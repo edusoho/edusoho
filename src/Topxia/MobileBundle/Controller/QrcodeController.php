@@ -14,14 +14,14 @@ class QrcodeController extends MobileController
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
             $token = $this->createToken($user, $request);
-            $url = $this->generateUrl('topxia_mobile_checkQR', array('token' => $token), true);
+            $url = $this->generateUrl('mapi_user_login_with_token', array('token' => $token), true);
         } else {
-            $url = $this->generateUrl('topxia_mobile_checkQR', array(), true);
+            $url = $this->generateUrl('mapi_user_login_with_site', array(), true);
         }
 
         $qrCode = new QrCode();
         $qrCode->setText($url);
-        $qrCode->setSize(200);
+        $qrCode->setSize(215);
         $qrCode->setPadding(10);
         $img = $qrCode->render();
 

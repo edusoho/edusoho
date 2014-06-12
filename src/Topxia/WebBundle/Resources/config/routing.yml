@@ -1120,6 +1120,10 @@ article_category:
     pattern: /article/category/{categoryCode}
     defaults: { _controller: TopxiaWebBundle:Article:category }
 
+mobile:
+    pattern: /mobile/
+    defaults: { _controller: TopxiaWebBundle:Mobile:index }
+
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
