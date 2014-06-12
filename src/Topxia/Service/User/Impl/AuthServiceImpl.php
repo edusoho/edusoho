@@ -97,7 +97,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         try {
             $result = $this->getAuthProvider()->checkUsername($username);
         } catch (\Exception $e) {
-            return array('error_db', 'Ucenter配置错误或无法连接，请检查Ucenter配置!');
+            return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
         }
 
         if ($result[0] != 'success') {
@@ -117,7 +117,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         try {
             $result = $this->getAuthProvider()->checkEmail($email);
         } catch (\Exception $e) {
-            return array('error_db', 'Ucenter配置错误或无法连接，请检查Ucenter配置!');
+            return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
         }
         if ($result[0] != 'success') {
             return $result;
