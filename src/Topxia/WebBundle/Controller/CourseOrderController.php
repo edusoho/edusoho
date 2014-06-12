@@ -36,7 +36,7 @@ class CourseOrderController extends OrderController
 
         $course = $this->getCourseService()->getCourse($id);
 
-        if ($remainingStudentNum == 0) {
+        if ($remainingStudentNum == 0 && $course['type'] == 'live') {
             return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
                 'course' => $course
             ));
