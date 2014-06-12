@@ -25,7 +25,7 @@
           <div class="pull-right">
             <button class="btn btn-primary btn-sm follow-student-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>
             <button class="btn btn-success btn-sm unfollow-student-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</button>
-            <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
+            <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}"  id="send-message">发私信</button>
           </div>
         {% endif %}
 
