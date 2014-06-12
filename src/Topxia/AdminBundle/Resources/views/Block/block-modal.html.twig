@@ -2,11 +2,7 @@
 {% set block = block|default(null) %}
 
 {% block title %}
-{% if editBlock.id == 0 %}
-新增编辑区
-{% else %}
-设置编辑区
-{% endif %}
+  {% if editBlock.id == 0 %}新增{% else %}设置{% endif %}编辑区
 {% endblock %}
 
 {% if editBlock.id == 0 %}
@@ -16,7 +12,7 @@
 {% endif %}
 
 {% block body %}
-  <form class="form-horizontal" id="block-form"  
+  <form class="form-horizontal" data-id = {{ editBlock.id }} id="block-form"  
   {% if editBlock.id == 0 %}
     action="{{ path('admin_block_create') }}"
   {% else %}
@@ -37,6 +33,23 @@
   </div>
 
   <div class="row form-group">
+    <div class="col-md-3 control-label"><label for="mode">编辑模式</label></div>
+    <div class="col-md-8 controls"> 
+      <div class="controls col-md-8 radios">
+        <label><input type="radio" name="mode" value="html" {% if editBlock.mode == 'html' %}checked{% endif %}>HTML</label>
+        <label><input type="radio" name="mode" value="template" {% if editBlock.mode == 'template' %}checked{% endif %}>模板</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row form-group" style="display:none;" id="template">
+    <div class="col-md-3 control-label"><label for="template">模板内容</label></div>
+    <div class="col-md-8 controls">
+      <textarea id="template" name="template" class="form-control" rows="8">{{ editBlock.template }}</textarea>
+    </div>
+  </div>
+
+  <div class="row form-group">
     <div class="col-md-3 control-label"><label for="tips">Tips</label></div>
     <div class="col-md-8 controls">
       <textarea id="tips" name="tips" class="form-control" rows="4"></textarea>
@@ -51,11 +64,7 @@
   </form>
 
   <script type="text/javascript">
-    {% if editBlock.id == 0 %}
-  app.load('block/save-modal')
-  {% else %}
-  app.load('block/edit-modal')
-   {% endif %}
+    app.load('block/save-modal')
   </script>
 {% endblock %}
 

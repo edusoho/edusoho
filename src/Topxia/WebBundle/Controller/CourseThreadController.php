@@ -397,4 +397,9 @@ class CourseThreadController extends BaseController
         }
         return $conditions;
     }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    } 
 }

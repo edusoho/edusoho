@@ -126,7 +126,7 @@ class CourseController extends BaseController
         $course = $this->getCourseService()->getCourse($id);
         $category = $this->getCategoryService()->getCategory($course['categoryId']);
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
-        return $this->render('TopxiaWebBundle:Course:info-modal.html.twig', array(
+        return $this->render('TopxiaWebBundle:Course:info.html.twig', array(
             'course' => $course,
             'category' => $category,
             'tags' => $tags,
@@ -411,6 +411,7 @@ class CourseController extends BaseController
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
+            $request->getSession()->set('_target_path', $this->generateUrl('course_show', array('id' => $id)));
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 

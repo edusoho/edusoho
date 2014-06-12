@@ -26,18 +26,15 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
     {
-        if(empty($tagIds)){
-            return array();
-        }
 
         $sql ="SELECT * FROM {$this->getTablename()} WHERE status = ?";
 
         foreach ($tagIds as $tagId) {
-            $sql .= " AND tags LIKE '%$tagId%'";
+                $sql .= " AND tags LIKE '%|$tagId|%'";
         }
 
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-      
+        
         return $this->getConnection()->fetchAll($sql, array($status));
     }
 
