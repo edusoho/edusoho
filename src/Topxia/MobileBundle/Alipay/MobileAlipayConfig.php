@@ -3,6 +3,7 @@
 namespace Topxia\MobileBundle\Alipay;
 
 use Topxia\MobileBundle\Controller\MobileController;
+use Topxia\Service\Common\ServiceKernel;
 
 class MobileAlipayConfig
 {
@@ -32,15 +33,17 @@ class MobileAlipayConfig
 
 	protected static function initAlipayConfig($name)
 	{
+		$payment = ServiceKernel::instance()->createService('System.SettingService')->get('payment', array());
+
 		$alipay_config = array();
 
-		$alipay_config['seller_email'] = 'service@howzhi.com';
+		$alipay_config['seller_email'] = empty($payment['alipay_account']) ? '' : $payment['alipay_account'];
 
-        $alipay_config['partner'] = '2088801030402123';
+        $alipay_config['partner'] = empty($payment['alipay_key']) ? '' : $payment['alipay_key'];
 
 		//安全检验码，以数字和字母组成的32位字符
 		//如果签名方式设置为“MD5”时，请设置该参数
-		$alipay_config['key'] = 'fc9dp2m15eamxv3wvdw4l8icdv5un6di';
+		$alipay_config['key'] = empty($payment['alipay_secret']) ? '' : $payment['alipay_secret'];
 
 		//商户的私钥（后缀是.pen）文件相对路径
 		//如果签名方式设置为“0001”时，请设置该参数
