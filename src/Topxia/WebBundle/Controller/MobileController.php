@@ -18,7 +18,7 @@ class MobileController extends BaseController
 
     public function downloadQrcodeAction(Request $request)
     {
-        $url = $this->generateUrl('mobile_download', array(), true);
+        $url = $this->generateUrl('mobile_download', array('from' => 'qrcode'), true);
 
         $qrCode = new QrCode();
         $qrCode->setText($url);
@@ -33,7 +33,8 @@ class MobileController extends BaseController
 
     public function downloadAction(Request $request)
     {
-        return $this->redirect('http://open.edusoho.com/mobile/download.php?from=qrcode');
+        $params = $request->query->all();
+        return $this->redirect('http://open.edusoho.com/mobile/download.php?' . http_build_query($params));
     }
 
 }
