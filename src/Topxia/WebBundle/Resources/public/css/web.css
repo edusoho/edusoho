@@ -695,6 +695,12 @@ body {
 	/*overflow: visible;*/
 }
 
+.thread pre,
+.thread-post pre {
+	overflow-x: scroll;
+	word-wrap: normal; 
+}
+
 .announcement-list li .action {
 	visibility: hidden;
 }
