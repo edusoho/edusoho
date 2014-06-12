@@ -28,14 +28,44 @@ class MobileOrderController extends MobileController
         if ($order['status'] == 'paid') {
             $result = array('status' => 'ok', 'paid' => true);
         } else {
-            $result = array('status' => 'ok', 'paid' => false, 'payUrl' => MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order));
+            // $result = array('status' => 'ok', 'paid' => false, 'payUrl' => MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order));
+            $result = array('status' => 'ok', 'paid' => false, 'payUrl' => $this->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id']), true));
         }
 
         return $this->createJson($request, $result);
-
     }
 
-    public function refundCourseAction(Request $request , $courseId)
+    public function submitPayRequestAction(Request $request, $id)
+    {
+        $this->getUserToken($request);
+        $user = $this->getCurrentUser();
+
+        $order = $this->getOrderService()->getOrder($id);
+        if (empty($order)) {
+            return $this->createErrorResponse($request, 'order_not_exist', '订单不存在！');
+        }
+
+        if ($order['userId'] != $user['id']) {
+            return $this->createErrorResponse($request, 'order_not_exist', '该订单，你不能支付！');
+        }
+
+        if ($order['status'] != 'created') {
+            return $this->createErrorResponse($request, 'order_not_exist', '该订单状态下，不能支付！');
+        }
+
+        $payRequestParams = array(
+            'returnUrl' => $this->generateUrl('course_order_pay_return', array('name' => $order['payment']), true),
+            'notifyUrl' => $this->generateUrl('course_order_pay_notify', array('name' => $order['payment']), true),
+            'showUrl' => $this->generateUrl('course_show', array('id' => $order['targetId']), true),
+        );
+
+        return $this->forward('TopxiaWebBundle:Order:submitPayRequest', array(
+            'order' => $order,
+            'requestParams' => $payRequestParams,
+        ));
+    }
+
+    public function refundCourseAction(Request $request, $courseId)
     {
         $this->getUserToken($request);
         $user = $this->getCurrentUser();
