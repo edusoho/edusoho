@@ -431,6 +431,9 @@ class CourseController extends MobileController
                 $item['length'] = 0;
             }
 
+            if (empty($item['content'])) {
+                $item['content'] = "";
+            }
             $item['content'] = $self->convertAbsoluteUrl($container->get('request'), $item['content']);
 
             return $item;
