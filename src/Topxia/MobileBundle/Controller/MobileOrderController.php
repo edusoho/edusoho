@@ -16,7 +16,7 @@ class MobileOrderController extends MobileController
         $formData = $request->query->all();
         $formData['courseId'] = $courseId;
 
-        $this->getUserToken($request);
+        $token = $this->getUserToken($request);
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
@@ -29,7 +29,7 @@ class MobileOrderController extends MobileController
             $result = array('status' => 'ok', 'paid' => true);
         } else {
             // $result = array('status' => 'ok', 'paid' => false, 'payUrl' => MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order));
-            $result = array('status' => 'ok', 'paid' => false, 'payUrl' => $this->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id']), true));
+            $result = array('status' => 'ok', 'paid' => false, 'payUrl' => $this->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token['token']), true));
         }
 
         return $this->createJson($request, $result);
@@ -46,11 +46,11 @@ class MobileOrderController extends MobileController
         }
 
         if ($order['userId'] != $user['id']) {
-            return $this->createErrorResponse($request, 'order_not_exist', '该订单，你不能支付！');
+            return $this->createErrorResponse($request, 'order_not_your_pay', '该订单，你不能支付！');
         }
 
         if ($order['status'] != 'created') {
-            return $this->createErrorResponse($request, 'order_not_exist', '该订单状态下，不能支付！');
+            return $this->createErrorResponse($request, 'order_not_pay', '该订单状态下，不能支付！');
         }
 
         $payRequestParams = array(
