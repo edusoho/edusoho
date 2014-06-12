@@ -42,28 +42,28 @@ class MobileOrderController extends MobileController
 
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order)) {
-            return $this->createErrorResponse($request, 'order_not_exist', '订单不存在！');
+            return new Response('订单不存在！');
         }
 
         if ($order['userId'] != $user['id']) {
-            return $this->createErrorResponse($request, 'order_not_your_pay', '该订单，你不能支付！');
+            return new Response('该订单，你不能支付！');
         }
 
         if ($order['status'] != 'created') {
-            return $this->createErrorResponse($request, 'order_not_pay', '该订单状态下，不能支付！');
+            return new Response('该订单状态下，不能支付！');
         }
 
         $payment = $this->setting('payment', array());
         if (empty($payment['enabled'])) {
-            return $this->createErrorResponse($request, 'payment_not_enabled', '支付功能未开启！');
+            return new Response('支付功能未开启！');
         }
 
         if (empty($payment['alipay_enabled'])) {
-            return $this->createErrorResponse($request, 'alipay_not_enabled', '支付宝支付未开启！');
+            return new Response('支付宝支付未开启！');
         }
 
         if (empty($payment['alipay_key']) or empty($payment['alipay_secret']) or empty($payment['alipay_account'])) {
-            return $this->createErrorResponse($request, 'alipay_params_error', '支付宝参数不正确！');
+            return new Response('支付宝参数不正确！');
         }
 
         $payRequestParams = array(
