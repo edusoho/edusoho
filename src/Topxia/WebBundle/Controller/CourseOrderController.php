@@ -36,11 +36,11 @@ class CourseOrderController extends OrderController
 
         $course = $this->getCourseService()->getCourse($id);
 
-        if ($remainingStudentNum == 0) {
-            return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
-                'course' => $course
-            ));
-        } else {
+        // if ($remainingStudentNum == 0 && $course['type'] == 'live') {
+        //     return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
+        //         'course' => $course
+        //     ));
+        // } else {
             return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
                 'course' => $course,
                 'payments' => $this->getEnabledPayments(),
@@ -49,7 +49,7 @@ class CourseOrderController extends OrderController
                 'courseSetting' => $courseSetting,
                 'member' => $member
             ));
-        }
+        // }
     }
 
     public function payAction(Request $request)
