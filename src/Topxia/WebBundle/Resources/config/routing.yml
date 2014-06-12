@@ -1124,6 +1124,14 @@ mobile:
     pattern: /mobile/
     defaults: { _controller: TopxiaWebBundle:Mobile:index }
 
+mobile_download_qrcode:
+    pattern: /mobile/downloadQrcode
+    defaults: { _controller: TopxiaWebBundle:Mobile:downloadQrcode }
+
+mobile_download:
+    pattern: /mobile/download
+    defaults: { _controller: TopxiaWebBundle:Mobile:download }
+
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
