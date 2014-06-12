@@ -235,6 +235,7 @@ class UserController extends MobileController
             $logo = '';
         }
 
+        $splashs = array();
         for($i=1; $i < 5; $i++) {
             if (!empty($mobile['splash'. $i])) {
                 $splashs[] = $request->getSchemeAndHttpHost() . '/' . $mobile['splash'. $i];
@@ -243,7 +244,7 @@ class UserController extends MobileController
 
         return array(
             'name' => $site['name'],
-            'url' => $request->getSchemeAndHttpHost(),
+            'url' => $request->getSchemeAndHttpHost() . '/mapi_v1',
             'logo' => $logo,
             'splashs' => $splashs,
             'apiVersionRange' => array(

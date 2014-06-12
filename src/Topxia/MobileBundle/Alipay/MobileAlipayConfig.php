@@ -22,7 +22,7 @@ class MobileAlipayConfig
 	{
         $alipay_config  = self::getAlipayConfig($name);
 
-		$payUrl = $request->getSchemeAndHttpHost() . "/mapi/alipay_pay?WIDseller_email=" . $alipay_config['seller_email'];
+		$payUrl = $request->getSchemeAndHttpHost() . "/mapi_v1/alipay_pay?WIDseller_email=" . $alipay_config['seller_email'];
 		$payUrl = $payUrl."&WIDout_trade_no=" . $order["sn"];
 		$payUrl = $payUrl."&WIDsubject=" . $order["title"];
 		$payUrl = $payUrl."&WIDtotal_fee=" . $order["amount"];
