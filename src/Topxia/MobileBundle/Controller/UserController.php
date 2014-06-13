@@ -49,6 +49,11 @@ class UserController extends MobileController
 
     public function loginWithTokenAction(Request $request)
     {
+        $mobile = $this->getSettingService()->get('mobile', array());
+        if (empty($mobile['enabled'])) {
+            return $this->createErrorResponse($request, 'client_closed', '没有搜索到该网校！');
+        }
+
         $token = $this->getUserToken($request);
         if (empty($token) or  $token['type'] != self::TOKEN_TYPE) {
             $token = null;
@@ -74,10 +79,16 @@ class UserController extends MobileController
 
     public function loginWithSiteAction(Request $request)
     {
+        $mobile = $this->getSettingService()->get('mobile', array());
+        if (empty($mobile['enabled'])) {
+            return $this->createErrorResponse($request, 'client_closed', '没有搜索到该网校！');
+        }
+
         $site = $this->getSettingService()->get('site', array());
         $result = array(
             'site' => $this->getSiteInfo($request)
         );
+
 
         return $this->createJson($request, $result);
     }
