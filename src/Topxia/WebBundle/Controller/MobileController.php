@@ -11,6 +11,12 @@ class MobileController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        $mobile = $this->setting('mobile', array());
+
+        if (empty($mobile['enabled'])) {
+            return $this->createMessageResponse('info', '客户端尚未开启！');
+        }
+
         return $this->render('TopxiaWebBundle:Mobile:index.html.twig', array(
             'host' => $request->getHttpHost(),
         ));
