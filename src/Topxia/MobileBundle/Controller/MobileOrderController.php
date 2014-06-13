@@ -28,8 +28,25 @@ class MobileOrderController extends MobileController
         if ($order['status'] == 'paid') {
             $result = array('status' => 'ok', 'paid' => true);
         } else {
-            // $result = array('status' => 'ok', 'paid' => false, 'payUrl' => MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order));
-            $result = array('status' => 'ok', 'paid' => false, 'payUrl' => $this->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token['token']), true));
+            $payment = $this->setting('payment', array());
+            if (empty($payment['enabled'])) {
+                return $this->createJson($request, array('status' => 'error', 'message' => '支付功能未开启！'));
+            }
+
+            if (empty($payment['alipay_enabled'])) {
+                return $this->createJson($request, array('status' => 'error', 'message' => '支付宝支付未开启！'));
+            }
+
+            if (empty($payment['alipay_key']) or empty($payment['alipay_secret']) or empty($payment['alipay_account'])) {
+                return $this->createJson($request, array('status' => 'error', 'message' => '支付宝参数不正确！'));
+            }
+
+            if (empty($payment['alipay_type']) or $payment['alipay_type'] != 'direct') {
+                $result = array('status' => 'ok', 'paid' => false, 'payUrl' => $this->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token['token']), true));
+            } else {
+                $result = array('status' => 'ok', 'paid' => false, 'payUrl' => MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order));
+            }
+
         }
 
         return $this->createJson($request, $result);
@@ -51,19 +68,6 @@ class MobileOrderController extends MobileController
 
         if ($order['status'] != 'created') {
             return new Response('该订单状态下，不能支付！');
-        }
-
-        $payment = $this->setting('payment', array());
-        if (empty($payment['enabled'])) {
-            return new Response('支付功能未开启！');
-        }
-
-        if (empty($payment['alipay_enabled'])) {
-            return new Response('支付宝支付未开启！');
-        }
-
-        if (empty($payment['alipay_key']) or empty($payment['alipay_secret']) or empty($payment['alipay_account'])) {
-            return new Response('支付宝参数不正确！');
         }
 
         $payRequestParams = array(
