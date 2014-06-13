@@ -31,6 +31,13 @@ class MobileController extends BaseController
 
     protected function createJson(Request $request, $data)
     {
+        if (empty($data['error'])) {
+            $mobile = $this->setting('mobile', array());
+            if (empty($mobile['enabled'])) {
+                return $this->createErrorResponse($request, 'client_closed', '客户端已关闭');
+            }
+        }
+
         $callback = $request->query->get('callback');
         if ($callback) {
             return $this->createJsonP($request, $callback, $data);
