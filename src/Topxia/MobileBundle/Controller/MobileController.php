@@ -34,7 +34,7 @@ class MobileController extends BaseController
         if (empty($data['error'])) {
             $mobile = $this->setting('mobile', array());
             if (empty($mobile['enabled'])) {
-                return $this->createErrorResponse($request, 'client_closed', '客户端已关闭');
+                return $this->createErrorResponse($request, 'client_closed', '网校客户端功能已关闭');
             }
         }
 
