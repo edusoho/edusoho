@@ -23,7 +23,7 @@ class QrcodeController extends MobileController
         $qrCode->setText($url);
         $qrCode->setSize(215);
         $qrCode->setPadding(10);
-        $img = $qrCode->render();
+        $img = $qrCode->get('png');
 
 
         $headers = array('Content-Type'     => 'image/png',

@@ -30,7 +30,7 @@ class MobileController extends BaseController
         $qrCode->setText($url);
         $qrCode->setSize(150);
         $qrCode->setPadding(10);
-        $img = $qrCode->render();
+        $img = $qrCode->get('png');
 
         $headers = array('Content-Type'     => 'image/png',
                          'Content-Disposition' => 'inline; filename="image.png"');
