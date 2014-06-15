@@ -107,10 +107,32 @@ class UserController extends MobileController
 
         foreach ($notifications as &$notification) {
             $notification['createdTime'] = date('c', $notification['createdTime']);
+            $notification["message"] = $this->coverNotifyContent($notification);
             unset($notification);
         }
 
         return $this->createJson($request, $notifications);
+    }
+
+     private function coverNotifyContent($notification)
+    {
+        $message = "";
+        $type = $notification['type'];
+        switch ($type) {
+            case 'thread-post':
+                $message = "您的问题" . $notification["content"]["threadTitle"] . " 有了" . $notification["content"]["postUserNickname"]  . "新回复";
+                break;
+            case 'thread':
+                $message = $notification["content"]["threadUserNickname"] . " 课程 " .  $notification["content"]["courseTitle"] . "发表了问题 " . $notification["content"]["threadTitle"] ;
+                break;
+            case 'cloud-file-converted':
+                $message = "您上传到云视频的视频文件" . $notification["content"]["filename"] . "已完成视频格式转换!" ;
+                break;
+            case 'default':
+                $message = $notification["content"]["message"] ;
+                break;
+        }
+        return $message;
     }
 
     public function registerAction(Request $request)
