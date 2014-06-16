@@ -20,7 +20,6 @@ class BuildCommand extends BaseCommand
 	{
 		$output->writeln('<info>Start build.</info>');
 		$this->initBuild($input, $output);
-
 		$this->buildAppDirectory();
 		$this->buildDocDirectory();
 		$this->buildSrcDirectory();
@@ -204,6 +203,8 @@ class BuildCommand extends BaseCommand
 			'symfony/symfony/src',
 			'twig/twig/lib',
 			'twig/extensions/lib',
+			'endroid/qrcode/src',
+			'endroid/qrcode/assets',
 		);
 
 		foreach ($directories as $dir) {
@@ -224,6 +225,37 @@ class BuildCommand extends BaseCommand
 
 		$this->filesystem->remove($toDeletes);
 
+		$this->cleanIcuVendor();
+
+	}
+
+	private function cleanIcuVendor()
+	{
+		$icuBase = "{$this->distDirectory}/vendor/symfony/icu/Symfony/Component/Icu/Resources/data";
+		$whileFiles = array(
+			'svn-info.txt',
+			'version.txt',
+			'curr/en.res',
+			'curr/zh.res',
+			'curr/zh_CN.res',
+			'lang/en.res',
+			'lang/zh.res',
+			'lang/zh_CN.res',
+			'locales/en.res',
+			'locales/zh.res',
+			'locales/zh_CN.res',
+			'region/en.res',
+			'region/zh.res',
+			'region/zh_CN.res'
+		);
+
+		$finder = new Finder();
+		$finder->files()->in($icuBase);
+		foreach ($finder as $file) {
+			if (!in_array($file->getRelativePathname(), $whileFiles)) {
+				$this->filesystem->remove($file->getRealpath());
+			}
+		}
 	}
 
 	public function buildVendorUserDirectory()
