@@ -68,6 +68,16 @@
 
 			{% if course.type == 'normal' %}
 				<div class="form-group">
+					<label class="col-md-2 control-label">进度条件设置</label>
+					<div class="col-md-8 controls radios">
+						{{ radios('completeLimit', {'yes':'完成作业后才能进入下一课时', 'no':'不做控制'}, course.completeLimit|default('no') ) }}
+					<div class="help-block">开启后请注意不要随意更改课时顺序</div>
+					</div>
+				</div>
+			{% endif %}
+
+			{% if course.type == 'normal' %}
+				<div class="form-group">
 					<label class="col-md-2 control-label">连载状态</label>
 					<div class="col-md-8 controls radios">
 						{{ radios('serializeMode', {'none':'非连载课程', 'serialize':'更新中', 'finished':'已完结'}, course.serializeMode|default('none') ) }}
