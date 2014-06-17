@@ -70,7 +70,7 @@
 				<div class="form-group">
 					<label class="col-md-2 control-label">进度条件设置</label>
 					<div class="col-md-8 controls radios">
-						{{ radios('completeLimit', {'yes':'完成作业后才能进入下一课时', 'no':'不做控制'}, course.completeLimit|default('no') ) }}
+						{{ radios('homeworkCompleteLimit', {'yes':'完成作业后才能进入下一课时', 'no':'不做控制'}, course.homeworkCompleteLimit|default('no') ) }}
 					<div class="help-block">开启后请注意不要随意更改课时顺序</div>
 					</div>
 				</div>
