@@ -326,9 +326,18 @@ class CourseLessonManageController extends BaseController
 
         if($request->getMethod() == 'POST') {
         	$fields = $request->request->all();
-        	$fields['source'] = array();
-        	$fields['single_choice'] = empty($fields['single_choice']) ? array() : $fields['source'][] = $fields['single_choice'];
-        	var_dump($fields);exit();
+        	$fields['range'] = array();
+        	$fields['single_choice'] = empty($fields['single_choice']) ? array() : $fields['range'][] = $fields['single_choice'];
+        	$fields['choice'] = empty($fields['choice']) ? array() : $fields['range'][] = $fields['choice'];
+        	$fields['fill'] = empty($fields['fill']) ? array() : $fields['range'][] = $fields['fill'];
+        	$fields['determine'] = empty($fields['determine']) ? array() : $fields['range'][] = $fields['determine'];
+        	$fields['essay'] = empty($fields['essay']) ? array() : $fields['range'][] = $fields['essay'];
+        	$fields['material'] = empty($fields['material']) ? array() : $fields['range'][] = $fields['material'];
+        	$fields['courseId'] = $courseId;
+        	$fields['lessonId'] = $lessonId;	
+
+        	list($exercise, $items) = $this->getExerciseService()->createExercise($fields);
+        	return $this->createJsonResponse(true);
         }
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:exercise.html.twig', array(
@@ -408,6 +417,11 @@ class CourseLessonManageController extends BaseController
     private function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    private function getExerciseService()
+    {
+    	return $this->getServiceKernel()->createService('Course.ExerciseService');
     }
 
 }
