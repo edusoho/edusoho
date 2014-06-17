@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new Topxia\MobileBundle\TopxiaMobileBundle(),
         );
 
         $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';

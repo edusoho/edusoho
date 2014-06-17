@@ -46,6 +46,74 @@ class SettingController extends BaseController
         ));
     }
 
+    public function mobileAction(Request $request)
+    {
+        $mobile = $this->getSettingService()->get('mobile', array());
+
+        $default = array(
+            'enabled'=> 0,   // 网校状态
+            'about'=>'',     // 网校简介
+            'logo' => '',    // 网校Logo
+            'splash1' => '', // 启动图1
+            'splash2' => '', // 启动图2
+            'splash3' => '', // 启动图3
+            'splash4' => '', // 启动图4
+            'splash5' => '', // 启动图5
+        );
+
+        $mobile = array_merge($default, $mobile);
+
+        if ($request->getMethod() == 'POST') {
+            $mobile = $request->request->all();
+            $this->getSettingService()->set('mobile', $mobile);
+            $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
+            $this->setFlashMessage('success', '移动客户端设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
+            'mobile'=>$mobile
+        ));
+    }
+
+    public function mobilePictureUploadAction(Request $request, $type)
+    {
+        $file = $request->files->get($type);
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+
+        $filename = 'mobile_picture' . time() . '.' . $file->getClientOriginalExtension();
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file = $file->move($directory, $filename);
+
+        $mobile = $this->getSettingService()->get('mobile', array()); 
+        $mobile[$type] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $mobile[$type] = ltrim($mobile[$type], '/');
+
+        $this->getSettingService()->set('mobile', $mobile);
+
+        $this->getLogService()->info('system', 'update_settings', "更新网校{$type}图片", array($type => $mobile[$type]));
+
+        $response = array(
+            'path' => $mobile[$type],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($mobile[$type]),
+        );
+
+        return new Response(json_encode($response));
+    }
+
+    public function mobilePictureRemoveAction(Request $request, $type)
+    {
+        $setting = $this->getSettingService()->get("mobile");
+        $setting[$type] = '';
+
+        $this->getSettingService()->set('mobile', $setting);
+
+        $this->getLogService()->info('system', 'update_settings', "移除网校{$type}图片");
+
+        return $this->createJsonResponse(true);
+    }
+
     public function logoUploadAction(Request $request)
     {
         $file = $request->files->get('logo');
@@ -230,6 +298,7 @@ class SettingController extends BaseController
             'alipay_enabled'=>0,
             'alipay_key'=>'',
             'alipay_secret' => '',
+            'alipay_account' => '',
             'alipay_type' => 'direct',
             'tenpay_enabled'=>0,
             'tenpay_key'=>'',

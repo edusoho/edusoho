@@ -128,15 +128,6 @@ class DefaultController extends BaseController
 
     }
 
-    public function systemInfoAction()
-    {
-        $info = array(
-            'version' => System::VERSION,
-        );
-
-        return $this->createJsonResponse($info);
-    }
-
     public function jumpAction(Request $request)
     {
         $courseId = intval($request->query->get('id'));

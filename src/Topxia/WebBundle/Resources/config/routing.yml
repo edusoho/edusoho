@@ -1102,7 +1102,7 @@ cloud_video_fingerprint:
 
 systeminfo:
     pattern: /systeminfo
-    defaults: {_controller: TopxiaWebBundle:Default:systemInfo }
+    defaults: {_controller: TopxiaWebBundle:Systeminfo:index }
 
 setting_approval_submit:
     pattern: /settings/approval/submit
@@ -1119,6 +1119,18 @@ article_detail:
 article_category:
     pattern: /article/category/{categoryCode}
     defaults: { _controller: TopxiaWebBundle:Article:category }
+
+mobile:
+    pattern: /mobile/
+    defaults: { _controller: TopxiaWebBundle:Mobile:index }
+
+mobile_download_qrcode:
+    pattern: /mobile/downloadQrcode
+    defaults: { _controller: TopxiaWebBundle:Mobile:downloadQrcode }
+
+mobile_download:
+    pattern: /mobile/download
+    defaults: { _controller: TopxiaWebBundle:Mobile:download }
 
 test:
     pattern:  /test/
