@@ -17,7 +17,6 @@
 /plugins/*
 /build/
 /vendor/
-!/var/www/edusoho-dev/vendor/doctrine/doctrine-bundle/Doctrine/Bundle/DoctrineBundle/
 /bin/
 /composer.phar
 /etc/sublimetext2/edusoho.sublime-workspace
