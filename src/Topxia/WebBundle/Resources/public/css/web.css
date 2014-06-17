@@ -1821,6 +1821,13 @@ body {
 	right: 50px;
 }
 
+.lesson-list .item-actions a.dropdown-toggle:hover,
+.lesson-list .item-actions a.dropdown-toggle:focus,
+.lesson-list .item-actions .btn-link:hover,
+.lesson-list .item-actions .btn-link:hover {
+	text-decoration: none;
+}
+
 .lesson-list .item-chapter:hover .item-actions, .lesson-list .item-lesson:hover .item-actions  {
 	visibility: visible;
 }

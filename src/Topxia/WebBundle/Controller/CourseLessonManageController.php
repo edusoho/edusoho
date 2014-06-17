@@ -315,6 +315,28 @@ class CourseLessonManageController extends BaseController
 
 	}
 
+	public function createExerciseAction(Request $request, $courseId, $lessonId)
+	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+        if (empty($lesson)) {
+            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+        }
+
+        if($request->getMethod() == 'POST') {
+        	$fields = $request->request->all();
+        	$fields['source'] = array();
+        	$fields['single_choice'] = empty($fields['single_choice']) ? array() : $fields['source'][] = $fields['single_choice'];
+        	var_dump($fields);exit();
+        }
+
+		return $this->render('TopxiaWebBundle:CourseLessonManage:exercise.html.twig', array(
+			'course' => $course,
+			'lesson' => $lesson
+		));
+	}
+
 	public function publishAction(Request $request, $courseId, $lessonId)
 	{
 		$this->getCourseService()->publishLesson($courseId, $lessonId);
