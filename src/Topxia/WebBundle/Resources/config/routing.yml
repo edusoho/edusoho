@@ -494,6 +494,10 @@ course_manage_lesson_sort:
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:sort }
     methods: [POST]
 
+course_manage_lesson_create_homework:
+    pattern: /course/{courseId}/manage/lesson/{lessonId}/create/homework
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createHomework }
+
 course_manage_lesson_edit:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:edit }
