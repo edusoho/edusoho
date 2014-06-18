@@ -34,7 +34,7 @@ define(function(require, exports, module) {
 
 	            $.post($form.attr('action'), $form.serialize(), function() {
                     Notify.success('添加练习成功!');
-                    /*window.location.href = target;*/
+                    window.location.href = target;
                 }).error(function(){
                     Notify.danger('添加练习失败!');
                 });
@@ -43,7 +43,7 @@ define(function(require, exports, module) {
 		});
 
 		validator.addItem({
-			element: '#question_number',
+			element: '#questionCount',
 			required: true,
 			rule: 'integer'
 		});

@@ -24,4 +24,21 @@ class ExerciseDaoImpl extends BaseDao implements ExerciseDao
         return $this->getExercise($this->getConnection()->lastInsertId());
     }
 
+    public function updateExercise($id, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getExercise($id);
+    }
+
+    public function findExerciseByCourseIdAndLessonIds($courseId, $lessonIds)
+    {   
+        if(empty($lessonIds)){
+            return array();
+        }
+        $marks = str_repeat('?,', count($lessonIds) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE courseId = {$courseId} AND lessonId IN ({$marks});";
+        
+        return $this->getConnection()->fetchAll($sql, $lessonIds);
+    }
+
 }

@@ -9,4 +9,8 @@ interface ExerciseDao
 
     public function addExercise($fields);
 
+    public function updateExercise($id, $fields);
+
+    public function findExerciseByCourseIdAndLessonIds($courseId, $lessonIds);
+
 }

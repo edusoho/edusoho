@@ -97,7 +97,13 @@
 	        </a>
           	<ul class="dropdown-menu" role="menu" style="margin-top:12px">
           		<li>
-					<a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-list-alt prs"></span>添加练习</a>
+          			{% set lessonId = lesson.id %}
+          			{% set exercise = exercises[lessonId]|default(null) %}
+          			{% if exercise %}
+						<a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-list-alt prs"></span>编辑练习</a>
+					{% else %}
+						<a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-list-alt prs"></span>新增练习</a>
+					{% endif %}
           		</li>
           		<li class="divider"></li>	
 	            <li>
