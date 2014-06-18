@@ -521,6 +521,10 @@ course_manage_lesson_unpublish:
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:unpublish }
     methods: [POST]
 
+course_manage_lesson_exercise_create:
+    pattern:  /course/{courseId}/manage/lesson/{lessonId}/exercise/create
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createExercise }
+
 question_file_url:
     pattern: /question_ajax/file_url
     defaults: { _controller: TopxiaWebBundle:Question:fileUrl }

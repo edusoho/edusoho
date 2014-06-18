@@ -1,0 +1,76 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}添加练习 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'lesson' %}
+{% set script_controller = 'course-manage/exercise' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  	<div class="panel-heading">添加练习</div>
+  	<div class="panel-body">
+    	<form id="exercise-form" data-target="{{ path('course_manage_lesson',{id:course.id}) }}" class="form-horizontal" method="post" action="{{ path('course_manage_lesson_exercise_create',{ courseId:course.id, lessonId:lesson.id }) }}" >
+      	{{ web_macro.flash_messages() }}
+
+      		<div class="form-group">
+				<label for="question_number" class="col-md-2 control-label">题目个数</label>
+				<div class="col-md-8 controls">
+					<input type="text" id="question_number" name="question_number" required="required" class="form-control" value="">
+				</div>
+			</div>
+
+      		<div class="form-group">
+				<label class="col-md-2 control-label">题目来源</label>
+				<div class="col-md-8 controls radios">
+					{{ radios('source', {'currentLesson':'当前课时的题目', 'course':'整个课程的题目'}, course.source|default('currentLesson') ) }}
+				</div>
+			</div>
+
+      		<div class="form-group">
+	          	<div class="col-md-2 control-label"><label>难度</label></div>
+	          	<div class="col-md-8 controls">
+		            <select id="course_categoryId" name="diffculty" class="form-control width-input width-input-large">
+				    	<option value="">不限</option>
+				    	<option value="easy">简单</option>
+				    	<option value="normal">一般</option>
+				    	<option value="hard">困难</option>
+				    </select>
+	          	</div>
+	        </div>
+
+			<div class="form-group">
+				<label class="col-md-2 control-label">题型范围</label>
+				<div class="col-md-8 controls">
+					<label class="checkbox-inline">
+					  <input type="checkbox" name="single_choice" value="single_choice">单选题
+					</label>
+					<label class="checkbox-inline">
+					  <input type="checkbox" name="choice" value="choice">多选题
+					</label>
+					<label class="checkbox-inline">
+					  <input type="checkbox" name="fill" value="fill">填空题
+					</label>
+					<label class="checkbox-inline">
+					  <input type="checkbox" name="determine" value="determine">判断题
+					</label>
+					<label class="checkbox-inline">
+					  <input type="checkbox" name="essay" value="essay">问答题
+					</label>
+					<label class="checkbox-inline">
+					  <input type="checkbox" name="material" value="material">材料题
+					</label>
+				</div>
+			</div>
+
+      		<div class="form-group">
+        		<div class="col-md-8 col-md-offset-2 controls">
+            		<button class="btn btn-fat btn-primary" id="exercise-create-btn" type="submit">保存</button>
+        		</div>
+      		</div>
+      		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    	</form>
+  	</div>
+</div>
+
+{% endblock %}

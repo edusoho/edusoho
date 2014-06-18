@@ -315,6 +315,37 @@ class CourseLessonManageController extends BaseController
 
 	}
 
+	public function createExerciseAction(Request $request, $courseId, $lessonId)
+	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+        if (empty($lesson)) {
+            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+        }
+
+        if($request->getMethod() == 'POST') {
+        	$fields = $request->request->all();
+        	$fields['range'] = array();
+        	$fields['single_choice'] = empty($fields['single_choice']) ? array() : $fields['range'][] = $fields['single_choice'];
+        	$fields['choice'] = empty($fields['choice']) ? array() : $fields['range'][] = $fields['choice'];
+        	$fields['fill'] = empty($fields['fill']) ? array() : $fields['range'][] = $fields['fill'];
+        	$fields['determine'] = empty($fields['determine']) ? array() : $fields['range'][] = $fields['determine'];
+        	$fields['essay'] = empty($fields['essay']) ? array() : $fields['range'][] = $fields['essay'];
+        	$fields['material'] = empty($fields['material']) ? array() : $fields['range'][] = $fields['material'];
+        	$fields['courseId'] = $courseId;
+        	$fields['lessonId'] = $lessonId;	
+
+        	list($exercise, $items) = $this->getExerciseService()->createExercise($fields);
+        	return $this->createJsonResponse(true);
+        }
+
+		return $this->render('TopxiaWebBundle:CourseLessonManage:exercise.html.twig', array(
+			'course' => $course,
+			'lesson' => $lesson
+		));
+	}
+
 	public function publishAction(Request $request, $courseId, $lessonId)
 	{
 		$this->getCourseService()->publishLesson($courseId, $lessonId);
@@ -403,6 +434,11 @@ class CourseLessonManageController extends BaseController
     private function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    private function getExerciseService()
+    {
+    	return $this->getServiceKernel()->createService('Course.ExerciseService');
     }
 
 }
