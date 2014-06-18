@@ -351,6 +351,23 @@ class CourseLessonManageController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
+	public function createHomeworkAction(Request $request, $courseId, $lessonId)
+	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+		$homework = $this->getCourseService()->getHomework($course['id'], $lessonId);
+
+		if (empty($lesson)) {
+			throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+		}
+
+		return $this->render('TopxiaWebBundle:CourseLessonManage:homework-modal.html.twig', array(
+            'course' => $course,
+            'lesson' => $lesson,
+            'homework' => $homework
+        ));
+	}
+
 	private function secondsToText($value)
 	{
         $minutes = intval($value / 60);
