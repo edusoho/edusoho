@@ -20,23 +20,23 @@ define(function(require, exports, module) {
         onClickPickItem: function(e) {
             var $btn = $(e.currentTarget);
 
-            // var $btn = $('#picker_homework_items');
+            var $btn = $('#picker_homework_items');
 
             // $btn.click(function(){
             //  $.get($btn.data('url'), function(html) {
             //         $modal.html(html);
             //     $modal.modal('show');
             // });
-                console.log($btn.data('url'));
+            //     console.log($btn.data('url'));
             // });
-            var excludeIds = [];
-            $("#testpaper-items-" + this.get('currentType')).find('[name="questionId[]"]').each(function(){
-                excludeIds.push($(this).val());
-            });
+            // var excludeIds = [];
+            // $("#testpaper-items-" + this.get('currentType')).find('[name="questionId[]"]').each(function(){
+            //     excludeIds.push($(this).val());
+            // });
 
             var $modal = $("#modal").modal();
             $modal.data('manager', this);
-            $.get($btn.data('url'), {excludeIds: excludeIds.join(','), type: this.get('currentType')}, function(html) {
+            $.get($btn.data('url'), function(html) {
                 $modal.html(html);
             });
         },
@@ -46,10 +46,8 @@ define(function(require, exports, module) {
             $("#homework-table").find("tbody tr").each(function(){
                 var $tr = $(this);
 
-                if (!$tr.hasClass('have-sub-questions')) {
                     $tr.find('td.seq').html(seq);
                     seq ++;
-                }
             });
         },
 

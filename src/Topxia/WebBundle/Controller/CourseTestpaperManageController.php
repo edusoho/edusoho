@@ -291,7 +291,7 @@ class CourseTestpaperManageController extends BaseController
 
 
         $replace = empty($conditions['replace']) ? '' : $conditions['replace'];
-
+        
         $paginator = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),
