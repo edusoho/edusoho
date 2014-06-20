@@ -1,0 +1,20 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}作业批改 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'lesson' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  	<div class="panel-heading">作业批改</div>
+  	<div class="panel-body">
+    	<ul class="nav nav-tabs">
+  		    <li class="active"><a href="#">未批改</a></li>
+  		    <li><a href="#">未提交</a></li>
+  		    <li><a href="#">已批改</a></li>
+  	  	</ul>
+  	</div>
+</div>
+
+{% endblock %}

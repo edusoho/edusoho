@@ -15,8 +15,14 @@ class ExerciseDaoImpl extends BaseDao implements ExerciseDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
+    public function getExerciseByCourseIdAndLessonId($courseId, $lessonId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND lessonId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($courseId, $lessonId)) ? : null;
+    }
+
     public function addExercise($fields)
-    {   
+    {      
         $affected = $this->getConnection()->insert($this->table, $fields);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert exercise error.');
@@ -24,8 +30,13 @@ class ExerciseDaoImpl extends BaseDao implements ExerciseDao
         return $this->getExercise($this->getConnection()->lastInsertId());
     }
 
-    public function updateExercise($id, $fields)
+    public function deleteExercise($id)
     {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
+    public function updateExercise($id, $fields)
+    {   
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getExercise($id);
     }
