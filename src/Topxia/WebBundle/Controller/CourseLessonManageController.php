@@ -393,18 +393,78 @@ class CourseLessonManageController extends BaseController
 
 	public function homeworkListAction(Request $request, $courseId, $lessonId)
 	{
-		$status = $request->query->get('status');
+		$status = $request->query->get('status', 'unchecked');
 
 		$course = $this->getCourseService()->tryManageCourse($courseId);
-
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
         if (empty($lesson)) {
             throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
         }
+
+		$homework = $this->getHomeworkService()->getHomeworkByCourseIdAndLessonId($course['id'], $lesson['id']);
+
+		$students = $this->getCourseService()->searchMembers(array('courseId' => $homework['courseId'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 100);
+		$studentUserIds = ArrayToolkit::column($students, 'userId');
+		$users = $this->getUserService()->findUsersByIds($studentUserIds);
+		$homeworkResults = $this->getHomeworkService()->findHomeworkResultsByCourseIdAndLessonId($course['id'], $lesson['id']);
+
+		if ($status == 'uncommitted') {
+			if (!empty($homeworkResults)) {
+				foreach ($students as &$student) {
+					foreach ($homeworkResults as $item) {
+						if ($item['status'] != 'doing' && $item['userId'] == $student['userId'] ) {
+							$student = null;
+						}
+					}
+				}
+			}
+		} else if ($status == 'unchecked') {
+			if (!empty($homeworkResults)) {
+				foreach ($students as &$student) {
+					$key = false;
+					foreach ($homeworkResults as $item) {
+						if ($item['status'] == 'reviewing' && $item['userId'] == $student['userId'] ) {
+							$key = true;
+						}
+					}
+
+					if ($key == true) {
+						continue;
+					}
+					$student = null;
+				}
+			} else {
+				$students = array();
+			}
+		} else {
+			if (!empty($homeworkResults)) {
+				foreach ($students as &$student) {
+					$key = false;
+					foreach ($homeworkResults as $item) {
+						if ($item['status'] == 'finished' && $item['userId'] == $student['userId'] ) {
+							$key = true;
+						}
+					}
+
+					if ($key == true) {
+						continue;
+					}
+					$student = null;
+				}
+			} else {
+				$students = array();
+			}
+		} 
+
+		$students = array_filter($students);
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:homework-check.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
-			'status' => $status
+			'status' => $status,
+			'homework' => $homework,
+			'students' => $students,
+			'users' => $users
 		));
 	}
 

@@ -12,6 +12,11 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 		return $this->getHomeworkDao()->getHomework($id);
 	}
 
+	public function getHomeworkByCourseIdAndLessonId($courseId, $lessonId)
+	{
+		return $this->getHomeworkDao()->getHomeworkByCourseIdAndLessonId($courseId, $lessonId);
+	}
+
 	public function getHomeworkResult($id)
 	{
 
@@ -65,6 +70,16 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
     }
 
+    public function searchHomeworkResults($conditions, $orderBy, $start, $limit)
+    {
+    	return $this->getHomeworkResultsDao()->searchHomeworkResults($conditions, $orderBy, $start, $limit);
+    }
+
+    public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId)
+    {
+    	return $this->getHomeworkResultsDao()->findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId);
+    }
+
     public function findHomeworkResultsByStatusAndCheckTeacherId($checkTeacherId, $status)
     {
 
@@ -81,11 +96,6 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     }
 
     public function findAllHomeworksByCourseId ($courseId)
-    {
-
-    }
-
-    public function findAllHomeworksByCourseIdAndLessonId ($courseId,$lessonId)
     {
 
     }
@@ -129,6 +139,11 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 	private function getHomeworkItemDao()
     {
     	return $this->createDao('Course.HomeworkItemDao');
+    }
+
+    private function getHomeworkResultsDao()
+    {
+    	return $this->createDao('Course.HomeworkResultsDao');
     }
 
 	private function filterHomeworkFields($fields,$mode)

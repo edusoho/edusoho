@@ -3,6 +3,7 @@
 {% block title %}作业批改 - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'lesson' %}
+{% set statuses = { unchecked:'未批改', uncommitted:'未提交', checked:'已批改' } %}
 
 {% block main %}
 
@@ -10,10 +11,40 @@
   	<div class="panel-heading">作业批改</div>
   	<div class="panel-body">
     	<ul class="nav nav-tabs">
-  		    <li class="active"><a href="#">未批改</a></li>
-  		    <li><a href="#">未提交</a></li>
-  		    <li><a href="#">已批改</a></li>
+    		{% for key, name in statuses %}
+			    <li {% if status == key %} class="active"{% endif %}><a href="{{ url('course_manage_lesson_homework_list', {courseId:course.id, lessonId:lesson.id, status:key}) }}">{{ name }}</a></li>
+		  	{% endfor %}
   	  	</ul>
+  	  	{% if homework %}
+  	  	<table class="table table-striped" id="homework-student-list">
+	      	<thead>
+		        <tr>
+		          <th width="70%">学员</th>
+		          <th width="30%">操作</th>
+		        </tr>
+	      	</thead>
+      		<tbody>
+      			{% for student in students %}
+      			{% set user = users[student.userId] %}
+      			{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+      			<tr id="student-{{ user.id }}-tr">
+					<td class="media">
+					    {{ web_macro.user_avatar(user, 'pull-left') }}
+					    <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+					    <div class="text-muted text-sm">批改时间：{{ student.createdTime|date('Y-n-d H:i') }}</div>
+					</td>
+					<td>
+					    <div class="btn-group">
+					        <button class="btn btn-default btn-sm follow-student-btn" data-url="/user/4/follow">批改</button>
+					    </div>
+					</td>
+				</tr>
+				{% endfor %}                
+            </tbody>
+    	</table>
+    	{% else %}
+			<div class="empty">没有相关的作业</div>
+		{% endif %}
   	</div>
 </div>
 
