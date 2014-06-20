@@ -1842,7 +1842,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('User.DiskService');
     }
 
-
     private function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');

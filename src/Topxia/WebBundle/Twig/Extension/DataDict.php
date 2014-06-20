@@ -182,8 +182,7 @@ class DataDict
         'targetName' => array(
         	'course' => '课程',
         	'vip' => '会员'
-    	),
-
+    	)
 	);
 
 	public static function dict($type)

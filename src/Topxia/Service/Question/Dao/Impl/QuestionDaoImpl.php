@@ -127,7 +127,6 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'questions');
 
-
         if (isset($conditions['targets']) and is_array($conditions['targets'])) {
             $targets = array();
             foreach ($conditions['targets'] as $target) {
@@ -148,8 +147,25 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }
 
         $builder->andWhere('parentId = :parentId')
+            ->andWhere('diffculty = :diffculty')
             ->andWhere('type = :type')
             ->andWhere('stem LIKE :stem');
+
+        if (isset($conditions['types'])) {  
+            $types = array();
+            foreach ($conditions['types'] as $type) {
+                if (empty($type)) {
+                    continue;
+                }
+                if (preg_match('/^[a-zA-Z0-9_\-\/]+$/', $type)) {
+                    $types[] = $type;
+                }
+            }
+            if (!empty($types)) {
+                $types = "'" . implode("','", $types) . "'";
+                $builder->andStaticWhere("type IN ({$types})");
+            }
+        }
 
         if (isset($conditions['excludeIds']) and is_array($conditions['excludeIds'])) {
             $excludeIds = array();

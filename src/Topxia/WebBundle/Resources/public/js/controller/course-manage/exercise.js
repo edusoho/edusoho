@@ -33,17 +33,17 @@ define(function(require, exports, module) {
 	            }
 
 	            $.post($form.attr('action'), $form.serialize(), function() {
-                    Notify.success('添加练习成功!');
+                    Notify.success('保存练习成功!');
                     /*window.location.href = target;*/
                 }).error(function(){
-                    Notify.danger('添加练习失败!');
+                    Notify.danger('保存练习失败,请检查题目是否存在！');
                 });
            		
             }
 		});
 
 		validator.addItem({
-			element: '#question_number',
+			element: '#questionCount',
 			required: true,
 			rule: 'integer'
 		});

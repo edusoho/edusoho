@@ -537,6 +537,18 @@ course_manage_lesson_exercise_create:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/exercise/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createExercise }
 
+course_manage_lesson_exercise_update:
+    pattern:  /course/{courseId}/manage/lesson/{lessonId}/exercise/{id}/update
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:updateExercise }
+
+course_manage_lesson_exercise_delete:
+    pattern:  /course/{courseId}/manage/lesson/{lessonId}/exercise/{id}/delete
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:deleteExercise }
+
+course_manage_lesson_homework_list:
+    pattern:  /course/{courseId}/manage/lesson/{lessonId}/homework/list
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:homeworkList }
+
 question_file_url:
     pattern: /question_ajax/file_url
     defaults: { _controller: TopxiaWebBundle:Question:fileUrl }
