@@ -1733,68 +1733,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getAnnouncementDao()->deleteAnnouncement($id);
 	}
 
-	//homework
-
-	public function getHomework($courseId,$lessonId)
-	{
-		
-	}
-
-	public function getHomeworkResult($courseId,$lessonId)
-	{
-
-	}
-
-	public function searchHomeworks($conditions, $sort, $start, $limit)
-	{
-
-	}
-
-	public function createHomework($courseId,$lessonId,$fields)
-	{
-
-	}
-
-    public function updateHomework($courseId,$lessonId, $fields)
-    {
-
-    }
-
-    public function deleteHomework($courseId,$lessonId)
-    {
-
-    }
-
-    public function deleteHomeworksByCourseId($courseId)
-    {
-
-    }
-
-    public function findHomeworkResultsByStatusAndCheckTeacherId($checkTeacherId, $status)
-    {
-
-    }
-
-    public function findHomeworkResultsByCourseIdAndStatusAndCheckTeacherId($courseId,$checkTeacherId, $status)
-    {
-
-    }
-
-    public function findHomeworkResultsByStatusAndStatusAndUserId($userId, $status)
-    {
-
-    }
-
-    public function findAllHomeworksByCourseId ($courseId)
-    {
-
-    }
-
-    public function findAllHomeworksByCourseIdAndLessonId ($courseId,$lessonId)
-    {
-
-    }
-
     private function getAnnouncementDao()
     {
     	return $this->createDao('Course.CourseAnnouncementDao');
