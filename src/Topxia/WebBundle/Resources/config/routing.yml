@@ -498,6 +498,18 @@ course_manage_lesson_create_homework:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/create/homework
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createHomework }
 
+course_manage_homework_items:
+    pattern: /course/{courseId}/manage/homework/{homeworkId}/items
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:homeworkItems }
+
+course_manage_homework_item_picker:
+    pattern: /course/{courseId}/manage/item_picker
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:homeworkItemPicker }
+
+course_manage_homework_item_picked:
+    pattern: /course/{courseId}/manage/item_picked
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:homeworkItemPicked }
+
 course_manage_lesson_edit:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:edit }
