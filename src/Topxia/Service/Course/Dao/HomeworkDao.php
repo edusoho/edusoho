@@ -6,6 +6,8 @@ interface HomeworkDao
 {
 	public function getHomework($id);
 
+    public function getHomeworkByCourseIdAndLessonId($courseId, $lessonId);
+
 	public function getHomeworkResult($id);
 
 	public function searchHomeworks($conditions, $sort, $start, $limit);
@@ -25,7 +27,5 @@ interface HomeworkDao
     public function findHomeworkResultsByStatusAndStatusAndUserId($userId, $status);
 
     public function findAllHomeworksByCourseId($courseId);
-
-    public function findAllHomeworksByCourseIdAndLessonId($courseId,$lessonId);
 
 }

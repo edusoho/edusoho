@@ -393,19 +393,83 @@ class CourseLessonManageController extends BaseController
 
 	public function homeworkListAction(Request $request, $courseId, $lessonId)
 	{
-		$status = $request->query->get('status');
+		$status = $request->query->get('status', 'unchecked');
 
 		$course = $this->getCourseService()->tryManageCourse($courseId);
-
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
         if (empty($lesson)) {
             throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
         }
+
+		$homework = $this->getHomeworkService()->getHomeworkByCourseIdAndLessonId($course['id'], $lesson['id']);
+
+		$students = $this->getCourseService()->searchMembers(array('courseId' => $homework['courseId'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 100);
+		$studentUserIds = ArrayToolkit::column($students, 'userId');
+		$users = $this->getUserService()->findUsersByIds($studentUserIds);
+		$homeworkResults = $this->getHomeworkService()->findHomeworkResultsByCourseIdAndLessonId($course['id'], $lesson['id']);
+
+		if (!empty($homeworkResults)) {
+			$students = $this->getHomeworkStudents($status, $students, $homeworkResults);
+		} else {
+			if ($status != 'uncommitted') {
+				$students = array();
+			}
+		}
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:homework-check.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
-			'status' => $status
+			'status' => $status,
+			'homework' => $homework,
+			'students' => $students,
+			'users' => $users
 		));
+	}
+
+	private function getHomeworkStudents($status, $students, $homeworkResults)
+	{
+		if ($status == 'uncommitted') {
+			foreach ($students as &$student) {
+				foreach ($homeworkResults as $item) {
+					if ($item['status'] != 'doing' && $item['userId'] == $student['userId'] ) {
+						$student = null;
+					}
+				}
+			}
+		} 
+
+		if ($status == 'unchecked') {
+			foreach ($students as &$student) {
+				$key = false;
+				foreach ($homeworkResults as $item) {
+					if ($item['status'] == 'reviewing' && $item['userId'] == $student['userId'] ) {
+						$key = true;
+					}
+				}
+
+				if ($key == true) {
+					continue;
+				}
+				$student = null;
+			}
+		}
+
+		if ($status == 'checked') {
+			foreach ($students as &$student) {
+				$key = false;
+				foreach ($homeworkResults as $item) {
+					if ($item['status'] == 'finished' && $item['userId'] == $student['userId'] ) {
+						$key = true;
+					}
+				}
+
+				if ($key == true) {
+					continue;
+				}
+				$student = null;
+			}
+		}
+		return array_filter($students);
 	}
 
 	private function generateExerciseFields($fields, $course, $lesson)
