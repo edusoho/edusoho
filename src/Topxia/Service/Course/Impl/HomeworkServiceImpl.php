@@ -40,14 +40,27 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 			throw $this->createServiceException('课时不存在，创建作业失败！');
 		}
 
+		$excludeIds = $fields['excludeIds'];
+		unset($fields['excludeIds']);
+
+		$excludeIds = explode(',',$excludeIds);
+
 		$fields = $this->filterHomeworkFields($fields,$mode = 'add');
 		$fields['courseId'] = $courseId;
 		$fields['lessonId'] = $lessonId;
 		$homework = $this->getHomeworkDao()->addHomework($fields);
 
+		//add items
+		foreach ($excludeIds as $key => $excludeId) {
+			$items['seq'] = $key+1;
+			$items['questionId'] = $excludeId;
+			$items['homeworkId'] = $homework['id'];
+			$this->getHomeworkItemDao()->addItem($items);
+		}
+		
 		$this->getLogService()->info('homework','create','创建课程{$courseId}课时{$lessonId}的作业');
 		
-		return $homework;
+		return true;
 	}
 
     public function updateHomework($id, $fields)

@@ -145,9 +145,11 @@ define(function(require, exports, module) {
             var $btn = $(e.currentTarget);
 
             var excludeIds = [];
+            console.log("#testpaper-items-" + this.get('currentType'));
             $("#testpaper-items-" + this.get('currentType')).find('[name="questionId[]"]').each(function(){
                 excludeIds.push($(this).val());
             });
+                console.log(excludeIds);
 
             var $modal = $("#modal").modal();
             $modal.data('manager', this);

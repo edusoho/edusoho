@@ -479,14 +479,15 @@ class CourseLessonManageController extends BaseController
 		}
 
 		if ($request->getMethod() == 'POST') {
+
         	$fields = $request->request->all();
         	$homework = $this->getHomeworkService()->createHomework($courseId,$lessonId,$fields);
-            
-            return $this->redirect($this->generateUrl('course_manage_homework_items',
-            	array(
-            		'courseId'=>$courseId,
-            		'homeworkId'=>$homework['id'],
-        		)));
+
+	        if($homework){
+	            return $this->createJsonResponse(array("status" =>"success",'courseId'=>$courseId));
+	        } else {
+	            return $this->createJsonResponse(array("status" =>"failed")); 
+	        }
 		}
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:homework-modal.html.twig', array(
@@ -554,7 +555,6 @@ class CourseLessonManageController extends BaseController
 
 	public function homeworkItemPickerAction(Request $request,$courseId)
 	{
-
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
         $conditions = $request->query->all();
@@ -572,7 +572,7 @@ class CourseLessonManageController extends BaseController
 
 
         $replace = empty($conditions['replace']) ? '' : $conditions['replace'];
-        
+
         $paginator = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),

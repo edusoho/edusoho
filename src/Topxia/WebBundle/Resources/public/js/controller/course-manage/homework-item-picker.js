@@ -15,7 +15,6 @@ define(function(require, exports, module) {
 
         $("#homework-item-picker-table").on('click', '[data-role=picked-item]', function() {
             var replace = parseInt($(this).data('replace'));
-console.log(replace);
             $.get($(this).data('url'), function(html) {
                 var $trs = $(html).find('tr'),
                     $firstTr = $trs.first();
