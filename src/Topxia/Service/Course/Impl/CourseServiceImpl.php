@@ -616,7 +616,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live'))) {
+		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt'))) {
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
@@ -660,7 +660,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	private function fillLessonMediaFields(&$lesson)
 	{
-		if (in_array($lesson['type'], array('video', 'audio'))) {
+		if (in_array($lesson['type'], array('video', 'audio', 'ppt'))) {
 			$media = empty($lesson['media']) ? null : $lesson['media'];
 			if (empty($media) or empty($media['source']) or empty($media['name'])) {
 				throw $this->createServiceException("media参数不正确，添加课时失败！");

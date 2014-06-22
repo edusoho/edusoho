@@ -90,6 +90,8 @@ class CourseLessonController extends BaseController
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
                         $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         $json['mediaHLSUri'] = $url['url'];
+                    } else if ($file['type'] == 'ppt') {
+                        $json['mediaUri'] = $this->generateUrl('course_lesson_ppt', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']));
                     } else {
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
                             $key = $file['metas']['hd']['key'];
@@ -149,6 +151,28 @@ class CourseLessonController extends BaseController
         $this->getCourseService()->tryTakeCourse($courseId);
 
         return $this->fileAction($request, $lesson['mediaId'], true);
+    }
+
+    public function pptAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        if ($lesson['type'] != 'ppt' or empty($lesson['mediaId'])) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        $factory = new CloudClientFactory();
+        $client = $factory->createClient();
+
+        $result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length']. '');
+
+        return $this->createJsonResponse($result);
     }
 
     public function fileAction(Request $request, $fileId, $isDownload = false)

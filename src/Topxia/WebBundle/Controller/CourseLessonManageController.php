@@ -106,6 +106,17 @@ class CourseLessonManageController extends BaseController
 	    		if (!empty($audioUploadToken['error'])) {
 	    			return $this->createMessageModalResponse('error', $audioUploadToken['error']['message']);
 	    		}
+
+                $commands = array_keys($client->getPPTConvertCommands());
+                $pptUploadToken = $client->generateUploadToken($client->getBucket(), array(
+                    'convertCommands' => implode(';', $commands),
+                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
+                ));
+                if (!empty($pptUploadToken['error'])) {
+                    return $this->createMessageModalResponse('error', $pptUploadToken['error']['message']);
+                }
+
+
     		}
     		 catch (\Exception $e) {
     			return $this->createMessageModalResponse('error', $e->getMessage());
@@ -117,7 +128,8 @@ class CourseLessonManageController extends BaseController
             'targetType' => $targetType,
             'targetId' => $targetId,
 			'videoUploadToken' => $videoUploadToken,
-			'audioUploadToken' => $audioUploadToken,
+            'audioUploadToken' => $audioUploadToken,
+			'pptUploadToken' => $pptUploadToken,
 			'filePath' => $filePath,
 			'fileKey' => $fileKey,
 			'convertKey' => $convertKey,

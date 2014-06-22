@@ -368,8 +368,14 @@ define(function(require, exports, module) {
 
                         }, 'json');
 
+                    }
 
-                        // window.open(url);
+                    else if (lesson.type == 'ppt') {
+                        $.get(that.get('courseUri') + '/lesson/' + id + '/ppt', function(response) {
+                            console.log(response);
+
+                        }, 'json');
+                        $("#lesson-ppt-content").show().find('.lesson-content-text-body').html('ppt');
                     }
                 }
 

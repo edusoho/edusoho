@@ -23,6 +23,10 @@ class EdusohoCloudClient implements CloudClient
 
     protected $videoCommands = array();
 
+    protected $audioCommands = array();
+
+    protected $pptCommands = array();
+
     public function __construct (array $options)
     {
     	if (substr($options['apiServer'], 0, 7) != 'http://') {
@@ -39,6 +43,7 @@ class EdusohoCloudClient implements CloudClient
         $this->bucket = $options['bucket'];
         $this->videoCommands = $options['videoCommands'];
         $this->audioCommands = $options['audioCommands'];
+        $this->pptCommands = $options['pptCommands'];
     }
 
 	public function generateUploadToken($bucket, array $params = array())
@@ -172,6 +177,11 @@ class EdusohoCloudClient implements CloudClient
         return $this->audioCommands;
     }
 
+    public function getPPTConvertCommands()
+    {
+        return $this->pptCommands;
+    }
+
     public function getVideoInfo($bucket, $key)
     {
         $params = array('bucket' => $bucket, 'key' => $key, 'duration' => 3600);
@@ -261,6 +271,21 @@ class EdusohoCloudClient implements CloudClient
         $content = $this->getRequest($this->getConvertUrl(), array('token' => $token));
 
         return json_decode($content, true);
+    }
+
+    public function convertPPT($key)
+    {
+        $args = array();
+        $args['key'] = $key;
+        return $this->callRemoteApi('GET', 'Pdf2Jpg', $args);
+    }
+
+    public function pptImages($key, $length)
+    {
+        $args = array();
+        $args['key'] = $key;
+        $args['length'] = $length;
+        return $this->callRemoteApi('GET', 'PPTImages', $args);
     }
 
     private function generateViewToken($bucket, $key)

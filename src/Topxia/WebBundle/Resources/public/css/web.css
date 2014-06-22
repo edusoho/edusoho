@@ -1831,13 +1831,15 @@ body {
 
 .lesson-form .for-video-type,
 .lesson-form .for-audio-type,
-.lesson-form .for-text-type {
+.lesson-form .for-text-type,
+.lesson-form .for-ppt-type {
 	display: none;
 }
 
 .lesson-form-video .for-video-type,
 .lesson-form-audio .for-audio-type,
-.lesson-form-text .for-text-type {
+.lesson-form-text .for-text-type,
+.lesson-form-ppt .for-ppt-type {
 	display: block;
 }
 

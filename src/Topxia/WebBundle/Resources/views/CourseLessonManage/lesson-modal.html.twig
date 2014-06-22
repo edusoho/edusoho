@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <div class="form-group for-text-type for-video-type for-audio-type">
+  <div class="form-group for-text-type for-video-type for-audio-type for-ppt-type">
     <div class="col-md-2 control-label"><label for="lesson-summary-field">摘要</label></div>
     <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary">{{ field_value(lesson, 'summary') }}</textarea></div>
   </div>
@@ -52,9 +52,10 @@
     <div class="col-md-9 controls"><textarea class="form-control" id="lesson-content-field" name="content">{{ field_value(lesson, 'content') }}</textarea></div>
   </div>
 
-  <div class="form-group for-video-type for-audio-type">
+  <div class="form-group for-video-type for-audio-type for-ppt-type">
     <div class="col-md-2 control-label for-video-type"><label>视频</label></div>
     <div class="col-md-2 control-label for-audio-type"><label>音频</label></div>
+    <div class="col-md-2 control-label for-ppt-type"><label>PPT</label></div>
     <div class="col-md-9 controls">
       {% include "TopxiaWebBundle:CourseLessonManage:media-choose.html.twig" %}
       <input id="lesson-media-field" type="hidden" name="media" value="{{ field_value(lesson, 'media')|json_encode }}">
