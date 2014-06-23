@@ -408,10 +408,22 @@ class CourseLessonManageController extends BaseController
 
 		$homework = $this->getHomeworkService()->getHomeworkByCourseIdAndLessonId($course['id'], $lesson['id']);
 
-		$students = $this->getCourseService()->searchMembers(array('courseId' => $homework['courseId'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 100);
+		$conditions = array('courseId' => $homework['courseId'], 'role' => 'student');
+		$paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchMemberCount($conditions)
+            , 25
+        );
+
+		$students = $this->getCourseService()->searchMembers(
+			$conditions, 
+			array('createdTime', 'DESC'), 
+			$paginator->getOffsetCount(),
+            $paginator->getPerPageCount());
+
 		$studentUserIds = ArrayToolkit::column($students, 'userId');
 		$users = $this->getUserService()->findUsersByIds($studentUserIds);
-		$homeworkResults = $this->getHomeworkService()->findHomeworkResultsByCourseIdAndLessonId($course['id'], $lesson['id']);
+		$homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findHomeworkResultsByCourseIdAndLessonId($course['id'], $lesson['id']), 'userId');
 
 		if (!empty($homeworkResults)) {
 			$students = $this->getHomeworkStudents($status, $students, $homeworkResults);
@@ -427,7 +439,9 @@ class CourseLessonManageController extends BaseController
 			'status' => $status,
 			'homework' => $homework,
 			'students' => $students,
-			'users' => $users
+			'users' => $users,
+			'homeworkResults' => $homeworkResults,
+			'paginator' => $paginator
 		));
 	}
 
@@ -776,6 +790,7 @@ class CourseLessonManageController extends BaseController
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
+    
     private function getHomeworkService()
     {
         return $this->getServiceKernel()->createService('Course.HomeworkService');

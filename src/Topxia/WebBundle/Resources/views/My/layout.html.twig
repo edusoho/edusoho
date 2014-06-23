@@ -25,8 +25,10 @@
                 href="{{path('my_teaching_threads', {type:'question'}) }}">学员问答</a>
                <a class="list-group-item {% if side_nav == 'my-teaching-discussions' %} active {% endif %}"
                 href="{{path('my_teaching_threads', {type:'discussion'}) }}">学员话题</a>
+               <a class="list-group-item {% if side_nav == 'my-teaching-homework-check' %} active {% endif %}"
+                href="{{path('my_teaching_homework_list') }}">作业批改</a>
                <a class="list-group-item {% if side_nav == 'my-teaching-check' %} active {% endif %}"
-                href="{{path('course_manage_list_teacher_test_reviewing') }}">我的批阅</a>
+                href="{{path('course_manage_list_teacher_test_reviewing') }}">试卷批阅</a>
               </ul>
             </div>
           {% endif %}

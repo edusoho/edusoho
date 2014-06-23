@@ -11,7 +11,7 @@
           {% else %}
             <strong>{{ web_macro.user_link(message.createdUser) }}：</strong> 
           {% endif %}
-          {{ message.content}}
+          {{ message.content|raw }}
         </div>
         <div class="message-footer">
           <span class="text-muted">{{ message.createdTime|smart_time }}</span>
