@@ -3855,3 +3855,126 @@ body {
 		width: 263px;
 	}
 }
+
+
+.ppt-dashboard {
+	width: 100%;
+	position: fixed;
+	top: 56px;
+	bottom: 0px;
+	left: 0;
+	right: 0;
+	background: #e5e5e5;
+}
+
+.slide-player {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+}
+
+.slide-player-body {
+	position: absolute;
+	text-align: center;
+	width: 100%;
+	top: 0px;
+	bottom: 50px;
+}
+
+.loading-background  {
+	background: #fff url(/bundles/topxiaweb/img/loader.gif) no-repeat center center;
+}
+
+.slide-player-control {
+	position: absolute;
+	width: 100%;
+	bottom: 0px;
+	text-align: center;
+	font-size: 20px;
+	padding: 10px;
+	background: #fff;
+	border-top: 1px solid #e2e2e2;
+}
+
+.slide-player-control a {
+	color: #666;
+}
+
+.slide-player-control a:hover {
+	color: #333;
+}
+
+.slide-player-control .fullscreen {
+	float: right;
+	margin-left: 15px;
+}
+
+.slide-player-control .goto-first {
+	margin-left: 100px;
+}
+
+.slide-player-control .goto-index {
+	width: 50px;
+	display: inline-block;
+}
+
+.slide-player-control .goto-index-input {
+	float: right;
+	font-size: 16px;
+}
+
+.toolbar-wrapper .glyphicon-fullscreen {
+	float: right;
+}
+
+.toolbar-wrapper a {
+	color: #444;
+}
+
+.toolbar-wrapper a:hover{
+	color: #000;
+}
+
+.slide-player-body {
+	text-align: center;
+}
+
+.slide-player-body .slide {
+	display: none;
+	position: relative;
+	height: 100%;
+}
+
+.slide-player-body .slide.active {
+	display: inline-block;
+}
+
+.slide-notice {
+	display: none;
+	border-bottom: 1px solid #e5e5e5;
+	-webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+	box-shadow: 0 5px 15px rgba(0,0,0,.5);
+	background-color: #fff;
+	background-clip: padding-box;
+	border: 1px solid #999;
+	border: 1px solid rgba(0,0,0,.2);
+	border-radius: 6px;
+	outline: 0;
+	-webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+	box-shadow: 0 3px 9px rgba(0,0,0,.5);
+	filter:alpha(opacity=50);
+	-moz-opacity:0.5;
+	opacity:0.5;
+	z-index: 1000;
+	text-align: center;
+	margin: 100px auto;
+	position: relative;
+	width: 300px;
+}
+
+.slide-notice .header {
+	padding: 15px;
+	min-height: 16.42857143px;
+}
