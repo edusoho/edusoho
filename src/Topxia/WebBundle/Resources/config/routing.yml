@@ -494,10 +494,18 @@ course_manage_lesson_sort:
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:sort }
     methods: [POST]
 
-course_manage_lesson_create_homework:
-    pattern: /course/{courseId}/manage/lesson/{lessonId}/create/homework
+course_manage_lesson_homework_create:
+    pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createHomework }
 
+course_manage_lesson_homework_edit:
+    pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/edit
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editHomework }
+
+course_manage_lesson_homework_remove:
+    pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/remove
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:removeHomework }
+    
 course_manage_homework_items:
     pattern: /course/{courseId}/manage/homework/{homeworkId}/items
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:homeworkItems }

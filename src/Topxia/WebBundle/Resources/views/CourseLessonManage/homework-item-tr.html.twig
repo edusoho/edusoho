@@ -3,7 +3,7 @@
     <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
     <input type="hidden" name="questionId[]" value="{{ question.id }}">
   </td>
-  <td class="seq">{{ item.seq|default(' ') }}</td>
+  <td class="seq">{{ homeworkItem.seq|default(' ') }}</td>
   <td>
     {{question['stem']|plain_text(40) }}
     <div class="text-muted text-sm">

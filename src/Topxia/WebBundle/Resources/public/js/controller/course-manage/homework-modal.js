@@ -4,6 +4,9 @@ define(function(require, exports, module) {
     var editor = EditorFactory.create('#homework-about-field', 'simple_noimage');
     var  $modal = $("#modal");
     var Widget = require('widget');
+    // var Handlebars = require('handlebars');
+    // var Notify = require('common/bootstrap-notify');
+        require('jquery.sortable');
 
     var HomeworkItemManager = Widget.extend({
 
@@ -19,26 +22,46 @@ define(function(require, exports, module) {
             'click #save-homework-btn': 'onConfirmSubmit'
         },
 
+        setup:function() {
+            this.initItemSortable();
+        },
 
         onConfirmSubmit: function(e) {
-            editor.sync(); 
+
+            editor.sync();
+            var $btn = $('#save-homework-btn');
             var $description = editor.html();
             var $completeLimit = $('[name="completeLimit"]:checked').val();
-
             var excludeIds = [];
+            var $tbodyValueLength = $('#homework-table-tbody:has(tr)').length;
 
-            $("#homework-table-tbody").find('[name="questionId[]"]').each(function(){
-                excludeIds.push($(this).val());
-            });
+            if ($tbodyValueLength == 0) {
 
-            $.post($('#save-homework-btn').data('url'),{description:$description,completeLimit:$completeLimit,excludeIds: excludeIds.join(',')},function(response){
-                    if (response.status == 'success') {
-                        window.location.href="/course/"+response.courseId+"/manage/lesson";
-                    }
-             });
+                $('#homework_items_help').css('color','#a94442');
+                $('#homework_items_help').show();
+                $btn.attr("disabled", true);
+
+            } else {
+
+                $('#homework_items_help').hide();
+                $btn.attr("disabled", false);
+                $btn.button('saving');
+
+                $("#homework-table-tbody").find('[name="questionId[]"]').each(function(){
+                    excludeIds.push($(this).val());
+                });
+
+                $.post($('#save-homework-btn').data('url'),{description:$description,completeLimit:$completeLimit,excludeIds: excludeIds.join(',')},function(response){
+                        if (response.status == 'success') {
+                            window.location.href="/course/"+response.courseId+"/manage/lesson";
+                        }
+                 });
+            }
+
         },
 
         onClickBatchSelect: function(e) {
+
             if ($(e.currentTarget).is(":checked") == true){
                 this.$('[data-role=batch-select]:visible, [data-role=batch-item]:visible').prop('checked', true);
             } else {
@@ -91,6 +114,8 @@ define(function(require, exports, module) {
                
             var excludeIds = [];
 
+            $('#save-homework-btn').attr("disabled", false);
+     
             $("#homework-table-tbody").find('[name="questionId[]"]').each(function(){
                 excludeIds.push($(this).val());
             });
@@ -110,13 +135,28 @@ define(function(require, exports, module) {
                     seq ++;
             });
         },
-    });
-  
-        
+
+        initItemSortable: function (e) {
+            var $table = this.$("#homework-table-tbody"),
+            self = this;
+            $list =$table.sortable({
+                    // containerPath: '> tr',
+                    itemSelector: 'tr.is-question',
+                    placeholder: '<tr class="placeholder"/>',
+                    // exclude: '.notMoveHandle',
+                onDrop: function (item, container, _super) {
+                    _super(item, container);
+                        self.refreshSeqs();
+                },
+            });
+        },
+});
     exports.run = function() {
         new HomeworkItemManager({
             element: '#homework-items-manager'
         });
+
+
     };
 
 });

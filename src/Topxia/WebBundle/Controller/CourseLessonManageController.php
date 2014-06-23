@@ -16,7 +16,8 @@ class CourseLessonManageController extends BaseController
 
 		$lessonIds = ArrayToolkit::column($courseItems, 'id');
 		$exercises = $this->getExerciseService()->findExerciseByCourseIdAndLessonIds($course['id'], $lessonIds);
-
+		$homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
+		
 		$mediaMap = array();
 		foreach ($courseItems as $item) {
 			if ($item['itemType'] != 'lesson') {
@@ -47,7 +48,8 @@ class CourseLessonManageController extends BaseController
 		return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
 			'course' => $course,
 			'items' => $courseItems,
-			'exercises' => $exercises
+			'exercises' => $exercises,
+			'homeworks' => $homeworks,
 		));
 	}
 
@@ -558,6 +560,59 @@ class CourseLessonManageController extends BaseController
             'course' => $course,
             'lesson' => $lesson,
         ));
+	}
+
+	public function editHomeworkAction(Request $request,$courseId,$lessonId,$homeworkId)
+	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+		$user = $this->getCurrentUser();
+
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
+		if (empty($course)) {
+			throw $this->createNotFoundException("课程(#{$courseId})不存在！");
+		}
+
+		if (empty($lesson)) {
+			throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+		}
+
+		$homework = $this->getHomeworkService()->getHomework($homeworkId);
+
+		if (empty($homework)) {
+			throw $this->createNotFoundException("作业(#{$homeworkId})不存在！");
+		}
+
+		$homeworkItems = $this->getHomeworkService()->findHomeworkItemsByHomeworkId($homeworkId);
+		$questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($homeworkItems, 'questionId'));
+        
+		if ($request->getMethod() == 'POST') {
+			
+			$fields = $request->request->all();
+			$homework = $this->getHomeworkService()->updateHomework($homeworkId, $fields);
+
+	        if($homework){
+	            return $this->createJsonResponse(array("status" =>"success",'courseId'=>$courseId));
+	        } else {
+	            return $this->createJsonResponse(array("status" =>"failed")); 
+	        }
+		}
+
+		return $this->render('TopxiaWebBundle:CourseLessonManage:homework-modal.html.twig', array(
+            'course' => $course,
+            'lesson' => $lesson,
+            'homework' => $homework,
+            'homeworkItems' => $homeworkItems,
+            'questions' => $questions,
+        ));
+	}
+
+	public function removeHomeworkAction(Request $request,$courseId,$lessonId,$homeworkId)
+	{
+
 	}
 
 	public function homeworkItemsAction(Request $request,$courseId,$homeworkId)

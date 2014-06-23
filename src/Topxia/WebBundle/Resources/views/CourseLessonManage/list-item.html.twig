@@ -97,6 +97,17 @@
 	        </a>
           	<ul class="dropdown-menu" role="menu" style="margin-top:12px">
           		<li>
+          		{% set homework =  homeworks[lesson.id]|default(null) %}
+          		{% set homeworkId =  homework.id|default(null) %}
+      			{% if homework %}
+						<a href="{{ path('course_manage_lesson_homework_edit', {courseId:course.id, lessonId:lesson.id, homeworkId:homeworkId }) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>编辑作业</a>
+						<a href="javascript:;" class="delete-exercise-btn" data-url="{{ path('course_manage_lesson_homework_remove', {courseId:course.id, lessonId:lesson.id, homeworkId:homeworkId }) }}" ><span class="glyphicon glyphicon-trash prs"></span>移除作业</a>
+					{% else %}
+						<a href="{{ path('course_manage_lesson_homework_create', {courseId:course.id, lessonId:lesson.id,homeworkId:homeworkId}) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>添加作业</a>
+					{% endif %}
+          		</li>
+
+          		<li>
           			<a href="{{ path('course_manage_lesson_homework_list', {courseId:course.id, lessonId:lesson.id }) }}" ><span class="glyphicon glyphicon-check prs"></span>作业批改</a>
           		</li>
           		<li class="divider"></li>

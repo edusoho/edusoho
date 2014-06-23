@@ -15,10 +15,17 @@ class HomeworkDaoImpl extends BaseDao Implements HomeworkDao
 		return $this->getConnection()->fetchAssoc($sql,array($id)) ? : null;
 	}
 
-    public function getHomeworkByCourseIdAndLessonId($courseId, $lessonId)
+    public function findHomeworkByCourseIdAndLessonIds($courseId, $lessonIds)
     {
-        $sql = "SELECT * FROM {$this->table} Where courseId = ? And lessonId = ? Limit 1";
-        return $this->getConnection()->fetchAssoc($sql, array($courseId, $lessonId)) ? : null;
+        if(empty($lessonIds)){
+            return array();
+        }
+        
+        $marks = str_repeat('?,', count($lessonIds) - 1) . '?';
+
+        $sql ="SELECT * FROM {$this->table} WHERE courseId = {$courseId} AND lessonId IN ({$marks});";
+        
+        return $this->getConnection()->fetchAll($sql, $lessonIds);
     }
 
 	public function getHomeworkResult($id)
@@ -42,7 +49,8 @@ class HomeworkDaoImpl extends BaseDao Implements HomeworkDao
 
     public function updateHomework($id,$fields)
     {
-
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getHomework($id);
     }
 
     public function deleteHomework($id)

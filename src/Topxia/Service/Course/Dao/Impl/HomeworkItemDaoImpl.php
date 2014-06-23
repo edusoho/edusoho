@@ -11,7 +11,7 @@ class HomeworkItemDaoImpl extends BaseDao implements HomeworkItemDao
 
     public function getItem($id)
     {
-        $sql = "SELECT * FROM {$this->table} Where id = ?";
+        $sql = "SELECT * FROM {$this->table} WHERE id = ?";
         return  $this->getConnection()->fetchAssoc($sql,array($id)) ? : array();
     }
 
@@ -31,7 +31,7 @@ class HomeworkItemDaoImpl extends BaseDao implements HomeworkItemDao
 
     public function deleteItem($id)
     {
-
+        return $this->getConnection()->delete($this->table,array('id'=>$id));
     }
 
     public function deleteItemsByParentId($id)
@@ -51,7 +51,8 @@ class HomeworkItemDaoImpl extends BaseDao implements HomeworkItemDao
 
     public function findItemsByHomeworkId($homeworkId)
     {
-
+        $sql = "SELECT * FROM {$this->table} WHERE homeworkId = ?";
+        return $this->getConnection()->fetchAll($sql,array($homeworkId)) ? : array();
     }
 
     public function getItemsCountByHomeworkId($homeworkId)
