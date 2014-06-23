@@ -19,6 +19,11 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return ArrayToolkit::index($homeworks, 'lessonId');
 	}
 
+	public function getHomeworkByCourseIdAndLessonId($courseId, $lessonId)
+	{
+		return $this->getHomeworkDao()->getHomeworkByCourseIdAndLessonId($courseId, $lessonId);
+	}
+
 	public function getHomeworkResult($id)
 	{
 
@@ -55,22 +60,15 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
 		unset($fields['excludeIds']);
 
-		$excludeIds = explode(',',$excludeIds);
-
 		$fields = $this->filterHomeworkFields($fields,$mode = 'add');
 		$fields['courseId'] = $courseId;
 		$fields['lessonId'] = $lessonId;
+		$excludeIds = explode(',',$excludeIds);
 		$fields['itemCount'] = count($excludeIds);
 
 		$homework = $this->getHomeworkDao()->addHomework($fields);
 
-		//add items
-		foreach ($excludeIds as $key => $excludeId) {
-			$items['seq'] = $key+1;
-			$items['questionId'] = $excludeId;
-			$items['homeworkId'] = $homework['id'];
-			$this->getHomeworkItemDao()->addItem($items);
-		}
+		$this->addHomeworkItems($homework['id'],$excludeIds);
 		
 		$this->getLogService()->info('homework','create','创建课程{$courseId}课时{$lessonId}的作业');
 		
@@ -85,11 +83,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     		throw $this->createServiceException('作业不存在，更新作业失败！');
     	}
 
-    	$homeworkItems = $this->getHomeworkItemDao()->findItemsByHomeworkId($homework['id']);
-
-    	foreach ($homeworkItems as $key => $homeworkItem) {
-    		$this->getHomeworkItemDao()->deleteItem($homeworkItem['id']);
-    	}
+    	$this->deleteHomeworkItemsByHomeworkId($homework['id']);
 
 		$excludeIds = $fields['excludeIds'];
 
@@ -99,19 +93,14 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
 		unset($fields['excludeIds']);
 
-		$excludeIds = explode(',',$excludeIds);
-
 		$fields = $this->filterHomeworkFields($fields,$mode = 'edit');
+		
+		$excludeIds = explode(',',$excludeIds);
 		$fields['itemCount'] = count($excludeIds);
 
 		$homework = $this->getHomeworkDao()->updateHomework($id,$fields);
 
-		foreach ($excludeIds as $key => $excludeId) {
-			$items['seq'] = $key+1;
-			$items['questionId'] = $excludeId;
-			$items['homeworkId'] = $homework['id'];
-			$this->getHomeworkItemDao()->addItem($items);
-		}
+		$this->addHomeworkItems($homework['id'],$excludeIds);
 		
 		$this->getLogService()->info('homework','update','更新课程{$courseId}课时{$lessonId}的{$id}作业');
 		
@@ -120,9 +109,19 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
     }
 
-    public function deleteHomework($id)
+    public function removeHomework($id)
     {
+    	$homework = $this->getHomework($id);
 
+    	if (empty($homework)) {
+    		throw $this->createServiceException('作业不存在，删除作业失败！');
+    	}
+
+    	$this->deleteHomeworkItemsByHomeworkId($homework['id']);
+
+    	$this->getHomeworkDao()->deleteHomework($id);
+
+    	return true;
     }
 
     public function deleteHomeworksByCourseId($courseId)
@@ -185,6 +184,26 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
 		$this->getHomeworkItemDao()->addItem($items);
 	}
+
+	private function addHomeworkItems($homeworkId,$excludeIds)
+	{
+		foreach ($excludeIds as $key => $excludeId) {
+			$items['seq'] = $key+1;
+			$items['questionId'] = $excludeId;
+			$items['homeworkId'] = $homeworkId;
+			$this->getHomeworkItemDao()->addItem($items);
+		}
+	}
+
+    private function deleteHomeworkItemsByHomeworkId($homeworkId)
+    {
+    	$homeworkItems = $this->getHomeworkItemDao()->findItemsByHomeworkId($homeworkId);
+
+    	foreach ($homeworkItems as $key => $homeworkItem) {
+    		$this->getHomeworkItemDao()->deleteItem($homeworkItem['id']);
+    	}
+
+    }
 
     private function getCourseService()
     {

@@ -10,6 +10,8 @@ interface HomeworkService
 
     public function findHomeworksByCourseIdAndLessonIds($courseId, $lessonIds);
 
+    public function getHomeworkByCourseIdAndLessonId($courseId, $lessonId);
+    
 	public function getHomeworkResult($id);
 
 	public function searchHomeworks($conditions, $sort, $start, $limit);
@@ -18,7 +20,7 @@ interface HomeworkService
 
     public function updateHomework($id, $fields);
 
-    public function deleteHomework($id);
+    public function removeHomework($id);
 
     public function deleteHomeworksByCourseId($courseId);
 

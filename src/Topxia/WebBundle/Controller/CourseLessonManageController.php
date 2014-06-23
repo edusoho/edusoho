@@ -615,6 +615,13 @@ class CourseLessonManageController extends BaseController
 
 	public function removeHomeworkAction(Request $request,$courseId,$lessonId,$homeworkId)
 	{
+		$result = $this->getHomeworkService()->removeHomework($homeworkId);
+
+        if($result){
+            return $this->createJsonResponse(array("status" =>"success"));
+        } else {
+            return $this->createJsonResponse(array("status" =>"failed")); 
+	    }
 
 	}
 
