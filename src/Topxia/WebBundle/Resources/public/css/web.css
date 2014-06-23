@@ -3884,7 +3884,7 @@ body {
 }
 
 .loading-background  {
-	background: #fff url(/bundles/topxiaweb/img/loader.gif) no-repeat center center;
+	background: #fff url(../img/loader.gif) no-repeat center center;
 }
 
 .slide-player-control {
