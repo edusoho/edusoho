@@ -214,7 +214,6 @@ class SettingController extends BaseController
         );
 
         $auth = array_merge($default, $auth);
-
         if ($request->getMethod() == 'POST') {
             $auth = $request->request->all();
             if (empty($auth['welcome_methods'])) {
@@ -459,6 +458,7 @@ class SettingController extends BaseController
             'mode' => 'default',
             'nickname_enabled' => 0,
             'avatar_alert' => 'none',
+            'email_filter' => ''
         );
         
         $setting = array_merge($default, $setting);
@@ -472,6 +472,7 @@ class SettingController extends BaseController
             $setting = array('mode' => $data['mode'],
                             'nickname_enabled' => $data['nickname_enabled'],
                             'avatar_alert' => $data['avatar_alert'],
+                            'email_filter' => $data['email_filter']
             );
             $this->getSettingService()->set('user_partner', $setting);
 

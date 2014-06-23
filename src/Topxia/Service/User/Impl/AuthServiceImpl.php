@@ -118,7 +118,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         if (!$avaliable) {
             return array('error_duplicate', 'Email已存在!');
         }
-
+        
         return array('success', '');
     }
 
