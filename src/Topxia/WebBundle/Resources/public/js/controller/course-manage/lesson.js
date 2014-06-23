@@ -97,6 +97,17 @@ define(function(require, exports, module) {
             }, 'json');
         });
 
+        $list.on('click', '.delete-homework-btn', function(e) {
+            if (!confirm('您真的要删除该课时作业吗？')) {
+                return ;
+            }
+            var $btn = $(e.currentTarget);
+            $.post($(this).data('url'), function(response) {
+                Notify.success('作业已删除！');
+                window.location.reload();
+            }, 'json');
+        });
+
         Sticky('.lesson-manage-panel .panel-heading', 0, function(status){
             if (status) {
                 var $elem = this.elem;
