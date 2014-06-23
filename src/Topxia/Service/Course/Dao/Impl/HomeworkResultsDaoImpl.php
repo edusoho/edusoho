@@ -20,6 +20,13 @@ class HomeworkResultsDaoImpl extends BaseDao implements HomeworkResultsDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
+    public function searchHomeworkResultsCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
     public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId)
     {   
         if(empty($courseId) or empty($lessonId)){
@@ -35,6 +42,7 @@ class HomeworkResultsDaoImpl extends BaseDao implements HomeworkResultsDao
             ->from($this->table, 'homework_result')
             ->andWhere('userId = :userId')
             ->andWhere('courseId = :courseId')
+            ->andWhere('lessonId = :lessonId')
             ->andWhere('homeworkId = :homeworkId')
             ->andWhere('status = :status');
 

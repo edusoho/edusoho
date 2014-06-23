@@ -6,6 +6,8 @@ interface HomeworkService
 {
 	public function getHomework($id);
 
+    public function getHomeworkByCourseIdAndLessonId($courseId, $lessonId);
+
     public function findHomeworksByCourseIdAndLessonIds($courseId, $lessonIds);
 
 	public function getHomeworkResult($id);
@@ -23,6 +25,8 @@ interface HomeworkService
     //HomeworkResults
 
     public function searchHomeworkResults($conditions, $orderBy, $start, $limit);
+
+    public function searchHomeworkResultsCount($conditions);
 
     public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId);
 

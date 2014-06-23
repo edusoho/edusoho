@@ -17,6 +17,9 @@ class CourseLessonManageController extends BaseController
 		$lessonIds = ArrayToolkit::column($courseItems, 'id');
 		$exercises = $this->getExerciseService()->findExerciseByCourseIdAndLessonIds($course['id'], $lessonIds);
 		$homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
+		foreach ($homeworks as &$homework) {
+			$homework['results'] = $this->getHomeworkService()->searchHomeworkResultsCount(array( 'courseId' => $homework['courseId'], 'lessonId' => $homework['lessonId'], 'status' => 'reviewing' ));
+		}
 		
 		$mediaMap = array();
 		foreach ($courseItems as $item) {
