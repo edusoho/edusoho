@@ -7,6 +7,8 @@ interface HomeworkDao
 	public function getHomework($id);
 
     public function findHomeworkByCourseIdAndLessonIds($courseId, $lessonIds);
+
+    public function findHomeworksByCreatedUserId($userId);
     
     public function getHomeworkByCourseIdAndLessonId($courseId, $lessonId);
 

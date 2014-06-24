@@ -27,6 +27,16 @@ class HomeworkResultsDaoImpl extends BaseDao implements HomeworkResultsDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function findHomeworkResultsByHomeworkIds($homeworkIds)
+    {
+        if(empty($homeworkIds)){
+            return array();
+        }
+        $marks = str_repeat('?,', count($homeworkIds) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE homeworkId IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $homeworkIds);
+    }
+
     public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId)
     {   
         if(empty($courseId) or empty($lessonId)){

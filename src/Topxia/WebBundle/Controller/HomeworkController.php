@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Paginator;
 
 class HomeworkController extends BaseController
 {
@@ -43,10 +44,97 @@ class HomeworkController extends BaseController
     }
 
     public function listAction(Request $request)
-    {
+    {   
+        $status = $request->query->get('status', 'unchecked');
+
         $currentUser = $this->getCurrentUser();
-        $homeworkResults = $this->getHomeworkService()->searchHomeworkResults(array('userId' => $currentUser['id']), array('createdTime','DESC'), 0, 100);
-        var_dump($homeworkResults);exit();
+        if (empty($currentUser)) {
+            throw $this->createServiceException('用户不存在或者尚未登录，请先登录');
+        }
+        $homeworks = ArrayToolkit::index($this->getHomeworkService()->findHomeworksByCreatedUserId($currentUser['id']), 'courseId');
+
+        $homeworkCourseIds = ArrayToolkit::column($homeworks, 'courseId');
+        $homeworkIds = ArrayToolkit::column($homeworks, 'id');
+
+        $conditions = array('courseIds' => $homeworkCourseIds, 'role' => 'student');
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchMemberCount($conditions)
+            , 25
+        );
+
+        $students = $this->getCourseService()->searchMembers(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $studentUserIds = ArrayToolkit::column($students, 'userId');
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $homeworkResults = $this->getHomeworkService()->findHomeworkResultsByHomeworkIds(ArrayToolkit::column($homeworks, 'id'));
+
+        if (!empty($homeworkResults)) {
+            $students = $this->getHomeworkStudents($status, $students, $homeworkResults);
+        } else {
+            if ($status != 'uncommitted') {
+                $students = array();
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:MyHomework:list.html.twig', array(
+            'status' => $status,
+            'homeworks' => empty($homeworks) ? array() : $homeworks,
+            'students' => $students,
+            'users' => $users,
+            'homeworkResults' => $homeworkResults,
+            'paginator' => $paginator
+        ));
+    }
+
+    private function getHomeworkStudents($status, $students, $homeworkResults)
+    {
+        if ($status == 'uncommitted') {
+            foreach ($students as &$student) {
+                foreach ($homeworkResults as $item) {
+                    if ($item['status'] != 'doing' && $item['userId'] == $student['userId'] ) {
+                        $student = null;
+                    }
+                }
+            }
+        } 
+
+        if ($status == 'unchecked') {
+            foreach ($students as &$student) {
+                $key = false;
+                foreach ($homeworkResults as $item) {
+                    if ($item['status'] == 'reviewing' && $item['userId'] == $student['userId'] ) {
+                        $key = true;
+                    }
+                }
+
+                if ($key == true) {
+                    continue;
+                }
+                $student = null;
+            }
+        }
+
+        if ($status == 'checked') {
+            foreach ($students as &$student) {
+                $key = false;
+                foreach ($homeworkResults as $item) {
+                    if ($item['status'] == 'finished' && $item['userId'] == $student['userId'] ) {
+                        $key = true;
+                    }
+                }
+
+                if ($key == true) {
+                    continue;
+                }
+                $student = null;
+            }
+        }
+        return array_filter($students);
     }
 
     private function getUrgeMessageBody($course, $lesson)

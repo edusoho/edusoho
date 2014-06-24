@@ -1,22 +1,20 @@
-{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
 {% block title %}作业批改 - {{ parent() }}{% endblock %}
-
-{% set side_nav = 'lesson' %}
+{% set side_nav = 'my-teaching-homework-check' %}
 {% set statuses = { unchecked:'未批改', uncommitted:'未提交', checked:'已批改' } %}
 {% set script_controller = 'course-manage/homework-list' %}
 
 {% block main %}
-
 <div class="panel panel-default panel-col">
   	<div class="panel-heading">作业批改</div>
   	<div class="panel-body">
     	<ul class="nav nav-tabs">
     		{% for key, name in statuses %}
-			    <li {% if status == key %} class="active"{% endif %}><a href="{{ url('course_manage_lesson_homework_list', {courseId:course.id, lessonId:lesson.id, status:key}) }}">{{ name }}</a></li>
+			    <li {% if status == key %} class="active"{% endif %}><a href="{{ url('my_teaching_homework_list', {status:key}) }}">{{ name }}</a></li>
 		  	{% endfor %}
   	  	</ul>
-  	  	{% if homework %}
+  	  	{% if homeworks %}
   	  	<table class="table table-striped" id="homework-student-list">
 	      	<thead>
 		        <tr>
@@ -27,6 +25,7 @@
       		<tbody>
       			{% for student in students %}
       			{% set user = users[student.userId] %}
+      			{% set homework = homeworks[student.courseId] %}
       			{% set homeworkResult = homeworkResults[student.userId]|default(null) %}
       			{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
       			<tr id="student-{{ user.id }}-tr">
@@ -49,6 +48,11 @@
 					    </div>
 					</td>
 				</tr>
+				{% else %}
+					<tr class="empty">
+			          <td>没有相关的作业</td>
+			          <td></td>
+			        </tr>
 				{% endfor %}                
             </tbody>
     	</table>
@@ -58,5 +62,4 @@
 		{{ web_macro.paginator(paginator) }}
   	</div>
 </div>
-
 {% endblock %}

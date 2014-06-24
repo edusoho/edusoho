@@ -8,5 +8,7 @@ interface HomeworkResultsDao
 
     public function searchHomeworkResultsCount($conditions);
 
+    public function findHomeworkResultsByHomeworkIds($homeworkIds);
+
     public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId);
 }
