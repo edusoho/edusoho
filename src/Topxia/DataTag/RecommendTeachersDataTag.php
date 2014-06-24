@@ -3,6 +3,7 @@
 namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
+use Topxia\Common\ArrayToolkit;
 
 class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag  
 {
@@ -26,6 +27,11 @@ class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag
         );
     	$users = $this->getUserService()->searchUsers($conditions, array('promotedTime', 'DESC'), 0, $arguments['count']);
 
+        foreach ($users as $key=>$user) {
+            $profile = $this->getUserService()->getUserProfile($user['id']);
+            $users[$key]['about'] = $profile['about'];
+        }
+        
         return $this->unsetUserPasswords($users);
     }
 
