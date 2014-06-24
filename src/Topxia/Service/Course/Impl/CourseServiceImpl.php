@@ -737,7 +737,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields['type'] = $lesson['type'];
-		$fields['endTime'] = $fields['startTime']+$fields['length']*60;
+		if ($fields['type'] != 'text') {
+			$fields['endTime'] = $fields['startTime']+$fields['length']*60;
+		}
 
 		$this->fillLessonMediaFields($fields);
 		
