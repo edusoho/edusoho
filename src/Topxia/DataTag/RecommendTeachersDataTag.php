@@ -3,7 +3,6 @@
 namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
-use Topxia\Common\ArrayToolkit;
 
 class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag  
 {
@@ -31,7 +30,7 @@ class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag
             $profile = $this->getUserService()->getUserProfile($user['id']);
             $users[$key]['about'] = $profile['about'];
         }
-        
+
         return $this->unsetUserPasswords($users);
     }
 
