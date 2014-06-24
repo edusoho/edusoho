@@ -1,72 +1,50 @@
 {% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}作业批改 - {{ parent() }}{% endblock %}
-{% set side_nav = 'my-teaching-homework-check' %}
-{% set statuses = { unchecked:'未批改', uncommitted:'未提交', checked:'已批改' } %}
-{% set script_controller = 'course-manage/homework-list' %}
+{% block title %}我的作业 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-homeworks' %}
 
 {% block main %}
-<div class="panel panel-default panel-col">
-  	<div class="panel-heading">作业批改</div>
-  	<div class="panel-body">
-    	<ul class="nav nav-tabs">
-    		{% for key, name in statuses %}
-			    <li {% if status == key %} class="active"{% endif %}><a href="{{ url('my_teaching_homework_list', {status:key}) }}">{{ name }}</a></li>
-		  	{% endfor %}
-  	  	</ul>
-  	  	{% if homeworks %}
-  	  	<table class="table table-striped" id="homework-student-list">
-	      	<thead>
-		        <tr>
-		          <th width="70%">学员</th>
-		          <th width="30%">操作</th>
-		        </tr>
-	      	</thead>
-      		<tbody>
-      			{% for student in students %}
-      			{% set user = users[student.userId] %}
-      			{% set homework = homeworks[student.courseId] %}
-      			{% set homeworkResult = homeworkResults[homework.id]|default(null) %}
-      			{% set course = courses[homework.courseId] %}
-      			{% set lesson = lessons[homework.lessonId] %}
-      			{% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
-      			{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-      			<tr id="student-{{ user.id }}-tr">
-					<td class="media">
-					    {{ web_macro.user_avatar(user, 'pull-left') }}
-					    <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
-					    
-					    <div class="clear-fix text-sm">
-					    	<div class="pull-left"><a class="text-success" href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a> <a class="text-success" href="{{ lessonUrl }}">第 {{ lesson.number }}课时</div>
-					    	{% if status == 'unchecked' %}
-					    		<div class="pull-left mll text-muted">提交时间：{{ homeworkResult.usedTime|date('Y-n-d H:i') }}</div>
-					    	{% endif %}
-					    </div>
+	<div class="panel panel-default panel-col">
+	  	<div class="panel-heading">我的作业</span></div>
+	  	<div class="panel-body">
+	  		<ul class="nav nav-tabs">
+				<li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'finished'}) }}">已批改</a></li>
+				<li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'reviewing'}) }}">批改中</a></li>
+			</ul>
+			{% if homeworkResults %}
+			<table class="table table-striped">
+				<thead>
+			        <tr>
+			          <th width="70%">作业</th>
+			          <th width="30%">操作</th>
+			        </tr>
+		      	</thead>
+				<tbody>
+					<tr>
+					<td>
+						{% for homework in homeworkResults %}
+						{% set course = courses[homework.courseId] %}
+						{% set lesson = lessons[homework.lessonId] %}
+						{% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
+      					{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+							<div><a class="text-success" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title }}》</a> <a class="text-success" href="{{ lessonUrl }}">第 {{ lesson.number }}课时</a><span class="mll text-muted">提交时间：{{ homework.usedTime|date('Y-n-d H:i') }}</span></div>
+						{% endfor %}
 					</td>
 					<td>
-					    <div class="btn-group">
-					    	{% if status == 'uncommitted' %}
-					    		<button class="btn btn-default btn-sm homework-urge-btn" data-url="{{ path('homework_urge', { homeworkId:homework.id, userId:user.id } )}}">私信催缴</button>
-					    	{% elseif status == 'unchecked' or status == null %}
-					        	<button class="btn btn-default btn-sm" data-url="/user/4/follow">批改</button>
-					        {% else %}
-					        	<button class="btn btn-default btn-sm" data-url="/user/4/follow">查看</button>
-					        {% endif %}
-					    </div>
+						<button class="btn btn-default btn-sm" data-url="/user/4/follow">查看</button>
 					</td>
-				</tr>
-				{% else %}
-					<tr class="empty">
-			          <td>没有相关的作业</td>
-			          <td></td>
-			        </tr>
-				{% endfor %}                
-            </tbody>
-    	</table>
-    	{% else %}
-			<div class="empty">没有相关的作业</div>
-		{% endif %}
-		{{ web_macro.paginator(paginator) }}
-  	</div>
-</div>
+					</tr>
+				</tbody>
+			</table>
+			{% else %}
+				<div class="empty">目前暂无作业</div>
+			{% endif %}
+	  	</div>
+	</div>
+	
+
 {% endblock %}
+
+
+

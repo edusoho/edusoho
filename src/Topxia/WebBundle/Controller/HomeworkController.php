@@ -43,7 +43,7 @@ class HomeworkController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function listAction(Request $request)
+    public function teachingListAction(Request $request)
     {   
         $status = $request->query->get('status', 'unchecked');
 
@@ -85,13 +85,37 @@ class HomeworkController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:MyHomework:list.html.twig', array(
+        return $this->render('TopxiaWebBundle:MyHomework:teaching-list.html.twig', array(
             'status' => $status,
             'homeworks' => empty($homeworks) ? array() : $homeworks,
             'students' => $students,
             'users' => $users,
             'homeworkResults' => $homeworkResults,
             'paginator' => $paginator,
+            'courses' => $courses,
+            'lessons' => $lessons
+        ));
+    }
+
+    public function listAction(Request $request)
+    {   
+        $status = $request->query->get('status', 'finished');
+        $currentUser = $this->getCurrentUser();
+
+        $conditions = array(
+            'status' => $status,
+            'userId' => $currentUser['id']
+        );
+        $homeworkResults = $this->getHomeworkService()->searchHomeworkResults($conditions, array('usedTime', 'DESC'), 0, 100);
+
+        $homeworkCourseIds = ArrayToolkit::column($homeworkResults, 'courseId');
+        $homeworkLessonIds = ArrayToolkit::column($homeworkResults, 'lessonId');
+        $courses = $this->getCourseService()->findCoursesByIds($homeworkCourseIds);
+        $lessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
+
+        return $this->render('TopxiaWebBundle:MyHomework:list.html.twig',array(
+            'status' => $status,
+            'homeworkResults' => $homeworkResults,
             'courses' => $courses,
             'lessons' => $lessons
         ));

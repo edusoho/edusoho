@@ -55,6 +55,9 @@
                {% if side_nav == 'my-notes' %} active {% endif %}" 
                 href="{{path('my_notebooks')}}">我的笔记</a>
                <a class="list-group-item
+               {% if side_nav == 'my-homeworks' %} active {% endif %}" 
+                href="{{ path('my_homework_list') }}">我的作业</a>
+               <a class="list-group-item
                {% if side_nav == 'my-quiz' %} active {% endif %}" 
                 href="{{path('my_quiz')}}">我的考试</a>
             </ul>
