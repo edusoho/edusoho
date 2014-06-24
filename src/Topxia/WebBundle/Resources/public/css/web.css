@@ -1841,7 +1841,8 @@ body {
 .lesson-form .for-video-type,
 .lesson-form .for-audio-type,
 .lesson-form .for-text-type,
-.lesson-form .for-ppt-type {
+.lesson-form .for-ppt-type, 
+.lesson-form .for-none-type {
 	display: none;
 }
 
