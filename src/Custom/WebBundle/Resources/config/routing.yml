@@ -1,3 +1,0 @@
-homepage_video:
-    pattern:  /homepage_video/
-    defaults: { _controller: CustomWebBundle:Default:homeSwf }
