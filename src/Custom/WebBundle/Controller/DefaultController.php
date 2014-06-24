@@ -1,6 +1,8 @@
 <?php
-
 namespace Custom\WebBundle\Controller;
+
+use Topxia\WebBundle\Controller\BaseController;
+
 
 class DefaultController extends BaseController
 {
@@ -8,5 +10,4 @@ class DefaultController extends BaseController
 	{
 
 	}
-
 }
