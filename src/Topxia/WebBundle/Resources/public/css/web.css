@@ -3939,6 +3939,10 @@ body {
 	float: right;
 }
 
+.lt-ie9 .toolbar-wrapper .glyphicon-fullscreen {
+	display: none;
+}
+
 .toolbar-wrapper a {
 	color: #444;
 }
