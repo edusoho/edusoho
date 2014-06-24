@@ -26,15 +26,22 @@
       			{% for student in students %}
       			{% set user = users[student.userId] %}
       			{% set homework = homeworks[student.courseId] %}
-      			{% set homeworkResult = homeworkResults[student.userId]|default(null) %}
+      			{% set homeworkResult = homeworkResults[homework.id]|default(null) %}
+      			{% set course = courses[homework.courseId] %}
+      			{% set lesson = lessons[homework.lessonId] %}
+      			{% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
       			{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
       			<tr id="student-{{ user.id }}-tr">
 					<td class="media">
 					    {{ web_macro.user_avatar(user, 'pull-left') }}
 					    <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
-					    {% if status == 'unchecked' %}
-					    <div class="text-muted text-sm">批改时间：{{ homeworkResult.usedTime|date('Y-n-d H:i') }}</div>
-					    {% endif %}
+					    
+					    <div class="clear-fix text-sm">
+					    	<div class="pull-left"><a class="text-success" href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a> <a class="text-success" href="{{ lessonUrl }}">第 {{ lesson.number }}课时</div>
+					    	{% if status == 'unchecked' %}
+					    		<div class="pull-left mll text-muted">提交时间：{{ homeworkResult.usedTime|date('Y-n-d H:i') }}</div>
+					    	{% endif %}
+					    </div>
 					</td>
 					<td>
 					    <div class="btn-group">

@@ -432,7 +432,7 @@ class CourseLessonManageController extends BaseController
 				$students = array();
 			}
 		}
-
+		
 		return $this->render('TopxiaWebBundle:CourseLessonManage:homework-list.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,

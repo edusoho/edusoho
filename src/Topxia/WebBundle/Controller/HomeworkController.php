@@ -54,7 +54,11 @@ class HomeworkController extends BaseController
         $homeworks = ArrayToolkit::index($this->getHomeworkService()->findHomeworksByCreatedUserId($currentUser['id']), 'courseId');
 
         $homeworkCourseIds = ArrayToolkit::column($homeworks, 'courseId');
+        $homeworkLessonIds = ArrayToolkit::column($homeworks, 'lessonId');
         $homeworkIds = ArrayToolkit::column($homeworks, 'id');
+
+        $courses = $this->getCourseService()->findCoursesByIds($homeworkCourseIds);
+        $lessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
 
         $conditions = array('courseIds' => $homeworkCourseIds, 'role' => 'student');
         $paginator = new Paginator(
@@ -71,7 +75,7 @@ class HomeworkController extends BaseController
         );
         $studentUserIds = ArrayToolkit::column($students, 'userId');
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $homeworkResults = $this->getHomeworkService()->findHomeworkResultsByHomeworkIds(ArrayToolkit::column($homeworks, 'id'));
+        $homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findHomeworkResultsByHomeworkIds(ArrayToolkit::column($homeworks, 'id')), 'homeworkId');
 
         if (!empty($homeworkResults)) {
             $students = $this->getHomeworkStudents($status, $students, $homeworkResults);
@@ -87,7 +91,9 @@ class HomeworkController extends BaseController
             'students' => $students,
             'users' => $users,
             'homeworkResults' => $homeworkResults,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'courses' => $courses,
+            'lessons' => $lessons
         ));
     }
 
@@ -96,7 +102,7 @@ class HomeworkController extends BaseController
         if ($status == 'uncommitted') {
             foreach ($students as &$student) {
                 foreach ($homeworkResults as $item) {
-                    if ($item['status'] != 'doing' && $item['userId'] == $student['userId'] ) {
+                    if ($item['status'] != 'doing' && $item['userId'] == $student['userId'] && $item['courseId'] == $student['courseId'] ) {
                         $student = null;
                     }
                 }
@@ -107,7 +113,7 @@ class HomeworkController extends BaseController
             foreach ($students as &$student) {
                 $key = false;
                 foreach ($homeworkResults as $item) {
-                    if ($item['status'] == 'reviewing' && $item['userId'] == $student['userId'] ) {
+                    if ($item['status'] == 'reviewing' && $item['userId'] == $student['userId'] && $item['courseId'] == $student['courseId'] ) {
                         $key = true;
                     }
                 }
@@ -123,7 +129,7 @@ class HomeworkController extends BaseController
             foreach ($students as &$student) {
                 $key = false;
                 foreach ($homeworkResults as $item) {
-                    if ($item['status'] == 'finished' && $item['userId'] == $student['userId'] ) {
+                    if ($item['status'] == 'finished' && $item['userId'] == $student['userId'] && $item['courseId'] == $student['courseId'] ) {
                         $key = true;
                     }
                 }
