@@ -3921,6 +3921,10 @@ body {
 	margin-left: 15px;
 }
 
+.lt-ie9 .slide-player-control .fullscreen {
+	display: none;
+}
+
 .slide-player-control .goto-first {
 	margin-left: 100px;
 }
@@ -3928,7 +3932,7 @@ body {
 .slide-player-control .goto-index {
 	width: 50px;
 	display: inline-block;
-}
+}	
 
 .slide-player-control .goto-index-input {
 	float: right;
@@ -3937,10 +3941,6 @@ body {
 
 .toolbar-wrapper .glyphicon-fullscreen {
 	float: right;
-}
-
-.lt-ie9 .toolbar-wrapper .glyphicon-fullscreen {
-	display: none;
 }
 
 .toolbar-wrapper a {
