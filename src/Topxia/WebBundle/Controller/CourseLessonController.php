@@ -167,6 +167,12 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        if ($file['convertStatus'] != 'success') {
+            return $this->createJsonResponse(array(
+                'error' => array('code' => 'processing', 'message' => 'PPT文档还在转换中，还不能查看，请稍等。'),
+            ));
+        }
+
         $factory = new CloudClientFactory();
         $client = $factory->createClient();
 
