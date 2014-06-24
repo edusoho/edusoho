@@ -1,5 +1,5 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-
+{% set modalSize = 'large' %}
 {% block title %}课程学员{% endblock %}
 {% set hide_footer = true %}
 {% block body %}
@@ -13,7 +13,9 @@
       {{ web_macro.user_avatar(user, 'pull-left') }}
       <div class="media-body">
         <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
-
+        {% if student.remark %}
+          <span class="text-muted text-sm" title="{{student.remark}}">({{ student.remark|plain_text(5) }})</span>
+        {% endif %}
         {% if canManage %}
           <div class="progress" title="已学{{ progress.number }}课时">
             <div class="progress-bar" style="width: {{ progress.percent }}">
