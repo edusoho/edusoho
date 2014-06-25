@@ -59,6 +59,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return CourseSerialize::unserialize($this->getCourseDao()->getCourse($id));
 	}
 
+	public function getCoursesCount()
+	{
+		return $this->getCourseDao()->getCoursesCount();
+	}
+
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
@@ -733,6 +738,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$fields['type'] = $lesson['type'];
 		// $fields['endTime'] = $fields['startTime']+$fields['length']*60;
+
 
 		$this->fillLessonMediaFields($fields);
 		

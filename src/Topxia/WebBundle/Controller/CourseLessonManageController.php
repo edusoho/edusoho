@@ -241,6 +241,7 @@ class CourseLessonManageController extends BaseController
     			return $this->createMessageModalResponse('error', $e->getMessage());
     		}
     	}
+        $lesson['title'] = str_replace(array('"',"'"), array('&#34;','&#39;'), $lesson['title']);
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
