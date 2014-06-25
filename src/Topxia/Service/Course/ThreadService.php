@@ -12,6 +12,8 @@ interface ThreadService
 
 	public function findLatestThreadsByType($type, $start, $limit);
 
+	public function findEliteThreadsByType($type, $status, $start, $limit);
+
 	public function searchThreads($conditions, $sort, $start, $limit);
 
 	public function searchThreadCount($conditions);

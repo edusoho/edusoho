@@ -3,12 +3,13 @@
 namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
+use Topxia\Common\ArrayToolkit;
 
-class LatestCourseThreadsByTypeDataTag extends CourseBaseDataTag implements DataTag  
+class EliteCourseThreadsByTypeDataTag extends CourseBaseDataTag implements DataTag  
 {
     
     /**
-     * 获取最新发表的课程话题列表
+     * 获取加精的课程话题列表
      *
      * 可传入的参数：
      *   type 选填 话题类型
@@ -27,14 +28,18 @@ class LatestCourseThreadsByTypeDataTag extends CourseBaseDataTag implements Data
         } else {
             $type = $arguments['type'];
         }
-    	$threads = $this->getThreadService()->findLatestThreadsByType($type, 0, $arguments['count']);
+
+        $arguments['status'] = '1';
+
+    	$threads = $this->getThreadService()->findEliteThreadsByType($type, $arguments['status'], 0, $arguments['count']);
 
         foreach ($threads as $key => $thread) {
             $course = $this->getCourseService()->getCourse($thread['courseId']);
-
+   
             $threads[$key]['courseTitle'] = $course['title'];
+
         }
- 
+
         return $threads;
     }
 
