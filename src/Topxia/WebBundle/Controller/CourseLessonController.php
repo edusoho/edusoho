@@ -168,9 +168,17 @@ class CourseLessonController extends BaseController
         }
 
         if ($file['convertStatus'] != 'success') {
-            return $this->createJsonResponse(array(
-                'error' => array('code' => 'processing', 'message' => 'PPT文档还在转换中，还不能查看，请稍等。'),
-            ));
+            if ($file['convertStatus'] == 'error') {
+                $url = $this->generateUrl('course_manage_files', array('id' => $courseId));
+                $message = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'error', 'message' => $message),
+                ));
+            } else {
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'processing', 'message' => 'PPT文档还在转换中，还不能查看，请稍等。'),
+                ));
+            }
         }
 
         $factory = new CloudClientFactory();

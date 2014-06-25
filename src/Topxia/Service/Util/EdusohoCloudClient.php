@@ -13,9 +13,9 @@ class EdusohoCloudClient implements CloudClient
 
 	protected $userAgent = 'Edusoho Cloud Client 1.0';
 
-	protected $connectTimeout = 5;
+	protected $connectTimeout = 10;
 
-	protected $timeout = 5;
+	protected $timeout = 20;
 
 	protected $apiServer;
 
