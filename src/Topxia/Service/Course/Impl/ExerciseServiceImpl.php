@@ -13,7 +13,17 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     {
         $exercise = $this->getExerciseDao()->getExercise($id);
         if (empty($exercise)) {
-            throw $this->createServiceException("Exercise #{$id} is not found.");
+            return null;
+        }
+        $exercise['questionTypeRange'] = json_decode($exercise['questionTypeRange'], true);
+        return $exercise;
+    }
+
+    public function getExerciseByCourseIdAndLessonId($courseId, $lessonId)
+    {
+        $exercise = $this->getExerciseDao()->getExerciseByCourseIdAndLessonId($courseId, $lessonId);
+        if (empty($exercise)) {
+            return null;
         }
         $exercise['questionTypeRange'] = json_decode($exercise['questionTypeRange'], true);
         return $exercise;
@@ -24,7 +34,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId', 'questionCount', 'difficulty', 'ranges', 'source'))) {
             throw $this->createServiceException('参数缺失，创建练习失败！');
         }
-        $exercise = $this->getExerciseDao()->getExerciseByCourseIdAndLessonId($fields['courseId'], $fields['lessonId']);
+        $exercise = $this->getExerciseByCourseIdAndLessonId($fields['courseId'], $fields['lessonId']);
 
         if (!empty($exercise)) {
             $this->getExerciseDao()->deleteExercise($exercise['id']);
@@ -70,13 +80,18 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return ArrayToolkit::index($exercises, 'lessonId');
     }
 
+    public function getExerciseResultByExerciseIdAndUserId($exerciseId, $userId)
+    {
+        return $this->getExerciseResultDao()->getExerciseResultByExerciseIdAndUserId($exerciseId, $userId);
+    }   
+
     public function buildExercise($id, $options)
     {
         $exercise = $this->getExercise($id);
 
         $questions = $this->getQuestions($options);
         if (empty($questions)) {
-            throw $this->createServiceException("Questions is empty.");
+            return null;
         }
 
         $items = array();
@@ -150,6 +165,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     protected function getExerciseItemDao()
     {
         return $this->createDao('Course.ExerciseItemDao');
+    }
+
+    protected function getExerciseResultDao()
+    {
+        return $this->createDao('Course.ExerciseResultDao');
     }
 
     protected function getQuestionService()

@@ -289,6 +289,10 @@ course_lesson_plugin_note_save:
     defaults: { _controller: TopxiaWebBundle:LessonNotePlugin:save }
     methods: [POST]
 
+course_lesson_plugin_homework_list:
+    pattern:  /lessonplugin/homework/list
+    defaults: { _controller: TopxiaWebBundle:LessonHomeworkPlugin:list }
+
 course_review_create:
     pattern:  /course/{id}/review/create
     defaults: { _controller: TopxiaWebBundle:CourseReview:create }

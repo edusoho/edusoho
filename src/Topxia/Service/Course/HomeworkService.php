@@ -26,6 +26,8 @@ interface HomeworkService
 
     //HomeworkResults
 
+    public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId);
+
     public function searchHomeworkResults($conditions, $orderBy, $start, $limit);
 
     public function searchHomeworkResultsCount($conditions);

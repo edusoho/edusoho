@@ -931,21 +931,21 @@ body {
 	font-size: 12px;
 }
 
-.material-pane {
+.homework-pane, .material-pane {
 	position: absolute;
 	top: 0;
 	bottom: 0;
 	width: 100%;
 	overflow: hidden;
 }
-.material-pane h5 {
+.homework-pane h5, .material-pane h5 {
 	font-weight: bold;
 	font-size: 13px;
 	color: #999;
 	margin: 10px;
 }
 
-.material-pane .lesson-about {
+.homework-pane .lesson-about, .material-pane .lesson-about {
 	color: #999;
 	font-size: 12px;
 	margin: 10px;

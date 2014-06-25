@@ -9,6 +9,16 @@ class HomeworkResultsDaoImpl extends BaseDao implements HomeworkResultsDao
 {
     protected $table = 'homework_result';
 
+    public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId)
+    {
+        if (empty($homeworkId) or empty($userId)) {
+            return null;
+        }
+
+        $sql = "SELECT * FROM {$this->table} WHERE homeworkId = ? AND userId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($homeworkId, $userId)) ? : null;
+    }
+
     public function searchHomeworkResults($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

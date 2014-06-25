@@ -106,7 +106,17 @@ class HomeworkController extends BaseController
             'status' => $status,
             'userId' => $currentUser['id']
         );
-        $homeworkResults = $this->getHomeworkService()->searchHomeworkResults($conditions, array('usedTime', 'DESC'), 0, 100);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getHomeworkService()->searchHomeworkResultsCount($conditions), 
+            25
+        );
+        $homeworkResults = $this->getHomeworkService()->searchHomeworkResults(
+            $conditions, 
+            array('usedTime', 'DESC'), 
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $homeworkCourseIds = ArrayToolkit::column($homeworkResults, 'courseId');
         $homeworkLessonIds = ArrayToolkit::column($homeworkResults, 'lessonId');
@@ -117,7 +127,8 @@ class HomeworkController extends BaseController
             'status' => $status,
             'homeworkResults' => $homeworkResults,
             'courses' => $courses,
-            'lessons' => $lessons
+            'lessons' => $lessons,
+            'paginator' => $paginator
         ));
     }
 
