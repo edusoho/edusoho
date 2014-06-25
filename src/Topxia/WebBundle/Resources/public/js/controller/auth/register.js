@@ -41,7 +41,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#user_terms',
             required: true,
-            errormessageRequired: '请先同意服务协议！'
+            errormessageRequired: '勾选同意此服务协议，才能继续注册'
         });
 
     };

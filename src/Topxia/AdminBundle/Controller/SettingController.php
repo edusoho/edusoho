@@ -539,7 +539,8 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
-
+            $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+            
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success','课程设置已保存！');

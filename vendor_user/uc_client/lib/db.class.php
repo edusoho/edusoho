@@ -164,7 +164,8 @@ class ucclient_db {
 			$s .= '<b>Error:</b>'.$error.'<br />';
 			$s .= '<b>Errno:</b>'.$errorno.'<br />';
 			$s = str_replace(UC_DBTABLEPRE, '[Table]', $s);
-			exit($s);
+			throw new \RuntimeException($s);
+			// exit($s);
 		}
 	}
 }
