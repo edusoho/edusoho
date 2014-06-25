@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\LiveClientFactory;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -737,9 +738,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields['type'] = $lesson['type'];
-		// $fields['endTime'] = $fields['startTime']+$fields['length']*60;
-
-
+		if ($fields['type'] == 'live') {
+			$fields['endTime'] = $fields['startTime'] + $fields['length']*60;
+		}
+		
 		$this->fillLessonMediaFields($fields);
 		
 		$lesson = LessonSerialize::unserialize(
@@ -834,6 +836,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$thisStartTime = $thisEndTime = 0;
 
+
 		if ($lessonId) {
 			$liveLesson = $this->getCourseLesson($course['id'], $lessonId);
 			$thisStartTime = empty($liveLesson['startTime']) ? 0 : $liveLesson['startTime'];
@@ -855,10 +858,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return array('error_occupied','该时段内已有直播课时存在，请调整直播开始时间');
 		}
 
-		$courseSetting = $this->getSettingService()->get('course', array());
-		$liveStudentCapacity = !empty($courseSetting['live_student_capacity']) ? $courseSetting['live_student_capacity'] : 0;
+        $client = LiveClientFactory::createClient();
+        $liveStudentCapacity = $client->getCapacity();
+        $liveStudentCapacity = empty($liveStudentCapacity['capacity']) ? 0 : $liveStudentCapacity['capacity'];
 
 		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime,$endTime,$lessonId);
+
 		$courseIds = ArrayToolkit::column($lessons,'courseId');
 		$courseIds = array_unique($courseIds);
 		$courseIds = array_values($courseIds);
