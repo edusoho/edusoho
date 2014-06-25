@@ -89,8 +89,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 $file['metas2'][$type] = array('type' => $type, 'cmd' => $item['cmd'], 'key' => $item['key']);
                 if ($file['type'] == 'ppt') {
                     $result = $this->getCloudClient()->convertPPT($item['key']);
-                    $file['metas2']['length'] = $result['length'];
-                    $file['metas2']['imagePrefix'] = $result['imagePrefix'];
+                    $file['metas2']['length'] = empty($result['length']) ? 0 : $result['length'];
+                    $file['metas2']['imagePrefix'] = empty($result['imagePrefix']) ? '' : $result['imagePrefix'];
                 }
             }
 
@@ -98,6 +98,9 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 $file['convertStatus'] = 'error';
             } else {
                 $file['convertStatus'] = 'success';
+                if ($file['type'] == 'ppt' && empty($file['metas2']['length'])) {
+                    $file['convertStatus'] = 'error';
+                }
             }
         }
 
