@@ -1,4 +1,4 @@
-    define(function(require, exports, module) {
+define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
@@ -7,95 +7,67 @@
     require('jquery.select2');
 
     exports.run = function() {
-        
+
         require('./header').run();
 
-            $('#course_tags').select2({
-            
-                ajax: {
-                    url: app.arguments.tagMatchUrl+'#',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term, page) { 
-                        return {
-                            q: term, 
-                            page_limit: 10
-                        };
-                    },
-                    results: function (data) {
+        $('#course_tags').select2({
 
-                        var results = [];
+            ajax: {
+                url: app.arguments.tagMatchUrl + '#',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function(term, page) {
+                    return {
+                        q: term,
+                        page_limit: 10
+                    };
+                },
+                results: function(data) {
 
-                        $.each(data, function(index, item){
+                    var results = [];
 
-                            results.push({
-                              id: item.name,
-                              name: item.name
-                            });
+                    $.each(data, function(index, item) {
+
+                        results.push({
+                            id: item.name,
+                            name: item.name
                         });
-
-                        return {
-                            results: results
-                        };
-
-                    }
-                },
-                initSelection : function (element, callback) {
-                    var data = [];
-                    $(element.val().split(",")).each(function () {
-                        data.push({id: this, name: this});
                     });
-                    callback(data);
-                },
-                formatSelection: function(item) {
-                    return item.name;
-                },
-                formatResult: function(item) {
-                    return item.name;
-                },
-                width: 'off',
-                multiple: true,
-                maximumSelectionSize: 20,
-                placeholder: "请输入标签",
-                width: 'off',
-                multiple: true,
-                createSearchChoice: function() { return null; },
-                maximumSelectionSize: 20
-            });
 
-        var $perLiveMaxStudentNum = $('#perLiveMaxStudentNum').val();
-        var $default_perLiveMaxStudentNum = $('#default_perLiveMaxStudentNum').val();
+                    return {
+                        results: results
+                    };
 
-        var $stuNumUpperLimit = $('#stuNumUpperLimit');
-
-        $stuNumUpperLimit.on('input',function(){
-            $stuNumUpperLimitVal = $stuNumUpperLimit.val();
-            if ( isNaN(Number($stuNumUpperLimitVal)) || Number($stuNumUpperLimitVal) < 0 ) {
-                $('#stuNumUpperLimit_help').html("请输入大于0的数字");
-                $('#stuNumUpperLimit_help').css("color","red");
-                $('#stuNumUpperLimit_help').show();
-                $('#course-create-btn').attr("disabled", true);
-            }else{
-                if (Number($stuNumUpperLimitVal) < Number($default_perLiveMaxStudentNum) && Number($default_perLiveMaxStudentNum)>0) {
-                    $('#stuNumUpperLimit_help').html("最大学员数只能增加，不能减少");
-                    $('#stuNumUpperLimit_help').css("color","red");
-                    $('#stuNumUpperLimit_help').show();
-                    $('#course-create-btn').attr("disabled", true);
-                }else{
-                    if(Number($stuNumUpperLimitVal) > Number($perLiveMaxStudentNum)) {
-                        $('#stuNumUpperLimit_help').html("超过了管理员设置的人数上限,最多"+$perLiveMaxStudentNum+"人");
-                        $('#stuNumUpperLimit_help').css("color","red");
-                        $('#stuNumUpperLimit_help').show();
-                        $('#course-create-btn').attr("disabled", true);
-                    }else{
-                        $('#stuNumUpperLimit_help').hide();
-                        $('#course-create-btn').attr("disabled", false);
-                    }
                 }
-            }
-
-
+            },
+            initSelection: function(element, callback) {
+                var data = [];
+                $(element.val().split(",")).each(function() {
+                    data.push({
+                        id: this,
+                        name: this
+                    });
+                });
+                callback(data);
+            },
+            formatSelection: function(item) {
+                return item.name;
+            },
+            formatResult: function(item) {
+                return item.name;
+            },
+            width: 'off',
+            multiple: true,
+            maximumSelectionSize: 20,
+            placeholder: "请输入标签",
+            width: 'off',
+            multiple: true,
+            createSearchChoice: function() {
+                return null;
+            },
+            maximumSelectionSize: 20
         });
+
 
         var validator = new Validator({
             element: '#course-form',
@@ -106,8 +78,8 @@
         validator.addItem({
             element: '[name=title]',
             required: true
-        });      
-        
+        });
+
         validator.addItem({
             element: '[name=subtitle]',
             rule: 'maxlength{max:70}'
@@ -117,6 +89,33 @@
             element: '[name=expiryDay]',
             rule: 'integer'
         });
+
+        validator.addItem({
+            element: '[name=maxStudentNum]',
+            rule: 'integer',
+            onItemValidated: function(error, message, elem) {
+                if (error) {
+                    return ;
+                }
+
+                var current = parseInt($(elem).val());
+                var capacity = parseInt($(elem).data('liveCapacity'));
+                if (current > capacity) {
+                    message = '网校可支持最多' + capacity +'人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。';
+                    if ($(elem).parent().find('.alert-warning').length > 0) {
+                        $(elem).parent().find('.alert-warning').html(message).show();
+                    } else {
+                        $(elem).parent().append('<div class="alert alert-warning mts">' + message + '</div>');
+                    }
+                } else {
+                    $(elem).parent().find('.alert-warning').hide();
+                }
+
+
+
+            }
+        });
+
     };
 
 });

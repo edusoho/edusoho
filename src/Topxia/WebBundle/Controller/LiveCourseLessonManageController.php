@@ -104,6 +104,20 @@ class LiveCourseLessonManageController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function calculateLeftCapacityAction(Request $request, $courseId)
+    {
+        $data = $request->query->all();
+
+        $startTime = strtotime($data['startTime']);
+        $length = $data['length'];
+        $endTime = $startTime + $length*60;
+        $lessonId = empty($data['lessonId']) ? "" : $data['lessonId'];
+
+        $leftCapacity = $this->getCourseService()->calculateLiveCourseLeftCapacityInTimeRange($startTime, $endTime, $lessonId);
+
+        return $this->createJsonResponse($leftCapacity);
+    }
+
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');

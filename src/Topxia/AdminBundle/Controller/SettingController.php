@@ -469,6 +469,7 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
+            $data['email_filter'] = trim(str_replace(array("\n\r", "\r\n", "\r"), "\n", $data['email_filter']));
             $setting = array('mode' => $data['mode'],
                             'nickname_enabled' => $data['nickname_enabled'],
                             'avatar_alert' => $data['avatar_alert'],
@@ -532,14 +533,14 @@ class SettingController extends BaseController
             'student_download_media' => '0',
             'relatedCourses' => '0',
             'live_course_enabled' => '0',
-            'perLiveMaxStudentNum' => '0'
         );
 
         $courseSetting = array_merge($default, $courseSetting);
 
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
-
+            $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+            
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success','课程设置已保存！');

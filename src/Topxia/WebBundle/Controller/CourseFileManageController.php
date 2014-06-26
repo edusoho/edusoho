@@ -87,14 +87,19 @@ class CourseFileManageController extends BaseController
             return $this->createJsonResponse(array('status' => 'error', 'message' => '只有转换失败的文件，才能重新转换！'));
         }
 
-        if ($file['type'] != 'video') {
-            return $this->createJsonResponse(array('status' => 'error', 'message' => '只有视频文件，才能转换！'));
+        if (!in_array($file['type'], array('video', 'ppt'))) {
+            return $this->createJsonResponse(array('status' => 'error', 'message' => '只有视频、PPT文件，才能重新转换！'));
         }
 
         $factory = new CloudClientFactory();
         $client = $factory->createClient();
 
-        $commands = array_keys($client->getVideoConvertCommands());
+        if ($file['type'] == 'video') {
+            $commands = array_keys($client->getVideoConvertCommands());
+        } elseif ($file['type'] == 'ppt') {
+            $commands = array_keys($client->getPPTConvertCommands());
+        }
+
         $convertKey = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
         $result = $client->convertVideo($client->getBucket(), $file['hashId'], implode(';', $commands), $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true));
 

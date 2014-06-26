@@ -24,6 +24,12 @@
 
         </div>
 
+          {% if setting('auth.user_terms') == 'opened' %}
+              <label id="user_terms">
+                <input type="checkbox"  checked="checked">我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
+              </label>
+          {% endif %}
+
         <div class="tac pvl">
           <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
           <button id="bind-new-btn" class="btn btn-primary btn-lg" data-url="{{ path('login_bind_new', {type:client.clientInfo.type}) }}" data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">直接登录</button>

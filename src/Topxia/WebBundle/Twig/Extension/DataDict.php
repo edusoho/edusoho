@@ -119,7 +119,8 @@ class DataDict
     	'lessonType'=> array(
     		'video' => '视频',
     		'audio' => '音频',
-    		'text' => '图文'
+    		'text' => '图文',
+            'ppt' => 'PPT',
 		),
 		'userRole' => array(
 			'ROLE_USER' => '学员',

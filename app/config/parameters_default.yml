@@ -12,5 +12,7 @@ parameters:
                 # avthumb/mp4/r/24/vb/1024k/vcodec/libx264/ar/44100/ab/64k/acodec/libfaac : shd
             audioCommands:
                 avthumb/mp3: shd
+            pptCommands:
+                odconv/pdf: pdf
 
     cdn_path: http://cdn.staticfile.org
