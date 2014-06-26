@@ -17,6 +17,9 @@ class CourseLessonManageController extends BaseController
 		$lessonIds = ArrayToolkit::column($courseItems, 'id');
 		$exercises = $this->getExerciseService()->findExerciseByCourseIdAndLessonIds($course['id'], $lessonIds);
 		$homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
+		foreach ($homeworks as &$homework) {
+			$homework['results'] = $this->getHomeworkService()->searchHomeworkResultsCount(array( 'courseId' => $homework['courseId'], 'lessonId' => $homework['lessonId'], 'status' => 'reviewing' ));
+		}
 		
 		$mediaMap = array();
 		foreach ($courseItems as $item) {
@@ -405,10 +408,22 @@ class CourseLessonManageController extends BaseController
 
 		$homework = $this->getHomeworkService()->getHomeworkByCourseIdAndLessonId($course['id'], $lesson['id']);
 
-		$students = $this->getCourseService()->searchMembers(array('courseId' => $homework['courseId'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 100);
+		$conditions = array('courseId' => $homework['courseId'], 'role' => 'student');
+		$paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchMemberCount($conditions)
+            , 25
+        );
+
+		$students = $this->getCourseService()->searchMembers(
+			$conditions, 
+			array('createdTime', 'DESC'), 
+			$paginator->getOffsetCount(),
+            $paginator->getPerPageCount());
+
 		$studentUserIds = ArrayToolkit::column($students, 'userId');
 		$users = $this->getUserService()->findUsersByIds($studentUserIds);
-		$homeworkResults = $this->getHomeworkService()->findHomeworkResultsByCourseIdAndLessonId($course['id'], $lesson['id']);
+		$homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findHomeworkResultsByCourseIdAndLessonId($course['id'], $lesson['id']), 'userId');
 
 		if (!empty($homeworkResults)) {
 			$students = $this->getHomeworkStudents($status, $students, $homeworkResults);
@@ -417,14 +432,16 @@ class CourseLessonManageController extends BaseController
 				$students = array();
 			}
 		}
-
-		return $this->render('TopxiaWebBundle:CourseLessonManage:homework-check.html.twig', array(
+		
+		return $this->render('TopxiaWebBundle:CourseLessonManage:homework-list.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
 			'status' => $status,
-			'homework' => $homework,
+			'homework' => empty($homework) ? array() : $homework,
 			'students' => $students,
-			'users' => $users
+			'users' => $users,
+			'homeworkResults' => $homeworkResults,
+			'paginator' => $paginator
 		));
 	}
 
@@ -877,6 +894,7 @@ class CourseLessonManageController extends BaseController
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
+    
     private function getHomeworkService()
     {
         return $this->getServiceKernel()->createService('Course.HomeworkService');

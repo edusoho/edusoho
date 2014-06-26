@@ -19,6 +19,12 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return ArrayToolkit::index($homeworks, 'lessonId');
 	}
 
+	public function findHomeworksByCreatedUserId($userId)
+	{
+		$homeworks = $this->getHomeworkDao()->findHomeworksByCreatedUserId($userId);
+		return $homeworks;
+	}
+
 	public function getHomeworkByCourseIdAndLessonId($courseId, $lessonId)
 	{
 		return $this->getHomeworkDao()->getHomeworkByCourseIdAndLessonId($courseId, $lessonId);
@@ -177,14 +183,29 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
     }
 
+    public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId)
+    {
+    	return $this->getHomeworkResultsDao()->getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId);
+    }
+
     public function searchHomeworkResults($conditions, $orderBy, $start, $limit)
     {
     	return $this->getHomeworkResultsDao()->searchHomeworkResults($conditions, $orderBy, $start, $limit);
     }
 
+    public function searchHomeworkResultsCount($conditions)
+    {
+    	return $this->getHomeworkResultsDao()->searchHomeworkResultsCount($conditions);
+    }
+
     public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId)
     {
     	return $this->getHomeworkResultsDao()->findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId);
+    }
+
+    public function findHomeworkResultsByHomeworkIds($homeworkIds)
+    {
+    	return $this->getHomeworkResultsDao()->findHomeworkResultsByHomeworkIds($homeworkIds);
     }
 
     public function findHomeworkResultsByStatusAndCheckTeacherId($checkTeacherId, $status)

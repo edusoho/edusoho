@@ -289,6 +289,10 @@ course_lesson_plugin_note_save:
     defaults: { _controller: TopxiaWebBundle:LessonNotePlugin:save }
     methods: [POST]
 
+course_lesson_plugin_homework_list:
+    pattern:  /lessonplugin/homework/list
+    defaults: { _controller: TopxiaWebBundle:LessonHomeworkPlugin:list }
+
 course_review_create:
     pattern:  /course/{id}/review/create
     defaults: { _controller: TopxiaWebBundle:CourseReview:create }
@@ -509,7 +513,7 @@ course_manage_lesson_homework_edit:
 course_manage_lesson_homework_remove:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/remove
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:removeHomework }
-    
+
 course_manage_homework_items:
     pattern: /course/{courseId}/manage/homework/{homeworkId}/items
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:homeworkItems }
@@ -560,6 +564,10 @@ course_manage_lesson_exercise_delete:
 course_manage_lesson_homework_list:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/homework/list
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:homeworkList }
+
+homework_urge:
+    pattern:  /homework/{homeworkId}/student/{userId}/urge
+    defaults: { _controller: TopxiaWebBundle:Homework:urge }
 
 question_file_url:
     pattern: /question_ajax/file_url
@@ -1011,6 +1019,14 @@ my_show_favorite_question:
 my_favorite_question_preview:
     pattern: /my/favorite/question/{id}/preview
     defaults: { _controller: TopxiaWebBundle:MyQuestion:preview }
+
+my_teaching_homework_list:
+    pattern: /my/teaching/homework/list
+    defaults: { _controller: TopxiaWebBundle:Homework:teachingList }
+
+my_homework_list:
+    pattern: /my/homework/list
+    defaults: { _controller: TopxiaWebBundle:Homework:list }
 
 user_show: 
     pattern:  /user/{id}

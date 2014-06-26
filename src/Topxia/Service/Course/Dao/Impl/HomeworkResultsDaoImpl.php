@@ -9,6 +9,16 @@ class HomeworkResultsDaoImpl extends BaseDao implements HomeworkResultsDao
 {
     protected $table = 'homework_result';
 
+    public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId)
+    {
+        if (empty($homeworkId) or empty($userId)) {
+            return null;
+        }
+
+        $sql = "SELECT * FROM {$this->table} WHERE homeworkId = ? AND userId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($homeworkId, $userId)) ? : null;
+    }
+
     public function searchHomeworkResults($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -18,6 +28,23 @@ class HomeworkResultsDaoImpl extends BaseDao implements HomeworkResultsDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ? : array(); 
+    }
+
+    public function searchHomeworkResultsCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function findHomeworkResultsByHomeworkIds($homeworkIds)
+    {
+        if(empty($homeworkIds)){
+            return array();
+        }
+        $marks = str_repeat('?,', count($homeworkIds) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE homeworkId IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $homeworkIds);
     }
 
     public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId)
@@ -35,6 +62,7 @@ class HomeworkResultsDaoImpl extends BaseDao implements HomeworkResultsDao
             ->from($this->table, 'homework_result')
             ->andWhere('userId = :userId')
             ->andWhere('courseId = :courseId')
+            ->andWhere('lessonId = :lessonId')
             ->andWhere('homeworkId = :homeworkId')
             ->andWhere('status = :status');
 

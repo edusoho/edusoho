@@ -1,0 +1,40 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+
+<h5>课后作业</h5>
+<div class="lesson-about">
+	{% if homework %}
+	  共{{ homework.itemCount }}个作业题 
+	  {% if homeworkResult %}
+	  	{% if homeworkResult.status == 'reviewing' %}
+	  		<span class="text-muted">作业批改中....</span>
+	  	{% elseif homeworkResult.status == 'finished' %}
+	  		<a href="#" class="btn btn-sm mlm">查看批改结果</a>
+	  	{% else %}
+	  		<a href="#" class="btn btn-primary btn-sm mlm">继续做题</a>
+	  	{% endif %}
+	  {% else %}
+	  	<a href="#" class="btn btn-primary btn-sm mlm">开始做题</a>
+	  {% endif %}
+	{% else %}
+	  此课时暂无作业
+	{% endif %}
+</div>
+
+<h5>课时练习</h5>
+
+<div class="lesson-about">
+	{% if exercise %}
+		{% if exerciseResult %}
+			{% if exerciseResult.status == 'doing' %}
+				<a href="#" class="btn btn-primary btn-sm">继续做题</a>
+			{% else %}
+				<a href="#" class="btn btn-primary btn-sm">查看练习结果</a>
+			{% endif %}
+		{% else %}
+	  		<a href="#" class="btn btn-primary btn-sm">来{{ exercise.itemCount }}题</a>
+	  	{% endif %}
+	{% else %}
+		此课时暂无练习
+	{% endif %}
+</div>
