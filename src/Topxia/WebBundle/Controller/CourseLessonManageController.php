@@ -526,6 +526,120 @@ class CourseLessonManageController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
+	public function showHomeworkAction(Request $request, $courseId, $lessonId, $homeworkId)
+	{
+		$course = $this->getCourseService()->getCourse($courseId);
+		$homework = $this->getHomeworkService()->getHomework($homeworkId);
+		$homeworkItems = $this->getHomeworkService()->findHomeworkItemsByHomeworkId($homeworkId);
+		$questionIds = ArrayToolkit::column($homeworkItems,'questionId');
+		$questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+
+		$types = ArrayToolkit::column($questions,'type');
+		$types = array_unique($types);
+		$types = $this->sortType($types);
+
+		$result = $this->getclassifyQuestionsAndCount($questions);
+// var_dump($result);exit();
+
+		return $this->render('TopxiaWebBundle:CourseLessonManage:homework-show.html.twig',array(
+			'course' => $course,
+			'homework' => $homework,
+			'items' => $homeworkItems,
+			'questions' => $result['newQuetsions'],
+			'typeQuestionsNum' => $result['typeQuestionsNum'],
+			'types' => $types,
+		));
+	}
+
+	private function sortType($types)
+	{
+		$newTypes = array('single_choice','choice','uncertain_choice','fill','determine','essay','material');
+		
+		foreach ($types as $key => $value) {
+			if (!in_array($value, $newTypes)) {
+				$k = array_search($value,$newTypes);
+				unset($newTypes[$k]);
+			}
+		}
+		return $newTypes;
+	}
+
+	private function getclassifyQuestionsAndCount($questions)
+	{
+		$singleNum = 0;
+		$choiceNum = 0;
+		$uncertainChoiceNum = 0;
+		$fillNum = 0;
+		$determineNum = 0;
+		$essayNum = 0;
+		$materialNum = 0;
+
+		$num = 1;
+
+		$newQuetsions = array();
+		$typeQuestionsNum = array();
+
+		foreach ($questions as $key => $value) {
+			
+			if ($value['type'] == 'single_choice') {
+				$value['number'] = $num;
+				$newQuetsions['single_choice'][] = $value;
+				$singleNum++;
+				
+			}elseif ($value['type'] == 'choice') {
+				$value['number'] = $num;
+				$newQuetsions['choice'][] = $value;
+				$choiceNum++;
+			}elseif ($value['type'] == 'uncertain_choice') {
+				$value['number'] = $num;
+				$newQuetsions['uncertain_choice'][] = $value;
+				$uncertainChoiceNum++;
+			}elseif ($value['type'] == 'fill') {
+				$value['number'] = $num;
+				$newQuetsions['fill'][] = $value;
+				$fillNum++;
+			}elseif ($value['type'] == 'determine') {
+				$value['number'] = $num;
+				$newQuetsions['determine'][] = $value;
+				$determineNum++;
+			}elseif ($value['type'] == 'essay') {
+				$value['number'] = $num;
+				$newQuetsions['essay'][] = $value;
+				$essayNum++;
+			}elseif ($value['type'] == 'material') {
+			
+					if ($value['subCount']>0) {
+						$questions = $this->getQuestionService()->findQuestionsByParentId($value['id']);
+						foreach ($questions as $key => $questionValue) {
+							$questionValue['number'] = $num;
+							$questions[$key] = $questionValue;
+							$num++;
+						}
+						$value['subQuestions'] = $questions;
+					} else {
+							$value['number'] = $num;
+						$value['subQuestions'] = array();
+					}
+				$newQuetsions['material'][] = $value;
+				$materialNum++;
+			}
+
+			$num++;
+		}
+		$typeQuestionsNum['single_choice'] = $singleNum;
+		$typeQuestionsNum['choice'] = $choiceNum;
+		$typeQuestionsNum['uncertain_choice'] = $uncertainChoiceNum;
+		$typeQuestionsNum['fill'] = $fillNum;
+		$typeQuestionsNum['determine'] = $determineNum;
+		$typeQuestionsNum['essay'] = $essayNum;
+		$typeQuestionsNum['material'] = $materialNum;
+
+		return array(
+			'typeQuestionsNum' => array_filter($typeQuestionsNum),
+			'newQuetsions' => $newQuetsions,
+		);
+	}
+
 	public function createHomeworkAction(Request $request, $courseId, $lessonId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
@@ -733,18 +847,8 @@ class CourseLessonManageController extends BaseController
         if (empty($question)) {
             throw $this->createNotFoundException();
         }
-        //add homework_item
-		// $items['homeworkId'] = $homeworkId;
-		// $items['questionId'] = $question['id'];
-		// $items['questionType'] = $question['type'];
-  //       $this->getHomeworkService()->createHomeworkItems($homeworkId, $items);
 
         $subQuestions = array();
-        // if ($question['subCount'] > 0) {
-        //     $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-        // } else {
-        //     $subQuestions = array();
-        // }
 
         $targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
 

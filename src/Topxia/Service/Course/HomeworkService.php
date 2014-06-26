@@ -19,6 +19,8 @@ interface HomeworkService
     public function updateHomework($id, $fields);
 
     public function removeHomework($id);
+    
+    public function showHomework($id);
 
     public function deleteHomeworksByCourseId($courseId);
 

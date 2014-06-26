@@ -124,6 +124,54 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     	return true;
     }
 
+    public function showHomework($id)
+    {
+        $itemResults = $this->getTestpaperItemResultDao()->findTestResultsByTestpaperResultId($testpaperResultId);
+        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+
+        $testpaperResult = $this->getTestpaperResultDao()->getTestpaperResult($testpaperResultId);
+
+        $items = $this->getTestpaperItems($testpaperResult['testId']);
+        $items = ArrayToolkit::index($items, 'questionId');
+
+        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
+        $questions = ArrayToolkit::index($questions, 'id');
+
+        $questions = $this->completeQuestion($items, $questions);
+
+        $formatItems = array();
+        foreach ($items as $questionId => $item) {
+
+            if (array_key_exists($questionId, $itemResults)){
+                $questions[$questionId]['testResult'] = $itemResults[$questionId];
+            }
+
+            $items[$questionId]['question'] = $questions[$questionId];
+
+            if ($item['parentId'] != 0) {
+                if (!array_key_exists('items', $items[$item['parentId']])) {
+                    $items[$item['parentId']]['items'] = array();
+                }
+                $items[$item['parentId']]['items'][$questionId] = $items[$questionId];
+                $formatItems['material'][$item['parentId']]['items'][$item['seq']] = $items[$questionId];
+                unset($items[$questionId]);
+            } else {
+                $formatItems[$item['questionType']][$item['questionId']] = $items[$questionId];
+            }
+
+        }
+
+        if ($isAccuracy){
+            $accuracy = $this->makeAccuracy($items);
+        }
+
+        ksort($formatItems);
+        return array(
+            'formatItems' => $formatItems,
+            'accuracy' => $isAccuracy ? $accuracy : null
+        );
+    }
+
     public function deleteHomeworksByCourseId($courseId)
     {
 

@@ -156,6 +156,7 @@ class TestpaperController extends BaseController
 
         $items = $this->getTestpaperService()->previewTestpaper($testId);
 
+var_dump($items);exit();
         $total = $this->makeTestpaperTotal($testpaper, $items);
 
         return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
@@ -184,7 +185,6 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
         $result = $this->getTestpaperService()->showTestpaper($id);
         $items = $result['formatItems'];
-
         $total = $this->makeTestpaperTotal($testpaper, $items);
 
         $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
