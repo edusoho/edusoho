@@ -5,6 +5,7 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
@@ -43,6 +44,74 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:site.html.twig', array(
             'site'=>$site
         ));
+    }
+
+    public function mobileAction(Request $request)
+    {
+        $mobile = $this->getSettingService()->get('mobile', array());
+
+        $default = array(
+            'enabled'=> 0,   // 网校状态
+            'about'=>'',     // 网校简介
+            'logo' => '',    // 网校Logo
+            'splash1' => '', // 启动图1
+            'splash2' => '', // 启动图2
+            'splash3' => '', // 启动图3
+            'splash4' => '', // 启动图4
+            'splash5' => '', // 启动图5
+        );
+
+        $mobile = array_merge($default, $mobile);
+
+        if ($request->getMethod() == 'POST') {
+            $mobile = $request->request->all();
+            $this->getSettingService()->set('mobile', $mobile);
+            $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
+            $this->setFlashMessage('success', '移动客户端设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
+            'mobile'=>$mobile
+        ));
+    }
+
+    public function mobilePictureUploadAction(Request $request, $type)
+    {
+        $file = $request->files->get($type);
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+
+        $filename = 'mobile_picture' . time() . '.' . $file->getClientOriginalExtension();
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file = $file->move($directory, $filename);
+
+        $mobile = $this->getSettingService()->get('mobile', array()); 
+        $mobile[$type] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $mobile[$type] = ltrim($mobile[$type], '/');
+
+        $this->getSettingService()->set('mobile', $mobile);
+
+        $this->getLogService()->info('system', 'update_settings', "更新网校{$type}图片", array($type => $mobile[$type]));
+
+        $response = array(
+            'path' => $mobile[$type],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($mobile[$type]),
+        );
+
+        return new Response(json_encode($response));
+    }
+
+    public function mobilePictureRemoveAction(Request $request, $type)
+    {
+        $setting = $this->getSettingService()->get("mobile");
+        $setting[$type] = '';
+
+        $this->getSettingService()->set('mobile', $setting);
+
+        $this->getLogService()->info('system', 'update_settings', "移除网校{$type}图片");
+
+        return $this->createJsonResponse(true);
     }
 
     public function logoUploadAction(Request $request)
@@ -140,10 +209,11 @@ class SettingController extends BaseController
             'welcome_methods' => array(),
             'welcome_title' => '',
             'welcome_body' => '',
+            'user_terms' => 'closed',
+            'user_terms_body' => ''
         );
 
         $auth = array_merge($default, $auth);
-
         if ($request->getMethod() == 'POST') {
             $auth = $request->request->all();
             if (empty($auth['welcome_methods'])) {
@@ -227,6 +297,7 @@ class SettingController extends BaseController
             'alipay_enabled'=>0,
             'alipay_key'=>'',
             'alipay_secret' => '',
+            'alipay_account' => '',
             'alipay_type' => 'direct',
             'tenpay_enabled'=>0,
             'tenpay_key'=>'',
@@ -387,6 +458,7 @@ class SettingController extends BaseController
             'mode' => 'default',
             'nickname_enabled' => 0,
             'avatar_alert' => 'none',
+            'email_filter' => ''
         );
         
         $setting = array_merge($default, $setting);
@@ -397,9 +469,11 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
+            $data['email_filter'] = trim(str_replace(array("\n\r", "\r\n", "\r"), "\n", $data['email_filter']));
             $setting = array('mode' => $data['mode'],
                             'nickname_enabled' => $data['nickname_enabled'],
                             'avatar_alert' => $data['avatar_alert'],
+                            'email_filter' => $data['email_filter']
             );
             $this->getSettingService()->set('user_partner', $setting);
 
@@ -447,6 +521,9 @@ class SettingController extends BaseController
     public function courseSettingAction(Request $request)
     {
         $courseSetting = $this->getSettingService()->get('course', array());
+        
+        $client = LiveClientFactory::createClient();
+        $capacity = $client->getCapacity();
 
         $default = array(
             'welcome_message_enabled' => '0',
@@ -454,17 +531,23 @@ class SettingController extends BaseController
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
             'student_download_media' => '0',
+            'relatedCourses' => '0',
+            'live_course_enabled' => '0',
         );
 
         $courseSetting = array_merge($default, $courseSetting);
 
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
+            $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+            
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success','课程设置已保存！');
         }
 
+        $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+        
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
             'courseSetting' => $courseSetting
         ));

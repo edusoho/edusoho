@@ -5,7 +5,7 @@
     <div class="label label-warning">试卷预览中</div>
   {% else %}
     {% if paperResult.status|default(null) == 'doing' %}
-      <div class="label label-primary">答题中</div>
+      <div class="label label-primary testpaper-status-doing">答题中</div>
     {% endif %}
   {% endif %}
 {% endblock %}

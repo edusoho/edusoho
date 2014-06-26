@@ -19,6 +19,7 @@ class WebExtension extends \Twig_Extension
     {
         return array(
             'smart_time' => new \Twig_Filter_Method($this, 'smarttimeFilter') ,
+            'data_format' => new \Twig_Filter_Method($this, 'dataformatFilter') ,
             'time_range' => new \Twig_Filter_Method($this, 'timeRangeFilter'),
             'remain_time' => new \Twig_Filter_Method($this, 'remainTimeFilter'),
             'location_text' => new \Twig_Filter_Method($this, 'locationTextFilter'),
@@ -60,7 +61,11 @@ class WebExtension extends \Twig_Extension
     {
         $basePath = $this->container->get('request')->getBasePath();
         $theme = $this->getSetting('theme.uri', 'default');
-        $plugins = array('coupon', 'vip');
+
+        $plugins = $this->container->get('kernel')->getPlugins();
+
+        $plugins[] = "customweb";
+        $plugins[] = "customadmin";
 
         $paths = array(
             'common' => 'common',
@@ -68,10 +73,18 @@ class WebExtension extends \Twig_Extension
         );
 
         foreach ($plugins as $name) {
+            $name = strtolower($name);
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
         }
 
         return $paths;
+    }
+    
+    public function dataformatFilter ($time) {
+        if (empty($time)) {
+            return ;
+        }
+        return date('Y-m-d H:i',$time);
     }
 
     public function smarttimeFilter ($time) {
@@ -253,6 +266,11 @@ class WebExtension extends \Twig_Extension
             $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri['path'];
             $url = ltrim($url, ' /');
             $url = $assets->getUrl($url);
+
+            if ($absolute) {
+                $url = $request->getSchemeAndHttpHost() . $url;
+            }
+
             return $url;
         } else {
 
@@ -340,19 +358,16 @@ class WebExtension extends \Twig_Extension
 
     public function bbCode2HtmlFilter($bbCode)
     {
-        $isFind = preg_match_all("#\[image\].*?\[\/image\]|\[video\].*?\[\/video\]#", $bbCode, $matches);
+        $ext = $this;
 
-        if($isFind){
-            foreach ($matches[0] as $value) {
-                $old = $value;
-                $src = "/files/" . str_replace(array('[image]', '[/image]'), '', $value);
+        $bbCode = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function($matches) use ($ext) {
+            $src = $ext->getFileUrl($matches[1]);
+            return "<img src='{$src}' />";
+        }, $bbCode);
 
-                $new = "<img src='" . $src . "' />";
-
-                $bbCode = str_replace($old, $new, $bbCode);
-            }
-
-        }
+        $bbCode = preg_replace_callback('/\[audio.*?id="(\d+)"\](.*?)\[\/audio\]/i', function($matches) {
+            return "<span class='audio-play-trigger' href='javascript:;' data-file-id=\"{$matches[1]}\" data-file-type=\"audio\"></span>";
+        }, $bbCode);
 
         return $bbCode;
     }

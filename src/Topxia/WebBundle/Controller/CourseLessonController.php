@@ -45,7 +45,6 @@ class CourseLessonController extends BaseController
     	list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
     	$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-
         $json = array();
         $json['number'] = $lesson['number'];
 
@@ -71,6 +70,12 @@ class CourseLessonController extends BaseController
         $json['materialNum'] = $lesson['materialNum'];
         $json['mediaId'] = $lesson['mediaId'];
         $json['mediaSource'] = $lesson['mediaSource'];
+        $json['startTimeFormat'] = date("m-d H:i",$lesson['startTime']);
+        $json['endTimeFormat'] = date("H:i",$lesson['endTime']);
+        $json['startTime'] = $lesson['startTime'];
+        $json['endTime'] = $lesson['endTime'];
+        $json['id'] = $lesson['id'];
+        $json['courseId'] = $lesson['courseId'];
 
         if ($json['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
@@ -85,6 +90,8 @@ class CourseLessonController extends BaseController
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
                         $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         $json['mediaHLSUri'] = $url['url'];
+                    } else if ($file['type'] == 'ppt') {
+                        $json['mediaUri'] = $this->generateUrl('course_lesson_ppt', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']));
                     } else {
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
                             $key = $file['metas']['hd']['key'];
@@ -144,6 +151,42 @@ class CourseLessonController extends BaseController
         $this->getCourseService()->tryTakeCourse($courseId);
 
         return $this->fileAction($request, $lesson['mediaId'], true);
+    }
+
+    public function pptAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        if ($lesson['type'] != 'ppt' or empty($lesson['mediaId'])) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['convertStatus'] != 'success') {
+            if ($file['convertStatus'] == 'error') {
+                $url = $this->generateUrl('course_manage_files', array('id' => $courseId));
+                $message = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'error', 'message' => $message),
+                ));
+            } else {
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'processing', 'message' => 'PPT文档还在转换中，还不能查看，请稍等。'),
+                ));
+            }
+        }
+
+        $factory = new CloudClientFactory();
+        $client = $factory->createClient();
+
+        $result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length']. '');
+
+        return $this->createJsonResponse($result);
     }
 
     public function fileAction(Request $request, $fileId, $isDownload = false)

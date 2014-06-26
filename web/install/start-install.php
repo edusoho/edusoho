@@ -542,6 +542,17 @@ EOD;
 EOD;
         $this->getBlockService()->updateContent($block['id'], $content);
 
+        $block = $this->getBlockService()->createBlock(array(
+            'code'=>'live_top_banner',
+            'title'=>'直播频道首页图片轮播'
+        ));
+
+        $content = <<<'EOD'
+<a href="#"><img src="../assets/img/placeholder/live-slide-1.jpg" /></a>
+<a href="#"><img src="../assets/img/placeholder/live-slide-2.jpg" /></a>
+EOD;
+		$this->getBlockService()->updateContent($block['id'], $content);
+
 	}
 
 	public function initLockFile()

@@ -27,6 +27,14 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
         return $this->getConnection()->fetchColumn($sql, array($target));
     }
 
+    public function findCategoriesByIds($ids)
+    {
+        if(empty($ids)){ return array(); }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
     public function addCategory($fields)
     {   
         $affected = $this->getConnection()->insert($this->table, $fields);

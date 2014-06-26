@@ -55,6 +55,8 @@ interface QuestionService
 
     public function findCategoriesByTarget($target, $start, $limit);
 
+    public function findCategoriesByIds($ids);
+
     public function createCategory($fields);
 
     public function updateCategory($id, $fields);

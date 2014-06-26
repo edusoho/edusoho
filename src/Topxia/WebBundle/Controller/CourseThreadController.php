@@ -42,7 +42,6 @@ class CourseThreadController extends BaseController
         );
 
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
-
         $userIds = array_merge(
             ArrayToolkit::column($threads, 'userId'),
             ArrayToolkit::column($threads, 'latestPostUserId')
@@ -397,4 +396,9 @@ class CourseThreadController extends BaseController
         }
         return $conditions;
     }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    } 
 }

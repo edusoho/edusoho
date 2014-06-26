@@ -23,6 +23,12 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findMinStartTimeByCourseId($courseId)
+    {
+        $sql = "select min(`startTime`) as startTime from `course_lesson` where courseId =?;";
+        return $this->getConnection()->fetchAll($sql,array($courseId));
+    }
+
     public function findLessonsByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY seq ASC";
@@ -52,10 +58,43 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
+    public function searchLessonCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
     public function getLessonMaxSeqByCourseId($courseId)
     {
         $sql = "SELECT MAX(seq) FROM {$this->table} WHERE  courseId = ?";
         return $this->getConnection()->fetchColumn($sql, array($courseId));
+    }
+
+    public function findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$excludeLessonId=0)
+    {
+        $addtionalCondition = ";";
+
+        if (!empty($excludeLessonId)) {
+            $addtionalCondition = "and id != {$excludeLessonId};";
+        }
+
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = {$courseId} and ((startTime  < {$startTime} and endTime > {$startTime}) or  (startTime between {$startTime} and {$endTime})) ".$addtionalCondition;
+        
+        return $this->getConnection()->fetchAll($sql, array($courseId,$startTime,$endTime));
+    }
+
+    public function findTimeSlotOccupiedLessons($startTime,$endTime,$excludeLessonId=0)
+    {
+        $addtionalCondition = ";";
+
+        if (!empty($excludeLessonId)) {
+            $addtionalCondition = "and id != {$excludeLessonId};";
+        }
+
+        $sql = "SELECT * FROM {$this->table} WHERE ((startTime  < {$startTime} and endTime > {$startTime}) or  (startTime between {$startTime} and {$endTime})) ".$addtionalCondition;
+        
+        return $this->getConnection()->fetchAll($sql, array($startTime,$endTime));
     }
 
     public function findLessonsByChapterId($chapterId)
@@ -100,7 +139,24 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('type = :type')
             ->andWhere('free = :free')
             ->andWhere('userId = :userId')
+            ->andWhere('startTime >= :startTimeGreaterThan')
+            ->andWhere('endTime < :endTimeLessThan')
+            ->andWhere('startTime <= :startTimeLessThan')
+            ->andWhere('endTime > :endTimeGreaterThan')
             ->andWhere('title LIKE :titleLike');
+
+        if (isset($conditions['courseIds'])) {
+            $courseIds = array();
+            foreach ($conditions['courseIds'] as $courseId) {
+                if (ctype_digit((string)abs($courseId))) {
+                    $courseIds[] = $courseId;
+                }
+            }
+            if ($courseIds) {
+                $courseIds = join(',', $courseIds);
+                $builder->andStaticWhere("courseId IN ($courseIds)");
+            }
+        }
 
         return $builder;
     }

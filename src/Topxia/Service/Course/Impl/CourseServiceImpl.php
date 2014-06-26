@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\LiveClientFactory;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -26,6 +27,27 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
+	public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
+	{
+		$courses = CourseSerialize::unserializes(
+            $this->getCourseDao()->findCoursesByTagIdsAndStatus($tagIds, $status, $start, $limit)
+        );
+        return ArrayToolkit::index($courses, 'id');
+	}
+
+	public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
+	{
+		$courses = CourseSerialize::unserializes(
+            $this->getCourseDao()->findCoursesByAnyTagIdsAndStatus($tagIds, $status, $orderBy, $start, $limit)
+        );
+        return ArrayToolkit::index($courses, 'id');
+    }
+
+	public function findMinStartTimeByCourseId($courseId)
+	{
+		return  $this->getLessonDao()->findMinStartTimeByCourseId($courseId);
+	}
+
 	public function findLessonsByIds(array $ids)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByIds($ids);
@@ -36,6 +58,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getCourse($id, $inChanging = false)
 	{
 		return CourseSerialize::unserialize($this->getCourseDao()->getCourse($id));
+	}
+
+	public function getCoursesCount()
+	{
+		return $this->getCourseDao()->getCoursesCount();
 	}
 
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
@@ -236,7 +263,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('缺少必要字段，创建课程失败！');
 		}
 
-		$course = ArrayToolkit::parts($course, array('title', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
+		$course = ArrayToolkit::parts($course, array('title', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
 
 		$course['status'] = 'draft';
         $course['about'] = !empty($course['about']) ? $this->getHtmlPurifier()->purify($course['about']) : '';
@@ -268,7 +295,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($course)) {
 			throw $this->createServiceException('课程不存在，更新失败！');
 		}
-
 		$fields = $this->_filterCourseFields($fields);
 
 		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
@@ -308,10 +334,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'endTime'  => 0,
 			'locationId' => 0,
 			'address' => '',
+			'maxStudentNum' => 0
 		));
 
 		if (!empty($fields['about'])) {
-			$fields['about'] = $this->purifyHtml($fields['about']);
+			$fields['about'] = $this->purifyHtml($fields['about'],true);
 		}
 
 		if (!empty($fields['tags'])) {
@@ -561,6 +588,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getLessonDao()->searchLessons($conditions, $orderBy, $start, $limit);
 	}
 
+	public function searchLessonCount($conditions)
+	{
+		return $this->getLessonDao()->searchLessonCount($conditions);
+	}
+
 	public function createLesson($lesson)
 	{
 		$lesson = ArrayToolkit::filter($lesson, array(
@@ -575,8 +607,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'media' => array(),
 			'mediaId' => 0,
 			'length' => 0,
+			'startTime' => 0,
 		));
-
 		if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
 			throw $this->createServiceException('参数缺失，创建课时失败！');
 		}
@@ -590,12 +622,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper'))) {
+		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt'))) {
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
 		$this->fillLessonMediaFields($lesson);
-
 
 
 		//课程内容的过滤 @todo
@@ -616,6 +647,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$lastChapter = $this->getChapterDao()->getLastChapterByCourseId($lesson['courseId']);
 		$lesson['chapterId'] = empty($lastChapter) ? 0 : $lastChapter['id'];
+		if ($lesson['type'] == 'live') {
+			$lesson['endTime'] = $lesson['startTime'] + $lesson['length']*60;
+		}
 
 		$lesson = $this->getLessonDao()->addLesson(
 			LessonSerialize::serialize($lesson)
@@ -632,8 +666,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	private function fillLessonMediaFields(&$lesson)
 	{
-
-		if (in_array($lesson['type'], array('video', 'audio'))) {
+		if (in_array($lesson['type'], array('video', 'audio', 'ppt'))) {
 			$media = empty($lesson['media']) ? null : $lesson['media'];
 			if (empty($media) or empty($media['source']) or empty($media['name'])) {
 				throw $this->createServiceException("media参数不正确，添加课时失败！");
@@ -664,6 +697,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			}
 		} elseif ($lesson['type'] == 'testpaper') {
 			$lesson['mediaId'] = $lesson['mediaId'];
+		} elseif ($lesson['type'] == 'live') {
 		} else {
 			$lesson['mediaId'] = 0;
 			$lesson['mediaName'] = '';
@@ -696,19 +730,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'mediaId' => 0,
 			'free' => 0,
 			'length' => 0,
+			'startTime' => 0,
 		));
-
-		// if (isset($fields['content'])) {
-		// 	$fields['content'] = $this->purifyHtml($fields['content']);
-		// }
 
 		if (isset($fields['title'])) {
 			$fields['title'] = $this->purifyHtml($fields['title']);
 		}
 
 		$fields['type'] = $lesson['type'];
+		if ($fields['type'] == 'live') {
+			$fields['endTime'] = $fields['startTime'] + $fields['length']*60;
+		}
+		
 		$this->fillLessonMediaFields($fields);
-
+		
 		$lesson = LessonSerialize::unserialize(
 			$this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))
 		);
@@ -789,6 +824,59 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getNextLessonNumber($courseId)
 	{
 		return $this->getLessonDao()->getLessonCountByCourseId($courseId) + 1;
+	}
+
+	public function liveLessonTimeCheck($courseId,$lessonId,$startTime,$length)
+	{	
+		$course = $this->getCourseDao()->getCourse($courseId);
+
+		if (empty($course)) {
+			throw $this->createServiceException('此课程不存在！');
+		}
+
+		$thisStartTime = $thisEndTime = 0;
+
+
+		if ($lessonId) {
+			$liveLesson = $this->getCourseLesson($course['id'], $lessonId);
+			$thisStartTime = empty($liveLesson['startTime']) ? 0 : $liveLesson['startTime'];
+			$thisEndTime = empty($liveLesson['endTime']) ? 0 : $liveLesson['endTime'];
+		} else {
+			$lessonId = "";
+		}
+
+		$startTime = is_numeric($startTime) ? $startTime : strtotime($startTime);
+		$endTime = $startTime + $length*60;
+
+		$thisLessons = $this->getLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$lessonId);
+
+		if (($length/60) > 8) {
+			 return array('error_timeout','时长不能超过8小时！');
+		}
+
+		if ($thisLessons) {
+			return array('error_occupied','该时段内已有直播课时存在，请调整直播开始时间');
+		}
+
+		return array('success','');
+	}
+
+	public function calculateLiveCourseLeftCapacityInTimeRange($startTime, $endTime, $excludeLessonId)
+	{
+        $client = LiveClientFactory::createClient();
+        $liveStudentCapacity = $client->getCapacity();
+        $liveStudentCapacity = empty($liveStudentCapacity['capacity']) ? 0 : $liveStudentCapacity['capacity'];
+
+		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime, $endTime, $excludeLessonId);
+
+		$courseIds = ArrayToolkit::column($lessons,'courseId');
+		$courseIds = array_unique($courseIds);
+		$courseIds = array_values($courseIds);
+		$courses = $this->getCourseDao()->findCoursesByIds($courseIds);
+		$maxStudentNum = ArrayToolkit::column($courses,'maxStudentNum');
+		$timeSlotOccupiedStuNums = array_sum($maxStudentNum);
+
+		return $liveStudentCapacity - $timeSlotOccupiedStuNums;
 	}
 
 	public function startLearnLesson($courseId, $lessonId)
@@ -1122,6 +1210,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function findCourseStudents($courseId, $start, $limit)
 	{
 		return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'student', $start, $limit);
+	}
+
+	public function findCourseStudentsByCourseIds($courseIds)
+	{
+		return $this->getMemberDao()->getMembersByCourseIds($courseIds);
 	}
 
 	public function getCourseStudentCount($courseId)
@@ -1587,6 +1680,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function findAnnouncements($courseId, $start, $limit)
 	{
 		return $this->getAnnouncementDao()->findAnnouncementsByCourseId($courseId, $start, $limit);
+	}
+
+	public function findAnnouncementsByCourseIds(array $ids, $start, $limit)
+	{
+		return $this->getAnnouncementDao()->findAnnouncementsByCourseIds($ids,$start, $limit);
 	}
 	
 	public function createAnnouncement($courseId, $fields)

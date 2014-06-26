@@ -8,6 +8,7 @@ use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
+use Topxia\Service\Util\LiveClientFactory;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -24,6 +25,7 @@ class CourseManageController extends BaseController
 	public function baseAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
+        $courseSetting = $this->getSettingService()->get('course', array());
 
 	    if($request->getMethod() == 'POST'){
             $data = $request->request->all();
@@ -35,9 +37,17 @@ class CourseManageController extends BaseController
 
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
 
+        if ($course['type'] == 'live') {
+            $client = LiveClientFactory::createClient();
+            $liveCapacity = $client->getCapacity();
+        } else {
+            $liveCapacity = null;
+        }
+
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
-            'tags' => ArrayToolkit::column($tags, 'name')
+            'tags' => ArrayToolkit::column($tags, 'name'),
+            'liveCapacity' => empty($liveCapacity['capacity']) ? 0 : $liveCapacity['capacity'],
 		));
 	}
 
@@ -327,13 +337,13 @@ class CourseManageController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    private function getOrderService()
-    {
-        return $this->getServiceKernel()->createService('Course.OrderService');
-    }
-
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

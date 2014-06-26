@@ -11,8 +11,28 @@
       {% elseif course.serializeMode=='finished' %}
         <span class="label label-warning ">已完结</span>
       {% endif %}
+      {% if course.type == 'live' %}
+          {% set lesson = course['lesson']|default(null) %}
+          {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+            <span class="label label-warning series-mode-label">正在直播中</span>
+          {% else %}
+            <span class="label label-success series-mode-label">直播</span>
+          {% endif %}
+      {% endif %}
       </h4>
-      <div class="course-about ellipsis">{{ course.subtitle }}</div>
+
+      {% if course.type == 'live' %}
+        {% set lesson = course.lesson|default(null) %}
+        {% if lesson %}
+          <div class="live-course-lesson mbm">
+            <span class="text-success fsm mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+            <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="course-about ellipsis">{{ course.subtitle }}</div>
+      {% endif %}
+
       <div class="course-footer clearfix">
         {% set teacher = users[course.teacherIds|first]|default(null) %}
         {% if teacher %}
