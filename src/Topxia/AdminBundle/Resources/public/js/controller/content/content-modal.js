@@ -70,7 +70,8 @@ define(function(require, exports, module) {
                     alert('正在上传附图，请等待附图上传成功后，再保存！');
                     return ;
                 }
-
+                
+                $('#content-save-btn').button('loading').addClass('disabled');
                 $form.ajaxSubmit({
                     clearForm: true,
                     success: function(data){

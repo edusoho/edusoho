@@ -16,7 +16,8 @@ define(function(require, exports, module) {
                 if (error) {
                     return ;
                 }
-                
+
+                $('#refund-confirm-btn').button('submiting').addClass('disabled');
                 $.post($form.attr('action'), $form.serialize(), function(response){
                     $modal.modal('hide');
                     Notify.success('退款申请处理结果已提交');
