@@ -69,7 +69,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $this->getExerciseDao()->deleteExercise($id);
         $this->getExerciseItemDao()->deleteItemsByExerciseId($id);
 
-        $this->getLogService()->info('exercise', 'delete', "删除练习(#{$exercise['id']})");
+        $this->getLogService()->info('exercise', 'delete', "删除练习(#{$id})");
 
         return true;
     }
