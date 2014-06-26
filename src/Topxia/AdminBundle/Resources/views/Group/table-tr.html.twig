@@ -3,13 +3,14 @@
    <td>
     {{ group.id}}
   <td>
-    <strong>{{ group.title}}</strong>
-     {% if group.status==0%}
+    <strong>  <a target="_blank" href="{{ path('group_index', {id:group.id}) }}">{{ group.title}}</a></strong>
+     {% if group.enum=='close' %}
           <label class="label label-danger">关闭</label>
     {% endif %}
   </td>
   <td>
-    {{ group.nickname }}
+    <a target="_blank" href="{{ path('user_show', {id:owner[group.ownerId].id}) }}">
+   {{owner[group.ownerId].nickname}}</a>
   </td>
   <td>
     {{ group.memberNum }}
@@ -24,7 +25,7 @@
  
   </td>
   <td>
-    {% if group.status==1%}
+    {% if group.enum=='open' %}
     开启
     {% else %}
     关闭
@@ -38,10 +39,12 @@
       <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-       {% if group.status==1%}
-  <li><a href="javascript:" class="close-group" title="关闭小组({{group.title}})" data-url="{{path('admin_close_group',{id:group.id})}}">关闭小组</a></li>
+       <li><a href="{{path('group_index',{id:group.id})}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 查看小组</a></li>
+       {% if group.enum=='open'%}
+  <li><a href="javascript:" class="close-group" title="关闭小组({{group.title}})" data-url="{{path('admin_close_group',{id:group.id})}}"><span class="glyphicon glyphicon-off"></span> 关闭小组</a></li>
     {% else %}
-    <li><a href="javascript:" class="open-group" title="开启小组({{group.title}})" data-url="{{path('admin_open_group',{id:group.id})}}">开启小组</a></li>
+    <li><a href="javascript:" class="open-group" title="开启小组({{group.title}})" data-url="{{path('admin_open_group',{id:group.id})}}"><span class="glyphicon glyphicon-ok"></span>开启小组</a></li>
+
     {% endif %}
        
       

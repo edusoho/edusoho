@@ -1,0 +1,46 @@
+{% extends 'TopxiaWebBundle:Group:groupindex.html.twig' %}
+{% block group %}
+
+<div class="es-row-wrap container-gap userpage-body">
+  <ul class="nav nav-pills userpage-nav clearfix">
+             <li><a href="{{path('group_index',{id:groupinfo.id})}}">小组首页</a></li>
+        <li><a href="{{path('groupthread',{id:groupinfo.id})}}">讨论区</a></li>
+        <li class="active"><a href="{{path('groupmember',{id:groupinfo.id})}}">小组成员</a></li>
+  </ul>
+
+  <div class="row">
+<div class="col-xs-12"><div class="row row-offcanvas row-offcanvas-right">
+                <div class="page-header"><span class="glyphicon glyphicon-user"></span> 成员列表  </div>
+                <div class="col-xs-12">
+                    <p><b>组长</b></p>
+                </div><div class="row">
+              <div class="grouplist" >  <a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}"  >
+                   <img src="{{file_path(owner_info.largeAvatar, 'avatar-large.png') }}" alt="{{owner_info.nickname}}" >
+                   </a> <p class="mvs"><a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}">{{owner_info.nickname}}</a></p></div></div>
+                <div class="col-xs-12"> <form method="post" > {% if groupmember_info %}{% if is_groupmember==2%}<button data-submiting-text="正在踢出" type="submit" class="btn btn-default btn-sm pull-right">踢出成员</button> {% endif %} {% endif %} 
+                    <p><b>组员</b></p> 
+                </div>
+                    {% if groupmember_info %}<div class="row">
+                    {% for member in groupmember_info %}
+                     <div class="grouplist" >
+                      {{ web_macro.user_avatar(members[member.userId] , 'clearfix  media-object media-object-small') }}
+                      <p class="mvs">{{ web_macro.user_link(members[member.userId] , 'link-muted') }}</p>
+              {% if is_groupmember==2%}
+                   <input type="checkbox" value="{{member.userId}}" name="deleteMemberId[]"class="checkboxs"> {% endif %}<br>
+                      </div>
+                     
+                                {%endfor%}
+                                {% if is_groupmember==2%}
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"> {% endif %}</form>
+                    {%else%}
+                     <div class="col-xs-12"> 
+                  <p>  还没有小组成员！</p>
+
+                    </div></div>
+                    {%endif%}
+
+            </div> <div class="pull-right">{{ web_macro.paginator(paginator) }}</div> <br> </div>
+</div>
+
+</div>
+{% endblock %}

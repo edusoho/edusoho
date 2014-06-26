@@ -737,10 +737,33 @@ admin_article_delete:
 admin_group:
     pattern:  /group/
     defaults: { _controller: TopxiaAdminBundle:Group:index }
+admin_groupThread:
+    pattern:  /group/thread
+    defaults: { _controller: TopxiaAdminBundle:Group:thread }
 admin_close_group:
     pattern:  /group/{id}/close
-    defaults: { _controller: TopxiaAdminBundle:Group:close_group }
+    defaults: { _controller: TopxiaAdminBundle:Group:closeGroup }
 admin_open_group:
     pattern:  /group/{id}/open
-    defaults: { _controller: TopxiaAdminBundle:Group:open_group }
-
+    defaults: { _controller: TopxiaAdminBundle:Group:openGroup }
+admin_removeElite:
+    pattern:  /group/thread/{threadId}/removeElite
+    defaults: { _controller: TopxiaAdminBundle:Group:removeElite }
+admin_setElite:
+    pattern:  /group/thread/{threadId}/setElite
+    defaults: { _controller: TopxiaAdminBundle:Group:setElite }
+admin_removeStick:
+    pattern:  /group/thread/{threadId}/removeStick
+    defaults: { _controller: TopxiaAdminBundle:Group:removeStick }
+admin_setStick:
+    pattern:  /group/thread/{threadId}/setStick
+    defaults: { _controller: TopxiaAdminBundle:Group:setStick }
+admin_closeThread:
+    pattern:  /group/thread/{threadId}/closeThread
+    defaults: { _controller: TopxiaAdminBundle:Group:closeThread }
+admin_openThread:
+    pattern:  /group/thread/{threadId}/openThread
+    defaults: { _controller: TopxiaAdminBundle:Group:openThread }
+admin_deleteThread:
+    pattern:  /group/thread/{threadId}/deleteThread
+    defaults: { _controller: TopxiaAdminBundle:Group:deleteThread }

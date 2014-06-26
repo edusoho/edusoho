@@ -1063,45 +1063,69 @@ article_category:
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
-mygroup:
+group:
     pattern:  /group
-    defaults: { _controller: TopxiaWebBundle:MyGroup:index }
-mygroup_add:
+    defaults: { _controller: TopxiaWebBundle:Group:index }
+group_add:
     pattern:  /mygroup/add
-    defaults: { _controller: TopxiaWebBundle:MyGroup:mygroup_add }
-groupindex:
+    defaults: { _controller: TopxiaWebBundle:Group:addGroup }
+group_index:
     pattern:  /group/{id}
-    defaults: { _controller: TopxiaWebBundle:MyGroup:groupindex }
-groupjoin:
+    defaults: { _controller: TopxiaWebBundle:Group:groupIndex }
+group_join:
     pattern:  /mygroup_join/{id}/{title}
-    defaults: { _controller: TopxiaWebBundle:MyGroup:groupjoin }
-groupexit:
+    defaults: { _controller: TopxiaWebBundle:Group:groupJoin }
+group_exit:
     pattern:  /mygroup_exit/{id}/{title}
-    defaults: { _controller: TopxiaWebBundle:MyGroup:groupexit }
+    defaults: { _controller: TopxiaWebBundle:Group:groupExit }
 groupmember:
     pattern:  /group/member/{id}
-    defaults: { _controller: TopxiaWebBundle:MyGroup:groupmember }
-setgrouplogo:
+    defaults: { _controller: TopxiaWebBundle:Group:groupMember }
+grouplogo_set:
     pattern:  /group/set_logo/{id}
-    defaults: { _controller: TopxiaWebBundle:MyGroup:setgrouplogo }
-setgrouplogo_crop:
+    defaults: { _controller: TopxiaWebBundle:Group:setGrouplogo }
+grouplogo_crop_set:
     pattern:  /group/set_logo/crop/{file}/{id}
-    defaults: { _controller: TopxiaWebBundle:MyGroup:setgrouplogo_crop }
+    defaults: { _controller: TopxiaWebBundle:Group:setGrouplogo_crop }
 groupinfo_edit:
     pattern:  /group/info_edit/{id}
-    defaults: { _controller: TopxiaWebBundle:MyGroup:groupinfo_edit }
-setgroupbackgroundlogo:
+    defaults: { _controller: TopxiaWebBundle:Group:groupEdit }
+groupbackgroundlogo_set:
     pattern:  /group/set_backgroundlogo/{id}
-    defaults: { _controller: TopxiaWebBundle:MyGroup:setgroupbackgroundlogo }
-setgroupbackgroundlogo_crop:
+    defaults: { _controller: TopxiaWebBundle:Group:setGroupbackgroundlogo }
+groupbackgroundlogo_crop_set:
     pattern:  /group/set_backgroundlogo/crop/{file}/{id}
-    defaults: { _controller: TopxiaWebBundle:MyGroup:setgroupbackgroundlogo_crop }
+    defaults: { _controller: TopxiaWebBundle:Group:setGroupbackgroundlogo_crop }
 groupthread:
     pattern:  /group/thread/{id}
-    defaults: { _controller: TopxiaWebBundle:MyGroup:groupthread }
-publishthread:
+    defaults: { _controller: TopxiaWebBundle:Group:groupThread }
+groupthread_add:
     pattern:  /mygroup/publishthread/{id}
-    defaults: { _controller: TopxiaWebBundle:MyGroup:publishthread }
+    defaults: { _controller: TopxiaWebBundle:Group:addThread }
+groupthread_index:
+    pattern:  /group/thread/home/{id}/{threadid}
+    defaults: { _controller: TopxiaWebBundle:Group:groupThreadIndex }
+groupthread_setElite:
+    pattern:  /group/thread/setElite/{threadId}
+    defaults: { _controller: TopxiaWebBundle:Group:setElite }
+groupthread_removeElite:
+    pattern:  /group/thread/removeElite/{threadId}
+    defaults: { _controller: TopxiaWebBundle:Group:removeElite }
+groupthread_setStick:
+    pattern:  /group/thread/setStick/{threadId}
+    defaults: { _controller: TopxiaWebBundle:Group:setStick }
+groupthread_removeStick:
+    pattern:  /group/thread/removeStick/{threadId}
+    defaults: { _controller: TopxiaWebBundle:Group:removeStick }
+groupthread_closeThread:
+    pattern:  /group/thread/closeThread/{threadId}/{memberId}
+    defaults: { _controller: TopxiaWebBundle:Group:closeThread }
+groupthread_deletePost:
+    pattern:  /group/thread/deletePost/{postId}/{memberId}/{threadOwnerId}/{groupOwnerId}/{groupId}
+    defaults: { _controller: TopxiaWebBundle:Group:deletePost }
+checkcode:
+    pattern:  /checkcode
+    defaults: { _controller: TopxiaWebBundle:Group:checkcode }
 #占位
 vip:
     pattern: /vip/

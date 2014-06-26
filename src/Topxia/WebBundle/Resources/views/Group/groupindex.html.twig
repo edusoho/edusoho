@@ -1,0 +1,174 @@
+{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+{% set script_controller = 'group/group' %}
+{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+{% block content %}
+{{ web_macro.flash_messages() }}
+<div class="jumbotron " {% if groupinfo.backgroundLogo %}style="background:url({{file_path(groupinfo.backgroundLogo)}});"{% else %}style="background:url({{asset('assets/img/default/background_group.jpg')}});"{% endif %}>
+  
+  <div class="row">
+    <div class="col-md-5" style="background:#fff;"><h2>
+      <div class="media">
+        <div class="pull-left">
+          {% if groupinfo.logo%}
+          <img src="{{file_path(groupinfo.logo)}}" alt="" >
+          {% else %}
+          <img src="{{asset('assets/img/default/group.png')}}" alt="" >
+          {% endif %}
+        </div >
+        <div class="media-body">
+          
+          {{groupinfo.title}}<br><span class="group-header-tip "> <span class="glyphicon glyphicon-user"></span>成员: {{groupinfo.memberNum}} &nbsp;<span class="glyphicon glyphicon-fire"></span>话题: {{groupinfo.threadNum}} &nbsp;<span class="glyphicon glyphicon-comment"></span>回复: {{groupinfo.postNum}}</span></span>
+        </div>
+        
+        
+      </div>
+      
+      </h2>
+    </div>
+  </div> <br><p class="group-header-btn">
+  {% if is_groupmember==0%}
+  <a class="btn btn-primary btn-default" role="button" href="{{path('group_join',{id:groupinfo.id,title:groupinfo.title})}}">加入小组</a>
+  {% elseif is_groupmember==1%}
+  <a class="btn btn-primary btn-default" role="button" href="{{path('group_exit',{id:groupinfo.id,title:groupinfo.title})}}">退出小组</a>
+  
+  {% endif %}
+  </p>
+  {% if is_groupmember==2 %}
+  <div class="modal fade" id="groupinfo_edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">编辑小组</h4>
+        </div>
+        <div class="modal-body">
+          
+          <form id="user-group-form" class="form-horizontal" method="post" action="{{path('groupinfo_edit',{id:groupinfo.id})}}">
+            
+            <div class="form-group">
+              <label class="col-md-2 control-label" for="group_grouptitle">小组名称</label>
+              <div class="col-md-9 controls">
+                <input type="text" id="group_grouptitle" name="group[grouptitle]" class="form-control"
+                value="{{groupinfo.title}}" >
+                <div class="help-block" style="display:none;"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-2 control-label" for="group_about">小组介绍</label>
+              <div class="col-md-9 controls">
+                <textarea name="group[about]" rows="10" id="group_about" class="form-control">{{groupinfo.about}}</textarea>
+              </div>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button id="group-save-btn" data-submiting-text="正在创建" type="submit" class="btn btn-primary">修改</button>
+          </div></form>
+          </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div>
+        {% endif %}
+        <!-- Modal -->
+
+          </div>
+          {% block group %}
+          <div class="es-row-wrap container-gap userpage-body">
+            <ul class="nav nav-pills userpage-nav clearfix">
+              <li class="active"><a href="{{path('group_index',{id:groupinfo.id})}}">小组首页</a></li>
+              <li><a href="{{path('groupthread',{id:groupinfo.id})}}">讨论区</a></li>
+              <li><a href="{{path('groupmember',{id:groupinfo.id})}}">小组成员</a></li>
+              {% if is_groupmember==2%}
+ <li> <a  href="{{path('grouplogo_set',{id:groupinfo.id})}}">logo设置</a></li>
+ <li>  <a  href="{{path('groupbackgroundlogo_set',{id:groupinfo.id})}}">背景设置</a></li>
+  <li><a  data-toggle="modal" data-target="#groupinfo_edit" href="#">编辑小组 </a></li>
+  {% endif %}
+            </ul>
+            <div class="row">
+              <div class="col-md-12">
+                
+                <div class="col-md-12 col-md-8">
+                  
+                  <div class="row">
+                    <div class="page" style="background:#effcfc;">
+                      <br>{% if groupinfo.about%}
+                {{groupinfo.about|raw}}
+                {% else %}
+                无
+                {% endif %} <br>  <br>
+               <div class="pull-right"> 创建时间：{{groupinfo.createdTime|date('Y-m-d')}}</div><br></div>
+                    <div class="page-header clearfix">
+                      <div><span class="glyphicon glyphicon-leaf"></span> 最近话题
+                        {% if is_groupmember!=0%}<a href="{{path('groupthread_add',{id:groupinfo.id})}}" class="btn btn-primary btn-sm pull-right" role="button">发话题</a>
+                      {% endif %}</div></div>
+                      <div class="col-md-12">
+                      <table class="table table-hover">
+                        
+                        {% if thread_recentlyinfo%}
+                        {% for threadinfo in thread_recentlyinfo%}
+                        <tr class="media-list" style="word-break: break-all;">
+                          <td class="media">
+                            {{ web_macro.user_avatar(owner[threadinfo.userId], 'pull-left media-object media-object-small')}}
+                            <div class="media-body">
+                              {% if threadinfo.postNum %}
+                              <span class="badge pull-right" style="margin-top:15px;"> {{threadinfo.postNum}}</span>
+                              {% endif %}
+                              {% if threadinfo.isStick %}
+                              <span class="label label-danger">置顶</span>
+                              {% endif %}
+                              
+                              <a href="{{path('groupthread_index',{id:groupinfo.id,threadid:threadinfo.id})}}" >{{threadinfo.title}}</a></h4> {% if threadinfo.isElite %}
+                              <span class="label label-warning">精</span><h4 class="mdm">
+                              {% endif %}
+                              <div class="text-muted text-normal"><br>
+                                <span class="glyphicon glyphicon-user"></span> {{ web_macro.user_link(owner[threadinfo.userId] , 'link-muted') }} &nbsp;<span class="glyphicon glyphicon-time"></sapn>{{threadinfo.createdTime|smart_time}}
+                                {% if threadinfo.lastPostTime %}
+                                &nbsp;最后回复: {{ web_macro.user_link(latedinfo[threadinfo.lastPostMemberId] , 'link-muted') }}
+                                &nbsp;最后回复时间: {{threadinfo.lastPostTime|smart_time}}
+                                {% endif %}
+                              </div>
+                              
+                              
+                            </td></tr>
+                            {% endfor %}
+                            <tr><td>
+                              {% if thread_recentlyinfo|length>14 %}
+                              <a href="{{path('groupthread',{id:groupinfo.id,page:2})}}" class="btn btn-primary btn-default btn-block" role="button">更多话题</a>  {% endif %}
+                              {% else %}
+                              还没有话题！
+                              {% endif %}
+                            </td> </tr>
+                            
+                          </table>
+                          </div>
+                        </div>
+                        
+                        <br>
+                      </div>
+                      <div class="col-md-6 col-md-4">
+                        
+                        <div class="row">
+                          <div class="page-header">最近加入</div>
+                       
+                            {% if groupmember_recentlyinfo %}
+                              <ul class="user-grids">
+                            {% for member in groupmember_recentlyinfo %}
+                            <li >
+                            {{ web_macro.user_avatar(members[member.userId] , 'pull-left media-object media-object-small') }}<p >{{ web_macro.user_link(members[member.userId] , 'link-muted') }}</p></li>
+                            
+                            {%endfor%} </ul>
+                            {%else%}
+                            还没有小组成员！
+                            {%endif%}
+                            
+                            
+                         <br>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endblock %}
+              {% endblock %}

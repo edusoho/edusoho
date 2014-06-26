@@ -1,0 +1,91 @@
+{% extends 'TopxiaWebBundle:Group:groupindex.html.twig' %}
+{% block group %}
+<div class="es-row-wrap container-gap userpage-body">
+  <ul class="nav nav-pills userpage-nav clearfix">
+    <li><a href="{{path('group_index',{id:groupinfo.id})}}">小组首页</a></li>
+    <li  class="active"><a href="{{path('groupthread',{id:groupinfo.id})}}">讨论区</a></li>
+    <li><a href="{{path('groupmember',{id:groupinfo.id})}}">小组成员</a></li>
+  </ul>
+  {% block groupthread %}
+  <div class="row">
+    <div class ="col-md-8">
+      
+        
+        <div class="page clearfix">
+          
+            &nbsp;       {% if is_groupmember !=0%}<div class="pull-right"><a href="{{path('groupthread_add',{id:groupinfo.id})}}" class="btn btn-primary btn-sm " role="button">发话题</a></div>{% endif %}
+            <ul class="nav nav-pills nav-mini  pull-left ">
+              <li{% if condition.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('groupthread',{id:id,num:condition.num,sort:condition.sort,isElite:0})}}">全部</a></li>
+              
+              <li{% if condition.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('groupthread',{id:id,type:'elite',num:condition.num,sort:condition.sort})}}">精华</a></li>
+              <li><span class="mhm text-muted">|</span></li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="text-muted">排序：</span>
+                {% if condition.sort == 'byLastPostTime' %}
+                最后回复
+                {% elseif condition.sort == 'byCreatedTime' %}
+                最新发帖
+                {% elseif condition.sort == 'byPostNum' %}
+                回复数
+                {% endif %}
+                <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="{% if condition.sort == 'byCreatedTime' %}active{% endif %}"><a class="js-nav" href="{{path('groupthread',{id:id,isElite:condition.type,num:condition.num,sort:'byCreatedTime'})}}">最新发帖</a></li>
+                  <li class="{% if condition.sort == 'byLastPostTime' %}active{% endif %}"><a class="js-nav" href="{{path('groupthread',{id:id,isElite:condition.type,num:condition.num,sort:'byLastPostTime'})}}">最后回复</a></li>
+                  <li class="{% if condition.sort == 'byPostNum' %}active{% endif %}"><a class="js-nav" href="{{path('groupthread',{id:id,isElite:condition.type,num:condition.num,sort:'byPostNum'})}}">回复数</a></li>
+                </ul>
+              </li>
+            <li></ul>
+       
+        </div>
+        <table class="table table-hover ">
+          {% if threadinfo%}
+          {% for threadinfo in threadinfo%}
+          <tr class="media-list" style="word-break: break-all;">
+            <td class="media">
+              
+              {{ web_macro.user_avatar(owner[threadinfo.userId], 'pull-left media-object media-object-small')}}
+              <div class="media-body" >
+                {% if threadinfo.postNum %}
+                <span class="badge pull-right" style="margin-top:15px;"> {{threadinfo.postNum}}</span>
+                {% endif %}
+                {% if threadinfo.isStick %}
+                <span class="label label-danger">置顶</span>
+                {% endif %}
+                
+                <a href="{{path('groupthread_index',{id:groupinfo.id,threadid:threadinfo.id})}}" >{{threadinfo.title}}</a></h4> {% if threadinfo.isElite %}
+                <span class="label label-warning">精</span><h4 class="mdm">
+                {% endif %}
+                
+                <div class="text-muted text-normal"><br>
+                  <span class="glyphicon glyphicon-user"></span>  {{ web_macro.user_link(owner[threadinfo.userId] , 'link-muted') }}&nbsp;<span class="glyphicon glyphicon-time"></sapn>{{threadinfo.createdTime|smart_time}}
+                  {% if threadinfo.lastPostTime %}
+                  &nbsp;最后回复:{{ web_macro.user_link(latedinfo[threadinfo.lastPostMemberId] , 'link-muted') }}
+                  &nbsp;最后回复时间: {{threadinfo.lastPostTime|smart_time}}
+                  {% endif %}
+                </div>
+                
+              </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr><td>
+            还没有话题！</td></tr>
+            {% endif %}
+            
+          </table>
+          {{ web_macro.paginator(paginator) }}
+        
+      </div>          <div class="col-md-4">
+         {% if groupmember_activeinfo %}
+       
+      {% include 'TopxiaWebBundle:Group:activeMember.list.html.twig' with {groupmember_activeinfo:groupmember_activeinfo} %}
+    {% endif %}
+                       </div> 
+
+    </div>
+    {% endblock %}
+  </div>
+  {% endblock %}

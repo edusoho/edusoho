@@ -16,8 +16,8 @@
     <div class="form-group">
       <input class="form-control" type="text" placeholder="小组名" name="title" value="{{ app.request.get('title') }}">
     </div>
-    <div class="form-group">
-      <input class="form-control" type="text" placeholder="创建者" name="nickname" value="{{ app.request.get('nickname') }}">
+        <div class="form-group">
+      <input class="form-control" type="text" placeholder="创建者" name="ownerName" value="{{ app.request.get('ownerName') }}">
     </div>
     <button class="btn btn-primary">搜索</button>
   </form>
@@ -41,6 +41,7 @@
     {% endfor %}
     </tbody>
   </table>
+  <div class="pull-right">
  {{ web_macro.paginator(paginator) }}
-
+</div>
 {% endblock %}
