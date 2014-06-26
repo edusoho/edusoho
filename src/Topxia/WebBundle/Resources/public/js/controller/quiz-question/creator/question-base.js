@@ -70,11 +70,9 @@ define(function(require, exports, module) {
 
             this.$('#advanced-collapse').on('shown.bs.collapse', function(){
                 uploader.enable();
-                console.log('shown');
             });
 
             this.$('#advanced-collapse').on('hidden.bs.collapse', function(){
-                console.log('hidden');
                 uploader.disable();
             });
 

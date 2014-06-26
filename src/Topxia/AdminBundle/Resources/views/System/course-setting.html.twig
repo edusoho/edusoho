@@ -4,8 +4,6 @@
 
 {% set submenu = 'course_setting' %}
 
-{% set script_controller = 'setting/course' %}
-
 {% block maincontent %}
 <div class="page-header"><h1>课程设置</h1></div>
 
@@ -91,15 +89,6 @@
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('live_course_enabled', {1:'开启', 0:'关闭'}, courseSetting.live_course_enabled) }}
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="perLiveMaxStudentNum">单堂最大学员数</label>
-      </div>
-      <div class="controls col-md-5">
-        <input type="text" id="perLiveMaxStudentNum" name="perLiveMaxStudentNum" class="form-control" value="{{ courseSetting.perLiveMaxStudentNum }}">
       </div>
     </div>
 

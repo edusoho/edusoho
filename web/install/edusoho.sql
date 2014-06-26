@@ -762,7 +762,7 @@ CREATE TABLE `upload_files` (
   `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none' COMMENT '文件转换状态',
   `metas` text COMMENT '元信息',
   `metas2` text COMMENT '元信息',
-  `type` enum('document','video','audio','image','other') NOT NULL DEFAULT 'other' COMMENT '文件类型',
+  `type` enum('document','video','audio','image','ppt','other') NOT NULL DEFAULT 'other' COMMENT '文件类型',
   `storage` enum('local','cloud') NOT NULL COMMENT '文件存储方式',
   `isPublic` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否公开文件',
   `canDownload` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可下载',

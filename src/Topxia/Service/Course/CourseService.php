@@ -18,6 +18,8 @@ interface CourseService
 
 	public function getCourse($id);
 
+	public function getCoursesCount();
+
 	public function findCoursesByIds(array $ids);
 	
 	public function findMinStartTimeByCourseId($courseId);
@@ -98,6 +100,8 @@ interface CourseService
 	public function getNextLessonNumber($courseId);
 
 	public function liveLessonTimeCheck($courseId,$lessonId,$startTime,$length);
+
+	public function calculateLiveCourseLeftCapacityInTimeRange($startTime, $endTime, $excludeLessonId);
 
 	public function startLearnLesson($courseId, $lessonId);
 

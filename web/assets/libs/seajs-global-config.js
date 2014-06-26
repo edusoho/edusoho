@@ -42,6 +42,7 @@ seajs.config({
 		'video-js': 'gallery2/video-js/4.2.1/video-js',
 		'swfupload': 'gallery2/swfupload/2.2.0/swfupload',
 		'webuploader': 'gallery2/webuploader/0.1.2/webuploader',
+		'screenfull': 'gallery2/screenfull/1.1.1/screenfull',
 		'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js'
 	},
 

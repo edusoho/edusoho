@@ -34,6 +34,8 @@
 				      <span class="type">图文 <span class="glyphicon glyphicon-picture"></span></span>
 				    {% elseif item.type == 'testpaper' %}
 				      <span class="type">试卷 <span class="glyphicon glyphicon-check"></span></span>
+				    {% elseif item.type == 'ppt' %}
+				      <span class="type">PPT <span class="glyphicon glyphicon-picture"></span></span>
 				    {% elseif item.type == 'live' %}
 				       	{% if item.startTime > currentTime %}
 							<small class="type">{{ item.startTime|date('m月d日') }} 

@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\LiveClientFactory;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -57,6 +58,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getCourse($id, $inChanging = false)
 	{
 		return CourseSerialize::unserialize($this->getCourseDao()->getCourse($id));
+	}
+
+	public function getCoursesCount()
+	{
+		return $this->getCourseDao()->getCoursesCount();
 	}
 
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
@@ -617,7 +623,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live'))) {
+		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt'))) {
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
@@ -661,7 +667,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	private function fillLessonMediaFields(&$lesson)
 	{
-		if (in_array($lesson['type'], array('video', 'audio'))) {
+		if (in_array($lesson['type'], array('video', 'audio', 'ppt'))) {
 			$media = empty($lesson['media']) ? null : $lesson['media'];
 			if (empty($media) or empty($media['source']) or empty($media['name'])) {
 				throw $this->createServiceException("media参数不正确，添加课时失败！");
@@ -733,8 +739,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields['type'] = $lesson['type'];
-		$fields['endTime'] = $fields['startTime']+$fields['length']*60;
-
+		if ($fields['type'] == 'live') {
+			$fields['endTime'] = $fields['startTime'] + $fields['length']*60;
+		}
+		
 		$this->fillLessonMediaFields($fields);
 		
 		$lesson = LessonSerialize::unserialize(
@@ -829,6 +837,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$thisStartTime = $thisEndTime = 0;
 
+
 		if ($lessonId) {
 			$liveLesson = $this->getCourseLesson($course['id'], $lessonId);
 			$thisStartTime = empty($liveLesson['startTime']) ? 0 : $liveLesson['startTime'];
@@ -850,25 +859,25 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return array('error_occupied','该时段内已有直播课时存在，请调整直播开始时间');
 		}
 
-		$courseSetting = $this->getSettingService()->get('course', array());
-		$perLiveMaxStudentNum = !empty($courseSetting['perLiveMaxStudentNum']) ? $courseSetting['perLiveMaxStudentNum'] : 0;
+		return array('success','');
+	}
 
-		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime,$endTime,$lessonId);
+	public function calculateLiveCourseLeftCapacityInTimeRange($startTime, $endTime, $excludeLessonId)
+	{
+        $client = LiveClientFactory::createClient();
+        $liveStudentCapacity = $client->getCapacity();
+        $liveStudentCapacity = empty($liveStudentCapacity['capacity']) ? 0 : $liveStudentCapacity['capacity'];
+
+		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime, $endTime, $excludeLessonId);
+
 		$courseIds = ArrayToolkit::column($lessons,'courseId');
 		$courseIds = array_unique($courseIds);
 		$courseIds = array_values($courseIds);
 		$courses = $this->getCourseDao()->findCoursesByIds($courseIds);
 		$maxStudentNum = ArrayToolkit::column($courses,'maxStudentNum');
 		$timeSlotOccupiedStuNums = array_sum($maxStudentNum);
-		$leftStuNums = $perLiveMaxStudentNum - $timeSlotOccupiedStuNums;
 
-		$thisMaxStudentNum = $course['maxStudentNum'];
-
-		if ($thisMaxStudentNum > $leftStuNums) {
-			return array('error_limitout','该时段内可加入直播的人数，已超出系统限制，请调整时间后再试或与管理员联系');
-		}
-
-		return array('success','');
+		return $liveStudentCapacity - $timeSlotOccupiedStuNums;
 	}
 
 	public function startLearnLesson($courseId, $lessonId)
