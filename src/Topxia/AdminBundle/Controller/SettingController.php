@@ -469,6 +469,7 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
+            $data['email_filter'] = trim(str_replace(array("\n\r", "\r\n", "\r"), "\n", $data['email_filter']));
             $setting = array('mode' => $data['mode'],
                             'nickname_enabled' => $data['nickname_enabled'],
                             'avatar_alert' => $data['avatar_alert'],

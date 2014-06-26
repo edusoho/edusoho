@@ -103,7 +103,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
                         $user = $this->syncEmailAndPassword($user, $partnerUser, $token);
                     } else {
                         $setting = $this->getSettingService()->get('user_partner', array());
-                        $email_filter = explode("\r\n", $setting['email_filter']);
+                        $email_filter = explode("\n", $setting['email_filter']);
                         if (in_array($partnerUser['email'], $email_filter)) {
                               $partnerUser['email'] = $partnerUser['id'].'_dz_'.$this->getRandomString(5).'@edusoho.net';
                         }
