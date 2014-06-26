@@ -94,7 +94,6 @@ define(function(require, exports, module) {
             element: '[name=maxStudentNum]',
             rule: 'integer',
             onItemValidated: function(error, message, elem) {
-                console.log('xxx');
                 if (error) {
                     return ;
                 }
