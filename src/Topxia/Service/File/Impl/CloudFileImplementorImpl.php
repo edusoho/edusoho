@@ -62,7 +62,14 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         if ($status != 'success') {
             $file['convertStatus'] = $status;
         } else {
-            $cmds = $this->getCloudClient()->getVideoConvertCommands();
+
+            if ($file['type'] == 'video') {
+                $cmds = $this->getCloudClient()->getVideoConvertCommands();
+            } elseif ($file['type'] == 'audio') {
+                $cmds = $this->getCloudClient()->getAudioConvertCommands();
+            } elseif ($file['type'] == 'ppt') {
+                $cmds = $this->getCloudClient()->getPPTConvertCommands();
+            }
 
             $file['metas2'] = array();
             foreach ($result as $item) {
@@ -80,12 +87,20 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 }
 
                 $file['metas2'][$type] = array('type' => $type, 'cmd' => $item['cmd'], 'key' => $item['key']);
+                if ($file['type'] == 'ppt') {
+                    $result = $this->getCloudClient()->convertPPT($item['key']);
+                    $file['metas2']['length'] = empty($result['length']) ? 0 : $result['length'];
+                    $file['metas2']['imagePrefix'] = empty($result['imagePrefix']) ? '' : $result['imagePrefix'];
+                }
             }
 
             if (empty($file['metas2'])) {
                 $file['convertStatus'] = 'error';
             } else {
                 $file['convertStatus'] = 'success';
+                if ($file['type'] == 'ppt' && empty($file['metas2']['length'])) {
+                    $file['convertStatus'] = 'error';
+                }
             }
         }
 

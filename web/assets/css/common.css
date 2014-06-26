@@ -879,8 +879,7 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 
 
 
-
-/*! define jquery-plugin/mediaelement/2.13.1/mediaelementplayer-debug.css */
+/*! define gallery2/mediaelement/2.14.2/mediaelementplayer-debug.css */
 .mejs-container {
   position: relative;
   background: #000;
@@ -1070,7 +1069,7 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 
 /* :focus for accessibility */
 .mejs-controls .mejs-button button:focus {
-  outline: solid 1px yellow;
+  outline: dotted 1px #999;
 }
 
 /* End: CONTROL BAR */
@@ -1748,3 +1747,46 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   cursor: pointer;
 }
 /* End: Postroll */
+
+.mejs-audio {
+  display: inline-block;
+}
+
+
+
+
+
+.webuploader-container {
+  position: relative;
+  padding: 0;
+}
+
+.webuploader-container label {
+  margin-bottom: 0;
+  line-height: 1;
+}
+
+
+
+.webuploader-container > .glyphicon {
+  padding: 8px 10px;
+  top: 0;
+}
+
+.webuploader-element-invisible {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px,1px,1px,1px);
+}
+.webuploader-pick {
+  position: relative;
+  overflow: hidden;
+  padding: 5px 10px;
+}
+.webuploader-pick-hover {
+}
+
+.webuploader-pick-disable {
+  opacity: 0.6;
+  pointer-events:none;
+}

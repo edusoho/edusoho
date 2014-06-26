@@ -18,7 +18,15 @@ interface CourseService
 
 	public function getCourse($id);
 
+	public function getCoursesCount();
+
 	public function findCoursesByIds(array $ids);
+	
+	public function findMinStartTimeByCourseId($courseId);
+
+	public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit);
+
+	public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit);
 
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit);
 
@@ -75,7 +83,9 @@ interface CourseService
 	
 	public function getCourseLessons($courseId);
 
-	public function searchLessons($condition, $orderBy, $start, $limit);
+	public function searchLessons($conditions, $orderBy, $start, $limit);
+
+	public function searchLessonCount($conditions);
 
 	public function createLesson($lesson);
 
@@ -88,6 +98,10 @@ interface CourseService
 	public function unpublishLesson($courseId, $lessonId);
 
 	public function getNextLessonNumber($courseId);
+
+	public function liveLessonTimeCheck($courseId,$lessonId,$startTime,$length);
+
+	public function calculateLiveCourseLeftCapacityInTimeRange($startTime, $endTime, $excludeLessonId);
 
 	public function startLearnLesson($courseId, $lessonId);
 
@@ -146,6 +160,8 @@ interface CourseService
 	public function isMemberNonExpired($course, $member);
 
 	public function findCourseStudents($courseId, $start, $limit);
+
+	public function findCourseStudentsByCourseIds($courseIds);
 
 	public function getCourseStudentCount($courseId);
 
@@ -245,6 +261,8 @@ interface CourseService
 	public function deleteCourseAnnouncement($courseId, $id);
 
 	public function findAnnouncements($courseId, $start, $limit);
+
+	public function findAnnouncementsByCourseIds(array $ids, $start, $limit);
 
 	public function updateAnnouncement($courseId, $id, $fields);
 

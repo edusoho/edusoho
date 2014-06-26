@@ -1,0 +1,82 @@
+{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+
+{% block title %}{{ course.title }} -{{ parent() }}{% endblock %}
+{% block keywords %}{{ course.title }}{% endblock %}
+{% block description %}{{ course.about }}{% endblock %}
+
+{% block content %}
+
+<div class="es-row-wrap container-gap">
+	<div class="row">
+	    <div class="col-md-12">
+	      <div class="page-header"><h1>{{ course.title }}</h1></div>
+	    </div>
+	</div>
+
+  	<div class="row article-row">
+	  	<div class="col-md-8 mbl">
+	  		<dl class="course-infos">
+    <dt class="thread-title">简介</dt>
+    <dd class="thread-body">{{ course.about|raw }}</dd>
+
+    {% if category %}
+    <dt>分类</dt>
+    <dd class="mbm">
+      <a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a>
+    </dd>
+    {% endif %}
+
+    {% if course.goals %}
+      <dt>课程目标</dt>
+      <dd>
+        <ul>
+          {% for goal in course.goals %}
+            <li>{{ goal }}</li>
+          {% endfor %}
+        </ul>
+      </dd>
+    {% endif %}
+
+    {% if course.audiences %}
+      <dt>适合人群</dt>
+      <dd>
+        <ul>
+          {% for audience in course.audiences %}
+            <li>{{ audience }}</li>
+          {% endfor %}
+        </ul>
+      </dd>
+    {% endif %}
+  </dl>
+		  		{% if tags %}
+		  		<div class="mtm">课程标签：
+		  			{% for tag in tags %}
+		  			<a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs"><span class="label label-info">{{ tag.name }}</span></a>
+		  			{% endfor %}
+		  		</div>
+		  		{% endif %}
+	  		<a class="btn btn-primary mtl nav-btn" href="{{ path('course_show',{id:course.id})}}"><span class="glyphicon glyphicon-play"></span> 查看课程</a>
+		</div>
+	  	<div class="col-md-4">
+	  		<div class="panel panel-default">
+			    <div class="panel-heading">
+			      <h3 class="panel-title">课时列表</h3>
+			    </div>
+		    <div class="panel-body">
+		    	{% if lessons %}
+		        <ul class="media-list">
+		    	{% for lesson in lessons %}
+		            <li class="media">
+		              <div class="media-body"><a href="{{ path('course_archive_lesson',{ id:course.id,lessonId:lesson.id })}}">第{{ lesson.number }}课时： {{ lesson.title }}</a></div>
+		            </li>
+		        {% endfor %}
+		        </ul>
+		        {% else %}
+		        <div class="empty">课程暂无相关课时</div>
+		        {% endif %}
+		    </div>
+		  </div>
+	  	</div>
+	</div>
+</div>
+{% endblock %}

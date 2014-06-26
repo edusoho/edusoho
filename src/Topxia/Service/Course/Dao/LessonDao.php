@@ -9,13 +9,21 @@ interface LessonDao
 
     public function findLessonsByCourseId($courseId);
 
+    public function findMinStartTimeByCourseId($courseId);
+
     public function findLessonIdsByCourseId($courseId);
 
     public function searchLessons($condition, $orderBy, $start, $limit);
 
+    public function searchLessonCount($conditions);
+
     public function getLessonCountByCourseId($courseId);
 
     public function getLessonMaxSeqByCourseId($courseId);
+
+    public function findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$excludeLessonId=0);
+
+    public function findTimeSlotOccupiedLessons($startTime,$endTime,$excludeLessonId=0);
 
     public function findLessonsByChapterId($chapterId);
 

@@ -1,0 +1,20 @@
+
+<div data-role="navigation">
+  <ul class="nav nav-tabs">
+    <li 
+    {% if status == 'underway'%}
+    class="active"
+    {% endif %}
+    ><a href="{{ url('admin_live_course', {status: 'underway'}) }}">当前进行中</a></li>
+    <li
+    {% if status == 'coming'%}
+    class="active"
+    {% endif %}
+    ><a href=" {{ url('admin_live_course', {status: 'coming'}) }}">即将开始的</a></li>
+    <li
+    {% if status == 'end'%}
+    class="active"
+    {% endif %}
+    ><a href=" {{ url('admin_live_course', {status: 'end'}) }}">已结束的</a></li>
+  </ul>
+</div>

@@ -13,6 +13,12 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $sql = "SELECT * FROM {$this->getTablename()} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
+
+    public function getCoursesCount()
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->getTablename()}";
+        return $this->getConnection()->fetchColumn($sql) ? : null;
+    }
     
     public function findCoursesByIds(array $ids)
     {
@@ -22,6 +28,42 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->getTablename()} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
+    public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
+    {
+
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE status = ?";
+
+        foreach ($tagIds as $tagId) {
+                $sql .= " AND tags LIKE '%|$tagId|%'";
+        }
+
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        
+        return $this->getConnection()->fetchAll($sql, array($status));
+    }
+
+    public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
+    {
+        if(empty($tagIds)){
+            return array();
+        }
+
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE status = ? AND ";
+
+        foreach ($tagIds as $key => $tagId) {
+            if ($key > 0 ) {
+                $sql .= "OR tags LIKE '%|$tagId|%'";
+            } else {
+                $sql .= " tags LIKE '%|$tagId|%' ";
+            }
+        }
+
+        $sql .= " ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
+        
+        return $this->getConnection()->fetchAll($sql, array($status));
+
     }
 
     public function searchCourses($conditions, $orderBy, $start, $limit)
@@ -81,13 +123,26 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['tagId']);
         }
 
+        if (isset($conditions['tagIds'])) {
+            $tagIds = $conditions['tagIds'];
+            $conditions['tagsLike'] = '%|';
+            if (!empty($tagIds)) {
+                foreach ($tagIds as $tagId) {
+                    $conditions['tagsLike'] .= "{$tagId}|";
+                }
+            }
+            $conditions['tagsLike'] .= '%';
+            unset($conditions['tagIds']);
+        }
+        
         if (isset($conditions['notFree'])) {
             $conditions['notFree'] = 0;
         }
-
+        
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'course')
             ->andWhere('status = :status')
+            ->andWhere('type = :type')
             ->andWhere('price = :price')
             ->andWhere('price > :notFree')
             ->andWhere('title LIKE :titleLike')
@@ -96,6 +151,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('tags LIKE :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan')
+            ->andWhere('rating > :ratingGreaterThan')
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan');
 
 

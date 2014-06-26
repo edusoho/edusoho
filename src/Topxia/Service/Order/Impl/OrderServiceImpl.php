@@ -3,6 +3,7 @@ namespace Topxia\Service\Order\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Order\OrderService;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Common\ArrayToolkit;
 
 class OrderServiceImpl extends BaseService implements OrderService
@@ -106,6 +107,10 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         $order = $this->getOrder($order['id']);
+
+        if ($success) {
+            $this->getDispatcher()->dispatch('order.service.paid', new ServiceEvent($order));
+        }
 
         return array($success, $order);
     }

@@ -93,12 +93,16 @@ class AuthServiceImpl extends BaseService implements AuthService
     }
 
     public function checkUsername($username)
-    {
-        $result = $this->getAuthProvider()->checkUsername($username);
+    {   
+        try {
+            $result = $this->getAuthProvider()->checkUsername($username);
+        } catch (\Exception $e) {
+            return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
+        }
+
         if ($result[0] != 'success') {
             return $result;
         }
-
 
         $avaliable = $this->getUserService()->isNicknameAvaliable($username);
         if (!$avaliable) {
@@ -110,7 +114,11 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function checkEmail($email)
     {
-        $result = $this->getAuthProvider()->checkEmail($email);
+        try {
+            $result = $this->getAuthProvider()->checkEmail($email);
+        } catch (\Exception $e) {
+            return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
+        }
         if ($result[0] != 'success') {
             return $result;
         }
@@ -118,7 +126,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         if (!$avaliable) {
             return array('error_duplicate', 'Email已存在!');
         }
-
+        
         return array('success', '');
     }
 

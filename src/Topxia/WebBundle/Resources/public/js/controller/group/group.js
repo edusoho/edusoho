@@ -7,7 +7,7 @@
   
     exports.run = function() {
         if($('#thread_content').length>0){
-            var editor_thread = EditorFactory.create('#thread_content', 'simple', {extraFileUploadParams:{group:'user'}});
+            var editor_thread = EditorFactory.create('#thread_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
              var validator_thread = new Validator({
             element: '#user-thread-form',
             failSilently: true,
@@ -41,7 +41,7 @@
 
         }
         if($('#group_about').length>0){
-            var editor = EditorFactory.create('#group_about', 'simple', {extraFileUploadParams:{group:'user'}});
+            var editor = EditorFactory.create('#group_about', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
             var validator = new Validator({
             element: '#user-group-form',
             failSilently: true,
@@ -64,7 +64,7 @@
 
            }
         if($('#post_content').length>0){
-        var editor_thread = EditorFactory.create('#post_content', 'simple', {extraFileUploadParams:{group:'user'}});
+        var editor_thread = EditorFactory.create('#post_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
         var validator_thread = new Validator({
             element: '#post-thread-form',
             failSilently: true,

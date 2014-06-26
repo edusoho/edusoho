@@ -72,6 +72,7 @@ class UploadFileController extends BaseController
             if ($convertor == 'video') {
                 $commands = array_keys($client->getVideoConvertCommands());
             } elseif ($convertor == 'audio') {
+                $commands = array_keys($client->getAudioConvertCommands());
             }
 
             //@todo refacor it. 
@@ -190,6 +191,8 @@ class UploadFileController extends BaseController
         $file = $this->getUploadFileService()->convertFile($file['id'], 'success', $data['items']);
 
         $this->getNotificationService()->notify($file['createdUserId'], 'cloud-file-converted', array(
+            'file' => $file,
+            'status' => $file['convertStatus'] == 'success' ? 'success' : 'error',
             'courseId' => $file['targetId'],
             'filename' => $file['filename'],
         ));

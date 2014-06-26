@@ -18,6 +18,7 @@ class LessonLessonPluginController extends BaseController
             'course' => $course,
             'items' => $items,
             'learnStatuses' => $learnStatuses,
+            'currentTime' => time(),
         ));
     }
 

@@ -25,6 +25,12 @@
 </div>
 {% endif %}
 
+
+{% if course.type == 'live' %}
+
+{% include 'TopxiaWebBundle:Course:live-course.html.twig' %}
+
+{% else %}
 <div class="es-row-wrap container-gap course-cover">
 
   <div class="row row-5-7 course-cover-heading">
@@ -213,6 +219,10 @@
       {% endembed %}
 
       {{ render(controller('TopxiaWebBundle:CourseReview:latestBlock',{course:course})) }}
+
+      {% if setting('course.relatedCourses') == 1 %}
+        {{ render(controller('TopxiaWebBundle:Course:relatedCoursesBlock',{course:course})) }}
+      {% endif %}
     </div>
     <div class="col-md-4">
       {{ render(controller('TopxiaWebBundle:Course:teachersBlock',{course:course})) }}
@@ -227,7 +237,7 @@
   </div>
 
 </div>
-
+{% endif %}
 </div>
 {% endblock %}
 

@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\Util\LiveClientFactory;
 
 class CourseLessonManageController extends BaseController
 {
@@ -11,7 +12,6 @@ class CourseLessonManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
 		$courseItems = $this->getCourseService()->getCourseItems($course['id']);
-
 		$mediaMap = array();
 		foreach ($courseItems as $item) {
 			if ($item['itemType'] != 'lesson') {
@@ -31,13 +31,14 @@ class CourseLessonManageController extends BaseController
 		$mediaIds = array_keys($mediaMap);
 
 		$files = $this->getUploadFileService()->findFilesByIds($mediaIds);
+
 		foreach ($files as $file) {
 			$lessonIds = $mediaMap[$file['id']];
 			foreach ($lessonIds as $lessonId) {
 				$courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
 			}
 		}
-
+		
 		return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
 			'course' => $course,
 			'items' => $courseItems
@@ -48,7 +49,6 @@ class CourseLessonManageController extends BaseController
 	public function createAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
-
 	    if($request->getMethod() == 'POST') {
         	$lesson = $request->request->all();
         	$lesson['courseId'] = $course['id'];
@@ -81,7 +81,7 @@ class CourseLessonManageController extends BaseController
 
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
-    		$videoUploadToken = $audioUploadToken = array(
+    		$videoUploadToken = $audioUploadToken = $pptUploadToken = array(
 	    		'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
 	    		'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
 			);
@@ -106,6 +106,17 @@ class CourseLessonManageController extends BaseController
 	    		if (!empty($audioUploadToken['error'])) {
 	    			return $this->createMessageModalResponse('error', $audioUploadToken['error']['message']);
 	    		}
+
+                $commands = array_keys($client->getPPTConvertCommands());
+                $pptUploadToken = $client->generateUploadToken($client->getBucket(), array(
+                    'convertCommands' => implode(';', $commands),
+                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
+                ));
+                if (!empty($pptUploadToken['error'])) {
+                    return $this->createMessageModalResponse('error', $pptUploadToken['error']['message']);
+                }
+
+
     		}
     		 catch (\Exception $e) {
     			return $this->createMessageModalResponse('error', $e->getMessage());
@@ -117,7 +128,8 @@ class CourseLessonManageController extends BaseController
             'targetType' => $targetType,
             'targetId' => $targetId,
 			'videoUploadToken' => $videoUploadToken,
-			'audioUploadToken' => $audioUploadToken,
+            'audioUploadToken' => $audioUploadToken,
+			'pptUploadToken' => $pptUploadToken,
 			'filePath' => $filePath,
 			'fileKey' => $fileKey,
 			'convertKey' => $convertKey,
@@ -190,7 +202,7 @@ class CourseLessonManageController extends BaseController
 
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
-            $videoUploadToken = $audioUploadToken = array(
+            $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
                 'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
                 'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
             );
@@ -214,12 +226,22 @@ class CourseLessonManageController extends BaseController
 	    		if (!empty($audioUploadToken['error'])) {
 	    			return $this->createMessageModalResponse('error', $audioUploadToken['error']['message']);
 	    		}
+
+                $commands = array_keys($client->getPPTConvertCommands());
+                $pptUploadToken = $client->generateUploadToken($client->getBucket(), array(
+                    'convertCommands' => implode(';', $commands),
+                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
+                ));
+                if (!empty($pptUploadToken['error'])) {
+                    return $this->createMessageModalResponse('error', $pptUploadToken['error']['message']);
+                }
+
     		}
     		 catch (\Exception $e) {
     			return $this->createMessageModalResponse('error', $e->getMessage());
     		}
     	}
-
+        $lesson['title'] = str_replace(array('"',"'"), array('&#34;','&#39;'), $lesson['title']);
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
@@ -227,6 +249,7 @@ class CourseLessonManageController extends BaseController
             'targetId' => $targetId,
 			'videoUploadToken' => $videoUploadToken,
 			'audioUploadToken' => $audioUploadToken,
+            'pptUploadToken' => $pptUploadToken,
 			'filePath' => $filePath,
 			'fileKey' => $fileKey,
 			'convertKey' => $convertKey,
@@ -344,6 +367,9 @@ class CourseLessonManageController extends BaseController
 	public function deleteAction(Request $request, $courseId, $lessonId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+		$client = LiveClientFactory::createClient();
+        $client->deleteLive($lesson['mediaId']);
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);
 		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 		return $this->createJsonResponse(true);

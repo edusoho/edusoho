@@ -98,6 +98,10 @@ class FileToolkit
             return 'audio';
         } elseif (strpos($mimeType, 'image') === 0) {
             return 'image';
+        } elseif (in_array($mimeType, array(
+            'application/vnd.ms-powerpoint',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation'))) {
+            return 'ppt';
         } elseif (strpos($mimeType, 'application/vnd.ms-') === 0 
             or strpos($mimeType, 'application/vnd.openxmlformats-officedocument') === 0
             or strpos($mimeType, 'application/pdf') === 0) {

@@ -1,0 +1,36 @@
+{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
+
+{% block title %}直播管理 - {{ parent() }}{% endblock %}
+
+{% set menu = 'live-course' %}
+
+{% block main %}
+  <div class="page-header">
+    <h1>直播管理</h1>
+  </div>
+
+  {% include 'TopxiaAdminBundle:LiveCourse:tab.html.twig' %}
+  <br>
+
+  <table class="table table-striped table-hover" id="course-table">
+    <thead>
+    <tr>
+      <th width="50%">课时</th>
+      <th>直播时间</th>
+      <th>最大参与人数</th>
+      <th><a href="{{ path('admin_live_course', {status:status}) }}"><span class="glyphicon glyphicon-refresh"></span></a></th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for lesson in lessons %}
+        {% set course = courses[lesson.courseId]|default(null) %}
+        {% include 'TopxiaAdminBundle:LiveCourse:tr.html.twig' %}
+      {% else %}
+        <tr><td colspan="20"><div class="empty">暂无进行中的直播</div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}
