@@ -532,7 +532,6 @@ class SettingController extends BaseController
             'student_download_media' => '0',
             'relatedCourses' => '0',
             'live_course_enabled' => '0',
-            'perLiveMaxStudentNum' => '0'
         );
 
         $courseSetting = array_merge($default, $courseSetting);

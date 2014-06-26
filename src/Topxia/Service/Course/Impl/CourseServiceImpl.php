@@ -858,11 +858,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return array('error_occupied','该时段内已有直播课时存在，请调整直播开始时间');
 		}
 
+		return array('success','');
+	}
+
+	public function calculateLiveCourseLeftCapacityInTimeRange($startTime, $endTime, $excludeLessonId)
+	{
         $client = LiveClientFactory::createClient();
         $liveStudentCapacity = $client->getCapacity();
         $liveStudentCapacity = empty($liveStudentCapacity['capacity']) ? 0 : $liveStudentCapacity['capacity'];
 
-		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime,$endTime,$lessonId);
+		$lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime, $endTime, $excludeLessonId);
 
 		$courseIds = ArrayToolkit::column($lessons,'courseId');
 		$courseIds = array_unique($courseIds);
@@ -870,15 +875,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$courses = $this->getCourseDao()->findCoursesByIds($courseIds);
 		$maxStudentNum = ArrayToolkit::column($courses,'maxStudentNum');
 		$timeSlotOccupiedStuNums = array_sum($maxStudentNum);
-		$leftStuNums = $liveStudentCapacity - $timeSlotOccupiedStuNums;
 
-		$thisMaxStudentNum = $course['maxStudentNum'];
-
-		if ($thisMaxStudentNum > $leftStuNums) {
-			return array('error_limitout','该时段内可加入直播的人数，已超出系统限制，请调整时间后再试或与管理员联系');
-		}
-
-		return array('success','');
+		return $liveStudentCapacity - $timeSlotOccupiedStuNums;
 	}
 
 	public function startLearnLesson($courseId, $lessonId)
