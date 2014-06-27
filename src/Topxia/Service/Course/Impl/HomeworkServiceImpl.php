@@ -78,7 +78,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 		
 		$this->getLogService()->info('homework','create','创建课程{$courseId}课时{$lessonId}的作业');
 		
-		return true;
+		return $homework;
 	}
 
     public function updateHomework($id, $fields)
