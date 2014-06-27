@@ -65,6 +65,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             if ($file['type'] == 'ppt') {
                 $cmds = $this->getCloudClient()->getPPTConvertCommands();
                 foreach ($result as $item) {
+                    $type = empty($cmds[$item['cmd']]) ? null : $cmds[$item['cmd']];
+                    if (empty($type)) {
+                        continue;
+                    }
+
                     $file['metas2'][$type] = array('type' => $type, 'cmd' => $item['cmd'], 'key' => $item['key']);
                     if ($callback) {
                         $result = $this->getCloudClient()->convertPPT($item['key'], $callback);
