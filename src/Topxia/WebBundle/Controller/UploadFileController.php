@@ -165,6 +165,7 @@ class UploadFileController extends BaseController
         $this->getLogService()->info('uploadfile', 'cloud_convert_callback', "文件云处理回调", array('content' => $data));
 
         $key = $request->query->get('key');
+        $fullKey = $request->query->get('fullKey');
         if (empty($key)) {
             throw new \RuntimeException('key不能为空');
         }
@@ -175,7 +176,11 @@ class UploadFileController extends BaseController
             throw new \RuntimeException('数据中id不能为空');
         }
 
-        $hash = "{$data['id']}:{$key}";
+        if ($fullKey) {
+            $hash = $fullKey;
+        } else {
+            $hash = "{$data['id']}:{$key}";
+        }
 
         $file = $this->getUploadFileService()->getFileByConvertHash($hash);
         if (empty($file)) {
@@ -188,14 +193,21 @@ class UploadFileController extends BaseController
         }
 
         $items = (empty($data['items']) or !is_array($data['items'])) ? array() : $data['items'];
-        $file = $this->getUploadFileService()->convertFile($file['id'], 'success', $data['items']);
 
-        $this->getNotificationService()->notify($file['createdUserId'], 'cloud-file-converted', array(
-            'file' => $file,
-            'status' => $file['convertStatus'] == 'success' ? 'success' : 'error',
-            'courseId' => $file['targetId'],
-            'filename' => $file['filename'],
-        ));
+        $status = $request->query->get('twoStep', false) ? 'doing' : 'success';
+
+        if ($status == 'doing') {
+            $callback = $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $key, 'fullKey' => $hash));
+            $file = $this->getUploadFileService()->convertFile($file['id'], $status, $data['items'], $callback);
+        } else {
+            $file = $this->getUploadFileService()->convertFile($file['id'], $status, $data['items']);
+        }
+
+        if (in_array($file['convertStatus'], array('success', 'error'))) {
+            $this->getNotificationService()->notify($file['createdUserId'], 'cloud-file-converted', array(
+                'file' => $file,
+            ));
+        }
 
         return $this->createJsonResponse($file['metas2']);
     }

@@ -110,7 +110,7 @@ class CourseLessonManageController extends BaseController
                 $commands = array_keys($client->getPPTConvertCommands());
                 $pptUploadToken = $client->generateUploadToken($client->getBucket(), array(
                     'convertCommands' => implode(';', $commands),
-                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
+                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey, 'twoStep' => '1'), true),
                 ));
                 if (!empty($pptUploadToken['error'])) {
                     return $this->createMessageModalResponse('error', $pptUploadToken['error']['message']);
@@ -230,7 +230,7 @@ class CourseLessonManageController extends BaseController
                 $commands = array_keys($client->getPPTConvertCommands());
                 $pptUploadToken = $client->generateUploadToken($client->getBucket(), array(
                     'convertCommands' => implode(';', $commands),
-                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
+                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey, 'twoStep' => 1), true),
                 ));
                 if (!empty($pptUploadToken['error'])) {
                     return $this->createMessageModalResponse('error', $pptUploadToken['error']['message']);

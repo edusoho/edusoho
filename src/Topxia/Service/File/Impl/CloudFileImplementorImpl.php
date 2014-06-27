@@ -59,49 +59,68 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function convertFile($file, $status, $result=null, $callback = null)
     {
-        if ($status != 'success') {
-            $file['convertStatus'] = $status;
-        } else {
+        if ($status == 'doing') {
+            $file['metas2'] = array();
+            $file['convertStatus'] = 'doing';
+            if ($file['type'] == 'ppt') {
+                $cmds = $this->getCloudClient()->getPPTConvertCommands();
+                foreach ($result as $item) {
+                    $file['metas2'][$type] = array('type' => $type, 'cmd' => $item['cmd'], 'key' => $item['key']);
+                    if ($callback) {
+                        $result = $this->getCloudClient()->convertPPT($item['key'], $callback);
+                    } else {
+                        $result = $this->getCloudClient()->convertPPT($item['key']);
+                    }
+                    $file['metas2']['length'] = empty($result['length']) ? 0 : $result['length'];
+                    $file['metas2']['imagePrefix'] = empty($result['imagePrefix']) ? '' : $result['imagePrefix'];
+                }
+
+                if (empty($file['metas2']['length'])) {
+                    $file['convertStatus'] = 'error';
+                }
+            }
+
+        } else if ($status == 'success') {
 
             if ($file['type'] == 'video') {
                 $cmds = $this->getCloudClient()->getVideoConvertCommands();
             } elseif ($file['type'] == 'audio') {
                 $cmds = $this->getCloudClient()->getAudioConvertCommands();
-            } elseif ($file['type'] == 'ppt') {
-                $cmds = $this->getCloudClient()->getPPTConvertCommands();
+            } else {
+                $cmds = null;
             }
 
-            $file['metas2'] = array();
-            foreach ($result as $item) {
-                $type = empty($cmds[$item['cmd']]) ? null : $cmds[$item['cmd']];
-                if (empty($type)) {
-                    continue;
+            if ($cmds) {
+                $file['metas2'] = array();
+                foreach ($result as $item) {
+                    $type = empty($cmds[$item['cmd']]) ? null : $cmds[$item['cmd']];
+                    if (empty($type)) {
+                        continue;
+                    }
+
+                    if ($item['code'] != 0) {
+                        continue;
+                    }
+
+                    if (empty($item['key'])) {
+                        continue;
+                    }
+
+                    $file['metas2'][$type] = array('type' => $type, 'cmd' => $item['cmd'], 'key' => $item['key']);
                 }
 
-                if ($item['code'] != 0) {
-                    continue;
+                if (empty($file['metas2'])) {
+                    $file['convertStatus'] = 'error';
+                } else {
+                    $file['convertStatus'] = 'success';
                 }
-
-                if (empty($item['key'])) {
-                    continue;
-                }
-
-                $file['metas2'][$type] = array('type' => $type, 'cmd' => $item['cmd'], 'key' => $item['key']);
-                if ($file['type'] == 'ppt') {
-                    $result = $this->getCloudClient()->convertPPT($item['key']);
-                    $file['metas2']['length'] = empty($result['length']) ? 0 : $result['length'];
-                    $file['metas2']['imagePrefix'] = empty($result['imagePrefix']) ? '' : $result['imagePrefix'];
-                }
-            }
-
-            if (empty($file['metas2'])) {
-                $file['convertStatus'] = 'error';
+                
             } else {
                 $file['convertStatus'] = 'success';
-                if ($file['type'] == 'ppt' && empty($file['metas2']['length'])) {
-                    $file['convertStatus'] = 'error';
-                }
             }
+
+        } else {
+            $file['convertStatus'] = $status;
         }
 
         $file['metas2'] = $this->encodeMetas(empty($file['metas2']) ? array() : $file['metas2']);
