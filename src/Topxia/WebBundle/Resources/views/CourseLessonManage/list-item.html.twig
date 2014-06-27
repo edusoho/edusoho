@@ -48,34 +48,6 @@
 	</div>
 
 	<div class="item-actions">
-
-	 {# {% if lesson.type != 'testpaper' %}
-		<button class="btn btn-link" title="添加资料" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip"></span>
-		</button>
-	  {% endif %}
-	  {% if lesson.type == 'testpaper' %}
-			<a class="btn btn-link" title="预览" href="{{ path('course_manage_preview_test', {testId:lesson.mediaId}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
-	  {% else %}
-			<a class="btn btn-link" title="预览" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
-	  {% endif %}
-  	  {% if lesson.status == 'unpublished' %}
-	  	<button class="btn btn-link publish-lesson-btn" title="发布" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-ok-circle"></span></button>
-	  {% else %}
-	  	<button class="btn btn-link unpublish-lesson-btn" title="取消发布" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span></button>
-	  {% endif %}
-
-		<button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
-		  {% if lesson.type == 'testpaper' %}
-			  data-url="{{ path('course_manage_lesson_edit_testpaper', {courseId:course.id, lessonId:lesson.id}) }}"
-			{% elseif lesson.type == 'live' %}
-			  data-url="{{ path('live_course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
-			{% else %}
-			  data-url="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
-			{% endif %}
-		  ><i class="glyphicon glyphicon-edit"></i></button>
-
-	    <button class="btn btn-link delete-lesson-btn" title="删除" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-trash"></span></button>
-		#}
 	    <span class="dropdown open">
           	<a class="btn btn-link" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
 			  {% if lesson.type == 'testpaper' %}
