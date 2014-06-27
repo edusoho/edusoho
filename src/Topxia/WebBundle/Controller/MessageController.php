@@ -96,7 +96,6 @@ class MessageController extends BaseController
     public function createAction(Request $request, $toId)
     {
         $user = $this->getCurrentUser();
-
         $receiver = $this->getUserService()->getUser($toId);
         $form = $this->createForm(new MessageType(), array('receiver'=>$receiver['nickname']));
         if($request->getMethod() == 'POST'){

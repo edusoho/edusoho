@@ -579,8 +579,7 @@ class CourseLessonManageController extends BaseController
 		$types = array_unique($types);
 		$types = $this->sortType($types);
 
-		$result = $this->getclassifyQuestionsAndCount($questions);
-// var_dump($result);exit();
+        $result = $this->getclassifyQuestionsAndCount($questions);
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:homework-show.html.twig',array(
 			'course' => $course,

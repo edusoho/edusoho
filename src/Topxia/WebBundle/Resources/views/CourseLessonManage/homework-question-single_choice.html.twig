@@ -12,8 +12,8 @@
 					    </div>
 
 						<ul class="testpaper-question-choices">
-								{% for key,choice in subQuestionVal.metas.choices %}		  			  
-								<li class=""><span class="testpaper-question-choice-index">{{key}}</span>{{choice}}</li>
+								{% for key,choice in subQuestionVal.metas.choices %}		  				{% set choiceIndex = (key+65)|chr %}	  
+								<li class=""><span class="testpaper-question-choice-index">{{choiceIndex}}.</span>{{choice}}</li>
 								{% endfor %}
 							
 						</ul>
@@ -44,8 +44,8 @@
 						    </div>
 
 							<ul class="testpaper-question-choices">
-									{% for key,choice in subQuestion.metas.choices %}		  			  
-									<li class=""><span class="testpaper-question-choice-index">{{key}}</span>{{choice}}</li>
+									{% for key,choice in subQuestion.metas.choices %}		  		{% set choiceIndex = (key+65)|chr %}	  
+									<li class=""><span class="testpaper-question-choice-index">{{choiceIndex}}.</span>{{choice}}</li>
 									{% endfor %}
 								
 							</ul>
