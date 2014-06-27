@@ -69,10 +69,14 @@ class UploadFileController extends BaseController
 
             $convertor = $request->query->get('convertor');
             $commands = null;
+            $twoStep = null;
             if ($convertor == 'video') {
                 $commands = array_keys($client->getVideoConvertCommands());
             } elseif ($convertor == 'audio') {
                 $commands = array_keys($client->getAudioConvertCommands());
+            } elseif ($convertor == 'ppt') {
+                $commands = array_keys($client->getPPTConvertCommands());
+                $twoStep = '1';
             }
 
             //@todo refacor it. 
@@ -83,9 +87,14 @@ class UploadFileController extends BaseController
             $clientParams = array();
             if ($commands) {
                 $convertKey = $keySuffix;
+                if ($twoStep) {
+                    $notifyUrl = $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey, 'twoStep' => $twoStep), true);
+                } else {
+                    $notifyUrl = $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true);
+                }
                 $clientParams = array(
                     'convertCommands' => implode(';', $commands),
-                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
+                    'convertNotifyUrl' => $notifyUrl,
                 );
             }
 
