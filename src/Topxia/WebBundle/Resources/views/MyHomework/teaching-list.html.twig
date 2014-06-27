@@ -35,7 +35,6 @@
 					<td class="media">
 					    {{ web_macro.user_avatar(user, 'pull-left') }}
 					    <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
-					    
 					    <div class="clear-fix text-sm">
 					    	<div class="pull-left"><a class="text-success" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title }}》</a><a class="text-success" href="{{ lessonUrl }}">第 {{ lesson.number }}课时</a></div>
 					    	{% if status == 'unchecked' %}
@@ -55,11 +54,6 @@
 					    </div>
 					</td>
 				</tr>
-				{% else %}
-					<tr class="empty">
-			          <td>没有相关的作业</td>
-			          <td></td>
-			        </tr>
 				{% endfor %}                
             </tbody>
     	</table>
