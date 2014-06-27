@@ -197,7 +197,7 @@ class UploadFileController extends BaseController
         $status = $request->query->get('twoStep', false) ? 'doing' : 'success';
 
         if ($status == 'doing') {
-            $callback = $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $key, 'fullKey' => $hash));
+            $callback = $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $key, 'fullKey' => $hash), true);
             $file = $this->getUploadFileService()->convertFile($file['id'], $status, $data['items'], $callback);
         } else {
             $file = $this->getUploadFileService()->convertFile($file['id'], $status, $data['items']);
