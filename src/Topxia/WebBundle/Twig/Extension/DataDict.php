@@ -27,6 +27,7 @@ class DataDict
 			'audio' => '音频',
 			'document' => '文档',
 			'image' => '图片',
+            'ppt' => 'PPT',
 			'other' => '其他'
 		),
 		'fileType:html' => array(
