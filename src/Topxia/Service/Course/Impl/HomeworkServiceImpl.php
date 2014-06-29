@@ -110,7 +110,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 		
 		$this->getLogService()->info('homework','update','更新课程{$courseId}课时{$lessonId}的{$id}作业');
 		
-		return true;
+		return $homework;
 
 
     }
