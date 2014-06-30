@@ -456,7 +456,24 @@ class CourseLessonManageController extends BaseController
 				$students = array();
 			}
 		}
-		
+
+        $committedCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
+            'commitStatus' => 'committed',
+            'courseId' => $course['id'],
+            'lessonId' => $lesson['id']
+        ));
+        $uncommitCount = $this->getCourseService()->searchMemberCount($conditions) - $committedCount;
+        $reviewingCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
+            'status' => 'reviewing',
+            'courseId' => $course['id'],
+            'lessonId' => $lesson['id']
+        ));
+        $finishedCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
+            'status' => 'finished',
+            'courseId' => $course['id'],
+            'lessonId' => $lesson['id']
+        ));
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:homework-list.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
@@ -465,7 +482,10 @@ class CourseLessonManageController extends BaseController
 			'students' => $students,
 			'users' => $users,
 			'homeworkResults' => $homeworkResults,
-			'paginator' => $paginator
+			'paginator' => $paginator,
+            'uncommitCount' => $uncommitCount,
+            'reviewingCount' => $reviewingCount,
+            'finishedCount' => $finishedCount
 		));
 	}
 

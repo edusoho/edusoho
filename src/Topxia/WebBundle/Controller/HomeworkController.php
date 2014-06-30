@@ -77,6 +77,20 @@ class HomeworkController extends BaseController
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
         $homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findHomeworkResultsByHomeworkIds(ArrayToolkit::column($homeworks, 'id')), 'homeworkId');
 
+        $committedCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
+            'commitStatus' => 'committed',
+            'checkTeacherId' => $currentUser['id']
+        ));
+        $uncommitCount = $this->getCourseService()->searchMemberCount($conditions) - $committedCount;
+        $reviewingCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
+            'status' => 'reviewing',
+            'checkTeacherId' => $currentUser['id']
+        ));
+        $finishedCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
+            'status' => 'finished',
+            'checkTeacherId' => $currentUser['id']
+        ));
+
         if (!empty($homeworkResults)) {
             $students = $this->getHomeworkStudents($status, $students, $homeworkResults);
         } else {
@@ -93,7 +107,10 @@ class HomeworkController extends BaseController
             'homeworkResults' => $homeworkResults,
             'paginator' => $paginator,
             'courses' => $courses,
-            'lessons' => $lessons
+            'lessons' => $lessons,
+            'uncommitCount' => $uncommitCount,
+            'reviewingCount' => $reviewingCount,
+            'finishedCount' => $finishedCount
         ));
     }
 
@@ -160,7 +177,7 @@ class HomeworkController extends BaseController
             }
         }
 
-        if ($status == 'checked') {
+        if ($status == 'finished') {
             foreach ($students as &$student) {
                 $key = false;
                 foreach ($homeworkResults as $item) {
