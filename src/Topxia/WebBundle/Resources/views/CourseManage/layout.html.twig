@@ -37,7 +37,7 @@
             <div class="list-group">
               <a class="list-group-item {% if side_nav == 'question' %}active{% endif %}" href="{{ path('course_manage_question', {courseId:course.id}) }}">题目管理</a>
 
-              {% if setting('question_plus.import') or setting('question_plus.export') %}
+              {% if setting('question_plus.enabled') %}
                 <a class="list-group-item {% if side_nav == 'question_plumber' %}active{% endif %}" href="{{ path('course_question_plumber', {courseId:course.id, type:'import'}) }}">题目导入/导出</a>
               {% endif %}
 
