@@ -44,7 +44,7 @@
 				{% for key,homeworkItem in homeworkItems %}
 					{% set questionId = homeworkItem.questionId %}
 					{% set question = questions[questionId] %}
-					{% include 'TopxiaWebBundle:CourseLessonManage:homework-item-tr.html.twig'%}
+					{% include 'TopxiaWebBundle:CourseHomeworkManage:homework-item-tr.html.twig'%}
 				{% endfor %}
 			{% endif %}
 			</tbody>
