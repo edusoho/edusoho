@@ -297,7 +297,6 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 	private function filterHomeworkFields($fields,$mode)
 	{
 		$fields['description'] = $fields['description'];
-		$fields['completeLimit'] = $fields['completeLimit'];
 
 		if ($mode == 'add') {
 			$fields['createdUserId'] = $this->getCurrentUser()->id;
