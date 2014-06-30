@@ -34,7 +34,7 @@
 	<div class="form-group">
         <label class="col-md-2 control-label" >直播时长</label>
          <div class="col-md-8 controls">
-            <input type="text"  name="timeLength" id="live-length-field" class="form-control width-input width-input-large" value="{{ liveLesson.length|default(60) }}" placeholder="时长"> 分钟
+            <input type="text"  name="timeLength" id="live-length-field" class="form-control width-input width-input-large" value="{{ liveLesson.length|default(60) }}" placeholder="时长" data-calculate-left-capacity-url="{{ path('live_lesson_calculate_left_capacity', {courseId:liveCourse.id, lessonId:liveLesson.id|default(0)}) }}" data-max-Student-Num = "{{ liveCourse.maxStudentNum }}"> 分钟
             <div class="help-block" id="timelength-help-block"></div>
         </div>
 

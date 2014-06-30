@@ -14,7 +14,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return ;
                 }
-                
+                $('#change-password-btn').button('submiting').addClass('disabled');
                 $.post($form.attr('action'), $form.serialize(), function(html){
         
                     var $modal = $('#modal');

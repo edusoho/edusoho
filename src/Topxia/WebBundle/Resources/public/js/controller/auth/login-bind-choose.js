@@ -7,6 +7,13 @@ define(function(require, exports, module) {
         $('#bind-new-btn').on('click', function() {
             var $btn = $(this);
 
+            if ($('#user_terms').length != 0) {
+                if(!$('#user_terms').find('input[type=checkbox]').attr('checked')) {
+                    Notify.danger('勾选同意此服务协议，才能继续注册！');
+                    return;
+                };
+            };
+
             $('#bind-new-form-error').hide();
             $btn.button('loading');
 
@@ -24,6 +31,14 @@ define(function(require, exports, module) {
                 $btn.button('reset');
             });
 
+        });
+
+        $('#user_terms').on('click', 'input[type=checkbox]', function() {
+            if($(this).attr('checked')) {
+                $(this).attr('checked',false);
+            } else {
+                $(this).attr('checked',true);
+            };
         });
 
         var $form = $('#bind-exist-form');

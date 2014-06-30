@@ -114,7 +114,7 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">保存</button>
+  <button id="edit-user-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">保存</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
   <script>app.load('user/edit-modal')</script>
 {% endblock %}

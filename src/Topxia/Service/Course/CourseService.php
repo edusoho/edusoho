@@ -101,6 +101,8 @@ interface CourseService
 
 	public function liveLessonTimeCheck($courseId,$lessonId,$startTime,$length);
 
+	public function calculateLiveCourseLeftCapacityInTimeRange($startTime, $endTime, $excludeLessonId);
+
 	public function startLearnLesson($courseId, $lessonId);
 
 	public function finishLearnLesson($courseId, $lessonId);
