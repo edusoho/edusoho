@@ -508,31 +508,31 @@ course_manage_lesson_sort:
 
 course_manage_lesson_homework_show:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/show
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:showHomework }
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:showHomework }
 
 course_manage_lesson_homework_create:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/create
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createHomework }
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:createHomework }
 
 course_manage_lesson_homework_edit:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/edit
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editHomework }
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:editHomework }
 
 course_manage_lesson_homework_remove:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/remove
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:removeHomework }
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:removeHomework }
 
 course_manage_homework_items:
     pattern: /course/{courseId}/manage/homework/{homeworkId}/items
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:homeworkItems }
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:homeworkItems }
 
 course_manage_homework_item_picker:
     pattern: /course/{courseId}/manage/item_picker
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:homeworkItemPicker }
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:homeworkItemPicker }
 
 course_manage_homework_item_picked:
     pattern: /course/{courseId}/manage/item_picked
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:homeworkItemPicked }
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:homeworkItemPicked }
 
 course_manage_lesson_edit:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit
