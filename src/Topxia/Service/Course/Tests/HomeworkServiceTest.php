@@ -104,6 +104,106 @@ class HomeworkServiceTest extends BaseTestCase
         $this->getHomeworkService()->removeHomework(-1);
     }
 
+    public function testGetHomeworkByCourseIdAndLessonId($value='')
+    {
+        $generatedHomework = $this->generateHomework();
+        $homework = $this->getHomeworkService()->getHomeworkByCourseIdAndLessonId($generatedHomework['courseId'], $generateHomework['lessonId']);
+        $this->assertEquals($generatedHomework['id'], $homework['id']);
+    }
+
+    public function testFindHomeworksByCourseIdAndLessonIds($value='')
+    {   
+        $course = $this->generateCourse2();
+        $lesson1 = $this->generateLesson2($course); 
+        $lesson2 = $this->generateLesson2($course); 
+        $lesson3 = $this->generateLesson2($course); 
+
+        $generatedHomework1 = $this->generateHomework2($course, $lesson1);
+        $generatedHomework2 = $this->generateHomework2($course, $lesson2);
+        $generatedHomework3 = $this->generateHomework2($course, $lesson3);
+
+        $courseId = $course['id'];
+        $lessonIds = array($generatedHomework1['lessonId'], $generatedHomework2['lessonId'], $generatedHomework3['lessonId']);
+        $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($courseId, $lessonIds);
+
+        $this->assertContains($generatedHomework1, $homeworks);
+        $this->assertContains($generatedHomework2, $homeworks);
+        $this->assertContains($generatedHomework3, $homeworks);
+    }
+
+    /**
+     * @group current
+     */
+    public function testFindHomeworksByCreatedUserId()
+    {
+        $generatedHomework1 = $this->generateHomework();
+        $generatedHomework2 = $this->generateHomework();
+        $generatedHomework3 = $this->generateHomework();
+
+        $user = $this->getCurrentUser();
+
+        $homeworks = $this->getHomeworkService()->findHomeworksByCreatedUserId($user['id']);
+
+        $this->assertContains($generatedHomework1, $homeworks);
+        $this->assertContains($generatedHomework2, $homeworks);
+        $this->assertContains($generatedHomework3, $homeworks);
+    }
+
+    public function testGetHomeworkResult();
+
+    private function generateCourse2()
+    {
+        return $this->getCourseService()->createCourse(array(
+            'title' => 'test course'
+        ));
+    }
+
+    private function generateLesson2($course)
+    {
+        return $this->getCourseService()->createLesson(array(
+            'courseId' => $course['id'],
+            'title' => 'test lesson 1',
+            'content' => 'test lesson content 1',
+            'type' => 'text'
+        ));
+    }
+
+    private function generateHomework2($course, $lesson)
+    {
+        $courseId = $course['id'];
+        $lessonId = $lesson['id'];
+
+        $target = 'course-'.$courseId;
+
+        $choiceQuestions = $this->generateChoiceQuestions($target, 5, 'simple');
+        $choiceQuestionIds = $this->getQuestionIds($choiceQuestions);
+
+        $fillQuestion = $this->generateFillQuestions($target, 1, 'difficulty');
+        $fillQuestionId = $this->getQuestionIds($fillQuestion);
+
+        $essayQuestion = $this->generateEssayQuestions($target, 1, 'difficulty');
+        $essayQuestionId = $this->getQuestionIds($essayQuestion);
+
+        $excludeIds = array(
+            $choiceQuestionIds,
+            $fillQuestionId,
+            $essayQuestionId
+        );
+        $excludeIds = $this->transferEcludeIdsFormat($excludeIds);
+
+        $fields = array(
+            'description' => 'it is a test homework',
+            'completeLimit' => 'inherited',
+            'itemCount' => $this->getItemsCount($excludeIds),
+            'excludeIds'=>$excludeIds
+        );
+
+        $homework = $this->getHomeworkService()->createHomework($courseId,$lessonId,$fields);
+
+        $this->assertNotNull($homework);
+        return $homework;
+    }
+
     private function generateHomework($value='')
     {
         $lesson = $this->generateCourseLesson();
