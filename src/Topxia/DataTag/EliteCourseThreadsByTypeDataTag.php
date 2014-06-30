@@ -33,6 +33,14 @@ class EliteCourseThreadsByTypeDataTag extends CourseBaseDataTag implements DataT
 
     	$threads = $this->getThreadService()->findEliteThreadsByType($type, $arguments['status'], 0, $arguments['count']);
 
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads,'courseId'));
+
+        foreach ($threads as $key => $thread) {
+            if ($thread['courseId'] == $courses[$thread['courseId']]['id'] ) {
+                $threads[$key]['courseTitle'] = $courses[$thread['courseId']]['title'];
+            }
+        }
+
         return $threads;
     }
 

@@ -29,7 +29,15 @@ class LatestCourseThreadsByTypeDataTag extends CourseBaseDataTag implements Data
             $type = $arguments['type'];
         }
     	$threads = $this->getThreadService()->findLatestThreadsByType($type, 0, $arguments['count']);
- 
+
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads,'courseId'));
+
+        foreach ($threads as $key => $thread) {
+            if ($thread['courseId'] == $courses[$thread['courseId']]['id'] ) {
+                $threads[$key]['courseTitle'] = $courses[$thread['courseId']]['title'];
+            }
+        }
+
         return $threads;
     }
 
