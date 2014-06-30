@@ -570,14 +570,14 @@ class CourseLessonManageController extends BaseController
 	public function showHomeworkAction(Request $request, $courseId, $lessonId, $homeworkId)
 	{
 		$course = $this->getCourseService()->getCourse($courseId);
-		$homework = $this->getHomeworkService()->getHomework($homeworkId);
-		$homeworkItems = $this->getHomeworkService()->findHomeworkItemsByHomeworkId($homeworkId);
-		$questionIds = ArrayToolkit::column($homeworkItems,'questionId');
-		$questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        $homework = $this->getHomeworkService()->getHomework($homeworkId);
+        $homeworkItems = $this->getHomeworkService()->findHomeworkItemsByHomeworkId($homeworkId);
+        $questionIds = ArrayToolkit::column($homeworkItems,'questionId');
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-		$types = ArrayToolkit::column($questions,'type');
-		$types = array_unique($types);
-		$types = $this->sortType($types);
+        $types = ArrayToolkit::column($questions,'type');
+        $types = array_unique($types);
+        $types = $this->sortType($types);
 
         $result = $this->getclassifyQuestionsAndCount($questions);
 

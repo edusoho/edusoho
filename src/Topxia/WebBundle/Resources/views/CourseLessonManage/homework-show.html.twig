@@ -33,13 +33,13 @@
     {% if not role|default(null) == 'teacher' %}
 
 		{% set materialFlag = 0 %}
-		{% set single_choice_questions  = questions['single_choice'] %}
-		{% set choice_questions  = questions['choice'] %}
-		{% set uncertain_choice  = questions['uncertain_choice'] %}
-		{% set fill_questions  = questions['fill'] %}
-		{% set determine_questions  = questions['determine'] %}
-		{% set essay_questions  = questions['essay'] %}
-		{% set material_questions  = questions['material'] %}
+		{% set single_choice_questions  = questions['single_choice']|default(null) %}
+		{% set choice_questions  = questions['choice']|default(null) %}
+		{% set uncertain_choice  = questions['uncertain_choice']|default(null) %}
+		{% set fill_questions  = questions['fill']|default(null) %}
+		{% set determine_questions  = questions['determine']|default(null) %}
+		{% set essay_questions  = questions['essay']|default(null) %}
+		{% set material_questions  = questions['material']|default(null) %}
 
 
 		{% for type,question in questions %}
