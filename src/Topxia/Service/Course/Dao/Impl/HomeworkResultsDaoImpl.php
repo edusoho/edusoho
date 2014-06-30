@@ -64,7 +64,8 @@ class HomeworkResultsDaoImpl extends BaseDao implements HomeworkResultsDao
             ->andWhere('courseId = :courseId')
             ->andWhere('lessonId = :lessonId')
             ->andWhere('homeworkId = :homeworkId')
-            ->andWhere('status = :status');
+            ->andWhere('status = :status')
+            ->andWhere('commitStatus = :commitStatus');
 
         return $builder;
     }
