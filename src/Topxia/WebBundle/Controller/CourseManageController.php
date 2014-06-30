@@ -26,7 +26,6 @@ class CourseManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
         $courseSetting = $this->getSettingService()->get('course', array());
-
 	    if($request->getMethod() == 'POST'){
             $data = $request->request->all();
             $this->getCourseService()->updateCourse($id, $data);
