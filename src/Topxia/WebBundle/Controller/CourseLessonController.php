@@ -124,6 +124,13 @@ class CourseLessonController extends BaseController
     	return $this->createJsonResponse($json);
     }
 
+    public function lessonNumberShowAction(Request $request, $courseId, $number)
+    {
+        $lesson = $this->getCourseService()->getCourseLessonByCourseIdAndNumber($courseId, $number);
+
+        return $this->createJsonResponse($lesson);
+    }
+
     public function mediaAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  

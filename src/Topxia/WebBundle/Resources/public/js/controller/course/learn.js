@@ -31,6 +31,8 @@ define(function(require, exports, module) {
         attrs: {
             courseId: null,
             courseUri: null,
+            progressControl: null,
+            learnedControl: null,
             dashboardUri: null,
             lessonId: null
         },
@@ -109,6 +111,8 @@ define(function(require, exports, module) {
             this.set('courseId', this.element.data('courseId'));
             this.set('courseUri', this.element.data('courseUri'));
             this.set('dashboardUri', this.element.data('dashboardUri'));
+            this.set('progressControl', this.element.data('progressControl'));
+            this.set('learnedControl', this.element.data('learnedControl'));
         },
 
         _initToolbar: function() {
@@ -167,6 +171,8 @@ define(function(require, exports, module) {
 
             var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
+
+
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
                 that.element.find('[data-role=lesson-number]').html(lesson.number);
                 if (parseInt(lesson.chapterNumber) > 0) {
@@ -180,10 +186,31 @@ define(function(require, exports, module) {
                 } else {
                     that.element.find('[data-role=unit-number]').parent().hide().next().hide();
                 }
+
+
+
                 if ( (lesson.status != 'published') && !/preview=1/.test(window.location.href)) {
                     $("#lesson-unpublished-content").show();
                     return;
                 }
+
+                var number = lesson.number -1;
+                $.get(self.get('courseUri') + '/lesson/number/' + number , function(lesson) {
+                    var prevId = lesson.id;
+                    if (self.get('progressControl') == 'Learned' && prevId > 0) {
+                        $.get(self.get('courseUri') + '/lesson/' + prevId + '/learn/status', function(json) {
+                            var $finishButton = that.element.find('[data-role=finish-lesson]');
+                            if (json.status != 'finished') {
+                                $('#lesson-uncommitHomework-content').show();
+                                $('#lesson-text-content').hide();
+                                $('#lesson-video-content').hide();
+                                $('#lesson-audio-content').hide();
+                                return;
+                            } 
+                        }, 'json');
+                    }
+                }, 'json');
+
                 if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
 
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');

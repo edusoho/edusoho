@@ -585,6 +585,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserializes($lessons);
 	}
 
+	public function getCourseLessonByCourseIdAndNumber($courseId, $number)
+	{	
+		if ($number < 1) {
+			return null;
+		}
+		$lesson = $this->getLessonDao()->getLessonByCourseIdAndNumber($courseId, $number);
+		return LessonSerialize::unserialize($lesson);
+	}
+
 	public function searchLessons($conditions, $orderBy, $start, $limit)
 	{
 		return $this->getLessonDao()->searchLessons($conditions, $orderBy, $start, $limit);
