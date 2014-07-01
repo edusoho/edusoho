@@ -10,6 +10,8 @@ interface HomeworkResultDao
 
 	public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId);
 
+	public function getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId);
+
     public function searchHomeworkResults($conditions, $orderBy, $start, $limit);
 
     public function searchHomeworkResultsCount($conditions);
@@ -17,6 +19,5 @@ interface HomeworkResultDao
     public function findHomeworkResultsByHomeworkIds($homeworkIds);
 
     public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId);
-
 
 }

@@ -131,6 +131,13 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($lesson);
     }
 
+    public function lessonHomeworkShowAction(Request $request, $courseId, $lessonId)
+    {
+        $user = $this->getCurrentUser();
+        $homework = $this->getHomeworkService()->getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $user['id']);
+        return $this->createJsonResponse($homework);
+    }
+
     public function mediaAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
@@ -287,6 +294,11 @@ class CourseLessonController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getHomeworkService()
+    {
+        return $this->getServiceKernel()->createService('Course.HomeworkService');
     }
 
     private function getDiskService()

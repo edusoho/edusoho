@@ -33,6 +33,8 @@ define(function(require, exports, module) {
             courseUri: null,
             progressControl: null,
             learnedControl: null,
+            playStatus: null,
+            homeworkStatus: null,
             dashboardUri: null,
             lessonId: null
         },
@@ -42,6 +44,16 @@ define(function(require, exports, module) {
             this._initToolbar();
             this._initRouter();
             this._initListeners();
+
+            var self = this;
+            var homeworkUrl = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/homework';
+            var homeworkDone = false;
+            $.get(homeworkUrl, function(response) {
+                if (response.commitStatus == 'uncommitted') {
+                    self.set('homeworkStatus', 'unfinished');
+                    console.log(self.get('homeworkStatus'));
+                }
+            }, 'json');
 
             $('.prev-lesson-btn, .next-lesson-btn').tooltip();
         },
@@ -83,7 +95,26 @@ define(function(require, exports, module) {
         _onFinishLearnLesson: function() {
             var $btn = this.element.find('[data-role=finish-lesson]'),
                 toolbar = this._toolbar,
+                progressControl = this.get('progressControl'),
+                learnedControl = this.get('learnedControl'),
+                playStatus = this.get('playStatus'),
                 self = this;
+
+            if (progressControl == 'Learned' && learnedControl == 'mediaPlayed') {
+                if (playStatus != 'ended') {
+                    $('#mediaPlayed-control-modal').modal('show');
+                    return;
+                };
+            };
+
+            if (progressControl == 'Learned' && learnedControl == 'homeworkDone') {
+
+                if (this.get('homeworkStatus') == 'unfinished') {
+                   $('#homeworkDone-control-modal').modal('show');
+                   return; 
+                }
+            };
+
             var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
             $.post(url, function(response) {
                 if (response.isLearned) {
@@ -108,11 +139,13 @@ define(function(require, exports, module) {
         },
 
         _readAttrsFromData: function() {
+
             this.set('courseId', this.element.data('courseId'));
             this.set('courseUri', this.element.data('courseUri'));
             this.set('dashboardUri', this.element.data('dashboardUri'));
             this.set('progressControl', this.element.data('progressControl'));
             this.set('learnedControl', this.element.data('learnedControl'));
+
         },
 
         _initToolbar: function() {
@@ -224,6 +257,7 @@ define(function(require, exports, module) {
                     mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
                     mediaPlayer.on('ended', function() {
                         that._onFinishLearnLesson();
+                        that.set('playStatus', 'ended');
                     });
                     mediaPlayer.play();
 
@@ -249,6 +283,7 @@ define(function(require, exports, module) {
                                     return ;
                                 }
                                 that._onFinishLearnLesson();
+                                that.set('playStatus', 'ended');
                                 player.currentTime(0);
                                 player.pause();
                             });
@@ -288,6 +323,7 @@ define(function(require, exports, module) {
                             enableAutosize:true,
                             success: function(media) {
                                 media.addEventListener("ended", function() {
+                                    that.set('playStatus', 'ended');
                                     that._onFinishLearnLesson();
                                 });
                                 media.play();
