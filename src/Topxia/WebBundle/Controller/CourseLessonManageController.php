@@ -63,6 +63,11 @@ class CourseLessonManageController extends BaseController
         	}
         	$lesson = $this->getCourseService()->createLesson($lesson);
 
+            if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
+                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                $lesson['mediaStatus'] = $file['convertStatus'];
+            }
+
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
