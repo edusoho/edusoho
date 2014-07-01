@@ -30,6 +30,8 @@ interface HomeworkService
 
     public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId);
 
+    public function getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId);
+
     public function searchHomeworkResults($conditions, $orderBy, $start, $limit);
 
     public function searchHomeworkResultsCount($conditions);

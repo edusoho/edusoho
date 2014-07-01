@@ -225,6 +225,10 @@ course_lesson_number_show:
     pattern:  /course/{courseId}/lesson/number/{number}
     defaults: { _controller: TopxiaWebBundle:CourseLesson:lessonNumberShow }
 
+course_lesson_homework_show:
+    pattern:  /course/{courseId}/lesson/{lessonId}/homework
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:lessonHomeworkShow }
+
 course_lesson_preview:
     pattern:  /course/{courseId}/lesson/{lessonId}/preview
     defaults: { _controller: TopxiaWebBundle:CourseLesson:preview }
