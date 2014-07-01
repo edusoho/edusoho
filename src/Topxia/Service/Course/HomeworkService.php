@@ -24,6 +24,8 @@ interface HomeworkService
     
     public function showHomework($id);
 
+    public function startHomework($id,$courseId, $lessonId);
+
     public function deleteHomeworksByCourseId($courseId);
 
     //HomeworkResults

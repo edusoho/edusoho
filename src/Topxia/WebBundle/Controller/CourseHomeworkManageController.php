@@ -7,7 +7,7 @@ use Topxia\Common\Paginator;
 
 class CourseHomeworkManageController extends BaseController
 {
-    public function createHomeworkAction(Request $request, $courseId, $lessonId)
+    public function createAction(Request $request, $courseId, $lessonId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 		$lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
@@ -43,7 +43,7 @@ class CourseHomeworkManageController extends BaseController
         ));
 	}
 
-	public function editHomeworkAction(Request $request,$courseId,$lessonId,$homeworkId)
+	public function editAction(Request $request,$courseId,$lessonId,$homeworkId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 		$lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
@@ -91,7 +91,7 @@ class CourseHomeworkManageController extends BaseController
         ));
 	}
 
-	public function removeHomeworkAction(Request $request,$courseId,$lessonId,$homeworkId)
+	public function removeAction(Request $request,$courseId,$lessonId,$homeworkId)
 	{
 		$result = $this->getHomeworkService()->removeHomework($homeworkId);
 
@@ -114,7 +114,6 @@ class CourseHomeworkManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            var_dump($data);exit();
             if (empty($data['questionId']) or empty($data['scores'])) {
                 return $this->createMessageResponse('error', '试卷题目不能为空！');
             }
@@ -228,11 +227,57 @@ class CourseHomeworkManageController extends BaseController
         ));
 	}
 
-    public function showHomeworkAction(Request $request, $courseId, $lessonId, $homeworkId)
+    public function doAction (Request $request,$homeworkId,$courseId,$lessonId)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
         $homework = $this->getHomeworkService()->getHomework($homeworkId);
+
+        if (empty($homework)) {
+            throw $this->createNotFoundException();
+        }
+
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if (empty($course)) {
+            return $this->createMessageResponse('info', '作业所属课程不存在！');
+        }
+
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            return $this->createMessageResponse('info','作业所属课时不存在！');
+        }
+
+        if (!$this->getCourseService()->canTakeCourse($course)) {
+            return $this->createMessageResponse('info', '不是作业所属课程的课时老师或学生');
+        }
+
+        $homeworkResult = $this->getHomeworkService()->startHomework($homeworkId,$courseId,$lessonId);
+
+        return $this->redirect($this->generateUrl('course_manage_lesson_homework_show', 
+            array(
+                'id' => $homework ['id'],
+            ))
+        );
+    }
+
+    public function showAction(Request $request,$id)
+    {
+        $homeworkResult = $this->getHomeworkService()->getHomeworkResult($id);
+
+        if (empty($homeworkResult)) {
+            throw $this->createNotFoundException('作业不存在!');
+        }
+
+        if ($homeworkResult['userId'] != $this->getCurrentUser()->id) {
+            throw $this->createAccessDeniedException('不可以访问其他学生的作业哦~');
+        }
+
+        if (in_array($homeworkResult['status'], array('reviewing', 'finished'))) {
+            return $this->redirect($this->generateUrl('course_manage_lesson_homework_result', array('id' => $homeworkResult['id'])));
+        }
+
         $homeworkItems = $this->getHomeworkService()->findHomeworkItemsByHomeworkId($homeworkId);
+
         $questionIds = ArrayToolkit::column($homeworkItems,'questionId');
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
@@ -243,6 +288,47 @@ class CourseHomeworkManageController extends BaseController
         $result = $this->getclassifyQuestionsAndCount($questions);
 
         return $this->render('TopxiaWebBundle:CourseHomeworkManage:homework-show.html.twig',array(
+            'course' => $course,
+            'homework' => $homework,
+            'items' => $homeworkItems,
+            'questions' => $result['newQuetsions'],
+            'typeQuestionsNum' => $result['typeQuestionsNum'],
+            'types' => $types,
+        ));
+    }
+
+    public function homeworkResultAction (Request $request,$id)
+    {
+        $homeworkResult = $this->getHomeworkService()->getHomeworkResult($id);
+
+        if (empty($homeworkResult)) {
+            throw $this->createNotFoundException('试卷不存在!');
+        }
+
+        if (in_array($homeworkResult['status'], array('doing'))){
+            return $this->redirect($this->generateUrl('course_manage_lesson_homework_show', array('id' => $homeworkResult['id'])));
+        }
+
+        $homework = $this->getHomeworkService()->getHomework($homeworkResult['homeworkId']);
+
+        if ($homeworkResult['userId'] != $this->getCurrentUser()->id) {
+            throw $this->createAccessDeniedException('不可以访问其他学生的作业哦~');
+        }
+
+        $homeworkItems = $this->getHomeworkService()->findHomeworkItemsByHomeworkId($homeworkId);
+
+        $questionIds = ArrayToolkit::column($homeworkItems,'questionId');
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+
+        $types = ArrayToolkit::column($questions,'type');
+        $types = array_unique($types);
+        $types = $this->sortType($types);
+
+        $result = $this->getclassifyQuestionsAndCount($questions);
+
+        $student = $this->getUserService()->getUser($testpaperResult['userId']);
+
+        return $this->render('TopxiaWebBundle:CourseHomeworkManage:homework-result.html.twig', array(
             'course' => $course,
             'homework' => $homework,
             'items' => $homeworkItems,
@@ -461,6 +547,82 @@ class CourseHomeworkManageController extends BaseController
         ));
     }
 
+    private function getclassifyQuestionsAndCount($questions)
+    {
+        $singleNum = 0;
+        $choiceNum = 0;
+        $uncertainChoiceNum = 0;
+        $fillNum = 0;
+        $determineNum = 0;
+        $essayNum = 0;
+        $materialNum = 0;
+
+        $num = 1;
+
+        $newQuetsions = array();
+        $typeQuestionsNum = array();
+
+        foreach ($questions as $key => $value) {
+            
+            if ($value['type'] == 'single_choice') {
+                $value['number'] = $num;
+                $newQuetsions['single_choice'][] = $value;
+                $singleNum++;
+                
+            }elseif ($value['type'] == 'choice') {
+                $value['number'] = $num;
+                $newQuetsions['choice'][] = $value;
+                $choiceNum++;
+            }elseif ($value['type'] == 'uncertain_choice') {
+                $value['number'] = $num;
+                $newQuetsions['uncertain_choice'][] = $value;
+                $uncertainChoiceNum++;
+            }elseif ($value['type'] == 'fill') {
+                $value['number'] = $num;
+                $newQuetsions['fill'][] = $value;
+                $fillNum++;
+            }elseif ($value['type'] == 'determine') {
+                $value['number'] = $num;
+                $newQuetsions['determine'][] = $value;
+                $determineNum++;
+            }elseif ($value['type'] == 'essay') {
+                $value['number'] = $num;
+                $newQuetsions['essay'][] = $value;
+                $essayNum++;
+            }elseif ($value['type'] == 'material') {
+            
+                    if ($value['subCount']>0) {
+                        $questions = $this->getQuestionService()->findQuestionsByParentId($value['id']);
+                        foreach ($questions as $key => $questionValue) {
+                            $questionValue['number'] = $num;
+                            $questions[$key] = $questionValue;
+                            $num++;
+                        }
+                        $value['subQuestions'] = $questions;
+                    } else {
+                            $value['number'] = $num;
+                        $value['subQuestions'] = array();
+                    }
+                $newQuetsions['material'][] = $value;
+                $materialNum++;
+            }
+
+            $num++;
+        }
+        $typeQuestionsNum['single_choice'] = $singleNum;
+        $typeQuestionsNum['choice'] = $choiceNum;
+        $typeQuestionsNum['uncertain_choice'] = $uncertainChoiceNum;
+        $typeQuestionsNum['fill'] = $fillNum;
+        $typeQuestionsNum['determine'] = $determineNum;
+        $typeQuestionsNum['essay'] = $essayNum;
+        $typeQuestionsNum['material'] = $materialNum;
+
+        return array(
+            'typeQuestionsNum' => array_filter($typeQuestionsNum),
+            'newQuetsions' => $newQuetsions,
+        );
+    }
+
     private function getHomeworkStudents($status, $students, $homeworkResults)
     {
         if ($status == 'uncommitted') {
@@ -521,6 +683,19 @@ class CourseHomeworkManageController extends BaseController
         }
 
         return $ranges;
+    }
+
+    private function sortType($types)
+    {
+        $newTypes = array('single_choice','choice','uncertain_choice','fill','determine','essay','material');
+        
+        foreach ($types as $key => $value) {
+            if (!in_array($value, $newTypes)) {
+                $k = array_search($value,$newTypes);
+                unset($newTypes[$k]);
+            }
+        }
+        return $newTypes;
     }
 
     private function getUrgeMessageBody($course, $lesson)
