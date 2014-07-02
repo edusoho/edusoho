@@ -4024,3 +4024,32 @@ body {
 	padding: 15px;
 	min-height: 16.42857143px;
 }
+
+
+/**
+ * Question
+ */
+
+.question-set-item {
+	margin-bottom: 50px;
+	padding-top: 20px;
+	border-top: 1px solid #ccc;
+}
+
+.question-set-item-side {
+	float: left;
+	width: 40px;
+}
+
+.question-set-item-main {
+	margin-left: 50px;
+}
+
+.question-heading {
+	padding-bottom: 10px;
+	border-bottom: 1px dashed #ddd;
+	margin-bottom: 10px;
+	overflow: hidden;
+	zoom: 1;
+}
+

@@ -178,7 +178,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         );
     }
 
-    public function startHomework($id,$courseId, $lessonId)
+    public function startHomework($id)
     {
         $homework = $this->getHomeworkDao()->getHomework($id);
 
@@ -186,28 +186,39 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             throw $this->createServiceException('课时作业不存在！');
         }
 
-        $course = $this->getCourseService()->getCourse($courseId);
-
+        $course = $this->getCourseService()->getCourse($homework['courseId']);
         if (empty($course)) {
-            throw $this->createServiceException('课时作业不存在！');
+            throw $this->createServiceException('作业所属课程不存在！');
         }
 
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-
+        $lesson = $this->getCourseService()->getCourseLesson($homework['courseId'], $homework['lessonId']);
         if (empty($lesson)) {
-            throw $this->createMessageResponse('info','作业所属课时不存在！');
+            throw $this->createServiceException('作业所属课时不存在！');
         }
 
-        $homeworkResult = array(
-            'homeworkId' => $id,
-            'courseId' => $courseId,
-            'lessonId' => $lessonId,
-            'userId' => $this->getCurrentUser()->id,
-            'status' => 'doing',
-            'usedTime' => 0,
-        );
+        $reviewingResults = $this->getHomeworkResultDao()->findResultsByHomeworkIdAndStatus($homework['id'], 'reviewing', 0, 1);
+        $finishedResults = $this->getHomeworkResultDao()->findResultsByHomeworkIdAndStatus($homework['id'], 'finished', 0, 1);
+        if (!empty($reviewingResults) or !empty($finishedResults)) {
+            throw $this->createServiceException('您已经做过该作业了！');
+        }
 
-        return $this->getHomeworkResultDao()->addHomeworkResult($homeworkResult);
+        $results = $this->getHomeworkResultDao()->findResultsByHomeworkIdAndStatus($homework['id'], 'doing', 0, 1);
+        if (empty($results)){
+            $homeworkResult = array(
+                'homeworkId' => $homework['id'],
+                'courseId' => $homework['courseId'],
+                'lessonId' =>  $homework['lessonId'],
+                'userId' => $this->getCurrentUser()->id,
+                'status' => 'doing',
+                'usedTime' => 0,
+            );
+
+            return $this->getHomeworkResultDao()->addHomeworkResult($homeworkResult);
+        } else {
+            return $results[0];
+        }
+
+
     }
 
     public function deleteHomeworksByCourseId($courseId)

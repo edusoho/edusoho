@@ -514,6 +514,27 @@ course_manage_lesson_sort:
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:sort }
     methods: [POST]
 
+
+
+course_homework_start_do:
+    pattern: /course/{courseId}/homework/{homeworkId}/startDo
+    defaults: { _controller: TopxiaWebBundle:CourseHomework:startDo }
+
+course_homework_do:
+    pattern: /course/{courseId}/homework/{homeworkId}/do/{resultId}
+    defaults: { _controller: TopxiaWebBundle:CourseHomework:do }
+
+course_homework_result:
+    pattern: /course/{courseId}/homework/{homeworkId}/result/{resultId}
+    defaults: { _controller: TopxiaWebBundle:CourseHomework:result }
+
+course_homework_review:
+    pattern: /course/{courseId}/homework/{homeworkId}/review/{resultId}
+    defaults: { _controller: TopxiaWebBundle:CourseHomework:review }
+
+
+
+
 course_manage_lesson_homework_show:
     pattern: /homework/{id}/show
     defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:show }
