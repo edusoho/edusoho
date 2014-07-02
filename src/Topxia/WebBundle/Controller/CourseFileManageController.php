@@ -30,19 +30,23 @@ class CourseFileManageController extends BaseController
             20
         );
 
-        $courseLessons = $this->getUploadFileService()->searchFiles(
+        $files = $this->getUploadFileService()->searchFiles(
             $conditions,
             'latestCreated',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseLessons, 'updatedUserId'));
+        foreach ($files as $key => $file) {
+            $files[$key]['metas2'] = json_decode($file['metas2']) ? : array();
+        }
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
             'type' => $type,
             'course' => $course,
-            'courseLessons' => $courseLessons,
+            'courseLessons' => $files,
             'users' => ArrayToolkit::index($users, 'id'),
             'paginator' => $paginator
         ));
