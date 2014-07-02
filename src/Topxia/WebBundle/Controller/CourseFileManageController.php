@@ -91,17 +91,28 @@ class CourseFileManageController extends BaseController
             return $this->createJsonResponse(array('status' => 'error', 'message' => '只有视频、PPT文件，才能重新转换！'));
         }
 
+        $convertKey = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
+
         $factory = new CloudClientFactory();
         $client = $factory->createClient();
 
         if ($file['type'] == 'video') {
             $commands = array_keys($client->getVideoConvertCommands());
+            $result = $client->convertVideo(
+                $client->getBucket(), 
+                $file['hashId'], 
+                implode(';', $commands), 
+                $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true)
+            );
         } elseif ($file['type'] == 'ppt') {
             $commands = array_keys($client->getPPTConvertCommands());
+            $result = $client->convertVideo(
+                $client->getBucket(), 
+                $file['hashId'], 
+                implode(';', $commands), 
+                $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey, 'twoStep' => '1'), true)
+            );
         }
-
-        $convertKey = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
-        $result = $client->convertVideo($client->getBucket(), $file['hashId'], implode(';', $commands), $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true));
 
         if (empty($result['persistentId'])) {
             return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
