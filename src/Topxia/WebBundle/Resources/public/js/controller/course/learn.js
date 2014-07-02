@@ -44,16 +44,7 @@ define(function(require, exports, module) {
             this._initToolbar();
             this._initRouter();
             this._initListeners();
-
-            var self = this;
-            var homeworkUrl = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/homework';
-            var homeworkDone = false;
-            $.get(homeworkUrl, function(response) {
-                if (response.commitStatus == 'uncommitted') {
-                    self.set('homeworkStatus', 'unfinished');
-                    console.log(self.get('homeworkStatus'));
-                }
-            }, 'json');
+            this._initHomework();
 
             $('.prev-lesson-btn, .next-lesson-btn').tooltip();
         },
@@ -79,6 +70,17 @@ define(function(require, exports, module) {
             } else {
                 this._onFinishLearnLesson();
             }
+        },
+
+        _initHomework: function() {
+            var self = this;
+            var homeworkUrl = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/homework';
+            var homeworkDone = false;
+            $.get(homeworkUrl, function(response) {
+                if (response.commitStatus == 'uncommitted') {
+                    self.set('homeworkStatus', 'unfinished');
+                }
+            }, 'json');  
         },
 
         _startLesson: function() {

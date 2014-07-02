@@ -8,20 +8,14 @@ use Topxia\Common\Paginator;
 class CourseExerciseManageController extends BaseController
 {
 	public function createExerciseAction(Request $request, $courseId, $lessonId)
-	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-
-        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
-        if (empty($lesson)) {
-            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
-        }
+	{   
+		list($course, $lesson) = $this->getExerciseCourseAndLesson($courseId, $lessonId);
 
         if($request->getMethod() == 'POST') {
-        	$fields = $request->request->all();
-        	$fields = $this->generateExerciseFields($fields, $course, $lesson);
+        	$fields = $this->generateExerciseFields($request->request->all(), $course, $lesson);
 
         	list($exercise, $items) = $this->getExerciseService()->createExercise($fields);
-        	return $this->createJsonResponse(true);
+        	return $this->createJsonResponse($this->generateUrl('course_manage_lesson', array('id' => $course['id'])));
         }
 
 		return $this->render('TopxiaWebBundle:CourseExerciseManage:exercise.html.twig', array(
@@ -33,12 +27,7 @@ class CourseExerciseManageController extends BaseController
 
 	public function updateExerciseAction(Request $request, $courseId, $lessonId, $id)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-
-        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
-        if (empty($lesson)) {
-            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
-        }
+		list($course, $lesson) = $this->getExerciseCourseAndLesson($courseId, $lessonId);
 
         $exercise = $this->getExerciseService()->getExercise($id);
         if (empty($exercise)) {
@@ -46,11 +35,10 @@ class CourseExerciseManageController extends BaseController
         }
 
         if($request->getMethod() == 'POST') {
-        	$fields = $request->request->all();
-        	$fields = $this->generateExerciseFields($fields, $course, $lesson);
+        	$fields = $this->generateExerciseFields($request->request->all(), $course, $lesson);
 
         	list($exercise, $items) = $this->getExerciseService()->updateExercise($exercise['id'], $fields);
-        	return $this->createJsonResponse(true);
+        	return $this->createJsonResponse($this->generateUrl('course_manage_lesson', array('id' => $course['id'])));
         }
         
         return $this->render('TopxiaWebBundle:CourseExerciseManage:exercise.html.twig', array(
@@ -62,12 +50,8 @@ class CourseExerciseManageController extends BaseController
 
 	public function deleteExerciseAction(Request $request, $courseId, $lessonId, $id)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
+		list($course, $lesson) = $this->getExerciseCourseAndLesson($courseId, $lessonId);
 
-        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
-        if (empty($lesson)) {
-            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
-        }
         $exercise = $this->getExerciseService()->getExercise($id);
         if (empty($exercise)) {
         	throw $this->createNotFoundException("练习(#{$id})不存在！");
@@ -92,6 +76,18 @@ class CourseExerciseManageController extends BaseController
 
     	return $fields;
 	}
+
+    private function getExerciseCourseAndLesson($courseId, $lessonId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+        if (empty($lesson)) {
+            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+        }
+
+        return array($course, $lesson);
+    }
 
     private function getExerciseService()
     {
