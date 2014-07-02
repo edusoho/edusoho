@@ -24,11 +24,15 @@ interface HomeworkService
     
     public function showHomework($id);
 
+    public function startHomework($id,$courseId, $lessonId);
+
     public function deleteHomeworksByCourseId($courseId);
 
     //HomeworkResults
 
     public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId);
+
+    public function getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId);
 
     public function searchHomeworkResults($conditions, $orderBy, $start, $limit);
 

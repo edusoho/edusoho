@@ -15,6 +15,12 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
+    public function getLessonByCourseIdAndNumber($courseId, $number)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND number = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($courseId, $number)) ? : null;
+    }
+
     public function findLessonsByIds(array $ids)
     {
         if(empty($ids)){ return array(); }

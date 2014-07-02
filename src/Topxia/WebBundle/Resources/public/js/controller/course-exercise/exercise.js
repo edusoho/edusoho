@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
 	exports.run = function() {
 
-		require('./header').run();
+		require('../course-manage/header').run();
 
 		var $form = $("#exercise-form");
 

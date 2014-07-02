@@ -80,6 +80,8 @@ interface CourseService
 	public function findLessonsByIds(array $ids);
 
 	public function getCourseLesson($courseId, $lessonId);
+
+	public function getCourseLessonByCourseIdAndNumber($courseId, $number);
 	
 	public function getCourseLessons($courseId);
 
