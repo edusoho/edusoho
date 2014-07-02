@@ -63,7 +63,7 @@ define(function(require, exports, module) {
             }
 
             if (this.element.data('watermark')) {
-                flashvars.plugin_watermake = 'http://cdn.staticfile.org/GrindPlayerCN/1.0.2/Watermake-1.0.2.swf';
+                flashvars.plugin_watermake = 'http://cdn.staticfile.org/GrindPlayerCN/1.0.2/Watermake-1.0.3.swf';
                 flashvars.watermake_namespace = 'watermake';
                 flashvars.watermake_url = this.element.data('watermark');
             }
