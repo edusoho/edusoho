@@ -32,7 +32,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
 	public function getHomeworkResult($id)
 	{
-
+        return $this->getHomeworkResultDao()->getHomeworkResult($id);
 	}
 
 	public function searchHomeworks($conditions, $sort, $start, $limit)
@@ -178,6 +178,38 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         );
     }
 
+    public function startHomework($id,$courseId, $lessonId)
+    {
+        $homework = $this->getHomeworkDao()->getHomework($id);
+
+        if (empty($homework)) {
+            throw $this->createServiceException('课时作业不存在！');
+        }
+
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createServiceException('课时作业不存在！');
+        }
+
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createMessageResponse('info','作业所属课时不存在！');
+        }
+
+        $homeworkResult = array(
+            'homeworkId' => $id,
+            'courseId' => $courseId,
+            'lessonId' => $lessonId,
+            'userId' => $this->getCurrentUser()->id,
+            'status' => 'doing',
+            'usedTime' => 0,
+        );
+
+        return $this->getHomeworkResultDao()->addHomeworkResult($homeworkResult);
+    }
+
     public function deleteHomeworksByCourseId($courseId)
     {
 
@@ -190,27 +222,27 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
     public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId)
     {
-    	return $this->getHomeworkResultsDao()->getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId);
+    	return $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId);
     }
 
     public function searchHomeworkResults($conditions, $orderBy, $start, $limit)
     {
-    	return $this->getHomeworkResultsDao()->searchHomeworkResults($conditions, $orderBy, $start, $limit);
+    	return $this->getHomeworkResultDao()->searchHomeworkResults($conditions, $orderBy, $start, $limit);
     }
 
     public function searchHomeworkResultsCount($conditions)
     {
-    	return $this->getHomeworkResultsDao()->searchHomeworkResultsCount($conditions);
+    	return $this->getHomeworkResultDao()->searchHomeworkResultsCount($conditions);
     }
 
     public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId)
     {
-    	return $this->getHomeworkResultsDao()->findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId);
+    	return $this->getHomeworkResultDao()->findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId);
     }
 
     public function findHomeworkResultsByHomeworkIds($homeworkIds)
     {
-    	return $this->getHomeworkResultsDao()->findHomeworkResultsByHomeworkIds($homeworkIds);
+    	return $this->getHomeworkResultDao()->findHomeworkResultsByHomeworkIds($homeworkIds);
     }
 
     public function findHomeworkResultsByStatusAndCheckTeacherId($checkTeacherId, $status)
@@ -294,9 +326,9 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     	return $this->createDao('Course.HomeworkItemDao');
     }
 
-    private function getHomeworkResultsDao()
+    private function getHomeworkResultDao()
     {
-    	return $this->createDao('Course.HomeworkResultsDao');
+    	return $this->createDao('Course.HomeworkResultDao');
     }
 
 	private function filterHomeworkFields($fields,$mode)

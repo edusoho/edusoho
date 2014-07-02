@@ -515,20 +515,28 @@ course_manage_lesson_sort:
     methods: [POST]
 
 course_manage_lesson_homework_show:
-    pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/show
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:showHomework }
+    pattern: /homework/{id}/show
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:show }
+
+course_manage_lesson_homework_do:
+    pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/do
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:do }
+
+course_manage_lesson_homework_result:
+    pattern: /homework/{id}/result
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:homeworkResult }
 
 course_manage_lesson_homework_create:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/create
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:createHomework }
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:create }
 
 course_manage_lesson_homework_edit:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/edit
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:editHomework }
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:edit }
 
 course_manage_lesson_homework_remove:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/remove
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:removeHomework }
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:remove }
 
 course_manage_homework_items:
     pattern: /course/{courseId}/manage/homework/{homeworkId}/items
@@ -541,14 +549,6 @@ course_manage_homework_item_picker:
 course_manage_homework_item_picked:
     pattern: /course/{courseId}/manage/item_picked
     defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:homeworkItemPicked }
-
-course_manage_lesson_homework_list:
-    pattern:  /course/{courseId}/manage/lesson/{lessonId}/homework/list
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:homeworkList }
-
-homework_urge:
-    pattern:  /homework/{homeworkId}/student/{userId}/urge
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:urge }
 
 course_manage_lesson_edit:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit
@@ -575,15 +575,23 @@ course_manage_lesson_unpublish:
 
 course_manage_lesson_exercise_create:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/exercise/create
-    defaults: { _controller: TopxiaWebBundle:CourseExerciseManage:createExercise }
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createExercise }
 
 course_manage_lesson_exercise_update:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/exercise/{id}/update
-    defaults: { _controller: TopxiaWebBundle:CourseExerciseManage:updateExercise }
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:updateExercise }
 
 course_manage_lesson_exercise_delete:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/exercise/{id}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseExerciseManage:deleteExercise }
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:deleteExercise }
+
+course_manage_lesson_homework_list:
+    pattern:  /course/{courseId}/manage/lesson/{lessonId}/homework/list
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:homeworkList }
+
+homework_urge:
+    pattern:  /homework/{homeworkId}/student/{userId}/urge
+    defaults: { _controller: TopxiaWebBundle:Homework:urge }
 
 question_file_url:
     pattern: /question_ajax/file_url
@@ -1038,11 +1046,11 @@ my_favorite_question_preview:
 
 my_teaching_homework_list:
     pattern: /my/teaching/homework/list
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:teachingList }
+    defaults: { _controller: TopxiaWebBundle:Homework:teachingList }
 
 my_homework_list:
     pattern: /my/homework/list
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:list }
+    defaults: { _controller: TopxiaWebBundle:Homework:list }
 
 user_show: 
     pattern:  /user/{id}
