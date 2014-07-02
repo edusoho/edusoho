@@ -117,6 +117,8 @@ define(function(require, exports, module) {
                 activePlugins: ['lesson', 'question', 'note', 'material'],
                 courseId: this.get('courseId')
             }).render();
+
+            $('#lesson-toolbar-primary li[data-plugin=lesson]').trigger('click');
         },
 
         _initRouter: function() {
