@@ -87,9 +87,9 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($file['convertStatus'] != 'error') {
-            return $this->createJsonResponse(array('status' => 'error', 'message' => '只有转换失败的文件，才能重新转换！'));
-        }
+        // if ($file['convertStatus'] != 'error') {
+        //     return $this->createJsonResponse(array('status' => 'error', 'message' => '只有转换失败的文件，才能重新转换！'));
+        // }
 
         if (!in_array($file['type'], array('video', 'ppt'))) {
             return $this->createJsonResponse(array('status' => 'error', 'message' => '只有视频、PPT文件，才能重新转换！'));
