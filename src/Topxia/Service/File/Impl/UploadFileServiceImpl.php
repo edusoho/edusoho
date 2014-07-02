@@ -144,10 +144,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             throw $this->createServiceException('file not exist.');
         }
 
-        $status = $file['convertStatus'] == 'success' ? 'success' : 'waiting';
+        // $status = $file['convertStatus'] == 'success' ? 'success' : 'waiting';
 
         $fields = array(
-            'convertStatus' => $status,
+            'convertStatus' => 'waiting',
             'convertHash' => $convertHash,
             'updatedTime' => time(),
         );

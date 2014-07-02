@@ -116,6 +116,7 @@ class CourseFileManageController extends BaseController
                 implode(';', $commands), 
                 $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey, 'twoStep' => '1'), true)
             );
+
         }
 
         if (empty($result['persistentId'])) {
