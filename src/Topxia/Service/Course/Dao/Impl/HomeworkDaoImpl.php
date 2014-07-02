@@ -41,7 +41,7 @@ class HomeworkDaoImpl extends BaseDao Implements HomeworkDao
         }
 
         $sql = "SELECT * FROM {$this->table} WHERE createdUserId = ?";
-        return $this->getConnection()->fetchAll($sql,array($userId)) ? : null;
+        return $this->getConnection()->fetchAll($sql,array($userId)) ? : array();
     }
 
 	public function getHomeworkResult($id)

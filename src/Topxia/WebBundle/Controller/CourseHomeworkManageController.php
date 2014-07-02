@@ -401,13 +401,6 @@ class CourseHomeworkManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
         $homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findHomeworkResultsByCourseIdAndLessonId($course['id'], $lesson['id']), 'userId');
 
-        if (!empty($homeworkResults)) {
-            $students = $this->getHomeworkStudents($status, $students, $homeworkResults);
-        } else {
-            if ($status != 'uncommitted') {
-                $students = array();
-            }
-        }
 
         $committedCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
             'commitStatus' => 'committed',
@@ -425,6 +418,18 @@ class CourseHomeworkManageController extends BaseController
             'courseId' => $course['id'],
             'lessonId' => $lesson['id']
         ));
+
+        if (!empty($homeworkResults)) {
+            $students = $this->getHomeworkStudents($status, $students, $homeworkResults);
+        } else {
+            if ($status != 'uncommitted') {
+                $students = array();
+            }
+        }
+
+        if (empty($homework)) {
+            $uncommitCount = 0;
+        }
 
         return $this->render('TopxiaWebBundle:CourseHomeworkManage:homework-list.html.twig', array(
             'course' => $course,
@@ -471,9 +476,11 @@ class CourseHomeworkManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
         $studentUserIds = ArrayToolkit::column($students, 'userId');
+
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findHomeworkResultsByHomeworkIds(ArrayToolkit::column($homeworks, 'id')), 'homeworkId');
+        $homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findHomeworkResultsByHomeworkIds(ArrayToolkit::column($homeworks, 'id')), 'userId');
 
         $committedCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
             'commitStatus' => 'committed',
@@ -495,6 +502,10 @@ class CourseHomeworkManageController extends BaseController
             if ($status != 'uncommitted') {
                 $students = array();
             }
+        }
+
+        if (empty($homeworks)) {
+            $uncommitCount = 0;
         }
 
         return $this->render('TopxiaWebBundle:CourseHomeworkManage:teaching-list.html.twig', array(
@@ -624,7 +635,8 @@ class CourseHomeworkManageController extends BaseController
     }
 
     private function getHomeworkStudents($status, $students, $homeworkResults)
-    {
+    {   
+
         if ($status == 'uncommitted') {
             foreach ($students as &$student) {
                 foreach ($homeworkResults as $item) {

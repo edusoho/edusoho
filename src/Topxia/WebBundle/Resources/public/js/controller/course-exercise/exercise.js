@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 			autoSubmit: false,
 			onFormValidated: function(error, results, $form) {
 				var isOk = false;
-				var target = $form.data('target');
+				var url = $form.data('action');
 
                 if (error) {
                     return ;
@@ -32,9 +32,10 @@ define(function(require, exports, module) {
 	            	return isOk;
 	            }
 
-	            $.post($form.attr('action'), $form.serialize(), function() {
+	            $.post(url, $form.serialize(), function(response) {
                     Notify.success('保存练习成功!');
-                    window.location.href = target;
+                    $('#exercise-save-btn').button('loading');
+	            	window.location.href = response;
                 }).error(function(){
                     Notify.danger('保存练习失败,请检查题目是否存在！');
                 });
@@ -54,6 +55,10 @@ define(function(require, exports, module) {
 			} else {
 				$(this).attr('checked', 'checked');
 			}
+		});
+
+		$form.on('click', '#exercise-save-btn', function() {
+    		$(this).button('loading');
 		});
 	};
 
