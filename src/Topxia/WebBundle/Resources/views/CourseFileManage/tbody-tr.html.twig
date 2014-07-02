@@ -1,6 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-<tr id="upload-file-tr-{{uploadFile.id}}" data-role="item">
+<tr id="upload-file-tr-{{uploadFile.id}}" data-role="item" data-convertHash="{{uploadFile.convertHash}}">
 
   <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
 
@@ -10,6 +10,10 @@
     {% endif %}
     {% if uploadFile.convertStatus == 'waiting' %}
       {{uploadFile.filename}}<br><span class="text-warning text-sm">正在文件格式转换</span>
+      {% if ( now - uploadFile.updatedTime ) > 28800 %}
+        <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
+      {% endif %}
+
     {% elseif uploadFile.convertStatus == 'doing' %}
       {{uploadFile.filename}}<br><span class="text-info text-sm">正在文件格式转换</span>
       {% if uploadFile.type == 'ppt' and ( now - uploadFile.updatedTime ) > 1800 %}
