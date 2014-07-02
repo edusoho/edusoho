@@ -48,7 +48,8 @@ class CourseFileManageController extends BaseController
             'course' => $course,
             'courseLessons' => $files,
             'users' => ArrayToolkit::index($users, 'id'),
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'now' => time(),
         ));
     }
 
