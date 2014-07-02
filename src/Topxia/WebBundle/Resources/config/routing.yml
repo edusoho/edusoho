@@ -587,7 +587,7 @@ course_manage_lesson_exercise_delete:
 
 course_manage_lesson_homework_list:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/homework/list
-    defaults: { _controller: TopxiaWebBundle:CourseExerciseManage:homeworkList }
+    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:homeworkList }
 
 homework_urge:
     pattern:  /homework/{homeworkId}/student/{userId}/urge
@@ -627,9 +627,6 @@ course_manage_question_upload:
     pattern: /course/{courseId}/manage/question/uploadfile/{type}
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadFile }
     methods: [POST]
-
-
-
 
 course_manage_question_category:
     pattern: /course/{courseId}/manage/question/category

@@ -24,7 +24,7 @@
     			</a>
     		</li>
   	  	</ul>
-  	  	{% if homeworks %}
+  	  	{% if homeworks and students %}
   	  	<table class="table table-striped" id="homework-student-list">
 	      	<thead>
 		        <tr>
@@ -68,7 +68,7 @@
           </tbody>
     	  </table>
     	{% else %}
-			<div class="empty">没有相关的作业</div>
+			<div class="empty">没有需要批改的作业</div>
 		{% endif %}
 		{{ web_macro.paginator(paginator) }}
   	</div>
