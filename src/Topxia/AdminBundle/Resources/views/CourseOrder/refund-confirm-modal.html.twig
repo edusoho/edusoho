@@ -39,6 +39,6 @@
 {% endblock %}
 
 {% block footer %}
-  <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#order-refund-confirm-form">提交</button>
+  <button id="refund-confirm-btn" data-submiting-text="正在提交" class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#order-refund-confirm-form">提交</button>
   <script>app.load('order/refund-confirm-modal')</script>
 {% endblock %}

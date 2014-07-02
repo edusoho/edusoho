@@ -40,7 +40,7 @@ define(function(require, exports, module) {
             }
 
             $form.find('input[value=ROLE_SUPER_ADMIN]').removeAttr('disabled');
-
+            $('#change-user-roles-btn').button('submiting').addClass('disabled');
             $.post($form.attr('action'), $form.serialize(), function(html) {
 
                 $modal.modal('hide');

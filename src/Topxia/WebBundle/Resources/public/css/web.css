@@ -3966,6 +3966,11 @@ body {
 	font-size: 16px;
 }
 
+.slide-player-control .glyphicon {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
 .toolbar-wrapper .glyphicon-fullscreen {
 	float: right;
 }

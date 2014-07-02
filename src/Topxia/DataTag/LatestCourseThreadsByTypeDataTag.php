@@ -3,6 +3,7 @@
 namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
+use Topxia\Common\ArrayToolkit;
 
 class LatestCourseThreadsByTypeDataTag extends CourseBaseDataTag implements DataTag  
 {
@@ -29,12 +30,14 @@ class LatestCourseThreadsByTypeDataTag extends CourseBaseDataTag implements Data
         }
     	$threads = $this->getThreadService()->findLatestThreadsByType($type, 0, $arguments['count']);
 
-        foreach ($threads as $key => $thread) {
-            $course = $this->getCourseService()->getCourse($thread['courseId']);
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads,'courseId'));
 
-            $threads[$key]['courseTitle'] = $course['title'];
+        foreach ($threads as $key => $thread) {
+            if ($thread['courseId'] == $courses[$thread['courseId']]['id'] ) {
+                $threads[$key]['courseTitle'] = $courses[$thread['courseId']]['title'];
+            }
         }
- 
+
         return $threads;
     }
 
