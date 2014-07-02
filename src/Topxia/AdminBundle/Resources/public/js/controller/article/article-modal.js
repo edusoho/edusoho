@@ -123,7 +123,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-
+                $('#article-operate-save').button('loading').addClass('disabled');
                 Notify.success('保存文章成功！');
             }
         });

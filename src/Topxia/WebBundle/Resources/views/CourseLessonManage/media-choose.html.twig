@@ -128,4 +128,62 @@
 
   </div>
 
+
+
+
+  <div class="file-chooser" id="ppt-chooser" style="display:none;">
+    <div class="file-chooser-bar"  style="display:none;">
+      <span data-role="placeholder"></span>
+      <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+    </div>
+
+    <div class="file-chooser-main">
+      <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
+        <li class="active"><a class="file-chooser-uploader-tab" href="#ppt-chooser-upload-pane" data-toggle="tab">上传PPT</a></li>
+        <li><a href="#ppt-chooser-disk-pane" data-toggle="tab">从PPT库中选择</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="ppt-chooser-upload-pane">
+
+          <div class="file-chooser-uploader">
+            <div class="file-chooser-uploader-label">选择你要上传的PPT文件：</div>
+            <div class="file-chooser-uploader-control">
+              <span id="ppt-choose-uploader-btn" 
+                data-role="uploader-btn"
+                data-key="{{ fileKey }}"
+                data-token="{{ pptUploadToken.token }}"
+                data-url="{{ pptUploadToken.url }}"
+                data-filepath="{{ filePath }}"
+                data-convert-key="{{ convertKey }}"
+                data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
+                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
+                data-progressbar="#ppt-chooser-progress"></span>
+            </div>
+            <div class="progress" id="ppt-chooser-progress" style="display:none;">
+              <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <ul>
+                <li>支持<strong>ppt, pptx</strong>格式的PPT文件上传，且文件大小不能超过<strong>100 MB</strong>。</li>
+                <li>PPT将上传到<strong>云服务器</strong></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+        <div class="tab-pane" id="ppt-chooser-disk-pane">
+          <div id="file-browser-ppt" data-role="file-browser"
+          data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
 </div>

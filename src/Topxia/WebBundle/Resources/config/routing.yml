@@ -233,6 +233,10 @@ course_lesson_media_download:
     pattern:  /course/{courseId}/lesson/{lessonId}/media_download
     defaults: { _controller: TopxiaWebBundle:CourseLesson:mediaDownload }
 
+course_lesson_ppt:
+    pattern:  /course/{courseId}/lesson/{lessonId}/ppt
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:ppt }
+
 course_lesson_learn_status:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/status
     defaults: { _controller: TopxiaWebBundle:CourseLesson:learnStatus }
@@ -484,6 +488,10 @@ live_course_manage_lesson_edit:
 live_lesson_time_check:
     pattern:  /course/{id}/manage/live/lesson/time/check
     defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:lessonTimeCheck }
+
+live_lesson_calculate_left_capacity:
+    pattern:  /course/{courseId}/manage/livelesson/calculateLeftCapacity
+    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:calculateLeftCapacity }
 
 course_manage_lesson_create_testpaper:
     pattern:  /course/{id}/manage/lesson/create/testpaper

@@ -13,6 +13,12 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $sql = "SELECT * FROM {$this->getTablename()} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
+
+    public function getCoursesCount()
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->getTablename()}";
+        return $this->getConnection()->fetchColumn($sql) ? : null;
+    }
     
     public function findCoursesByIds(array $ids)
     {

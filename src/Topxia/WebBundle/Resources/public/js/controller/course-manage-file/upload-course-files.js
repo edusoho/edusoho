@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 		var extensions = '';
 		if (targetType == 'courselesson') {
 			if (uploadMode == 'cloud') {
-				extensions = 'mp3,mp4,avi,flv,wmv,mov';
+				extensions = 'mp3,mp4,avi,flv,wmv,mov,ppt,pptx';
 			} else {
 				extensions = 'mp3,mp4';
 			}
@@ -80,6 +80,8 @@ define(function(require, exports, module) {
 					if (targetType == 'courselesson' && uploadMode == 'cloud') {
 						if (file.type == 'audio/mpeg') {
 							data.convertor = 'audio';
+						} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
+							data.convertor = 'ppt';
 						} else {
 							data.convertor = 'video';
 						}

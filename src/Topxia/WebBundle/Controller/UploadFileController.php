@@ -69,10 +69,14 @@ class UploadFileController extends BaseController
 
             $convertor = $request->query->get('convertor');
             $commands = null;
+            $twoStep = null;
             if ($convertor == 'video') {
                 $commands = array_keys($client->getVideoConvertCommands());
             } elseif ($convertor == 'audio') {
                 $commands = array_keys($client->getAudioConvertCommands());
+            } elseif ($convertor == 'ppt') {
+                $commands = array_keys($client->getPPTConvertCommands());
+                $twoStep = '1';
             }
 
             //@todo refacor it. 
@@ -83,9 +87,14 @@ class UploadFileController extends BaseController
             $clientParams = array();
             if ($commands) {
                 $convertKey = $keySuffix;
+                if ($twoStep) {
+                    $notifyUrl = $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey, 'twoStep' => $twoStep), true);
+                } else {
+                    $notifyUrl = $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true);
+                }
                 $clientParams = array(
                     'convertCommands' => implode(';', $commands),
-                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
+                    'convertNotifyUrl' => $notifyUrl,
                 );
             }
 
@@ -165,6 +174,7 @@ class UploadFileController extends BaseController
         $this->getLogService()->info('uploadfile', 'cloud_convert_callback', "文件云处理回调", array('content' => $data));
 
         $key = $request->query->get('key');
+        $fullKey = $request->query->get('fullKey');
         if (empty($key)) {
             throw new \RuntimeException('key不能为空');
         }
@@ -175,7 +185,11 @@ class UploadFileController extends BaseController
             throw new \RuntimeException('数据中id不能为空');
         }
 
-        $hash = "{$data['id']}:{$key}";
+        if ($fullKey) {
+            $hash = $fullKey;
+        } else {
+            $hash = "{$data['id']}:{$key}";
+        }
 
         $file = $this->getUploadFileService()->getFileByConvertHash($hash);
         if (empty($file)) {
@@ -188,12 +202,21 @@ class UploadFileController extends BaseController
         }
 
         $items = (empty($data['items']) or !is_array($data['items'])) ? array() : $data['items'];
-        $file = $this->getUploadFileService()->convertFile($file['id'], 'success', $data['items']);
 
-        $this->getNotificationService()->notify($file['createdUserId'], 'cloud-file-converted', array(
-            'courseId' => $file['targetId'],
-            'filename' => $file['filename'],
-        ));
+        $status = $request->query->get('twoStep', false) ? 'doing' : 'success';
+
+        if ($status == 'doing') {
+            $callback = $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $key, 'fullKey' => $hash), true);
+            $file = $this->getUploadFileService()->convertFile($file['id'], $status, $data['items'], $callback);
+        } else {
+            $file = $this->getUploadFileService()->convertFile($file['id'], $status, $data['items']);
+        }
+
+        if (in_array($file['convertStatus'], array('success', 'error'))) {
+            $this->getNotificationService()->notify($file['createdUserId'], 'cloud-file-converted', array(
+                'file' => $file,
+            ));
+        }
 
         return $this->createJsonResponse($file['metas2']);
     }

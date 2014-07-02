@@ -79,7 +79,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             $addtionalCondition = "and id != {$excludeLessonId};";
         }
 
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = {$courseId} and ((startTime  < {$startTime} and endTime > {$startTime}) or  (startTime between {$startTime} and {$endTime}))".$addtionalCondition;
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = {$courseId} and ((startTime  < {$startTime} and endTime > {$startTime}) or  (startTime between {$startTime} and {$endTime})) ".$addtionalCondition;
         
         return $this->getConnection()->fetchAll($sql, array($courseId,$startTime,$endTime));
     }
@@ -92,7 +92,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             $addtionalCondition = "and id != {$excludeLessonId};";
         }
 
-        $sql = "SELECT * FROM {$this->table} WHERE (startTime  < {$startTime} and endTime > {$startTime}) or  (startTime between {$startTime} and {$endTime})".$addtionalCondition;
+        $sql = "SELECT * FROM {$this->table} WHERE ((startTime  < {$startTime} and endTime > {$startTime}) or  (startTime between {$startTime} and {$endTime})) ".$addtionalCondition;
         
         return $this->getConnection()->fetchAll($sql, array($startTime,$endTime));
     }

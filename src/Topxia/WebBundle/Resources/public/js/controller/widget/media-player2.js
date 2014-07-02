@@ -70,7 +70,7 @@ define(function(require, exports, module) {
 
             if (this.element.data('fingerprint')) {
                 flashvars.plugin_fingerprint = 'http://cdn.staticfile.org/GrindPlayerCN/1.0.2/Fingerprint-1.0.1.swf';
-                flashvars.fingerprint_namespace = 'fingerprint',
+                flashvars.fingerprint_namespace = 'fingerprint';
                 flashvars.fingerprint_src = this.element.data('fingerprint');
             }
 

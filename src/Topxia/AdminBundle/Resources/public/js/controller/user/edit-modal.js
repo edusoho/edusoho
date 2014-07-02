@@ -18,7 +18,7 @@ define(function(require, exports, module) {
             	if (error) {
             		return false;
             	}
-
+                $('#edit-user-btn').button('submiting').addClass('disabled');
                 editor.sync();
 
 				$.post($form.attr('action'), $form.serialize(), function(html) {
