@@ -4,8 +4,8 @@
   <div class="question-set homework-set" style="background:white;">
 
     <div class="question-set-items">
-      {% for item in items %}
-        {% set question = questions[item.questionId]|default(null) %}
+      {% for item in itemSet %}
+        {% set question = item.question %}
         {% include 'TopxiaWebBundle:Question:question-set-item.html.twig' %}
       {% endfor %}
     </div>

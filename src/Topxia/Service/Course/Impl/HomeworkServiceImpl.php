@@ -281,6 +281,30 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 		return $this->getHomeworkItemDao()->findItemsByHomeworkId($homeworkId);
     }
 
+    public function getItemSetByHomeworkId($homeworkId)
+    {
+        $items = $this->getHomeworkItemDao()->findItemsByHomeworkId($homeworkId);
+        $indexdItems = ArrayToolkit::index($items, 'questionId');
+
+        $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
+
+        foreach ($indexdItems as $index => &$item) {
+            $item['question'] = empty($questions[$item['questionId']]) ? null : $questions[$item['questionId']];
+            if (empty($item['parentId'])) {
+                continue;
+            }
+
+            if (empty($indexdItems[$item['parentId']]['subItems'])) {
+                $indexdItems[$item['parentId']]['subItems'] = array();
+            }
+
+            $indexdItems[$item['parentId']]['subItems'][] = $item;
+            unset($indexdItems[$item['questionId']]);
+        }
+
+        return array_values($indexdItems);
+    }
+
     public function updateHomeworkItems($homeworkId, $items)
     {
 
@@ -319,7 +343,12 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
     private function getCourseService()
     {
-    	return $this->createService('Course.CourseService');
+        return $this->createService('Course.CourseService');
+    }
+
+    private function getQuestionService()
+    {
+    	return $this->createService('Question.QuestionService');
     }
 
     private function getLogService()

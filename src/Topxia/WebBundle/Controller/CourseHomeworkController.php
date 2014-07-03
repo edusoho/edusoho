@@ -54,13 +54,11 @@ class CourseHomeworkController extends BaseController
             return $this->createMessageResponse('info','作业所属课时不存在！');
         }
 
-        $items = $this->getHomeworkService()->findHomeworkItemsByHomeworkId($homework['id']);
-        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
+        $itemSet = $this->getHomeworkService()->getItemSetByHomeworkId($homework['id']);
 
         return $this->render('TopxiaWebBundle:CourseHomework:do.html.twig', array(
             'homework' => $homework,
-            'items' => $items,
-            'questions' => $questions,
+            'itemSet' => $itemSet,
         ));
 
     }
