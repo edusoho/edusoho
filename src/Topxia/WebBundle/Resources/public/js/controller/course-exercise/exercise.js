@@ -34,10 +34,6 @@ define(function(require, exports, module) {
 	            	return isOk;
 	            }
 
-	   //          $form.on('click', '#exercise-save-btn', function() {
-		  //   		$(this).button('loading');
-				// });
-
 				$.ajax($form.data('buildCheckUrl'), {
 	                type: 'POST',
 	                async: false,
@@ -52,14 +48,17 @@ define(function(require, exports, module) {
 	                }
 	            });
 
-	            // $.post(url, $form.serialize(), function(response) {
-             //        Notify.success('保存练习成功!');
-             //        $('#exercise-save-btn').button('loading');
-	            // 	window.location.href = response;
-             //    }).error(function(){
-             //        Notify.danger('保存练习失败,请检查题目是否存在！');
-             //    });
-           		
+	            if (!questionCountIsOk) {
+	            	return ;
+	            };
+
+	            $.post(url, $form.serialize(), function(response) {
+                    Notify.success('保存练习成功!');
+                    $('#exercise-save-btn').button('loading').addClass('disabled');
+	            	window.location.href = response;
+                }).error(function(){
+                    Notify.danger('保存练习失败,请检查题目是否存在！');
+                });
             }
 		});
 
