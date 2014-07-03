@@ -71,6 +71,10 @@ class EdusohoCloudClient implements CloudClient
 			$cleanParams['convertNotifyUrl'] = (string) $params['convertNotifyUrl'];
 		}
 
+        if (!empty($params['convertor'])) {
+            $cleanParams['convertor'] = (string) $params['convertor'];
+        }
+
 		$encodedParams = base64_encode(json_encode($cleanParams));
 
 		$sign = hash_hmac('sha1', $encodedParams, $this->secretKey);

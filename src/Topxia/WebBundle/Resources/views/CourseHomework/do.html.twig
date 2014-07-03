@@ -1,0 +1,14 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block content %}
+  <div class="question-set homework-set" style="background:white;">
+
+    <div class="question-set-items">
+      {% for item in itemSet %}
+        {% set question = item.question %}
+        {% include 'TopxiaWebBundle:Question:question-set-item.html.twig' %}
+      {% endfor %}
+    </div>
+
+  </div>
+{% endblock %}

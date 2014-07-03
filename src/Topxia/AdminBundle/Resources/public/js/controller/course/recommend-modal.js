@@ -13,7 +13,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                
+                $('#course-recommend-btn').button('submiting').addClass('disabled');
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
                     Notify.success('设置推荐课程操作成功!');

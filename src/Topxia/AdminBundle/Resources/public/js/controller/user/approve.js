@@ -20,7 +20,7 @@ define(function(require, exports, module) {
 			}
 
 			$('#form_status').val(status);
-
+			$('.user-approve-btn').button('submiting').addClass('disabled');
 			$.post($form.attr('action'), $form.serialize(), function(response){
 				var originText = submitButton.text();
 				submitButton.text('提交中...');

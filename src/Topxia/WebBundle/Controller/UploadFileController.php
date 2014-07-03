@@ -89,13 +89,18 @@ class UploadFileController extends BaseController
                 $convertKey = $keySuffix;
                 if ($twoStep) {
                     $notifyUrl = $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey, 'twoStep' => $twoStep), true);
+                    $clientParams = array(
+                        'convertCommands' => implode(';', $commands),
+                        'convertNotifyUrl' => $notifyUrl,
+                        'convertor' => 'document',
+                    );
                 } else {
                     $notifyUrl = $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true);
+                    $clientParams = array(
+                        'convertCommands' => implode(';', $commands),
+                        'convertNotifyUrl' => $notifyUrl,
+                    );
                 }
-                $clientParams = array(
-                    'convertCommands' => implode(';', $commands),
-                    'convertNotifyUrl' => $notifyUrl,
-                );
             }
 
             $uploadToken = $client->generateUploadToken($client->getBucket(), $clientParams);

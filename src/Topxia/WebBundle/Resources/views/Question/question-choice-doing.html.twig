@@ -1,0 +1,20 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+  <ul class="">
+    {% for key, choice in question.metas.choices %}
+      {% set choiceIndex = (65+key)|chr %}
+      <li><span class="">{{ choiceIndex }}.</span> {{ choice|bbCode2Html|raw }}</li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

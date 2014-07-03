@@ -24,7 +24,7 @@ interface HomeworkService
     
     public function showHomework($id);
 
-    public function startHomework($id,$courseId, $lessonId);
+    public function startHomework($id);
 
     public function deleteHomeworksByCourseId($courseId);
 
@@ -52,6 +52,11 @@ interface HomeworkService
 
     //item
     public function findHomeworkItemsByHomeworkId($homeworkId);
+
+    /**
+     * 获得作业的问题集（含子题）
+     */
+    public function getItemSetByHomeworkId($homeworkId);
 
     public function updateHomeworkItems($homeworkId, $items);
 

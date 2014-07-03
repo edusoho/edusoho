@@ -229,35 +229,7 @@ class CourseHomeworkManageController extends BaseController
 
     public function doAction (Request $request,$homeworkId,$courseId,$lessonId)
     {
-        $homework = $this->getHomeworkService()->getHomework($homeworkId);
 
-        if (empty($homework)) {
-            throw $this->createNotFoundException();
-        }
-
-        $course = $this->getCourseService()->getCourse($courseId);
-
-        if (empty($course)) {
-            return $this->createMessageResponse('info', '作业所属课程不存在！');
-        }
-
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-
-        if (empty($lesson)) {
-            return $this->createMessageResponse('info','作业所属课时不存在！');
-        }
-
-        if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createMessageResponse('info', '不是作业所属课程的课时老师或学生');
-        }
-
-        $homeworkResult = $this->getHomeworkService()->startHomework($homeworkId,$courseId,$lessonId);
-
-        return $this->redirect($this->generateUrl('course_manage_lesson_homework_show', 
-            array(
-                'id' => $homework ['id'],
-            ))
-        );
     }
 
     public function showAction(Request $request,$id)
