@@ -400,6 +400,14 @@ admin_setting_theme_change:
     defaults: { _controller: TopxiaAdminBundle:Theme:change }
     methods:  [POST]
 
+edit_theme:
+    pattern:  /edit/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:edit }
+
+left_edit_theme:
+    pattern:  /edit-left/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:editLeft }
+
 admin_setting_user_center:
     pattern:  /setting/user-center
     defaults: { _controller: TopxiaAdminBundle:Setting:userCenter }

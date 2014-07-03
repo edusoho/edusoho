@@ -1,0 +1,199 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="{{ csrf_token('site') }}" name="csrf-token" />
+  <title>{% block title %}EduSoho主题编辑{% endblock %}</title>
+  {% if setting('site.favicon') %}
+  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+  {% endif %}
+  <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/css/common.css') }}" rel="stylesheet" />
+  <link href="{{ asset('bundles/topxiaadmin/css/admin.css') }}" rel="stylesheet" />
+  <link href="{{ asset('bundles/topxiaadmin/css/admin_v2.css') }}" rel="stylesheet" />
+  {% block javascripts %}{% endblock %}
+  <!--[if lt IE 9]>
+    <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
+    <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
+  <![endif]-->
+</head>
+
+{% set nav = nav|default(null) %}
+{% set menu = menu|default(null) %}
+{% set script_controller = 'setting/edit' %}
+
+<body>
+
+ <nav class="navbar navbar-inverse site-navbar navbar-fixed-top" role="navigation">
+  <div class="container">
+  	<div class="col-md-1"></div>
+  	<div class="col-md-10"> 
+	    <a class="navbar-brand">主题编辑</a>
+	    <ul class="nav navbar-nav navbar-right">
+			<li><a href="#"><i class="glyphicon glyphicon-remove"></i> 取消</a></li>
+			<li><a href="#"><i class="glyphicon glyphicon-ok"></i> 保存</a></li>
+	    </ul>
+  	</div>
+  	<div class="col-md-1"></div>
+  </div>
+</nav>
+<div class="container">
+	<div class="col-md-1"></div>
+	<div class="col-md-10">
+		 <!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+		  <li class="active"><a href="#left" role="tab" data-toggle="tab">左侧</a></li>
+		  <li><a href="#right" role="tab" data-toggle="tab">右侧</a></li>
+		  <li><a href="#buttom" role="tab" data-toggle="tab">底部</a></li>
+		  <li><a href="#color" role="tab" data-toggle="tab">配色方案</a></li>
+		  <button class="btn btn-primary pull-right" data-toggle="form-submit" data-role="item-delete" id="reset">全部重置</button>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content">
+		  <div class="tab-pane active" id="left">
+		  	  <ul class="list-group module-item-list" >
+		  	  	<li class="list-group-item clearfix">
+		  	  		<div class="col-md-4 ">
+		  	  			<label>
+					      <input type="checkbox"> 挂件名称
+		  	  			</label>
+		  	  		</div>
+		  	  		<div class="col-md-4">
+		  	  			自定义名称
+		  	  		</div>
+		  	  		<div class="col-md-3">
+		  	  			xxxxx
+		  	  		</div>
+		  	  		<div class="col-md-1">
+		  	  			<button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+
+		  	  		</div>
+		  	  	</li>
+			    <li class="list-group-item clearfix">
+			    	<div class="col-md-4">
+			    		<label>
+					      <input type="checkbox"> 最新课程挂件
+			    		</label>
+		  	  		</div>
+		  	  		<div class="col-md-4">
+		  	  			自定义名称
+		  	  		</div>
+		  	  		<div class="col-md-3">
+		  	  			xxxxx
+		  	  		</div>
+		  	  		<div class="col-md-1">
+		  	  			<button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#edit" data-placement="top" rel="tooltip"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+		  	  		</div>
+
+			    </li>
+			    <li class="list-group-item">Dapibus ac facilisis in</li>
+			    <li class="list-group-item">Morbi leo risus</li>
+			    <li class="list-group-item">Porta ac consectetur ac</li>
+			    <li class="list-group-item">Vestibulum at eros</li>
+			    <li class="list-group-item">Cras justo odio</li>
+			    <li class="list-group-item">Dapibus ac facilisis in</li>
+			    <li class="list-group-item">Morbi leo risus</li>
+			    <li class="list-group-item">Porta ac consectetur ac</li>
+			    <li class="list-group-item">Vestibulum at eros</li>
+			  </ul>
+
+		  </div>
+		  <div class="tab-pane" id="right">
+		  	<ul class="list-group module-item-list">
+		  	  	<li class="list-group-item clearfix">
+		  	  		<div class="col-md-4 ">
+		  	  			<label>
+					      <input type="checkbox"> 挂件名称
+		  	  			</label>
+		  	  		</div>
+		  	  		<div class="col-md-4">
+		  	  			自定义名称
+		  	  		</div>
+		  	  		<div class="col-md-3">
+		  	  			xxxxx
+		  	  		</div>
+		  	  		<div class="col-md-1">
+		  	  			<button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+
+		  	  		</div>
+		  	  	</li>
+			    <li class="list-group-item clearfix">
+			    	<div class="col-md-4">
+			    		<label>
+					      <input type="checkbox"> 登录挂件
+			    		</label>
+		  	  		</div>
+		  	  		<div class="col-md-4">
+		  	  			自定义名称
+		  	  		</div>
+		  	  		<div class="col-md-3">
+		  	  			xxxxx
+		  	  		</div>
+		  	  		<div class="col-md-1">
+		  	  			<button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#edit" data-placement="top" rel="tooltip"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+		  	  		</div>
+
+			    </li>
+			    <li class="list-group-item">Dapibus ac facilisis in</li>
+			    <li class="list-group-item">Morbi leo risus</li>
+			    <li class="list-group-item">Porta ac consectetur ac</li>
+			    <li class="list-group-item">Vestibulum at eros</li>
+			    <li class="list-group-item">Cras justo odio</li>
+			    <li class="list-group-item">Dapibus ac facilisis in</li>
+			    <li class="list-group-item">Morbi leo risus</li>
+			    <li class="list-group-item">Porta ac consectetur ac</li>
+			    <li class="list-group-item">Vestibulum at eros</li>
+			  </ul>
+
+
+
+
+
+		  </div>
+		  <div class="tab-pane" id="buttom">
+		  	<div class="panel panel-default">
+			  <div class="panel-body">
+			    Basic panel example
+			  </div>
+			</div>
+		  </div>
+		  <div class="tab-pane" id="color">
+		  	<div class="panel panel-default">
+			  <div class="panel-body">
+			    Basic panel example
+			  </div>
+			</div>
+		  </div>
+		</div>
+	</div>
+</div>
+
+<div class="layout-content">
+<iframe src="/" marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="100%" height="100%" id="iframepage" name="iframepage" >
+
+</iframe>
+</div>
+<div class="col-md-1"></div>
+
+  {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+
+  <div id="modal" class="modal"></div>
+
+</body>
+</html>
+
+
+<style>
+.list-group {
+	height: 244px;
+	overflow:auto;
+}
+</style>

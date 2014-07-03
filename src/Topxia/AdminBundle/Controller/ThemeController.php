@@ -76,6 +76,19 @@ class ThemeController extends BaseController
         return $theme;
     }
 
+
+    public function editAction (Request $request)
+    {
+       
+        return $this->render('TopxiaAdminBundle:Theme:edit.html.twig');
+    }
+
+
+    public function editLeftAction (Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Theme:left-edit-modal.html.twig');
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');

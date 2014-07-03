@@ -1,0 +1,46 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}挂件编辑{% endblock %}
+{% block body %}
+		<form class="form-horizontal" role="form">
+			 <div class="row form-group">
+			    <div class="col-md-3 control-label">
+			      <label for="email">自定义名称</label>
+			    </div>
+			    <div class="col-md-7 controls">
+			      <input type="text"  class="form-control" >
+			    </div>
+			 </div>
+
+			 <div class="form-group">
+			    <label class="col-sm-3 control-label">课程数量设置</label>
+			    <div class="col-sm-4">
+			      <select class="form-control width-input-large">
+			        <option value="">课程数量</option>
+			        <option value="1">1</option>
+			        <option value="2">2</option>
+			        <option value="3">3</option>
+			      </select>
+			    </div>
+			 </div>
+
+			 <div class="form-group">
+			  <label class="col-md-3 control-label">课程分类设置</label>
+			  <div class="col-md-4 controls">
+			    <select id="categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
+			    	{{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}
+			    </select>
+			  	<div class="help-block" style="display:none;"></div>
+			  </div>
+			</div>
+
+		</form>
+
+{% endblock %}
+{% block footer %}
+  <button data-submiting-text="正在保存" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#">保存</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  {# <script>app.load('user/create-modal')</script> #}
+{% endblock %}
