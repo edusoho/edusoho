@@ -6,12 +6,16 @@
 
 {% block body %}
 
-  <ul class="">
+  {% include 'TopxiaWebBundle:Question:question-choice-options.html.twig' %}
+
+  <div class="question-choices-inputs">
     {% for key, choice in question.metas.choices %}
       {% set choiceIndex = (65+key)|chr %}
-      <li><span class="">{{ choiceIndex }}.</span> {{ choice|bbCode2Html|raw }}</li>
+      <label class="checkbox-inline">
+        <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" name="answer[{{ question.id }}][]" value="{{ choiceIndex }}"> {{ choiceIndex }}
+      </label>
     {% endfor %}
-  </ul>
+  </div>
 
 {% endblock %}
 

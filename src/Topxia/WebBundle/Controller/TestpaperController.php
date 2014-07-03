@@ -156,8 +156,6 @@ class TestpaperController extends BaseController
 
         $items = $this->getTestpaperService()->previewTestpaper($testId);
 
-        var_dump($items);exit();
-
         $total = $this->makeTestpaperTotal($testpaper, $items);
 
         return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
