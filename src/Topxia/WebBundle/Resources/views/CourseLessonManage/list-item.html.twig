@@ -80,7 +80,7 @@
           		</li>
           		{% if homework %}
           		<li>
-          			<a href="{{ path('course_manage_lesson_homework_list', {courseId:course.id, lessonId:lesson.id }) }}" ><span class="glyphicon glyphicon-check prs"></span>作业批改 <span class="badge">{{ homework.results|default(null) }}</span></a>
+          			<a href="{{ path('course_homework_list', {courseId:course.id, lessonId:lesson.id }) }}" ><span class="glyphicon glyphicon-check prs"></span>作业批改 <span class="badge">{{ homework.results|default(null) }}</span></a>
           		</li>
           		{% endif %}
           		<li class="divider"></li>
@@ -88,10 +88,10 @@
           			{% set lessonId = lesson.id %}
           			{% set exercise = exercises[lessonId]|default(null) %}
           			{% if exercise %}
-						<a href="{{ path('course_manage_lesson_exercise_update', {courseId:course.id, lessonId:lesson.id, id:exercise.id }) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>编辑练习</a>
-						<a href="javascript:;" class="delete-exercise-btn" data-url="{{ path('course_manage_lesson_exercise_delete', {courseId:course.id, lessonId:lesson.id, id:exercise.id }) }}" ><span class="glyphicon glyphicon-trash prs"></span>移除练习</a>
+						<a href="{{ path('course_exercise_update', {courseId:course.id, lessonId:lesson.id, id:exercise.id }) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>编辑练习</a>
+						<a href="javascript:;" class="delete-exercise-btn" data-url="{{ path('course_exercise_delete', {courseId:course.id, lessonId:lesson.id, id:exercise.id }) }}" ><span class="glyphicon glyphicon-trash prs"></span>移除练习</a>
 					{% else %}
-						<a href="{{ path('course_manage_lesson_exercise_create', {courseId:course.id, lessonId:lesson.id}) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>新增练习</a>
+						<a href="{{ path('course_exercise_create', {courseId:course.id, lessonId:lesson.id}) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>新增练习</a>
 					{% endif %}
           		</li>
           		<li class="divider"></li>	
