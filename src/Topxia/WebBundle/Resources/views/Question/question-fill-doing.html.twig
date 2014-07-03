@@ -5,13 +5,11 @@
 {% endblock %}
 
 {% block body %}
-      <div class="testpaper-question-fill-inputs">
-        {% set input_index = 1 %}
-        {% for answer in question.answer %}
-          <input class="form-control " type="text" data-type="fill" name="{{ question.id }}" placeholder="填空({{ input_index }})答案，请填在这里"/>
-          {% set input_index = input_index + 1 %}
-        {% endfor %}
-      </div>
+  <div class="question-fill-inputs">
+    {% for answer in question.answer %}
+      <input class="form-control " type="text" data-type="fill" name="answer[{{ question.id }}][]" placeholder="填空({{ loop.index }})答案，请填在这里"/>
+    {% endfor %}
+  </div>
 {% endblock %}
 
 {% block footer %}

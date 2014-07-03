@@ -1,13 +1,61 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block content %}
-  <div class="question-set homework-set" style="background:white;">
+{% set script_controller = 'homework/do' %}
 
-    <div class="question-set-items">
-      {% for item in itemSet %}
-        {% set question = item.question %}
-        {% include 'TopxiaWebBundle:Question:question-set-item.html.twig' %}
-      {% endfor %}
+{% block content %}
+  <div class="question-set homework-set" id="homework-set">
+
+    <div class="row question-set-heading">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="question-set-type">作业</div>
+            <div class="question-set-title">PHP基础</div>
+            <div class="question-set-description">
+              xxxxx
+              <p class="text-muted">所属课程 <a href="#">xxxx</a></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row question-set-body">
+      <div class="col-md-9 question-set-main">
+        <div class="panel panel-default">
+          <div class="panel-heading">作业题目 <small class="text-muted">共{{ itemSet|length }}题</small></div>
+          <div class="panel-body">
+            
+            <div class="question-set-items">
+              {% for item in itemSet %}
+                {% if item.subItems|default(null) %}
+                  {% include 'TopxiaWebBundle:Question:question-set-item-have-sub.html.twig' %}
+                {% else %}
+                  {% include 'TopxiaWebBundle:Question:question-set-item.html.twig' %}
+                {% endif %}
+              {% endfor %}
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 question-set-side">
+        <div class="panel panel-default question-set-card">
+          <div class="panel-heading">答题卡 <button class="btn btn-default btn-sm pull-right">下次再做</button></div>
+          <div class="panel-body">
+            {%- for i in 1..10 -%}
+              <a href="#" class="question-index">{{ i }}</a>
+            {%- endfor -%}
+          </div>
+          <div class="panel-footer">
+            <button class="btn btn-success btn-block">提交作业</button>
+          </div>
+        </div>
+      </div>
+
+
     </div>
 
   </div>

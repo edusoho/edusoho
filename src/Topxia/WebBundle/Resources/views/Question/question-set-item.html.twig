@@ -8,6 +8,7 @@
     </div>
 
     <div class="question-set-item-main">
+      {% set question = item.question %}
       {% include 'TopxiaWebBundle:Question:question-' ~ question.type ~ '-doing.html.twig' %}
     </div>
 
