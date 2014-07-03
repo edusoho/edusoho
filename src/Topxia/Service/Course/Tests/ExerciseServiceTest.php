@@ -209,11 +209,6 @@ class ExerciseServiceTest extends BaseTestCase
         $this->assertContains($exercise2[0], $exercises);
     }
 
-    public function testGetExerciseResultByExerciseIdAndUserId()
-    {
-
-    }
-
     private function generateChoiceQuestions($target, $count, $difficulty = null)
     {
         $questions = array();

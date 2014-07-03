@@ -25,15 +25,7 @@
 
 <div class="lesson-about">
 	{% if exercise %}
-		{% if exerciseResult %}
-			{% if exerciseResult.status == 'doing' %}
-				<a href="#" class="btn btn-primary btn-sm">继续做题</a>
-			{% else %}
-				<a href="#" class="btn btn-primary btn-sm">查看练习结果</a>
-			{% endif %}
-		{% else %}
-	  		<a href="#" class="btn btn-primary btn-sm">来{{ exercise.itemCount }}题</a>
-	  	{% endif %}
+	  	<a href="#" class="btn btn-primary btn-sm">来{{ exercise.itemCount }}题</a>
 	{% else %}
 		此课时暂无练习
 	{% endif %}

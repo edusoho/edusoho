@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
 
+	var Widget = require('widget');
 	var Validator = require('bootstrap.validator');
 	require('common/validator-rules').inject(Validator);
 	var Notify = require('common/bootstrap-notify');
@@ -16,6 +17,7 @@ define(function(require, exports, module) {
 			onFormValidated: function(error, results, $form) {
 				var isOk = false;
 				var url = $form.data('action');
+				var questionCountIsOk = true;
 
                 if (error) {
                     return ;
@@ -32,13 +34,31 @@ define(function(require, exports, module) {
 	            	return isOk;
 	            }
 
-	            $.post(url, $form.serialize(), function(response) {
-                    Notify.success('保存练习成功!');
-                    $('#exercise-save-btn').button('loading');
-	            	window.location.href = response;
-                }).error(function(){
-                    Notify.danger('保存练习失败,请检查题目是否存在！');
-                });
+	   //          $form.on('click', '#exercise-save-btn', function() {
+		  //   		$(this).button('loading');
+				// });
+
+				$.ajax($form.data('buildCheckUrl'), {
+	                type: 'POST',
+	                async: false,
+	                data: $form.serialize(),
+	                dataType: 'json',
+	                success: function(response) {
+	                	if (response.status != 'yes') {
+	                		var lessNum = response.lessNum;
+	                		Notify.danger('课程题库题目数量不足，无法生成练习：还缺少' + lessNum + '题');
+	                    	questionCountIsOk = false;
+	                	};
+	                }
+	            });
+
+	            // $.post(url, $form.serialize(), function(response) {
+             //        Notify.success('保存练习成功!');
+             //        $('#exercise-save-btn').button('loading');
+	            // 	window.location.href = response;
+             //    }).error(function(){
+             //        Notify.danger('保存练习失败,请检查题目是否存在！');
+             //    });
            		
             }
 		});
@@ -55,10 +75,6 @@ define(function(require, exports, module) {
 			} else {
 				$(this).attr('checked', 'checked');
 			}
-		});
-
-		$form.on('click', '#exercise-save-btn', function() {
-    		$(this).button('loading');
 		});
 	};
 

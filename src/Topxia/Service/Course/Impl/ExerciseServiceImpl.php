@@ -38,14 +38,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
         if (!empty($exercise)) {
             $this->getExerciseDao()->deleteExercise($exercise['id']);
-            $this->getExerciseItemDao()->deleteItemsByExerciseId($exercise['id']);
         }
-        $exercise = $this->getExerciseDao()->addExercise($this->filterExerciseFields($fields));
-        $items = $this->buildExercise($exercise['id'], $fields);
 
         $this->getLogService()->info('exercise', 'create', "创建练习(#{$exercise['id']})");
 
-        return array($exercise, $items);
+        return $this->getExerciseDao()->addExercise($this->filterExerciseFields($fields));
     }
 
     public function updateExercise($id, $fields)
@@ -55,63 +52,38 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         }
 
         $exercise = $this->getExercise($id);
-        $this->getExerciseItemDao()->deleteItemsByExerciseId($exercise['id']);
         $exercise = $this->getExerciseDao()->updateExercise($exercise['id'], $this->filterExerciseFields($fields));
-        $items = $this->buildExercise($exercise['id'], $fields);
 
         $this->getLogService()->info('exercise', 'update', "编辑练习(#{$exercise['id']})");
 
-        return array($exercise ,$items);
+        return $exercise;
     }
 
     public function deleteExercise($id)
     {
         $this->getExerciseDao()->deleteExercise($id);
-        $this->getExerciseItemDao()->deleteItemsByExerciseId($id);
 
         $this->getLogService()->info('exercise', 'delete', "删除练习(#{$id})");
 
         return true;
     }
 
+    public function canBuildExercise($fields)
+    {
+        $questionsCount = count($this->getQuestions($fields));
+        if ($questionsCount < $fields['questionCount']) {
+            $lessNum = $fields['questionCount'] - $questionsCount;
+            return array('status' => 'no', 'lessNum' => $lessNum);
+        } else {
+            return array('status' => 'yes');
+        }
+    }
+
     public function findExerciseByCourseIdAndLessonIds($courseId, $lessonIds)
     {
         $exercises = $this->getExerciseDao()->findExerciseByCourseIdAndLessonIds($courseId, $lessonIds);
         return ArrayToolkit::index($exercises, 'lessonId');
-    }
-
-    public function getExerciseResultByExerciseIdAndUserId($exerciseId, $userId)
-    {
-        return $this->getExerciseResultDao()->getExerciseResultByExerciseIdAndUserId($exerciseId, $userId);
-    }   
-
-    public function buildExercise($id, $options)
-    {
-        $exercise = $this->getExercise($id);
-
-        $questions = $this->getQuestions($options);
-        if (empty($questions)) {
-            return null;
-        }
-
-        $items = array();
-        $seq = 1;
-
-        foreach ($questions as $item) {
-            $fields = array();
-            $fields['exerciseId'] = $exercise['id'];
-            $fields['seq'] = $seq;
-            $fields['questionId'] = $item['id'];
-            $fields['questionType'] = $item['type'];
-
-            $seq++;
-            $items[] = $this->getExerciseItemDao()->addItem($fields);
-        }
-
-        $this->getExerciseDao()->updateExercise($exercise['id'], array( 'itemCount' => $seq -1));
-
-        return $items;
-    }
+    }  
 
     public function filterExerciseFields($fields)
     {
@@ -128,33 +100,52 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $filtedFields;
     }
 
-    private function getQuestions($options)
+    private function getQuestions($fields)
     {
         $conditions = array();
-        $questionCount = $options['questionCount'];
 
-        if ($options['source'] == 'course') {
-            $options['targets'][] = "course-{$options['courseId']}/lesson-{$options['lessonId']}";
-            $options['targets'][] = "course-{$options['courseId']}";
+        if (!empty($fields['difficulty'])) {
+            $conditions['difficulty'] = $fields['difficulty'];
+        }
+
+        if ($fields['source'] == 'lesson') {
+            $conditions['target'] = 'course-'.$fields['courseId'].'/lesson-'.$fields['lessonId'];
         } else {
-            $options['target'] = "course-{$options['courseId']}/lesson-{$options['lessonId']}";
+            $conditions['targetPrefix'] = 'course-'.$fields['courseId'];
         }
-
-        if (!empty($options['difficulty'])) {
-            $conditions['difficulty'] = $options['difficulty'];
-        }
-
-        if (!empty($options['target'])) {
-            $conditions['target'] = $options['target'];
-        }
-
-        if (!empty($options['ranges'])) {
-            $conditions['types'] =  $options['ranges'];
-        }
-
+        $conditions['types'] = $fields['ranges'];
         $conditions['parentId'] = 0;
 
-        return $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $questionCount);
+        $total = $this->getQuestionService()->searchQuestionsCount($conditions);
+
+        return $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
+    }
+
+    private function canBuildWithQuestions($fields, $questions)
+    {
+        $missing = array();
+
+        foreach ($fields['counts'] as $type => $needCount) {
+            $needCount = intval($needCount);
+            if ($needCount == 0) {
+                continue;
+            }
+
+            if (empty($questions[$type])) {
+                $missing[$type] = $needCount;
+                continue;
+            }
+
+            if (count($questions[$type]) < $needCount) {
+                $missing[$type] = $needCount - count($questions[$type]);
+            }
+        }
+
+        if (empty($missing)) {
+            return array('status' => 'yes');
+        }
+
+        return array('status' => 'no', 'missing' => $missing);
     }
 
     protected function getExerciseDao()
@@ -162,24 +153,14 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->createDao('Course.ExerciseDao');
     }
 
-    protected function getExerciseItemDao()
+    protected function getCourseService()
     {
-        return $this->createDao('Course.ExerciseItemDao');
-    }
-
-    protected function getExerciseResultDao()
-    {
-        return $this->createDao('Course.ExerciseResultDao');
+        return $this->createService('Course.CourseService');
     }
 
     protected function getQuestionService()
     {
         return $this->createService('Question.QuestionService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->createService('Course.CourseService');
     }
 
     protected function getLogService()

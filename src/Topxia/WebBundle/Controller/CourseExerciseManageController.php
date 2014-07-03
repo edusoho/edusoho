@@ -14,7 +14,7 @@ class CourseExerciseManageController extends BaseController
         if($request->getMethod() == 'POST') {
         	$fields = $this->generateExerciseFields($request->request->all(), $course, $lesson);
 
-        	list($exercise, $items) = $this->getExerciseService()->createExercise($fields);
+        	$exercise = $this->getExerciseService()->createExercise($fields);
         	return $this->createJsonResponse($this->generateUrl('course_manage_lesson', array('id' => $course['id'])));
         }
 
@@ -37,7 +37,7 @@ class CourseExerciseManageController extends BaseController
         if($request->getMethod() == 'POST') {
         	$fields = $this->generateExerciseFields($request->request->all(), $course, $lesson);
 
-        	list($exercise, $items) = $this->getExerciseService()->updateExercise($exercise['id'], $fields);
+        	$exercise = $this->getExerciseService()->updateExercise($exercise['id'], $fields);
         	return $this->createJsonResponse($this->generateUrl('course_manage_lesson', array('id' => $course['id'])));
         }
         
@@ -60,6 +60,15 @@ class CourseExerciseManageController extends BaseController
 
         return $this->createJsonResponse(true);
 	}
+
+    public function buildCheckAction(Request $request, $courseId, $lessonId)
+    {
+        list($course, $lesson) = $this->getExerciseCourseAndLesson($courseId, $lessonId);
+        $fields = $this->generateExerciseFields($request->request->all(), $course, $lesson);
+        $result = $this->getExerciseService()->canBuildExercise($fields);
+
+        return $this->createJsonResponse($result);
+    }
 
 	private function generateExerciseFields($fields, $course, $lesson)
 	{
@@ -97,6 +106,11 @@ class CourseExerciseManageController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getQuestionService()
+    {
+        return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 
 }
