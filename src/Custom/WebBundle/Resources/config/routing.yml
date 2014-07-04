@@ -1,3 +1,0 @@
-test:
-    pattern:  /test
-    defaults: { _controller: CustomWebBundle:Default:index }

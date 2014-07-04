@@ -63,6 +63,11 @@ class CourseLessonManageController extends BaseController
         	}
         	$lesson = $this->getCourseService()->createLesson($lesson);
 
+            if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
+                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                $lesson['mediaStatus'] = $file['convertStatus'];
+            }
+
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
@@ -110,7 +115,8 @@ class CourseLessonManageController extends BaseController
                 $commands = array_keys($client->getPPTConvertCommands());
                 $pptUploadToken = $client->generateUploadToken($client->getBucket(), array(
                     'convertCommands' => implode(';', $commands),
-                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
+                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey, 'twoStep' => '1'), true),
+                    'convertor' => 'document',
                 ));
                 if (!empty($pptUploadToken['error'])) {
                     return $this->createMessageModalResponse('error', $pptUploadToken['error']['message']);
@@ -230,7 +236,8 @@ class CourseLessonManageController extends BaseController
                 $commands = array_keys($client->getPPTConvertCommands());
                 $pptUploadToken = $client->generateUploadToken($client->getBucket(), array(
                     'convertCommands' => implode(';', $commands),
-                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
+                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey, 'twoStep' => 1), true),
+                    'convertor' => 'document',
                 ));
                 if (!empty($pptUploadToken['error'])) {
                     return $this->createMessageModalResponse('error', $pptUploadToken['error']['message']);
