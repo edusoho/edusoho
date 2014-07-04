@@ -4150,3 +4150,11 @@ body {
 .question-set-card .panel-heading {
 	line-height: 30px;
 }
+
+a.homework-essay-textarea-pack-up{
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+	color: #999999;
+}

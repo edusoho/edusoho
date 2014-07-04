@@ -39,7 +39,6 @@ class CourseHomeworkController extends BaseController
     public function doAction(Request $request, $courseId, $homeworkId, $resultId)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-
         $homework = $this->getHomeworkService()->getHomework($homeworkId);
         if (empty($homework)) {
             throw $this->createNotFoundException();
@@ -55,10 +54,11 @@ class CourseHomeworkController extends BaseController
         }
 
         $itemSet = $this->getHomeworkService()->getItemSetByHomeworkId($homework['id']);
-
         return $this->render('TopxiaWebBundle:CourseHomework:do.html.twig', array(
             'homework' => $homework,
             'itemSet' => $itemSet,
+            'course' => $course,
+            'lesson' => $lesson,
         ));
 
     }

@@ -10,10 +10,10 @@
         <div class="panel panel-default">
           <div class="panel-body">
             <div class="question-set-type">作业</div>
-            <div class="question-set-title">PHP基础</div>
+            <div class="question-set-title">{{ lesson.title }}</div>
             <div class="question-set-description">
-              xxxxx
-              <p class="text-muted">所属课程 <a href="#">xxxx</a></p>
+              {{ homework.description }}
+              <p class="text-muted">所属课程 <a href="#">{{ course.title }}</a></p>
             </div>
           </div>
 
@@ -45,8 +45,9 @@
         <div class="panel panel-default question-set-card">
           <div class="panel-heading">答题卡 <button class="btn btn-default btn-sm pull-right">下次再做</button></div>
           <div class="panel-body">
-            {%- for i in 1..10 -%}
-              <a href="#" class="question-index">{{ i }}</a>
+            {%- for key,item in itemSet -%}
+            {% set questionId = item.question.id %}
+              <a href="javascript:;" class="question-index" data-anchor="{{ questionId }}">{{ key+1 }}</a>
             {%- endfor -%}
           </div>
           <div class="panel-footer">
