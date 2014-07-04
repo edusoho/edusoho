@@ -10,7 +10,7 @@
 <div class="panel panel-default panel-col">
   	<div class="panel-heading">{% if exercise.id %}编辑练习{% else %}添加练习{% endif %}</div>
   	<div class="panel-body">
-    	<form id="exercise-form" data-build-check-url="{{ path('course_manage_lesson_exercise_check', {courseId:course.id, lessonId:lesson.id}) }}" data-target="{{ path('course_manage_lesson',{id:course.id}) }}" class="form-horizontal" method="post" {% if exercise.id %}data-action="{{ path('course_manage_lesson_exercise_update',{ courseId:course.id, lessonId:lesson.id, id:exercise.id }) }}"{% else %}data-action="{{ path('course_manage_lesson_exercise_create',{ courseId:course.id, lessonId:lesson.id }) }}"{% endif %} >
+    	<form id="exercise-form" data-build-check-url="{{ path('course_exercise_check', {courseId:course.id, lessonId:lesson.id}) }}" data-target="{{ path('course_manage_lesson',{id:course.id}) }}" class="form-horizontal" method="post" {% if exercise.id %}data-action="{{ path('course_exercise_update',{ courseId:course.id, lessonId:lesson.id, id:exercise.id }) }}"{% else %}data-action="{{ path('course_exercise_create',{ courseId:course.id, lessonId:lesson.id }) }}"{% endif %} >
 
       		<div class="form-group">
 				<label for="questionCount" class="col-md-2 control-label">题目个数</label>
