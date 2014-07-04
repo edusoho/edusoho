@@ -4144,8 +4144,13 @@ body {
 
 .question-set-card  .question-index:hover {
 	background: #eee;
+}
+
+.question-set-card .question-index-active {
+	background: #eee;
 	border-color: #aaa;
 }
+
 
 .question-set-card .panel-heading {
 	line-height: 30px;

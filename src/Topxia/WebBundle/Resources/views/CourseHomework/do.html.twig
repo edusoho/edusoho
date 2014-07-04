@@ -24,11 +24,11 @@
     <div class="row question-set-body">
       <div class="col-md-9 question-set-main">
         <div class="panel panel-default">
-          <div class="panel-heading">作业题目 <small class="text-muted">共{{ itemSet|length }}题</small></div>
+          <div class="panel-heading">作业题目 <small class="text-muted">共{{ itemSet.total }}题</small></div>
           <div class="panel-body">
             
             <div class="question-set-items">
-              {% for item in itemSet %}
+              {% for item in itemSet.items %}
                 {% if item.subItems|default(null) %}
                   {% include 'TopxiaWebBundle:Question:question-set-item-have-sub.html.twig' %}
                 {% else %}
@@ -45,9 +45,8 @@
         <div class="panel panel-default question-set-card">
           <div class="panel-heading">答题卡 <button class="btn btn-default btn-sm pull-right">下次再做</button></div>
           <div class="panel-body">
-            {%- for key,item in itemSet -%}
-            {% set questionId = item.question.id %}
-              <a href="javascript:;" class="question-index" data-anchor="{{ questionId }}">{{ key+1 }}</a>
+            {%- for questionId in itemSet.questionIds -%}
+              <a href="javascript:;" class="question-index for-question-{{ questionId }}">{{ loop.index }}</a>
             {%- endfor -%}
           </div>
           <div class="panel-footer">

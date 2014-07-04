@@ -288,6 +288,8 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
         $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
 
+        $validQuestionIds = array();
+
         foreach ($indexdItems as $index => &$item) {
             $item['question'] = empty($questions[$item['questionId']]) ? null : $questions[$item['questionId']];
             if (empty($item['parentId'])) {
@@ -302,7 +304,23 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             unset($indexdItems[$item['questionId']]);
         }
 
-        return array_values($indexdItems);
+        $set = array(
+            'items' => array_values($indexdItems),
+            'questionIds' => array(),
+            'total' => 0,
+        );
+
+        foreach ($set['items'] as $item) {
+            if (!empty($item['subItems'])) {
+                $set['total'] += count($item['subItems']);
+                $set['questionIds'] = array_merge($set['questionIds'], ArrayToolkit::column($item['subItems'],'questionId'));
+            } else {
+                $set['total'] ++;
+                $set['questionIds'][] = $item['questionId'];
+            }
+        }
+
+        return $set;
     }
 
     public function updateHomeworkItems($homeworkId, $items)
