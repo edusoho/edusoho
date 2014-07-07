@@ -1,0 +1,16 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+
+{% for article in data('LatestArticles',{count:'8'}) %}
+
+      {% if thread %}
+
+       {# {% set user = thread.user %}
+       {% set latestPostUser = thread.latestPostUser %}
+        {{ web_macro.user_link(user, 'text-muted') }}
+
+      	-----------
+
+      	{{ web_macro.user_link(latestPostUser, 'text-muted') }} #}
+      {% endif %}
+{% endfor %}

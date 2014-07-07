@@ -8,6 +8,6 @@ class DefaultController extends BaseController
 {
 	public function indexAction()
 	{
-         return $this->render('TopxiaWebBundle:Default:index.html.twig');
+         return $this->render('TopxiaWebBundle:Default:test.html.twig');
 	}
 }

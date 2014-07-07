@@ -8,7 +8,7 @@ class LatestArticlesDataTag extends CourseBaseDataTag implements DataTag
 {
 
     /**
-     * 获取最新课程列表
+     * 获取最新资讯列表
      *
      * 可传入的参数：
      *   count    必需 课程数量，取值不能超过100
