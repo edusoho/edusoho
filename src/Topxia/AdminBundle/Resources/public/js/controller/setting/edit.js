@@ -42,7 +42,7 @@ define(function(require, exports, module) {
         });
 
         $("#iframepage").load(function(){
-            var mainheight = $(this).contents().find("body").height()+520;
+            var mainheight = $(this).contents().find("body").height()+420;
                 $(this).height(mainheight);
             }); 
 
