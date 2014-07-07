@@ -1,33 +1,36 @@
-<div class="row">
-                          <div class="page  ">值得加入的小组</div>
-                            <table class="table">
-          {% if deserveGroup%}
-          {% for group in deserveGroup%}
+<div class="panel panel-default">
+  <div class="panel-heading">值得加入的小组</div>
+  <div class="panel-body">
+    
+    <table class="table">
+      {% if deserveGroup%}
+        {% for group in deserveGroup%}
           <tr class="media-list" style="word-break: break-all;">
             <td class="media">
-             <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}" class="pull-left">
-                                     {% if group.logo %}
-                                    <img src="{{file_path(group.logo)}}" alt="{{group.title}}" style="width:58px;height:58px;" >
-                                    {%else%}
-                                    <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}"  style="width:58px;height:58px;">
-                                    {%endif%}
-                                </a>
-              <div class="media-body" ><p><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title}}</a></p>   
+              <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}" class="pull-left">
+                {% if group.logo %}
+                  <img src="{{file_path(group.logo)}}" alt="{{group.title}}" style="width:58px;height:58px;" >
+                  {%else%}
+                  <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}"  style="width:58px;height:58px;">
+                  {%endif%}
+                </a>
+                <div class="media-body" ><p><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title}}</a></p>
                 <div class="text-muted text-normal">
-                {{group.memberNum}}个成员   
-                {{group.threadNum}}个话题 
-                  <a type="button" class="btn btn-success btn-sm pull-right" href="{{path('group_index',{id:group.id})}}">
-   <span class="glyphicon glyphicon-hand-right"></span> 进入小组 
-  </a>
+                  {{group.memberNum}}个成员
+                  {{group.threadNum}}个话题
+                  <a type="button" class="btn btn-success btn-xs pull-right" href="{{path('group_index',{id:group.id})}}">
+                    <span class="glyphicon glyphicon-hand-right"></span> 进入小组
+                  </a>
                 </div>
                 
               </td>
             </tr>
-            {% endfor %}
-            {% else %}
-            <tr><td>
-           </td></tr>
-            {% endif %}
-            
-          </table>
-                        </div>
+          {% endfor %}
+        {% else %}
+          <tr><td>
+          </td></tr>
+        {% endif %}
+        
+      </table>
+    </div>
+</div>

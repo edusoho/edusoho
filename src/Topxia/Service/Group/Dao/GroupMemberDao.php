@@ -9,6 +9,8 @@ interface GroupMemberDao
 
  	public function searchMembers($conditions,$orderBy,$start,$limit);
 
+ 	public function searchMembersCount($conditions);
+
  	public function getMemberByGroupIdAndUserId($groupId, $userId);
 
  	public function getMembersByUserId($userId);
@@ -16,6 +18,8 @@ interface GroupMemberDao
  	public function getMember($id);
 
  	public function addMember($fields);
+
+ 	public function updateMember($id, $fields);
  
     public function deleteMember($id);
 

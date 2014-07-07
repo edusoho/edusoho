@@ -13,10 +13,16 @@ class GroupMemberDaoImpl extends BaseDao implements GroupMemberDao
     {
         $sql="SELECT * FROM {$this->table} WHERE groupId=? and userId=? LIMIT 1";
 
-        return $this->getConnection()->fetchAssoc($sql,array($groupId,$userId)) ? : array();
+        return $this->getConnection()->fetchAssoc($sql,array($groupId,$userId)) ? : null;
     }
 
-
+    public function searchMembersCount($conditions)
+    {
+        $builder = $this->_createGroupMemberSearchBuilder($conditions)
+                         ->select('count(id)');
+        return $builder->execute()->fetchColumn(0); 
+    }
+    
     public function getMember($id)
     {
         $sql="SELECT * FROM {$this->table} WHERE id=? LIMIT 1";
@@ -51,6 +57,12 @@ class GroupMemberDaoImpl extends BaseDao implements GroupMemberDao
         return $this->getMember($this->getConnection()->lastInsertId());
     }
 
+    public function updateMember($id, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+
+        return $this->getMember($id);
+    }
 
      public function getMembersCountByGroupId($groupId)
      {

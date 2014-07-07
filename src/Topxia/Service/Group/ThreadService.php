@@ -4,18 +4,21 @@ namespace Topxia\Service\Group;
 
 interface ThreadService
 {
-
-    public function getThreadCount($conditions);
-
     public function getThread($id);
+
+    public function getThreadsByIds($ids);
     
     public function addThread($thread);
+
+    public function updateThread($id,$fields);
 
     public function closeThread($threadId);
 
     public function openThread($threadId);
 
     public function searchThreads($conditions,$orderBy,$start, $limit);
+
+    public function searchThreadsCount($conditions);
 
     public function postThread($threadContent,$groupId,$memberId,$threadId);
 

@@ -1,62 +1,41 @@
-{% extends 'TopxiaWebBundle:Group:groupindex.html.twig' %}
-{% block group %}
-<div class="es-row-wrap container-gap userpage-body">
-  <ul class="nav nav-pills userpage-nav clearfix">
-    <li><a href="{{path('group_index',{id:groupinfo.id})}}">小组首页</a></li>
-    <li class="active"><a href="{{path('groupthread',{id:groupinfo.id})}}">讨论区</a></li>
-    <li ><a href="{{path('groupmember',{id:groupinfo.id})}}">小组成员</a></li>
-  </ul>
-  <div class="row">
-    <div class="col-md-8">
-    <div class="page-header clearfix">
-
-      <div class="btn-group-xs pull-right" id="post-action">
-        <a type="button" {% if filters.type=='onlyOwner' %}class="btn btn-default active" href="{{path('groupthread_index',{id:groupinfo.id,threadid:threadMain.id,type:'all',sort:filters.sort})}}"{% else %} class="btn btn-default"  href="{{path('groupthread_index',{id:groupinfo.id,threadid:threadMain.id,type:'onlyOwner',sort:filters.sort})}}" {% endif %}>只看楼主</a>
-        <a type="button" {% if filters.sort=='desc' %}class="btn btn-default active" href="{{path('groupthread_index',{id:groupinfo.id,threadid:threadMain.id,type:filters.type,sort:'asc'})}}"{% else %}class="btn btn-default " href="{{path('groupthread_index',{id:groupinfo.id,threadid:threadMain.id,type:filters.type,sort:'desc'})}}"{% endif %}><span class="glyphicon glyphicon-circle-arrow-down"></span> 倒序查看</a>
-        <a type="button" class="btn btn-default" href="#post-thread-form"><span class="glyphicon glyphicon-comment"></span>  回复({{threadMain.postNum}})</a>
-
-        {% if is_groupmember==2 %}
-        {% if threadMain.isElite==1 %}
-        <a id="elite" type="button" class="btn btn-default" title="取消加精" 
-        href="javascript:"
-        data-url="{{path('groupthread_removeElite',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-minus"></span> 取消加精</a>
-        {% else %}
-        <a id="elite" type="button" class="btn btn-default" title="加精" 
-        href="javascript:" data-url="{{path('groupthread_setElite',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-heart-empty"></span> 加精</a>
-        {% endif %}
-        {% if threadMain.isStick==1 %}
-        <a id="stick" type="button" class="btn btn-default" title="取消置顶" 
-        href="javascript:" data-url="{{path('groupthread_removeStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-remove-sign"></span> 取消置顶</a>
-        {% else %}
-        <a id="stick" type="button" class="btn btn-default" title="置顶" 
-        href="javascript:" data-url="{{path('groupthread_setStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-ok-sign"></span>  置顶</a>
-        {% endif %}
-        {% endif %}
-        {% if user.id==owner.id %}
-        <a id="closeThread" type="button" class="btn btn-default" title="一但关闭话题将删除！确定关闭话题" 
-        href="javascript:" data-url="{{path('groupthread_closeThread',{threadId:threadMain.id,memberId:user.id})}}"><span class="glyphicon glyphicon-remove"></span>  关闭话题</a>
-        {% elseif user.id==groupinfo.ownerId %}
-        <a id="closeThread" type="button" class="btn btn-default" title="一但关闭话题将删除！确定关闭话题" 
-        href="javascript:" data-url="{{path('groupthread_closeThread',{threadId:threadMain.id,memberId:user.id})}}"><span class="glyphicon glyphicon-remove"></span>  关闭话题</a>
-        {% endif %}
-      </div>
-    </div>
-    <div class="clearfix">
-      <h4 style="word-break: break-all;{% if threadMain.isStick==1 %}color:red;{% endif %}" >&nbsp;&nbsp;{{threadMain.title}}{% if threadMain.isElite %}
-                              <span class="label label-warning">精</span>
-                              {% endif %}{% if threadMain.isStick==1 %}
-                              <span class="label label-danger">置顶</span>
-                              {% endif %}</h4>
+{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+{% set script_controller = 'group/group' %}
+{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+{% block content %}
+  {{ web_macro.flash_messages() }}
+  {% include 'TopxiaWebBundle:Group:groupHeader.html.twig' with {
+  'groupinfo':groupinfo,
+  'is_groupmember':is_groupmember,}
+  %}
+  <div class="es-row-wrap container-gap userpage-body">
+  {% include 'TopxiaWebBundle:Group:group.tab.ul.html.twig' with 
+    {'tab':'', }%}
+    <div class="row">
+      <div class="col-md-8">
+        <div class="page-header clearfix">
+          <div class="btn-group-xs pull-right" >
+            <a type="button" {% if filters.type=='onlyOwner' %}class="btn btn-default active" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}"{% else %} class="btn btn-default"  href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}" {% endif %}>只看楼主</a>
+            <a type="button" {% if filters.sort=='desc' %}class="btn btn-default active" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"{% else %}class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"{% endif %}><span class="glyphicon glyphicon-circle-arrow-down"></span> 倒序查看</a>
+            <a type="button" class="btn btn-default" href="#post-thread-form"><span class="glyphicon glyphicon-comment"></span>  回复({{threadMain.postNum}})</a>
+           
+          </div>
+        </div>
+        <div class="clearfix">
+          <h4 style="word-break: break-all;" >{{threadMain.title}}{% if threadMain.isElite %}
+            <span class="label label-warning">精</span>
+          {% endif %}{% if threadMain.isStick==1 %}
+          <span class="label label-danger">置顶</span>
+        {% endif %}</h4>
         <br>
       </div>
-  
-        <table class="table table-hover">
-          {% if paginator.currentPage==1 %}
+      
+      <table class="table table-hover">
+        {% if paginator.currentPage==1 %}
           <tr style="word-break: break-all;" class="thread-list">
             <td >
               <div class="row">
-              <div class="col-md-2">
-              <div class="media"> </div>
+                <div class="col-md-2">
+                  <div class="media"> </div>
                   <div class="media"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:owner.id}) }}">
                     <img src="{{ file_path(owner.largeAvatar, 'avatar-large.png') }}">
                   </a></div>
@@ -64,178 +43,163 @@
                   <div class="media">  {{ web_macro.user_link(owner , 'link-muted ') }}</div>
                   <div class="media"> <span class="label label-danger">楼主</span>
                     {% if groupinfo.ownerId==threadMain.userId %}<span class="label label-info">组长</span>{% endif %}</div>
-                
-              </div>
-              <div class="col-md-10 " >
-                <div class="media"> </div>
-                  <div class="media">
-                    <div class="media-body" >
-                   {{threadMain.content|raw}}
-                    </div></div>
-             
-                
-              </div>
-            </div>
-            </td>
-            
-          </tr>
-          <tr>
-            <td style="border-top:0px;">
-              
-              <div class="text-muted pull-right" ><b>
-                1楼 {{threadMain.createdTime|date('Y-m-d H:i:s')}}  &nbsp;
-                </b>
-              </div>
-            </td>
-          </tr>
-          {% endif %}
-          {% if post %}
-          {% for post in post %}
-          <tr style="word-break: break-all;" class="thread-list">
-            <td>
-              <div class="col-md-2 " >
-                <div class="media"> </div>
-                  <div class="media"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:post.userId}) }}">
-                    <img src="{{ file_path(postMember[post.userId].largeAvatar, 'avatar-large.png') }}">
-                  </a></div>
+                    
+                  </div>
+                  <div class="col-md-10 " >
+                    <div class="media"> </div>
+                    <div class="media">
+                      <div class="media-body" >
+                        {{threadMain.content|raw}}
+         
+                        </div></div>
+                        
+                        
+                      </div>
+                    </div>
+                  </td>
                   
-                  <div class="media">  {{ web_macro.user_link(postMember[post.userId] , 'link-muted ') }}</div>
-                  
-                 
-                  <div class="media"> {% if post.userId==owner.id %} <span class="label label-danger">楼主</span> {% endif %}{% if groupinfo.ownerId==post.userId %}<span class="label label-info">组长</span>{% endif %}</div>
-                  
-
+                </tr>
+                {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3%}
+                           <tr>
+                  <td style="border-top:0px;">
+                   <div class="pull-right" id="post-action">
+                          {% if user.id==owner.id or is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
+                          <a class="btn btn-link" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
+                          {% endif %}
+                          {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
+                            {% if threadMain.isElite==1 %}
+                              <a id="elite"  title="取消加精" class="btn btn-link"
+                                href="javascript:"
+                              data-url="{{path('group_thread_removeElite',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-hand-right"></span> 取消加精</a>
+                            {% else %}
+                              <a id="elite"  title="加精" class="btn btn-link"
+                              href="javascript:" data-url="{{path('group_thread_setElite',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-thumbs-up"></span> 加精</a>
+                            {% endif %}
+                            {% if threadMain.isStick==1 %}
+                               <a id="stick" title="取消置顶" class="btn btn-link"
+                              href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
+                            {% else %}
+                              <a id="stick"  title="置顶" class="btn btn-link"
+                              href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-circle-arrow-up"></span>  置顶</a>
+                            {% endif %}
+                          {% endif %}
+                          {% if user.id==owner.id or is_granted('ROLE_ADMIN') or is_groupmember==3 or is_groupmember==2%}
+                            <a id="closeThread"  title="一但关闭话题将删除！确定关闭话题" class="btn btn-link"
+                            href="javascript:" data-url="{{path('group_thread_closeThread',{threadId:threadMain.id,memberId:user.id})}}"><span class="glyphicon glyphicon-remove-sign"></span> 关闭话题</a>
+                          {% endif %}
+                        </div>
+                  </td>
+                </tr>
+                {% else %}
+                 <tr>
+                  <td style="border-top:0px;">
+                    
+                    <div class="text-muted pull-right" ><b>
+                      1楼 {{threadMain.createdTime|date('Y-m-d H:i:s')}}  &nbsp;
+                      </b>
+                    </div>
+                  </td>
+                </tr>
+                {% endif %}
                
-              </div>
-              <div class="col-md-10" >
-                <div class="media"> </div>
-                  <div class="media"  >
-                    <div class="media-body" >
-                      {{post.content|raw}}
+              {% endif %}
+              {% if post %}
+                {% for post in post %}
+                  <tr style="word-break: break-all;" class="thread-list" id="post-{{post.id}}">
+                    <td>
+                      <div class="col-md-2 " >
+                        <div class="media"> </div>
+                        <div class="media"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:post.userId}) }}">
+                          <img src="{{ file_path(postMember[post.userId].largeAvatar, 'avatar-large.png') }}">
+                        </a></div>
+                        
+                        <div class="media">  {{ web_macro.user_link(postMember[post.userId] , 'link-muted ') }}</div>
+                        
+                        
+                        <div class="media"> {% if post.userId==owner.id %} <span class="label label-danger">楼主</span> {% endif %}{% if groupinfo.ownerId==post.userId %}<span class="label label-info">组长</span>{% endif %}</div>
+                        
+                        
+                      </div>
+                      <div class="col-md-10" >
+                        <div class="media"> </div>
+                        <div class="media"  >
+                          <div class="media-body" >
+                            {{post.content|raw}}
+                          </div>
+                        </div>
+                        
+                        
+                        
+                      </div>
+                      
+                    </div>
+                    {% if user.id==post.userId%}
+                      <div class="course-view">
+                        <div class="deletePost"><a title="确定删除这条回复"  id="deletePostByself"
+                        href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a>
+                        
+                      </div>
+                    </div>
+                  {% elseif user.id==owner.id %}
+                    <div class="course-view" >
+                      <div class="deletePost"><a title="确定删除这条回复"  id="deletePostBythreadowner"
+                      href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a>
                     </div>
                   </div>
+                {% elseif is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
+                  <div class="course-view">
+                    <div class="deletePost">
+                      <a title="确定删除这条回复"  id="deletePostBygroupowner"
+                      href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a>
+                    </div>
+                  </div>
+                {% endif %}
+              </td>
               
+            </tr>
+            <tr>
+              <td style="border-top:0px;">
                 
                 
-              </div>
+                <div class="text-muted pull-right" ><b>
+                  {% if filters.sort=='desc' %}
+                    {{ (postCount+1)-10*(paginator.currentPage-1)-loop.index0 }}
+                  {% else %}
+                    {{ (loop.index+1)+10*(paginator.currentPage-1) }}
+                  {% endif %}
+                  楼 {{post.createdTime|date('Y-m-d H:i:s')}} </b> &nbsp;
+                  
+                </td>
+              </tr>
               
-            </div>
-            {% if user.id==post.userId%}
-             <div class="course-view">
-          <div class="btn-group">
-  <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-    编辑<span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" role="menu">
-    <li class="deletePost"><a title="确定删除这条回复"  id="deletePostByself" 
-        href="javascript:" data-url="{{path('groupthread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a></li>
-  </ul>
-</div> 
-          </div>
-          {% elseif user.id==owner.id %}
-          <div class="course-view" >
-          <div class="btn-group">
-  <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-    编辑<span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" role="menu">
-    <li class="deletePost"><a title="确定删除这条回复"  id="deletePostBythreadowner"
-        href="javascript:" data-url="{{path('groupthread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a></li>
-  </ul>
-</div> 
-          </div>
-           {% elseif user.id==groupinfo.ownerId %}
-           <div class="course-view">
-          <div class="btn-group">
-  <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-    编辑<span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" role="menu">
-    <li class="deletePost"><a title="确定删除这条回复"  id="deletePostBygroupowner" 
-        href="javascript:" data-url="{{path('groupthread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a></li>
-  </ul>
-</div> 
-          </div>
-          {% elseif is_granted('ROLE_ADMIN') %}
-
-          <div class="course-view">
-          <div class="btn-group">
-  <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-    编辑<span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" role="menu">
-    <li class="deletePost"><a title="确定删除这条回复"  id="deletePostBygroupowner" 
-        href="javascript:" data-url="{{path('groupthread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a></li>
-  </ul>
-</div> 
-          </div>
+            {% endfor %}
           {% endif %}
-        </td>
-        
-      </tr>
-      <tr>
-        <td style="border-top:0px;">
+        </table>
+        <div class="pull-right">{{ web_macro.paginator(paginator) }}</div>
+        <div class="page-header clearfix">
           
-          
-          <div class="text-muted pull-right" ><b>
-            {% if filters.sort=='desc' %}
-            {{ (postCount+1)-10*(paginator.currentPage-1)-loop.index0 }}
-            {% else %}
-            {{ (loop.index+1)+10*(paginator.currentPage-1) }}
-            {% endif %}
-            楼 {{post.createdTime|date('Y-m-d H:i:s')}} </b> &nbsp;
-            
-          </td>
-        </tr>
-        
-        {% endfor %}
-        {% endif %}
-      </table>
-      <div class="pull-right">{{ web_macro.paginator(paginator) }}</div>  
-      <div class="page-header clearfix">
-        
+        </div>
+        <form id="post-thread-form" class="form-horizontal" method="post" action="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="post_content"><span class="glyphicon glyphicon-comment"></span> 回复内容</label>
+            <div class="col-md-9 controls">
+              <textarea name="content" rows="10" id="post_content" class="form-control"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5 col-md-offset-2">
+              <button id="post-thread-btn" data-submiting-text="正在回复" type="submit" class="btn btn-primary">回复</button>
+            </div>
+          </div><br>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </form>
       </div>
-      <form id="post-thread-form" class="form-horizontal" method="post" >
-        <div class="form-group">
-          <label class="col-md-2 control-label" for="post_content"><span class="glyphicon glyphicon-comment"></span> 回复内容</label>
-
-          <div class="col-md-9 controls">
-            <textarea name="content" rows="10" id="post_content" class="form-control"></textarea>
-          </div>
-        </div>
-        {% if checkCodeStatus==1 %}
-         <div class="form-group">
-          <label class="col-md-2 control-label" for="post_check">验证码</label>
-        
-          <div class="col-md-5 controls">
-            <input name="checkCode" rows="10" id="post_check" class="form-control">
-          </div>
-           <div class="col-md-5 ">
-              <img src="{{path('checkcode')}}">
-          </div>
-        </div>
+      <div class="col-md-4">
+        {% if activeMembers %}
+          
+          {% include 'TopxiaWebBundle:Group:activeMember.list.html.twig' with {activeMembers:activeMembers} %}
         {% endif %}
-
-        <div class="row">
-          <div class="col-md-5 col-md-offset-2">
-            <button id="post-thread-btn" data-submiting-text="正在回复" type="submit" class="btn btn-primary">回复</button>
-          </div>
-        </div><br>
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-      </form>
+      </div>
     </div>
-       <div class="col-md-4">
-         {% if groupmember_activeinfo %}
-       
-      {% include 'TopxiaWebBundle:Group:activeMember.list.html.twig' with {groupmember_activeinfo:groupmember_activeinfo} %}
-    {% endif %}
-                       </div>
-       <div class="col-md-4">
-                {% if deserveGroup %}
-       
-      {% include 'TopxiaWebBundle:Group:deserveGroup.list.html.twig' with {deserveGroup:deserveGroup} %}
-    {% endif %}
-          </div>
   </div>
-    </div>
-  {% endblock %}
+{% endblock %}

@@ -11,7 +11,7 @@ class GroupController extends BaseController
     {
 		$fields = $request->query->all();
         $conditions = array(
-            'status'=>'',
+            'enum'=>'',
             'title'=>'',
             'ownerName'=>'',
         );
@@ -46,7 +46,7 @@ class GroupController extends BaseController
     {
         $fields = $request->query->all();
         $conditions = array(
-            'status'=>'',
+            'enum'=>'',
             'title'=>'',
             'groupName',
         );
@@ -55,13 +55,13 @@ class GroupController extends BaseController
 
             $threadIds=$request->request->all();
 
-            if($threadIds['status']=='open'&&isset($threadIds['ID'])){
+            if($threadIds['enum']=='open'&&isset($threadIds['ID'])){
                 foreach ($threadIds['ID'] as $threadId) {
                 $this->postAction($threadId,'openThread');
 
                 }
 
-            }elseif($threadIds['status']=='close'&&isset($threadIds['ID'])){
+            }elseif($threadIds['enum']=='close'&&isset($threadIds['ID'])){
 
                 foreach ($threadIds['ID'] as $threadId) {
                 
@@ -77,7 +77,7 @@ class GroupController extends BaseController
         
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getThreadService()->getThreadCount($conditions),
+            $this->getThreadService()->searchThreadsCount($conditions),
             10
         );
         $threadinfo=$this->getThreadService()->searchThreads   (

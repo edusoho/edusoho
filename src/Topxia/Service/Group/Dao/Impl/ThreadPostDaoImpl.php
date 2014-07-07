@@ -16,7 +16,7 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
     {
         $sql="SELECT * from {$this->table} where id=? LIMIT 1";
 
-        return $this->getConnection()->fetchAssoc($sql,array($id)) ? : array();
+        return $this->getConnection()->fetchAssoc($sql,array($id)) ? : null;
     }
 
     public function addPost($fields)
@@ -79,6 +79,7 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table,$this->table)
             ->andWhere('userId = :userId')
+            ->andWhere('id < :id')
             ->andWhere('threadId = :threadId');
         return $builder;
     }

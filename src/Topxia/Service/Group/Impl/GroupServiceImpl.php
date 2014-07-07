@@ -32,23 +32,37 @@ class GroupServiceImpl extends BaseService implements GroupService {
         return $this->getGroupDao()->searchGroups($conditions,$orderBy,$start,$limit);
     }
 
-    public function searchMembersCount()
+    public function searchMembersCount($conditions)
     {
+         $count= $this->getGroupMemberDao()->searchMembersCount($conditions);
+         return $count;
 
     }
 
     public function updateGroup($id,$fields)
-    {
+    {   
+        if(isset($fields['about'])){
+            $fields['about']=$this->purifyHtml($fields['about']);
+        }
         $group=$this->getGroupDao()->updateGroup($id,$fields);
         return $group;
     }
-
-    public function addGroup($group)
+    public function updateMember($id, $fields)
     {
-        $user = $this->getCurrentUser();
+        return $this->getGroupMemberDao()->updateMember($id, $fields);
+    }
+
+    public function addGroup($user,$group)
+    {
         if (empty($group['title'])) {
             throw $this->createServiceException("小组名称不能为空！");
         }
+        if(isset($group['about'])){
+            $group['about']=$this->purifyHtml($group['about']);
+        }
+        $group['ownerId']=$user['id'];
+        $group['memberNum']=1;
+        $group['createdTime']=time();
         $group = $this->getGroupDao()->addGroup($group);
         $member = array(
             'groupId' => $group['id'],
@@ -88,7 +102,7 @@ class GroupServiceImpl extends BaseService implements GroupService {
     {
         
         $group=$this->getGroup($id);
-        $mediumFileRecord=$this->changeLogo($filePath,1140,229,$options,$group['backgroundLogo']);
+        $mediumFileRecord=$this->changeLogo($filePath,1140,279,$options,$group['backgroundLogo']);
 
         return  $this->getGroupDao()->updateGroup($id, array(
             'backgroundlogo' => $mediumFileRecord['uri'],
@@ -96,10 +110,8 @@ class GroupServiceImpl extends BaseService implements GroupService {
     }
 
 
-    public function joinGroup($groupId) 
+    public function joinGroup($user,$groupId) 
     {
-        $user = $this->getCurrentUser();
-
         $group= $this->getGroup($groupId);
         if (empty($group)) {
             throw $this->createServiceException("小组不存在, 加入小组失败！");
@@ -121,10 +133,8 @@ class GroupServiceImpl extends BaseService implements GroupService {
         return $member;
     }
         
-    public function exitGroup($groupId)
+    public function exitGroup($user,$groupId)
     {
-        $user = $this->getCurrentUser();
-
         $group= $this->getGroup($groupId);
         if (empty($group)) {
             throw $this->createServiceException("小组不存在,退出小组失败！");
@@ -155,9 +165,9 @@ class GroupServiceImpl extends BaseService implements GroupService {
         return array();
     }
 
-    public function findGroupsByTitle($title)
+    public function findGroupByTitle($title)
     {
-        return $this->getGroupDao()->getGroupsByTitle($title);
+        return $this->getGroupDao()->getGroupByTitle($title);
     }
 
     public function searchMembers($conditions, $orderBy, $start, $limit)
@@ -176,6 +186,12 @@ class GroupServiceImpl extends BaseService implements GroupService {
     {
         $group=$this->getGroupDao()->getGroup($id);
         return $group['ownerId']==$userId ? true : false;
+    }
+
+    public function isAdmin($groupId, $userId) 
+    {
+        $member=$this->getGroupMemberDao()->getMemberByGroupIdAndUserId($groupId, $userId);
+        return $member['role']=="admin" ? true : false;
     }
 
     public function isMember($groupId, $userId) 
@@ -200,7 +216,7 @@ class GroupServiceImpl extends BaseService implements GroupService {
         $this->getGroupDao()->updateGroup($groupId,array('memberNum'=>$groupMemberNum));
     }
 
-    public function waveGroup($id,$field, $diff)
+    public function waveGroup($id, $field, $diff)
     {
         return $this->getGroupDao()->waveGroup($id,$field, $diff);
     }
@@ -215,7 +231,7 @@ class GroupServiceImpl extends BaseService implements GroupService {
         
     }
 
-    public function deleteMemberByGroupIdAndUserId($userId,$groupId)
+    public function deleteMemberByGroupIdAndUserId($groupId,$userId)
     {
         $member=$this->getGroupMemberDao()->getMemberByGroupIdAndUserId($groupId,$userId);
         $this->getGroupMemberDao()->deleteMember($member['id']); 

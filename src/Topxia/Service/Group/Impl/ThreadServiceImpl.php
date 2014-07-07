@@ -15,7 +15,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadDao()->getThread($id);
     }
 
-    public function getThreadCount($conditions)
+    public function getThreadsByIds($ids)
+    {
+        $threads=$this->getThreadDao()->getThreadsByIds($ids);
+        return ArrayToolkit::index($threads, 'id');
+    }
+
+    public function searchThreadsCount($conditions)
     {
         $conditions=$this->prepareThreadConditions($conditions);
         $count=$this->getThreadDao()->searchThreadsCount($conditions);
@@ -30,8 +36,18 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     public function addThread($thread) 
     {     
         if (empty($thread['title'])) {
-            throw $this->createServiceException("标题名称为空！");
+            throw $this->createServiceException("标题名称不能为空！");
         }
+        if (empty($thread['content'])) {
+            throw $this->createServiceException("话题内容不能为空！");
+        }
+        if (empty($thread['groupId'])) {
+            throw $this->createServiceException("小组Id不能为空！");
+        }
+        if (empty($thread['userId'])) {
+            throw $this->createServiceException("用户ID不能为空！");
+        }
+        $thread['createdTime']=time();
         $thread=$this->getThreadDao()->addThread($thread);
 
         $this->getGroupService()->waveGroup($thread['groupId'],'threadNum',+1);
@@ -39,6 +55,18 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         $this->getGroupService()->waveMember($thread['groupId'],$thread['userId'],'threadNum',+1);
         
         return $thread;
+    }
+
+    public function updateThread($id,$fields)
+    {
+        if (empty($fields['title'])) {
+            throw $this->createServiceException("标题名称不能为空！");
+        }
+        if (empty($fields['content'])) {
+            throw $this->createServiceException("话题内容不能为空！");
+        }
+
+        return $this->getThreadDao()->updateThread($id,$fields);
     }
 
     public function closeThread($threadId)
@@ -59,10 +87,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     public function postThread($threadContent,$groupId,$memberId,$threadId)
     {
-        $user=$this->getCurrentUser();
         if (empty($threadContent['content'])) {
-            throw $this->createServiceException("回复内容为空！");
+            throw $this->createServiceException("回复内容不能为空！");
         }
+        $threadContent['content']=$this->purifyHtml($threadContent['content']);
+        $threadContent['userId']=$memberId;
+        $threadContent['createdTime']=time();
+        $threadContent['threadId']=$threadId;
         $post=$this->getThreadPostDao()->addPost($threadContent);  
         $this->getThreadDao()->updateThread($threadId,array('lastPostMemberId'=>$memberId,'lastPostTime'=>time()));
         $this->getGroupService()->waveGroup($groupId,'postNum',+1);
@@ -159,7 +190,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
      private function prepareThreadConditions($conditions)
      {
         if(isset($conditions['groupName'])&&$conditions['groupName']!==""){
-            $group=$this->getGroupService()->findGroupsByTitle($conditions['groupName']);
+            $group=$this->getGroupService()->findGroupByTitle($conditions['groupName']);
             if(!empty($group)){
               $conditions['groupId']=$group[0]['id'];  
             }   

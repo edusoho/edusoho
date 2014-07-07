@@ -9,8 +9,8 @@
 
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
-      <select class="form-control" name="status">
-        {{ select_options(dict('groupstatus'), app.request.query.get('status'), '话题状态') }}
+      <select class="form-control" name="enum">
+        {{ select_options(dict('groupstatus'), app.request.query.get('enum'), '话题状态') }}
       </select>
     </div>
 

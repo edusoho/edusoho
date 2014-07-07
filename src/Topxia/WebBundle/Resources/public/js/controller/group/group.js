@@ -34,35 +34,10 @@
            
             
         });
-        validator_thread.addItem({
-            element: '[name="checkCode"]',
-            required: true,
-        });
+
 
         }
-        if($('#group_about').length>0){
-            var editor = EditorFactory.create('#group_about', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
-            var validator = new Validator({
-            element: '#user-group-form',
-            failSilently: true,
-            onFormValidated: function(error){
-                if (error) {
-                    return false;
-                }
-                $('#group-save-btn').button('submiting').addClass('disabled');
-            }
-        });
         
-        validator.addItem({
-            element: '[name="group[grouptitle]"]',
-            required: true,
-            rule: 'minlength{min:2} maxlength{max:12}',
-            errormessageUrl: '长度为2-12位'
-           
-            
-        });
-
-           }
         if($('#post_content').length>0){
         var editor_thread = EditorFactory.create('#post_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
         var validator_thread = new Validator({
@@ -73,24 +48,34 @@
                 if (error) {
                     return false;
                 }
+              
                 $('#post-thread-btn').button('submiting').addClass('disabled');
 
-                $.post(window.location.href,$("form").serialize(), function(status) {
+                $.post($("form").attr('action'),$("form").serialize(), function(url) {
+                    if(url){
+                        href=window.location.href;
+                        var hrefArray=new Array();
+                        hrefArray=href.split('#');
+                        hrefArray=hrefArray[0].split('?');
+                        var olderHref=hrefArray[1];
+                        newHrefArray=url.split('#');
+                        newHrefArray=newHrefArray[0].split('?');
+                        console.log(olderHref);
+                        console.log(newHrefArray[1]);
+                        if(newHrefArray[1]==olderHref){
+                            window.location.reload();
+                        }else{
+                            window.location.href=url;
+                        }
 
-                    if(status=='error'){
-                        Notify.danger('验证码错误！');
-                        
-                    }else{
-                        Notify.success('回复成功！');
-                        setTimeout(function(){window.location.reload();},1500); 
-                        
-
-                        
                     }
-                    
+                    else{
+                            window.location.reload();
+                    }
+                  
                    
                 }).error(function(){
-                  
+                  console.log(3);
                 });
                
             }
@@ -99,13 +84,6 @@
             element: '[name="content"]',
             required: true,
             rule: 'minlength{min:2}',
-           
-            
-        });
-        validator_thread.addItem({
-            element: '[name="checkCode"]',
-            required: true,
-
            
             
         });
@@ -130,6 +108,14 @@
             })
 
         }
+        if($('#exit-btn').length>0){
+        $('#exit-btn').click(function(){
+            if (!confirm( '真的要退出该小组？您在该小组的信息将删除！')) {
+                    return false;
+            }
+        })
+
+        }
         if($('.deletePost').length>0){
        
             $('.deletePost').on('click','#deletePostByself,#deletePostBythreadowner,#deletePostBygroupowner',function(){
@@ -145,6 +131,31 @@
             })
 
         }
+
+        if($('#group_about').length>0){
+            var editor = EditorFactory.create('#group_about', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+            var validator = new Validator({
+            element: '#user-group-form',
+            failSilently: true,
+            onFormValidated: function(error){
+                if (error) {
+                    return false;
+                }
+                $('#group-save-btn').button('submiting').addClass('disabled');
+            }
+        });
+        
+        validator.addItem({
+            element: '[name="group[grouptitle]"]',
+            required: true,
+            rule: 'minlength{min:2} maxlength{max:12}',
+            errormessageUrl: '长度为2-12位'
+           
+            
+        });
+
+           }
+    
         
        
     };

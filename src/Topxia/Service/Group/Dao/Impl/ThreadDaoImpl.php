@@ -14,9 +14,21 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     public function getThread($id)
     {
         $sql="SELECT * from {$this->table} where id=? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql,array($id)) ? : array();
+        return $this->getConnection()->fetchAssoc($sql,array($id)) ? : null;
 
     }
+
+    public function getThreadsByIds($ids)
+    {
+        if(empty($ids)) { 
+            return array(); 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
     public function addThread($thread)
     {
     	$thread = $this->createSerializer()->serialize($thread, $this->serializeFields);
@@ -89,6 +101,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             ->andWhere('groupId = :groupId') 
             ->andWhere('createdTime > :createdTime')
             ->andWhere('isElite = :isElite')
+            ->andWhere('userId = :userId')
             ->andWhere('enum = :enum')
             ->andWhere('title like :title'); 
         return $builder;

@@ -33,7 +33,7 @@ class GroupDaoImpl extends BaseDao implements GroupDao
     public function getGroup($id)
     {
         $sql = "SELECT * FROM {$this->table} where id=? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : array();
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
     public function addGroup($group)
@@ -84,7 +84,7 @@ class GroupDaoImpl extends BaseDao implements GroupDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function getGroupsByTitle($title)
+    public function getGroupByTitle($title)
     {
         $sql="SELECT * FROM {$this->table} WHERE title=? ";
 

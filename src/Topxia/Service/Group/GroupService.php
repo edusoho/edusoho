@@ -14,7 +14,7 @@ interface GroupService
 
     public function updateGroup($id, $fields);
 
-    public function addGroup($group);
+    public function addGroup($user,$group);
 
     public function closeGroup($id);
 
@@ -24,21 +24,25 @@ interface GroupService
 
     public function changeGroupBackgroundLogo($id, $pictureFilePath, $options);
 
-    public function joinGroup($id);
+    public function joinGroup($user,$id);
 
-    public function exitGroup($id);
+    public function exitGroup($user,$id);
 
     public function findGroupsByUserId($userId);
 
-    public function findGroupsByTitle($title);
+    public function findGroupByTitle($title);
 
     public function searchMembers($conditions, $orderBy, $start, $limit);
 
-    public function searchMembersCount();
+    public function searchMembersCount($conditions);
 
     public function isOwner($id,$userId);
 
+    public function isAdmin($id,$userId);
+
     public function isMember($id, $userId);
+
+    public function updateMember($id, $fields);
 
     public function getMembersCountByGroupId($groupId);
 

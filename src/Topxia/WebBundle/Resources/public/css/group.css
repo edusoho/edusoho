@@ -1,10 +1,4 @@
-.col-xs-2 img{
-   
-    border: 0px none;
-    width: 58px;
-    height: 58px;
 
-}
 .grouplist img{
    
     border: 0px none;
@@ -15,7 +9,7 @@
 
 }
 .grouplist{
-    height:120px;width: 105px; float: left;text-align:center;
+    height:110px;width: 76px; float: left;text-align:center;
 }
 
 .jumbotron{
