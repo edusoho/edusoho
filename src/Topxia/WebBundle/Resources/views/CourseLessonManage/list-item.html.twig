@@ -31,6 +31,10 @@
 		  <span class="text-muted">{{ lesson.startTime|data_format }}</span>
 		{% endif %}
 
+		{% if lesson.giveCredit > 0 %}
+		  <span class="text-muted">({{ lesson.giveCredit }}学分)</span>
+		{% endif %}
+
 		{% if lesson.type != 'testpaper' %}
 			{% set mediaTypeName = lesson.type == 'video' ? '视频' : (lesson.type == 'audio' ? '音频' : '文件') %}
 			{% if mediaStatus == 'waiting' %}
