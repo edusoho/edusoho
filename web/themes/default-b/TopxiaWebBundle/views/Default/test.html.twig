@@ -1,10 +1,11 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
 
-{% for article in data('LatestArticles',{count:'8'}) %}
+{% for course in data('PopularCourses',{count:'8', type:'studentNum'}) %}
 
-      {% if article %}
-{{ article.category.name }}
+      {% if course %}
+{{ course.title }}
+{{ course.price }}
        {# {% set user = thread.user %}
        {% set latestPostUser = thread.latestPostUser %}
         {{ web_macro.user_link(user, 'text-muted') }}
