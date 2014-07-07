@@ -888,6 +888,27 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $liveStudentCapacity - $timeSlotOccupiedStuNums;
 	}
 
+	public function canLearnLesson($courseId, $lessonId)
+	{
+		list($course, $member) = $this->tryTakeCourse($courseId);
+		$lesson = $this->getCourseLesson($courseId, $lessonId);
+		if (empty($lesson) or $lesson['courseId']!=$courseId) {
+			throw $this->createNotFoundException();
+		}
+		$user = $this->getCurrentUser();
+
+
+		if (empty($lesson['requireCredit'])) {
+			return array('status' => 'yes');
+		}
+
+		if ($member['credit'] >= $lesson['requireCredit']) {
+			return array('status' => 'yes');
+		}
+
+		return array('status' => 'no', 'message' => sprintf('本课时需要%s学分才能学习，您当前学分为%s分。', $lesson['requireCredit'], $member['credit']));
+	}
+
 	public function startLearnLesson($courseId, $lessonId)
 	{
 		list($course, $member) = $this->tryTakeCourse($courseId);
