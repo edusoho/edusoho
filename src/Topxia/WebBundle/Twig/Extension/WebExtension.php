@@ -55,6 +55,7 @@ class WebExtension extends \Twig_Extension
             'upload_max_filesize' => new \Twig_Function_Method($this, 'getUploadMaxFilesize') ,
             'js_paths' => new \Twig_Function_Method($this, 'getJsPaths') ,
             'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
+            'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
         );
     }
 
@@ -93,6 +94,12 @@ class WebExtension extends \Twig_Extension
         }
 
         return $value;
+    }
+
+    public function isFeatureEnabled($feature)
+    {
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+        return in_array($feature, $features);
     }
     
     public function dataformatFilter ($time) {
