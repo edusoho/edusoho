@@ -54,6 +54,7 @@ class WebExtension extends \Twig_Extension
             'dict_text' => new \Twig_Function_Method($this, 'getDictText', array('is_safe' => array('html'))) ,
             'upload_max_filesize' => new \Twig_Function_Method($this, 'getUploadMaxFilesize') ,
             'js_paths' => new \Twig_Function_Method($this, 'getJsPaths') ,
+            'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
         );
     }
 
@@ -78,6 +79,20 @@ class WebExtension extends \Twig_Extension
         }
 
         return $paths;
+    }
+
+    public function getContextValue($context, $key)
+    {
+        $keys = explode('.', $key);
+        $value = $context;
+        foreach ($keys as $key) {
+            if (!isset($value[$key])) {
+                throw new \InvalidArgumentException(sprintf("Key `%s` is not in context with %s", $key, implode(array_keys($context), ', ')) );
+            }
+            $value = $value[$key];
+        }
+
+        return $value;
     }
     
     public function dataformatFilter ($time) {
