@@ -68,9 +68,18 @@ class CourseHomeworkManageController extends BaseController
 		}
 
 		$homeworkItems = $this->getHomeworkService()->findHomeworkItemsByHomeworkId($homeworkId);
-		$questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($homeworkItems, 'questionId'));
+        $homeworkItemsArray = array();
+
+        foreach ($homeworkItems as $key => $homeworkItem) {
+           if ($homeworkItem['parentId'] == "0") {
+              $homeworkItemsArray[] = $homeworkItem;
+           }
+        }
         
-		if ($request->getMethod() == 'POST') {
+        $homeworkItems = $homeworkItemsArray;
+		$questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($homeworkItems, 'questionId'));
+		
+        if ($request->getMethod() == 'POST') {
 			
 			$fields = $request->request->all();
 			$homework = $this->getHomeworkService()->updateHomework($homeworkId, $fields);

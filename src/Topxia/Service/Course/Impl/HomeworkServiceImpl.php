@@ -285,14 +285,15 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     {
         $items = $this->getHomeworkItemDao()->findItemsByHomeworkId($homeworkId);
         $indexdItems = ArrayToolkit::index($items, 'questionId');
-
         $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
 
         $validQuestionIds = array();
 
         foreach ($indexdItems as $index => &$item) {
+   
             $item['question'] = empty($questions[$item['questionId']]) ? null : $questions[$item['questionId']];
             if (empty($item['parentId'])) {
+                $indexdItems[$index] = $item;
                 continue;
             }
 
@@ -303,7 +304,6 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             $indexdItems[$item['parentId']]['subItems'][] = $item;
             unset($indexdItems[$item['questionId']]);
         }
-
         $set = array(
             'items' => array_values($indexdItems),
             'questionIds' => array(),
@@ -341,12 +341,43 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
 	private function addHomeworkItems($homeworkId,$excludeIds)
 	{
+        $homeworkItems = array();
+        $homeworkItemsSub = array();
+        $includeItemsSubIds = array();
+        $index = 1;
+
 		foreach ($excludeIds as $key => $excludeId) {
-			$items['seq'] = $key+1;
+			$items['seq'] = $index;
 			$items['questionId'] = $excludeId;
 			$items['homeworkId'] = $homeworkId;
-			$this->getHomeworkItemDao()->addItem($items);
+			$homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
+            $index++;
 		}
+
+        foreach ($homeworkItems as $key => $homeworkItem) {
+
+            $questions = $this->getQuestionService()->findQuestionsByParentId($homeworkItem['questionId']);
+
+            if (!empty($questions)) {
+                foreach ($questions as $key => $question) {
+                   $includeItemsSubIds[] = $homeworkItem['questionId']."-".$question['id'];
+                }
+            }
+
+        }
+
+        $index -= 1;
+
+        foreach ($includeItemsSubIds as $key => $includeItemsSubId) {
+            $includeItemsSubIdArr = explode("-", $includeItemsSubId);
+            $items['seq'] = $index;
+            $items['questionId'] = $includeItemsSubIdArr[1];
+            $items['parentId'] = $includeItemsSubIdArr[0];
+            $items['homeworkId'] = $homeworkId;
+            $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
+            $index++;
+        }
+
 	}
 
     private function deleteHomeworkItemsByHomeworkId($homeworkId)
