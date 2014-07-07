@@ -13,8 +13,8 @@ class Version20140707115705 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE IF EXISTS `exercise_item`;')
-        $this->addSql('DROP TABLE IF EXISTS `exercise_result`;')
+        $this->addSql('DROP TABLE IF EXISTS `exercise_item`;');
+        $this->addSql('DROP TABLE IF EXISTS `exercise_result`;');
 
     }
 
