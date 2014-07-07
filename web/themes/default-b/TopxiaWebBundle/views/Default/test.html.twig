@@ -3,8 +3,8 @@
 
 {% for article in data('LatestArticles',{count:'8'}) %}
 
-      {% if thread %}
-
+      {% if article %}
+{{ article.category.name }}
        {# {% set user = thread.user %}
        {% set latestPostUser = thread.latestPostUser %}
         {{ web_macro.user_link(user, 'text-muted') }}
