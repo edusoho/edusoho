@@ -305,9 +305,12 @@ class CourseLessonManageController extends BaseController
 
     	}
 
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
 			'course' => $course,
 			'paperOptions' => $paperOptions,
+            'features' => $features,
 		));
 	}
 
@@ -345,10 +348,13 @@ class CourseLessonManageController extends BaseController
             ));
         }
 
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
         return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
             'paperOptions' => $paperOptions,
+            'features' => $features,
         ));
 
 	}
