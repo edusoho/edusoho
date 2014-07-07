@@ -287,6 +287,7 @@ class HomeworkServiceTest extends BaseTestCase
     {
         return count(explode(',', $items));
     }
+    
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');

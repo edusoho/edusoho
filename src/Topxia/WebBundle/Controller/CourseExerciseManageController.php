@@ -30,7 +30,7 @@ class CourseExerciseManageController extends BaseController
 		list($course, $lesson) = $this->getExerciseCourseAndLesson($courseId, $lessonId);
 
         $exercise = $this->getExerciseService()->getExercise($id);
-        if (empty($exercise)) {
+        if(empty($exercise)) {
         	throw $this->createNotFoundException("练习(#{$id})不存在！");
         }
 
