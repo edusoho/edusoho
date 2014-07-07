@@ -176,7 +176,6 @@ class CourseHomeworkManageController extends BaseController
             $conditions['stem'] = $conditions['keyword'];
         }
 
-
         $replace = empty($conditions['replace']) ? '' : $conditions['replace'];
 
         $paginator = new Paginator(
