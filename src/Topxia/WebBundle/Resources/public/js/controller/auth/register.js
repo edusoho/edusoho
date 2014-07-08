@@ -3,8 +3,9 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
+        var $form = $('#register-form');
         var validator = new Validator({
-            element: '#register-form',
+            element: $form,
             onFormValidated: function(error, results, $form) {
                 if (error) {
                     return false;
@@ -42,6 +43,23 @@ define(function(require, exports, module) {
             element: '#user_terms',
             required: true,
             errormessageRequired: '勾选同意此服务协议，才能继续注册'
+        });
+
+        validator.addItem({
+            element: '[name="truename"]',
+            required: $form.find('[name="truename"]').attr('required') == 'required'
+        });
+
+        validator.addItem({
+            element: '[name="mobile"]',
+            required: $form.find('[name="mobile"]').attr('required') == 'required',
+            rule: 'mobile'
+        });
+
+        validator.addItem({
+            element: '[name="idcard"]',
+            required: $form.find('[name="idcard"]').attr('required') == 'required',
+            rule: 'idcard'
         });
 
     };

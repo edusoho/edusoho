@@ -103,8 +103,11 @@ class WebExtension extends \Twig_Extension
         return in_array($feature, $features);
     }
 
-    public function getParameter($name)
+    public function getParameter($name, $default = null)
     {
+        if (!$this->container->hasParameter($name)) {
+            return $default;
+        }
         return $this->container->getParameter($name);
     }
 
