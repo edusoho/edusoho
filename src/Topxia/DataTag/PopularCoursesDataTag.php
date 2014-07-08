@@ -37,7 +37,7 @@ class PopularCoursesDataTag extends CourseBaseDataTag implements DataTag
             $conditions = array('status' => 'published', 'categoryId' => $arguments['categoryId']);
         }
 
-        if (isset($conditions['price']) || $conditions['price'] == true) {
+        if (isset($arguments['price'])) {
             $conditions['notFree'] = true;
         } else {
             $conditions['price'] = '0.00';
