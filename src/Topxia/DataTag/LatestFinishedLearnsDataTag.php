@@ -40,7 +40,7 @@ class LatestFinishedLearnsDataTag extends BaseDataTag implements DataTag
                 $learns[$key]['lesson'] = $lessons[$learn['lessonId']];
             }
         }
-var_dump($learns);exit();
+
         return $learns;
     }
 
