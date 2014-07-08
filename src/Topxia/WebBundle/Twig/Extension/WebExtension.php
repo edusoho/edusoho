@@ -56,6 +56,7 @@ class WebExtension extends \Twig_Extension
             'js_paths' => new \Twig_Function_Method($this, 'getJsPaths') ,
             'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
+            'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
         );
     }
 
@@ -101,7 +102,12 @@ class WebExtension extends \Twig_Extension
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
         return in_array($feature, $features);
     }
-    
+
+    public function getParameter($name)
+    {
+        return $this->container->getParameter($name);
+    }
+
     public function dataformatFilter ($time) {
         if (empty($time)) {
             return ;
