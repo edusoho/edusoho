@@ -1,4 +1,4 @@
-{% if is_feature_enabled('hide_testpaper_resule') and paperResult.status == 'finished' and not app.user.isTeacher() %}
+{% if is_feature_enabled('hide_testpaper_result') and paperResult.status == 'finished' and not app.user.isTeacher() %}
 
 {% else %}
 

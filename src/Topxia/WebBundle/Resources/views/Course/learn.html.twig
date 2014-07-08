@@ -15,7 +15,8 @@
     <div class="container lesson-dashboard" id="lesson-dashboard"
          data-course-id="{{ course.id }}"
          data-course-uri="{{ path('course_show', {id:course.id}) }}"
-         data-dashboard-uri="{{ path('course_learn', {id:course.id}) }}">
+         data-dashboard-uri="{{ path('course_learn', {id:course.id}) }}"
+         data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
       <div class="dashboard-content">
          <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> 返回课程</a>
          <a class="btn btn-primary  nav-btn prev-lesson-btn" href="javascript:" data-role="prev-lesson" data-placement="right" title="上一课时"><span class="glyphicon glyphicon-chevron-up" title="上一课时"></span></a>

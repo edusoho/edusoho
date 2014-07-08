@@ -403,7 +403,15 @@ define(function(require, exports, module) {
                 if (lesson.type == 'testpaper') {
                     that.element.find('[data-role=finish-lesson]').hide();
                 } else {
-                    that.element.find('[data-role=finish-lesson]').show();
+                    if (!that.element.data('hideMediaLessonLearnBtn')) {
+                        that.element.find('[data-role=finish-lesson]').show();
+                    } else {
+                        if (lesson.type == 'video' || lesson.type == 'audio') {
+                            that.element.find('[data-role=finish-lesson]').hide();
+                        } else {
+                            that.element.find('[data-role=finish-lesson]').show();
+                        }
+                    }
                 }
 
                 that._toolbar.set('lesson', lesson);
