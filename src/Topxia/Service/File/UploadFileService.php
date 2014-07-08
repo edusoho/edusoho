@@ -25,7 +25,7 @@ interface UploadFileService
 
     public function deleteFiles(array $ids);
 
-    public function convertFile($id, $status, array $result = array());
+    public function convertFile($id, $status, array $result = array(), $callback = null);
 
     public function setFileConverting($id, $convertHash);
 

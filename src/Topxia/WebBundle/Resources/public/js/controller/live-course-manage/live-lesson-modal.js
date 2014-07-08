@@ -122,16 +122,8 @@ define(function(require, exports, module) {
                 $.get($(elem).data('calculateLeftCapacityUrl'), params, function(response) {
                     var maxStudentNum = parseInt($(elem).data('maxStudentNum'));
                     var leftCapacity = parseInt(response);
-                    var message = '';
                     if ( maxStudentNum > leftCapacity) {
-                        if (leftCapacity == 0) {
-                            message += '当前时间段内已无直播名额，';
-                        } else if (leftCapacity < 0) {
-                            message += '当前时间段内已<strong>超出直播名额 ' + (-leftCapacity) + '人</strong> ，';
-                        } else {
-                            message += '当前时间段内还有' + leftCapacity + '人的直播名额，';
-                        }
-                        message += '而本课程的最大学员数为' + maxStudentNum  +  '人，届时有可能会导致满额后部分学员无法进入直播。';
+                       var message = '在此时间段内开课，将会超出教室容量<strong>' + (maxStudentNum - leftCapacity) + '</strong>人，届时有可能会导致满额后部分学员无法进入直播。';
                         $(elem).parent().find('.help-block').html('<div class="alert alert-warning">' + message + '</div>');
                     }
                 }, 'json');

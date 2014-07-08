@@ -35,9 +35,22 @@ class EliteCourseThreadsByTypeDataTag extends CourseBaseDataTag implements DataT
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads,'courseId'));
 
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads,'userId'));
+
+        $latestPostUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads,'latestPostUserId'));
+
         foreach ($threads as $key => $thread) {
+
             if ($thread['courseId'] == $courses[$thread['courseId']]['id'] ) {
-                $threads[$key]['courseTitle'] = $courses[$thread['courseId']]['title'];
+                $threads[$key]['course'] = $courses[$thread['courseId']];
+            }
+
+            if ($thread['userId'] == $users[$thread['userId']]['id'] ) {
+                $threads[$key]['user'] = $users[$thread['userId']];
+            }
+
+            if ($thread['latestPostUserId'] == $latestPostUsers[$thread['latestPostUserId']]['id'] ) {
+                $threads[$key]['latestPostUser'] = $latestPostUsers[$thread['latestPostUserId']];
             }
         }
 

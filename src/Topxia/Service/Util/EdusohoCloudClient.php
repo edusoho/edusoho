@@ -71,6 +71,10 @@ class EdusohoCloudClient implements CloudClient
 			$cleanParams['convertNotifyUrl'] = (string) $params['convertNotifyUrl'];
 		}
 
+        if (!empty($params['convertor'])) {
+            $cleanParams['convertor'] = (string) $params['convertor'];
+        }
+
 		$encodedParams = base64_encode(json_encode($cleanParams));
 
 		$sign = hash_hmac('sha1', $encodedParams, $this->secretKey);
@@ -273,10 +277,14 @@ class EdusohoCloudClient implements CloudClient
         return json_decode($content, true);
     }
 
-    public function convertPPT($key)
+    public function convertPPT($key, $notifyUrl = null)
     {
         $args = array();
         $args['key'] = $key;
+        if ($notifyUrl) {
+            $args['notifyUrl'] = $notifyUrl;
+        }
+            
         return $this->callRemoteApi('GET', 'Pdf2Jpg', $args);
     }
 

@@ -52,6 +52,13 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $this->getConnection()->fetchColumn($sql, array($lessonId));
     }
 
+    public function findLatestFinishedLearns($start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE status = 'finished' ORDER BY finishedTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql);
+    }
+
 	public function addLearn($learn)
 	{
         $affected = $this->getConnection()->insert($this->table, $learn);
