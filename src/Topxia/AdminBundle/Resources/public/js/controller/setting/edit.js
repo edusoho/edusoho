@@ -3,6 +3,8 @@ define(function(require, exports, module) {
     require('jquery.sortable');
 
 
+    var themeModal = require('./theme-modal');
+
     exports.run = function() {
 
         var sortList = function($list) {
@@ -43,9 +45,14 @@ define(function(require, exports, module) {
 
         $("#iframepage").load(function(){
             var mainheight = $(this).contents().find("body").height()+420;
-                $(this).height(mainheight);
-            }); 
+            $(this).height(mainheight);
+        }); 
 
+
+
+        var currentConfig = $.parseJSON($("#fuck").text());
+
+        themeModal.setAll(currentConfig);
     };
 
 });

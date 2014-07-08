@@ -80,7 +80,9 @@ class ThemeController extends BaseController
     public function editAction (Request $request)
     {
        
-        return $this->render('TopxiaAdminBundle:Theme:edit.html.twig');
+        return $this->render('TopxiaAdminBundle:Theme:edit.html.twig', array(
+            'themeConfig' => array('fuck' => 'fuckyou')
+        ));
     }
 
 
