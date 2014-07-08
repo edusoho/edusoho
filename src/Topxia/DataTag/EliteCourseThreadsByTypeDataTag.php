@@ -42,7 +42,7 @@ class EliteCourseThreadsByTypeDataTag extends CourseBaseDataTag implements DataT
         foreach ($threads as $key => $thread) {
 
             if ($thread['courseId'] == $courses[$thread['courseId']]['id'] ) {
-                $threads[$key]['courseTitle'] = $courses[$thread['courseId']]['title'];
+                $threads[$key]['course'] = $courses[$thread['courseId']];
             }
 
             if ($thread['userId'] == $users[$thread['userId']]['id'] ) {
