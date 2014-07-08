@@ -928,6 +928,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
 
+	public function findLatestFinishedLearns($start, $limit)
+	{
+		return $this->getLessonLearnDao()->findLatestFinishedLearns($start, $limit);
+	}
+
 	public function cancelLearnLesson($courseId, $lessonId)
 	{
 		list($course, $member) = $this->tryLearnCourse($courseId);

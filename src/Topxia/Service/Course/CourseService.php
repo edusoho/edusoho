@@ -107,6 +107,8 @@ interface CourseService
 
 	public function finishLearnLesson($courseId, $lessonId);
 
+	public function findLatestFinishedLearns($start, $limit);
+
 	public function cancelLearnLesson($courseId, $lessonId);
 
 	public function getUserLearnLessonStatus($userId, $courseId, $lessonId);
