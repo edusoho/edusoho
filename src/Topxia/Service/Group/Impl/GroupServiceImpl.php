@@ -74,17 +74,27 @@ class GroupServiceImpl extends BaseService implements GroupService {
         return $group;
     }
 
+    public function addOwner($groupId,$userId)
+    {
+        $member = array(
+            'groupId' => $groupId,
+            'userId' => $userId,
+            'createdTime' => time(),
+            'role' => 'owner',
+        );
+        return $this->getGroupMemberDao()->addMember($member);
+    }
     public function openGroup($id)
     {
          return $this->updateGroup($id, array(
-            'enum' => 'open',
+            'status' => 'open',
         ));
     }
 
     public function closeGroup($id)
     {
          return $this->updateGroup($id, array(
-            'enum' => 'close',
+            'status' => 'close',
         ));
     }
 
@@ -246,13 +256,15 @@ class GroupServiceImpl extends BaseService implements GroupService {
 
             if(!empty($owner)){
                   $conditions['ownerId']=$owner['id'];
+            }else{
+                  $conditions['ownerId']=0;
             }
    
         }
-        if(isset($conditions['enum']))
+        if(isset($conditions['status']))
         {
-            if($conditions['enum']==""){
-               unset( $conditions['enum']);
+            if($conditions['status']==""){
+               unset( $conditions['status']);
             }
         }
         

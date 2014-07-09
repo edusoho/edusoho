@@ -4,11 +4,16 @@
     require('common/validator-rules').inject(Validator);
     var EditorFactory = require('common/kindeditor-factory');
 
-  
+    function checkUrl (url){
+        var hrefArray=new Array();
+        hrefArray=url.split('#');
+        hrefArray=hrefArray[0].split('?');
+        return hrefArray[1];
+    }
     exports.run = function() {
         if($('#thread_content').length>0){
             var editor_thread = EditorFactory.create('#thread_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
-             var validator_thread = new Validator({
+            var validator_thread = new Validator({
             element: '#user-thread-form',
             failSilently: true,
             onFormValidated: function(error){
@@ -34,8 +39,6 @@
            
             
         });
-
-
         }
         
         if($('#post_content').length>0){
@@ -54,26 +57,16 @@
                 $.post($("form").attr('action'),$("form").serialize(), function(url) {
                     if(url){
                         href=window.location.href;
-                        var hrefArray=new Array();
-                        hrefArray=href.split('#');
-                        hrefArray=hrefArray[0].split('?');
-                        var olderHref=hrefArray[1];
-                        newHrefArray=url.split('#');
-                        newHrefArray=newHrefArray[0].split('?');
-                        console.log(olderHref);
-                        console.log(newHrefArray[1]);
-                        if(newHrefArray[1]==olderHref){
+                        var olderHref=checkUrl(href);
+                        if(checkUrl(url)==olderHref){
                             window.location.reload();
                         }else{
                             window.location.href=url;
                         }
-
                     }
                     else{
                             window.location.reload();
-                    }
-                  
-                   
+                    }                              
                 }).error(function(){
                   console.log(3);
                 });
@@ -87,8 +80,6 @@
            
             
         });
-
-        
         }
 
         if($('#post-action').length>0){
@@ -124,7 +115,6 @@
                  if (!confirm($trigger.attr('title') + '？')) {
                     return false;
                  }
-               
                     $.post($trigger.data('url'), function(){
                     window.location.reload();
                     });
@@ -154,7 +144,7 @@
             
         });
 
-           }
+       }
     
         
        

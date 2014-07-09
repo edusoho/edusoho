@@ -5,17 +5,29 @@ define(function(require, exports, module) {
 	exports.run = function() {
 		var $table=$('#thread-table');
 		require('../../util/batch-select')($('#thread-table'));
-		
 
 		$('#openThread').on('click',function(){
+	        if($(":checkbox:checked").length <1){
+            alert("请选择要开启的话题！");
+            return false;
+            }
+		
+			$.post($('#batchOpenThread').attr('value'),$("#thread-form").serialize(),function(status){
+				window.location.reload();
+			});
 
-			$('#status').attr('value','open');
+		});
 
-		})
 		$('#closeThread').on('click',function(){
-			
-			$('#status').attr('value','close');
-		})
+	        if($(":checkbox:checked").length <1){
+            alert("请选择要关闭的话题！");
+            return false;
+            }	
+			$.post($('#batchCloseThread').attr('value'),$("#thread-form").serialize(),function(status){		
+				window.location.reload();
+			});
+
+		});
 
 
 		$table.on('click','.delete-thread,.removeElite,.removeStick,.setElite,.setStick,.close-thread,.open-thread',function(){

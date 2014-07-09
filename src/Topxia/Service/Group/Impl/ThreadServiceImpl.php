@@ -71,12 +71,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     public function closeThread($threadId)
     {
-         $this->getThreadDao()->updateThread($threadId,array('enum'=>'close'));
+         $this->getThreadDao()->updateThread($threadId,array('status'=>'close'));
     }
 
     public function openThread($threadId)
     {
-         $this->getThreadDao()->updateThread($threadId,array('enum'=>'open'));
+         $this->getThreadDao()->updateThread($threadId,array('status'=>'open'));
     }
 
     public function searchThreads($conditions,$orderBy,$start, $limit)
@@ -193,13 +193,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
             $group=$this->getGroupService()->findGroupByTitle($conditions['groupName']);
             if(!empty($group)){
               $conditions['groupId']=$group[0]['id'];  
+            }else{
+              $conditions['groupId']=0;  
             }   
         }
 
-         if(isset($conditions['enum']))
+         if(isset($conditions['status']))
         {
-            if($conditions['enum']==""){
-               unset( $conditions['enum']);
+            if($conditions['status']==""){
+               unset( $conditions['status']);
             }
         }   
         return $conditions;

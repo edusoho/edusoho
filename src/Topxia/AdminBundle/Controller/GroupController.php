@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
@@ -10,66 +11,48 @@ class GroupController extends BaseController
 	public function IndexAction(Request $request)
     {
 		$fields = $request->query->all();
+
         $conditions = array(
-            'enum'=>'',
+            'status'=>'',
             'title'=>'',
             'ownerName'=>'',
         );
 
         if(!empty($fields)){
             $conditions =$fields;
-        }     
+        } 
+
 		$paginator = new Paginator(
             $this->get('request'),
             $this->getGroupService()->searchGroupsCount($conditions),
             10
         );
-		$groupinfo=$this->getGroupService()->searchGroups(
-			 $conditions,
-            array('createdTime','desc'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-            );
 
-        $ownerIds = array_merge(
-            ArrayToolkit::column($groupinfo, 'ownerId')
+		$groupinfo=$this->getGroupService()->searchGroups(
+                $conditions,
+                array('createdTime','desc'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
         );
 
-        $owner=$this->getUserService()->findUsersByIds($ownerIds);
+        $ownerIds =  ArrayToolkit::column($groupinfo, 'ownerId');
+        $owners = $this->getUserService()->findUsersByIds($ownerIds);
 
 		return $this->render('TopxiaAdminBundle:Group:index.html.twig',array(
 			'groupinfo'=>$groupinfo,
-            'owner'=>$owner,
+            'owners'=>$owners,
 			'paginator' => $paginator));
 	}
+
     public function threadAction(Request $request)
     {
         $fields = $request->query->all();
+
         $conditions = array(
-            'enum'=>'',
+            'status'=>'',
             'title'=>'',
             'groupName',
         );
-
-        if($request->getMethod()=="POST"){
-
-            $threadIds=$request->request->all();
-
-            if($threadIds['enum']=='open'&&isset($threadIds['ID'])){
-                foreach ($threadIds['ID'] as $threadId) {
-                $this->postAction($threadId,'openThread');
-
-                }
-
-            }elseif($threadIds['enum']=='close'&&isset($threadIds['ID'])){
-
-                foreach ($threadIds['ID'] as $threadId) {
-                
-                $this->postAction($threadId,'closeThread');
-
-                }
-            }
-        }
 
         if(!empty($fields)){
             $conditions =$fields;
@@ -80,30 +63,46 @@ class GroupController extends BaseController
             $this->getThreadService()->searchThreadsCount($conditions),
             10
         );
-        $threadinfo=$this->getThreadService()->searchThreads   (
+
+        $threadinfo=$this->getThreadService()->searchThreads(
             $conditions,
             $this->filterSort('byCreatedTime'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-            );
-
-        $memberIds = array_merge(
-            ArrayToolkit::column($threadinfo, 'userId')
         );
 
-        $owner=$this->getUserService()->findUsersByIds($memberIds);
+        $memberIds = ArrayToolkit::column($threadinfo, 'userId');
 
-        $groupIds = array_merge(
-            ArrayToolkit::column($threadinfo, 'groupId')
-        );
+        $owners = $this->getUserService()->findUsersByIds($memberIds);
+
+        $groupIds =  ArrayToolkit::column($threadinfo, 'groupId');
+
 
         $group=$this->getGroupService()->getGroupsByIds($groupIds);
 
         return $this->render('TopxiaAdminBundle:Group:thread.html.twig',array(
             'threadinfo'=>$threadinfo,
-            'owner'=>$owner,
+            'owners'=>$owners,
             'group'=>$group,
             'paginator' => $paginator));
+    }
+
+    public function batchOpenThreadAction(Request $request)
+    {
+        $threadIds=$request->request->all();
+        foreach ($threadIds['ID'] as $threadId) {
+            $this->postAction($threadId,'openThread');
+        }
+        return new Response('success');
+    }
+
+    public function batchCloseThreadAction(Request $request)
+    {
+        $threadIds=$request->request->all();
+        foreach ($threadIds['ID'] as $threadId) {
+            $this->postAction($threadId,'closeThread');
+        }
+        return new Response('success');
     }
 
     public function threadPostAction()
@@ -130,7 +129,6 @@ class GroupController extends BaseController
         $this->getGroupService()->closeGroup($id);
 
         $groupinfo=$this->getGroupService()->getGroup($id);
-
         
         $owner=$this->getUserService()->findUsersByIds(array('0'=>$groupinfo['ownerId']));
 
@@ -139,6 +137,7 @@ class GroupController extends BaseController
             'owner'=>$owner,
         ));
     }
+
     public function removeEliteAction($threadId)
     {
         return $this->postAction($threadId,'removeElite');

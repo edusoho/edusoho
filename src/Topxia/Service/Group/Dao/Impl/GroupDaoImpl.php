@@ -102,7 +102,7 @@ class GroupDaoImpl extends BaseDao implements GroupDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table,$this->table)
             ->andWhere('ownerId=:ownerId')
-            ->andWhere('enum = :enum')
+            ->andWhere('status = :status')
             ->andWhere('title like :title');
 
         return $builder;

@@ -9,77 +9,102 @@
 
                 <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 热门小组<a href="{{path('group_search_group')}}" class="pull-right">..更多</a> </div>
               
-                    {% if activeGroup %}
-                    {% for group in activeGroup %}
-                     <div class="grouplist" style="height:110px;width: 90px;">  <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
+                {% if activeGroup %}
+                        {% for group in activeGroup %}
+
+                         <div class="grouplist" style="height:110px;width: 90px;"> 
+
+                                     <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
                                      {% if group.logo %}
-                                    <img src="{{file_path(group.logo)}}" alt="{{group.title}}" >
-                                    {%else%}
-                                    <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
-                                    {%endif%}
-                                </a><p class="mvs"><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title|plain_text(9)}}</a></p></div>
-                      
-                                {%endfor%}
-                    {%else%}
-                    还没有小组信息！赶紧去创建吧！
-                    {%endif%}                        
+                                            <img src="{{file_path(group.logo)}}" alt="{{group.title}}" >
+                                     {% else %}
+                                            <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
+                                     {% endif %}
+                                    </a>
+                                    <p class="mvs"><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title|plain_text(9)}}</a></p>
+                         </div>
+                          
+                        {% endfor %}
+                {% else %}
+                还没有小组信息！赶紧去创建吧！
+                {% endif %}                        
             </div>
              <br>
         </div>
 
         <div class="es-row-wrap ">
             <div class="row">        
-                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 热门话题</div> 
-                <div class="col-md-12">
+                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 热门话题
+                </div> 
+
+                <div class="col-md-12">           
                    <ul class="media-list">
-                  {% if recentlyThread%}
-                    {% for threadinfo in recentlyThread%}  
-                    <li class="media"> 
-                          <a href="{{path('group_index',{id:threadinfo.groupId})}}" title="{{groupinfo[threadinfo.groupId].title}}">  <span class="label label-success pull-right" style="margin-top:15px;">{{groupinfo[threadinfo.groupId].title}}</span> </a>           
-                     
-                      {{ web_macro.user_avatar(owner[threadinfo.userId], 'pull-left media-object media-object-small')}}
-                    <div class="media-body" style="word-break: break-all;" >
-                      <a href="{{path('group_thread_index',{id:threadinfo.groupId,threadId:threadinfo.id})}}">{{threadinfo.title|plain_text(75)}} </a></h4>
-                      <br>
-                     <div class="text-muted text-normal"><br>
-                       <span class="glyphicon glyphicon-user"></span> {{ web_macro.user_link(owner[threadinfo.userId] , 'link-muted') }} &nbsp;<span class="glyphicon glyphicon-time"></sapn>{{threadinfo.createdTime|smart_time}} 
-                     </div>      
-                   </li>
-                    {% endfor %}
-                      
-                    {% else %}
-                    还没有话题！
-                    {% endif %}
+                          {% if recentlyThread%}
+                                {% for threadinfo in recentlyThread%}  
+                                    <li class="media"> 
+                                          <a href="{{path('group_index',{id:threadinfo.groupId})}}" title="{{groupinfo[threadinfo.groupId].title}}">  
+                                            <h5><span class="badge pull-right" style="margin-top:15px;">{{groupinfo[threadinfo.groupId].title}}</span></h5> 
+                                          </a>           
+                                     
+                                          {{ web_macro.user_avatar(owners[threadinfo.userId], 'pull-left media-object media-object-small')}}
+
+                                          <div class="media-body" style="word-break: break-all;" >
+                                                 <a href="{{path('group_thread_index',{id:threadinfo.groupId,threadId:threadinfo.id})}}">{{threadinfo.title|plain_text(75)}} </a>
+                                                 <br>
+                                                 <div class="text-muted text-normal"><br>
+                                                   <span class="glyphicon glyphicon-user"></span>
+                                                    {{ web_macro.user_link(owners[threadinfo.userId] , 'link-muted') }} &nbsp;
+                                                    <span class="glyphicon glyphicon-time"></sapn>
+                                                        {{threadinfo.createdTime|smart_time}} 
+                                                   {% if threadinfo.lastPostTime %}
+                                                      &nbsp;最后回复:{{ web_macro.user_link(lastPostMembers[threadinfo.lastPostMemberId] , 'link-muted') }}
+                                                      &nbsp;最后回复时间: {{threadinfo.lastPostTime|smart_time}}
+                                                   {% endif %}
+                                                 </div>    
+                                          </div>   
+                                   </li>
+                                {% endfor %}
+                                  
+                            {% else %}
+                                还没有话题！
+                            {% endif %}
   
                     </ul>
                 </div>
-            </div></div>
+            </div>
+        </div>
     </div>
+
     <div class="col-md-6 col-md-4" >
         <div class="es-row " >  
-                    <form action="{{path('group_search_group')}}" method="get">
+                <form action="{{path('group_search_group')}}" method="get">
                       <div class="input-group">
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-                        <input type="text" class="form-control" placeholder="小组搜索" name="key">
+                        <input type="text" class="form-control" placeholder="小组搜索" name="keyWord">
                         <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
                         </span>
-                      </div></form>
-                      
-                    <br>  </div> 
+                      </div>
+                </form>
+                <br>  
+        </div> 
+
         {% if user.id %}
-<div class="es-row ">
-                        <div class="panel panel-default" >
-  <div class="panel-body">
-    <div class="media">
-         {{ web_macro.user_avatar(user, ' pull-left media-object media-object-small') }}
-        <div class="media-body">
-<p >{{ web_macro.user_link(user , 'link-muted') }}</p>
-    <a href="{{ path ('group_member_center') }}" class="btn btn-primary btn-xs btn-default active" role="button">我的小组主页</a>
-     <a href="{{ path ('group_add') }}" class="btn btn-primary btn-xs btn-default active" role="button">创建小组</a>
-  </div>
-</div>
-                 </div></div></div>{% endif %}
+        <div class="es-row ">
+            <div class="panel panel-default" >
+                <div class="panel-body">
+                    <div class="media">
+                     {{ web_macro.user_avatar(user, ' pull-left media-object media-object-small') }}
+                        <div class="media-body">
+                            <p >{{ web_macro.user_link(user , 'link-muted') }}</p>
+                            <a href="{{ path ('group_member_center') }}" class="btn btn-primary btn-xs btn-default active" role="button">我的小组主页</a>
+                            <a href="{{ path ('group_add') }}" class="btn btn-primary btn-xs btn-default active" role="button">创建小组</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
                           
         <div class="es-row-wrap " >
                               
@@ -88,53 +113,68 @@
                 <div class="page-header">我创建的小组
                   {% if user.id %} <a href="{{ path ('group_member_join') }}" class="pull-right">..更多</a>{% endif %}
                 </div> 
-                  <div class="row">
+                <div class="row">
            
-                     {% if mycreatedGroup %}
-                    {% for group in mycreatedGroup %}
-                     <div class="grouplist"     >  <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
-                                     {% if group.logo %}
+                    {% if mycreatedGroup %}
+                        {% for group in mycreatedGroup %}
+                            <div class="grouplist">  
+                                <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
+                                {% if group.logo %}
                                     <img src="{{file_path(group.logo)}}" alt="{{group.title}}" >
-                                    {%else%}
+                                    {% else %}
                                     <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
-                                    {%endif%}
-                                </a> <p class="mvs"><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title|plain_text(9)}}</a></p></div>
-                     
-                                {%endfor%}
-                    {%else%}
-                    还没有小组信息！赶紧去创建小组吧！  <a href="{{ path ('group_add') }}" class="btn btn-primary btn-xs btn-default active" role="button">创建小组</a>
-                    {%endif%}
-                  </div><br>
-            </div></div>
-         <div class="es-row-wrap ">
+                                {% endif %}
+
+                                </a> 
+                                <p class="mvs">
+                                    <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title|plain_text(9)}}</a>
+                                </p>
+                            </div>
+                         
+                        {% endfor %}
+                    {% else %}
+                        还没有小组信息！赶紧去创建小组吧！  
+                        <a href="{{ path ('group_add') }}" class="btn btn-primary btn-xs btn-default active" role="button">创建小组</a>
+                    {% endif %}
+                </div>
+                  <br>
+            </div>
+        </div>
+
+
+        <div class="es-row-wrap ">
             <div class="row">
 
                 <div class="page-header">我加入的小组
-                 {% if user.id %}<a href="{{ path ('group_member_join') }}" class="pull-right">..更多</a>{% endif %}</div> 
+                 {% if user.id %}
+                 <a href="{{ path ('group_member_join') }}" class="pull-right">..更多</a>
+                 {% endif %}
+                </div> 
 
-                  <div class="row">
+                <div class="row">
               
-                     {% if myjionGroup %}
-                     {% for group in myjionGroup %}
-                     {% if group.enum=='open' %}
-                     <div class="grouplist" >  <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
-                                     {% if group.logo %}
-                                    <img src="{{file_path(group.logo)}}" alt="{{group.title}}" >
-                                    {%else%}
-                                    <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
-                                    {%endif%}
-                                </a> <p class="mvs"><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title}}</a></p></div>
-                    {% endif %}
-                     {%endfor%}
+                    {% if myjionGroup %}
+                         {% for group in myjionGroup %}
+                             {% if group.status=='open' %}
+                                <div class="grouplist" >  <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
+                                    {% if group.logo %}
+                                        <img src="{{file_path(group.logo)}}" alt="{{group.title}}" >
+                                        {%else%}
+                                        <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
+                                    {% endif %}
+                                        </a> 
+                                        <p class="mvs"><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title}}</a>
+                                        </p>
+                                </div>
+                             {% endif %}
+                         {% endfor %}
                               
-                    {%else%}
-                    还没有小组信息！赶紧去加入小组吧！
-                    {%endif%}
-                   </div><br>
-               
-
-
-            </div></div>
+                    {% else %}
+                        还没有小组信息！赶紧去加入小组吧！
+                    {% endif %}
+                </div><br>
+            </div>
+        </div>
         
     </div>
 </div>

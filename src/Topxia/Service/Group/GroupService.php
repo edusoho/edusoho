@@ -42,6 +42,8 @@ interface GroupService
 
     public function isMember($id, $userId);
 
+    public function addOwner($groupId,$userId);
+
     public function updateMember($id, $fields);
 
     public function getMembersCountByGroupId($groupId);
