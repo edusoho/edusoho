@@ -47,7 +47,8 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="truename"]',
-            required: $form.find('[name="truename"]').attr('required') == 'required'
+            required: $form.find('[name="truename"]').attr('required') == 'required',
+            rule: 'chinese minlength{min:2} maxlength{max:12}'
         });
 
         validator.addItem({

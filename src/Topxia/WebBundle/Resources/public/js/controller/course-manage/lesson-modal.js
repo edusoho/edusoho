@@ -64,6 +64,12 @@ define(function(require, exports, module) {
             required: true
         });
 
+        validator.addItem({
+            element: '#lesson-give-credit-field',
+            required: true,
+            rule: 'integer'
+        });
+
         switch (type) {
             case 'video':
             case 'audio':
