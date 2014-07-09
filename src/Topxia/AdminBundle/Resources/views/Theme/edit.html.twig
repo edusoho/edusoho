@@ -27,7 +27,7 @@
 
 {% set nav = nav|default(null) %}
 {% set menu = menu|default(null) %}
-{% set script_controller = 'setting/edit' %}
+{% set script_controller = 'theme-edit/edit' %}
 
 <body>
 
@@ -61,104 +61,285 @@
     <!-- Tab panes -->
     <div class="tab-content">
       <div class="tab-pane active" id="left">
-          <ul class="list-group module-item-list" >
-            <li class="list-group-item clearfix">
+          <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading clearfix">
               <div class="col-md-4 ">
-                <label>
-                <input type="checkbox"> 挂件名称
-                </label>
+                挂件名称
               </div>
               <div class="col-md-4">
                 自定义名称
               </div>
-              <div class="col-md-3">
-                xxxxx
-              </div>
-              <div class="col-md-1">
-                <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
 
-              </div>
-            </li>
-          <li class="list-group-item clearfix">
-            <div class="col-md-4">
-              <label>
-                <input type="checkbox"> 最新课程挂件
-              </label>
-              </div>
-              <div class="col-md-4">
-                自定义名称
-              </div>
-              <div class="col-md-3">
-                xxxxx
-              </div>
-              <div class="col-md-1">
-                <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#edit" data-placement="top" rel="tooltip"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-              </div>
+            </div>
 
-          </li>
-          <li class="list-group-item">Dapibus ac facilisis in</li>
-          <li class="list-group-item">Morbi leo risus</li>
-          <li class="list-group-item">Porta ac consectetur ac</li>
-          <li class="list-group-item">Vestibulum at eros</li>
-          <li class="list-group-item">Cras justo odio</li>
-          <li class="list-group-item">Dapibus ac facilisis in</li>
-          <li class="list-group-item">Morbi leo risus</li>
-          <li class="list-group-item">Porta ac consectetur ac</li>
-          <li class="list-group-item">Vestibulum at eros</li>
-        </ul>
-
+            <!-- List group -->
+            <ul class="list-group module-item-list">
+               <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 首页轮播图挂件
+                  </label>
+                </div>
+                <div class="col-md-4"></div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1"></div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 推荐课程挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 最新课程挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 直播课程挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 分类课程一挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 分类课程二挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 分类课程三挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 推荐话题挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_threads_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 资讯挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_articles_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 讲师团挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_teachers_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+            </ul>
+          </div>
       </div>
+
       <div class="tab-pane" id="right">
-        <ul class="list-group module-item-list">
-            <li class="list-group-item clearfix">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading clearfix">
               <div class="col-md-4 ">
-                <label>
-                <input type="checkbox"> 挂件名称
-                </label>
+                挂件名称
               </div>
               <div class="col-md-4">
                 自定义名称
               </div>
-              <div class="col-md-3">
-                xxxxx
-              </div>
-              <div class="col-md-1">
-                <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
 
-              </div>
-            </li>
-          <li class="list-group-item clearfix">
-            <div class="col-md-4">
-              <label>
-                <input type="checkbox"> 登录挂件
-              </label>
-              </div>
-              <div class="col-md-4">
-                自定义名称
-              </div>
-              <div class="col-md-3">
-                xxxxx
-              </div>
-              <div class="col-md-1">
-                <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#edit" data-placement="top" rel="tooltip"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-              </div>
+            </div>
 
-          </li>
-          <li class="list-group-item">Dapibus ac facilisis in</li>
-          <li class="list-group-item">Morbi leo risus</li>
-          <li class="list-group-item">Porta ac consectetur ac</li>
-          <li class="list-group-item">Vestibulum at eros</li>
-          <li class="list-group-item">Cras justo odio</li>
-          <li class="list-group-item">Dapibus ac facilisis in</li>
-          <li class="list-group-item">Morbi leo risus</li>
-          <li class="list-group-item">Porta ac consectetur ac</li>
-          <li class="list-group-item">Vestibulum at eros</li>
-        </ul>
-
-
-
-
-
+            <!-- List group -->
+            <ul class="list-group module-item-list">
+               <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 登录框挂件
+                  </label>
+                </div>
+                <div class="col-md-4"></div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1"></div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 每日一师挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_teacher_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 学员评价挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_reviews_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 直播课程挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_live_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 精品课程挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_popular_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 热门标签挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_tags_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 业内动态挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_articles_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+              <li class="list-group-item clearfix">
+                <div class="col-md-4 ">
+                  <label>
+                  <input type="checkbox"> 学习动态挂件
+                  </label>
+                </div>
+                <div class="col-md-4">
+                  &nbsp;自定义名称
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-1">
+                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_learns_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                </div>
+              </li>
+            </ul>
+          </div>
       </div>
       <div class="tab-pane" id="buttom">
         <div class="panel panel-default">
@@ -206,9 +387,12 @@
 
 }
 .mod-preview-mask {
-  background-color: #fff;
-  z-index: 9999;
 
+  border-top: 1px solid #ddd;
+}
+
+iframe {
+  z-index: 1000;
 }
 
 /*.mod-preview-mask .pm-div {

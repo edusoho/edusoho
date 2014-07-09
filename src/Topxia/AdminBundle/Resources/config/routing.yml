@@ -400,13 +400,53 @@ admin_setting_theme_change:
     defaults: { _controller: TopxiaAdminBundle:Theme:change }
     methods:  [POST]
 
-edit_theme:
+admin_edit_theme:
     pattern:  /edit/theme
     defaults: { _controller: TopxiaAdminBundle:Theme:edit }
 
-left_edit_theme:
-    pattern:  /edit-left/theme
-    defaults: { _controller: TopxiaAdminBundle:Theme:editLeft }
+left_edit_courses_theme:
+    pattern:  /edit_left_courses/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:editLeftCourses }
+
+left_edit_threads_theme:
+    pattern:  /edit_left_threads/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:editLeftThreads }
+
+left_edit_articles_theme:
+    pattern:  /edit_left_articles/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:editLeftArticles }
+
+left_edit_teachers_theme:
+    pattern:  /edit_left_teachers/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:editLeftTeachers }
+
+right_edit_teacher_theme:
+    pattern:  /edit_right_teacher/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:editRightTeacher }
+
+right_edit_reviews_theme:
+    pattern:  /edit_right_reviews/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:editRightReviews }
+
+right_edit_live_courses_theme:
+    pattern:  /edit_right_live_courses/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:editRightLiveCourses }
+
+right_edit_popular_courses_theme:
+    pattern:  /edit_right_popular_courses/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:editRightPopularCourses }
+
+right_edit_tags_theme:
+    pattern:  /edit_right_tags/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:editRightTags }
+
+right_edit_articles_theme:
+    pattern:  /edit_right_articles/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:editRightArticles }
+
+right_edit_learns_theme:
+    pattern:  /edit_right_learns/theme
+    defaults: { _controller: TopxiaAdminBundle:Theme:editRightLearns }
 
 admin_setting_user_center:
     pattern:  /setting/user-center

@@ -4,10 +4,10 @@
 
 {% block title %}挂件编辑{% endblock %}
 {% block body %}
-		<form class="form-horizontal" role="form">
+		<form id="edit-left-course-form" class="form-horizontal" role="form" method="post" action="{{ url('left_edit_courses_theme') }}">
 			 <div class="row form-group">
 			    <div class="col-md-3 control-label">
-			      <label for="email">自定义名称</label>
+			      <label for="name">自定义名称</label>
 			    </div>
 			    <div class="col-md-7 controls">
 			      <input type="text"  class="form-control" >
@@ -19,9 +19,10 @@
 			    <div class="col-sm-4">
 			      <select class="form-control width-input-large">
 			        <option value="">课程数量</option>
-			        <option value="1">1</option>
-			        <option value="2">2</option>
 			        <option value="3">3</option>
+			        <option value="6">6</option>
+			        <option value="9">9</option>
+			        <option value="9">12</option>
 			      </select>
 			    </div>
 			 </div>
@@ -40,7 +41,7 @@
 
 {% endblock %}
 {% block footer %}
-  <button data-submiting-text="正在保存" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#">保存</button>
+  <button data-submiting-text="正在保存" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#edit-left-course-form">确定</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-  <script>app.load('setting/left-edit-modal')</script>
+  <script>app.load('theme-edit/left-edit-modal')</script>
 {% endblock %}

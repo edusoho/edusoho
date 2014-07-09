@@ -86,10 +86,66 @@ class ThemeController extends BaseController
     }
 
 
-    public function editLeftAction (Request $request)
+    public function editLeftCoursesAction (Request $request)
     {
-        return $this->render('TopxiaAdminBundle:Theme:left-edit-modal.html.twig');
+        return $this->render('TopxiaAdminBundle:Theme:edit-left-courses-modal.html.twig');
     }
+
+    public function editLeftThreadsAction (Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-left-threads-modal.html.twig');
+    }
+
+    public function editLeftArticlesAction (Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-left-articles-modal.html.twig');
+    }
+
+    public function editLeftTeachersAction (Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-left-teachers-modal.html.twig');
+    }
+
+    public function editRightTeacherAction (Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-right-teacher-modal.html.twig');
+    }
+
+    public function editRightReviewsAction (Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-right-reviews-modal.html.twig');
+    }
+
+    public function editRightLiveCoursesAction (Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-right-live-courses-modal.html.twig');
+    }
+
+    public function editRightPopularCoursesAction (Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-right-popular-courses-modal.html.twig');
+    }
+
+    public function editRighArticlesAction (Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-right-articles-modal.html.twig');
+    }
+
+    public function editRightTagsAction (Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-right-tags-modal.html.twig');
+    }
+
+    public function editRightArticlesAction (Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-right-articles-modal.html.twig');
+    }
+
+    public function editRightLearnsAction (Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-right-learns-modal.html.twig');
+    }
+
 
     protected function getSettingService()
     {
