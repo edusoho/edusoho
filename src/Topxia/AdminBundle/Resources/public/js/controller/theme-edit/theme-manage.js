@@ -2,21 +2,6 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
 
-
-
-
-    exports.run = function() {
-
-        var themeManage = new ThemeManage({
-            element: '#theme-manage',
-            config: $.parseJSON($('#theme-config').html())
-        });
-
-        $('body').data('themeManage', themeManage);
-    }
-
-
-
     var ThemeManage = Widget.extend({
         attrs: {
             config: {},
@@ -24,53 +9,64 @@ define(function(require, exports, module) {
         },
 
         events: {
+            "save_config": "_saveBlock"
         },
 
         setup: function() {
-
+            // this._saveConfig();
         },
 
-        saveConfig: function() {
-            var config = {color: '', blocks:{left:[], right:[], bottom:[]}};
-
-            config.blocks.left = this.getBlockConfig(this.$('.theme-custom-left-block'));
-            config.blocks.right = this.getBlockConfig(this.$('.theme-custom-right-block'));
-            config.blocks.bottom = this.getBlockConfig(this.$('.theme-custom-bottom-block'));
-            config.color = this.getColorConfig();
-
-            $.post(this.element.data('saveUrl'), config, function() {
-
-            });
+        getElement: function() {
+            return $(this.element);
         },
 
-        getBlockConfig: function($block) {
+        setCurrentItem: function($item) {
+            this.set('currentItem', $item);
+        },
+
+        getCurrentItem: function() {
+            return this.get('currentItem');
+        },
+
+        _saveBlock: function() {
+
+            this._saveConfig();
+            this._send();
+        },
+
+        _saveConfig: function() {
+            var configs = {color: '', blocks:{left:[], right:[], bottom:[]}};
+
+            configs.blocks.left = this._getBlockConfig(this.$('.theme-custom-left-block'));
+            configs.blocks.right = this._getBlockConfig(this.$('.theme-custom-right-block'));
+            configs.blocks.bottom = this._getBlockConfig(this.$('.theme-custom-bottom-block'));
+            configs.color = this._getColorConfig(this.$('.theme-custom-color-block'));
+            this.set('config', configs,{override: true});
+        },
+
+        _getBlockConfig: function($block) {
             var config = [];
-            $($block).each(function(){
-                if ($(this).find('.checkbox').isChecked()) {
-                    config.push = $(this).data('config');
-                }
+
+            $($block).find('input[type=checkbox]:checked').each(function(){
+
+                config.push($(this).parents('li').data('config'));
             });
 
             return config;
         },
 
-        getColorConfig: function() {
+        _getColorConfig: function($block) {
+            return $($block).find('input[type=radio]').val();
+        },
 
+        _send: function() {
+            $.post(this.element.data('url'), {config:this.get('config')}, function(response){
+                // window.location.reload();
+            });
         }
+    })
 
-    }
+    module.exports = ThemeManage;
 
+})
 
-
-});
-
-//modal.js
-
-$('.confirm-btn').on('click', function(){
-   
- var themeManage = $('body').data('themeManage');
-    themeManage.get('currentItem').data('config', config);
-    themeManage.saveConfig();
-
-    $modal.close(); 
-});

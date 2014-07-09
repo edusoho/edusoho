@@ -31,7 +31,7 @@
 
 <body>
 
-<script id="fuck" type="text/x-handlebars-template">{{ themeConfig|json_encode|raw }}</script>
+<script id="theme-config" type="text/x-handlebars-template">{{ themeConfig|json_encode|raw }}</script>
 
 <nav class="navbar navbar-inverse site-navbar navbar-fixed-top" role="navigation">
   <div class="container">
@@ -39,8 +39,8 @@
     <div class="col-md-10"> 
       <a class="navbar-brand">主题编辑</a>
       <ul class="nav navbar-nav navbar-right">
-      <li><a href="#"><i class="glyphicon glyphicon-remove"></i> 取消</a></li>
-      <li><a href="#"><i class="glyphicon glyphicon-ok"></i> 保存</a></li>
+      <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-remove"></i> 取消</a></li>
+      <li><a href="{{ path('admin_confirm_theme_config') }}"><i class="glyphicon glyphicon-ok"></i> 保存</a></li>
       </ul>
     </div>
     <div class="col-md-1"></div>
@@ -55,11 +55,11 @@
       <li><a href="#right" role="tab" data-toggle="tab">右侧</a></li>
       <li><a href="#buttom" role="tab" data-toggle="tab">底部</a></li>
       <li><a href="#color" role="tab" data-toggle="tab">配色方案</a></li>
-      <button class="btn btn-primary pull-right" data-toggle="form-submit" data-role="item-delete" id="reset">全部重置</button>
+      <a herf="{{ path('admin_reset_theme_config') }}" class="btn btn-primary pull-right" data-toggle="form-submit" data-role="item-delete" id="reset">全部重置</a>
     </ul>
 
     <!-- Tab panes -->
-    <div class="tab-content">
+    <div class="tab-content" id="theme-edit-content" data-url="{{ path('admin_save_theme_config') }}">
       <div class="tab-pane active" id="left">
           <div class="panel panel-default">
             <!-- Default panel contents -->
@@ -74,8 +74,8 @@
             </div>
 
             <!-- List group -->
-            <ul class="list-group module-item-list">
-               <li class="list-group-item clearfix">
+            <ul class="list-group module-item-list theme-edit-block theme-custom-left-block">
+              <li class="list-group-item clearfix theme-edit-item">
                 <div class="col-md-4 ">
                   <label>
                   <input type="checkbox"> 首页轮播图挂件
@@ -85,10 +85,10 @@
                 <div class="col-md-3"></div>
                 <div class="col-md-1"></div>
               </li>
-              <li class="list-group-item clearfix">
+              <li class="list-group-item clearfix theme-edit-item" id="theme-edit-item-code">
                 <div class="col-md-4 ">
                   <label>
-                  <input type="checkbox"> 推荐课程挂件
+                  <input type="checkbox" class="check-block"> 推荐课程挂件
                   </label>
                 </div>
                 <div class="col-md-4">
@@ -96,13 +96,13 @@
                 </div>
                 <div class="col-md-3"></div>
                 <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                  <button class="btn btn-primary btn-sm item-edit-btn" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
                 </div>
               </li>
-              <li class="list-group-item clearfix">
+              <li class="list-group-item clearfix theme-edit-item">
                 <div class="col-md-4 ">
                   <label>
-                  <input type="checkbox"> 最新课程挂件
+                  <input type="checkbox" class="check-block"> 最新课程挂件
                   </label>
                 </div>
                 <div class="col-md-4">
@@ -110,13 +110,13 @@
                 </div>
                 <div class="col-md-3"></div>
                 <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                  <button class="btn btn-primary btn-sm item-edit-btn" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
                 </div>
               </li>
-              <li class="list-group-item clearfix">
+              <li class="list-group-item clearfix theme-edit-item">
                 <div class="col-md-4 ">
                   <label>
-                  <input type="checkbox"> 直播课程挂件
+                  <input type="checkbox" class="check-block"> 直播课程挂件
                   </label>
                 </div>
                 <div class="col-md-4">
@@ -124,7 +124,7 @@
                 </div>
                 <div class="col-md-3"></div>
                 <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+                  <button class="btn btn-primary btn-sm item-edit-btn" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
                 </div>
               </li>
               <li class="list-group-item clearfix">

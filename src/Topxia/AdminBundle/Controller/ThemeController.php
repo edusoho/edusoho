@@ -34,54 +34,30 @@ class ThemeController extends BaseController
 
     }
 
-    private function getThemes()
+    public function saveConfigAction(Request $request)
     {
-        $themes = array();
-
-        $dir = $this->container->getParameter('kernel.root_dir'). '/../web/themes';
-        $finder = new Finder();
-        foreach ($finder->directories()->in($dir)->depth('== 0') as $directory) {
-            $theme = $this->getTheme($directory->getBasename());
-
-            if ($theme) {
-                $themes[] = $theme;
-            }
-
-        }
-
-        return $themes;
+        $config = $request->request->get('config');
+        $config = $this->getThemeService()->saveCurrentThemeConfig($config);
+        var_dump($config);exit();
     }
 
-    private function getTheme($uri)
+    public function confirmConfigAction(Request $request)
     {
-        if (empty($uri)) {
-            return null;
-        }
-
-        $dir = $this->container->getParameter('kernel.root_dir'). '/../web/themes';
-
-        $metaPath = $dir . '/' . $uri . '/theme.json';
-
-        if (!file_exists($metaPath)) {
-            return null;
-        }
-
-        $theme = json_decode(file_get_contents($metaPath), true);
-        if (empty($theme)) {
-            return null;
-        }
-
-        $theme['uri'] = $uri;
-
-        return $theme;
+        $this->getThemeService()->saveConfirmConfig();
+        return $this->redirect($this->generateUrl('homepage'));
     }
 
+    public function resetConfigAction(Request $request)
+    {
+        $this->getThemeService()->resetConfig();
+        return $this->redirect($this->generateUrl('homepage'));
+    }
 
     public function editAction (Request $request)
     {
        
         return $this->render('TopxiaAdminBundle:Theme:edit.html.twig', array(
-            'themeConfig' => array('fuck' => 'fuckyou')
+            'themeConfig' => array('fuckddddd' => 'fuckyouddddd')
         ));
     }
 
@@ -147,8 +123,56 @@ class ThemeController extends BaseController
     }
 
 
+
+    private function getTheme($uri)
+    {
+        if (empty($uri)) {
+            return null;
+        }
+
+        $dir = $this->container->getParameter('kernel.root_dir'). '/../web/themes';
+
+        $metaPath = $dir . '/' . $uri . '/theme.json';
+
+        if (!file_exists($metaPath)) {
+            return null;
+        }
+
+        $theme = json_decode(file_get_contents($metaPath), true);
+        if (empty($theme)) {
+            return null;
+        }
+
+        $theme['uri'] = $uri;
+
+        return $theme;
+    }
+
+    private function getThemes()
+    {
+        $themes = array();
+
+        $dir = $this->container->getParameter('kernel.root_dir'). '/../web/themes';
+        $finder = new Finder();
+        foreach ($finder->directories()->in($dir)->depth('== 0') as $directory) {
+            $theme = $this->getTheme($directory->getBasename());
+
+            if ($theme) {
+                $themes[] = $theme;
+            }
+
+        }
+
+        return $themes;
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function getThemeService()
+    {
+        return $this->getServiceKernel()->createService('Theme.ThemeService');
     }
 }

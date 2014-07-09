@@ -404,6 +404,19 @@ admin_edit_theme:
     pattern:  /edit/theme
     defaults: { _controller: TopxiaAdminBundle:Theme:edit }
 
+admin_save_theme_config:
+    pattern:  /save/theme/config
+    defaults: { _controller: TopxiaAdminBundle:Theme:saveConfig }
+    methods:  [POST]
+
+admin_confirm_theme_config:
+    pattern:  /confirm/theme/config
+    defaults: { _controller: TopxiaAdminBundle:Theme:confirmConfig }
+
+admin_reset_theme_config:
+    pattern:  /reset/theme/config
+    defaults: { _controller: TopxiaAdminBundle:Theme:resetConfig }
+
 left_edit_courses_theme:
     pattern:  /edit_left_courses/theme
     defaults: { _controller: TopxiaAdminBundle:Theme:editLeftCourses }
