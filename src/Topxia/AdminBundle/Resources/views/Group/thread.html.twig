@@ -26,7 +26,7 @@
     
     <button class="btn btn-primary">搜索</button>
   </form>
-
+  {% if threadinfo %}
   <form method="post" id="thread-form">
 
       <table class="table table-striped table-hover" id="thread-table">
@@ -72,6 +72,9 @@
        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
    </form>
+   {% else %}
+      <div class="empty">暂无话题！</div>
+   {% endif %}
    <div class="pull-right">
  {{ web_macro.paginator(paginator) }}
 </div>
