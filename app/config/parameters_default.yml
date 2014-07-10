@@ -2,6 +2,7 @@
 parameters:
     role_hierarchy:
         ROLE_TEACHER:     ROLE_USER
+        ROLE_BACKEND:     ROLE_USER
         ROLE_ADMIN:       [ROLE_TEACHER, ROLE_BACKEND]
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
