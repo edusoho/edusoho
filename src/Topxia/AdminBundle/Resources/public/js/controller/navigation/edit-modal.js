@@ -33,11 +33,6 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="url"]',
-            required: true
-        });
-
-        validator.addItem({
             element: '[name="sequence"]',
             rule: 'number',
             required: true
