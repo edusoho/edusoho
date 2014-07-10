@@ -286,7 +286,7 @@ define(function(require, exports, module) {
 
                         var courseId = lesson.courseId;
                         var lessonId = lesson.id;
-                        var $liveNotice = "直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入,";
+                        var $liveNotice = "直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。";
 
                             var iID = setInterval(function () {
                                 var nowDate = new Date();
@@ -299,18 +299,18 @@ define(function(require, exports, module) {
                                 var minutes = Math.floor(modulo / 60);
                                 var seconds = modulo % 60;
 
-                        $countDown = "还剩:" + days + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒<br><br>";
+                        $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
 
                         if (days == 0) {
-                                     $countDown = "还剩:" + hours + "小时" + minutes + "分钟" + seconds + "秒<br><br>";
+                                     $countDown = "还剩: <strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
                         };
 
                         if (hours == 0 && days != 0) {
-                               $countDown = "还剩:" + days + "天" + minutes + "分钟" + seconds + "秒<br><br>";
+                               $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
                         };
 
                         if (hours == 0 && days == 0) {
-                               $countDown = "还剩:" + minutes + "分钟" + seconds + "秒<br><br>";
+                               $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
                         };
 
                         if (0< startLeftSeconds && startLeftSeconds < 3600) {
@@ -333,7 +333,7 @@ define(function(require, exports, module) {
                             $countDown = "";
                         };
 
-                        $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice + '<div>' + lesson.summary + '</div>' + '<br>' + $countDown);
+                        $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice + '<div style="padding-bottom:15px; border-bottom:1px dashed #ccc;">' + lesson.summary + '</div>' + '<br>' + $countDown);
 
 
                             }, 1000);
