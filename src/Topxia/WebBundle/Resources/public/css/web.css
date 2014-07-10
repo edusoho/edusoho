@@ -1148,6 +1148,11 @@ body {
 	width: 65px;
 }
 
+.course-item-list .lesson-item .name a:hover {
+	color: #444;
+	outline: none;
+}
+
 .course-item-list .lesson-item .type {
 	float: right;
 	color: #999;
