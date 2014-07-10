@@ -14,6 +14,7 @@ define(function(require, exports, module) {
             var code = $currentItem.data('code').split('-').pop();
 
             config.code = code;
+            config.id = $currentItem.attr('id');
 
             $("#"+$currentItem.attr('id')).data('config', config);
 
