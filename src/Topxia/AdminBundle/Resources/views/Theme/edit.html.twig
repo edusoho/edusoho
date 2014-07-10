@@ -75,142 +75,21 @@
 
             <!-- List group -->
             <ul class="list-group module-item-list theme-edit-block theme-custom-left-block">
-             {#  <li class="list-group-item clearfix theme-edit-item">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 首页轮播图挂件
-                  </label>
-                </div>
-                <div class="col-md-4"></div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1"></div>
-              </li> #}
-              <li class="list-group-item clearfix theme-edit-item" data-code="theme-edit-item-code">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox" class="check-block"> 推荐课程挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm item-edit-btn" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix theme-edit-item">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox" class="check-block"> 最新课程挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm item-edit-btn" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix theme-edit-item">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox" class="check-block"> 直播课程挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm item-edit-btn" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 分类课程一挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 分类课程二挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 分类课程三挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 推荐话题挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_threads_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 资讯挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_articles_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 讲师团挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_teachers_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
+
+              {% for pendant in themeConfig.blocks.left|default([]) %}
+
+                {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:true} %}
+                
+              {% endfor %}
+
+              {% for pendant in allConfig.blocks.left %}
+                {% if not is_exist_in_subarray_by_id(pendant, themeConfig.blocks.left|default([])) %}
+
+                  {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:false} %}
+                
+                {% endif %}
+              {% endfor %}
+              
             </ul>
           </div>
       </div>
@@ -230,114 +109,19 @@
 
             <!-- List group -->
             <ul class="list-group module-item-list">
-               <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 登录框挂件
-                  </label>
-                </div>
-                <div class="col-md-4"></div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1"></div>
-              </li>
-              <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 每日一师挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_teacher_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 学员评价挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_reviews_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 直播课程挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_live_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 精品课程挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_popular_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 热门标签挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_tags_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 业内动态挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_articles_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
-              <li class="list-group-item clearfix">
-                <div class="col-md-4 ">
-                  <label>
-                  <input type="checkbox"> 学习动态挂件
-                  </label>
-                </div>
-                <div class="col-md-4">
-                  &nbsp;自定义名称
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary btn-sm" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('right_edit_learns_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
-                </div>
-              </li>
+              {% for pendant in themeConfig.blocks.right|default([]) %}
+
+                {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:true} %}
+                
+              {% endfor %}
+
+              {% for pendant in allConfig.blocks.right %}
+                {% if not is_exist_in_subarray_by_id(pendant, themeConfig.blocks.right|default([])) %}
+
+                  {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:false} %}
+                
+                {% endif %}
+              {% endfor %}
             </ul>
           </div>
       </div>

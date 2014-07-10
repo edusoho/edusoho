@@ -1,0 +1,14 @@
+<li class="list-group-item clearfix theme-edit-item" data-code="theme-edit-item-{{ pendant.code }}" id="{{ pendant.id }}">
+  <div class="col-md-4 ">
+    <label>
+      <input type="checkbox" class="check-block" {% if isChoiced %}checked{% endif %}> 推荐课程挂件
+    </label>
+  </div>
+  <div class="col-md-4">
+    &nbsp;{% if pendant.title|default(null) %}{{ pendant.title }}{% else %}自定义名称{% endif %}
+  </div>
+  <div class="col-md-3"></div>
+  <div class="col-md-1">
+    <button class="btn btn-primary btn-sm item-edit-btn" data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('left_edit_courses_theme')}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+  </div>
+</li>

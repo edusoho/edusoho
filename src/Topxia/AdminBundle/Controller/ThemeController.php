@@ -38,8 +38,8 @@ class ThemeController extends BaseController
     {
         $config = $request->request->get('config');
         
-        var_dump($config);exit();
         $config = $this->getThemeService()->saveCurrentThemeConfig($config);
+        var_dump($config);exit();
     }
 
     public function confirmConfigAction(Request $request)
@@ -59,7 +59,8 @@ class ThemeController extends BaseController
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
 
         return $this->render('TopxiaAdminBundle:Theme:edit.html.twig', array(
-            'themeConfig' => $themeConfig
+            'themeConfig' => $themeConfig['config'],
+            'allConfig' => $themeConfig['allConfig']
         ));
     }
 
