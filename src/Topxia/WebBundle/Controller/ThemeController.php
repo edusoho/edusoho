@@ -7,8 +7,6 @@ class ThemeController extends BaseController
 {
 	public function pendantAction($config=null)
     {
-        var_dump($config);
-
         if (isset($config['code'])) {
             return $this->render("TopxiaWebBundle:Default:{$config['code']}.html.twig",array(
                 'config' => $config

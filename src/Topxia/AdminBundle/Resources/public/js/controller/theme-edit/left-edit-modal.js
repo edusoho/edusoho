@@ -11,7 +11,7 @@ define(function(require, exports, module) {
         $("#save-btn").on('click', function(){
             var config = formSerialize($($(this).data('form')));
 
-            var code = $currentItem.data('code').split('-').pop();
+            var code = $currentItem.data('code').split('_').pop();
 
             config.code = code;
             config.id = $currentItem.attr('id');

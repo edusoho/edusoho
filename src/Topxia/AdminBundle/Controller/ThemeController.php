@@ -57,7 +57,7 @@ class ThemeController extends BaseController
     public function editAction (Request $request)
     {
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
-
+var_dump($themeConfig);exit();
         return $this->render('TopxiaAdminBundle:Theme:edit.html.twig', array(
             'themeConfig' => $themeConfig['config'],
             'allConfig' => $themeConfig['allConfig']
