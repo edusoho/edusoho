@@ -19,8 +19,8 @@ define(function(require, exports, module) {
 
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
-                    $table.find('tbody').replaceWith(html);
                     Notify.success('保存导航成功！');
+                    window.location.reload();
                 });
 
             }

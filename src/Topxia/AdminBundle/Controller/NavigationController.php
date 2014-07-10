@@ -14,22 +14,12 @@ class NavigationController extends BaseController
     {
         $type = $request->query->get('type', 'top');
 
-        $paginator = new Paginator(
-            $request,
-            $this->getNavigationService()->getNavigationsCountByType($type),
-            10
-        );
-
-        $navigations = $this->getNavigationService()->findNavigationsByType(
-            $type,
-            0,
-            $this->getNavigationService()->getNavigationsCountByType($type)
-        );
+        $navigations = $this->getNavigationService()->getNavigationsListByType($type);
 
         return $this->render('TopxiaAdminBundle:Navigation:index.html.twig', array(
             'type' => $type,
             'navigations' => $navigations,
-            'paginator' => $paginator));
+        ));
     }
 
     public function deleteAction (Request $request, $id)

@@ -2,7 +2,7 @@
   {% for navigation in navigations %}
 		<tr id="navigations-tr-{{ navigation.id }}">
 		  <td>
-        {% if navigation.parentId > 0 %} &nbsp;&nbsp;&nbsp;&nbsp; {% endif %}
+        {% if navigation.parentId > 0 %} &nbsp;&nbsp;&nbsp;&nbsp; └─{% endif %}
         <a href="{{navigation.url|navigation_url}}" target="_blank"> {{navigation.name}} </a>
       </td>
 		  <td>

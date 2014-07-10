@@ -15,6 +15,8 @@ interface NavigationService
 
     public function getNavigationsCountByType($type);
 
+    public function getNavigationsListByType($type);
+
     public function createNavigation($fields);
 
     public function updateNavigation($id, $fields);
