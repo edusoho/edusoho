@@ -100,7 +100,7 @@ class DefaultController extends BaseController
 
     public function topNavigationAction($siteNav = null)
     {
-    	$navigations = $this->getNavigationService()->findNavigationsByType('top', 0, 100);
+    	$navigations = $this->getNavigationService()->getNavigationsTreeByType('top');
 
     	return $this->render('TopxiaWebBundle:Default:top-navigation.html.twig', array(
     		'navigations' => $navigations,
