@@ -53,8 +53,19 @@ class WebExtension extends \Twig_Extension
             'dict' => new \Twig_Function_Method($this, 'getDict') ,
             'dict_text' => new \Twig_Function_Method($this, 'getDictText', array('is_safe' => array('html'))) ,
             'upload_max_filesize' => new \Twig_Function_Method($this, 'getUploadMaxFilesize') ,
-            'js_paths' => new \Twig_Function_Method($this, 'getJsPaths') ,
+            'js_paths' => new \Twig_Function_Method($this, 'getJsPaths'),
+            'is_exist_in_subarray_by_id' => new \Twig_Function_Method($this, 'isExistInSubArrayById')
         );
+    }
+
+    public function isExistInSubArrayById($currentTarget, $targetArray)
+    {
+        foreach ($targetArray as $target) {
+            if ($currentTarget['id'] == $target['id']) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function getJsPaths()
