@@ -5,7 +5,7 @@
           <li class="media">
             
               <div class="media-body" style="word-break: break-all;" >
-                   <a href="{{path('group_thread_index',{id:ownThread.groupId,threadId:ownThread.id})}}">"{{ownThread.title|plain_text(50 )}}"</a> 
+                   <a href="{{path('group_thread_index',{id:ownThread.groupId,threadId:ownThread.id})}}">"{{ownThread.title|plain_text(100)}}"</a> 
                    <div class="pull-right">                      
                      {% if ownThread.postNum %}
                       <span class="badge pull-right" >{{ownThread.postNum}}</span>
@@ -14,7 +14,7 @@
                   </div>
                   <br>
                   <div class="text-muted text-normal"><br>
-                    <a href="{{path('group_index',{id:ownThread.groupId})}}" title="{{groupsAsOwnThreads[ownThread.groupId].title}}" >{{groupsAsOwnThreads[ownThread.groupId].title}}</a> &nbsp;
+                    <a class="link-muted" href="{{path('group_index',{id:ownThread.groupId})}}" title="{{groupsAsOwnThreads[ownThread.groupId].title}}" >{{groupsAsOwnThreads[ownThread.groupId].title}}</a> &nbsp;
                     <span class="glyphicon glyphicon-user"></span>
                     {{ web_macro.user_link(user , 'link-muted') }} &nbsp;
                      <span class="glyphicon glyphicon-time"></sapn>{{ownThread.createdTime|smart_time}}&nbsp;
