@@ -286,7 +286,7 @@ define(function(require, exports, module) {
 
                         var courseId = lesson.courseId;
                         var lessonId = lesson.id;
-                        var $liveNotice = "直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。";
+                        var $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
 
                             var iID = setInterval(function () {
                                 var nowDate = new Date();
