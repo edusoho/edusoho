@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ThemeController extends BaseController
 {
+
 	public function pendantAction($config=null)
     {
         if (isset($config['code'])) {
