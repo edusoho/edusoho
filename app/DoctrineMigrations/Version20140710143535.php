@@ -13,7 +13,7 @@ class Version20140710143535 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-         $this->addSql("ALTER TABLE `theme_config` ADD `allConfig` TEXT NOT NULL AFTER `confirmConfig`;");
+        $this->addSql("ALTER TABLE `theme_config` ADD `allConfig` TEXT NOT NULL AFTER `confirmConfig`;");
 
 
     }

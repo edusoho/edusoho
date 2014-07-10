@@ -18,6 +18,10 @@
   <link href="{{ asset('assets/css/common.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin_v2.css') }}" rel="stylesheet" />
+  <link rel="stylesheet" media="screen" href="{{ asset('assets/css/bootstrap-extends.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('themes/one/css/one.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('themes/one/css/yellow.css') }}" />
   {% block javascripts %}{% endblock %}
   <!--[if lt IE 9]>
     <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
@@ -81,7 +85,7 @@
                 
               {% endfor %}
 
-              {% for pendant in allConfig.blocks.left %}
+              {% for pendant in allConfig.blocks.left|default([]) %}
                 {% if not is_exist_in_subarray_by_id(pendant, themeConfig.blocks.left|default([])) %}
 
                   {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:false} %}
@@ -113,7 +117,7 @@
                 
               {% endfor %}
 
-              {% for pendant in allConfig.blocks.right %}
+              {% for pendant in allConfig.blocks.right|default([]) %}
                 {% if not is_exist_in_subarray_by_id(pendant, themeConfig.blocks.right|default([])) %}
 
                   {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:false} %}
@@ -146,8 +150,9 @@
 </div>
 
 <div class="mod-preview-mask">
-  <iframe src="/" marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="100%" height="100%" id="iframepage" name="iframepage" >
-</iframe>
+ {#  <iframe src="/" marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="100%" height="100%" id="iframepage" name="iframepage" >
+  </iframe> #}
+  {{ render(controller('TopxiaWebBundle:Theme:pendant')) }}
 </div>
 <div class="col-md-1"></div>
 

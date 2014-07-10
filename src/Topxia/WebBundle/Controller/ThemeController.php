@@ -13,10 +13,9 @@ class ThemeController extends BaseController
     				'code' =>'live-course', 
     				'title' =>'bbbbb',
     				'count' => '2',
-
     				);
     	$view = $config->code;
-// var_dump($view);exit();
+
         return $this->render("TopxiaWebBundle:Default:{$view}.html.twig",array(
             'config' => $config
         ));
