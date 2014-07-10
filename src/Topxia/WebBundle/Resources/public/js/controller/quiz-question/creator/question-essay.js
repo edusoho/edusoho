@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     var BaseQuestion = require('./question-base');
     var EditorFactory = require('common/kindeditor-factory');
     var Uploader = require('upload');
+    var Notify = require('common/bootstrap-notify');
 
     var EssayQuestion = BaseQuestion.extend({
         setup: function() {
@@ -31,6 +32,7 @@ define(function(require, exports, module) {
                     Notify.danger('上传失败，请重试！')
                 },
                 success: function(response) {
+                    Notify.success('上传成功！', 1);
                     var result = '[image]' + response.hashId + '[/image]'
                     editor.insertHtml(result);
                 }
