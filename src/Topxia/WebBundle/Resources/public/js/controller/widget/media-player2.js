@@ -59,11 +59,12 @@ define(function(require, exports, module) {
             };
 
             if (this.get('src').indexOf('.m3u8') > 0 || this.get('src').indexOf('HLSQualitiyList') > 0) {
-                flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayerCN/1.0.2/HLSProviderOSMF.swf";
+                // flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayerCN/1.0.2/HLSProviderOSMF.swf";
+                flashvars.plugin_hls = app.httpHost + app.basePath + "/assets/libs/player/HLSProviderOSMF-1.0.2.swf";
             }
 
             if (this.element.data('watermark')) {
-                flashvars.plugin_watermake = 'http://cdn.staticfile.org/GrindPlayerCN/1.0.2/Watermake-1.0.2.swf';
+                flashvars.plugin_watermake = 'http://cdn.staticfile.org/GrindPlayerCN/1.0.2/Watermake-1.0.3.swf';
                 flashvars.watermake_namespace = 'watermake';
                 flashvars.watermake_url = this.element.data('watermark');
             }
