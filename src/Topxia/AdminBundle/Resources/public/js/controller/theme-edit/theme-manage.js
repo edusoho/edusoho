@@ -35,11 +35,11 @@ define(function(require, exports, module) {
         },
 
         _saveConfig: function() {
-            var configs = {color: '', blocks:{left:[], right:[], bottom:[]}};
+            var configs = {color: '', blocks:{left:[], right:[]}, bottom: ''};
 
             configs.blocks.left = this._getBlockConfig(this.$('.theme-custom-left-block'));
             configs.blocks.right = this._getBlockConfig(this.$('.theme-custom-right-block'));
-            configs.blocks.bottom = this._getBlockConfig(this.$('.theme-custom-bottom-block'));
+            configs.bottom = this._getBlockConfig(this.$('.theme-custom-bottom-block'));
             configs.color = this._getColorConfig(this.$('.theme-custom-color-block'));
             this.set('config', configs,{override: true});
         },
@@ -51,7 +51,7 @@ define(function(require, exports, module) {
 
                 config.push($(this).parents('li').data('config'));
             });
-
+console.log(config);
             return config;
         },
 
