@@ -37,8 +37,9 @@ class ThemeController extends BaseController
     public function saveConfigAction(Request $request)
     {
         $config = $request->request->get('config');
-        $config = $this->getThemeService()->saveCurrentThemeConfig($config);
+        
         var_dump($config);exit();
+        $config = $this->getThemeService()->saveCurrentThemeConfig($config);
     }
 
     public function confirmConfigAction(Request $request)
@@ -55,9 +56,10 @@ class ThemeController extends BaseController
 
     public function editAction (Request $request)
     {
-       
+        $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
+
         return $this->render('TopxiaAdminBundle:Theme:edit.html.twig', array(
-            'themeConfig' => array('fuckddddd' => 'fuckyouddddd')
+            'themeConfig' => $themeConfig
         ));
     }
 
