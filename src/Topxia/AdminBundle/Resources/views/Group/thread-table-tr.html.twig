@@ -5,7 +5,7 @@
    </td>
 
    <td style="word-break:break-all;">
-    <strong >{{ thread.title|plain_text(50)}}</strong>
+    <strong ><a target="_blank" href="{{path('group_thread_index',{id:thread.groupId,threadId:thread.id})}}">{{ thread.title|plain_text(50)}}</a></strong>
     {% if thread.isElite %}
           <span class="label label-warning">精</span>
           {% endif %}{% if thread.isStick==1 %}

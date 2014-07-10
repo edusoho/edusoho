@@ -759,12 +759,9 @@ admin_group:
 admin_groupThread:
     pattern:  /group/thread
     defaults: { _controller: TopxiaAdminBundle:Group:thread }
-admin_batch_openThread:
-    pattern:  /group/batchOpenThread
-    defaults: { _controller: TopxiaAdminBundle:Group:batchOpenThread }
-admin_batch_closeThread:
-    pattern:  /group/batchCloseThread
-    defaults: { _controller: TopxiaAdminBundle:Group:batchCloseThread }
+admin_batch_deleteThread:
+    pattern:  /group/batchDeleteThread
+    defaults: { _controller: TopxiaAdminBundle:Group:batchDeleteThread }
 admin_close_group:
     pattern:  /group/{id}/close
     defaults: { _controller: TopxiaAdminBundle:Group:closeGroup }
@@ -792,3 +789,6 @@ admin_openThread:
 admin_deleteThread:
     pattern:  /group/thread/{threadId}/deleteThread
     defaults: { _controller: TopxiaAdminBundle:Group:deleteThread }
+admin_transferGroup:
+    pattern:  /group/transfer/{groupId}
+    defaults: { _controller: TopxiaAdminBundle:Group:transferGroup }

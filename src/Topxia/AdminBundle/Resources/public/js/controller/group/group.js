@@ -2,6 +2,9 @@ define(function(require, exports, module) {
 
   
 	var Notify = require('common/bootstrap-notify');
+    var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
+
 	exports.run = function() {
 		var $table=$('#group-table');
 
@@ -18,7 +21,34 @@ define(function(require, exports, module) {
                 Notify.danger($trigger.attr('title') + '失败');
             });
 
-		})
+		});
+
+        $('.transfer-group').on('click',function(){
+            console.log(1);
+            $('#myModal').modal('show');
+            $('#transfer-group-form').attr('action',$(this).data('url'));
+
+        });
+
+        var validator = new Validator({
+            element: '#transfer-group-form',
+            autoSubmit: false,
+            onFormValidated: function(error){
+                if (error) {
+                    return false;
+                }
+                $.post($("#transfer-group-form").attr('action'),$("#transfer-group-form").serialize(), function(){
+        
+                    window.location.reload();
+                })
+            }
+        });
+
+        validator.addItem({
+            element: '[name="user[nickname]"]',
+            required: true,
+            rule: 'remote'
+        });
 
 	}
 	

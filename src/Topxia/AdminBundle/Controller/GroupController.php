@@ -51,7 +51,8 @@ class GroupController extends BaseController
         $conditions = array(
             'status'=>'',
             'title'=>'',
-            'groupName',
+            'groupName'=>'',
+            'userName'=>'',
         );
 
         if(!empty($fields)){
@@ -87,20 +88,11 @@ class GroupController extends BaseController
             'paginator' => $paginator));
     }
 
-    public function batchOpenThreadAction(Request $request)
+    public function batchDeleteThreadAction(Request $request)
     {
         $threadIds=$request->request->all();
         foreach ($threadIds['ID'] as $threadId) {
-            $this->postAction($threadId,'openThread');
-        }
-        return new Response('success');
-    }
-
-    public function batchCloseThreadAction(Request $request)
-    {
-        $threadIds=$request->request->all();
-        foreach ($threadIds['ID'] as $threadId) {
-            $this->postAction($threadId,'closeThread');
+            $this->getThreadService()->deleteThread($threadId); 
         }
         return new Response('success');
     }
@@ -117,11 +109,11 @@ class GroupController extends BaseController
 
         $groupinfo=$this->getGroupService()->getGroup($id);
 
-        $owner=$this->getUserService()->findUsersByIds(array('0'=>$groupinfo['ownerId']));
+        $owners=$this->getUserService()->findUsersByIds(array('0'=>$groupinfo['ownerId']));
 
         return $this->render('TopxiaAdminBundle:Group:table-tr.html.twig', array(
             'group' => $groupinfo,
-            'owner'=>$owner,
+            'owners'=>$owners,
         ));
     }
     public function  closeGroupAction($id)
@@ -130,12 +122,39 @@ class GroupController extends BaseController
 
         $groupinfo=$this->getGroupService()->getGroup($id);
         
-        $owner=$this->getUserService()->findUsersByIds(array('0'=>$groupinfo['ownerId']));
+        $owners=$this->getUserService()->findUsersByIds(array('0'=>$groupinfo['ownerId']));
 
         return $this->render('TopxiaAdminBundle:Group:table-tr.html.twig', array(
             'group' => $groupinfo,
-            'owner'=>$owner,
+            'owners'=>$owners,
         ));
+    }
+
+    public function transferGroupAction(Request $request,$groupId)
+    {
+        $data=$request->request->all();
+
+        $user=$this->getUserService()->getUserByNickname($data['user']['nickname']);
+
+        $group=$this->getGroupService()->getGroup($groupId);
+
+        $ownerId=$group['ownerId'];
+
+        $member=$this->getGroupService()->getMemberByGroupIdAndUserId($groupId,$ownerId);
+
+        $this->getGroupService()->updateMember($member['id'],array('role'=>'member'));
+
+        $this->getGroupService()->updateGroup($groupId,array('ownerId'=>$user['id']));
+
+        $member=$this->getGroupService()->getMemberByGroupIdAndUserId($groupId,$user['id']);
+
+        if($member){
+            $this->getGroupService()->updateMember($member['id'],array('role'=>'owner'));
+        }else{
+            $this->getGroupService()->addOwner($groupId,$user['id']);
+        }
+
+        return new Response("success");
     }
 
     public function removeEliteAction($threadId)
@@ -199,14 +218,14 @@ class GroupController extends BaseController
 
         $thread=$this->getThreadService()->getThread($threadId);
 
-        $owner=$this->getUserService()->findUsersByIds(array('0'=>$thread['userId']));
+        $owners=$this->getUserService()->findUsersByIds(array('0'=>$thread['userId']));
 
         $group=$this->getGroupService()->getGroupsByIds(array('0'=>$thread['groupId']));
 
 
         return $this->render('TopxiaAdminBundle:Group:thread-table-tr.html.twig', array(
             'thread' => $thread,
-            'owner'=>$owner,
+            'owners'=>$owners,
             'group'=>$group,
         ));
 
@@ -240,7 +259,6 @@ class GroupController extends BaseController
                 break;
             case 'byCreatedTime':
                 $orderBys=array(
-                    array('isStick','DESC'),
                     array('createdTime','DESC'),
                 );
                 break;

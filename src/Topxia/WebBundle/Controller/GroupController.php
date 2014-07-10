@@ -26,7 +26,7 @@ class GroupController extends BaseController
                 'createdTime'=>time()-30*24*60*60,
                 'status'=>'open'
                 ),
-            $this->filterSort('byPostNum'),0, 15
+            $this->filterSort('byPostNum'),0, 25
         );
 
         $ownerIds = ArrayToolkit::column($recentlyThread, 'userId');
@@ -43,7 +43,7 @@ class GroupController extends BaseController
 
         if ($user['id']) {
             $members=$this->getGroupService()->searchMembers(array('userId'=>$user['id']),array('createdTime',"DESC"),0,
-            24);
+            20);
 
             $groupIds = ArrayToolkit::column($members, 'groupId');
 
@@ -54,12 +54,20 @@ class GroupController extends BaseController
                 array('createdTime','DESC'), 0, 8);
         }
 
+        $groupCount=$this->getGroupService()->searchGroupsCount(array('status'=>'open'));
+
+        $start=$groupCount>8 ? rand(0,$groupCount-8) : 0 ;
+
+        $deserveGroup=$this->getGroupService()->searchGroups(array('status'=>'open',),
+            array('createdTime','DESC'),$start,8);
+
         return $this->render("TopxiaWebBundle:Group:index.html.twig", array(
             'activeGroup' => $activeGroup,
             'mycreatedGroup' => $mycreatedGroup,
             'myjionGroup' => $myJoinGroup,
             'lastPostMembers'=>$lastPostMembers,
             'owners'=>$owners,
+            'deserveGroup'=>$deserveGroup,
             'groupinfo'=>$groups,
             'user'=>$user,  
             'recentlyThread'=>$recentlyThread,
@@ -158,8 +166,16 @@ class GroupController extends BaseController
     {
         $user=$this->getCurrentUser();
 
-        $createdGroups=$this->getGroupService()->searchGroups(array('ownerId'=>$user['id']),array('createdTime',"DESC"),0,
-                1000);
+        $admins=$this->getGroupService()->searchMembers(array('userId'=>$user['id'],'role'=>'admin'),
+            array('createdTime',"DESC"),0,1000
+            );
+        $owners=$this->getGroupService()->searchMembers(array('userId'=>$user['id'],'role'=>'owner'),
+            array('createdTime',"DESC"),0,1000
+            );
+        $members=array_merge($admins,$owners);
+        $groupIds = ArrayToolkit::column($members, 'groupId');
+        $adminGroups=$this->getGroupService()->getGroupsByids($groupIds);
+
         $paginator=new Paginator(
             $this->get('request'),
             $this->getGroupService()->searchMembersCount(array('userId'=>$user['id'])),
@@ -174,7 +190,7 @@ class GroupController extends BaseController
 
         return $this->render("TopxiaWebBundle:Group:groupMemberJoin.html.twig",array(
             'user'=>$user,
-            'createdGroups'=>$createdGroups,
+            'adminGroups'=>$adminGroups,
             'paginator'=>$paginator,
             'groups'=>$groups));
 
@@ -287,13 +303,6 @@ class GroupController extends BaseController
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
 
-        $groupCount=$this->getGroupService()->searchGroupsCount(array('status'=>'open'));
-
-        $start=$groupCount>12 ? rand(0,$groupCount-12) : 0 ;
-
-        $deserveGroup=$this->getGroupService()->searchGroups(array('status'=>'open',),
-            array('createdTime','DESC'),$start,12);
-
         $members=$this->getUserService()->findUsersByIds($memberIds);
         return $this->render("TopxiaWebBundle:Group:groupindex.html.twig", array(
             'groupinfo' => $group,
@@ -302,7 +311,6 @@ class GroupController extends BaseController
             'owner'=>$owners,
             'user'=>$user,
             'id'=>$id,
-            'deserveGroup'=>$deserveGroup,
             'threads'=>$threads,
             'paginator'=>$paginator,
             'condition'=>$filters,
@@ -645,7 +653,7 @@ class GroupController extends BaseController
        if($this->getUserService()->verifyPassword($currentUser['id'],$data['user']['password'])){
 
             $user=$this->getUserService()->getUserByNickname($data['user']['nickname']);
-
+            
             $this->getGroupService()->updateGroup($id,array('ownerId'=>$user['id']));
 
             $member=$this->getGroupService()->getMemberByGroupIdAndUserId($id,$user['id']);

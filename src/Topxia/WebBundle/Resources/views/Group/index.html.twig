@@ -7,7 +7,7 @@
         <div class="es-row-wrap ">
             <div class="row">
 
-                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 热门小组<a href="{{path('group_search_group')}}" class="pull-right">..更多</a> </div>
+                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 热门小组<a href="{{path('group_search_group')}}" class="pull-right">&raquo;更多</a> </div>
               
                 {% if activeGroup %}
                         {% for group in activeGroup %}
@@ -21,7 +21,7 @@
                                             <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
                                      {% endif %}
                                     </a>
-                                    <p class="mvs"><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title|plain_text(9)}}</a></p>
+                                    <p class="mvs"><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}" >{{group.title}}</a></p>
                          </div>
                           
                         {% endfor %}
@@ -42,9 +42,11 @@
                           {% if recentlyThread%}
                                 {% for threadinfo in recentlyThread%}  
                                     <li class="media"> 
+                                          {% if threadinfo.postNum %}
                                           <a href="{{path('group_index',{id:threadinfo.groupId})}}" title="{{groupinfo[threadinfo.groupId].title}}">  
-                                            <h5><span class="badge pull-right" style="margin-top:15px;">{{groupinfo[threadinfo.groupId].title}}</span></h5> 
-                                          </a>           
+                                            <h5><span class="badge pull-right" style="margin-top:15px;">{{threadinfo.postNum}}</span></h5> 
+                                          </a>   
+                                          {% endif %}        
                                      
                                           {{ web_macro.user_avatar(owners[threadinfo.userId], 'pull-left media-object media-object-small')}}
 
@@ -52,6 +54,9 @@
                                                  <a href="{{path('group_thread_index',{id:threadinfo.groupId,threadId:threadinfo.id})}}">{{threadinfo.title|plain_text(75)}} </a>
                                                  <br>
                                                  <div class="text-muted text-normal"><br>
+                                                  <a href="{{path('group_index',{id:threadinfo.groupId})}}" title="{{groupinfo[threadinfo.groupId].title}}">  
+                                                  {{groupinfo[threadinfo.groupId].title}}</h5> 
+                                                  </a>&nbsp;
                                                    <span class="glyphicon glyphicon-user"></span>
                                                     {{ web_macro.user_link(owners[threadinfo.userId] , 'link-muted') }} &nbsp;
                                                     <span class="glyphicon glyphicon-time"></sapn>
@@ -98,24 +103,26 @@
                         <div class="media-body">
                             <p >{{ web_macro.user_link(user , 'link-muted') }}</p>
                             <a href="{{ path ('group_member_center') }}" class="btn btn-primary btn-xs btn-default active" role="button">我的小组主页</a>
+                            {% if is_granted('ROLE_ADMIN') %}
                             <a href="{{ path ('group_add') }}" class="btn btn-primary btn-xs btn-default active" role="button">创建小组</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         {% endif %}
-                          
+        {% if mycreatedGroup %}                  
         <div class="es-row-wrap " >
                               
             <div class="row">
 
                 <div class="page-header">我创建的小组
-                  {% if user.id %} <a href="{{ path ('group_member_join') }}" class="pull-right">..更多</a>{% endif %}
+                  {% if user.id %} <a href="{{ path ('group_member_join') }}" class="pull-right">&raquo;更多</a>{% endif %}
                 </div> 
                 <div class="row">
            
-                    {% if mycreatedGroup %}
+                    
                         {% for group in mycreatedGroup %}
                             <div class="grouplist">  
                                 <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
@@ -131,29 +138,25 @@
                                 </p>
                             </div>
                          
-                        {% endfor %}
-                    {% else %}
-                        还没有小组信息！赶紧去创建小组吧！  
-                        <a href="{{ path ('group_add') }}" class="btn btn-primary btn-xs btn-default active" role="button">创建小组</a>
-                    {% endif %}
+                        {% endfor %}            
                 </div>
                   <br>
             </div>
         </div>
+        {% endif %}
 
-
+        {% if myjionGroup %}
         <div class="es-row-wrap ">
             <div class="row">
 
                 <div class="page-header">我加入的小组
                  {% if user.id %}
-                 <a href="{{ path ('group_member_join') }}" class="pull-right">..更多</a>
+                 <a href="{{ path ('group_member_join') }}" class="pull-right">&raquo;更多</a>
                  {% endif %}
                 </div> 
 
                 <div class="row">
-              
-                    {% if myjionGroup %}
+
                          {% for group in myjionGroup %}
                              {% if group.status=='open' %}
                                 <div class="grouplist" >  <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
@@ -167,15 +170,18 @@
                                         </p>
                                 </div>
                              {% endif %}
-                         {% endfor %}
-                              
-                    {% else %}
-                        还没有小组信息！赶紧去加入小组吧！
-                    {% endif %}
+                         {% endfor %}    
+
                 </div><br>
             </div>
         </div>
-        
+        {% endif %}
+
+        <div class="es-row ">
+         
+         {% include 'TopxiaWebBundle:Group:deserveGroup.list.html.twig' %}
+           
+        </div>
     </div>
 </div>
 {% endblock %}

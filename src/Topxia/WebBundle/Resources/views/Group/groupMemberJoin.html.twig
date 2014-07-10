@@ -13,10 +13,10 @@
         <div class="col-md-12"> 
           {% include 'TopxiaWebBundle:Group:groupMember.nav.pill.html.twig' %}
           <div class="page-header">
-            <h4> 我创建的小组</h4>
+            <h4> 我管理的小组</h4>
           </div>
           {% include 'TopxiaWebBundle:Group:groups.ul.html.twig' with {
-          'groups':createdGroups,  }
+          'groups':adminGroups,  }
           %}
           
         </div>

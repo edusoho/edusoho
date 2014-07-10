@@ -96,9 +96,9 @@
           {% else %}
           <tr>
             <td style="border-top:0px;">       
-              <div class="text-muted pull-right" ><b>
+              <div class="text-muted pull-right" >
                 1楼 {{threadMain.createdTime|date('Y-m-d H:i:s')}}  &nbsp;
-                </b>
+             
               </div>
             </td>
           </tr>
@@ -160,13 +160,13 @@
             </tr>
             <tr>
               <td style="border-top:0px;">
-                <div class="text-muted pull-right" ><b>
+                <div class="text-muted pull-right" >
                   {% if filters.sort=='desc' %}
                     {{ (postCount+1)-10*(paginator.currentPage-1)-loop.index0 }}
                   {% else %}
                     {{ (loop.index+1)+10*(paginator.currentPage-1) }}
                   {% endif %}
-                  楼 {{post.createdTime|date('Y-m-d H:i:s')}} </b> &nbsp;
+                  楼 {{post.createdTime|date('Y-m-d H:i:s')}}  &nbsp;
                 </div>
               </td>
             </tr>             

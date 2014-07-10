@@ -82,7 +82,12 @@ class GroupServiceImpl extends BaseService implements GroupService {
             'createdTime' => time(),
             'role' => 'owner',
         );
-        return $this->getGroupMemberDao()->addMember($member);
+
+        $member=$this->getGroupMemberDao()->addMember($member);
+
+        $this->reCountGroupMember($groupId);
+
+        return $member;
     }
     public function openGroup($id)
     {

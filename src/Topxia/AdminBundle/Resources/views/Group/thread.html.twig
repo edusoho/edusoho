@@ -23,6 +23,10 @@
     <div class="form-group">
       <input class="form-control" type="text" placeholder="话题名称关键词" name="title" value="{{ app.request.get('title') }}">
     </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="创建者" name="userName" value="{{ app.request.get('userName') }}">
+    </div>
     
     <button class="btn btn-primary">搜索</button>
   </form>
@@ -55,14 +59,11 @@
           </td> 
 
           <td>   
-           <input type="hidden" id="batchCloseThread" value="{{path('admin_batch_closeThread')}}">
+           <input type="hidden" id="batchDeleteThread" value="{{path('admin_batch_deleteThread')}}">
            
-           <input type="hidden" id="batchOpenThread" value="{{path('admin_batch_openThread')}}">
-           
-           <button id="closeThread" data-submiting-text="正在关闭" type="button" class="btn btn-default btn-sm"
-           >关闭话题</button>
-
-           <button id="openThread" data-submiting-text="正在开启" type="button" class="btn btn-default btn-sm">开启话题</button>   
+           <button id="deleteThread" data-submiting-text="正在删除" type="button" class="btn btn-default btn-sm"
+           >删除话题</button>
+ 
           </td>
 
         </tr>

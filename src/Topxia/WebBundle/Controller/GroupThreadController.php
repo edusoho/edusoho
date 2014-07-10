@@ -88,8 +88,6 @@ class GroupThreadController extends BaseController
 
         if ($result) {
             $response = array('success' => false, 'message' => '该用户不存在');
-        } else if ($currentUser['nickname'] == $nickname){
-            $response = array('success' => false, 'message' => '不能转移给自己！');
         } else {
             $response = array('success' => true, 'message' => '');
         }

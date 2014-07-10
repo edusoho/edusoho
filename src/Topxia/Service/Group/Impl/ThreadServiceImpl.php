@@ -198,6 +198,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
             }   
         }
 
+        if(isset($conditions['userName'])&&$conditions['userName']!==""){
+            $user=$this->getUserService()->getUserByNickname($conditions['userName']);
+            if(!empty($user)){
+              $conditions['userId']=$user['id'];  
+            }else{
+              $conditions['userId']=0;  
+            }   
+        }
+
          if(isset($conditions['status']))
         {
             if($conditions['status']==""){
@@ -214,6 +223,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     private function getGroupService()
     {
         return $this->createService('Group.GroupService');
+    }
+    private function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
     private function getThreadPostDao()
     {
