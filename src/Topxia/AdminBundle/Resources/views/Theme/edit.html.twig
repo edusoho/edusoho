@@ -150,9 +150,8 @@
 </div>
 
 <div class="mod-preview-mask">
- {#  <iframe src="/" marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="100%" height="100%" id="iframepage" name="iframepage" >
-  </iframe> #}
-  {{ render(controller('TopxiaWebBundle:Theme:pendant')) }}
+  <iframe src="{{ path('admin_theme_show') }}" marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="100%" height="100%" id="iframepage" name="iframepage" >
+  </iframe>
 </div>
 <div class="col-md-1"></div>
 

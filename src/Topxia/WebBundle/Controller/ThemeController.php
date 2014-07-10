@@ -10,7 +10,7 @@ class ThemeController extends BaseController
     	// $config = $request->query->all();
         
     	$config = (Object)array(
-    				'code' =>'live-course', 
+    				'code' =>'recommend-course', 
     				'title' =>'bbbbb',
     				'count' => '2',
     				);

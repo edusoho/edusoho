@@ -417,6 +417,10 @@ admin_reset_theme_config:
     pattern:  /reset/theme/config
     defaults: { _controller: TopxiaAdminBundle:Theme:resetConfig }
 
+admin_theme_show:
+    pattern:  /admin/theme/show
+    defaults: { _controller: TopxiaAdminBundle:Theme:show }
+
 left_edit_courses_theme:
     pattern:  /edit_left_courses/theme
     defaults: { _controller: TopxiaAdminBundle:Theme:editLeftCourses }
