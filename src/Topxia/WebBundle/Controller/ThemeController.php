@@ -7,9 +7,17 @@ class ThemeController extends BaseController
 {
 	 public function pendantAction(Request $request)
     {
-    	$config = $request->query->all();
+    	// $config = $request->query->all();
         
-        return $this->render('TopxiaWebBundle:Default:xxx.html.twig',array(
+    	$config = (Object)array(
+    				'code' =>'live-course', 
+    				'title' =>'bbbbb',
+    				'count' => '2',
+
+    				);
+    	$view = $config->code;
+// var_dump($view);exit();
+        return $this->render("TopxiaWebBundle:Default:{$view}.html.twig",array(
             'config' => $config
         ));
     }

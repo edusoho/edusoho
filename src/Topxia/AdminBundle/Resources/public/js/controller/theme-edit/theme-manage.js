@@ -51,7 +51,7 @@ define(function(require, exports, module) {
 
                 config.push($(this).parents('li').data('config'));
             });
-console.log(config);
+
             return config;
         },
 
