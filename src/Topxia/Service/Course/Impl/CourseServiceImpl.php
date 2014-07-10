@@ -1269,7 +1269,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 				'createdTime' => time(),
 			);
 		}
-
 		// 先清除所有的已存在的教师学员
 		$existTeacherMembers = $this->findCourseTeachers($courseId);
 		foreach ($existTeacherMembers as $member) {
