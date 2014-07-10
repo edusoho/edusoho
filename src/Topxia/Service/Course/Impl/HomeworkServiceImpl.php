@@ -203,6 +203,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         }
 
         $results = $this->getHomeworkResultDao()->findResultsByHomeworkIdAndStatus($homework['id'], 'doing', 0, 1);
+
         if (empty($results)){
             $homeworkResult = array(
                 'homeworkId' => $homework['id'],
@@ -210,7 +211,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
                 'lessonId' =>  $homework['lessonId'],
                 'userId' => $this->getCurrentUser()->id,
                 'status' => 'doing',
-                'usedTime' => 0,
+                'usedTime' => time(),
             );
 
             return $this->getHomeworkResultDao()->addHomeworkResult($homeworkResult);
@@ -221,6 +222,70 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
     }
 
+    public function submitHomework($id,$homework)
+    {
+        $homeworkResult = $this->getHomeworkResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
+        $homeworkItems = $this->getHomeworkService()->findHomeworkItemsByHomeworkId($id);
+
+        $itemResult = array();
+        $homeworkitemResult = array();
+
+        foreach ($homeworkItems as $key => $homeworkItem) {
+            if (!empty($homework[$homeworkItem['questionId']])) {
+                $answer = $homework[$homeworkItem['questionId']]['answer'];
+
+                if (count($answer)>1) {
+                    $answer = implode(",", $answer);
+                } else {
+                    $answer = $answer[0];
+                }
+
+                $answerArray = array($answer);
+                $result = $this->getQuestionService()->judgeQuestion($homeworkItem['questionId'], $answerArray);
+                $status = $result['status'];
+            } else {
+                $answer = null;
+                $status = "noAnswer";
+
+            }
+
+            $itemResult['itemId'] = $homeworkItem['id'];
+            $itemResult['homeworkId'] = $homeworkItem['homeworkId'];
+            $itemResult['homeworkResultId'] = $homeworkResult['id'];
+            $itemResult['questionId'] = $homeworkItem['questionId'];
+            $itemResult['userId'] = $this->getCurrentUser()->id;
+            $itemResult['status'] = $status;
+            $itemResult['answer'] = $answer;
+
+            $this->getHomeworkItemResultDao()->addHomeworkItemResult($itemResult);
+        }
+
+        //reviewing
+        $rightItemCount = 0;
+
+        $homeworkItemsRusults = $this->getHomeworkItemResultDao()->findHomeworkItemsResultsbyHomeworkId($id);
+
+        foreach ($homeworkItemsRusults as $key => $homeworkItemRusult) {
+            if ($homeworkItemRusult['status'] == 'right') {
+               $rightItemCount++;
+            }
+        }
+
+        $homeworkItemResult = $this->getHomeworkItemResultDao()->getHomeworkItemResultByHomeworkIdAndStatus($id,$status="none1");
+        $homeworkitemResult['commitStatus'] = 'committed';
+        $homeworkitemResult['rightItemCount'] = $rightItemCount;
+
+        if ($homeworkItemResult) {
+            $homeworkitemResult['status'] = 'reviewing';
+        } else {
+            $homeworkitemResult['checkedTime'] = time();
+            $homeworkitemResult['status'] = 'finished';
+        }
+        $this->getHomeworkResultDao()->updateHomeworkResult($homeworkResult['id'],$homeworkitemResult);
+
+        return true;
+    }
+
     public function deleteHomeworksByCourseId($courseId)
     {
 
@@ -229,6 +294,11 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     public function getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId)
     {
         return $this->getHomeworkResultDao()->getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId);
+    }
+
+    public function getHomeworkResultByHomeworkId($homeworkId)
+    {
+        return $this->getHomeworkResultDao()->getHomeworkResultByHomeworkId($homeworkId);
     }
 
     public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId)
@@ -289,7 +359,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
         $validQuestionIds = array();
 
-        foreach ($indexdItems as $index => &$item) {
+        foreach ($indexdItems as $index => $item) {
    
             $item['question'] = empty($questions[$item['questionId']]) ? null : $questions[$item['questionId']];
             if (empty($item['parentId'])) {
@@ -304,6 +374,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             $indexdItems[$item['parentId']]['subItems'][] = $item;
             unset($indexdItems[$item['questionId']]);
         }
+
         $set = array(
             'items' => array_values($indexdItems),
             'questionIds' => array(),
@@ -347,37 +418,29 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         $index = 1;
 
 		foreach ($excludeIds as $key => $excludeId) {
-			$items['seq'] = $index;
-			$items['questionId'] = $excludeId;
-			$items['homeworkId'] = $homeworkId;
-			$homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
-            $index++;
-		}
 
-        foreach ($homeworkItems as $key => $homeworkItem) {
+            $questions = $this->getQuestionService()->findQuestionsByParentId($excludeId);
 
-            $questions = $this->getQuestionService()->findQuestionsByParentId($homeworkItem['questionId']);
+            $items['seq'] = $index;
+            $items['questionId'] = $excludeId;
+            $items['homeworkId'] = $homeworkId;
+            $items['parentId'] = 0;
+            $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
+           
 
             if (!empty($questions)) {
                 foreach ($questions as $key => $question) {
-                   $includeItemsSubIds[] = $homeworkItem['questionId']."-".$question['id'];
+                    $items['seq'] = $index;
+                    $items['questionId'] = $question['id'];
+                    $items['homeworkId'] = $homeworkId;
+                    $items['parentId'] = $question['parentId'];
+                    $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
+                    $index++;  
                 }
+                $index -= 1;
             }
-
+             $index++;
         }
-
-        $index -= 1;
-
-        foreach ($includeItemsSubIds as $key => $includeItemsSubId) {
-            $includeItemsSubIdArr = explode("-", $includeItemsSubId);
-            $items['seq'] = $index;
-            $items['questionId'] = $includeItemsSubIdArr[1];
-            $items['parentId'] = $includeItemsSubIdArr[0];
-            $items['homeworkId'] = $homeworkId;
-            $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
-            $index++;
-        }
-
 	}
 
     private function deleteHomeworkItemsByHomeworkId($homeworkId)
@@ -393,6 +456,11 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     private function getCourseService()
     {
         return $this->createService('Course.CourseService');
+    }
+
+    private function getHomeworkService()
+    {
+        return $this->createService('Course.HomeworkService');
     }
 
     private function getQuestionService()
@@ -413,6 +481,11 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 	private function getHomeworkItemDao()
     {
     	return $this->createDao('Course.HomeworkItemDao');
+    }
+
+    private function getHomeworkItemResultDao()
+    {
+        return $this->createDao('Course.HomeworkItemResultDao');
     }
 
     private function getHomeworkResultDao()

@@ -235,46 +235,42 @@ class CourseHomeworkManageController extends BaseController
         ));
 	}
 
-    public function doAction (Request $request,$homeworkId,$courseId,$lessonId)
+
+    public function reviewAction(Request $request,$id,$courseId)
     {
+        $course = $this->getCourseService()->getCourse($courseId);
 
-    }
+        if (empty($course)) {
+            return $this->createMessageResponse('info','作业所属课程不存在！');
+        }
+        
+        $homework = $this->getHomeworkService()->getHomework($id);
 
-    public function showAction(Request $request,$id)
-    {
-        $homeworkResult = $this->getHomeworkService()->getHomeworkResult($id);
-
-        if (empty($homeworkResult)) {
-            throw $this->createNotFoundException('作业不存在!');
+        if (empty($homework)) {
+            throw $this->createNotFoundException();
         }
 
-        if ($homeworkResult['userId'] != $this->getCurrentUser()->id) {
-            throw $this->createAccessDeniedException('不可以访问其他学生的作业哦~');
+        $lesson = $this->getCourseService()->getCourseLesson($homework['courseId'], $homework['lessonId']);
+        
+        if (empty($lesson)) {
+            return $this->createMessageResponse('info','作业所属课时不存在！');
         }
 
-        if (in_array($homeworkResult['status'], array('reviewing', 'finished'))) {
-            return $this->redirect($this->generateUrl('course_manage_lesson_homework_result', array('id' => $homeworkResult['id'])));
-        }
+        $itemSet = $this->getHomeworkService()->getItemSetByHomeworkId($homework['id']);
 
-        $homeworkItems = $this->getHomeworkService()->findHomeworkItemsByHomeworkId($homeworkId);
+        $homeworkResult = $this->getHomeworkService()->getHomeworkResultByHomeworkId($id);
 
-        $questionIds = ArrayToolkit::column($homeworkItems,'questionId');
-        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        $user = $this->getUserService()->getUser($homeworkResult['userId']);
 
-        $types = ArrayToolkit::column($questions,'type');
-        $types = array_unique($types);
-        $types = $this->sortType($types);
-
-        $result = $this->getclassifyQuestionsAndCount($questions);
-
-        return $this->render('TopxiaWebBundle:CourseHomeworkManage:homework-show.html.twig',array(
-            'course' => $course,
+        return $this->render('TopxiaWebBundle:CourseHomeworkManage:review.html.twig', array(
             'homework' => $homework,
-            'items' => $homeworkItems,
-            'questions' => $result['newQuetsions'],
-            'typeQuestionsNum' => $result['typeQuestionsNum'],
-            'types' => $types,
-        ));
+            'homeworkResult' => $homeworkResult,
+            'itemSet' => $itemSet,
+            'course' => $course,
+            'lesson' => $lesson,
+            'user' => $user,
+            'questionStatus' => 'reviewing'
+        ));    
     }
 
     public function homeworkResultAction (Request $request,$id)

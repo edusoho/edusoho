@@ -4118,13 +4118,13 @@ body {
 
 .question-set-title {
 	margin-top: 5px;
-	margin-left: 60px;
+	margin-left: 80px;
 	margin-bottom: 10px;
 	font-size: 20px;
 }
 
 .question-set-description {
-	margin-left: 60px;
+	margin-left: 80px;
 	color: #999;
 }
 
@@ -4162,4 +4162,15 @@ a.homework-essay-textarea-pack-up{
 	line-height: 1.5;
 	border-radius: 3px;
 	color: #999999;
+}
+
+.homework-status {
+	margin-top: 20px;
+	float: right;
+}
+
+.homework-status .label {
+	padding: 5px 25px;
+	border-radius: 3px;
+	font-size: 100%;
 }

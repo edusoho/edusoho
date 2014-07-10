@@ -9,7 +9,7 @@
 
     <div class="question-set-item-main">
       {% set question = item.question %}
-      {% include 'TopxiaWebBundle:Question:question-' ~ question.type ~ '-doing.html.twig' %}
+      {% include 'TopxiaWebBundle:Question:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
     </div>
 
   </div>

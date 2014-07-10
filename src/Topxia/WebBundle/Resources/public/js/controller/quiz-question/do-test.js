@@ -147,7 +147,6 @@ define(function(require, exports, module) {
 
     //...
 
-
         $('*[data-type]').each(function(index){
             var name = $(this).attr('name');
 

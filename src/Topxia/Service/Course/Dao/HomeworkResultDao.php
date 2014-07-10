@@ -8,6 +8,10 @@ interface HomeworkResultDao
     
     public function addHomeworkResult(array $fields);
 
+    public function updateHomeworkResult($id,array $fields);
+
+    public function getHomeworkResultByHomeworkId($homeworkId);
+    
 	public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId);
 
 	public function getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId);

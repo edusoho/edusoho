@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 
 class CourseHomeworkController extends BaseController
@@ -49,20 +50,35 @@ class CourseHomeworkController extends BaseController
         }
 
         $lesson = $this->getCourseService()->getCourseLesson($homework['courseId'], $homework['lessonId']);
+        
         if (empty($lesson)) {
             return $this->createMessageResponse('info','作业所属课时不存在！');
         }
 
         $itemSet = $this->getHomeworkService()->getItemSetByHomeworkId($homework['id']);
+
         return $this->render('TopxiaWebBundle:CourseHomework:do.html.twig', array(
             'homework' => $homework,
             'itemSet' => $itemSet,
             'course' => $course,
             'lesson' => $lesson,
+            'questionStatus' => 'doing'
         ));
 
     }
 
+    public function submitAction(Request $request,$courseId,$homeworkId)
+    {
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $data = !empty($data['data']) ? $data['data'] : array();
+            $res = $this->getHomeworkService()->submitHomework($homeworkId,$data);
+            if ($res) {
+               return $this->createJsonResponse(array('courseId'=>$courseId));
+            }
+        }
+    }
+    
     public function resultAction(Request $request, $courseId, $homeworkId, $resultId)
     {
         

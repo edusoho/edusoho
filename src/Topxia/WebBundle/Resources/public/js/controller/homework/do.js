@@ -2,17 +2,44 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     var EditorFactory = require('common/kindeditor-factory');
+    var changeAnswers = {};
+
+    var editor = EditorFactory.create(".question-essay-input-long", 'simple',{
+        extraFileUploadParams:{group:'default'},
+        afterChange:function(){
+            this.sync();
+            var essayInput = $('.question-essay-input-long').parents('.question');
+            var essayQuestionId = essayInput.data('questionId');
+            console.log(this.html())
+            $answerArr = {}
+            if (this.html() != "") {
+                $answerArr[0] = this.html();
+                changeAnswers[essayQuestionId] = {answer:$answerArr,questionId:essayQuestionId};
+                $('.question-set-card').find('.for-question-' + essayQuestionId).addClass('question-index-active');
+            } else {
+                $('.question-set-card').find('.for-question-' + essayQuestionId).removeClass('question-index-active');
+                
+            }
+        }
+    });
 
     exports.run = function() {
         var questionSet = new QuestionSet({
             element: '#homework-set'
         });
+
+       $('.question-set-card').affix({
+            offset: {
+              top: 100
+            }
+        });
     };
 
     var QuestionSet = Widget.extend({
+
         attrs: {
             list: null,
-            card: null
+            card: null,
         },
 
         setup: function() {
@@ -39,13 +66,37 @@ define(function(require, exports, module) {
 
         setup: function() {
             var card = this;
+
             this.get('questionSet').on('answer_change', function(answerData) {
+                var questionId = answerData.questionId;
+                changeAnswers[questionId] = answerData;
                 if (answerData.answer.length > 0) {
                     card.activeQuestionIndex(answerData.questionId);
                 } else {
                     card.deactiveQuestionIndex(answerData.questionId);
                 }
             });
+        },
+
+        events: {
+            'click #homework-finish-btn': 'onClickFinishBtn',
+            'click .question-index': 'onClickSetCard',
+        },
+
+        onClickFinishBtn: function(event) {
+             if (!confirm('确认要提交作业吗？')) return false;
+            var $btn = $(event.currentTarget);
+                $btn.button('saving');
+                $btn.attr('disabled', 'disabled');
+
+            $.post($btn.data('url'),{data:changeAnswers},function(res){
+                // location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/learn";
+            });
+        },
+
+        onClickSetCard: function(event) {
+            var position = $('.question-'+$(event.currentTarget).data('anchor')).offset();
+            $(document).scrollTop(position.top-10);
         },
 
         activeQuestionIndex: function(questionId) {
@@ -58,7 +109,6 @@ define(function(require, exports, module) {
 
     });
 
-
     var QuestionSetList = Widget.extend({
         attrs: {
             questionSet: null
@@ -68,31 +118,47 @@ define(function(require, exports, module) {
             'click .question-choices > li': 'onClickChoice',
             'click .question-choices-inputs input': 'onClickInputChoiceInput',
             'click .question-choices-inputs > label': 'onClickInputChoiceLabel',
-            'click .question-index': 'onClickSetCard',
-            'click .homework-question-essay-input-short': 'onClickEssay',
-            'click .homework-essay-textarea-pack-up': 'onClickEssayPackup',
+            'click .question-essay-input-short': 'onClickEssay',
+            'click .essay-textarea-pack-up': 'onClickEssayPackup',
+            'change .question-fill-inputs input': 'onChangeFillInput',
         },
 
         setup: function() {
+             $(".ke-container-default").hide();
+        },
 
+      
+
+        onChangeFillInput: function(event) {
+            $answer = $(event.currentTarget);
+            this._setFillQuestionAnswer($answer);
+        },
+  
+        _setFillQuestionAnswer: function($answer) {
+            var $question = $answer.parents('.question');
+            // console.log($answer.val());
+            var answer = [];
+            if ($answer.val() != "") { answer.push($answer.val());};
+            // console.log(answer)
+            this.get('questionSet').trigger('answer_change', {questionId:$question.data('questionId'), answer:answer});
         },
 
         onClickInputChoiceInput: function(event) {
-            console.log('input click');
-            event.preventDefault();
+            // console.log('input click');
+            // event.preventDefault();
             // event.stopPropagation();
         },
 
         onClickInputChoiceLabel: function(event) {
-            console.log('label click');
+            // console.log('label click');
             event.preventDefault();
             // event.stopPropagation();
             // event.stopImmediatePropagation();
-            console.log(event);
-            console.log($(event.target).is('input'));
+            // console.log(event);
+            // console.log($(event.target).is('input'));
             // event.preventDefault();
             var $answer = $(event.currentTarget).find('input');
-            console.log($answer[0]);
+            // console.log($answer[0]);
             this._setChoiceQuestionAnswer($answer);
         },
 
@@ -102,8 +168,8 @@ define(function(require, exports, module) {
         },
 
         _setChoiceQuestionAnswer: function($answer)  {
-            console.log('is :checked:', $answer.is(":checked"));
-            console.log('prop checked', $answer.prop('checked'));
+            // console.log('is :checked:', $answer.is(":checked"));
+            // console.log('prop checked', $answer.prop('checked'));
             if ($answer.is(":checked") == true){
                 $answer.prop('checked', false);
             } else {
@@ -116,34 +182,28 @@ define(function(require, exports, module) {
             $question.find('.question-choices-inputs').find('input:checked').each(function(){
                 answer.push($(this).val());
             });
-
             this.get('questionSet').trigger('answer_change', {questionId:$question.data('questionId'), answer:answer});
         },
 
-        onClickSetCard: function(event){
-            var position = $('.question-'+$(event.currentTarget).data('anchor')).offset();
-            $(document).scrollTop(position.top-10);
-        },
-
+            
         onClickEssay: function(event){
 
-            $(".homework-essay-textarea-pack-up").show();
-            var editor = EditorFactory.create(event.currentTarget, 'simple');
-            editor.sync();
-            $(".homework-question-essay-input-short").hide();
+            $(".essay-textarea-pack-up").show();
+            // editor.sync();
+            $(".question-essay-input-short").hide();
             $(".ke-container-default").show();
+            // console.log(editor.html())
 
         },
 
         onClickEssayPackup: function(event){
             
             $(this).hide();
-            $(".homework-essay-textarea-pack-up").hide();
             $(".ke-container-default").hide();
-            $(".homework-question-essay-input-short").show();
+            $(".question-essay-input-short").show();
+            $(".essay-textarea-pack-up").hide();
+            
         }
-
-
 
     });
 

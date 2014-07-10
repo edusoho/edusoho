@@ -26,9 +26,13 @@ interface HomeworkService
 
     public function startHomework($id);
 
+    public function submitHomework($id,$homework);
+
     public function deleteHomeworksByCourseId($courseId);
 
     //HomeworkResults
+
+    public function getHomeworkResultByHomeworkId($homeworkId);
 
     public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId);
 
@@ -61,4 +65,5 @@ interface HomeworkService
     public function updateHomeworkItems($homeworkId, $items);
 
     public function createHomeworkItems($homeworkId, $items);
+
 }
