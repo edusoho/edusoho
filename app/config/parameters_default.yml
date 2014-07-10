@@ -1,5 +1,10 @@
 # 请不要修改此文件的参数
 parameters:
+    role_hierarchy:
+        ROLE_TEACHER:     ROLE_USER
+        ROLE_ADMIN:       [ROLE_TEACHER, ROLE_BACKEND]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
     register_fileds: 
         email: required
         nickname: required
