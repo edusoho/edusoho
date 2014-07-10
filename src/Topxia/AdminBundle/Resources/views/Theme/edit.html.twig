@@ -127,23 +127,65 @@
             </ul>
           </div>
       </div>
+
       <div class="tab-pane" id="buttom">
         <div class="panel panel-default">
-        <div class="panel-body">
-          Basic panel example
+          <form class="panel-body radios theme-custom-bottom-block">
+            <label class="col-lg-3 check-block">
+              <input type="radio" checked="checked" name="bottom" value="simple" >简洁版
+            </label>
+            <label class="col-lg-3 check-block">
+              <input type="radio" name="bottom" value="complex" >多列表版
+            </label>
+          </form>
         </div>
       </div>
-      </div>
+
       <div class="tab-pane" id="color">
         <div class="panel panel-default">
-        <form class="panel-body form-inline">
-           <div class="form-group">
-            <label>
-              <input type="checkbox"> <div class="mod-cpanel-basic-color" data-color-scheme="orange" style="background:#f16e50; display:inline-block"></div>
-            </label>
-          </div>  
-        </form>
-      </div>
+          <form class="panel-body form-inline radios theme-custom-color-block">
+            <div class="form-group">
+              <div class="col-lg-3">
+                <label class="input-group check-block">
+                  <span class="input-group-addon">
+                    <input type="radio" checked="checked" name="color" value="default">
+                  </span>
+                  <div class="mod-cpanel-basic-color" data-color-scheme="orange" style="background:#02b980; display:table-cell;height:35px"></div>
+                </label>
+              </div>
+
+              <div class="col-lg-3">
+                <label class="input-group check-block">
+                  <span class="input-group-addon">
+                    <input type="radio" name="color" value="black">
+                  </span>
+                  <div class="mod-cpanel-basic-color" data-color-scheme="orange" style="background:#333; display:table-cell;height:35px"></div>
+                </label>
+              </div>
+
+              <div class="col-lg-3">
+                <label class="input-group check-block">
+                  <span class="input-group-addon">
+                    <input type="radio" name="color" value="blue">
+                  </span>
+                  <div class="mod-cpanel-basic-color" data-color-scheme="orange" style="background:#0093e8; display:table-cell;height:35px"></div>
+                </label>
+              </div>
+             
+              <div class="col-lg-3">
+                <label class="input-group check-block">
+                  <span class="input-group-addon">
+                    <input type="radio" name="color" value="yellow">
+                  </span>
+                  <div class="mod-cpanel-basic-color" data-color-scheme="orange" style="background:#ffae00; display:table-cell;height:35px"></div>
+                </label>
+              </div>
+
+            </div>  
+          </form>
+        </div>
+
+
       </div>
     </div>
   </div>
@@ -157,58 +199,53 @@
 
   {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
 
-  <div id="modal" class="modal"></div>
+<div id="modal" class="modal"></div>
 
 </body>
 </html>
 
 
 <style>
-.list-group {
-  height: 244px;
-  overflow:auto;
-}
+  .list-group {
+    height: 244px;
+    overflow:auto;
+  }
 
-#iframepage {
+  #iframepage {
 
-}
-.mod-preview-mask {
+  }
+  .mod-preview-mask {
+    width: 100%;
+    min-height: 500px;
+    position: relative;
+    border-top: 1px solid #ddd;
+  }
 
-  border-top: 1px solid #ddd;
-}
+  iframe {
+    z-index: 1000;
+  }
 
-iframe {
-  z-index: 1000;
-}
+  .radios, .checkboxs {
+    padding-top: 20px;
+    vertical-align: middle;
+  }
 
-/*.mod-preview-mask .pm-div {
-  background-color: rgb(0, 0, 0);
-  width: 100%;
-  height: 100%;
-  z-index: 1024;
-  left: 0;
-  top: 0;
-  opacity: 0;
-  filter: alpha(opacity=0);
-  position: fixed;
-}
-*/
-/*.mod-preview-mask .pm-iframe {
-  position: absolute;
-  z-index: 1024;
-  left: 0;
-  top: 0;
-  border: none;
-  opacity: 0;
-  filter: alpha(opacity=0);
-  width: 100%;
-  height: 100%;
-}
-*/
-.mod-cpanel-basic-color {
-  width: 85px;
-  height: 25px;
-  border: 1px solid #aaa;
-  cursor: pointer;
-}
+  .mod-preview-mask .pm-iframe {
+    position: absolute;
+    z-index: 1024;
+    left: 0;
+    top: 0;
+    border: none;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    width: 100%;
+    height: 100%;
+  }
+
+  .mod-cpanel-basic-color {
+    width: 85px;
+    height: 25px;
+    border: 1px solid #aaa;
+    cursor: pointer;
+  }
 </style>

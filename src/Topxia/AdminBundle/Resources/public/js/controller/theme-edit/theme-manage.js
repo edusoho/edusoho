@@ -39,7 +39,7 @@ define(function(require, exports, module) {
 
             configs.blocks.left = this._getBlockConfig(this.$('.theme-custom-left-block'));
             configs.blocks.right = this._getBlockConfig(this.$('.theme-custom-right-block'));
-            configs.bottom = this._getBlockConfig(this.$('.theme-custom-bottom-block'));
+            configs.bottom = this._getBottomConfig(this.$('.theme-custom-bottom-block'));
             configs.color = this._getColorConfig(this.$('.theme-custom-color-block'));
             this.set('config', configs,{override: true});
         },
@@ -48,11 +48,14 @@ define(function(require, exports, module) {
             var config = [];
 
             $($block).find('input[type=checkbox]:checked').each(function(){
-
                 config.push($(this).parents('li').data('config'));
             });
 
             return config;
+        },
+
+        _getBottomConfig: function($block) {
+            return $($block).find('input[type=radio]').val();
         },
 
         _getColorConfig: function($block) {
@@ -60,6 +63,7 @@ define(function(require, exports, module) {
         },
 
         _send: function() {
+console.log(this.get('config'));
             $.post(this.element.data('url'), {config:this.get('config')}, function(response){
                 // window.location.reload();
             });

@@ -5,19 +5,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ThemeController extends BaseController
 {
-	 public function pendantAction(Request $request)
+	public function pendantAction($config=null)
     {
-    	// $config = $request->query->all();
-        
-    	$config = (Object)array(
-    				'code' =>'recommend-course', 
-    				'title' =>'bbbbb',
-    				'count' => '2',
-    				);
-    	$view = $config->code;
+        var_dump($config);
 
-        return $this->render("TopxiaWebBundle:Default:{$view}.html.twig",array(
-            'config' => $config
-        ));
+        if (isset($config['code'])) {
+            return $this->render("TopxiaWebBundle:Default:{$config['code']}.html.twig",array(
+                'config' => $config
+            ));
+        } 
+        if (isset($config['bottom'])) {
+            $config = $config['bottom'];
+            return $this->render("TopxiaWebBundle:Default:{$config}-bottom.html.twig"); 
+        }
     }
 }

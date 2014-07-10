@@ -38,6 +38,7 @@ define(function(require, exports, module) {
 
         $("#theme-edit-content").on("click", '.check-block', function(){
             themeManage.getElement().trigger('save_config');
+            event.stopPropagation();
         });
     };
 
