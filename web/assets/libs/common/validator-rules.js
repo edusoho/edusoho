@@ -135,6 +135,11 @@ define(function(require, exports, module) {
             '{{display}}只能由4-20个字符组成'
         ],
         [
+            'second_range',
+            /^([0-9]|[12345][0-9]|59)$/,
+            '秒数只能在0-59之间'
+        ],
+        [
             'qq',
             /^[1-9]\d{4,}$/,
             '{{display}}格式不正确'

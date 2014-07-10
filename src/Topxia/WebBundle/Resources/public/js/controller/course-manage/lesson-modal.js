@@ -18,7 +18,6 @@ define(function(require, exports, module) {
         Validator.addRule('timeLength', function(options) {
             return /^\d+:\d+$/.test(options.element.val())
         }, '时长格式不正确');
-
         validator = new Validator({
             element: $form,
             autoSubmit: false
@@ -75,16 +74,16 @@ define(function(require, exports, module) {
                 });
 
                 validator.addItem({
-                    element: '#lesson-second-field',
+                    element: '#lesson-minute-field',
                     required: true,
                     rule: 'integer',
                     display: '时长'
                 });
 
                 validator.addItem({
-                    element: '#lesson-minute-field',
+                    element: '#lesson-second-field',
                     required: true,
-                    rule: 'integer',
+                    rule: 'second_range',
                     display: '时长'
                 });
 
