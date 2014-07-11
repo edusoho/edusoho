@@ -71,7 +71,7 @@ class WebExtension extends \Twig_Extension
     public function getThemeGlobalScript()
     {
         $theme = $this->getSetting('theme.uri', 'default');
-        $filePath = realpath($this->container->getParameter('kernel.root_dir') . "/../web/themes/{$theme}/js/global_script.js");
+        $filePath = realpath($this->container->getParameter('kernel.root_dir') . "/../web/themes/{$theme}/js/global-script.js");
         if ($filePath) {
             return 'theme/global_script';
         }
