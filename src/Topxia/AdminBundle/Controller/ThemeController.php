@@ -37,9 +37,13 @@ class ThemeController extends BaseController
     public function saveConfigAction(Request $request)
     {
         $config = $request->request->get('config');
-        
+        $currentData = $request->request->get('currentData');
+
         $config = $this->getThemeService()->saveCurrentThemeConfig($config);
-        var_dump($config);exit();
+
+        return $this->render('TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig', array(
+            'pendant' => $currentData
+        ));
     }
 
     public function confirmConfigAction(Request $request)

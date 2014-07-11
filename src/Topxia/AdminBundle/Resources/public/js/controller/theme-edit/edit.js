@@ -27,7 +27,8 @@ define(function(require, exports, module) {
         var themeManage = new ThemeManage({
             element: '#theme-edit-content',
             config: $.parseJSON($('#theme-config').text()),
-            allConfig: $.parseJSON($('#theme-all-config').text())
+            allConfig: $.parseJSON($('#theme-all-config').text()),
+            currentIframe: $('#iframepage')
         });
 
         $('body').data('themeManage', themeManage);
@@ -39,6 +40,9 @@ define(function(require, exports, module) {
 
         $("#theme-edit-content").on("click", '.check-block', function(){
             event.stopPropagation();
+
+            themeManage.setCurrentItem($(this).parents('li.theme-edit-item'));
+            
             if ($(this).prop('checked') == true) {
                 $(this).parents('li').find('.item-edit-btn').show();
             } else {

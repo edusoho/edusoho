@@ -6,7 +6,8 @@ define(function(require, exports, module) {
         attrs: {
             config: {},
             allConfig: {},
-            currentItem: null
+            currentItem: null,
+            currentIframe: null
         },
 
         events: {
@@ -24,7 +25,7 @@ define(function(require, exports, module) {
         },
 
         setCurrentItem: function($item) {
-            this.set('currentItem', $item);
+            this.set('currentItem', $item,{override: true});
         },
 
         getCurrentItem: function() {
@@ -32,7 +33,6 @@ define(function(require, exports, module) {
         },
 
         _saveBlock: function() {
-
             this._saveConfig();
             this._send();
         },
@@ -50,18 +50,21 @@ define(function(require, exports, module) {
         _setupBlockConfig: function() {
             var config = this.get('config');
             var allConfig = this.get('allConfig');
+            var self = this;
             this.$('.theme-custom-left-block').find('li').each(function(index, value){
                 if ($(this).find('.check-block').prop('checked') == true) {
                     $(this).data('config', config.blocks.left[index]);
                 } else {
-                    $(this).data('config', allConfig.blocks.left[index]);
+                    var itemConfig = self._getConfigfromAllConfig($(this).attr('id'), allConfig.blocks.left);
+                    $(this).data('config', itemConfig);
                 }
             });
             this.$('.theme-custom-right-block').find('li').each(function(index, value){
                 if ($(this).find('.check-block').prop('checked') == true) {
                     $(this).data('config', config.blocks.right[index]);
                 } else {
-                    $(this).data('config', allConfig.blocks.right[index]);
+                    var itemConfig = self._getConfigfromAllConfig($(this).attr('id'), allConfig.blocks.right);
+                    $(this).data('config', itemConfig);
                 }
             });
         },
@@ -94,10 +97,29 @@ define(function(require, exports, module) {
         },
 
         _send: function() {
-            $.post(this.element.data('url'), {config:this.get('config')}, function(response){
-                // window.location.reload();
+            var $iframe = this.get('currentIframe');
+            var currentData = $('#'+$(this.get('currentItem')).attr('id')).data('config');
+            var isChoiced = $('#'+$(this.get('currentItem')).attr('id')).find('.check-block').prop('checked');
+
+            $.post(this.element.data('url'), {config:this.get('config'), currentData: currentData}, function(html){
+
+                $('#'+$(html).attr('id')).replaceWith($(html));
+                $('#'+$(html).attr('id')).data('config', currentData);
+                if (isChoiced) {
+                    $('#'+$(html).attr('id')).find('.check-block').prop('checked', true);
+                    $('#'+$(html).attr('id')).find('.item-edit-btn').show();
+                }
+                $iframe.attr('src', $iframe.attr('src'));
             });
-        }
+        },
+
+        _getConfigfromAllConfig: function(id, allConfig){
+            for (var itemConfig in allConfig) {
+                if (allConfig[itemConfig].id == id) {
+                    return allConfig[itemConfig];
+                }
+            }
+        },
     })
 
     module.exports = ThemeManage;
