@@ -137,7 +137,7 @@ define(function(require, exports, module) {
         [
             'second_range',
             /^(0[1-9]|[12345][0-9]|59)$/,
-            '秒数只能在01-59之间'
+            '秒数只能在1-59之间'
         ],
         [
             'qq',
