@@ -36,6 +36,7 @@
 <body>
 
 <script id="theme-config" type="text/x-handlebars-template">{{ themeConfig|json_encode|raw }}</script>
+<script id="theme-all-config" type="text/x-handlebars-template">{{ allConfig|json_encode|raw }}</script>
 
 <nav class="navbar navbar-inverse site-navbar navbar-fixed-top" role="navigation">
   <div class="container">
@@ -110,7 +111,7 @@
             </div>
 
             <!-- List group -->
-            <ul class="list-group module-item-list">
+            <ul class="list-group module-item-list theme-edit-block theme-custom-right-block">
               {% for pendant in themeConfig.blocks.right|default([]) %}
 
                 {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:true} %}
@@ -131,10 +132,10 @@
       <div class="tab-pane" id="buttom">
         <div class="panel panel-default">
           <form class="panel-body radios theme-custom-bottom-block">
-            <label class="col-lg-3 check-block">
+            <label class="col-lg-3 check-box">
               <input type="radio" checked="checked" name="bottom" value="simple" >简洁版
             </label>
-            <label class="col-lg-3 check-block">
+            <label class="col-lg-3 check-box">
               <input type="radio" name="bottom" value="complex" >多列表版
             </label>
           </form>
@@ -146,7 +147,7 @@
           <form class="panel-body form-inline radios theme-custom-color-block">
             <div class="form-group">
               <div class="col-lg-3">
-                <label class="input-group check-block">
+                <label class="input-group check-box">
                   <span class="input-group-addon">
                     <input type="radio" checked="checked" name="color" value="default">
                   </span>
@@ -155,7 +156,7 @@
               </div>
 
               <div class="col-lg-3">
-                <label class="input-group check-block">
+                <label class="input-group check-box">
                   <span class="input-group-addon">
                     <input type="radio" name="color" value="black">
                   </span>
@@ -164,7 +165,7 @@
               </div>
 
               <div class="col-lg-3">
-                <label class="input-group check-block">
+                <label class="input-group check-box">
                   <span class="input-group-addon">
                     <input type="radio" name="color" value="blue">
                   </span>
@@ -173,7 +174,7 @@
               </div>
              
               <div class="col-lg-3">
-                <label class="input-group check-block">
+                <label class="input-group check-box">
                   <span class="input-group-addon">
                     <input type="radio" name="color" value="yellow">
                   </span>

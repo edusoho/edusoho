@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
         var $currentItem = themeManage.getCurrentItem();
         var currentConfig = $currentItem.data('config');
-        // formInit($(".item-config-form"), currentConfig);
+        formInit($(".item-config-form"), currentConfig);
 
         $("#save-btn").on('click', function(){
             var config = formSerialize($($(this).data('form')));
@@ -14,6 +14,7 @@ define(function(require, exports, module) {
             var code = $currentItem.data('code').split('_').pop();
 
             config.code = code;
+            config.defaultTitle = currentConfig.defaultTitle;
             config.id = $currentItem.attr('id');
 
             $("#"+$currentItem.attr('id')).data('config', config);
@@ -45,30 +46,3 @@ define(function(require, exports, module) {
     }
 
 });
-
-
-// function saveList($list, config) {}
-
-    // function save()
-    // {
-    //  var config = [];
-    //  $('.left').each(function(){
-    //      if ($(this).find('.checkbox').isChecked()) {
-    //          config.push = $(this).data('config');
-    //      }
-    //  });
-    // }
-
-    // $.post('/xxx', config, {
-
-    // });
-
-
-// $('.confirm-btn').on('click', function(){
-   
-//  var themeManage = $('body').data('themeManage');
-//     themeManage.get('currentItem').data('config', config);
-//     themeManage.saveConfig();
-
-//     $modal.close(); 
-// });

@@ -57,7 +57,7 @@ class ThemeController extends BaseController
     public function editAction (Request $request)
     {
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
-var_dump($themeConfig);exit();
+
         return $this->render('TopxiaAdminBundle:Theme:edit.html.twig', array(
             'themeConfig' => $themeConfig['config'],
             'allConfig' => $themeConfig['allConfig']
@@ -74,65 +74,91 @@ var_dump($themeConfig);exit();
         ));
     }
 
-    public function editLeftCoursesAction (Request $request)
+    public function themeConfigEditAction(Request $request)
+    {
+        $code = $request->query->get('code');
+
+        $code = "edit" . $this->fiterCode($code);
+
+        return $this->$code();
+    }
+
+    private function fiterCode($code)
+    {
+        $codes = explode('-', $code);
+        $code = '';
+        foreach ($codes as $value) {
+            $code .= ucfirst($value);
+        }
+        return $code;
+    }
+
+    private function editRecommendCourse ()
     {
         return $this->render('TopxiaAdminBundle:Theme:edit-left-courses-modal.html.twig');
     }
 
-    public function editLeftThreadsAction (Request $request)
+    private function editCategoryCourse ()
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-left-courses-modal.html.twig');
+    }
+
+    private function editLiveCourse ()
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-left-courses-modal.html.twig');
+    }
+
+    private function editRecommendTopic ()
     {
         return $this->render('TopxiaAdminBundle:Theme:edit-left-threads-modal.html.twig');
     }
 
-    public function editLeftArticlesAction (Request $request)
+    private function editInformation ()
     {
         return $this->render('TopxiaAdminBundle:Theme:edit-left-articles-modal.html.twig');
     }
 
-    public function editLeftTeachersAction (Request $request)
+    private function editLecturers ()
     {
         return $this->render('TopxiaAdminBundle:Theme:edit-left-teachers-modal.html.twig');
     }
 
-    public function editRightTeacherAction (Request $request)
-    {
-        return $this->render('TopxiaAdminBundle:Theme:edit-right-teacher-modal.html.twig');
-    }
-
-    public function editRightReviewsAction (Request $request)
-    {
-        return $this->render('TopxiaAdminBundle:Theme:edit-right-reviews-modal.html.twig');
-    }
-
-    public function editRightLiveCoursesAction (Request $request)
+    private function editSidebarLiveCourse ()
     {
         return $this->render('TopxiaAdminBundle:Theme:edit-right-live-courses-modal.html.twig');
     }
 
-    public function editRightPopularCoursesAction (Request $request)
+    private function editPayCourse ()
     {
         return $this->render('TopxiaAdminBundle:Theme:edit-right-popular-courses-modal.html.twig');
     }
 
-    public function editRighArticlesAction (Request $request)
-    {
-        return $this->render('TopxiaAdminBundle:Theme:edit-right-articles-modal.html.twig');
-    }
-
-    public function editRightTagsAction (Request $request)
+    private function editPopularTags ()
     {
         return $this->render('TopxiaAdminBundle:Theme:edit-right-tags-modal.html.twig');
     }
 
-    public function editRightArticlesAction (Request $request)
+    private function editLatestReviews ()
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-right-reviews-modal.html.twig');
+    }
+
+    private function editPromotedTeacherBlock ()
+    {
+        return $this->render('TopxiaAdminBundle:Theme:edit-right-teacher-modal.html.twig');
+    }
+
+    private function editTheDynamic ()
     {
         return $this->render('TopxiaAdminBundle:Theme:edit-right-articles-modal.html.twig');
     }
 
-    public function editRightLearnsAction (Request $request)
+    private function editTheLearningDynamics ()
     {
         return $this->render('TopxiaAdminBundle:Theme:edit-right-learns-modal.html.twig');
     }
+
+
 
 
 

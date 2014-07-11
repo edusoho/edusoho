@@ -5,6 +5,7 @@ define(function(require, exports, module) {
     var ThemeManage = Widget.extend({
         attrs: {
             config: {},
+            allConfig: {},
             currentItem: null
         },
 
@@ -13,7 +14,9 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
-            // this._saveConfig();
+            this._setupBlockConfig();
+            this._setupBottomConfig();
+            this._setupColorConfig();
         },
 
         getElement: function() {
@@ -44,9 +47,37 @@ define(function(require, exports, module) {
             this.set('config', configs,{override: true});
         },
 
+        _setupBlockConfig: function() {
+            var config = this.get('config');
+            var allConfig = this.get('allConfig');
+            this.$('.theme-custom-left-block').find('li').each(function(index, value){
+                if ($(this).find('.check-block').prop('checked') == true) {
+                    $(this).data('config', config.blocks.left[index]);
+                } else {
+                    $(this).data('config', allConfig.blocks.left[index]);
+                }
+            });
+            this.$('.theme-custom-right-block').find('li').each(function(index, value){
+                if ($(this).find('.check-block').prop('checked') == true) {
+                    $(this).data('config', config.blocks.right[index]);
+                } else {
+                    $(this).data('config', allConfig.blocks.right[index]);
+                }
+            });
+        },
+
+        _setupBottomConfig: function() {
+            var config = this.get('config');
+            this.$('.theme-custom-bottom-block').find('input[type=radio][value='+config.bottom+']').prop('checked', true);
+        },
+
+        _setupColorConfig: function() {
+            var config = this.get('config');
+            this.$('.theme-custom-color-block').find('input[type=radio][value='+config.color+']').prop('checked', true);
+        },
+
         _getBlockConfig: function($block) {
             var config = [];
-
             $($block).find('input[type=checkbox]:checked').each(function(){
                 config.push($(this).parents('li').data('config'));
             });
@@ -55,15 +86,14 @@ define(function(require, exports, module) {
         },
 
         _getBottomConfig: function($block) {
-            return $($block).find('input[type=radio]').val();
+            return $($block).find('input[type=radio]:checked').val();
         },
 
         _getColorConfig: function($block) {
-            return $($block).find('input[type=radio]').val();
+            return $($block).find('input[type=radio]:checked').val();
         },
 
         _send: function() {
-console.log(this.get('config'));
             $.post(this.element.data('url'), {config:this.get('config')}, function(response){
                 // window.location.reload();
             });

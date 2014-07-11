@@ -26,7 +26,8 @@ define(function(require, exports, module) {
 
         var themeManage = new ThemeManage({
             element: '#theme-edit-content',
-            config: $.parseJSON($('#theme-config').text())
+            config: $.parseJSON($('#theme-config').text()),
+            allConfig: $.parseJSON($('#theme-all-config').text())
         });
 
         $('body').data('themeManage', themeManage);
@@ -37,8 +38,18 @@ define(function(require, exports, module) {
         });
 
         $("#theme-edit-content").on("click", '.check-block', function(){
-            themeManage.getElement().trigger('save_config');
             event.stopPropagation();
+            if ($(this).prop('checked') == true) {
+                $(this).parents('li').find('.item-edit-btn').show();
+            } else {
+                $(this).parents('li').find('.item-edit-btn').hide();
+            }
+            themeManage.getElement().trigger('save_config');
+        });
+
+        $("#theme-edit-content").on("click", '.check-box', function(){
+            event.stopPropagation();
+            themeManage.getElement().trigger('save_config');
         });
     };
 
