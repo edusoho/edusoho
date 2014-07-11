@@ -3,6 +3,10 @@ define(function(require, exports, module) {
     exports.run = function() {
         require('./common').run();
 
+        $("#course-item-list").on('click', '.item', function(e) {
+            window.location.href = $(this).find('.title').attr('href');
+        });
+
         function checkWidth(){
                 if($(this).width()<400){
                 $('.name').hide();         
