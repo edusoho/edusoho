@@ -45,7 +45,6 @@ define(function(require, exports, module) {
             uploader.on( 'uploadSuccess', function( file, response ) {
                 Notify.success('上传成功！', 1);
                 var result = '[image]' + response.hashId + '[/image]';
-                alert(response+'<br>'+response.hashId)
                 editor.insertHtml(result);
             });
 
