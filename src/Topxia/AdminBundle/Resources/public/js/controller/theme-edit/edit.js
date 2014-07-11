@@ -19,7 +19,7 @@ define(function(require, exports, module) {
         });
 
         $("#iframepage").load(function(){
-            var mainheight = $(this).contents().find("body").height();
+            var mainheight = $(this).contents().find("body").height()+100;
             $(this).height(mainheight);
         }); 
 
