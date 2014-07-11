@@ -28,6 +28,7 @@ class ThemeConfigDaoImpl extends BaseDao implements ThemeConfigDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE name = ? LIMIT 1";
         $themeConfig = $this->getConnection()->fetchAssoc($sql, array($name)) ? : null;
+
         return $themeConfig ? $this->createSerializer()->unserialize($themeConfig, $this->serializeFields) : null;
     }
 

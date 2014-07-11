@@ -12,10 +12,26 @@ class ThemeController extends BaseController
             return $this->render("TopxiaWebBundle:Default:{$config['code']}.html.twig",array(
                 'config' => $config
             ));
-        } 
-        if (isset($config['bottom'])) {
-            $config = $config['bottom'];
-            return $this->render("TopxiaWebBundle:Default:{$config}-bottom.html.twig"); 
         }
+    }
+
+    public function getCurrentConfigColorAction()
+    {
+        $config = $this->getThemeService()->getCurrentThemeConfig();
+        return $this->render("TopxiaWebBundle:Default:color.html.twig", array(
+            'color' => $config['config']['color']
+        )); 
+    }
+
+    public function getCurrentConfigBottomAction()
+    {
+        $config = $this->getThemeService()->getCurrentThemeConfig();
+        $config = $config['config']['bottom'];
+        return $this->render("TopxiaWebBundle:Default:{$config}-bottom.html.twig"); 
+    }
+
+    private function getThemeService()
+    {
+        return $this->getServiceKernel()->createService('Theme.ThemeService');
     }
 }
