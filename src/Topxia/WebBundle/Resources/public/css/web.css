@@ -1007,6 +1007,7 @@ body {
 	overflow-x: hidden;*/
 }
 
+
 .course-item-list {
 	list-style: none;
 	margin: 0 0 0 -99px;
@@ -1029,8 +1030,6 @@ body {
 
 .course-item-list .hover-item:hover {
 	cursor: pointer;
-	background-color: #f9f9f9;
-	border-color: #eee;
 }
 
 .course-item-list .chapter-item {
