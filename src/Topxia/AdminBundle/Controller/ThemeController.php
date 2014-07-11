@@ -55,7 +55,7 @@ class ThemeController extends BaseController
     public function resetConfigAction(Request $request)
     {
         $this->getThemeService()->resetConfig();
-        return $this->redirect($this->generateUrl('homepage'));
+        return $this->redirect($this->generateUrl('admin_edit_theme'));
     }
 
     public function editAction (Request $request)
