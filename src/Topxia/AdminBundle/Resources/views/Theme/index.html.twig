@@ -23,8 +23,17 @@
       {% for theme in themes %}
         <tr>
           <td>
-            <img src="{{ asset('themes/' ~ theme.uri ~ '/' ~ theme.thumb) }}" width="150">
-            <span class="mlm">{{ theme.name }}</span>
+
+            <div class="media">
+              <img class="media-object pull-left" src="{{ asset('themes/' ~ theme.uri ~ '/' ~ theme.thumb) }}" width="150">
+              <div class="media-body">
+                <h5 class="media-heading">{{ theme.name }}</h5>
+                {{ theme.description|default('')|raw }}
+                {% if theme.setting|default(null) %}
+                  <a href="../{{ theme.setting }}">设置</a>
+                {% endif %}
+              </div>
+            </div>
           </td>
           <td>{{ theme.version }}</td>
           <td>{{ theme.author }}</td>
@@ -33,7 +42,7 @@
               <span class="text-success">当前正在使用该主题</span>
             {% else %}
               <button class="btn btn-default btn-sm use-theme-btn" data-url="{{ path('admin_setting_theme_change', {uri:theme.uri}) }}">使用</button>
-              {% endif %}
+            {% endif %}
           </td>
         </tr>
       {% endfor %}
