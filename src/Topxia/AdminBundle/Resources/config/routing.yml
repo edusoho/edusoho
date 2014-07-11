@@ -400,31 +400,6 @@ admin_setting_theme_change:
     defaults: { _controller: TopxiaAdminBundle:Theme:change }
     methods:  [POST]
 
-admin_edit_theme:
-    pattern:  /edit/theme
-    defaults: { _controller: TopxiaAdminBundle:Theme:edit }
-
-admin_save_theme_config:
-    pattern:  /save/theme/config
-    defaults: { _controller: TopxiaAdminBundle:Theme:saveConfig }
-    methods:  [POST]
-
-admin_confirm_theme_config:
-    pattern:  /confirm/theme/config
-    defaults: { _controller: TopxiaAdminBundle:Theme:confirmConfig }
-
-admin_reset_theme_config:
-    pattern:  /reset/theme/config
-    defaults: { _controller: TopxiaAdminBundle:Theme:resetConfig }
-
-admin_theme_show:
-    pattern:  /theme/show
-    defaults: { _controller: TopxiaAdminBundle:Theme:show }
-
-admin_theme_config_edit:
-    pattern:  /theme/config/edit
-    defaults: { _controller: TopxiaAdminBundle:Theme:themeConfigEdit }
-
 admin_setting_user_center:
     pattern:  /setting/user-center
     defaults: { _controller: TopxiaAdminBundle:Setting:userCenter }

@@ -1140,10 +1140,6 @@ mobile_download:
     pattern: /mobile/download
     defaults: { _controller: TopxiaWebBundle:Mobile:download }
 
-theme_pendant:
-    pattern:  /theme/pendant
-    defaults: { _controller: TopxiaWebBundle:Theme:pendant }
-
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
