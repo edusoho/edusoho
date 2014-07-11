@@ -41,8 +41,8 @@ class WebExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
+            'theme_global_script' => new \Twig_Function_Method($this, 'getThemeGlobalScript') ,
             'file_uri_parse'  => new \Twig_Function_Method($this, 'parseFileUri'),
-
             // file_path即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
@@ -66,6 +66,16 @@ class WebExtension extends \Twig_Extension
             }
         }
         return false;
+    }
+
+    public function getThemeGlobalScript()
+    {
+        $theme = $this->getSetting('theme.uri', 'default');
+        $filePath = realpath($this->container->getParameter('kernel.root_dir') . "/../web/themes/{$theme}/js/global_script.js");
+        if ($filePath) {
+            return 'theme/global_script';
+        }
+        return '';
     }
 
     public function getJsPaths()

@@ -5,6 +5,7 @@
   app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
   app.basePath = '{{ app.request.getBasePath() }}';
   app.theme = '{{ setting("theme.uri"|default("default")) }}';
+  app.themeGlobalScript = '{{ theme_global_script() }}';
   app.jsPaths = {{ js_paths()|json_encode|raw }};
 
   app.config = {{
