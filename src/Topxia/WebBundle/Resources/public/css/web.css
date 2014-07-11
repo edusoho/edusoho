@@ -19,6 +19,10 @@ a.link-muted {
 	overflow-y: auto;
 }
 
+.modal-header .close {
+	padding: 5px;
+}
+
 .modal-body {
 	word-break: break-all;
 	word-wrap: break-word;

@@ -19,7 +19,6 @@
 		  {% elseif 'lesson' in id %}
 	    	  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
 		    <li class="item lesson-item {% if learnStatuses[item.id]|default(null) %}lesson-item-{{ learnStatuses[item.id] }}{% endif %} lesson-item-{{item.id}} hover-item clearfix " data-id="{{ item.id }}">
-		    <a href="{{ lessonUrl }}">
 		    	{% if item.status == 'published' %}	    	
 			    	{% if item.type == 'video' %}
 				    	<span class="type" title="视频时长{{ item.length|duration }}">
@@ -56,9 +55,8 @@
 			    {% else %}
 			      	<span class="status">未发布</span>
 			    {% endif %}
-			</a>
 
-		    	<span class="name "><a href="{{ lessonUrl }}">课时{{ item.number }}</a></span>
+		    	<span class="name ">课时{{ item.number }}</span>
 		    	<span class="pie ">&nbsp;</span>
 		    	<a class=" title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}">
 			    	{% if item.title|length > 30 %}
