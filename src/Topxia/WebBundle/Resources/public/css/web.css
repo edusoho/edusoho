@@ -19,6 +19,10 @@ a.link-muted {
 	overflow-y: auto;
 }
 
+.modal-header .close {
+	padding: 5px;
+}
+
 .modal-body {
 	word-break: break-all;
 	word-wrap: break-word;
@@ -624,7 +628,8 @@ body {
 
 .thread {
 	margin-bottom: 50px;
-	overflow-x: scroll;
+	overflow-x: auto;
+	overflow-y: hidden;
 }
 
 .thread-header {
@@ -1006,6 +1011,7 @@ body {
 	overflow-x: hidden;*/
 }
 
+
 .course-item-list {
 	list-style: none;
 	margin: 0 0 0 -99px;
@@ -1028,8 +1034,6 @@ body {
 
 .course-item-list .hover-item:hover {
 	cursor: pointer;
-	background-color: #f9f9f9;
-	border-color: #eee;
 }
 
 .course-item-list .chapter-item {
@@ -1146,6 +1150,11 @@ body {
 	padding-left: 15px;
 	margin-right: 0px;
 	width: 65px;
+}
+
+.course-item-list .lesson-item .name a:hover {
+	color: #444;
+	outline: none;
 }
 
 .course-item-list .lesson-item .type {

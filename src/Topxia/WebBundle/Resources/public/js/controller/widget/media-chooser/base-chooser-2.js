@@ -101,7 +101,11 @@ define(function(require, exports, module) {
 
             browser.on('select', function(file) {
                 self.trigger('change', self._convertFileToMedia(file));
-                self.trigger('fileinfo.fetched', {});
+                if (file.storage == 'cloud' && file.type == 'video') {
+                    $.get(browser.element.data('fileinfoUrl'), {key:file.hashId, type:'video'}, function(info){
+                        self.trigger('fileinfo.fetched', info);
+                    }, 'json');
+                }
             });
         },
 
