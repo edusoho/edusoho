@@ -117,7 +117,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function judgeQuestion($id, $answer, $refreshStats = false)
     {
-        $results = $this->judgeQuestions(array($id => $answers), $refreshStats);
+        $results = $this->judgeQuestions(array($id => $answer), $refreshStats);
         return $results[$id];
     }
 
