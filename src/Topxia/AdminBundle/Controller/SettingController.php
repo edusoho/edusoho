@@ -9,6 +9,7 @@ use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Util\PluginUtil;
 
 class SettingController extends BaseController
 {
@@ -390,6 +391,13 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $storageSetting = $request->request->all();
             $this->getSettingService()->set('storage', $storageSetting);
+            $cop = $this->getAppService()->checkAppCop();
+            if ($cop && isset($cop['cop']) && ($cop['cop'] == 1)) {
+                $this->getSettingService()->set('_app_cop', 1);
+            } else {
+                $this->getSettingService()->set('_app_cop', 0);
+            }
+            PluginUtil::refresh();
             $this->getLogService()->info('system', 'update_settings', "更新云平台设置", $storageSetting);
             $this->setFlashMessage('success', '云平台设置已保存！');
         }
@@ -616,6 +624,11 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:developer-setting.html.twig', array(
             'developerSetting' => $developerSetting
         ));
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
     protected function getSettingService()
