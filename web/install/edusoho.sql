@@ -511,6 +511,7 @@ CREATE TABLE `navigation` (
   `name` varchar(255) NOT NULL COMMENT '导航名称',
   `url` varchar(300) NOT NULL COMMENT '链接地址',
   `sequence` tinyint(4) unsigned NOT NULL COMMENT '显示顺序',
+  `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父导航ID',
   `createdTime` int(11) NOT NULL COMMENT '创建时间',
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   `type` varchar(30) NOT NULL COMMENT '类型',
