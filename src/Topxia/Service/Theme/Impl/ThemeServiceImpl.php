@@ -12,12 +12,16 @@ class ThemeServiceImpl extends BaseService implements ThemeService
     private $themeName;
     public function __construct()  {
         $currentTheme = $this->getSettingService()->get('theme');
-        $this->defaultConfig =  $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_default");
-        $this->allConfig =  $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_all");
-        $this->themeName =  $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_name");
-        if(empty($this->defaultConfig)) $this->defaultConfig = array();
-        if(empty($this->allConfig)) $this->allConfig = array();
 
+        try {
+            $this->defaultConfig =  $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_default");
+            $this->allConfig =  $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_all");
+            $this->themeName =  $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_name");
+        } catch (\Exception $e) {
+            $this->defaultConfig = array();
+            $this->allConfig = array();
+            $this->themeName = null;
+        }
     }
     public function isAllowedConfig()
     {
