@@ -56,7 +56,7 @@ class CourseController extends BaseController
         } else {
             $categories = $this->getCategoryService()->getCategoryTree($group['id']);
         }
-     
+        
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses' => $courses,
             'category' => $category,
@@ -292,8 +292,7 @@ class CourseController extends BaseController
     {
         return ($course['status'] == 'published') or 
             $user->isAdmin() or 
-            $this->getCourseService()->isCourseTeacher($course['id'],$user['id']) or
-            $this->getCourseService()->isCourseStudent($course['id'],$user['id']);
+            $this->getCourseService()->isCourseTeacher($course['id'],$user['id']) ;
     }
 
     private function previewAsMember($as, $member, $course)
