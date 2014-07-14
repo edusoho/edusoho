@@ -424,6 +424,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $course;
 	}
 
+	public function hitCourse($id)
+	{
+		$checkCourse = $this->getCourse($id);
+
+		if(empty($checkCourse)){
+			throw $this->createServiceException("课程不存在，操作失败。");
+		}
+
+		$this->getCourseDao()->waveCourse($id, 'hitNum', +1);
+	}
+
 	public function cancelRecommendCourse($id)
 	{
 		$course = $this->tryAdminCourse($id);
