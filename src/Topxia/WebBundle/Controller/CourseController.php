@@ -257,6 +257,8 @@ class CourseController extends BaseController
             ));
         }
 
+        $this->getCourseService()->hitCourse($id);
+        
         $groupedItems = $this->groupCourseItems($items);
         $hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
 

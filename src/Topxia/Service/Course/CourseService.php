@@ -62,6 +62,8 @@ interface CourseService
 
 	public function recommendCourse($id, $number);
 
+	public function hitCourse($id);
+
 	public function cancelRecommendCourse($id);
 
 	/**
