@@ -7,9 +7,49 @@ use Topxia\Service\Theme\ThemeService;
 
 class ThemeServiceImpl extends BaseService implements ThemeService
 {
-    public function getThemeConfigByName($name)
+    private $defaultConfig;
+    private $allConfig;
+    private $themeName;
+    public function __construct()  {
+        $currentTheme = $this->getSettingService()->get('theme');
+        $this->defaultConfig =  $this->getKernel()->getParameter($currentTheme["namespace"].'_default');
+        $this->allConfig =  $this->getKernel()->getParameter($currentTheme["namespace"].'_all');
+        $this->themeName =  $this->getKernel()->getParameter($currentTheme["namespace"].'_name');
+        if(empty($this->defaultConfig)) $this->defaultConfig = array();
+        if(empty($this->allConfig)) $this->allConfig = array();
+
+    }
+    public function isAllowedConfig()
     {
-        return $this->getThemeConfigDao()->getThemeConfigByName($name);
+        $currentTheme = $this->getSettingService()->get('theme');
+        if(empty($this->themeName) && empty($this->defaultConfig)){
+            return false;
+        }
+        if (in_array($currentTheme['name'], array($this->themeName))) {
+            return true;
+        }
+        return false;
+    }
+
+    private  function getThemeConfigByName($name)
+    {
+        $config = $this->getThemeConfigDao()->getThemeConfigByName($name);
+        $config['allConfig'] = $this->allConfig;
+
+        if (empty($config['config'])) {
+            $config['config'] = $this->defaultConfig;
+        }
+
+        if (empty($config['confirmConfig'])) {
+            $config['confirmConfig'] = $this->defaultConfig;
+        }
+
+        if (empty($config['name'])) {
+            $currentTheme = $this->getSettingService()->get('theme');
+            $config['name'] = $currentTheme['name'];
+        }
+
+        return $config;
     }
 
     public function getCurrentThemeConfig()
@@ -18,9 +58,17 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         return $this->getThemeConfigByName($currentTheme['name']);
     }
 
+    public function getCurrentThemeConfirmConfig()
+    {
+        $currentTheme = $this->getSettingService()->get('theme');
+        return $this->getThemeConfigByName($currentTheme['name']);
+    }
+
     public function saveCurrentThemeConfig($config)
     {
-        $currentTheme = $this->getCurrentThemeConfig();
+        $currentTheme = $this->getSettingService()->get('theme');
+        $currentTheme = $this->getThemeConfigDao()->getThemeConfigByName($currentTheme['name']);
+
         if (empty($currentTheme)) {
             $currentTheme = $this->getSettingService()->get('theme');
             return $this->createThemeConfig($currentTheme['name'], $config);
@@ -41,12 +89,8 @@ class ThemeServiceImpl extends BaseService implements ThemeService
     
     public function resetConfig()
     {
-        $currentTheme = $this->getCurrentThemeConfig();
-
-        return $this->editThemeConfig($currentTheme['name'], array(
-            'confirmConfig' => null,
-            'config' => null
-        ));
+        $currentTheme = $this->getSettingService()->get('theme');
+        return $this->saveCurrentThemeConfig($this->defaultConfig);
     }
 
     private function createThemeConfig($name, $config)
@@ -70,7 +114,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
 
     protected function getThemeConfigDao()
     {
-        return $this->createDao('Theme.ThemeConfigDao');
+        return $this->createDao('GracefulTheme:GracefulTheme.ThemeConfigDao');
     }
 
     protected function getSettingService()
