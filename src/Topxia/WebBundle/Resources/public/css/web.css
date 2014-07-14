@@ -567,7 +567,9 @@ body {
 	margin-bottom: 20px;
 }
 
-
+.course-dashboard-page .course-infos img {
+	width: 100%;
+}
 
 
 #course-about-pane img {
