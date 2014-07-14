@@ -10,32 +10,33 @@ define(function(require, exports, module) {
         });
 
         var reviewTabInited = false;
-        $("#course-review-tab").on('show.bs.tab', function(e) {
-            if (reviewTabInited) {
-                return ;
-            }
-            var $this = $(this),
-                $pane = $($this.attr('href'));
 
-            $.get($this.data('url'), function(html) {
-                $pane.html(html);
+        if (!reviewTabInited) {
+            var $reviewTab = $("#course-review-pane");
+
+            $.get($reviewTab.data('url'), function(html) {
+                $reviewTab.html(html);
                 reviewTabInited =  true;
             });
 
-            $pane.on('click', '.pagination a', function(e) {
+            $reviewTab.on('click', '.pagination a', function(e) {
                 e.preventDefault();
                 $.get($(this).attr('href'), function(html){
-                    $pane.html(html);
+                    $reviewTab.html(html);
                 });
             });
+        }
 
+        $('#course-nav-tabs').affix({
+            offset: {
+                top: 300
+            }
         });
 
-        $(".show-course-review-pane").click(function(){
-            $("#course-review-tab").tab('show');
-            var offset = $("#course-nav-tabs").offset();
-            $(document).scrollTop(offset.top - 20);
-        }); 
+        $('#course-nav-tabs').on('click', '.btn-index', function() {
+            var position = $($(this).data('anchor')).offset();
+            $(document).scrollTop(position.top - 55);
+        });
 
         $("#favorite-btn").on('click', function() {
             var $btn = $(this);
