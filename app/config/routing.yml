@@ -9,8 +9,8 @@ topxia_mobile:
     resource: "@TopxiaMobileBundle/Resources/config/routing.yml"
     prefix:   /mapi_v1
 
-# _plugins:
-#     resource: routing_plugins.yml
+_plugins:
+    resource: routing_plugins.yml
 
 custom_web:
     resource: "@CustomWebBundle/Resources/config/routing.yml"
