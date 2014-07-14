@@ -1,11 +1,11 @@
 <ul class="media-list">
   {% if ownThreads%}
     {% for ownThread in ownThreads%}
-       {% if ownThread.status =='open' and groupsAsOwnThreads[ownThread.groupId].status=='open'%}
+       {% if ownThread.status =='open' %}
           <li class="media">
             
               <div class="media-body" style="word-break: break-all;" >
-                   <a href="{{path('group_thread_index',{id:ownThread.groupId,threadId:ownThread.id})}}">"{{ownThread.title|plain_text(100)}}"</a> 
+                   <a href="{{path('group_thread_index',{id:ownThread.groupId,threadId:ownThread.id})}}">"{{ownThread.title|sub_text(50)}}"</a> 
                    <div class="pull-right">                      
                      {% if ownThread.postNum %}
                       <span class="badge pull-right" >{{ownThread.postNum}}</span>

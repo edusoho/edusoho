@@ -64,3 +64,9 @@
     height: 18px;
     width: 18px;
 }
+.title-thread{
+    background: #fff6ee;
+}
+.bottom-thread-post{
+    margin-bottom: 0px;
+}

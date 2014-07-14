@@ -11,29 +11,24 @@
   {% include 'TopxiaWebBundle:Group:group.tab.ul.html.twig' with 
     {'tab':'', }%}
     <div class="row">
-      <div class="col-md-8">
-        <div class="page-header clearfix">
+      <div class="col-md-8">    
           <div class="btn-group-xs pull-right" >
-            <a type="button" {% if filters.type=='onlyOwner' %}class="btn btn-default active" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}"{% else %} class="btn btn-default"  href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}" {% endif %}>只看楼主</a>
-            <a type="button" {% if filters.sort=='desc' %}class="btn btn-default active" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"{% else %}class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"{% endif %}><span class="glyphicon glyphicon-circle-arrow-down"></span> 倒序查看</a>
-            <a type="button" class="btn btn-default" href="#post-thread-form"><span class="glyphicon glyphicon-comment"></span>  回复({{threadMain.postNum}})</a>
-           
-          </div>
-        </div>
-
+                <a type="button" {% if filters.type=='onlyOwner' %}class="btn btn-default active" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}"{% else %} class="btn btn-default"  href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}" {% endif %}>只看楼主</a>
+                <a type="button" {% if filters.sort=='desc' %}class="btn btn-default active" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"{% else %}class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"{% endif %}><span class="glyphicon glyphicon-circle-arrow-down"></span> 倒序查看</a>
+                <a type="button" class="btn btn-default" href="#post-thread-form"><span class="glyphicon glyphicon-comment"></span>  回复({{threadMain.postNum}})</a>
+              
+            </div>
         <div class="clearfix">
-          <h4 style="word-break: break-all;" >{{threadMain.title}}{% if threadMain.isElite %}
+          <h4 style="word-break: break-all;" ><b>{{threadMain.title|sub_text(25)}}</b>{% if threadMain.isElite %}
             <span class="label label-warning">精</span>
           {% endif %}{% if threadMain.isStick==1 %}
           <span class="label label-danger">置顶</span>
         {% endif %}</h4>
         <br>
       </div>
-      
-      <table class="table table-hover">
         {% if paginator.currentPage==1 %}
-          <tr style="word-break: break-all;" class="thread-list">
-            <td >
+          <div style="word-break: break-all;" class="thread-list">
+           
               <div class="row">
                 <div class="col-md-2">
                     <div class="media"> </div>
@@ -54,11 +49,11 @@
                     </div>     
                   </div>
                 </div>
-            </td>                  
-          </tr>
+                            
+          </div>
           {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3%}
-          <tr>
-            <td style="border-top:0px;">
+          
+            
               <div class="pull-right" id="post-action">
                   {% if user.id==owner.id or is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
                       <a class="btn btn-link" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
@@ -91,21 +86,20 @@
                             </a>
                   {% endif %}
               </div>
-            </td>
-          </tr>
+    
           {% else %}
-          <tr>
-            <td style="border-top:0px;">       
+            
               <div class="text-muted pull-right" >
                 1楼 {{threadMain.createdTime|date('Y-m-d H:i:s')}}  &nbsp;
              
               </div>
-            </td>
-          </tr>
+      
           {% endif %}
                
       {% endif %}
-
+  
+      <table class="table table-hover">
+        
       {% if post %}
         {% for post in post %}
           <tr style="word-break: break-all;" class="thread-list" id="post-{{post.id}}">
@@ -134,42 +128,40 @@
                       </div>
                     </div>        
                 </div>
-                      
-                {% if user.id==post.userId%}
-                <div class="course-view">
-                  <div class="deletePost"><a title="确定删除这条回复"  id="deletePostByself"
-                  href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a>
-                  
+                
+                <div class="bottom-thread-post col-md-12">  
+                  <div class="text-muted pull-right" >&nbsp;
+                    {% if filters.sort=='desc' %}
+                      {{ (postCount+1)-10*(paginator.currentPage-1)-loop.index0 }}
+                    {% else %}
+                      {{ (loop.index+1)+10*(paginator.currentPage-1) }}
+                    {% endif %}
+                    楼 {{post.createdTime|date('Y-m-d H:i:s')}}  &nbsp;
+                  </div>    
+                  {% if user.id==post.userId%}
+                  <div class="course-view">
+                    <div class="deletePost"><a title="确定删除这条回复"  id="deletePostByself"
+                    href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a>
+                    
+                    </div>
                   </div>
-                </div>
-                {% elseif user.id==owner.id %}
+                  {% elseif user.id==owner.id %}
                   <div class="course-view" >
                       <div class="deletePost"><a title="确定删除这条回复"  id="deletePostBythreadowner"
                       href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a>
                       </div>
                   </div>
-                {% elseif is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                <div class="course-view">
-                    <div class="deletePost">
-                      <a title="确定删除这条回复"  id="deletePostBygroupowner"
-                      href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a>
-                    </div>
-                </div>
-                {% endif %}
-              </td>   
-            </tr>
-            <tr>
-              <td style="border-top:0px;">
-                <div class="text-muted pull-right" >
-                  {% if filters.sort=='desc' %}
-                    {{ (postCount+1)-10*(paginator.currentPage-1)-loop.index0 }}
-                  {% else %}
-                    {{ (loop.index+1)+10*(paginator.currentPage-1) }}
+                  {% elseif is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
+                  <div class="course-view">
+                      <div class="deletePost">
+                        <a title="确定删除这条回复"  id="deletePostBygroupowner"
+                        href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a>
+                      </div>
+                  </div>
                   {% endif %}
-                  楼 {{post.createdTime|date('Y-m-d H:i:s')}}  &nbsp;
-                </div>
-              </td>
-            </tr>             
+              </div>
+              </td>   
+            </tr>                  
           {% endfor %}
         {% endif %}
       </table>

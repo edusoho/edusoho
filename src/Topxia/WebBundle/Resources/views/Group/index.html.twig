@@ -51,7 +51,7 @@
                                           {{ web_macro.user_avatar(owners[threadinfo.userId], 'pull-left media-object media-object-small')}}
 
                                           <div class="media-body" style="word-break: break-all;" >
-                                                 <a href="{{path('group_thread_index',{id:threadinfo.groupId,threadId:threadinfo.id})}}">{{threadinfo.title|plain_text(75)}} </a>
+                                                 <a href="{{path('group_thread_index',{id:threadinfo.groupId,threadId:threadinfo.id})}}">{{threadinfo.title|sub_text(40)}} </a>
                                                  <br>
                                                  <div class="text-muted text-normal"><br>
                                                   <a href="{{path('group_index',{id:threadinfo.groupId})}}" title="{{groupinfo[threadinfo.groupId].title}}">  
@@ -134,7 +134,7 @@
 
                                 </a> 
                                 <p class="mvs">
-                                    <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title|slice(0,10)}}</a>
+                                    <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(9)}}</a>
                                 </p>
                             </div>
                          
@@ -166,7 +166,7 @@
                                         <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
                                     {% endif %}
                                         </a> 
-                                        <p class="mvs"><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}" style="text-overflow:ellipsis;">{{group.title|plain_text(12)}}</a>
+                                        <p class="mvs"><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}" style="text-overflow:ellipsis;">{{group.title|sub_text(9)}}</a>
                                         </p>
                                 </div>
                              {% endif %}

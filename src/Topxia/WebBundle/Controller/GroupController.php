@@ -53,7 +53,7 @@ class GroupController extends BaseController
                 array('ownerId'=>$user['id'],'status'=>'open'),
                 array('createdTime','DESC'), 0, 8);
         }
-        echo mb_strlen("电影世界电影世界电影");
+
         $groupCount=$this->getGroupService()->searchGroupsCount(array('status'=>'open'));
 
         $start=$groupCount>8 ? rand(0,$groupCount-8) : 0 ;
