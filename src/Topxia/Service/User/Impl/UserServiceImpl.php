@@ -393,6 +393,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $token;
     }
 
+    public function searchTokenCount($conditions)
+    {
+        return $this->getUserTokenDao()->searchTokenCount($conditions);
+    }
+
     public function deleteToken($type, $token)
     {
         $token = $this->getUserTokenDao()->findTokenByToken($token);

@@ -57,10 +57,18 @@ class AppServiceImpl extends BaseService implements AppService
             $args[$app['code']] = $app['version'];
         }
 
+        $coursePublishedCount = $this->getCourseService()->searchCourseCount(array('status'=>'published'));
+        $courseUnpublishedCount = $this->getCourseService()->searchCourseCount(array('status'=>'draft'));
+
         $extInfos = array(
             'userCount' => $this->getUserService()->searchUserCount(array()),
+            'coursePublishedCount' => $coursePublishedCount,
+            'courseUnpublishedCount' => $courseUnpublishedCount,
+            'courseCount' => ($coursePublishedCount+$courseUnpublishedCount)."",
+            'mobileLoginCount' => $this->getUserService()->searchTokenCount(array('type'=>'mobile_login')),
+            'TeacherCount' => $this->getUserService()->searchUserCount(array('roles'=>'ROLE_TEACHER')),
         );
-
+        
         return $this->createAppClient()->checkUpgradePackages($args, $extInfos);
     }
 
@@ -642,6 +650,11 @@ class AppServiceImpl extends BaseService implements AppService
     protected function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course.CourseService');
     }
 
 }
