@@ -69,7 +69,7 @@ class WeiboOAuthClient extends AbstractOAuthClient
     private function checkUnaudited($userInfo)
     {
         if (array_key_exists('error_code', $userInfo)) {
-            throw new \Exception($userInfo, 1);
+            throw new \Exception($userInfo['error'], 'unaudited');
         }
     }
 }

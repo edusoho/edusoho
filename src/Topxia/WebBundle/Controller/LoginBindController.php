@@ -54,7 +54,15 @@ class LoginBindController extends BaseController
         try {
             $oauthUser = $client->getUserInfo($token);
         } catch (\Exception $e) {
-            var_dump($e);exit();
+            $code = $e->getCode();
+            $clientInfo = $client->getClientInfo();
+            if ($code == 'unaudited') {
+                $message = '抱歉！暂时无法通过第三方帐号登录,原因：'.$clientInfo['name'].'登录连接的审核还未通过。';
+            } else {
+                $message = '抱歉！暂时无法通过第三方帐号登录,原因：'.$e->getMessage();
+            }
+            $this->setFlashMessage('danger', $message);
+            return $this->redirect($this->generateUrl('login'));
         }
 
         return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
