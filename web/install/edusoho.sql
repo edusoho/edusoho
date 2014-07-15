@@ -729,6 +729,19 @@ CREATE TABLE `testpaper_result` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `theme_config`;
+CREATE TABLE `theme_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `config` text NOT NULL,
+  `confirmConfig` text NOT NULL,
+  `allConfig` text NOT NULL,
+  `updatedTime` int(11) NOT NULL DEFAULT '0',
+  `createdTime` int(11) NOT NULL DEFAULT '0',
+  `updatedUserId` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `upgrade_logs`;
 CREATE TABLE `upgrade_logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

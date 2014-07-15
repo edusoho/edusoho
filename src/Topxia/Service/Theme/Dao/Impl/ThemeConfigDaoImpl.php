@@ -2,8 +2,9 @@
 
 namespace Topxia\Service\Theme\Dao\Impl;
 
+
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Theme\Dao\ThemeConfigDao;
+use GracefulTheme\Service\GracefulTheme\Dao\ThemeConfigDao;
 use Topxia\Common\DaoException;
 use PDO;
 
