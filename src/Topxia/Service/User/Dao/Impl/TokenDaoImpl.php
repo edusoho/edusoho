@@ -34,4 +34,19 @@ class TokenDaoImpl extends BaseDao implements TokenDao
 		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
+	public function searchTokenCount($conditions)
+	{
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+	}
+
+	private function _createSearchQueryBuilder($conditions)
+	{
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'user_token')
+            ->andWhere('type = :type');
+        
+        return $builder;
+	}
 }

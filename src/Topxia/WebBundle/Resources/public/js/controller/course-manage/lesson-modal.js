@@ -20,6 +20,7 @@ define(function(require, exports, module) {
         }, '时长格式不正确');
         validator = new Validator({
             element: $form,
+            failSilently: true,
             autoSubmit: false
         });
 
