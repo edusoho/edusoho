@@ -41,6 +41,9 @@ class WeiboOAuthClient extends AbstractOAuthClient
     	$params['uid'] = $token['userId'];
     	$data = $this->getRequest('https://api.weibo.com/2/users/show.json', $params);
     	$userInfo = json_decode($data, true);
+
+        $this->checkUnaudited($userInfo);
+
     	return $this->convertUserInfo($userInfo);
     }
 
@@ -61,5 +64,12 @@ class WeiboOAuthClient extends AbstractOAuthClient
             'type' => 'weibo',
             'name' => '微博',
         );
+    }
+
+    private function checkUnaudited($userInfo)
+    {
+        if (array_key_exists('error_code', $userInfo)) {
+            throw new \Exception($userInfo, 1);
+        }
     }
 }

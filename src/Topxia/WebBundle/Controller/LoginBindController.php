@@ -16,6 +16,7 @@ class LoginBindController extends BaseController
         $client = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $url = $client->getAuthorizeUrl($callbackUrl);
+
         return $this->redirect($url);
     }
 
@@ -49,7 +50,13 @@ class LoginBindController extends BaseController
     {
         $token = $request->getSession()->get('oauth_token');
         $client = $this->createOAuthClient($type);
-        $oauthUser = $client->getUserInfo($token);
+
+        try {
+            $oauthUser = $client->getUserInfo($token);
+        } catch (\Exception $e) {
+            var_dump($e);exit();
+        }
+
         return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
             'oauthUser' => $oauthUser,
             'client' => $client,
