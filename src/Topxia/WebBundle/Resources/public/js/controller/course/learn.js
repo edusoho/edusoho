@@ -186,6 +186,13 @@ define(function(require, exports, module) {
                     $("#lesson-unpublished-content").show();
                     return;
                 }
+
+                if (lesson.canLearn.status != 'yes') {
+                    $("#lesson-alert-content .lesson-content-text-body").html(lesson.canLearn.message);
+                    $("#lesson-alert-content").show();
+                    return;
+                }
+
                 if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
 
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
@@ -396,7 +403,15 @@ define(function(require, exports, module) {
                 if (lesson.type == 'testpaper') {
                     that.element.find('[data-role=finish-lesson]').hide();
                 } else {
-                    that.element.find('[data-role=finish-lesson]').show();
+                    if (!that.element.data('hideMediaLessonLearnBtn')) {
+                        that.element.find('[data-role=finish-lesson]').show();
+                    } else {
+                        if (lesson.type == 'video' || lesson.type == 'audio') {
+                            that.element.find('[data-role=finish-lesson]').hide();
+                        } else {
+                            that.element.find('[data-role=finish-lesson]').show();
+                        }
+                    }
                 }
 
                 that._toolbar.set('lesson', lesson);

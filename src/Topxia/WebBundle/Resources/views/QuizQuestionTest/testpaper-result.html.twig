@@ -27,6 +27,10 @@
 
 {% block testpaper_body_sidebar %}
 
+{% if is_feature_enabled('hide_testpaper_result') and (paperResult|default(null) and paperResult.status == 'finished') and not app.user.isTeacher() %}
+
+{% else %}
+
   <div class="testpaper-card" data-spy="affix" data-offset-top="200">
     <div class="panel panel-default">
         <div class="panel-body">
@@ -71,7 +75,7 @@
         </div>
     </div>
   </div>
-
+{% endif %}
 
 
 {% endblock %}
