@@ -211,12 +211,14 @@ class SettingController extends BaseController
             'welcome_title' => '',
             'welcome_body' => '',
             'user_terms' => 'closed',
-            'user_terms_body' => ''
+            'user_terms_body' => '',
+            'registerSortType'=>array(),
         );
 
         $auth = array_merge($default, $auth);
         if ($request->getMethod() == 'POST') {
             $auth = $request->request->all();
+       
             if (empty($auth['welcome_methods'])) {
                 $auth['welcome_methods'] = array();
             }
