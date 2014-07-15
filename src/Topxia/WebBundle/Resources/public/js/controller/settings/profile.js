@@ -49,8 +49,14 @@
 
         validator.addItem({
             element: '[name="profile[mobile]"]',
-            rule: 'phone'
+            rule: 'mobile'
         });
+
+        validator.addItem({
+            element: '[name="profile[idcard]"]',
+            rule: 'idcard'
+        });
+
 
         validator.on('formValidate', function(elemetn, event) {
             editor.sync();

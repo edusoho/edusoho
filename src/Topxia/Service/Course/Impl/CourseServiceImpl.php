@@ -308,7 +308,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function updateCourseCounter($id, $counter)
 	{
-		$fields = ArrayToolkit::parts($counter, array('rating', 'ratingNum', 'lessonNum'));
+		$fields = ArrayToolkit::parts($counter, array('rating', 'ratingNum', 'lessonNum', 'giveCredit'));
 		if (empty($fields)) {
 			throw $this->createServiceException('参数不正确，更新计数器失败！');
 		}
@@ -619,6 +619,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'mediaId' => 0,
 			'length' => 0,
 			'startTime' => 0,
+			'giveCredit' => 0,
+			'requireCredit' => 0,
 		));
 		if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
 			throw $this->createServiceException('参数缺失，创建课时失败！');
@@ -667,7 +669,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		);
 
 		$this->updateCourseCounter($course['id'], array(
-			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
+			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id']),
+			'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id']),
 		));
 
 		$this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
@@ -742,6 +745,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'free' => 0,
 			'length' => 0,
 			'startTime' => 0,
+			'giveCredit' => 0,
+			'requireCredit' => 0,
 		));
 
 		if (isset($fields['title'])) {
@@ -758,6 +763,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lesson = LessonSerialize::unserialize(
 			$this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))
 		);
+
+		$this->updateCourseCounter($course['id'], array(
+			'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id']),
+		));
 
 		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$lesson['title']}》({$lesson['id']})", $lesson);
 
@@ -890,6 +899,27 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $liveStudentCapacity - $timeSlotOccupiedStuNums;
 	}
 
+	public function canLearnLesson($courseId, $lessonId)
+	{
+		list($course, $member) = $this->tryTakeCourse($courseId);
+		$lesson = $this->getCourseLesson($courseId, $lessonId);
+		if (empty($lesson) or $lesson['courseId']!=$courseId) {
+			throw $this->createNotFoundException();
+		}
+		$user = $this->getCurrentUser();
+
+
+		if (empty($lesson['requireCredit'])) {
+			return array('status' => 'yes');
+		}
+
+		if ($member['credit'] >= $lesson['requireCredit']) {
+			return array('status' => 'yes');
+		}
+
+		return array('status' => 'no', 'message' => sprintf('本课时需要%s学分才能学习，您当前学分为%s分。', $lesson['requireCredit'], $member['credit']));
+	}
+
 	public function startLearnLesson($courseId, $lessonId)
 	{
 		list($course, $member) = $this->tryTakeCourse($courseId);
@@ -933,9 +963,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 			));
 		}
 
+		$learns = $this->getLessonLearnDao()->findLearnsByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
+		$totalCredits = $this->getLessonDao()->sumLessonGiveCreditByLessonIds(ArrayToolkit::column($learns, 'lessonId'));
+
 		$memberFields = array();
-		$memberFields['learnedNum'] = $this->getLessonLearnDao()->getLearnCountByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
+		$memberFields['learnedNum'] = count($learns);
 		$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+		$memberFields['credit'] = $totalCredits;
+
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
 
@@ -962,9 +997,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'finishedTime' => 0,
 		));
 
+		$learns = $this->getLessonLearnDao()->findLearnsByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
+		$totalCredits = $this->getLessonDao()->sumLessonGiveCreditByLessonIds(ArrayToolkit::column($learns, 'lessonId'));
+
 		$memberFields = array();
-		$memberFields['learnedNum'] = $this->getLessonLearnDao()->getLearnCountByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
+		$memberFields['learnedNum'] = count($learns);
 		$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+		$memberFields['credit'] = $totalCredits;
+
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
 
