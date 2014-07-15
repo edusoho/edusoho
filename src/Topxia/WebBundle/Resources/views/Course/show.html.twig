@@ -132,29 +132,29 @@
     </div>
   </div>
 
-  <div class="row row-8-4" style="position:relative;">
+  <div class="row row-8-4">
     <div class="col-md-8">
 
-      <div class=".course-nav-tabs">
+      <div class="course-nav-tabs">
         <ul class="nav mbl nav-pills" id="course-nav-tabs">
           <li class="active">
-            <a href="javascript:;" class="btn-index" data-anchor="#course-about-pane">课程介绍</a>
+            <a href="#course-about-pane" class="btn-index" data-anchor="#course-about-pane">课程介绍</a>
           </li>
           {% if course.goals %}
             <li>
-              <a href="javascript:;" class="btn-index" data-anchor="#course-goal-pane">课程目标</a>
+              <a href="#course-goal-pane" class="btn-index" data-anchor="#course-goal-pane">课程目标</a>
             </li>
           {% endif %}
           {% if course.audiences %}
             <li>
-              <a href="javascript:;" class="btn-index" data-anchor="#course-audience-pane">适合人群</a>
+              <a href="#course-audience-pane" class="btn-index" data-anchor="#course-audience-pane">适合人群</a>
             </li>
           {% endif %}
           <li>
-            <a href="javascript:;" class="btn-index" data-anchor="#course-list-pane">课程列表</a>
+            <a href="#course-list-pane" class="btn-index" data-anchor="#course-list-pane">课程列表</a>
           </li>
           <li>
-            <a href="javascript:;" class="btn-index" data-anchor="#course-review-pane">
+            <a href="#course-review-pane" class="btn-index" data-anchor="#course-review-pane">
               课程评价
               <span class="badge">{{ course.ratingNum }}</span>
             </a>

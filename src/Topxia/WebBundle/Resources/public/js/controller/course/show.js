@@ -27,18 +27,6 @@ define(function(require, exports, module) {
             });
         }
 
-        $('#course-nav-tabs').affix({
-            offset: {
-                top: 300
-            }
-        });
-
-        $('#course-nav-tabs').on('click', '.btn-index', function() {
-            var position = $($(this).data('anchor')).offset();
-            var top = position.top - 50;
-            $(document).scrollTop(top);
-        });
-
         var $body = $(document.body);
 
         $body.scrollspy({
@@ -50,13 +38,18 @@ define(function(require, exports, module) {
             $body.scrollspy('refresh');
         });
 
+        $('#course-nav-tabs').affix({
+            offset: {
+                top: 300
+            }
+        });
 
-
-
-
-
-
-
+        $('#course-nav-tabs').on('click', '.btn-index', function(event) {
+            event.preventDefault();
+            var position = $($(this).data('anchor')).offset();
+            var top = position.top - 50;
+            $(document).scrollTop(top);
+        });
 
         $("#favorite-btn").on('click', function() {
             var $btn = $(this);
