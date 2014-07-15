@@ -132,35 +132,40 @@
     </div>
   </div>
 
-  <div class="row row-8-4">
+  <div class="row row-8-4" style="position:relative;">
     <div class="col-md-8">
-      <ul class="nav mbl nav-pills" id="course-nav-tabs">
-        <li class="active">
-          <a href="javascript:;" class="btn-index" data-anchor="#course-about-pane">课程介绍</a>
-        </li>
-        <li>
-          <a href="javascript:;" class="btn-index" data-anchor="#course-review-pane">
-            课程评价
-            <span class="badge">{{ course.ratingNum }}</span>
-          </a>
-        </li>
-        {% if course.goals %}
-        <li>
-          <a href="javascript:;" class="btn-index" data-anchor="#course-goal-pane">课程目标</a>
-        </li>
-        {% endif %}
-        {% if course.audiences %}
-        <li>
-          <a href="javascript:;" class="btn-index" data-anchor="#course-audience-pane">适合人群</a>
-        </li>
-        {% endif %}
-      </ul>
+
+      <div class=".course-nav-tabs">
+        <ul class="nav mbl nav-pills" id="course-nav-tabs">
+          <li class="active">
+            <a href="javascript:;" class="btn-index" data-anchor="#course-about-pane">课程介绍</a>
+          </li>
+          {% if course.goals %}
+            <li>
+              <a href="javascript:;" class="btn-index" data-anchor="#course-goal-pane">课程目标</a>
+            </li>
+          {% endif %}
+          {% if course.audiences %}
+            <li>
+              <a href="javascript:;" class="btn-index" data-anchor="#course-audience-pane">适合人群</a>
+            </li>
+          {% endif %}
+          <li>
+            <a href="javascript:;" class="btn-index" data-anchor="#course-list-pane">课程列表</a>
+          </li>
+          <li>
+            <a href="javascript:;" class="btn-index" data-anchor="#course-review-pane">
+              课程评价
+              <span class="badge">{{ course.ratingNum }}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
 
 
-
-      {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}
+      {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-about-pane'} %}
         {% block heading %}
-          <h3 class="panel-title" id="course-about-pane">课程介绍</h3>
+          <h3 class="panel-title">课程介绍</h3>
         {% endblock %}
         {% block body %}
 
@@ -180,23 +185,10 @@
         {% endblock %}
       {% endembed %}
 
-
-
-      {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}
-        {% block heading %}
-          <h3 class="panel-title">课时列表</h3>
-        {% endblock %}
-        {% block body %}
-
-          {% include 'TopxiaWebBundle:CourseLesson:item-list-multi.html.twig' with {experience: true} %}
-
-        {% endblock %}
-      {% endembed %}
-
       {% if course.goals %}
-        {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}
+        {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-goal-pane'} %}
           {% block heading %}
-            <h3 class="panel-title" id="course-goal-pane">课时目标</h3>
+            <h3 class="panel-title">课时目标</h3>
           {% endblock %}
           {% block body %}
             <ul class="media-list">
@@ -214,9 +206,9 @@
       {% endif %}
 
       {% if course.audiences %}
-        {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}
+        {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-audience-pane'} %}
           {% block heading %}
-            <h3 class="panel-title" id="course-audience-pane">适合人群</h3>
+            <h3 class="panel-title">适合人群</h3>
           {% endblock %}
           {% block body %}
             <ul class="media-list">
@@ -233,14 +225,24 @@
         {% endembed %}
       {% endif %}
 
+      {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-list-pane'} %}
+        {% block heading %}
+          <h3 class="panel-title">课时列表</h3>
+        {% endblock %}
+        {% block body %}
 
-      {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}
+          {% include 'TopxiaWebBundle:CourseLesson:item-list-multi.html.twig' with {experience: true} %}
+
+        {% endblock %}
+      {% endembed %}
+
+      {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-review-pane'} %}
         {% block heading %}
           <h3 class="panel-title">课程评价</h3>
         {% endblock %}
         {% block body %}
 
-          <div id="course-review-pane" data-url="{{ path('course_review_list', {id:course.id, previewAs:previewAs}) }}">正在载入课程评价数据...</div>
+          <div id="course-review-pane-show" data-url="{{ path('course_review_list', {id:course.id, previewAs:previewAs}) }}">正在载入课程评价数据...</div>
 
         {% endblock %}
       {% endembed %}

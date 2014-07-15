@@ -12,7 +12,7 @@ define(function(require, exports, module) {
         var reviewTabInited = false;
 
         if (!reviewTabInited) {
-            var $reviewTab = $("#course-review-pane");
+            var $reviewTab = $("#course-review-pane-show");
 
             $.get($reviewTab.data('url'), function(html) {
                 $reviewTab.html(html);
@@ -35,8 +35,28 @@ define(function(require, exports, module) {
 
         $('#course-nav-tabs').on('click', '.btn-index', function() {
             var position = $($(this).data('anchor')).offset();
-            $(document).scrollTop(position.top - 55);
+            var top = position.top - 50;
+            $(document).scrollTop(top);
         });
+
+        var $body = $(document.body);
+
+        $body.scrollspy({
+            target: '.course-nav-tabs',
+            offset: 120
+        });
+
+        $(window).on('load', function () {
+            $body.scrollspy('refresh');
+        });
+
+
+
+
+
+
+
+
 
         $("#favorite-btn").on('click', function() {
             var $btn = $(this);
