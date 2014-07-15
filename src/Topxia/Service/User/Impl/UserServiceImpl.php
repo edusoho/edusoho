@@ -254,7 +254,26 @@ class UserServiceImpl extends BaseService implements UserService
         $user = UserSerialize::unserialize(
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
         );
-        $this->getProfileDao()->addProfile(array('id' => $user['id']));
+
+        if (isset($registration['mobile']) && !SimpleValidator::mobile($registration['mobile'])) {
+            throw $this->createServiceException('mobile error!');
+        }
+
+        if (isset($registration['idcard']) && !SimpleValidator::idcard($registration['idcard'])) {
+            throw $this->createServiceException('idcard error!');
+        }
+
+        if (isset($registration['truename']) && !SimpleValidator::truename($registration['truename'])) {
+            throw $this->createServiceException('truename error!');
+        }
+
+        $profile = array();
+        $profile['id'] = $user['id'];
+        $profile['mobile'] = empty($registration['mobile']) ? '' : $registration['mobile'];
+        $profile['idcard'] = empty($registration['idcard']) ? '' : $registration['idcard'];
+        $profile['truename'] = empty($registration['truename']) ? '' : $registration['truename'];
+
+        $this->getProfileDao()->addProfile($profile);
         if ($type != 'default') {
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
@@ -391,6 +410,11 @@ class UserServiceImpl extends BaseService implements UserService
         }
         $token['data'] = unserialize($token['data']);
         return $token;
+    }
+
+    public function searchTokenCount($conditions)
+    {
+        return $this->getUserTokenDao()->searchTokenCount($conditions);
     }
 
     public function deleteToken($type, $token)

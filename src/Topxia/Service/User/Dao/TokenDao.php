@@ -13,4 +13,6 @@ interface TokenDao
 
 	public function deleteToken($id);
 
+	public function searchTokenCount($conditions);
+
 }

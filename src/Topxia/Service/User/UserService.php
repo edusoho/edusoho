@@ -80,6 +80,8 @@ interface UserService
 
     public function getToken($type, $token);
 
+    public function searchTokenCount($conditions);
+
     public function deleteToken($type, $token);
 
     public function lockUser($id);

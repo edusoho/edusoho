@@ -35,7 +35,9 @@ class CourseController extends BaseController
             'status' => 'published',
             'type' => 'normal',
             'categoryId' => $category['id'],
-            'recommended' => ($sort == 'recommendedSeq') ? 1 : null
+            'recommended' => ($sort == 'recommendedSeq') ? 1 : null,
+            'createdTimeGreaterThan' => time()-30*3600*24,
+            'createdTimeLessThan' => time(),
         );
 
         $paginator = new Paginator(
