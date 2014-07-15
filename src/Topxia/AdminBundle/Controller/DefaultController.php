@@ -58,6 +58,12 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function operationAnalysisDashbordBlockAction(Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
+        ));        
+    }
+
     public function unsolvedQuestionsBlockAction(Request $request)
     {
         $questions = $this->getThreadService()->searchThreads(
