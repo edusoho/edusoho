@@ -21,6 +21,7 @@ define(function(require, exports, module) {
 
         validator = new Validator({
             element: $form,
+            failSilently: true,
             autoSubmit: false
         });
 
