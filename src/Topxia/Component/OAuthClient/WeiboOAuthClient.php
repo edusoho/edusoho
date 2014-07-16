@@ -42,7 +42,7 @@ class WeiboOAuthClient extends AbstractOAuthClient
     	$data = $this->getRequest('https://api.weibo.com/2/users/show.json', $params);
     	$userInfo = json_decode($data, true);
 
-        $this->checkUnaudited($userInfo);
+        $this->checkError($userInfo);
 
     	return $this->convertUserInfo($userInfo);
     }
@@ -66,10 +66,14 @@ class WeiboOAuthClient extends AbstractOAuthClient
         );
     }
 
-    private function checkUnaudited($userInfo)
+    private function checkError($userInfo)
     {
-        if (array_key_exists('error_code', $userInfo)) {
-            throw new \Exception($userInfo['error'], 'unaudited');
+        if (!array_key_exists('error_code', $userInfo)) {
+            return ;
         }
+        if ($userInfo['error_code'] == '21321') {
+            throw new \Exception('unaudited');
+        }
+        throw new \Exception($userInfo['error']);
     }
 }

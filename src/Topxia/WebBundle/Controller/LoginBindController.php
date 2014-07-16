@@ -54,12 +54,12 @@ class LoginBindController extends BaseController
         try {
             $oauthUser = $client->getUserInfo($token);
         } catch (\Exception $e) {
-            $code = $e->getCode();
+            $message = $e->getMessage();
             $clientInfo = $client->getClientInfo();
-            if ($code == 'unaudited') {
+            if ($message == 'unaudited') {
                 $message = '抱歉！暂时无法通过第三方帐号登录,原因：'.$clientInfo['name'].'登录连接的审核还未通过。';
             } else {
-                $message = '抱歉！暂时无法通过第三方帐号登录,原因：'.$e->getMessage();
+                $message = '抱歉！暂时无法通过第三方帐号登录,原因：'.$message;
             }
             $this->setFlashMessage('danger', $message);
             return $this->redirect($this->generateUrl('login'));
