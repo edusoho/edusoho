@@ -40,26 +40,36 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
+            element: '[name="truename"]',
+            required: true,
+            rule: 'chinese minlength{min:2} maxlength{max:12}'
+        });
+
+        validator.addItem({
+            element: '[name="company"]',
+            required: true,
+        });
+
+        validator.addItem({
+            element: '[name="job"]',
+            required: true,
+        });
+
+        validator.addItem({
             element: '#user_terms',
             required: true,
             errormessageRequired: '勾选同意此服务协议，才能继续注册'
         });
 
         validator.addItem({
-            element: '[name="truename"]',
-            required: $form.find('[name="truename"]').attr('required') == 'required',
-            rule: 'chinese minlength{min:2} maxlength{max:12}'
-        });
-
-        validator.addItem({
             element: '[name="mobile"]',
-            required: $form.find('[name="mobile"]').attr('required') == 'required',
+            required: true,
             rule: 'mobile'
         });
 
         validator.addItem({
             element: '[name="idcard"]',
-            required: $form.find('[name="idcard"]').attr('required') == 'required',
+            required: true,
             rule: 'idcard'
         });
 

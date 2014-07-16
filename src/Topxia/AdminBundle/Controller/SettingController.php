@@ -211,12 +211,14 @@ class SettingController extends BaseController
             'welcome_title' => '',
             'welcome_body' => '',
             'user_terms' => 'closed',
-            'user_terms_body' => ''
+            'user_terms_body' => '',
+            'registerSortType'=>array(),
         );
 
         $auth = array_merge($default, $auth);
         if ($request->getMethod() == 'POST') {
             $auth = $request->request->all();
+       
             if (empty($auth['welcome_methods'])) {
                 $auth['welcome_methods'] = array();
             }
@@ -624,6 +626,64 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:developer-setting.html.twig', array(
             'developerSetting' => $developerSetting
         ));
+    }
+
+    public function userFieldsAction()
+    {   
+
+       $textCount=$this->getSettingService()->searchFieldCount(array('fieldName'=>'textField'));
+       $intCount=$this->getSettingService()->searchFieldCount(array('fieldName'=>'intField'));
+       $floatCount=$this->getSettingService()->searchFieldCount(array('fieldName'=>'floatField'));
+       $dateCount=$this->getSettingService()->searchFieldCount(array('fieldName'=>'dateField'));
+       $varcharCount=$this->getSettingService()->searchFieldCount(array('fieldName'=>'varcharField'));
+
+       $fields=$this->getSettingService()->getAllFieldsOrderBySeq();
+       for($i=0;$i<count($fields);$i++){
+           if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['fieldName']="多行文本";
+           if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['fieldName']="文本";
+           if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['fieldName']="整数";
+           if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['fieldName']="小数";
+           if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['fieldName']="日期";
+       }
+
+       return $this->render('TopxiaAdminBundle:System:user-fields.html.twig',array(
+            'textCount'=>$textCount,
+            'intCount'=>$intCount,
+            'floatCount'=>$floatCount,
+            'dateCount'=>$dateCount,
+            'varcharCount'=>$varcharCount,
+            'fields'=>$fields,
+        )); 
+    }
+
+    public function editUserFieldsAction(Request $request, $id)
+    {
+        $field = $this->getSettingService()->getField($id);
+        if (empty($field)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $field = $this->getSettingService()->updateField($id, $request->request->all());
+            return $this->redirect($this->generateUrl('admin_setting_user_fields'));
+        }
+
+        return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
+            'category' => $category,
+        ));
+    }
+
+    public function addUserFieldsAction(Request $request)
+    {
+        $field=$request->request->all();
+
+        $field=$this->getSettingService()->addUserField($field);
+
+        if($field==false){
+           $this->setFlashMessage('danger', '已经没有可以添加的字段了!'); 
+        }
+
+        return $this->redirect($this->generateUrl('admin_setting_user_fields')); 
     }
 
     protected function getAppService()

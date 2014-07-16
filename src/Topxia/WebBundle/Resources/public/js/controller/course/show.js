@@ -10,32 +10,46 @@ define(function(require, exports, module) {
         });
 
         var reviewTabInited = false;
-        $("#course-review-tab").on('show.bs.tab', function(e) {
-            if (reviewTabInited) {
-                return ;
-            }
-            var $this = $(this),
-                $pane = $($this.attr('href'));
 
-            $.get($this.data('url'), function(html) {
-                $pane.html(html);
+        if (!reviewTabInited) {
+            var $reviewTab = $("#course-review-pane-show");
+
+            $.get($reviewTab.data('url'), function(html) {
+                $reviewTab.html(html);
                 reviewTabInited =  true;
             });
 
-            $pane.on('click', '.pagination a', function(e) {
+            $reviewTab.on('click', '.pagination a', function(e) {
                 e.preventDefault();
                 $.get($(this).attr('href'), function(html){
-                    $pane.html(html);
+                    $reviewTab.html(html);
                 });
             });
+        }
 
+        var $body = $(document.body);
+
+        $body.scrollspy({
+            target: '.course-nav-tabs',
+            offset: 120
         });
 
-        $(".show-course-review-pane").click(function(){
-            $("#course-review-tab").tab('show');
-            var offset = $("#course-nav-tabs").offset();
-            $(document).scrollTop(offset.top - 20);
-        }); 
+        $(window).on('load', function () {
+            $body.scrollspy('refresh');
+        });
+
+        $('#course-nav-tabs').affix({
+            offset: {
+                top: 300
+            }
+        });
+
+        $('#course-nav-tabs').on('click', '.btn-index', function(event) {
+            event.preventDefault();
+            var position = $($(this).data('anchor')).offset();
+            var top = position.top - 50;
+            $(document).scrollTop(top);
+        });
 
         $("#favorite-btn").on('click', function() {
             var $btn = $(this);

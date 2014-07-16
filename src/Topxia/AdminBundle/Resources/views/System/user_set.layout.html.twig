@@ -1,0 +1,30 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% block title %}全局设置 - {{ parent() }}{% endblock %}
+
+{% set menu = 'user_set' %}
+
+{% block main %}
+<ul class="nav nav-tabs mbl">
+  <li class="{% if submenu == 'auth' %}active{% endif %}">
+  	<a href="{{ url('admin_setting_auth') }}">注册设置
+  	</a>
+  </li>	
+  <li class="{% if submenu == 'login_bind' %}active{% endif %}">
+  	<a href="{{ url('admin_setting_login_bind') }}">登录设置
+  	</a>
+  </li>
+  <li class="{% if submenu == 'user_center' %}active{% endif %}">
+    <a href="{{ url('admin_setting_user_center') }}">用户中心设置
+    </a>
+  </li>
+  <li class="{% if submenu == 'user_fields' %}active{% endif %}">
+    <a href="{{ url('admin_setting_user_fields') }}">字段自定义
+    </a>
+  </li>
+
+</ul>
+
+
+  {% block maincontent %}{% endblock %}
+{% endblock %}
