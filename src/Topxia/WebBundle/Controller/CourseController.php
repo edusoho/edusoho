@@ -169,7 +169,6 @@ class CourseController extends BaseController
     public function membersAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-
         $paginator = new Paginator(
             $request,
             $this->getCourseService()->getCourseStudentCount($course['id']),
