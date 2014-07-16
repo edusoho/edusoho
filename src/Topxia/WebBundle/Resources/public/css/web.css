@@ -1668,7 +1668,7 @@ body {
 
 .lesson-dashboard .dashboard-header {
 	position: absolute;
-	left: 150px;
+	left: 130px;
 	top: 0;
 	height: 40px;
 }
@@ -1689,7 +1689,7 @@ body {
 
 .lesson-dashboard .dashboard-body {
 	position: absolute;
-	top: 120px;
+	top: 150px;
 	bottom: 0px;
 	width: 100%;
 	/*background: #1d1f21;*/
