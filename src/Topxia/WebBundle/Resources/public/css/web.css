@@ -428,6 +428,7 @@ body {
 	line-height: 1.2;
 	font-size: 18px;
 	font-weight: bold;
+	word-break:break-all;
 }
 
 @media (max-width: 767px) {
@@ -1714,6 +1715,7 @@ body {
 .lesson-dashboard .title-group {
 	line-height: 40px;
 	height:200px;
+	word-break:break-all;
 	overflow:hidden;
 }
 
