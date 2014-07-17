@@ -2876,6 +2876,7 @@ body {
 
 .course-wide-list .course-title {
 	margin: 10px 0 10px;
+	word-break:break-all;
 }
 
 .course-wide-list .course-title a {
