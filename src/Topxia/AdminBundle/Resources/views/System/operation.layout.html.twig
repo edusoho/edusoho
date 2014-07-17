@@ -6,6 +6,12 @@
 
 {% block main %}
 <ul class="nav nav-tabs mbl">
+
+  <li class="{% if submenu == 'course_setting' %}active{% endif %}">
+    <a href="{{ url('admin_setting_course_setting') }}">课程设置
+    </a>
+  </li>
+
   <li class="{% if submenu == 'payment' %}active{% endif %}">
   	<a href="{{ url('admin_setting_payment') }}">支付方式
   	</a>
@@ -28,11 +34,6 @@
 
   <li class="{% if submenu == 'customer_service' %}active{% endif %}" style="display:none;">
     <a href="{{ url('admin_customer_service') }}">在线客户服务
-    </a>
-  </li>
-
-  <li class="{% if submenu == 'course_setting' %}active{% endif %}">
-    <a href="{{ url('admin_setting_course_setting') }}">课程设置
     </a>
   </li>
 
