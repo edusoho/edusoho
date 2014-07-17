@@ -1,20 +1,20 @@
 <?php
 
-namespace Topxia\Service\System\Dao;
+namespace Topxia\Service\User;
 
-interface UserFieldDao
+interface UserFieldService
 {
-
-    public function addField($field);
-
     public function getField($id);
 
-    public function getFieldByFieldName($fieldName);
+    public function addUserField($field);
 
     public function searchFieldCount($condition);
 
     public function getAllFieldsOrderBySeq();
 
+    public function getAllFieldsOrderBySeqAndEnabled();
+
     public function updateField($id,$fields);
 
+    public function dropField($id);
 }

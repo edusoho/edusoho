@@ -631,13 +631,13 @@ class SettingController extends BaseController
     public function userFieldsAction()
     {   
 
-       $textCount=$this->getSettingService()->searchFieldCount(array('fieldName'=>'textField'));
-       $intCount=$this->getSettingService()->searchFieldCount(array('fieldName'=>'intField'));
-       $floatCount=$this->getSettingService()->searchFieldCount(array('fieldName'=>'floatField'));
-       $dateCount=$this->getSettingService()->searchFieldCount(array('fieldName'=>'dateField'));
-       $varcharCount=$this->getSettingService()->searchFieldCount(array('fieldName'=>'varcharField'));
+       $textCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'textField'));
+       $intCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'intField'));
+       $floatCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'floatField'));
+       $dateCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'dateField'));
+       $varcharCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'varcharField'));
 
-       $fields=$this->getSettingService()->getAllFieldsOrderBySeq();
+       $fields=$this->getUserFieldService()->getAllFieldsOrderBySeq();
        for($i=0;$i<count($fields);$i++){
            if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['fieldName']="多行文本";
            if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['fieldName']="文本";
@@ -658,18 +658,54 @@ class SettingController extends BaseController
 
     public function editUserFieldsAction(Request $request, $id)
     {
-        $field = $this->getSettingService()->getField($id);
+        $field = $this->getUserFieldService()->getField($id);
+
+        if (empty($field)) {
+            throw $this->createNotFoundException();
+        }
+
+        if(strstr($field['fieldName'], "textField")) $field['fieldName']="多行文本";
+        if(strstr($field['fieldName'], "varcharField")) $field['fieldName']="文本";
+        if(strstr($field['fieldName'], "intField")) $field['fieldName']="整数";
+        if(strstr($field['fieldName'], "floatField")) $field['fieldName']="小数";
+        if(strstr($field['fieldName'], "dateField")) $field['fieldName']="日期";
+
+        if ($request->getMethod() == 'POST') {
+            $fields=$request->request->all();
+
+            if(isset($fields['enabled'])){
+                $fields['enabled']=1;
+            }else{
+                $fields['enabled']=0;
+            }
+            
+            $field = $this->getUserFieldService()->updateField($id, $fields);
+            
+            return $this->redirect($this->generateUrl('admin_setting_user_fields'));
+        }
+
+        return $this->render('TopxiaAdminBundle:System:user-fields.modal.edit.html.twig', array(
+            'field' => $field,
+        ));
+    }
+
+    public function deleteUserFieldsAction(Request $request, $id)
+    {
+        $field = $this->getUserFieldService()->getField($id);
+
         if (empty($field)) {
             throw $this->createNotFoundException();
         }
 
         if ($request->getMethod() == 'POST') {
-            $field = $this->getSettingService()->updateField($id, $request->request->all());
+
+            $this->getUserFieldService()->dropField($id);
+
             return $this->redirect($this->generateUrl('admin_setting_user_fields'));
         }
 
-        return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
-            'category' => $category,
+        return $this->render('TopxiaAdminBundle:System:user-fields.modal.delete.html.twig', array(
+            'field' => $field,
         ));
     }
 
@@ -677,7 +713,7 @@ class SettingController extends BaseController
     {
         $field=$request->request->all();
 
-        $field=$this->getSettingService()->addUserField($field);
+        $field=$this->getUserFieldService()->addUserField($field);
 
         if($field==false){
            $this->setFlashMessage('danger', '已经没有可以添加的字段了!'); 
@@ -694,6 +730,11 @@ class SettingController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
     }
 
     protected function getAuthService()

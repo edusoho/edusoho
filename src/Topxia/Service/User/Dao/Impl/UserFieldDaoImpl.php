@@ -1,8 +1,8 @@
 <?php
-namespace Topxia\Service\System\Dao\Impl;
+namespace Topxia\Service\User\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\System\Dao\UserFieldDao;
+use Topxia\Service\User\Dao\UserFieldDao;
 
 class UserFieldDaoImpl extends BaseDao implements UserFieldDao
 {   
@@ -43,10 +43,21 @@ class UserFieldDaoImpl extends BaseDao implements UserFieldDao
         return $this->getConnection()->fetchAll($sql) ? : array();
     }
 
+    public function getAllFieldsOrderBySeqAndEnabled()
+    {
+        $sql = "SELECT * FROM {$this->table} where enabled=1 ORDER BY seq";
+        return $this->getConnection()->fetchAll($sql) ? : array();
+    }
+
     public function updateField($id,$fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getField($id);
+    }
+
+    public function deleteField($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
     private function _createSearchQueryBuilder($condition)

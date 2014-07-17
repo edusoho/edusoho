@@ -761,3 +761,11 @@ admin_article_delete:
 admin_user_fields_add:
     pattern:  /user_fields/add
     defaults: { _controller: TopxiaAdminBundle:Setting:addUserFields }
+
+admin_user_fields_edit:
+    pattern:  /user_fields/edit/{id}
+    defaults: { _controller: TopxiaAdminBundle:Setting:editUserFields }
+
+admin_user_fields_delete:
+    pattern:  /user_fields/delete/{id}
+    defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }

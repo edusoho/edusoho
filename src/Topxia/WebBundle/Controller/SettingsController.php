@@ -22,19 +22,29 @@ class SettingsController extends BaseController
 		$user = $this->getCurrentUser();
 
         $profile = $this->getUserService()->getUserProfile($user['id']);
+
         $profile['title'] = $user['title'];
 
         if ($request->getMethod() == 'POST') {
             $profile = $request->request->get('profile');
-
             $this->getUserService()->updateUserProfile($user['id'], $profile);
             $this->setFlashMessage('success', '基础信息保存成功。');
             return $this->redirect($this->generateUrl('settings'));
 
         }
 
+        $fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        for($i=0;$i<count($fields);$i++){
+           if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['type']="text";
+           if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['type']="varchar";
+           if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['type']="int";
+           if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['type']="float";
+           if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
+        }
+    
         return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
-            'profile' => $profile
+            'profile' => $profile,
+            'fields'=>$fields,
         ));
 	}
 
@@ -513,5 +523,10 @@ class SettingsController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
     }
 }
