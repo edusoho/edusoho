@@ -7,6 +7,10 @@ use Topxia\Common\ArrayToolkit;
 
 class UserServiceTest extends BaseTestCase
 {   
+    /**
+     * @group current
+     * @return [type] [description]
+     */
     public function testRegister()
     {
         $userInfo = array(
