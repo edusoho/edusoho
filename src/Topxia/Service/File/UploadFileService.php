@@ -30,4 +30,7 @@ interface UploadFileService
     public function setFileConverting($id, $convertHash);
 
 
+    public function makeUploadParams($params);
+
+
 }

@@ -55,6 +55,15 @@ class UploadFileController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $params = $request->query->all();
+
+        $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_convert_callback', array(), true);
+
+        $params = $this->getUploadFileService()->makeUploadParams($params);
+
+        var_dump($params);exit();
+
+
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
 

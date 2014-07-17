@@ -68,6 +68,11 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     	@unlink($filename);
     }
 
+    public function makeUploadParams($params)
+    {
+        
+    }
+
     private function getFileFullPath($file)
     {
         if (empty($file['isPublic'])) {

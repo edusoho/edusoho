@@ -11,7 +11,10 @@ use Topxia\Service\File\UploadFileService;
     
 class UploadFileServiceImpl extends BaseService implements UploadFileService
 {
-	static $IMPEMNTORMAP = array('local'=>'File.LocalFileImplementor','cloud' => 'File.CloudFileImplementor');
+	static $implementor = array(
+        'local'=>'File.LocalFileImplementor',
+        'cloud' => 'File.CloudFileImplementor'
+    );
 
     public function getFile($id)
     {
@@ -78,7 +81,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function addFile($targetType,$targetId,array $fileInfo=array(),$implemtor='local',UploadedFile $originalFile=null)    
     {
-        $file = $this->getFieImplementor($implemtor)->addFile($targetType,$targetId,$fileInfo,$originalFile);
+        $file = $this->getFileImplementor($implemtor)->addFile($targetType,$targetId,$fileInfo,$originalFile);
         return $this->getUploadFileDao()->addFile($file);
     }
 
@@ -158,9 +161,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFile($id);
     }
 
+    public function makeUploadParams($params)
+    {
+        return $this->getFileImplementor($params['storage'])->makeUploadParams($params);
+    }
+
     private function getFileImplementorByFile($file)
     {
-        return $this->getFieImplementor($file['storage']);
+        return $this->getFileImplementor($file['storage']);
     }
 
     private function getUploadFileDao()
@@ -173,9 +181,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->createService('User.UserService');
     }
 
-    private function getFieImplementor($key)
+    private function getFileImplementor($key)
     {
-        return $this->createService(self::$IMPEMNTORMAP[$key]);
+        if (!array_key_exists($key, self::$implementor)) {
+            throw $this->createServiceException(sprintf("`%s` File Implementor is not allowed.", $key));
+        }
+        return $this->createService(self::$implementor[$key]);
     }
 
     private function getLogService()

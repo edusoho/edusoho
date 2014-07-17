@@ -150,6 +150,19 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $this->getCloudClient()->deleteFiles($keys, $keyPrefixs);
     }
 
+    public function makeUploadParams($rawParams)
+    {
+        var_dump($rawParams);
+
+        $convertor = $this->getConvertor($rawParams['convertor']);
+
+        $convertParams = $convertor->getCovertParams($rawParams);
+
+        $uploadParams = $this->getCloudClient()->makeUploadParams();
+
+        var_dump($convertParams);exit();
+    }
+
     private function getFileFullName($file)
     {
         $diskDirectory= $this->getFilePath($file['targetType'],$file['targetId']);
@@ -190,4 +203,38 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $this->cloudClient;
     }
 
+    private function getConvertor($name)
+    {
+        $class = __NAMESPACE__ . '\\' .  ucfirst($name) . 'Convertor';
+        return new $class($this->getKernel()->getParameter('cloud_convertor'));
+    }
+}
+
+class HLSVideoConvertor
+{
+    const NAME = 'HLSVideo';
+
+    protected $config = array();
+
+    public function __construct($config)
+    {
+        $this->config = $config[self::NAME];
+    }
+
+    public function getCovertParams($params)
+    {
+        $videoQuality = empty($params['videoQuality']) ? 'low' : $params['videoQuality'];
+        $videoDefinitions = $this->config['video'][$videoQuality];
+
+        $audioQuality = empty($params['audioQuality']) ? 'low' : $params['audioQuality'];
+        $audioDefinitions = $this->config['audio'][$audioQuality];
+
+        return array(
+            'convertor' => self::NAME,
+            'segtime' => $this->config['segtime'],
+            'video' => $videoDefinitions,
+            'audio' => $audioDefinitions,
+        );
+
+    }
 }
