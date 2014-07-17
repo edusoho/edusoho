@@ -211,7 +211,7 @@
           <div class="form-group">
             <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
             <div class="col-md-7 controls">
-              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|date("Y-m-d")|default('') }}">
+              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{% if profile[field.fieldName] %} {{profile[field.fieldName]|date("Y-m-d")}}{% endif %}">
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>

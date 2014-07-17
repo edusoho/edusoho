@@ -75,6 +75,11 @@
             rule: 'currency'
         });
 
+        validator.addItem({
+            element: '.date',
+            rule: 'date'
+        });
+
 
         validator.on('formValidate', function(elemetn, event) {
             editor.sync();
