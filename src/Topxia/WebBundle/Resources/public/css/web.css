@@ -1690,8 +1690,8 @@ body {
 
 .lesson-dashboard .dashboard-body {
 	position: absolute;
-	top: 200px;
-	bottom: 0px;
+	top: 50px;
+	bottom: 50px;
 	width: 100%;
 	/*background: #1d1f21;*/
 
@@ -1714,7 +1714,7 @@ body {
 
 .lesson-dashboard .title-group {
 	line-height: 40px;
-	height:200px;
+	height:50px;
 	word-break:break-all;
 	overflow:hidden;
 }
