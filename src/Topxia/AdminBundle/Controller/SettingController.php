@@ -381,6 +381,8 @@ class SettingController extends BaseController
             'cloud_secret_key' => '',
             'cloud_bucket' => '',
             'cloud_api_server' => '',
+            'video_quality' => 'low',
+            'video_audio_quality' => 'low',
             'video_watermark' => 0,
             'video_watermark_image' => '',
             'video_watermark_position' => 'topright',

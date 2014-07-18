@@ -4006,3 +4006,21 @@ body {
 	padding: 15px;
 	min-height: 16.42857143px;
 }
+
+.quality-switcher {
+
+}
+
+.quality-switcher-control {
+	margin: 10px 0 10px 20px;
+	display: none;
+}
+
+.quality-switcher-control-open {
+	display: block;
+}
+
+.quality-switcher .quality-actions {
+	margin-top: 10px;
+
+}
