@@ -1,12 +1,20 @@
     define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
+    require("jquery.bootstrap-datetimepicker");
     require('common/validator-rules').inject(Validator);
     var EditorFactory = require('common/kindeditor-factory');
 
     exports.run = function() {
 
         var editor = EditorFactory.create('#profile_about', 'simple', {extraFileUploadParams:{group:'user'}});
+        EditorFactory.create('.text', 'simple', {extraFileUploadParams:{group:'user'}});
+        $(".date").datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            minView: 'month'
+        });
 
         var validator = new Validator({
             element: '#user-profile-form',
@@ -55,6 +63,21 @@
         validator.addItem({
             element: '[name="profile[idcard]"]',
             rule: 'idcard'
+        });
+
+        validator.addItem({
+            element: '.int',
+            rule: 'integer'
+        });
+
+        validator.addItem({
+            element: '.float',
+            rule: 'currency'
+        });
+
+        validator.addItem({
+            element: '.date',
+            rule: 'date'
         });
 
 

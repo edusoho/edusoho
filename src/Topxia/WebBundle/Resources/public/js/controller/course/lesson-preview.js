@@ -94,7 +94,7 @@ define(function(require, exports, module) {
 			$modal.modal('hide');
 			$.get($(this).data('url'), function(html) {
 				$modal.html(html);
-				$modal.modal('show');
+				$('#join-course-btn').click();
 			});
 		});
 

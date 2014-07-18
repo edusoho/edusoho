@@ -32,13 +32,13 @@
             <div class="form-group "> 
              <label class="col-md-4 control-label" for="field_seq">显示序号</label>
               <div class="col-md-6 controls">
-              <input type="text"  name="field_seq" id="field_seq" class="form-control">
+              <input type="text"  name="field_seq" id="field_seq" class="form-control" value="1">
               </div>
             </div>
 
             <div class="form-group "> 
              <label class="col-md-4 control-label">是否启用、显示</label>
-             <div class="col-md-2"><input type="checkbox"  name="field_enabled" vaule="1" style="height:18px;width:18px;"></div>
+             <div class="col-md-2"><input type="checkbox"  checked=checked name="field_enabled" vaule="1" style="height:18px;width:18px;"></div>
             </div>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
        </div> 
