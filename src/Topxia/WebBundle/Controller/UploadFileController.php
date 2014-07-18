@@ -57,84 +57,18 @@ class UploadFileController extends BaseController
 
         $params = $request->query->all();
 
+        $params['user'] = $user->id;
         $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_convert_callback', array(), true);
 
         $params = $this->getUploadFileService()->makeUploadParams($params);
 
-        var_dump($params);exit();
+        // var_dump($params);exit();
 
-
-        $targetType = $request->query->get('targetType');
-        $targetId = $request->query->get('targetId');
-
-        $params = array();
-
-        $setting = $this->setting('storage');
-        if ($setting['upload_mode'] == 'cloud') {
-            $params['mode'] = 'cloud';
-
-            $factory = new CloudClientFactory();
-            $client = $factory->createClient();
-
-            $convertor = $request->query->get('convertor');
-            $commands = null;
-            $twoStep = null;
-            if ($convertor == 'video') {
-                $commands = array_keys($client->getVideoConvertCommands());
-            } elseif ($convertor == 'audio') {
-                $commands = array_keys($client->getAudioConvertCommands());
-            } elseif ($convertor == 'ppt') {
-                $commands = array_keys($client->getPPTConvertCommands());
-                $twoStep = '1';
-            }
-
-            //@todo refacor it. 
-            $keySuffix = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
-            $key = "{$targetType}-{$targetId}/{$keySuffix}";
-            $convertKey = null;
-
-            $clientParams = array();
-            if ($commands) {
-                $convertKey = $keySuffix;
-                if ($twoStep) {
-                    $notifyUrl = $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey, 'twoStep' => $twoStep), true);
-                    $clientParams = array(
-                        'convertCommands' => implode(';', $commands),
-                        'convertNotifyUrl' => $notifyUrl,
-                        'convertor' => 'document',
-                    );
-                } else {
-                    $notifyUrl = $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true);
-                    $clientParams = array(
-                        'convertCommands' => implode(';', $commands),
-                        'convertNotifyUrl' => $notifyUrl,
-                    );
-                }
-            }
-
-            $uploadToken = $client->generateUploadToken($client->getBucket(), $clientParams);
-            if (!empty($uploadToken['error'])) {
-                throw \RuntimeException('创建上传TOKEN失败！');
-            }
-
-            $params['url'] = $uploadToken['url'];
-
-            $params['postParams'] = array(
-                'token' => $uploadToken['token'],
-                'key' => $key,
-            );
-
-            if ($convertKey) {
-                $params['postParams']['x:convertKey'] = $convertKey;
-            }
-
-        } else {
-            $params['mode'] = 'local';
-            $params['url'] = $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId));
-            $params['postParams'] = array(
-                'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
-            );
-        }
+        // $params['mode'] = 'local';
+        // $params['url'] = $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId));
+        // $params['postParams'] = array(
+        //     'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
+        // );
 
         return $this->createJsonResponse($params);
     }

@@ -46,6 +46,7 @@ define(function(require, exports, module) {
             },			
 			init: {
 				FileUploaded: function(up, file, info) {
+					console.log(info.response);
 					response = $.parseJSON(info.response);
 					if (divData.callback) {
 						$.post(divData.callback, response, function(response) {
@@ -87,11 +88,15 @@ define(function(require, exports, module) {
 						}
 					}
 
+					data.videoQuality = 'low';
+					data.audioQuality = 'low';
+					data.convertor = 'HLSVideo';
+
 					$.ajax({
 						url: divData.paramsUrl,
 						async: false,
 						dataType: 'json',
-						data: data,
+						data: data,	
 						cache: false,
 						success: function(response, status, jqXHR) {
 							up.settings.url = response.url;

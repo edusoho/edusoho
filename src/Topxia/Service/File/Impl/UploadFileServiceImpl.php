@@ -13,7 +13,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 {
 	static $implementor = array(
         'local'=>'File.LocalFileImplementor',
-        'cloud' => 'File.CloudFileImplementor'
+        'cloud' => 'File.CloudFileImplementor',
     );
 
     public function getFile($id)

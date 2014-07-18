@@ -39,12 +39,14 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['metas'] = $this->encodeMetas(empty($fileInfo['metas']) ? array() : $fileInfo['metas']);    
         $uploadFile['metas2'] = $this->encodeMetas(empty($fileInfo['metas2']) ? array() : $fileInfo['metas2']);    
 
-        if (empty($fileInfo['convertId']) or empty($fileInfo['convertKey'])) {
+        if (empty($fileInfo['convertHash'])) {
             $uploadFile['convertHash'] = "ch-{$uploadFile['hashId']}";
             $uploadFile['convertStatus'] = 'none';
+            $uploadFile['convertParams'] = '';
         } else {
-            $uploadFile['convertHash'] = "{$fileInfo['convertId']}:{$fileInfo['convertKey']}";
+            $uploadFile['convertHash'] = "{$fileInfo['convertHash']}";
             $uploadFile['convertStatus'] = 'waiting';
+            $uploadFile['convertParams'] = $fileInfo['convertParams'];
         }
 
         $uploadFile['type'] = FileToolkit::getFileTypeByMimeType($fileInfo['mimeType']);
@@ -152,15 +154,42 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function makeUploadParams($rawParams)
     {
-        var_dump($rawParams);
-
         $convertor = $this->getConvertor($rawParams['convertor']);
 
-        $convertParams = $convertor->getCovertParams($rawParams);
+        $rawUploadParams = array(
+            'convertor' => $rawParams['convertor'],
+            'convertCallback' => $rawParams['convertCallback'],
+            'convertParams' => $convertor->getCovertParams($rawParams),
+            'duration' => empty($rawParams['duration']) ? 18000 : $rawParams['duration'],
+            'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
+        );
 
-        $uploadParams = $this->getCloudClient()->makeUploadParams();
+        $tokenAndUrl = $this->getCloudClient()->makeUploadParams($rawUploadParams);
 
-        var_dump($convertParams);exit();
+        $key = null;
+        if (!empty($rawParams['key'])) {
+            $key = $rawParams['key'];
+        }
+
+        if (!empty($rawParams['targetType']) && !empty($rawParams['targetId'])) {
+            $keySuffix = date('Ymdhis') . '-' . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
+            $key = "{$rawParams['targetType']}-{$rawParams['targetId']}/{$keySuffix}";
+        }
+
+        if (empty($key)) {
+            throw $this->createServiceException("key error.");
+        }
+
+        $params = array();
+        $params['storage'] = 'cloud';
+        $params['url'] = $tokenAndUrl['url'];
+        $params['postParams'] = array();
+        $params['postParams']['token'] = $tokenAndUrl['token'];
+        $params['postParams']['key'] = $key;
+        // $params['postParams']['x:convertKey'] = md5($params['postParams']['key']);
+        $params['postParams']['x:convertParams'] = json_encode($rawUploadParams['convertParams']);
+
+        return $params;
     }
 
     private function getFileFullName($file)
@@ -230,7 +259,6 @@ class HLSVideoConvertor
         $audioDefinitions = $this->config['audio'][$audioQuality];
 
         return array(
-            'convertor' => self::NAME,
             'segtime' => $this->config['segtime'],
             'video' => $videoDefinitions,
             'audio' => $audioDefinitions,
