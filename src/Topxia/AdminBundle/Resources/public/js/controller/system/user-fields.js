@@ -38,7 +38,7 @@ define(function(require, exports, module) {
 
         $('#field_type').on('change',function(){
             
-            $('#type_num').html('还剩'+$(this).children('option:selected').attr('num')+'个字段');
+            $('#type_num').html($(this).children('option:selected').attr('num'));
         });
 
     };

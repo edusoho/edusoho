@@ -20,12 +20,12 @@
              <label class="col-md-4 control-label" for="field_type">字段类型</label>
               <div class="col-md-6 controls">
                   <select class="form-control" name="field_type" id="field_type">
-                    <option value="">请选择</option>
-                    <option value ="varchar" num="{{10-varcharCount}}" {% if varcharCount==10 %}disabled="disabled"{% endif %}>文本({% if varcharCount==10 %}已满10个{% else %}最多10个{% endif %})</option>
-                    <option value ="text" num="{{10-textCount}}" {% if textCount==10 %}disabled="disabled"{% endif %}>多行文本({% if textCount==10 %}已满10个{% else %}最多10个{% endif %})</option>
-                    <option value="int" num="{{5-intCount}}" {% if intCount==5 %}disabled="disabled"{% endif %}>整数({% if intCount==5 %}已满5个{% else %}最多5个{% endif %})</option>
-                    <option value="float" num="{{5-floatCount}}" {% if floatCount==5 %}disabled="disabled"{% endif %}>小数({% if floatCount==5 %}已满5个{% else %}最多5个{% endif %})</option>
-                    <option value="date" num="{{5-dateCount}}" {% if dateCount==5 %}disabled="disabled"{% endif %}>日期({% if dateCount==5 %}已满5个{% else %}最多5个{% endif %})</option>
+                    <option value="" num="">请选择</option>
+                    <option value ="varchar" num="还剩{{10-varcharCount}}个字段" {% if varcharCount==10 %}disabled="disabled"{% endif %}>文本({% if varcharCount==10 %}已满10个{% else %}最多10个{% endif %})</option>
+                    <option value ="text" num="还剩{{10-textCount}}个字段" {% if textCount==10 %}disabled="disabled"{% endif %}>多行文本({% if textCount==10 %}已满10个{% else %}最多10个{% endif %})</option>
+                    <option value="int" num="还剩{{5-intCount}}个字段" {% if intCount==5 %}disabled="disabled"{% endif %}>整数({% if intCount==5 %}已满5个{% else %}最多5个{% endif %})</option>
+                    <option value="float" num="还剩{{5-floatCount}}个字段" {% if floatCount==5 %}disabled="disabled"{% endif %}>小数({% if floatCount==5 %}已满5个{% else %}最多5个{% endif %})</option>
+                    <option value="date" num="还剩{{5-dateCount}}个字段" {% if dateCount==5 %}disabled="disabled"{% endif %}>日期({% if dateCount==5 %}已满5个{% else %}最多5个{% endif %})</option>
                   </select>
                   <div class="help-block" id="type_num" style="color:red;" ></div>
               </div>
