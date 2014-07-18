@@ -17,10 +17,11 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
         
         if (empty($fields['field_seq'])) throw $this->createServiceException('字段排序不能为空！');
 
-        if (is_int($fields['field_seq'])) throw $this->createServiceException('字段排序只能为数字！');
+        if (!intval($fields['field_seq'])) throw $this->createServiceException('字段排序只能为数字！');
 
         $fieldName=$this->checkType($fields['field_type']);
-        if($fieldName==false) return false;
+        if($fieldName==false) throw $this->createServiceException('字段类型是错误的！');
+
         $field['fieldName']=$fieldName;
         $field['title']=$fields['field_title'];
         $field['seq']=$fields['field_seq'];
@@ -47,11 +48,11 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
 
     public function updateField($id,$fields)
     {   
-        if (empty($fields['title'])) throw $this->createServiceException('字段名称不能为空！');
+        if (isset($fields['title']) && empty($fields['title'])) throw $this->createServiceException('字段名称不能为空！');
         
-        if (empty($fields['seq'])) throw $this->createServiceException('字段排序不能为空！');
+        if (isset($fields['seq']) && empty($fields['seq'])) throw $this->createServiceException('字段排序不能为空！');
 
-        if (is_int($fields['seq'])) throw $this->createServiceException('字段排序只能为数字！');
+        if (isset($fields['seq']) && !intval($fields['seq'])) throw $this->createServiceException('字段排序只能为数字！');
 
         return $this->getUserFieldDao()->updateField($id, $fields);
     }

@@ -29,6 +29,18 @@ define(function(require, exports, module) {
             rule:'positive_integer'
         });
 
+        validator.addItem({
+            element: '[name="field_type"]',
+            required: true,
+            errormessageRequired: '请选择字段类型'
+        });
+
+
+        $('#field_type').on('change',function(){
+            
+            $('#type_num').html('还剩'+$(this).children('option:selected').attr('num')+'个字段');
+        });
+
     };
 
 });
