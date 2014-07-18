@@ -19,6 +19,10 @@ a.link-muted {
 	overflow-y: auto;
 }
 
+.modal-title {
+	word-break:break-all;
+}
+
 .modal-header .close {
 	padding: 5px;
 }
@@ -2586,6 +2590,10 @@ body {
 
 .es-row-wrap .page-header h1 {
 	font-size: 24px;
+}
+
+.es-row-wrap h1 {
+	word-break:break-all;
 }
 
 .es-box {
