@@ -274,7 +274,7 @@ class UserServiceImpl extends BaseService implements UserService
         $profile['truename'] = empty($registration['truename']) ? '' : $registration['truename'];
         $profile['company'] = empty($registration['company']) ? '' : $registration['company'];
         $profile['job'] = empty($registration['job']) ? '' : $registration['job'];
-        $profile['gender'] = empty($registration['gender']) ? '' : $registration['gender'];
+        $profile['gender'] = empty($registration['gender']) ? 'male' : $registration['gender'];
 
         $this->getProfileDao()->addProfile($profile);
         if ($type != 'default') {
