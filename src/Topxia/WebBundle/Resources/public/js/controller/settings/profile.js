@@ -66,17 +66,77 @@
         });
 
         validator.addItem({
-            element: '.int',
+            element: '[name="profile[intField1]"]',
             rule: 'integer'
         });
 
         validator.addItem({
-            element: '.float',
-            rule: 'currency'
+            element: '[name="profile[intField2]"]',
+            rule: 'integer'
         });
 
         validator.addItem({
-            element: '.date',
+            element: '[name="profile[intField3]"]',
+            rule: 'integer'
+        });
+
+        validator.addItem({
+            element: '[name="profile[intField4]"]',
+            rule: 'integer'
+        });
+
+        validator.addItem({
+            element: '[name="profile[intField5]"]',
+            rule: 'integer'
+        });
+
+        validator.addItem({
+            element: '[name="profile[floatField1]',
+            rule: 'float'
+        });
+
+        validator.addItem({
+            element: '[name="profile[floatField2]',
+            rule: 'float'
+        });
+
+        validator.addItem({
+            element: '[name="profile[floatField3]',
+            rule: 'float'
+        });
+
+        validator.addItem({
+            element: '[name="profile[floatField4]',
+            rule: 'float'
+        });
+
+        validator.addItem({
+            element: '[name="profile[floatField5]',
+            rule: 'float'
+        });
+
+        validator.addItem({
+            element: '[name="profile[dateField1]"]',
+            rule: 'date'
+        });
+
+        validator.addItem({
+            element: '[name="profile[dateField2]"]',
+            rule: 'date'
+        });
+
+        validator.addItem({
+            element: '[name="profile[dateField3]"]',
+            rule: 'date'
+        });
+
+        validator.addItem({
+            element: '[name="profile[dateField4]"]',
+            rule: 'date'
+        });
+
+        validator.addItem({
+            element: '[name="profile[dateField5]"]',
             rule: 'date'
         });
 

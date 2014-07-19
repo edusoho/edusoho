@@ -334,11 +334,11 @@ class UserServiceImpl extends BaseService implements UserService
             'intField3'=>null,
             'intField4'=>null,
             'intField5'=>null,
-            'dateField1'=>null,
-            'dateField2'=>null,
-            'dateField3'=>null,
-            'dateField4'=>null,
-            'dateField5'=>null,
+            'dateField1'=>"",
+            'dateField2'=>"",
+            'dateField3'=>"",
+            'dateField4'=>"",
+            'dateField5'=>"",
             'floatField1'=>null,
             'floatField2'=>null,
             'floatField3'=>null,
@@ -392,21 +392,6 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if(!empty($fields['about'])) $fields['about'] = $this->purifyHtml($fields['about']);
-
-        if (isset($fields['dateField1'])) $fields['dateField1']=strtotime($fields['dateField1']);
-
-
-        if (isset($fields['dateField2'])) $fields['dateField2']=strtotime($fields['dateField2']);
-
-
-        if (isset($fields['dateField3'])) $fields['dateField3']=strtotime($fields['dateField3']);
-
-
-        if (isset($fields['dateField4'])) $fields['dateField4']=strtotime($fields['dateField4']);
- 
-
-        if (isset($fields['dateField5'])) $fields['dateField5']=strtotime($fields['dateField5']);
-
 
         return $this->getProfileDao()->updateProfile($id, $fields);
     }

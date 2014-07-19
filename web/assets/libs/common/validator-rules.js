@@ -62,7 +62,7 @@ define(function(require, exports, module) {
             'currency',
             /^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/i,
             '请输入合法的{{display}},如:200, 221.99, 0.99, 0等'
-        ],        
+        ],      
         [
             'byte_maxlength',
             function(options) {
@@ -141,6 +141,11 @@ define(function(require, exports, module) {
             /^[+-]?\d+$/,
             '{{display}}必须为整数'
         ],
+        [
+            'float',
+            /^(([+-]?\d+[1-9]{1}\d*)|[+-]?\d+([0]{1}))(\.(\d)+)?$/i,
+            '请输入正确的小数'
+        ],   
         [
             'positive_integer',
             /^[0-9]*[1-9][0-9]*$/,
