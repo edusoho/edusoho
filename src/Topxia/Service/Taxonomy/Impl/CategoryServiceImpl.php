@@ -120,7 +120,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     {
         $category = ArrayToolkit::parts($category, array('depict','name', 'code', 'weight', 'groupId', 'parentId', 'icon'));
 
-        if (!ArrayToolkit::requireds($category, array('depict','name', 'code', 'weight', 'groupId', 'parentId'))) {
+        if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'groupId', 'parentId'))) {
             throw $this->createServiceException("缺少必要参数，，添加分类失败");
         }
 

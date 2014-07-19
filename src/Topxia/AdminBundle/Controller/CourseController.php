@@ -23,7 +23,7 @@ class CourseController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
         $courseSetting = $this->getSettingService()->get('course', array());
-
+        if(!isset($courseSetting['live_course_enabled']))$courseSetting['live_course_enabled']="";
         return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
             'conditions' => $conditions,
             'courses' => $courses ,
