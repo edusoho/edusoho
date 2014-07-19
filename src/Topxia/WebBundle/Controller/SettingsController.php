@@ -41,7 +41,11 @@ class SettingsController extends BaseController
            if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['type']="float";
            if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
         }
-    
+        
+        if (array_key_exists('idcard',$profile) && $profile['idcard']=="0") {
+            $profile['idcard'] = "";
+        }
+
         return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
             'profile' => $profile,
             'fields'=>$fields,
