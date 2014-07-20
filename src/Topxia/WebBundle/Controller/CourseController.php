@@ -35,7 +35,9 @@ class CourseController extends BaseController
             'status' => 'published',
             'type' => 'normal',
             'categoryId' => $category['id'],
-            'recommended' => ($sort == 'recommendedSeq') ? 1 : null
+            'recommended' => ($sort == 'recommendedSeq') ? 1 : null,
+            'createdTimeGreaterThan' => time()-30*3600*24,
+            'createdTimeLessThan' => time(),
         );
 
         $paginator = new Paginator(
@@ -56,7 +58,7 @@ class CourseController extends BaseController
         } else {
             $categories = $this->getCategoryService()->getCategoryTree($group['id']);
         }
-     
+        
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses' => $courses,
             'category' => $category,
@@ -256,6 +258,8 @@ class CourseController extends BaseController
             ));
         }
 
+        $this->getCourseService()->hitCourse($id);
+        
         $groupedItems = $this->groupCourseItems($items);
         $hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
 
@@ -291,8 +295,7 @@ class CourseController extends BaseController
     {
         return ($course['status'] == 'published') or 
             $user->isAdmin() or 
-            $this->getCourseService()->isCourseTeacher($course['id'],$user['id']) or
-            $this->getCourseService()->isCourseStudent($course['id'],$user['id']);
+            $this->getCourseService()->isCourseTeacher($course['id'],$user['id']) ;
     }
 
     private function previewAsMember($as, $member, $course)

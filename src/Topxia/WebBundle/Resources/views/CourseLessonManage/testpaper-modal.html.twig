@@ -32,6 +32,18 @@
           <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ lesson.title|default('') }}">
         </div>
       </div>
+
+      {% if 'lesson_credit' in features %}
+      <div class="form-group">
+        <div class="col-md-2 control-label"><label for="lesson-title-field">限制学分</label></div>
+        <div class="col-md-9 controls">
+          <input class="form-control width-input width-input-small" type="text" name="requireCredit" value="{{ lesson.requireCredit|default(0) }}"> 分
+          <div class="help-block">参加此次考试所需的学分，０分则不限制。</div>
+        </div>
+      </div>
+      {% endif %}
+
+
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
     <script>app.load('course-manage/lesson-testpaper-modal')</script>

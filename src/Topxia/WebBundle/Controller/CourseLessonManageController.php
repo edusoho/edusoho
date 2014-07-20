@@ -95,6 +95,8 @@ class CourseLessonManageController extends BaseController
 
    //  	}
 
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
             'targetType' => $targetType,
@@ -103,6 +105,7 @@ class CourseLessonManageController extends BaseController
 			'fileKey' => $fileKey,
 			'convertKey' => $convertKey,
 			'storageSetting' => $setting,
+            'features' => $features,
 		));
 	}
 
@@ -180,6 +183,9 @@ class CourseLessonManageController extends BaseController
 
     	}
         $lesson['title'] = str_replace(array('"',"'"), array('&#34;','&#39;'), $lesson['title']);
+
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
@@ -189,7 +195,8 @@ class CourseLessonManageController extends BaseController
 			'filePath' => $filePath,
 			'fileKey' => $fileKey,
 			'convertKey' => $convertKey,
-			'storageSetting' => $setting
+			'storageSetting' => $setting,
+            'features' => $features,
 		));
 	}
 
@@ -227,9 +234,12 @@ class CourseLessonManageController extends BaseController
 
     	}
 
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
 			'course' => $course,
 			'paperOptions' => $paperOptions,
+            'features' => $features,
 		));
 	}
 
@@ -267,10 +277,13 @@ class CourseLessonManageController extends BaseController
             ));
         }
 
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
         return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
             'paperOptions' => $paperOptions,
+            'features' => $features,
         ));
 
 	}

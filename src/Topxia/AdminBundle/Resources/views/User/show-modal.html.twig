@@ -75,6 +75,28 @@
   </tr>
 
   <tr>
+    <th>身份证号</th>
+    <td>
+      {% if profile.idcard %}
+        {{ profile.idcard }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>手机号</th>
+    <td>
+      {% if profile.mobile %}
+        {{ profile.mobile }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
     <th>类型</th>
     <td>
       {% if profile.iam %}

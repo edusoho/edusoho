@@ -1,6 +1,11 @@
+{% if is_feature_enabled('hide_testpaper_result') and (paperResult|default(null) and paperResult.status == 'finished') and not app.user.isTeacher() %}
+
+{% else %}
+
 {# {% if showTestpaperNavbar|default('on') == 'off' %} #}
 	<form id='teacherCheckForm' autocomplete="off">
 {# {% endif %} #}
+
 
 
 {% for type in types|default(paper.metas.question_type_seq) %}
@@ -47,3 +52,5 @@
 
 
 </form>
+
+{% endif %}

@@ -39,7 +39,11 @@
 
 {% block footer %}
   {% if lesson.status == 'published' %}
-    <button id="buy-btn" type="button" class="btn btn-primary" data-url="{{ path('course_buy', {id:course.id}) }}">觉得不错？点击购买此课程（{{ course.price }}元）</button>
+    {% if course.price=='0.00'  %}
+        <button id="buy-btn" type="button" class="btn btn-primary" data-url="{{ path('course_buy', {id:course.id}) }}">免费加入学习</button>
+    {% else %}
+        <button id="buy-btn" type="button" class="btn btn-primary" data-url="{{ path('course_buy', {id:course.id}) }}">觉得不错？点击购买此课程（{{ course.price }}元）</button>
+    {% endif %}
   {% else %}
     <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
   {% endif %}
