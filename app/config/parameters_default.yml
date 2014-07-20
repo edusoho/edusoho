@@ -16,9 +16,9 @@ parameters:
             low: 64k
             normal: 96k
             high: 128k
-        Audio:
+        audio:
             shd: mp3
-        Ppt:
+        ppt:
             density: 150
             quality: 80
             resize: 1200

@@ -47,6 +47,8 @@
         {% endif %}
       </ul>
     </div>
+
+    {% if storageSetting.upload_mode == 'cloud' %}
     <div class="quality-switcher">
       <div class="quality-switcher-bar">
         视频转码类型<span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> 设置</a>
@@ -68,6 +70,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
   {% elseif targetType == 'coursematerial' %}
     <div class="alert alert-info">
       <ul>

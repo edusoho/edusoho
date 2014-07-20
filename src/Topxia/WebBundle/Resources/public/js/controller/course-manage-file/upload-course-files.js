@@ -16,9 +16,13 @@ define(function(require, exports, module) {
 			uploadMode = $container.data('uploadMode');
 
 
-		var switcher = new VideoQualitySwitcher({
-			element: '.quality-switcher'
-		});
+		var switcher = null;
+		if ($('.quality-switcher').length > 0) {
+			var switcher = new VideoQualitySwitcher({
+				element: '.quality-switcher'
+			});
+		}
+
 
 		var extensions = '';
 		if (targetType == 'courselesson') {
@@ -54,7 +58,6 @@ define(function(require, exports, module) {
             },			
 			init: {
 				FileUploaded: function(up, file, info) {
-					console.log(info.response);
 					response = $.parseJSON(info.response);
 					if (divData.callback) {
 						$.post(divData.callback, response, function(response) {
@@ -92,9 +95,11 @@ define(function(require, exports, module) {
 						} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
 							data.convertor = 'ppt';
 						} else {
-							data.videoQuality = switcher.get('videoQuality');
-							data.audioQuality = switcher.get('audioQuality');
-							data.convertor = 'HLSVideo';
+							if (switcher) {
+								data.videoQuality = switcher.get('videoQuality');
+								data.audioQuality = switcher.get('audioQuality');
+								data.convertor = 'HLSVideo';
+							}
 						}
 					}
 
