@@ -23,7 +23,7 @@
                     <option value="" num="">请选择</option>
                     <option value ="varchar" num="还可以添加{{10-varcharCount}}个字段" {% if varcharCount==10 %}disabled="disabled"{% endif %}>文本{% if varcharCount==10 %}(已满10个){% endif %}</option>
                     <option value ="text" num="还可以添加{{10-textCount}}个字段" {% if textCount==10 %}disabled="disabled"{% endif %}>多行文本{% if textCount==10 %}(已满10个){% endif %}</option>
-                    <option value="int" num="还可以添加{{5-intCount}}个字段" {% if intCount==5 %}disabled="disabled"{% endif %}>整数{% if intCount==5 %}(已满5个){% endif %}</option>
+                    <option value="int" num="还可以添加{{5-intCount}}个字段" {% if intCount==5 %}disabled="disabled"{% endif %}>整数(最大到9位整数){% if intCount==5 %}(已满5个){% endif %}</option>
                     <option value="float" num="还可以添加{{5-floatCount}}个字段" {% if floatCount==5 %}disabled="disabled"{% endif %}>小数(保留到两位小数){% if floatCount==5 %}(已满5个){% endif %}</option>
                     <option value="date" num="还可以添加{{5-dateCount}}个字段" {% if dateCount==5 %}disabled="disabled"{% endif %}>日期{% if dateCount==5 %}(已满5个){% endif %}</option>
                   </select>

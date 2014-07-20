@@ -67,27 +67,27 @@
 
         validator.addItem({
             element: '[name="profile[intField1]"]',
-            rule: 'integer'
+            rule: 'int'
         });
 
         validator.addItem({
             element: '[name="profile[intField2]"]',
-            rule: 'integer'
+            rule: 'int'
         });
 
         validator.addItem({
             element: '[name="profile[intField3]"]',
-            rule: 'integer'
+            rule: 'int'
         });
 
         validator.addItem({
             element: '[name="profile[intField4]"]',
-            rule: 'integer'
+            rule: 'int'
         });
 
         validator.addItem({
             element: '[name="profile[intField5]"]',
-            rule: 'integer'
+            rule: 'int'
         });
 
         validator.addItem({
