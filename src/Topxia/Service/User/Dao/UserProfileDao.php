@@ -11,4 +11,6 @@ interface UserProfileDao
 	public function updateProfile($id, $profile);
 
     public function findProfilesByIds(array $ids);
+
+    public function dropFieldData($fieldName);
 }

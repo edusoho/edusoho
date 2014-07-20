@@ -9,4 +9,5 @@ interface SettingService
     public function get($name, $default = NULL);
 
     public function delete ($name);
+    
 }

@@ -37,4 +37,10 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
     }
+
+    public function dropFieldData($fieldName)
+    {   
+        $sql="UPDATE {$this->table} set {$fieldName} =null ";
+        return $this->getConnection()->exec($sql);
+    }
 }

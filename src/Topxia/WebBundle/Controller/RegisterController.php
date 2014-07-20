@@ -38,7 +38,11 @@ class RegisterController extends BaseController
             return $this->redirect($goto);
             
         }
+
         $auth=$this->getSettingService()->get('auth');
+
+        if(!isset($auth['registerSort']))$auth['registerSort']="";
+        
         $loginEnable  = $this->isLoginEnabled();
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
             'isLoginEnabled' => $loginEnable,
