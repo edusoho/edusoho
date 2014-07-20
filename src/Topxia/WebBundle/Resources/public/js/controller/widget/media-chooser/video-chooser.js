@@ -18,9 +18,12 @@ define(function(require, exports, module) {
     		},
             preUpload: function(uploader, file) {
                 var data = {};
-                data.videoQuality = this.qualitySwitcher.get('videoQuality');
-                data.audioQuality = this.qualitySwitcher.get('audioQuality');
-                data.convertor = 'HLSVideo';
+
+                if (this.qualitySwitcher) {
+                    data.videoQuality = this.qualitySwitcher.get('videoQuality');
+                    data.audioQuality = this.qualitySwitcher.get('audioQuality');
+                    data.convertor = 'HLSVideo';
+                }
 
                 $.ajax({
                     url: this.element.data('paramsUrl'),
@@ -48,11 +51,14 @@ define(function(require, exports, module) {
     		VideoChooser.superclass.setup.call(this);
             $('#disk-browser-video').perfectScrollbar({wheelSpeed:50});
 
-            var switcher = new VideoQualitySwitcher({
-                element: '.video-quality-switcher'
-            });
+            if ($('.video-quality-switcher').length > 0) {
+                var switcher = new VideoQualitySwitcher({
+                    element: '.video-quality-switcher'
+                });
 
-            this.qualitySwitcher = switcher;
+                this.qualitySwitcher = switcher;
+            }
+
 
     	},
 
