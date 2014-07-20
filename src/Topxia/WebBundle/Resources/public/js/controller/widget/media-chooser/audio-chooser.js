@@ -9,7 +9,25 @@ define(function(require, exports, module) {
                 file_types : "*.mp3",
                 file_size_limit : "100 MB",
                 file_types_description: "音频文件"
-    		}
+    		},
+            preUpload: function(uploader, file) {
+                var data = {};
+                $.ajax({
+                    url: this.element.data('paramsUrl'),
+                    async: false,
+                    dataType: 'json',
+                    data: data, 
+                    cache: false,
+                    success: function(response, status, jqXHR) {
+                        console.log(response);
+                        uploader.setUploadURL(response.url);
+                        uploader.setPostParams(response.postParams);
+                    },
+                    error: function(jqXHR, status, error) {
+                        Notify.danger('请求上传授权码失败！');
+                    }
+                });
+            }
     	},
         
         setup: function() {

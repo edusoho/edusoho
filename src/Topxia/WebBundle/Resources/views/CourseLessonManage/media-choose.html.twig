@@ -1,6 +1,9 @@
 <div id="media-choosers">
 
-  <div class="file-chooser" id="video-chooser" style="display:none;">
+  <div class="file-chooser" id="video-chooser" style="display:none;"
+    data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
+
+  >
     <div class="file-chooser-bar" style="display:none;">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
@@ -21,8 +24,6 @@
             <div class="file-chooser-uploader-control">
               <span id="video-choose-uploader-btn"
                 data-role="uploader-btn"
-                data-url="{{ videoUploadToken.url }}"
-                data-post-params="{{videoUploadToken.postParams|json_encode}}"
                 data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv;*.mov{% else %}*.mp4{% endif %}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
@@ -70,7 +71,10 @@
   </div>
 
 
-  <div class="file-chooser" id="audio-chooser" style="display:none;">
+  <div class="file-chooser" id="audio-chooser" style="display:none;"
+      data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
+
+  >
     <div class="file-chooser-bar"  style="display:none;">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
@@ -89,8 +93,6 @@
             <div class="file-chooser-uploader-control">
               <span id="audio-choose-uploader-btn" 
                 data-role="uploader-btn"
-                data-url="{{ audioUploadToken.url }}"
-                data-post-params="{{audioUploadToken.postParams|json_encode}}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
                 data-fileinfo-url="{{ path('uploadfile_cloud_fileinfo', {type:'audio'}) }}"
@@ -145,8 +147,6 @@
             <div class="file-chooser-uploader-control">
               <span id="ppt-choose-uploader-btn" 
                 data-role="uploader-btn"
-                data-url="{{ pptUploadToken.url }}"
-                data-post-params="{{pptUploadToken.postParams|json_encode}}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
                 data-progressbar="#ppt-chooser-progress"></span>

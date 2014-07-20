@@ -82,9 +82,10 @@
     </div>
   </div>
 
-  <div class="form-group for-video-type video-quality-switcher">
+  {% if storageSetting.upload_mode == 'cloud'  %}
+  <div class="form-group for-video-type video-quality-switcher" data-editable="{% if file|default(null) %}false{% else %}true{% endif %}">
     <div class="col-md-2 control-label"><label>视频转码类型</label></div>
-    <div class="col-md-9 controls">
+    <div class="col-md-9 controls" style="padding-top:7px;">
       <div class="quality-switcher-bar">
         <span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> 设置</a>
       </div>
@@ -92,12 +93,20 @@
       <div class="quality-switcher-control">
         <div class="video-quality radios">
           画质：
-        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality|default('low')) }}
+          {% if file|default(null) %}
+            {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, file.convertParams.videoQuality|default('low')) }}
+          {% else %}
+            {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality|default('low')) }}
+          {% endif %}
         </div>
 
         <div class="audio-quality radios">
           音质：
-          {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '精细'}, storageSetting.video_audio_quality|default('low')) }}
+          {% if file|default(null) %}
+            {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '精细'}, file.convertParams.audioQuality|default('low')) }}
+          {% else %}
+            {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '精细'}, storageSetting.video_audio_quality|default('low')) }}
+            {% endif %}
         </div>
 
         <div class="quality-actions">
@@ -106,10 +115,8 @@
         </div>
       </div>
 
-
-
-
     </div>
+    {% endif %}
 
 
 

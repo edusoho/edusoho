@@ -15,6 +15,9 @@ define(function(require, exports, module) {
 
         setup: function() {
             this.makeQualitySwitcherName();
+            if (this.element.data('editable') === false) {
+                this.$('.edit-btn').hide();
+            }
         },
 
         onClickEditBtn: function() {

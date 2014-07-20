@@ -296,6 +296,8 @@ class HLSVideoConvertor
         return array(
             'convertor' => self::NAME,
             'segtime' => $this->config['segtime'],
+            'videoQuality' => $videoQuality,
+            'audioQuality' => $audioQuality,
             'video' => $videoDefinitions,
             'audio' => $audioDefinitions,
         );

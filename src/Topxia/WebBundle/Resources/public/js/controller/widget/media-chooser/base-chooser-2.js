@@ -10,7 +10,7 @@ define(function(require, exports, module) {
             choosed: null,
             uploader: null,
             uploaderSettings: {},
-            beforeUploadHandler: null
+            preUpload: null
         },
 
         events: {
@@ -132,8 +132,6 @@ define(function(require, exports, module) {
             var self = this;
 
             var settings = $.extend({}, {
-                upload_url : $btn.data('url'),
-                post_params : $btn.data('postParams'),
                 file_types : "*.*",
                 file_size_limit : "10 MB",
                 file_upload_limit : 1,
@@ -167,8 +165,8 @@ define(function(require, exports, module) {
                 },
 
                 upload_start_handler: function(file) {
-                    if (self.get('beforeUpload')) {
-                        self.get('beforeUpload').call(this, file);
+                    if (self.get('preUpload')) {
+                        self.get('preUpload').call(self, this, file);
                     }
                     progressbar.reset().show();
                 },
