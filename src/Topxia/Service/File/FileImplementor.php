@@ -12,6 +12,8 @@ interface FileImplementor
 
     public function convertFile($file, $status, $result=null, $callback = null);
 
+    public function saveConvertResult($file, array $result = array());
+
     public function deleteFile($file, $deleteSubFile = true);
 
     public function makeUploadParams($params);

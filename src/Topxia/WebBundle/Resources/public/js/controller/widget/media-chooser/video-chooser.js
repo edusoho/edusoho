@@ -4,13 +4,18 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require('jquery.perfect-scrollbar');
 
+    var VideoQualitySwitcher = require('../video-quality-switcher');
+
     var VideoChooser = BaseChooser.extend({
     	attrs: {
     		uploaderSettings: {
                 file_types : "*.mp4;*.avi;*.flv",
                 file_size_limit : "1000 MB",
                 file_types_description: "视频文件"
-    		}
+    		},
+            beforeUpload: function(file) {
+                console.log('bfore upload', file);
+            }
     	},
 
     	events: {
@@ -20,6 +25,11 @@ define(function(require, exports, module) {
     	setup: function() {
     		VideoChooser.superclass.setup.call(this);
             $('#disk-browser-video').perfectScrollbar({wheelSpeed:50});
+
+            var switcher = new VideoQualitySwitcher({
+                element: '.video-quality-switcher'
+            });
+
     	},
 
     	onImport: function(e) {

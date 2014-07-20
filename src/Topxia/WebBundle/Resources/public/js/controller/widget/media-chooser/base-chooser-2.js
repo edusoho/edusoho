@@ -10,6 +10,7 @@ define(function(require, exports, module) {
             choosed: null,
             uploader: null,
             uploaderSettings: {},
+            beforeUploadHandler: null
         },
 
         events: {
@@ -132,12 +133,7 @@ define(function(require, exports, module) {
 
             var settings = $.extend({}, {
                 upload_url : $btn.data('url'),
-                post_params : {
-                    "key" : $btn.data('key'),
-                    "token" : $btn.data('token'),
-                    "x:filepath": $btn.data('filepath'),
-                    "x:convertKey": $btn.data('convertKey')
-                },
+                post_params : $btn.data('postParams'),
                 file_types : "*.*",
                 file_size_limit : "10 MB",
                 file_upload_limit : 1,
@@ -171,6 +167,9 @@ define(function(require, exports, module) {
                 },
 
                 upload_start_handler: function(file) {
+                    if (self.get('beforeUpload')) {
+                        self.get('beforeUpload').call(this, file);
+                    }
                     progressbar.reset().show();
                 },
 
@@ -194,7 +193,7 @@ define(function(require, exports, module) {
                             Notify.success('文件上传成功！');
                             if ($btn.data('fileinfoUrl')) {
                                 self.trigger('fileinfo.fetching');
-                                $.get($btn.data('fileinfoUrl'), {key:$btn.data('key')}, function(info){
+                                $.get($btn.data('fileinfoUrl'), {key:response.hashId}, function(info){
                                     self.trigger('fileinfo.fetched', info);
                                 }, 'json');
                             }

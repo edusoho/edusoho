@@ -95,33 +95,28 @@ class CourseLessonManageController extends BaseController
 
     		try {
 
-                $factory = new CloudClientFactory();
-                $client = $factory->createClient();
-    		
-		        $commands = array_keys($client->getVideoConvertCommands());
-		    	$videoUploadToken = $client->generateUploadToken($client->getBucket(), array(
-		    		'convertCommands' => implode(';', $commands),
-		    		'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
-	    		));
-	    		if (!empty($videoUploadToken['error'])) {
-	    			return $this->createMessageModalResponse('error', $videoUploadToken['error']['message']);
-	    		}
-
-	    		$audioUploadToken = $client->generateUploadToken($client->getBucket(), array());
-	    		if (!empty($audioUploadToken['error'])) {
-	    			return $this->createMessageModalResponse('error', $audioUploadToken['error']['message']);
-	    		}
-
-                $commands = array_keys($client->getPPTConvertCommands());
-                $pptUploadToken = $client->generateUploadToken($client->getBucket(), array(
-                    'convertCommands' => implode(';', $commands),
-                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey, 'twoStep' => '1'), true),
-                    'convertor' => 'document',
+                $videoUploadToken = $this->getUploadFileService()->makeUploadParams(array(
+                    'storage' => 'cloud',
+                    'convertor' => 'HLSVideo',
+                    'targetType' => 'courselesson',
+                    'targetId' => $course['id'],
+                    'user' => $user['id'],
+                    'convertCallback' => $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true),
                 ));
-                if (!empty($pptUploadToken['error'])) {
-                    return $this->createMessageModalResponse('error', $pptUploadToken['error']['message']);
-                }
 
+                $audioUploadToken = $this->getUploadFileService()->makeUploadParams(array(
+                    'storage' => 'cloud',
+                    'targetType' => 'courselesson',
+                    'targetId' => $course['id'],
+                    'user' => $user['id'],
+                ));
+
+                $pptUploadToken = $this->getUploadFileService()->makeUploadParams(array(
+                    'storage' => 'cloud',
+                    'targetType' => 'courselesson',
+                    'targetId' => $course['id'],
+                    'user' => $user['id'],
+                ));
 
     		}
     		 catch (\Exception $e) {

@@ -88,17 +88,15 @@ define(function(require, exports, module) {
 					var data = {};
 					if (targetType == 'courselesson' && uploadMode == 'cloud') {
 						if (file.type == 'audio/mpeg') {
-							data.convertor = 'audio';
+							data.convertor = '';
 						} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
 							data.convertor = 'ppt';
 						} else {
-							data.convertor = 'video';
+							data.videoQuality = switcher.get('videoQuality');
+							data.audioQuality = switcher.get('audioQuality');
+							data.convertor = 'HLSVideo';
 						}
 					}
-
-					data.videoQuality = switcher.get('videoQuality');
-					data.audioQuality = switcher.get('audioQuality');
-					data.convertor = 'HLSVideo';
 
 					$.ajax({
 						url: divData.paramsUrl,

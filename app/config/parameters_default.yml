@@ -16,6 +16,14 @@ parameters:
             low: 64k
             normal: 96k
             high: 128k
+        Audio:
+            shd: mp3
+        Ppt:
+            density: 150
+            quality: 80
+            resize: 1200
+
+
 
     cloud_client:
         arguments: 

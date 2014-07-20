@@ -118,6 +118,24 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
     }
 
+    public function saveConvertResult($id, array $result = array())
+    {
+        $file = $this->getFile($id);
+        if (empty($file)) {
+            throw $this->createServiceException("文件(#{$id})不存在，转换失败");
+        }
+
+        $file = $this->getFileImplementorByFile($file)->saveConvertResult($file, $result);
+
+        $this->getUploadFileDao()->updateFile($id, array(
+            'convertStatus' => $file['convertStatus'],
+            'metas2' => json_encode($file['metas2']),
+            'updatedTime' => time(),
+        ));
+
+        return $this->getFile($id);
+    }
+
     public function convertFile($id, $status, array $result = array(), $callback = null)
     {
         $statuses = array('none', 'waiting', 'doing', 'success', 'error');

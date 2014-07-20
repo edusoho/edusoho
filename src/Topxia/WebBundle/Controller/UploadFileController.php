@@ -58,7 +58,7 @@ class UploadFileController extends BaseController
         $params = $request->query->all();
 
         $params['user'] = $user->id;
-        $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_convert_callback', array(), true);
+        $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true);
 
         $params = $this->getUploadFileService()->makeUploadParams($params);
 
@@ -113,6 +113,39 @@ class UploadFileController extends BaseController
         }
 
         return $this->createJsonResponse($info);
+    }
+
+    public function cloudConvertCallback2Action(Request $request)
+    {
+        $result = $request->getContent();
+
+        $result = preg_replace_callback(
+          "(\\\\x([0-9a-f]{2}))i",
+          function($a) {return chr(hexdec($a[1]));},
+          $result
+        );
+
+        $this->getLogService()->info('uploadfile', 'cloud_convert_callback', "文件云处理回调", array('result' => $result));
+        $result = json_decode($result, true);
+        $result = array_merge($request->query->all(), $result);
+        if (empty($result['id'])) {
+            throw new \RuntimeException('数据中id不能为空');
+        }
+
+        $file = $this->getUploadFileService()->getFileByConvertHash($result['id']);
+        if (empty($file)) {
+            throw new \RuntimeException('文件不存在');
+        }
+
+        $file = $this->getUploadFileService()->saveConvertResult($file['id'], $result);
+
+        if (in_array($file['convertStatus'], array('success', 'error'))) {
+            $this->getNotificationService()->notify($file['createdUserId'], 'cloud-file-converted', array(
+                'file' => $file,
+            ));
+        }
+
+        return $this->createJsonResponse($file['metas2']);
     }
 
     public function cloudConvertCallbackAction(Request $request)

@@ -21,11 +21,8 @@
             <div class="file-chooser-uploader-control">
               <span id="video-choose-uploader-btn"
                 data-role="uploader-btn"
-                data-key="{{ fileKey }}"
-                data-token="{{ videoUploadToken.token }}"
                 data-url="{{ videoUploadToken.url }}"
-                data-filepath="{{ filePath }}"
-                data-convert-key="{{ convertKey }}"
+                data-post-params="{{videoUploadToken.postParams|json_encode}}"
                 data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv;*.mov{% else %}*.mp4{% endif %}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
@@ -92,11 +89,8 @@
             <div class="file-chooser-uploader-control">
               <span id="audio-choose-uploader-btn" 
                 data-role="uploader-btn"
-                data-key="{{ fileKey }}"
-                data-token="{{ audioUploadToken.token }}"
                 data-url="{{ audioUploadToken.url }}"
-                data-filepath="{{ filePath }}"
-                data-convert-key="{{ convertKey }}"
+                data-post-params="{{audioUploadToken.postParams|json_encode}}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
                 data-fileinfo-url="{{ path('uploadfile_cloud_fileinfo', {type:'audio'}) }}"
@@ -151,11 +145,8 @@
             <div class="file-chooser-uploader-control">
               <span id="ppt-choose-uploader-btn" 
                 data-role="uploader-btn"
-                data-key="{{ fileKey }}"
-                data-token="{{ pptUploadToken.token }}"
                 data-url="{{ pptUploadToken.url }}"
-                data-filepath="{{ filePath }}"
-                data-convert-key="{{ convertKey }}"
+                data-post-params="{{pptUploadToken.postParams|json_encode}}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
                 data-progressbar="#ppt-chooser-progress"></span>

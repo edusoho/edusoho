@@ -82,6 +82,39 @@
     </div>
   </div>
 
+  <div class="form-group for-video-type video-quality-switcher">
+    <div class="col-md-2 control-label"><label>视频转码类型</label></div>
+    <div class="col-md-9 controls">
+      <div class="quality-switcher-bar">
+        <span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> 设置</a>
+      </div>
+
+      <div class="quality-switcher-control">
+        <div class="video-quality radios">
+          画质：
+        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality|default('low')) }}
+        </div>
+
+        <div class="audio-quality radios">
+          音质：
+          {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '精细'}, storageSetting.video_audio_quality|default('low')) }}
+        </div>
+
+        <div class="quality-actions">
+          <a href="javascript:;" class="btn btn-default btn-sm confrim-btn">确定</a>
+          <a href="javascript:;" class="btn btn-link btn-sm cancel-btn">取消</a>
+        </div>
+      </div>
+
+
+
+
+    </div>
+
+
+
+  </div>
+
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
 </form>

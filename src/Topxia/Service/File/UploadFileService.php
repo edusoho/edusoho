@@ -27,6 +27,8 @@ interface UploadFileService
 
     public function convertFile($id, $status, array $result = array(), $callback = null);
 
+    public function saveConvertResult($id, array $result = array());
+
     public function setFileConverting($id, $convertHash);
 
 
