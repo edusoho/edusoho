@@ -10,6 +10,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\PluginUtil;
+use Topxia\Service\Util\CloudClientFactory;
 
 class SettingController extends BaseController
 {
@@ -393,6 +394,11 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $storageSetting = $request->request->all();
             $this->getSettingService()->set('storage', $storageSetting);
+
+            $factory = new CloudClientFactory();
+            $client = $factory->createClient($storageSetting);
+            $keyCheckResult = $client->checkKey();
+
             $cop = $this->getAppService()->checkAppCop();
             if ($cop && isset($cop['cop']) && ($cop['cop'] == 1)) {
                 $this->getSettingService()->set('_app_cop', 1);
@@ -401,11 +407,15 @@ class SettingController extends BaseController
             }
             PluginUtil::refresh();
             $this->getLogService()->info('system', 'update_settings', "更新云平台设置", $storageSetting);
-            $this->setFlashMessage('success', '云平台设置已保存！');
+            if (!empty($keyCheckResult['status']) && $keyCheckResult['status'] == 'ok') {
+                $this->setFlashMessage('success', '云平台设置已保存！');
+            } else {
+                $this->setFlashMessage('danger', 'AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，请修改设置。');
+            }
         }
 
         return $this->render('TopxiaAdminBundle:System:storage.html.twig', array(
-            'storageSetting'=>$storageSetting
+            'storageSetting'=>$storageSetting,
         ));
     }
 

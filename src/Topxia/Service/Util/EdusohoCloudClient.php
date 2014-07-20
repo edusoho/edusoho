@@ -311,6 +311,13 @@ class EdusohoCloudClient implements CloudClient
         return json_decode($content, true);
     }
 
+    public function checkKey()
+    {
+        $args = array();
+        $args['_t'] = time();
+        return $this->callRemoteApiWithBase64('GET', 'CheckKey', $args);
+    }
+
     public function convertPPT($key, $notifyUrl = null)
     {
         $args = array();
