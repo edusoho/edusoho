@@ -270,7 +270,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     private function getConvertor($name)
     {
         $class = __NAMESPACE__ . '\\' .  ucfirst($name) . 'Convertor';
-        return new $class($this->getKernel()->getParameter('cloud_convertor'));
+        return new $class($this->getCloudClient(), $this->getKernel()->getParameter('cloud_convertor'));
     }
 }
 
@@ -278,9 +278,12 @@ class HLSVideoConvertor
 {
     const NAME = 'HLSVideo';
 
+    protected $client;
+
     protected $config = array();
 
-    public function __construct($config)
+
+    public function __construct($client, $config)
     {
         $this->config = $config[self::NAME];
     }
@@ -331,8 +334,11 @@ class AudioConvertor
 {
     const NAME = 'audio';
 
+    protected $client;
 
-    public function __construct($config)
+    protected $config = array();
+
+    public function __construct($client, $config)
     {
 
     }
@@ -355,9 +361,13 @@ class PptConvertor
 {
     const NAME = 'ppt';
 
+    protected $client;
 
-    public function __construct($config)
+    protected $config = array();
+
+    public function __construct($client, $config)
     {
+        $this->client = $client;
         $this->config = $config[self::NAME];
     }
 
@@ -365,5 +375,37 @@ class PptConvertor
     {
         $params = array('convertor' => self::NAME,);
         return array_merge($params, $this->config);
+    }
+
+    public function saveConvertResult($file, $result)
+    {
+
+        if (!empty($result['nextConvertCallbackUrl'])) {
+            $items = (empty($result['items']) or !is_array($result['items'])) ? array() : $result['items'];
+
+            $types = array('pdf');
+            $metas = array();
+            foreach (array_values($items) as $index => $item) {
+                $type = $types[$index];
+                $metas[$type] = array(
+                    'type' => $type,
+                    'cmd' => $item['cmd'],
+                    'key' => $item['key'],
+                );
+            }
+
+            $result = $this->client->convertPPT($metas['pdf']['key'], $result['nextConvertCallbackUrl']);
+
+            $metas['length'] = empty($result['length']) ? 0 : $result['length'];
+            $metas['imagePrefix'] = empty($result['imagePrefix']) ? '' : $result['imagePrefix'];
+
+            $file['metas2'] = empty($file['metas2']) ? array() : $file['metas2'];
+            $file['metas2'] = array_merge($file['metas2'], $metas);
+            $file['convertStatus'] = 'doing';
+        } else {
+            $file['convertStatus'] = 'success';
+        }
+
+        return $file;
     }
 }

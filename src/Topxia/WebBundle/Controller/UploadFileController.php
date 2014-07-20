@@ -133,7 +133,15 @@ class UploadFileController extends BaseController
             throw new \RuntimeException('数据中id不能为空');
         }
 
-        $file = $this->getUploadFileService()->getFileByConvertHash($result['id']);
+        if (!empty($result['convertHash'])) {
+            $file = $this->getUploadFileService()->getFileByConvertHash($result['convertHash']);
+        } else {
+            $file = $this->getUploadFileService()->getFileByConvertHash($result['id']);
+            if ($file && $file['type'] == 'ppt') {
+                $result['nextConvertCallbackUrl'] = $this->generateUrl('uploadfile_cloud_convert_callback2', array('convertHash' => $result['id']), true);
+            }
+        }
+
         if (empty($file)) {
             throw new \RuntimeException('文件不存在');
         }
