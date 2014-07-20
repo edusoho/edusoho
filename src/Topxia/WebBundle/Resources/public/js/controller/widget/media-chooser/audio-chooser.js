@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     var BaseChooser = require('./base-chooser-2');
     require('jquery.perfect-scrollbar');
+    var Notify = require('common/bootstrap-notify');
 
     var AudioChooser = BaseChooser.extend({
     	attrs: {

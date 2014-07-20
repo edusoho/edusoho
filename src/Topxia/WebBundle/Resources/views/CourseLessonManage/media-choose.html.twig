@@ -128,7 +128,10 @@
 
 
 
-  <div class="file-chooser" id="ppt-chooser" style="display:none;">
+  <div class="file-chooser" id="ppt-chooser" style="display:none;"
+    data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId, convertor:'ppt'}) }}"
+
+  >
     <div class="file-chooser-bar"  style="display:none;">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
