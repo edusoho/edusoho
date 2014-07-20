@@ -395,9 +395,17 @@ class SettingController extends BaseController
             $storageSetting = $request->request->all();
             $this->getSettingService()->set('storage', $storageSetting);
 
-            $factory = new CloudClientFactory();
-            $client = $factory->createClient($storageSetting);
-            $keyCheckResult = $client->checkKey();
+            if (!empty($storageSetting['cloud_access_key']) or !empty($storageSetting['cloud_secret_key'])) {
+                if (!empty($storageSetting['cloud_access_key']) and !empty($storageSetting['cloud_secret_key'])) {
+                    $factory = new CloudClientFactory();
+                    $client = $factory->createClient($storageSetting);
+                    $keyCheckResult = $client->checkKey();
+                } else {
+                    $keyCheckResult = array('error' => 'error');
+                }
+            } else {
+                $keyCheckResult = array('status' => 'ok');
+            }
 
             $cop = $this->getAppService()->checkAppCop();
             if ($cop && isset($cop['cop']) && ($cop['cop'] == 1)) {
