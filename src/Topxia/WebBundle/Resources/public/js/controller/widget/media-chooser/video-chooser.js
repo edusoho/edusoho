@@ -32,7 +32,6 @@ define(function(require, exports, module) {
                     data: data, 
                     cache: false,
                     success: function(response, status, jqXHR) {
-                        console.log(response);
                         uploader.setUploadURL(response.url);
                         uploader.setPostParams(response.postParams);
                     },
