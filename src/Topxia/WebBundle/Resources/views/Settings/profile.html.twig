@@ -195,7 +195,7 @@
           <div class="form-group">
             <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
             <div class="col-md-7 controls">
-              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|default('') }}">
+              <input type="text" id="{{field.fieldName}}" placeholder="最大值为9位整数" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|default('') }}">
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>
@@ -203,7 +203,7 @@
           <div class="form-group">
             <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
             <div class="col-md-7 controls">
-              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|default('') }}">
+              <input type="text" id="{{field.fieldName}}" placeholder="保留到2位小数" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|default('') }}">
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>
