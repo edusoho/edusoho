@@ -36,8 +36,6 @@ class CourseController extends BaseController
             'type' => 'normal',
             'categoryId' => $category['id'],
             'recommended' => ($sort == 'recommendedSeq') ? 1 : null,
-            'createdTimeGreaterThan' => time()-30*3600*24,
-            'createdTimeLessThan' => time(),
         );
 
         $paginator = new Paginator(
@@ -171,6 +169,7 @@ class CourseController extends BaseController
     public function membersAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+
         $paginator = new Paginator(
             $request,
             $this->getCourseService()->getCourseStudentCount($course['id']),
