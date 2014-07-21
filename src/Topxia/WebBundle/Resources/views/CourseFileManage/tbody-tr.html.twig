@@ -10,7 +10,7 @@
     {% endif %}
     {% if uploadFile.convertStatus == 'waiting' %}
       {{uploadFile.filename}}<br><span class="text-warning text-sm">正在文件格式转换</span>
-      {% if ( now - uploadFile.updatedTime ) > 0 %}
+      {% if ( now - uploadFile.updatedTime ) > 28800 %}
         <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
       {% endif %}
 
@@ -30,6 +30,7 @@
       {% else %}
         {{ uploadFile.filename }}
       {% endif %}
+      <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
     {% endif %}
   </td>
   <td> 
