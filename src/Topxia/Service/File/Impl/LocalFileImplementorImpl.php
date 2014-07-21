@@ -85,6 +85,11 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $uploadParams;
     }
 
+    public function reconvertFile($file, $convertCallback)
+    {
+        
+    }
+
     private function getFileFullPath($file)
     {
         if (empty($file['isPublic'])) {

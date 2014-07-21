@@ -184,6 +184,20 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileImplementor($params['storage'])->makeUploadParams($params);
     }
 
+    public function reconvertFile($id, $convertCallback)
+    {
+        $file = $this->getFile($id);
+        if (empty($file)) {
+            throw $this->createServiceException('file not exist.');
+        }
+
+        $convertHash = $this->getFileImplementorByFile($file)->reconvertFile($file, $convertCallback);
+
+        $this->setFileConverting($file['id'], $convertHash);
+
+        return $convertHash;
+    }
+
     private function getFileImplementorByFile($file)
     {
         return $this->getFileImplementor($file['storage']);
