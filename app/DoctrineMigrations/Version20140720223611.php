@@ -13,7 +13,7 @@ class Version20140720223611 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `upload_files` ADD  `convertParams` TEXT NOT NULL DEFAULT  '' COMMENT  '文件转换参数' AFTER  `convertStatus`;");
+        $this->addSql("ALTER TABLE `upload_files` ADD  `convertParams` TEXT NULL COMMENT  '文件转换参数' AFTER  `convertStatus`;");
         $this->addSql("ALTER TABLE `upload_files` ADD UNIQUE (`convertHash` ( 32 ));");
     }
 
