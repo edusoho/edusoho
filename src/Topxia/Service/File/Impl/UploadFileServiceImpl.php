@@ -115,7 +115,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
     }
 
-    public function convertFile($id, $status, array $result = array())
+    public function convertFile($id, $status, array $result = array(), $callback = null)
     {
         $statuses = array('none', 'waiting', 'doing', 'success', 'error');
         if (!in_array($status, $statuses)) {
@@ -127,11 +127,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             throw $this->createServiceException("文件(#{$id})不存在，转换失败");
         }
 
-        $file = $this->getFileImplementorByFile($file)->convertFile($file, $status, $result);
+        $file = $this->getFileImplementorByFile($file)->convertFile($file, $status, $result, $callback);
 
         $this->getUploadFileDao()->updateFile($id, array(
             'convertStatus' => $file['convertStatus'],
-            'metas2' => $file['metas2']
+            'metas2' => $file['metas2'],
+            'updatedTime' => time(),
         ));
 
         return $this->getFile($id);
@@ -144,11 +145,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             throw $this->createServiceException('file not exist.');
         }
 
-        $status = $file['convertStatus'] == 'success' ? 'success' : 'waiting';
+        // $status = $file['convertStatus'] == 'success' ? 'success' : 'waiting';
 
         $fields = array(
-            'convertStatus' => $status,
+            'convertStatus' => 'waiting',
             'convertHash' => $convertHash,
+            'updatedTime' => time(),
         );
 
         $this->getUploadFileDao()->updateFile($id, $fields);

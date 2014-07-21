@@ -27,6 +27,7 @@ class DataDict
 			'audio' => '音频',
 			'document' => '文档',
 			'image' => '图片',
+            'ppt' => 'PPT',
 			'other' => '其他'
 		),
 		'fileType:html' => array(
@@ -119,7 +120,8 @@ class DataDict
     	'lessonType'=> array(
     		'video' => '视频',
     		'audio' => '音频',
-    		'text' => '图文'
+    		'text' => '图文',
+            'ppt' => 'PPT',
 		),
 		'userRole' => array(
 			'ROLE_USER' => '学员',

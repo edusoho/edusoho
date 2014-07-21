@@ -2,7 +2,9 @@
 
 {% block title %}{% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}{% endblock %}
 {% block body %}
-  
+  {% if course.price > 0 %}
+    <div class="alert alert-info">注意：请在30分钟内完成支付，否则订单将会过期失效</div>
+  {% endif %}
   <form id="course-buy-form" class="form-horizontal" method="post" action="{{ path('course_order_pay') }}">
 
     <div class="form-group">
@@ -39,10 +41,10 @@
         <div class="row">
           <div class="col-md-12">
             <div class="alert alert-info">
-            <h4>付款提示</h4>
-            请在随后的支付宝支付页面中，选择“<strong>即时到帐交易</strong>”，如下图所示。如果选择“担保交易”需要人工确认，将会产生较大延迟。
-            <br>
-            <img src="{{ asset('bundles/topxiaweb/img/order/alipay_dualfun_example.png') }}">
+              <h4>付款提示</h4>
+              请在随后的支付宝支付页面中，选择“<strong>即时到帐交易</strong>”，如下图所示。如果选择“担保交易”需要手动确认收货，会增加不必要的操作步骤。
+              <br>
+              <img src="{{ asset('bundles/topxiaweb/img/order/alipay_dualfun_example.png') }}">
             </div>
           </div>
         </div>
@@ -165,7 +167,7 @@
       <button class="btn btn-primary" disabled="disabled">加入学习</button> 
     {% else %}  
       {% if not avatarAlert %}
-        <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
+        <button id="join-course-btn" class="btn btn-primary" data-submiting-text="正在加入" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
       {% endif %}
     {% endif %}
 

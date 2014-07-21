@@ -188,10 +188,12 @@ define(function(require, exports, module) {
                             var media = self._convertFileToMedia(response);
                             self.trigger('change',  media);
                             Notify.success('文件上传成功！');
-                            self.trigger('fileinfo.fetching');
-                            $.get($btn.data('fileinfoUrl'), {key:$btn.data('key')}, function(info){
-                                self.trigger('fileinfo.fetched', info);
-                            }, 'json');
+                            if ($btn.data('fileinfoUrl')) {
+                                self.trigger('fileinfo.fetching');
+                                $.get($btn.data('fileinfoUrl'), {key:$btn.data('key')}, function(info){
+                                    self.trigger('fileinfo.fetched', info);
+                                }, 'json');
+                            }
                         }, 'json');
                     } else {
                         var media = self._convertFileToMedia(serverData);

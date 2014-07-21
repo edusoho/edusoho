@@ -13,6 +13,12 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $sql = "SELECT * FROM {$this->getTablename()} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
+
+    public function getCoursesCount()
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->getTablename()}";
+        return $this->getConnection()->fetchColumn($sql) ? : null;
+    }
     
     public function findCoursesByIds(array $ids)
     {
@@ -132,10 +138,11 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         if (isset($conditions['notFree'])) {
             $conditions['notFree'] = 0;
         }
-
+        
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'course')
             ->andWhere('status = :status')
+            ->andWhere('type = :type')
             ->andWhere('price = :price')
             ->andWhere('price > :notFree')
             ->andWhere('title LIKE :titleLike')
@@ -144,6 +151,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('tags LIKE :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan')
+            ->andWhere('rating > :ratingGreaterThan')
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan');
 
 

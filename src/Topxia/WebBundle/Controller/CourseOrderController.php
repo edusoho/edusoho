@@ -22,6 +22,8 @@ class CourseOrderController extends OrderController
             throw $this->createAccessDeniedException();
         }
 
+        $remainingStudentNum = $this->getRemainStudentNum($course);
+
         $previewAs = $request->query->get('previewAs');
 
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
@@ -34,14 +36,20 @@ class CourseOrderController extends OrderController
 
         $course = $this->getCourseService()->getCourse($id);
 
-        return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
-            'course' => $course,
-            'payments' => $this->getEnabledPayments(),
-            'user' => $userInfo,
-            'avatarAlert' => AvatarAlert::alertJoinCourse($user),
-            'courseSetting' => $courseSetting,
-            'member' => $member
-        ));
+        if ($remainingStudentNum == 0 && $course['type'] == 'live') {
+            return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
+                'course' => $course
+            ));
+        } else {
+            return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
+                'course' => $course,
+                'payments' => $this->getEnabledPayments(),
+                'user' => $userInfo,
+                'avatarAlert' => AvatarAlert::alertJoinCourse($user),
+                'courseSetting' => $courseSetting,
+                'member' => $member
+            ));
+        }
     }
 
     public function payAction(Request $request)
@@ -204,6 +212,27 @@ class CourseOrderController extends OrderController
         }
 
         return $member;
+    }
+
+    private function getRemainStudentNum($course)
+    {
+        $remainingStudentNum = $course['maxStudentNum'];
+
+        if ($course['type'] == 'live') {
+            if ($course['price'] <= 0) {
+                $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'];
+            } else {
+                $createdOrdersCount = $this->getOrderService()->searchOrderCount(array(
+                    'targetType' => 'course',
+                    'targetId' => $course['id'],
+                    'status' => 'created',
+                    'createdTimeGreaterThan' => strtotime("-30 minutes")
+                ));
+                $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'] - $createdOrdersCount;
+            }
+        }
+
+        return $remainingStudentNum;
     }
 
     public function getCourseService()

@@ -1,0 +1,17 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+
+{% for course in data('PopularCourses',{count:'8', type:'studentNum'}) %}
+
+      {% if course %}
+{{ course.title }}
+{{ course.price }}
+       {# {% set user = thread.user %}
+       {% set latestPostUser = thread.latestPostUser %}
+        {{ web_macro.user_link(user, 'text-muted') }}
+
+      	-----------
+
+      	{{ web_macro.user_link(latestPostUser, 'text-muted') }} #}
+      {% endif %}
+{% endfor %}

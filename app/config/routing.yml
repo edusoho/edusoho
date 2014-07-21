@@ -5,6 +5,10 @@ topxia_admin:
     resource: "@TopxiaAdminBundle/Resources/config/routing.yml"
     prefix:   /admin
 
+topxia_mobile:
+    resource: "@TopxiaMobileBundle/Resources/config/routing.yml"
+    prefix:   /mapi_v1
+
 _plugins:
     resource: routing_plugins.yml
 

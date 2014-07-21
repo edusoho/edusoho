@@ -18,6 +18,8 @@ interface LessonLearnDao
 
     public function findLearnsCountByLessonId($lessonId);
 
+    public function findLatestFinishedLearns($start, $limit);
+
 	public function addLearn($learn);
 
 	public function updateLearn($id, $fields);

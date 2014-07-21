@@ -1,7 +1,9 @@
 <?php
 
 namespace Topxia\WebBundle\Controller;
+
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
 
@@ -10,8 +12,16 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
-        $conditions = array('status' => 'published');
+        $conditions = array('status' => 'published', 'type' => 'normal');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
+
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        if (!empty($courseSetting['live_course_enabled']) && $courseSetting['live_course_enabled']) {
+            $recentLiveCourses = $this->getRecentLiveCourses();
+        } else {
+            $recentLiveCourses = array();
+        }
 
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
 
@@ -19,8 +29,45 @@ class DefaultController extends BaseController
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
-            'blocks' => $blocks
+            'blocks' => $blocks,
+            'recentLiveCourses' => $recentLiveCourses
         ));
+    }
+
+    private function getRecentLiveCourses()
+    {
+
+        $recenntLessonsCondition = array(
+            'status' => 'published',
+            'endTimeGreaterThan' => time(),
+        );
+
+        $recentlessons = $this->getCourseService()->searchLessons(
+            $recenntLessonsCondition,  
+            array('startTime', 'ASC'),
+            0,
+            20
+        );
+
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentlessons, 'courseId'));
+
+        $recentCourses = array();
+        foreach ($recentlessons as $lesson) {
+            $course = $courses[$lesson['courseId']];
+            if ($course['status'] != 'published') {
+                continue;
+            }
+            $course['lesson'] = $lesson;
+            $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
+
+            if (count($recentCourses) >= 8) {
+                break;
+            }
+
+            $recentCourses[] = $course;
+        }
+
+        return $recentCourses;
     }
 
     public function promotedTeacherBlockAction()
@@ -81,13 +128,16 @@ class DefaultController extends BaseController
 
     }
 
-    public function systemInfoAction()
+    public function jumpAction(Request $request)
     {
-        $info = array(
-            'version' => System::VERSION,
-        );
-
-        return $this->createJsonResponse($info);
+        $courseId = intval($request->query->get('id'));
+        $url = $this->generateUrl('course_show', array('id' => $courseId));
+        echo "<script type=\"text/javascript\"> 
+        if (top.location !== self.location) {
+        top.location = \"{$url}\";
+        }
+        </script>";
+        exit();
     }
 
     protected function getSettingService()

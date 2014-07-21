@@ -290,6 +290,10 @@ admin_course_order_manage:
     pattern: /course/order/manage
     defaults: { _controller: TopxiaAdminBundle:CourseOrder:manage }
 
+admin_live_course:
+    pattern: /livecourse/{status}
+    defaults: { _controller: TopxiaAdminBundle:LiveCourse:index }
+
 admin_order:
     pattern: /order
     defaults: { _controller: TopxiaAdminBundle:Order:index }
@@ -314,6 +318,20 @@ admin_order_audit_refund:
 admin_setting_site:
     pattern:  /setting/site
     defaults: { _controller: TopxiaAdminBundle:Setting:site }
+
+admin_setting_mobile:
+    pattern:  /setting/mobile
+    defaults: { _controller: TopxiaAdminBundle:Setting:mobile }
+
+admin_setting_mobile_picture_upload:
+    pattern:  /setting/mobile/picture/upload/{type}
+    defaults: { _controller: TopxiaAdminBundle:Setting:mobilePictureUpload }
+    methods: [POST]
+
+admin_setting_mobile_picture_remove:
+    pattern:  /setting/mobile/picture/remove/{type}
+    defaults: { _controller: TopxiaAdminBundle:Setting:mobilePictureRemove }
+    methods: [POST]
 
 admin_setting_logo_upload:
     pattern:  /setting/logo/upload

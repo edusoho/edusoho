@@ -50,8 +50,8 @@
 </form>
 {% endif %}
 
-<div class="mbm mtl"><strong>设置提示</strong></div>
-<div class="text-info">{{ block.tips }}</div>
+<div class="mbm mtl"><strong>编辑帮助</strong></div>
+<div class="text-info">{{ block.tips|nl2br }}</div>
 
 <div class="mbm mtl"><strong>变更记录</strong></div>
   <table id="block-history-table" class="table table-striped table-condensed">
@@ -85,6 +85,6 @@
 
 {% block footer %}
   <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-  <button type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#block-form">保存</button>
+  <button id="block-update-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#block-form">保存</button>
   <script type="text/javascript">app.load('block/update')</script>
 {% endblock %}

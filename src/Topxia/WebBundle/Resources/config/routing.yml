@@ -2,6 +2,10 @@ homepage:
     pattern:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
+live_jump:
+    pattern: /live/jump
+    defaults: { _controller: TopxiaWebBundle:Default:jump }
+
 login:
     pattern:  /login
     defaults: { _controller: TopxiaWebBundle:Login:index }
@@ -106,6 +110,34 @@ kindeditor_upload:
     defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }
     methods: [POST]
 
+live_auth:
+    pattern:  /live/auth
+    defaults: { _controller: TopxiaWebBundle:LiveAuth:index }
+
+live_course_explore:
+    pattern:  /live
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:explore }
+
+live_course_play:
+    pattern:  /course/{courseId}/lesson/{lessonId}/live_entry
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:entry }
+
+live_course_replay:
+    pattern: /live/replay/course/{courseId}/lesson/{lessonId}
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:replay }
+
+live_course_list:
+    pattern:  /live/list/{category}
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:list, category:'' }
+
+live_classroom_iframe:
+    pattern: /live/classroom/course/{courseId}/lesson/{lessonId}
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:classroomIframe }
+
+live_course_create:
+    pattern:  /livecourse/create
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:create }
+
 course_explore:
     pattern:  /course/explore/{category}
     defaults: { _controller: TopxiaWebBundle:Course:explore, category:'' }
@@ -113,6 +145,10 @@ course_explore:
 course_archive:
     pattern:  /archive/course
     defaults: { _controller: TopxiaWebBundle:Course:archive }
+
+course_archive_show:
+    pattern:  /archive/course/{id}
+    defaults: { _controller: TopxiaWebBundle:Course:archiveCourse }
 
 course_archive_lesson:
     pattern:  /archive/course/{id}/lesson/{lessonId}
@@ -196,6 +232,10 @@ course_lesson_media:
 course_lesson_media_download:
     pattern:  /course/{courseId}/lesson/{lessonId}/media_download
     defaults: { _controller: TopxiaWebBundle:CourseLesson:mediaDownload }
+
+course_lesson_ppt:
+    pattern:  /course/{courseId}/lesson/{lessonId}/ppt
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:ppt }
 
 course_lesson_learn_status:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/status
@@ -436,6 +476,22 @@ course_manage_lesson:
 course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
+
+live_course_manage_lesson_create:
+    pattern:  /course/{id}/manage/live/lesson/create
+    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:create }
+
+live_course_manage_lesson_edit:
+    pattern:  /course/{courseId}/manage/live/lesson/{lessonId}/edit
+    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:edit }
+
+live_lesson_time_check:
+    pattern:  /course/{id}/manage/live/lesson/time/check
+    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:lessonTimeCheck }
+
+live_lesson_calculate_left_capacity:
+    pattern:  /course/{courseId}/manage/livelesson/calculateLeftCapacity
+    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:calculateLeftCapacity }
 
 course_manage_lesson_create_testpaper:
     pattern:  /course/{id}/manage/lesson/create/testpaper
@@ -842,6 +898,10 @@ my_teaching_threads:
     pattern: /my/teaching/threads/{type}
     defaults: { _controller: TopxiaWebBundle:MyTeaching:threads }
 
+my_live_courses_learning:
+    pattern: /my/livecourses/learing
+    defaults: { _controller: TopxiaWebBundle:MyLiveCourse:index }
+
 my_courses_learning:
     pattern: /my/courses/learning
     defaults: { _controller: TopxiaWebBundle:MyCourse:learning }
@@ -1050,7 +1110,7 @@ cloud_video_fingerprint:
 
 systeminfo:
     pattern: /systeminfo
-    defaults: {_controller: TopxiaWebBundle:Default:systemInfo }
+    defaults: {_controller: TopxiaWebBundle:Systeminfo:index }
 
 setting_approval_submit:
     pattern: /settings/approval/submit
@@ -1067,6 +1127,18 @@ article_detail:
 article_category:
     pattern: /article/category/{categoryCode}
     defaults: { _controller: TopxiaWebBundle:Article:category }
+
+mobile:
+    pattern: /mobile/
+    defaults: { _controller: TopxiaWebBundle:Mobile:index }
+
+mobile_download_qrcode:
+    pattern: /mobile/downloadQrcode
+    defaults: { _controller: TopxiaWebBundle:Mobile:downloadQrcode }
+
+mobile_download:
+    pattern: /mobile/download
+    defaults: { _controller: TopxiaWebBundle:Mobile:download }
 
 test:
     pattern:  /test/

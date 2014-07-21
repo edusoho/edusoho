@@ -1,0 +1,8 @@
+http://www.edusoho-dev.com/mapi/alipay_call_back?
+
+out_trade_no=app支付测试单号
+request_token=requestToken
+result=success
+trade_no=2014051341167168
+sign=858fb4d73a0f55e93e86f0d05c2b56b4
+sign_type=MD5

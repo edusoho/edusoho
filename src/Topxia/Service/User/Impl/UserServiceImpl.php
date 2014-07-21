@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Common\SimpleValidator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\User\UserService;
 use Topxia\Service\User\CurrentUser;
 
@@ -257,6 +258,9 @@ class UserServiceImpl extends BaseService implements UserService
         if ($type != 'default') {
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
+
+        $this->getDispatcher()->dispatch('user.service.registered', new ServiceEvent($user));
+
         return $user;
     }
 

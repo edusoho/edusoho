@@ -2,7 +2,6 @@
 namespace Topxia\Component\Payment\Alipay;
 
 use Topxia\Component\Payment\Response;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class AlipayResponse extends Response
 {

@@ -19,6 +19,7 @@ class WebExtension extends \Twig_Extension
     {
         return array(
             'smart_time' => new \Twig_Filter_Method($this, 'smarttimeFilter') ,
+            'data_format' => new \Twig_Filter_Method($this, 'dataformatFilter') ,
             'time_range' => new \Twig_Filter_Method($this, 'timeRangeFilter'),
             'remain_time' => new \Twig_Filter_Method($this, 'remainTimeFilter'),
             'location_text' => new \Twig_Filter_Method($this, 'locationTextFilter'),
@@ -60,7 +61,11 @@ class WebExtension extends \Twig_Extension
     {
         $basePath = $this->container->get('request')->getBasePath();
         $theme = $this->getSetting('theme.uri', 'default');
-        $plugins = array('coupon', 'vip');
+
+        $plugins = $this->container->get('kernel')->getPlugins();
+
+        $plugins[] = "customweb";
+        $plugins[] = "customadmin";
 
         $paths = array(
             'common' => 'common',
@@ -68,10 +73,18 @@ class WebExtension extends \Twig_Extension
         );
 
         foreach ($plugins as $name) {
+            $name = strtolower($name);
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
         }
 
         return $paths;
+    }
+    
+    public function dataformatFilter ($time) {
+        if (empty($time)) {
+            return ;
+        }
+        return date('Y-m-d H:i',$time);
     }
 
     public function smarttimeFilter ($time) {
@@ -253,6 +266,11 @@ class WebExtension extends \Twig_Extension
             $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri['path'];
             $url = ltrim($url, ' /');
             $url = $assets->getUrl($url);
+
+            if ($absolute) {
+                $url = $request->getSchemeAndHttpHost() . $url;
+            }
+
             return $url;
         } else {
 

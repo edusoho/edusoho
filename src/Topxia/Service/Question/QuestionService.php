@@ -11,6 +11,8 @@ interface QuestionService
 
     public function findQuestionsByParentId($id);
 
+    public function findQuestionsByParentIds($ids);
+
     public function searchQuestions($conditions, $sort, $start, $limit);
 
     public function searchQuestionsCount($conditions);
@@ -54,6 +56,8 @@ interface QuestionService
     public function getCategory($id);
 
     public function findCategoriesByTarget($target, $start, $limit);
+
+    public function findCategoriesByIds($ids);
 
     public function createCategory($fields);
 
