@@ -30,7 +30,6 @@
       {% else %}
         {{ uploadFile.filename }}
       {% endif %}
-      <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
     {% endif %}
   </td>
   <td> 
