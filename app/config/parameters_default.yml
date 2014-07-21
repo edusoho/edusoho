@@ -19,9 +19,9 @@ parameters:
                 normal: [440k, 640k, 1000k]
                 high: [640k, 1000k, 1500k]
             audio:
-                low: [64k, 64k, 64k]
-                normal: [96k, 96k, 96k]
-                high: [128k, 128k, 128k]
+                low: [32k, 48k, 64k]
+                normal: [48k, 64k, 96k]
+                high: [64k, 96k, 128k]
             segtime: 10
         HLSAudio:
             low: 64k
