@@ -62,6 +62,8 @@ interface CourseService
 
 	public function recommendCourse($id, $number);
 
+	public function hitCourse($id);
+
 	public function cancelRecommendCourse($id);
 
 	/**
@@ -102,6 +104,8 @@ interface CourseService
 	public function liveLessonTimeCheck($courseId,$lessonId,$startTime,$length);
 
 	public function calculateLiveCourseLeftCapacityInTimeRange($startTime, $endTime, $excludeLessonId);
+
+	public function canLearnLesson($courseId, $lessonId);
 
 	public function startLearnLesson($courseId, $lessonId);
 

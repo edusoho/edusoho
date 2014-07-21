@@ -34,24 +34,6 @@ class ThemeController extends BaseController
 
     }
 
-    private function getThemes()
-    {
-        $themes = array();
-
-        $dir = $this->container->getParameter('kernel.root_dir'). '/../web/themes';
-        $finder = new Finder();
-        foreach ($finder->directories()->in($dir)->depth('== 0') as $directory) {
-            $theme = $this->getTheme($directory->getBasename());
-
-            if ($theme) {
-                $themes[] = $theme;
-            }
-
-        }
-
-        return $themes;
-    }
-
     private function getTheme($uri)
     {
         if (empty($uri)) {
@@ -74,6 +56,24 @@ class ThemeController extends BaseController
         $theme['uri'] = $uri;
 
         return $theme;
+    }
+
+    private function getThemes()
+    {
+        $themes = array();
+
+        $dir = $this->container->getParameter('kernel.root_dir'). '/../web/themes';
+        $finder = new Finder();
+        foreach ($finder->directories()->in($dir)->depth('== 0') as $directory) {
+            $theme = $this->getTheme($directory->getBasename());
+
+            if ($theme) {
+                $themes[] = $theme;
+            }
+
+        }
+
+        return $themes;
     }
 
     protected function getSettingService()

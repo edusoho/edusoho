@@ -66,7 +66,7 @@ class RecentLiveCoursesDataTag extends CourseBaseDataTag implements DataTag
             $recentCourses[] = $course;
         }
 
-        return $recentCourses;
+        return $this->getCourseTeachersAndCategories($recentCourses);
     }
 
     protected function getSettingService()

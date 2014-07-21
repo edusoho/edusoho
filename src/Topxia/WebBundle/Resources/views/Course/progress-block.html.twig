@@ -14,7 +14,12 @@
       {% endif %}
 
       <span class="text-muted">已学: <strong class="text-success">{{ progress.number }}</strong> / <strong>{{ progress.total }}</strong></span>
-      {% if not member.deadline == 0 %}
+
+      {% if course.giveCredit >0 %}
+        <span class="text-muted mlm">获得学分：<strong class="text-success">{{ member.credit }}</strong> / <strong>{{ course.giveCredit }}</strong></span>
+      {% endif %}
+
+      {% if not member.deadline|default(0) == 0 %}
         <br>
         <span class="text-muted">有效期： <strong class="text-success" title="从 {{ member.createdTime|date('Y-m-d H:i') }} 到 {{ member.deadline|date('Y-m-d H:i') }}">还有{{ member.deadline|remain_time }}</strong></span>
       {% endif %}

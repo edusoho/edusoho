@@ -1,12 +1,20 @@
     define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
+    require("jquery.bootstrap-datetimepicker");
     require('common/validator-rules').inject(Validator);
     var EditorFactory = require('common/kindeditor-factory');
 
     exports.run = function() {
 
         var editor = EditorFactory.create('#profile_about', 'simple', {extraFileUploadParams:{group:'user'}});
+        EditorFactory.create('.text', 'simple', {extraFileUploadParams:{group:'user'}});
+        $(".date").datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            minView: 'month'
+        });
 
         var validator = new Validator({
             element: '#user-profile-form',
@@ -49,8 +57,89 @@
 
         validator.addItem({
             element: '[name="profile[mobile]"]',
-            rule: 'phone'
+            rule: 'mobile'
         });
+
+        validator.addItem({
+            element: '[name="profile[idcard]"]',
+            rule: 'idcard'
+        });
+
+        validator.addItem({
+            element: '[name="profile[intField1]"]',
+            rule: 'int'
+        });
+
+        validator.addItem({
+            element: '[name="profile[intField2]"]',
+            rule: 'int'
+        });
+
+        validator.addItem({
+            element: '[name="profile[intField3]"]',
+            rule: 'int'
+        });
+
+        validator.addItem({
+            element: '[name="profile[intField4]"]',
+            rule: 'int'
+        });
+
+        validator.addItem({
+            element: '[name="profile[intField5]"]',
+            rule: 'int'
+        });
+
+        validator.addItem({
+            element: '[name="profile[floatField1]',
+            rule: 'float'
+        });
+
+        validator.addItem({
+            element: '[name="profile[floatField2]',
+            rule: 'float'
+        });
+
+        validator.addItem({
+            element: '[name="profile[floatField3]',
+            rule: 'float'
+        });
+
+        validator.addItem({
+            element: '[name="profile[floatField4]',
+            rule: 'float'
+        });
+
+        validator.addItem({
+            element: '[name="profile[floatField5]',
+            rule: 'float'
+        });
+
+        validator.addItem({
+            element: '[name="profile[dateField1]"]',
+            rule: 'date'
+        });
+
+        validator.addItem({
+            element: '[name="profile[dateField2]"]',
+            rule: 'date'
+        });
+
+        validator.addItem({
+            element: '[name="profile[dateField3]"]',
+            rule: 'date'
+        });
+
+        validator.addItem({
+            element: '[name="profile[dateField4]"]',
+            rule: 'date'
+        });
+
+        validator.addItem({
+            element: '[name="profile[dateField5]"]',
+            rule: 'date'
+        });
+
 
         validator.on('formValidate', function(elemetn, event) {
             editor.sync();

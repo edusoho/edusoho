@@ -22,7 +22,7 @@ define(function(require, exports, module) {
             if (count == 0) {
                 return ;
             }
-            var html = "<a href='" + $alert.data('upgradeUrl') + "'>亲爱的用户，系统现在有 <span class='badge'>" + count + " </span> 个更新,请及时去系统安装与升级中心更新，体验最新的功能和改进。</a>";
+            var html = "<a href='" + $alert.data('upgradeUrl') + "'>亲爱的用户，系统现在有 <span class='badge'>" + count + " </span> 个更新,请及时去应用中心检查查看，体验最新的功能和改进。</a>";
             $alert.append(html);
             $alert.removeClass('hide');
         });

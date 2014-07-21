@@ -118,7 +118,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function createCategory(array $category)
     {
-        $category = ArrayToolkit::parts($category, array('name', 'code', 'weight', 'groupId', 'parentId', 'icon'));
+        $category = ArrayToolkit::parts($category, array('description','name', 'code', 'weight', 'groupId', 'parentId', 'icon'));
 
         if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'groupId', 'parentId'))) {
             throw $this->createServiceException("缺少必要参数，，添加分类失败");
@@ -139,7 +139,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             throw $this->createNoteFoundException("分类(#{$id})不存在，更新分类失败！");
         }
 
-        $fields = ArrayToolkit::parts($fields, array('name', 'code', 'weight', 'parentId', 'icon'));
+        $fields = ArrayToolkit::parts($fields, array('description','name', 'code', 'weight', 'parentId', 'icon'));
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新分类失败！');
         }

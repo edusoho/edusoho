@@ -22,12 +22,15 @@ class CourseController extends BaseController
   
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
+        $courseSetting = $this->getSettingService()->get('course', array());
+        if(!isset($courseSetting['live_course_enabled']))$courseSetting['live_course_enabled']="";
         return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
             'conditions' => $conditions,
             'courses' => $courses ,
             'users' => $users,
             'categories' => $categories,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'liveSetEnabled' => $courseSetting['live_course_enabled']
         ));
     }
 
@@ -145,6 +148,11 @@ class CourseController extends BaseController
             'categories' => $categories,
             'paginator' => $paginator
         ));
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     private function renderCourseTr($courseId)

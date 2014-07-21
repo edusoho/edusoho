@@ -85,61 +85,27 @@ class CourseLessonManageController extends BaseController
         $targetId = $course['id'];
 
     	$setting = $this->setting('storage');
-    	if ($setting['upload_mode'] == 'local') {
-    		$videoUploadToken = $audioUploadToken = $pptUploadToken = array(
-	    		'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
-	    		'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
-			);
+   //  	if ($setting['upload_mode'] == 'local') {
+   //  		$videoUploadToken = $audioUploadToken = $pptUploadToken = array(
+	  //   		'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
+	  //   		'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
+			// );
 
-    	} else {
+   //  	} else {
 
-    		try {
+   //  	}
 
-                $factory = new CloudClientFactory();
-                $client = $factory->createClient();
-    		
-		        $commands = array_keys($client->getVideoConvertCommands());
-		    	$videoUploadToken = $client->generateUploadToken($client->getBucket(), array(
-		    		'convertCommands' => implode(';', $commands),
-		    		'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
-	    		));
-	    		if (!empty($videoUploadToken['error'])) {
-	    			return $this->createMessageModalResponse('error', $videoUploadToken['error']['message']);
-	    		}
-
-	    		$audioUploadToken = $client->generateUploadToken($client->getBucket(), array());
-	    		if (!empty($audioUploadToken['error'])) {
-	    			return $this->createMessageModalResponse('error', $audioUploadToken['error']['message']);
-	    		}
-
-                $commands = array_keys($client->getPPTConvertCommands());
-                $pptUploadToken = $client->generateUploadToken($client->getBucket(), array(
-                    'convertCommands' => implode(';', $commands),
-                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey, 'twoStep' => '1'), true),
-                    'convertor' => 'document',
-                ));
-                if (!empty($pptUploadToken['error'])) {
-                    return $this->createMessageModalResponse('error', $pptUploadToken['error']['message']);
-                }
-
-
-    		}
-    		 catch (\Exception $e) {
-    			return $this->createMessageModalResponse('error', $e->getMessage());
-    		}
-    	}
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
             'targetType' => $targetType,
             'targetId' => $targetId,
-			'videoUploadToken' => $videoUploadToken,
-            'audioUploadToken' => $audioUploadToken,
-			'pptUploadToken' => $pptUploadToken,
 			'filePath' => $filePath,
 			'fileKey' => $fileKey,
 			'convertKey' => $convertKey,
 			'storageSetting' => $setting,
+            'features' => $features,
 		));
 	}
 
@@ -171,6 +137,7 @@ class CourseLessonManageController extends BaseController
 			));
         }
 
+        $file = null;
         if ($lesson['mediaId']) {
 	    	$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 	    	if (!empty($file)) {
@@ -208,59 +175,28 @@ class CourseLessonManageController extends BaseController
 
     	$setting = $this->setting('storage');
     	if ($setting['upload_mode'] == 'local') {
-            $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
-                'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
-                'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
-            );
+            // $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
+            //     'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
+            //     'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
+            // );
     	} else {
 
-    		try {
-
-                $factory = new CloudClientFactory();
-                $client = $factory->createClient();
-
-		        $commands = array_keys($client->getVideoConvertCommands());
-		    	$videoUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array(
-		    		'convertCommands' => implode(';', $commands),
-		    		'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true),
-	    		));
-	    		if (!empty($videoUploadToken['error'])) {
-	    			return $this->createMessageModalResponse('error', $videoUploadToken['error']['message']);
-	    		}
-
-	    		$audioUploadToken = $client->generateUploadToken($setting['cloud_bucket'], array());
-	    		if (!empty($audioUploadToken['error'])) {
-	    			return $this->createMessageModalResponse('error', $audioUploadToken['error']['message']);
-	    		}
-
-                $commands = array_keys($client->getPPTConvertCommands());
-                $pptUploadToken = $client->generateUploadToken($client->getBucket(), array(
-                    'convertCommands' => implode(';', $commands),
-                    'convertNotifyUrl' => $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey, 'twoStep' => 1), true),
-                    'convertor' => 'document',
-                ));
-                if (!empty($pptUploadToken['error'])) {
-                    return $this->createMessageModalResponse('error', $pptUploadToken['error']['message']);
-                }
-
-    		}
-    		 catch (\Exception $e) {
-    			return $this->createMessageModalResponse('error', $e->getMessage());
-    		}
     	}
         $lesson['title'] = str_replace(array('"',"'"), array('&#34;','&#39;'), $lesson['title']);
+
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
+            'file' => $file,
             'targetType' => $targetType,
             'targetId' => $targetId,
-			'videoUploadToken' => $videoUploadToken,
-			'audioUploadToken' => $audioUploadToken,
-            'pptUploadToken' => $pptUploadToken,
 			'filePath' => $filePath,
 			'fileKey' => $fileKey,
 			'convertKey' => $convertKey,
-			'storageSetting' => $setting
+			'storageSetting' => $setting,
+            'features' => $features,
 		));
 	}
 
@@ -298,9 +234,12 @@ class CourseLessonManageController extends BaseController
 
     	}
 
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
 			'course' => $course,
 			'paperOptions' => $paperOptions,
+            'features' => $features,
 		));
 	}
 
@@ -338,10 +277,13 @@ class CourseLessonManageController extends BaseController
             ));
         }
 
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
         return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
             'paperOptions' => $paperOptions,
+            'features' => $features,
         ));
 
 	}

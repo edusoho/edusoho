@@ -20,13 +20,11 @@
         </div>
       </div>
     </div>
-    {% if course.type == 'normal' %}
-      <div class="col-md-4 course-dashboard-side">
-        {{ render(controller('TopxiaWebBundle:Course:progressBlock',{course:course})) }}
-        {{ render(controller('TopxiaWebBundle:CourseAnnouncement:block',{course:course})) }}
-        {{ render(controller('TopxiaWebBundle:CourseThread:questionBlock',{course:course})) }}
-      </div>
-    {% endif %}
+    <div class="col-md-4 course-dashboard-side">
+      {{ render(controller('TopxiaWebBundle:Course:progressBlock',{course:course})) }}
+      {{ render(controller('TopxiaWebBundle:CourseAnnouncement:block',{course:course})) }}
+      {{ render(controller('TopxiaWebBundle:CourseThread:questionBlock',{course:course})) }}
+    </div>
   </div>
 
 </div>

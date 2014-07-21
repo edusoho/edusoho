@@ -80,6 +80,8 @@ interface UserService
 
     public function getToken($type, $token);
 
+    public function searchTokenCount($conditions);
+
     public function deleteToken($type, $token);
 
     public function lockUser($id);
@@ -167,4 +169,6 @@ interface UserService
     public function passApproval($userId, $note = null);
 
     public function rejectApproval($userId, $note = null);
+
+    public function dropFieldData($fieldName);
 }

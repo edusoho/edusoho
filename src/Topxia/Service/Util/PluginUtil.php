@@ -33,8 +33,10 @@ class PluginUtil
             'installed' => array()
         );
 
+        $cop = self::getSettingService()->get('_app_cop', null);
+
         foreach ($apps as $app) {
-            if ($app['code'] == 'MAIN') {
+            if ($app['code'] == 'MAIN' or $cop) {
                 continue;
             }
 
@@ -61,12 +63,13 @@ class PluginUtil
 
         $config = '';
 
+        $cop = self::getSettingService()->get('_app_cop', null);
+
         foreach ($apps as $app) {
-            if ($app['code'] == 'MAIN') {
+            if ($app['code'] == 'MAIN' or $cop) {
                 continue;
             }
             $code = $app['code'];
-
 
             $routingPath = sprintf("{$pluginRootDirectory}/%s/%sBundle/Resources/config/routing.yml", ucfirst($code), ucfirst($code));
             if (self::$filesystem->exists($routingPath)) {
@@ -92,7 +95,10 @@ class PluginUtil
 
     }
 
-
+    private static function getSettingService()
+    {
+        return self::$kernel->createService('System.SettingService');
+    }
 
 	private static function getAppService()
 	{

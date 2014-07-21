@@ -404,6 +404,10 @@ admin_setting_user_center:
     pattern:  /setting/user-center
     defaults: { _controller: TopxiaAdminBundle:Setting:userCenter }
 
+admin_setting_user_fields:
+    pattern:  /setting/user-fields
+    defaults: { _controller: TopxiaAdminBundle:Setting:userFields }
+
 admin_setting_course_setting:
     pattern:  /setting/course-setting
     defaults: { _controller: TopxiaAdminBundle:Setting:courseSetting }
@@ -753,3 +757,15 @@ admin_article_delete:
     pattern:  /article/delete
     defaults: { _controller: TopxiaAdminBundle:Article:delete }
     methods:  [POST]
+
+admin_user_fields_add:
+    pattern:  /user_fields/add
+    defaults: { _controller: TopxiaAdminBundle:Setting:addUserFields }
+
+admin_user_fields_edit:
+    pattern:  /user_fields/edit/{id}
+    defaults: { _controller: TopxiaAdminBundle:Setting:editUserFields }
+
+admin_user_fields_delete:
+    pattern:  /user_fields/delete/{id}
+    defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }
