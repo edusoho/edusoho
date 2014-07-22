@@ -11,6 +11,10 @@ admin_question_remind_teachers:
     defaults: { _controller: TopxiaAdminBundle:Default:questionRemindTeachers }
     methods:  [POST]
 
+admin_operation_analysis:
+    pattern:  /operation/analysis
+    defaults: { _controller: TopxiaAdminBundle:Default:operationAnalysisDashbordBlock }
+
 admin_dashboard:
     pattern:  /dashboard
     defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
@@ -753,3 +757,4 @@ admin_article_delete:
     pattern:  /article/delete
     defaults: { _controller: TopxiaAdminBundle:Article:delete }
     methods:  [POST]
+

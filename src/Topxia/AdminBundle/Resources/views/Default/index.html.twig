@@ -15,7 +15,19 @@
     </div>
   </div>
 
-  {{ render(controller('TopxiaAdminBundle:Default:operationAnalysisDashbordBlock')) }}
+ <div class="col-md-6">
+  <div class="panel panel-default">
+  
+    <div class="panel-heading">
+      <h3 class="panel-title" id="operation-analysis-title" data-url="{{path('admin_operation_analysis')}}">常用运营数据</h3>
+    </div>
+    <div id="operation-analysis-table" >
+      <div class="empty">正在载入数据，请稍等。</div>
+    </div>
+  </div>
+</div>
+
+
   <div id="popular-courses-panel" class="col-md-6">
      <div class="panel panel-default">
       <div class="panel-heading">

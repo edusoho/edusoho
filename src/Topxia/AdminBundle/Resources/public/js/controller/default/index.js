@@ -27,6 +27,10 @@ define(function(require, exports, module) {
             $alert.removeClass('hide');
         });
 
+        $.post($('#operation-analysis-title').data('url'),function(html){
+            $('#operation-analysis-table').html(html);
+        });
+
     };
 
 });
