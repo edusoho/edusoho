@@ -64,20 +64,20 @@ class AppServiceImpl extends BaseService implements AppService
 
             $extInfos = array(
                 'host' => $_SERVER['HTTP_HOST'],
-                'userCount' => $this->getUserService()->searchUserCount(array()),
-                'coursePublishedCount' => $coursePublishedCount,
-                'courseUnpublishedCount' => $courseUnpublishedCount,
+                'userCount' => (string) $this->getUserService()->searchUserCount(array()),
+                'coursePublishedCount' => (string) $coursePublishedCount,
+                'courseUnpublishedCount' => (string) $courseUnpublishedCount,
                 'courseCount' => (string) ($coursePublishedCount + $courseUnpublishedCount),
                 'moneyCourseCount' => (string) $this->getCourseService()->searchCourseCount(array('status' => 'published', 'notFree' => true)),
                 'lessonCount' => (string) $this->getCourseService()->searchLessonCount(array()),
                 'courseMemberCount' => (string) $this->getCourseService()->searchMemberCount(array('role' => 'student')),
-                'mobileLoginCount' => $this->getUserService()->searchTokenCount(array('type'=>'mobile_login')),
-                'teacherCount' => $this->getUserService()->searchUserCount(array('roles'=>'ROLE_TEACHER')),
+                'mobileLoginCount' => (string) $this->getUserService()->searchTokenCount(array('type'=>'mobile_login')),
+                'teacherCount' => (string) $this->getUserService()->searchUserCount(array('roles'=>'ROLE_TEACHER')),
             );
 
             $this->getSettingService()->set('_app_last_check', time());
         } else {
-            $extInfos = array();
+            $extInfos = array('_t' => (string)time());
         }
 
         return $this->createAppClient()->checkUpgradePackages($args, $extInfos);
