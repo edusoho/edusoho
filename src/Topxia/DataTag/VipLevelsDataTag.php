@@ -15,7 +15,7 @@ class VipLevelsDataTag extends CourseBaseDataTag implements DataTag
     
     public function getData(array $arguments)
     {
-        $levels = $this->getLevelService()->searchLevels( array('enabled' => 1), 0, 100);
+        $levels = $this->getLevelService()->searchLevels( array('enabled' => 1), 0, $arguments['count']);
 
     	return $levels;
     }

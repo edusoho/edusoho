@@ -83,6 +83,14 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <label for="profile_mobile" class="col-md-2 control-label">手机号码</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile.mobile|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+
           {# <div class="form-group form-forIam-group form-student-group">
             <label class="col-md-2 control-label">学校</label>
             <div class="col-md-7 controls">
@@ -172,13 +180,7 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="profile_mobile" class="col-md-2 control-label">手机</label>
-            <div class="col-md-7 controls">
-              <input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile.mobile|default('') }}">
-              <div class="help-block" style="display:none;"></div>
-            </div>
-          </div>
+
 
           {% if fields %}
           <hr>
