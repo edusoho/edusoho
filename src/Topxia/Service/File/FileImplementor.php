@@ -17,4 +17,6 @@ interface FileImplementor
     public function deleteFile($file, $deleteSubFile = true);
 
     public function makeUploadParams($params);
+
+    public function reconvertFile($file, $convertCallback);
 }

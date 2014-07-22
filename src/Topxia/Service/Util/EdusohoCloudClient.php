@@ -311,6 +311,12 @@ class EdusohoCloudClient implements CloudClient
         return json_decode($content, true);
     }
 
+    public function reconvertFile($key, $params)
+    {
+        $params['key'] = $key;
+        return $this->callRemoteApiWithBase64('POST', 'FileReconvert', $params);
+    }
+
     public function checkKey()
     {
         $args = array();

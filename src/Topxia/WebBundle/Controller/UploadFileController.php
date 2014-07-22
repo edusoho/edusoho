@@ -63,14 +63,6 @@ class UploadFileController extends BaseController
 
         $params = $this->getUploadFileService()->makeUploadParams($params);
 
-        // var_dump($params);exit();
-
-        // $params['mode'] = 'local';
-        // $params['url'] = $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId));
-        // $params['postParams'] = array(
-        //     'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
-        // );
-
         return $this->createJsonResponse($params);
     }
 

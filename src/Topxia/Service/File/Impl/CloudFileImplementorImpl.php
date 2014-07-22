@@ -227,6 +227,27 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $params;
     }
 
+    public function reconvertFile($file, $convertCallback)
+    {
+        if (empty($file['convertParams'])) {
+            return null;
+        }
+
+        $params = array(
+            'convertCallback' => $convertCallback,
+            'convertor' => $file['convertParams']['convertor'],
+            'convertParams' => $file['convertParams'],
+        );
+
+        $result = $this->getCloudClient()->reconvertFile($file['hashId'], $params);
+
+        if (empty($result['persistentId'])) {
+            return null;
+        }
+
+        return $result['persistentId'];
+    }
+
     private function getFileFullName($file)
     {
         $diskDirectory= $this->getFilePath($file['targetType'],$file['targetId']);

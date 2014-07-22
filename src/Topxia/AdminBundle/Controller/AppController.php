@@ -65,6 +65,7 @@ class AppController extends BaseController
             $this->getSettingService()->set('_app_cop', 1);
             PluginUtil::refresh();
         }
+
         return $this->createJsonResponse(count($apps));
     }
 

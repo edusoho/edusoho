@@ -34,5 +34,7 @@ interface UploadFileService
 
     public function makeUploadParams($params);
 
+    public function reconvertFile($id, $convertCallback);
+
 
 }
