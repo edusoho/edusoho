@@ -1070,22 +1070,6 @@ body {
 	border-bottom-color: #fff;
 }
 
-.course-item-list .item-chapter-title {
-	position: relative;
-	line-height: 30px;
-	padding: 2px 10px 0 0;
-	border-top: 1px solid transparent;
-	border-bottom: 1px solid transparent;
-}
-
-.course-item-list .item-chapter-unit-title {
-	position: relative;
-	line-height: 30px;
-	padding: 2px 10px 0 0;
-	border-top: 1px solid transparent;
-	border-bottom: 1px solid transparent;
-}
-
 .course-item-list .hover-item:hover {
 	cursor: pointer;
 }

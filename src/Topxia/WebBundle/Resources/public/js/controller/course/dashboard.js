@@ -3,8 +3,8 @@ define(function(require, exports, module) {
     exports.run = function() {
         require('./common').run();
 
-        $("#course-item-list").on('click', '.item', function(e) {
-            window.location.href = $(this).find('.title').attr('href');
+        $("#course-item-list").on('click', '.lesson-item', function(e) {
+            window.location.href = $('.lesson-item').find('.title').attr('href');
         });
 
         function checkWidth(){
