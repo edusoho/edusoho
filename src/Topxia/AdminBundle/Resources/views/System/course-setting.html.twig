@@ -79,6 +79,15 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>免费课程允许未登录用户观看</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('free_course_nologin_view', {1:'不允许', 0:'允许'}, courseSetting.free_course_nologin_view) }}
+      </div>
+    </div>
+
   </fieldset>
   <fieldset>
     <legend>直播课程</legend>

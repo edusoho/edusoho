@@ -561,6 +561,7 @@ class SettingController extends BaseController
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
             'student_download_media' => '0',
+            'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
             'live_course_enabled' => '0',
         );
