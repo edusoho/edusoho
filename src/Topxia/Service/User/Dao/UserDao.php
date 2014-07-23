@@ -24,4 +24,8 @@ interface UserDao
 
 	public function clearCounterById($id, $name);
 
+	public function analysisRegisterNumByTime($startTime,$endTime);
+
+	public function analysisRegisterDataByTime($startTime,$endTime);
+
 }

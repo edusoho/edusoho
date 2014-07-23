@@ -758,3 +758,7 @@ admin_article_delete:
     defaults: { _controller: TopxiaAdminBundle:Article:delete }
     methods:  [POST]
 
+admin_operation_analysis_register:
+    pattern:  /operation/analysis/register/{tab}
+    defaults: { _controller: TopxiaAdminBundle:OperationAnalysis:register }
+

@@ -1,7 +1,10 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-
+    require("jquery.bootstrap-datetimepicker");
+    var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
+    var now = new Date();
     exports.run = function() {
 
         $('.tbody').on('click', 'button.remind-teachers', function() {
@@ -31,6 +34,33 @@ define(function(require, exports, module) {
             $('#operation-analysis-table').html(html);
         });
 
+        $("[name=endTime]").datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            minView: 'month'
+        });
+        $('[name=endTime]').datetimepicker('setEndDate', now);
+        $("[name=startTime]").datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            minView: 'month'
+        });
+        $('[name=startTime]').datetimepicker('setEndDate', now);
+
+        var validator = new Validator({          
+            element: '#operation-form'});
+
+        validator.addItem({
+            element: '[name=startTime]',
+            required: true
+        });
+
+        validator.addItem({
+            element: '[name=endTime]',
+            required: true
+        });
     };
 
 });

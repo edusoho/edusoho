@@ -59,8 +59,15 @@ class DefaultController extends BaseController
     }
 
     public function operationAnalysisDashbordBlockAction(Request $request)
-    {
+    {   
+
+        $todayRegisterNum=$this->getUserService()->analysisRegisterNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
+
+        $yesterdayRegisterNum=$this->getUserService()->analysisRegisterNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
+
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
+            'todayRegisterNum'=>$todayRegisterNum,
+            'yesterdayRegisterNum'=>$yesterdayRegisterNum,
         ));        
     }
 

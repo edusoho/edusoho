@@ -10,9 +10,9 @@
         <tbody>
 			<tr>
 				<td>新注册用户数</td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td><a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayRegisterNum}}</td>
+				<td>{{yesterdayRegisterNum}}</td>
+				<td><a href="#">趋势</a> | <a href="{{path('admin_operation_analysis_register',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 			<tr>

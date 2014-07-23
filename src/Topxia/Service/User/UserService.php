@@ -167,4 +167,9 @@ interface UserService
     public function passApproval($userId, $note = null);
 
     public function rejectApproval($userId, $note = null);
+
+    public function analysisRegisterNumByTime($startTime,$endTime);
+
+    public function analysisRegisterDataByTime($startTime,$endTime);
+
 }
