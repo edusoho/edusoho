@@ -6,7 +6,7 @@
 		{% for id, item in items %}
 		  {% if 'chapter' in id %}
 		    {% if item.type == 'unit' %}
-				  <li class="item-chapter-title chapter-item chapter-item-unit clearfix">
+				  <li class="item-chapter-unit-title chapter-item chapter-item-unit clearfix">
 				  	<span class="name">第 {{ item.number }} 节</span>
 				  	<span class="title">{{ item.title }}</span>
 		  	  </li>
