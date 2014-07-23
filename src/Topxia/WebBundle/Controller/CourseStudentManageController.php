@@ -32,13 +32,17 @@ class CourseStudentManageController extends BaseController
         foreach ($students as $student) {
             $progresses[$student['userId']] = $this->calculateUserLearnProgress($course, $student);
         }
-      
+
+        $courseSetting = $this->getSettingService()->get('course', array());
+        $isTeacherAuthAdd = !empty($courseSetting['teacher_add_student']) ? 1: 0;
+
         return $this->render('TopxiaWebBundle:CourseStudentManage:index.html.twig', array(
             'course' => $course,
             'students' => $students,
             'users'=>$users,
             'progresses' => $progresses,
             'followingIds' => $followingIds,
+            'isTeacherAuthAdd' => $isTeacherAuthAdd,
             'paginator' => $paginator,
             'canManage' => $this->getCourseService()->canManageCourse($course['id']),
         ));
@@ -47,7 +51,13 @@ class CourseStudentManageController extends BaseController
 
     public function createAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryAdminCourse($id);
+        $courseSetting = $this->getSettingService()->get('course', array());
+        
+        if (!empty($courseSetting['teacher_add_student'])) {
+            $course = $this->getCourseService()->tryManageCourse($id);
+        } else {
+            $course = $this->getCourseService()->tryAdminCourse($id);
+        }
 
         $currentUser = $this->getCurrentUser();
 
@@ -254,6 +264,11 @@ class CourseStudentManageController extends BaseController
             'progress' => $progress,
             'isFollowing' => $isFollowing,
         ));
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     private function getCourseService()
