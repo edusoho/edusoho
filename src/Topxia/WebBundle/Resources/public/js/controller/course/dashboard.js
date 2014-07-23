@@ -4,7 +4,7 @@ define(function(require, exports, module) {
         require('./common').run();
 
         $("#course-item-list").on('click', '.lesson-item', function(e) {
-            window.location.href = $('.lesson-item').find('.title').attr('href');
+            window.location.href = $(this).find('.title').attr('href');
         });
 
         function checkWidth(){
