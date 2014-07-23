@@ -174,6 +174,11 @@ class CourseManageController extends BaseController
 
         $canModifyPrice = true;
         $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
+        if ($this->setting('vip.enabled')) {
+            $levels = $this->getLevelService()->findEnabledLevels();
+        } else {
+            $levels = array();
+        }
         if (empty($teacherModifyPrice)) {
             if (!$this->getCurrentUser()->isAdmin()) {
                 $canModifyPrice = false;
@@ -186,11 +191,6 @@ class CourseManageController extends BaseController
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
-        if ($this->setting('vip.enabled')) {
-            $levels = $this->getLevelService()->findEnabledLevels();
-        } else {
-            $levels = array();
-        }
 
 
         response:
