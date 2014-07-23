@@ -3875,6 +3875,11 @@ body {
 	display: inline-block;
 	margin: 0 5px 5px 0;
 }
+.testpaper-card .panel-body {
+	height: auto;
+	max-height: 560px;
+	overflow: auto;
+}
 
 .testpaper-card-explain .btn-index {
 	width: 12px;
