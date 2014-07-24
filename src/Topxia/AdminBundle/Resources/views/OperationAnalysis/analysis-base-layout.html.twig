@@ -1,0 +1,51 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{% set panel = 'dashboard' %}
+{% set script_controller = 'default/index' %}
+{% block content %}
+  <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
+<div class="row">
+  {% block analysisHead %}
+  <div class="col-md-12">
+{{ web_macro.flash_messages() }}
+
+      <form   class="form-inline" action="" method="get" id="operation-form">
+        
+        <div class="form-group">
+           <a type="button" class="btn btn-default {% if app.request.query.get('type')!="lastMonth" and app.request.query.get('type')!="lastThreeMonths" %}active{% endif %}"  href="{{path(href,{type:"month",tab:tab})}}">本月</a>
+        </div>
+        
+        <div class="form-group">
+         <a type="button" class="btn btn-default  {% if app.request.query.get('type')=="lastMonth" %}active{% endif %}"  href="{{path(href,{type:"lastMonth",tab:tab})}}">上月</a>
+        </div>
+
+        <div class="form-group">
+          <a type="button" class="btn btn-default {% if app.request.query.get('type')=="lastThreeMonths" %}active{% endif %}" href="{{path(href,{type:"lastThreeMonths",tab:tab})}}">近三月</a>
+        </div>
+
+        <div class="form-group">
+          <label >起始日期&nbsp;</label><input type="text" class="form-control" name="startTime" value="{{app.request.query.get('startTime')}}">
+
+        </div>
+
+        <div class="form-group">
+          <label >截止日期&nbsp;</label><input type="text" class="form-control"  name="endTime" value="{{app.request.query.get('endTime')}}">
+        </div>
+
+        <button class="btn btn-primary">查询</button>
+      </form>
+
+  </div>
+  <div class="col-md-12"><br>
+  </div>
+  <div class="col-md-9">
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation"{% if tab=="trend" %} class="active"{% endif %} ><a href="{{path(href,{tab:"trend"})}}">趋势</a></li>
+        <li role="presentation" {% if tab=="detail" %} class="active"{% endif %}><a href="{{path(href,{tab:"detail"})}}">明细</a></li>
+      </ul>
+  </div>
+{% endblock %}
+{% block analysisBody %}
+{% endblock %}
+</div>
+
+{% endblock %}

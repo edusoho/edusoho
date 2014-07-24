@@ -9,6 +9,13 @@
 </div>
 
 {% if is_granted('ROLE_ADMIN') %}
+  
+  <div class="row">
+    <div class="col-md-12">
+      <div id="app-upgrade-alert" class="alert alert-info alert-dismissable hide" data-url="{{path('admin_app_upgrades_count') }}" data-upgrade-url="{{ path('admin_app_upgrades') }}">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      </div>
+    </div>
 
  <div class="col-md-6">
   <div class="panel panel-default">
@@ -21,16 +28,6 @@
     </div>
   </div>
 </div>
-
-
-  <div class="row">
-    <div class="col-md-12">
-      <div id="app-upgrade-alert" class="alert alert-info alert-dismissable hide" data-url="{{path('admin_app_upgrades_count') }}" data-upgrade-url="{{ path('admin_app_upgrades') }}">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-      </div>
-    </div>
-
-    {{ render(controller('TopxiaAdminBundle:Default:latestUsersBlock')) }}
     <div id="popular-courses-panel" class="col-md-6">
        <div class="panel panel-default">
         <div class="panel-heading">

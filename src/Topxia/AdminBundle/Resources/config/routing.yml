@@ -764,7 +764,7 @@ admin_article_delete:
 
 admin_operation_analysis_register:
     pattern:  /operation/analysis/register/{tab}
-    defaults: { _controller: TopxiaAdminBundle:OperationAnalysis:register }
+    defaults: { _controller: TopxiaAdminBundle:Analysis:register }
 
 admin_user_fields_add:
     pattern:  /user_fields/add

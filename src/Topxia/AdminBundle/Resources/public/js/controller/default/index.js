@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require("jquery.bootstrap-datetimepicker");
     var Validator = require('bootstrap.validator');
+    var Morris=require("morris");
     require('common/validator-rules').inject(Validator);
     var now = new Date();
     exports.run = function() {
@@ -61,6 +62,16 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name=endTime]',
             required: true
+        });
+        var data = eval ("(" + $('#data').attr("value") + ")");
+
+        Morris.Line({
+          element: 'line-data',
+          data: data,
+          xkey: 'date',
+          ykeys: ['count',],
+          labels: ['注册人数'],
+          xLabels:"week",
         });
     };
 
