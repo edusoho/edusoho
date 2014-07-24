@@ -49,6 +49,7 @@ define(function(require, exports, module) {
         });
         $('[name=startTime]').datetimepicker('setEndDate', now);
 
+
         var validator = new Validator({          
             element: '#operation-form'});
 
