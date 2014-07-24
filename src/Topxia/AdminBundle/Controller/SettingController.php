@@ -269,12 +269,15 @@ class SettingController extends BaseController
             'weibo_enabled'=>0,
             'weibo_key'=>'',
             'weibo_secret'=>'',
+            'weibo_set_fill_account'=>0,
             'qq_enabled'=>0,
             'qq_key'=>'',
             'qq_secret'=>'',
+            'qq_set_fill_account'=>0,
             'renren_enabled'=>0,
             'renren_key'=>'',
             'renren_secret'=>'',
+            'renren_set_fill_account'=>0,
             'verify_code' => '',
         );
 
