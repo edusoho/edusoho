@@ -7,7 +7,8 @@
     {% block sidebar %}
       <div class="list-group">
         <a href="{{ path('admin_setting_site') }}" class="list-group-item {% if menu == 'site' %}active{% endif %}">站点设置</a>
-        <a href="{{ path('admin_setting_auth') }}" class="list-group-item {% if menu == 'operation' %}active{% endif %}">全局设置</a>
+        <a href="{{ path('admin_setting_course_setting') }}" class="list-group-item {% if menu == 'operation' %}active{% endif %}">全局设置</a>
+          <a href="{{ path('admin_setting_auth') }}" class="list-group-item {% if menu == 'user_set' %}active{% endif %}">用户相关设置</a>
         <a href="{{ path('admin_setting_mobile') }}" class="list-group-item {% if menu == 'client' %}active{% endif %}">移动客户端设置</a>
         <a href="{{ url('admin_setting_ip_blacklist') }}" class="list-group-item {% if menu == 'ip_blacklist' %}active{% endif %}">IP黑名单</a>
 

@@ -15,6 +15,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
 	public function getFile($file)
 	{
+       $file['convertParams'] = $this->decodeMetas($file['convertParams']);
        $file['metas'] = $this->decodeMetas($file['metas']);
        $file['metas2'] = $this->decodeMetas($file['metas2']);
 	   // $file['path'] = $this->getCloudClient()->getFileUrl($file['hashId'],$file['targetId'],$file['targetType']);
@@ -39,12 +40,14 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['metas'] = $this->encodeMetas(empty($fileInfo['metas']) ? array() : $fileInfo['metas']);    
         $uploadFile['metas2'] = $this->encodeMetas(empty($fileInfo['metas2']) ? array() : $fileInfo['metas2']);    
 
-        if (empty($fileInfo['convertId']) or empty($fileInfo['convertKey'])) {
+        if (empty($fileInfo['convertHash'])) {
             $uploadFile['convertHash'] = "ch-{$uploadFile['hashId']}";
             $uploadFile['convertStatus'] = 'none';
+            $uploadFile['convertParams'] = '';
         } else {
-            $uploadFile['convertHash'] = "{$fileInfo['convertId']}:{$fileInfo['convertKey']}";
+            $uploadFile['convertHash'] = "{$fileInfo['convertHash']}";
             $uploadFile['convertStatus'] = 'waiting';
+            $uploadFile['convertParams'] = $fileInfo['convertParams'];
         }
 
         $uploadFile['type'] = FileToolkit::getFileTypeByMimeType($fileInfo['mimeType']);
@@ -55,6 +58,30 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['updatedTime'] = $uploadFile['createdTime'] = time();
 
         return $uploadFile; 
+    }
+
+    public function saveConvertResult($file, array $result = array())
+    {
+        if (empty($result['id'])) {
+            throw new \RuntimeException('数据中id不能为空');
+        }
+
+        if ($result['code'] != 0) {
+            $file['convertStatus'] = 'error';
+            goto return_result;
+        }
+
+        if (empty($file['convertParams']['convertor'])) {
+            $file['convertStatus'] = 'error';
+            goto return_result;
+        }
+
+        $convertor = $this->getConvertor($file['convertParams']['convertor']);
+
+        $file = $convertor->saveConvertResult($file, $result);
+
+        return_result:
+        return $file;
     }
 
     public function convertFile($file, $status, $result=null, $callback = null)
@@ -150,6 +177,77 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $this->getCloudClient()->deleteFiles($keys, $keyPrefixs);
     }
 
+    public function makeUploadParams($rawParams)
+    {
+        if (!empty($rawParams['convertor'])) {
+            $convertor = $this->getConvertor($rawParams['convertor']);
+
+            $rawUploadParams = array(
+                'convertor' => $rawParams['convertor'],
+                'convertCallback' => $rawParams['convertCallback'],
+                'convertParams' => $convertor->getCovertParams($rawParams),
+                'duration' => empty($rawParams['duration']) ? 18000 : $rawParams['duration'],
+                'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
+            );
+        } else {
+            $rawUploadParams = array(
+                'convertor' => null,
+                'convertCallback' => null,
+                'convertParams' => array(),
+                'duration' => empty($rawParams['duration']) ? 18000 : $rawParams['duration'],
+                'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
+            );
+        }
+
+        $tokenAndUrl = $this->getCloudClient()->makeUploadParams($rawUploadParams);
+
+        $key = null;
+        if (!empty($rawParams['key'])) {
+            $key = $rawParams['key'];
+        }
+
+        if (!empty($rawParams['targetType']) && !empty($rawParams['targetId'])) {
+            $keySuffix = date('Ymdhis') . '-' . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
+            $key = "{$rawParams['targetType']}-{$rawParams['targetId']}/{$keySuffix}";
+        }
+
+        if (empty($key)) {
+            throw $this->createServiceException("key error.");
+        }
+
+        $params = array();
+        $params['storage'] = 'cloud';
+        $params['url'] = $tokenAndUrl['url'];
+        $params['postParams'] = array();
+        $params['postParams']['token'] = $tokenAndUrl['token'];
+        $params['postParams']['key'] = $key;
+        // $params['postParams']['x:convertKey'] = md5($params['postParams']['key']);
+        $params['postParams']['x:convertParams'] = json_encode($rawUploadParams['convertParams']);
+
+        return $params;
+    }
+
+    public function reconvertFile($file, $convertCallback)
+    {
+        if (empty($file['convertParams'])) {
+            return null;
+        }
+
+        $params = array(
+            'convertCallback' => $convertCallback,
+            'convertor' => $file['convertParams']['convertor'],
+            'convertParams' => $file['convertParams'],
+        );
+
+        $result = $this->getCloudClient()->reconvertFile($file['hashId'], $params);
+
+        if (empty($result['persistentId'])) {
+            return null;
+        }
+
+        return $result['persistentId'];
+    }
+
     private function getFileFullName($file)
     {
         $diskDirectory= $this->getFilePath($file['targetType'],$file['targetId']);
@@ -190,4 +288,145 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $this->cloudClient;
     }
 
+    private function getConvertor($name)
+    {
+        $class = __NAMESPACE__ . '\\' .  ucfirst($name) . 'Convertor';
+        return new $class($this->getCloudClient(), $this->getKernel()->getParameter('cloud_convertor'));
+    }
+}
+
+class HLSVideoConvertor
+{
+    const NAME = 'HLSVideo';
+
+    protected $client;
+
+    protected $config = array();
+
+
+    public function __construct($client, $config)
+    {
+        $this->config = $config[self::NAME];
+    }
+
+    public function getCovertParams($params)
+    {
+        $videoQuality = empty($params['videoQuality']) ? 'low' : $params['videoQuality'];
+        $videoDefinitions = $this->config['video'][$videoQuality];
+
+        $audioQuality = empty($params['audioQuality']) ? 'low' : $params['audioQuality'];
+        $audioDefinitions = $this->config['audio'][$audioQuality];
+
+        return array(
+            'convertor' => self::NAME,
+            'segtime' => $this->config['segtime'],
+            'videoQuality' => $videoQuality,
+            'audioQuality' => $audioQuality,
+            'video' => $videoDefinitions,
+            'audio' => $audioDefinitions,
+        );
+
+    }
+
+    public function saveConvertResult($file, $result)
+    {
+        $items = (empty($result['items']) or !is_array($result['items'])) ? array() : $result['items'];
+
+        $types = array('sd', 'hd', 'shd');
+        $metas = array();
+        foreach (array_values($items) as $index => $item) {
+            $type = $types[$index];
+            $metas[$type] = array(
+                'type' => $type,
+                'cmd' => $item['cmd'],
+                'key' => $item['key'],
+            );
+        }
+
+        $file['metas2'] = empty($file['metas2']) ? array() : $file['metas2'];
+        $file['metas2'] = array_merge($file['metas2'], $metas);
+        $file['convertStatus'] = 'success';
+
+        return $file;
+    }
+}
+
+class AudioConvertor
+{
+    const NAME = 'audio';
+
+    protected $client;
+
+    protected $config = array();
+
+    public function __construct($client, $config)
+    {
+
+    }
+
+    public function saveConvertResult($file, $result)
+    {
+
+    }
+
+    public function getCovertParams($params)
+    {
+        return array(
+            'convertor' => self::NAME,
+            'shd' => 'mp3',
+        );
+    }
+}
+
+class PptConvertor
+{
+    const NAME = 'ppt';
+
+    protected $client;
+
+    protected $config = array();
+
+    public function __construct($client, $config)
+    {
+        $this->client = $client;
+        $this->config = $config[self::NAME];
+    }
+
+    public function getCovertParams($params)
+    {
+        $params = array('convertor' => self::NAME,);
+        return array_merge($params, $this->config);
+    }
+
+    public function saveConvertResult($file, $result)
+    {
+
+        if (!empty($result['nextConvertCallbackUrl'])) {
+            $items = (empty($result['items']) or !is_array($result['items'])) ? array() : $result['items'];
+
+            $types = array('pdf');
+            $metas = array();
+            foreach (array_values($items) as $index => $item) {
+                $type = $types[$index];
+                $metas[$type] = array(
+                    'type' => $type,
+                    'cmd' => $item['cmd'],
+                    'key' => $item['key'],
+                );
+            }
+
+            $result = $this->client->convertPPT($metas['pdf']['key'], $result['nextConvertCallbackUrl']);
+
+            $metas['length'] = empty($result['length']) ? 0 : $result['length'];
+            $metas['imagePrefix'] = empty($result['imagePrefix']) ? '' : $result['imagePrefix'];
+
+            $file['metas2'] = empty($file['metas2']) ? array() : $file['metas2'];
+            $file['metas2'] = array_merge($file['metas2'], $metas);
+            $file['convertStatus'] = 'doing';
+        } else {
+            $file['convertStatus'] = 'success';
+        }
+
+        return $file;
+    }
 }

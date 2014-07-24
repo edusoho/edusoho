@@ -16,6 +16,11 @@
         douban:{key:setting('login_bind.douban_key', '')},
         renren:{key:setting('login_bind.renren_key', '')}
       },
+      cloud: {
+        video_player: parameter('cloud.video_player'),
+        video_player_watermark_plugin: parameter('cloud.video_player_watermark_plugin'),
+        video_player_fingerprint_plugin: parameter('cloud.video_player_fingerprint_plugin')
+      },
       editor_upload_path: path('kindeditor_upload')
     }|json_encode|raw
   }};

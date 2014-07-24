@@ -67,6 +67,15 @@
 				    {% if item.materialNum > 0 %}
 				      <span class="glyphicon  glyphicon-download" title="资料"></span>
 				    {% endif %}
+
+				    {% if item.giveCredit > 0 %}
+				      <small class="text-muted">({{ item.giveCredit }}学分)</small>
+				    {% endif %}
+
+				    {% if item.requireCredit > 0 %}
+				      <small class="text-muted">(需{{ item.requireCredit }}学分)</small>
+				    {% endif %}
+
 		    	</a>
 		    	<button class="btn btn-success btn-mini action">开始学习</button>
 		    </li>

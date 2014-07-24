@@ -35,7 +35,7 @@ class LatestFinishedLearnsDataTag extends BaseDataTag implements DataTag
                 $learns[$key]['user'] = $users[$learn['userId']];
             }
 
-            if ($learn['lessonId'] == $lessons[$learn['lessonId']]['id']) {
+            if (!empty($lessons[$learn['lessonId']]['id']) && $learn['lessonId'] == $lessons[$learn['lessonId']]['id']) {
 
                 $learns[$key]['lesson'] = $lessons[$learn['lessonId']];
             }

@@ -10,6 +10,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\PluginUtil;
+use Topxia\Service\Util\CloudClientFactory;
 
 class SettingController extends BaseController
 {
@@ -211,12 +212,14 @@ class SettingController extends BaseController
             'welcome_title' => '',
             'welcome_body' => '',
             'user_terms' => 'closed',
-            'user_terms_body' => ''
+            'user_terms_body' => '',
+            'registerSortType'=>array(),
         );
 
         $auth = array_merge($default, $auth);
         if ($request->getMethod() == 'POST') {
             $auth = $request->request->all();
+       
             if (empty($auth['welcome_methods'])) {
                 $auth['welcome_methods'] = array();
             }
@@ -381,6 +384,8 @@ class SettingController extends BaseController
             'cloud_secret_key' => '',
             'cloud_bucket' => '',
             'cloud_api_server' => '',
+            'video_quality' => 'low',
+            'video_audio_quality' => 'low',
             'video_watermark' => 0,
             'video_watermark_image' => '',
             'video_watermark_position' => 'topright',
@@ -391,6 +396,19 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $storageSetting = $request->request->all();
             $this->getSettingService()->set('storage', $storageSetting);
+
+            if (!empty($storageSetting['cloud_access_key']) or !empty($storageSetting['cloud_secret_key'])) {
+                if (!empty($storageSetting['cloud_access_key']) and !empty($storageSetting['cloud_secret_key'])) {
+                    $factory = new CloudClientFactory();
+                    $client = $factory->createClient($storageSetting);
+                    $keyCheckResult = $client->checkKey();
+                } else {
+                    $keyCheckResult = array('error' => 'error');
+                }
+            } else {
+                $keyCheckResult = array('status' => 'ok');
+            }
+
             $cop = $this->getAppService()->checkAppCop();
             if ($cop && isset($cop['cop']) && ($cop['cop'] == 1)) {
                 $this->getSettingService()->set('_app_cop', 1);
@@ -399,11 +417,15 @@ class SettingController extends BaseController
             }
             PluginUtil::refresh();
             $this->getLogService()->info('system', 'update_settings', "更新云平台设置", $storageSetting);
-            $this->setFlashMessage('success', '云平台设置已保存！');
+            if (!empty($keyCheckResult['status']) && $keyCheckResult['status'] == 'ok') {
+                $this->setFlashMessage('success', '云平台设置已保存！');
+            } else {
+                $this->setFlashMessage('danger', 'AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，请修改设置。');
+            }
         }
 
         return $this->render('TopxiaAdminBundle:System:storage.html.twig', array(
-            'storageSetting'=>$storageSetting
+            'storageSetting'=>$storageSetting,
         ));
     }
 
@@ -538,7 +560,9 @@ class SettingController extends BaseController
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
+            'teacher_add_student' => '0',
             'student_download_media' => '0',
+            'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
             'live_course_enabled' => '0',
         );
@@ -626,6 +650,100 @@ class SettingController extends BaseController
         ));
     }
 
+    public function userFieldsAction()
+    {   
+
+       $textCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'textField'));
+       $intCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'intField'));
+       $floatCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'floatField'));
+       $dateCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'dateField'));
+       $varcharCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'varcharField'));
+
+       $fields=$this->getUserFieldService()->getAllFieldsOrderBySeq();
+       for($i=0;$i<count($fields);$i++){
+           if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['fieldName']="多行文本";
+           if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['fieldName']="文本";
+           if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['fieldName']="整数";
+           if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['fieldName']="小数";
+           if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['fieldName']="日期";
+       }
+
+       return $this->render('TopxiaAdminBundle:System:user-fields.html.twig',array(
+            'textCount'=>$textCount,
+            'intCount'=>$intCount,
+            'floatCount'=>$floatCount,
+            'dateCount'=>$dateCount,
+            'varcharCount'=>$varcharCount,
+            'fields'=>$fields,
+        )); 
+    }
+
+    public function editUserFieldsAction(Request $request, $id)
+    {
+        $field = $this->getUserFieldService()->getField($id);
+
+        if (empty($field)) {
+            throw $this->createNotFoundException();
+        }
+
+        if(strstr($field['fieldName'], "textField")) $field['fieldName']="多行文本";
+        if(strstr($field['fieldName'], "varcharField")) $field['fieldName']="文本";
+        if(strstr($field['fieldName'], "intField")) $field['fieldName']="整数";
+        if(strstr($field['fieldName'], "floatField")) $field['fieldName']="小数";
+        if(strstr($field['fieldName'], "dateField")) $field['fieldName']="日期";
+
+        if ($request->getMethod() == 'POST') {
+            $fields=$request->request->all();
+
+            if(isset($fields['enabled'])){
+                $fields['enabled']=1;
+            }else{
+                $fields['enabled']=0;
+            }
+            
+            $field = $this->getUserFieldService()->updateField($id, $fields);
+            
+            return $this->redirect($this->generateUrl('admin_setting_user_fields'));
+        }
+
+        return $this->render('TopxiaAdminBundle:System:user-fields.modal.edit.html.twig', array(
+            'field' => $field,
+        ));
+    }
+
+    public function deleteUserFieldsAction(Request $request, $id)
+    {
+        $field = $this->getUserFieldService()->getField($id);
+
+        if (empty($field)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($request->getMethod() == 'POST') {
+
+            $this->getUserFieldService()->dropField($id);
+
+            return $this->redirect($this->generateUrl('admin_setting_user_fields'));
+        }
+
+        return $this->render('TopxiaAdminBundle:System:user-fields.modal.delete.html.twig', array(
+            'field' => $field,
+        ));
+    }
+
+    public function addUserFieldsAction(Request $request)
+    {
+        $field=$request->request->all();
+
+        $field=$this->getUserFieldService()->addUserField($field);
+
+        if($field==false){
+           $this->setFlashMessage('danger', '已经没有可以添加的字段了!'); 
+        }
+
+        return $this->redirect($this->generateUrl('admin_setting_user_fields')); 
+    }
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
@@ -634,6 +752,11 @@ class SettingController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
     }
 
     protected function getAuthService()

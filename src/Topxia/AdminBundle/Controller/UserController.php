@@ -122,9 +122,20 @@ class UserController extends BaseController
         $user = $this->getUserService()->getUser($id);
         $profile = $this->getUserService()->getUserProfile($id);
         $profile['title'] = $user['title'];
+
+        $fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        for($i=0;$i<count($fields);$i++){
+           if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['type']="text";
+           if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['type']="varchar";
+           if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['type']="int";
+           if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['type']="float";
+           if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
+        }
+        
         return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
             'user' => $user,
             'profile' => $profile,
+            'fields'=>$fields,
         ));
     }
 
@@ -381,4 +392,8 @@ class UserController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
 }

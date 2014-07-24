@@ -1,4 +1,4 @@
-{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:System:user_set.layout.html.twig' %}
 
 {% block title %}注册设置 - {{ parent() }}{% endblock %}
 
@@ -53,7 +53,115 @@
       </div>
     </div>
   </fieldset>
-
+  <fieldset>
+    <legend>注册信息字段设置</legend>
+      <div class="row">
+        <div class="col-md-3 control-label">
+          <label for="email_activation_body">注册时需提供</label>
+        </div>
+        <div  class="controls col-md-8">
+            <div class="form-group"><ul class="register-list sortable-list" data-role="list">
+            {% if auth.registerSortType %}
+            {% for sort in auth.registerSortType %}
+               {% if sort=='email' %}
+                <li class="list-group-item clearfix" data-role="item" >
+                <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerSortType[]" value="email"></input> 邮箱地址
+                </li>
+               {% endif %}
+               {% if sort=='nickname' %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                  &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerSortType[]" value="nickname"></input> 昵称
+                </li>
+               {% endif %}
+               {% if sort=='password' %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                  &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerSortType[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerSortType[]" value="confirmPassword"></input> 密码
+                </li>
+               {% endif %}
+               {% if sort=='truename' %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="truename"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="truename"></input><input type="hidden"  name="registerSortType[]" value="truename"></input> 姓名
+                </li>
+               {% endif %}
+               {% if sort=='mobile' %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="mobile"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="mobile"></input><input type="hidden"  name="registerSortType[]" value="mobile"></input> 手机号码(带格式校检)
+                </li>
+               {% endif %}
+               {% if sort=='idcard' %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="idcard"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="idcard"></input><input type="hidden"  name="registerSortType[]" value="idcard"></input> 身份证号码(带格式校检)
+                </li>
+               {% endif %}
+               {% if sort=='gender' %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="gender"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="gender"></input><input type="hidden"  name="registerSortType[]" value="gender"></input> 性别
+                </li>
+               {% endif %}
+               {% if sort=='job' %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="job"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="job"></input><input type="hidden"  name="registerSortType[]" value="job"></input> 职业
+                </li>
+               {% endif %}
+               {% if sort=='company' %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                  &nbsp;<input type="checkbox"  {% for sort in auth.registerSort %}{% if sort=="company"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="company"></input><input type="hidden"  name="registerSortType[]" value="company"></input> 公司
+                </li>
+               {% endif %}
+            {% endfor %}
+            {% else %}
+            <li class="list-group-item clearfix" data-role="item" >
+              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerSortType[]" value="email"></input> 邮箱地址
+            </li>
+            <li class="list-group-item clearfix" data-role="item" >
+              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerSortType[]" value="nickname"></input> 昵称
+            </li>
+            <li class="list-group-item clearfix" data-role="item" >
+              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerSortType[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerSortType[]" value="confirmPassword"></input> 密码
+            </li>
+            <li class="list-group-item clearfix" data-role="item" >
+              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+              &nbsp;<input type="checkbox" name="registerSort[]" value="truename"></input><input type="hidden"  name="registerSortType[]" value="truename"></input> 姓名
+            </li>
+            <li class="list-group-item clearfix" data-role="item" >
+              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+              &nbsp;<input type="checkbox" name="registerSort[]" value="mobile"></input><input type="hidden"  name="registerSortType[]" value="mobile"></input> 手机号码(带格式校检)
+            </li>
+            <li class="list-group-item clearfix" data-role="item" >
+              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+              &nbsp;<input type="checkbox" name="registerSort[]" value="idcard"></input><input type="hidden"  name="registerSortType[]" value="idcard"></input> 身份证号码(带格式校检)
+            </li>
+            <li class="list-group-item clearfix" data-role="item" >
+              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+              &nbsp;<input type="checkbox" name="registerSort[]" value="gender"></input><input type="hidden"  name="registerSortType[]" value="gender"></input> 性别
+            </li>
+            <li class="list-group-item clearfix" data-role="item" >
+              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+              &nbsp;<input type="checkbox" name="registerSort[]" value="job"></input><input type="hidden"  name="registerSortType[]" value="job"></input> 职业
+            </li>
+            <li class="list-group-item clearfix" data-role="item" >
+              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+              &nbsp;<input type="checkbox" name="registerSort[]" value="company"></input><input type="hidden"  name="registerSortType[]" value="company"></input> 公司
+            </li>
+            {% endif %}
+            </ul>
+            <span class="help-block pull-right">可拖动调整先后次序.勾选后，在注册时就必须要填写该项目，将会增加注册难度，请谨慎使用</span>
+          </div>
+        </div>
+    </div>
+  </fieldset>
   <fieldset>
     <legend>欢迎信息设置</legend>
 

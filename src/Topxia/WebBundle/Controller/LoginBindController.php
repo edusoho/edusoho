@@ -16,6 +16,7 @@ class LoginBindController extends BaseController
         $client = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $url = $client->getAuthorizeUrl($callbackUrl);
+
         return $this->redirect($url);
     }
 
@@ -49,7 +50,21 @@ class LoginBindController extends BaseController
     {
         $token = $request->getSession()->get('oauth_token');
         $client = $this->createOAuthClient($type);
-        $oauthUser = $client->getUserInfo($token);
+
+        try {
+            $oauthUser = $client->getUserInfo($token);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $clientInfo = $client->getClientInfo();
+            if ($message == 'unaudited') {
+                $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$clientInfo['name'].'登录连接的审核还未通过。';
+            } else {
+                $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$message;
+            }
+            $this->setFlashMessage('danger', $message);
+            return $this->redirect($this->generateUrl('login'));
+        }
+
         return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
             'oauthUser' => $oauthUser,
             'client' => $client,

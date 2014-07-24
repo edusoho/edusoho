@@ -161,7 +161,7 @@ function install_step3()
 		$init->initLockFile();
         $init->initRefundSetting();
 		$init->initArticleSetting();
-
+		
 		header("Location: start-install.php?step=4");
 		exit();
 	}
@@ -169,6 +169,8 @@ function install_step3()
 	echo $twig->render('step-3.html.twig', array(
 		'step' => 3,
 		'error' => $error,
+		'server_addr'=> $_SERVER['SERVER_ADDR'],
+		'server_name'=>$_SERVER['SERVER_NAME'],
 		'request' => $_POST,
 	));
 }

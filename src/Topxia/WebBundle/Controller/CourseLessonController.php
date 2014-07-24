@@ -121,6 +121,8 @@ class CourseLessonController extends BaseController
             $json['mediaUri'] = $lesson['mediaUri'];
         }
 
+        $json['canLearn'] = $this->getCourseService()->canLearnLesson($lesson['courseId'], $lesson['id']);
+
     	return $this->createJsonResponse($json);
     }
 

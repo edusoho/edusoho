@@ -83,7 +83,7 @@
                   <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
                   <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 帐号设置</a></li>
                   <li class="divider"></li>
-                  {% if is_granted('ROLE_ADMIN') %}
+                  {% if is_granted('ROLE_BACKEND') %}
                     <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> 管理后台</a></li>
                     <li class="divider"></li>
                   {% endif %}

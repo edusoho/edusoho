@@ -35,7 +35,7 @@ class CourseController extends BaseController
             'status' => 'published',
             'type' => 'normal',
             'categoryId' => $category['id'],
-            'recommended' => ($sort == 'recommendedSeq') ? 1 : null
+            'recommended' => ($sort == 'recommendedSeq') ? 1 : null,
         );
 
         $paginator = new Paginator(
@@ -56,7 +56,7 @@ class CourseController extends BaseController
         } else {
             $categories = $this->getCategoryService()->getCategoryTree($group['id']);
         }
-     
+        
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses' => $courses,
             'category' => $category,
@@ -243,6 +243,8 @@ class CourseController extends BaseController
             return $this->createMessageResponse('info', '抱歉，课程已关闭或未发布，不能参加学习，如有疑问请联系管理员！');
         }
         
+        $this->getCourseService()->hitCourse($id);
+        
         $member = $this->previewAsMember($previewAs, $member, $course);
         if ($member && empty($member['locked'])) {
             $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
@@ -256,7 +258,7 @@ class CourseController extends BaseController
                 'weeks' => $weeks
             ));
         }
-
+        
         $groupedItems = $this->groupCourseItems($items);
         $hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
 
@@ -292,8 +294,7 @@ class CourseController extends BaseController
     {
         return ($course['status'] == 'published') or 
             $user->isAdmin() or 
-            $this->getCourseService()->isCourseTeacher($course['id'],$user['id']) or
-            $this->getCourseService()->isCourseStudent($course['id'],$user['id']);
+            $this->getCourseService()->isCourseTeacher($course['id'],$user['id']) ;
     }
 
     private function previewAsMember($as, $member, $course)
@@ -406,6 +407,10 @@ class CourseController extends BaseController
                 $capacity = array();
             }
 
+            if (empty($courseSetting['live_course_enabled'])) {
+                return $this->createMessageResponse('info', '请前往后台开启直播,尝试创建！');
+            }
+
             if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
                 return $this->createMessageResponse('info', '请联系EduSoho官方购买直播教室，然后才能开启直播功能！');
             }
@@ -467,12 +472,18 @@ class CourseController extends BaseController
         }
 
         $course = $this->getCourseService()->getCourse($id);
+
+
         if (empty($course)) {
             throw $this->createNotFoundException("课程不存在，或已删除。");
         }
 
         if (!$this->getCourseService()->canTakeCourse($id)) {
             return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+        }
+        
+        if (!empty($course['status']) && $course['status'] == 'closed') {
+            return $this->createMessageResponse('info',"课程《{$course['title']}》已关闭。");
         }
 
         try{

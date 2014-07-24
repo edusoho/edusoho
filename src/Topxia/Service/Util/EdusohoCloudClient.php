@@ -2,6 +2,7 @@
 
 namespace Topxia\Service\Util;
 
+use Topxia\Common\ArrayToolkit;
 use \RuntimeException;
 
 
@@ -44,6 +45,17 @@ class EdusohoCloudClient implements CloudClient
         $this->videoCommands = $options['videoCommands'];
         $this->audioCommands = $options['audioCommands'];
         $this->pptCommands = $options['pptCommands'];
+    }
+
+    public function makeUploadParams($params)
+    {
+        $params = ArrayToolkit::parts($params, array(
+            'convertor', 'convertCallback', 'convertParams', 'duration', 'user',
+        ));
+
+        $params = $this->callRemoteApiWithBase64('GET', 'MakeUploadToken', $params);
+
+        return $params;
     }
 
 	public function generateUploadToken($bucket, array $params = array())
@@ -232,7 +244,7 @@ class EdusohoCloudClient implements CloudClient
         return $this->callRemoteApi('POST', 'FileDelete', $args);
     }
 
-    private function callRemoteApi($httpMethod, $action, array $args)
+    protected function callRemoteApi($httpMethod, $action, array $args)
     {
         $url = $this->makeApiUrl($action);
 
@@ -244,6 +256,28 @@ class EdusohoCloudClient implements CloudClient
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
 
         return json_decode($result, true);
+    }
+
+    protected function callRemoteApiWithBase64($httpMethod, $action, array $args)
+    {
+        $url = $this->makeApiUrl($action);
+
+        $httpParams = array();
+        $httpParams['accessKey'] = $this->accessKey;
+        $httpParams['args'] = $this->urlsafeBase64Encode(json_encode($args));
+        $httpParams['encode'] = 'base64';
+        $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
+
+        $result = $this->sendRequest($httpMethod, $url, $httpParams);
+
+        return json_decode($result, true);
+    }
+
+    protected function urlsafeBase64Encode($string)
+    {
+        $find = array('+', '/');
+        $replace = array('-', '_');
+        return str_replace($find, $replace, base64_encode($string));
     }
 
     public function getFileUrl($key,$targetId,$targetType){
@@ -275,6 +309,19 @@ class EdusohoCloudClient implements CloudClient
         $content = $this->getRequest($this->getConvertUrl(), array('token' => $token));
 
         return json_decode($content, true);
+    }
+
+    public function reconvertFile($key, $params)
+    {
+        $params['key'] = $key;
+        return $this->callRemoteApiWithBase64('POST', 'FileReconvert', $params);
+    }
+
+    public function checkKey()
+    {
+        $args = array();
+        $args['_t'] = time();
+        return $this->callRemoteApiWithBase64('GET', 'CheckKey', $args);
     }
 
     public function convertPPT($key, $notifyUrl = null)

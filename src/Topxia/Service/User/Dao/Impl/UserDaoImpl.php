@@ -66,7 +66,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             $conditions['role'] = "|{$conditions['role']}|";
         }
 
-        if(isset($conditions['keywordType'])) {
+        if(isset($conditions['keywordType']) && isset($conditions['keyword'])) {
             $conditions[$conditions['keywordType']]=$conditions['keyword'];
             unset($conditions['keywordType']);
             unset($conditions['keyword']);

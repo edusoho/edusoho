@@ -170,6 +170,10 @@ define(function(require, exports, module) {
             var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
+
+                $titleArray = document.title.split(' - ');
+                document.title = lesson.title + ' - ' + $titleArray[1] + ' - ' + $titleArray[2] + ' - ' +$titleArray[3]
+
                 that.element.find('[data-role=lesson-number]').html(lesson.number);
                 if (parseInt(lesson.chapterNumber) > 0) {
                     that.element.find('[data-role=chapter-number]').html(lesson.chapterNumber).parent().show().next().show();
@@ -186,6 +190,13 @@ define(function(require, exports, module) {
                     $("#lesson-unpublished-content").show();
                     return;
                 }
+
+                if (lesson.canLearn.status != 'yes') {
+                    $("#lesson-alert-content .lesson-content-text-body").html(lesson.canLearn.message);
+                    $("#lesson-alert-content").show();
+                    return;
+                }
+
                 if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
 
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
@@ -396,7 +407,15 @@ define(function(require, exports, module) {
                 if (lesson.type == 'testpaper') {
                     that.element.find('[data-role=finish-lesson]').hide();
                 } else {
-                    that.element.find('[data-role=finish-lesson]').show();
+                    if (!that.element.data('hideMediaLessonLearnBtn')) {
+                        that.element.find('[data-role=finish-lesson]').show();
+                    } else {
+                        if (lesson.type == 'video' || lesson.type == 'audio') {
+                            that.element.find('[data-role=finish-lesson]').hide();
+                        } else {
+                            that.element.find('[data-role=finish-lesson]').show();
+                        }
+                    }
                 }
 
                 that._toolbar.set('lesson', lesson);

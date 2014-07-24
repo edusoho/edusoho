@@ -26,6 +26,8 @@ abstract class Response
 
         $curl = curl_init();
 
+        curl_setopt($curl, CURLOPT_CAINFO, __DIR__ . '/cacert.pem');
+
         curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
 
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);

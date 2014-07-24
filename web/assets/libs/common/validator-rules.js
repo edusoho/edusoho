@@ -62,7 +62,7 @@ define(function(require, exports, module) {
             'currency',
             /^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/i,
             '请输入合法的{{display}},如:200, 221.99, 0.99, 0等'
-        ],        
+        ],      
         [
             'byte_maxlength',
             function(options) {
@@ -76,58 +76,45 @@ define(function(require, exports, module) {
         'idcard',
         function(options){
         var idcard = options.element.val();
-            var reg = /^\d{15}(\d{2}[0-9X])?$/i;
+            var reg = /^\d{17}[0-9xX]$/i;
             if (!reg.test(idcard)) {
                 return false;
             }
-            if (idcard.length == 15) {
-                var n = new Date();
-                var y = n.getFullYear();
-                if (parseInt("19" + idcard.substr(6, 2)) < 1900 || parseInt("19" + idcard.substr(6, 2)) > y) {
-                    return false;
-                }
-                var birth = "19" + idcard.substr(6, 2) + "-" + idcard.substr(8, 2) + "-" + idcard.substr(10, 2);
-                if (!isDate(birth)) {
-                    return false;
-                }
+            var n = new Date();
+            var y = n.getFullYear();
+            if (parseInt(idcard.substr(6, 4)) < 1900 || parseInt(idcard.substr(6, 4)) > y) {
+                return false;
             }
-            if (idcard.length == 18) {
-                var n = new Date();
-                var y = n.getFullYear();
-                if (parseInt(idcard.substr(6, 4)) < 1900 || parseInt(idcard.substr(6, 4)) > y) {
-                    return false;
-                }
-                var birth = idcard.substr(6, 4) + "-" + idcard.substr(10, 2) + "-" + idcard.substr(12, 2);
-                if (!isDate(birth)) {
-                    return false;
-                }
-                iW = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1);
-                iSum = 0;
-                for (i = 0; i < 17; i++) {
-                    iC = idcard.charAt(i);
-                    iVal = parseInt(iC);
-                    iSum += iVal * iW[i];
-                }
-                iJYM = iSum % 11;
-                if (iJYM == 0) sJYM = "1";
-                else if (iJYM == 1) sJYM = "0";
-                else if (iJYM == 2) sJYM = "x";
-                else if (iJYM == 3) sJYM = "9";
-                else if (iJYM == 4) sJYM = "8";
-                else if (iJYM == 5) sJYM = "7";
-                else if (iJYM == 6) sJYM = "6";
-                else if (iJYM == 7) sJYM = "5";
-                else if (iJYM == 8) sJYM = "4";
-                else if (iJYM == 9) sJYM = "3";
-                else if (iJYM == 10) sJYM = "2";
-                var cCheck = idcard.charAt(17).toLowerCase();
-                if (cCheck != sJYM) {
-                    return false;
-                }
+            var birth = idcard.substr(6, 4) + "-" + idcard.substr(10, 2) + "-" + idcard.substr(12, 2);
+            if (!isDate(birth)) {
+                return false;
+            }
+            iW = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1);
+            iSum = 0;
+            for (i = 0; i < 17; i++) {
+                iC = idcard.charAt(i);
+                iVal = parseInt(iC);
+                iSum += iVal * iW[i];
+            }
+            iJYM = iSum % 11;
+            if (iJYM == 0) sJYM = "1";
+            else if (iJYM == 1) sJYM = "0";
+            else if (iJYM == 2) sJYM = "x";
+            else if (iJYM == 3) sJYM = "9";
+            else if (iJYM == 4) sJYM = "8";
+            else if (iJYM == 5) sJYM = "7";
+            else if (iJYM == 6) sJYM = "6";
+            else if (iJYM == 7) sJYM = "5";
+            else if (iJYM == 8) sJYM = "4";
+            else if (iJYM == 9) sJYM = "3";
+            else if (iJYM == 10) sJYM = "2";
+            var cCheck = idcard.charAt(17).toLowerCase();
+            if (cCheck != sJYM) {
+                return false;
             }
             return true;
         },
-        '{{display}}格式不正确，为15位或18位'
+        '{{display}}格式不正确'
         ],
         [
             'password',
@@ -140,6 +127,11 @@ define(function(require, exports, module) {
             '秒数只能在0-59之间'
         ],
         [
+            'date',
+            /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/,
+            '请输入正确的日期',
+        ],
+        [
             'qq',
             /^[1-9]\d{4,}$/,
             '{{display}}格式不正确'
@@ -149,6 +141,16 @@ define(function(require, exports, module) {
             /^[+-]?\d+$/,
             '{{display}}必须为整数'
         ],
+        [
+            'float',
+            /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i,
+            '请输入正确的小数,只保留到两位小数'
+        ],  
+        [
+            'int',
+            /^[+-]?\d{1,9}$/,
+            '{{display}}必须为整数,最大到9位整数'
+        ], 
         [
             'positive_integer',
             /^[0-9]*[1-9][0-9]*$/,

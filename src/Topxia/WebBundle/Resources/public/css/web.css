@@ -19,6 +19,10 @@ a.link-muted {
 	overflow-y: auto;
 }
 
+.modal-title {
+	word-break:break-all;
+}
+
 .modal-header .close {
 	padding: 5px;
 }
@@ -428,6 +432,7 @@ body {
 	line-height: 1.2;
 	font-size: 18px;
 	font-weight: bold;
+	word-break:break-all;
 }
 
 @media (max-width: 767px) {
@@ -567,8 +572,41 @@ body {
 	margin-bottom: 20px;
 }
 
+#course-nav-tabs.affix {
+  position: static;
+}
 
+@media (min-width: 768px) {
+  #course-nav-tabs.affix {
+    z-index: 1030;
+    position: fixed;
+    margin-left: -1px;
+    top: 0px;
+    width: 669px;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 3px 3px rgba(0,0,0,.1);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+}
+@media (min-width: 992px) {
+  #course-nav-tabs.affix {
+    width: 915px;
+  }
+}
 
+@media (min-width: 1200px) {
+  #course-nav-tabs.affix {
+    width: 1088px;
+  }
+}
+
+.course-dashboard-page .course-infos img {
+	width: 100%;
+}
 
 #course-about-pane img {
 	max-width: 100%;
@@ -1635,7 +1673,7 @@ body {
 
 .lesson-dashboard .dashboard-header {
 	position: absolute;
-	left: 150px;
+	left: 130px;
 	top: 0;
 	height: 40px;
 }
@@ -1656,7 +1694,7 @@ body {
 
 .lesson-dashboard .dashboard-body {
 	position: absolute;
-	top: 40px;
+	top: 50px;
 	bottom: 50px;
 	width: 100%;
 	/*background: #1d1f21;*/
@@ -1680,6 +1718,9 @@ body {
 
 .lesson-dashboard .title-group {
 	line-height: 40px;
+	height:50px;
+	word-break:break-all;
+	overflow:hidden;
 }
 
 .lesson-dashboard .title-group .divider {
@@ -2551,6 +2592,10 @@ body {
 	font-size: 24px;
 }
 
+.es-row-wrap h1 {
+	word-break:break-all;
+}
+
 .es-box {
 	margin-bottom: 20px;
 }
@@ -2839,6 +2884,7 @@ body {
 
 .course-wide-list .course-title {
 	margin: 10px 0 10px;
+	word-break:break-all;
 }
 
 .course-wide-list .course-title a {
@@ -3829,6 +3875,11 @@ body {
 	display: inline-block;
 	margin: 0 5px 5px 0;
 }
+.testpaper-card .panel-body {
+	height: auto;
+	max-height: 560px;
+	overflow: auto;
+}
 
 .testpaper-card-explain .btn-index {
 	width: 12px;
@@ -4005,4 +4056,22 @@ body {
 .slide-notice .header {
 	padding: 15px;
 	min-height: 16.42857143px;
+}
+
+.quality-switcher {
+
+}
+
+.quality-switcher-control {
+	margin: 10px 0 10px 20px;
+	display: none;
+}
+
+.quality-switcher-control-open {
+	display: block;
+}
+
+.quality-switcher .quality-actions {
+	margin-top: 10px;
+
 }

@@ -85,6 +85,28 @@
     </td>
   </tr>
  
+   <tr>
+    <th>身份证号</th>
+    <td>
+      {% if profile.idcard %}
+        {{ profile.idcard }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>手机号码</th>
+    <td>
+      {% if profile.mobile %}
+        {{ profile.mobile }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr>
+
   <tr>
     <th>学校</th>
     <td>
@@ -206,8 +228,29 @@
       {% endif %}
     </td>
   </tr>
-</table>
 
+</table>
+<hr>
+<table class="table table-striped table-condenseda table-bordered">
+    {% if fields %}
+  {% for field in fields %}
+    <tr>
+        <th width="25%">{{field.title}}</th>
+        <td>
+          {% if profile[field.fieldName] %}
+            {% if field.type=="date"%}
+            {{ profile[field.fieldName]|date("Y-m-d") }}
+            {% else %}
+            {{ profile[field.fieldName] }}
+            {% endif %}
+          {% else %}
+            暂无
+          {% endif %}
+        </td>
+    </tr>
+  {% endfor %}
+  {% endif %}
+  </table>
 {% endblock %}
 
 {% block footer %}

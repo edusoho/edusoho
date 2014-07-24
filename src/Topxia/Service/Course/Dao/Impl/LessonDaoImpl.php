@@ -129,6 +129,22 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
+    public function sumLessonGiveCreditByCourseId($courseId)
+    {
+        $sql = "SELECT SUM(giveCredit) FROM {$this->table} WHERE  courseId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($courseId)) ? : 0;
+    }
+
+    public function sumLessonGiveCreditByLessonIds(array $lessonIds)
+    {
+        if(empty($lessonIds)){ 
+            return 0; 
+        }
+        $marks = str_repeat('?,', count($lessonIds) - 1) . '?';
+        $sql ="SELECT SUM(giveCredit) FROM {$this->table} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchColumn($sql, $lessonIds);
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
 

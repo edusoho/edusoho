@@ -17,11 +17,13 @@ class RegisterController extends BaseController
         $form = $this->createForm(new RegisterType());
         
         if ($request->getMethod() == 'POST') {
-            
+    
             $registration = $request->request->all();
+   
             $registration['createdIp'] = $request->getClientIp();
 
             $user = $this->getAuthService()->register($registration);
+
             $this->authenticateUser($user);
             $this->sendRegisterMessage($user);
 
@@ -36,9 +38,15 @@ class RegisterController extends BaseController
             return $this->redirect($goto);
             
         }
+
+        $auth=$this->getSettingService()->get('auth');
+
+        if(!isset($auth['registerSort']))$auth['registerSort']="";
+        
         $loginEnable  = $this->isLoginEnabled();
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
-            'isLoginEnabled' => $loginEnable
+            'isLoginEnabled' => $loginEnable,
+            'registerSort'=>$auth['registerSort'],
         ));
     }
 

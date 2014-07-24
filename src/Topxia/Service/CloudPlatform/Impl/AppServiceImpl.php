@@ -57,9 +57,28 @@ class AppServiceImpl extends BaseService implements AppService
             $args[$app['code']] = $app['version'];
         }
 
-        $extInfos = array(
-            'userCount' => $this->getUserService()->searchUserCount(array()),
-        );
+        $lastCheck = intval($this->getSettingService()->get('_app_last_check'));
+        if (empty($lastCheck) or ((time() - $lastCheck) > 86400) ) {
+            $coursePublishedCount = $this->getCourseService()->searchCourseCount(array('status'=>'published'));
+            $courseUnpublishedCount = $this->getCourseService()->searchCourseCount(array('status'=>'draft'));
+
+            $extInfos = array(
+                'host' => $_SERVER['HTTP_HOST'],
+                'userCount' => (string) $this->getUserService()->searchUserCount(array()),
+                'coursePublishedCount' => (string) $coursePublishedCount,
+                'courseUnpublishedCount' => (string) $courseUnpublishedCount,
+                'courseCount' => (string) ($coursePublishedCount + $courseUnpublishedCount),
+                'moneyCourseCount' => (string) $this->getCourseService()->searchCourseCount(array('status' => 'published', 'notFree' => true)),
+                'lessonCount' => (string) $this->getCourseService()->searchLessonCount(array()),
+                'courseMemberCount' => (string) $this->getCourseService()->searchMemberCount(array('role' => 'student')),
+                'mobileLoginCount' => (string) $this->getUserService()->searchTokenCount(array('type'=>'mobile_login')),
+                'teacherCount' => (string) $this->getUserService()->searchUserCount(array('roles'=>'ROLE_TEACHER')),
+            );
+
+            $this->getSettingService()->set('_app_last_check', time());
+        } else {
+            $extInfos = array('_t' => (string)time());
+        }
 
         return $this->createAppClient()->checkUpgradePackages($args, $extInfos);
     }
@@ -642,6 +661,11 @@ class AppServiceImpl extends BaseService implements AppService
     protected function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course.CourseService');
     }
 
 }
