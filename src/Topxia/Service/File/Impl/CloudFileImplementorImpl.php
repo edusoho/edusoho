@@ -303,7 +303,6 @@ class HLSVideoConvertor
 
     protected $config = array();
 
-
     public function __construct($client, $config)
     {
         $this->config = $config[self::NAME];
@@ -325,7 +324,6 @@ class HLSVideoConvertor
             'video' => $videoDefinitions,
             'audio' => $audioDefinitions,
         );
-
     }
 
     public function saveConvertResult($file, $result)
@@ -348,6 +346,17 @@ class HLSVideoConvertor
         $file['convertStatus'] = 'success';
 
         return $file;
+    }
+}
+
+class HLSEncryptedVideoConvertor extends HLSVideoConvertor
+{
+    public function getCovertParams($params)
+    {
+        $params = parent::getCovertParams($params);
+        $params['convertor'] = 'HLSEncryptedVideo';
+
+        return $params;
     }
 }
 

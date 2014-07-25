@@ -13,7 +13,8 @@ define(function(require, exports, module) {
 	exports.run = function() {
 		var $container = $("#file-uploader-container"),
 			targetType = $container.data('targetType'),
-			uploadMode = $container.data('uploadMode');
+			uploadMode = $container.data('uploadMode'),
+			hlsEncrypted = $container.data('hlsEncrypted');
 
 
 		var switcher = null;
@@ -98,7 +99,11 @@ define(function(require, exports, module) {
 							if (switcher) {
 								data.videoQuality = switcher.get('videoQuality');
 								data.audioQuality = switcher.get('audioQuality');
-								data.convertor = 'HLSVideo';
+								if (hlsEncrypted) {
+									data.convertor = 'HLSEncryptedVideo';
+								} else {
+									data.convertor = 'HLSVideo';
+								}
 							}
 						}
 					}
