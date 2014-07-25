@@ -197,6 +197,11 @@ define(function(require, exports, module) {
                     return;
                 }
 
+                if (lesson.mediaError) {
+                    Notify.danger(lesson.mediaError);
+                    return ;
+                }
+
                 if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
 
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
