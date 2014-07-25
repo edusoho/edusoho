@@ -43,6 +43,8 @@ define(function(require, exports, module) {
 
         var $form = $('#bind-exist-form');
 
+        var $formSet = $('#set-bind-exist-form');
+
         var validator = new Validator({
             element: $form,
             autoSubmit: false,
@@ -72,6 +74,45 @@ define(function(require, exports, module) {
             }
         });
 
+        var validatorSet = new Validator({
+
+            element: $formSet,
+            autoSubmit: false,
+            onFormValidated: function(error, results, $form) {
+                if (error) {
+                    return false;
+                }
+
+
+          if ($('#set-bind-nickname-field').length >0 ) {
+                $nickname = $('#set-bind-nickname-field').val();
+            }else{
+                $nickname = "";
+            }
+
+            if ($('#set-bind-email-field').length >0 ) {
+                $email = $('#set-bind-email-field').val();
+            }else{
+                $email = "";
+            }
+
+            $.post($('#set-bind-new-btn').data('url'),{nickname:$nickname,email:$email}, function(response) {
+                if (!response.success) {
+                    $('#bind-new-form-error').html(response.message).show();
+                    return ;
+                }
+                Notify.success('登录成功，正在跳转至首页！');
+                window.location.href = response._target_path;
+
+            }, 'json').fail(function() {
+                Notify.danger('登录失败，请重新登录后再试！');
+            }).always(function() {
+               $('#set-bind-new-btn').button('reset');
+            });
+
+
+            }
+        });
 
         validator.addItem({
             element: '#bind-email-field',
@@ -79,10 +120,10 @@ define(function(require, exports, module) {
             rule: 'email'
         });
 
-        validator.addItem({
+        validatorSet.addItem({
             element: '#set-bind-email-field',
             required: true,
-            rule: 'email'
+            rule: 'email email_remote'
         });
 
         validator.addItem({
@@ -90,7 +131,7 @@ define(function(require, exports, module) {
             required: true
         });
 
-        validator.addItem({
+        validatorSet.addItem({
             element: '#set-bind-nickname-field',
             required: true,
             rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'

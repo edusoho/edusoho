@@ -24,8 +24,9 @@
 
         </div>
 
-          {% if setting('login_bind.' ~ client.clientInfo.type ~ '_set_fill_account') == 1 %}
+      {% if setting('login_bind.' ~ client.clientInfo.type ~ '_set_fill_account') == 1 %}
 
+       <form id="set-bind-exist-form" class="form-vertical" method="post" >
           <div class="form-group">
             <label class="control-label" for="set-bind-nickname-field">昵称</label>
             <div class="controls">
@@ -37,7 +38,7 @@
           <div class="form-group">
             <label class="control-label" for="set-bind-email-field">邮箱地址</label>
             <div class="controls">
-              <input id="set-bind-email-field" class="form-control" type="text" name="email">
+              <input id="set-bind-email-field" class="form-control" type="text" name="email" data-url="{{path('register_email_check')}}">
                {# <p class="help-block">如空缺，补充一个</p> #}
             </div>
           </div>
@@ -53,9 +54,11 @@
         <div class="tac pvl">
           <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
 
-       {% if setting('login_bind.' ~ client.clientInfo.type ~ '_set_fill_account') == 0 %}
+       {% if setting('login_bind.' ~ client.clientInfo.type ~ '_set_fill_account') == 1 %}
 
-            <button id="bind-new-btn" class="btn btn-primary btn-lg" data-url="{{ path('login_bind_new', {type:client.clientInfo.type}) }}" data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">确认登录</button>
+            <button id="set-bind-new-btn" class="btn btn-primary btn-lg" data-url="{{ path('login_bind_newset', {type:client.clientInfo.type}) }}" data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">确认登录</button>
+        
+        </form>
 
         {% else %}
 
