@@ -34,7 +34,7 @@ class CourseStudentManageController extends BaseController
         }
 
         $courseSetting = $this->getSettingService()->get('course', array());
-        $isTeacherAuthAdd = !empty($courseSetting['teacher_add_student']) ? 1: 0;
+        $isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1: 0;
 
         return $this->render('TopxiaWebBundle:CourseStudentManage:index.html.twig', array(
             'course' => $course,
@@ -42,7 +42,7 @@ class CourseStudentManageController extends BaseController
             'users'=>$users,
             'progresses' => $progresses,
             'followingIds' => $followingIds,
-            'isTeacherAuthAdd' => $isTeacherAuthAdd,
+            'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
             'paginator' => $paginator,
             'canManage' => $this->getCourseService()->canManageCourse($course['id']),
         ));
@@ -53,7 +53,7 @@ class CourseStudentManageController extends BaseController
     {
         $courseSetting = $this->getSettingService()->get('course', array());
         
-        if (!empty($courseSetting['teacher_add_student'])) {
+        if (!empty($courseSetting['teacher_manage_student'])) {
             $course = $this->getCourseService()->tryManageCourse($id);
         } else {
             $course = $this->getCourseService()->tryAdminCourse($id);
@@ -117,7 +117,13 @@ class CourseStudentManageController extends BaseController
 
     public function removeAction(Request $request, $courseId, $userId)
     {
-        $course = $this->getCourseService()->tryAdminCourse($courseId);
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        if (!empty($courseSetting['teacher_manage_student'])) {
+            $course = $this->getCourseService()->tryManageCourse($courseId);
+        } else {
+            $course = $this->getCourseService()->tryAdminCourse($courseId);
+        }
 
         $this->getCourseService()->removeStudent($courseId, $userId);
 
@@ -131,7 +137,13 @@ class CourseStudentManageController extends BaseController
 
     public function exportCsvAction (Request $request, $id)
     {   
-        $course = $this->getCourseService()->tryAdminCourse($id);
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        if (!empty($courseSetting['teacher_manage_student'])) {
+            $course = $this->getCourseService()->tryManageCourse($id);
+        } else {
+            $course = $this->getCourseService()->tryAdminCourse($id);
+        }
 
         $courseMembers = $this->getCourseService()->searchMembers( array('courseId' => $course['id'],'role' => 'student'),array('createdTime', 'DESC'), 0, 1000);
 
@@ -253,6 +265,9 @@ class CourseStudentManageController extends BaseController
 
     private function createStudentTrResponse($course, $student)
     {
+        $courseSetting = $this->getSettingService()->get('course', array());
+        $isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1: 0;
+
         $user = $this->getUserService()->getUser($student['userId']);
         $isFollowing = $this->getUserService()->isFollowed($this->getCurrentUser()->id, $student['userId']);
         $progress = $this->calculateUserLearnProgress($course, $student);
@@ -263,6 +278,7 @@ class CourseStudentManageController extends BaseController
             'user'=>$user,
             'progress' => $progress,
             'isFollowing' => $isFollowing,
+            'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
         ));
     }
 

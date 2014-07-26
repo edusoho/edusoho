@@ -61,10 +61,10 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >允许教师添加学员</label>
+        <label >允许教师添加/移除学员</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('teacher_add_student', {1:'是', 0:'否'}, courseSetting.teacher_add_student) }}
+        {{ radios('teacher_manage_student', {1:'是', 0:'否'}, courseSetting.teacher_manage_student) }}
       </div>
     </div>
 

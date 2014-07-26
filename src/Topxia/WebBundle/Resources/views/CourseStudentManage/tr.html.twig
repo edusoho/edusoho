@@ -26,7 +26,7 @@
       {% if app.user.id != user.id %}
           <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
         {% endif %}
-        {% if app.user.isAdmin() or app.user.isTeacher() and course.expiryDay > 0 %}
+        {% if app.user.isAdmin() %}
           <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_students_show', { id:user.id})}}">查看资料</button>
         {% endif %}
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">管理
@@ -40,11 +40,11 @@
             <a class="btn-success unfollow-student-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</a>
             </li>
         {% endif %}
-        {% if app.user.isAdmin() or app.user.isTeacher() and course.expiryDay > 0 %}
+        {% if app.user.isAdmin() or  app.user.isTeacher() and  isTeacherAuthManageStudent == 1 and course.expiryDay > 0 %}
           <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_expiryday', {courseId:course.id, userId:user.id})}}">增加有效期</a></li>
         {% endif %}
 
-        {% if app.user.isAdmin() %}
+        {% if app.user.isAdmin() or  app.user.isTeacher() and  isTeacherAuthManageStudent == 1 %}
           <li><a class="student-remove" href="javascript:;" data-url="{{path('course_manage_student_remove', {courseId:course.id, userId:user.id})}}">移除</a></li>
         {% endif %}
       </ul>

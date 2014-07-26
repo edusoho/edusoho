@@ -9,7 +9,7 @@
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading">学员管理
-    {% if app.user.isAdmin() or isTeacherAuthAdd == 1 %}
+    {% if app.user.isAdmin() or isTeacherAuthManageStudent == 1 %}
       <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('course_manage_student_export_csv', {id:course.id}) }}"><i class="glyphicon glyphicon-export"></i> 导出学员</a>
       <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 添加学员</button>
     {% endif %}
