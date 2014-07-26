@@ -22,7 +22,7 @@
               class="btn btn-default btn-sm"
               data-role="uploader-btn"
               data-upload-url="{{ path('uploadfile_upload', {targetType:targetType, targetId:targetId}) }}"
-              data-params-url="{{ path('uploadfile_params', {targetType:targetType, targetId:targetId}) }}"
+              data-params-url="{{ path('uploadfile_params', {targetType:targetType, targetId:targetId, storage:storageSetting.upload_mode}) }}"
               {% if storageSetting.upload_mode == 'cloud' %}
                 data-callback="{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}"
                 data-fileinfo-url="{{ path('uploadfile_cloud_fileinfo') }}"
