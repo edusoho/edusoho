@@ -20,6 +20,10 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        if (!empty($course['status']) && $course['status'] == 'closed') {
+            return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig',array('course' => $course));
+        }
+
         if (empty($lesson['free'])) {
             return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
         }
