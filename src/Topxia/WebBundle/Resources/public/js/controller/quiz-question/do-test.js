@@ -21,6 +21,7 @@ define(function(require, exports, module) {
     var isAjaxing = 0;
 
     exports.run = function() {
+        $('.testpaper-card').find('.panel-body').css({"max-height":($(window).height()-200)+'px',"height":"auto","overflow":"auto"});
 
         $('#testpaper-navbar').affix({
             offset: {
