@@ -3877,7 +3877,7 @@ body {
 }
 .testpaper-card .panel-body {
 	height: auto;
-	max-height: 420px;
+	max-height: 220px;
 	overflow: auto;
 }
 
