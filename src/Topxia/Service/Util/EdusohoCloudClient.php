@@ -125,12 +125,16 @@ class EdusohoCloudClient implements CloudClient
         return json_decode($content, true);
     }
 
-    public function generateHLSEncryptedListUrl($videos, $duration = 3600)
+    public function generateHLSEncryptedListUrl($convertParams, $videos, $hlsKeyUrl, $duration = 3600)
     {
-        $url = $this->apiServer . '/api.m3u8?action=HLSEncryptedList';
-
+        $types = array('sd', 'hd', 'shd');
         $names = array('sd' => '标清', 'hd' => '高清', 'shd' => '超清');
-        $bandwidths = array('sd' => '245760', 'hd' => '450560', 'shd' => '655360');
+
+        $bandwidths = array();
+        foreach ($convertParams['video'] as $index => $videoBandwidth) {
+            $type = $types[$index];
+            $bandwidths[$type] = (intval($videoBandwidth) + intval($convertParams['audio'][$index])) * 1024; 
+        }
 
         $items = array();
         foreach (array('sd', 'hd', 'shd') as $type) {
@@ -147,16 +151,19 @@ class EdusohoCloudClient implements CloudClient
 
         $args = array(
             'items' => $items,
+            'hlsKeyUrl' => $hlsKeyUrl,
             'timestamp' => (string) time(),
             'duration' => (string) $duration
         );
 
         $httpParams = array();
         $httpParams['accessKey'] = $this->accessKey;
-        $httpParams['args'] = $args;
+        $httpParams['args'] = $this->urlsafeBase64Encode(json_encode($args));
+        $httpParams['encode'] = 'base64';
         $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
 
-        $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($httpParams);
+        $url = $this->apiServer . '/api.m3u8?action=HLSEncryptedList';
+        $url = $url . '&' . http_build_query($httpParams);
 
         return array('url' => $url);
     }    

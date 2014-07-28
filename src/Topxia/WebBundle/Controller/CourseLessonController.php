@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\Common\Paginator;
@@ -38,6 +39,32 @@ class CourseLessonController extends BaseController
             'lesson' => $lesson,
             'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
         ));
+    }
+
+    public function hlskeyurlAction(Request $request, $courseId, $lessonId)
+    {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (empty($lesson['mediaId'])) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (empty($file['convertParams']['hlsKey'])) {
+            throw $this->createNotFoundException();
+        }
+
+        return new Response($file['convertParams']['hlsKey']);
     }
 
     public function showAction(Request $request, $courseId, $lessonId)
@@ -88,7 +115,12 @@ class CourseLessonController extends BaseController
                     $json['mediaConvertStatus'] = $file['convertStatus'];
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
-                        $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                        if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                            $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id']), true);
+                            $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
+                        } else {
+                            $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                        }
                         $json['mediaHLSUri'] = $url['url'];
                     } else if ($file['type'] == 'ppt') {
                         $json['mediaUri'] = $this->generateUrl('course_lesson_ppt', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']));
