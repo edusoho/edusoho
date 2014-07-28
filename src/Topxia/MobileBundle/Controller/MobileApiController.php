@@ -64,7 +64,11 @@ class MobileApiController extends MobileBaseController
 	    private function init($request)
 	    {
 	    	$this->pathInfo = $request->getPathInfo();
-	    	$this->formData = $request->request->all();
+	    	if ($request->getMethod() == "POST") {
+	    		$this->formData = $request->request->all();
+	    	} else {
+	    		$this->formData = $request->query->all();
+	    	}
 	    }
 
 	    public function IndexAction(Request $request, $service, $method)
@@ -79,23 +83,10 @@ class MobileApiController extends MobileBaseController
 	    		return $this->createJson($request, "service not exists");
 	    	}
 
-	    	$instance = new $class($this->formData);
-	    	if (method_exists($instance, $method)) {
-	    		$result = call_user_func(array($instance, $method));
-	    	} else {
-	    		$result = "method not exists";
-	    	}
+	    	$instance = call_user_func(array($class, "getInstance"), $class, $this->formData);
+
+	    	$result = call_user_func(array($instance, $method));
 	    	return $this->createJson($request, $result);
-	    }
-
-	    private function after()
-	    {
-
-	    }
-
-	    private function before()
-	    {
-
 	    }
 
 	    private function getClassName($name)

@@ -8,6 +8,6 @@ class UrlFilter extends Filter
 
 	public function invoke()
 	{
-		return new FilterResult(true, true, array("ddd"=>11));
+		return new FilterResult(true, false, array("ddd"=>11));
 	}
 }

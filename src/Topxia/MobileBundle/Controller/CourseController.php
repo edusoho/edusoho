@@ -9,6 +9,7 @@ use Topxia\Common\ArrayToolkit;
 
 class CourseController extends MobileController
 {
+
     public function coursesAction(Request $request)
     {
         $conditions = $request->query->all();
@@ -33,6 +34,11 @@ class CourseController extends MobileController
         return $this->createJson($request, $result);
     }
 
+    public function searchCourses(Request $request)
+    {
+
+    }
+    
     public function courseAction(Request $request, $courseId)
     {
         $this->getUserToken($request);
