@@ -125,6 +125,42 @@ class EdusohoCloudClient implements CloudClient
         return json_decode($content, true);
     }
 
+    public function generateHLSEncryptedListUrl($videos, $duration = 3600)
+    {
+        $url = $this->apiServer . '/api.m3u8?action=HLSEncryptedList';
+
+        $names = array('sd' => '标清', 'hd' => '高清', 'shd' => '超清');
+        $bandwidths = array('sd' => '245760', 'hd' => '450560', 'shd' => '655360');
+
+        $items = array();
+        foreach (array('sd', 'hd', 'shd') as $type) {
+            if (!isset($videos[$type])) {
+                continue;
+            }
+
+            $items[] = array(
+                'name' => $names[$type],
+                'bandwidth' => $bandwidths[$type],
+                'key' => $videos[$type]['key'],
+            );
+        }
+
+        $args = array(
+            'items' => $items,
+            'timestamp' => (string) time(),
+            'duration' => (string) $duration
+        );
+
+        $httpParams = array();
+        $httpParams['accessKey'] = $this->accessKey;
+        $httpParams['args'] = $args;
+        $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
+
+        $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($httpParams);
+
+        return array('url' => $url);
+    }    
+
     public function generateHLSQualitiyListUrl($videos, $duration = 3600)
     {
         $url = $this->apiServer . '/api.m3u8?action=HLSQualitiyList';

@@ -355,9 +355,23 @@ class HLSEncryptedVideoConvertor extends HLSVideoConvertor
     {
         $params = parent::getCovertParams($params);
         $params['convertor'] = 'HLSEncryptedVideo';
-
+        $params['hlsKeyUrl'] = 'http://hlskey.edusoho.net/placeholder';
+        $params['hlsKey'] = $this->generateKey(16);
         return $params;
     }
+
+    private function generateKey ($length = 0 )
+    {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+        $key = '';
+        for ( $i = 0; $i < 16; $i++ ) {
+            $key .= $chars[ mt_rand(0, strlen($chars) - 1) ];
+        }
+        
+        return $key;
+    }
+
 }
 
 class AudioConvertor
