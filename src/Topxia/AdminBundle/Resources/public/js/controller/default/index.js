@@ -1,11 +1,9 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-    require("jquery.bootstrap-datetimepicker");
     var Validator = require('bootstrap.validator');
-    var Morris=require("morris");
     require('common/validator-rules').inject(Validator);
-    var now = new Date();
+
     exports.run = function() {
 
         $('.tbody').on('click', 'button.remind-teachers', function() {
@@ -33,45 +31,6 @@ define(function(require, exports, module) {
 
         $.post($('#operation-analysis-title').data('url'),function(html){
             $('#operation-analysis-table').html(html);
-        });
-
-        $("[name=endTime]").datetimepicker({
-            language: 'zh-CN',
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            minView: 'month'
-        });
-        $('[name=endTime]').datetimepicker('setEndDate', now);
-        $("[name=startTime]").datetimepicker({
-            language: 'zh-CN',
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            minView: 'month'
-        });
-        $('[name=startTime]').datetimepicker('setEndDate', now);
-
-
-        var validator = new Validator({          
-            element: '#operation-form'});
-
-        validator.addItem({
-            element: '[name=startTime]',
-            required: true
-        });
-
-        validator.addItem({
-            element: '[name=endTime]',
-            required: true
-        });
-        var data = eval ("(" + $('#data').attr("value") + ")");
-
-        Morris.Line({
-          element: 'line-data',
-          data: data,
-          xkey: 'date',
-          ykeys: ['count',],
-          labels: ['注册人数'],
-          xLabels:"week",
         });
     };
 

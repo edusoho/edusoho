@@ -766,6 +766,26 @@ admin_operation_analysis_register:
     pattern:  /operation/analysis/register/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:register }
 
+admin_operation_analysis_login:
+    pattern:  /operation/analysis/login/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:login }
+
+admin_operation_analysis_course:
+    pattern:  /operation/analysis/course/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:course }
+
+admin_operation_analysis_lesson:
+    pattern:  /operation/analysis/lesson/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:lesson }
+
+admin_operation_analysis_lesson_join:
+    pattern:  /operation/analysis/lesson/join/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:joinLesson }
+
+admin_operation_analysis_lesson_exit:
+    pattern:  /operation/analysis/lesson/exit/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:exitLesson }
+
 admin_user_fields_add:
     pattern:  /user_fields/add
     defaults: { _controller: TopxiaAdminBundle:Setting:addUserFields }
@@ -777,4 +797,6 @@ admin_user_fields_edit:
 admin_user_fields_delete:
     pattern:  /user_fields/delete/{id}
     defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }
+
+
 

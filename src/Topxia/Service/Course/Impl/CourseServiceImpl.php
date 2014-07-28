@@ -545,6 +545,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $favorite ? true : false;
 	}
 
+	public function analysisCourseNumByTime($startTime,$endTime)
+	{
+	    	return $this->getCourseDao()->analysisCourseNumByTime($startTime,$endTime);
+	}
+
+	public function analysisCourseDataByTime($startTime,$endTime)
+	{
+	    	return $this->getCourseDao()->analysisCourseDataByTime($startTime,$endTime);
+	}
+
 	private function autosetCourseFields($courseId)
 	{
 		$fields = array('type' => 'text', 'lessonNum' => 0);
@@ -676,6 +686,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
 
 		return $lesson;
+	}
+
+	public function analysisLessonNumByTime($startTime,$endTime)
+	{
+	    	return $this->getLessonDao()->analysisLessonNumByTime($startTime,$endTime);
+	}
+
+	public function analysisLessonDataByTime($startTime,$endTime)
+	{
+	    	return $this->getLessonDao()->analysisLessonDataByTime($startTime,$endTime);
 	}
 
 	private function fillLessonMediaFields(&$lesson)
@@ -1795,6 +1815,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getAnnouncementDao()->deleteAnnouncement($id);
 	}
+	
 
     private function getAnnouncementDao()
     {
@@ -1971,6 +1992,7 @@ class CourseSerialize
         return $course;
     }
 
+
     public static function unserialize(array $course = null)
     {
     	if (empty($course)) {
@@ -2007,7 +2029,6 @@ class CourseSerialize
     	}, $courses);
     }
 }
-
 
 
 class LessonSerialize

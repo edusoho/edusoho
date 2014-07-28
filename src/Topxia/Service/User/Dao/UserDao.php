@@ -12,11 +12,11 @@ interface UserDao
 
 	public function findUsersByIds(array $ids);
 
-    public function searchUsers($conditions, $orderBy, $start, $limit);
+              public function searchUsers($conditions, $orderBy, $start, $limit);
 
-    public function searchUserCount($conditions);
+              public function searchUserCount($conditions);
 
-    public function addUser($user);
+              public function addUser($user);
 
 	public function updateUser($id, $fields);
 

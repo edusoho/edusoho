@@ -70,5 +70,14 @@ class OrderRefundDaoImpl extends BaseDao implements OrderRefundDao
             ->andWhere('orderId = :orderId')
             ->andWhere('courseId = :courseId');
     }
+    public function findRefundsByIds(array $ids)
+    {
+        if(empty($ids)) {
+            return array();
+        }
 
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        return  $this->getConnection()->fetchAll($sql, $ids);
+    }
 }

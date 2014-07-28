@@ -11,10 +11,10 @@ class LogDaoImpl extends BaseDao implements LogDao
 
 	public function addLog($log)
 	{
-        $affected = $this->getConnection()->insert($this->table, $log);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert log error.');
-        }
+	        $affected = $this->getConnection()->insert($this->table, $log);
+	        if ($affected <= 0) {
+	            throw $this->createDaoException('Insert log error.');
+	        }
 	}
 
 	public function searchLogs($conditions, $sort, $start, $limit)
@@ -47,5 +47,19 @@ class LogDaoImpl extends BaseDao implements LogDao
 			->andWhere('userId = :userId')
 			->andWhere('createdTime > :startDateTime')
 			->andWhere('createdTime < :endDateTime');
+	}
+
+	public function analysisLoginNumByTime($startTime,$endTime)
+	{
+	              $sql="SELECT count(distinct userid)  as num FROM `{$this->table}` WHERE `action`='login_success' and  `createdTime`>={$startTime} and `createdTime`<={$endTime}  ";
+
+        		return $this->getConnection()->fetchColumn($sql);
+	}
+
+	public function analysisLoginDataByTime($startTime,$endTime)
+	{
+	              $sql="SELECT count(distinct userid) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `action`='login_success' and `createdTime`>={$startTime} and `createdTime`<={$endTime} group by date_format(from_unixtime(`createdTime`),'%Y-%m-%d') order by date ASC ";
+
+     		return $this->getConnection()->fetchAll($sql);
 	}
 }

@@ -132,6 +132,16 @@ class OrderServiceImpl extends BaseService implements OrderService
         return in_array($order['status'], array('created'));
     }
 
+    public function analysisCourseOrderNumByTimeAndStatus($startTime,$endTime,$status)
+    {
+        return $this->getOrderDao()->analysisCourseOrderNumByTimeAndStatus($startTime,$endTime,$status);
+    }
+
+    public function analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status)
+    {
+        return $this->getOrderDao()->analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
+    }
+
     private function generateOrderSn($order)
     {
         $prefix = empty($order['snPrefix']) ? 'E' : (string) $order['snPrefix'];
@@ -168,6 +178,10 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function findUserRefundCount($userId)
     {
         return $this->getOrderRefundDao()->findRefundCountByUserId($userId);
+    }
+    public function findRefundsByIds(array $ids)
+    {
+        return $this->getOrderRefundDao()->findRefundsByIds($ids);
     }
 
     public function findUserRefunds($userId, $start, $limit)

@@ -60,4 +60,8 @@ interface LogService
 	 * @return interger           
 	 */
 	public function searchLogCount($conditions);
+
+	public function analysisLoginNumByTime($startTime,$endTime);
+
+	public function analysisLoginDataByTime($startTime,$endTime);
 }

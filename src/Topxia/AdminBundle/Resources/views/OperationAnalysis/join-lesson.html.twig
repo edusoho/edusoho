@@ -1,0 +1,15 @@
+{% extends 'TopxiaAdminBundle:OperationAnalysis:analysis-base-layout.html.twig' %}
+{% set script_controller = 'analysis/join-lesson' %}
+{% set href="admin_operation_analysis_lesson_join" %}
+{% block analysisBody %}
+  <div class="col-md-9">
+
+              {% if tab=="trend" %}
+	          <div id="line-data"></div>
+	           <input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'> 
+	          </input>
+              {% elseif tab=="detail" %}
+                      {% include 'TopxiaAdminBundle:OperationAnalysis:join-lesson.table.html.twig' %}
+              {% endif %}
+  </div>
+{% endblock %}

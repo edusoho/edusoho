@@ -65,9 +65,39 @@ class DefaultController extends BaseController
 
         $yesterdayRegisterNum=$this->getUserService()->analysisRegisterNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
 
+        $todayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
+
+        $yesterdayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
+
+        $todayCourseNum=$this->getCourseService()->analysisCourseNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
+
+        $yesterdayCourseNum=$this->getCourseService()->analysisCourseNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
+     
+        $todayLessonNum=$this->getCourseService()->analysisLessonNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
+
+        $yesterdayLessonNum=$this->getCourseService()->analysisLessonNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
+    
+        $todayJoinLessonNum=$this->getOrderService()->analysisCourseOrderNumByTimeAndStatus(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)),"paid");
+
+        $yesterdayJoinLessonNum=$this->getOrderService()->analysisCourseOrderNumByTimeAndStatus(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())),"paid");
+  
+        $todayExitLessonNum=$this->getOrderService()->analysisCourseOrderNumByTimeAndStatus(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)),"cancelled");
+
+        $yesterdayExitLessonNum=$this->getOrderService()->analysisCourseOrderNumByTimeAndStatus(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())),"cancelled");
+     
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
             'todayRegisterNum'=>$todayRegisterNum,
             'yesterdayRegisterNum'=>$yesterdayRegisterNum,
+            'todayLoginNum'=>$todayLoginNum,
+            'yesterdayLoginNum'=>$yesterdayLoginNum,
+            'todayCourseNum'=>$todayCourseNum,
+            'yesterdayCourseNum'=>$yesterdayCourseNum,
+            'todayLessonNum'=>$todayLessonNum,
+            'yesterdayLessonNum'=>$yesterdayLessonNum,
+            'todayJoinLessonNum'=>$todayJoinLessonNum,
+            'yesterdayJoinLessonNum'=>$yesterdayJoinLessonNum,
+            'todayExitLessonNum'=>$todayExitLessonNum,
+            'yesterdayExitLessonNum'=>$yesterdayExitLessonNum,
         ));        
     }
 
@@ -140,4 +170,10 @@ class DefaultController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
+
+    protected function getLogService()
+    {
+        return $this->getServiceKernel()->createService('System.LogService');
+    }
+
 }

@@ -102,4 +102,14 @@ class LogServiceImpl extends BaseService implements  LogService
 
 		return $conditions;
 	}
+
+	public function analysisLoginNumByTime($startTime,$endTime)
+	{
+		return $this->getLogDao()->analysisLoginNumByTime($startTime,$endTime);
+	}
+
+	public function analysisLoginDataByTime($startTime,$endTime)
+	{
+		return $this->getLogDao()->analysisLoginDataByTime($startTime,$endTime);
+	}
 }

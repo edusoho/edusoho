@@ -17,30 +17,30 @@
 
 			<tr>
 				<td>用户登录数<small>（不含重复登录)</small></td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td><a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayLoginNum}}</td>
+				<td>{{yesterdayLoginNum}}</td>
+				<td><a href="{{path('admin_operation_analysis_login',{tab:"trend"})}}">趋势</a> | <a href="{{path('admin_operation_analysis_login',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 			<tr>
 				<td>新增课程数</td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td><a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayCourseNum}}</td>
+				<td>{{yesterdayCourseNum}}</td>
+				<td><a href="{{path('admin_operation_analysis_course',{tab:"trend"})}}">趋势</a> | <a href="{{path('admin_operation_analysis_course',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 			<tr>
 				<td>新增课时数</td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td><a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayLessonNum}}</td>
+				<td>{{yesterdayLessonNum}}</td>
+				<td><a href="{{path('admin_operation_analysis_lesson',{tab:"trend"})}}">趋势</a> | <a href="{{path('admin_operation_analysis_lesson',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 			<tr>
 				<td>加入学习数</td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td><a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayJoinLessonNum}}</td>
+				<td>{{yesterdayJoinLessonNum}}</td>
+				<td><a href="{{path('admin_operation_analysis_lesson_join',{tab:"trend"})}}">趋势</a> | <a href="{{path('admin_operation_analysis_lesson_join',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 			<tr>
@@ -101,9 +101,9 @@
 
 			<tr>
 				<td>退出学习数</td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td><a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayExitLessonNum}}</td>
+				<td>{{yesterdayExitLessonNum}}</td>
+				<td><a href="{{path('admin_operation_analysis_lesson_exit',{tab:"trend"})}}">趋势</a> | <a href="{{path('admin_operation_analysis_lesson_exit',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 

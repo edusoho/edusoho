@@ -1,6 +1,5 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 {% set panel = 'dashboard' %}
-{% set script_controller = 'default/index' %}
 {% block content %}
   <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
 <div class="row">
@@ -11,7 +10,7 @@
       <form   class="form-inline" action="" method="get" id="operation-form">
         
         <div class="form-group">
-           <a type="button" class="btn btn-default {% if app.request.query.get('type')!="lastMonth" and app.request.query.get('type')!="lastThreeMonths" %}active{% endif %}"  href="{{path(href,{type:"month",tab:tab})}}">本月</a>
+           <a type="button" class="btn btn-default {% if app.request.query.get('type')!="lastMonth" and app.request.query.get('type')!="lastThreeMonths" and app.request.query.get('startTime')=="" and app.request.query.get('endTime')=="" %}active{% endif %}"  href="{{path(href,{type:"month",tab:tab})}}">本月</a>
         </div>
         
         <div class="form-group">
@@ -39,8 +38,8 @@
   </div>
   <div class="col-md-9">
       <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation"{% if tab=="trend" %} class="active"{% endif %} ><a href="{{path(href,{tab:"trend"})}}">趋势</a></li>
-        <li role="presentation" {% if tab=="detail" %} class="active"{% endif %}><a href="{{path(href,{tab:"detail"})}}">明细</a></li>
+        <li role="presentation"{% if tab=="trend" %} class="active"{% endif %} ><a href="{{path(href,{tab:"trend",type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')})}}">趋势</a></li>
+        <li role="presentation" {% if tab=="detail" %} class="active"{% endif %}><a href="{{path(href,{tab:"detail",type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')})}}">明细</a></li>
       </ul>
   </div>
 {% endblock %}
