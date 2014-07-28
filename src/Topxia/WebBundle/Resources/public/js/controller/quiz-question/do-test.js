@@ -29,15 +29,15 @@ define(function(require, exports, module) {
             }
 
         });
-        
-     $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-50-186-54-130,"height": "auto","overflow": "auto"});
+
+     $(".testpaper-card").find(".panel-body").css({"height": "auto","overflow": "hidden"});
   
     $(window).scroll(function(){
  
     if ($('#testpaper-navbar').offset().top > $navbarTop) {
             $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-84-80-30,"height": "auto","overflow": "auto"});
         } else {
-            $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-50-186-54-130,"height": "auto","overflow": "auto"});
+             $(".testpaper-card").find(".panel-body").css({"height": "auto","overflow": "hidden"});
         }
     });
 
