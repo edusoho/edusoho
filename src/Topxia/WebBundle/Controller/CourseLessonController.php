@@ -121,11 +121,11 @@ class CourseLessonController extends BaseController
             } else {
                 $json['mediaUri'] = '';
                 if ($lesson['type'] == 'video') {
-                    $json['mediaError'] = '抱歉，视频文件不存在，暂时无法观看。';
-                } else if ($lesson['type'] = 'audio') {
-                    $json['mediaError'] = '抱歉，音频文件不存在，暂时无法观看。';
-                } else if ($lesson['type'] = 'ppt') {
-                    $json['mediaError'] = '抱歉，PPT文件不存在，暂时无法观看。';
+                    $json['mediaError'] = '抱歉，视频文件不存在，此课时不能学习。';
+                } else if ($lesson['type'] == 'audio') {
+                    $json['mediaError'] = '抱歉，音频文件不存在，此课时不能学习。';
+                } else if ($lesson['type'] == 'ppt') {
+                    $json['mediaError'] = '抱歉，PPT文件不存在，此课时不能学习。';
                 }
             }
         } else {
