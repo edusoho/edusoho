@@ -115,7 +115,17 @@
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
                   &nbsp;<input type="checkbox"  {% for sort in auth.registerSort %}{% if sort=="company"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="company"></input><input type="hidden"  name="registerSortType[]" value="company"></input> 公司
-                </li>
+                </li>            
+               {% endif %}
+               {% if userFields %}
+               {% for field in userFields %}
+                {% if sort==field.fieldName %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                  &nbsp;<input type="checkbox"  {% for sort in auth.registerSort %}{% if sort==field.fieldName%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="{{sort}}"></input><input type="hidden"  name="registerSortType[]" value="{{sort}}"></input> {{field.title}}
+                </li>            
+               {% endif %}
+               {% endfor %}
                {% endif %}
             {% endfor %}
             {% else %}
@@ -155,6 +165,14 @@
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
               &nbsp;<input type="checkbox" name="registerSort[]" value="company"></input><input type="hidden"  name="registerSortType[]" value="company"></input> 公司
             </li>
+            {% if  userFields %}
+                {% for field in userFields %}
+                    <li class="list-group-item clearfix" data-role="item" >
+                      <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                      &nbsp;<input type="checkbox" name="registerSort[]" value="{{field.fieldName}}"></input><input type="hidden"  name="registerSortType[]" value="{{field.fieldName}}"></input> {{field.title}}
+                    </li>
+                {% endfor %}
+            {% endif %}
             {% endif %}
             </ul>
             <span class="help-block pull-right">可拖动调整先后次序.勾选后，在注册时就必须要填写该项目，将会增加注册难度，请谨慎使用</span>

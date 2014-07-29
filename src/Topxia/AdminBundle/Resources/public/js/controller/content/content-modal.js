@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     Validator.addRule(
         'noNumberFirst',
         /^[a-zA-Z]+[a-zA-Z0-9]+?$/,
-        'URL路径不能以数字开头'
+        'URL路径只能包含字母和数字,首字母请以字母开头!长度大于2位'
     );
 
     var Notify = require('common/bootstrap-notify');

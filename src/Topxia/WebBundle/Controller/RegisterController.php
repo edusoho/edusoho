@@ -44,9 +44,20 @@ class RegisterController extends BaseController
         if(!isset($auth['registerSort']))$auth['registerSort']="";
         
         $loginEnable  = $this->isLoginEnabled();
+
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        for($i=0;$i<count($userFields);$i++){
+           if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
+           if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
+           if(strstr($userFields[$i]['fieldName'], "intField")) $userFields[$i]['type']="int";
+           if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
+           if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
+        }
+        
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
             'isLoginEnabled' => $loginEnable,
             'registerSort'=>$auth['registerSort'],
+            'userFields'=>$userFields,
         ));
     }
 
@@ -158,6 +169,11 @@ class RegisterController extends BaseController
             $response = array('success' => false, 'message' => $message);
         }
         return $this->createJsonResponse($response);
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
     }
 
     public function getEmailLoginUrl ($email)
