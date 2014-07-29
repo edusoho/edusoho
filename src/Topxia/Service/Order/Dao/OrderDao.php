@@ -25,4 +25,14 @@ interface OrderDao
 
     public function analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
 
+    public function analysisPaidCourseOrderNumByTime($startTime,$endTime);
+
+    public function analysisPaidCourseOrderDataByTime($startTime,$endTime);
+
+    public function analysisAmount($conditions);
+
+    public function analysisAmountDataByTime($startTime,$endTime);
+
+    public function analysisCourseAmountDataByTime($startTime,$endTime);
+
 }

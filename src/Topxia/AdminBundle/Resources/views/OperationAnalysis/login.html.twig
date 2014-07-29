@@ -1,8 +1,9 @@
 {% extends 'TopxiaAdminBundle:OperationAnalysis:analysis-base-layout.html.twig' %}
 {% set script_controller = 'analysis/login' %}
 {% set href="admin_operation_analysis_login" %}
+{% set menu = 'login' %}
 {% block analysisBody %}
-  <div class="col-md-9">
+  <div class="col-md-12">
 
               {% if tab=="trend" %}
 	          <div id="line-data"></div>

@@ -782,6 +782,22 @@ admin_operation_analysis_lesson_join:
     pattern:  /operation/analysis/lesson/join/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:joinLesson }
 
+admin_operation_analysis_lesson_paid:
+    pattern:  /operation/analysis/lesson/paid/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:paidLesson }
+
+admin_operation_analysis_lesson_finished:
+    pattern:  /operation/analysis/lesson/finished/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:finishedLesson }
+
+admin_operation_analysis_income:
+    pattern:  /operation/analysis/income/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:income }
+
+admin_operation_analysis_course_income:
+    pattern:  /operation/analysis/course/income/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:courseIncome }
+
 admin_operation_analysis_lesson_exit:
     pattern:  /operation/analysis/lesson/exit/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:exitLesson }

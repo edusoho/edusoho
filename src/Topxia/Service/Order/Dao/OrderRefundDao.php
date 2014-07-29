@@ -19,4 +19,8 @@ interface OrderRefundDao
 	public function addRefund($refund);
 
 	public function updateRefund($id, $refund);
+
+    	public function analysisCourseOrderNumByTimeAndStatus($startTime,$endTime,$status);
+
+    	public function analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
 }

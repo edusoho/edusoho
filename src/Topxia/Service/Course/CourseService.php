@@ -125,9 +125,17 @@ interface CourseService
 
 	public function getUserNextLearnLesson($userId, $courseId);
 
+    	public function searchLearnCount($conditions);
+
+    	public function searchLearns($conditions,$orderBy,$start,$limit);
+
 	public function analysisLessonNumByTime($startTime,$endTime);
 
     	public function analysisLessonDataByTime($startTime,$endTime);
+
+        	public function analysisLessonFinishedNumByTime($startTime,$endTime);
+
+    	public function analysisLessonFinishedDataByTime($startTime,$endTime);
 
 	/**
 	 * Chapter API

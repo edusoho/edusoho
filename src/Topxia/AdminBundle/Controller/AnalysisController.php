@@ -104,7 +104,7 @@ class AnalysisController extends BaseController
 	        	if(!$timeRange) {
 
 	        		  $this->setFlashMessage("danger","输入的日期有误!");
-        		                return $this->redirect($this->generateUrl('admin_operation_analysis_login', array(
+        		                return $this->redirect($this->generateUrl('admin_operation_analysis_course', array(
 			               'tab' => "trend",
 		                )));
 	        	}
@@ -154,7 +154,7 @@ class AnalysisController extends BaseController
 	        	if(!$timeRange) {
 
 	        		  $this->setFlashMessage("danger","输入的日期有误!");
-        		                return $this->redirect($this->generateUrl('admin_operation_analysis_login', array(
+        		                return $this->redirect($this->generateUrl('admin_operation_analysis_lesson', array(
 			               'tab' => "trend",
 		                )));
 	        	}
@@ -205,7 +205,7 @@ class AnalysisController extends BaseController
 	        	if(!$timeRange) {
 
 	        		  $this->setFlashMessage("danger","输入的日期有误!");
-        		                return $this->redirect($this->generateUrl('admin_operation_analysis_login', array(
+        		                return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_join', array(
 			               'tab' => "trend",
 		                )));
 	        	}
@@ -256,7 +256,7 @@ class AnalysisController extends BaseController
 	        	if(!$timeRange) {
 
 	        		  $this->setFlashMessage("danger","输入的日期有误!");
-        		                return $this->redirect($this->generateUrl('admin_operation_analysis_login', array(
+        		                return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_exit', array(
 			               'tab' => "trend",
 		                )));
 	        	}
@@ -275,7 +275,7 @@ class AnalysisController extends BaseController
 
 	        	$ExitLessonData="";
 	        	if($tab=="trend"){
-		        	$ExitLessonData=$this->getOrderService()->analysisCourseOrderDataByTimeAndStatus($timeRange['startTime'],$timeRange['endTime'],"cancelled");
+		        	$ExitLessonData=$this->getOrderService()->analysisExitCourseDataByTimeAndStatus($timeRange['startTime'],$timeRange['endTime'],"success");
 		  	
 		  	$data=$this->fillAnalysisData($condition,$ExitLessonData);		  	
 	        	}
@@ -300,6 +300,215 @@ class AnalysisController extends BaseController
 			'courses'=>$courses,
 			'users'=>$users,
 			'cancelledOrders'=>$cancelledOrders,
+	      	));
+	}
+
+	public function paidLessonAction(Request $request,$tab)
+	{
+	        	$data=array();
+	        	$condition=$request->query->all();
+	        	$timeRange=$this->getTimeRange($condition);
+       	
+	        	if(!$timeRange) {
+
+	        		  $this->setFlashMessage("danger","输入的日期有误!");
+        		                return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_paid', array(
+			               'tab' => "trend",
+		                )));
+	        	}
+	        	$paginator = new Paginator(
+		            	$request,
+		            	$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00")),
+		           	 20
+	        	);
+
+	        	$PaidLessonDetail=$this->getOrderService()->searchOrders(
+		        	array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00"),
+		        	"latest",
+		              $paginator->getOffsetCount(),
+		              $paginator->getPerPageCount()
+	             );
+
+	        	$PaidLessonData="";
+	        	if($tab=="trend"){
+		        	$PaidLessonData=$this->getOrderService()->analysisPaidCourseOrderDataByTime($timeRange['startTime'],$timeRange['endTime']);
+		  	
+		  	$data=$this->fillAnalysisData($condition,$PaidLessonData);		  	
+	        	}
+
+		$courseIds = ArrayToolkit::column($PaidLessonDetail, 'targetId');
+
+		$courses=$this->getCourseService()->findCoursesByIds($courseIds);
+
+	        	$userIds = ArrayToolkit::column($PaidLessonDetail, 'userId');
+
+	              $users = $this->getUserService()->findUsersByIds($userIds);
+	        
+	       	return $this->render("TopxiaAdminBundle:OperationAnalysis:paid-lesson.html.twig",array(
+			'PaidLessonDetail'=>$PaidLessonDetail,
+			'paginator'=>$paginator,
+			'tab'=>$tab,
+			'data'=>$data,
+			'courses'=>$courses,
+			'users'=>$users,
+	      	));
+	}
+
+	public function finishedLessonAction(Request $request,$tab)
+	{
+	        	$data=array();
+	        	$condition=$request->query->all();
+	        	$timeRange=$this->getTimeRange($condition);
+       	
+	        	if(!$timeRange) {
+
+	        		  $this->setFlashMessage("danger","输入的日期有误!");
+        		                return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_finished', array(
+			               'tab' => "trend",
+		                )));
+	        	}
+	        	$paginator = new Paginator(
+		            	$request,
+		            	$this->getCourseService()->searchLearnCount(array("startTime"=>$timeRange['startTime'],"endTime"=>$timeRange['endTime'],"status"=>"finished")),
+		           	 20
+	        	);
+
+	        	$FinishedLessonDetail=$this->getCourseService()->searchLearns(
+		        	array("startTime"=>$timeRange['startTime'],"endTime"=>$timeRange['endTime'],"status"=>"finished"),
+		        	array("finishedTime","DESC"),
+		              $paginator->getOffsetCount(),
+		              $paginator->getPerPageCount()
+	             );
+
+	        	$FinishedLessonData="";
+	        	if($tab=="trend"){
+		        	$FinishedLessonData=$this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'],$timeRange['endTime']);
+		  	
+		  	$data=$this->fillAnalysisData($condition,$FinishedLessonData);		  	
+	        	}
+
+		$courseIds = ArrayToolkit::column($FinishedLessonDetail, 'courseId');
+
+		$courses=$this->getCourseService()->findCoursesByIds($courseIds);
+
+		$lessonIds = ArrayToolkit::column($FinishedLessonDetail, 'lessonId');
+
+		$lessons=$this->getCourseService()->findLessonsByIds($lessonIds);
+
+	        	$userIds = ArrayToolkit::column($FinishedLessonDetail, 'userId');
+
+	              $users = $this->getUserService()->findUsersByIds($userIds);
+	        
+	       	return $this->render("TopxiaAdminBundle:OperationAnalysis:finished-lesson.html.twig",array(
+			'FinishedLessonDetail'=>$FinishedLessonDetail,
+			'paginator'=>$paginator,
+			'tab'=>$tab,
+			'data'=>$data,
+			'courses'=>$courses,
+			'lessons'=>$lessons,
+			'users'=>$users,
+	      	));
+	}
+
+	public function incomeAction(Request $request,$tab)
+	{
+	        	$data=array();
+	        	$condition=$request->query->all();
+	        	$timeRange=$this->getTimeRange($condition);
+       	
+	        	if(!$timeRange) {
+
+	        		  $this->setFlashMessage("danger","输入的日期有误!");
+        		                return $this->redirect($this->generateUrl('admin_operation_analysis_income', array(
+			               'tab' => "trend",
+		                )));
+	        	}
+	        	$paginator = new Paginator(
+		            	$request,
+		            	$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00")),
+		           	 20
+	        	);
+
+	        	$IncomeDetail=$this->getOrderService()->searchOrders(
+		        	array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00"),
+		        	"latest",
+		              $paginator->getOffsetCount(),
+		              $paginator->getPerPageCount()
+	             );
+
+	        	$IncomeData="";
+	        	if($tab=="trend"){
+		        	$IncomeData=$this->getOrderService()->analysisAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
+		  	
+		  	$data=$this->fillAnalysisData($condition,$IncomeData);		  	
+	        	}
+
+		$courseIds = ArrayToolkit::column($IncomeDetail, 'targetId');
+
+		$courses=$this->getCourseService()->findCoursesByIds($courseIds);
+
+	        	$userIds = ArrayToolkit::column($IncomeDetail, 'userId');
+
+	              $users = $this->getUserService()->findUsersByIds($userIds);
+	        
+	       	return $this->render("TopxiaAdminBundle:OperationAnalysis:income.html.twig",array(
+			'IncomeDetail'=>$IncomeDetail,
+			'paginator'=>$paginator,
+			'tab'=>$tab,
+			'data'=>$data,
+			'courses'=>$courses,
+			'users'=>$users,
+	      	));
+	}
+
+	public function courseIncomeAction(Request $request,$tab)
+	{
+	        	$data=array();
+	        	$condition=$request->query->all();
+	        	$timeRange=$this->getTimeRange($condition);
+       	
+	        	if(!$timeRange) {
+
+	        		  $this->setFlashMessage("danger","输入的日期有误!");
+        		                return $this->redirect($this->generateUrl('admin_operation_analysis_course_income', array(
+			               'tab' => "trend",
+		                )));
+	        	}
+	        	$paginator = new Paginator(
+		            	$request,
+		            	$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","targetType"=>"course","amount"=>"0.00")),
+		           	 20
+	        	);
+
+	        	$CourseIncomeDetail=$this->getOrderService()->searchOrders(
+		        	array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","targetType"=>"course","amount"=>'0.00'),
+		        	"latest",
+		              $paginator->getOffsetCount(),
+		              $paginator->getPerPageCount()
+	             );
+
+	        	$CourseIncomeData="";
+	        	if($tab=="trend"){
+		        	$CourseIncomeData=$this->getOrderService()->analysisCourseAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
+		  	
+		  	$data=$this->fillAnalysisData($condition,$CourseIncomeData);		  	
+	        	}
+
+		$courseIds = ArrayToolkit::column($CourseIncomeDetail, 'targetId');
+
+		$courses=$this->getCourseService()->findCoursesByIds($courseIds);
+
+	        	$userIds = ArrayToolkit::column($CourseIncomeDetail, 'userId');
+
+	              $users = $this->getUserService()->findUsersByIds($userIds);
+	        
+	       	return $this->render("TopxiaAdminBundle:OperationAnalysis:courseIncome.html.twig",array(
+			'CourseIncomeDetail'=>$CourseIncomeDetail,
+			'paginator'=>$paginator,
+			'tab'=>$tab,
+			'data'=>$data,
+			'courses'=>$courses,
+			'users'=>$users,
 	      	));
 	}
 

@@ -1,7 +1,7 @@
 {% extends 'TopxiaAdminBundle:OperationAnalysis:analysis-base-layout.html.twig' %}
-{% set script_controller = 'analysis/course' %}
-{% set href="admin_operation_analysis_course" %}
-{% set menu = 'course' %}
+{% set script_controller = 'analysis/course-income' %}
+{% set href="admin_operation_analysis_course_income" %}
+{% set menu = 'course-income' %}
 {% block analysisBody %}
   <div class="col-md-12">
 
@@ -10,7 +10,7 @@
 	           <input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'> 
 	          </input>
               {% elseif tab=="detail" %}
-                      {% include 'TopxiaAdminBundle:OperationAnalysis:course.table.html.twig' %}
+                      {% include 'TopxiaAdminBundle:OperationAnalysis:courseIncome.table.html.twig' %}
               {% endif %}
   </div>
 {% endblock %}

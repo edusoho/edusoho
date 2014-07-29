@@ -45,16 +45,16 @@
 
 			<tr>
 				<td>购买课程数</td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td><a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayBuyLessonNum}}</td>
+				<td>{{yesterdayBuyLessonNum}}</td>
+				<td><a href="{{path('admin_operation_analysis_lesson_paid',{tab:"trend"})}}">趋势</a> | <a href="{{path('admin_operation_analysis_lesson_paid',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 			<tr>
 				<td>完成课时学习数</td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td><a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayFinishedLessonNum}}</td>
+				<td>{{yesterdayFinishedLessonNum}}</td>
+				<td><a href="{{path('admin_operation_analysis_lesson_finished',{tab:"trend"})}}">趋势</a> | <a href="{{path('admin_operation_analysis_lesson_finished',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 			<tr>
@@ -87,16 +87,16 @@
 
 			<tr>
 				<td>营收额</td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td><a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayIncome}}</td>
+				<td>{{yesterdayIncome}}</td>
+				<td><a href="{{path('admin_operation_analysis_income',{tab:"trend"})}}">趋势</a> | <a href="{{path('admin_operation_analysis_income',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 			<tr>
 				<td>课程营收额</td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td><a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayCourseIncome}}</td>
+				<td>{{yesterdayCourseIncome}}</td>
+				<td><a href="{{path('admin_operation_analysis_course_income',{tab:"trend"})}}">趋势</a> | <a href="{{path('admin_operation_analysis_course_income',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 			<tr>

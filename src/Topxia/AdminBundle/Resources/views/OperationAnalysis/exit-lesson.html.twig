@@ -1,8 +1,9 @@
 {% extends 'TopxiaAdminBundle:OperationAnalysis:analysis-base-layout.html.twig' %}
 {% set script_controller = 'analysis/exit-lesson' %}
 {% set href="admin_operation_analysis_lesson_exit" %}
+{% set menu = 'exit-lesson' %}
 {% block analysisBody %}
-  <div class="col-md-9">
+  <div class="col-md-12">
 
               {% if tab=="trend" %}
 	          <div id="line-data"></div>

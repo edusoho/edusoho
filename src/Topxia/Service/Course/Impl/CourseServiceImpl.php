@@ -837,6 +837,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		// $this->autosetCourseFields($courseId);
 	}
 
+      	public function analysisLessonFinishedNumByTime($startTime,$endTime)
+      	{
+      		return $this->getLessonLearnDao()->analysisLessonFinishedNumByTime($startTime,$endTime);
+      	}
+
+    	public function analysisLessonFinishedDataByTime($startTime,$endTime)
+    	{
+    		return $this->getLessonLearnDao()->analysisLessonFinishedDataByTime($startTime,$endTime);
+    	}
+
 	public function publishLesson($courseId, $lessonId)
 	{
 		$course = $this->tryManageCourse($courseId);
@@ -993,6 +1003,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
+
+    	public function searchLearnCount($conditions)
+    	{
+    		return $this->getLessonLearnDao()->searchLearnCount($conditions);
+    	}
+
+    	public function searchLearns($conditions,$orderBy,$start,$limit)
+    	{
+    		return $this->getLessonLearnDao()->searchLearns($conditions,$orderBy,$start,$limit);
+    	}
 
 	public function findLatestFinishedLearns($start, $limit)
 	{

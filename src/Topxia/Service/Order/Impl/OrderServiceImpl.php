@@ -142,6 +142,42 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
     }
 
+    public function analysisPaidCourseOrderNumByTime($startTime,$endTime)
+    {
+         return $this->getOrderDao()->analysisPaidCourseOrderNumByTime($startTime,$endTime);
+    }
+
+    public function analysisPaidCourseOrderDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisPaidCourseOrderDataByTime($startTime,$endTime);
+    }
+
+    public function analysisExitCourseNumByTimeAndStatus($startTime,$endTime,$status)
+    {
+        return $this->getOrderRefundDao()->analysisCourseOrderNumByTimeAndStatus($startTime,$endTime,$status);
+    }
+
+    public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime,$status)
+    {
+        return $this->getOrderRefundDao()->analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
+    }
+
+    public function analysisAmount($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->analysisAmount($conditions);
+    }
+
+    public function analysisAmountDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisAmountDataByTime($startTime,$endTime);
+    }
+
+    public function analysisCourseAmountDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisCourseAmountDataByTime($startTime,$endTime);
+    }
+
     private function generateOrderSn($order)
     {
         $prefix = empty($order['snPrefix']) ? 'E' : (string) $order['snPrefix'];

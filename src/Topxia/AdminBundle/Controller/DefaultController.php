@@ -80,11 +80,27 @@ class DefaultController extends BaseController
         $todayJoinLessonNum=$this->getOrderService()->analysisCourseOrderNumByTimeAndStatus(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)),"paid");
 
         $yesterdayJoinLessonNum=$this->getOrderService()->analysisCourseOrderNumByTimeAndStatus(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())),"paid");
-  
-        $todayExitLessonNum=$this->getOrderService()->analysisCourseOrderNumByTimeAndStatus(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)),"cancelled");
+    
+        $todayBuyLessonNum=$this->getOrderService()->analysisPaidCourseOrderNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
 
-        $yesterdayExitLessonNum=$this->getOrderService()->analysisCourseOrderNumByTimeAndStatus(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())),"cancelled");
+        $yesterdayBuyLessonNum=$this->getOrderService()->analysisPaidCourseOrderNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
+
+        $todayFinishedLessonNum=$this->getCourseService()->analysisLessonFinishedNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)),"success");
+
+        $yesterdayFinishedLessonNum=$this->getCourseService()->analysisLessonFinishedNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())),"success");
      
+        $todayExitLessonNum=$this->getOrderService()->analysisExitCourseNumByTimeAndStatus(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)),"success");
+
+        $yesterdayExitLessonNum=$this->getOrderService()->analysisExitCourseNumByTimeAndStatus(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())),"success");
+   
+        $todayIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid"));
+
+        $yesterdayIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid"))+0.00;
+     
+        $todayCourseIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid","targetType"=>"course"));
+
+        $yesterdayCourseIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid","targetType"=>"course"))+0.00;
+
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
             'todayRegisterNum'=>$todayRegisterNum,
             'yesterdayRegisterNum'=>$yesterdayRegisterNum,
@@ -96,6 +112,14 @@ class DefaultController extends BaseController
             'yesterdayLessonNum'=>$yesterdayLessonNum,
             'todayJoinLessonNum'=>$todayJoinLessonNum,
             'yesterdayJoinLessonNum'=>$yesterdayJoinLessonNum,
+            'todayBuyLessonNum'=>$todayBuyLessonNum,
+            'yesterdayBuyLessonNum'=>$yesterdayBuyLessonNum,
+            'todayFinishedLessonNum'=>$todayFinishedLessonNum,
+            'yesterdayFinishedLessonNum'=>$yesterdayFinishedLessonNum,
+            'todayIncome'=>$todayIncome,
+            'yesterdayIncome'=>$yesterdayIncome,
+            'todayCourseIncome'=>$todayCourseIncome,
+            'yesterdayCourseIncome'=>$yesterdayCourseIncome,
             'todayExitLessonNum'=>$todayExitLessonNum,
             'yesterdayExitLessonNum'=>$yesterdayExitLessonNum,
         ));        

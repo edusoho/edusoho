@@ -3,10 +3,30 @@
 {% block content %}
   <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
 <div class="row">
+  <div class="col-md-2">
+    {% block sidebar %}
+      <div class="list-group">
+        <a href="{{ url('admin_operation_analysis_register',{tab:"trend"}) }}" class="list-group-item {% if menu == 'register' %}active{% endif %}">新注册用户</a>
+        <a href="{{ url('admin_operation_analysis_login',{tab:"trend"}) }}" class="list-group-item {% if menu == 'login' %}active{% endif %}">用户登录</a>
+        <a href="{{ url('admin_operation_analysis_course',{tab:"trend"}) }}" class="list-group-item {% if menu == 'course' %}active{% endif %}">新增课程</a>
+        <a href="{{ url('admin_operation_analysis_lesson',{tab:"trend"}) }}" class="list-group-item {% if menu == 'lesson' %}active{% endif %}">新增课时</a>
+        <a href="{{ url('admin_operation_analysis_lesson_join',{tab:"trend"}) }}" class="list-group-item {% if menu == 'join-lesson' %}active{% endif %}">加入学习</a>
+        <a href="{{ url('admin_operation_analysis_lesson_paid',{tab:"trend"}) }}" class="list-group-item {% if menu == 'paid-lesson' %}active{% endif %}">购买课程</a>
+        <a href="{{ url('admin_operation_analysis_lesson_finished',{tab:"trend"}) }}" class="list-group-item {% if menu == 'finished-lesson' %}active{% endif %}">完成课时学习</a>
+        <a href="{{ url('admin_operation_analysis_income',{tab:"trend"}) }}" class="list-group-item {% if menu == 'income' %}active{% endif %}">营收额</a>
+        <a href="{{ url('admin_operation_analysis_course_income',{tab:"trend"}) }}" class="list-group-item {% if menu == 'course-income' %}active{% endif %}">课程营收额</a>
+        <a href="{{ url('admin_operation_analysis_lesson_exit',{tab:"trend"}) }}" class="list-group-item {% if menu == 'exit-lesson' %}active{% endif %}">退出学习</a>
+
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-10">
   {% block analysisHead %}
   <div class="col-md-12">
 {{ web_macro.flash_messages() }}
-
+  <div class="page-header">
+    <h1>运营数据</h1>
+  </div>
       <form   class="form-inline" action="" method="get" id="operation-form">
         
         <div class="form-group">
@@ -36,7 +56,7 @@
   </div>
   <div class="col-md-12"><br>
   </div>
-  <div class="col-md-9">
+  <div class="col-md-12">
       <ul class="nav nav-tabs" role="tablist">
         <li role="presentation"{% if tab=="trend" %} class="active"{% endif %} ><a href="{{path(href,{tab:"trend",type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')})}}">趋势</a></li>
         <li role="presentation" {% if tab=="detail" %} class="active"{% endif %}><a href="{{path(href,{tab:"detail",type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')})}}">明细</a></li>
@@ -45,6 +65,7 @@
 {% endblock %}
 {% block analysisBody %}
 {% endblock %}
+</div>
 </div>
 
 {% endblock %}
