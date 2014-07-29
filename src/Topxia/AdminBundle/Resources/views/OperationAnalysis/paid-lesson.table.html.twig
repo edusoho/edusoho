@@ -12,9 +12,9 @@
             {% if PaidLessonDetail %}
             {% for data in PaidLessonDetail %}
               <tr>
-                   <td> <a href="{{ path('course_show', {id:data.targetId}) }}" target="_blank"><strong>{{ courses[data.targetId].title }}</strong><br><span class="text-muted text-sm">订单号:{{data.sn}}</span></td>
+                   <td> <a href="{{ path('course_show', {id:data.targetId}) }}" target="_blank"><strong>{{ courses[data.targetId].title|default("此课程已不存在") }}</strong><br><span class="text-muted text-sm">订单号:{{data.sn}}</span></td>
                    <td>{{ admin_macro.user_link(users[data.userId]) }}</td>
-                   <td class="text-danger">{{ courses[data.targetId].price }}</td>
+                   <td class="text-danger">{{ courses[data.targetId].price|default("") }}</td>
                     <td class="text-danger">{{ data.amount }}</td>
                    <td>{{data.createdTime|date("Y-m-d H:i:s")}}<br>{{data.paidTime|date("Y-m-d H:i:s")}}</td>
               </tr>

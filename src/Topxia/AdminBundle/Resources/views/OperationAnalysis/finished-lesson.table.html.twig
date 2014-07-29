@@ -10,7 +10,7 @@
             {% if FinishedLessonDetail %}
             {% for data in FinishedLessonDetail %}
               <tr>
-                   <td> <strong>{{lessons[data.lessonId].title}}</strong><br><span class="text-muted text-sm">属于课程:{{courses[data.courseId].title}}</span></td>
+                   <td> <strong>{{lessons[data.lessonId].title|default("")}}</strong><br><span class="text-muted text-sm">属于课程:{{courses[data.courseId].title}}</span></td>
                    <td>{% if lessons[data.lessonId].type=="text" %}图文
                   {% elseif lessons[data.lessonId].type=="video" %}视频
                   {% elseif lessons[data.lessonId].type=="audio" %}音频

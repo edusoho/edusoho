@@ -12,7 +12,7 @@
             {% for data in JoinLessonDetail %}
               <tr>
                   <td> {{ admin_macro.user_link(users[data.userId]) }}</td>
-                   <td><a href="{{ path('course_show', {id:data.targetId}) }}" target="_blank"><strong>{{ courses[data.targetId].title }}</strong></a><br></td>
+                   <td><a href="{{ path('course_show', {id:data.targetId}) }}" target="_blank"><strong>{{ courses[data.targetId].title|default("") }}</strong></a><br></td>
                    <td>{{data.createdTime|date("Y-m-d H:i:s")}}</td>
                    <td class="text-danger">{% if data.amount==0 %}免费{% else %}data.amount{% endif %}</td>
               </tr>
