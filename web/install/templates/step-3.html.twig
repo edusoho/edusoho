@@ -35,10 +35,39 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <label for="website-user-name" class="col-sm-4 control-label">网站所有人姓名 </label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="website-user-name" name="web[name]" value="">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="website-user-mobile" class="col-sm-4 control-label">手机号码 </label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="website-user-mobile" name="web[mobile]" value="">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="website-user-qq" class="col-sm-4 control-label">QQ号码</label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="website-user-qq" name="web[qq]" value="">
+      </div>
+    </div>
+
+
     <div class="actions">
       <button type="submit" id="init-btn" class="btn btn-primary btn-lg">初始化系统</button>
     </div>
 
+  </form>
+  <form id="info-form">
+         <input type="hidden" class="form-control" id="website-addr" name="web[server_addr]" value="{{server_addr}}">
+         <input type="hidden" class="form-control" id="website-name" name="web[server_name]" value="{{server_name}}">
+         <input type="hidden" class="form-control" id="website-qq" name="web[qq]" >
+         <input type="hidden" class="form-control" id="website-mobile" name="web[mobile]" >
+         <input type="hidden" class="form-control" id="website-userName" name="web[userName]" >
   </form>
 {% endblock %}
 
@@ -50,7 +79,21 @@
     var $form = $("#init-form");
 
     var validator = new Validator({
-        element: $form
+        element: $form,
+        onFormValidated: function(error, results, $form){
+            if (error) {
+                return false;
+            }
+            $('#init-btn').button('submiting').addClass('disabled');
+
+            $('#website-qq').attr('value',$('#website-user-qq').attr('value'));
+            $('#website-userName').attr('value',$('#website-user-name').attr('value'));
+            $('#website-mobile').attr('value',$('#website-user-mobile').attr('value'));
+
+            $.post("http://open.edusoho.com/track/install",$("#info-form").serialize(),function(){
+                   
+            });
+        }
     });
 
     validator.addItem({
@@ -75,6 +118,24 @@
         required: true,
         rule: 'minlength{min:5} maxlength{max:20}'
     });
+
+    validator.addItem({
+        element: '#website-user-name',
+        required: true,
+        rule:'chinese minlength{min:2} maxlength{max:12}'
+    });
+
+    validator.addItem({
+        element: '#website-user-mobile',
+        required: true,
+        rule: 'mobile'
+    });
+
+    validator.addItem({
+        element: '#website-user-qq',
+        rule: 'qq'
+    });
+
 
   });
 </script>

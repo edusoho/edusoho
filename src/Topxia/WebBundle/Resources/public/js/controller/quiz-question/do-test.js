@@ -12,6 +12,7 @@ define(function(require, exports, module) {
     var playedQuestions = [];
     var playingQuestion = null;
 
+    var $navbarTop=$('#testpaper-navbar').offset().top;
     var wrongs = [],
 
     rights = [],
@@ -26,7 +27,21 @@ define(function(require, exports, module) {
             offset: {
               top: 200
             }
+
         });
+
+     $(".testpaper-card").find(".panel-body").css({"height": "auto","overflow": "hidden"});
+  
+    $(window).scroll(function(){
+ 
+    if ($('#testpaper-navbar').offset().top > $navbarTop) {
+            $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-84-80-30,"height": "auto","overflow": "auto"});
+        } else {
+            $(".testpaper-card").find(".panel-body").scrollTop(0);
+             $(".testpaper-card").find(".panel-body").css({"height": "auto","overflow": "hidden"});
+        }
+    });
+
         $('.testpaper-card').affix({
             offset: {
               top: 200

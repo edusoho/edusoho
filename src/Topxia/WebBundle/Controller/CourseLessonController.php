@@ -20,6 +20,10 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        if (!empty($course['status']) && $course['status'] == 'closed') {
+            return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig',array('course' => $course));
+        }
+
         if (empty($lesson['free'])) {
             return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
         }
@@ -116,6 +120,13 @@ class CourseLessonController extends BaseController
                 }
             } else {
                 $json['mediaUri'] = '';
+                if ($lesson['type'] == 'video') {
+                    $json['mediaError'] = '抱歉，视频文件不存在，暂时无法观看。';
+                } else if ($lesson['type'] = 'audio') {
+                    $json['mediaError'] = '抱歉，音频文件不存在，暂时无法观看。';
+                } else if ($lesson['type'] = 'ppt') {
+                    $json['mediaError'] = '抱歉，PPT文件不存在，暂时无法观看。';
+                }
             }
         } else {
             $json['mediaUri'] = $lesson['mediaUri'];

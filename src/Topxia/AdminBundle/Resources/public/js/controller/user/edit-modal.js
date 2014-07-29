@@ -54,6 +54,16 @@ define(function(require, exports, module) {
             errormessageUrl: '网站地址不正确，须以http://开头。'
         });
 
+        validator.addItem({
+            element: '[name="mobile"]',
+            rule: 'phone',
+        });
+
+        validator.addItem({
+            element: '[name="idcard"]',
+            rule: 'idcard',
+        });
+
 	};
 
 });

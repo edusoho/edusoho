@@ -37,6 +37,11 @@ login_bind_new:
     defaults: { _controller: TopxiaWebBundle:LoginBind:new }
     methods: [POST]
 
+login_bind_newset:
+    pattern:  /login/bind/{type}/newset
+    defaults: { _controller: TopxiaWebBundle:LoginBind:newSet }
+    methods: [POST]
+
 login_bind_exist:
     pattern:  /login/bind/{type}/exist
     defaults: { _controller: TopxiaWebBundle:LoginBind:exist }

@@ -269,12 +269,15 @@ class SettingController extends BaseController
             'weibo_enabled'=>0,
             'weibo_key'=>'',
             'weibo_secret'=>'',
+            'weibo_set_fill_account'=>0,
             'qq_enabled'=>0,
             'qq_key'=>'',
             'qq_secret'=>'',
+            'qq_set_fill_account'=>0,
             'renren_enabled'=>0,
             'renren_key'=>'',
             'renren_secret'=>'',
+            'renren_set_fill_account'=>0,
             'verify_code' => '',
         );
 
@@ -560,7 +563,9 @@ class SettingController extends BaseController
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
+            'teacher_manage_student' => '0',
             'student_download_media' => '0',
+            'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
             'live_course_enabled' => '0',
         );

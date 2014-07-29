@@ -27,6 +27,17 @@ class PasswordResetController extends BaseController
                 $data = $form->getData();
                 $user = $this->getUserService()->getUserByEmail($data['email']);
 
+                if (empty($user)) {
+                    list($result, $message) = $this->getAuthService()->checkEmail($data['email']);
+                    if ($result == 'error_duplicate') {
+                        $error = '请通过论坛找回密码';
+                        return $this->render("TopxiaWebBundle:PasswordReset:index.html.twig", array(
+                            'form' => $form->createView(),
+                            'error' => $error,
+                        ));
+                    }
+                }
+
                 if ($user) {
                     $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
                     try {

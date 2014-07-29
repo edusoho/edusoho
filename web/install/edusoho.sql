@@ -36,7 +36,7 @@ CREATE TABLE `article_category` (
   `parentId` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
+  UNIQUE KEY `code` (`code`(32))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `block`;
@@ -53,7 +53,7 @@ CREATE TABLE `block` (
   `createdTime` int(11) unsigned NOT NULL COMMENT '编辑区创建时间',
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '编辑区最后更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
+  UNIQUE KEY `code` (`code`(32))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `block_history`;
@@ -76,7 +76,7 @@ CREATE TABLE `cache` (
   `expiredTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '缓存过期时间',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '缓存创建时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `name` (`name`(32)),
   KEY `expiredTime` (`expiredTime`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -92,7 +92,7 @@ CREATE TABLE `category` (
   `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父分类ID',
   `description` text,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uri` (`code`)
+  UNIQUE KEY `uri` (`code`(32))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `category_group`;
@@ -118,7 +118,7 @@ CREATE TABLE `cloud_app` (
   `installedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '云应用安装时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '云应用最后更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
+  UNIQUE KEY `code` (`code`(32))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='已安装的应用';
 
 DROP TABLE IF EXISTS `cloud_app_logs`;
@@ -444,7 +444,7 @@ CREATE TABLE `installed_packages` (
   `installTime` int(11) NOT NULL COMMENT '安装时间',
   `fromVersion` varchar(255) NOT NULL DEFAULT '' COMMENT '来源',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `cname` (`ename`)
+  UNIQUE KEY `cname` (`ename`(32))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='已安装包';
 
 DROP TABLE IF EXISTS `location`;
@@ -650,7 +650,7 @@ CREATE TABLE `setting` (
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '系统设置名',
   `value` longblob COMMENT '系统设置值',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`(32))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tag`;
@@ -659,7 +659,7 @@ CREATE TABLE `tag` (
   `name` varchar(255) NOT NULL COMMENT '标签名称',
   `createdTime` int(10) unsigned NOT NULL COMMENT '标签创建时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`(32))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `testpaper`;
