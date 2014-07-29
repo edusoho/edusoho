@@ -223,14 +223,18 @@ class SettingController extends BaseController
             if (empty($auth['welcome_methods'])) {
                 $auth['welcome_methods'] = array();
             }
+
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
             $this->setFlashMessage('success','注册设置已保存！');
         }
 
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
         return $this->render('TopxiaAdminBundle:System:auth.html.twig', array(
-            'auth' => $auth
+            'auth' => $auth,
+            'userFields'=>$userFields,
         ));
     }
 
@@ -724,6 +728,14 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
 
+            $auth = $this->getSettingService()->get('auth', array());
+
+            foreach ($auth['registerSortType'] as $key => $value) {
+                if($value==$field['fieldName']) unset( $auth['registerSortType'][$key]);
+            }
+
+            $this->getSettingService()->set('auth', $auth);
+
             $this->getUserFieldService()->dropField($id);
 
             return $this->redirect($this->generateUrl('admin_setting_user_fields'));
@@ -743,6 +755,11 @@ class SettingController extends BaseController
         if($field==false){
            $this->setFlashMessage('danger', '已经没有可以添加的字段了!'); 
         }
+
+        $auth = $this->getSettingService()->get('auth', array());
+        if(!isset($auth['registerSortType'])) $auth['registerSortType']=array(0=>"email",1=>"nickname",3=>"confirmPassword",4=>"truename",5=>"mobile",6=>"idcard",7=>"gender",8=>"job",9=>"company");
+        $auth['registerSortType'][]=$field['fieldName'];
+        $this->getSettingService()->set('auth', $auth);
 
         return $this->redirect($this->generateUrl('admin_setting_user_fields')); 
     }

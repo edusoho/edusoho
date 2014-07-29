@@ -95,7 +95,51 @@
                 </div>
               </div>
             {% endif %}
-
+            {% for userField in userFields %}
+              {% if field==userField.fieldName %}
+                 {% if userField.type=="text" %}             
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class="control-label ">{{userField.title}}</label>
+                    <div class="controls">
+                      <textarea id="{{userField.fieldName}}" name="{{userField.fieldName}}" class=" form-control "></textarea>
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                  {% elseif userField.type=="int" %}
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class=" control-label">{{userField.title}}</label>
+                    <div class="controls">
+                      <input type="text" id="{{userField.fieldName}}" placeholder="最大值为9位整数" name="{{userField.fieldName}}" class="{{userField.type}} form-control" data-widget-cid="widget-5" data-explain="">
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                  {% elseif userField.type=="float" %}
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class="control-label">{{userField.title}}</label>
+                    <div class=" controls">
+                      <input type="text" id="{{userField.fieldName}}" placeholder="保留到2位小数" name="{{userField.fieldName}}" class="{{userField.type}} form-control" data-widget-cid="widget-5" data-explain="" >
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                  {% elseif userField.type=="date" %}
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class="control-label">{{userField.title}}</label>
+                    <div class=" controls">
+                      <input type="text" id="{{userField.fieldName}}" name="{{userField.fieldName}}" class="{{userField.type}} form-control" data-widget-cid="widget-5" data-explain="" >
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                  {% elseif userField.type=="varchar" %}
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class="control-label">{{userField.title}}</label>
+                    <div class=" controls">
+                      <input type="text" id="{{userField.fieldName}}" name="{{userField.fieldName}}" class="form-control" data-widget-cid="widget-5" data-explain="" >
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
           {% endfor %}
           {% else %}
            <div class="form-group">
