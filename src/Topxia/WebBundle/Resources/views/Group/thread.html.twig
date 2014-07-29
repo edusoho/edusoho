@@ -38,7 +38,7 @@
                     
                     <div class="media">  {{ web_macro.user_link(owner , 'link-muted ') }}</div>
                     <div class="media"> <span class="label label-danger">楼主</span>
-                      {% if groupinfo.ownerId==threadMain.userId %}<span class="label label-info">组长</span>{% endif %}</div>                    
+                    </div>                    
                   </div>
                   <div class="col-md-10 " >
                     <div class="media"> </div>
@@ -115,7 +115,7 @@
                     <div class="media">  {{ web_macro.user_link(postMember[post.userId] , 'link-muted ') }}
                     </div>
 
-                    <div class="media"> {% if post.userId==owner.id %} <span class="label label-danger">楼主</span> {% endif %}{% if groupinfo.ownerId==post.userId %}<span class="label label-info">组长</span>{% endif %}
+                    <div class="media">{% if post.userId==owner.id %}<span class="label label-danger">楼主</span>{% endif %}
                     </div> 
 
                 </div>
@@ -129,15 +129,7 @@
                     </div>        
                 </div>
                 
-                <div class="bottom-thread-post col-md-12">  
-                  <div class="text-muted pull-right" >&nbsp;
-                    {% if filters.sort=='desc' %}
-                      {{ (postCount+1)-10*(paginator.currentPage-1)-loop.index0 }}
-                    {% else %}
-                      {{ (loop.index+1)+10*(paginator.currentPage-1) }}
-                    {% endif %}
-                    楼 {{post.createdTime|date('Y-m-d H:i:s')}}  &nbsp;
-                  </div>    
+                <div class="bottom-thread-post col-md-12">     
                   {% if user.id==post.userId%}
                   <div class="course-view">
                     <div class="deletePost"><a title="确定删除这条回复"  id="deletePostByself"
@@ -159,6 +151,14 @@
                       </div>
                   </div>
                   {% endif %}
+                    <div class="text-muted pull-right" >&nbsp;
+                    {% if filters.sort=='desc' %}
+                      {{ (postCount+1)-10*(paginator.currentPage-1)-loop.index0 }}
+                    {% else %}
+                      {{ (loop.index+1)+10*(paginator.currentPage-1) }}
+                    {% endif %}
+                    楼 {{post.createdTime|date('Y-m-d H:i:s')}}  &nbsp;
+                  </div> 
               </div>
               </td>   
             </tr>                  
