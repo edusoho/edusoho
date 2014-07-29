@@ -58,15 +58,24 @@ class CourseController extends MobileController
 
         $result = array();
         $result['course'] = $this->filterCourse($course);
-        $result['items'] = $this->filterItems($items);
-        $result['items2'] = array_values($result['items']);
         $result['reviews'] = $this->filterReviews($reviews);
         $result['member'] = $member;
         $result['userIsStudent'] = $user->isLogin() ? $this->getCourseService()->isCourseStudent($courseId, $user['id']) : false;
         if (!$result['userIsStudent']){
                 $learnStatuses = array();
         }
+
         $result['userLearns'] = $learnStatuses;
+        $result['items'] = $this->filterItems($items);
+        foreach ($result['userLearns'] as $lessonId => $status) {
+            if (empty($result['items']['lesson-' . $lessonId])) {
+                continue;
+            }
+            $result['items']['lesson-' . $lessonId]['userLearnStatus'] = $status;
+        }
+
+        $result['items2'] = array_values($result['items']);
+
         $result['userFavorited'] = $user->isLogin() ? $this->getCourseService()->hasFavoritedCourse($courseId) : false;
 
         return $this->createJson($request, $result);
