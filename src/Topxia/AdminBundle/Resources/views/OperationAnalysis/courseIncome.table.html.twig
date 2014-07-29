@@ -14,7 +14,7 @@
               <tr>
                    <td>{{data.title}}<br>订单号:{{data.sn}}</td>
                     <td class="text-danger">{{data.amount}}<br>{{ courses[data.targetId].price}}</td>
-                    <td></td>
+                    <td>{% if  data.coupon %}优惠码<br>[{{data.coupon}}]{% endif %}</td>
                    <td> {{ admin_macro.user_link(users[data.userId]) }}</td>
                    <td>{{data.createdTime|date("Y-m-d H:i:s")}}<br>{{data.paidTime|date("Y-m-d H:i:s")}}</td>
               </tr>
