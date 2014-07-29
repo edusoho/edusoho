@@ -127,6 +127,7 @@ class EdusohoCloudClient implements CloudClient
 
     public function generateHLSEncryptedListUrl($convertParams, $videos, $hlsKeyUrl, $duration = 3600)
     {
+
         $types = array('sd', 'hd', 'shd');
         $names = array('sd' => '标清', 'hd' => '高清', 'shd' => '超清');
 
@@ -149,11 +150,12 @@ class EdusohoCloudClient implements CloudClient
             );
         }
 
+        $onceToken = $this->makeToken('hlslist.view', array('once' => true, 'duration' => 3600));
+
         $args = array(
             'items' => $items,
             'hlsKeyUrl' => $hlsKeyUrl,
-            'timestamp' => (string) time(),
-            'duration' => (string) $duration
+            '_once' => $onceToken['token'],
         );
 
         $httpParams = array();
@@ -285,6 +287,15 @@ class EdusohoCloudClient implements CloudClient
         $args = array_filter($args);
 
         return $this->callRemoteApi('POST', 'FileDelete', $args);
+    }
+
+    public function makeToken($type, array $tokenArgs = array())
+    {
+        $args = array();
+        $args['type'] = $type;
+        $args['args'] = $tokenArgs;
+
+        return $this->callRemoteApiWithBase64('POST', 'MakeToken', $args);
     }
 
     protected function callRemoteApi($httpMethod, $action, array $args)
