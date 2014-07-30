@@ -150,7 +150,7 @@ class EdusohoCloudClient implements CloudClient
             );
         }
 
-        $onceToken = $this->makeToken('hlslist.view', array('once' => true, 'duration' => 3600));
+        $onceToken = $this->makeToken('hlslist.view', array('once' => false, 'duration' => 3600));
 
         $args = array(
             'items' => $items,
