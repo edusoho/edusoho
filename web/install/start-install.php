@@ -149,7 +149,7 @@ function install_step3()
 		$web=$_POST['web'];
 		$userData['mobile']=$web['mobile'];
 		$userData['qq']=$web['qq'];
-		$userData['name']=$web['name'];print_r($userData);
+		$userData['name']=$web['name'];
 		$post=new postRequest();
 		$post->postRequest("http://open.edusoho.com/track/install",$userData);
 
