@@ -837,15 +837,25 @@ class CourseServiceImpl extends BaseService implements CourseService
 		// $this->autosetCourseFields($courseId);
 	}
 
-      	public function analysisLessonFinishedNumByTime($startTime,$endTime)
-      	{
-      		return $this->getLessonLearnDao()->analysisLessonFinishedNumByTime($startTime,$endTime);
-      	}
+  	public function analysisLessonFinishedNumByTime($startTime,$endTime)
+  	{
+  		return $this->getLessonLearnDao()->analysisLessonFinishedNumByTime($startTime,$endTime);
+  	}
 
-    	public function analysisLessonFinishedDataByTime($startTime,$endTime)
-    	{
-    		return $this->getLessonLearnDao()->analysisLessonFinishedDataByTime($startTime,$endTime);
-    	}
+	public function analysisLessonFinishedDataByTime($startTime,$endTime)
+	{
+		return $this->getLessonLearnDao()->analysisLessonFinishedDataByTime($startTime,$endTime);
+	}
+
+	public function searchAnalysisLessonViewNum($conditions)
+	{
+		return $this->getLessonViewDao()->searchLessonViewCount($conditions);
+	}
+
+	public function analysisLessonViewDataByTime($startTime,$endTime,$conditions)
+	{
+		return $this->getLessonViewDao()->searchLessonViewGroupByTime($startTime,$endTime,$conditions);
+	}
 
 	public function publishLesson($courseId, $lessonId)
 	{
@@ -955,6 +965,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 		list($course, $member) = $this->tryTakeCourse($courseId);
 		$user = $this->getCurrentUser();
 
+		$lesson = $this->getCourseLesson($courseId, $lessonId);
+
+		$createLessonView['courseId'] = $courseId;
+		$createLessonView['lessonId'] = $lessonId;
+		$createLessonView['fileId'] = $lesson['mediaId'];
+		// $createLessonView['fileType'] = ?;
+		// $createLessonView['fileStorage'] = ?;
+		// $createLessonView['fileSource'] = ?;
+
+		$this->createLessonView($createLessonView);
+
 		$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
 		if ($learn) {
 			return false;
@@ -969,7 +990,25 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'finishedTime' => 0,
 		));
 
+
+
 		return true;
+	}
+
+	public function createLessonView($createLessonView)
+	{
+		$createLessonView = ArrayToolkit::parts($createLessonView, array('courseId', 'lessonId','fileId', 'fileType', 'fileStorage', 'fileSource'));
+
+		$createLessonView['userId'] = $this->getCurrentUser()->id;
+		$createLessonView['createdTime'] = time();
+
+		$lessonView = $this->getLessonViewDao()->addLessonView($createLessonView);
+
+		$lesson = $this->getCourseLesson($createLessonView['courseId'], $createLessonView['lessonId']);
+
+		$this->getLogService()->info('course', 'create', "{$this->getCurrentUser()->nickname}观看课时{$lesson['title']}}");
+
+		return $lessonView;
 	}
 
 	public function finishLearnLesson($courseId, $lessonId)
@@ -1899,6 +1938,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getLessonViewedDao ()
     {
         return $this->createDao('Course.LessonViewedDao');
+    }
+
+    private function getLessonViewDao ()
+    {
+        return $this->createDao('Course.LessonViewDao');
     }
 
     private function getChapterDao()
