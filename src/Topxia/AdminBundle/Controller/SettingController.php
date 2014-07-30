@@ -572,14 +572,20 @@ class SettingController extends BaseController
             'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
             'live_course_enabled' => '0',
+            'userinfoFields'=>array(),
+            "userinfoFieldsType"=>array(),
         );
 
         $courseSetting = array_merge($default, $courseSetting);
 
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
+
+            if(!isset($courseSetting['userinfoFields']))$courseSetting['userinfoFields']=array();
+            if(!isset($courseSetting['userinfoFieldsType']))$courseSetting['userinfoFieldsType']=array();
+
             $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
-            
+
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success','课程设置已保存！');
@@ -587,8 +593,11 @@ class SettingController extends BaseController
 
         $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
         
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
-            'courseSetting' => $courseSetting
+            'courseSetting' => $courseSetting,
+            'userFields'=>$userFields,
         ));
     }
 
@@ -730,11 +739,17 @@ class SettingController extends BaseController
 
             $auth = $this->getSettingService()->get('auth', array());
 
+            $courseSetting = $this->getSettingService()->get('course', array());
+
             foreach ($auth['registerSortType'] as $key => $value) {
                 if($value==$field['fieldName']) unset( $auth['registerSortType'][$key]);
             }
-
+            foreach ($courseSetting['userinfoFieldsType'] as $key => $value) {
+                if($value==$field['fieldName']) unset( $courseSetting['userinfoFieldsType'][$key]);
+            }
             $this->getSettingService()->set('auth', $auth);
+
+            $this->getSettingService()->set('course', $courseSetting);
 
             $this->getUserFieldService()->dropField($id);
 
@@ -760,6 +775,12 @@ class SettingController extends BaseController
         if(!isset($auth['registerSortType'])) $auth['registerSortType']=array(0=>"email",1=>"nickname",3=>"confirmPassword",4=>"truename",5=>"mobile",6=>"idcard",7=>"gender",8=>"job",9=>"company");
         $auth['registerSortType'][]=$field['fieldName'];
         $this->getSettingService()->set('auth', $auth);
+
+        $courseSetting = $this->getSettingService()->get('course', array());
+        if(!isset($courseSetting['userinfoFieldsType'])) $courseSetting['userinfoFieldsType']=array();
+        $courseSetting['userinfoFieldsType'][]=$field['fieldName'];
+
+        $this->getSettingService()->set('course', $courseSetting);
 
         return $this->redirect($this->generateUrl('admin_setting_user_fields')); 
     }
