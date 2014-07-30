@@ -144,6 +144,15 @@ function install_step3()
 
 	$error = null;
 	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+		$userData['server_addr']=$_SERVER['SERVER_ADDR'];
+		$userData['server_name']=$_SERVER['SERVER_NAME'];
+		$web=$_POST['web'];
+		$userData['mobile']=$web['mobile'];
+		$userData['qq']=$web['qq'];
+		$userData['name']=$web['name'];print_r($userData);
+		$post=new postRequest();
+		$post->postRequest("http://open.edusoho.com/track/install",$userData);
+
 		$init = new SystemInit();
 		$admin = $init->initAdmin($_POST['admin']);
 		$init->initSiteSettings($_POST);
@@ -169,8 +178,6 @@ function install_step3()
 	echo $twig->render('step-3.html.twig', array(
 		'step' => 3,
 		'error' => $error,
-		'server_addr'=> $_SERVER['SERVER_ADDR'],
-		'server_name'=>$_SERVER['SERVER_NAME'],
 		'request' => $_POST,
 	));
 }
@@ -259,7 +266,37 @@ function _create_connection()
 
     return $connection;
 }
+class postRequest
+{
+	public function postRequest($url, $params)
+    {
+    	$userAgent = 'Topxia  Client 1.0';
 
+	$connectTimeout = 30;
+
+	$timeout = 30;
+
+    	$curl = curl_init();
+
+    	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+    	curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
+		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
+		curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_HEADER, 0);
+		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+		curl_setopt($curl, CURLOPT_URL, $url );
+
+		// curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
+
+		$response = curl_exec($curl);
+
+		curl_close($curl);
+
+		return $response;
+}
+}
 class SystemInit
 {
 
