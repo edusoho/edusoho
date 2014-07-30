@@ -88,12 +88,11 @@
               </div>
     
           {% else %}
-            
+            <div class="bottom-thread-post col-md-12">  
               <div class="text-muted pull-right" >
-                1楼 {{threadMain.createdTime|date('Y-m-d H:i:s')}}  &nbsp;
-             
+                1&nbsp;楼 {{threadMain.createdTime|date('Y-m-d H:i:s')}} &nbsp;
               </div>
-      
+            </div>
           {% endif %}
                
       {% endif %}
@@ -130,6 +129,14 @@
                 </div>
                 
                 <div class="bottom-thread-post col-md-12">     
+                    <div class="text-muted pull-right" >&nbsp;
+                    {% if filters.sort=='desc' %}
+                      {{ (postCount+1)-10*(paginator.currentPage-1)-loop.index0 }}
+                    {% else %}
+                      {{ (loop.index+1)+10*(paginator.currentPage-1) }}
+                    {% endif %}
+                    楼 {{post.createdTime|date('Y-m-d H:i:s')}}
+                  </div>
                   {% if user.id==post.userId%}
                   <div class="course-view">
                     <div class="deletePost"><a title="确定删除这条回复"  id="deletePostByself"
@@ -150,15 +157,7 @@
                         href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a>
                       </div>
                   </div>
-                  {% endif %}
-                    <div class="text-muted pull-right" >&nbsp;
-                    {% if filters.sort=='desc' %}
-                      {{ (postCount+1)-10*(paginator.currentPage-1)-loop.index0 }}
-                    {% else %}
-                      {{ (loop.index+1)+10*(paginator.currentPage-1) }}
-                    {% endif %}
-                    楼 {{post.createdTime|date('Y-m-d H:i:s')}}  &nbsp;
-                  </div> 
+                  {% endif %} 
               </div>
               </td>   
             </tr>                  
