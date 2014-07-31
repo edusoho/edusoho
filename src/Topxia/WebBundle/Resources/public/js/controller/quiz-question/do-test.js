@@ -55,7 +55,6 @@ define(function(require, exports, module) {
         var $testpaperHeadingHeight=$('.testpaper-heading').height();
 
         $(window).scroll(function(){
-            console.log($(window).scrollTop())
             if ($(window).scrollTop() > $testpaperHeadingHeight) {
                 var $cardFooterHeight= $(".testpaper-card").find('.panel-footer').css('height').replace('px','');
                 $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-$cardFooterHeight-80,"height": "auto","overflow": "auto"});
