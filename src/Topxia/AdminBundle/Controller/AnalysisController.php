@@ -437,22 +437,23 @@ class AnalysisController extends BaseController
          );
 
     	$videoViewedTrendData="";
+
     	if($tab=="trend"){
-        	$videoViewedTrendData = $this->getOrderService()->searchLessonViewGroupByTime($timeRange['startTime'],$timeRange['endTime'],array("fileType"=>'video'));
+        	$videoViewedTrendData = $this->getCourseService()->analysisLessonViewDataByTime($timeRange['startTime'],$timeRange['endTime'],array("fileType"=>'video'));
   	
-		  	$data=$this->fillAnalysisData($condition,$PaidLessonData);		  	
+		  	$data=$this->fillAnalysisData($condition,$videoViewedTrendData);		  	
     	}
 
-		$courseIds = ArrayToolkit::column($PaidLessonDetail, 'targetId');
+		$courseIds = ArrayToolkit::column($videoViewedDetail, 'courseId');
 
 		$courses=$this->getCourseService()->findCoursesByIds($courseIds);
 
-    	$userIds = ArrayToolkit::column($PaidLessonDetail, 'userId');
+    	$userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
 
 		$users = $this->getUserService()->findUsersByIds($userIds);
     
-       	return $this->render("TopxiaAdminBundle:OperationAnalysis:paid-lesson.html.twig",array(
-			'PaidLessonDetail'=>$PaidLessonDetail,
+       	return $this->render("TopxiaAdminBundle:OperationAnalysis:video-view.html.twig",array(
+			'videoViewedDetail'=>$videoViewedDetail,
 			'paginator'=>$paginator,
 			'tab'=>$tab,
 			'data'=>$data,
