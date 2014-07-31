@@ -12,7 +12,6 @@ define(function(require, exports, module) {
     var playedQuestions = [];
     var playingQuestion = null;
 
-    var $navbarTop=$('#testpaper-navbar').offset().top;
     var wrongs = [],
 
     rights = [],
@@ -32,21 +31,51 @@ define(function(require, exports, module) {
 
      $(".testpaper-card").find(".panel-body").css({"height": "auto","overflow": "hidden"});
   
-    $(window).scroll(function(){
- 
-    if ($('#testpaper-navbar').offset().top > $navbarTop) {
-            $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-84-80-30,"height": "auto","overflow": "auto"});
-        } else {
-            $(".testpaper-card").find(".panel-body").scrollTop(0);
-             $(".testpaper-card").find(".panel-body").css({"height": "auto","overflow": "hidden"});
-        }
-    });
+      if ($('#testpaper-navbar').length > 0) {
+            var $navbarTop=$('#testpaper-navbar').offset().top;
+            $(window).scroll(function(){
+         
+            if ($('#testpaper-navbar').offset().top > $navbarTop) {
+                var $cardFooterHeight= $(".testpaper-card").find('.panel-footer').css('height').replace('px','');
+                var $cardHeadingHeight= $(".testpaper-card").find('.panel-heading').css('height').replace('px','');
+                var $testpaperNavbarHeight= $(".testpaper-card").find('.panel-heading').css('height').replace('px','');
+                // console.log($(window).height()-84-80-30)
+                // console.log($(window).height()-$cardFooterHeight-$cardHeadingHeight-$testpaperNavbarHeight-40)
+                    // $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-84-80-30,"height": "auto","overflow": "auto"});
+                    $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-$cardFooterHeight-$cardHeadingHeight-$testpaperNavbarHeight-40,"height": "auto","overflow": "auto"});
+                } else {
+                    $(".testpaper-card").find(".panel-body").scrollTop(0);
+                     $(".testpaper-card").find(".panel-body").css({"height": "auto","overflow": "hidden"});
+                }
+            });
+
+            $('.testpaper-card').affix({
+                offset: {
+                  top: 200
+                }
+            });
+      } else {
+        var $testpaperHeadingHeight=$('.testpaper-heading').height();
+
+        $(window).scroll(function(){
+            console.log($(window).scrollTop())
+            if ($(window).scrollTop() > $testpaperHeadingHeight) {
+                var $cardFooterHeight= $(".testpaper-card").find('.panel-footer').css('height').replace('px','');
+                // console.log($cardFooterHeight)
+                $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-$cardFooterHeight-80,"height": "auto","overflow": "auto"});
+            } else {
+                $(".testpaper-card").find(".panel-body").scrollTop(0);
+                 $(".testpaper-card").find(".panel-body").css({"height": "auto","overflow": "hidden"});
+            }
+        });
 
         $('.testpaper-card').affix({
             offset: {
-              top: 200
+              top: 400
             }
         });
+      }
+
 
         $('.testpaper-card').on('click', '.btn-index', function() {
             var position = $($(this).data('anchor')).offset();
