@@ -374,8 +374,12 @@ class UserController extends BaseController
          if ($request->getMethod() == 'POST') {
                 $file=$request->files->get('excel');
 
-                if (FileToolkit::validateFileExtension($file)) {
-                    throw $this->createAccessDeniedException('Excel格式不正确！');
+                if (FileToolkit::validateFileExtension($file,'xls xlsx')) {
+
+            		$this->setFlashMessage('danger', 'Excel格式不正确！');
+
+	        	return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
+       		 ));
                 }
 
 /*                $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
