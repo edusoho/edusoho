@@ -22,7 +22,11 @@ define(function(require, exports, module) {
                 if (this.qualitySwitcher) {
                     data.videoQuality = this.qualitySwitcher.get('videoQuality');
                     data.audioQuality = this.qualitySwitcher.get('audioQuality');
-                    data.convertor = 'HLSVideo';
+                    if (this.element.data('hlsEncrypted')) {
+                        data.convertor = 'HLSEncryptedVideo';
+                    } else {
+                        data.convertor = 'HLSVideo';
+                    }
                 }
 
                 $.ajax({
