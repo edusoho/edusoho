@@ -15,10 +15,9 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
-	public function addLessonView($data)
+	public function addLessonView($lessonView)
 	{
-		var_dump($data);exit();
-		$affected = $this->getConnection()->insert($this->table, $learn);
+		$affected = $this->getConnection()->insert($this->table, $lessonView);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert LessonView error.');
         }

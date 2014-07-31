@@ -6,7 +6,7 @@ interface LessonViewDao
 {
 	public function getLessonView($id);
 
-	public function addLessonView($data);
+	public function addLessonView($lessonView);
 
 	public function searchLessonViewCount($conditions);
 

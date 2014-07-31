@@ -970,9 +970,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$createLessonView['courseId'] = $courseId;
 		$createLessonView['lessonId'] = $lessonId;
 		$createLessonView['fileId'] = $lesson['mediaId'];
-		// $createLessonView['fileType'] = ?;
-		// $createLessonView['fileStorage'] = ?;
-		// $createLessonView['fileSource'] = ?;
+
+		$file = array();
+		if (!empty($createLessonView['fileId'])) {
+			$file = $this->getUploadFileService()->getFile($createLessonView['fileId']);
+		}
+
+		$createLessonView['fileStorage'] = empty($file) ? "" : $file['storage'];
+		$createLessonView['fileType'] = $lesson['type'];
+		$createLessonView['fileSource'] = $lesson['mediaSource'];
 
 		$this->createLessonView($createLessonView);
 
