@@ -10,10 +10,10 @@
 <div class="page-header clearfix">
   <h1 class="pull-left">用户导入</h1>
 </div>
-<div class="col-md-12">
-    <div class="col-md-2">
+
+    
       <b>选择要导入的文件</b>
-    </div>
+
     <form method="post" enctype="multipart/form-data">
     <div class="uploader white">
       <input type="text" class="filename" readonly="readonly"/>
@@ -21,9 +21,10 @@
       <input type="file" size="30" name="excel"/>
     </div>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    <button type="submit" class="btn btn-primary">aaa</button>
+      <br>
+    <button type="submit" class="btn btn-primary">上传</button>
   </form>
-</div>
+
 
 
 <style>.uploader{

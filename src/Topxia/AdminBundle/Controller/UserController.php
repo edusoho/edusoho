@@ -5,6 +5,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
+use PHPExcel_IOFactory;
+use PHPExcel_Cell;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -376,14 +378,34 @@ class UserController extends BaseController
                     throw $this->createAccessDeniedException('Excel格式不正确！');
                 }
 
-                $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+/*                $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
         
                 $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
-                $file = $file->move($directory, $filename);
+                $file = $file->move($directory, $filename);*/
 
+                $objPHPExcel = PHPExcel_IOFactory::load($file);
 
+                $objWorksheet = $objPHPExcel->getActiveSheet();
+                $highestRow = $objWorksheet->getHighestRow(); 
 
-         }
+                $highestColumn = $objWorksheet->getHighestColumn();
+                $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);//总列数
+
+                $headtitle=array(); 
+                for ($row = 1;$row <= $highestRow;$row++) 
+                {
+                    $strs=array();
+
+                    for ($col = 0;$col < $highestColumnIndex;$col++)
+                    {
+                        $strs[$col] =$objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+                        echo  $strs[$col] ;
+                    }    
+                    
+                }
+            
+        }
+
         return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
         ));
     }
