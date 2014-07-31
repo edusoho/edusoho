@@ -31,6 +31,14 @@ class CourseLessonController extends BaseController
                 $factory = new CloudClientFactory();
                 $client = $factory->createClient();
                 $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+
+                if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                    $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id']), true);
+                    $hls = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
+                } else {
+                    $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                }
+
             }
         }
 
@@ -43,8 +51,6 @@ class CourseLessonController extends BaseController
 
     public function hlskeyurlAction(Request $request, $courseId, $lessonId)
     {
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
@@ -62,6 +68,10 @@ class CourseLessonController extends BaseController
 
         if (empty($file['convertParams']['hlsKey'])) {
             throw $this->createNotFoundException();
+        }
+
+        if (!$lesson['free']) {
+            list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         }
 
         return new Response($file['convertParams']['hlsKey']);
