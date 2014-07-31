@@ -39,9 +39,6 @@ define(function(require, exports, module) {
                 var $cardFooterHeight= $(".testpaper-card").find('.panel-footer').css('height').replace('px','');
                 var $cardHeadingHeight= $(".testpaper-card").find('.panel-heading').css('height').replace('px','');
                 var $testpaperNavbarHeight= $(".testpaper-card").find('.panel-heading').css('height').replace('px','');
-                // console.log($(window).height()-84-80-30)
-                // console.log($(window).height()-$cardFooterHeight-$cardHeadingHeight-$testpaperNavbarHeight-40)
-                    // $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-84-80-30,"height": "auto","overflow": "auto"});
                     $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-$cardFooterHeight-$cardHeadingHeight-$testpaperNavbarHeight-40,"height": "auto","overflow": "auto"});
                 } else {
                     $(".testpaper-card").find(".panel-body").scrollTop(0);
@@ -61,7 +58,6 @@ define(function(require, exports, module) {
             console.log($(window).scrollTop())
             if ($(window).scrollTop() > $testpaperHeadingHeight) {
                 var $cardFooterHeight= $(".testpaper-card").find('.panel-footer').css('height').replace('px','');
-                // console.log($cardFooterHeight)
                 $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-$cardFooterHeight-80,"height": "auto","overflow": "auto"});
             } else {
                 $(".testpaper-card").find(".panel-body").scrollTop(0);
