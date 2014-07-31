@@ -367,6 +367,26 @@ class UserController extends BaseController
 
     }
 
+    public function userInfoLeadByExcelAction(Request $request)
+    {
+         if ($request->getMethod() == 'POST') {
+                $file=$request->files->get('excel');
+
+                if (FileToolkit::validateFileExtension($file)) {
+                    throw $this->createAccessDeniedException('Excel格式不正确！');
+                }
+
+                $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+        
+                $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+                $file = $file->move($directory, $filename);
+
+
+
+         }
+        return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
+        ));
+    }
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');

@@ -7,6 +7,8 @@
     {% block sidebar %}
       <div class="list-group">
         <a href="{{ url('admin_user') }}" class="list-group-item {% if menu == 'user' %}active{% endif %}">用户管理</a>
+
+         <a href="{{ url('admin_user_excel_lead') }}" class="list-group-item {% if menu == 'user-lead' %}active{% endif %}">用户导入</a>
         
         <a href="{{ url('admin_teacher') }}" class="list-group-item {% if menu == 'teacher' %}active{% endif %}">教师管理</a>
 
