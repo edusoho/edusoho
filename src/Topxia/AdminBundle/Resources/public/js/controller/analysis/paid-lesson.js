@@ -8,7 +8,6 @@ define(function(require, exports, module) {
 
         if($('#data').length > 0){
                     var data = eval ("(" + $('#data').attr("value") + ")");
-console.log($('#data').attr("value"));
                     Morris.Line({
                       element: 'line-data',
                       data: data,
