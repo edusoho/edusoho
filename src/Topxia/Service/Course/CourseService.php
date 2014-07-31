@@ -139,7 +139,9 @@ interface CourseService
 
 	public function analysisLessonFinishedDataByTime($startTime,$endTime);
 
-	public function searchAnalysisLessonViewNum($conditions);
+	public function searchAnalysisLessonViewCount($conditions);
+
+	public function searchAnalysisLessonView($conditions, $orderBy, $start, $limit);
 
 	public function analysisLessonViewDataByTime($startTime,$endTime,$conditions);
 

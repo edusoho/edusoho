@@ -847,9 +847,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getLessonLearnDao()->analysisLessonFinishedDataByTime($startTime,$endTime);
 	}
 
-	public function searchAnalysisLessonViewNum($conditions)
+	public function searchAnalysisLessonViewCount($conditions)
 	{
 		return $this->getLessonViewDao()->searchLessonViewCount($conditions);
+	}
+
+	public function searchAnalysisLessonView($conditions, $orderBy, $start, $limit)
+	{
+		return $this->getLessonViewDao()->searchLessonView($conditions, $orderBy, $start, $limit);
 	}
 
 	public function analysisLessonViewDataByTime($startTime,$endTime,$conditions)
