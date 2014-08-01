@@ -13,27 +13,23 @@
         <form id="register-form" class="form-vertical" method="post" action="{{ path('register') }}">
 
           {{ web_macro.flash_messages() }}
-
-          {% if registerSort %}
-          {% for field in registerSort %}
-
-            {% if field == 'email' %}
               <div class="form-group">
-                <label class="control-label required" for="register_{{ field }}">邮箱地址</label>
+                <label class="control-label required" for="register_email">邮箱地址</label>
                 <div class="controls">
-                  <input type="text" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-url="{{path('register_email_check')}}" data-explain="填写你常用的邮箱作为登录帐号">
+                  <input type="text" id="register_email" name="email" required="required" class="form-control" data-url="{{path('register_email_check')}}" data-explain="填写你常用的邮箱作为登录帐号">
                   <p class="help-block">填写你常用的邮箱作为登录帐号</p>
                 </div>
               </div>
-            {% elseif field == 'nickname' %}
               <div class="form-group">
-                <label class="control-label required" for="register_{{ field }}">昵称</label>
+                <label class="control-label required" for="register_nickname">昵称</label>
                 <div class="controls">
-                  <input type="text" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-url="{{path('register_nickname_check')}}" data-explain="该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字">
+                  <input type="text" id="register_nickname" name="nickname" required="required" class="form-control" data-url="{{path('register_nickname_check')}}" data-explain="该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字">
                   <p class="help-block">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</p>
                 </div>
               </div>
-            {% elseif field == 'truename' %}
+          {% if registerSort %}
+          {% for field in registerSort %}
+            {% if field == 'truename' %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">姓名</label>
                 <div class="controls">
@@ -76,22 +72,6 @@
                 <label class="control-label required" for="register_{{ field }}">身份证号</label>
                 <div class="controls">
                   <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control">
-                </div>
-              </div>
-            {% elseif field == 'password' %}
-              <div class="form-group">
-                <label class="control-label required" for="register_{{ field }}">密码</label>
-                <div class="controls">
-                  <input type="password" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-explain="5-20位英文、数字、符号，区分大小写">
-                  <p class="help-block">5-20位英文、数字、符号，区分大小写</p>
-                </div>
-              </div>
-            {% elseif field == 'confirmPassword' %}
-              <div class="form-group">
-                <label class="control-label required" for="register_{{ field }}">确认密码</label>
-                <div class="controls">
-                  <input type="password" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-explain="再输入一次密码">
-                  <p class="help-block">再输入一次密码</p>
                 </div>
               </div>
             {% endif %}
@@ -141,6 +121,20 @@
               {% endif %}
             {% endfor %}
           {% endfor %}
+              <div class="form-group">
+                <label class="control-label required" for="register_password">密码</label>
+                <div class="controls">
+                  <input type="password" id="register_password" name="password" required="required" class="form-control" data-explain="5-20位英文、数字、符号，区分大小写">
+                  <p class="help-block">5-20位英文、数字、符号，区分大小写</p>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label required" for="register_confirmPassword">确认密码</label>
+                <div class="controls">
+                  <input type="password" id="register_confirmPassword" name="confirmPassword" required="required" class="form-control" data-explain="再输入一次密码">
+                  <p class="help-block">再输入一次密码</p>
+                </div>
+              </div>
           {% else %}
            <div class="form-group">
                 <label class="control-label required" for="register_email">邮箱地址</label>

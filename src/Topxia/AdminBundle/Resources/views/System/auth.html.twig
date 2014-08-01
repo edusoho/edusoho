@@ -59,7 +59,49 @@
         <div class="col-md-3 control-label">
           <label for="email_activation_body">注册时需提供</label>
         </div>
-        <div  class="controls col-md-8">
+        <div class="controls col-md-8 "  id="show-list">
+        {% for sort in auth.registerSort%}
+            {% if sort=='email' %}
+            <button type="button" class="btn btn-default btn-xs">邮箱地址</button>
+            {% endif %}
+            {% if sort=='nickname' %}
+            <button type="button" class="btn btn-default btn-xs">昵称</button>
+            {% endif %}
+            {% if sort=='password' %}
+            <button type="button" class="btn btn-default btn-xs">密码</button>
+            {% endif %}
+            {% if sort=='truename' %}
+            <button type="button" class="btn btn-default btn-xs">姓名</button>
+            {% endif %}
+            {% if sort=='idcard' %}
+            <button type="button" class="btn btn-default btn-xs">身份证号码</button>
+            {% endif %}
+             {% if sort=='mobile' %}
+            <button type="button" class="btn btn-default btn-xs">手机号码</button>
+            {% endif %}
+             {% if sort=='job' %}
+            <button type="button" class="btn btn-default btn-xs">职业</button>
+            {% endif %}
+             {% if sort=='gender' %}
+            <button type="button" class="btn btn-default btn-xs">性别</button>
+            {% endif %}
+             {% if sort=='company' %}
+            <button type="button" class="btn btn-default btn-xs">公司</button>
+            {% endif %}
+            {% if  userFields %}
+                {% for field in userFields %}
+                      {% if sort==field.fieldName %}
+                           <button type="button" class="btn btn-default btn-xs">{{field.title}}</button>
+                     {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        <div class="pull-right "><a href="javascript:" id="show-list-btn">编辑 <span class="
+  glyphicon glyphicon-chevron-down"></span></a></div>
+      </div>
+        <div  class="controls col-md-8 " id="show-register-list">
+          <div class="form-group "><ul class="sortable-list" data-role="list">
+          </div>
             <div class="form-group"><ul class="register-list sortable-list" data-role="list">
             {% if auth.registerSortType %}
             {% for sort in auth.registerSortType %}
@@ -177,6 +219,8 @@
             </ul>
             <span class="help-block pull-right">可拖动调整先后次序.勾选后，在注册时就必须要填写该项目，将会增加注册难度，请谨慎使用</span>
           </div>
+          <div style="text-align:center;"><a href="javascript:" id="hide-list-btn">收起 <span class="
+glyphicon glyphicon-chevron-up"></span></a></div>
         </div>
     </div>
   </fieldset>
