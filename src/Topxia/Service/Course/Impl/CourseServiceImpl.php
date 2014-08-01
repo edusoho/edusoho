@@ -981,7 +981,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$file = $this->getUploadFileService()->getFile($createLessonView['fileId']);
 		}
 
-		$createLessonView['fileStorage'] = empty($file) ? "" : $file['storage'];
+		$createLessonView['fileStorage'] = empty($file) ? "net" : $file['storage'];
 		$createLessonView['fileType'] = $lesson['type'];
 		$createLessonView['fileSource'] = $lesson['mediaSource'];
 
@@ -1009,7 +1009,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function createLessonView($createLessonView)
 	{
 		$createLessonView = ArrayToolkit::parts($createLessonView, array('courseId', 'lessonId','fileId', 'fileType', 'fileStorage', 'fileSource'));
-
 		$createLessonView['userId'] = $this->getCurrentUser()->id;
 		$createLessonView['createdTime'] = time();
 

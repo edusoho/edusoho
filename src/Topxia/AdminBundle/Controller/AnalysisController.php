@@ -444,20 +444,20 @@ class AnalysisController extends BaseController
 		  	$data=$this->fillAnalysisData($condition,$videoViewedTrendData);		  	
     	}
 
-		$courseIds = ArrayToolkit::column($videoViewedDetail, 'courseId');
-
-		$courses=$this->getCourseService()->findCoursesByIds($courseIds);
+		$lessonIds = ArrayToolkit::column($videoViewedDetail, 'lessonId');
+		$lessons=$this->getCourseService()->findLessonsByIds($lessonIds);
+		$lessons=ArrayToolkit::index($lessons,'id');
 
     	$userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
-
 		$users = $this->getUserService()->findUsersByIds($userIds);
-    
+		$users = ArrayToolkit::index($users,'id');
+
        	return $this->render("TopxiaAdminBundle:OperationAnalysis:video-view.html.twig",array(
 			'videoViewedDetail'=>$videoViewedDetail,
 			'paginator'=>$paginator,
 			'tab'=>$tab,
 			'data'=>$data,
-			'courses'=>$courses,
+			'lessons'=>$lessons,
 			'users'=>$users,
       	));
 	}

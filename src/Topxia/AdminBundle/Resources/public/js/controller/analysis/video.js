@@ -14,7 +14,7 @@ define(function(require, exports, module) {
                       data: data,
                       xkey: 'date',
                       ykeys: ['count',],
-                      labels: ['营收额'],
+                      labels: ['观看数'],
                       xLabels:"day",
                     });
         }

@@ -8,12 +8,15 @@
             </tr>
           </thead>
           <tbody>
-            {% if IncomeDetail %}
-            {% for data in videoViewedDetail %}
-        <tr>
-        	<td></td>
-        </tr>
-            {% endfor %}
+            {% if videoViewedDetail %}
+              {% for key,val in videoViewedDetail %}
+                  <tr>
+                    <td>{{ users[val.userId].nickname }}</td>
+                    <td>{{ lessons[val.lessonId].title }}</td>
+                    <td>{{val.createdTime|data_format}}</td>
+                  	<td>{{dict_text('videoStorageType',val.fileStorage)}}</td>
+                  </tr>
+              {% endfor %}
             {% endif %}
           </tbody>
       </table>    
