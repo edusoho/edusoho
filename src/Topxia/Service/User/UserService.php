@@ -76,12 +76,24 @@ interface UserService
 
     public function changeUserRoles($id, array $roles);
 
+    /**
+     * @deprecated move to TokenService
+     */
     public function makeToken($type, $userId = null, $expiredTime = null, $data = null);
 
+    /**
+     * @deprecated move to TokenService
+     */
     public function getToken($type, $token);
 
+    /**
+     * @deprecated move to TokenService
+     */
     public function searchTokenCount($conditions);
 
+    /**
+     * @deprecated move to TokenService
+     */
     public function deleteToken($type, $token);
 
     public function lockUser($id);

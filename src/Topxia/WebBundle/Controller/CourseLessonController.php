@@ -33,7 +33,8 @@ class CourseLessonController extends BaseController
                 $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
 
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id']), true);
+                    $token = $this->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
+                    $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                     $hls = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
                 } else {
                     $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
@@ -49,8 +50,13 @@ class CourseLessonController extends BaseController
         ));
     }
 
-    public function hlskeyurlAction(Request $request, $courseId, $lessonId)
+    public function hlskeyurlAction(Request $request, $courseId, $lessonId, $token)
     {
+        if (!$this->getTokenService()->verifyToken('hlsvideo.view', $token)) {
+            $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
+            return new Response($fakeKey);
+        }
+
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
@@ -126,7 +132,8 @@ class CourseLessonController extends BaseController
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                            $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id']), true);
+                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
+                            $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                             $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
@@ -329,6 +336,11 @@ class CourseLessonController extends BaseController
     private function getDiskService()
     {
         return $this->getServiceKernel()->createService('User.DiskService');
+    }
+
+    private function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     private function getFileService()

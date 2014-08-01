@@ -261,7 +261,7 @@ course_lesson_learn_cancel:
     methods: [POST]
 
 course_lesson_hlskeyurl:
-    pattern:  /course/{courseId}/lesson/{lessonId}/hlskeyurl
+    pattern:  /course/{courseId}/lesson/{lessonId}/kan/{token}
     defaults: { _controller: TopxiaWebBundle:CourseLesson:hlskeyurl }
 
 course_lesson_plugin_lesson_list:
