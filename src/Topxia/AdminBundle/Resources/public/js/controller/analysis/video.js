@@ -28,7 +28,6 @@ define(function(require, exports, module) {
         });
 
         $minCreatedTime = $('[name=minCreatedTime]').val();
-        console.log($minCreatedTime);
 
         $('[name=endTime]').datetimepicker('setEndDate', now);
         $('[name=endTime]').datetimepicker('setStartDate', $minCreatedTime);
@@ -58,23 +57,6 @@ define(function(require, exports, module) {
             rule:'date_check'
         });
 
-    Validator.addRule('date_check',
-            function() {
-
-                var startTime = $('[name=startTime]').val();
-                var endTime = $('[name=endTime]').val();
-                startTime = startTime.replace(/-/g,"/");
-                startTime = Date.parse(startTime)/1000;
-                endTime = endTime.replace(/-/g,"/");
-                endTime = Date.parse(endTime)/1000;
-
-                if (endTime >= startTime) {
-                    return true;
-                }else{
-                    return false;
-                }
-            },"开始时间必须小于或等于结束时间"
-        );
     };
 
 });

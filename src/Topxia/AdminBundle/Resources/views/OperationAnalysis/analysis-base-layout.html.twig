@@ -3,9 +3,9 @@
 {% block content %}
   <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
 <div class="row">
-  <div class="col-md-2">
+  {# <div class="col-md-2"> #}
     {% block sidebar %}
-      <div class="list-group">
+{#       <div class="list-group">
         <a href="{{ url('admin_operation_analysis_register',{tab:"trend"}) }}" class="list-group-item {% if menu == 'register' %}active{% endif %}">新注册用户</a>
         <a href="{{ url('admin_operation_analysis_login',{tab:"trend"}) }}" class="list-group-item {% if menu == 'login' %}active{% endif %}">用户登录</a>
         <a href="{{ url('admin_operation_analysis_course',{tab:"trend"}) }}" class="list-group-item {% if menu == 'course' %}active{% endif %}">新增课程</a>
@@ -23,26 +23,32 @@
         <a href="{{ url('admin_operation_analysis_course_income',{tab:"trend"}) }}" class="list-group-item {% if menu == 'course-income' %}active{% endif %}">课程营收额</a>
         <a href="{{ url('admin_operation_analysis_lesson_exit',{tab:"trend"}) }}" class="list-group-item {% if menu == 'exit-lesson' %}active{% endif %}">退出学习</a>
 
-      </div>
+      </div> #}
 
     {% endblock %}
-  </div>
-  <div class="col-md-10">
+  {# </div> #}
+  <div class="col-md-12">
   {% block analysisHead %}
   <div class="col-md-12">
 {{ web_macro.flash_messages() }}
   <div class="page-header">
-    <h1>运营数据</h1>
+    <h1>运营数据统计</h1>
   </div>
 
-      <form   class="form-inline" action="" method="get" id="operation-form">
+      <form   class="well well-sm form-inline" action="" method="get" id="operation-form"  role="form">
         
+          <div class="form-group">
+    <select class="form-control" name="analysisDateType">
+        {{ select_options(dict('analysisDateType'), app.request.query.get('analysisDateType'), '--选择数据类型--') }}
+    </select>
+  </div>
+
         <div class="form-group">
-           <a type="button" class="btn btn-default {% if app.request.query.get('type')!="lastMonth" and app.request.query.get('type')!="lastThreeMonths" and app.request.query.get('startTime')=="" and app.request.query.get('endTime')=="" %}active{% endif %}"  href="{{path(href,{type:"month",tab:tab})}}">本月</a>
+           <a class="btn btn-default {% if app.request.query.get('type')!="lastMonth" and app.request.query.get('type')!="lastThreeMonths" and app.request.query.get('startTime')=="" and app.request.query.get('endTime')=="" %}active{% endif %}"  href="{{path(href,{type:"month",tab:tab})}}">本月</a>
         </div>
         
         <div class="form-group">
-         <a type="button" class="btn btn-default  {% if app.request.query.get('type')=="lastMonth" %}active{% endif %}"  href="{{path(href,{type:"lastMonth",tab:tab})}}">上月</a>
+         <a class="btn btn-default  {% if app.request.query.get('type')=="lastMonth" %}active{% endif %}"  href="{{path(href,{type:"lastMonth",tab:tab})}}">上月</a>
         </div>
 
         <div class="form-group">
@@ -51,16 +57,25 @@
 
         <div class="form-group">
 
-          <label >起始日期&nbsp;</label><input type="text" class="form-control" name="startTime" value="{{startTime}}">
+          <label class="col-md-4" style="padding-top:9px;">起始日期</label>
 
+            <div class="col-md-8 ">
+            <input type="text" class="form-control" name="startTime" value="{{startTime}}">
+
+          </div>
         </div>
 
         <div class="form-group">
 
-          <label >截止日期&nbsp;</label><input type="text" class="form-control"  name="endTime" value="{{endTime}}">
+          <label class="col-md-4" style="padding-top:9px;">截止日期</label>
+
+             <div class="col-md-8 ">
+            <input type="text" class="form-control"  name="endTime" value="{{endTime}}">
+
+            </div>
         </div>
 
-        <button class="btn btn-primary">查询</button>
+        <button class="btn btn-primary pull-right">查询</button>
       </form>
 
   </div>

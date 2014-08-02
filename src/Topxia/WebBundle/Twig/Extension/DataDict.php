@@ -165,6 +165,24 @@ class DataDict
 			'warning' => '<span class="text-warning">警告</span>',
 			'error' => '<span class="text-danger">错误</span>'
 		),
+
+		'analysisDateType' => array(
+			'register' => '新注册用户数',
+			'login' => '用户登录数',
+			'course' => '新增课程数',
+			'lesson' => '新增课时数',
+			'joinLesson' => '加入学习数',
+			'paidLesson' => '购买课程数',
+			'finishedLesson' => '完成课时学习数',
+			'videoViewed' => '视频观看数',
+			'cloudVideoViewed' => '云视频观看数',
+			'localVideoViewed' => '本地视频观看数',
+			'netVideoViewed' => '网络视频观看数',
+			'income' => '营收额',
+			'courseIncome' => '课程营收额',
+			'exitLesson' => '退出学习数',
+		),
+
 		'userType' => array(
 			'default' => '网站注册',
 			'weibo' => '微博登录',
