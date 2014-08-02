@@ -97,8 +97,8 @@
   </div>
   <div class="col-md-12">
       <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation"{% if tab=="trend" %} class="active"{% endif %} ><a href="{{path(href,{tab:"trend",type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')})}}">趋势</a></li>
-        <li role="presentation" {% if tab=="detail" %} class="active"{% endif %}><a href="{{path(href,{tab:"detail",type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')})}}">明细</a></li>
+        <li role="presentation"{% if tab=="trend" %} class="active"{% endif %} ><a href="{{path(href,{tab:"trend",type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime'),analysisDateType:app.request.query.get('analysisDateType')})}}">趋势</a></li>
+        <li role="presentation" {% if tab=="detail" %} class="active"{% endif %}><a href="{{path(href,{tab:"detail",type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime'),analysisDateType:app.request.query.get('analysisDateType')})}}">明细</a></li>
       </ul>
   </div>
 {% endblock %}
