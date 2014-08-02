@@ -8,23 +8,6 @@ use Topxia\Common\ArrayToolkit;
 
 class AnalysisController extends BaseController
 {	
-	public function routeTransfer(Request $request)
-	{
-    	$analysisDateType=$request->query->get('analysisDateType');
-    	if (!empty($analysisDateType) and !in_array($analysisDateType,array(
-			'register', 'login','course','lesson' ,
-			'lesson_join','lesson_paid','lesson_finished',
-			'video_viewed','video_cloud_viewed','video_local_viewed',
-			'video_net_viewed','income','course_income','lesson_exit'
-			))  )
-		{
-    		return $this->createMessageResponse('error','选择数据类型有误，请重新选择！');
-    	}
-    	
-    	$conditions = $request->query->all();
-
-    	return $this->forward('TopxiaAdminBundle:Analysis:'.$analysisDateType);
-	}
 
 	public function registerAction(Request $request,$tab)
 	{		

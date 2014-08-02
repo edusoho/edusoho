@@ -5,6 +5,20 @@
 <div class="row">
   {# <div class="col-md-2"> #}
     {% block sidebar %}
+<input type="hidden" value="{{ url('admin_operation_analysis_register',{tab:"trend",analysisDateType:'register'}) }}" name="register"/>
+<input type="hidden" value="{{ url('admin_operation_analysis_login',{tab:"trend",analysisDateType:'login'}) }}" name="login"/>
+<input type="hidden" value="{{ url('admin_operation_analysis_course',{tab:"trend",analysisDateType:'course'}) }}" name="course"/>
+<input type="hidden" value="{{ url('admin_operation_analysis_lesson',{tab:"trend",analysisDateType:'lesson'}) }}" name="lesson"/>
+<input type="hidden" value="{{ url('admin_operation_analysis_lesson_join',{tab:"trend",analysisDateType:'joinLesson'}) }}" name="lesson_join"/>
+<input type="hidden" value="{{ url('admin_operation_analysis_lesson_paid',{tab:"trend",analysisDateType:'paidLesson'}) }}" name="lesson_paid"/>
+<input type="hidden" value="{{ url('admin_operation_analysis_lesson_finished',{tab:"trend",analysisDateType:'finishedLesson'}) }}" name="lesson_finished"/>
+ <input type="hidden" value="{{ url('admin_operation_analysis_video_viewed',{tab:"trend",analysisDateType:'videoViewed'}) }}" name="video_viewed"/>
+<input type="hidden" value="{{ url('admin_operation_analysis_video_cloud_viewed',{tab:"trend",analysisDateType:'cloudVideoViewed'}) }}" name="video_cloud_viewed"/>
+<input type="hidden" value="{{ url('admin_operation_analysis_video_local_viewed',{tab:"trend",analysisDateType:'localVideoViewed'}) }}" name="video_local_viewed"/>
+<input type="hidden" value="{{ url('admin_operation_analysis_video_net_viewed',{tab:"trend",analysisDateType:'netVideoViewed'}) }}" name="video_net_viewed"/>
+<input type="hidden" value="{{ url('admin_operation_analysis_income',{tab:"trend",analysisDateType:'income'}) }}" name="income"/>
+<input type="hidden" value="{{ url('admin_operation_analysis_course_income',{tab:"trend",analysisDateType:'courseIncome'}) }}" name="course_income"/>
+<input type="hidden" value="{{ url('admin_operation_analysis_lesson_exit',{tab:"trend",analysisDateType:'exitLesson'}) }}" name="lesson_exit"/>
 {#       <div class="list-group">
         <a href="{{ url('admin_operation_analysis_register',{tab:"trend"}) }}" class="list-group-item {% if menu == 'register' %}active{% endif %}">新注册用户</a>
         <a href="{{ url('admin_operation_analysis_login',{tab:"trend"}) }}" class="list-group-item {% if menu == 'login' %}active{% endif %}">用户登录</a>
