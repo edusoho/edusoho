@@ -123,6 +123,11 @@ class DataDict
     		'text' => '图文',
             'ppt' => 'PPT',
 		),
+		'videoStorageType' =>array(
+			'local'=>'本地视频',
+			'cloud'=>'云视频',
+			'net'=>'网络视频',
+		),
 		'userRole' => array(
 			'ROLE_USER' => '学员',
 			'ROLE_TEACHER' => '教师',

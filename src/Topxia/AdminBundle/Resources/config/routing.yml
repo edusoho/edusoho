@@ -790,6 +790,10 @@ admin_operation_analysis_lesson_finished:
     pattern:  /operation/analysis/lesson/finished/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:finishedLesson }
 
+admin_operation_analysis_video_viewed:
+    pattern:  /operation/analysis/video/viewed/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:videoViewed }
+
 admin_operation_analysis_income:
     pattern:  /operation/analysis/income/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:income }

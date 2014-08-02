@@ -8,12 +8,13 @@ define(function(require, exports, module) {
 
         if($('#data').length > 0){
                     var data = eval ("(" + $('#data').attr("value") + ")");
+
                     Morris.Line({
                       element: 'line-data',
                       data: data,
                       xkey: 'date',
                       ykeys: ['count',],
-                      labels: ['购买课程数'],
+                      labels: ['观看数'],
                       xLabels:"day",
                     });
         }
@@ -26,8 +27,6 @@ define(function(require, exports, module) {
             minView: 'month'
         });
         $('[name=endTime]').datetimepicker('setEndDate', now);
-        $('[name=endTime]').datetimepicker('setStartDate', $('#paidLessonStartDate').attr("value"));
-        
         $("[name=startTime]").datetimepicker({
             language: 'zh-CN',
             autoclose: true,
@@ -35,7 +34,7 @@ define(function(require, exports, module) {
             minView: 'month'
         });
         $('[name=startTime]').datetimepicker('setEndDate', now);
-        $('[name=startTime]').datetimepicker('setStartDate', $('#paidLessonStartDate').attr("value"));
+
 
         var validator = new Validator({          
             element: '#operation-form'});

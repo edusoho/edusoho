@@ -489,6 +489,58 @@ class AnalysisController extends BaseController
 	      	));
 	}
 
+	public function videoViewedAction(Request $request,$tab)
+	{
+    	$data=array();
+    	$condition=$request->query->all();
+    	$timeRange=$this->getTimeRange($condition);
+	
+    	if(!$timeRange) {
+		  $this->setFlashMessage("danger","输入的日期有误!");
+			return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
+               'tab' => "trend",
+            )));
+    	}
+
+    	$paginator = new Paginator(
+            	$request,
+            	$this->getCourseService()->searchAnalysisLessonViewCount(array("fileType"=>'video',"startTime"=>$timeRange['startTime'],"endTime"=>$timeRange['endTime'])),
+           	 20
+    	);
+
+    	$videoViewedDetail=$this->getCourseService()->searchAnalysisLessonView(
+        	array("fileType"=>'video',"startTime"=>$timeRange['startTime'],"endTime"=>$timeRange['endTime']),
+        		array("createdTime","DESC"),
+              $paginator->getOffsetCount(),
+              $paginator->getPerPageCount()
+         );
+
+    	$videoViewedTrendData="";
+
+    	if($tab=="trend"){
+        	$videoViewedTrendData = $this->getCourseService()->analysisLessonViewDataByTime($timeRange['startTime'],$timeRange['endTime'],array("fileType"=>'video'));
+  	
+		  	$data=$this->fillAnalysisData($condition,$videoViewedTrendData);		  	
+    	}
+
+		$lessonIds = ArrayToolkit::column($videoViewedDetail, 'lessonId');
+		$lessons=$this->getCourseService()->findLessonsByIds($lessonIds);
+		$lessons=ArrayToolkit::index($lessons,'id');
+
+    	$userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
+		$users = $this->getUserService()->findUsersByIds($userIds);
+		$users = ArrayToolkit::index($users,'id');
+
+       	return $this->render("TopxiaAdminBundle:OperationAnalysis:video-view.html.twig",array(
+			'videoViewedDetail'=>$videoViewedDetail,
+			'paginator'=>$paginator,
+			'tab'=>$tab,
+			'data'=>$data,
+			'lessons'=>$lessons,
+			'users'=>$users,
+      	));
+	}
+
 	public function incomeAction(Request $request,$tab)
 	{
 	        	$data=array();
