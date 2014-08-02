@@ -42,12 +42,14 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name=startTime]',
-            required: true
+            required: true,
+            rule:'date_check'
         });
 
         validator.addItem({
             element: '[name=endTime]',
-            required: true
+            required: true,
+            rule:'date_check'
         });
     };
 

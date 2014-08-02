@@ -213,6 +213,7 @@ define(function(require, exports, module) {
                     return false;
                 }
             },"开始时间必须小于或等于结束时间"
+        ],
         ];
 
     exports.inject = function(Validator) {
