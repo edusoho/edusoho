@@ -152,14 +152,14 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisPaidCourseOrderDataByTime($startTime,$endTime);
     }
 
-    public function analysisExitCourseNumByTimeAndStatus($startTime,$endTime,$status)
+    public function analysisExitCourseNumByTimeAndStatus($startTime,$endTime)
     {
-        return $this->getOrderRefundDao()->analysisCourseOrderNumByTimeAndStatus($startTime,$endTime,$status);
+        return $this->getOrderDao()->analysisExitCourseOrderNumByTime($startTime,$endTime);
     }
 
-    public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime,$status)
+    public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime)
     {
-        return $this->getOrderRefundDao()->analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
+        return $this->getOrderDao()->analysisExitCourseOrderDataByTime($startTime,$endTime);
     }
 
     public function analysisAmount($conditions)
@@ -411,6 +411,8 @@ class OrderServiceImpl extends BaseService implements OrderService
         $orderBy = array();
         if ($sort == 'latest') {
             $orderBy =  array('createdTime', 'DESC');
+        }  elseif ($sort == 'early') {
+            $orderBy =  array('createdTime', 'ASC');
         } else {
             $orderBy = array('createdTime', 'DESC');
         }

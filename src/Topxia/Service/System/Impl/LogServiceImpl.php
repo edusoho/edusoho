@@ -29,8 +29,11 @@ class LogServiceImpl extends BaseService implements  LogService
 
 		switch ($sort) {
 			case 'created':
-				$sort = 'createdTime';
+				$sort = array('createdTime','DESC');
 				break;
+			case 'createdByAsc':
+				$sort = array('createdTime','ASC');
+				break;				
 			
 			default:
 				throw $this->createServiceException('参数sort不正确。');

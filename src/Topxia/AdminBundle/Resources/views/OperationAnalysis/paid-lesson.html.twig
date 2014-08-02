@@ -8,6 +8,7 @@
               {% if tab=="trend" %}
 	          <div id="line-data"></div>
 	           <input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'> 
+	          </input> <input id="paidLessonStartDate"  type="hidden" value='{% if paidLessonStartDate %}{{paidLessonStartDate}}{% endif %}'> 
 	          </input>
               {% elseif tab=="detail" %}
                       {% include 'TopxiaAdminBundle:OperationAnalysis:paid-lesson.table.html.twig' %}

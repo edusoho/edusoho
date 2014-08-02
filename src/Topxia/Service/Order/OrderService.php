@@ -60,9 +60,9 @@ interface OrderService
 
     public function analysisPaidCourseOrderDataByTime($startTime,$endTime);
 
-    public function analysisExitCourseNumByTimeAndStatus($startTime,$endTime,$status);
+    public function analysisExitCourseNumByTimeAndStatus($startTime,$endTime);
 
-    public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime,$status);
+    public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime);
 
     public function analysisAmount($conditions);
 

@@ -27,6 +27,8 @@ define(function(require, exports, module) {
             minView: 'month'
         });
         $('[name=endTime]').datetimepicker('setEndDate', now);
+        $('[name=endTime]').datetimepicker('setStartDate', $('#courseStartDate').attr("value"));
+        
         $("[name=startTime]").datetimepicker({
             language: 'zh-CN',
             autoclose: true,
@@ -34,7 +36,7 @@ define(function(require, exports, module) {
             minView: 'month'
         });
         $('[name=startTime]').datetimepicker('setEndDate', now);
-
+        $('[name=startTime]').datetimepicker('setStartDate', $('#courseStartDate').attr("value"));
 
         var validator = new Validator({          
             element: '#operation-form'});

@@ -7,8 +7,8 @@
             </tr>
           </thead>
           <tbody>
-            {% if LoginDetail %}
-            {% for data in LoginDetail %}
+            {% if loginDetail %}
+            {% for data in loginDetail %}
               <tr>
                 <td>{{ admin_macro.user_link(users[data.userId]) }}</td>
                 <td>{{data.ip}}</td>
