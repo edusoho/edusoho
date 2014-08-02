@@ -55,6 +55,7 @@ class AnalysisController extends BaseController
 			"registerStartDate"=>$registerStartDate,
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
 			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
+			'analysisDateType'=>"register",
 	    	  ));
 	}
 
@@ -109,7 +110,8 @@ class AnalysisController extends BaseController
 			'users'=>$users,
 			'loginStartDate'=>$loginStartDate,
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
-			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),			
+			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
+			'analysisDateType'=>"login",			
 	     	 ));
 	}
 	
@@ -167,7 +169,8 @@ class AnalysisController extends BaseController
 			'users'=>$users,
 			'courseStartDate'=>$courseStartDate,
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
-			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),			
+			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
+			'analysisDateType'=>"course",				
 	     	 ));
 	}
 
@@ -228,7 +231,8 @@ class AnalysisController extends BaseController
 			'users'=>$users,
 			'lessonStartDate'=>$lessonStartDate,
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
-			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),			
+			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
+			'analysisDateType'=>"lesson",			
 	      	));
 	}
 
@@ -290,7 +294,8 @@ class AnalysisController extends BaseController
 			'users'=>$users,
 			'joinLessonStartDate'=>$joinLessonStartDate,
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
-			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),			
+			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
+			'analysisDateType'=>"joinLesson",			
 	      	));
 	}
 
@@ -357,7 +362,8 @@ class AnalysisController extends BaseController
 			'exitLessonStartDate'=>$exitLessonStartDate,
 			'cancelledOrders'=>$cancelledOrders,
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
-			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),			
+			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
+			'analysisDateType'=>"exitLesson",			
 	      	));
 	}
 
@@ -419,7 +425,8 @@ class AnalysisController extends BaseController
 			'users'=>$users,
 			'paidLessonStartDate'=>$paidLessonStartDate,
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
-			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),			
+			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),	
+			'analysisDateType'=>"paidLesson",			
 	      	));
 	}
 
@@ -485,7 +492,8 @@ class AnalysisController extends BaseController
 			'users'=>$users,
 			'finishedLessonStartDate'=>$finishedLessonStartDate,
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
-			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),			
+			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
+			'analysisDateType'=>"finishedLesson",			
 	      	));
 	}
 
@@ -550,6 +558,7 @@ class AnalysisController extends BaseController
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
 			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),	
 			'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
+			'analysisDateType'=>"videoViewed",	
       	));
 	}
 
@@ -615,6 +624,7 @@ class AnalysisController extends BaseController
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
 			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),	
 			'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
+			'analysisDateType'=>"cloudVideoViewed",	
       	));
 	}
 
@@ -679,6 +689,7 @@ class AnalysisController extends BaseController
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
 			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),	
 			'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
+			'analysisDateType'=>"localVideoViewed",	
       	));
 	}
 	
@@ -744,6 +755,7 @@ class AnalysisController extends BaseController
 				'startTime'=>date("Y-m-d",$timeRange['startTime']),
 			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),	
 			'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
+			'analysisDateType'=>"netVideoViewed",
       	));
 	}
 
@@ -805,7 +817,8 @@ class AnalysisController extends BaseController
 			'users'=>$users,
 			'incomeStartDate'=>$incomeStartDate,
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
-			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),			
+			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),	
+			'analysisDateType'=>"income",		
 	      	));
 	}
 
@@ -867,7 +880,8 @@ class AnalysisController extends BaseController
 			'users'=>$users,
 			'courseIncomeStartDate'=>$courseIncomeStartDate,
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
-			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),			
+			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
+			'analysisDateType'=>"courseIncome",					
 	      	));
 	}
 
