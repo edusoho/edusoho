@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\CloudClientFactory;
 
 class DefaultController extends BaseController
 {
@@ -88,7 +89,24 @@ class DefaultController extends BaseController
         $todayFinishedLessonNum=$this->getCourseService()->analysisLessonFinishedNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)),"success");
 
         $yesterdayFinishedLessonNum=$this->getCourseService()->analysisLessonFinishedNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())),"success");
-     
+
+        $todayAllVideoViewedNum=$this->getCourseService()->searchAnalysisLessonViewCount(array('startTime'=>strtotime(date("Y-m-d",time())),'endTime'=>strtotime(date("Y-m-d",time()+24*3600)),"fileType"=>'video'));
+
+        $yesterdayAllVideoViewedNum=$this->getCourseService()->searchAnalysisLessonViewCount(array('startTime'=>strtotime(date("Y-m-d",time()-24*3600)),'endTime'=>strtotime(date("Y-m-d",time())),"fileType"=>'video'));        
+
+        $todayCloudVideoViewedNum=$this->getCourseService()->searchAnalysisLessonViewCount(array('startTime'=>strtotime(date("Y-m-d",time())),'endTime'=>strtotime(date("Y-m-d",time()+24*3600)),"fileType"=>'video','fileStorage'=>'cloud'));
+
+        $yesterdayCloudVideoViewedNum=$this->getCourseService()->searchAnalysisLessonViewCount(array('startTime'=>strtotime(date("Y-m-d",time()-24*3600)),'endTime'=>strtotime(date("Y-m-d",time())),"fileType"=>'video','fileStorage'=>'cloud'));
+
+        $todayLocalVideoViewedNum=$this->getCourseService()->searchAnalysisLessonViewCount(array('startTime'=>strtotime(date("Y-m-d",time())),'endTime'=>strtotime(date("Y-m-d",time()+24*3600)),"fileType"=>'video','fileStorage'=>'local'));
+
+        $yesterdayLocalVideoViewedNum=$this->getCourseService()->searchAnalysisLessonViewCount(array('startTime'=>strtotime(date("Y-m-d",time()-24*3600)),'endTime'=>strtotime(date("Y-m-d",time())),"fileType"=>'video','fileStorage'=>'local'));
+
+        $todayNetVideoViewedNum=$this->getCourseService()->searchAnalysisLessonViewCount(array('startTime'=>strtotime(date("Y-m-d",time())),'endTime'=>strtotime(date("Y-m-d",time()+24*3600)),"fileType"=>'video','fileStorage'=>'net'));
+
+        $yesterdayNetVideoViewedNum=$this->getCourseService()->searchAnalysisLessonViewCount(array('startTime'=>strtotime(date("Y-m-d",time()-24*3600)),'endTime'=>strtotime(date("Y-m-d",time())),"fileType"=>'video','fileStorage'=>'net'));
+
+
         $todayExitLessonNum=$this->getOrderService()->analysisExitCourseNumByTimeAndStatus(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)),"success");
 
         $yesterdayExitLessonNum=$this->getOrderService()->analysisExitCourseNumByTimeAndStatus(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())),"success");
@@ -100,6 +118,20 @@ class DefaultController extends BaseController
         $todayCourseIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid","targetType"=>"course"));
 
         $yesterdayCourseIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid","targetType"=>"course"))+0.00;
+
+              $storageSetting = $this->getSettingService()->get('storage');
+
+            if (!empty($storageSetting['cloud_access_key']) or !empty($storageSetting['cloud_secret_key'])) {
+                if (!empty($storageSetting['cloud_access_key']) and !empty($storageSetting['cloud_secret_key'])) {
+                    $factory = new CloudClientFactory();
+                    $client = $factory->createClient($storageSetting);
+                    $keyCheckResult = $client->checkKey();
+                } else {
+                    $keyCheckResult = array('error' => 'error');
+                }
+            } else {
+                $keyCheckResult = array('status' => 'ok');
+            }
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
             'todayRegisterNum'=>$todayRegisterNum,
@@ -116,12 +148,26 @@ class DefaultController extends BaseController
             'yesterdayBuyLessonNum'=>$yesterdayBuyLessonNum,
             'todayFinishedLessonNum'=>$todayFinishedLessonNum,
             'yesterdayFinishedLessonNum'=>$yesterdayFinishedLessonNum,
+
+            'todayAllVideoViewedNum'=>$todayAllVideoViewedNum,
+            'yesterdayAllVideoViewedNum'=>$yesterdayAllVideoViewedNum,
+
+            'todayCloudVideoViewedNum'=>$todayCloudVideoViewedNum,
+            'yesterdayCloudVideoViewedNum'=>$yesterdayCloudVideoViewedNum,
+
+            'todayLocalVideoViewedNum'=>$todayLocalVideoViewedNum,
+            'yesterdayLocalVideoViewedNum'=>$yesterdayLocalVideoViewedNum,
+
+            'todayNetVideoViewedNum'=>$todayNetVideoViewedNum,
+            'yesterdayNetVideoViewedNum'=>$yesterdayNetVideoViewedNum,
+
             'todayIncome'=>$todayIncome,
             'yesterdayIncome'=>$yesterdayIncome,
             'todayCourseIncome'=>$todayCourseIncome,
             'yesterdayCourseIncome'=>$yesterdayCourseIncome,
             'todayExitLessonNum'=>$todayExitLessonNum,
             'yesterdayExitLessonNum'=>$yesterdayExitLessonNum,
+            'keyCheckResult'=>$keyCheckResult,
         ));        
     }
 
@@ -173,6 +219,11 @@ class DefaultController extends BaseController
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     protected function getThreadService()

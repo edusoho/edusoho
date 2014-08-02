@@ -31,6 +31,12 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
         return $builder->execute()->fetchColumn(0);
 	}
 
+    public function getAnalysisLessonMinTime()
+    {
+        $sql = "SELECT `createdTime` FROM {$this->table} ORDER BY `createdTime` ASC LIMIT 1;";
+        return $this->getConnection()->fetchAssoc($sql) ? : null;
+    }
+
     public function searchLessonView($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

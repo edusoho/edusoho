@@ -10,6 +10,8 @@ interface LessonViewDao
 
 	public function searchLessonViewCount($conditions);
 
+	public function getAnalysisLessonMinTime();
+
 	public function searchLessonView($conditions, $orderBy, $start, $limit);
 
 	public function searchLessonViewGroupByTime($startTime,$endTime,$conditions);

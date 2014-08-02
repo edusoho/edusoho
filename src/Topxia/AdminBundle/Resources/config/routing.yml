@@ -794,6 +794,18 @@ admin_operation_analysis_video_viewed:
     pattern:  /operation/analysis/video/viewed/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:videoViewed }
 
+admin_operation_analysis_video_cloud_viewed:
+    pattern:  /operation/analysis/video/cloud/viewed/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:cloudVideoViewed }
+
+admin_operation_analysis_video_local_viewed:
+    pattern:  /operation/analysis/video/local/viewed/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:localVideoViewed }
+
+admin_operation_analysis_video_net_viewed:
+    pattern:  /operation/analysis/video/net/viewed/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:netVideoViewed }
+
 admin_operation_analysis_income:
     pattern:  /operation/analysis/income/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:income }

@@ -59,30 +59,39 @@
 
 			<tr>
 				<td>视频观看数<small>（* 含重复打开）</small></td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td><a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayAllVideoViewedNum}}</td>
+				<td>{{yesterdayAllVideoViewedNum}}</td>
+				<td><a href="{{path('admin_operation_analysis_video_viewed',{tab:"trend"})}}">趋势</a> | <a href="{{path('admin_operation_analysis_video_viewed',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 			<tr>
 				<td>云视频观看数</td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td>还未开通云视频，点击开通<a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayCloudVideoViewedNum}}</td>
+				<td>{{yesterdayCloudVideoViewedNum}}</td>
+				<td>
+				{% if keyCheckResult.status|default(null) == 'error' %}
+					<a href="#">还未开通云视频，点击开通</a>
+				{% endif %}
+
+				{% if keyCheckResult.error|default(null) %}
+					AccessKey或者SecretKey设置不正确
+				{% endif %}
+
+				<a href="{{path('admin_operation_analysis_video_cloud_viewed',{tab:"trend"})}}">趋势</a> | <a href="{{path('admin_operation_analysis_video_cloud_viewed',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 			<tr>
 				<td>本地视频观看数</td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td><a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayLocalVideoViewedNum}}</td>
+				<td>{{yesterdayLocalVideoViewedNum}}</td>
+				<td><a href="{{path('admin_operation_analysis_video_local_viewed',{tab:"trend"})}}">趋势</a> | <a href="{{path('admin_operation_analysis_video_local_viewed',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 			<tr>
 				<td>网络视频观看数</td>
-				<td>xxx</td>
-				<td>xxxx</td>
-				<td><a href="#">趋势</a> | <a href="#">详情</a></td>
+				<td>{{todayNetVideoViewedNum}}</td>
+				<td>{{yesterdayNetVideoViewedNum}}</td>
+				<td><a href="{{path('admin_operation_analysis_video_net_viewed',{tab:"trend"})}}">趋势</a> | <a href="{{path('admin_operation_analysis_video_net_viewed',{tab:"detail"})}}">详情</a></td>
 			</tr>
 
 			<tr>

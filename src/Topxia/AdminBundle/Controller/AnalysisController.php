@@ -13,7 +13,6 @@ class AnalysisController extends BaseController
 	        	$data=array();
 	        	$condition=$request->query->all();
 	        	$timeRange=$this->getTimeRange($condition);
-
 	        	if(!$timeRange) {
 
 	        		  $this->setFlashMessage("danger","输入的日期有误!");
@@ -46,6 +45,7 @@ class AnalysisController extends BaseController
 			'paginator'=>$paginator,
 			'tab'=>$tab,
 			'data'=>$data,
+			'timeRange'=>$timeRange,
 	    	  ));
 	}
 
@@ -414,8 +414,15 @@ class AnalysisController extends BaseController
 	{
     	$data=array();
     	$condition=$request->query->all();
+
     	$timeRange=$this->getTimeRange($condition);
-	
+
+		$searchCondition = array(
+			"fileType"=>'video',
+			"startTime"=>$timeRange['startTime']
+			,"endTime"=>$timeRange['endTime']
+		);
+
     	if(!$timeRange) {
 		  $this->setFlashMessage("danger","输入的日期有误!");
 			return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
@@ -425,17 +432,17 @@ class AnalysisController extends BaseController
 
     	$paginator = new Paginator(
             	$request,
-            	$this->getCourseService()->searchAnalysisLessonViewCount(array("fileType"=>'video',"startTime"=>$timeRange['startTime'],"endTime"=>$timeRange['endTime'])),
+            	$this->getCourseService()->searchAnalysisLessonViewCount(
+            		$searchCondition,
            	 20
-    	);
+    	));
 
     	$videoViewedDetail=$this->getCourseService()->searchAnalysisLessonView(
-        	array("fileType"=>'video',"startTime"=>$timeRange['startTime'],"endTime"=>$timeRange['endTime']),
-        		array("createdTime","DESC"),
+      		$searchCondition,
+    		array("createdTime","DESC"),
               $paginator->getOffsetCount(),
               $paginator->getPerPageCount()
          );
-
     	$videoViewedTrendData="";
 
     	if($tab=="trend"){
@@ -452,7 +459,195 @@ class AnalysisController extends BaseController
 		$users = $this->getUserService()->findUsersByIds($userIds);
 		$users = ArrayToolkit::index($users,'id');
 
+		$timeRange['endTime'] = $timeRange['endTime']-24*3600;
+		$minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime();
+
        	return $this->render("TopxiaAdminBundle:OperationAnalysis:video-view.html.twig",array(
+			'videoViewedDetail'=>$videoViewedDetail,
+			'paginator'=>$paginator,
+			'tab'=>$tab,
+			'data'=>$data,
+			'lessons'=>$lessons,
+			'users'=>$users,
+			'timeRange'=>$timeRange,
+			'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
+      	));
+	}
+
+	public function cloudVideoViewedAction(Request $request,$tab)
+	{
+		$data=array();
+    	$condition=$request->query->all();
+
+    	$timeRange=$this->getTimeRange($condition);
+    	
+			$searchCondition = array(
+				"fileType"=>'video',
+				"fileStorage"=>'cloud',
+				"startTime"=>$timeRange['startTime']
+				,"endTime"=>$timeRange['endTime']
+			);
+    	
+    	if(!$timeRange) {
+		  $this->setFlashMessage("danger","输入的日期有误!");
+			return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
+               'tab' => "trend",
+            )));
+    	}
+
+    	$paginator = new Paginator(
+            	$request,
+            	$this->getCourseService()->searchAnalysisLessonViewCount(
+            		$searchCondition,
+           	 20
+    	));
+
+    	$videoViewedDetail=$this->getCourseService()->searchAnalysisLessonView(
+      		$searchCondition,
+    		array("createdTime","DESC"),
+              $paginator->getOffsetCount(),
+              $paginator->getPerPageCount()
+         );
+
+    	$videoViewedTrendData="";
+
+    	if($tab=="trend"){
+        	$videoViewedTrendData = $this->getCourseService()->analysisLessonViewDataByTime($timeRange['startTime'],$timeRange['endTime'],array("fileType"=>'video',"fileStorage"=>'cloud'));
+  	
+		  	$data=$this->fillAnalysisData($condition,$videoViewedTrendData);		  	
+    	}
+
+		$lessonIds = ArrayToolkit::column($videoViewedDetail, 'lessonId');
+		$lessons=$this->getCourseService()->findLessonsByIds($lessonIds);
+		$lessons=ArrayToolkit::index($lessons,'id');
+
+    	$userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
+		$users = $this->getUserService()->findUsersByIds($userIds);
+		$users = ArrayToolkit::index($users,'id');
+
+       	return $this->render("TopxiaAdminBundle:OperationAnalysis:cloud-video-view.html.twig",array(
+			'videoViewedDetail'=>$videoViewedDetail,
+			'paginator'=>$paginator,
+			'tab'=>$tab,
+			'data'=>$data,
+			'lessons'=>$lessons,
+			'users'=>$users,
+      	));
+	}
+
+	public function localVideoViewedAction(Request $request,$tab)
+	{
+		$data=array();
+    	$condition=$request->query->all();
+
+    	$timeRange=$this->getTimeRange($condition);
+    	
+			$searchCondition = array(
+				"fileType"=>'video',
+				"fileStorage"=>'local',
+				"startTime"=>$timeRange['startTime']
+				,"endTime"=>$timeRange['endTime']
+			);
+    	
+    	if(!$timeRange) {
+		  $this->setFlashMessage("danger","输入的日期有误!");
+			return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
+               'tab' => "trend",
+            )));
+    	}
+
+    	$paginator = new Paginator(
+            	$request,
+            	$this->getCourseService()->searchAnalysisLessonViewCount(
+            		$searchCondition,
+           	 20
+    	));
+
+    	$videoViewedDetail=$this->getCourseService()->searchAnalysisLessonView(
+      		$searchCondition,
+    		array("createdTime","DESC"),
+              $paginator->getOffsetCount(),
+              $paginator->getPerPageCount()
+         );
+
+    	$videoViewedTrendData="";
+
+    	if($tab=="trend"){
+        	$videoViewedTrendData = $this->getCourseService()->analysisLessonViewDataByTime($timeRange['startTime'],$timeRange['endTime'],array("fileType"=>'video',"fileStorage"=>'local'));
+  	
+		  	$data=$this->fillAnalysisData($condition,$videoViewedTrendData);		  	
+    	}
+
+		$lessonIds = ArrayToolkit::column($videoViewedDetail, 'lessonId');
+		$lessons=$this->getCourseService()->findLessonsByIds($lessonIds);
+		$lessons=ArrayToolkit::index($lessons,'id');
+
+    	$userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
+		$users = $this->getUserService()->findUsersByIds($userIds);
+		$users = ArrayToolkit::index($users,'id');
+
+       	return $this->render("TopxiaAdminBundle:OperationAnalysis:local-video-view.html.twig",array(
+			'videoViewedDetail'=>$videoViewedDetail,
+			'paginator'=>$paginator,
+			'tab'=>$tab,
+			'data'=>$data,
+			'lessons'=>$lessons,
+			'users'=>$users,
+      	));
+	}
+	
+	public function netVideoViewedAction(Request $request,$tab)
+	{
+		$data=array();
+    	$condition=$request->query->all();
+
+    	$timeRange=$this->getTimeRange($condition);
+    	
+			$searchCondition = array(
+				"fileType"=>'video',
+				"fileStorage"=>'net',
+				"startTime"=>$timeRange['startTime']
+				,"endTime"=>$timeRange['endTime']
+			);
+    	
+    	if(!$timeRange) {
+		  $this->setFlashMessage("danger","输入的日期有误!");
+			return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
+               'tab' => "trend",
+            )));
+    	}
+
+    	$paginator = new Paginator(
+            	$request,
+            	$this->getCourseService()->searchAnalysisLessonViewCount(
+            		$searchCondition,
+           	 20
+    	));
+
+    	$videoViewedDetail=$this->getCourseService()->searchAnalysisLessonView(
+      		$searchCondition,
+    		array("createdTime","DESC"),
+              $paginator->getOffsetCount(),
+              $paginator->getPerPageCount()
+         );
+
+    	$videoViewedTrendData="";
+
+    	if($tab=="trend"){
+        	$videoViewedTrendData = $this->getCourseService()->analysisLessonViewDataByTime($timeRange['startTime'],$timeRange['endTime'],array("fileType"=>'video',"fileStorage"=>'net'));
+  	
+		  	$data=$this->fillAnalysisData($condition,$videoViewedTrendData);		  	
+    	}
+
+		$lessonIds = ArrayToolkit::column($videoViewedDetail, 'lessonId');
+		$lessons=$this->getCourseService()->findLessonsByIds($lessonIds);
+		$lessons=ArrayToolkit::index($lessons,'id');
+
+    	$userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
+		$users = $this->getUserService()->findUsersByIds($userIds);
+		$users = ArrayToolkit::index($users,'id');
+
+       	return $this->render("TopxiaAdminBundle:OperationAnalysis:net-video-view.html.twig",array(
 			'videoViewedDetail'=>$videoViewedDetail,
 			'paginator'=>$paginator,
 			'tab'=>$tab,

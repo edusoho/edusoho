@@ -14,13 +14,17 @@
         <a href="{{ url('admin_operation_analysis_lesson_paid',{tab:"trend"}) }}" class="list-group-item {% if menu == 'paid-lesson' %}active{% endif %}">购买课程</a>
         <a href="{{ url('admin_operation_analysis_lesson_finished',{tab:"trend"}) }}" class="list-group-item {% if menu == 'finished-lesson' %}active{% endif %}">完成课时学习</a>
         <a href="{{ url('admin_operation_analysis_video_viewed',{tab:"trend"}) }}" class="list-group-item {% if menu == 'video-view' %}active{% endif %}">总视频观看数</a>
-        <a href="{{ url('admin_operation_analysis_lesson_paid',{tab:"trend"}) }}" class="list-group-item {% if menu == 'paid-lesson' %}active{% endif %}">云视频观看数</a>
-        <a href="{{ url('admin_operation_analysis_lesson_paid',{tab:"trend"}) }}" class="list-group-item {% if menu == 'paid-lesson' %}active{% endif %}">本地视频观看数</a>
+        <a href="{{ url('admin_operation_analysis_video_cloud_viewed',{category:'cloud',tab:"trend"}) }}" class="list-group-item {% if menu == 'cloud-video-view' %}active{% endif %}">云视频观看数</a>
+        <a href="{{ url('admin_operation_analysis_video_local_viewed',{category:'local',tab:"trend"}) }}" class="list-group-item {% if menu == 'local-video-view' %}active{% endif %}">本地视频观看数</a>
+
+        <a href="{{ url('admin_operation_analysis_video_net_viewed',{category:'net',tab:"trend"}) }}" class="list-group-item {% if menu == 'net-video-view' %}active{% endif %}">网络视频观看数</a>
+
         <a href="{{ url('admin_operation_analysis_income',{tab:"trend"}) }}" class="list-group-item {% if menu == 'income' %}active{% endif %}">营收额</a>
         <a href="{{ url('admin_operation_analysis_course_income',{tab:"trend"}) }}" class="list-group-item {% if menu == 'course-income' %}active{% endif %}">课程营收额</a>
         <a href="{{ url('admin_operation_analysis_lesson_exit',{tab:"trend"}) }}" class="list-group-item {% if menu == 'exit-lesson' %}active{% endif %}">退出学习</a>
 
       </div>
+
     {% endblock %}
   </div>
   <div class="col-md-10">
@@ -30,6 +34,7 @@
   <div class="page-header">
     <h1>运营数据</h1>
   </div>
+
       <form   class="form-inline" action="" method="get" id="operation-form">
         
         <div class="form-group">
@@ -45,12 +50,12 @@
         </div>
 
         <div class="form-group">
-          <label >起始日期&nbsp;</label><input type="text" class="form-control" name="startTime" value="{{app.request.query.get('startTime')}}">
+          <label class="control-label">起始日期&nbsp;</label><input type="text" class="form-control" name="startTime" value="{{app.request.query.get('startTime')|default(timeRange.startTime|data_format2)}}">
 
         </div>
 
         <div class="form-group">
-          <label >截止日期&nbsp;</label><input type="text" class="form-control"  name="endTime" value="{{app.request.query.get('endTime')}}">
+          <label class="control-label">截止日期&nbsp;</label><input type="text" class="form-control"  name="endTime" value="{{app.request.query.get('endTime')|default(timeRange.endTime|data_format2)}}">
         </div>
 
         <button class="btn btn-primary">查询</button>
