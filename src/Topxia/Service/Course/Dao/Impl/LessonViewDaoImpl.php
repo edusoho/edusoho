@@ -31,9 +31,10 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
         return $builder->execute()->fetchColumn(0);
 	}
 
-    public function getAnalysisLessonMinTime()
+    public function getAnalysisLessonMinTime($type)
     {
-        $sql = "SELECT `createdTime` FROM {$this->table} ORDER BY `createdTime` ASC LIMIT 1;";
+        $condition = $this->_filterTypeCondition($type);
+        $sql = "SELECT `createdTime` FROM {$this->table} {$condition} ORDER BY `createdTime` ASC LIMIT 1;";
         return $this->getConnection()->fetchAssoc($sql) ? : null;
     }
 
@@ -65,6 +66,15 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime');
         return $builder;
+    }
+
+    private function _filterTypeCondition($type)
+    {
+        if (in_array($type, array('net','local','cloud'))) {
+           return "WHERE `fileType` = '{$type}'";
+        }
+
+        return "";
     }
 
     private function _filterConditions($conditions)

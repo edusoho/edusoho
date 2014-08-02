@@ -141,7 +141,7 @@ interface CourseService
 
 	public function searchAnalysisLessonViewCount($conditions);
 
-	public function getAnalysisLessonMinTime();
+	public function getAnalysisLessonMinTime($type);
 
 	public function searchAnalysisLessonView($conditions, $orderBy, $start, $limit);
 

@@ -538,7 +538,7 @@ class AnalysisController extends BaseController
 		$users = ArrayToolkit::index($users,'id');
 
 		$timeRange['endTime'] = $timeRange['endTime']-24*3600;
-		$minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime();
+		$minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('all');
 
        	return $this->render("TopxiaAdminBundle:OperationAnalysis:video-view.html.twig",array(
 			'videoViewedDetail'=>$videoViewedDetail,
@@ -547,7 +547,8 @@ class AnalysisController extends BaseController
 			'data'=>$data,
 			'lessons'=>$lessons,
 			'users'=>$users,
-			'timeRange'=>$timeRange,
+			'startTime'=>date("Y-m-d",$timeRange['startTime']),
+			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),	
 			'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
       	));
 	}
@@ -602,6 +603,7 @@ class AnalysisController extends BaseController
     	$userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
 		$users = $this->getUserService()->findUsersByIds($userIds);
 		$users = ArrayToolkit::index($users,'id');
+		$minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('cloud');
 
        	return $this->render("TopxiaAdminBundle:OperationAnalysis:cloud-video-view.html.twig",array(
 			'videoViewedDetail'=>$videoViewedDetail,
@@ -610,6 +612,9 @@ class AnalysisController extends BaseController
 			'data'=>$data,
 			'lessons'=>$lessons,
 			'users'=>$users,
+			'startTime'=>date("Y-m-d",$timeRange['startTime']),
+			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),	
+			'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
       	));
 	}
 
@@ -663,7 +668,7 @@ class AnalysisController extends BaseController
     	$userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
 		$users = $this->getUserService()->findUsersByIds($userIds);
 		$users = ArrayToolkit::index($users,'id');
-
+		$minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('local');
        	return $this->render("TopxiaAdminBundle:OperationAnalysis:local-video-view.html.twig",array(
 			'videoViewedDetail'=>$videoViewedDetail,
 			'paginator'=>$paginator,
@@ -671,6 +676,9 @@ class AnalysisController extends BaseController
 			'data'=>$data,
 			'lessons'=>$lessons,
 			'users'=>$users,
+			'startTime'=>date("Y-m-d",$timeRange['startTime']),
+			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),	
+			'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
       	));
 	}
 	
@@ -724,7 +732,8 @@ class AnalysisController extends BaseController
     	$userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
 		$users = $this->getUserService()->findUsersByIds($userIds);
 		$users = ArrayToolkit::index($users,'id');
-
+		$minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('net');
+		
        	return $this->render("TopxiaAdminBundle:OperationAnalysis:net-video-view.html.twig",array(
 			'videoViewedDetail'=>$videoViewedDetail,
 			'paginator'=>$paginator,
@@ -732,6 +741,9 @@ class AnalysisController extends BaseController
 			'data'=>$data,
 			'lessons'=>$lessons,
 			'users'=>$users,
+				'startTime'=>date("Y-m-d",$timeRange['startTime']),
+			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),	
+			'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
       	));
 	}
 

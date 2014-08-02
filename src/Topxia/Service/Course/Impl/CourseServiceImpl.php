@@ -854,9 +854,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getLessonViewDao()->searchLessonViewCount($conditions);
 	}
 
-	public function getAnalysisLessonMinTime()
+	public function getAnalysisLessonMinTime($type)
 	{
-		return $this->getLessonViewDao()->getAnalysisLessonMinTime();
+		if (!in_array($type, array('all','cloud','net','local'))) {
+			throw $this->createServiceException("error");
+		}
+
+		return $this->getLessonViewDao()->getAnalysisLessonMinTime($type);
 	}
 
 	public function searchAnalysisLessonView($conditions, $orderBy, $start, $limit)
