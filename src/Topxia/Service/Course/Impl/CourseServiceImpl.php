@@ -1027,7 +1027,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$lesson = $this->getCourseLesson($createLessonView['courseId'], $createLessonView['lessonId']);
 
-		$this->getLogService()->info('course', 'create', "{$this->getCurrentUser()->nickname}观看课时{$lesson['title']}}");
+		$this->getLogService()->info('course', 'create', "{$this->getCurrentUser()->nickname}观看课时《{$lesson['title']}》");
 
 		return $lessonView;
 	}
