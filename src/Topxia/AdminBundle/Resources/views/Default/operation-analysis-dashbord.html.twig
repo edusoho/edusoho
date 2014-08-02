@@ -69,8 +69,8 @@
 				<td>{{todayCloudVideoViewedNum}}</td>
 				<td>{{yesterdayCloudVideoViewedNum}}</td>
 				<td>
-				{% if keyCheckResult.status|default(null) == 'error' %}
-						<a href="#">还未开通云视频，点击开通</a>
+				{% if keyCheckResult.error|default(null) == 'error' %}
+						未开通或未开启云视频!
 					{% else %}
 						<a href="{{path('admin_operation_analysis_video_cloud_viewed',{tab:"trend",analysisDateType:'cloudVideoViewed'})}}">趋势</a> | <a href="{{path('admin_operation_analysis_video_cloud_viewed',{tab:"detail",analysisDateType:'cloudVideoViewed'})}}">详情</a>
 				{% endif %}

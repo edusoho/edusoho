@@ -121,7 +121,6 @@ class DefaultController extends BaseController
 
               $storageSetting = $this->getSettingService()->get('storage');
 
-            if (!empty($storageSetting['cloud_access_key']) or !empty($storageSetting['cloud_secret_key'])) {
                 if (!empty($storageSetting['cloud_access_key']) and !empty($storageSetting['cloud_secret_key'])) {
                     $factory = new CloudClientFactory();
                     $client = $factory->createClient($storageSetting);
@@ -129,9 +128,6 @@ class DefaultController extends BaseController
                 } else {
                     $keyCheckResult = array('error' => 'error');
                 }
-            } else {
-                $keyCheckResult = array('status' => 'ok');
-            }
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
             'todayRegisterNum'=>$todayRegisterNum,
