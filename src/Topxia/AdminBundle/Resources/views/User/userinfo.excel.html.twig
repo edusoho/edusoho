@@ -11,21 +11,41 @@
   <h1 class="pull-left">用户导入</h1>
 </div>
 
-    
-      <b>选择要导入的文件</b>
+    <div class="row">
+          <form method="post" enctype="multipart/form-data">
+          <div class="col-md-3 col-md-offset-1">
+          <b>选择要导入的文件</b>
+          </div>
+          <div class="col-md-8">
+                <div class="uploader white">
+                  <input type="text" class="filename" readonly="readonly"/>
+                  <input type="button" name="excel" class="button" value="浏览..."/>
+                  <input type="file" size="30" name="excel"/>
+                </div>
+                <br>
+                支持从Excel文件导入
+          </div>
+          <div class="col-md-12"><br></div>
+          <div class="col-md-3 col-md-offset-1">
+          <b>数据重复时的导入规则</b>
+          </div>
+          <div class="col-md-8">
+                <div class="form-group">        
+                <div class="controls">
+                  <input type="radio"  required="required" value="ignore" checked=true name="rule">
+                  <label class="required" style="padding: 0 20px 0 0px;">忽略跳过</label>
+                  <input type="radio"  required="required" value="update" name="rule" >
+                  <label class="required" >覆盖更新</label>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">开始校验数据</button>
+              </div>
+          </div>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-    <form method="post" enctype="multipart/form-data">
-    <div class="uploader white">
-      <input type="text" class="filename" readonly="readonly"/>
-      <input type="button" name="excel" class="button" value="浏览..."/>
-      <input type="file" size="30" name="excel"/>
+          <br>
+          </form>
     </div>
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-      <br>
-    <button type="submit" class="btn btn-primary">上传</button>
-  </form>
-
-
 
 <style>.uploader{
 position:relative;

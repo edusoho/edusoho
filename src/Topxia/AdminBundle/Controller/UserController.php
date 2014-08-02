@@ -372,8 +372,15 @@ class UserController extends BaseController
     public function userInfoLeadByExcelAction(Request $request)
     {
          if ($request->getMethod() == 'POST') {
+
                 $file=$request->files->get('excel');
 
+                if(!$file){
+                    $this->setFlashMessage('danger', '请选择上传的文件');
+
+                    return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
+                 ));
+                }
                 if (FileToolkit::validateFileExtension($file,'xls xlsx')) {
 
             		$this->setFlashMessage('danger', 'Excel格式不正确！');
@@ -382,37 +389,159 @@ class UserController extends BaseController
        		 ));
                 }
 
-/*                $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
-        
-                $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
-                $file = $file->move($directory, $filename);*/
-
                 $objPHPExcel = PHPExcel_IOFactory::load($file);
 
                 $objWorksheet = $objPHPExcel->getActiveSheet();
                 $highestRow = $objWorksheet->getHighestRow(); 
 
                 $highestColumn = $objWorksheet->getHighestColumn();
-                $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);//总列数
+                $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);//总列数   
 
-                $headtitle=array(); 
-                for ($row = 1;$row <= $highestRow;$row++) 
+                $fieldNameArray=$this->getFieldNameArray();
+                $fieldArray=$this->getFieldArray();
+
+                for ($col = 0;$col < $highestColumnIndex;$col++)
+                {
+                        $strs[$col] =$objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
+                        
+                }   
+                $excelField=$strs;
+
+                if(!$this->checkNecessaryFields($excelField)){
+
+                    $this->setFlashMessage('danger', '缺少必要的字段');
+
+                    return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
+                    ));
+                }
+
+                foreach ($excelField as $key => $value) {
+
+                    $value=$this->trim($value);
+
+                    if(in_array($value, $fieldNameArray)){
+                        //自定义字段名重复  将导入第一个字段
+                        foreach ($fieldArray as $fieldKey => $fieldValue) {
+                            if($value==$fieldValue) {
+                                 $fieldSort[]=array("num"=>$key,"fieldName"=>$fieldKey);
+                                 break;
+                            }
+                        }
+                    }
+
+                }
+                //start import
+                for ($row = 3;$row <= $highestRow;$row++) 
                 {
                     $strs=array();
 
                     for ($col = 0;$col < $highestColumnIndex;$col++)
                     {
                         $strs[$col] =$objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-                        echo  $strs[$col] ;
                     }    
-                    
+
+                    foreach ($fieldSort as $sort) {
+
+                        $num=$sort['num'];
+                        $key=$sort['fieldName'];
+
+                        $userData[$key]=$strs[$num];
+                    }
+
+                    if(!$this->getUserService()->isNicknameAvaliable($userData['nickname'])){                      
+                        continue;
+                    }
+                    if(!$this->getUserService()->isEmailAvaliable($userData['email'])){                      
+                        continue;
+                    }
+
+                    $allUserData[]= $userData;
+
+
+                     //do sql  insert   $userData
+
                 }
-            
+                $userCount=count($allUserData);
+                print_r($allUserData);
+                print($userCount);
+
         }
 
         return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
         ));
     }
+
+
+    private function checkNecessaryFields($data)
+    {       
+            $data=implode("", $data);
+            $data=$this->trim($data);
+            $tmparray = explode("用户名",$data);
+            if (count($tmparray)<1) return false; 
+
+            $tmparray = explode("邮箱",$data);
+            if (count($tmparray)<1) return false; 
+
+            $tmparray = explode("密码",$data);
+            if (count($tmparray)<1) return false; 
+
+            return true;
+    }
+
+    private function getFieldNameArray()
+    {   
+            $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+            $fieldNameArray=array("用户名","邮箱","密码","姓名","性别","身份证号","手机号码","公司","职业","个人主页","微博","微信","QQ");
+       
+            foreach ($userFields as $userField) {
+                    $title=$userField['title'];
+                    array_push($fieldNameArray,$title);
+            }
+
+            return $fieldNameArray;
+    }
+
+    private function getFieldArray()
+    {       
+            $userFieldArray=array();
+
+            $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+            $fieldArray=array(
+                    "nickname"=>'用户名',
+                    "email"=>'邮箱',
+                    "password"=>'密码',
+                    "truename"=>'姓名',
+                    "gender"=>'性别',
+                    "idcard"=>'身份证号',
+                    "mobile"=>'手机号码',
+                    "company"=>'公司',
+                    "job"=>'职业',
+                    "site"=>'个人主页',
+                    "weibo"=>'微博',
+                    "weixin"=>'微信',
+                    "qq"=>'QQ',
+                    );
+            foreach ($userFields as $userField) {
+                $title=$userField['title'];
+
+                $userFieldArray[$userField['fieldName']]=$title;
+            }
+            $fieldArray=array_merge($fieldArray,$userFieldArray);
+            return $fieldArray;
+    }
+
+
+    private function trim($data)
+    {       
+            $data=trim($data);
+            $data=str_replace(" ","",$data);
+            $data=str_replace('\n','',$data);
+            $data=str_replace('\r','',$data);
+            $data=str_replace('\t','',$data);
+
+            return $data;
+    }
+
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
