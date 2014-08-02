@@ -109,13 +109,13 @@ class DefaultController extends BaseController
 
         $todayExitLessonNum=$this->getOrderService()->analysisExitCourseNumByTimeAndStatus(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)),"success");
 
-        $yesterdayExitLessonNum=$this->getOrderService()->analysisExitCourseNumByTimeAndStatus(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())),"success");
+        $yesterdayExitLessonNum=$this->getOrderService()->analysisExitCourseNumByTimeAndStatus(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
    
-        $todayIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid"));
+        $todayIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid"))+0.00;
 
         $yesterdayIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid"))+0.00;
      
-        $todayCourseIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid","targetType"=>"course"));
+        $todayCourseIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid","targetType"=>"course"))+0.00;
 
         $yesterdayCourseIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid","targetType"=>"course"))+0.00;
 

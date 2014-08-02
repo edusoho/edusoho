@@ -9,8 +9,8 @@
             </tr>
           </thead>
           <tbody>
-            {% if PaidLessonDetail %}
-            {% for data in PaidLessonDetail %}
+            {% if paidLessonDetail %}
+            {% for data in paidLessonDetail %}
 
             {%  if  courses[data.targetId].title|default(null)  %}
               <tr>

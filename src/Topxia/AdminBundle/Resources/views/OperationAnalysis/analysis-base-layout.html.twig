@@ -50,12 +50,14 @@
         </div>
 
         <div class="form-group">
-          <label class="control-label">起始日期&nbsp;</label><input type="text" class="form-control" name="startTime" value="{{app.request.query.get('startTime')|default(timeRange.startTime|data_format2)}}">
+
+          <label >起始日期&nbsp;</label><input type="text" class="form-control" name="startTime" value="{{startTime}}">
 
         </div>
 
         <div class="form-group">
-          <label class="control-label">截止日期&nbsp;</label><input type="text" class="form-control"  name="endTime" value="{{app.request.query.get('endTime')|default(timeRange.endTime|data_format2)}}">
+
+          <label >截止日期&nbsp;</label><input type="text" class="form-control"  name="endTime" value="{{endTime}}">
         </div>
 
         <button class="btn btn-primary">查询</button>

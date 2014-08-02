@@ -8,6 +8,7 @@
               {% if tab=="trend" %}
 	          <div id="line-data"></div>
 	           <input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'> 
+	          </input><input id="joinLessonStartDate"  type="hidden" value='{% if joinLessonStartDate %}{{joinLessonStartDate}}{% endif %}'> 
 	          </input>
               {% elseif tab=="detail" %}
                       {% include 'TopxiaAdminBundle:OperationAnalysis:join-lesson.table.html.twig' %}

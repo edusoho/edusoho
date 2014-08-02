@@ -7,8 +7,8 @@
             </tr>
           </thead>
           <tbody>
-            {% if LessonDetail %}
-            {% for data in LessonDetail %}
+            {% if lessonDetail %}
+            {% for data in lessonDetail %}
               <tr>
                    <td> <strong>{{ data.title }}</strong><br><span class="text-muted text-sm">属于课程:{{courses[data.courseId].title}}</span></td>
                    <td>{% if data.type=="text" %}图文

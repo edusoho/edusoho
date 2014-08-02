@@ -23,7 +23,7 @@ class LogDaoImpl extends BaseDao implements LogDao
 		$builder = $this->createLogQueryBuilder($conditions)
 	        ->select('*')
 	        ->from($this->table, $this->table);
-        $builder->addOrderBy($sort, "DESC");
+        $builder->addOrderBy($sort[0], $sort[1]);
 
 		$builder->setFirstResult($start)->setMaxResults($limit);    
        	return $builder->execute()->fetchAll() ? : array();

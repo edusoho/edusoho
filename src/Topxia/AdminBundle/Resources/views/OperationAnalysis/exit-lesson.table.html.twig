@@ -8,12 +8,12 @@
             </tr>
           </thead>
           <tbody>
-            {% if ExitLessonDetail %}
-            {% for data in ExitLessonDetail %}
+            {% if exitLessonDetail %}
+            {% for data in exitLessonDetail %}
               <tr>
                   <td> {{ admin_macro.user_link(users[data.userId]) }}</td>
                    <td><a href="{{ path('course_show', {id:data.targetId}) }}" target="_blank"><strong>{{ courses[data.targetId].title|default("") }}</strong></a><br></td>
-                   <td>{{cancelledOrders[data.refundId].createdTime|date("Y-m-d H:i:s")}}</td>
+                   <td>{{data.createdTime|date("Y-m-d H:i:s")}}</td>
                    <td >{{cancelledOrders[data.refundId].reasonNote}}</td>
               </tr>
             {% endfor %}

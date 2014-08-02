@@ -9,8 +9,8 @@
             </tr>
           </thead>
           <tbody>
-            {% if IncomeDetail %}
-            {% for data in IncomeDetail %}
+            {% if incomeDetail %}
+            {% for data in incomeDetail %}
             {% if courses[data.targetId].price|default(null)%}
               <tr>
                     <td>{{data.title}}<br>订单号:{{data.sn}}</td>
