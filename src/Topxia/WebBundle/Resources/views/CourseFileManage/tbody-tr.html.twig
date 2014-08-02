@@ -24,7 +24,7 @@
     {% else %}
       {% if uploadFile.targetType in ['courselesson', 'coursematerial'] %}
         <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank">{{ uploadFile.filename }}</a>
-        {% if uploadFile.type == 'ppt' and ( not uploadFile.metas2.length|default(null) )  %}
+        {% if uploadFile.type == 'ppt' and ( not uploadFile.metas2.length|default(null) ) and uploadFile.targetType == 'courselesson'  %}
           <br><a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
         {% endif %}
       {% else %}

@@ -82,6 +82,14 @@ abstract class BaseController extends Controller
 
         $loginEvent = new InteractiveLoginEvent($this->getRequest(), $token);
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
+
+        $loginBind = $this->setting('login_bind', array());
+        if (empty($loginBind['login_limit'])) {
+            return ;
+        }
+
+        $sessionId = $this->container->get('request')->getSession()->getId();
+        $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
     }
 
 
