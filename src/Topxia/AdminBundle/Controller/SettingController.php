@@ -216,6 +216,8 @@ class SettingController extends BaseController
             'registerSortType'=>array(),
             'registerSort'=>array(0=>"email",1=>"nickname",2=>"password"),
         );
+         $this->getSettingService()->set('auth', $default);die;
+
 
         $auth = array_merge($default, $auth);
         if ($request->getMethod() == 'POST') {
