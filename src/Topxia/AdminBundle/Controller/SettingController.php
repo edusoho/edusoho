@@ -587,7 +587,7 @@ class SettingController extends BaseController
             'userinfoFields'=>array(),
             "userinfoFieldsType"=>array(),
         );
-
+ $this->getSettingService()->set('course', $default);die;
         $courseSetting = array_merge($default, $courseSetting);
 
         if ($request->getMethod() == 'POST') {
