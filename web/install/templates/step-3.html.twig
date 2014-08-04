@@ -62,18 +62,11 @@
     </div>
 
   </form>
-  <form id="info-form">
-         <input type="hidden" class="form-control" id="website-addr" name="web[server_addr]" value="{{server_addr}}">
-         <input type="hidden" class="form-control" id="website-name" name="web[server_name]" value="{{server_name}}">
-         <input type="hidden" class="form-control" id="website-qq" name="web[qq]" >
-         <input type="hidden" class="form-control" id="website-mobile" name="web[mobile]" >
-         <input type="hidden" class="form-control" id="website-userName" name="web[userName]" >
-  </form>
 {% endblock %}
 
 {% block bottom_scripts %}
 <script>
-  seajs.use(['jquery', 'bootstrap.validator', 'common/validator-rules'], function($, Validator, Rules){
+  seajs.use(['jquery', 'bootstrap.validator', 'common/validator-rules','bootstrap'], function($, Validator, Rules){
     window.$ = $;
     Rules.inject(Validator);
     var $form = $("#init-form");
@@ -85,14 +78,6 @@
                 return false;
             }
             $('#init-btn').button('submiting').addClass('disabled');
-
-            $('#website-qq').attr('value',$('#website-user-qq').attr('value'));
-            $('#website-userName').attr('value',$('#website-user-name').attr('value'));
-            $('#website-mobile').attr('value',$('#website-user-mobile').attr('value'));
-
-            $.post("http://open.edusoho.com/track/install",$("#info-form").serialize(),function(){
-                   
-            });
         }
     });
 
