@@ -236,7 +236,6 @@ class SettingController extends BaseController
 
         if($auth['registerSortType']){
             foreach ($userFields as $key => $fieldValue) {
-                $authField[]=$fieldValue['fieldName'];
                 if(!in_array($fieldValue['fieldName'], $auth['registerSortType'])){
                     $auth['registerSortType'][]=$fieldValue['fieldName'];
                 }
@@ -588,6 +587,7 @@ class SettingController extends BaseController
             "userinfoFieldsType"=>array(),
         );
 
+        $this->getSettingService()->set('course', $courseSetting);
         $courseSetting = array_merge($default, $courseSetting);
 
         if ($request->getMethod() == 'POST') {
@@ -606,6 +606,15 @@ class SettingController extends BaseController
         $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
         
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
+        if($courseSetting['userinfoFieldsType']){
+            foreach ($userFields as $key => $fieldValue) {
+                if(!in_array($fieldValue['fieldName'], $courseSetting['userinfoFieldsType'])){
+                    $courseSetting['userinfoFieldsType'][]=$fieldValue['fieldName'];
+                }
+            }
+         
+        }
 
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
             'courseSetting' => $courseSetting,
@@ -786,12 +795,6 @@ class SettingController extends BaseController
         if($field==false){
            $this->setFlashMessage('danger', '已经没有可以添加的字段了!'); 
         }
-
-        $courseSetting = $this->getSettingService()->get('course', array());
-        if(!isset($courseSetting['userinfoFieldsType'])) $courseSetting['userinfoFieldsType']=array();
-        $courseSetting['userinfoFieldsType'][]=$field['fieldName'];
-
-        $this->getSettingService()->set('course', $courseSetting);
 
         return $this->redirect($this->generateUrl('admin_setting_user_fields')); 
     }
