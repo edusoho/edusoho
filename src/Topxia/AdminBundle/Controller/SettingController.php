@@ -752,12 +752,12 @@ class SettingController extends BaseController
 
             $courseSetting = $this->getSettingService()->get('course', array());
 
-            if($auth['registerSortType']){
+            if(isset($auth['registerSortType'])){
                 foreach ($auth['registerSortType'] as $key => $value) {
                 if($value==$field['fieldName']) unset( $auth['registerSortType'][$key]);
                 }
             }
-            if($courseSetting['userinfoFieldsType']){
+            if(isset($courseSetting['userinfoFieldsType'])){
                 foreach ($courseSetting['userinfoFieldsType'] as $key => $value) {
                 if($value==$field['fieldName']) unset( $courseSetting['userinfoFieldsType'][$key]);
                 }
