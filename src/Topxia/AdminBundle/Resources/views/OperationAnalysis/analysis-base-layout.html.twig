@@ -4,24 +4,25 @@
 {% block content %}
   <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
 <div class="row">
-    {% block sidebar %}
-<input type="hidden" value="{{ url('admin_operation_analysis_register',{tab:tab,analysisDateType:'register',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="register"/>
-<input type="hidden" value="{{ url('admin_operation_analysis_login',{tab:tab,analysisDateType:'login',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="login"/>
-<input type="hidden" value="{{ url('admin_operation_analysis_course',{tab:tab,analysisDateType:'course',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="course"/>
-<input type="hidden" value="{{ url('admin_operation_analysis_lesson',{tab:tab,analysisDateType:'lesson',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="lesson"/>
-<input type="hidden" value="{{ url('admin_operation_analysis_lesson_join',{tab:tab,analysisDateType:'joinLesson',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="lesson_join"/>
-<input type="hidden" value="{{ url('admin_operation_analysis_lesson_paid',{tab:tab,analysisDateType:'paidLesson',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="lesson_paid"/>
-<input type="hidden" value="{{ url('admin_operation_analysis_lesson_finished',{tab:tab,analysisDateType:'finishedLesson',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="lesson_finished"/>
- <input type="hidden" value="{{ url('admin_operation_analysis_video_viewed',{tab:tab,analysisDateType:'videoViewed',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="video_viewed"/>
-<input type="hidden" value="{{ url('admin_operation_analysis_video_cloud_viewed',{tab:tab,analysisDateType:'cloudVideoViewed',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="video_cloud_viewed"/>
-<input type="hidden" value="{{ url('admin_operation_analysis_video_local_viewed',{tab:tab,analysisDateType:'localVideoViewed',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="video_local_viewed"/>
-<input type="hidden" value="{{ url('admin_operation_analysis_video_net_viewed',{tab:tab,analysisDateType:'netVideoViewed',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="video_net_viewed"/>
-<input type="hidden" value="{{ url('admin_operation_analysis_income',{tab:tab,analysisDateType:'income',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="income"/>
-<input type="hidden" value="{{ url('admin_operation_analysis_course_income',{tab:tab,analysisDateType:'courseIncome',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="course_income"/>
-<input type="hidden" value="{{ url('admin_operation_analysis_lesson_exit',{tab:tab,analysisDateType:'exitLesson',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="lesson_exit"/>
 
+    {% block sidebar %}
+        <input type="hidden" value="{{ url('admin_operation_analysis_register',{tab:tab,analysisDateType:'register',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="register"/>
+        <input type="hidden" value="{{ url('admin_operation_analysis_login',{tab:tab,analysisDateType:'login',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="login"/>
+        <input type="hidden" value="{{ url('admin_operation_analysis_course',{tab:tab,analysisDateType:'course',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="course"/>
+        <input type="hidden" value="{{ url('admin_operation_analysis_lesson',{tab:tab,analysisDateType:'lesson',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="lesson"/>
+        <input type="hidden" value="{{ url('admin_operation_analysis_lesson_join',{tab:tab,analysisDateType:'joinLesson',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="lesson_join"/>
+        <input type="hidden" value="{{ url('admin_operation_analysis_lesson_paid',{tab:tab,analysisDateType:'paidLesson',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="lesson_paid"/>
+        <input type="hidden" value="{{ url('admin_operation_analysis_lesson_finished',{tab:tab,analysisDateType:'finishedLesson',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="lesson_finished"/>
+         <input type="hidden" value="{{ url('admin_operation_analysis_video_viewed',{tab:tab,analysisDateType:'videoViewed',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="video_viewed"/>
+        <input type="hidden" value="{{ url('admin_operation_analysis_video_cloud_viewed',{tab:tab,analysisDateType:'cloudVideoViewed',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="video_cloud_viewed"/>
+        <input type="hidden" value="{{ url('admin_operation_analysis_video_local_viewed',{tab:tab,analysisDateType:'localVideoViewed',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="video_local_viewed"/>
+        <input type="hidden" value="{{ url('admin_operation_analysis_video_net_viewed',{tab:tab,analysisDateType:'netVideoViewed',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="video_net_viewed"/>
+        <input type="hidden" value="{{ url('admin_operation_analysis_income',{tab:tab,analysisDateType:'income',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="income"/>
+        <input type="hidden" value="{{ url('admin_operation_analysis_course_income',{tab:tab,analysisDateType:'courseIncome',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="course_income"/>
+        <input type="hidden" value="{{ url('admin_operation_analysis_lesson_exit',{tab:tab,analysisDateType:'exitLesson',type:app.request.query.get('type'),startTime:app.request.query.get('startTime'),endTime:app.request.query.get('endTime')}) }}" name="lesson_exit"/>
 
     {% endblock %}
+
   <div class="col-md-12">
   {% block analysisHead %}
   <div class="col-md-12">
@@ -30,14 +31,12 @@
     <h1>数据统计</h1>
   </div>
 
-      <form   class="well well-sm form-inline" action="" method="get" id="operation-form"  role="form">
-        
+  <form  class="well well-sm form-inline" action="" method="get" id="operation-form"  role="form">
           <div class="form-group">
     <select class="form-control" name="analysisDateType">
         {{ select_options(dict('analysisDateType'), app.request.query.get('analysisDateType'), '--选择数据类型--') }}
     </select>
   </div>
-
         <div class="form-group">
            <a class="btn btn-default {% if app.request.query.get('type')!="lastMonth" and app.request.query.get('type')!="lastThreeMonths" and app.request.query.get('startTime')=="" and app.request.query.get('endTime')=="" %}active{% endif %}"  href="{{path(href,{type:"month",tab:tab,analysisDateType:analysisDateType})}}">本月</a>
         </div>
@@ -51,22 +50,16 @@
         </div>
 
         <div class="form-group">
-
           <label class="col-md-4" style="padding-top:9px;">起始日期</label>
-
             <div class="col-md-8 ">
             <input type="text" class="form-control" name="startTime" value="{{startTime}}">
-
           </div>
         </div>
 
         <div class="form-group">
-
           <label class="col-md-4" style="padding-top:9px;">截止日期</label>
-
              <div class="col-md-8 ">
             <input type="text" class="form-control"  name="endTime" value="{{endTime}}">
-
             </div>
         </div>
 

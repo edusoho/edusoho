@@ -74,6 +74,7 @@ class AnalysisController extends BaseController
                    'tab' => "trend",
                 )));
         }
+
         $paginator = new Paginator(
                 $request,
                 $this->getLogService()->searchLogCount(array('action'=>"login_success",'startDateTime'=>date("Y-m-d H:i:s",$timeRange['startTime']),'endDateTime'=>date("Y-m-d H:i:s",$timeRange['endTime']))),
@@ -88,6 +89,7 @@ class AnalysisController extends BaseController
          );
 
         $LoginData="";
+
         if($tab=="trend"){
             $LoginData=$this->getLogService()->analysisLoginDataByTime($timeRange['startTime'],$timeRange['endTime']);
     
@@ -130,6 +132,7 @@ class AnalysisController extends BaseController
                    'tab' => "trend",
                 )));
         }
+
         $paginator = new Paginator(
                 $request,
                 $this->getCourseService()->searchCourseCount($timeRange),
@@ -144,6 +147,7 @@ class AnalysisController extends BaseController
          );
 
         $courseData="";
+
         if($tab=="trend"){
             $courseData=$this->getCourseService()->analysisCourseDataByTime($timeRange['startTime'],$timeRange['endTime']);
     
@@ -190,6 +194,7 @@ class AnalysisController extends BaseController
                    'tab' => "trend",
                 )));
         }
+
         $paginator = new Paginator(
                 $request,
                 $this->getCourseService()->searchLessonCount($timeRange),
@@ -204,6 +209,7 @@ class AnalysisController extends BaseController
          );
 
         $lessonData="";
+
         if($tab=="trend"){
             $lessonData=$this->getCourseService()->analysisLessonDataByTime($timeRange['startTime'],$timeRange['endTime']);
     
@@ -265,6 +271,7 @@ class AnalysisController extends BaseController
          );
 
         $JoinLessonData="";
+
         if($tab=="trend"){
             $JoinLessonData=$this->getOrderService()->analysisCourseOrderDataByTimeAndStatus($timeRange['startTime'],$timeRange['endTime'],"paid");
     
@@ -678,6 +685,7 @@ class AnalysisController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
         $users = ArrayToolkit::index($users,'id');
         $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('local');
+        
         return $this->render("TopxiaAdminBundle:OperationAnalysis:local-video-view.html.twig",array(
             'videoViewedDetail'=>$videoViewedDetail,
             'paginator'=>$paginator,
@@ -787,6 +795,7 @@ class AnalysisController extends BaseController
          );
 
         $incomeData="";
+
         if($tab=="trend"){
             $incomeData=$this->getOrderService()->analysisAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
     
@@ -836,6 +845,7 @@ class AnalysisController extends BaseController
             'tab' => "trend",
             )));
         }
+
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","targetType"=>"course","amount"=>"0.00")),
@@ -850,6 +860,7 @@ class AnalysisController extends BaseController
          );
 
         $courseIncomeData="";
+
         if($tab=="trend"){
             $courseIncomeData=$this->getOrderService()->analysisCourseAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
 
@@ -890,7 +901,7 @@ class AnalysisController extends BaseController
 
         foreach ($dates as $key => $value) {
             
-        $zeroData[]=array("date"=>$value,"count"=>0);
+            $zeroData[]=array("date"=>$value,"count"=>0);
         }
 
         $currentData=ArrayToolkit::index($currentData,'date');
@@ -958,16 +969,16 @@ class AnalysisController extends BaseController
 
     private function getCourseService()
     {
-                return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
     private function getCategoryService()
     {
-            return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
      }
 
     private function getOrderService()
     {
-            return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 }
