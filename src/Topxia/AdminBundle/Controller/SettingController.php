@@ -588,7 +588,7 @@ class SettingController extends BaseController
         );
 
         $courseSetting = array_merge($default, $courseSetting);
-print_r($courseSetting['userinfoFieldsType']);
+
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
 
