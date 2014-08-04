@@ -25,4 +25,12 @@ interface LessonLearnDao
 	public function updateLearn($id, $fields);
 
     public function deleteLearnsByLessonId($lessonId);
+
+    	public function searchLearnCount($conditions);
+
+    	public function searchLearns($conditions,$orderBy,$start,$limit);
+
+        	public function analysisLessonFinishedNumByTime($startTime,$endTime);
+
+    	public function analysisLessonFinishedDataByTime($startTime,$endTime);
 }

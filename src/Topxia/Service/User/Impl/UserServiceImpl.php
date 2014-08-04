@@ -844,6 +844,16 @@ class UserServiceImpl extends BaseService implements UserService
         ));
     }
 
+    public function analysisRegisterNumByTime($startTime,$endTime)
+    {
+        return $this->getUserDao()->analysisRegisterNumByTime($startTime,$endTime);
+    }
+
+    public function analysisRegisterDataByTime($startTime,$endTime)
+    {
+        return $this->getUserDao()->analysisRegisterDataByTime($startTime,$endTime);
+    }
+
     private function getFriendDao()
     {
         return $this->createDao("User.FriendDao");

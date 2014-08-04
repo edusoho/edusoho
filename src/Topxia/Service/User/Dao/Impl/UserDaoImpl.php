@@ -86,6 +86,8 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('approvalStatus = :approvalStatus')
             ->andWhere('email = :email')
             ->andWhere('level = :level')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime <= :endTime')
             ->andWhere('level >= :greatLevel');
     }
 
@@ -122,6 +124,20 @@ class UserDaoImpl extends BaseDao implements UserDao
         }
         $sql = "UPDATE {$this->table} SET {$name} = 0 WHERE id = ? LIMIT 1";
         return $this->getConnection()->executeQuery($sql, array($id));
+    }
+
+    public function analysisRegisterNumByTime($startTime,$endTime)
+    {
+        $sql="SELECT count(id) as num FROM `{$this->table}` WHERE `createdTime`>={$startTime} and `createdTime`<={$endTime}  ";
+
+        return $this->getConnection()->fetchColumn($sql);
+    }
+
+    public function analysisRegisterDataByTime($startTime,$endTime)
+    {
+        $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} and `createdTime`<={$endTime} group by date_format(from_unixtime(`createdTime`),'%Y-%m-%d') order by date ASC ";
+
+        return $this->getConnection()->fetchAll($sql);
     }
 
 }

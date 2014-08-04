@@ -6,13 +6,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 interface UserService
 {
     
-	public function getUser($id);
+    public function getUser($id);
 
     public function getUserByNickname($nickname);
 
     public function getUserByEmail($email);
 
-	public function findUsersByIds(array $ids);
+    public function findUsersByIds(array $ids);
 
     public function findUserProfilesByIds(array $ids);
 
@@ -170,5 +170,10 @@ interface UserService
 
     public function rejectApproval($userId, $note = null);
 
+    public function analysisRegisterNumByTime($startTime,$endTime);
+
+    public function analysisRegisterDataByTime($startTime,$endTime);
+
     public function dropFieldData($fieldName);
+
 }

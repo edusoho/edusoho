@@ -21,4 +21,22 @@ interface OrderDao
 
     public function sumOrderPriceByTargetAndStatuses($targetType, $targetId, array $statuses);
 
+    public function analysisCourseOrderNumByTimeAndStatus($startTime,$endTime,$status);
+
+    public function analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
+
+    public function analysisPaidCourseOrderNumByTime($startTime,$endTime);
+
+    public function analysisPaidCourseOrderDataByTime($startTime,$endTime);
+
+    public function analysisAmount($conditions);
+
+    public function analysisAmountDataByTime($startTime,$endTime);
+
+    public function analysisCourseAmountDataByTime($startTime,$endTime);
+
+    public function analysisExitCourseOrderNumByTime($startTime,$endTime);
+
+    public function analysisExitCourseOrderDataByTime($startTime,$endTime);
+
 }

@@ -191,6 +191,12 @@ class RegisterController extends BaseController
         return 'http://mail.' . $host;
     }
 
+
+    public function analysisAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Register:analysis.html.twig',array());
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');

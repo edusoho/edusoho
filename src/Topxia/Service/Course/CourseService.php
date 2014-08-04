@@ -66,6 +66,10 @@ interface CourseService
 
 	public function cancelRecommendCourse($id);
 
+	public function analysisCourseNumByTime($startTime,$endTime);
+
+	public function analysisCourseDataByTime($startTime,$endTime);
+
 	/**
 	 * 删除课程
 	 */
@@ -109,6 +113,8 @@ interface CourseService
 
 	public function startLearnLesson($courseId, $lessonId);
 
+	public function createLessonView($createLessonView);
+
 	public function finishLearnLesson($courseId, $lessonId);
 
 	public function findLatestFinishedLearns($start, $limit);
@@ -120,6 +126,26 @@ interface CourseService
 	public function getUserLearnLessonStatuses($userId, $courseId);
 
 	public function getUserNextLearnLesson($userId, $courseId);
+
+	public function searchLearnCount($conditions);
+
+	public function searchLearns($conditions,$orderBy,$start,$limit);
+
+	public function analysisLessonNumByTime($startTime,$endTime);
+
+	public function analysisLessonDataByTime($startTime,$endTime);
+
+	public function analysisLessonFinishedNumByTime($startTime,$endTime);
+
+	public function analysisLessonFinishedDataByTime($startTime,$endTime);
+
+	public function searchAnalysisLessonViewCount($conditions);
+
+	public function getAnalysisLessonMinTime($type);
+
+	public function searchAnalysisLessonView($conditions, $orderBy, $start, $limit);
+
+	public function analysisLessonViewDataByTime($startTime,$endTime,$conditions);
 
 	/**
 	 * Chapter API
@@ -271,6 +297,5 @@ interface CourseService
 	public function findAnnouncementsByCourseIds(array $ids, $start, $limit);
 
 	public function updateAnnouncement($courseId, $id, $fields);
-
 
 }
