@@ -213,7 +213,8 @@ class SettingController extends BaseController
             'welcome_body' => '',
             'user_terms' => 'closed',
             'user_terms_body' => '',
-            'registerSortType'=>array(0=>"email",1=>"nickname",3=>"confirmPassword",4=>"truename",5=>"mobile",6=>"idcard",7=>"gender",8=>"job",9=>"company"),
+            'registerSortType'=>array(),
+            'registerSort'=>array(0=>"email",1=>"nickname",2=>"password"),
         );
 
         $auth = array_merge($default, $auth);
@@ -232,12 +233,16 @@ class SettingController extends BaseController
 
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        foreach ($userFields as $key => $fieldValue) {
-            $auth['registerSortType'][]=$fieldValue['fieldName'];
+        if($auth['registerSortType']){
+            foreach ($userFields as $key => $fieldValue) {
+                $authField[]=$fieldValue['fieldName'];
+                if(!in_array($fieldValue['fieldName'], $auth['registerSortType'])){
+                    $auth['registerSortType'][]=$fieldValue['fieldName'];
+                }
+            }
+         
         }
 
-        $this->getSettingService()->set('auth', $auth);
-        
         return $this->render('TopxiaAdminBundle:System:auth.html.twig', array(
             'auth' => $auth,
             'userFields'=>$userFields,
