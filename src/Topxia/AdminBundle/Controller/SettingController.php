@@ -224,10 +224,10 @@ class SettingController extends BaseController
                 $auth['welcome_methods'] = array();
             }
 
-            foreach ($print_r($userFields) as $key => $fieldValue) {
+            foreach ($userFields as $key => $fieldValue) {
             $auth['registerSortType'][]=$fieldValue['fieldName'];
             }
-            
+
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
