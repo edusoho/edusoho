@@ -373,7 +373,10 @@ class UserController extends BaseController
     {
          if ($request->getMethod() == 'POST') {
 
+                $chechkType=$request->request->get("rule");
                 $file=$request->files->get('excel');
+                $errorInfo=array();
+                $userCount=0;
 
                 if(!$file){
                     $this->setFlashMessage('danger', '请选择上传的文件');
@@ -435,10 +438,19 @@ class UserController extends BaseController
                         $userData[$key]=$strs[$num];
                     }
 
-                    if(!$this->getUserService()->isNicknameAvaliable($userData['nickname'])){                      
+                    if(!$this->getUserService()->isNicknameAvaliable($userData['nickname'])){ 
+
+                        if($chechkType=="ignore") $errorInfo[]="第".$row."行的用户已存在，已略过"; 
+                        if($chechkType=="update") {
+                            $errorInfo[]="第".$row."行的用户已存在，将会更新";          
+                        }            
                         continue;
                     }
-                    if(!$this->getUserService()->isEmailAvaliable($userData['email'])){                      
+                    if(!$this->getUserService()->isEmailAvaliable($userData['email'])){          
+
+                        if($chechkType=="ignore") $errorInfo[]="第".$row."行的用户已存在，已略过"; 
+                        if($chechkType=="update") $errorInfo[]="第".$row."行的用户已存在，将会更新";  
+
                         continue;
                     }
 
@@ -449,8 +461,8 @@ class UserController extends BaseController
 
                 }
                 $userCount=count($allUserData);
-                print_r($allUserData);
-                print($userCount);
+                //print_r($allUserData);
+                print_r($errorInfo);
 
         }
 
@@ -460,7 +472,8 @@ class UserController extends BaseController
 
 
     private function getFieldSort($excelField,$fieldNameArray,$fieldArray)
-    {
+    {       
+            $fieldSort=array();
             foreach ($excelField as $key => $value) {
 
             $value=$this->trim($value);
@@ -485,13 +498,13 @@ class UserController extends BaseController
             $data=implode("", $data);
             $data=$this->trim($data);
             $tmparray = explode("用户名",$data);
-            if (count($tmparray)<1) return false; 
+            if (count($tmparray)<=1) return false; 
 
             $tmparray = explode("邮箱",$data);
-            if (count($tmparray)<1) return false; 
+            if (count($tmparray)<=1) return false; 
 
             $tmparray = explode("密码",$data);
-            if (count($tmparray)<1) return false; 
+            if (count($tmparray)<=1) return false; 
 
             return true;
     }
