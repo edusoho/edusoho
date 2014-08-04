@@ -213,7 +213,7 @@ class SettingController extends BaseController
             'welcome_body' => '',
             'user_terms' => 'closed',
             'user_terms_body' => '',
-            'registerSortType'=>array(),
+            'registerSortType'=>array(0=>"email",1=>"nickname",3=>"confirmPassword",4=>"truename",5=>"mobile",6=>"idcard",7=>"gender",8=>"job",9=>"company"),
         );
 
         $auth = array_merge($default, $auth);
@@ -224,6 +224,10 @@ class SettingController extends BaseController
                 $auth['welcome_methods'] = array();
             }
 
+            foreach ($print_r($userFields) as $key => $fieldValue) {
+            $auth['registerSortType'][]=$fieldValue['fieldName'];
+            }
+            
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
@@ -770,11 +774,6 @@ class SettingController extends BaseController
         if($field==false){
            $this->setFlashMessage('danger', '已经没有可以添加的字段了!'); 
         }
-
-        $auth = $this->getSettingService()->get('auth', array());
-        if(!isset($auth['registerSortType'])) $auth['registerSortType']=array(0=>"email",1=>"nickname",3=>"confirmPassword",4=>"truename",5=>"mobile",6=>"idcard",7=>"gender",8=>"job",9=>"company");
-        $auth['registerSortType'][]=$field['fieldName'];
-        $this->getSettingService()->set('auth', $auth);
 
         $courseSetting = $this->getSettingService()->get('course', array());
         if(!isset($courseSetting['userinfoFieldsType'])) $courseSetting['userinfoFieldsType']=array();
