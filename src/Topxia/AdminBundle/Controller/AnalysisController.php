@@ -11,43 +11,43 @@ class AnalysisController extends BaseController
 
 	public function registerAction(Request $request,$tab)
 	{		
-	        	$data=array();
-	        	$registerStartDate="";
-	        	
-	        	$condition=$request->query->all();
-	        	$timeRange=$this->getTimeRange($condition);
-	        	if(!$timeRange) {
+    	$data=array();
+    	$registerStartDate="";
+    	
+    	$condition=$request->query->all();
+    	$timeRange=$this->getTimeRange($condition);
+    	if(!$timeRange) {
 
-	        		  $this->setFlashMessage("danger","输入的日期有误!");
-        		                return $this->redirect($this->generateUrl('admin_operation_analysis_register', array(
-			               'tab' => "trend",
-		                )));
-	        	}
-	        	$paginator = new Paginator(
-		            	$request,
-		            	$this->getUserService()->searchUserCount($timeRange),
-		           	 20
-	        	);
+    		  $this->setFlashMessage("danger","输入的日期有误!");
+		                return $this->redirect($this->generateUrl('admin_operation_analysis_register', array(
+	               'tab' => "trend",
+                )));
+    	}
+    	$paginator = new Paginator(
+            	$request,
+            	$this->getUserService()->searchUserCount($timeRange),
+           	 20
+    	);
 
-	        	$registerDetail=$this->getUserService()->searchUsers(
-		        	$timeRange,
-		        	array('createdTime', 'DESC'),
-		              $paginator->getOffsetCount(),
-		              $paginator->getPerPageCount()
-	             );
+    	$registerDetail=$this->getUserService()->searchUsers(
+        	$timeRange,
+        	array('createdTime', 'DESC'),
+              $paginator->getOffsetCount(),
+              $paginator->getPerPageCount()
+         );
 
-	        	$registerData="";
-	        	if($tab=="trend"){
-		        	$registerData=$this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'],$timeRange['endTime']);
-		  	
-		  	$data=$this->fillAnalysisData($condition,$registerData);		  	
-	        	}
-	      	
-	      	$registerStartData=$this->getUserService()->searchUsers(array(),array('createdTime', 'ASC'),0,1);
+        	$registerData="";
+        	if($tab=="trend"){
+	        	$registerData=$this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'],$timeRange['endTime']);
+	  	
+	  	$data=$this->fillAnalysisData($condition,$registerData);		  	
+        	}
+      	
+      	$registerStartData=$this->getUserService()->searchUsers(array(),array('createdTime', 'ASC'),0,1);
 
-	      	if($registerStartData) $registerStartDate=date("Y-m-d",$registerStartData[0]['createdTime']);
+      	if($registerStartData) $registerStartDate=date("Y-m-d",$registerStartData[0]['createdTime']);
 
-	       	return $this->render("TopxiaAdminBundle:OperationAnalysis:register.html.twig",array(
+       	return $this->render("TopxiaAdminBundle:OperationAnalysis:register.html.twig",array(
 			'registerDetail'=>$registerDetail,
 			'paginator'=>$paginator,
 			'tab'=>$tab,
@@ -56,7 +56,7 @@ class AnalysisController extends BaseController
 			'startTime'=>date("Y-m-d",$timeRange['startTime']),
 			'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
 			'analysisDateType'=>"register",
-	    	  ));
+    	  ));
 	}
 
 	public function loginAction(Request $request,$tab)
