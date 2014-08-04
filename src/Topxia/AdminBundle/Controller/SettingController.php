@@ -224,10 +224,6 @@ class SettingController extends BaseController
                 $auth['welcome_methods'] = array();
             }
 
-            foreach ($userFields as $key => $fieldValue) {
-            $auth['registerSortType'][]=$fieldValue['fieldName'];
-            }
-
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
@@ -236,6 +232,12 @@ class SettingController extends BaseController
 
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
+        foreach ($userFields as $key => $fieldValue) {
+            $auth['registerSortType'][]=$fieldValue['fieldName'];
+        }
+
+        $this->getSettingService()->set('auth', $auth);
+        
         return $this->render('TopxiaAdminBundle:System:auth.html.twig', array(
             'auth' => $auth,
             'userFields'=>$userFields,
