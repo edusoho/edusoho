@@ -395,7 +395,7 @@ class UserController extends BaseController
                 $highestRow = $objWorksheet->getHighestRow(); 
 
                 $highestColumn = $objWorksheet->getHighestColumn();
-                $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);//总列数   
+                $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);   
 
                 $fieldNameArray=$this->getFieldNameArray();
                 $fieldArray=$this->getFieldArray();
@@ -415,21 +415,8 @@ class UserController extends BaseController
                     ));
                 }
 
-                foreach ($excelField as $key => $value) {
+                $fieldSort=$this->getFieldSort($excelField,$fieldNameArray,$fieldArray);
 
-                    $value=$this->trim($value);
-
-                    if(in_array($value, $fieldNameArray)){
-                        //自定义字段名重复  将导入第一个字段
-                        foreach ($fieldArray as $fieldKey => $fieldValue) {
-                            if($value==$fieldValue) {
-                                 $fieldSort[]=array("num"=>$key,"fieldName"=>$fieldKey);
-                                 break;
-                            }
-                        }
-                    }
-
-                }
                 //start import
                 for ($row = 3;$row <= $highestRow;$row++) 
                 {
@@ -471,6 +458,27 @@ class UserController extends BaseController
         ));
     }
 
+
+    private function getFieldSort($excelField,$fieldNameArray,$fieldArray)
+    {
+            foreach ($excelField as $key => $value) {
+
+            $value=$this->trim($value);
+
+            if(in_array($value, $fieldNameArray)){
+                //自定义字段名重复  将导入第一个字段
+                foreach ($fieldArray as $fieldKey => $fieldValue) {
+                    if($value==$fieldValue) {
+                         $fieldSort[]=array("num"=>$key,"fieldName"=>$fieldKey);
+                         break;
+                    }
+                }
+             }
+
+             }
+
+             return $fieldSort;
+    }
 
     private function checkNecessaryFields($data)
     {       
