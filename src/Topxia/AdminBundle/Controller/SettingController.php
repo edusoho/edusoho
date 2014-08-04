@@ -213,7 +213,7 @@ class SettingController extends BaseController
             'welcome_body' => '',
             'user_terms' => 'closed',
             'user_terms_body' => '',
-            'registerSortType'=>array(),
+            'registerFieldNameArray'=>array(),
             'registerSort'=>array(0=>"email",1=>"nickname",2=>"password"),
         );
 
@@ -234,10 +234,10 @@ class SettingController extends BaseController
 
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        if($auth['registerSortType']){
+        if($auth['registerFieldNameArray']){
             foreach ($userFields as $key => $fieldValue) {
-                if(!in_array($fieldValue['fieldName'], $auth['registerSortType'])){
-                    $auth['registerSortType'][]=$fieldValue['fieldName'];
+                if(!in_array($fieldValue['fieldName'], $auth['registerFieldNameArray'])){
+                    $auth['registerFieldNameArray'][]=$fieldValue['fieldName'];
                 }
             }
          
@@ -584,7 +584,7 @@ class SettingController extends BaseController
             'relatedCourses' => '0',
             'live_course_enabled' => '0',
             'userinfoFields'=>array(),
-            "userinfoFieldsType"=>array(),
+            "userinfoFieldNameArray"=>array(),
         );
 
         $this->getSettingService()->set('course', $courseSetting);
@@ -594,7 +594,7 @@ class SettingController extends BaseController
             $courseSetting = $request->request->all();
 
             if(!isset($courseSetting['userinfoFields']))$courseSetting['userinfoFields']=array();
-            if(!isset($courseSetting['userinfoFieldsType']))$courseSetting['userinfoFieldsType']=array();
+            if(!isset($courseSetting['userinfoFieldNameArray']))$courseSetting['userinfoFieldNameArray']=array();
 
             $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
 
@@ -607,10 +607,10 @@ class SettingController extends BaseController
         
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        if($courseSetting['userinfoFieldsType']){
+        if($courseSetting['userinfoFieldNameArray']){
             foreach ($userFields as $key => $fieldValue) {
-                if(!in_array($fieldValue['fieldName'], $courseSetting['userinfoFieldsType'])){
-                    $courseSetting['userinfoFieldsType'][]=$fieldValue['fieldName'];
+                if(!in_array($fieldValue['fieldName'], $courseSetting['userinfoFieldNameArray'])){
+                    $courseSetting['userinfoFieldNameArray'][]=$fieldValue['fieldName'];
                 }
             }
          
@@ -762,14 +762,14 @@ class SettingController extends BaseController
 
             $courseSetting = $this->getSettingService()->get('course', array());
 
-            if(isset($auth['registerSortType'])){
-                foreach ($auth['registerSortType'] as $key => $value) {
-                if($value==$field['fieldName']) unset( $auth['registerSortType'][$key]);
+            if(isset($auth['registerFieldNameArray'])){
+                foreach ($auth['registerFieldNameArray'] as $key => $value) {
+                if($value==$field['fieldName']) unset( $auth['registerFieldNameArray'][$key]);
                 }
             }
-            if(isset($courseSetting['userinfoFieldsType'])){
-                foreach ($courseSetting['userinfoFieldsType'] as $key => $value) {
-                if($value==$field['fieldName']) unset( $courseSetting['userinfoFieldsType'][$key]);
+            if(isset($courseSetting['userinfoFieldNameArray'])){
+                foreach ($courseSetting['userinfoFieldNameArray'] as $key => $value) {
+                if($value==$field['fieldName']) unset( $courseSetting['userinfoFieldNameArray'][$key]);
                 }
             }
             $this->getSettingService()->set('auth', $auth);
