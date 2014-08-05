@@ -9,296 +9,319 @@ use Topxia\Common\Paginator;
 class CourseStudentManageController extends BaseController
 {
 
-    public function indexAction(Request $request, $id)
-    {
-        $course = $this->getCourseService()->tryManageCourse($id);
+	public function indexAction(Request $request, $id)
+	{
+		$course = $this->getCourseService()->tryManageCourse($id);
 
-        $paginator = new Paginator(
-            $request,
-            $this->getCourseService()->getCourseStudentCount($course['id']),
-            20
-        );
+		$paginator = new Paginator(
+			$request,
+			$this->getCourseService()->getCourseStudentCount($course['id']),
+			20
+		);
 
-        $students = $this->getCourseService()->findCourseStudents(
-            $course['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        $studentUserIds = ArrayToolkit::column($students, 'userId');
-        $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $followingIds = $this->getUserService()->filterFollowingIds($this->getCurrentUser()->id, $studentUserIds);
+		$students = $this->getCourseService()->findCourseStudents(
+			$course['id'],
+			$paginator->getOffsetCount(),
+			$paginator->getPerPageCount()
+		);
+		$studentUserIds = ArrayToolkit::column($students, 'userId');
+		$users = $this->getUserService()->findUsersByIds($studentUserIds);
+		$followingIds = $this->getUserService()->filterFollowingIds($this->getCurrentUser()->id, $studentUserIds);
 
-        $progresses = array();
-        foreach ($students as $student) {
-            $progresses[$student['userId']] = $this->calculateUserLearnProgress($course, $student);
-        }
+		$progresses = array();
+		foreach ($students as $student) {
+			$progresses[$student['userId']] = $this->calculateUserLearnProgress($course, $student);
+		}
 
-        $courseSetting = $this->getSettingService()->get('course', array());
-        $isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1: 0;
+		$courseSetting = $this->getSettingService()->get('course', array());
+		$isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1: 0;
 
-        return $this->render('TopxiaWebBundle:CourseStudentManage:index.html.twig', array(
-            'course' => $course,
-            'students' => $students,
-            'users'=>$users,
-            'progresses' => $progresses,
-            'followingIds' => $followingIds,
-            'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
-            'paginator' => $paginator,
-            'canManage' => $this->getCourseService()->canManageCourse($course['id']),
-        ));
+		return $this->render('TopxiaWebBundle:CourseStudentManage:index.html.twig', array(
+			'course' => $course,
+			'students' => $students,
+			'users'=>$users,
+			'progresses' => $progresses,
+			'followingIds' => $followingIds,
+			'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
+			'paginator' => $paginator,
+			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
+		));
 
-    }
+	}
 
-    public function createAction(Request $request, $id)
-    {
-        $courseSetting = $this->getSettingService()->get('course', array());
-        
-        if (!empty($courseSetting['teacher_manage_student'])) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        } else {
-            $course = $this->getCourseService()->tryAdminCourse($id);
-        }
+	public function createAction(Request $request, $id)
+	{
+		$courseSetting = $this->getSettingService()->get('course', array());
+		
+		if (!empty($courseSetting['teacher_manage_student'])) {
+			$course = $this->getCourseService()->tryManageCourse($id);
+		} else {
+			$course = $this->getCourseService()->tryAdminCourse($id);
+		}
 
-        $currentUser = $this->getCurrentUser();
+		$currentUser = $this->getCurrentUser();
 
-        if ('POST' == $request->getMethod()) {
-            $data = $request->request->all();
-            $user = $this->getUserService()->getUserByNickname($data['nickname']);
-            if (empty($user)) {
-                throw $this->createNotFoundException("用户{$data['nickname']}不存在");
-            }
+		if ('POST' == $request->getMethod()) {
+			$data = $request->request->all();
+			$user = $this->getUserService()->getUserByNickname($data['nickname']);
+			if (empty($user)) {
+				throw $this->createNotFoundException("用户{$data['nickname']}不存在");
+			}
 
-            if ($this->getCourseService()->isCourseStudent($course['id'], $user['id'])) {
-                throw $this->createNotFoundException("用户已经是学员，不能添加！");
-            }
+			if ($this->getCourseService()->isCourseStudent($course['id'], $user['id'])) {
+				throw $this->createNotFoundException("用户已经是学员，不能添加！");
+			}
 
-            $order = $this->getOrderService()->createOrder(array(
-                'userId' => $user['id'],
-                'title' => "购买课程《{$course['title']}》(管理员添加)",
-                'targetType' => 'course',
-                'targetId' => $course['id'],
-                'amount' => $data['price'],
-                'payment' => 'none',
-                'snPrefix' => 'C',
-            ));
+			$order = $this->getOrderService()->createOrder(array(
+				'userId' => $user['id'],
+				'title' => "购买课程《{$course['title']}》(管理员添加)",
+				'targetType' => 'course',
+				'targetId' => $course['id'],
+				'amount' => $data['price'],
+				'payment' => 'none',
+				'snPrefix' => 'C',
+			));
 
-            $this->getOrderService()->payOrder(array(
-                'sn' => $order['sn'],
-                'status' => 'success', 
-                'amount' => $order['amount'], 
-                'paidTime' => time(),
-            ));
+			$this->getOrderService()->payOrder(array(
+				'sn' => $order['sn'],
+				'status' => 'success', 
+				'amount' => $order['amount'], 
+				'paidTime' => time(),
+			));
 
-            $info = array(
-                'orderId' => $order['id'],
-                'note'  => $data['remark'],
-            );
+			$info = array(
+				'orderId' => $order['id'],
+				'note'  => $data['remark'],
+			);
 
-            $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+			$this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
-            $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+			$member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
 
-            $this->getNotificationService()->notify($member['userId'], 'student-create', array(
-                'courseId' => $course['id'], 
-                'courseTitle' => $course['title'],
-            ));
+			$this->getNotificationService()->notify($member['userId'], 'student-create', array(
+				'courseId' => $course['id'], 
+				'courseTitle' => $course['title'],
+			));
 
 
 
-            $this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
+			$this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
 
-            return $this->createStudentTrResponse($course, $member);
-        }
+			return $this->createStudentTrResponse($course, $member);
+		}
 
-        return $this->render('TopxiaWebBundle:CourseStudentManage:create-modal.html.twig',array(
-            'course'=>$course
-        ));
-    }
+		return $this->render('TopxiaWebBundle:CourseStudentManage:create-modal.html.twig',array(
+			'course'=>$course
+		));
+	}
 
-    public function removeAction(Request $request, $courseId, $userId)
-    {
-        $courseSetting = $this->getSettingService()->get('course', array());
+	public function removeAction(Request $request, $courseId, $userId)
+	{
+		$courseSetting = $this->getSettingService()->get('course', array());
 
-        if (!empty($courseSetting['teacher_manage_student'])) {
-            $course = $this->getCourseService()->tryManageCourse($courseId);
-        } else {
-            $course = $this->getCourseService()->tryAdminCourse($courseId);
-        }
+		if (!empty($courseSetting['teacher_manage_student'])) {
+			$course = $this->getCourseService()->tryManageCourse($courseId);
+		} else {
+			$course = $this->getCourseService()->tryAdminCourse($courseId);
+		}
 
-        $this->getCourseService()->removeStudent($courseId, $userId);
+		$this->getCourseService()->removeStudent($courseId, $userId);
 
-        $this->getNotificationService()->notify($userId, 'student-remove', array(
-            'courseId' => $course['id'], 
-            'courseTitle' => $course['title'],
-        ));
+		$this->getNotificationService()->notify($userId, 'student-remove', array(
+			'courseId' => $course['id'], 
+			'courseTitle' => $course['title'],
+		));
 
-        return $this->createJsonResponse(true);
-    }
+		return $this->createJsonResponse(true);
+	}
 
-    public function exportCsvAction (Request $request, $id)
-    {   
-        $courseSetting = $this->getSettingService()->get('course', array());
+	public function exportCsvAction (Request $request, $id)
+	{   
+		$courseSetting = $this->getSettingService()->get('course', array());
 
-        if (!empty($courseSetting['teacher_manage_student'])) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        } else {
-            $course = $this->getCourseService()->tryAdminCourse($id);
-        }
+		if (!empty($courseSetting['teacher_manage_student'])) {
+			$course = $this->getCourseService()->tryManageCourse($id);
+		} else {
+			$course = $this->getCourseService()->tryAdminCourse($id);
+		}
 
-        $courseMembers = $this->getCourseService()->searchMembers( array('courseId' => $course['id'],'role' => 'student'),array('createdTime', 'DESC'), 0, 1000);
+		$courseMembers = $this->getCourseService()->searchMembers( array('courseId' => $course['id'],'role' => 'student'),array('createdTime', 'DESC'), 0, 1000);
 
-        $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
+		$studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
 
-        $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $users = ArrayToolkit::index($users, 'id');
+		$users = $this->getUserService()->findUsersByIds($studentUserIds);
+		$users = ArrayToolkit::index($users, 'id');
 
-        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
-        $profiles = ArrayToolkit::index($profiles, 'id');
-        
-        $progresses = array();
-        foreach ($courseMembers as $student) {
-            $progresses[$student['userId']] = $this->calculateUserLearnProgress($course, $student);
-        }
+		$profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
+		$profiles = ArrayToolkit::index($profiles, 'id');
+		
+		$progresses = array();
+		foreach ($courseMembers as $student) {
+			$progresses[$student['userId']] = $this->calculateUserLearnProgress($course, $student);
+		}
 
-        $str = "用户名,加入学习时间,学习进度,姓名,Email,公司,头衔,电话,微信号,QQ号"."\r\n";
+		$str = "用户名,加入学习时间,学习进度,姓名,Email,公司,头衔,电话,微信号,QQ号"."\r\n";
 
-        $students = array();
+		$students = array();
 
-        foreach ($courseMembers as $courseMember) {
-            $member = "";
-            $member .= $users[$courseMember['userId']]['nickname'].",";
-            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
-            $member .= $progresses[$courseMember['userId']]['percent'].",";
-            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename']."," : "-".",";
-            $member .= $users[$courseMember['userId']]['email'].",";
-            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company']."," : "-".",";
-            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-";
-            $students[] = $member;   
-        };
+		foreach ($courseMembers as $courseMember) {
+			$member = "";
+			$member .= $users[$courseMember['userId']]['nickname'].",";
+			$member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
+			$member .= $progresses[$courseMember['userId']]['percent'].",";
+			$member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename']."," : "-".",";
+			$member .= $users[$courseMember['userId']]['email'].",";
+			$member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company']."," : "-".",";
+			$member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
+			$member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
+			$member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
+			$member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-";
+			$students[] = $member;   
+		};
 
-        $str .= implode("\r\n",$students);
-        $str = chr(239) . chr(187) . chr(191) . $str;
-        
-        $filename = sprintf("course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
+		$str .= implode("\r\n",$students);
+		$str = chr(239) . chr(187) . chr(191) . $str;
+		
+		$filename = sprintf("course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
 
-        $userId = $this->getCurrentUser()->id;
+		$userId = $this->getCurrentUser()->id;
 
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
+		$response = new Response();
+		$response->headers->set('Content-type', 'text/csv');
+		$response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+		$response->headers->set('Content-length', strlen($str));
+		$response->setContent($str);
 
-        return $response;
-    }
+		return $response;
+	}
 
-    public function remarkAction(Request $request, $courseId, $userId)
-    {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-        $user = $this->getUserService()->getUser($userId);
-        $member = $this->getCourseService()->getCourseMember($courseId, $userId);
+	public function remarkAction(Request $request, $courseId, $userId)
+	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$user = $this->getUserService()->getUser($userId);
+		$member = $this->getCourseService()->getCourseMember($courseId, $userId);
 
-        if ('POST' == $request->getMethod()) {
-            $data = $request->request->all();
-            $member = $this->getCourseService()->remarkStudent($course['id'], $user['id'], $data['remark']);
-            return $this->createStudentTrResponse($course, $member);
-        }
+		if ('POST' == $request->getMethod()) {
+			$data = $request->request->all();
+			$member = $this->getCourseService()->remarkStudent($course['id'], $user['id'], $data['remark']);
+			return $this->createStudentTrResponse($course, $member);
+		}
 
-        return $this->render('TopxiaWebBundle:CourseStudentManage:remark-modal.html.twig',array(
-            'member'=>$member,
-            'user'=>$user,
-            'course'=>$course
-        ));
-    }
+		return $this->render('TopxiaWebBundle:CourseStudentManage:remark-modal.html.twig',array(
+			'member'=>$member,
+			'user'=>$user,
+			'course'=>$course
+		));
+	}
 
-    public function checkNicknameAction(Request $request, $id)
-    {
-        $nickname = $request->query->get('value');
-        $result = $this->getUserService()->isNicknameAvaliable($nickname);
-        if ($result) {
-            $response = array('success' => false, 'message' => '该用户不存在');
-        } else {
-            $user = $this->getUserService()->getUserByNickname($nickname);
-            $isCourseStudent = $this->getCourseService()->isCourseStudent($id, $user['id']);
-            if($isCourseStudent){
-                $response = array('success' => false, 'message' => '该用户已是本课程的学员了');
-            } else {
-                $response = array('success' => true, 'message' => '');
-            }
-            
-            $isCourseTeacher = $this->getCourseService()->isCourseTeacher($id, $user['id']);
-            if($isCourseTeacher){
-                $response = array('success' => false, 'message' => '该用户是本课程的教师，不能添加');
-            }
-        }
-        return $this->createJsonResponse($response);
-    }
+	public function checkNicknameAction(Request $request, $id)
+	{
+		$nickname = $request->query->get('value');
+		$result = $this->getUserService()->isNicknameAvaliable($nickname);
+		if ($result) {
+			$response = array('success' => false, 'message' => '该用户不存在');
+		} else {
+			$user = $this->getUserService()->getUserByNickname($nickname);
+			$isCourseStudent = $this->getCourseService()->isCourseStudent($id, $user['id']);
+			if($isCourseStudent){
+				$response = array('success' => false, 'message' => '该用户已是本课程的学员了');
+			} else {
+				$response = array('success' => true, 'message' => '');
+			}
+			
+			$isCourseTeacher = $this->getCourseService()->isCourseTeacher($id, $user['id']);
+			if($isCourseTeacher){
+				$response = array('success' => false, 'message' => '该用户是本课程的教师，不能添加');
+			}
+		}
+		return $this->createJsonResponse($response);
+	}
 
-    public function showAction(Request $request, $id)
-    {
-        $user = $this->getUserService()->getUser($id);
-        $profile = $this->getUserService()->getUserProfile($id);
-        $profile['title'] = $user['title'];
-        return $this->render('TopxiaWebBundle:CourseStudentManage:show-modal.html.twig', array(
-            'user' => $user,
-            'profile' => $profile,
-        ));
-    }
+	public function showAction(Request $request, $id)
+	{
+		$user = $this->getUserService()->getUser($id);
+		$profile = $this->getUserService()->getUserProfile($id);
+		$profile['title'] = $user['title'];
 
-    private function calculateUserLearnProgress($course, $member)
-    {
-        if ($course['lessonNum'] == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
-        }
+		$fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+		return $this->render('TopxiaWebBundle:CourseStudentManage:show-modal.html.twig', array(
+			'user' => $user,
+			'profile' => $profile,
+			'fields' => $fields,
+		));
+	}
 
-        return array (
-            'percent' => $percent,
-            'number' => $member['learnedNum'],
-            'total' => $course['lessonNum']
-        );
-    }
+	public function definedShowAction(Request $request, $id)
+	{
+		$user = $this->getUserService()->getUser($id);
+		$profile = $this->getUserService()->getUserProfile($id);
+		$profile['title'] = $user['title'];
 
-    private function createStudentTrResponse($course, $student)
-    {
-        $courseSetting = $this->getSettingService()->get('course', array());
-        $isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1: 0;
+		$fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        $user = $this->getUserService()->getUser($student['userId']);
-        $isFollowing = $this->getUserService()->isFollowed($this->getCurrentUser()->id, $student['userId']);
-        $progress = $this->calculateUserLearnProgress($course, $student);
+		return $this->render('TopxiaWebBundle:CourseStudentManage:defined-show-modal.html.twig', array(
+			'profile' => $profile,
+			'fields' => $fields,
+		));
+	}
 
-        return $this->render('TopxiaWebBundle:CourseStudentManage:tr.html.twig', array(
-            'course' => $course,
-            'student' => $student,
-            'user'=>$user,
-            'progress' => $progress,
-            'isFollowing' => $isFollowing,
-            'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
-        ));
-    }
+	private function calculateUserLearnProgress($course, $member)
+	{
+		if ($course['lessonNum'] == 0) {
+			return array('percent' => '0%', 'number' => 0, 'total' => 0);
+		}
 
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
+		$percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
 
-    private function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
+		return array (
+			'percent' => $percent,
+			'number' => $member['learnedNum'],
+			'total' => $course['lessonNum']
+		);
+	}
 
-    private function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
+	private function createStudentTrResponse($course, $student)
+	{
+		$courseSetting = $this->getSettingService()->get('course', array());
+		$isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1: 0;
 
-    private function getOrderService()
-    {
-        return $this->getServiceKernel()->createService('Order.OrderService');
-    }
+		$user = $this->getUserService()->getUser($student['userId']);
+		$isFollowing = $this->getUserService()->isFollowed($this->getCurrentUser()->id, $student['userId']);
+		$progress = $this->calculateUserLearnProgress($course, $student);
+
+		return $this->render('TopxiaWebBundle:CourseStudentManage:tr.html.twig', array(
+			'course' => $course,
+			'student' => $student,
+			'user'=>$user,
+			'progress' => $progress,
+			'isFollowing' => $isFollowing,
+			'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
+		));
+	}
+
+	private function getSettingService()
+	{
+		return $this->getServiceKernel()->createService('System.SettingService');
+	}
+
+	private function getCourseService()
+	{
+		return $this->getServiceKernel()->createService('Course.CourseService');
+	}
+
+	private function getNotificationService()
+	{
+		return $this->getServiceKernel()->createService('User.NotificationService');
+	}
+
+	private function getOrderService()
+	{
+		return $this->getServiceKernel()->createService('Order.OrderService');
+	}
+
+	protected function getUserFieldService()
+	{
+		return $this->getServiceKernel()->createService('User.UserFieldService');
+	}
 }
