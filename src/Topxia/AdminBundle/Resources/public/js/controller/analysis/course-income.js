@@ -54,7 +54,7 @@ define(function(require, exports, module) {
         });
         validator.addItem({
             element: '[name=analysisDateType]',
-            required: true,
+            required: true
         });
         autoSubmitCondition.autoSubmitCondition();
     };
