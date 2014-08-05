@@ -61,34 +61,39 @@ class DefaultController extends BaseController
 
     public function operationAnalysisDashbordBlockAction(Request $request)
     {   
+        $todayTimeStart=strtotime(date("Y-m-d",time()));
+        $todayTimeEnd=strtotime(date("Y-m-d",time()+24*3600));
 
-        $todayRegisterNum=$this->getUserService()->analysisRegisterNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
+        $yesterdayTimeStart=strtotime(date("Y-m-d",time()-24*3600));
+        $yesterdayTimeEnd=strtotime(date("Y-m-d",time()));
 
-        $yesterdayRegisterNum=$this->getUserService()->analysisRegisterNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
+        $todayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
+
+        $yesterdayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
 
         $todayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
 
         $yesterdayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
 
-        $todayCourseNum=$this->getCourseService()->analysisCourseNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
+        $todayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
 
-        $yesterdayCourseNum=$this->getCourseService()->analysisCourseNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
+        $yesterdayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
      
-        $todayLessonNum=$this->getCourseService()->analysisLessonNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
+        $todayLessonNum=$this->getCourseService()->searchLessonCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
 
-        $yesterdayLessonNum=$this->getCourseService()->analysisLessonNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
+        $yesterdayLessonNum=$this->getCourseService()->searchLessonCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
     
-        $todayJoinLessonNum=$this->getOrderService()->analysisCourseOrderNumByTimeAndStatus(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)),"paid");
+        $todayJoinLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$todayTimeStart,"paidEndTime"=>$todayTimeEnd,"status"=>"paid"));
 
-        $yesterdayJoinLessonNum=$this->getOrderService()->analysisCourseOrderNumByTimeAndStatus(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())),"paid");
+        $yesterdayJoinLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid"));
     
-        $todayBuyLessonNum=$this->getOrderService()->analysisPaidCourseOrderNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
+        $todayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$todayTimeStart,"paidEndTime"=>$todayTimeEnd,"status"=>"paid","amount"=>"0.00"));
 
-        $yesterdayBuyLessonNum=$this->getOrderService()->analysisPaidCourseOrderNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
+        $yesterdayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid","amount"=>"0.00"));
 
-        $todayFinishedLessonNum=$this->getCourseService()->analysisLessonFinishedNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)),"success");
+        $todayFinishedLessonNum=$this->getCourseService()->searchLearnCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd,"status"=>"finished"));
 
-        $yesterdayFinishedLessonNum=$this->getCourseService()->analysisLessonFinishedNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())),"success");
+        $yesterdayFinishedLessonNum=$this->getCourseService()->searchLearnCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd,"status"=>"finished"));
 
         $todayAllVideoViewedNum=$this->getCourseService()->searchAnalysisLessonViewCount(array('startTime'=>strtotime(date("Y-m-d",time())),'endTime'=>strtotime(date("Y-m-d",time()+24*3600)),"fileType"=>'video'));
 
@@ -106,28 +111,27 @@ class DefaultController extends BaseController
 
         $yesterdayNetVideoViewedNum=$this->getCourseService()->searchAnalysisLessonViewCount(array('startTime'=>strtotime(date("Y-m-d",time()-24*3600)),'endTime'=>strtotime(date("Y-m-d",time())),"fileType"=>'video','fileStorage'=>'net'));
 
+        $todayExitLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$todayTimeStart,"paidEndTime"=>$todayTimeEnd,"statusPaid"=>"paid","statusCreated"=>"created"));
 
-        $todayExitLessonNum=$this->getOrderService()->analysisExitCourseNumByTimeAndStatus(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)),"success");
+        $yesterdayExitLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"statusPaid"=>"paid","statusCreated"=>"created"));
 
-        $yesterdayExitLessonNum=$this->getOrderService()->analysisExitCourseNumByTimeAndStatus(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
-   
         $todayIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid"))+0.00;
 
         $yesterdayIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid"))+0.00;
-     
+
         $todayCourseIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid","targetType"=>"course"))+0.00;
 
         $yesterdayCourseIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid","targetType"=>"course"))+0.00;
 
-              $storageSetting = $this->getSettingService()->get('storage');
+        $storageSetting = $this->getSettingService()->get('storage');
 
-                if (!empty($storageSetting['cloud_access_key']) and !empty($storageSetting['cloud_secret_key'])) {
-                    $factory = new CloudClientFactory();
-                    $client = $factory->createClient($storageSetting);
-                    $keyCheckResult = $client->checkKey();
-                } else {
-                    $keyCheckResult = array('error' => 'error');
-                }
+        if (!empty($storageSetting['cloud_access_key']) and !empty($storageSetting['cloud_secret_key'])) {
+            $factory = new CloudClientFactory();
+            $client = $factory->createClient($storageSetting);
+            $keyCheckResult = $client->checkKey();
+        } else {
+            $keyCheckResult = array('error' => 'error');
+        }
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
             'todayRegisterNum'=>$todayRegisterNum,

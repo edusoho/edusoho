@@ -818,6 +818,10 @@ admin_operation_analysis_course_income:
     pattern:  /operation/analysis/course/income/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:courseIncome }
 
+admin_operation_analysis_rount:
+    pattern:  /operation/analysis/rountByanalysisDateType/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:rountByanalysisDateType }
+
 admin_operation_analysis_lesson_exit:
     pattern:  /operation/analysis/lesson/exit/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:exitLesson }

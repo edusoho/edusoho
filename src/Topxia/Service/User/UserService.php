@@ -170,8 +170,6 @@ interface UserService
 
     public function rejectApproval($userId, $note = null);
 
-    public function analysisRegisterNumByTime($startTime,$endTime);
-
     public function analysisRegisterDataByTime($startTime,$endTime);
 
     public function dropFieldData($fieldName);

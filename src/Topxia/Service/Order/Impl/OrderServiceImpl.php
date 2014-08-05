@@ -132,29 +132,14 @@ class OrderServiceImpl extends BaseService implements OrderService
         return in_array($order['status'], array('created'));
     }
 
-    public function analysisCourseOrderNumByTimeAndStatus($startTime,$endTime,$status)
-    {
-        return $this->getOrderDao()->analysisCourseOrderNumByTimeAndStatus($startTime,$endTime,$status);
-    }
-
     public function analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status)
     {
         return $this->getOrderDao()->analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
     }
 
-    public function analysisPaidCourseOrderNumByTime($startTime,$endTime)
-    {
-         return $this->getOrderDao()->analysisPaidCourseOrderNumByTime($startTime,$endTime);
-    }
-
     public function analysisPaidCourseOrderDataByTime($startTime,$endTime)
     {
         return $this->getOrderDao()->analysisPaidCourseOrderDataByTime($startTime,$endTime);
-    }
-
-    public function analysisExitCourseNumByTimeAndStatus($startTime,$endTime)
-    {
-        return $this->getOrderDao()->analysisExitCourseOrderNumByTime($startTime,$endTime);
     }
 
     public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime)

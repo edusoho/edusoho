@@ -547,11 +547,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $favorite ? true : false;
 	}
 
-	public function analysisCourseNumByTime($startTime,$endTime)
-	{
-	    	return $this->getCourseDao()->analysisCourseNumByTime($startTime,$endTime);
-	}
-
 	public function analysisCourseDataByTime($startTime,$endTime)
 	{
 	    	return $this->getCourseDao()->analysisCourseDataByTime($startTime,$endTime);
@@ -688,11 +683,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
 
 		return $lesson;
-	}
-
-	public function analysisLessonNumByTime($startTime,$endTime)
-	{
-	    	return $this->getLessonDao()->analysisLessonNumByTime($startTime,$endTime);
 	}
 
 	public function analysisLessonDataByTime($startTime,$endTime)
@@ -838,11 +828,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		// $this->autosetCourseFields($courseId);
 	}
-
-  	public function analysisLessonFinishedNumByTime($startTime,$endTime)
-  	{
-  		return $this->getLessonLearnDao()->analysisLessonFinishedNumByTime($startTime,$endTime);
-  	}
 
 	public function analysisLessonFinishedDataByTime($startTime,$endTime)
 	{

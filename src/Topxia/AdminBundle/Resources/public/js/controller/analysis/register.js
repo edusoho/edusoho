@@ -2,12 +2,11 @@ define(function(require, exports, module) {
 
     var Morris=require("morris");
     require("jquery.bootstrap-datetimepicker");
+    var autoSubmitCondition=require("./autoSubmitCondition.js");
     var Validator = require('bootstrap.validator');
-    var forwordByType=require('./onChangeType.js');
     require('common/validator-rules').inject(Validator);
     var now = new Date();
     exports.run = function() {
-        forwordByType.forwordByType();
         if($('#data').length > 0){
                     var data = eval ("(" + $('#data').attr("value") + ")");
 
@@ -51,6 +50,11 @@ define(function(require, exports, module) {
             required: true,
             rule:'date_check'
         });
+        validator.addItem({
+            element: '[name=analysisDateType]',
+            required: true,
+        });
+        autoSubmitCondition.autoSubmitCondition();
     };
 
 });

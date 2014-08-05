@@ -126,16 +126,9 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->executeQuery($sql, array($id));
     }
 
-    public function analysisRegisterNumByTime($startTime,$endTime)
-    {
-        $sql="SELECT count(id) as num FROM `{$this->table}` WHERE `createdTime`>={$startTime} and `createdTime`<={$endTime}  ";
-
-        return $this->getConnection()->fetchColumn($sql);
-    }
-
     public function analysisRegisterDataByTime($startTime,$endTime)
     {
-        $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} and `createdTime`<={$endTime} group by date_format(from_unixtime(`createdTime`),'%Y-%m-%d') order by date ASC ";
+        $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
         return $this->getConnection()->fetchAll($sql);
     }
