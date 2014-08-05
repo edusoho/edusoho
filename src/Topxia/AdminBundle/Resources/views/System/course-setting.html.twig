@@ -247,6 +247,16 @@ glyphicon glyphicon-chevron-up"></span></a></div>
       </div>
     </div>
 
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>免费课程允许未登录用户观看</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('relatedCourses', {1:'允许', 0:'不允许'}, courseSetting.relatedCourses) }}
+        <div class="help-block">如果允许此项设置,未登录用户（游客）可观看免费课程</div>
+      </div>
+    </div>
+
 {#     <div class="form-group">
       <div class="col-md-3 control-label">
         <label>免费课程允许未登录用户观看</label>
