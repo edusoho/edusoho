@@ -10,12 +10,22 @@
           <tbody>
             {% if videoViewedDetail %}
               {% for key,val in videoViewedDetail %}
+
+              {% if  lessons[val.lessonId].title|default(null)  %}
                   <tr>
                     <td>{{ users[val.userId].nickname }}</td>
                     <td>{{ lessons[val.lessonId].title }}</td>
                     <td>{{val.createdTime|data_format}}</td>
                   	<td>{{dict_text('videoStorageType',val.fileStorage)}}</td>
                   </tr>
+                  {% else %}
+                  <tr class="danger">
+                    <td>{{ users[val.userId].nickname }}</td>
+                    <td>(此课时已删除)</td>
+                    <td>{{val.createdTime|data_format}}</td>
+                    <td>{{dict_text('videoStorageType',val.fileStorage)}}</td>
+                  </tr>
+                  {% endif %}
               {% endfor %}
             {% endif %}
           </tbody>
