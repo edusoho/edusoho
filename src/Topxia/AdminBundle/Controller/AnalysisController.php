@@ -565,6 +565,7 @@ class AnalysisController extends BaseController
             'users'=>$users,
             'dataInfo'=>$dataInfo,
             'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
+            'showHelpMessage' => 1
         ));
     }
 
@@ -630,6 +631,7 @@ class AnalysisController extends BaseController
             'users'=>$users,
             'dataInfo'=>$dataInfo,
             'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
+            'showHelpMessage' => 1
         ));
     }
 
@@ -695,6 +697,7 @@ class AnalysisController extends BaseController
             'users'=>$users,
             'dataInfo'=>$dataInfo,
             'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
+            'showHelpMessage' => 1
         ));
     }
     
@@ -760,6 +763,7 @@ class AnalysisController extends BaseController
             'users'=>$users,
             'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
             'dataInfo'=>$dataInfo,
+            'showHelpMessage' => 1
         ));
     }
 
