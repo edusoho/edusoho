@@ -201,7 +201,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function analysisCourseDataByTime($startTime,$endTime)
     {
-             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by date_format(from_unixtime(`createdTime`),'%Y-%m-%d') order by date ASC ";
+             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
             return $this->getConnection()->fetchAll($sql);
     }
