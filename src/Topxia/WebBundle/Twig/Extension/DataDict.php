@@ -179,7 +179,7 @@ class DataDict
 			'localVideoViewed' => '└─ 本地视频观看数',
 			'netVideoViewed' => '└─ 网络视频观看数',
 			'income' => '营收额',
-			'courseIncome' => '课程营收额',
+			'courseIncome' => '└─ 课程营收额',
 			'exitLesson' => '退出学习数',
 		),
 
