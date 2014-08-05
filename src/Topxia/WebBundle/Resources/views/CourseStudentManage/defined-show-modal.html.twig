@@ -5,18 +5,27 @@
 {% block body %}
 
 <table class="table table-striped table-condenseda table-bordered">
-    {% for field in fields %}
-        <tr>
-            <th>{{field.title}}</th>
-            <td>
-                {{ profile[field.fieldName]|default('') }}
-            </td>
-        </tr>
-    {% endfor %}
+	<tr>
+		<th width="25%">用户名</th>
+		<td width="75%">
+			<a class="pull-right" href="{{ path('user_show', {id:user.id}) }}" target="_blank">个人主页</a>
+			{{ user.nickname }}
+		</td>
+	</tr>
+	{% if fields %}
+	{% for field in fields %}
+		<tr>
+			<th>{{field.title}}</th>
+			<td>
+				{{ profile[field.fieldName]|default('暂无') }}
+			</td>
+		</tr>
+	{% endfor %}
+	{% endif %}
 </table>
 
 {% endblock %}
 
 {% block footer %}
-        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+		<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
 {% endblock %}
