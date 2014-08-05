@@ -108,19 +108,19 @@
                {% if sort=='email' %}
                 <li class="list-group-item clearfix" data-role="item" >
                 <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址
+                &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址（系统必需，不可取消，显示时始终在第一位）
                 </li>
                {% endif %}
                {% if sort=='nickname' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称
+                  &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称（系统必需，不可取消，显示时始终在第二位）
                 </li>
                {% endif %}
                {% if sort=='password' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerFieldNameArray[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerFieldNameArray[]" value="confirmPassword"></input> 密码
+                  &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerFieldNameArray[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerFieldNameArray[]" value="confirmPassword"></input> 密码（系统必需，不可取消，显示时始终在最后一位）
                 </li>
                {% endif %}
                {% if sort=='truename' %}
@@ -173,15 +173,15 @@
             {% else %}
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址
+              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址（系统必需，不可取消，显示时始终在第一位）
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称
+              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称（系统必需，不可取消，显示时始终在第二位）
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerFieldNameArray[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerFieldNameArray[]" value="confirmPassword"></input> 密码
+              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerFieldNameArray[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerFieldNameArray[]" value="confirmPassword"></input> 密码（系统必需，不可取消，显示时始终在最后一位）
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
