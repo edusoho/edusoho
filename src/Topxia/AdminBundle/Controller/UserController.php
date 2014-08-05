@@ -441,9 +441,8 @@ class UserController extends BaseController
                     $fieldCol[$key]=$num+1;
                 }
 
-                if(!$this->validFields($userData,$row,$fieldCol)){echo 1;
+                if($this->validFields($userData,$row,$fieldCol)){  
                     $errorInfo=array_merge($errorInfo,$this->validFields($userData,$row,$fieldCol));
-                    print_r($this->validFields($userData,$row,$fieldCol));
                     continue;
                 }
                 
