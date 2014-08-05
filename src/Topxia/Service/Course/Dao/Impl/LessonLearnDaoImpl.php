@@ -109,13 +109,6 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $builder;
     }
 
-    public function analysisLessonFinishedNumByTime($startTime,$endTime)
-    {
-        $sql="SELECT count(id) as num FROM `{$this->table}` WHERE `finishedTime`>={$startTime} and `finishedTime`<={$endTime}  and `status`='finished'  ";
-
-        return $this->getConnection()->fetchColumn($sql);
-    }
-
     public function analysisLessonFinishedDataByTime($startTime,$endTime)
     {
         $sql="SELECT count(id) as count, from_unixtime(finishedTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`finishedTime`>={$startTime} and `finishedTime`<={$endTime} and `status`='finished'  group by date_format(from_unixtime(`finishedTime`),'%Y-%m-%d') order by date ASC ";

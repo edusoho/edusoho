@@ -28,8 +28,6 @@ interface CourseDao
     
     public function waveCourse($id,$field,$diff);
 
-    public function analysisCourseNumByTime($startTime,$endTime);
-
     public function analysisCourseDataByTime($startTime,$endTime);
 
 }

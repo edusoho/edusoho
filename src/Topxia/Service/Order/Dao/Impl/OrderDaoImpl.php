@@ -106,25 +106,11 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchColumn($sql, array_merge(array($targetType, $targetId), $statuses));
     }
 
-    public function analysisCourseOrderNumByTimeAndStatus($startTime,$endTime,$status)
-    {
-        $sql="SELECT count(id) as num FROM `{$this->table}` WHERE `createdTime`>={$startTime} and `createdTime`<={$endTime}  and `status`='{$status}' and targetType='course' ";
-
-        return $this->getConnection()->fetchColumn($sql);
-    }
-
     public function analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status)
     {
         $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} and `createdTime`<={$endTime} and `status`='{$status}' and targetType='course' group by date_format(from_unixtime(`createdTime`),'%Y-%m-%d') order by date ASC ";
 
         return $this->getConnection()->fetchAll($sql);
-    }
-
-    public function analysisPaidCourseOrderNumByTime($startTime,$endTime)
-    {
-        $sql="SELECT count(id) as num FROM `{$this->table}` WHERE `createdTime`>={$startTime} and `createdTime`<={$endTime}  and `status`='paid' and targetType='course' and `amount`>0 ";
-
-        return $this->getConnection()->fetchColumn($sql);
     }
 
     public function analysisPaidCourseOrderDataByTime($startTime,$endTime)
@@ -153,13 +139,6 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         $sql="SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>={$startTime} and `paidTime`<={$endTime} and `status`='paid' and targetType='course'   group by date_format(from_unixtime(`paidTime`),'%Y-%m-%d') order by date ASC ";
 
         return $this->getConnection()->fetchAll($sql);
-    }
-
-    public function analysisExitCourseOrderNumByTime($startTime,$endTime)
-    {
-        $sql="SELECT count(id) as num FROM `{$this->table}` WHERE `createdTime`>={$startTime} and `createdTime`<={$endTime}  and `status`<>'paid' and `status`<>'created' and targetType='course' ";
-
-        return $this->getConnection()->fetchColumn($sql);
     }
 
     public function analysisExitCourseOrderDataByTime($startTime,$endTime)
