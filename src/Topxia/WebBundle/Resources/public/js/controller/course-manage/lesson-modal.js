@@ -57,9 +57,9 @@ define(function(require, exports, module) {
             var $panel = $('.lesson-manage-panel');
             $.post($form.attr('action'), $form.serialize(), function(html) {
 
-                var id = '#' + $(html).attr('id');
-                var $parent = $('#'+$form.data('parentid'));
+                var id = '#' + $(html).attr('id'),
                     $item = $(id);
+                 var $parent = $('#'+$form.data('parentid'));
                 if ($item.length) {
                     $item.replaceWith(html);
                     Notify.success('课时已保存');
@@ -76,6 +76,11 @@ define(function(require, exports, module) {
                                 return false;
                              }
                           });
+                            if(add !=1 ){
+                                $("#course-item-list").append(html);
+                                add = 1;
+                            }
+                            
                         }else{
                              $parent.nextAll().each(function(){
                                 if($(this).hasClass('item-chapter  clearfix'))
