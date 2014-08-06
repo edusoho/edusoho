@@ -108,19 +108,19 @@
                {% if sort=='email' %}
                 <li class="list-group-item clearfix" data-role="item" >
                 <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址<span class="text-muted">(系统必需，不可取消)</span>
+                &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址<span class="text-muted"> (系统必需，不可取消)</span>
                 </li>
                {% endif %}
                {% if sort=='nickname' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted">(系统必需，不可取消)</span>
+                  &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted"> (系统必需，不可取消)</span>
                 </li>
                {% endif %}
                {% if sort=='password' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerFieldNameArray[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerFieldNameArray[]" value="confirmPassword"></input> 密码<span class="text-muted">(系统必需，不可取消)</span>
+                  &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerFieldNameArray[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerFieldNameArray[]" value="confirmPassword"></input> 密码<span class="text-muted"> (系统必需，不可取消)</span>
                 </li>
                {% endif %}
                {% if sort=='truename' %}
@@ -132,13 +132,13 @@
                {% if sort=='mobile' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="mobile"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="mobile"></input><input type="hidden"  name="registerFieldNameArray[]" value="mobile"></input> 手机号码<span class="text-muted">(带格式校检)</span>
+                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="mobile"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="mobile"></input><input type="hidden"  name="registerFieldNameArray[]" value="mobile"></input> 手机号码<span class="text-muted"> (带格式校检)</span>
                 </li>
                {% endif %}
                {% if sort=='idcard' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="idcard"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="idcard"></input><input type="hidden"  name="registerFieldNameArray[]" value="idcard"></input> 身份证号码<span class="text-muted">(带格式校检)</span>
+                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="idcard"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="idcard"></input><input type="hidden"  name="registerFieldNameArray[]" value="idcard"></input> 身份证号码<span class="text-muted"> (带格式校检)</span>
                 </li>
                {% endif %}
                {% if sort=='gender' %}
@@ -173,15 +173,15 @@
             {% else %}
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址<span class="text-muted">(系统必需，不可取消)</span>
+              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址<span class="text-muted"> (系统必需，不可取消)</span>
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted">(系统必需，不可取消)</span>
+              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted"> (系统必需，不可取消)</span>
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerFieldNameArray[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerFieldNameArray[]" value="confirmPassword"></input> 密码<span class="text-muted">(系统必需，不可取消)</span>
+              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerFieldNameArray[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerFieldNameArray[]" value="confirmPassword"></input> 密码<span class="text-muted"> (系统必需，不可取消)</span>
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
@@ -189,11 +189,11 @@
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="registerSort[]" value="mobile"></input><input type="hidden"  name="registerFieldNameArray[]" value="mobile"></input> 手机号码<span class="text-muted">(带格式校检)</span>
+              &nbsp;<input type="checkbox" name="registerSort[]" value="mobile"></input><input type="hidden"  name="registerFieldNameArray[]" value="mobile"></input> 手机号码<span class="text-muted"> (带格式校检)</span>
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="registerSort[]" value="idcard"></input><input type="hidden"  name="registerFieldNameArray[]" value="idcard"></input> 身份证号码<span class="text-muted">(带格式校检)</span>
+              &nbsp;<input type="checkbox" name="registerSort[]" value="idcard"></input><input type="hidden"  name="registerFieldNameArray[]" value="idcard"></input> 身份证号码<span class="text-muted"> (带格式校检)</span>
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
