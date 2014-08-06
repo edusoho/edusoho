@@ -35,6 +35,8 @@ class BuildPackageCommand extends BaseCommand
 
 		$this->generateFiles($diff_file, $packageDirectory, $output);
 
+		$this->copyUpgradeScript($packageDirectory, $version, $output);
+
 		$output->writeln('<question>编制升级包完毕</question>');
 	}
 
@@ -123,6 +125,22 @@ class BuildPackageCommand extends BaseCommand
 		}
 
 		return null;
+	}
+
+	private function copyUpgradeScript($dir, $version, $output)
+	{
+		$output->writeln("\n\n");
+		$output->write("<info>拷贝升级脚本：</info>");
+
+		$path = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../') . '/scripts/upgrade-' . $version . '.php';
+		if (!file_exists($path)) {
+			$output->writeln("无升级脚本");
+		} else {
+			$targetPath = realpath($dir) . '/Upgrade.php';
+			$output->writeln($path . " -> {$targetPath}" );
+			$this->filesystem->copy($path, $targetPath, true);
+		}
+
 	}
 
 }

@@ -10,6 +10,8 @@ interface OrderRefundDao
 
 	public function findRefundsByUserId($userId, $start, $limit);
 
+	public function findRefundsByIds(array $ids);
+
 	public function searchRefunds($conditions, $orderBy, $start, $limit);
 
 	public function searchRefundCount($conditions);
@@ -17,4 +19,5 @@ interface OrderRefundDao
 	public function addRefund($refund);
 
 	public function updateRefund($id, $refund);
+
 }

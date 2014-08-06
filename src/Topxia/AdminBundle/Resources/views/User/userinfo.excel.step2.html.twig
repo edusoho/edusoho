@@ -15,7 +15,7 @@
           <form method="post" enctype="multipart/form-data">
               {% if errorInfo %}
                 {% for errorInfo in errorInfo%}
-                 <div class="col-md-offset-2">{{errorInfo}}</div><br>
+                 <div class="col-md-offset-2">{{errorInfo|raw}}</div><br>
                 {% endfor %}
                 <div class="col-md-offset-2"><a type="button" class="btn btn-primary" href="{{ url('admin_user_excel_lead') }}">重新导入</a></div> 
               {% else %}

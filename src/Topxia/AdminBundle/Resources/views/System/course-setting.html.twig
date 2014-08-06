@@ -90,60 +90,60 @@
       </div>
       <div  class="controls col-md-8 col-md-offset-2" id="buy-userinfo-list">
             <div class="form-group"><ul class="buy-userinfo-list sortable-list" data-role="list">
-            {% if courseSetting.userinfoFieldsType %}
-            {% for sort in courseSetting.userinfoFieldsType %}
+            {% if courseSetting.userinfoFieldNameArray %}
+            {% for sort in courseSetting.userinfoFieldNameArray %}
                {% if sort=='truename' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" name="userinfoFields[]" value="truename"  {% for sort in courseSetting.userinfoFields %}{% if sort=="truename"%}checked=true{% endif %}{% endfor %}></input><input type="hidden"  name="userinfoFieldsType[]" value="truename"></input> 真实姓名
+                  &nbsp;<input type="checkbox" name="userinfoFields[]" value="truename"  {% for sort in courseSetting.userinfoFields %}{% if sort=="truename"%}checked=true{% endif %}{% endfor %}></input><input type="hidden"  name="userinfoFieldNameArray[]" value="truename"></input> 真实姓名
                 </li>
                {% endif %}
                {% if sort=='mobile' %}
                   <li class="list-group-item clearfix" data-role="item" >
                     <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                    &nbsp;<input type="checkbox" name="userinfoFields[]" value="mobile" {% for sort in courseSetting.userinfoFields %}{% if sort=="mobile"%}checked=true{% endif %}{% endfor %}></input><input type="hidden"  name="userinfoFieldsType[]" value="mobile"></input> 手机号码(带格式校检)
+                    &nbsp;<input type="checkbox" name="userinfoFields[]" value="mobile" {% for sort in courseSetting.userinfoFields %}{% if sort=="mobile"%}checked=true{% endif %}{% endfor %}></input><input type="hidden"  name="userinfoFieldNameArray[]" value="mobile"></input> 手机号码(带格式校检)
                   </li>
                {% endif %}
                {% if sort=='qq' %}
                       <li class="list-group-item clearfix" data-role="item" >
                       <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                      &nbsp;<input type="checkbox"  {% for sort in courseSetting.userinfoFields %}{% if sort=="qq"%}checked=true{% endif %}{% endfor %}  name="userinfoFields[]" value="qq"></input><input type="hidden"  name="userinfoFieldsType[]" value="qq"></input> QQ（带格式校验）
+                      &nbsp;<input type="checkbox"  {% for sort in courseSetting.userinfoFields %}{% if sort=="qq"%}checked=true{% endif %}{% endfor %}  name="userinfoFields[]" value="qq"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="qq"></input> QQ（带格式校验）
                     </li>
                {% endif %}
                {% if sort=='company' %}
                     <li class="list-group-item clearfix" data-role="item" >
                       <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                      &nbsp;<input type="checkbox" {% for sort in courseSetting.userinfoFields %}{% if sort=="company"%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="company"></input><input type="hidden"  name="userinfoFieldsType[]" value="company"></input> 所在公司
+                      &nbsp;<input type="checkbox" {% for sort in courseSetting.userinfoFields %}{% if sort=="company"%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="company"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="company"></input> 所在公司
                     </li>
                {% endif %}
                {% if sort=='idcard' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in courseSetting.userinfoFields %}{% if sort=="idcard"%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="idcard"></input><input type="hidden"  name="userinfoFieldsType[]" value="idcard"></input> 身份证号码(带格式校检)
+                  &nbsp;<input type="checkbox" {% for sort in courseSetting.userinfoFields %}{% if sort=="idcard"%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="idcard"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="idcard"></input> 身份证号码(带格式校检)
                 </li>
                {% endif %}
                {% if sort=='gender' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in courseSetting.userinfoFields %}{% if sort=="gender"%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="gender"></input><input type="hidden"  name="userinfoFieldsType[]" value="gender"></input> 性别
+                  &nbsp;<input type="checkbox" {% for sort in courseSetting.userinfoFields %}{% if sort=="gender"%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="gender"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="gender"></input> 性别
                 </li>
                {% endif %}
                {% if sort=='job' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in courseSetting.userinfoFields %}{% if sort=="job"%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="job"></input><input type="hidden"  name="userinfoFieldsType[]" value="job"></input> 职业
+                  &nbsp;<input type="checkbox" {% for sort in courseSetting.userinfoFields %}{% if sort=="job"%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="job"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="job"></input> 职业
                 </li>
                {% endif %}
                {% if sort=='weibo' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in courseSetting.userinfoFields %}{% if sort=="weibo"%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="weibo"></input><input type="hidden"  name="userinfoFieldsType[]" value="weibo"></input> 微博
+                  &nbsp;<input type="checkbox" {% for sort in courseSetting.userinfoFields %}{% if sort=="weibo"%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="weibo"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="weibo"></input> 微博
                 </li>
                {% endif %}
                {% if sort=='weixin' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in courseSetting.userinfoFields %}{% if sort=="weixin"%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="weixin"></input><input type="hidden"  name="userinfoFieldsType[]" value="weixin"></input> 微信
+                  &nbsp;<input type="checkbox" {% for sort in courseSetting.userinfoFields %}{% if sort=="weixin"%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="weixin"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="weixin"></input> 微信
                 </li>
                {% endif %}
                {% if userFields %}
@@ -151,7 +151,7 @@
                 {% if sort==field.fieldName %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox"  {% for sort in courseSetting.userinfoFields %}{% if sort==field.fieldName%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="{{sort}}"></input><input type="hidden"  name="userinfoFieldsType[]" value="{{sort}}"></input> {{field.title}}
+                  &nbsp;<input type="checkbox"  {% for sort in courseSetting.userinfoFields %}{% if sort==field.fieldName%}checked=true{% endif %}{% endfor %} name="userinfoFields[]" value="{{sort}}"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="{{sort}}"></input> {{field.title}}
                 </li>            
                {% endif %}
                {% endfor %}
@@ -160,45 +160,45 @@
             {% else %}
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="userinfoFields[]" value="truename" ></input><input type="hidden"  name="userinfoFieldsType[]" value="truename"></input> 真实姓名
+              &nbsp;<input type="checkbox" name="userinfoFields[]" value="truename" ></input><input type="hidden"  name="userinfoFieldNameArray[]" value="truename"></input> 真实姓名
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="userinfoFields[]" value="mobile" ></input><input type="hidden"  name="userinfoFieldsType[]" value="mobile"></input> 手机号码(带格式校检)
+              &nbsp;<input type="checkbox" name="userinfoFields[]" value="mobile" ></input><input type="hidden"  name="userinfoFieldNameArray[]" value="mobile"></input> 手机号码(带格式校检)
             </li>
               <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="userinfoFields[]" value="qq"></input><input type="hidden"  name="userinfoFieldsType[]" value="qq"></input> QQ（带格式校验）
+              &nbsp;<input type="checkbox" name="userinfoFields[]" value="qq"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="qq"></input> QQ（带格式校验）
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="userinfoFields[]" value="company"></input><input type="hidden"  name="userinfoFieldsType[]" value="company"></input> 所在公司
+              &nbsp;<input type="checkbox" name="userinfoFields[]" value="company"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="company"></input> 所在公司
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="userinfoFields[]" value="job"></input><input type="hidden"  name="userinfoFieldsType[]" value="job"></input> 职业
+              &nbsp;<input type="checkbox" name="userinfoFields[]" value="job"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="job"></input> 职业
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="userinfoFields[]" value="gender"></input><input type="hidden"  name="userinfoFieldsType[]" value="gender"></input> 性别
+              &nbsp;<input type="checkbox" name="userinfoFields[]" value="gender"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="gender"></input> 性别
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="userinfoFields[]" value="idcard"></input><input type="hidden"  name="userinfoFieldsType[]" value="idcard"></input> 身份证号码(带格式校检)
+              &nbsp;<input type="checkbox" name="userinfoFields[]" value="idcard"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="idcard"></input> 身份证号码(带格式校检)
             </li>
               <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="userinfoFields[]" value="weibo"></input><input type="hidden"  name="userinfoFieldsType[]" value="weibo"></input> 微博
+              &nbsp;<input type="checkbox" name="userinfoFields[]" value="weibo"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="weibo"></input> 微博
             </li>
               <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="userinfoFields[]" value="weixin"></input><input type="hidden"  name="userinfoFieldsType[]" value="weixin"></input> 微信
+              &nbsp;<input type="checkbox" name="userinfoFields[]" value="weixin"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="weixin"></input> 微信
             </li>
             {% if  userFields %}
                 {% for field in userFields %}
                     <li class="list-group-item clearfix" data-role="item" >
                       <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                      &nbsp;<input type="checkbox" name="userinfoFields[]" value="{{field.fieldName}}"></input><input type="hidden"  name="userinfoFieldsType[]" value="{{field.fieldName}}"></input> {{field.title}}
+                      &nbsp;<input type="checkbox" name="userinfoFields[]" value="{{field.fieldName}}"></input><input type="hidden"  name="userinfoFieldNameArray[]" value="{{field.fieldName}}"></input> {{field.title}}
                     </li>
                 {% endfor %}
             {% endif %}
@@ -301,10 +301,6 @@ glyphicon glyphicon-chevron-up"></span></a></div>
 </form>
 
 {% endblock %}
-
-
-
-
 
 
 

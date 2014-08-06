@@ -441,6 +441,16 @@ class UserController extends BaseController
 
             $fieldSort=$this->getFieldSort($excelField,$fieldNameArray,$fieldArray);
 
+            $repeatInfo=$this->checkRepeatData($row=3,$fieldSort,$highestRow,$objWorksheet);
+
+            if($repeatInfo){
+
+                $errorInfo[]=$repeatInfo;
+                return $this->render('TopxiaAdminBundle:User:userinfo.excel.step2.html.twig', array(
+                    "errorInfo"=>$errorInfo,
+                ));
+
+            }
                 //start import
             for ($row = 3;$row <= $highestRow;$row++) 
             {
@@ -513,6 +523,7 @@ class UserController extends BaseController
     private function validFields($userData,$row,$fieldCol)
     {           
         $errorInfo=array();
+
         if (!SimpleValidator::email($userData['email'])) {
             $errorInfo[]="第 ".$row."行".$fieldCol["email"]." 列 的数据存在问题，请检查。";
         }
@@ -539,8 +550,75 @@ class UserController extends BaseController
         if (isset($userData['gender'])&& !in_array($userData['gender'], array("男","女"))){
             $errorInfo[]="第 ".$row."行".$fieldCol["gender"]." 列 的数据存在问题，请检查。";
         }
+        for($i=1;$i<=5;$i++){
+            if (isset($userData['intField'.$i])&& !SimpleValidator::integer($userData['intField'.$i])){
+            $errorInfo[]="第 ".$row."行".$fieldCol["intField".$i]." 列 的数据存在问题，请检查(必须为整数,最大到9位整数)。";
+             }
+            if (isset($userData['floatField'.$i])&& !SimpleValidator::float($userData['floatField'.$i])){
+            $errorInfo[]="第 ".$row."行".$fieldCol["floatField".$i]." 列 的数据存在问题，请检查(只保留到两位小数)。";
+             }
+            if (isset($userData['dateField'.$i])&& !SimpleValidator::date($this->excelTime($userData['dateField'.$i]))){
+            $errorInfo[]="第 ".$row."行".$fieldCol["dateField".$i]." 列 的数据存在问题，请检查(格式如XXXX-MM-DD)。";
+             }
+        }
+        return $errorInfo;
+    }
+
+    private function checkRepeatData($row,$fieldSort,$highestRow,$objWorksheet)
+    {
+        $errorInfo=array();
+        $strs=array();
+
+        foreach ($fieldSort as $key => $value) {
+            if($value["fieldName"]=="nickname"){
+                $nickNameCol=$value["num"];
+            }
+            if($value["fieldName"]=="email"){
+                $emailCol=$value["num"];
+            }
+        }
+
+        for ($row ;$row <= $highestRow;$row++) {
+
+            $strs[] =$objWorksheet->getCellByColumnAndRow($emailCol, $row)->getValue();         
+        }
+
+        $errorInfo=$this->arrayRepeat($strs);
 
         return $errorInfo;
+    }
+
+    private function arrayRepeat($array)
+    {   
+        $repeatArray=array();
+        $repeatArrayCount=array_count_values($array);
+        $repeatRow="";
+
+        foreach ($repeatArrayCount as $key => $value) {
+            if($value>1) {$repeatRow.="重复:<br>";
+               for($i=1;$i<=$value;$i++){
+                $row=array_search($key, $array)+3;
+                $repeatRow.="第".$row."行"."    ".$key."<br>";
+                unset($array[$row-3]);
+               }
+            }
+        }
+
+        return $repeatRow;
+    }
+
+    private function excelTime($days, $time=false){
+        if(is_numeric($days)){
+            $jd = GregorianToJD(1, 1, 1970);
+            $gregorian = JDToGregorian($jd+intval($days)-25569);
+            $myDate = explode('/',$gregorian);
+            $myDateStr = str_pad($myDate[2],4,'0', STR_PAD_LEFT)
+                    ."-".str_pad($myDate[0],2,'0', STR_PAD_LEFT)
+                    ."-".str_pad($myDate[1],2,'0', STR_PAD_LEFT)
+                    .($time?" 00:00:00":'');
+            return $myDateStr;
+        }
+        return $days;
     }
 
     private function getFieldSort($excelField,$fieldNameArray,$fieldArray)
