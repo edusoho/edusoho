@@ -27,6 +27,7 @@ class BuildCommand extends BaseCommand
 		$this->buildVendorUserDirectory();
 		$this->buildWebDirectory();
 		$this->buildPluginsDirectory();
+		$this->buildFixPdoSession();
 		$this->cleanMacosDirectory();
 
 		$this->package();
@@ -306,6 +307,15 @@ class BuildCommand extends BaseCommand
 			$this->filesystem->mirror($dir->getRealpath(), "{$this->distDirectory}/web/bundles/{$dir->getFilename()}");
 		}
 
+	}
+
+	public function buildFixPdoSession()
+	{
+		$this->output->writeln('build fix PdoSessionHandler .');
+
+		$targetPath = "{$this->distDirectory}/vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/Session/Storage/Handler/PdoSessionHandler.php";
+		$sourcePath = __DIR__ . "/Fixtures/PdoSessionHandler.php";
+		$this->filesystem->copy($sourcePath, $targetPath, true);
 	}
 
 	public function cleanMacosDirectory()

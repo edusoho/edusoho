@@ -254,15 +254,12 @@ class CourseStudentManageController extends BaseController
 
 	public function definedShowAction(Request $request, $id)
 	{
-		$user = $this->getUserService()->getUser($id);
 		$profile = $this->getUserService()->getUserProfile($id);
-
 		$fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
 		return $this->render('TopxiaWebBundle:CourseStudentManage:defined-show-modal.html.twig', array(
-			'user' => $user,
-			'profile' => $profile,
 			'fields' => $fields,
+			'profile' => $profile,
 		));
 	}
 

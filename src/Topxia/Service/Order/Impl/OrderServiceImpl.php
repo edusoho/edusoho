@@ -132,6 +132,37 @@ class OrderServiceImpl extends BaseService implements OrderService
         return in_array($order['status'], array('created'));
     }
 
+    public function analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status)
+    {
+        return $this->getOrderDao()->analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
+    }
+
+    public function analysisPaidCourseOrderDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisPaidCourseOrderDataByTime($startTime,$endTime);
+    }
+
+    public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisExitCourseOrderDataByTime($startTime,$endTime);
+    }
+
+    public function analysisAmount($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->analysisAmount($conditions);
+    }
+
+    public function analysisAmountDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisAmountDataByTime($startTime,$endTime);
+    }
+
+    public function analysisCourseAmountDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisCourseAmountDataByTime($startTime,$endTime);
+    }
+
     private function generateOrderSn($order)
     {
         $prefix = empty($order['snPrefix']) ? 'E' : (string) $order['snPrefix'];
@@ -168,6 +199,10 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function findUserRefundCount($userId)
     {
         return $this->getOrderRefundDao()->findRefundCountByUserId($userId);
+    }
+    public function findRefundsByIds(array $ids)
+    {
+        return $this->getOrderRefundDao()->findRefundsByIds($ids);
     }
 
     public function findUserRefunds($userId, $start, $limit)
@@ -361,6 +396,8 @@ class OrderServiceImpl extends BaseService implements OrderService
         $orderBy = array();
         if ($sort == 'latest') {
             $orderBy =  array('createdTime', 'DESC');
+        }  elseif ($sort == 'early') {
+            $orderBy =  array('createdTime', 'ASC');
         } else {
             $orderBy = array('createdTime', 'DESC');
         }

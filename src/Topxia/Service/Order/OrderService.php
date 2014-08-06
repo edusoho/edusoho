@@ -28,6 +28,8 @@ interface OrderService
 
     public function findUserRefundCount($userId);
 
+    public function findRefundsByIds(array $ids);
+
     public function findUserRefunds($userId, $start, $limit);
 
     public function searchRefunds($conditions, $sort = 'latest', $start, $limit);
@@ -49,4 +51,16 @@ interface OrderService
     public function auditRefundOrder($id, $pass, $actualAmount = null, $note = '');
 
     public function cancelRefundOrder($id);
+
+    public function analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
+
+    public function analysisPaidCourseOrderDataByTime($startTime,$endTime);
+
+    public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime);
+
+    public function analysisAmount($conditions);
+
+    public function analysisAmountDataByTime($startTime,$endTime);
+
+    public function analysisCourseAmountDataByTime($startTime,$endTime);
 }

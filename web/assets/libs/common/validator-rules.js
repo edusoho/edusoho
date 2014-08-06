@@ -129,7 +129,7 @@ define(function(require, exports, module) {
         [
             'date',
             /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/,
-            '请输入正确的日期,格式如XXXX-MM-DD',
+            '请输入正确的日期,格式如XXXX-MM-DD'
         ],
         [
             'qq',
@@ -195,8 +195,25 @@ define(function(require, exports, module) {
                     commit(response.success, response.message);
                 }, 'json');
             }
-        ]
+        ],
+        [
+            'date_check',
+            function() {
 
+                var startTime = $('[name=startTime]').val();
+                var endTime = $('[name=endTime]').val();
+                startTime = startTime.replace(/-/g,"/");
+                startTime = Date.parse(startTime)/1000;
+                endTime = endTime.replace(/-/g,"/");
+                endTime = Date.parse(endTime)/1000;
+
+                if (endTime >= startTime) {
+                    return true;
+                }else{
+                    return false;
+                }
+            },"开始时间必须小于或等于结束时间"
+        ]
     ];
 
     exports.inject = function(Validator) {
