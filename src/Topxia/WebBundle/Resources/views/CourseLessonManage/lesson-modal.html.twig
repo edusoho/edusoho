@@ -9,7 +9,7 @@
 
 {% block body %}
 
-<form id="course-lesson-form" class="form-horizontal lesson-form" method="post"
+<form id="course-lesson-form" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   {% if lesson %}
     action="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
   {% else %}

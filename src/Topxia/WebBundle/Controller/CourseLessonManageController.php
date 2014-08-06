@@ -38,7 +38,8 @@ class CourseLessonManageController extends BaseController
 				$courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
 			}
 		}
-		
+		 //print_r($courseItems);
+                          //exit();
 		return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
 			'course' => $course,
 			'items' => $courseItems
@@ -49,9 +50,10 @@ class CourseLessonManageController extends BaseController
 	public function createAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
-	    if($request->getMethod() == 'POST') {
-        	$lesson = $request->request->all();
-        	$lesson['courseId'] = $course['id'];
+                        $parentId = $request->query->get('parentId');
+                    if($request->getMethod() == 'POST') {
+                        $lesson = $request->request->all();
+        	           $lesson['courseId'] = $course['id'];
 
         	if ($lesson['media']) {
         		$lesson['media'] = json_decode($lesson['media'], true);
@@ -67,8 +69,10 @@ class CourseLessonManageController extends BaseController
                 $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
                 $lesson['mediaStatus'] = $file['convertStatus'];
             }
-
-			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+                      //  if ($shortcut == 'true') 
+                              //  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array( 'course' => $course,'lesson' => $lesson))->getContent();                        
+                        //else
+		      return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
 			));
@@ -106,6 +110,7 @@ class CourseLessonManageController extends BaseController
 			'convertKey' => $convertKey,
 			'storageSetting' => $setting,
             'features' => $features,
+            'parentId'=>$parentId
 		));
 	}
 
@@ -203,7 +208,7 @@ class CourseLessonManageController extends BaseController
 	public function createTestPaperAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
-
+                          $parentId = $request->query->get('parentId');
         $conditions = array();
         $conditions['target'] = "course-{$course['id']}";
         $conditions['status'] = 'open';
@@ -226,7 +231,6 @@ class CourseLessonManageController extends BaseController
             $lesson['type'] = 'testpaper';
             $lesson['courseId'] = $course['id'];
             $lesson = $this->getCourseService()->createLesson($lesson);
-
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
@@ -239,7 +243,8 @@ class CourseLessonManageController extends BaseController
 		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
 			'course' => $course,
 			'paperOptions' => $paperOptions,
-            'features' => $features,
+                                       'features' => $features,
+                                       'parentId' =>$parentId
 		));
 	}
 
@@ -284,6 +289,7 @@ class CourseLessonManageController extends BaseController
             'lesson' => $lesson,
             'paperOptions' => $paperOptions,
             'features' => $features,
+
         ));
 
 	}

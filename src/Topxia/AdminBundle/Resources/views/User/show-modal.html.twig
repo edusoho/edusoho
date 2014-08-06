@@ -32,7 +32,7 @@
     <td>
       {{ user.createdTime|date('Y-n-d H:i:s') }}
       /
-      {{ user.createdIp }}
+      {{ user.createdIp }} {{user.createdLocation}}
     </td>
   </tr>
 
@@ -45,7 +45,7 @@
           {{ user.loginTime|date('Y-n-d H:i:s') }}
       {% endif %}
       {% if user.loginIp|default is not empty %}
-           / {{ user.loginIp }}
+           / {{ user.loginIp }} {{user.loginLocation}}
       {% endif %}
      </td>
   </tr>

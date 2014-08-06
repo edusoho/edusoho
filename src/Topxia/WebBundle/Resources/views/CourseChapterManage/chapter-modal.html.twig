@@ -7,7 +7,7 @@
 {% endblock %}
 {% block body %}
 
-<form id="course-chapter-form" class="form-horizontal" method="post"
+<form id="course-chapter-form" class="form-horizontal" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   {% if chapter %}
 	  action="{{ path('course_manage_chapter_edit', {courseId:course.id, chapterId:chapter.id}) }}"
 	{% else %}

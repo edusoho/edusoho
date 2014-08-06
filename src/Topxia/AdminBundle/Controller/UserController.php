@@ -7,12 +7,13 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 use PHPExcel_IOFactory;
 use PHPExcel_Cell;
+use Topxia\Common\SimpleValidator;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
-
+use Topxia\Common\ConvertIpToolkit;
 
 class UserController extends BaseController 
 {
@@ -42,8 +43,20 @@ class UserController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+      
+        $result = array();
+        foreach ($users as $key => $user) {
+            $user['loginLocation']  = '';
+            $user['createdLocation'] = '';
+            if(!empty($user['loginIp']))
+                $user['loginLocation'] = ConvertIpToolkit::convertIp($user['loginIp']);
+            if(!empty($user['createdIp']))
+                $user['createdLocation'] = ConvertIpToolkit::convertIp($user['createdIp']);   
+            $result[$key] = $user;
+        }
+
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
-            'users' => $users ,
+            'users' => $result ,
             'paginator' => $paginator
         ));
     }
@@ -133,7 +146,14 @@ class UserController extends BaseController
            if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['type']="float";
            if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
         }
-        
+            
+        $user['loginLocation']  = '';
+        $user['createdLocation'] = '';
+        if(!empty($user['loginIp']))
+            $user['loginLocation'] = ConvertIpToolkit::convertIp($user['loginIp']);
+        if(!empty($user['createdIp']))
+            $user['createdLocation'] = ConvertIpToolkit::convertIp($user['createdIp']);   
+   
         return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
             'user' => $user,
             'profile' => $profile,
@@ -376,6 +396,7 @@ class UserController extends BaseController
             $chechkType=$request->request->get("rule");
             $file=$request->files->get('excel');
             $errorInfo=array();
+            $checkInfo=array();
             $userCount=0;
 
             if(!$file){
@@ -436,44 +457,51 @@ class UserController extends BaseController
                     $key=$sort['fieldName'];
 
                     $userData[$key]=$strs[$num];
+                    $fieldCol[$key]=$num+1;
                 }
 
+                if($this->validFields($userData,$row,$fieldCol)){  
+                    $errorInfo=array_merge($errorInfo,$this->validFields($userData,$row,$fieldCol));
+                    continue;
+                }
+                
                 if(!$this->getUserService()->isNicknameAvaliable($userData['nickname'])){ 
 
                     if($chechkType=="ignore") {
-                        $errorInfo[]="第".$row."行的用户已存在，已略过"; 
+                        $checkInfo[]="第".$row."行的用户已存在，已略过"; 
                         continue;
                     }
                     if($chechkType=="update") {
-                        $errorInfo[]="第".$row."行的用户已存在，将会更新";          
+                        $checkInfo[]="第".$row."行的用户已存在，将会更新";          
                     }
-                    $userCount=$userCount+1;            
+                    $userCount=$userCount+1; 
+                    $allUserData[]= $userData;            
                     continue;
                 }
                 if(!$this->getUserService()->isEmailAvaliable($userData['email'])){          
 
                     if($chechkType=="ignore") {
-                        $errorInfo[]="第".$row."行的用户已存在，已略过";
+                        $checkInfo[]="第".$row."行的用户已存在，已略过";
                         continue;
                     };
                     if($chechkType=="update") {
-                        $errorInfo[]="第".$row."行的用户已存在，将会更新";
+                        $checkInfo[]="第".$row."行的用户已存在，将会更新";
                     }  
-                    $userCount=$userCount+1;       
+                   $userCount=$userCount+1; 
+                    $allUserData[]= $userData;     
                     continue;
                 }
+
                 $userCount=$userCount+1;    
                 $allUserData[]= $userData;
-
-
                 //do sql  insert   $userData
 
             }
-            //print_r($allUserData);
 
             return $this->render('TopxiaAdminBundle:User:userinfo.excel.step2.html.twig', array(
                 'userCount'=>$userCount,
                 'errorInfo'=>$errorInfo,
+                'checkInfo'=>$checkInfo,
             ));
 
         }
@@ -482,6 +510,38 @@ class UserController extends BaseController
         ));
     }
 
+    private function validFields($userData,$row,$fieldCol)
+    {           
+        $errorInfo=array();
+        if (!SimpleValidator::email($userData['email'])) {
+            $errorInfo[]="第 ".$row."行".$fieldCol["email"]." 列 的数据存在问题，请检查。";
+        }
+
+        if (!SimpleValidator::nickname($userData['nickname'])) {
+            $errorInfo[]="第 ".$row."行".$fieldCol["nickname"]." 列 的数据存在问题，请检查。";
+        }
+
+        if (!SimpleValidator::password($userData['password'])) {
+            $errorInfo[]="第 ".$row."行".$fieldCol["password"]." 列 的数据存在问题，请检查。";
+        }
+
+        if (isset($userData['truename'])&& !SimpleValidator::truename($userData['truename'])) {
+            $errorInfo[]="第 ".$row."行".$fieldCol["truename"]." 列 的数据存在问题，请检查。";
+        }
+
+        if (isset($userData['idcard']) && !SimpleValidator::idcard($userData['idcard'])) {
+            $errorInfo[]="第 ".$row."行".$fieldCol["idcard"]." 列 的数据存在问题，请检查。";
+        }
+
+        if (isset($userData['mobile'])&& !SimpleValidator::mobile($userData['mobile'])) {
+            $errorInfo[]="第 ".$row."行".$fieldCol["mobile"]." 列 的数据存在问题，请检查。";
+        }
+        if (isset($userData['gender'])&& !in_array($userData['gender'], array("男","女"))){
+            $errorInfo[]="第 ".$row."行".$fieldCol["gender"]." 列 的数据存在问题，请检查。";
+        }
+
+        return $errorInfo;
+    }
 
     private function getFieldSort($excelField,$fieldNameArray,$fieldArray)
     {       

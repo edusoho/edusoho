@@ -13,7 +13,7 @@ class LiveCourseLessonManageController extends BaseController
   	public function createAction(Request $request,$id)
     {
         $liveCourse = $this->getCourseService()->tryManageCourse($id);
-
+        $parentId = $request->query->get('parentId');
         if($request->getMethod() == 'POST') {
 
             $liveLesson = $request->request->all();
@@ -51,6 +51,7 @@ class LiveCourseLessonManageController extends BaseController
             
         return $this->render('TopxiaWebBundle:LiveCourseLessonManage:live-lesson-modal.html.twig',array(
         	'liveCourse' => $liveCourse,
+            'parentId'=>$parentId
         ));
     }
 
