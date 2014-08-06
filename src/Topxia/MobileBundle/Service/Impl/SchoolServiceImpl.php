@@ -68,7 +68,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         return array(
             'name' => $site['name'],
             'url' => $request->getSchemeAndHttpHost() . '/mapi_v1',
-            'host'=> $request->getSchemeAndHttpHost()
+            'host'=> $request->getSchemeAndHttpHost(),
             'logo' => $logo,
             'splashs' => $splashs,
             'apiVersionRange' => array(
