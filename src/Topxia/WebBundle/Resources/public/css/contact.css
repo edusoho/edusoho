@@ -1,0 +1,125 @@
+/*客服部分*/
+.qqserver p img {
+    display: inline;
+    margin: -5px 5px 0 0;
+    vertical-align: middle;
+}
+.scrollsidebar {
+    position: absolute;
+    z-index: 999;
+
+}
+.side_content {
+    width: 167px;
+    height: auto;
+    overflow: hidden;
+    float: left;
+}
+.side_content .side_list {
+    width: 167px;
+    overflow: hidden;
+}
+.show_btn {
+    width: 0;
+    height: 144px;
+    overflow: hidden;
+    margin-top: 50px;
+    float: left;
+    cursor: pointer;
+}
+.show_btn span {
+    display: none;
+}
+.close_btn {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+.side_title,.side_bottom,.close_btn,.show_btn {
+    background: url(../img/contact/sidebar_bg.png) no-repeat;
+
+}
+.side_title {
+    height: 46px;
+}
+.side_title {
+    height: 46px;
+}
+.side_bottom {
+    height: 8px;
+}
+.side_center {
+    font-family: Verdana, Geneva, sans-serif;
+    padding: 10px 12px 5px 12px;
+    font-size: 12px;
+}
+.close_btn {
+    float: right;
+    display: block;
+    width: 19px;
+    height: 19px;
+    margin: 16px 7px 0 0;
+    _margin: 16px 3px 0 0;
+}
+.close_btn span {
+    display: none;
+}
+.side_center .qqserver p {
+    text-align: left;
+    padding: 6px 0;
+    margin: 0;
+    vertical-align: middle;
+}
+.phoneserver {
+    font-size: 14px;
+    text-align: center;
+}
+.phoneserver p {
+    padding: 2px 0;
+    _height: 16px;
+    margin: 0;
+    color: #666666;
+}
+.msgserver {
+    border-top: 1px dotted #ccc;
+    text-align: center;
+    margin-top: 6px;
+    padding: 10px 0 3px 0;
+}
+.msgserver a {
+
+    padding: 3px 0 3px 23px;
+}
+.side_content hr {
+    border-bottom: 1px solid #E6E6E6;
+    height: 1px;
+    margin: 10px 0;
+    clear: both;
+}
+
+/* green skin  */
+.side_green .side_title {
+    background-position: -505px 0;
+}
+.side_green .side_center {
+    background: url(../img/contact/green_line.gif) repeat-y center;
+}
+.side_green .side_bottom {
+    background-position: -505px -60px;
+}
+.side_green .close_btn {
+    background-position: -44px -45px;
+}
+.side_green .close_btn:hover {
+    background-position: -65px -45px;
+}
+.side_green .show_btn {
+    background-position: -187px 0;
+}
+.side_green .msgserver a {
+    color: #68c40b;
+}
+.side_green hr {
+    border-bottom: 1px solid #edf2e5;
+}
+
