@@ -208,7 +208,7 @@ class CourseLessonManageController extends BaseController
 	public function createTestPaperAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
-
+                          $parentId = $request->query->get('parentId');
         $conditions = array();
         $conditions['target'] = "course-{$course['id']}";
         $conditions['status'] = 'open';
@@ -243,7 +243,8 @@ class CourseLessonManageController extends BaseController
 		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
 			'course' => $course,
 			'paperOptions' => $paperOptions,
-            'features' => $features,
+                                       'features' => $features,
+                                       'parentId' =>$parentId
 		));
 	}
 
@@ -288,6 +289,7 @@ class CourseLessonManageController extends BaseController
             'lesson' => $lesson,
             'paperOptions' => $paperOptions,
             'features' => $features,
+
         ));
 
 	}
