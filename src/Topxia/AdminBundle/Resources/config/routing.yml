@@ -416,6 +416,10 @@ admin_setting_course_setting:
     pattern:  /setting/course-setting
     defaults: { _controller: TopxiaAdminBundle:Setting:courseSetting }
 
+admin_setting_contact_setting:
+    pattern:  /setting/contact-setting
+    defaults: { _controller: TopxiaAdminBundle:Setting:contactSetting }
+
 admin_setting_admin_sync:
     pattern:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }

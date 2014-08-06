@@ -794,6 +794,35 @@ class SettingController extends BaseController
         return $this->redirect($this->generateUrl('admin_setting_user_fields')); 
     }
 
+    public function contactSettingAction(Request $request)
+    { 
+        $contact = $this->getSettingService()->get('contact', array());
+        $default = array(
+            'enabled'=>0,
+            'qq1'=>'',
+            'qq2'=>'',
+            'qq3'=>'',
+            'qqgroup1'=>'',
+            'qqgroup2'=>'',
+            'qqgroup3'=>'',
+            'hotline1'=>'',
+            'hotline2'=>'',
+            'hotline3'=>'',
+            'webchat'=>'',
+            'email'=>'',
+            );
+        $contact = array_merge($default, $contact);
+        if ($request->getMethod() == 'POST') {
+            $contact = $request->request->all();
+            $this->getSettingService()->set('contact', $contact);
+            $this->getLogService()->info('system', 'update_settings', "更新QQ客服设置", $contact);
+            $this->setFlashMessage('success', 'QQ客服设置已保存！');
+        }
+        return $this->render('TopxiaAdminBundle:System:contact-setting.html.twig', array(
+            'contact' => $contact,
+        ));
+    }
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
