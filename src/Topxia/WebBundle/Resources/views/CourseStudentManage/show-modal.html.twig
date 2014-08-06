@@ -148,7 +148,19 @@
 				暂无
 			{% endif %}
 		</td>
+	</tr>	
+{% if fields %}
+{% for field in fields %}
+	<tr>
+		{% if profile[field.fieldName] %}
+			<th width="25%">{{field.title}}</th>
+			<td width="75%">
+					{ profile[field.fieldName] }}
+			</td>
+		{% endif %}
 	</tr>
+	{% endfor %}
+	{% endif %}
 </table>
 
 {% endblock %}
