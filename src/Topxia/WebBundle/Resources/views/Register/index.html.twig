@@ -13,11 +13,16 @@
         <form id="register-form" class="form-vertical" method="post" action="{{ path('register') }}">
 
           {{ web_macro.flash_messages() }}
-
           {% if registerSort %}
           {% for field in registerSort %}
-
-            {% if field == 'email' %}
+            {% if field == 'truename' %}
+              <div class="form-group">
+                <label class="control-label required" for="register_{{ field }}">姓名</label>
+                <div class="controls">
+                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control">
+                </div>
+              </div>
+            {% elseif field == 'email' %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">邮箱地址</label>
                 <div class="controls">
@@ -25,19 +30,12 @@
                   <p class="help-block">填写你常用的邮箱作为登录帐号</p>
                 </div>
               </div>
-            {% elseif field == 'nickname' %}
+              {% elseif field == 'nickname' %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">昵称</label>
                 <div class="controls">
                   <input type="text" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-url="{{path('register_nickname_check')}}" data-explain="该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字">
                   <p class="help-block">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</p>
-                </div>
-              </div>
-            {% elseif field == 'truename' %}
-              <div class="form-group">
-                <label class="control-label required" for="register_{{ field }}">姓名</label>
-                <div class="controls">
-                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control">
                 </div>
               </div>
             {% elseif field == 'job' %}
@@ -77,8 +75,8 @@
                 <div class="controls">
                   <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control">
                 </div>
-              </div>
-            {% elseif field == 'password' %}
+              </div>           
+              {% elseif field == 'password' %}   
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">密码</label>
                 <div class="controls">
@@ -86,7 +84,7 @@
                   <p class="help-block">5-20位英文、数字、符号，区分大小写</p>
                 </div>
               </div>
-            {% elseif field == 'confirmPassword' %}
+              {% elseif field == 'confirmPassword' %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">确认密码</label>
                 <div class="controls">
@@ -95,7 +93,51 @@
                 </div>
               </div>
             {% endif %}
-
+            {% for userField in userFields %}
+              {% if field==userField.fieldName %}
+                 {% if userField.type=="text" %}             
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class="control-label ">{{userField.title}}</label>
+                    <div class="controls">
+                      <textarea id="{{userField.fieldName}}" name="{{userField.fieldName}}" class=" form-control "></textarea>
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                  {% elseif userField.type=="int" %}
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class=" control-label">{{userField.title}}</label>
+                    <div class="controls">
+                      <input type="text" id="{{userField.fieldName}}" placeholder="最大值为9位整数" name="{{userField.fieldName}}" class="{{userField.type}} form-control" data-widget-cid="widget-5" data-explain="">
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                  {% elseif userField.type=="float" %}
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class="control-label">{{userField.title}}</label>
+                    <div class=" controls">
+                      <input type="text" id="{{userField.fieldName}}" placeholder="保留到2位小数" name="{{userField.fieldName}}" class="{{userField.type}} form-control" data-widget-cid="widget-5" data-explain="" >
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                  {% elseif userField.type=="date" %}
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class="control-label">{{userField.title}}</label>
+                    <div class=" controls">
+                      <input type="text" id="{{userField.fieldName}}" name="{{userField.fieldName}}" class="{{userField.type}} form-control" data-widget-cid="widget-5" data-explain="" >
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                  {% elseif userField.type=="varchar" %}
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class="control-label">{{userField.title}}</label>
+                    <div class=" controls">
+                      <input type="text" id="{{userField.fieldName}}" name="{{userField.fieldName}}" class="form-control" data-widget-cid="widget-5" data-explain="" >
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
           {% endfor %}
           {% else %}
            <div class="form-group">

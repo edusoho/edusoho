@@ -1,6 +1,8 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
+    var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
 
@@ -27,6 +29,9 @@ define(function(require, exports, module) {
             $alert.removeClass('hide');
         });
 
+        $.post($('#operation-analysis-title').data('url'),function(html){
+            $('#operation-analysis-table').html(html);
+        });
     };
 
 });

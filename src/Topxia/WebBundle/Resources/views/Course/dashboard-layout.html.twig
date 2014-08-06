@@ -19,6 +19,9 @@
           {% block dashboard_main %}{% endblock %}
         </div>
       </div>
+      <div>
+        {% block dashboard_relatedCoursesBlock %}{% endblock %}
+      </div>
     </div>
     <div class="col-md-4 course-dashboard-side">
       {{ render(controller('TopxiaWebBundle:Course:progressBlock',{course:course})) }}

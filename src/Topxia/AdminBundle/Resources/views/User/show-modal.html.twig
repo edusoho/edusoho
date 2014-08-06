@@ -74,7 +74,18 @@
     </td>
   </tr>
 
-  <tr>
+{#   <tr>
+    <th>类型</th>
+    <td>
+      {% if profile.iam %}
+        {{ profile.iam }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr> #}
+ 
+   <tr>
     <th>身份证号</th>
     <td>
       {% if profile.idcard %}
@@ -86,7 +97,7 @@
   </tr>
 
   <tr>
-    <th>手机号</th>
+    <th>手机号码</th>
     <td>
       {% if profile.mobile %}
         {{ profile.mobile }}
@@ -96,18 +107,7 @@
     </td>
   </tr>
 
-  <tr>
-    <th>类型</th>
-    <td>
-      {% if profile.iam %}
-        {{ profile.iam }}
-      {% else %}
-        暂无
-      {% endif %}
-    </td>
-  </tr>
- 
-  <tr>
+{#   <tr>
     <th>学校</th>
     <td>
       {% if profile.school %}
@@ -127,7 +127,7 @@
         暂无
       {% endif %}
     </td>
-  </tr>
+  </tr> #}
 
   <tr>
     <th>公司</th>

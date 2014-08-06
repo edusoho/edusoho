@@ -159,7 +159,9 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('endTime < :endTimeLessThan')
             ->andWhere('startTime <= :startTimeLessThan')
             ->andWhere('endTime > :endTimeGreaterThan')
-            ->andWhere('title LIKE :titleLike');
+            ->andWhere('title LIKE :titleLike')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime <= :endTime');
 
         if (isset($conditions['courseIds'])) {
             $courseIds = array();
@@ -175,6 +177,20 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         }
 
         return $builder;
+    }
+
+    public function analysisLessonNumByTime($startTime,$endTime)
+    {
+              $sql="SELECT count( id)  as num FROM `{$this->table}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime}  ";
+
+              return $this->getConnection()->fetchColumn($sql);
+    }
+
+    public function analysisLessonDataByTime($startTime,$endTime)
+    {
+             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+
+            return $this->getConnection()->fetchAll($sql);
     }
 
 }

@@ -1,4 +1,4 @@
-{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+  {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set panel = 'dashboard' %}
 {% set script_controller = 'default/index' %}
@@ -9,7 +9,7 @@
 </div>
 
 {% if is_granted('ROLE_ADMIN') %}
-
+  
   <div class="row">
     <div class="col-md-12">
       <div id="app-upgrade-alert" class="alert alert-info alert-dismissable hide" data-url="{{path('admin_app_upgrades_count') }}" data-upgrade-url="{{ path('admin_app_upgrades') }}">
@@ -17,7 +17,17 @@
       </div>
     </div>
 
-    {{ render(controller('TopxiaAdminBundle:Default:latestUsersBlock')) }}
+ <div class="col-md-6">
+  <div class="panel panel-default">
+  
+    <div class="panel-heading">
+      <h3 class="panel-title" id="operation-analysis-title" data-url="{{path('admin_operation_analysis')}}">数据统计</h3>
+    </div>
+    <div id="operation-analysis-table" >
+      <div class="empty">正在载入数据，请稍等。</div>
+    </div>
+  </div>
+</div>
     <div id="popular-courses-panel" class="col-md-6">
        <div class="panel panel-default">
         <div class="panel-heading">

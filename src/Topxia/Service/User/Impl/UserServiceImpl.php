@@ -275,6 +275,15 @@ class UserServiceImpl extends BaseService implements UserService
         $profile['company'] = empty($registration['company']) ? '' : $registration['company'];
         $profile['job'] = empty($registration['job']) ? '' : $registration['job'];
         $profile['gender'] = empty($registration['gender']) ? 'secret' : $registration['gender'];
+        for($i=1;$i<=5;$i++){
+            $profile['intField'.$i] = empty($registration['intField'.$i]) ? null : $registration['intField'.$i];
+            $profile['dateField'.$i] = empty($registration['dateField'.$i]) ? null : $registration['dateField'.$i];
+            $profile['floatField'.$i] = empty($registration['floatField'.$i]) ? null : $registration['floatField'.$i];
+        }
+        for($i=1;$i<=10;$i++){
+            $profile['varcharField'.$i] = empty($registration['varcharField'.$i]) ? "" : $registration['varcharField'.$i];
+            $profile['textField'.$i] = empty($registration['textField'.$i]) ? "" : $registration['textField'.$i];
+        }
 
         $this->getProfileDao()->addProfile($profile);
         if ($type != 'default') {
@@ -833,6 +842,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->updateUser($id, array(
             'loginSessionId' => $sessionId
         ));
+    }
+
+    public function analysisRegisterDataByTime($startTime,$endTime)
+    {
+        return $this->getUserDao()->analysisRegisterDataByTime($startTime,$endTime);
     }
 
     private function getFriendDao()

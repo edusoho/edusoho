@@ -37,6 +37,11 @@ login_bind_new:
     defaults: { _controller: TopxiaWebBundle:LoginBind:new }
     methods: [POST]
 
+login_bind_newset:
+    pattern:  /login/bind/{type}/newset
+    defaults: { _controller: TopxiaWebBundle:LoginBind:newSet }
+    methods: [POST]
+
 login_bind_exist:
     pattern:  /login/bind/{type}/exist
     defaults: { _controller: TopxiaWebBundle:LoginBind:exist }
@@ -74,6 +79,10 @@ register_email_check:
 register_nickname_check:
     pattern:  /register/nickname/check
     defaults: { _controller: TopxiaWebBundle:Register:nicknameCheck }
+
+register_analysis:
+    pattern:  /register/analysis
+    defaults: { _controller: TopxiaWebBundle:Register:analysis }
 
 file_upload:
     pattern:  /file/upload

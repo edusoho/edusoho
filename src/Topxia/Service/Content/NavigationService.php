@@ -3,7 +3,7 @@ namespace Topxia\Service\Content;
 
 interface NavigationService
 {
-	public function getNavigation($id);
+    public function getNavigation($id);
 
     public function findNavigations($start, $limit);
 

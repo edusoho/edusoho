@@ -213,7 +213,8 @@ class SettingController extends BaseController
             'welcome_body' => '',
             'user_terms' => 'closed',
             'user_terms_body' => '',
-            'registerSortType'=>array(),
+            'registerFieldNameArray'=>array(),
+            'registerSort'=>array(0=>"email",1=>"nickname",2=>"password"),
         );
 
         $auth = array_merge($default, $auth);
@@ -223,14 +224,27 @@ class SettingController extends BaseController
             if (empty($auth['welcome_methods'])) {
                 $auth['welcome_methods'] = array();
             }
+
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
             $this->setFlashMessage('success','注册设置已保存！');
         }
 
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
+        if($auth['registerFieldNameArray']){
+            foreach ($userFields as $key => $fieldValue) {
+                if(!in_array($fieldValue['fieldName'], $auth['registerFieldNameArray'])){
+                    $auth['registerFieldNameArray'][]=$fieldValue['fieldName'];
+                }
+            }
+         
+        }
+
         return $this->render('TopxiaAdminBundle:System:auth.html.twig', array(
-            'auth' => $auth
+            'auth' => $auth,
+            'userFields'=>$userFields,
         ));
     }
 
@@ -269,12 +283,15 @@ class SettingController extends BaseController
             'weibo_enabled'=>0,
             'weibo_key'=>'',
             'weibo_secret'=>'',
+            'weibo_set_fill_account'=>0,
             'qq_enabled'=>0,
             'qq_key'=>'',
             'qq_secret'=>'',
+            'qq_set_fill_account'=>0,
             'renren_enabled'=>0,
             'renren_key'=>'',
             'renren_secret'=>'',
+            'renren_set_fill_account'=>0,
             'verify_code' => '',
         );
 
@@ -560,17 +577,26 @@ class SettingController extends BaseController
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
+            'teacher_manage_student' => '0',
             'student_download_media' => '0',
+            'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
             'live_course_enabled' => '0',
+            'userinfoFields'=>array(),
+            "userinfoFieldNameArray"=>array(),
         );
 
+        $this->getSettingService()->set('course', $courseSetting);
         $courseSetting = array_merge($default, $courseSetting);
 
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
+
+            if(!isset($courseSetting['userinfoFields']))$courseSetting['userinfoFields']=array();
+            if(!isset($courseSetting['userinfoFieldNameArray']))$courseSetting['userinfoFieldNameArray']=array();
+
             $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
-            
+
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success','课程设置已保存！');
@@ -578,8 +604,20 @@ class SettingController extends BaseController
 
         $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
         
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
+        if($courseSetting['userinfoFieldNameArray']){
+            foreach ($userFields as $key => $fieldValue) {
+                if(!in_array($fieldValue['fieldName'], $courseSetting['userinfoFieldNameArray'])){
+                    $courseSetting['userinfoFieldNameArray'][]=$fieldValue['fieldName'];
+                }
+            }
+         
+        }
+
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
-            'courseSetting' => $courseSetting
+            'courseSetting' => $courseSetting,
+            'userFields'=>$userFields,
         ));
     }
 
@@ -719,6 +757,24 @@ class SettingController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
+
+            $auth = $this->getSettingService()->get('auth', array());
+
+            $courseSetting = $this->getSettingService()->get('course', array());
+
+            if(isset($auth['registerFieldNameArray'])){
+                foreach ($auth['registerFieldNameArray'] as $key => $value) {
+                if($value==$field['fieldName']) unset( $auth['registerFieldNameArray'][$key]);
+                }
+            }
+            if(isset($courseSetting['userinfoFieldNameArray'])){
+                foreach ($courseSetting['userinfoFieldNameArray'] as $key => $value) {
+                if($value==$field['fieldName']) unset( $courseSetting['userinfoFieldNameArray'][$key]);
+                }
+            }
+            $this->getSettingService()->set('auth', $auth);
+
+            $this->getSettingService()->set('course', $courseSetting);
 
             $this->getUserFieldService()->dropField($id);
 

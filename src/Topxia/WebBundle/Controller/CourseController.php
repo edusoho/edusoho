@@ -239,10 +239,6 @@ class CourseController extends BaseController
 
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
-        if(!$this->canShowCourse($course, $user)) {
-            return $this->createMessageResponse('info', '抱歉，课程已关闭或未发布，不能参加学习，如有疑问请联系管理员！');
-        }
-        
         $this->getCourseService()->hitCourse($id);
         
         $member = $this->previewAsMember($previewAs, $member, $course);
@@ -466,6 +462,7 @@ class CourseController extends BaseController
     public function learnAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
+
         if (!$user->isLogin()) {
             $request->getSession()->set('_target_path', $this->generateUrl('course_show', array('id' => $id)));
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
@@ -482,10 +479,6 @@ class CourseController extends BaseController
             return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
         }
         
-        if (!empty($course['status']) && $course['status'] == 'closed') {
-            return $this->createMessageResponse('info',"课程《{$course['title']}》已关闭。");
-        }
-
         try{
             list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
             if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
