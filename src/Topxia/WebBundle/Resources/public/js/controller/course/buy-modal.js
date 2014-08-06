@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     exports.run = function() {
         var validator = new Validator({
             element: '#course-buy-form',
-            failSilently: true,
+            failSilently: true
         });
 
         if ($('#course-buy-form').find('input[name="mobile"]').length > 0){
@@ -19,7 +19,7 @@ define(function(require, exports, module) {
                 $('#join-course-btn').button('submiting').addClass('disabled');
                  },
                 required: true,
-                rule: 'phone',
+                rule: 'phone'
             });
         }
 
@@ -27,7 +27,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="truename"]',
                 required: true,
-                rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}',
+                rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}'
             });
         }
 
@@ -47,17 +47,17 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="gender"]',
-            required: true,
+            required: true
         });
 
         validator.addItem({
             element: '[name="company"]',
-            required: true,
+            required: true
         });
 
         validator.addItem({
             element: '[name="job"]',
-            required: true,
+            required: true
         });
 
         validator.addItem({

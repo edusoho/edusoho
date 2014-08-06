@@ -20,7 +20,6 @@ class WebExtension extends \Twig_Extension
         return array(
             'smart_time' => new \Twig_Filter_Method($this, 'smarttimeFilter') ,
             'data_format' => new \Twig_Filter_Method($this, 'dataformatFilter') ,
-            'data_format2' => new \Twig_Filter_Method($this, 'dataformatFilter2') ,
             'time_range' => new \Twig_Filter_Method($this, 'timeRangeFilter'),
             'remain_time' => new \Twig_Filter_Method($this, 'remainTimeFilter'),
             'location_text' => new \Twig_Filter_Method($this, 'locationTextFilter'),
@@ -138,13 +137,6 @@ class WebExtension extends \Twig_Extension
             return ;
         }
         return date('Y-m-d H:i',$time);
-    }
-
-    public function dataformatFilter2 ($time) {
-        if (empty($time)) {
-            return ;
-        }
-        return date('Y-m-d',$time);
     }
 
     public function smarttimeFilter ($time) {

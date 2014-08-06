@@ -9,24 +9,33 @@ use Topxia\Common\ArrayToolkit;
 class AnalysisController extends BaseController
 {   
 
+    public function rountByanalysisDateTypeAction(Request $request,$tab)
+    {   
+        $analysisDateType=$request->query->get("analysisDateType");
+        return $this->forward('TopxiaAdminBundle:Analysis:'.$analysisDateType, array(
+            'request'=>$request,
+            'tab'=>$tab,
+        ));
+    }
+
     public function registerAction(Request $request,$tab)
-    {       
+    {      
         $data=array();
         $registerStartDate="";
-        
+
         $condition=$request->query->all();
         $timeRange=$this->getTimeRange($condition);
         if(!$timeRange) {
 
               $this->setFlashMessage("danger","输入的日期有误!");
-                        return $this->redirect($this->generateUrl('admin_operation_analysis_register', array(
+                    return $this->redirect($this->generateUrl('admin_operation_analysis_register', array(
                    'tab' => "trend",
                 )));
         }
         $paginator = new Paginator(
                 $request,
                 $this->getUserService()->searchUserCount($timeRange),
-             20
+                20
         );
 
         $registerDetail=$this->getUserService()->searchUsers(
@@ -47,15 +56,14 @@ class AnalysisController extends BaseController
 
         if($registerStartData) $registerStartDate=date("Y-m-d",$registerStartData[0]['createdTime']);
 
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:register.html.twig",array(
             'registerDetail'=>$registerDetail,
             'paginator'=>$paginator,
             'tab'=>$tab,
             'data'=>$data,
             "registerStartDate"=>$registerStartDate,
-            'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
-            'analysisDateType'=>"register",
+            "dataInfo"=>$dataInfo,
           ));
     }
 
@@ -104,6 +112,7 @@ class AnalysisController extends BaseController
 
         if($loginStartData) $loginStartDate=date("Y-m-d",$loginStartData[0]['createdTime']);
 
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:login.html.twig",array(
             'loginDetail'=>$loginDetail,
             'paginator'=>$paginator,
@@ -111,9 +120,7 @@ class AnalysisController extends BaseController
             'data'=>$data,
             'users'=>$users,
             'loginStartDate'=>$loginStartDate,
-            'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
-            'analysisDateType'=>"login",            
+            'dataInfo'=>$dataInfo,        
         ));
     }
     
@@ -164,6 +171,7 @@ class AnalysisController extends BaseController
 
         if($courseStartData) $courseStartDate=date("Y-m-d",$courseStartData[0]['createdTime']);
 
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:course.html.twig",array(
             'courseDetail'=>$courseDetail,
             'paginator'=>$paginator,
@@ -172,9 +180,7 @@ class AnalysisController extends BaseController
             'data'=>$data,
             'users'=>$users,
             'courseStartDate'=>$courseStartDate,
-            'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
-            'analysisDateType'=>"course",               
+            'dataInfo'=>$dataInfo,          
          ));
     }
 
@@ -228,6 +234,7 @@ class AnalysisController extends BaseController
 
         if($lessonStartData) $lessonStartDate=date("Y-m-d",$lessonStartData[0]['createdTime']);
 
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:lesson.html.twig",array(
             'lessonDetail'=>$lessonDetail,
             'paginator'=>$paginator,
@@ -236,9 +243,7 @@ class AnalysisController extends BaseController
             'courses'=>$courses,
             'users'=>$users,
             'lessonStartDate'=>$lessonStartDate,
-            'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
-            'analysisDateType'=>"lesson",           
+            'dataInfo'=>$dataInfo,         
         ));
     }
 
@@ -292,6 +297,7 @@ class AnalysisController extends BaseController
             $joinLessonStartDate=date("Y-m-d",$key['createdTime']);
         }         
 
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:join-lesson.html.twig",array(
             'JoinLessonDetail'=>$JoinLessonDetail,
             'paginator'=>$paginator,
@@ -300,9 +306,7 @@ class AnalysisController extends BaseController
             'courses'=>$courses,
             'users'=>$users,
             'joinLessonStartDate'=>$joinLessonStartDate,
-            'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
-            'analysisDateType'=>"joinLesson",           
+            'dataInfo'=>$dataInfo,      
         ));
     }
 
@@ -359,6 +363,7 @@ class AnalysisController extends BaseController
             $exitLessonStartDate=date("Y-m-d",$key['createdTime']);
         }
 
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:exit-lesson.html.twig",array(
             'exitLessonDetail'=>$exitLessonDetail,
             'paginator'=>$paginator,
@@ -368,9 +373,7 @@ class AnalysisController extends BaseController
             'users'=>$users,
             'exitLessonStartDate'=>$exitLessonStartDate,
             'cancelledOrders'=>$cancelledOrders,
-            'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
-            'analysisDateType'=>"exitLesson",           
+            'dataInfo'=>$dataInfo,        
         ));
     }
 
@@ -423,6 +426,7 @@ class AnalysisController extends BaseController
             $paidLessonStartDate=date("Y-m-d",$key['createdTime']);
         }
 
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:paid-lesson.html.twig",array(
             'paidLessonDetail'=>$paidLessonDetail,
             'paginator'=>$paginator,
@@ -431,9 +435,7 @@ class AnalysisController extends BaseController
             'courses'=>$courses,
             'users'=>$users,
             'paidLessonStartDate'=>$paidLessonStartDate,
-            'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600), 
-            'analysisDateType'=>"paidLesson",           
+            'dataInfo'=>$dataInfo,      
         ));
     }
 
@@ -487,7 +489,8 @@ class AnalysisController extends BaseController
         $finishedLessonStartData=$this->getCourseService()->searchLearns(array("status"=>"finished"),array("finishedTime","ASC"),0,1);
 
         if($finishedLessonStartData) $finishedLessonStartDate=date("Y-m-d",$finishedLessonStartData[0]['finishedTime']);
-                
+        
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:finished-lesson.html.twig",array(
             'finishedLessonDetail'=>$finishedLessonDetail,
             'paginator'=>$paginator,
@@ -497,9 +500,7 @@ class AnalysisController extends BaseController
             'lessons'=>$lessons,
             'users'=>$users,
             'finishedLessonStartDate'=>$finishedLessonStartDate,
-            'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
-            'analysisDateType'=>"finishedLesson",           
+            'dataInfo'=>$dataInfo,          
         ));
     }
 
@@ -554,6 +555,7 @@ class AnalysisController extends BaseController
 
         $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('all');
 
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:video-view.html.twig",array(
             'videoViewedDetail'=>$videoViewedDetail,
             'paginator'=>$paginator,
@@ -561,10 +563,9 @@ class AnalysisController extends BaseController
             'data'=>$data,
             'lessons'=>$lessons,
             'users'=>$users,
-            'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600), 
+            'dataInfo'=>$dataInfo,
             'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
-            'analysisDateType'=>"videoViewed",  
+            'showHelpMessage' => 1
         ));
     }
 
@@ -620,6 +621,7 @@ class AnalysisController extends BaseController
         $users = ArrayToolkit::index($users,'id');
         $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('cloud');
 
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:cloud-video-view.html.twig",array(
             'videoViewedDetail'=>$videoViewedDetail,
             'paginator'=>$paginator,
@@ -627,10 +629,9 @@ class AnalysisController extends BaseController
             'data'=>$data,
             'lessons'=>$lessons,
             'users'=>$users,
-            'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600), 
+            'dataInfo'=>$dataInfo,
             'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
-            'analysisDateType'=>"cloudVideoViewed", 
+            'showHelpMessage' => 1
         ));
     }
 
@@ -686,6 +687,7 @@ class AnalysisController extends BaseController
         $users = ArrayToolkit::index($users,'id');
         $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('local');
         
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:local-video-view.html.twig",array(
             'videoViewedDetail'=>$videoViewedDetail,
             'paginator'=>$paginator,
@@ -693,10 +695,9 @@ class AnalysisController extends BaseController
             'data'=>$data,
             'lessons'=>$lessons,
             'users'=>$users,
-            'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600), 
+            'dataInfo'=>$dataInfo,
             'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
-            'analysisDateType'=>"localVideoViewed", 
+            'showHelpMessage' => 1
         ));
     }
     
@@ -752,6 +753,7 @@ class AnalysisController extends BaseController
         $users = ArrayToolkit::index($users,'id');
         $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('net');
         
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:net-video-view.html.twig",array(
             'videoViewedDetail'=>$videoViewedDetail,
             'paginator'=>$paginator,
@@ -759,10 +761,9 @@ class AnalysisController extends BaseController
             'data'=>$data,
             'lessons'=>$lessons,
             'users'=>$users,
-                'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600), 
             'minCreatedTime'=>date("Y-m-d",$minCreatedTime['createdTime']),
-            'analysisDateType'=>"netVideoViewed",
+            'dataInfo'=>$dataInfo,
+            'showHelpMessage' => 1
         ));
     }
 
@@ -816,6 +817,7 @@ class AnalysisController extends BaseController
             $incomeStartDate=date("Y-m-d",$key['createdTime']);
         }
 
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:income.html.twig",array(
             'incomeDetail'=>$incomeDetail,
             'paginator'=>$paginator,
@@ -824,9 +826,7 @@ class AnalysisController extends BaseController
             'courses'=>$courses,
             'users'=>$users,
             'incomeStartDate'=>$incomeStartDate,
-            'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600), 
-            'analysisDateType'=>"income",       
+            'dataInfo'=>$dataInfo,    
         ));
     }
 
@@ -881,6 +881,7 @@ class AnalysisController extends BaseController
             $courseIncomeStartDate=date("Y-m-d",$key['createdTime']);
         }
 
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:courseIncome.html.twig",array(
             'courseIncomeDetail'=>$courseIncomeDetail,
             'paginator'=>$paginator,
@@ -889,9 +890,7 @@ class AnalysisController extends BaseController
             'courses'=>$courses,
             'users'=>$users,
             'courseIncomeStartDate'=>$courseIncomeStartDate,
-            'startTime'=>date("Y-m-d",$timeRange['startTime']),
-            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
-            'analysisDateType'=>"courseIncome",                 
+            'dataInfo'=>$dataInfo,              
         ));
     }
 
@@ -924,18 +923,23 @@ class AnalysisController extends BaseController
 
         return $dates;
     }
-    
+
+    private function getDataInfo($condition,$timeRange)
+    {
+        return array(            
+            'startTime'=>date("Y-m-d",$timeRange['startTime']),
+            'endTime'=>date("Y-m-d",$timeRange['endTime']-24*3600),
+            'currentMonthStart'=>date("Y-m-d",strtotime(date("Y-m",time()))),
+            'currentMonthEnd'=>date("Y-m-d",strtotime(date("Y-m-d",time()))),
+            'lastMonthStart'=>date("Y-m-d",strtotime(date("Y-m", strtotime("-1 month")))),
+            'lastMonthEnd'=>date("Y-m-d",strtotime(date("Y-m",time()))-24*3600),
+            'lastThreeMonthsStart'=>date("Y-m-d",strtotime(date("Y-m", strtotime("-2 month")))),
+            'lastThreeMonthsEnd'=>date("Y-m-d",strtotime(date("Y-m-d",time()))),
+            'analysisDateType'=>$condition["analysisDateType"],);
+    }
+
     private function getTimeRange($fields)
     {
-        if(isset($fields['type']))
-        {
-            if($fields['type']=="month")return array('startTime'=>strtotime(date("Y-m",time())),'endTime'=>strtotime(date("Y-m-d",time()+24*3600)));
-
-            if($fields['type']=="lastMonth")return array('startTime'=>strtotime(date("Y-m", strtotime("-1 month"))),'endTime'=>strtotime(date("Y-m",time())));
-
-            if($fields['type']=="lastThreeMonths")return array('startTime'=>strtotime(date("Y-m", strtotime("-2 month"))),'endTime'=>strtotime(date("Y-m-d",time()+24*3600)));
-        }
-
         if(isset($fields['startTime'])&&isset($fields['endTime'])&&$fields['startTime']!=""&&$fields['endTime']!="")
         {   
             if($fields['startTime']>$fields['endTime']) return false;

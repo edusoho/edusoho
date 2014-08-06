@@ -52,15 +52,9 @@ interface OrderService
 
     public function cancelRefundOrder($id);
 
-    public function analysisCourseOrderNumByTimeAndStatus($startTime,$endTime,$status);
-
     public function analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
 
-    public function analysisPaidCourseOrderNumByTime($startTime,$endTime);
-
     public function analysisPaidCourseOrderDataByTime($startTime,$endTime);
-
-    public function analysisExitCourseNumByTimeAndStatus($startTime,$endTime);
 
     public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime);
 

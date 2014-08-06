@@ -42,7 +42,7 @@
                 {% endif %}
               {% else %}
                 {% if paperResult.status == 'finished' or not accuracy[type].hasEssay|default(false) %}
-                  <td><span class="text-danger">{{ accuracy[type].wrong + accuracy[type].partRight }} <small>道</small></span></td>
+                  <td><span class="text-danger">{{ accuracy[type].wrong + accuracy[type].partRight }} <small>道{% if type == 'choice' and accuracy[type].partRight != 0 or  type == 'uncertain_choice' and accuracy[type].partRight != 0 %}（其中有{{accuracy[type].partRight}}道漏选）{% endif %}</small></span></td>
                 {% endif %}
               {% endif %}
             {% endfor %}

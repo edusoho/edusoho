@@ -15,6 +15,7 @@
                   {% elseif lessons[data.lessonId].type=="video" %}视频
                   {% elseif lessons[data.lessonId].type=="audio" %}音频
                   {% elseif lessons[data.lessonId].type=="ppt" %}PPT
+                  {% elseif lessons[data.lessonId].type=="testpaper" %}试卷
                   {% endif %}</td>
                    <td>{{ admin_macro.user_link(users[data.userId]) }}<br>{{data.finishedTime|date("Y-m-d H:i:s")}}</td>
               </tr>

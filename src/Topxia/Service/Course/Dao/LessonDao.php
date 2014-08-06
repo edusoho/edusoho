@@ -41,7 +41,5 @@ interface LessonDao
 
     public function sumLessonGiveCreditByLessonIds(array $lesonIds);
 
-    public function analysisLessonNumByTime($startTime,$endTime);
-
     public function analysisLessonDataByTime($startTime,$endTime);    
 }

@@ -304,6 +304,20 @@ CREATE TABLE `course_lesson_learn` (
   KEY `userId_courseId` (`userId`,`courseId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `course_lesson_view`;
+CREATE TABLE `course_lesson_view` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `courseId` int(10) NOT NULL,
+  `lessonId` int(10) NOT NULL,
+  `fileId` int(10) NOT NULL,
+  `userId` int(10) NOT NULL,
+  `fileType` enum('document','video','audio','image','ppt','other') NOT NULL DEFAULT 'other',
+  `fileStorage` enum('local','cloud','net') NOT NULL,
+  `fileSource` varchar(32) NOT NULL,
+  `createdTime` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `course_material`;
 CREATE TABLE `course_material` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程资料ID',
