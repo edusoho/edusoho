@@ -149,16 +149,6 @@
 			{% endif %}
 		</td>
 	</tr>
-	{% if fields %}
-	{% for field in fields %}
-		<tr>
-			<th>{{field.title}}</th>
-				<td>
-					{{ profile[field.fieldName]|default('暂无') }}
-				</td>
-		</tr>
-	{% endfor %}
-	{% endif %}
 </table>
 
 {% endblock %}
