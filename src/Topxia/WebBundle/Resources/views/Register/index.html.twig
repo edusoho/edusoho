@@ -11,7 +11,6 @@
         <div class="panel-heading"><h2>注册</h2></div>
 
         <form id="register-form" class="form-vertical" method="post" action="{{ path('register') }}">
-
           {{ web_macro.flash_messages() }}
           {% if registerSort %}
           {% for field in registerSort %}
