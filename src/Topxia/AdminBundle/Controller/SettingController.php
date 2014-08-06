@@ -802,6 +802,8 @@ class SettingController extends BaseController
         $contact = $this->getSettingService()->get('contact', array());
         $default = array(
             'enabled'=>0,
+            'title'=>'马上咨询',
+            'worktime'=>'9:00 - 17:00',
             'qq1'=>'',
             'qq2'=>'',
             'qq3'=>'',
