@@ -8,13 +8,13 @@ use Topxia\WebBundle\Controller\BaseController;
 class MobileApiController extends MobileBaseController
 {
 	    private static $filtetNames = array(
-	    	1000=>"UrlFilter",
-	    	999=>"ServiceFilter"
+	    	1000=>"UrlFilter"
 	    );
 
 	    private $filters = array();
 	    private $pathInfo;
 	    private $filterResponse;
+	    public $request;
 
 	    function __construct(){
 	    	ksort(self::$filtetNames);
@@ -63,6 +63,7 @@ class MobileApiController extends MobileBaseController
 
 	    private function init($request)
 	    {
+	    	$this->request = $request;
 	    	$this->pathInfo = $request->getPathInfo();
 	    	if ($request->getMethod() == "POST") {
 	    		$this->formData = $request->request->all();
@@ -83,7 +84,7 @@ class MobileApiController extends MobileBaseController
 	    		return $this->createJson($request, "service not exists");
 	    	}
 
-	    	$instance = call_user_func(array($class, "getInstance"), $class, $this->formData);
+	    	$instance = call_user_func(array($class, "getInstance"), $class, $this);
 
 	    	$result = call_user_func(array($instance, $method));
 	    	return $this->createJson($request, $result);

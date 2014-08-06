@@ -4,13 +4,18 @@ namespace Topxia\MobileBundle\Service;
 class BaseService
 {
 	public $formData;
-	private function __construct($formData){
-		$this->formData = $formData;
+	public $controller;
+	public $request;
+
+	private function __construct($controller){
+		$this->controller = $controller;
+		$this->request = $controller->request;
+		$this->formData = $controller->formData;
 	}
 
-	public static function getInstance($class, $formData)
+	public static function getInstance($class, $controller)
 	{
-		$instance = new $class($formData);
+		$instance = new $class($controller);
 		$serviceDelegator = new serviceDelegator($instance);
 		return $serviceDelegator;
 	}
@@ -19,5 +24,11 @@ class BaseService
 	}
 
 	public function before(){
+	}
+
+	public function createErrorResponse($name, $message)
+	{
+	    $error = array('error' => array('name' => $name, 'message' => $message));
+	    return $error;
 	}
 }

@@ -142,10 +142,45 @@ class MobileBaseController extends BaseController
         return current($reviews);
     }
 
-    protected function createErrorResponse($request, $name, $message)
+    public function createErrorResponse($request, $name, $message)
     {
         $error = array('error' => array('name' => $name, 'message' => $message));
         return $this->createJson($request, $error);
+    }
+
+    public function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    public function getReviewService()
+    {
+        return $this->getServiceKernel()->createService('Course.ReviewService');
+    }
+
+    public function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    public function getMemberDao ()
+    {
+        return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
+    }
+
+    public function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    public function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    public function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

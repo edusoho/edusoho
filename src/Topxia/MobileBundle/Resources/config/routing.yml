@@ -162,5 +162,5 @@ mapi_mobile_notify_version:
     defaults: { _controller: TopxiaMobileBundle:Mobile:notifyMobileVersion }
 
 mapi_mobile_api:
-    pattern:  /api/{service}/{method}
+    pattern:  /{service}/{method}
     defaults: { _controller: TopxiaMobileBundle:MobileApi:index }
