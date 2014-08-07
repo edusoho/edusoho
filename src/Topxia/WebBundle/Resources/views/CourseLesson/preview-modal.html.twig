@@ -5,46 +5,54 @@
 {% block title %}<span class="text-muted">免费课时预览:</span> {{lesson.title}}{% endblock %}
 
 {% block body %}
-  {% if lesson.status == 'published' %}
-    {% if lesson.type == 'video' %}
-      {% if lesson.mediaSource == 'self' %}
-        <div id="lesson-preview-video-player" data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" data-hls-url="{{ hlsUrl }}"
+	{% if lesson.status == 'published' %}
+		{% if lesson.type == 'video' %}
+			{% if lesson.mediaSource == 'self' %}
+				<div id="lesson-preview-video-player" data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" data-hls-url="{{ hlsUrl }}"
 
-          {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
-            data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
-          {% endif %}
-          {% if setting('storage.video_fingerprint') and app.user %}
-            data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
-          {% endif %}
+					{% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
+						data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
+					{% endif %}
+					{% if setting('storage.video_fingerprint') and app.user %}
+						data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+					{% endif %}
 
-        ></div>
-      {% else %}
-        <div id="lesson-preview-swf-player" data-url="{{ lesson.mediaUri }}"></div>
-      {% endif %}
-    {% elseif lesson.type == 'audio' %}
-      <audio id="lesson-preview-audio-player" width="100%" height="100%">
-         <source src="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" type='audio/mp3' />
-      </audio>
-    {% elseif lesson.type == 'ppt' %}
-      <div id="lesson-preview-ppt-player" data-url="{{ path('course_lesson_ppt', {courseId:lesson.courseId, lessonId:lesson.id}) }}"></div>
+				></div>
+			{% else %}
+				<div id="lesson-preview-swf-player" data-url="{{ lesson.mediaUri }}"></div>
+			{% endif %}
+		{% elseif lesson.type == 'audio' %}
+			<audio id="lesson-preview-audio-player" width="100%" height="100%">
+				 <source src="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" type='audio/mp3' />
+			</audio>
+		{% elseif lesson.type == 'ppt' %}
+			<div id="lesson-preview-ppt-player" data-url="{{ path('course_lesson_ppt', {courseId:lesson.courseId, lessonId:lesson.id}) }}"></div>
 
-    {% else %}
-      {{ lesson.content|raw }}
-    {% endif %}
-  {% else %}
-    <div class="empty">课时尚未发布，无法预览！</div>
-  {% endif %}
-    <script>app.load('course/lesson-preview')</script>
+		{% else %}
+			{{ lesson.content|raw }}
+		{% endif %}
+	{% else %}
+		<div class="empty">课时尚未发布，无法预览！</div>
+	{% endif %}
+		<script>app.load('course/lesson-preview')</script>
 {% endblock %}
 
 {% block footer %}
-  {% if lesson.status == 'published' %}
-    {% if course.price=='0.00'  %}
-        <button id="buy-btn" type="button" class="btn btn-primary" data-url="{{ path('course_buy', {id:course.id}) }}">免费加入学习</button>
-    {% else %}
-        <button id="buy-btn" type="button" class="btn btn-primary" data-url="{{ path('course_buy', {id:course.id}) }}">觉得不错？点击购买此课程（{{ course.price }}元）</button>
-    {% endif %}
-  {% else %}
-    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
-  {% endif %}
+	{% if lesson.status == 'published' %}
+		{% if course.price=='0.00'  %}
+				<button id="buy-btn" type="button" class="btn btn-primary" data-url="{{ path('course_buy', {id:course.id}) }}">
+					{% if user.id %}免费加入学习
+					{% else %}登录后加入学习
+					{% endif %}				
+				</button>
+		{% else %}
+				<button id="buy-btn" type="button" class="btn btn-primary" data-url="{{ path('course_buy', {id:course.id}) }}">
+					{% if user.id %}觉得不错？点击购买此课程（{{ course.price }}元）
+					{% else %}登录后购买学习完整的课程
+					{% endif %}
+				</button>
+		{% endif %}
+	{% else %}
+		<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+	{% endif %}
 {% endblock %}
