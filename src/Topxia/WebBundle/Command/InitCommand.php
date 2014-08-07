@@ -26,6 +26,7 @@ class InitCommand extends BaseCommand
 		$user = $this->initAdminUser($output);
 
 		$this->initSiteSetting($output);
+		$this->initContactSetting($output);
 		$this->initRegisterSetting($user, $output);
 		$this->initMailerSetting($output);
 		$this->initPaymentSetting($output);
@@ -75,6 +76,34 @@ class InitCommand extends BaseCommand
         );
 
         $site = $this->getSettingService()->set('site', $default);
+
+
+	}
+
+	private function initContactSetting($output)
+	{
+		$output->write('  初始化客服设置');
+
+
+        $default = array(
+			'enabled'=>0,
+			'title'=>'马上咨询',
+			'worktime'=>'9:00 - 17:00',
+			'qq1'=>'',
+			'qq2'=>'',
+			'qq3'=>'',
+			'qqgroup1'=>'',
+			'qqgroup2'=>'',
+			'qqgroup3'=>'',
+			'hotline1'=>'',
+			'hotline2'=>'',
+			'hotline3'=>'',
+			'webchat'=>'',
+			'webchatURI' => '',
+			'email'=>'',
+			);
+
+        $site = $this->getSettingService()->set('contact', $default);
 
 
 	}
