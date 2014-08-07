@@ -166,7 +166,7 @@
       </table>
       <div class="pull-right">{{ web_macro.paginator(paginator) }}</div>
           <div class="page-header clearfix"></div>
-          <form id="post-thread-form" class="form-horizontal" method="post" action="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
+          <form id="post-thread-form" class="form-horizontal" method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
 
             <div class="form-group">
               <label class="col-md-2 control-label" for="post_content"><span class="glyphicon glyphicon-comment"></span> 回复内容</label>

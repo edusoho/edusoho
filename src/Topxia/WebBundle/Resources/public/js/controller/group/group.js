@@ -55,7 +55,7 @@
                 $('#post-thread-btn').button('submiting').addClass('disabled');
 
                 $.ajax({
-                url : $("#post-thread-form").attr('action'),
+                url : $("#post-thread-form").attr('post-url'),
                 data:$("#post-thread-form").serialize(),
                 cache : false, 
                 async : false,
