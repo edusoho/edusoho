@@ -116,9 +116,13 @@ admin_user_create:
     pattern:  /user/create
     defaults: { _controller: TopxiaAdminBundle:User:create }
 
-admin_user_excel_lead:
-    pattern:  /user/lead/excel
-    defaults: { _controller: TopxiaAdminBundle:User:userInfoLeadByExcel }
+admin_user_excel_import:
+    pattern:  /user/import/excel
+    defaults: { _controller: TopxiaAdminBundle:User:importUserInfoByExcel }
+
+admin_user_excel_import_to_base:
+    pattern:  /user/import/excel/to/base
+    defaults: { _controller: TopxiaAdminBundle:User:importUserDataToBase }
 
 admin_user_create_email_check:
     pattern:  /user/create/email/check

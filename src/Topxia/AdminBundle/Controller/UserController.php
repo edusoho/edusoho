@@ -389,15 +389,56 @@ class UserController extends BaseController
 
     }
 
-    public function userInfoLeadByExcelAction(Request $request)
+    public function importUserDataToBaseAction(Request $request)
+    {   
+        $userData=$request->request->get("data");
+        $userData=unserialize($userData);
+        $checkType=$request->request->get("checkType");
+
+        if($checkType=="ignore"){
+
+            foreach ($userData as $key => $user) {
+                if ($user["gender"]=="男")$user["gender"]="male";
+                if ($user["gender"]=="女")$user["gender"]="female";
+                if ($user["gender"]=="")$user["gender"]="secret";
+                $this->getUserService()->register($user);
+                }       
+        }
+        if($checkType=="update"){
+   
+            foreach ($userData as $key => $user) {
+                if ($user["gender"]=="男")$user["gender"]="male";
+                if ($user["gender"]=="女")$user["gender"]="female";
+                if ($user["gender"]=="")$user["gender"]="secret";
+
+                if($this->getUserService()->getUserByNickname($user["nickname"])){
+                    $member=$this->getUserService()->getUserByNickname($user["nickname"]);
+                    $this->getUserService()->changePassword($member["id"],$user["password"]);
+                    $this->getUserService()->updateUserProfile($member["id"],$user);
+                }
+                elseif ($this->getUserService()->getUserByEmail($user["email"])){
+                    $member=$this->getUserService()->getUserByEmail($user["email"]);
+                    $this->getUserService()->changePassword($member["id"],$user["password"]);
+                    $this->getUserService()->updateUserProfile($member["id"],$user);
+                }else { 
+                    $this->getUserService()->register($user);
+                }          
+            }       
+        }
+        return $this->render('TopxiaAdminBundle:User:userinfo.excel.step3.html.twig', array(
+        ));
+    }
+
+    public function importUserInfoByExcelAction(Request $request)
     {
          if ($request->getMethod() == 'POST') {
 
-            $chechkType=$request->request->get("rule");
+            $checkType=$request->request->get("rule");
             $file=$request->files->get('excel');
             $errorInfo=array();
             $checkInfo=array();
             $userCount=0;
+            $allUserData=array();
 
             if(!$file){
                 $this->setFlashMessage('danger', '请选择上传的文件');
@@ -426,8 +467,8 @@ class UserController extends BaseController
 
             for ($col = 0;$col < $highestColumnIndex;$col++)
             {
-                $strs[$col] =$objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
-                    
+                 $fieldTitle=$objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
+                 $strs[$col]=$fieldTitle."";
             }   
             $excelField=$strs;
 
@@ -440,7 +481,7 @@ class UserController extends BaseController
             }
 
             $fieldSort=$this->getFieldSort($excelField,$fieldNameArray,$fieldArray);
-
+            unset($fieldNameArray,$fieldArray,$excelField);
             $repeatInfo=$this->checkRepeatData($row=3,$fieldSort,$highestRow,$objWorksheet);
 
             if($repeatInfo){
@@ -458,7 +499,9 @@ class UserController extends BaseController
 
                 for ($col = 0;$col < $highestColumnIndex;$col++)
                 {
-                    $strs[$col] =$objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+                     $infoData=$objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+                     $strs[$col]=$infoData."";
+                     unset($infoData);
                 }    
 
                 foreach ($fieldSort as $sort) {
@@ -469,19 +512,25 @@ class UserController extends BaseController
                     $userData[$key]=$strs[$num];
                     $fieldCol[$key]=$num+1;
                 }
-
+                unset($strs);
                 if($this->validFields($userData,$row,$fieldCol)){  
                     $errorInfo=array_merge($errorInfo,$this->validFields($userData,$row,$fieldCol));
                     continue;
                 }
                 
+                for($i=1;$i<=5;$i++){
+                    if (isset($userData['dateField'.$i])&&$userData['dateField'.$i]!=""){
+                    $userData['dateField'.$i]=$this->excelTime($userData['dateField'.$i]);
+                     }
+                }   
+
                 if(!$this->getUserService()->isNicknameAvaliable($userData['nickname'])){ 
 
-                    if($chechkType=="ignore") {
+                    if($checkType=="ignore") {
                         $checkInfo[]="第".$row."行的用户已存在，已略过"; 
                         continue;
                     }
-                    if($chechkType=="update") {
+                    if($checkType=="update") {
                         $checkInfo[]="第".$row."行的用户已存在，将会更新";          
                     }
                     $userCount=$userCount+1; 
@@ -490,28 +539,32 @@ class UserController extends BaseController
                 }
                 if(!$this->getUserService()->isEmailAvaliable($userData['email'])){          
 
-                    if($chechkType=="ignore") {
+                    if($checkType=="ignore") {
                         $checkInfo[]="第".$row."行的用户已存在，已略过";
                         continue;
                     };
-                    if($chechkType=="update") {
+                    if($checkType=="update") {
                         $checkInfo[]="第".$row."行的用户已存在，将会更新";
                     }  
-                   $userCount=$userCount+1; 
+                    $userCount=$userCount+1; 
                     $allUserData[]= $userData;     
                     continue;
                 }
 
-                $userCount=$userCount+1;    
-                $allUserData[]= $userData;
-                //do sql  insert   $userData
+                $userCount=$userCount+1; 
 
+                $allUserData[]= $userData;
+                unset($userData);
             }
+
+            $allUserData=serialize($allUserData);
 
             return $this->render('TopxiaAdminBundle:User:userinfo.excel.step2.html.twig', array(
                 'userCount'=>$userCount,
                 'errorInfo'=>$errorInfo,
                 'checkInfo'=>$checkInfo,
+                'allUserData'=>$allUserData,
+                'checkType'=>$checkType,
             ));
 
         }
@@ -536,28 +589,28 @@ class UserController extends BaseController
             $errorInfo[]="第 ".$row."行".$fieldCol["password"]." 列 的数据存在问题，请检查。";
         }
 
-        if (isset($userData['truename'])&& !SimpleValidator::truename($userData['truename'])) {
+        if (isset($userData['truename'])&&$userData['truename']!=""&& !SimpleValidator::truename($userData['truename'])) {
             $errorInfo[]="第 ".$row."行".$fieldCol["truename"]." 列 的数据存在问题，请检查。";
         }
 
-        if (isset($userData['idcard']) && !SimpleValidator::idcard($userData['idcard'])) {
+        if (isset($userData['idcard']) &&$userData['idcard']!=""&& !SimpleValidator::idcard($userData['idcard'])) {
             $errorInfo[]="第 ".$row."行".$fieldCol["idcard"]." 列 的数据存在问题，请检查。";
         }
 
-        if (isset($userData['mobile'])&& !SimpleValidator::mobile($userData['mobile'])) {
+        if (isset($userData['mobile'])&&$userData['mobile']!=""&& !SimpleValidator::mobile($userData['mobile'])) {
             $errorInfo[]="第 ".$row."行".$fieldCol["mobile"]." 列 的数据存在问题，请检查。";
         }
-        if (isset($userData['gender'])&& !in_array($userData['gender'], array("男","女"))){
+        if (isset($userData['gender'])&&$userData['gender']!=""&& !in_array($userData['gender'], array("男","女"))){
             $errorInfo[]="第 ".$row."行".$fieldCol["gender"]." 列 的数据存在问题，请检查。";
         }
         for($i=1;$i<=5;$i++){
-            if (isset($userData['intField'.$i])&& !SimpleValidator::integer($userData['intField'.$i])){
+            if (isset($userData['intField'.$i])&&$userData['intField'.$i]!=""&& !SimpleValidator::integer($userData['intField'.$i])){
             $errorInfo[]="第 ".$row."行".$fieldCol["intField".$i]." 列 的数据存在问题，请检查(必须为整数,最大到9位整数)。";
              }
-            if (isset($userData['floatField'.$i])&& !SimpleValidator::float($userData['floatField'.$i])){
+            if (isset($userData['floatField'.$i])&&$userData['floatField'.$i]!=""&& !SimpleValidator::float($userData['floatField'.$i])){
             $errorInfo[]="第 ".$row."行".$fieldCol["floatField".$i]." 列 的数据存在问题，请检查(只保留到两位小数)。";
              }
-            if (isset($userData['dateField'.$i])&& !SimpleValidator::date($this->excelTime($userData['dateField'.$i]))){
+            if (isset($userData['dateField'.$i])&&$userData['dateField'.$i]!=""&& !SimpleValidator::date($this->excelTime($userData['dateField'.$i]))){
             $errorInfo[]="第 ".$row."行".$fieldCol["dateField".$i]." 列 的数据存在问题，请检查(格式如XXXX-MM-DD)。";
              }
         }
@@ -567,7 +620,8 @@ class UserController extends BaseController
     private function checkRepeatData($row,$fieldSort,$highestRow,$objWorksheet)
     {
         $errorInfo=array();
-        $strs=array();
+        $emailData=array();
+        $nicknameData=array();
 
         foreach ($fieldSort as $key => $value) {
             if($value["fieldName"]=="nickname"){
@@ -580,10 +634,21 @@ class UserController extends BaseController
 
         for ($row ;$row <= $highestRow;$row++) {
 
-            $strs[] =$objWorksheet->getCellByColumnAndRow($emailCol, $row)->getValue();         
+            $emailColData =$objWorksheet->getCellByColumnAndRow($emailCol, $row)->getValue(); 
+
+            $emailData[]=$emailColData."";         
         }
 
-        $errorInfo=$this->arrayRepeat($strs);
+        $errorInfo=$this->arrayRepeat($emailData);
+
+        for ($row=3 ;$row <= $highestRow;$row++) {
+
+            $nickNameColData=$objWorksheet->getCellByColumnAndRow($nickNameCol, $row)->getValue();      
+
+            $nicknameData[]=$nickNameColData.""; 
+        }
+
+        $errorInfo.=$this->arrayRepeat($nicknameData);
 
         return $errorInfo;
     }
