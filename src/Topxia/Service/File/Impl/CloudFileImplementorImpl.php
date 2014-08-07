@@ -366,7 +366,7 @@ class HLSEncryptedVideoConvertor extends HLSVideoConvertor
         $file = parent::saveConvertResult($file, $result);
 
         $moves = array(
-            array("public:{$file['key']}", "private:{$file['key']}")
+            array("public:{$file['hashId']}", "private:{$file['hashId']}")
         );
         $result = $this->client->moveFiles($moves);
 
