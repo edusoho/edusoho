@@ -7,6 +7,10 @@ use Topxia\MobileBundle\Service\SchoolService;
 
 class SchoolServiceImpl extends BaseService implements SchoolService {
 
+    public function getSchoolBanner()
+    {
+        return $this->getSchoolBannerFromDb();
+    }
 
     public function getSchoolSiteByQrCode()
     {
@@ -49,6 +53,28 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         );
 
         return $result;
+    }
+
+    private function getSchoolBannerFromDb()
+    {
+        $banner = array(
+            array(
+                "url"=>"",
+                "action"=>"none",
+                "params"=>array()
+                ),
+            array(
+                "url"=>"",
+                "action"=>"none",
+                "params"=>array()
+                ),
+            array(
+                "url"=>"",
+                "action"=>"none",
+                "params"=>array()
+                )
+        );
+        return $banner;
     }
 
     private function getSiteInfo($request) {

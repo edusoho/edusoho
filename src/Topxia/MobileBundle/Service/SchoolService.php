@@ -5,4 +5,5 @@ interface SchoolService
 {
 	public function getSchoolSite();
 	public function getSchoolSiteByQrCode();
+	public function getSchoolBanner();
 }

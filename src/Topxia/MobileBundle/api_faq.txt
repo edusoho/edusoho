@@ -1,2 +1,2 @@
-School/getSchoolSite
-School/getSchoolSiteByQrCode
+1获取网校信息	School/getSchoolSite
+2 根据二维码获取网校信息	School/getSchoolSiteByQrCode
