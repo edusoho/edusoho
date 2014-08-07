@@ -7,6 +7,22 @@ use Topxia\MobileBundle\Service\SchoolService;
 
 class SchoolServiceImpl extends BaseService implements SchoolService {
 
+    public function getRecommendCourses()
+    {
+        $sort = "latest";
+        $courses = $this->controller->getCourseService()->searchCourses(array(), $sort, 0,  2);
+        return $courses;
+    }
+
+    public function getSchoolAnnouncement()
+    {
+        return array(
+            "info"=>"这是网校简介",
+            "action"=>"none",
+            "params"=>array()
+            );
+    }
+
     public function getSchoolBanner()
     {
         return $this->getSchoolBannerFromDb();
@@ -53,6 +69,11 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         );
 
         return $result;
+    }
+
+    private function getSchoolAnnouncementFromDb()
+    {
+        $result = array();
     }
 
     private function getSchoolBannerFromDb()
