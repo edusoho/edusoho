@@ -14,7 +14,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         $result = array(
             "start"=>"0",
             "limit"=>"2",
-            "data"=>$courses);
+            "data"=>$this->controller->filterCourses($courses));
         return $result;
     }
 

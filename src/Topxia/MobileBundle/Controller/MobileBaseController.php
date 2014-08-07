@@ -129,6 +129,48 @@ class MobileBaseController extends BaseController
         }, $reviews);
     }
 
+    public function filterCourses($courses)
+    {
+        if (empty($courses)) {
+            return array();
+        }
+
+        $teacherIds = array();
+        foreach ($courses as $course) {
+            $teacherIds = array_merge($teacherIds, $course['teacherIds']);
+        }
+        $teachers = $this->getUserService()->findUsersByIds($teacherIds);
+        $teachers = $this->simplifyUsers($teachers);
+
+        $self = $this;
+        $container = $this->container;
+        return array_map(function($course) use ($self, $container, $teachers) {
+            $course['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
+            $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['middlePicture'], 'course-large.png', true);
+            $course['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['largePicture'], 'course-large.png', true);
+            $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
+
+            $course['teachers'] = array();
+            foreach ($course['teacherIds'] as $teacherId) {
+                $course['teachers'][] = $teachers[$teacherId];
+            }
+            unset($course['teacherIds']);
+
+            return $course;
+        }, $courses);
+    }
+
+    public function convertAbsoluteUrl($request, $html)
+    {
+        $baseUrl = $request->getSchemeAndHttpHost();
+        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) use ($baseUrl) {
+            return "src=\"{$baseUrl}/{$matches[1]}\"";
+        }, $html);
+
+        return $html;
+
+    }
+
     /**
      * @todo 要移走，放这里不合适
      */
