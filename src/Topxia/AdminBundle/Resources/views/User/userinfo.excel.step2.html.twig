@@ -28,7 +28,7 @@
                 <input type="hidden" value="{{allUserData}}" name="data">
                  <input type="hidden" value="{{checkType}}" name="checkType">
                   <div class="col-md-offset-2">校验成功！一共包含 <b>{{userCount}}</b>个用户信息</div><br>
-                  <div class="col-md-offset-2"><button type="submit" class="btn btn-primary">确定导入</button> <a type="button" class="btn btn-primary" href="{{ url('admin_user_excel_import') }}">返回</a></div> 
+                  <div class="col-md-offset-2"><button type="submit" class="btn btn-primary" id="start-import-btn" >确定导入</button> <a type="button" class="btn btn-primary" href="{{ url('admin_user_excel_import') }}">返回</a></div> 
               {% endif %}      
              
              
