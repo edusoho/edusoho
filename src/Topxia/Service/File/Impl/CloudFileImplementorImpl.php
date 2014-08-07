@@ -306,6 +306,7 @@ class HLSVideoConvertor
 
     public function __construct($client, $config)
     {
+        $this->client = $client;
         $this->config = $config[self::NAME];
     }
 
