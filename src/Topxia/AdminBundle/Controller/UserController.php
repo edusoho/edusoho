@@ -492,7 +492,7 @@ class UserController extends BaseController
                 ));
 
             }
-                //start import
+
             for ($row = 3;$row <= $highestRow;$row++) 
             {
                 $strs=array();

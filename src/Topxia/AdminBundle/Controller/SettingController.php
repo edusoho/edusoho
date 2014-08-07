@@ -14,6 +14,7 @@ use Topxia\Service\Util\CloudClientFactory;
 
 class SettingController extends BaseController
 {
+
     public function siteAction(Request $request)
     {
         $site = $this->getSettingService()->get('site', array());
@@ -878,5 +879,6 @@ class SettingController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }
+
 
 }
