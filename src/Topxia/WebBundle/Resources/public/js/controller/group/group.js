@@ -54,15 +54,14 @@
               
                 $('#post-thread-btn').button('submiting').addClass('disabled');
 
-                $.post($("form").attr('action'),$("form").serialize(), function(url) {
-                    if(url){
+                $.post($("#post-thread-form").attr('action'),$("#post-thread-form").serialize(), function(url) {
+                    if(url){ 
                         href=window.location.href;
                         var olderHref=checkUrl(href);
                         if(checkUrl(url)==olderHref){
                             window.location.reload();
                         }else{
-                            console.log(url)
-                            //window.location.href=url;
+                            window.location.href=url;
                         }
                     }
                     else{
