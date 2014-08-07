@@ -61,7 +61,8 @@
                         if(checkUrl(url)==olderHref){
                             window.location.reload();
                         }else{
-                            window.location.href=url;
+                            console.log(url)
+                            //window.location.href=url;
                         }
                     }
                     else{
