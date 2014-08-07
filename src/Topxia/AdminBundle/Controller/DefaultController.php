@@ -173,9 +173,14 @@ class DefaultController extends BaseController
 
     public function onlineCountAction(Request $request)
     {
-        $retentionTime = 20*60;
-        $onlineNum = $this->getStatisticsService()->getOnlineCount($retentionTime);
-        var_dump($onlineNum);exit();
+        $onlineCount =  $this->getStatisticsService()->getOnlineCount(10*60);
+        return $this->createJsonResponse(array('onlineCount' => $onlineCount, 'message' => 'ok'));
+    }
+
+    public function loginCountAction(Request $request)
+    {
+        $loginCount = $this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
+        return $this->createJsonResponse(array('loginCount' => $loginCount, 'message' => 'ok'));
     }
 
     public function unsolvedQuestionsBlockAction(Request $request)
