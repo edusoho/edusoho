@@ -5,6 +5,7 @@
         <a title="隐藏" class="close_btn"><span>关闭</span></a></div>
       <div class="side_center">
         <div class="qqserver">
+           {%  if contact.qq1 is not empty or contact.qq2 is not empty or contact.qq3 is not empty %}
            <div class="online_bar expand" id="onlineSort1">
               <h2><a id="1">QQ联系</a></h2>
               <div class="online_content overz" id="onlineType1">
@@ -27,7 +28,9 @@
                 {% endif %}
               </div>
           </div>
-          
+           {% endif %}
+
+            {% if contact.qqgroup1 is not empty or  contact.qqgroup2 is not empty or  contact.qqgroup3 is not empty%}
             <div class="online_bar mycollapse" id="onlineSort2">
               <h2><a  id="2">QQ群联系</a></h2>
               <div class="online_content overz" id="onlineType2" style="display:none">  
@@ -53,7 +56,9 @@
             {% endif %}
           </div>
         </div>
+        {% endif %}
 
+        {% if contact.hotline1 is not empty or contact.hotline2 is not empty  or contact.hotline3 is not empty %}
           <div class="online_bar mycollapse" id="onlineSort3">
               <h2><a id="3">热线电话</a></h2>
               <div class="online_content overz" id="onlineType3" style="display:none">  
@@ -70,29 +75,31 @@
             {% endif %}
           </div>
         </div>
+          {% endif %}
 
+          {% if contact.webchat is not empty %}
         <div class="online_bar mycollapse" id="onlineSort4">
               <h2><a id="4">微信</a></h2>
               <div class="online_content overz" id="onlineType4" style="display:none">  
-            {% if contact.webchat is not empty %}
-                <strong>微信：<a href="#">{{contact.webchat}}</a></strong>
+           
+                <strong>微信：<a href="#" class="hovera">{{contact.webchat}}</a></strong>
                 <div class="displayimg">
                   <img  boarder="0" src="{{contact.webchatURI}}" alt="微信二维码" title="微信二维码">
                 </div>
                 
-            {% endif %}
           </div>
         </div>
+        {% endif %}
 
+          {% if contact.email is not empty %}
           <div class="online_bar mycollapse" id="onlineSort5">
               <h2><a id="5">电子邮件</a></h2>
               <div class="online_content overz" id="onlineType5" style="display:none">  
-            {% if contact.email is not empty %}
                 <strong>邮件地址：{{contact.email}}</strong>
-            {% endif %}
+          
           </div>
         </div>
-       
+         {% endif %}
          
         </div>
       </div>
