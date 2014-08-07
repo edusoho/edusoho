@@ -513,11 +513,18 @@ class UserController extends BaseController
                     $fieldCol[$key]=$num+1;
                 }
                 unset($strs);
+
+                $emptyData=array_count_values($userData);
+                if(isset($emptyData[""])&&count($userData)==$emptyData[""]) {
+                    $checkInfo[]="第".$row."行为空行，已跳过";
+                    continue;
+                }
+
                 if($this->validFields($userData,$row,$fieldCol)){  
                     $errorInfo=array_merge($errorInfo,$this->validFields($userData,$row,$fieldCol));
                     continue;
                 }
-                
+
                 for($i=1;$i<=5;$i++){
                     if (isset($userData['dateField'.$i])&&$userData['dateField'.$i]!=""){
                     $userData['dateField'.$i]=$this->excelTime($userData['dateField'.$i]);
@@ -635,7 +642,7 @@ class UserController extends BaseController
         for ($row ;$row <= $highestRow;$row++) {
 
             $emailColData =$objWorksheet->getCellByColumnAndRow($emailCol, $row)->getValue(); 
-
+            if($emailColData.""=="") continue;
             $emailData[]=$emailColData."";         
         }
 
@@ -644,7 +651,7 @@ class UserController extends BaseController
         for ($row=3 ;$row <= $highestRow;$row++) {
 
             $nickNameColData=$objWorksheet->getCellByColumnAndRow($nickNameCol, $row)->getValue();      
-
+            if($nickNameColData.""=="") continue;
             $nicknameData[]=$nickNameColData.""; 
         }
 
