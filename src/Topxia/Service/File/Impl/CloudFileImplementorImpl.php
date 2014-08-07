@@ -171,6 +171,12 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 if (empty($file['metas2'][$key]) or empty($file['metas2'][$key]['key'])) {
                     continue ;
                 }
+
+                // 防错
+                if (strlen($file['metas2'][$key]['key']) < 5) {
+                    continue;
+                }
+
                 $keyPrefixs[] = $file['metas2'][$key]['key'];
             }
         }
