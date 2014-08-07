@@ -114,6 +114,7 @@
       </div>
     {% endif %}
     {% block content %}{% endblock %}
+    
   </div><!-- /container -->
 
   <div class="site-footer container clearfix">
@@ -129,6 +130,7 @@
     </div>
   </div>
 
+  {% block contact %}{% endblock %}
   {% block bottom %}{% endblock %}
 
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>

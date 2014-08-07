@@ -1,0 +1,163 @@
+{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+
+{% block title %}QQ客服设置 - {{ parent() }}{% endblock %}
+
+{% set submenu = 'contact_setting' %}
+
+{% block maincontent %}
+
+<div class="page-header"><h1>QQ客服设置</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" id="contact-setting-form" novalidate>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label >QQ客服</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('enabled', {1:'开启', 0:'关闭'}, contact.enabled) }}
+    </div>
+  </div>
+
+<div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="title">区域标题</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="title" name="title" class="form-control" value="{{contact.title}}">
+    </div>
+  </div>
+  <p></p>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="worktime">工作时间</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="worktime" name="worktime" class="form-control" value="{{contact.worktime}}">
+    </div>
+  </div>
+  <p></p>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="qq1">QQ号1</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="qq1" name="qq1" class="form-control" value="{{contact.qq1}}">
+    </div>
+  </div>
+  <p></p>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="qq2">QQ号2</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="qq2" name="qq2" class="form-control" value="{{contact.qq2}}">
+    </div>
+  </div>
+ <p></p>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="qq3">QQ号3</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="qq3" name="qq3" class="form-control" value="{{contact.qq3}}">
+    </div>
+  </div>
+   <p></p>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="qqgroup1">qq群1</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="qqgroup1" name="qqgroup1" class="form-control" value="{{contact.qqgroup1}}">
+    </div>
+  </div>
+   <p></p>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="qqgroup2">qq群2</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="qqgroup2" name="qqgroup2" class="form-control" value="{{contact.qqgroup2}}">
+    </div>
+  </div>
+   <p></p>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="qqgroup3">qq群3</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="qqgroup3" name="qqgroup3" class="form-control" value="{{contact.qqgroup3}}">
+    </div>
+  </div>
+ <p></p>
+
+   <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="hotline1">热线电话1</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="hotline1" name="hotline1" class="form-control" value="{{contact.hotline1}}">
+    </div>
+  </div>
+ <p></p>
+
+   <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="hotline2">热线电话2</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="hotline2" name="hotline2" class="form-control" value="{{contact.hotline2}}">
+    </div>
+  </div>
+ <p></p>
+
+   <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="hotline3">热线电话3</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="hotline3" name="hotline3" class="form-control" value="{{contact.hotline3}}">
+    </div>
+  </div>
+ <p></p>
+
+   <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="webchat">微信公众号</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="webchat" name="webchat" class="form-control" value="{{contact.webchat}}">
+    </div>
+  </div>
+ <p></p>
+
+    <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="email">Email</label>
+    </div>
+    <div class="controls col-md-8">
+      <input type="text" id="email" name="email" class="form-control" value="{{contact.email}}">
+    </div>
+  </div>
+ <p></p>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}
