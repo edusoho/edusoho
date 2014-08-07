@@ -11,7 +11,11 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     {
         $sort = "latest";
         $courses = $this->controller->getCourseService()->searchCourses(array(), $sort, 0,  2);
-        return $courses;
+        $result = array(
+            "start"=>"0",
+            "limit"=>"2",
+            "data"=>$courses);
+        return $result;
     }
 
     public function getSchoolAnnouncement()
