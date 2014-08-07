@@ -54,7 +54,30 @@
               
                 $('#post-thread-btn').button('submiting').addClass('disabled');
 
-                $.post($("#post-thread-form").attr('action'),$("#post-thread-form").serialize(), function(url) {
+                $.ajax({
+                url : $("#post-thread-form").attr('action'),
+                data:$("#post-thread-form").serialize(),
+                cache : false, 
+                async : false,
+                type : "POST",
+                dataType : 'text',
+                success : function (url){
+                    if(url){ 
+                        href=window.location.href;
+                        var olderHref=checkUrl(href);
+                        if(checkUrl(url)==olderHref){
+                            window.location.reload();
+                        }else{
+                            window.location.href=url;
+                        }
+                    }
+                    else{
+                            window.location.reload();
+                    }                        
+                }
+                });
+
+/*                $.post($("#post-thread-form").attr('action'),$("#post-thread-form").serialize(), function(url) {
                     if(url){ 
                         href=window.location.href;
                         var olderHref=checkUrl(href);
@@ -69,7 +92,7 @@
                     }                              
                 }).error(function(){
                   console.log(3);
-                });
+                });*/
                
             }
         });
