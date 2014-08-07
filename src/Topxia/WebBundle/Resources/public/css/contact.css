@@ -125,3 +125,78 @@
     border-bottom: 1px solid #edf2e5;
 }
 
+
+.online_bar h2 {
+    background: url(../img/contact/online_bg.png) repeat-x 0 -156px;
+    height: 29px;
+    line-height: 27px;
+    font-size: 12px;
+    color: #666;
+    text-align: left;
+    _background: url(../img/contact/online_bg_ie6.png) repeat-x 0 -156px;
+}
+.online_bar h2 a {
+    display: block;
+    padding-left: 14px;
+    margin-left: 6px;
+    cursor: pointer;
+}
+
+.expand h2 a {
+    background: url(../img/contact/online_bg.png) no-repeat -36px -69px;
+    _background: url(../img/contact/online_bg_ie6.png) no-repeat -36px -69px;
+}
+
+.collapse h2 a {
+    background: url(../img/contact/online_bg.png) no-repeat -36px -96px;
+    _background: url(../img/contact/online_bg_ie6.png) no-repeat -36px -96px;
+}
+
+.expand h2 a:hover,.collapse h2 a:hover {
+    text-decoration: none;
+    color: #c81d04;
+}
+
+.overz {
+    overflow: auto;
+    zoom: 1;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.online_content {
+    background: url(../img/contact/online_bg.png) no-repeat -147px -185px;
+    padding-top: 11px;
+    _background: url(../img/contact/online_bg_ie6.png) no-repeat -147px -185px;
+}
+
+.online_content a.qq_icon {
+    background: url(../img/contact/online_bg.png) no-repeat -37px -130px;
+    width: 121px;
+    height: 25px;
+    display: block;
+    margin: 0 auto;
+    text-indent: 30px;
+    line-height: 23px;
+    cursor: pointer;
+    _background: url(../img/contact/online_bg_ie6.png) no-repeat -37px -130px;
+}
+.online_content a.qq_icon:hover {
+    background-position: -159px -130px;
+    color: #FFF;
+}
+
+.online_content {
+    text-align: center;
+    border-bottom: 1px solid #d0d0d0;
+    margin-bottom: 1px;
+}
+.online_content ul li {
+    height: 24px;
+    line-height: 24px;
+    margin-bottom: 4px;
+    font-family: '宋体';
+}
+.online_content ul li a:hover {
+    color: #c81d04;
+}
