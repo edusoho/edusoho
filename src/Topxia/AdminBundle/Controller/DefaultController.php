@@ -171,6 +171,10 @@ class DefaultController extends BaseController
         ));        
     }
 
+    public function onlineCountAction(Request $request)
+    {
+    }
+
     public function unsolvedQuestionsBlockAction(Request $request)
     {
         $questions = $this->getThreadService()->searchThreads(
