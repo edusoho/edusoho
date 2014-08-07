@@ -289,6 +289,13 @@ class EdusohoCloudClient implements CloudClient
         return $this->callRemoteApi('POST', 'FileDelete', $args);
     }
 
+    public function moveFiles(array $files)
+    {
+        $args = array();
+        $args['moves'] = $files;
+        return $this->callRemoteApiWithBase64('GET', 'FileMove', $args);
+    }
+
     public function makeToken($type, array $tokenArgs = array())
     {
         $args = array();

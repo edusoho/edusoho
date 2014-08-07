@@ -361,6 +361,20 @@ class HLSEncryptedVideoConvertor extends HLSVideoConvertor
         return $params;
     }
 
+    public function saveConvertResult($file, $result)
+    {
+        $file = parent::saveConvertResult($file, $result);
+
+        $moves = array(
+            array("public:{$file['key']}", "private:{$file['key']}")
+        );
+        $result = $this->client->moveFiles($moves);
+
+        $files['metas2']['protectSourceFile'] = empty($result['success_count']) ? 0 : $result['success_count'];
+
+        return $file;
+    }
+
     private function generateKey ($length = 0 )
     {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
