@@ -278,6 +278,9 @@ class EdusohoCloudClient implements CloudClient
 
     }
 
+    /**
+     * 即将废除
+     */
     public function deleteFiles(array $keys, array $prefixs = array())
     {
         $args = array();
@@ -289,11 +292,27 @@ class EdusohoCloudClient implements CloudClient
         return $this->callRemoteApi('POST', 'FileDelete', $args);
     }
 
+    public function deleteFilesByKeys($storageType, array $keys)
+    {
+        $args = array();
+        $args['storageType'] = $storageType;
+        $args['keys'] = $keys;
+        return $this->callRemoteApiWithBase64('POST', 'FilesDeleteByKeys', $args);
+    }
+
+    public function deleteFilesByPrefixs($storageType, array $prefixs)
+    {
+        $args = array();
+        $args['storageType'] = $storageType;
+        $args['prefixs'] = $prefixs;
+        return $this->callRemoteApiWithBase64('POST', 'FilesDeleteByPrefixs', $args);
+    }
+
     public function moveFiles(array $files)
     {
         $args = array();
         $args['moves'] = $files;
-        return $this->callRemoteApiWithBase64('GET', 'FileMove', $args);
+        return $this->callRemoteApiWithBase64('POST', 'FileMove', $args);
     }
 
     public function makeToken($type, array $tokenArgs = array())
