@@ -110,6 +110,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $deleteSubFile = true;
         }
 
+        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'ppt') {
+            $deleteSubFile = true;
+        }
+
         $this->getFileImplementorByFile($file)->deleteFile($file, $deleteSubFile);
 
         return $this->getUploadFileDao()->deleteFile($id);
