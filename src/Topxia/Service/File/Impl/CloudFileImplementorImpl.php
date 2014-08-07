@@ -167,7 +167,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $keyPrefixs = array();
 
         if ($deleteSubFile) {
-            foreach (array('sd', 'hd', 'shd') as $key) {
+            foreach (array('sd', 'hd', 'shd', 'pdf') as $key) {
                 if (empty($file['metas2'][$key]) or empty($file['metas2'][$key]['key'])) {
                     continue ;
                 }
