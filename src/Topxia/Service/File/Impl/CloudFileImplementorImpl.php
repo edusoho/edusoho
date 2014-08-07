@@ -370,7 +370,7 @@ class HLSEncryptedVideoConvertor extends HLSVideoConvertor
         );
         $result = $this->client->moveFiles($moves);
 
-        $files['metas2']['protectSourceFile'] = empty($result['success_count']) ? 0 : $result['success_count'];
+        $file['metas2']['protectSourceFile'] = empty($result['success_count']) ? 0 : $result['success_count'];
 
         return $file;
     }
