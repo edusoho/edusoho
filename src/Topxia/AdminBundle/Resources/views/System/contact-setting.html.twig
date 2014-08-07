@@ -4,6 +4,8 @@
 
 {% set submenu = 'contact_setting' %}
 
+{% set script_controller = 'setting/contact-setting' %}
+
 {% block maincontent %}
 
 <div class="page-header"><h1>QQ客服设置</h1></div>
@@ -139,6 +141,18 @@
     </div>
   </div>
  <p></p>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>微信二维码</label>
+      </div>
+      <div class="col-md-8 controls">
+        <div id="contact-container">{% if contact.webchatURI %}<img src="{{ asset(contact.webchatURI) }}">{% endif %}</div>
+        <button class="btn btn-default btn-sm" id="contact-upload" type="button" data-url="{{ path('admin_setting_contact_upload') }}">上传</button>
+        <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
+         <input type="hidden" name="webchatURI" value="{{ contact.webchatURI }}">
+      </div>
+    </div>
 
     <div class="row form-group">
     <div class="col-md-3 control-label">

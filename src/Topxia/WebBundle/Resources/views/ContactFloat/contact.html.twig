@@ -75,7 +75,11 @@
               <h2><a id="4">微信</a></h2>
               <div class="online_content overz" id="onlineType4" style="display:none">  
             {% if contact.webchat is not empty %}
-                <strong>微信：{{contact.webchat}}</strong>
+                <strong>微信：<a href="#">{{contact.webchat}}</a></strong>
+                <div class="displayimg">
+                  <img  boarder="0" src="{{contact.webchatURI}}" alt="微信二维码" title="微信二维码">
+                </div>
+                
             {% endif %}
           </div>
         </div>
