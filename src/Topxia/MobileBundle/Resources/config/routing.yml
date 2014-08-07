@@ -164,3 +164,4 @@ mapi_mobile_notify_version:
 mapi_mobile_api:
     pattern:  /{service}/{method}
     defaults: { _controller: TopxiaMobileBundle:MobileApi:index }
+    methods: [POST, GET]
