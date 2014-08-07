@@ -1,5 +1,5 @@
 {%  set contact = setting('contact')%}
-{% if contact.enabled == 1 %}
+{% if contact.enabled == 1  and contact is not empty  %}
 <div class="scrollsidebar side_green" id="hhService" >
   <div class="side_content" style="width: 167px;">
     <div class="side_list">
