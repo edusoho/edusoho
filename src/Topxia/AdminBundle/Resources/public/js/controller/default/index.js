@@ -32,6 +32,10 @@ define(function(require, exports, module) {
         $.post($('#operation-analysis-title').data('url'),function(html){
             $('#operation-analysis-table').html(html);
         });
+
+        // setInterval(function(){
+        //     console.log('haha')
+        // }, 5000);
     };
 
 });

@@ -173,6 +173,9 @@ class DefaultController extends BaseController
 
     public function onlineCountAction(Request $request)
     {
+        $retentionTime = 20*60;
+        $onlineNum = $this->getStatisticsService()->getOnlineCount($retentionTime);
+        var_dump($onlineNum);exit();
     }
 
     public function unsolvedQuestionsBlockAction(Request $request)
@@ -228,6 +231,11 @@ class DefaultController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getStatisticsService()
+    {
+        return $this->getServiceKernel()->createService('System.StatisticsService');
     }
 
     protected function getThreadService()
