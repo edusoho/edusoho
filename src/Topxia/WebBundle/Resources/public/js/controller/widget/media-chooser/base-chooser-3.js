@@ -28,7 +28,6 @@ define(function(require, exports, module) {
             var choosed = this.get('choosed');
             if (choosed) {
                 this.trigger('change', choosed);
-                this.trigger('fileinfo.fetched', {});
             }
 
         },
@@ -102,11 +101,6 @@ define(function(require, exports, module) {
 
             browser.on('select', function(file) {
                 self.trigger('change', self._convertFileToMedia(file));
-                if (file.storage == 'cloud' && file.type == 'video') {
-                    $.get(browser.element.data('fileinfoUrl'), {key:file.hashId, type:'video'}, function(info){
-                        self.trigger('fileinfo.fetched', info);
-                    }, 'json');
-                }
             });
         },
 
@@ -117,6 +111,7 @@ define(function(require, exports, module) {
             media.type = file.type;
             media.source = 'self';
             media.name = file.filename;
+            media.length = file.length;
             return media;
         },
 
@@ -189,17 +184,10 @@ define(function(require, exports, module) {
                             var media = self._convertFileToMedia(response);
                             self.trigger('change',  media);
                             Notify.success('文件上传成功！');
-                            if ($btn.data('fileinfoUrl')) {
-                                self.trigger('fileinfo.fetching');
-                                $.get($btn.data('fileinfoUrl'), {key:response.hashId}, function(info){
-                                    self.trigger('fileinfo.fetched', info);
-                                }, 'json');
-                            }
                         }, 'json');
                     } else {
                         var media = self._convertFileToMedia(serverData);
                         self.trigger('change',  media);
-                        self.trigger('fileinfo.fetched', {});
                         Notify.success('文件上传成功！');
                     }
 

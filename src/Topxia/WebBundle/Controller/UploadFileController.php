@@ -81,33 +81,6 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($file);
     }
 
-    public function cloudFileinfoAction(Request $request)
-    {
-        $type = $request->query->get('type', '');
-        $key = $request->query->get('key', '');
-
-        if (empty($key)) {
-            return $this->createNotFoundException();
-        }
-
-        $factory = new CloudClientFactory();
-        $client = $factory->createClient();
-
-        if ($type == 'video') {
-            $info = $client->getVideoInfo($client->getBucket(), $key);
-        } else if ($type == 'audio') {
-            $info = $client->getAudioInfo($client->getBucket(), $key);
-        } else {
-            $info = array();
-        }
-
-        if (!empty($info['duration'])) {
-            $info['duration'] = StringToolkit::secondsToText($info['duration']);
-        }
-
-        return $this->createJsonResponse($info);
-    }
-
     public function cloudConvertCallback2Action(Request $request)
     {
         $result = $request->getContent();

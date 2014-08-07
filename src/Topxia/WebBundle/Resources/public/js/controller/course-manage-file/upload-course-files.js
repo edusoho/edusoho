@@ -62,11 +62,7 @@ define(function(require, exports, module) {
 					response = $.parseJSON(info.response);
 					if (divData.callback) {
 						$.post(divData.callback, response, function(response) {
-							if (divData.fileinfoUrl) {
-								$.get($div.data('fileinfoUrl'), {
-									key: response.hashId
-								}, function(info) {}, 'json');
-							}
+	
 						}, 'json');
 					}
 

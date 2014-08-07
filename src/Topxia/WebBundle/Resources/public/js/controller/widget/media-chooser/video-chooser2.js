@@ -92,7 +92,6 @@ define(function(require, exports, module) {
                     uri: video.files[0].url
                 };
                 self.trigger('change', media);
-                self.trigger('fileinfo.fetched', {});
                 $urlInput.val('');
             }, 'json').error(function(jqXHR, textStatus, errorThrown) {
                 Notify.danger('读取视频页面信息失败，请检查您的输入的页面地址后重试');
