@@ -79,6 +79,26 @@
     </div>
   </div>
 
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="cloud_bucket" >云视频转码类型</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <p>
+        <span class="form-control-static text-info">画质</span>
+        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality) }}
+      </p>
+
+      <p>
+        <span class="form-control-static text-info">音质</span>
+        {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '高品'}, storageSetting.video_audio_quality) }}
+      </p>
+
+    </div>
+  </div>
+
+
+
   <hr>
 
   <div class="row form-group">

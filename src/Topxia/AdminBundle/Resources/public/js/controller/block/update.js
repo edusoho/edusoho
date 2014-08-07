@@ -46,6 +46,7 @@ define(function(require, exports, module) {
         });
 
         $form.submit(function() {
+            $('#block-update-btn').button('submiting').addClass('disabled');
             $.post($form.attr('action'), $form.serialize(), function(response) {
                 if (response.status == 'ok') {
                     var $html = $(response.html);

@@ -12,16 +12,18 @@ interface UserDao
 
 	public function findUsersByIds(array $ids);
 
-    public function searchUsers($conditions, $orderBy, $start, $limit);
+	public function searchUsers($conditions, $orderBy, $start, $limit);
 
-    public function searchUserCount($conditions);
+	public function searchUserCount($conditions);
 
-    public function addUser($user);
+	public function addUser($user);
 
 	public function updateUser($id, $fields);
 
 	public function waveCounterById($id, $name, $number);
 
 	public function clearCounterById($id, $name);
+
+	public function analysisRegisterDataByTime($startTime,$endTime);
 
 }

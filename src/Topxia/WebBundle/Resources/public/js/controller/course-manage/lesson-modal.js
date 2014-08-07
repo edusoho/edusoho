@@ -3,9 +3,9 @@ define(function(require, exports, module) {
     var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    var VideoChooser = require('../widget/media-chooser/video-chooser');
-    var AudioChooser = require('../widget/media-chooser/audio-chooser');
-    var PPTChooser = require('../widget/media-chooser/ppt-chooser');
+    var VideoChooser = require('../widget/media-chooser/video-chooser2');
+    var AudioChooser = require('../widget/media-chooser/audio-chooser2');
+    var PPTChooser = require('../widget/media-chooser/ppt-chooser2');
     var Notify = require('common/bootstrap-notify');
 
     function createValidator ($form) {
@@ -18,9 +18,9 @@ define(function(require, exports, module) {
         Validator.addRule('timeLength', function(options) {
             return /^\d+:\d+$/.test(options.element.val())
         }, '时长格式不正确');
-
         validator = new Validator({
             element: $form,
+            failSilently: true,
             autoSubmit: false
         });
 
@@ -64,6 +64,12 @@ define(function(require, exports, module) {
             required: true
         });
 
+        validator.addItem({
+            element: '#lesson-give-credit-field',
+            required: true,
+            rule: 'integer'
+        });
+
         switch (type) {
             case 'video':
             case 'audio':
@@ -75,16 +81,16 @@ define(function(require, exports, module) {
                 });
 
                 validator.addItem({
-                    element: '#lesson-second-field',
+                    element: '#lesson-minute-field',
                     required: true,
                     rule: 'integer',
                     display: '时长'
                 });
 
                 validator.addItem({
-                    element: '#lesson-minute-field',
+                    element: '#lesson-second-field',
                     required: true,
-                    rule: 'integer',
+                    rule: 'second_range',
                     display: '时长'
                 });
 

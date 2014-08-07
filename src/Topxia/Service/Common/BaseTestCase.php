@@ -100,13 +100,14 @@ class BaseTestCase extends WebTestCase
     private  function createAppDatabase()
     {
         // 执行数据库的migrate脚本
-        // $application = new Application(static::$kernel);
-        // $application->add(new MigrationsMigrateDoctrineCommand());
-        // $command = $application->find('doctrine:migrations:migrate');
-        // $commandTester = new CommandTester($command);
-        // $commandTester->execute(
-        //     array('command' => $command->getName(), '--no-interaction' => true)
-        // );
+        $application = new Application(static::$kernel);
+        $application->add(new MigrationsMigrateDoctrineCommand());
+        $command = $application->find('doctrine:migrations:migrate');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(
+            array('command' => $command->getName()),
+            array('interactive' => false)
+        );
     }
 
     private function emptyAppDatabase()

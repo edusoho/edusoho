@@ -37,6 +37,11 @@ login_bind_new:
     defaults: { _controller: TopxiaWebBundle:LoginBind:new }
     methods: [POST]
 
+login_bind_newset:
+    pattern:  /login/bind/{type}/newset
+    defaults: { _controller: TopxiaWebBundle:LoginBind:newSet }
+    methods: [POST]
+
 login_bind_exist:
     pattern:  /login/bind/{type}/exist
     defaults: { _controller: TopxiaWebBundle:LoginBind:exist }
@@ -75,6 +80,10 @@ register_nickname_check:
     pattern:  /register/nickname/check
     defaults: { _controller: TopxiaWebBundle:Register:nicknameCheck }
 
+register_analysis:
+    pattern:  /register/analysis
+    defaults: { _controller: TopxiaWebBundle:Register:analysis }
+
 file_upload:
     pattern:  /file/upload
     defaults: { _controller: TopxiaWebBundle:File:upload }
@@ -104,6 +113,10 @@ uploadfile_cloud_fileinfo:
 uploadfile_cloud_convert_callback:
     pattern:  /uploadfile/cloud_convertcallback
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback }
+
+uploadfile_cloud_convert_callback2:
+    pattern:  /uploadfile/cloud_convertcallback2
+    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback2 }
 
 kindeditor_upload:
     pattern:  /kindeditor/upload

@@ -82,7 +82,6 @@ define(function(require, exports, module) {
                 if (!self.canBuild()) {
                     return ;
                 }
-
                 $('#testpaper-create-btn').button('submiting').addClass('disabled');
 
                 $form[0].submit();

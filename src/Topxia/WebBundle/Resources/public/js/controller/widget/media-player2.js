@@ -59,18 +59,19 @@ define(function(require, exports, module) {
             };
 
             if (this.get('src').indexOf('.m3u8') > 0 || this.get('src').indexOf('HLSQualitiyList') > 0) {
-                flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayerCN/1.0.2/HLSProviderOSMF.swf";
+                // flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayerCN/1.0.2/HLSProviderOSMF.swf";
+                flashvars.plugin_hls = app.httpHost + app.basePath + "/assets/libs/player/HLSProviderOSMF-1.0.2.swf";
             }
 
             if (this.element.data('watermark')) {
-                flashvars.plugin_watermake = 'http://cdn.staticfile.org/GrindPlayerCN/1.0.2/Watermake-1.0.2.swf';
+                flashvars.plugin_watermake = app.config.cloud.video_player_watermark_plugin;
                 flashvars.watermake_namespace = 'watermake';
                 flashvars.watermake_url = this.element.data('watermark');
             }
 
             if (this.element.data('fingerprint')) {
-                flashvars.plugin_fingerprint = 'http://cdn.staticfile.org/GrindPlayerCN/1.0.2/Fingerprint-1.0.1.swf';
-                flashvars.fingerprint_namespace = 'fingerprint',
+                flashvars.plugin_fingerprint = app.config.cloud.video_player_fingerprint_plugin;
+                flashvars.fingerprint_namespace = 'fingerprint';
                 flashvars.fingerprint_src = this.element.data('fingerprint');
             }
 
@@ -86,7 +87,7 @@ define(function(require, exports, module) {
             };
 
             swfobject.embedSWF(
-                "http://cdn.staticfile.org/GrindPlayerCN/1.0.2/GrindPlayer.swf",
+                app.config.cloud.video_player,
                 this.get('playerId'),
                 this.get('width'),  this.get('height') , "10.2", null, flashvars, params, attrs
             );

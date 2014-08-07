@@ -32,7 +32,11 @@
       </ul>
     </div>
     <div class="col-md-9">
-
+      {% if category.id != null and category.description != null %}
+        <div class="page">
+          {{category.description}}
+        </div>
+      {% endif %}
       <div class="category-filters">
         <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'latest'}) }}" {% if sort == 'latest' %}class="selected"{% endif %}>最新</a>        
         <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'popular'}) }}" {% if sort == 'popular' %}class="selected"{% endif %}>热门</a>

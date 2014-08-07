@@ -24,6 +24,27 @@
 
         </div>
 
+      {% if setting('login_bind.' ~ client.clientInfo.type ~ '_set_fill_account') == 1 %}
+
+       <form id="set-bind-exist-form" class="form-vertical" method="post" >
+          <div class="form-group">
+            <label class="control-label" for="set-bind-nickname-field">昵称</label>
+            <div class="controls">
+              <input id="set-bind-nickname-field" class="form-control" type="text" name="nickname" value="{{ oauthUser.name }}" data-url="{{ path('register_nickname_check') }}" />
+              <p class="help-block">推荐用现在这个，也可以另外取一个。最长14个英文或者7个汉字</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label" for="set-bind-email-field">邮箱地址</label>
+            <div class="controls">
+              <input id="set-bind-email-field" class="form-control" type="text" name="email" data-url="{{path('register_email_check')}}">
+               {# <p class="help-block">如空缺，补充一个</p> #}
+            </div>
+          </div>
+
+          {% endif %}
+
           {% if setting('auth.user_terms') == 'opened' %}
               <label id="user_terms">
                 <input type="checkbox"  checked="checked">我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
@@ -32,9 +53,19 @@
 
         <div class="tac pvl">
           <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
-          <button id="bind-new-btn" class="btn btn-primary btn-lg" data-url="{{ path('login_bind_new', {type:client.clientInfo.type}) }}" data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">直接登录</button>
-        </div>
 
+       {% if setting('login_bind.' ~ client.clientInfo.type ~ '_set_fill_account') == 1 %}
+
+            <button id="set-bind-new-btn" class="btn btn-primary btn-lg" data-url="{{ path('login_bind_newset', {type:client.clientInfo.type}) }}" data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">确认登录</button>
+        
+        </form>
+
+        {% else %}
+
+            <button id="bind-new-btn" class="btn btn-primary btn-lg" data-url="{{ path('login_bind_new', {type:client.clientInfo.type}) }}" data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">直接登录</button>
+
+        {% endif %}
+        </div>
         <hr>
 
         <p class="text-primary">

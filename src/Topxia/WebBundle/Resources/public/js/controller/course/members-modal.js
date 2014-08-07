@@ -15,10 +15,10 @@ define(function(require, exports, module) {
             });
         });
 
-        $("#course-student-list").on('click', '#send-message', function() {
+        $("#course-student-list").on('click', '.send-message-btn', function() {
             var $this = $(this);
             
-            $.post($this.data('url'), function(res){
+            $.get($this.data('url'), function(res){
                 $('#modal').html(res);
             });
         });

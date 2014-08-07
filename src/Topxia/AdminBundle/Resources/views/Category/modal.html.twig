@@ -25,7 +25,15 @@
 			<label class="col-md-2 control-label" for="category-code-field">编码</label>
 			<div class="col-md-8 controls">
 				<input class="form-control" id="category-code-field" type="text" name="code" value="{{ category.code }}" data-url="{{ path('admin_category_checkcode', {exclude:category.code}) }}" tabindex="3">
-				<div class="help-block">选填，建议使用分类名称的英文单词或缩写作为编码。</div>
+				<div class="help-block">必填，建议使用分类名称的英文单词或缩写作为编码。</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="category-description-field">分类描述</label>
+			<div class="col-md-8 controls">
+				<textarea class="form-control" id="category-description-field" style="height:100px;" name="description">{{category.description}}</textarea>
+				<div class="help-block">非必填</div>
 			</div>
 		</div>
 

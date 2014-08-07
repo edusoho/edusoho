@@ -107,6 +107,18 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
     }
 
+    public function waveCourse($id,$field,$diff)
+    {
+        $fields = array('hitNum');
+
+        if (!in_array($field, $fields)) {
+            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
+        }
+        $sql = "UPDATE {$this->getTablename()} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+        
+        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
 
@@ -152,7 +164,9 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan')
             ->andWhere('rating > :ratingGreaterThan')
-            ->andWhere('vipLevelId >= :vipLevelIdGreaterThan');
+            ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime <= :endTime');
 
 
         if (isset($conditions['categoryIds'])) {
@@ -183,6 +197,13 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         return $builder;
+    }
+
+    public function analysisCourseDataByTime($startTime,$endTime)
+    {
+             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+
+            return $this->getConnection()->fetchAll($sql);
     }
 
     private function getTablename()

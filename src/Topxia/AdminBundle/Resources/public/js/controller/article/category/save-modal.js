@@ -16,6 +16,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return ;
                 }
+                $('#category-save-btn').button('submiting').addClass('disabled');
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
                     $table.find('tbody').replaceWith(html);

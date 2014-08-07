@@ -1,21 +1,33 @@
 define(function(require, exports, module) {
 
 	var Notify = require('common/bootstrap-notify');
+	var Widget = require('widget');
 	require('jquery.plupload-queue-css');
 	require('jquery.plupload-queue');
 	require('plupload');
 	// 这里require是有顺序要求的
 	require('jquery.plupload-queue-zh-cn');
 
+	var VideoQualitySwitcher = require('../widget/video-quality-switcher');
+
 	exports.run = function() {
 		var $container = $("#file-uploader-container"),
 			targetType = $container.data('targetType'),
-			uploadMode = $container.data('uploadMode')
+			uploadMode = $container.data('uploadMode');
+
+
+		var switcher = null;
+		if ($('.quality-switcher').length > 0) {
+			var switcher = new VideoQualitySwitcher({
+				element: '.quality-switcher'
+			});
+		}
+
 
 		var extensions = '';
 		if (targetType == 'courselesson') {
 			if (uploadMode == 'cloud') {
-				extensions = 'mp3,mp4,avi,flv,wmv,mov';
+				extensions = 'mp3,mp4,avi,flv,wmv,mov,ppt,pptx';
 			} else {
 				extensions = 'mp3,mp4';
 			}
@@ -79,9 +91,15 @@ define(function(require, exports, module) {
 					var data = {};
 					if (targetType == 'courselesson' && uploadMode == 'cloud') {
 						if (file.type == 'audio/mpeg') {
-							data.convertor = 'audio';
+							data.convertor = '';
+						} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
+							data.convertor = 'ppt';
 						} else {
-							data.convertor = 'video';
+							if (switcher) {
+								data.videoQuality = switcher.get('videoQuality');
+								data.audioQuality = switcher.get('audioQuality');
+								data.convertor = 'HLSVideo';
+							}
 						}
 					}
 
@@ -89,7 +107,7 @@ define(function(require, exports, module) {
 						url: divData.paramsUrl,
 						async: false,
 						dataType: 'json',
-						data: data,
+						data: data,	
 						cache: false,
 						success: function(response, status, jqXHR) {
 							up.settings.url = response.url;
@@ -106,6 +124,7 @@ define(function(require, exports, module) {
 			}
 
 		});
+
 
 		$('#modal').on('hide.bs.modal', function(e) {
 			window.location.reload();

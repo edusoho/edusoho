@@ -82,6 +82,16 @@
     </div>
   </div>
 
+  {% if 'lesson_credit' in features %}
+  <div class="form-group for-text-type for-video-type for-audio-type for-ppt-type">
+    <div class="col-md-2 control-label"><label for="lesson-give-credit-field">学分</label></div>
+    <div class="col-md-9 controls">
+      <input class="form-control width-input width-input-small" id="lesson-give-credit-field" type="text" name="giveCredit" value="{{ lesson.giveCredit|default(0) }}"> 分
+      <div class="help-block">学完此课时，可获得的学分</div>
+    </div>
+  </div>
+  {% endif %}
+
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
 </form>

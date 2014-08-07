@@ -29,15 +29,13 @@
 	    <th width="10%">新开窗口</th>
 	    <th width="10%">显示顺序</th>
 	    <th width="10%">状态</th>  
-	    <th width="20%">操作</th>
+	    <th width="30%">操作</th>
 	  </tr>
 	</thead>
     
  	{% include 'TopxiaAdminBundle:Navigation:tbody.html.twig' %}
 </table>
     
-   <div class="paginator">
-    {{ web_macro.paginator(paginator) }}
-   </div> 
+
 
 {% endblock %}

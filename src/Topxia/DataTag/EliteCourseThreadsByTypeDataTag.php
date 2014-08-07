@@ -33,11 +33,25 @@ class EliteCourseThreadsByTypeDataTag extends CourseBaseDataTag implements DataT
 
     	$threads = $this->getThreadService()->findEliteThreadsByType($type, $arguments['status'], 0, $arguments['count']);
 
-        foreach ($threads as $key => $thread) {
-            $course = $this->getCourseService()->getCourse($thread['courseId']);
-   
-            $threads[$key]['courseTitle'] = $course['title'];
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads,'courseId'));
 
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads,'userId'));
+
+        $latestPostUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads,'latestPostUserId'));
+
+        foreach ($threads as $key => $thread) {
+
+            if ($thread['courseId'] == $courses[$thread['courseId']]['id'] ) {
+                $threads[$key]['course'] = $courses[$thread['courseId']];
+            }
+
+            if ($thread['userId'] == $users[$thread['userId']]['id'] ) {
+                $threads[$key]['user'] = $users[$thread['userId']];
+            }
+
+            if ($thread['latestPostUserId'] == $latestPostUsers[$thread['latestPostUserId']]['id'] ) {
+                $threads[$key]['latestPostUser'] = $latestPostUsers[$thread['latestPostUserId']];
+            }
         }
 
         return $threads;
