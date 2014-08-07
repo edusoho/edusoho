@@ -39,6 +39,7 @@ class CourseFileManageController extends BaseController
 
         foreach ($files as $key => $file) {
             $files[$key]['metas2'] = json_decode($file['metas2']) ? : array();
+            $files[$key]['convertParams'] = json_decode($file['convertParams']) ? : array();
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
