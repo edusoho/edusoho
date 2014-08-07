@@ -4,6 +4,11 @@
     <li class="course-grid">
       <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
         <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb">
+          {% if course.status == 'draft' %}
+            <span class="label  label-warning course-status">未发布</span>
+          {% elseif course.status == 'closed' %}
+            <span class="label label-danger course-status">已关闭</span>
+          {% endif %} 
           {% if course.serializeMode=='serialize' %}
             <span class="label label-success series-mode-label">更新中</span>
           {% elseif course.serializeMode=='finished' %}

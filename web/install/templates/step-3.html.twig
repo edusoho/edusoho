@@ -35,6 +35,28 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <label for="website-user-name" class="col-sm-4 control-label">网站所有人姓名 </label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="website-user-name" name="web[name]" value="">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="website-user-mobile" class="col-sm-4 control-label">手机号码 </label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="website-user-mobile" name="web[mobile]" value="">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="website-user-qq" class="col-sm-4 control-label">QQ号码</label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="website-user-qq" name="web[qq]" value="">
+      </div>
+    </div>
+
+
     <div class="actions">
       <button type="submit" id="init-btn" class="btn btn-primary btn-lg">初始化系统</button>
     </div>
@@ -44,13 +66,19 @@
 
 {% block bottom_scripts %}
 <script>
-  seajs.use(['jquery', 'bootstrap.validator', 'common/validator-rules'], function($, Validator, Rules){
+  seajs.use(['jquery', 'bootstrap.validator', 'common/validator-rules','bootstrap'], function($, Validator, Rules){
     window.$ = $;
     Rules.inject(Validator);
     var $form = $("#init-form");
 
     var validator = new Validator({
-        element: $form
+        element: $form,
+        onFormValidated: function(error, results, $form){
+            if (error) {
+                return false;
+            }
+            $('#init-btn').button('submiting').addClass('disabled');
+        }
     });
 
     validator.addItem({
@@ -75,6 +103,24 @@
         required: true,
         rule: 'minlength{min:5} maxlength{max:20}'
     });
+
+    validator.addItem({
+        element: '#website-user-name',
+        required: true,
+        rule:'chinese minlength{min:2} maxlength{max:12}'
+    });
+
+    validator.addItem({
+        element: '#website-user-mobile',
+        required: true,
+        rule: 'mobile'
+    });
+
+    validator.addItem({
+        element: '#website-user-qq',
+        rule: 'qq'
+    });
+
 
   });
 </script>

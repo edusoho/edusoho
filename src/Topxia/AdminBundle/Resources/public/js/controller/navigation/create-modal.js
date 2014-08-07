@@ -16,11 +16,11 @@ define(function(require, exports, module) {
                 if (error) {
                     return ;
                 }
-                
+                $('#navigation-save-btn').button('submiting').addClass('disabled');
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
-                    $table.find('tbody').replaceWith(html);
                     Notify.success('保存导航成功！');
+                    window.location.reload();
                 });
 
             }
@@ -29,11 +29,6 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="name"]',
-            required: true
-        });
-
-        validator.addItem({
-            element: '[name="url"]',
             required: true
         });
 

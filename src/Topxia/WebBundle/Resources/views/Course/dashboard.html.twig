@@ -15,3 +15,9 @@
 	{% endif %}
 
 {% endblock %}
+
+{% block dashboard_relatedCoursesBlock %}
+      {% if setting('course.relatedCourses') == 1 %}
+        {{ render(controller('TopxiaWebBundle:Course:relatedCoursesBlock',{course:course})) }}
+      {% endif %}
+{% endblock %}

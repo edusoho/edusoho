@@ -98,7 +98,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND role = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND role = ? ORDER BY seq,createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($courseId, $role));
     }
 
@@ -183,6 +183,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
             ->from($this->table, 'course_member')
             ->andWhere('userId = :userId')
             ->andWhere('courseId = :courseId')
+            ->andWhere('isLearned = :isLearned')
             ->andWhere('noteNum > :noteNumGreaterThan')
             ->andWhere('role = :role')
             ->andWhere('createdTime >= :startTimeGreaterThan')

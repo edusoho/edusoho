@@ -57,6 +57,11 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $uploadFile;
     }
 
+    public function saveConvertResult($file, array $result = array())
+    {
+
+    }
+
     public function convertFile($file, $status, $result=null, $callback = null)
     {
     	throw $this->createServiceException('本地文件暂不支持转换');
@@ -66,6 +71,23 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     {
     	$filename = $this->getFileFullPath($file);
     	@unlink($filename);
+    }
+
+    public function makeUploadParams($params)
+    {
+        $uploadParams = array();
+
+        $uploadParams['storage'] = 'local';
+        $uploadParams['url'] = $params['defaultUploadUrl'];
+        $uploadParams['postParams'] = array();
+        $uploadParams['postParams']['token'] =  $this->getUserService()->makeToken('fileupload', $params['user'], strtotime('+ 2 hours'));
+
+        return $uploadParams;
+    }
+
+    public function reconvertFile($file, $convertCallback)
+    {
+        
     }
 
     private function getFileFullPath($file)
@@ -96,5 +118,10 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
             $baseDirectory = $this->getKernel()->getParameter('topxia.disk.local_directory');
         }
         return $baseDirectory . DIRECTORY_SEPARATOR. $targetType . DIRECTORY_SEPARATOR . $targetId;
+    }
+
+    private function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 }

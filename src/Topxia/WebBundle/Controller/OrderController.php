@@ -55,7 +55,6 @@ class OrderController extends BaseController
         }
 
         $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
-
         return $this->redirect($goto);
     }
 
@@ -88,7 +87,6 @@ class OrderController extends BaseController
             'summary' => '',
             'amount' => $order['amount'],
         ));
-
         return $request->setParams($requestParams);
     }
 

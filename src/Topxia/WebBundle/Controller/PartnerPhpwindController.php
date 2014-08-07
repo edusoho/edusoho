@@ -101,9 +101,6 @@ class PartnerPhpwindController extends BaseController
         }
 
         $this->authenticateUser($user);
-        
-        $sessionId = $request->getSession()->getId();
-        $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
 
         return true;
     }

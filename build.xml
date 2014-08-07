@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<project name="HudsonPHP" basedir='.'  default="test">
+
+    <property name="logDir" value="../report/logs"/>
+    <property name="testDir" value="../report/test"/>
+    <property name="coverageDir" value="../report/coverage"/>
+   
+    <target name="mkdir">
+        <mkdir dir="${logDir}" />
+        <mkdir dir="${testDir}" />
+        <mkdir dir="${coverageDir}" />
+    </target>
+
+    <target name="test" description="Run PHPUnit tests">
+        <echo>test!!!</echo>
+        <phpunit configuration='app/phpunit_test.xml.dist' haltonerror="true" haltonfailure="true" printsummary="true">
+            <formatter type="xml" todir="${logDir}" outfile="test.unit.report.xml"/>
+            <batchtest>
+                <fileset dir=".">
+                    <include name="src/Topxia/Service/*/Tests/*Test.php" />
+                </fileset>
+            </batchtest>
+        </phpunit>
+
+        <phpunitreport infile="${logDir}/test.unit.report.xml" format="frames" todir="${testDir}"  styledir="/usr/share/php/data/phing/etc" />
+
+        <!--
+        <coverage-report outfile="${coverageDir}/coverage.xml">
+            <report todir="${coverageDir}" styledir="/usr/share/php/data/phing/etc"/>
+        </coverage-report>
+        -->
+    </target>
+</project>

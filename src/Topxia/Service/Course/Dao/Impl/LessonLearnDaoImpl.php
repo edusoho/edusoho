@@ -52,6 +52,13 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $this->getConnection()->fetchColumn($sql, array($lessonId));
     }
 
+    public function findLatestFinishedLearns($start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE status = 'finished' ORDER BY finishedTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql);
+    }
+
 	public function addLearn($learn)
 	{
         $affected = $this->getConnection()->insert($this->table, $learn);
@@ -71,5 +78,41 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
     {
         $sql = "DELETE FROM {$this->table} WHERE lessonId = ?";
         return $this->getConnection()->executeUpdate($sql, array($lessonId));
+    }
+
+    public function searchLearnCount($conditions)
+    {
+        $builder=$this->_createSearchQueryBuilder($conditions)
+            ->select('count(id)');
+
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchLearns($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array(); 
+    }
+
+    private function _createSearchQueryBuilder($conditions)
+    {
+        $builder=$this->createDynamicQueryBuilder($conditions)
+            ->from($this->table,$this->table)
+            ->andWhere("status = :status")
+            ->andWhere("finishedTime >= :startTime")
+            ->andWhere("finishedTime <= :endTime");
+        return $builder;
+    }
+
+    public function analysisLessonFinishedDataByTime($startTime,$endTime)
+    {
+        $sql="SELECT count(id) as count, from_unixtime(finishedTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`finishedTime`>={$startTime} and `finishedTime`<={$endTime} and `status`='finished'  group by from_unixtime(`finishedTime`,'%Y-%m-%d') order by date ASC ";
+
+        return $this->getConnection()->fetchAll($sql);
     }
 }

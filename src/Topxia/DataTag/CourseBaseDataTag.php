@@ -105,6 +105,13 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+        foreach ($users as $key => $user) {
+            if ($user['id'] == $profiles[$user['id']]['id']) {
+                 $users[$key]['profile'] = $profiles[$user['id']];
+             } 
+        }
+
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
         foreach ($courses as &$course) {
@@ -122,7 +129,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
                 $course['category'] = $categories[$categoryId];
             }
         }
-        
+   
 		return $courses;
 	}
 

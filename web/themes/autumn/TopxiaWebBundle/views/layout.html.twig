@@ -78,12 +78,12 @@
                 </li>
               <li class="visible-lt-ie8"><a href="{{ path('settings') }}">{{ app.user.nickname }}</a></li>
               <li class="dropdown hidden-lt-ie8">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
+                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
                   <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 帐号设置</a></li>
                   <li class="divider"></li>
-                  {% if is_granted('ROLE_ADMIN') %}
+                  {% if is_granted('ROLE_BACKEND') %}
                     <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> 管理后台</a></li>
                     <li class="divider"></li>
                   {% endif %}
@@ -129,7 +129,7 @@
         {% include "TopxiaWebBundle::powered-by.html.twig" %}
         {{ setting('site.analytics')|raw }} 
         <a class="mlm" href="{{ path('course_archive') }}">课程存档</a>
-        {% if setting('site.copyright') %}<div class="mts">课程内容版权均归<a href="/">{{ setting('site.copyright') }}</a>所有{% endif %}&nbsp;{% if setting('site.icp') %}<a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a></div>{% endif %}
+        <div class="mts">{% if setting('site.copyright') %}课程内容版权均归<a href="/">{{ setting('site.copyright') }}</a>所有{% endif %}&nbsp;{% if setting('site.icp') %}<a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a>{% endif %}</div>
       </div>
 
     </div>

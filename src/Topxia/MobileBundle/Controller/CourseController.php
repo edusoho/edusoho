@@ -58,14 +58,24 @@ class CourseController extends MobileController
 
         $result = array();
         $result['course'] = $this->filterCourse($course);
-        $result['items'] = $this->filterItems($items);
         $result['reviews'] = $this->filterReviews($reviews);
         $result['member'] = $member;
         $result['userIsStudent'] = $user->isLogin() ? $this->getCourseService()->isCourseStudent($courseId, $user['id']) : false;
         if (!$result['userIsStudent']){
                 $learnStatuses = array();
         }
+
         $result['userLearns'] = $learnStatuses;
+        $result['items'] = $this->filterItems($items);
+        foreach ($result['userLearns'] as $lessonId => $status) {
+            if (empty($result['items']['lesson-' . $lessonId])) {
+                continue;
+            }
+            $result['items']['lesson-' . $lessonId]['userLearnStatus'] = $status;
+        }
+
+        $result['items2'] = array_values($result['items']);
+
         $result['userFavorited'] = $user->isLogin() ? $this->getCourseService()->hasFavoritedCourse($courseId) : false;
 
         return $this->createJson($request, $result);
@@ -110,7 +120,7 @@ class CourseController extends MobileController
         $json['title'] = $lesson['title'];
         $json['summary'] = $lesson['summary'];
         $json['type'] = $lesson['type'];
-        $json['content'] = $lesson['content'];
+        $json['content'] = $this->convertAbsoluteUrl($this->container->get('request'), $lesson['content']);
         $json['status'] = $lesson['status'];
         if ($lesson['length'] > 0 and in_array($lesson['type'], array('audio', 'video'))) {
             $json['length'] =  $this->container->get('topxia.twig.web_extension')->durationFilter($lesson['length']);

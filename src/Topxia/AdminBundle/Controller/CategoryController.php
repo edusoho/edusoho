@@ -32,6 +32,7 @@ class CategoryController extends BaseController
             'id' => 0,
             'name' => '',
             'code' => '',
+            'description'=>'',
             'groupId' => (int) $request->query->get('groupId'),
             'parentId' => (int) $request->query->get('parentId', 0),
             'weight' => 0,
