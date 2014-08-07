@@ -200,3 +200,10 @@
 .online_content ul li a:hover {
     color: #c81d04;
 }
+
+.displayimg{
+    position: absolute;
+    right: 170px;
+    top: 3px;
+    display: none;
+}

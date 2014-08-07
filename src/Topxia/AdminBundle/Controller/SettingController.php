@@ -14,6 +14,7 @@ use Topxia\Service\Util\CloudClientFactory;
 
 class SettingController extends BaseController
 {
+
     public function siteAction(Request $request)
     {
         $site = $this->getSettingService()->get('site', array());
@@ -814,6 +815,7 @@ class SettingController extends BaseController
             'hotline2'=>'',
             'hotline3'=>'',
             'webchat'=>'',
+            'webchatURI' => '',
             'email'=>'',
             );
         $contact = array_merge($default, $contact);
@@ -826,6 +828,36 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:contact-setting.html.twig', array(
             'contact' => $contact,
         ));
+    }
+
+    public function contactUploadAction(Request $request)
+    {
+        $file = $request->files->get('contact');
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+
+        $filename = 'webchat.' . $file->getClientOriginalExtension();
+        
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file = $file->move($directory, $filename);
+
+        $contact = $this->getSettingService()->get('contact', array());
+
+        $contact['webchatURI'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $contact['webchatURI'] = ltrim($contact['webchatURI'], '/');
+
+        $this->getSettingService()->set('contact', $contact);
+
+        $this->getLogService()->info('system', 'update_settings', "更新微信二维码", array('webchatURI' => $contact['webchatURI']));
+
+        $response = array(
+            'path' => $contact['webchatURI'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($contact['webchatURI']),
+        );
+
+        return new Response(json_encode($response));
+
     }
 
     protected function getAppService()
@@ -847,5 +879,6 @@ class SettingController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }
+
 
 }
