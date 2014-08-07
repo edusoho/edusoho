@@ -269,6 +269,16 @@
 </div>
 {% endblock %}
 
+{%  set contact = setting('contact') %}
+
+{% block contact %}
+{% if contact %}
+{% if contact.enabled == 1 %}
+{% include 'TopxiaWebBundle:ContactFloat:contact.html.twig'   with {contact:contact} %}
+{% endif %}
+{% endif %}
+{% endblock %}
+
 {% block bottom %}
 <div id="course-modal" class="modal"></div>
 <div id="course-edit-modal" class="modal"></div>
