@@ -6,9 +6,9 @@
 {% block dashboard_main %}
   {% include 'TopxiaWebBundle:Course:dashboard-nav.html.twig' with {nav:'info'} %}
 
-  <dl class="course-infos">
+  <dl class="course-infos" style="width:100%">
     <dt>简介</dt>
-    <dd>{{ course.about|raw }}</dd>
+    <dd >{{ course.about|raw }}</dd>
 
     {% if category %}
     <dt>分类</dt>
