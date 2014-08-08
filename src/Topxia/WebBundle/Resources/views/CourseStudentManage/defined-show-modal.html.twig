@@ -5,12 +5,133 @@
 {% block body %}
 
 <table class="table table-striped table-condenseda table-bordered">
+		<tr>
+		<th width="25%">用户名</th>
+		<td width="75%">
+			<a class="pull-right" href="{{ path('user_show', {id:user.id}) }}" target="_blank">个人主页</a>
+			{{ user.nickname }}
+		</td>
+	</tr>
+
+	<tr>
+		<th>Email</th>
+		<td>{{ user.email }}</td>
+	</tr>
+
+	{% if profile.truename %}
+	<tr>
+		<th>姓名</th>
+		<td>
+			{{ profile.truename }}
+		</td>
+	</tr>
+	{% endif %}
+
+	{% if profile.gender %}
+	<tr>
+		<th>姓别</th>
+		<td>
+			{{ profile.gender }}
+		</td>
+	</tr>
+	{% endif %}
+
+	{% if profile.company %}
+	<tr>
+		<th>公司</th>
+		<td>
+			{{ profile.company }}
+		</td>
+	</tr>
+	{% endif %}
+
+	{% if profile.job %}
+	<tr>
+		<th>职业</th>
+		<td>
+			{{ profile.job }}
+		</td>
+	</tr>
+	{% endif %}
+
+	{% if profile.title %}
+	<tr>
+		<th>头衔</th>
+		<td>
+			{{ profile.title }}
+		</td>
+	</tr>
+	{% endif %}
+
+	{% if profile.mobile %}
+	<tr>
+		<th>电话</th>
+		<td>
+			{{ profile.mobile }}
+		</td>
+	</tr>
+	{% endif %}
+
+	{% if profile.signature %}
+	<tr>
+		<th>个人签名</th>
+		<td>
+			{{ profile.signature }}
+		</td>
+	</tr>
+	{% endif %}
+
+	{% if profile.about %}
+	<tr>
+		<th>自我介绍</th>
+		<td>
+			{{ profile.about | raw }}
+		</td>
+	</tr>
+	{% endif %}
+
+	{% if profile.site %}
+	<tr>
+		<th>个人网站</th>
+		<td>
+			{{ profile.site }}
+		</td>
+	</tr>
+	{% endif %}
+
+	{% if profile.weibo %}
+	<tr>
+		<th>微博</th>
+		<td>
+			{{ profile.weibo }}
+		</td>
+	</tr>
+	{% endif %}
+
+	{% if profile.weixin %}
+	<tr>
+		<th>微信</th>
+		<td>
+			{{ profile.weixin }}
+		</td>
+	</tr>
+	{% endif %}
+
+	{% if profile.qq %}
+	<tr>
+		<th>QQ</th>
+		<td>
+			{{ profile.qq }}
+		</td>
+	</tr>
+	{% endif %}
+	
 	{% if fields %}
 	{% for field in fields %}
 		<tr>
 			{% if profile[field.fieldName] %}
-			<th width="25%">{{field.title}}</th>
-			<td width="75%">			
+			<th>{{field.title}}</th>
+			<td>			
 				{{ profile[field.fieldName] }}
 			</td>
 			{% endif %}
