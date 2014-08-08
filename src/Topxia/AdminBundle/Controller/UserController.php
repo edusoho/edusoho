@@ -422,7 +422,7 @@ class UserController extends BaseController
             $userCount=0;
             $allUserData=array();
 
-            if(!$file){
+            if(!is_object($file)){
                 $this->setFlashMessage('danger', '请选择上传的文件');
 
                 return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
