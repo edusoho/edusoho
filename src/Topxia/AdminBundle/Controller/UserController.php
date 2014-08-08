@@ -44,19 +44,8 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
       
-        $result = array();
-        foreach ($users as $key => $user) {
-            $user['loginLocation']  = '';
-            $user['createdLocation'] = '';
-            if(!empty($user['loginIp']))
-                $user['loginLocation'] = ConvertIpToolkit::convertIp($user['loginIp']);
-            if(!empty($user['createdIp']))
-                $user['createdLocation'] = ConvertIpToolkit::convertIp($user['createdIp']);   
-            $result[$key] = $user;
-        }
-
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
-            'users' => $result ,
+            'users' => $users ,
             'paginator' => $paginator
         ));
     }
@@ -147,13 +136,6 @@ class UserController extends BaseController
            if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
         }
             
-        $user['loginLocation']  = '';
-        $user['createdLocation'] = '';
-        if(!empty($user['loginIp']))
-            $user['loginLocation'] = ConvertIpToolkit::convertIp($user['loginIp']);
-        if(!empty($user['createdIp']))
-            $user['createdLocation'] = ConvertIpToolkit::convertIp($user['createdIp']);   
-   
         return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
             'user' => $user,
             'profile' => $profile,
@@ -476,8 +458,10 @@ class UserController extends BaseController
                 return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
                 ));
             }
-            $fieldSort=$this->getFieldSort($excelField,$fieldNameArray,$fieldArray);
-            unset($fieldNameArray,$fieldArray,$excelField);
+
+            $fieldSort=$this->getFieldSort($excelField,$fieldArray);
+            unset($fieldArray,$excelField);
+            
             $repeatInfo=$this->checkRepeatData($row=3,$fieldSort,$highestRow,$objWorksheet);
 
             if($repeatInfo){
@@ -688,14 +672,18 @@ class UserController extends BaseController
         return $days;
     }
 
-    private function getFieldSort($excelField,$fieldNameArray,$fieldArray)
+    private function getFieldSort($excelField,$fieldArray)
     {       
         $fieldSort=array();
         foreach ($excelField as $key => $value) {
 
             $value=$this->trim($value);
 
+<<<<<<< HEAD
             if(in_array($value, $fieldNameArray)){
+=======
+            if(in_array($value, $fieldArray)){
+>>>>>>> 0100202fe3a97b318d9a7d0469285c12c52c961c
                 foreach ($fieldArray as $fieldKey => $fieldValue) {
                     if($value==$fieldValue) {
                          $fieldSort[]=array("num"=>$key,"fieldName"=>$fieldKey);
@@ -723,19 +711,6 @@ class UserController extends BaseController
         if (count($tmparray)<=1) return false; 
 
         return true;
-    }
-
-    private function getFieldNameArray()
-    {   
-        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-        $fieldNameArray=array("用户名","邮箱","密码","姓名","性别","身份证号","手机号码","公司","职业","个人主页","微博","微信","QQ");
-   
-        foreach ($userFields as $userField) {
-                $title=$userField['title'];
-                array_push($fieldNameArray,$title);
-        }
-
-        return $fieldNameArray;
     }
 
     private function getFieldArray()
