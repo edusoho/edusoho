@@ -153,9 +153,9 @@
 {% for field in fields %}
 	<tr>
 		{% if profile[field.fieldName] %}
-			<th width="25%">{{field.title}}</th>
-			<td width="75%">
-					{{ profile[field.fieldName] }}
+			<th>{{field.title}}</th>
+			<td>
+				{{ profile[field.fieldName] }}
 			</td>
 		{% endif %}
 	</tr>
