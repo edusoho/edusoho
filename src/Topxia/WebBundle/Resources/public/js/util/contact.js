@@ -23,12 +23,12 @@ define(function(require, exports, module) {
                  {
                       if (i == num)
                  {
-            $("#onlineSort" + i).css ("class","online_bar expand");
+            $("#onlineSort" + i).attr ("class","online_bar expand");
             $("#onlineType" + i).css("display" , "block");
                   }
               else
                {
-            $("#onlineSort" + i).css("class", "online_bar mycollapse") ;
+            $("#onlineSort" + i).attr("class", "online_bar mycollapse") ;
             $("#onlineType" + i).css("display" , "none");
          }
     }

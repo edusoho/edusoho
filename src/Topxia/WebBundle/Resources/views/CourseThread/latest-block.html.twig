@@ -10,11 +10,9 @@
 					<li class="clearfix">
 						
 						<span class="text-muted pull-right">{{ thread.createdTime|date('Y-m-d') }}</span>
-						<a href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}" >{{ thread.title|plain_text(15) }}</a>
+						<a href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}" >{{ thread.title|plain_text(15) }}</a>	
 
-						
 					</li>
-				{% else %}
 				{% endfor %}
 			</ul>
 		</div>
