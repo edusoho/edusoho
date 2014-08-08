@@ -44,19 +44,8 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
       
-        $result = array();
-        foreach ($users as $key => $user) {
-            $user['loginLocation']  = '';
-            $user['createdLocation'] = '';
-            if(!empty($user['loginIp']))
-                $user['loginLocation'] = ConvertIpToolkit::convertIp($user['loginIp']);
-            if(!empty($user['createdIp']))
-                $user['createdLocation'] = ConvertIpToolkit::convertIp($user['createdIp']);   
-            $result[$key] = $user;
-        }
-
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
-            'users' => $result ,
+            'users' => $users ,
             'paginator' => $paginator
         ));
     }
@@ -147,13 +136,6 @@ class UserController extends BaseController
            if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
         }
             
-        $user['loginLocation']  = '';
-        $user['createdLocation'] = '';
-        if(!empty($user['loginIp']))
-            $user['loginLocation'] = ConvertIpToolkit::convertIp($user['loginIp']);
-        if(!empty($user['createdIp']))
-            $user['createdLocation'] = ConvertIpToolkit::convertIp($user['createdIp']);   
-   
         return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
             'user' => $user,
             'profile' => $profile,
