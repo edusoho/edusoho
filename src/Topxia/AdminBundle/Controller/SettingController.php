@@ -670,7 +670,7 @@ class SettingController extends BaseController
         $default = array(
             'debug' => '0',
             'app_api_url' => '',
-            'hls_encrypted' => '0'
+            'hls_encrypted' => '1'
         );
 
         $developerSetting = array_merge($default, $developerSetting);
