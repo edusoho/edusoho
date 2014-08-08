@@ -35,7 +35,7 @@ define(function(require, exports, module) {
            checkWidth();
         });
 
-
+        $('.course-dashboard-page .course-infos  dd  img').css("width","100%");
     };
 
 });
