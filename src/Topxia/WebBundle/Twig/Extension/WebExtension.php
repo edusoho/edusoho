@@ -5,6 +5,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\ConvertIpToolkit;
 
 class WebExtension extends \Twig_Extension
 {
@@ -58,6 +59,7 @@ class WebExtension extends \Twig_Extension
             'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
+            'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
         );
     }
 
@@ -131,6 +133,14 @@ class WebExtension extends \Twig_Extension
         }
         return $this->container->getParameter($name);
     }
+
+    public function getConvertIP($IP)
+    {
+        if(!empty($IP))
+            return ConvertIpToolkit::convertIp($IP);
+        return 'INNA';
+    }
+
 
     public function dataformatFilter ($time) {
         if (empty($time)) {

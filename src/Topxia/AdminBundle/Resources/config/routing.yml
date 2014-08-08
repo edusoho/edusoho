@@ -15,6 +15,14 @@ admin_operation_analysis:
     pattern:  /operation/analysis
     defaults: { _controller: TopxiaAdminBundle:Default:operationAnalysisDashbordBlock }
 
+admin_online_count:
+    pattern: /online/count
+    defaults: { _controller: TopxiaAdminBundle:Default:onlineCount }
+
+admin_login_count:
+    pattern: /login/count
+    defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
+
 admin_dashboard:
     pattern:  /dashboard
     defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
