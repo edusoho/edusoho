@@ -1,7 +1,7 @@
 admin:
     pattern:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
-
+    
 admin_popular_courses:
     pattern:  /popular_courses
     defaults: { _controller: TopxiaAdminBundle:Default:popularCourses }
@@ -14,6 +14,14 @@ admin_question_remind_teachers:
 admin_operation_analysis:
     pattern:  /operation/analysis
     defaults: { _controller: TopxiaAdminBundle:Default:operationAnalysisDashbordBlock }
+
+admin_online_count:
+    pattern: /online/count
+    defaults: { _controller: TopxiaAdminBundle:Default:onlineCount }
+
+admin_login_count:
+    pattern: /login/count
+    defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
 
 admin_dashboard:
     pattern:  /dashboard
