@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
 	require('mediaelementplayer');
 
-	var MediaPlayer = require('../widget/media-player2');
+	var MediaPlayer = require('../widget/media-player3');
 	var SlidePlayer = require('../widget/slider-player');
 
 
