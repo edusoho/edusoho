@@ -235,6 +235,7 @@
 				{% endblock %}
 			{% endembed %}
 
+			{% if courseReviews %}
 			{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-review-pane'} %}
 				{% block heading %}
 					<h3 class="panel-title">课程评价</h3>
@@ -245,6 +246,7 @@
 
 				{% endblock %}
 			{% endembed %}
+			{% endif %}
 
 			{% if setting('course.relatedCourses') == 1 %}
 				{{ render(controller('TopxiaWebBundle:Course:relatedCoursesBlock',{course:course})) }}
@@ -265,6 +267,16 @@
 </div>
 {% endif %}
 </div>
+{% endblock %}
+
+{%  set contact = setting('contact') %}
+
+{% block contact %}
+{% if contact %}
+{% if contact.enabled == 1 %}
+{% include 'TopxiaWebBundle:ContactFloat:contact.html.twig'   with {contact:contact} %}
+{% endif %}
+{% endif %}
 {% endblock %}
 
 {% block bottom %}
