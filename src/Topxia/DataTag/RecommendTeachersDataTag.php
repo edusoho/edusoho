@@ -24,6 +24,7 @@ class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag
         $conditions = array(
             'roles'=>'ROLE_TEACHER',
             'promoted'=>'1',
+            'locked'=>0
         );
         
     	$users = $this->getUserService()->searchUsers($conditions, array('promotedTime', 'DESC'), 0, $arguments['count']);
