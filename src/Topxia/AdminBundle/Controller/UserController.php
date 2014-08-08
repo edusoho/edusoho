@@ -460,8 +460,8 @@ class UserController extends BaseController
 
             $highestColumn = $objWorksheet->getHighestColumn();
             $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);   
-            $fieldNameArray=$this->getFieldNameArray();
             $fieldArray=$this->getFieldArray();
+            $fieldNameArray=$this->getFieldNameArray();
 
             for ($col = 0;$col < $highestColumnIndex;$col++)
             {
@@ -476,7 +476,6 @@ class UserController extends BaseController
                 return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
                 ));
             }
-
             $fieldSort=$this->getFieldSort($excelField,$fieldNameArray,$fieldArray);
             unset($fieldNameArray,$fieldArray,$excelField);
             $repeatInfo=$this->checkRepeatData($row=3,$fieldSort,$highestRow,$objWorksheet);
@@ -510,7 +509,6 @@ class UserController extends BaseController
                     $fieldCol[$key]=$num+1;
                 }
                 unset($strs);
-
                 $emptyData=array_count_values($userData);
                 if(isset($emptyData[""])&&count($userData)==$emptyData[""]) {
                     $checkInfo[]="第".$row."行为空行，已跳过";
@@ -698,7 +696,6 @@ class UserController extends BaseController
             $value=$this->trim($value);
 
             if(in_array($value, $fieldNameArray)){
-                //自定义字段名重复  将导入第一个字段
                 foreach ($fieldArray as $fieldKey => $fieldValue) {
                     if($value==$fieldValue) {
                          $fieldSort[]=array("num"=>$key,"fieldName"=>$fieldKey);
