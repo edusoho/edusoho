@@ -455,13 +455,11 @@ class UserController extends BaseController
             }
 
             $objPHPExcel = PHPExcel_IOFactory::load($file);
-
             $objWorksheet = $objPHPExcel->getActiveSheet();
             $highestRow = $objWorksheet->getHighestRow(); 
 
             $highestColumn = $objWorksheet->getHighestColumn();
             $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);   
-
             $fieldNameArray=$this->getFieldNameArray();
             $fieldArray=$this->getFieldArray();
 
@@ -471,7 +469,6 @@ class UserController extends BaseController
                  $strs[$col]=$fieldTitle."";
             }   
             $excelField=$strs;
-
             if(!$this->checkNecessaryFields($excelField)){
 
                 $this->setFlashMessage('danger', '缺少必要的字段');
