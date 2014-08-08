@@ -679,11 +679,8 @@ class UserController extends BaseController
 
             $value=$this->trim($value);
 
-<<<<<<< HEAD
-            if(in_array($value, $fieldNameArray)){
-=======
+
             if(in_array($value, $fieldArray)){
->>>>>>> 0100202fe3a97b318d9a7d0469285c12c52c961c
                 foreach ($fieldArray as $fieldKey => $fieldValue) {
                     if($value==$fieldValue) {
                          $fieldSort[]=array("num"=>$key,"fieldName"=>$fieldKey);
