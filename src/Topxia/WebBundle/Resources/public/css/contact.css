@@ -143,16 +143,16 @@
 }
 
 .expand h2 a {
-    background: url(../img/contact/online_bg.png) no-repeat -36px -69px;
-    _background: url(../img/contact/online_bg_ie6.png) no-repeat -36px -69px;
+    background: url(../img/contact/online_bg.png) no-repeat -37px -70px;
+    _background: url(../img/contact/online_bg_ie6.png) no-repeat -37px -70px;
 }
 
-.collapse h2 a {
-    background: url(../img/contact/online_bg.png) no-repeat -36px -96px;
-    _background: url(../img/contact/online_bg_ie6.png) no-repeat -36px -96px;
+.mycollapse h2 a {
+    background: url(../img/contact/online_bg.png) no-repeat -37px -96px;
+    _background: url(../img/contact/online_bg_ie6.png) no-repeat -37px -96px;
 }
 
-.expand h2 a:hover,.collapse h2 a:hover {
+.expand h2 a:hover,.mycollapse h2 a:hover {
     text-decoration: none;
     color: #c81d04;
 }
@@ -162,12 +162,6 @@
     zoom: 1;
     overflow-x: hidden;
     overflow-y: hidden;
-}
-
-.online_content {
-    background: url(../img/contact/online_bg.png) no-repeat -147px -185px;
-    padding-top: 11px;
-    _background: url(../img/contact/online_bg_ie6.png) no-repeat -147px -185px;
 }
 
 .online_content a.qq_icon {
@@ -199,4 +193,11 @@
 }
 .online_content ul li a:hover {
     color: #c81d04;
+}
+
+.displayimg{
+    position: absolute;
+    right: 170px;
+    top: 3px;
+    display: none;
 }

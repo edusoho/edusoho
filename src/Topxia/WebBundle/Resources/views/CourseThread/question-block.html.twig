@@ -1,3 +1,4 @@
+{% if threads%}
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">最新问答</h3>
@@ -8,9 +9,8 @@
   		<li>
         <a href="{{ path('course_thread_show', {courseId:course.id, id:thread.id}) }}">{{ thread.title }}</a>
       </li>
-      {% else %}
-        <div class="empty">暂无问答</div>
   		{% endfor %}
   	</ul>
   </div>
 </div>
+{% endif %}
