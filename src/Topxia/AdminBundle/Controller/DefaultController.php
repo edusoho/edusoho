@@ -8,7 +8,6 @@ use Topxia\Service\Util\CloudClientFactory;
 
 class DefaultController extends BaseController
 {
-
     public function popularCoursesAction(Request $request)
     {
         $dateType = $request->query->get('dateType');

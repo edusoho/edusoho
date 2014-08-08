@@ -3,26 +3,27 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
 
-	exports.run = function() {
+    exports.run = function() {
 
         var $modal = $('#user-create-form').parents('.modal');
+        
         var validator = new Validator({
             element: '#user-create-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
-            	if (error) {
-            		return false;
-            	}
+                if (error) {
+                    return false;
+                }
 
                 $('#user-create-btn').button('submiting').addClass('disabled');
 
-				$.post($form.attr('action'), $form.serialize(), function(html) {
-					$modal.modal('hide');
-					Notify.success('新用户添加成功');
+                $.post($form.attr('action'), $form.serialize(), function(html) {
+                    $modal.modal('hide');
+                    Notify.success('新用户添加成功');
                     window.location.reload();
-				}).error(function(){
-					Notify.danger('新用户添加失败');
-				});
+                }).error(function(){
+                    Notify.danger('新用户添加失败');
+                });
 
             }
         });
@@ -49,6 +50,6 @@ define(function(require, exports, module) {
             required: true,
             rule: 'confirmation{target:#password}'
         });
-	};
+    };
 
 });

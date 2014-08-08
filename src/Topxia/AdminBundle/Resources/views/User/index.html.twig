@@ -7,12 +7,10 @@
 {% set script_controller = 'user/list' %}
 
 {% block main %}
-
 <div class="page-header clearfix">
-  <button class="btn btn-info btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_create')}}">添加新用户</button>
+  <button class="btn btn-info btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_create')}}" >添加新用户</button>
   <h1 class="pull-left">用户管理</h1>
 </div>
-
  <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     
     <div class="form-group">
