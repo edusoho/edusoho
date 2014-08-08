@@ -443,7 +443,6 @@ class UserController extends BaseController
             $highestColumn = $objWorksheet->getHighestColumn();
             $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);   
             $fieldArray=$this->getFieldArray();
-            $fieldNameArray=$this->getFieldNameArray();
 
             for ($col = 0;$col < $highestColumnIndex;$col++)
             {
@@ -589,6 +588,19 @@ class UserController extends BaseController
         if (isset($userData['gender'])&&$userData['gender']!=""&& !in_array($userData['gender'], array("男","女"))){
             $errorInfo[]="第 ".$row."行".$fieldCol["gender"]." 列 的数据存在问题，请检查。";
         }
+
+        if (isset($userData['qq'])&&$userData['qq']!=""&& !SimpleValidator::qq($userData['qq'])){
+            $errorInfo[]="第 ".$row."行".$fieldCol["qq"]." 列 的数据存在问题，请检查。";
+        }
+
+        if (isset($userData['site'])&&$userData['site']!=""&& !SimpleValidator::site($userData['site'])){
+            $errorInfo[]="第 ".$row."行".$fieldCol["site"]." 列 的数据存在问题，请检查。";
+        }
+
+        if (isset($userData['weibo'])&&$userData['weibo']!=""&& !SimpleValidator::site($userData['weibo'])){
+            $errorInfo[]="第 ".$row."行".$fieldCol["weibo"]." 列 的数据存在问题，请检查。";
+        }
+
         for($i=1;$i<=5;$i++){
             if (isset($userData['intField'.$i])&&$userData['intField'.$i]!=""&& !SimpleValidator::integer($userData['intField'.$i])){
             $errorInfo[]="第 ".$row."行".$fieldCol["intField".$i]." 列 的数据存在问题，请检查(必须为整数,最大到9位整数)。";
