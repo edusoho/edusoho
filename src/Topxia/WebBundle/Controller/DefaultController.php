@@ -81,6 +81,9 @@ class DefaultController extends BaseController
             );
         }
 
+        if($teacher['locked'] !== '0')
+            $teacher = null;
+
         return $this->render('TopxiaWebBundle:Default:promoted-teacher-block.html.twig', array(
             'teacher' => $teacher,
         ));

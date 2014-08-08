@@ -443,6 +443,7 @@ class UserController extends BaseController
             $highestColumn = $objWorksheet->getHighestColumn();
             $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);   
             $fieldArray=$this->getFieldArray();
+            $fieldNameArray=$this->getFieldNameArray();
 
             for ($col = 0;$col < $highestColumnIndex;$col++)
             {
@@ -460,6 +461,7 @@ class UserController extends BaseController
 
             $fieldSort=$this->getFieldSort($excelField,$fieldArray);
             unset($fieldArray,$excelField);
+
             $repeatInfo=$this->checkRepeatData($row=3,$fieldSort,$highestRow,$objWorksheet);
 
             if($repeatInfo){
@@ -491,7 +493,6 @@ class UserController extends BaseController
                     $fieldCol[$key]=$num+1;
                 }
                 unset($strs);
-
                 $emptyData=array_count_values($userData);
                 if(isset($emptyData[""])&&count($userData)==$emptyData[""]) {
                     $checkInfo[]="第".$row."行为空行，已跳过";
@@ -728,6 +729,7 @@ class UserController extends BaseController
                 "weixin"=>'微信',
                 "qq"=>'QQ',
                 );
+        
         foreach ($userFields as $userField) {
             $title=$userField['title'];
 

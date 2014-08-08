@@ -21,7 +21,12 @@
   <div class="panel panel-default">
   
     <div class="panel-heading">
-     <h3 class="panel-title" id="operation-analysis-title" data-url="{{path('admin_operation_analysis')}}">数据统计<span class="pull-right"><span id="onlineNum" data-url="{{path('admin_online_count')}}">正在载入在线人数...</span>（<span id="loginNum" data-url="{{path('admin_login_count')}}">正在载入登陆人数...</span>）</span></h3>
+     <h3 class="panel-title" id="operation-analysis-title" data-url="{{path('admin_operation_analysis')}}">数据统计
+{#      <span class="pull-right">
+       <span id="onlineNum" data-url="{{path('admin_online_count')}}">正在载入在线人数...</span>（<span id="loginNum" data-url="{{path('admin_login_count')}}">正在载入登陆人数...</span>）
+     </span> #}
+
+     </h3>
     </div>
     <div id="operation-analysis-table" >
       <div class="empty">正在载入数据，请稍等。</div>
