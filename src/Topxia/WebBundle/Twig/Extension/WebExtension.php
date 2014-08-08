@@ -136,9 +136,14 @@ class WebExtension extends \Twig_Extension
 
     public function getConvertIP($IP)
     {
-        if(!empty($IP))
-            return ConvertIpToolkit::convertIp($IP);
-        return 'INNA';
+        
+        if(!empty($IP)){
+                $location = ConvertIpToolkit::convertIp($IP);
+            if ($location === 'INNA') 
+                return '未知区域';
+            return $location;
+        }
+        return '';
     }
 
 
