@@ -80,9 +80,9 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if (!$lesson['free']) {
-            list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-        }
+        // if (!$lesson['free']) {
+        //     list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        // }
 
         return new Response($file['convertParams']['hlsKey']);
     }

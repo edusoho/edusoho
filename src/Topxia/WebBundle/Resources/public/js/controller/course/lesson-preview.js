@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
 	require('mediaelementplayer');
 
-	var MediaPlayer = require('../widget/media-player2');
+	var MediaPlayer = require('../widget/media-player3');
 	var SlidePlayer = require('../widget/slider-player');
 
 
@@ -25,6 +25,10 @@ define(function(require, exports, module) {
 
         		mediaPlayer.setSrc($("#lesson-preview-video-player").data('hlsUrl'), 'video');
         		mediaPlayer.play();
+
+                $('#modal').one('hidden.bs.modal', function () {
+                    mediaPlayer.dispose();
+                });
 
 			} else {
 				$("#lesson-preview-video-player").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"  width="100%" height="360"></video>');

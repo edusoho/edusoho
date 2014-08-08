@@ -9,7 +9,8 @@ define(function(require, exports, module) {
             srcType: '',
             width: '100%',
             height: '100%',
-            _firstPlay: true
+            _firstPlay: true,
+            runtime: null
         },
 
         events: {},
@@ -34,6 +35,12 @@ define(function(require, exports, module) {
                 alert('您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。');
             }
 
+        },
+
+        dispose: function() {
+            if (this.get('runtime') == 'flash') {
+                swfobject.removeSWF(this.get('playerId'));
+            }
         },
 
         _initHtml5Player: function() {
@@ -91,6 +98,8 @@ define(function(require, exports, module) {
                 this.get('playerId'),
                 this.get('width'),  this.get('height') , "10.2", null, flashvars, params, attrs
             );
+
+            this.set('runtime', 'flash');
         },
 
         _evetProcesser: function(playerId, event, data) {
