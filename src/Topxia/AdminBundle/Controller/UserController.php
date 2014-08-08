@@ -443,7 +443,6 @@ class UserController extends BaseController
             $highestColumn = $objWorksheet->getHighestColumn();
             $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);   
             $fieldArray=$this->getFieldArray();
-            $fieldNameArray=$this->getFieldNameArray();
 
             for ($col = 0;$col < $highestColumnIndex;$col++)
             {
