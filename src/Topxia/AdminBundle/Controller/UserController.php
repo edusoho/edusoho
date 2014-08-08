@@ -461,7 +461,7 @@ class UserController extends BaseController
 
             $fieldSort=$this->getFieldSort($excelField,$fieldArray);
             unset($fieldArray,$excelField);
-            
+
             $repeatInfo=$this->checkRepeatData($row=3,$fieldSort,$highestRow,$objWorksheet);
 
             if($repeatInfo){
@@ -679,7 +679,6 @@ class UserController extends BaseController
 
             $value=$this->trim($value);
 
-
             if(in_array($value, $fieldArray)){
                 foreach ($fieldArray as $fieldKey => $fieldValue) {
                     if($value==$fieldValue) {
@@ -730,6 +729,7 @@ class UserController extends BaseController
                 "weixin"=>'微信',
                 "qq"=>'QQ',
                 );
+        
         foreach ($userFields as $userField) {
             $title=$userField['title'];
 
