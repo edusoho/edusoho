@@ -1,33 +1,36 @@
 /*客服部分*/
 .qqserver p img {
     display: inline;
-    margin: -5px 5px 0 0;
     vertical-align: middle;
 }
 .scrollsidebar {
     position: fixed;
+    width: 126px;
     right: 0px;
     top: 150px;
     z-index: 999;
-
 }
 .side_content {
-    width: 167px;
+    width: 128px;
     height: auto;
     overflow: hidden;
     float: left;
 }
-.side_content .side_list {
-    width: 167px;
+.side_list {
+    width: 128px;
+    height: auto;
     overflow: hidden;
+    border-radius:10px;
 }
+
 .show_btn {
     width: 0;
-    height: 144px;
+    height: 153px;
     overflow: hidden;
     margin-top: 50px;
     float: left;
     cursor: pointer;
+    border-radius:5px;
 }
 .show_btn span {
     display: none;
@@ -37,22 +40,28 @@
     height: 24px;
     cursor: pointer;
 }
-.side_title,.side_bottom,.close_btn,.show_btn {
-    background: url(../img/contact/sidebar_bg.png) no-repeat;
-
+.side_title,.side_bottom,.show_btn {
+  
+    background: url(../img/contact/contact.png) no-repeat;
 }
 .side_title {
-    height: 46px;
+    height: 60px;
 }
-.side_title {
-    height: 46px;
+.siede_title_font{
+    position: relative;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 14px;
+    top: 38px;
+    left: 25px;
 }
 .side_bottom {
     height: 8px;
 }
-.side_center {
+.qqserver {
     font-family: Verdana, Geneva, sans-serif;
-    padding: 10px 12px 5px 12px;
+    float:right;
+    width: 128px;
     font-size: 12px;
 }
 .close_btn {
@@ -66,9 +75,8 @@
 .close_btn span {
     display: none;
 }
-.side_center .qqserver p {
+.qqserver .qqserver p {
     text-align: left;
-    padding: 6px 0;
     margin: 0;
     vertical-align: middle;
 }
@@ -92,51 +100,43 @@
 
     padding: 3px 0 3px 23px;
 }
-.side_content hr {
-    border-bottom: 1px solid #E6E6E6;
-    height: 1px;
-    margin: 10px 0;
-    clear: both;
-}
 
 /* green skin  */
-.side_green .side_title {
-    background-position: -505px 0;
+ .side_title {
+    background-position: 45% 8%;
 }
-.side_green .side_center {
-    background: url(../img/contact/green_line.gif) repeat-y center;
+ .qqserver {
+    background-color: #353e45
 }
-.side_green .side_bottom {
+ .side_bottom {
     background-position: -505px -60px;
 }
-.side_green .close_btn {
-    background-position: -44px -45px;
+
+ .show_btn {
+    background-position: 0 50%;
 }
-.side_green .close_btn:hover {
-    background-position: -65px -45px;
-}
-.side_green .show_btn {
-    background-position: -187px 0;
-}
-.side_green .msgserver a {
+ .msgserver a {
     color: #68c40b;
 }
-.side_green hr {
-    border-bottom: 1px solid #edf2e5;
+
+
+.online_bar{
+        margin-top: -20px;
 }
 
-
 .online_bar h2 {
-    background: url(../img/contact/online_bg.png) repeat-x 0 -156px;
+    background-color: #353e45;
     height: 29px;
     line-height: 27px;
     font-size: 12px;
     color: #666;
     text-align: left;
-    _background: url(../img/contact/online_bg_ie6.png) repeat-x 0 -156px;
 }
 .online_bar h2 a {
     display: block;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 14px;
     padding-left: 14px;
     margin-left: 6px;
     cursor: pointer;
@@ -164,32 +164,20 @@
     overflow-y: hidden;
 }
 
-.online_content a.qq_icon {
-    background: url(../img/contact/online_bg.png) no-repeat -37px -130px;
-    width: 121px;
-    height: 25px;
-    display: block;
-    margin: 0 auto;
-    text-indent: 30px;
-    line-height: 23px;
-    cursor: pointer;
-    _background: url(../img/contact/online_bg_ie6.png) no-repeat -37px -130px;
-}
-.online_content a.qq_icon:hover {
-    background-position: -159px -130px;
-    color: #FFF;
+
+.online_content a{
+    float: left;
 }
 
 .online_content {
     text-align: center;
-    border-bottom: 1px solid #d0d0d0;
+    background-color: #585f65;
     margin-bottom: 1px;
 }
-.online_content ul li {
-    height: 24px;
-    line-height: 24px;
-    margin-bottom: 4px;
-    font-family: '宋体';
+.online_content p a,strong,p,strong a{
+    font-size: 12px; 
+    color: #e7f0fc !important; 
+    font-weight: bold !important; 
 }
 .online_content ul li a:hover {
     color: #c81d04;
