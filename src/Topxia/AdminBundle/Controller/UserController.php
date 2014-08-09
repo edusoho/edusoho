@@ -404,7 +404,7 @@ class UserController extends BaseController
                     $this->getUserService()->updateUserProfile($member["id"],$user);
                 }else { 
                     $this->getUserService()->register($user);
-                }          
+                }      
             }       
         }
         return $this->render('TopxiaAdminBundle:User:userinfo.excel.step3.html.twig', array(
