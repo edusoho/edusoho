@@ -478,10 +478,10 @@ class UserController extends BaseController
 
                 for ($col = 0;$col < $highestColumnIndex;$col++)
                 {
-                     $infoData=$objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+                     $infoData=$objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
                      $strs[$col]=$infoData."";
                      unset($infoData);
-                }    
+                }
 
                 foreach ($fieldSort as $sort) {
 
@@ -502,12 +502,6 @@ class UserController extends BaseController
                     $errorInfo=array_merge($errorInfo,$this->validFields($userData,$row,$fieldCol));
                     continue;
                 }
-
-                for($i=1;$i<=5;$i++){
-                    if (isset($userData['dateField'.$i])&&$userData['dateField'.$i]!=""){
-                    $userData['dateField'.$i]=$this->excelTime($userData['dateField'.$i]);
-                     }
-                }   
 
                 if(!$this->getUserService()->isNicknameAvaliable($userData['nickname'])){ 
 
@@ -559,7 +553,7 @@ class UserController extends BaseController
     }
 
     private function validFields($userData,$row,$fieldCol)
-    {           
+    {    
         $errorInfo=array();
 
         if (!SimpleValidator::email($userData['email'])) {
@@ -608,7 +602,7 @@ class UserController extends BaseController
             if (isset($userData['floatField'.$i])&&$userData['floatField'.$i]!=""&& !SimpleValidator::float($userData['floatField'.$i])){
             $errorInfo[]="第 ".$row."行".$fieldCol["floatField".$i]." 列 的数据存在问题，请检查(只保留到两位小数)。";
              }
-            if (isset($userData['dateField'.$i])&&$userData['dateField'.$i]!=""&& !SimpleValidator::date($this->excelTime($userData['dateField'.$i]))){
+            if (isset($userData['dateField'.$i])&&$userData['dateField'.$i]!=""&& !SimpleValidator::date($userData['dateField'.$i])){
             $errorInfo[]="第 ".$row."行".$fieldCol["dateField".$i]." 列 的数据存在问题，请检查(格式如XXXX-MM-DD)。";
              }
         }
@@ -668,20 +662,6 @@ class UserController extends BaseController
         }
 
         return $repeatRow;
-    }
-
-    private function excelTime($days, $time=false){
-        if(is_numeric($days)){
-            $jd = GregorianToJD(1, 1, 1970);
-            $gregorian = JDToGregorian($jd+intval($days)-25569);
-            $myDate = explode('/',$gregorian);
-            $myDateStr = str_pad($myDate[2],4,'0', STR_PAD_LEFT)
-                    ."-".str_pad($myDate[0],2,'0', STR_PAD_LEFT)
-                    ."-".str_pad($myDate[1],2,'0', STR_PAD_LEFT)
-                    .($time?" 00:00:00":'');
-            return $myDateStr;
-        }
-        return $days;
     }
 
     private function getFieldSort($excelField,$fieldArray)
