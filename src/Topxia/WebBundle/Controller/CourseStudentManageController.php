@@ -261,9 +261,7 @@ class CourseStudentManageController extends BaseController
 
 	public function definedShowAction(Request $request, $id)
 	{
-		$user = $this->getUserService()->getUser($id);
 		$profile = $this->getUserService()->getUserProfile($id);
-		$profile['title'] = $user['title'];
 
 		$userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 		for($i=0;$i<count($userFields);$i++){
@@ -274,14 +272,13 @@ class CourseStudentManageController extends BaseController
 			if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
 		}
 
-		$auth = $this->getSettingService()->get('auth',array());
-		$registerSort = $auth['registerSort'];
+		$course = $this->getSettingService()->get('course',array());
+		$userinfoFields = $course['userinfoFields'];
 
 		return $this->render('TopxiaWebBundle:CourseStudentManage:defined-show-modal.html.twig', array(
-			'user' => $user,
 			'profile' => $profile,
 			'userFields' => $userFields,
-			'registerSort' => $registerSort,
+			'userinfoFields' => $userinfoFields,
 		));
 	}
 

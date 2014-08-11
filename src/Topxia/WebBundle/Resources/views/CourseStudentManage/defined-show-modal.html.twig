@@ -5,24 +5,11 @@
 {% block body %}
 
 <table class="table table-striped table-condenseda table-bordered">
-	<tr>
-		<th width="25%">用户名</th>
-		<td width="75%">
-			<a class="pull-right" href="{{ path('user_show', {id:user.id}) }}" target="_blank">个人主页</a>
-			{{ user.nickname }}
-		</td>
-	</tr>
-
-	<tr>
-		<th>Email</th>
-		<td>{{ user.email }}</td>
-	</tr>
-
-	{% if registerSort %}
-	{% for field in registerSort %}
+	{% if userinfoFields %}
+	{% for field in userinfoFields %}
 		{% if field == 'truename' %}
 		<tr>
-			<th>姓名</th>
+			<th width="25%">姓名</th>
 			<td>
 				{% if profile.truename %}
 					{{ profile.truename }}
@@ -33,7 +20,7 @@
 		</tr>
 		{% elseif field == 'gender' %}
 		<tr>
-			<th>性别</th>
+			<th width="25%">性别</th>
 			{% if profile.gender == 'mail' %}
 				男
 			{% elseif profile.gender == 'femail' %}
@@ -44,7 +31,7 @@
 		</tr>
 		{% elseif field == 'job' %}
 		<tr>
-			<th>职业</th>
+			<th width="25%">职业</th>
 			<td>
 				{% if profile.job %}
 					{{ profile.job }}
@@ -55,7 +42,7 @@
 		</tr>
 		{% elseif field == 'company' %}
 		<tr>
-			<th>公司</th>
+			<th width="25%">公司</th>
 			<td>
 				{% if profile.company %}
 					{{ profile.company }}
