@@ -1,7 +1,7 @@
 admin:
     pattern:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
-    
+
 admin_popular_courses:
     pattern:  /popular_courses
     defaults: { _controller: TopxiaAdminBundle:Default:popularCourses }
