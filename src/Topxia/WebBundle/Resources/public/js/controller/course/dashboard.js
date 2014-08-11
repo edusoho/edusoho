@@ -35,8 +35,6 @@ define(function(require, exports, module) {
            checkWidth();
         });
 
-        $('.course-dashboard-page .course-infos  img').css("width":"100%");
-        $('.course-about-pane  img').css("width":"100%","height":null);
     };
 
 });
