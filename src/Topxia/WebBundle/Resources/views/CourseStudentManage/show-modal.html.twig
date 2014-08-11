@@ -32,8 +32,10 @@
 	<tr>
 		<th>姓别</th>
 		<td>
-			{% if profile.gender %}
-				{{ profile.gender }}
+			{% if profile.gender == 'mail' %}
+				男
+			{% elseif profile.gender == 'femail' %}
+				女
 			{% else %}
 				暂无
 			{% endif %}
@@ -149,18 +151,25 @@
 			{% endif %}
 		</td>
 	</tr>	
-{% if fields %}
-{% for field in fields %}
+{% if userFields %}
+	{% for userField in userFields %}
 	<tr>
-		{% if profile[field.fieldName] %}
-			<th>{{field.title}}</th>
-			<td>
-				{{ profile[field.fieldName] }}
-			</td>
-		{% endif %}
+		<th width="25%">{{userField.title}}</th>
+		<td>
+			{% if profile[userField.fieldName] %}
+				{% if userField.type=="date"%}
+					{{ profile[userField.fieldName]|date("Y-m-d") }}
+				{% else %}
+					{{ profile[userField.fieldName] }}
+				{% endif %}
+		  {% else %}
+				暂无
+		  {% endif %}
+		</td>
 	</tr>
-	{% endfor %}
-	{% endif %}
+  {% endfor %}
+  {% endif %}
+  </table>
 </table>
 
 {% endblock %}

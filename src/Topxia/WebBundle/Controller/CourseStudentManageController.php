@@ -243,12 +243,19 @@ class CourseStudentManageController extends BaseController
 		$profile = $this->getUserService()->getUserProfile($id);
 		$profile['title'] = $user['title'];
 
-		$fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+		$userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+		for($i=0;$i<count($userFields);$i++){
+			if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
+			if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
+			if(strstr($userFields[$i]['fieldName'], "intField")) $userFields[$i]['type']="int";
+			if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
+			if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
+		}
 
 		return $this->render('TopxiaWebBundle:CourseStudentManage:show-modal.html.twig', array(
 			'user' => $user,
 			'profile' => $profile,
-			'fields' => $fields,
+			'userFields' => $userFields,
 		));
 	}
 
@@ -257,12 +264,24 @@ class CourseStudentManageController extends BaseController
 		$user = $this->getUserService()->getUser($id);
 		$profile = $this->getUserService()->getUserProfile($id);
 		$profile['title'] = $user['title'];
-		$fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
+		$userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+		for($i=0;$i<count($userFields);$i++){
+			if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
+			if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
+			if(strstr($userFields[$i]['fieldName'], "intField")) $userFields[$i]['type']="int";
+			if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
+			if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
+		}
+
+		$auth = $this->getSettingService()->get('auth',array());
+		$registerSort = $auth['registerSort'];
 
 		return $this->render('TopxiaWebBundle:CourseStudentManage:defined-show-modal.html.twig', array(
 			'user' => $user,
-			'fields' => $fields,
 			'profile' => $profile,
+			'userFields' => $userFields,
+			'registerSort' => $registerSort,
 		));
 	}
 

@@ -224,7 +224,6 @@ class SettingController extends BaseController
 			if (empty($auth['welcome_methods'])) {
 				$auth['welcome_methods'] = array();
 			}
-
 			$this->getSettingService()->set('auth', $auth);
 
 			$this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
