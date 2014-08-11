@@ -84,14 +84,15 @@
     color: #ffffff;
     font-size: 16px;
     font-weight:bold;
-
+    position: relative;
+    top: 2px;
 }
 .side_title_above a{
     float: right;
     display: block;
-    width: 20px;
-    height: 25px;
-    margin-top: -30px;
+    width: 17px;
+    height: 19px;
+  /*  margin-top: -30px;*/
     cursor: pointer;
     background: url(../img/contact/contact.png) no-repeat;
     background-position: 62% 10%;
