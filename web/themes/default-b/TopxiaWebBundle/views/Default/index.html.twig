@@ -97,7 +97,8 @@
                         <div class="topic-body">
                           {% set user = thread.user %}
                           {% set latestPostUser = thread.latestPostUser %}
-
+                          <img src="{{ file_path(thread.user.mediumAvatar, 'avatar.png') }}">
+                          <span>{{ user.nickname }}</span>
                         </div>
                         {# {% set user = thread.user %}       
                         {% set latestPostUser = thread.latestPostUser %}  

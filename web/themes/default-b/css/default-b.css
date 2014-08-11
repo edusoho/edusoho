@@ -131,6 +131,7 @@
 }
 
 .topic-item {
+	display: block;
 	margin-bottom: 20px;
 	padding: 5px;
 	border: 1px solid #e1e1e1; 
@@ -151,4 +152,15 @@
 	overflow: hidden;
 	margin-bottom: 25px;
 	text-decoration: none;
+}
+
+.topic-body {
+	display: block;
+	overflow: hidden;
+}
+
+.topic-body img {
+	width: 42px;
+	height: 42px;
+	margin-right: 10px;
 }
