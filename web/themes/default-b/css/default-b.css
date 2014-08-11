@@ -164,3 +164,40 @@
 	height: 42px;
 	margin-right: 10px;
 }
+
+.topic-body h3 {
+	margin: 0;
+	padding: 0;
+}
+
+.topic-body p {
+	line-height: 20px;
+	margin-bottom: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.topic-bottom {
+	margin-top: 20px;
+}
+
+.tag-list a {
+	border-radius: 5px;
+	margin: 0 10px 10px 0;
+	padding: 0 15px;
+	display: inline-block;
+	font-weight: 800;
+	border: 1px solid #ddd;
+	height: 30px;
+	line-height: 30px;
+	color: #999;
+	text-decoration: none;
+	background: #ddd;
+}
+
+.tag-list a:hover {
+	border: 1px solid #096;
+	color: #fff;
+	background: #096;
+}

@@ -97,20 +97,16 @@
                         <div class="topic-body">
                           {% set user = thread.user %}
                           {% set latestPostUser = thread.latestPostUser %}
-                          <img src="{{ file_path(thread.user.mediumAvatar, 'avatar.png') }}">
-                          <span>{{ user.nickname }}</span>
+                          <img src="{{ file_path(thread.user.mediumAvatar, 'avatar.png') }}" class="pull-left">
+                          <h3>{{ user.nickname }}</h3>
+                          <p><a href="{{ path('course_show', {id:thread.course.id}) }}">{{ thread.course.title }}</a></p>
                         </div>
-                        {# {% set user = thread.user %}       
-                        {% set latestPostUser = thread.latestPostUser %}  
-                        <img src="{{ file_path(thread.user.mediumAvatar, 'avatar.png') }}" class="pull-left">
-                        <h3>
-                          <a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}">{{ thread.title|plain_text(28) }}</a>
-                        </h3>
-                        <span>{{ web_macro.user_link(user, 'text-muted') }}</span> 
-                        <p>
-                          <span>{{ web_macro.user_link(latestPostUser, 'text-muted') }}  </span>
-                        {{ thread.latestPostTime|date('m-d H:i') }}时回复
-                        </p> #}
+
+                        <p class="topic-bottom">
+                          <span>{{ web_macro.user_link(latestPostUser) }}  </span>
+              {{ thread.latestPostTime|smart_time }}回复
+                          <span class="pull-right">共 {{ thread.postNum }} 个回复</span>
+                        </p>
                       </div>
                     </li>
                   {% endif %}
@@ -191,7 +187,44 @@
       </div>
 
       <div class="col-md-3">
-        {{ render(controller('TopxiaWebBundle:Default:promotedTeacherBlock')) }}
+        {# 在学课程 #}
+        {{ render(controller('TopxiaWebBundle:Default:userlearning')) }}
+
+        {# 热门标签 #}
+        <div class="es-box teachers">
+          <div class="es-box-heading">
+            <h2>热门标签</h2>
+          </div>
+          <div class="es-box-body">
+            {% set tags = data('Tags',{'count':5}) %}
+            {% if tags %}
+            <div class="tag-list">
+            {% for tag in tags %}
+              {% if tag %} 
+                <a href="{{ path('tag_show', {name:tag.name}) }}"> {{ tag.name }}</a>
+              {% endif %}
+            {% endfor %}
+            {% else %}
+                <div class="empty">还没有添加标签</div>
+            {% endif %}
+            </div>
+          </div>
+        </div>
+
+        {# 课程排行 #}
+        <div class="es-box courses-rank">
+          <div class="es-box-heading">
+            <h2>课程排行</h2>
+          </div>
+          <div class="es-box-body">
+            {% for course in data('PopularCourses',{'count':'5', 'type':'studentNum'}) %}
+              <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
+                <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb">
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+
         {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock', {number:5})) }}
       </div>
     </div>
