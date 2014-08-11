@@ -2,8 +2,14 @@
   <div class="side_content">
     <div class="side_list">
       <div class="side_title">
-        <a title="隐藏" class="close_btn"><span>关闭</span></a>
-        <span class="siede_title_font">{{contact.worktime}}</span>
+        <div class="side_title_above">
+          <img border="0" src="{{asset('/bundles/topxiaweb/img/contact/webchat.png')}}" /> 
+          <span>{{contact.title}}</span>
+          <a title="隐藏"></a></div>
+        <div class="side_title_below">
+          <span>{{contact.worktime}}</span>
+        </div>
+        
       </div>
       
         <div class="qqserver">
@@ -94,7 +100,7 @@
               <div class="online_content overz" id="onlineType4" style="display:none">  
            
                <p>
-                <img border="0" src="{{asset('/bundles/topxiaweb/img/contact/webchat.png')}}" alt="微信" title="微信">
+                <img border="0" src="{{asset('/bundles/topxiaweb/img/contact/webchat24.png')}}" alt="微信" title="微信">
                 <a href="#" class="hovera">{{contact.webchat}}</a>
                </p>
                 <div class="displayimg">
@@ -124,5 +130,9 @@
       </div>
     </div>
   </div>
-  <div class="show_btn"><span>马上咨询</span></div>
+  <div class="show_btn">
+    <img border="0" src="{{asset('/bundles/topxiaweb/img/contact/webchat.png')}}" />    
+    <div class="my_vertical">{{contact.title}}</div>
+    <div class="arrow"></div>
+  </div>
 </div>

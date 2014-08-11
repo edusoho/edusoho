@@ -10,7 +10,7 @@ define(function(require, exports, module) {
          var n = {"float": "left",minStatue: !1,skin: "gray",durationTime: 1e3}, t = $.extend(n, t);
          
          o.each(function() {
-             var n = $(this), h= n.find("h2 a") ,hover = n.find("#onlineSort4"), r = n.find(".close_btn"), i = n.find(".show_btn"), s = n.find(".side_content"), o = n.find(".side_list").width(), u = n.find(".side_list"), a = n.offset().top;
+             var n = $(this), h= n.find("h2 a") ,hover = n.find("#onlineSort4"), r = n.find(".side_title_above a"), i = n.find(".show_btn"), s = n.find(".side_content"), o = n.find(".side_list").width(), u = n.find(".side_list"), a = n.offset().top;
            n.css(t.float, 0), t.minStatue && ($(".show_btn").css("float", t.float), s.css("width", 0), i.css("width", 48)), t.skin && n.addClass("side_" + t.skin), r.bind("click", function() {
                  s.animate({width: "0"}, "fast"), i.stop(!0, !0).delay(300).animate({width: "48px"}, "fast").css("float", "right")
              }), i.click(function() {

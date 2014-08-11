@@ -1,4 +1,4 @@
-/*客服部分*/
+/*/*客服部分*/
 .qqserver p img {
     display: inline;
     vertical-align: middle;
@@ -25,36 +25,86 @@
 
 .show_btn {
     width: 0;
-    height: 153px;
+/*    height: 153px;*/
+    height:auto; 
     overflow: hidden;
     margin-top: 50px;
     float: left;
     cursor: pointer;
     border-radius:5px;
+    background-color: #353e45;
 }
-.show_btn span {
-    display: none;
+.show_btn img {
+    float: left;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+.my_vertical{
+    color: #ffffff;
+    margin:0 auto;
+    width:20px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height:24px;
+
+}
+.arrow{
+     background: url(../img/contact/contact.png) no-repeat;
+     
+}
+ .arrow {
+    width: 40px;
+    height: 29px;
+    background-position: 0 71%;
 }
 .close_btn {
     width: 24px;
     height: 24px;
     cursor: pointer;
 }
-.side_title,.side_bottom,.show_btn {
+.side_title,.side_bottom {
   
-    background: url(../img/contact/contact.png) no-repeat;
+    /*background: url(../img/contact/contact.png) no-repeat;*/
+    background-color: #2b3238;
 }
 .side_title {
     height: 60px;
+    width: auto;
 }
-.siede_title_font{
-    position: relative;
+.side_title_above{
+    padding-left: 10px;
+    padding-top: 10px;
+}
+.side_title_above img{
+/*    float: left;
+    padding-left: 10px;
+    padding-top: 10px;*/
+}
+.side_title_above span{
+    color: #ffffff;
+    font-size: 16px;
+    font-weight:bold;
+
+}
+.side_title_above a{
+    float: right;
+    display: block;
+    width: 20px;
+    height: 25px;
+    margin-top: -30px;
+    cursor: pointer;
+    background: url(../img/contact/contact.png) no-repeat;
+    background-position: 62% 10%;
+}
+.side_title_below{
+    padding-left: 24px;
+}
+.side_title_below span{
     color: #ffffff;
     font-weight: bold;
     font-size: 14px;
-    top: 38px;
-    left: 25px;
 }
+
 .side_bottom {
     height: 8px;
 }
@@ -64,17 +114,7 @@
     width: 128px;
     font-size: 12px;
 }
-.close_btn {
-    float: right;
-    display: block;
-    width: 19px;
-    height: 19px;
-    margin: 16px 7px 0 0;
-    _margin: 16px 3px 0 0;
-}
-.close_btn span {
-    display: none;
-}
+
 .qqserver .qqserver p {
     text-align: left;
     margin: 0;
@@ -101,10 +141,7 @@
     padding: 3px 0 3px 23px;
 }
 
-/* green skin  */
- .side_title {
-    background-position: 45% 8%;
-}
+
  .qqserver {
     background-color: #353e45
 }
@@ -112,9 +149,9 @@
     background-position: -505px -60px;
 }
 
- .show_btn {
+/* .show_btn {
     background-position: 0 50%;
-}
+}*/
  .msgserver a {
     color: #68c40b;
 }
@@ -198,3 +235,4 @@
     display: none;
 }
 
+*/
