@@ -197,7 +197,7 @@
     background-color: #585f65;
     margin-bottom: 1px;
 }
-.online_content p a{
+.online_content p a,.online_content p{
     font-size: 12px; 
     color: #e7f0fc !important;
 
