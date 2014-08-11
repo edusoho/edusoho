@@ -1,29 +1,29 @@
 /*/*客服部分*/
-.qqserver p img {
+.online-contact-qq p img {
     display: inline;
     vertical-align: middle;
 }
-.scrollsidebar {
+.online-contact {
     position: fixed;
     width: 126px;
     right: 0px;
     top: 100px;
     z-index: 999;
 }
-.side_content {
+.online-contact-content {
     width: 128px;
     height: auto;
     overflow: hidden;
     float: left;
 }
-.side_list {
+.online-contact-list {
     width: 128px;
     height: auto;
     overflow: hidden;
     border-radius:10px;
 }
 
-.show_btn {
+.online-contact-show {
     width: 0;
 /*    height: 153px;*/
     height:auto; 
@@ -34,7 +34,7 @@
     border-radius:5px;
     background-color: #353e45;
 }
-.show_btn img {
+.online-contact-show img {
     float: left;
     padding-left: 10px;
     padding-top: 10px;
@@ -62,32 +62,32 @@
     height: 24px;
     cursor: pointer;
 }
-.side_title,.side_bottom {
+.online-contact-title,.online-contact-bottom {
   
     /*background: url(../img/contact/contact.png) no-repeat;*/
     background-color: #2b3238;
 }
-.side_title {
+.online-contact-title {
     height: 60px;
     width: auto;
 }
-.side_title_above{
+.online-contact-title_above{
     padding-left: 10px;
     padding-top: 10px;
 }
-.side_title_above img{
+.online-contact-title_above img{
 /*    float: left;
     padding-left: 10px;
     padding-top: 10px;*/
 }
-.side_title_above span{
+.online-contact-title_above span{
     color: #ffffff;
     font-size: 16px;
     font-weight:bold;
     position: relative;
     top: 2px;
 }
-.side_title_above a{
+.online-contact-title_above a{
     float: right;
     display: block;
     width: 17px;
@@ -97,26 +97,26 @@
     background: url(../img/contact/contact.png) no-repeat;
     background-position: 62% 10%;
 }
-.side_title_below{
+.online-contact-title_below{
     padding-left: 24px;
 }
-.side_title_below span{
+.online-contact-title_below span{
     color: #ffffff;
     font-weight: bold;
     font-size: 14px;
 }
 
-.side_bottom {
+.online-contact-bottom {
     height: 8px;
 }
-.qqserver {
+.online-contact-qq {
     font-family: Verdana, Geneva, sans-serif;
     float:right;
     width: 128px;
     font-size: 12px;
 }
 
-.qqserver .qqserver p {
+.online-contact-qq .online-contact-qq p {
     text-align: left;
     margin: 0;
     vertical-align: middle;
@@ -137,32 +137,19 @@
     margin-top: 6px;
     padding: 10px 0 3px 0;
 }
-.msgserver a {
 
-    padding: 3px 0 3px 23px;
-}
-
-
- .qqserver {
+ .online-contact-qq {
     background-color: #353e45
 }
- .side_bottom {
+ .online-contact-bottom {
     background-position: -505px -60px;
 }
-
-/* .show_btn {
-    background-position: 0 50%;
-}*/
- .msgserver a {
-    color: #68c40b;
-}
-
 
 .online_bar{
         margin-top: -20px;
 }
 
-.online_bar h2 {
+.online_bar h1 {
     background-color: #353e45;
     height: 24px;
     line-height: 27px;
@@ -170,7 +157,7 @@
     color: #666;
     text-align: left;
 }
-.online_bar h2 a {
+.online_bar h1 a {
     display: block;
     color: #FFFFFF;
   /*  font-weight: bold; */
@@ -181,17 +168,17 @@
     cursor: pointer;
 }
 
-.expand h2 a {
+.expand h1 a {
     background: url(../img/contact/online_bg.png) no-repeat -37px -70px;
     _background: url(../img/contact/online_bg_ie6.png) no-repeat -37px -70px;
 }
 
-.mycollapse h2 a {
+.mycollapse h1 a {
     background: url(../img/contact/online_bg.png) no-repeat -37px -96px;
     _background: url(../img/contact/online_bg_ie6.png) no-repeat -37px -96px;
 }
 
-.expand h2 a:hover,.mycollapse h2 a:hover {
+.expand h1 a:hover,.mycollapse h1 a:hover {
     text-decoration: none;
     color: #c81d04;
 }

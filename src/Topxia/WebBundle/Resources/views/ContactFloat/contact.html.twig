@@ -1,21 +1,21 @@
-<div class="scrollsidebar" id="hhService">
-  <div class="side_content">
-    <div class="side_list">
-      <div class="side_title">
-        <div class="side_title_above">
+<div class="online-contact" id="hhService">
+  <div class="online-contact-content">
+    <div class="online-contact-list">
+      <div class="online-contact-title">
+        <div class="online-contact-title_above">
           <img border="0" src="{{asset('/bundles/topxiaweb/img/contact/webchat.png')}}" /> 
           <span>{{contact.title}}</span>
           <a title="隐藏"></a></div>
-        <div class="side_title_below">
+        <div class="online-contact-title_below">
           <span>{{contact.worktime}}</span>
         </div>
         
       </div>
       
-        <div class="qqserver">
+        <div class="online-contact-qq">
            {%  if contact.qq1 is not empty or contact.qq2 is not empty or contact.qq3 is not empty %}
            <div class="online_bar expand" id="onlineSort1">
-              <h2><a id="1">QQ联系</a></h2>
+              <h1><a id="1">QQ联系</a></h1>
               <div class="online_content overz" id="onlineType1">
                 {%  if contact.qq1 is not empty %}
                 <p>
@@ -40,7 +40,7 @@
 
             {% if contact.qqgroup1 is not empty or  contact.qqgroup2 is not empty or  contact.qqgroup3 is not empty%}
             <div class="online_bar mycollapse" id="onlineSort2">
-              <h2><a  id="2">QQ群联系</a></h2>
+              <h1><a  id="2">QQ群联系</a></h1>
               <div class="online_content overz" id="onlineType2" style="display:none">  
             {% if contact.qqgroup1 is not empty %}
                 <p>
@@ -68,7 +68,7 @@
 
         {% if contact.hotline1 is not empty or contact.hotline2 is not empty  or contact.hotline3 is not empty %}
           <div class="online_bar mycollapse" id="onlineSort3">
-              <h2><a id="3">热线电话</a></h2>
+              <h1><a id="3">热线电话</a></h1>
               <div class="online_content overz" id="onlineType3" style="display:none">  
             {% if contact.hotline1 is not empty %}
                 <p>
@@ -96,7 +96,7 @@
 
           {% if contact.webchat is not empty %}
         <div class="online_bar mycollapse" id="onlineSort4">
-              <h2><a id="4">微信</a></h2>
+              <h1><a id="4">微信</a></h1>
               <div class="online_content overz" id="onlineType4" style="display:none">  
            
                <p>
@@ -113,7 +113,7 @@
 
           {% if contact.email is not empty %}
           <div class="online_bar mycollapse" id="onlineSort5">
-              <h2><a id="5">电子邮件</a></h2>
+              <h1><a id="5">电子邮件</a></h1>
               <div class="online_content overz" id="onlineType5" style="display:none">  
                 <p>
                   <img border="0" src="{{asset('/bundles/topxiaweb/img/contact/email24.png')}}" alt="email" title="email" style="float:left;padding-left: 5px;">
@@ -126,11 +126,11 @@
          
         </div>
       
-      <div class="side_bottom">
+      <div class="online-contact-bottom">
       </div>
     </div>
   </div>
-  <div class="show_btn">
+  <div class="online-contact-show">
     <img border="0" src="{{asset('/bundles/topxiaweb/img/contact/webchat.png')}}" />    
     <div class="my_vertical">{{contact.title}}</div>
     <div class="arrow"></div>
