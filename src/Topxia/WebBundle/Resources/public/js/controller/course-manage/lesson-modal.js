@@ -58,6 +58,8 @@
 			$.post($form.attr('action'), $form.serialize(), function(html) {
 				if(html.success == false){
 					Notify.danger(html.message);
+					$('#course-lesson-btn').button('submiting').removeClass('disabled');
+					$('#course-lesson-btn').button('submiting').text('提交');
 					return ;
 				}
 				var id = '#' + $(html).attr('id'),
