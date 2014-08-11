@@ -165,3 +165,8 @@ mapi_mobile_api:
     pattern:  /{service}/{method}
     defaults: { _controller: TopxiaMobileBundle:MobileApi:index }
     methods: [POST, GET]
+
+mapi_mobile_device:
+    pattern:  /regist_device
+    defaults: { _controller: TopxiaMobileBundle:Mobile:mobileDeviceRegist }
+    methods: [POST, GET]

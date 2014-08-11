@@ -7,6 +7,18 @@ use Topxia\MobileBundle\Service\SchoolService;
 
 class SchoolServiceImpl extends BaseService implements SchoolService {
 
+
+    public function getWeekRecommendCourses()
+    {
+        $sort = "recommend";
+        $courses = $this->controller->getCourseService()->searchCourses(array(), $sort, 0,  3);
+        $result = array(
+            "start"=>"0",
+            "limit"=>"3",
+            "data"=>$this->controller->filterCourses($courses));
+        return $result;
+    }
+
     public function getRecommendCourses()
     {
         $sort = "latest";

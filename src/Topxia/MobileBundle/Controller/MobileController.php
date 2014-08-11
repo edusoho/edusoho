@@ -24,6 +24,28 @@ class MobileController extends BaseController
         return $this->createJson($request, $result);
     }
 
+    public function mobileDeviceRegistAction(Request $request)
+    {
+        $parames = array();
+        $parames["imei"] = $this->getPostParam($request, "imei",  "");
+        $parames["platform"] = $this->getPostParam($request, "platform",  "");
+        $parames["version"] = $this->getPostParam($request, "version",  "");
+        $parames["screenresolution"] = $this->getPostParam($request, "screenresolution",  "");
+        $parames["kernel"] = $this->getPostParam($request, "kernel",  "");
+
+        if (empty($parames["imei"]) || empty($parames["platform"])) {
+            return $this->createErrorResponse($request, "info_error", "串号或平台版本不能为空!");
+        }
+        $result = $this->getMobileDeviceService()->addMobileDevice($parames);
+        return $this->createJson($request, $result);
+    }
+
+    protected function getPostParam($request, $name, $default = null)
+    {
+        $result = $request->request->get($name);
+        return $result ? $result : $default;
+    }
+    
     public function notifyMobileVersionAction(Request $request)
     {
         return new JsonResponse("success");
