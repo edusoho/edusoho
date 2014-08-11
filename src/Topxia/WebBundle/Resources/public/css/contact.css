@@ -168,6 +168,12 @@
 
 .online_content p{
     float: left;
+    padding-left: 5px;
+    padding-top: 5px;
+}
+
+.online_content p img{
+    width: 18%;
 }
 
 .online_content {
@@ -191,3 +197,4 @@
     top: 3px;
     display: none;
 }
+
