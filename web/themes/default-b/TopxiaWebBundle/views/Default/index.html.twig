@@ -217,12 +217,54 @@
             <h2>课程排行</h2>
           </div>
           <div class="es-box-body">
-            {% for course in data('PopularCourses',{'count':'5', 'type':'studentNum'}) %}
-              <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
-                <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb">
-              </a>
-            {% endfor %}
+            <ul class="media-list">
+              {% for course in data('PopularCourses',{'count':'5', 'type':'studentNum'}) %}
+                <li class="media">
+                  <a href="{{ path('course_show', {id:course.id}) }}">
+                    <div class="course-item">
+                      <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb pull-left">
+                      <div class="course-title">{{ course.title }}</div>
+                    </div>
+                  </a>
+                </li>
+              {% endfor %}        
+          </ul>
           </div>
+        </div>
+
+        {# 学员动态 #}
+        <div class="es-box status-side">
+          <div class="es-box-heading">
+            <h2>学员动态</h2>
+          </div>
+          {% set learns = data('LatestFinishedLearns', {'count':5}) %}
+          {% if learns %}
+          <div class="es-box-body">
+            <ul class="media-list">
+              {% for learn in learns %}
+                {% if learn.lesson is defined %}
+                  <li class="media">
+                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
+                      <img class="img-circle media-object" src="{{ file_path(learn.user.mediumAvatar, 'avatar.png') }}">
+                    </a>
+                    <div class="media-body">
+                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+                      {% if learn.status == 'learning' %}
+                        正在学习
+                      {% else %}
+                        在{{ learn.finishedTime|smart_time }} 完成了
+                      {% endif %}
+                      <a href="{{ path('course_show', {id:learn.courseId}) }}">《{{ learn.lesson.title|plain_text(15) }}》</a>
+                      的学习
+                    </div>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+          {% else %}
+                 <div class="empty">还没有动态</div>
+          {% endif %}
         </div>
 
         {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock', {number:5})) }}

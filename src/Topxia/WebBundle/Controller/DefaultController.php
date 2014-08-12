@@ -43,6 +43,8 @@ class DefaultController extends BaseController
         if (!empty($courses)) {
             foreach ($courses as $course) {
                 $member = $this->getCourseService()->getCourseMember($course['id'], $user->id);
+
+                $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
             }
 
             $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user->id, $course['id']);
@@ -59,6 +61,7 @@ class DefaultController extends BaseController
                 'course' => $course,
                 'nextLearnLesson' => $nextLearnLesson,
                 'progress'  => $progress,
+                'teachers' => $teachers
             ));
     }
 
