@@ -10,9 +10,13 @@ class serviceDelegator
 
 	function __call($name, $arguments)
 	{
-		if (method_exists($this->target, $name) || $this->filterMethod($name)) {
+		if (!method_exists($this->target, $name)) {
 			return array("error" => "method not exists");
 		}
+		if (method_exists($this, $name) || $this->filterMethod($name)) {
+			return array("error" => "the method is serviceDelegator");
+		}
+
 		call_user_func(array($this->target, "after"), $arguments);
 		$functionResult = call_user_func(array($this->target, $name), $arguments);
 		call_user_func(array($this->target, "before"), $arguments);
