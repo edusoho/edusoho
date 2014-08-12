@@ -51,3 +51,13 @@
 
   </div>
 {% endblock %}
+
+{%  set contact = setting('contact') %}
+
+{% block contact %}
+{% if contact %}
+{% if contact.enabled == 1 %}
+{% include 'TopxiaWebBundle:ContactFloat:contact.html.twig'   with {contact:contact} %}
+{% endif %}
+{% endif %}
+{% endblock %}

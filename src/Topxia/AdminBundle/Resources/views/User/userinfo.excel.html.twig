@@ -10,24 +10,24 @@
 <div class="page-header clearfix">
   <h1 class="pull-left">用户导入-Step1</h1>
 </div>
-
     <div class="row">
           <form method="post" enctype="multipart/form-data">
           <div class="col-md-3 col-md-offset-1">
+            <br>
           <b>选择要导入的文件</b>
           </div>
-          <div class="col-md-8">
+          <div class="col-md-8">            <br>
                 <div class="uploader blue">
                   <input type="text" class="filename" readonly="readonly"/>
                   <input type="button" name="excel" class=" button" value="浏览..."/>
                   <input type="file" size="30" name="excel"/>
-                </div>
+                </div>&nbsp;&nbsp;<a href="{{ asset('assets/files/User_import_example.xls') }}">点击下载示例说明文件</a>
                 <br>
                 支持从Excel文件导入
           </div>
           <div class="col-md-12"><br></div>
           <div class="col-md-3 col-md-offset-1">
-          <b>数据重复时的导入规则</b>
+          <b>用户已存在时的导入规则</b>
           </div>
           <div class="col-md-8">
                 <div class="form-group">        
@@ -38,7 +38,7 @@
                   <label class="required" >覆盖更新</label>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-primary">开始校验数据</button>
+                <button type="submit" class="btn btn-primary" id="start-import-btn">开始校验数据</button>
               </div>
           </div>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

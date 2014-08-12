@@ -136,6 +136,52 @@
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">           
 
+{% if fields %}
+          <hr>
+          {% for field in fields %}
+          {% if field.type=="text" %}
+          <div class="form-group">
+            <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+            <div class="col-md-7 controls">
+              <textarea id="{{field.fieldName}}" name="{{field.fieldName}}" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="">{{ profile[field.fieldName]|default('') }}</textarea>
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+          {% elseif field.type=="int" %}
+          <div class="form-group">
+            <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="{{field.fieldName}}" placeholder="最大值为9位整数" name="{{field.fieldName}}" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+          {% elseif field.type=="float" %}
+          <div class="form-group">
+            <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="{{field.fieldName}}" placeholder="保留到2位小数" name="{{field.fieldName}}" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+          {% elseif field.type=="date" %}
+          <div class="form-group">
+            <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="{{field.fieldName}}" name="{{field.fieldName}}" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{% if profile[field.fieldName] %}{{profile[field.fieldName]}}{% endif %}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+          {% elseif field.type=="varchar" %}
+          <div class="form-group">
+            <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="{{field.fieldName}}" name="{{field.fieldName}}" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
 
 </form>
 {% endblock %}

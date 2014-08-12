@@ -15,6 +15,14 @@ admin_operation_analysis:
     pattern:  /operation/analysis
     defaults: { _controller: TopxiaAdminBundle:Default:operationAnalysisDashbordBlock }
 
+admin_online_count:
+    pattern: /online/count
+    defaults: { _controller: TopxiaAdminBundle:Default:onlineCount }
+
+admin_login_count:
+    pattern: /login/count
+    defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
+
 admin_dashboard:
     pattern:  /dashboard
     defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
@@ -112,9 +120,13 @@ admin_user_create:
     pattern:  /user/create
     defaults: { _controller: TopxiaAdminBundle:User:create }
 
-admin_user_excel_lead:
-    pattern:  /user/lead/excel
-    defaults: { _controller: TopxiaAdminBundle:User:userInfoLeadByExcel }
+admin_user_excel_import:
+    pattern:  /user/import/excel
+    defaults: { _controller: TopxiaAdminBundle:User:importUserInfoByExcel }
+
+admin_user_excel_import_to_base:
+    pattern:  /user/import/excel/to/base
+    defaults: { _controller: TopxiaAdminBundle:User:importUserDataToBase }
 
 admin_user_create_email_check:
     pattern:  /user/create/email/check
@@ -419,6 +431,14 @@ admin_setting_user_fields:
 admin_setting_course_setting:
     pattern:  /setting/course-setting
     defaults: { _controller: TopxiaAdminBundle:Setting:courseSetting }
+
+admin_setting_contact_setting:
+    pattern:  /setting/contact-setting
+    defaults: { _controller: TopxiaAdminBundle:Setting:contactSetting }
+
+admin_setting_contact_upload:
+    pattern:  /setting/contact-upload
+    defaults: { _controller: TopxiaAdminBundle:Setting:contactUpload }
 
 admin_setting_admin_sync:
     pattern:  /setting/admin_sync

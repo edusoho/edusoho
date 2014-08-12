@@ -255,15 +255,15 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
         );
 
-        if (isset($registration['mobile']) && !SimpleValidator::mobile($registration['mobile'])) {
+        if (isset($registration['mobile']) &&$registration['mobile']!=""&& !SimpleValidator::mobile($registration['mobile'])) {
             throw $this->createServiceException('mobile error!');
         }
 
-        if (isset($registration['idcard']) && !SimpleValidator::idcard($registration['idcard'])) {
+        if (isset($registration['idcard']) &&$registration['idcard']!=""&& !SimpleValidator::idcard($registration['idcard'])) {
             throw $this->createServiceException('idcard error!');
         }
 
-        if (isset($registration['truename']) && !SimpleValidator::truename($registration['truename'])) {
+        if (isset($registration['truename']) &&$registration['truename']!=""&& !SimpleValidator::truename($registration['truename'])) {
             throw $this->createServiceException('truename error!');
         }
 
@@ -274,6 +274,10 @@ class UserServiceImpl extends BaseService implements UserService
         $profile['truename'] = empty($registration['truename']) ? '' : $registration['truename'];
         $profile['company'] = empty($registration['company']) ? '' : $registration['company'];
         $profile['job'] = empty($registration['job']) ? '' : $registration['job'];
+        $profile['weixin'] = empty($registration['weixin']) ? '' : $registration['weixin'];
+        $profile['weibo'] = empty($registration['weibo']) ? '' : $registration['weibo'];
+        $profile['qq'] = empty($registration['qq']) ? '' : $registration['qq'];
+        $profile['site'] = empty($registration['site']) ? '' : $registration['site'];
         $profile['gender'] = empty($registration['gender']) ? 'secret' : $registration['gender'];
         for($i=1;$i<=5;$i++){
             $profile['intField'.$i] = empty($registration['intField'.$i]) ? null : $registration['intField'.$i];

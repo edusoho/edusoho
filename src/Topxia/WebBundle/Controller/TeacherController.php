@@ -27,6 +27,12 @@ class TeacherController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $teachers = array_filter($teachers,function($v){
+            if($v['locked'] === '0')
+                return true;
+            return false;
+        });
+
         $profiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($teachers, 'id'));
 
         return $this->render('TopxiaWebBundle:Teacher:index.html.twig', array(

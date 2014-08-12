@@ -457,6 +457,10 @@ course_manage_students_show:
     pattern:  /course/{id}/manage/students/show
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:show }
 
+course_manage_students_defined_show:
+    pattern:  /course/{id}/manage/students/defined/show
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:definedShow }
+
 course_manage_student_create:
     pattern:  /course/{id}/manage/student/create
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:create }
