@@ -1,0 +1,31 @@
+{% if course.freeLimitType != 0 %}
+<div class="countdown-div">
+    <div class="countdown-img">
+       {% if course.freeLimitType == 1 %} <img src="{{asset('/bundles/topxiaweb/img/course/start-icon.png')}}"> {% endif %}
+       {% if course.freeLimitType == 2 %} <img src="{{asset('/bundles/topxiaweb/img/course/end-icon.png')}}"> {% endif %}
+    </div>
+<ul class="countdown" data-starttime="{{course.freeStartTime|default()|data_format('Y-m-d H:i:s')}}" data-endtime="{{course.freeEndTime|default()|data_format('Y-m-d H:i:s')}}">
+        <li>
+            <span class="days">00</span>
+            <p class="days_ref">天</p>
+        </li>
+        <li class="seperator">.</li>
+        <li>
+            <span class="hours">00</span>
+            <p class="hours_ref">时</p>
+        </li>
+        <li class="seperator">:</li>
+        <li>
+            <span class="minutes">00</span>
+            <p class="minutes_ref">分</p>
+        </li>
+        <li class="seperator">:</li>
+        <li>
+            <span class="seconds">00</span>
+            <p class="seconds_ref">秒</p>
+        </li>
+    </ul>
+
+</div>
+
+{% endif %}

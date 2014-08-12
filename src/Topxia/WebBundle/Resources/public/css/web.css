@@ -4070,3 +4070,44 @@ body {
 	margin-top: 10px;
 
 }
+
+.countdown-div{
+	position: absolute;
+	top: 105px;
+	left: 800px;
+	display: none;
+}
+
+.countdown-img{
+	float: left;
+}
+.countdown-img img{
+	height: 80px;
+}
+ul.countdown {
+	list-style: none;
+	padding: 0;
+	display: block;
+	text-align: center;
+	float: right;
+	margin: 10;
+}
+
+ul.countdown li {
+	display: inline-block;
+}
+
+ul.countdown li span {
+	font-size: 20px;
+	font-weight: 300;
+}
+
+ul.countdown li.seperator {
+	font-size: 20px;
+	vertical-align: top;
+}
+
+ul.countdown li p {
+	color: #a7abb1;
+	font-size: 14px;
+}

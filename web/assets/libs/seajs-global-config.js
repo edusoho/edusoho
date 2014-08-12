@@ -45,7 +45,8 @@ seajs.config({
 		'swfupload': 'gallery2/swfupload/2.2.0/swfupload',
 		'webuploader': 'gallery2/webuploader/0.1.2/webuploader',
 		'screenfull': 'gallery2/screenfull/1.1.1/screenfull',
-		'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js'
+		'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js',
+		'countdown': 'jquery-plugin/countdown/1.0.0/countdown',
 	},
 
 	// 预加载项
