@@ -166,12 +166,12 @@ mapi_mobile_api:
     defaults: { _controller: TopxiaMobileBundle:MobileApi:index }
     methods: [POST, GET]
 
-mapi_mobile_device:
+mapi_mobile_regist_device:
     pattern:  /regist_device
     defaults: { _controller: TopxiaMobileBundle:Mobile:mobileDeviceRegist }
     methods: [POST, GET]
 
-mapi_mobile_device:
+mapi_mobile_log:
     pattern:  /mobile_school_login
     defaults: { _controller: TopxiaMobileBundle:Mobile:mobileSchoolLogin }
     methods: [POST, GET]

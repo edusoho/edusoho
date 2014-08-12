@@ -51,6 +51,8 @@ class MobileController extends BaseController
             return $this->createErrorResponse($request, "info_error", "串号或平台版本不能为空!");
         }
         $result = $this->getMobileDeviceService()->addMobileDevice($parames);
+        
+        $this->getLogService()->info(MobileController::MOBILE_MODULE, "regist_device", "注册客户端",  $parames);
         return $this->createJson($request, $result);
     }
 
