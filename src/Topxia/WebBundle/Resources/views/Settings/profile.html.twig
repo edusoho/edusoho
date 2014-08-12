@@ -189,7 +189,7 @@
 					<div class="form-group">
 						<label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
 						<div class="col-md-7 controls">
-							<textarea id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="">{{ profile[field.fieldName]|default('') }}</textarea>
+							<textarea id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control">{{ profile[field.fieldName]|default('') }}</textarea>
 							<div class="help-block" style="display:none;"></div>
 						</div>
 					</div>
@@ -197,7 +197,7 @@
 					<div class="form-group">
 						<label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
 						<div class="col-md-7 controls">
-							<input type="text" id="{{field.fieldName}}" placeholder="最大值为9位整数" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|default('') }}">
+							<input type="text" id="{{field.fieldName}}" placeholder="最大值为9位整数" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
 					</div>
@@ -205,7 +205,7 @@
 					<div class="form-group">
 						<label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
 						<div class="col-md-7 controls">
-							<input type="text" id="{{field.fieldName}}" placeholder="保留到2位小数" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|default('') }}">
+							<input type="text" id="{{field.fieldName}}" placeholder="保留到2位小数" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
 					</div>
@@ -213,7 +213,7 @@
 					<div class="form-group">
 						<label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
 						<div class="col-md-7 controls">
-							<input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{% if profile[field.fieldName] %}{{profile[field.fieldName]}}{% endif %}">
+							<input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" value="{% if profile[field.fieldName] %}{{profile[field.fieldName]}}{% endif %}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
 					</div>
@@ -221,7 +221,7 @@
 					<div class="form-group">
 						<label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
 						<div class="col-md-7 controls">
-							<input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|default('') }}">
+							<input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="form-control" value="{{ profile[field.fieldName]|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
 					</div>
