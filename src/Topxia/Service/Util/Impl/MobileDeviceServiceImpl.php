@@ -1,10 +1,10 @@
 <?php
 namespace Topxia\Service\Util\Impl;
 
-use Topxia\Service\Common\NewBaseService;
+use Topxia\Service\Common\BaseService;
 use Topxia\Service\Util\MobileDeviceService;
 
-class MobileDeviceServiceImpl extends NewBaseService implements MobileDeviceService
+class MobileDeviceServiceImpl extends BaseService implements MobileDeviceService
 {
 	function addMobileDevice($parames)
 	{

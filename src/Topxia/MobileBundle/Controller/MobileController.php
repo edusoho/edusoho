@@ -40,6 +40,7 @@ class MobileController extends BaseController
 
     public function mobileDeviceRegistAction(Request $request)
     {
+        $result = false;
         $parames = array();
         $parames["imei"] = $this->getPostParam($request, "imei",  "");
         $parames["platform"] = $this->getPostParam($request, "platform",  "");
@@ -50,7 +51,9 @@ class MobileController extends BaseController
         if (empty($parames["imei"]) || empty($parames["platform"])) {
             return $this->createErrorResponse($request, "info_error", "串号或平台版本不能为空!");
         }
-        $result = $this->getMobileDeviceService()->addMobileDevice($parames);
+        if ($this->getMobileDeviceService()->addMobileDevice($parames)) {
+            $result = true;
+        }
         
         $this->getLogService()->info(MobileController::MOBILE_MODULE, "regist_device", "注册客户端",  $parames);
         return $this->createJson($request, $result);
@@ -196,6 +199,11 @@ class MobileController extends BaseController
     {
         $error = array('error' => array('name' => $name, 'message' => $message));
         return $this->createJson($request, $error);
+    }
+
+    protected function getMobileDeviceService()
+    {
+        return $this->getServiceKernel()->createService('Util.MobileDeviceService');
     }
 
 }
