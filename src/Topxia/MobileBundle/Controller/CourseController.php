@@ -329,13 +329,26 @@ class CourseController extends MobileController
         }
 
         $result = array();
-        $result['total'] = $this->getCourseService()->findUserLearnCourseCount($user['id']);
+        $result['total'] = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
-        $courses = $this->getCourseService()->findUserLearnCourses($user['id'], $result['start'], $result['limit']);
-        $result['data'] = $this->filterCourses($courses);
+        $courses = $this->getCourseService()->findUserLeaningCourses($user['id'], $result['start'], $result['limit']);
+        $result['data'] = $this->array2Map($this->filterCourses($courses));
 
         return $this->createJson($request, $result);
+    }
+
+    private function array2Map($learnCourses)
+    {
+        $mapCourses = array();
+        if (empty($learnCourses)) {
+            return $mapCourses;
+        }        
+        foreach ($learnCourses as $key => $learnCourse) {
+            $mapCourses[$learnCourse['id']] = $learnCourse;
+        }
+
+        return $mapCourses;
     }
 
     /**
@@ -355,7 +368,7 @@ class CourseController extends MobileController
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
         $courses = $this->getCourseService()->findUserLeanedCourses($user['id'], $result['start'], $result['limit']);
-        $result['data'] = $this->filterCourses($courses);
+        $result['data'] = $this->array2Map($this->filterCourses($courses));
 
         return $this->createJson($request, $result);
     }
