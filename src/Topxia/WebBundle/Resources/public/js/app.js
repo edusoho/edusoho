@@ -2,17 +2,8 @@ define(function(require, exports, module) {
 	window.$ = window.jQuery = require('jquery');
 	require('bootstrap');
 	require('common/bootstrap-modal-hack');
-	var Contact = require('/bundles/topxiaweb/js/util/contact.js');
 
 	exports.load = function(name) {
-		$contact = $('#hhService');
-		if($contact.length >0){
-		   require('/bundles/topxiaweb/css/contact.css');
-		   var contact = new Contact();
-		   contact.animate({float:'right',minStatue:true,skin:'green',durationTime:1000},$contact);
-		 		
-		}
-		
 		if (window.app.jsPaths[name.split('/', 1)[0]] == undefined) {
 			name = window.app.basePath + '/bundles/topxiaweb/js/controller/' + name;
 		}
