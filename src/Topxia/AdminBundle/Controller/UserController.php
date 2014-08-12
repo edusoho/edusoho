@@ -383,39 +383,38 @@ class UserController extends BaseController
 
     public function importUserDataToBaseAction(Request $request)
     {   
+        
         $userData=$request->request->get("data");
         $userData=unserialize($userData);
         $checkType=$request->request->get("checkType");
+        $userByEmail=array();
+        $userByNickname=array();
+        $users=array();
 
         if($checkType=="ignore"){
 
-            foreach ($userData as $key => $user) {
-                if ($user["gender"]=="男")$user["gender"]="male";
-                if ($user["gender"]=="女")$user["gender"]="female";
-                if ($user["gender"]=="")$user["gender"]="secret";
-                $this->getUserService()->register($user);
-                }       
+            $this->getUserService()->importUsers($userData);
+
         }
         if($checkType=="update"){
-   
+            
             foreach ($userData as $key => $user) {
                 if ($user["gender"]=="男")$user["gender"]="male";
                 if ($user["gender"]=="女")$user["gender"]="female";
                 if ($user["gender"]=="")$user["gender"]="secret";
 
                 if($this->getUserService()->getUserByNickname($user["nickname"])){
-                    $member=$this->getUserService()->getUserByNickname($user["nickname"]);
-                    $this->getUserService()->changePassword($member["id"],$user["password"]);
-                    $this->getUserService()->updateUserProfile($member["id"],$user);
+                    $userByNickname[]=$user;
                 }
                 elseif ($this->getUserService()->getUserByEmail($user["email"])){
-                    $member=$this->getUserService()->getUserByEmail($user["email"]);
-                    $this->getUserService()->changePassword($member["id"],$user["password"]);
-                    $this->getUserService()->updateUserProfile($member["id"],$user);
-                }else { 
-                    $this->getUserService()->register($user);
+                    $userByEmail[]=$user;
+                }else {
+                    $users[]=$user; 
                 }      
-            }       
+            }
+            $this->getUserService()->importUpdateNickname($userByNickname); 
+            $this->getUserService()->importUpdateEmail($userByEmail); 
+            $this->getUserService()->importUsers($users);      
         }
         return $this->render('TopxiaAdminBundle:User:userinfo.excel.step3.html.twig', array(
         ));
@@ -424,7 +423,6 @@ class UserController extends BaseController
     public function importUserInfoByExcelAction(Request $request)
     {
          if ($request->getMethod() == 'POST') {
-
             $checkType=$request->request->get("rule");
             $file=$request->files->get('excel');
             $errorInfo=array();
@@ -452,6 +450,15 @@ class UserController extends BaseController
 
             $highestColumn = $objWorksheet->getHighestColumn();
             $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);   
+
+            if($highestRow>1000){
+
+                $this->setFlashMessage('danger', 'Excel超过1000行数据!');
+
+                return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
+                ));
+            }
+
             $fieldArray=$this->getFieldArray();
 
             for ($col = 0;$col < $highestColumnIndex;$col++)
