@@ -11,6 +11,7 @@ use Topxia\Common\ArrayToolkit;
 class MobileController extends BaseController
 {
     const TOKEN_TYPE = 'mobile_login';
+    const MOBILE_MODULE = "mobile";
 
     protected $result = array();
 
@@ -22,6 +23,19 @@ class MobileController extends BaseController
             );
 
         return $this->createJson($request, $result);
+    }
+
+    public function mobileSchoolLoginAction(Request $request)
+    {
+        if ($request->getMethod() == "POST"){
+            $parames = $request->request->all();
+        } else {
+            $parames = $request->query->all();
+        }
+
+        $this->getLogService()->info(MobileController::MOBILE_MODULE, "school_login", "网校登录",  $parames);
+
+        return $this->createJson($request, null);
     }
 
     public function mobileDeviceRegistAction(Request $request)

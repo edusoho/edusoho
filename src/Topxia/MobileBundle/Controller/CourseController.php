@@ -74,6 +74,9 @@ class CourseController extends MobileController
         $result['userLearns'] = $learnStatuses;
         $result['userFavorited'] = $user->isLogin() ? $this->getCourseService()->hasFavoritedCourse($courseId) : false;
 
+        $this->getLogService()->info(MobileController::MOBILE_MODULE, "view_course", "浏览课程",  array(
+            "course" => $result['course'])
+        );
         return $this->createJson($request, $result);
     }
 
