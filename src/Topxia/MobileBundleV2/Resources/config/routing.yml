@@ -1,0 +1,4 @@
+mapi_mobile_api:
+    pattern:  /{service}/{method}
+    defaults: { _controller: TopxiaMobileBundleV2:MobileApi:index }
+    methods: [GET, POST]
