@@ -3,8 +3,9 @@ define(function(require, exports, module) {
     var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    var VideoChooser = require('../widget/media-chooser/video-chooser');
-    var AudioChooser = require('../widget/media-chooser/audio-chooser');
+    var VideoChooser = require('../widget/media-chooser/video-chooser3');
+    var AudioChooser = require('../widget/media-chooser/audio-chooser2');
+    var PPTChooser = require('../widget/media-chooser/ppt-chooser2');
     var Notify = require('common/bootstrap-notify');
 
     function createValidator ($form) {
@@ -17,9 +18,9 @@ define(function(require, exports, module) {
         Validator.addRule('timeLength', function(options) {
             return /^\d+:\d+$/.test(options.element.val())
         }, '时长格式不正确');
-
         validator = new Validator({
             element: $form,
+            failSilently: true,
             autoSubmit: false
         });
 
@@ -63,6 +64,12 @@ define(function(require, exports, module) {
             required: true
         });
 
+        validator.addItem({
+            element: '#lesson-give-credit-field',
+            required: true,
+            rule: 'integer'
+        });
+
         switch (type) {
             case 'video':
             case 'audio':
@@ -74,16 +81,16 @@ define(function(require, exports, module) {
                 });
 
                 validator.addItem({
-                    element: '#lesson-second-field',
+                    element: '#lesson-minute-field',
                     required: true,
                     rule: 'integer',
                     display: '时长'
                 });
 
                 validator.addItem({
-                    element: '#lesson-minute-field',
+                    element: '#lesson-second-field',
                     required: true,
-                    rule: 'integer',
+                    rule: 'second_range',
                     display: '时长'
                 });
 
@@ -94,11 +101,29 @@ define(function(require, exports, module) {
                     required: true
                 });
                 break;
+            case 'ppt':
+                validator.addItem({
+                    element: '#lesson-media-field',
+                    required: true,
+                    rule: 'mediaValueEmpty',
+                    display: 'PPT'
+                });
+                break;
         }
 
     }
 
     exports.run = function() {
+        var updateDuration = function (length) {
+            length = parseInt(length);
+
+            var minute = parseInt(length / 60);
+            var second = length - minute * 60;
+
+            $("#lesson-minute-field").val(minute);
+            $("#lesson-second-field").val(second);
+        }
+
         var $form = $("#course-lesson-form");
 
         var $content = $("#lesson-content-field");
@@ -116,65 +141,51 @@ define(function(require, exports, module) {
             choosed: choosedMedia,
         });
 
+        var pptChooser = new PPTChooser({
+            element: '#ppt-chooser',
+            choosed: choosedMedia,
+        });
+
+
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
-            if (item.status == 'waiting') {
-                
-            }
+            updateDuration(item.length);
         });
 
         audioChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+            updateDuration(item.length);
         });
 
-        var mediaFileInfoFetchingCallback = function () {
-            var $group = $("#lesson-length-form-group").show();
-            var $help = $group.find('.help-block');
-            $help.data('help', $help.text());
-            $help.text('正在读取时长，请稍等...');
-        };
+        pptChooser.on('change', function(item) {
+            var value = item ? JSON.stringify(item) : '';
+            $form.find('[name="media"]').val(value);
+        });
 
-        var mediaFileInfoFetchedCallback = function (info) {
-            var $group = $("#lesson-length-form-group").show();
-            var $help = $group.find('.help-block');
-            if ($help.data('help')) {
-                $help.text($help.data('help'));
-            }
-
-            if (info.duration) {
-
-                if (info.duration.match(':')){
-                    var durations = info.duration.split(':');
-                    $("#lesson-minute-field").val(durations[0]);
-                    $("#lesson-second-field").val(durations[1]);
-                }
-
-            }
-        }
-
-        videoChooser.on('fileinfo.fetching', mediaFileInfoFetchingCallback);
-        videoChooser.on('fileinfo.fetched', mediaFileInfoFetchedCallback);
-        
-        audioChooser.on('fileinfo.fetching', mediaFileInfoFetchingCallback);
-        audioChooser.on('fileinfo.fetched', mediaFileInfoFetchedCallback);
 
         var validator = createValidator($form);
 
         $form.on('change', '[name=type]', function(e) {
             var type = $(this).val();
 
-            $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text")
+            $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text").removeClass("lesson-form-ppt")
             $form.addClass("lesson-form-" + type);
 
             if (type == 'video') {
                 videoChooser.show();
                 audioChooser.hide();
+                pptChooser.hide();
 
             } else if (type == 'audio') {
                 audioChooser.show();
                 videoChooser.hide();
+                pptChooser.hide();
+            } else if (type == 'ppt') {
+                pptChooser.show();
+                videoChooser.hide();
+                audioChooser.hide();
             }
 
             switchValidator(validator, type);

@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type{% endif %}" >
     <div class="col-md-2 control-label"><label for="lesson-title-field">标题</label></div>
     <div class="col-md-9 controls">
       <div class="row">
@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <div class="form-group for-text-type for-video-type for-audio-type">
+  <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type{% endif %}">
     <div class="col-md-2 control-label"><label for="lesson-summary-field">摘要</label></div>
     <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary">{{ field_value(lesson, 'summary') }}</textarea></div>
   </div>
@@ -52,12 +52,22 @@
     <div class="col-md-9 controls"><textarea class="form-control" id="lesson-content-field" name="content">{{ field_value(lesson, 'content') }}</textarea></div>
   </div>
 
-  <div class="form-group for-video-type for-audio-type">
+  <div class="form-group for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type{% endif %}">
     <div class="col-md-2 control-label for-video-type"><label>视频</label></div>
     <div class="col-md-2 control-label for-audio-type"><label>音频</label></div>
+    <div class="col-md-2 control-label for-ppt-type"><label>PPT</label></div>
     <div class="col-md-9 controls">
       {% include "TopxiaWebBundle:CourseLessonManage:media-choose.html.twig" %}
       <input id="lesson-media-field" type="hidden" name="media" value="{{ field_value(lesson, 'media')|json_encode }}">
+    </div>
+  </div>
+
+  <div class="form-group for-none-type {% if storageSetting.upload_mode != 'cloud' %}for-ppt-type{% endif %}">
+    <div class="col-md-offset-2 col-md-9">
+      <div class="alert alert-info">
+        <p>PPT文档需要EduSoho云转换后才能在浏览器中显示，请先开启EduSoho云。</p>
+        <p>如尚未购买EduSoho云服务，请联系<a href="http://www.edusoho.com/service" target="_blank"><strong>EduSoho官方</strong></a>购买。</p>
+        </div>
     </div>
   </div>
 
@@ -71,6 +81,16 @@
       <div class="help-block">时长必须为整数。</div>
     </div>
   </div>
+
+  {% if 'lesson_credit' in features %}
+  <div class="form-group for-text-type for-video-type for-audio-type for-ppt-type">
+    <div class="col-md-2 control-label"><label for="lesson-give-credit-field">学分</label></div>
+    <div class="col-md-9 controls">
+      <input class="form-control width-input width-input-small" id="lesson-give-credit-field" type="text" name="giveCredit" value="{{ lesson.giveCredit|default(0) }}"> 分
+      <div class="help-block">学完此课时，可获得的学分</div>
+    </div>
+  </div>
+  {% endif %}
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 

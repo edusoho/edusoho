@@ -6,13 +6,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 interface UserService
 {
     
-	public function getUser($id);
+    public function getUser($id);
 
     public function getUserByNickname($nickname);
 
     public function getUserByEmail($email);
 
-	public function findUsersByIds(array $ids);
+    public function findUsersByIds(array $ids);
 
     public function findUserProfilesByIds(array $ids);
 
@@ -76,10 +76,24 @@ interface UserService
 
     public function changeUserRoles($id, array $roles);
 
+    /**
+     * @deprecated move to TokenService
+     */
     public function makeToken($type, $userId = null, $expiredTime = null, $data = null);
 
+    /**
+     * @deprecated move to TokenService
+     */
     public function getToken($type, $token);
 
+    /**
+     * @deprecated move to TokenService
+     */
+    public function searchTokenCount($conditions);
+
+    /**
+     * @deprecated move to TokenService
+     */
     public function deleteToken($type, $token);
 
     public function lockUser($id);
@@ -167,4 +181,9 @@ interface UserService
     public function passApproval($userId, $note = null);
 
     public function rejectApproval($userId, $note = null);
+
+    public function analysisRegisterDataByTime($startTime,$endTime);
+
+    public function dropFieldData($fieldName);
+
 }

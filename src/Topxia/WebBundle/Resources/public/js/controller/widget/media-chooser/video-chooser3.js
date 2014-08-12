@@ -1,16 +1,49 @@
 define(function(require, exports, module) {
 
-    var BaseChooser = require('./base-chooser-2');
+    var BaseChooser = require('./base-chooser-4');
     var Notify = require('common/bootstrap-notify');
     require('jquery.perfect-scrollbar');
 
+    var VideoQualitySwitcher = require('../video-quality-switcher');
+
     var VideoChooser = BaseChooser.extend({
+
+        qualitySwitcher:null,
+
     	attrs: {
     		uploaderSettings: {
                 file_types : "*.mp4;*.avi;*.flv",
                 file_size_limit : "1000 MB",
                 file_types_description: "视频文件"
-    		}
+    		},
+            preUpload: function(uploader, file) {
+                var data = {};
+
+                if (this.qualitySwitcher) {
+                    data.videoQuality = this.qualitySwitcher.get('videoQuality');
+                    data.audioQuality = this.qualitySwitcher.get('audioQuality');
+                    if (this.element.data('hlsEncrypted')) {
+                        data.convertor = 'HLSEncryptedVideo';
+                    } else {
+                        data.convertor = 'HLSVideo';
+                    }
+                }
+
+                $.ajax({
+                    url: this.element.data('paramsUrl'),
+                    async: false,
+                    dataType: 'json',
+                    data: data, 
+                    cache: false,
+                    success: function(response, status, jqXHR) {
+                        uploader.setUploadURL(response.url);
+                        uploader.setPostParams(response.postParams);
+                    },
+                    error: function(jqXHR, status, error) {
+                        Notify.danger('请求上传授权码失败！');
+                    }
+                });
+            }
     	},
 
     	events: {
@@ -20,6 +53,16 @@ define(function(require, exports, module) {
     	setup: function() {
     		VideoChooser.superclass.setup.call(this);
             $('#disk-browser-video').perfectScrollbar({wheelSpeed:50});
+
+            if ($('.video-quality-switcher').length > 0) {
+                var switcher = new VideoQualitySwitcher({
+                    element: '.video-quality-switcher'
+                });
+
+                this.qualitySwitcher = switcher;
+            }
+
+
     	},
 
     	onImport: function(e) {
@@ -49,7 +92,6 @@ define(function(require, exports, module) {
                     uri: video.files[0].url
                 };
                 self.trigger('change', media);
-                self.trigger('fileinfo.fetched', {});
                 $urlInput.val('');
             }, 'json').error(function(jqXHR, textStatus, errorThrown) {
                 Notify.danger('读取视频页面信息失败，请检查您的输入的页面地址后重试');

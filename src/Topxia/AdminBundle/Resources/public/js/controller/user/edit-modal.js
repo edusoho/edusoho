@@ -18,7 +18,7 @@ define(function(require, exports, module) {
             	if (error) {
             		return false;
             	}
-
+                $('#edit-user-btn').button('submiting').addClass('disabled');
                 editor.sync();
 
 				$.post($form.attr('action'), $form.serialize(), function(html) {
@@ -52,6 +52,16 @@ define(function(require, exports, module) {
             element: '[name="site"]',
             rule: 'url',
             errormessageUrl: '网站地址不正确，须以http://开头。'
+        });
+
+        validator.addItem({
+            element: '[name="mobile"]',
+            rule: 'phone',
+        });
+
+        validator.addItem({
+            element: '[name="idcard"]',
+            rule: 'idcard',
         });
 
 	};

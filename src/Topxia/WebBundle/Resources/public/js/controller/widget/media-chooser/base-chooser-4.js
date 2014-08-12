@@ -10,6 +10,7 @@ define(function(require, exports, module) {
             choosed: null,
             uploader: null,
             uploaderSettings: {},
+            preUpload: null
         },
 
         events: {
@@ -27,7 +28,6 @@ define(function(require, exports, module) {
             var choosed = this.get('choosed');
             if (choosed) {
                 this.trigger('change', choosed);
-                this.trigger('fileinfo.fetched', {});
             }
 
         },
@@ -101,7 +101,6 @@ define(function(require, exports, module) {
 
             browser.on('select', function(file) {
                 self.trigger('change', self._convertFileToMedia(file));
-                self.trigger('fileinfo.fetched', {});
             });
         },
 
@@ -112,6 +111,7 @@ define(function(require, exports, module) {
             media.type = file.type;
             media.source = 'self';
             media.name = file.filename;
+            media.length = file.length;
             return media;
         },
 
@@ -127,13 +127,6 @@ define(function(require, exports, module) {
             var self = this;
 
             var settings = $.extend({}, {
-                upload_url : $btn.data('url'),
-                post_params : {
-                    "key" : $btn.data('key'),
-                    "token" : $btn.data('token'),
-                    "x:filepath": $btn.data('filepath'),
-                    "x:convertKey": $btn.data('convertKey')
-                },
                 file_types : "*.*",
                 file_size_limit : "10 MB",
                 file_upload_limit : 1,
@@ -167,6 +160,9 @@ define(function(require, exports, module) {
                 },
 
                 upload_start_handler: function(file) {
+                    if (self.get('preUpload')) {
+                        self.get('preUpload').call(self, this, file);
+                    }
                     progressbar.reset().show();
                 },
 
@@ -188,15 +184,10 @@ define(function(require, exports, module) {
                             var media = self._convertFileToMedia(response);
                             self.trigger('change',  media);
                             Notify.success('文件上传成功！');
-                            self.trigger('fileinfo.fetching');
-                            $.get($btn.data('fileinfoUrl'), {key:$btn.data('key')}, function(info){
-                                self.trigger('fileinfo.fetched', info);
-                            }, 'json');
                         }, 'json');
                     } else {
                         var media = self._convertFileToMedia(serverData);
                         self.trigger('change',  media);
-                        self.trigger('fileinfo.fetched', {});
                         Notify.success('文件上传成功！');
                     }
 

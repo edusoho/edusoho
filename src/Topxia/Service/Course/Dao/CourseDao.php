@@ -8,6 +8,8 @@ interface CourseDao
 
     public function getCourse($id);
 
+    public function getCoursesCount();
+
     public function findCoursesByIds(array $ids);
 
     public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit);
@@ -23,5 +25,9 @@ interface CourseDao
     public function updateCourse($id, $fields);
 
     public function deleteCourse($id);
+    
+    public function waveCourse($id,$field,$diff);
+
+    public function analysisCourseDataByTime($startTime,$endTime);
 
 }

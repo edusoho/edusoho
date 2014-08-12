@@ -20,9 +20,14 @@ define(function(require, exports, module) {
 
 	window.app.load = exports.load;
 
+	if (app.themeGlobalScript) {
+		exports.load(app.themeGlobalScript);
+	}
+
 	if (app.controller) {
 		exports.load(app.controller);
 	}
+
 
 	$(document).ajaxError(function(event, jqxhr, settings, exception) {
 		var json = jQuery.parseJSON(jqxhr.responseText);

@@ -22,6 +22,8 @@
 								  试卷
                 {% elseif item.type == 'live' %}
                   {{ item.length|duration }}
+                {% elseif item.type == 'ppt' %}
+                  PPT
 								{% else %}
 									{{ item.length|duration }}
 								{% endif %}

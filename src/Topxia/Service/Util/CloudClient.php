@@ -13,6 +13,8 @@ interface CloudClient
     public function getVideoConvertCommands();
 
     public function getAudioConvertCommands();
+    
+    public function getPPTConvertCommands();
 
     public function getVideoInfo($bucket, $key);
 

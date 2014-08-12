@@ -75,6 +75,22 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="profile_idcard">身份证号</label>
+            <div class="col-md-7 controls radios">
+              <input type="text" id="profile_idcard" name="profile[idcard]" class="form-control" value="{{ profile.idcard|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="profile_mobile" class="col-md-2 control-label">手机号码</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile.mobile|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+
           {# <div class="form-group form-forIam-group form-student-group">
             <label class="col-md-2 control-label">学校</label>
             <div class="col-md-7 controls">
@@ -164,13 +180,54 @@
             </div>
           </div>
 
+
+
+          {% if fields %}
+          <hr>
+          {% for field in fields %}
+          {% if field.type=="text" %}
           <div class="form-group">
-            <label for="profile_mobile" class="col-md-2 control-label">手机</label>
+            <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
             <div class="col-md-7 controls">
-              <input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile.mobile|default('') }}">
+              <textarea id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="">{{ profile[field.fieldName]|default('') }}</textarea>
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>
+          {% elseif field.type=="int" %}
+          <div class="form-group">
+            <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="{{field.fieldName}}" placeholder="最大值为9位整数" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+          {% elseif field.type=="float" %}
+          <div class="form-group">
+            <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="{{field.fieldName}}" placeholder="保留到2位小数" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+          {% elseif field.type=="date" %}
+          <div class="form-group">
+            <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{% if profile[field.fieldName] %}{{profile[field.fieldName]}}{% endif %}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+          {% elseif field.type=="varchar" %}
+          <div class="form-group">
+            <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
+            <div class="col-md-7 controls">
+              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile[field.fieldName]|default('') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
 
           <div class="row">
             <div class="col-md-7 col-md-offset-2">

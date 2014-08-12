@@ -42,6 +42,12 @@ class EduSohoAppClient implements AppClient
         return $this->callRemoteApi('POST', 'CheckUpgradePackages', $args);
     }
 
+    public function checkAppCop()
+    {
+        $args = array('cop' => '1');
+        return $this->callRemoteApi('POST', 'CheckAppCop', $args);
+    }
+
     public function submitRunLog($log)
     {
         $args = array('log' => $log);

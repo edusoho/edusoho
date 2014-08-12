@@ -66,7 +66,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             $conditions['role'] = "|{$conditions['role']}|";
         }
 
-        if(isset($conditions['keywordType'])) {
+        if(isset($conditions['keywordType']) && isset($conditions['keyword'])) {
             $conditions[$conditions['keywordType']]=$conditions['keyword'];
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
@@ -86,6 +86,8 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('approvalStatus = :approvalStatus')
             ->andWhere('email = :email')
             ->andWhere('level = :level')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime <= :endTime')
             ->andWhere('level >= :greatLevel');
     }
 
@@ -122,6 +124,13 @@ class UserDaoImpl extends BaseDao implements UserDao
         }
         $sql = "UPDATE {$this->table} SET {$name} = 0 WHERE id = ? LIMIT 1";
         return $this->getConnection()->executeQuery($sql, array($id));
+    }
+
+    public function analysisRegisterDataByTime($startTime,$endTime)
+    {
+        $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+
+        return $this->getConnection()->fetchAll($sql);
     }
 
 }

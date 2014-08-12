@@ -36,7 +36,7 @@ CREATE TABLE `article_category` (
   `parentId` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
+  UNIQUE KEY `code` (`code`(64))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `block`;
@@ -48,12 +48,12 @@ CREATE TABLE `block` (
   `template` text COMMENT '模板',
   `templateData` text COMMENT '模板数据',
   `content` text COMMENT '编辑区内容',
-  `code` varchar(255) NOT NULL DEFAULT '' COMMENT '编辑区编码',
+  `code` varchar(64) NOT NULL DEFAULT '' COMMENT '编辑区编码',
   `tips` text COMMENT '编辑区编辑提示',
   `createdTime` int(11) unsigned NOT NULL COMMENT '编辑区创建时间',
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '编辑区最后更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
+  UNIQUE KEY `code` (`code`(64))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `block_history`;
@@ -70,13 +70,13 @@ CREATE TABLE `block_history` (
 DROP TABLE IF EXISTS `cache`;
 CREATE TABLE `cache` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '缓存ID',
-  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '缓存名称',
+  `name` varchar(128) NOT NULL DEFAULT '' COMMENT '缓存名称',
   `data` longblob COMMENT '缓存数据',
   `serialized` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '缓存是否为序列化的标记位',
   `expiredTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '缓存过期时间',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '缓存创建时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `name` (`name`(128)),
   KEY `expiredTime` (`expiredTime`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -90,8 +90,9 @@ CREATE TABLE `category` (
   `weight` int(11) NOT NULL DEFAULT '0' COMMENT '分类权重',
   `groupId` int(10) unsigned NOT NULL COMMENT '分类组ID',
   `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父分类ID',
+  `description` text,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uri` (`code`)
+  UNIQUE KEY `uri` (`code`(64))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `category_group`;
@@ -107,7 +108,7 @@ DROP TABLE IF EXISTS `cloud_app`;
 CREATE TABLE `cloud_app` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '云应用ID',
   `name` varchar(255) NOT NULL COMMENT '云应用名称',
-  `code` varchar(255) NOT NULL COMMENT '云应用编码',
+  `code` varchar(64) NOT NULL COMMENT '云应用编码',
   `description` text NOT NULL COMMENT '云应用描述',
   `icon` varchar(255) NOT NULL COMMENT '云应用图标',
   `version` varchar(32) NOT NULL COMMENT '云应用当前版本',
@@ -117,7 +118,7 @@ CREATE TABLE `cloud_app` (
   `installedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '云应用安装时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '云应用最后更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
+  UNIQUE KEY `code` (`code`(64))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='已安装的应用';
 
 DROP TABLE IF EXISTS `cloud_app_logs`;
@@ -198,6 +199,7 @@ CREATE TABLE `course` (
   `serializeMode` enum('none','serialize','finished') NOT NULL DEFAULT 'none' COMMENT '连载模式',
   `income` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '课程销售总收入',
   `lessonNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课时数',
+  `giveCredit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学完课程所有课时，可获得的总学分',
   `rating` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排行分数',
   `ratingNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '投票人数',
   `vipLevelId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '可以免费看的，会员等级',
@@ -269,6 +271,8 @@ CREATE TABLE `course_lesson` (
   `tags` text COMMENT '课时标签',
   `type` varchar(64) NOT NULL DEFAULT 'text' COMMENT '课时类型',
   `content` text COMMENT '课时正文',
+  `giveCredit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学完课时获得的学分',
+  `requireCredit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习课时前，需达到的学分',
   `mediaId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '媒体文件ID',
   `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
   `mediaName` varchar(255) NOT NULL DEFAULT '' COMMENT '媒体文件名称',
@@ -300,6 +304,20 @@ CREATE TABLE `course_lesson_learn` (
   KEY `userId_courseId` (`userId`,`courseId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `course_lesson_view`;
+CREATE TABLE `course_lesson_view` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `courseId` int(10) NOT NULL,
+  `lessonId` int(10) NOT NULL,
+  `fileId` int(10) NOT NULL,
+  `userId` int(10) NOT NULL,
+  `fileType` enum('document','video','audio','image','ppt','other') NOT NULL DEFAULT 'other',
+  `fileStorage` enum('local','cloud','net') NOT NULL,
+  `fileSource` varchar(32) NOT NULL,
+  `createdTime` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `course_material`;
 CREATE TABLE `course_material` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程资料ID',
@@ -326,6 +344,7 @@ CREATE TABLE `course_member` (
   `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习最后期限',
   `levelId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户以会员的方式加入课程学员时的会员ID',
   `learnedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学课时数',
+  `credit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员已获得的学分',
   `noteNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记数目',
   `noteLastUpdateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最新的笔记更新时间',
   `isLearned` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否已学完',
@@ -430,18 +449,6 @@ CREATE TABLE `friend` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `installed_packages`;
-CREATE TABLE `installed_packages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ename` varchar(255) NOT NULL COMMENT '包名称',
-  `cname` varchar(255) NOT NULL,
-  `version` varchar(255) NOT NULL COMMENT 'version',
-  `installTime` int(11) NOT NULL COMMENT '安装时间',
-  `fromVersion` varchar(255) NOT NULL DEFAULT '' COMMENT '来源',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `cname` (`ename`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='已安装包';
-
 DROP TABLE IF EXISTS `location`;
 CREATE TABLE `location` (
   `id` bigint(20) unsigned NOT NULL,
@@ -511,6 +518,7 @@ CREATE TABLE `navigation` (
   `name` varchar(255) NOT NULL COMMENT '导航名称',
   `url` varchar(300) NOT NULL COMMENT '链接地址',
   `sequence` tinyint(4) unsigned NOT NULL COMMENT '显示顺序',
+  `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父导航ID',
   `createdTime` int(11) NOT NULL COMMENT '创建时间',
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   `type` varchar(30) NOT NULL COMMENT '类型',
@@ -641,19 +649,19 @@ CREATE TABLE `session` (
 DROP TABLE IF EXISTS `setting`;
 CREATE TABLE `setting` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统设置ID',
-  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '系统设置名',
+  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '系统设置名',
   `value` longblob COMMENT '系统设置值',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`(64))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tag`;
 CREATE TABLE `tag` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '标签ID',
-  `name` varchar(255) NOT NULL COMMENT '标签名称',
+  `name` varchar(64) NOT NULL COMMENT '标签名称',
   `createdTime` int(10) unsigned NOT NULL COMMENT '标签创建时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`(64))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `testpaper`;
@@ -728,6 +736,19 @@ CREATE TABLE `testpaper_result` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `theme_config`;
+CREATE TABLE `theme_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `config` text,
+  `confirmConfig` text,
+  `allConfig` text,
+  `updatedTime` int(11) NOT NULL DEFAULT '0',
+  `createdTime` int(11) NOT NULL DEFAULT '0',
+  `updatedUserId` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `upgrade_logs`;
 CREATE TABLE `upgrade_logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -758,11 +779,12 @@ CREATE TABLE `upload_files` (
   `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
   `size` bigint(20) NOT NULL DEFAULT '0' COMMENT '文件大小',
   `etag` varchar(256) NOT NULL DEFAULT '' COMMENT 'ETAG',
-  `convertHash` varchar(256) NOT NULL DEFAULT '' COMMENT '文件转换时的查询转换进度用的Hash值',
+  `convertHash` varchar(128) NOT NULL DEFAULT '' COMMENT '文件转换时的查询转换进度用的Hash值',
   `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none' COMMENT '文件转换状态',
+  `convertParams` text COMMENT '文件转换参数',
   `metas` text COMMENT '元信息',
   `metas2` text COMMENT '元信息',
-  `type` enum('document','video','audio','image','other') NOT NULL DEFAULT 'other' COMMENT '文件类型',
+  `type` enum('document','video','audio','image','ppt','other') NOT NULL DEFAULT 'other' COMMENT '文件类型',
   `storage` enum('local','cloud') NOT NULL COMMENT '文件存储方式',
   `isPublic` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否公开文件',
   `canDownload` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可下载',
@@ -771,8 +793,10 @@ CREATE TABLE `upload_files` (
   `createdUserId` int(10) unsigned NOT NULL COMMENT '文件上传人',
   `createdTime` int(10) unsigned NOT NULL COMMENT '文件上传时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `hashId` (`hashId`)
+  UNIQUE KEY `hashId` (`hashId`(128)),
+  UNIQUE KEY `convertHash` (`convertHash`(128))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -840,6 +864,17 @@ CREATE TABLE `user_bind` (
   UNIQUE KEY `type_2` (`type`,`toId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `user_field`;
+CREATE TABLE `user_field` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `fieldName` varchar(100) NOT NULL DEFAULT '',
+  `title` varchar(1024) NOT NULL DEFAULT '',
+  `seq` int(10) unsigned NOT NULL,
+  `enabled` int(10) unsigned NOT NULL DEFAULT '0',
+  `createdTime` int(100) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `user_fortune_log`;
 CREATE TABLE `user_fortune_log` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -856,7 +891,7 @@ DROP TABLE IF EXISTS `user_profile`;
 CREATE TABLE `user_profile` (
   `id` int(10) unsigned NOT NULL COMMENT '用户ID',
   `truename` varchar(255) NOT NULL DEFAULT '' COMMENT '真实姓名',
-  `idcard` varchar(24) NOT NULL DEFAULT '0' COMMENT '身份证号码',
+  `idcard` varchar(24) NOT NULL DEFAULT '' COMMENT '身份证号码',
   `gender` enum('male','female','secret') NOT NULL DEFAULT 'secret' COMMENT '性别',
   `iam` varchar(255) NOT NULL DEFAULT '' COMMENT '我是谁',
   `birthday` date DEFAULT NULL COMMENT '生日',
@@ -872,9 +907,43 @@ CREATE TABLE `user_profile` (
   `weibo` varchar(255) NOT NULL DEFAULT '' COMMENT '微博',
   `weixin` varchar(255) NOT NULL DEFAULT '' COMMENT '微信',
   `site` varchar(255) NOT NULL DEFAULT '' COMMENT '网站',
+  `intField1` int(11) DEFAULT NULL,
+  `intField2` int(11) DEFAULT NULL,
+  `intField3` int(11) DEFAULT NULL,
+  `intField4` int(11) DEFAULT NULL,
+  `intField5` int(11) DEFAULT NULL,
+  `dateField1` date DEFAULT NULL,
+  `dateField2` date DEFAULT NULL,
+  `dateField3` date DEFAULT NULL,
+  `dateField4` date DEFAULT NULL,
+  `dateField5` date DEFAULT NULL,
+  `floatField1` float(10,2) DEFAULT NULL,
+  `floatField2` float(10,2) DEFAULT NULL,
+  `floatField3` float(10,2) DEFAULT NULL,
+  `floatField4` float(10,2) DEFAULT NULL,
+  `floatField5` float(10,2) DEFAULT NULL,
+  `varcharField1` varchar(1024) DEFAULT NULL,
+  `varcharField2` varchar(1024) DEFAULT NULL,
+  `varcharField3` varchar(1024) DEFAULT NULL,
+  `varcharField4` varchar(1024) DEFAULT NULL,
+  `varcharField5` varchar(1024) DEFAULT NULL,
+  `varcharField6` varchar(1024) DEFAULT NULL,
+  `varcharField7` varchar(1024) DEFAULT NULL,
+  `varcharField8` varchar(1024) DEFAULT NULL,
+  `varcharField9` varchar(1024) DEFAULT NULL,
+  `varcharField10` varchar(1024) DEFAULT NULL,
+  `textField1` text,
+  `textField2` text,
+  `textField3` text,
+  `textField4` text,
+  `textField5` text,
+  `textField6` text,
+  `textField7` text,
+  `textField8` text,
+  `textField9` text,
+  `textField10` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 DROP TABLE IF EXISTS `user_token`;
 CREATE TABLE `user_token` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'TOKEN编号',
@@ -885,5 +954,5 @@ CREATE TABLE `user_token` (
   `expiredTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'TOKEN过期时间',
   `createdTime` int(10) unsigned NOT NULL COMMENT 'TOKEN创建时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `token` (`token`(6))
+  UNIQUE KEY `token` (`token`(64))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

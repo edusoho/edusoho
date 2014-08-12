@@ -102,7 +102,11 @@ class AuthenticationProvider extends UserAuthenticationProvider
                         $user = $this->getUserService()->getUser($bind['toId']);
                         $user = $this->syncEmailAndPassword($user, $partnerUser, $token);
                     } else {
-
+                        $setting = $this->getSettingService()->get('user_partner', array());
+                        $email_filter = explode("\n", $setting['email_filter']);
+                        if (in_array($partnerUser['email'], $email_filter)) {
+                              $partnerUser['email'] = $partnerUser['id'].'_dz_'.$this->getRandomString(5).'@edusoho.net';
+                        }
                         $registration = array();
                         $registration['nickname'] = $partnerUser['nickname'];
                         $registration['email'] = $partnerUser['email'];
@@ -163,6 +167,23 @@ class AuthenticationProvider extends UserAuthenticationProvider
 
 
         return $user;
+    }
+
+    private function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+    {
+        $s = '';
+        $cLength = strlen($chars);
+
+        while (strlen($s) < $length) {
+            $s .= $chars[mt_rand(0, $cLength-1)];
+        }
+
+        return $s;
+    }
+
+    private function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 
     private function getUserService()

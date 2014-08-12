@@ -107,7 +107,28 @@ define(function(require, exports, module) {
             element: '[name=timeLength]',
             required: true,
             rule:'integer romote_check',
-            errormessageRequired: '请输入时长'
+            display: '直播时长',
+            onItemValidated: function(error, message, elem) {
+                if (error) {
+                    return ;
+                }
+
+                var params = {startTime: $('[name=startTime]').val(), length: $('[name=timeLength]').val()};
+
+                if (!params.startTime) {
+                    return ;
+                }
+
+                $.get($(elem).data('calculateLeftCapacityUrl'), params, function(response) {
+                    var maxStudentNum = parseInt($(elem).data('maxStudentNum'));
+                    var leftCapacity = parseInt(response);
+                    if ( maxStudentNum > leftCapacity) {
+                       var message = '在此时间段内开课，将会超出教室容量<strong>' + (maxStudentNum - leftCapacity) + '</strong>人，届时有可能会导致满额后部分学员无法进入直播。';
+                        $(elem).parent().find('.help-block').html('<div class="alert alert-warning">' + message + '</div>');
+                    }
+                }, 'json');
+
+            }
         });
      
         $("[name=startTime]").datetimepicker({

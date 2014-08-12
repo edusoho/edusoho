@@ -21,7 +21,7 @@ class KernelRequestListener
             if (stripos($request->getPathInfo(), '/mapi_v1/') == 0) {
                 return;
             }
-            $whiteList = array('/course/order/pay/alipay/notify', '/vip/pay_notify/alipay', '/uploadfile/upload', '/uploadfile/cloud_convertcallback', '/disk/upload', '/file/upload', '/kindeditor/upload', '/disk/convert/callback', '/partner/phpwind/api/notify', '/partner/discuz/api/notify', '/live/auth');
+            $whiteList = array('/course/order/pay/alipay/notify', '/vip/pay_notify/alipay', '/uploadfile/upload', '/uploadfile/cloud_convertcallback', '/uploadfile/cloud_convertcallback2', '/disk/upload', '/file/upload', '/kindeditor/upload', '/disk/convert/callback', '/partner/phpwind/api/notify', '/partner/discuz/api/notify', '/live/auth');
             if (in_array($request->getPathInfo(), $whiteList)) {
                 return ;
             }

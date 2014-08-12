@@ -1,4 +1,4 @@
-{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:System:user_set.layout.html.twig' %}
 
 {% block title %}登录设置 - {{ parent() }}{% endblock %}
 
@@ -67,6 +67,15 @@
         <input type="text" id="weibo_secret" name="weibo_secret" class="form-control" value="{{loginConnect.weibo_secret}}">
       </div>
     </div>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="">登录时必须设置账号和邮箱</label>
+      </div>
+        <div class="controls col-md-8 radios">    
+        {{ radios('weibo_set_fill_account', {1:'开启', 0:'关闭'}, loginConnect.weibo_set_fill_account) }}
+              <p class="help-block">在微博官方审核通过您的接入申请以前，请不要开启此选项，否则审核将无法通过</p>
+        </div>
+    </div>
   </fieldset>
 
   <fieldset>
@@ -98,6 +107,17 @@
         <input type="text" id="qq_secret" name="qq_secret" class="form-control" value="{{loginConnect.qq_secret}}">
       </div>
     </div>
+
+     <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="">登录时必须设置账号和邮箱</label>
+      </div>
+        <div class="controls col-md-8 radios">    
+        {{ radios('qq_set_fill_account', {1:'开启', 0:'关闭'}, loginConnect.qq_set_fill_account) }}
+              <p class="help-block">在QQ官方审核通过您的接入申请以前，请不要开启此选项，否则审核将无法通过</p>
+        </div>
+    </div>
+
   </fieldset>
 
   <fieldset>
@@ -129,6 +149,17 @@
         <input type="text" id="renren_secret" name="renren_secret" class="form-control" value="{{loginConnect.renren_secret}}">
       </div>
     </div>
+
+     <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="">登录时必须设置账号和邮箱</label>
+      </div>
+        <div class="controls col-md-8 radios">    
+        {{ radios('renren_set_fill_account', {1:'开启', 0:'关闭'}, loginConnect.renren_set_fill_account) }}
+              <p class="help-block">在人人官方审核通过您的接入申请以前，请不要开启此选项，否则审核将无法通过</p>
+        </div>
+    </div>
+
   </fieldset>
 
   <fieldset>

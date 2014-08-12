@@ -10,7 +10,7 @@
       <div class="actions">
         <button class="btn btn-primary btn-sm btn-block follow-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>
         <button class="btn btn-primary btn-sm btn-block unfollow-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</button>
-        <button class="btn btn-default btn-sm btn-block" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
+        <button class="btn btn-default btn-sm btn-block" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}" id="message_to_teacher">发私信</button>
       </div>
     {% else %}
 

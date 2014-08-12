@@ -1,4 +1,4 @@
-{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:System:user_set.layout.html.twig' %}
 
 {% block title %}用户中心设置 - {{ parent() }}{% endblock %}
 
@@ -40,6 +40,20 @@
       <div class="help-block">如使用phpwind (WindID)的用户中心，请填写此项配置。<a href="http://demo.edusoho.com/course/125" target="_blank">如何配置？</a></div>
     </div>
   </div>
+
+    <div class="form-group with-phpwind with-discuz">
+    <div class="col-md-3 control-label">
+      <label for="email_filter">过滤邮箱地址清单</label>
+    </div>
+    <div class="controls col-md-8">
+      <textarea id="email_filter" name="email_filter" class="form-control" rows="5">{{setting.email_filter}}</textarea>
+      <div class="help-block">
+        {% verbatim %}
+        <div>每行输入一个邮箱地址。名单中的邮箱地址如果出现在第三方登录的过程中，则会给该用户随机生成一个邮箱</div>
+        {% endverbatim %}
+      </div>
+    </div>
+  </div>
   
   <div class="form-group">
     <div class="col-md-3 control-label">
@@ -58,6 +72,8 @@
       {{ radios('avatar_alert', {'none':'从不', 'in_user_center':'每次进入"我的课程"时', 'when_join_course':'加入免费课程时强制要求'}, setting.avatar_alert) }}
     </div>
   </div>
+
+
 
   <div class="row form-group">
     <div class="col-md-3 control-label"></div>

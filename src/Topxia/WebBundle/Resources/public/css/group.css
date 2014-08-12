@@ -1,0 +1,66 @@
+
+.grouplist img{
+   
+    border: 0px none;
+    width: 58px;
+    height: 58px;
+   
+
+
+}
+.grouplist{
+    height:110px;width: 76px; float: left;text-align:center;
+}
+
+.jumbotron{
+    background: #fff;
+    position: relative;
+    
+}
+.jumbotron img{
+     width: 60px;
+    height: 60px;
+}
+.nav-pills{
+    border-bottom:none;
+}
+.group-header-btn{
+   right: 0px;
+}
+.group-header-tip{
+    font-size: 14px;
+}
+.modal-body img{
+    width: auto;
+    height: auto;
+}
+.mvs{
+    text-align: center;
+}
+.group-header-btn{
+    text-align: right;
+}
+.threadimg{
+    width: 48px;
+    height: 48px;
+
+}
+.course-view {
+    float:right;
+    visibility: hidden;
+}
+
+.thread-list:hover .course-view {
+    visibility: visible;
+}
+.thread-img img{
+    height: 55px;
+    width: 55px;
+}
+.media-body img{max-width: 100%; height: auto;}
+.page img{max-width: 100%; height: auto;}
+
+.checkboxs{
+    height: 18px;
+    width: 18px;
+}

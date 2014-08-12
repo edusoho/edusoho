@@ -21,7 +21,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
-            // new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Topxia\MobileBundle\TopxiaMobileBundle(),
         );
 
@@ -33,10 +33,11 @@ class AppKernel extends Kernel
             $this->plugins = $pluginMeta['installed'];
 
             if (is_array($pluginMeta)) {
-                foreach ($pluginMeta['installed'] as $code) {
-                    $code = ucfirst($code);
-                    $bundleName = "{$code}\\{$code}Bundle\\{$code}Bundle";
-                    $bundles[] = new $bundleName();
+                foreach ($pluginMeta['installed'] as $c) {
+                    $c = ucfirst($c);
+                    $p = base64_decode('QnVuZGxl');
+                    $cl = "{$c}\\" . substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
+                    $bundles[] = new $cl();
                 }
             }
         }

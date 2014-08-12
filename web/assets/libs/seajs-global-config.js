@@ -39,9 +39,11 @@ seajs.config({
 		"backbone": "gallery/backbone/1.0.0/backbone",
 		"swfobject": "gallery/swfobject/2.2.0/swfobject.js",
 		'moment' : 'gallery/moment/2.5.1/moment',
+		'morris': 'gallery/morris/0.5.0/morris',
 		'video-js': 'gallery2/video-js/4.2.1/video-js',
 		'swfupload': 'gallery2/swfupload/2.2.0/swfupload',
 		'webuploader': 'gallery2/webuploader/0.1.2/webuploader',
+		'screenfull': 'gallery2/screenfull/1.1.1/screenfull',
 		'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js'
 	},
 

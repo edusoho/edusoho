@@ -37,6 +37,11 @@ login_bind_new:
     defaults: { _controller: TopxiaWebBundle:LoginBind:new }
     methods: [POST]
 
+login_bind_newset:
+    pattern:  /login/bind/{type}/newset
+    defaults: { _controller: TopxiaWebBundle:LoginBind:newSet }
+    methods: [POST]
+
 login_bind_exist:
     pattern:  /login/bind/{type}/exist
     defaults: { _controller: TopxiaWebBundle:LoginBind:exist }
@@ -75,6 +80,10 @@ register_nickname_check:
     pattern:  /register/nickname/check
     defaults: { _controller: TopxiaWebBundle:Register:nicknameCheck }
 
+register_analysis:
+    pattern:  /register/analysis
+    defaults: { _controller: TopxiaWebBundle:Register:analysis }
+
 file_upload:
     pattern:  /file/upload
     defaults: { _controller: TopxiaWebBundle:File:upload }
@@ -97,13 +106,13 @@ uploadfile_cloud_callback:
     pattern:  /uploadfile/cloud_callback
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudCallback }
 
-uploadfile_cloud_fileinfo:
-    pattern:  /uploadfile/cloud_fileinfo
-    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudFileinfo }
-
 uploadfile_cloud_convert_callback:
     pattern:  /uploadfile/cloud_convertcallback
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback }
+
+uploadfile_cloud_convert_callback2:
+    pattern:  /uploadfile/cloud_convertcallback2
+    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback2 }
 
 kindeditor_upload:
     pattern:  /kindeditor/upload
@@ -233,6 +242,10 @@ course_lesson_media_download:
     pattern:  /course/{courseId}/lesson/{lessonId}/media_download
     defaults: { _controller: TopxiaWebBundle:CourseLesson:mediaDownload }
 
+course_lesson_ppt:
+    pattern:  /course/{courseId}/lesson/{lessonId}/ppt
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:ppt }
+
 course_lesson_learn_status:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/status
     defaults: { _controller: TopxiaWebBundle:CourseLesson:learnStatus }
@@ -251,6 +264,10 @@ course_lesson_learn_cancel:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/cancel
     defaults: { _controller: TopxiaWebBundle:CourseLesson:learnCancel }
     methods: [POST]
+
+course_lesson_hlskeyurl:
+    pattern:  /course/{courseId}/lesson/{lessonId}/kan/{token}
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:hlskeyurl }
 
 course_lesson_plugin_lesson_list:
     pattern:  /lessonplugin/lesson/list
@@ -484,6 +501,10 @@ live_course_manage_lesson_edit:
 live_lesson_time_check:
     pattern:  /course/{id}/manage/live/lesson/time/check
     defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:lessonTimeCheck }
+
+live_lesson_calculate_left_capacity:
+    pattern:  /course/{courseId}/manage/livelesson/calculateLeftCapacity
+    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:calculateLeftCapacity }
 
 course_manage_lesson_create_testpaper:
     pattern:  /course/{id}/manage/lesson/create/testpaper

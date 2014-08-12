@@ -62,7 +62,7 @@
           </div>
           <div class="col-md-2" style="padding-left:0;">
             <div id="question-stem-uploader" class="btn btn-sm btn-default webuploader-container" type="button" data-target="#question-stem-field"><i class="glyphicon glyphicon-picture"></i></div>
-            {% if enabledAudioQuestion %}
+            {% if enabledAudioQuestion|default(null) %}
               <div id="question-stem-audio-uploader" class="btn btn-sm btn-default webuploader-container" type="button" data-target="#question-stem-field"><i class="glyphicon glyphicon-volume-up"></i></div>
             {% endif %}
           </div>

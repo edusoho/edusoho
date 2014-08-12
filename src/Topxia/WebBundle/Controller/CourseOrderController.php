@@ -35,21 +35,32 @@ class CourseOrderController extends OrderController
         $userInfo['approvalStatus'] = $user['approvalStatus'];
 
         $course = $this->getCourseService()->getCourse($id);
+       
+       $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        // if ($remainingStudentNum == 0 && $course['type'] == 'live') {
-        //     return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
-        //         'course' => $course
-        //     ));
-        // } else {
+        for($i=0;$i<count($userFields);$i++){
+           if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
+           if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
+           if(strstr($userFields[$i]['fieldName'], "intField")) $userFields[$i]['type']="int";
+           if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
+           if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
+        }
+
+        if ($remainingStudentNum == 0 && $course['type'] == 'live') {
+            return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
+                'course' => $course
+            ));
+        } else {
             return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
                 'course' => $course,
                 'payments' => $this->getEnabledPayments(),
                 'user' => $userInfo,
                 'avatarAlert' => AvatarAlert::alertJoinCourse($user),
                 'courseSetting' => $courseSetting,
-                'member' => $member
+                'member' => $member,
+                'userFields'=>$userFields,
             ));
-        // }
+        }
     }
 
     public function payAction(Request $request)
@@ -65,7 +76,16 @@ class CourseOrderController extends OrderController
             'mobile',
             'qq',
             'company',
-            'job'
+            'weixin',
+            'weibo',
+            'idcard',
+            'gender',
+            'job',
+            'intField1','intField2','intField3','intField4','intField5',
+            'floatField1','floatField2','floatField3','floatField4','floatField5',
+            'dateField1','dateField2','dateField3','dateField4','dateField5',
+            'varcharField1','varcharField2','varcharField3','varcharField4','varcharField5','varcharField10','varcharField6','varcharField7','varcharField8','varcharField9',
+            'textField1','textField2','textField3','textField4','textField5', 'textField6','textField7','textField8','textField9','textField10',
         ));
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
@@ -276,5 +296,8 @@ class CourseOrderController extends OrderController
 
         return $enableds;
     }
-
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
 }

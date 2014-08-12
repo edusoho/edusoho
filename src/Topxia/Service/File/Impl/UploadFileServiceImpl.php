@@ -11,7 +11,10 @@ use Topxia\Service\File\UploadFileService;
     
 class UploadFileServiceImpl extends BaseService implements UploadFileService
 {
-	static $IMPEMNTORMAP = array('local'=>'File.LocalFileImplementor','cloud' => 'File.CloudFileImplementor');
+	static $implementor = array(
+        'local'=>'File.LocalFileImplementor',
+        'cloud' => 'File.CloudFileImplementor',
+    );
 
     public function getFile($id)
     {
@@ -78,7 +81,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function addFile($targetType,$targetId,array $fileInfo=array(),$implemtor='local',UploadedFile $originalFile=null)    
     {
-        $file = $this->getFieImplementor($implemtor)->addFile($targetType,$targetId,$fileInfo,$originalFile);
+        $file = $this->getFileImplementor($implemtor)->addFile($targetType,$targetId,$fileInfo,$originalFile);
         return $this->getUploadFileDao()->addFile($file);
     }
 
@@ -103,6 +106,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             }
         }
 
+        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
+            $deleteSubFile = true;
+        }
+
+        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'ppt') {
+            $deleteSubFile = true;
+        }
+
         $this->getFileImplementorByFile($file)->deleteFile($file, $deleteSubFile);
 
         return $this->getUploadFileDao()->deleteFile($id);
@@ -115,7 +126,25 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
     }
 
-    public function convertFile($id, $status, array $result = array())
+    public function saveConvertResult($id, array $result = array())
+    {
+        $file = $this->getFile($id);
+        if (empty($file)) {
+            throw $this->createServiceException("文件(#{$id})不存在，转换失败");
+        }
+
+        $file = $this->getFileImplementorByFile($file)->saveConvertResult($file, $result);
+
+        $this->getUploadFileDao()->updateFile($id, array(
+            'convertStatus' => $file['convertStatus'],
+            'metas2' => json_encode($file['metas2']),
+            'updatedTime' => time(),
+        ));
+
+        return $this->getFile($id);
+    }
+
+    public function convertFile($id, $status, array $result = array(), $callback = null)
     {
         $statuses = array('none', 'waiting', 'doing', 'success', 'error');
         if (!in_array($status, $statuses)) {
@@ -127,11 +156,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             throw $this->createServiceException("文件(#{$id})不存在，转换失败");
         }
 
-        $file = $this->getFileImplementorByFile($file)->convertFile($file, $status, $result);
+        $file = $this->getFileImplementorByFile($file)->convertFile($file, $status, $result, $callback);
 
         $this->getUploadFileDao()->updateFile($id, array(
             'convertStatus' => $file['convertStatus'],
-            'metas2' => $file['metas2']
+            'metas2' => $file['metas2'],
+            'updatedTime' => time(),
         ));
 
         return $this->getFile($id);
@@ -144,11 +174,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             throw $this->createServiceException('file not exist.');
         }
 
-        $status = $file['convertStatus'] == 'success' ? 'success' : 'waiting';
+        // $status = $file['convertStatus'] == 'success' ? 'success' : 'waiting';
 
         $fields = array(
-            'convertStatus' => $status,
+            'convertStatus' => 'waiting',
             'convertHash' => $convertHash,
+            'updatedTime' => time(),
         );
 
         $this->getUploadFileDao()->updateFile($id, $fields);
@@ -156,9 +187,28 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFile($id);
     }
 
+    public function makeUploadParams($params)
+    {
+        return $this->getFileImplementor($params['storage'])->makeUploadParams($params);
+    }
+
+    public function reconvertFile($id, $convertCallback)
+    {
+        $file = $this->getFile($id);
+        if (empty($file)) {
+            throw $this->createServiceException('file not exist.');
+        }
+
+        $convertHash = $this->getFileImplementorByFile($file)->reconvertFile($file, $convertCallback);
+
+        $this->setFileConverting($file['id'], $convertHash);
+
+        return $convertHash;
+    }
+
     private function getFileImplementorByFile($file)
     {
-        return $this->getFieImplementor($file['storage']);
+        return $this->getFileImplementor($file['storage']);
     }
 
     private function getUploadFileDao()
@@ -171,9 +221,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->createService('User.UserService');
     }
 
-    private function getFieImplementor($key)
+    private function getFileImplementor($key)
     {
-        return $this->createService(self::$IMPEMNTORMAP[$key]);
+        if (!array_key_exists($key, self::$implementor)) {
+            throw $this->createServiceException(sprintf("`%s` File Implementor is not allowed.", $key));
+        }
+        return $this->createService(self::$implementor[$key]);
     }
 
     private function getLogService()

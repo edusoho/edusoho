@@ -8,6 +8,7 @@ use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
+use Topxia\Service\Util\LiveClientFactory;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -36,10 +37,17 @@ class CourseManageController extends BaseController
 
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
 
+        if ($course['type'] == 'live') {
+            $client = LiveClientFactory::createClient();
+            $liveCapacity = $client->getCapacity();
+        } else {
+            $liveCapacity = null;
+        }
+
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
             'tags' => ArrayToolkit::column($tags, 'name'),
-            'perLiveMaxStudentNum' => !empty($courseSetting['perLiveMaxStudentNum']) ? $courseSetting['perLiveMaxStudentNum'] : 0
+            'liveCapacity' => empty($liveCapacity['capacity']) ? 0 : $liveCapacity['capacity'],
 		));
 	}
 
@@ -166,6 +174,11 @@ class CourseManageController extends BaseController
 
         $canModifyPrice = true;
         $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
+        if ($this->setting('vip.enabled')) {
+            $levels = $this->getLevelService()->findEnabledLevels();
+        } else {
+            $levels = array();
+        }
         if (empty($teacherModifyPrice)) {
             if (!$this->getCurrentUser()->isAdmin()) {
                 $canModifyPrice = false;
@@ -178,11 +191,6 @@ class CourseManageController extends BaseController
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
-        if ($this->setting('vip.enabled')) {
-            $levels = $this->getLevelService()->findEnabledLevels();
-        } else {
-            $levels = array();
-        }
 
 
         response:

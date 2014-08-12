@@ -18,6 +18,8 @@ interface AppService
 
     public function checkAppUpgrades();
 
+    public function checkAppCop();
+
     public function findLogs($start, $limit);
 
     public function findLogCount();

@@ -64,14 +64,24 @@ class CourseController extends MobileController
 
         $result = array();
         $result['course'] = $this->filterCourse($course);
-        $result['items'] = $this->filterItems($items);
         $result['reviews'] = $this->filterReviews($reviews);
         $result['member'] = $member;
         $result['userIsStudent'] = $user->isLogin() ? $this->getCourseService()->isCourseStudent($courseId, $user['id']) : false;
         if (!$result['userIsStudent']){
                 $learnStatuses = array();
         }
+
         $result['userLearns'] = $learnStatuses;
+        $result['items'] = $this->filterItems($items);
+        foreach ($result['userLearns'] as $lessonId => $status) {
+            if (empty($result['items']['lesson-' . $lessonId])) {
+                continue;
+            }
+            $result['items']['lesson-' . $lessonId]['userLearnStatus'] = $status;
+        }
+
+        $result['items2'] = array_values($result['items']);
+
         $result['userFavorited'] = $user->isLogin() ? $this->getCourseService()->hasFavoritedCourse($courseId) : false;
 
         if ($course) {
@@ -146,7 +156,14 @@ class CourseController extends MobileController
                     $json['mediaConvertStatus'] = $file['convertStatus'];
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
-                        $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+
+                        if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
+                            $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
+                            $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
+                        } else {
+                            $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                        }
                         $json['mediaUri'] = $url['url'];
                     } else {
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
@@ -473,6 +490,11 @@ class CourseController extends MobileController
     private function getReviewService()
     {
         return $this->getServiceKernel()->createService('Course.ReviewService');
+    }
+
+    private function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     private function getUploadFileService()

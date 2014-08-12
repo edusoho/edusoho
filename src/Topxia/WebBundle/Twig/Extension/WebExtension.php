@@ -41,8 +41,8 @@ class WebExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
+            'theme_global_script' => new \Twig_Function_Method($this, 'getThemeGlobalScript') ,
             'file_uri_parse'  => new \Twig_Function_Method($this, 'parseFileUri'),
-
             // file_path即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
@@ -53,8 +53,32 @@ class WebExtension extends \Twig_Extension
             'dict' => new \Twig_Function_Method($this, 'getDict') ,
             'dict_text' => new \Twig_Function_Method($this, 'getDictText', array('is_safe' => array('html'))) ,
             'upload_max_filesize' => new \Twig_Function_Method($this, 'getUploadMaxFilesize') ,
-            'js_paths' => new \Twig_Function_Method($this, 'getJsPaths') ,
+            'js_paths' => new \Twig_Function_Method($this, 'getJsPaths'),
+            'is_exist_in_subarray_by_id' => new \Twig_Function_Method($this, 'isExistInSubArrayById'),
+            'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
+            'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
+            'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
         );
+    }
+
+    public function isExistInSubArrayById($currentTarget, $targetArray)
+    {
+        foreach ($targetArray as $target) {
+            if ($currentTarget['id'] == $target['id']) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getThemeGlobalScript()
+    {
+        $theme = $this->getSetting('theme.uri', 'default');
+        $filePath = realpath($this->container->getParameter('kernel.root_dir') . "/../web/themes/{$theme}/js/global-script.js");
+        if ($filePath) {
+            return 'theme/global-script';
+        }
+        return '';
     }
 
     public function getJsPaths()
@@ -79,7 +103,35 @@ class WebExtension extends \Twig_Extension
 
         return $paths;
     }
-    
+
+    public function getContextValue($context, $key)
+    {
+        $keys = explode('.', $key);
+        $value = $context;
+        foreach ($keys as $key) {
+            if (!isset($value[$key])) {
+                throw new \InvalidArgumentException(sprintf("Key `%s` is not in context with %s", $key, implode(array_keys($context), ', ')) );
+            }
+            $value = $value[$key];
+        }
+
+        return $value;
+    }
+
+    public function isFeatureEnabled($feature)
+    {
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+        return in_array($feature, $features);
+    }
+
+    public function getParameter($name, $default = null)
+    {
+        if (!$this->container->hasParameter($name)) {
+            return $default;
+        }
+        return $this->container->getParameter($name);
+    }
+
     public function dataformatFilter ($time) {
         if (empty($time)) {
             return ;

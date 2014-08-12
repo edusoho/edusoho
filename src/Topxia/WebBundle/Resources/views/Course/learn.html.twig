@@ -15,7 +15,8 @@
     <div class="container lesson-dashboard" id="lesson-dashboard"
          data-course-id="{{ course.id }}"
          data-course-uri="{{ path('course_show', {id:course.id}) }}"
-         data-dashboard-uri="{{ path('course_learn', {id:course.id}) }}">
+         data-dashboard-uri="{{ path('course_learn', {id:course.id}) }}"
+         data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
       <div class="dashboard-content">
          <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> 返回课程</a>
          <a class="btn btn-primary  nav-btn prev-lesson-btn" href="javascript:" data-role="prev-lesson" data-placement="right" title="上一课时"><span class="glyphicon glyphicon-chevron-up" title="上一课时"></span></a>
@@ -52,17 +53,22 @@
           <div class="lesson-content lesson-content-text" id="lesson-unpublished-content" data-role="lesson-content" style="display:none;">
             <div class="lesson-content-text-body">当前课时正在编辑中，暂时无法观看。</div>
           </div>
+          <div class="lesson-content lesson-content-text" id="lesson-alert-content" data-role="lesson-content" style="display:none;">
+            <div class="lesson-content-text-body"></div>
+          </div>
           <div class="lesson-content lesson-content-text" id="lesson-testpaper-content" data-role="lesson-content" style="display:none;">
             <div class="lesson-content-text-body"></div>
           </div>
-
+          <div class="lesson-content lesson-content-text" id="lesson-ppt-content" data-role="lesson-content" style="display:none;">
+            <div class="lesson-content-text-body"></div>
+          </div>
 
         </div>
 
         <div class="dashboard-footer clearfix">
 
           <div class="pull-right">
-            <button class="btn btn-primary finish-btn" data-role="finish-lesson"><span class="glyphicon glyphicon-unchecked"></span> 学过了</button>
+            <button class="btn btn-primary finish-btn" data-role="finish-lesson" style="display:none;"><span class="glyphicon glyphicon-unchecked"></span> 学过了</button>
           </div>
 
         </div>

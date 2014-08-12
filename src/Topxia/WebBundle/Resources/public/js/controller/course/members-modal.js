@@ -15,6 +15,14 @@ define(function(require, exports, module) {
             });
         });
 
+        $("#course-student-list").on('click', '.send-message-btn', function() {
+            var $this = $(this);
+            
+            $.get($this.data('url'), function(res){
+                $('#modal').html(res);
+            });
+        });
+
     }
 
 });

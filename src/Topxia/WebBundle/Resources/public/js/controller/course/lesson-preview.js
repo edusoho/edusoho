@@ -5,7 +5,8 @@ define(function(require, exports, module) {
 
 	require('mediaelementplayer');
 
-	var MediaPlayer = require('../widget/media-player2');
+	var MediaPlayer = require('../widget/media-player3');
+	var SlidePlayer = require('../widget/slider-player');
 
 
     exports.run = function() {
@@ -24,6 +25,10 @@ define(function(require, exports, module) {
 
         		mediaPlayer.setSrc($("#lesson-preview-video-player").data('hlsUrl'), 'video');
         		mediaPlayer.play();
+
+                $('#modal').one('hidden.bs.modal', function () {
+                    mediaPlayer.dispose();
+                });
 
 			} else {
 				$("#lesson-preview-video-player").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"  width="100%" height="360"></video>');
@@ -60,6 +65,26 @@ define(function(require, exports, module) {
 
 		}
 
+		if ($("#lesson-preview-ppt-player").length > 0) {
+			var $player = $("#lesson-preview-ppt-player");
+			var html = '';
+            $.get($player.data('url'), function(response) {
+                if (response.error) {
+                    html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
+                } else {
+	                html = '<div class="slide-player" style="min-height:500px;"><div class="slide-player-body loading-background"></div><div class="slide-notice"><div class="header">已经到最后一张图片了哦<button type="button" class="close">×</button></div></div><div class="slide-player-control clearfix"><a href="javascript:" class="goto-first"><span class="glyphicon glyphicon-step-backward"></span></a><a href="javascript:" class="goto-prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="javascript:" class="goto-next"><span class="glyphicon glyphicon-chevron-right"></span></span></a><a href="javascript:" class="goto-last"><span class="glyphicon glyphicon-step-forward"></span></a><a href="javascript:" class="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></a><div class="goto-index-input"><input type="text" class="goto-index form-control input-sm" value="1">&nbsp;/&nbsp;<span class="total"></span></div></div></div>';
+                }
+
+                $player.html(html);
+
+                var player = new SlidePlayer({
+                    element: '.slide-player',
+                    slides: response
+                });
+
+            }, 'json');
+		}
+
 		if ($("#lesson-preview-swf-player").length > 0) {
 			swfobject.embedSWF($("#lesson-preview-swf-player").data('url'), 'lesson-preview-swf-player', '100%', '360', "9.0.0", null, null, {wmode: 'transparent'});
 
@@ -73,7 +98,7 @@ define(function(require, exports, module) {
 			$modal.modal('hide');
 			$.get($(this).data('url'), function(html) {
 				$modal.html(html);
-				$modal.modal('show');
+				$('#join-course-btn').click();
 			});
 		});
 
