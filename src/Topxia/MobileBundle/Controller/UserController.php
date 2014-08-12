@@ -296,7 +296,7 @@ class UserController extends MobileController
             'splashs' => $splashs,
             'apiVersionRange' => array(
                 "min" => "1.0.0",
-                "max" => "1.0.0"
+                "max" => "1.1.0"
             ),
         );
     }
