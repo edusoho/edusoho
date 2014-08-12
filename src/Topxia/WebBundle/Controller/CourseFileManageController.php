@@ -12,152 +12,154 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class CourseFileManageController extends BaseController
 {
 
-	public function indexAction(Request $request, $id)
-	{
-		$course = $this->getCourseService()->tryManageCourse($id);
+    public function indexAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
 
-		$type = $request->query->get('type');
-		$type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
+        $type = $request->query->get('type');
+        $type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
 
-		$conditions = array(
-			'targetType'=> $type,
-			'targetId'=>$course['id']
-		);
+        $conditions = array(
+            'targetType'=> $type,
+            'targetId'=>$course['id']
+        );
 
-		$paginator = new Paginator(
-			$request,
-			$this->getUploadFileService()->searchFileCount($conditions),
-			20
-		);
+        $paginator = new Paginator(
+            $request,
+            $this->getUploadFileService()->searchFileCount($conditions),
+            20
+        );
 
-		$files = $this->getUploadFileService()->searchFiles(
-			$conditions,
-			'latestCreated',
-			$paginator->getOffsetCount(),
-			$paginator->getPerPageCount()
-		);
+        $files = $this->getUploadFileService()->searchFiles(
+            $conditions,
+            'latestCreated',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-		foreach ($files as $key => $file) {
-			$files[$key]['metas2'] = json_decode($file['metas2']) ? : array();
-		}
+        foreach ($files as $key => $file) {
+            $files[$key]['metas2'] = json_decode($file['metas2']) ? : array();
+            $files[$key]['convertParams'] = json_decode($file['convertParams']) ? : array();
+        }
 
-		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
-		return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
-			'type' => $type,
-			'course' => $course,
-			'courseLessons' => $files,
-			'users' => ArrayToolkit::index($users, 'id'),
-			'paginator' => $paginator,
-			'now' => time(),
-		));
-	}
+        return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
+            'type' => $type,
+            'course' => $course,
+            'courseLessons' => $files,
+            'users' => ArrayToolkit::index($users, 'id'),
+            'paginator' => $paginator,
+            'now' => time(),
+        ));
+    }
 
-	public function showAction(Request $request, $id, $fileId)
-	{
-		$course = $this->getCourseService()->tryManageCourse($id);
+    public function showAction(Request $request, $id, $fileId)
+    {
 
-		$file = $this->getUploadFileService()->getFile($fileId);
+        $course = $this->getCourseService()->tryManageCourse($id);
 
-		if (empty($file)) {
-			throw $this->createNotFoundException();
-		}
+        $file = $this->getUploadFileService()->getFile($fileId);
 
-		if ($file['targetType'] == 'courselesson') {
-			return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $file['id'], 'isDownload' => true));
-		} else if ($file['targetType'] == 'coursematerial') {
-			if ($file['storage'] == 'cloud') {
-				$factory = new CloudClientFactory();
-				$client = $factory->createClient();
-				$client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
-			} else {
-				return $this->createPrivateFileDownloadResponse($request, $file);
-			}
-		}
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
 
-		throw $this->createNotFoundException();
-	}
+        if ($file['targetType'] == 'courselesson') {
+            return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $file['id'], 'isDownload' => true));
+        } else if ($file['targetType'] == 'coursematerial') {
+            if ($file['storage'] == 'cloud') {
+                $factory = new CloudClientFactory();
+                $client = $factory->createClient();
+                $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
+            } else {
+                return $this->createPrivateFileDownloadResponse($request, $file);
+            }
+        }
 
-	public function convertAction(Request $request, $id, $fileId)
-	{
-		$course = $this->getCourseService()->tryManageCourse($id);
+        throw $this->createNotFoundException();
+    }
 
-		$file = $this->getUploadFileService()->getFile($fileId);
-		if (empty($file)) {
-			throw $this->createNotFoundException();
-		}
+    public function convertAction(Request $request, $id, $fileId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
 
-		$convertHash = $this->getUploadFileService()->reconvertFile(
-			$file['id'],
-			$this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
-		);
+        $file = $this->getUploadFileService()->getFile($fileId);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
 
-		if (empty($convertHash)) {
-			return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
-		}
+        $convertHash = $this->getUploadFileService()->reconvertFile(
+            $file['id'],
+            $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+        );
 
-		return $this->createJsonResponse(array('status' => 'ok'));
-	}
+        if (empty($convertHash)) {
+            return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
+        }
 
-
-	public function uploadCourseFilesAction(Request $request, $id, $targetType)
-	{
-		$course = $this->getCourseService()->tryManageCourse($id);
-		$storageSetting = $this->getSettingService()->get('storage', array());
-		return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-files.html.twig', array(
-			'course' => $course,
-			'storageSetting' => $storageSetting,
-			'targetType' => $targetType,
-			'targetId'=>$course['id'],
-		));
-	}
-
-	public function deleteCourseFilesAction(Request $request, $id, $type)
-	{
-		$course = $this->getCourseService()->tryManageCourse($id);
-
-		$ids = $request->request->get('ids', array());
-
-		$this->getUploadFileService()->deleteFiles($ids);
+        return $this->createJsonResponse(array('status' => 'ok'));
+    }
 
 
-		return $this->createJsonResponse(true);
-	}
+    public function uploadCourseFilesAction(Request $request, $id, $targetType)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-files.html.twig', array(
+            'course' => $course,
+            'storageSetting' => $storageSetting,
+            'targetType' => $targetType,
+            'targetId'=>$course['id'],
+        ));
+    }
 
-	private function getCourseService()
-	{
-		return $this->getServiceKernel()->createService('Course.CourseService');
-	}
+    public function deleteCourseFilesAction(Request $request, $id, $type)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
 
-	private function getUploadFileService()
-	{
-		return $this->getServiceKernel()->createService('File.UploadFileService');
-	}
+        $ids = $request->request->get('ids', array());
 
-	private function getSettingService()
-	{
-		return $this->getServiceKernel()->createService('System.SettingService');
-	}
+        $this->getUploadFileService()->deleteFiles($ids);
 
-	private function createPrivateFileDownloadResponse(Request $request, $file)
-	{
 
-		$response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
-		$response->trustXSendfileTypeHeader();
+        return $this->createJsonResponse(true);
+    }
 
-		$file['filename'] = urlencode($file['filename']);
-		if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-			$response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
-		} else {
-			$response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
-		}
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
 
-		$mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
-		if ($mimeType) {
-			$response->headers->set('Content-Type', $mimeType);
-		}
+    private function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
 
-		return $response;
-	}
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function createPrivateFileDownloadResponse(Request $request, $file)
+    {
+
+        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
+        $response->trustXSendfileTypeHeader();
+
+        $file['filename'] = urlencode($file['filename']);
+        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+        } else {
+            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+        }
+
+        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
+        if ($mimeType) {
+            $response->headers->set('Content-Type', $mimeType);
+        }
+
+        return $response;
+    }
 
 }

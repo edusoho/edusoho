@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\Common\Paginator;
@@ -12,309 +13,355 @@ use Topxia\Service\Util\CloudClientFactory;
 class CourseLessonController extends BaseController
 {
 
-	public function previewAction(Request $request, $courseId, $lessonId)
-	{
-		$course = $this->getCourseService()->getCourse($courseId);
-		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-		$user = $this->getCurrentUser();
+    public function previewAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
 
-		if ($this->setting('course.freeCourses') == 0 && !$user->isLogin()) {
-			throw $this->createAccessDeniedException();
-		}
+        if (!empty($course['status']) && $course['status'] == 'closed') {
+            return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig',array('course' => $course));
+        }
 
-		if (empty($lesson)) {
-			throw $this->createNotFoundException();
-		}
+        if (empty($lesson['free'])) {
+            return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
+        }
 
-		if (!empty($course['status']) && $course['status'] == 'closed') {
-			return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig',array('course' => $course));
-		}
+        if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
+                $factory = new CloudClientFactory();
+                $client = $factory->createClient();
+                $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
 
-		if (empty($lesson['free'])) {
-			return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
-		}
+                if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                    $token = $this->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
+                    $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
+                    $hls = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
+                } else {
+                    $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                }
 
-		if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
-			$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-			if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
-				$factory = new CloudClientFactory();
-				$client = $factory->createClient();
-				$hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
-			}
-		}
+            }
+        }
 
-		return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
-			'user' => $user,
-			'course' => $course,
-			'lesson' => $lesson,
-			'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
-		));
-	}
+        return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
+            'course' => $course,
+            'lesson' => $lesson,
+            'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
+        ));
+    }
 
-	public function showAction(Request $request, $courseId, $lessonId)
-	{
-		list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+    public function hlskeyurlAction(Request $request, $courseId, $lessonId, $token)
+    {
+        if (!$this->getTokenService()->verifyToken('hlsvideo.view', $token)) {
+            $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
+            return new Response($fakeKey);
+        }
 
-		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-		$json = array();
-		$json['number'] = $lesson['number'];
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
-		$chapter = empty($lesson['chapterId']) ? null : $this->getCourseService()->getChapter($course['id'], $lesson['chapterId']);
-		if ($chapter['type'] == 'unit') {
-			$unit = $chapter;
-			$json['unitNumber'] = $unit['number'];
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
 
-			$chapter = $this->getCourseService()->getChapter($course['id'], $unit['parentId']);
-			$json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];
+        if (empty($lesson['mediaId'])) {
+            throw $this->createNotFoundException();
+        }
 
-		} else {
-			$json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];
-			$json['unitNumber'] = 0;
-		}
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
 
-		$json['title'] = $lesson['title'];
-		$json['summary'] = $lesson['summary'];
-		$json['type'] = $lesson['type'];
-		$json['content'] = $lesson['content'];
-		$json['status'] = $lesson['status'];
-		$json['quizNum'] = $lesson['quizNum'];
-		$json['materialNum'] = $lesson['materialNum'];
-		$json['mediaId'] = $lesson['mediaId'];
-		$json['mediaSource'] = $lesson['mediaSource'];
-		$json['startTimeFormat'] = date("m-d H:i",$lesson['startTime']);
-		$json['endTimeFormat'] = date("H:i",$lesson['endTime']);
-		$json['startTime'] = $lesson['startTime'];
-		$json['endTime'] = $lesson['endTime'];
-		$json['id'] = $lesson['id'];
-		$json['courseId'] = $lesson['courseId'];
+        if (empty($file['convertParams']['hlsKey'])) {
+            throw $this->createNotFoundException();
+        }
 
-		if ($json['mediaSource'] == 'self') {
-			$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        // if (!$lesson['free']) {
+        //     list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        // }
 
-			if (!empty($file)) {
-				if ($file['storage'] == 'cloud') {
-					$factory = new CloudClientFactory();
-					$client = $factory->createClient();
+        return new Response($file['convertParams']['hlsKey']);
+    }
 
-					$json['mediaConvertStatus'] = $file['convertStatus'];
+    public function showAction(Request $request, $courseId, $lessonId)
+    {
+    	list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
-					if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
-						$url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
-						$json['mediaHLSUri'] = $url['url'];
-					} else if ($file['type'] == 'ppt') {
-						$json['mediaUri'] = $this->generateUrl('course_lesson_ppt', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']));
-					} else {
-						if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-							$key = $file['metas']['hd']['key'];
-						} else {
-							if ($file['type'] == 'video') {
-								$key = null;
-							} else {
-								$key = $file['hashId'];
-							}
-						}
+    	$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $json = array();
+        $json['number'] = $lesson['number'];
 
-						if ($key) {
-							$url = $client->generateFileUrl($client->getBucket(), $key, 3600);
-							$json['mediaUri'] = $url['url'];
-						} else {
-							$json['mediaUri'] = '';
-						}
+        $chapter = empty($lesson['chapterId']) ? null : $this->getCourseService()->getChapter($course['id'], $lesson['chapterId']);
+        if ($chapter['type'] == 'unit') {
+            $unit = $chapter;
+            $json['unitNumber'] = $unit['number'];
 
-					}
-				} else {
-					$json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']));
-				}
-			} else {
-				$json['mediaUri'] = '';
-				if ($lesson['type'] == 'video') {
-					$json['mediaError'] = '抱歉，视频文件不存在，暂时无法学习。';
-				} else if ($lesson['type'] == 'audio') {
-					$json['mediaError'] = '抱歉，音频文件不存在，暂时无法学习。';
-				} else if ($lesson['type'] == 'ppt') {
-					$json['mediaError'] = '抱歉，PPT文件不存在，暂时无法学习。';
-				}
-			}
-		} else {
-			$json['mediaUri'] = $lesson['mediaUri'];
-		}
+            $chapter = $this->getCourseService()->getChapter($course['id'], $unit['parentId']);
+            $json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];
 
-		$json['canLearn'] = $this->getCourseService()->canLearnLesson($lesson['courseId'], $lesson['id']);
+        } else {
+            $json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];
+            $json['unitNumber'] = 0;
+        }
 
-		return $this->createJsonResponse($json);
-	}
+        $json['title'] = $lesson['title'];
+        $json['summary'] = $lesson['summary'];
+        $json['type'] = $lesson['type'];
+        $json['content'] = $lesson['content'];
+        $json['status'] = $lesson['status'];
+        $json['quizNum'] = $lesson['quizNum'];
+        $json['materialNum'] = $lesson['materialNum'];
+        $json['mediaId'] = $lesson['mediaId'];
+        $json['mediaSource'] = $lesson['mediaSource'];
+        $json['startTimeFormat'] = date("m-d H:i",$lesson['startTime']);
+        $json['endTimeFormat'] = date("H:i",$lesson['endTime']);
+        $json['startTime'] = $lesson['startTime'];
+        $json['endTime'] = $lesson['endTime'];
+        $json['id'] = $lesson['id'];
+        $json['courseId'] = $lesson['courseId'];
 
-	public function mediaAction(Request $request, $courseId, $lessonId)
-	{
-		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
-		if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self') ) {
-			throw $this->createNotFoundException();
-		}
+        if ($json['mediaSource'] == 'self') {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
-		if (!$lesson['free']) {
-			$this->getCourseService()->tryTakeCourse($courseId);
-		}
+            if (!empty($file)) {
+                if ($file['storage'] == 'cloud') {
+                    $factory = new CloudClientFactory();
+                    $client = $factory->createClient();
 
-		return $this->fileAction($request, $lesson['mediaId']);
-	}
+                    $json['mediaConvertStatus'] = $file['convertStatus'];
 
-	public function mediaDownloadAction(Request $request, $courseId, $lessonId)
-	{
-		if (!$this->setting('course.student_download_media')) {
-			return $this->createMessageResponse('未开启课时音视频下载。');
-		}
-		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
-		if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self') ) {
-			throw $this->createNotFoundException();
-		}
+                    if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
+                        if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
+                            $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
+                            $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
+                        } else {
+                            $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                        }
+                        $json['mediaHLSUri'] = $url['url'];
+                    } else if ($file['type'] == 'ppt') {
+                        $json['mediaUri'] = $this->generateUrl('course_lesson_ppt', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']));
+                    } else {
+                        if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                            $key = $file['metas']['hd']['key'];
+                        } else {
+                            if ($file['type'] == 'video') {
+                                $key = null;
+                            } else {
+                                $key = $file['hashId'];
+                            }
+                        }
 
-		$this->getCourseService()->tryTakeCourse($courseId);
+                        if ($key) {
+                            $url = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                            $json['mediaUri'] = $url['url'];
+                        } else {
+                            $json['mediaUri'] = '';
+                        }
 
-		return $this->fileAction($request, $lesson['mediaId'], true);
-	}
+                    }
+                } else {
+                    $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']));
+                }
+            } else {
+                $json['mediaUri'] = '';
+                if ($lesson['type'] == 'video') {
+                    $json['mediaError'] = '抱歉，视频文件不存在，暂时无法学习。';
+                } else if ($lesson['type'] == 'audio') {
+                    $json['mediaError'] = '抱歉，音频文件不存在，暂时无法学习。';
+                } else if ($lesson['type'] == 'ppt') {
+                    $json['mediaError'] = '抱歉，PPT文件不存在，暂时无法学习。';
+                }
+            }
+        } else {
+            $json['mediaUri'] = $lesson['mediaUri'];
+        }
 
-	public function pptAction(Request $request, $courseId, $lessonId)
-	{
-		$this->getCourseService()->tryTakeCourse($courseId);
+        $json['canLearn'] = $this->getCourseService()->canLearnLesson($lesson['courseId'], $lesson['id']);
 
-		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-		if ($lesson['type'] != 'ppt' or empty($lesson['mediaId'])) {
-			throw $this->createNotFoundException();
-		}
+    	return $this->createJsonResponse($json);
+    }
 
-		$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-		if (empty($file)) {
-			throw $this->createNotFoundException();
-		}
+    public function mediaAction(Request $request, $courseId, $lessonId)
+    {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
+        if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self') ) {
+            throw $this->createNotFoundException();
+        }
 
-		if ($file['convertStatus'] != 'success') {
-			if ($file['convertStatus'] == 'error') {
-				$url = $this->generateUrl('course_manage_files', array('id' => $courseId));
-				$message = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
-				return $this->createJsonResponse(array(
-					'error' => array('code' => 'error', 'message' => $message),
-				));
-			} else {
-				return $this->createJsonResponse(array(
-					'error' => array('code' => 'processing', 'message' => 'PPT文档还在转换中，还不能查看，请稍等。'),
-				));
-			}
-		}
+        if (!$lesson['free']) {
+            $this->getCourseService()->tryTakeCourse($courseId);
+        }
 
-		$factory = new CloudClientFactory();
-		$client = $factory->createClient();
+        return $this->fileAction($request, $lesson['mediaId']);
+    }
 
-		$result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length']. '');
+    public function mediaDownloadAction(Request $request, $courseId, $lessonId)
+    {
+        if (!$this->setting('course.student_download_media')) {
+            return $this->createMessageResponse('未开启课时音视频下载。');
+        }
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
+        if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self') ) {
+            throw $this->createNotFoundException();
+        }
 
-		return $this->createJsonResponse($result);
-	}
+        $this->getCourseService()->tryTakeCourse($courseId);
 
-	public function fileAction(Request $request, $fileId, $isDownload = false)
-	{
-		$file = $this->getUploadFileService()->getFile($fileId);
-		if (empty($file)) {
-			throw $this->createNotFoundException();
-		}
+        return $this->fileAction($request, $lesson['mediaId'], true);
+    }
 
-		if ($file['storage'] == 'cloud') {
-			if ($isDownload) {
-				$key = $file['hashId'];
-			} else {
-				if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-					$key = $file['metas']['hd']['key'];
-				} else {
-					$key = $file['hashId'];
-				}
-			}
-			if (empty($key)){
-				throw $this->createNotFoundException();
-			}
+    public function pptAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
 
-			$factory = new CloudClientFactory();
-			$client = $factory->createClient();
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        if ($lesson['type'] != 'ppt' or empty($lesson['mediaId'])) {
+            throw $this->createNotFoundException();
+        }
 
-			if ($isDownload) {
-				$client->download($client->getBucket(), $key, 3600, $file['filename']);
-			} else {
-				$client->download($client->getBucket(), $key);
-			}
-		}
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
 
-		return $this->createLocalMediaResponse($request, $file, $isDownload);
-	}
+        if ($file['convertStatus'] != 'success') {
+            if ($file['convertStatus'] == 'error') {
+                $url = $this->generateUrl('course_manage_files', array('id' => $courseId));
+                $message = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'error', 'message' => $message),
+                ));
+            } else {
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'processing', 'message' => 'PPT文档还在转换中，还不能查看，请稍等。'),
+                ));
+            }
+        }
 
-	public function learnStatusAction(Request $request, $courseId, $lessonId)
-	{
-		$user = $this->getCurrentUser();
-		$status = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);
-		return $this->createJsonResponse(array('status' => $status ? : 'unstart'));
-	}
+        $factory = new CloudClientFactory();
+        $client = $factory->createClient();
 
-	public function learnStartAction(Request $request, $courseId, $lessonId)
-	{
-		$result = $this->getCourseService()->startLearnLesson($courseId, $lessonId);
-		return $this->createJsonResponse($result);
-	}
+        $result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length']. '');
 
-	public function learnFinishAction(Request $request, $courseId, $lessonId)
-	{
-		$this->getCourseService()->finishLearnLesson($courseId, $lessonId);
+        return $this->createJsonResponse($result);
+    }
 
-		$user = $this->getCurrentUser();
-		$member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+    public function fileAction(Request $request, $fileId, $isDownload = false)
+    {
+        $file = $this->getUploadFileService()->getFile($fileId);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
 
-		$response = array(
-			'learnedNum' => empty($member['learnedNum']) ? 0 : $member['learnedNum'],
-			'isLearned' => empty($member['isLearned']) ? 0 : $member['isLearned'],
-		);
+        if ($file['storage'] == 'cloud') {
+            if ($isDownload) {
+                $key = $file['hashId'];
+            } else {
+                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                    $key = $file['metas']['hd']['key'];
+                } else {
+                    $key = $file['hashId'];
+                }
+            }
+            if (empty($key)){
+                throw $this->createNotFoundException();
+            }
 
-		return $this->createJsonResponse($response);
-	}
+            $factory = new CloudClientFactory();
+            $client = $factory->createClient();
 
-	public function learnCancelAction(Request $request, $courseId, $lessonId)
-	{
-		$this->getCourseService()->cancelLearnLesson($courseId, $lessonId);
-		return $this->createJsonResponse(true);
-	}
+            if ($isDownload) {
+                $client->download($client->getBucket(), $key, 3600, $file['filename']);
+            } else {
+                $client->download($client->getBucket(), $key);
+            }
+        }
 
-	private function createLocalMediaResponse(Request $request, $file, $isDownload = false)
-	{
-		$response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
-		$response->trustXSendfileTypeHeader();
+        return $this->createLocalMediaResponse($request, $file, $isDownload);
+    }
 
-		$file['filename'] = urlencode($file['filename']);
-		if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-			$response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
-		} else {
-			$response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
-		}
+    public function learnStatusAction(Request $request, $courseId, $lessonId)
+    {
+        $user = $this->getCurrentUser();
+        $status = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);
+        return $this->createJsonResponse(array('status' => $status ? : 'unstart'));
+    }
 
-		$mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
-		if ($mimeType) {
-			$response->headers->set('Content-Type', $mimeType);
-		}
+    public function learnStartAction(Request $request, $courseId, $lessonId)
+    {
+        $result = $this->getCourseService()->startLearnLesson($courseId, $lessonId);
+        return $this->createJsonResponse($result);
+    }
 
-		return $response;
-	}
+    public function learnFinishAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
-	private function getCourseService()
-	{
-		return $this->getServiceKernel()->createService('Course.CourseService');
-	}
+        $user = $this->getCurrentUser();
+        $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
 
-	private function getDiskService()
-	{
-		return $this->getServiceKernel()->createService('User.DiskService');
-	}
+        $response = array(
+            'learnedNum' => empty($member['learnedNum']) ? 0 : $member['learnedNum'],
+            'isLearned' => empty($member['isLearned']) ? 0 : $member['isLearned'],
+        );
 
-	private function getFileService()
-	{
-		return $this->getServiceKernel()->createService('Content.FileService');
-	}
+        return $this->createJsonResponse($response);
+    }
 
-	private function getUploadFileService()
-	{
-		return $this->getServiceKernel()->createService('File.UploadFileService');
-	}
+    public function learnCancelAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getCourseService()->cancelLearnLesson($courseId, $lessonId);
+        return $this->createJsonResponse(true);
+    }
+
+    private function createLocalMediaResponse(Request $request, $file, $isDownload = false)
+    {
+        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
+        $response->trustXSendfileTypeHeader();
+
+        $file['filename'] = urlencode($file['filename']);
+        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+        } else {
+            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+        }
+
+        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
+        if ($mimeType) {
+            $response->headers->set('Content-Type', $mimeType);
+        }
+
+        return $response;
+    }
+
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getDiskService()
+    {
+        return $this->getServiceKernel()->createService('User.DiskService');
+    }
+
+    private function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
+    }
+
+    private function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
+    }
+
+    private function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
 
 }
