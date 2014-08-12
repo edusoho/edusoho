@@ -50,7 +50,7 @@ define(function(require, exports, module) {
         autoclose: true,
         startDate: new Date(),
         todayHighlight: true,
-        forceParse: true
+        forceParse: false
     });
 
     $("#freeEndTime").datetimepicker({
@@ -60,21 +60,18 @@ define(function(require, exports, module) {
         autoclose: true,
         startDate: new Date(),
         todayHighlight: true,
-        forceParse: true
+        forceParse: false
     });    
 
     Validator.addRule('time_check',
         function(a) {
           var thisTime = $(a.element.selector).val();
-          var nowTime = Date.parse(new Date())/1000;
-          thisTime = thisTime.replace(/-/g,"/");
-          thisTime = Date.parse(thisTime)/1000 + 180;
-          if (nowTime <= thisTime) {
-              return true;
+          if (!Date.parse(thisTime)) {
+           return false;
           }else{
-              return false;
+          return true;
           }
-        },"请输入一个晚于现在的时间");    
+        },"请输入一个正确的时间");    
 
     validator.addItem({
       element: '[name="price"]',
