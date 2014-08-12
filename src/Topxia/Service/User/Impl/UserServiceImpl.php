@@ -299,6 +299,112 @@ class UserServiceImpl extends BaseService implements UserService
         return $user;
     }
 
+    public function importUsers($users)
+    {
+
+        $this->getUserDao()->getConnection()->beginTransaction();
+        try{
+
+            for($i=0;$i<count($users);$i++){
+
+                $userInfo = array();
+                if ($users[$i]["gender"]=="男")$users[$i]["gender"]="male";
+                if ($users[$i]["gender"]=="女")$users[$i]["gender"]="female";
+                if ($users[$i]["gender"]=="")$users[$i]["gender"]="secret";
+
+                $userInfo['email'] = $users[$i]['email'];
+                $userInfo['nickname'] = $users[$i]['nickname'];
+                $userInfo["roles"]=array('ROLE_USER');
+                $userInfo['type'] = "default";
+                $userInfo['createdIp'] = "";
+                $userInfo['createdTime'] = time();
+                $userInfo['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+                $userInfo['password'] = $this->getPasswordEncoder()->encodePassword($users[$i]['password'], $userInfo['salt']);
+                $userInfo['setup'] = 1;
+
+                $user = UserSerialize::unserialize(
+                    $this->getUserDao()->addUser(UserSerialize::serialize($userInfo))
+                );
+
+                $profile = array();
+                $profile['id'] = $user['id'];
+                $profile['mobile'] = empty($user[$i]['mobile']) ? '' : $user[$i]['mobile'];
+                $profile['idcard'] = empty($user[$i]['idcard']) ? '' : $user[$i]['idcard'];
+                $profile['truename'] = empty($user[$i]['truename']) ? '' : $user[$i]['truename'];
+                $profile['company'] = empty($user[$i]['company']) ? '' : $user[$i]['company'];
+                $profile['job'] = empty($user[$i]['job']) ? '' : $user[$i]['job'];
+                $profile['weixin'] = empty($user[$i]['weixin']) ? '' : $user[$i]['weixin'];
+                $profile['weibo'] = empty($user[$i]['weibo']) ? '' : $user[$i]['weibo'];
+                $profile['qq'] = empty($user[$i]['qq']) ? '' : $user[$i]['qq'];
+                $profile['site'] = empty($user[$i]['site']) ? '' : $user[$i]['site'];
+                $profile['gender'] = empty($user[$i]['gender']) ? 'secret' : $user[$i]['gender'];
+                for($j=1;$j<=5;$j++){
+                    $profile['intField'.$j] = empty($user[$i]['intField'.$j]) ? null : $user[$i]['intField'.$j];
+                    $profile['dateField'.$j] = empty($user[$i]['dateField'.$j]) ? null : $user[$i]['dateField'.$j];
+                    $profile['floatField'.$j] = empty($user[$i]['floatField'.$j]) ? null : $user[$i]['floatField'.$j];
+                }
+                for($j=1;$j<=10;$j++){
+                    $profile['varcharField'.$j] = empty($user[$i]['varcharField'.$j]) ? "" : $user[$i]['varcharField'.$j];
+                    $profile['textField'.$j] = empty($user[$i]['textField'.$j]) ? "" : $user[$i]['textField'.$j];
+                }
+
+                $this->getProfileDao()->addProfile($profile);
+            
+            }
+
+             $this->getUserDao()->getConnection()->commit();
+
+        }catch(\Exception $e){
+            $this->getUserDao()->getConnection()->rollback();
+            throw $e;
+        }
+
+    }
+
+    public function importUpdateNickname($users)
+    {
+
+        $this->getUserDao()->getConnection()->beginTransaction();
+        try{
+
+            for($i=0;$i<count($users);$i++){
+                $member = $this->getUserDao()->findUserByNickname($users[$i]["nickname"]);
+                $member=UserSerialize::unserialize($member);
+                $this->changePassword($member["id"],$users[$i]["password"]);
+                $this->updateUserProfile($member["id"],$users[$i]);              
+            }
+
+             $this->getUserDao()->getConnection()->commit();
+
+        }catch(\Exception $e){
+            $this->getUserDao()->getConnection()->rollback();
+            throw $e;
+        }
+
+    }
+
+    public function importUpdateEmail($users)
+    {
+
+        $this->getUserDao()->getConnection()->beginTransaction();
+        try{
+
+            for($i=0;$i<count($users);$i++){
+                $member = $this->getUserDao()->findUserByEmail($users[$i]["email"]);
+                $member=UserSerialize::unserialize($member);
+                $this->changePassword($member["id"],$users[$i]["password"]);
+                $this->updateUserProfile($member["id"],$users[$i]);              
+            }
+
+             $this->getUserDao()->getConnection()->commit();
+
+        }catch(\Exception $e){
+            $this->getUserDao()->getConnection()->rollback();
+            throw $e;
+        }
+
+    }
+
     public function setupAccount($userId)
     {
         $user = $this->getUser($userId);
