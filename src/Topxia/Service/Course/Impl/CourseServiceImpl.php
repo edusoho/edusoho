@@ -336,9 +336,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'endTime'  => 0,
 			'locationId' => 0,
 			'address' => '',
-			'maxStudentNum' => 0
+			'maxStudentNum' => 0,
+			'freeStartTime' => 0,
+			'freeEndTime' => 0
 		));
-
+		
 		if (!empty($fields['about'])) {
 			$fields['about'] = $this->purifyHtml($fields['about'],true);
 		}
