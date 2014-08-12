@@ -13,8 +13,8 @@ class SysteminfoController extends BaseController
     {
         $info = array(
             'version' => System::VERSION,
-            'mobileApiVersion' => '1',
-            'mobileApiUrl' => $request->getSchemeAndHttpHost() . '/mapi_v1',
+            'mobileApiVersion' => '2',
+            'mobileApiUrl' => $request->getSchemeAndHttpHost() . '/mapi_v2',
         );
 
         return $this->createJson($request, $info);
