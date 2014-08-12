@@ -115,9 +115,12 @@ class UserController extends BaseController
             return $this->redirect($this->generateUrl('settings'));
         }
 
+        $fields=$this->getFields();
+
         return $this->render('TopxiaAdminBundle:User:edit-modal.html.twig', array(
             'user' => $user,
-            'profile'=>$profile
+            'profile'=>$profile,
+            'fields'=>$fields,
         ));
     }
 
@@ -127,14 +130,7 @@ class UserController extends BaseController
         $profile = $this->getUserService()->getUserProfile($id);
         $profile['title'] = $user['title'];
 
-        $fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-        for($i=0;$i<count($fields);$i++){
-           if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['type']="text";
-           if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['type']="varchar";
-           if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['type']="int";
-           if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['type']="float";
-           if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
-        }
+        $fields=$this->getFields();
             
         return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
             'user' => $user,
@@ -225,6 +221,20 @@ class UserController extends BaseController
             'user' => $this->getUserService()->getUser($user['id']),
             'partnerAvatar' => $partnerAvatar,
         ));
+    }
+
+    private function getFields()
+    {
+        $fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        for($i=0;$i<count($fields);$i++){
+            if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['type']="text";
+            if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['type']="varchar";
+            if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['type']="int";
+            if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['type']="float";
+            if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
+        }
+
+        return $fields;
     }
 
     private function avatar_2 ($id, $filename)

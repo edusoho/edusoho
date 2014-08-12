@@ -65,81 +65,23 @@
             rule: 'idcard'
         });
 
-        validator.addItem({
-            element: '[name="profile[intField1]"]',
-            rule: 'int'
-        });
 
-        validator.addItem({
-            element: '[name="profile[intField2]"]',
-            rule: 'int'
-        });
+        for(var i=1;i<=5;i++){
+             validator.addItem({
+             element: '[name="profile[intField'+i+']"]',
+             rule: 'int'
+             });
 
-        validator.addItem({
-            element: '[name="profile[intField3]"]',
-            rule: 'int'
-        });
-
-        validator.addItem({
-            element: '[name="profile[intField4]"]',
-            rule: 'int'
-        });
-
-        validator.addItem({
-            element: '[name="profile[intField5]"]',
-            rule: 'int'
-        });
-
-        validator.addItem({
-            element: '[name="profile[floatField1]',
+             validator.addItem({
+            element: '[name="profile[floatField'+i+']"]',
             rule: 'float'
-        });
+            });
 
-        validator.addItem({
-            element: '[name="profile[floatField2]',
-            rule: 'float'
-        });
-
-        validator.addItem({
-            element: '[name="profile[floatField3]',
-            rule: 'float'
-        });
-
-        validator.addItem({
-            element: '[name="profile[floatField4]',
-            rule: 'float'
-        });
-
-        validator.addItem({
-            element: '[name="profile[floatField5]',
-            rule: 'float'
-        });
-
-        validator.addItem({
-            element: '[name="profile[dateField1]"]',
+             validator.addItem({
+            element: '[name="profile[dateField'+i+']"]',
             rule: 'date'
-        });
-
-        validator.addItem({
-            element: '[name="profile[dateField2]"]',
-            rule: 'date'
-        });
-
-        validator.addItem({
-            element: '[name="profile[dateField3]"]',
-            rule: 'date'
-        });
-
-        validator.addItem({
-            element: '[name="profile[dateField4]"]',
-            rule: 'date'
-        });
-
-        validator.addItem({
-            element: '[name="profile[dateField5]"]',
-            rule: 'date'
-        });
-
+             });
+        }
 
         validator.on('formValidate', function(elemetn, event) {
             editor.sync();
