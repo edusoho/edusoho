@@ -132,11 +132,11 @@ class WebExtension extends \Twig_Extension
         return $this->container->getParameter($name);
     }
 
-    public function dataformatFilter ($time) {
+    public function dataformatFilter ($time,$format = 'Y-m-d H:i') {
         if (empty($time)) {
             return ;
         }
-        return date('Y-m-d H:i',$time);
+        return date($format,$time);
     }
 
     public function smarttimeFilter ($time) {

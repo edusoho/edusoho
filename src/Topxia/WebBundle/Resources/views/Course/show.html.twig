@@ -265,9 +265,11 @@
 </div>
 {% endif %}
 </div>
+{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}
 {% endblock %}
 
 {% block bottom %}
 <div id="course-modal" class="modal"></div>
 <div id="course-edit-modal" class="modal"></div>
 {% endblock %}
+
