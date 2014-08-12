@@ -3,10 +3,34 @@ define(function(require, exports, module) {
     var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    var VideoChooser = require('../widget/media-chooser/video-chooser3');
+    var VideoChooser = require('../widget/media-chooser/video-chooser2');
     var AudioChooser = require('../widget/media-chooser/audio-chooser2');
     var PPTChooser = require('../widget/media-chooser/ppt-chooser2');
     var Notify = require('common/bootstrap-notify');
+        require('jquery.sortable');
+        
+    var sortList = function($list) {
+            var data = $list.sortable("serialize").get();
+            $.post($list.data('sortUrl'), {ids:data}, function(response){
+                var lessonNum = chapterNum = unitNum = 0;
+
+                $list.find('.item-lesson, .item-chapter').each(function() {
+                    var $item = $(this);
+                    if ($item.hasClass('item-lesson')) {
+                        lessonNum ++;
+                        $item.find('.number').text(lessonNum);
+                    } else if ($item.hasClass('item-chapter-unit')) {
+                        unitNum ++;
+                        $item.find('.number').text(unitNum);
+                    } else if ($item.hasClass('item-chapter')) {
+                        chapterNum ++;
+                        unitNum = 0;
+                        $item.find('.number').text(chapterNum);
+                    }
+
+                });
+            });
+        };
 
     function createValidator ($form) {
 
@@ -35,17 +59,51 @@ define(function(require, exports, module) {
                 if(html.success == false){
                     Notify.danger(html.message);
                     $('#course-lesson-btn').button('submiting').removeClass('disabled');
-                    $('#course-lesson-btn').button('submiting').text('保存');
+                    $('#course-lesson-btn').button('submiting').text('提交');
                     return ;
                 }
                 var id = '#' + $(html).attr('id'),
                     $item = $(id);
+                var $parent = $('#'+$form.data('parentid'));
                 if ($item.length) {
                     $item.replaceWith(html);
                     Notify.success('课时已保存');
                 } else {
                     $panel.find('.empty').remove();
-                    $("#course-item-list").append(html);
+
+                    if($parent.length){
+                        var add = 0;
+                        if($parent.hasClass('item-chapter  clearfix')){
+                            $parent.nextAll().each(function(){
+                            if($(this).hasClass('item-chapter  clearfix')){
+                                $(this).before(html);
+                                add = 1;
+                                return false;
+                            }
+                        });
+                            if(add !=1 ){
+                                $("#course-item-list").append(html);
+                                add = 1;
+                            }
+
+                        }else{
+                             $parent.nextAll().each(function(){
+                                if($(this).hasClass('item-chapter  clearfix'))
+                                    return false;
+                                if($(this).hasClass('item-chapter item-chapter-unit clearfix')){
+                                    $(this).before(html);
+                                    add = 1;
+                                    return false;
+                                }
+                            });
+                        }
+                    if(add != 1 )
+                        $parent.after(html);  
+                        var $list = $("#course-item-list");
+                        sortList($list);
+                    }else{
+                        $("#course-item-list").append(html);
+                    }
                     Notify.success('添加课时成功');
                 }
                 $(id).find('.btn-link').tooltip();
@@ -119,16 +177,6 @@ define(function(require, exports, module) {
     }
 
     exports.run = function() {
-        var updateDuration = function (length) {
-            length = parseInt(length);
-
-            var minute = parseInt(length / 60);
-            var second = length - minute * 60;
-
-            $("#lesson-minute-field").val(minute);
-            $("#lesson-second-field").val(second);
-        }
-
         var $form = $("#course-lesson-form");
 
         var $content = $("#lesson-content-field");
@@ -155,13 +203,14 @@ define(function(require, exports, module) {
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
-            updateDuration(item.length);
+            if (item.status == 'waiting') {
+                
+            }
         });
 
         audioChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
-            updateDuration(item.length);
         });
 
         pptChooser.on('change', function(item) {
@@ -169,6 +218,36 @@ define(function(require, exports, module) {
             $form.find('[name="media"]').val(value);
         });
 
+        var mediaFileInfoFetchingCallback = function () {
+            var $group = $("#lesson-length-form-group").show();
+            var $help = $group.find('.help-block');
+            $help.data('help', $help.text());
+            $help.text('正在读取时长，请稍等...');
+        };
+
+        var mediaFileInfoFetchedCallback = function (info) {
+            var $group = $("#lesson-length-form-group").show();
+            var $help = $group.find('.help-block');
+            if ($help.data('help')) {
+                $help.text($help.data('help'));
+            }
+
+            if (info.duration) {
+
+                if (info.duration.match(':')){
+                    var durations = info.duration.split(':');
+                    $("#lesson-minute-field").val(durations[0]);
+                    $("#lesson-second-field").val(durations[1]);
+                }
+
+            }
+        }
+
+        videoChooser.on('fileinfo.fetching', mediaFileInfoFetchingCallback);
+        videoChooser.on('fileinfo.fetched', mediaFileInfoFetchedCallback);
+        
+        audioChooser.on('fileinfo.fetching', mediaFileInfoFetchingCallback);
+        audioChooser.on('fileinfo.fetched', mediaFileInfoFetchedCallback);
 
         var validator = createValidator($form);
 
