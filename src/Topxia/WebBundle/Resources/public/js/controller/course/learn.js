@@ -163,6 +163,11 @@ define(function(require, exports, module) {
                 this.set('audioPlayer', null);
             }
 
+            if (that.get('mediaPlayer')) {
+                this.get('mediaPlayer').dispose();
+                this.set('mediaPlayer', null);
+            }
+
             swfobject.removeSWF('lesson-swf-player');
 
             $('#lesson-iframe-content').empty();
@@ -225,6 +230,8 @@ define(function(require, exports, module) {
                         that._onFinishLearnLesson();
                     });
                     mediaPlayer.play();
+
+                    that.set('mediaPlayer', mediaPlayer);
 
                 } else {
                     if (lesson.type == 'video') {
