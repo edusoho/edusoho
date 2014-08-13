@@ -1,4 +1,4 @@
- <div class="es-box">
+<div class="es-box">
   <div class="es-box-heading">
     <h2>在学课程</h2>
   </div>
@@ -13,15 +13,15 @@
       <div class="progress" style="width:90%">
         <span class="progress-bar" style="width: {{ progress.percent }};"></span>
       </div>  
-    <div class="percentage clearfix">完成{{ progress.percent }}</div>
+      <div class="percentage clearfix">完成{{ progress.percent }}</div>
 
-    {% if nextLearnLesson %}
-      <div class="continue">
-        <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{nextLearnLesson.id}}" title="继续学习：{{ nextLearnLesson.title }}" class="btn btn-success pull-right">继续学习</a>
-      </div>
+      {% if nextLearnLesson %}
+        <div class="continue">
+          <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{nextLearnLesson.id}}" title="继续学习：{{ nextLearnLesson.title }}" class="btn btn-success pull-right">继续学习</a>
+        </div>
       {% endif %}
+    </div>
   </div>
-
 </div>
 
         

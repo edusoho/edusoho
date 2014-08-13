@@ -81,7 +81,6 @@
         <div class="es-box topic">
           <div class="es-box-heading">
             <h2>推荐话题</h2>
-            {# <a class="pull-right" href="{{ path('article_show') }}">更多&gt;</a> #}
           </div>
           <div class="es-box-body">
             {% set threads = data('EliteCourseThreadsByType',{'count':4, 'type':'discussion'}) %}
@@ -109,6 +108,8 @@
                         </p>
                       </div>
                     </li>
+                  {% else %}
+                    <div class="empty">还没有推荐话题</div>
                   {% endif %}
                 {% endfor %}
               </ul>

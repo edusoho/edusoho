@@ -55,7 +55,7 @@ a:hover {
     *zoom:1;
     vertical-align:top;
     letter-spacing:0;
-    width: 277px;
+    width: 254px;
     margin: 0px 10px 17px 0;
     background: #fff;
     border: 1px solid #e2e2e2;
@@ -68,7 +68,7 @@ a:hover {
 
 @media (min-width: 1200px) {
     .autumn-grid {
-        width: 277px;
+        width: 243px;
         margin: 0px 10px 17px 0;
     }
 }
@@ -116,7 +116,7 @@ a:hover {
     font-size: 16px;
 }
 
-.autumn-course-grid .course-name a:hover {
+.autumn-course-grid:hover .course-name a {
     color: #f78a4b;
 }
 
