@@ -59,7 +59,7 @@ define(function(require, exports, module) {
                 if(html.success == false){
                     Notify.danger(html.message);
                     $('#course-lesson-btn').button('submiting').removeClass('disabled');
-                    $('#course-lesson-btn').button('submiting').text('提交');
+                    $('#course-lesson-btn').button('submiting').text('保存');
                     return ;
                 }
                 var id = '#' + $(html).attr('id'),
