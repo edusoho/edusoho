@@ -639,11 +639,11 @@ class CourseController extends BaseController
         if(empty($startTime)){
             return 0;
         }
-        //即将开始
+        //即将限免
         if($startTime > $now){
             return 1;
         }
-        //即将结束
+        //正在限免
         if($endTime >= $now){
             return 2;
         }
