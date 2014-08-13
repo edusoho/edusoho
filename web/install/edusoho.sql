@@ -512,6 +512,17 @@ CREATE TABLE `migration_versions` (
   PRIMARY KEY (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP TABLE IF EXISTS `mobile_device`;
+CREATE TABLE `mobile_device` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '设备ID',
+  `imei` varchar(255) NOT NULL COMMENT '串号',
+  `platform` varchar(255) NOT NULL COMMENT '平台',
+  `version` varchar(255) NOT NULL COMMENT '版本',
+  `screenresolution` varchar(100) NOT NULL COMMENT '分辨率',
+  `kernel` varchar(255) NOT NULL COMMENT '内核',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `navigation`;
 CREATE TABLE `navigation` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '导航ID',
@@ -674,6 +685,7 @@ CREATE TABLE `testpaper` (
   `target` varchar(255) NOT NULL DEFAULT '' COMMENT '试卷所属对象',
   `status` varchar(32) NOT NULL DEFAULT 'draft' COMMENT '试卷状态：draft,open,closed',
   `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '总分',
+  `passedScore` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '通过考试的分数线',
   `itemCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目数量',
   `createdUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建人',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
@@ -723,6 +735,7 @@ CREATE TABLE `testpaper_result` (
   `subjectiveScore` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '客观题得分',
   `teacherSay` text COMMENT '老师评价',
   `rightItemCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '正确题目数',
+  `passedStatus` enum('none','passed','unpassed') NOT NULL DEFAULT 'none' COMMENT '考试通过状态，none表示该考试没有',
   `limitedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷限制时间(秒)',
   `beginTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
