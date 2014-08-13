@@ -202,7 +202,13 @@ define(function(require, exports, module) {
                     return ;
                 }
 
-                if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
+                if (lesson.mediaSource == 'iframe') {
+                    var html = '<iframe src="' + lesson.mediaUri + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no">';
+
+                    $("#lesson-iframe-content").html(html);
+                    $("#lesson-iframe-content").show();
+
+                } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
 
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
                     $("#lesson-video-content").show();

@@ -177,6 +177,23 @@ class CourseLessonController extends BaseController
                     $json['mediaError'] = '抱歉，PPT文件不存在，暂时无法学习。';
                 }
             }
+        } else if ($json['mediaSource'] == 'youku') {
+            $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+            if ($matched) {
+                $json['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
+                $json['mediaSource'] = 'iframe';
+            } else {
+                $json['mediaUri'] = $lesson['mediaUri'];
+            }
+
+        } else if ($json['mediaSource'] == 'tudou'){
+            $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+            if ($matched) {
+                $json['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                $json['mediaSource'] = 'iframe';
+            } else {
+                $json['mediaUri'] = $lesson['mediaUri'];
+            }
         } else {
             $json['mediaUri'] = $lesson['mediaUri'];
         }
