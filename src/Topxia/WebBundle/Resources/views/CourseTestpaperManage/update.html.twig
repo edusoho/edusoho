@@ -43,6 +43,16 @@
         </div>
       </div>
 
+      {% if is_feature_enabled('testpaper_passed_score') %}
+      <div class="form-group">
+        <div class="col-md-2 control-label"><label for="testpaper-limitedTime-field">及格分数线</label></div>
+        <div class="col-md-8 controls">
+          <input class="form-control width-input width-input-large" name="passedScore" id="testpaper-passedScore-field" value="{{testpaper.passedScore }}" /> 分
+          <div class="help-block">总分为{{ testpaper.score }}，最大不能超过总分；0表示不设及格分数线。</div>
+        </div>
+      </div>
+      {% endif %}
+
       <div class="form-group">
         <div class="col-md-8 col-md-offset-2 controls">
           <button type="submit" class="btn btn-primary">保存</button>
