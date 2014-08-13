@@ -6,6 +6,7 @@ class BaseService
 	public $formData;
 	public $controller;
 	public $request;
+	protected $delegator;
 
 	private function __construct($controller){
 		$this->controller = $controller;
@@ -17,7 +18,19 @@ class BaseService
 	{
 		$instance = new $class($controller);
 		$serviceDelegator = new serviceDelegator($instance);
+		$instance->setDelegator($serviceDelegator);
+
 		return $serviceDelegator;
+	}
+
+	public function setDelegator($serviceDelegator)
+	{
+		$this->delegator = $serviceDelegator;
+	}
+
+	public function getDelegator()
+	{
+		return $this->delegator;
 	}
 
 	public function after(){

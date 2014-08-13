@@ -1,2 +1,6 @@
-1获取网校信息	School/getSchoolSite
+1 获取网校信息			School/getSchoolSite
 2 根据二维码获取网校信息	School/getSchoolSiteByQrCode
+3 获取网校banner		School/getSchoolBanner
+4 获取网校公告			School/getSchoolBanner
+5 获取推荐课程			School/getRecommendCourses
+6 获取每周精选			School/getWeekRecommendCourses

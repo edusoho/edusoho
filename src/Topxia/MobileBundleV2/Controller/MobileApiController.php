@@ -8,7 +8,8 @@ use Topxia\WebBundle\Controller\BaseController;
 class MobileApiController extends MobileBaseController
 {
 	    private static $filtetNames = array(
-	    	1000=>"UrlFilter"
+	    	1000=>"UrlFilter",
+	    	999=>"ServiceFilter"
 	    );
 
 	    private $filters = array();
@@ -27,7 +28,7 @@ class MobileApiController extends MobileBaseController
 
 	    private function filter($service, $method)
 	    {
-	    	foreach ($this->filters as $filter) {
+	    	while ($filter = array_pop($this->filters)){
 	    		if (!$this->isSatisfy($filter)) {
 	    			continue;
 	    		}
@@ -41,7 +42,7 @@ class MobileApiController extends MobileBaseController
 	    			continue;
 	    		}
 	    		return false;
-	            }
+	    	}
 	            return false;
 	    }
 

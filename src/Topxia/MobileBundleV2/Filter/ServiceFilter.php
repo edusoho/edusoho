@@ -8,6 +8,6 @@ class ServiceFilter extends Filter
 
 	public function invoke()
 	{
-		return new FilterResult(true, false, array("ddd"=>22));
+		return $this->next();
 	}
 }

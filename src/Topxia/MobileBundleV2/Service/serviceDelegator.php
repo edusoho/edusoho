@@ -4,7 +4,10 @@ namespace Topxia\MobileBundleV2\Service;
 class serviceDelegator
 {
 	private $target;
+	private $invokeArray;
+
 	function __construct($target){
+		$this->invokeArray = array();
 		$this->target = $target;
 	}
 
@@ -17,9 +20,23 @@ class serviceDelegator
 			return array("error" => "the method is serviceDelegator");
 		}
 
-		call_user_func(array($this->target, "after"), $arguments);
-		$functionResult = call_user_func(array($this->target, $name), $arguments);
-		call_user_func(array($this->target, "before"), $arguments);
+		return $this->invokeFunction($name, $arguments);
+		return $functionResult;
+	}
+
+	public function stopInvoke()
+	{
+		$this->invokeArray = array();
+	}
+
+	private function invokeFunction($name, $arguments)
+	{
+		$functionResult = array();
+		array_push($this->invokeArray, 'before', $name, 'after');
+		while ($function = array_pop($this->invokeArray)) {
+			$functionResult = call_user_func(array($this->target, $function), $arguments);
+		}
+
 		return $functionResult;
 	}
 
