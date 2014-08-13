@@ -18,15 +18,17 @@ class KernelRequestListener
     {
     	$request = $event->getRequest();
     	if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
+            
+            if (stripos($request->getPathInfo(), '/mapi/') === 0) {
+                return ;
+            }
+            
             $whiteList = array('/course/order/pay/alipay/notify', '/vip/pay_notify/alipay', '/uploadfile/upload', '/uploadfile/cloud_convertcallback', '/uploadfile/cloud_convertcallback2', '/disk/upload', '/file/upload', '/kindeditor/upload', '/disk/convert/callback', '/partner/phpwind/api/notify', '/partner/discuz/api/notify', '/live/auth');
             if (in_array($request->getPathInfo(), $whiteList)) {
                 return ;
             }
 
 
-            if (stripos($request->getPathInfo(), '/mapi/') === 0) {
-                return ;
-            }
 
     		if ($request->isXmlHttpRequest()) {
     			$token = $request->headers->get('X-CSRF-Token');
