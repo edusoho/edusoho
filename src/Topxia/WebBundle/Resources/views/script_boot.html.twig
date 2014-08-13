@@ -21,7 +21,8 @@
         video_player_watermark_plugin: parameter('cloud.video_player_watermark_plugin'),
         video_player_fingerprint_plugin: parameter('cloud.video_player_fingerprint_plugin')
       },
-      editor_upload_path: path('kindeditor_upload')
+      editor_upload_path: path('kindeditor_upload'),
+      loading_img_path: asset('assets/img/default/loading.gif'),
     }|json_encode|raw
   }};
 
