@@ -17,6 +17,12 @@ class CourseLessonController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $user = $this->getCurrentUser();
+
+        if ($this->setting('course.freeCourses') == 0 && !$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+        
         if (empty($lesson)) {
             throw $this->createNotFoundException();
         }
@@ -45,9 +51,10 @@ class CourseLessonController extends BaseController
                 }
 
             }
-        }
+        }        
 
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
+            'user' => $user,
             'course' => $course,
             'lesson' => $lesson,
             'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
@@ -89,9 +96,9 @@ class CourseLessonController extends BaseController
 
     public function showAction(Request $request, $courseId, $lessonId)
     {
-    	list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
-    	$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $json = array();
         $json['number'] = $lesson['number'];
 
@@ -183,7 +190,7 @@ class CourseLessonController extends BaseController
 
         $json['canLearn'] = $this->getCourseService()->canLearnLesson($lesson['courseId'], $lesson['id']);
 
-    	return $this->createJsonResponse($json);
+        return $this->createJsonResponse($json);
     }
 
     public function mediaAction(Request $request, $courseId, $lessonId)
