@@ -57,6 +57,7 @@ class WebExtension extends \Twig_Extension
             'js_paths' => new \Twig_Function_Method($this, 'getJsPaths'),
             'is_plugin_installed' => new \Twig_Function_Method($this, 'isPluginInstaled'),
             'is_exist_in_subarray_by_id' => new \Twig_Function_Method($this, 'isExistInSubArrayById'),
+            'is_plugins_enabled' => new \Twig_Function_Method($this, 'isPluginsEnabled'),
             'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
@@ -136,6 +137,18 @@ class WebExtension extends \Twig_Extension
     {
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
         return in_array($feature, $features);
+    }
+
+    public function isPluginsEnabled($name)
+    {
+        $plugins=ServiceKernel::instance()->createService('System.SettingService')->get("plugins",array());
+
+        if($plugins&&isset($plugins[$name]["enabled"])){
+
+            return $plugins[$name]["enabled"];
+        }
+
+        return false;
     }
 
     public function getParameter($name, $default = null)
