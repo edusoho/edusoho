@@ -130,13 +130,13 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         }
         return array(
             'name' => $site['name'],
-            'url' => $request->getSchemeAndHttpHost() . '/mapi_v1',
+            'url' => $request->getSchemeAndHttpHost() . '/mapi_v2',
             'host'=> $request->getSchemeAndHttpHost(),
             'logo' => $logo,
             'splashs' => $splashs,
             'apiVersionRange' => array(
-                "min" => "1.0.0",
-                "max" => "1.0.0"
+                "min" => "2.0.0",
+                "max" => "2.0.0"
             ) ,
         );
     }
