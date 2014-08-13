@@ -17,6 +17,12 @@ class CourseLessonController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $user = $this->getCurrentUser();
+
+        if ($this->setting('course.freeCourses') == 0 && !$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
         if (empty($lesson)) {
             throw $this->createNotFoundException();
         }
@@ -48,6 +54,7 @@ class CourseLessonController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
+            'user' => $user,
             'course' => $course,
             'lesson' => $lesson,
             'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
