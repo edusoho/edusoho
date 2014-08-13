@@ -166,7 +166,9 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('rating > :ratingGreaterThan')
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
             ->andWhere('createdTime >= :startTime')
-            ->andWhere('createdTime <= :endTime');
+            ->andWhere('createdTime <= :endTime')
+            ->andWhere('freeStartTime >= :freeStartTime')
+            ->andWhere('freeEndTime >= :freeEndTime');
 
 
         if (isset($conditions['categoryIds'])) {

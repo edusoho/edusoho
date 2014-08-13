@@ -30,7 +30,6 @@ class CourseController extends BaseController
 
 
         $sort = $request->query->get('sort', 'latest');
-
         $conditions = array(
             'status' => 'published',
             'type' => 'normal',
@@ -547,6 +546,7 @@ class CourseController extends BaseController
         }
 
         $course['freeLimitType'] = $this->getFreeLimitType($course);
+
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course' => $course,
             'canManage' => $this->getCourseService()->canManageCourse($course['id']),
@@ -634,7 +634,7 @@ class CourseController extends BaseController
     {
         $startTime = $course['freeStartTime'];
         $endTime = $course['freeEndTime'];
-        $now = strtotime(date("y-m-d h:i:s"));
+        $now = time();
 
         //不是限免
         if(empty($startTime)){

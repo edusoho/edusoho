@@ -82,7 +82,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$orderBy = array('recommendedSeq', 'ASC');
 		}elseif ($sort == 'createdTimeByAsc') {
 			$orderBy = array('createdTime', 'ASC');
-		} else {
+		}elseif($sort == 'freeEndTime'){
+			$orderBy =array('freeEndTime','ASC');
+		}elseif($sort == 'freeStartTime'){
+			$orderBy =array('freeStartTime','ASC');
+		}else {
 			$orderBy = array('createdTime', 'DESC');
 		}
 		

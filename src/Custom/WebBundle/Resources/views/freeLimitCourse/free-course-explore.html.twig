@@ -1,0 +1,20 @@
+{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+
+{% block content %}
+
+      <div class="category-filters">
+        <a href="{{ path('free_now_explore') }}" {% if type == 'now' %}class="selected"{% endif %}>正在限免</a>        
+        <a href="{{ path('free_coming_explore') }}" {% if type == 'coming' %}class="selected"{% endif %}>即将限免</a>
+      </div>
+
+      {% if courses %}
+        {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
+        {{ web_macro.paginator(paginator) }} 
+      {% else %}
+        <div class="empty">暂无限免无课程</div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}
