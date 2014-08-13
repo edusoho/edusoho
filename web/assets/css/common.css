@@ -16,6 +16,13 @@
 .money-text {
     color: #f40;
 }
+.free-money-text{
+    float: right;
+    margin-right: -200px;
+    margin-top: 29px;
+    color: #777;
+    font-size: 12px; 
+}
 
 .short-long-text .trigger {
   visibility: hidden;

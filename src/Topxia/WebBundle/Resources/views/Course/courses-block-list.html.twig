@@ -48,8 +48,19 @@
           {% if course.showStudentNumType == 'opened' %}
           <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学员</span>
           {% endif %}
-          <span class="course-price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+          <span class="course-price">
+            {% if course.price > 0 %}
+              {% if freeLimitType(course) == 2 %}
+                0.0 元
+              {% else %}
+                {{ course.price }}元
+              {% endif %}  
+            {% else %}免费{% endif %}
+          </span>
         </div>
+           {% if course.price > 0 and freeLimitType(course) == 2 %}
+            <span class="free-money-text">(原价：<del>{{ course.price }}</del> 元)</span>
+          {% endif %}
       </div>
     </div>
     {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course,'pageType':'list'} %}
