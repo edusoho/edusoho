@@ -4071,43 +4071,47 @@ body {
 
 }
 
-.countdown-div{
+.countdown-show{
 	position: absolute;
-	top: 105px;
-	left: 800px;
+	top: 139px;
+	left: 670px;
 	display: none;
 }
 
-.countdown-img{
+.countdown-dashboard{
+	position: absolute;
+	top: 73px;
+	left: 955px;
+	display: none;
+}
+
+.countdown-em{
 	float: left;
-}
-.countdown-img img{
-	height: 80px;
-}
-ul.countdown {
-	list-style: none;
-	padding: 0;
-	display: block;
-	text-align: center;
-	float: right;
-	margin: 10;
+	padding-top: 6px;
 }
 
-ul.countdown li {
-	display: inline-block;
+.countdown{
+	float: left;
+	padding-left: 0px;
+	color: #3e3e3e;
+	font-family: tahoma arial 宋体;
+}
+.countdown-font{
+	display: inline;
+	float: left;
+	margin-right: 5px;
+	padding: 0 5px;
+	color: #fff;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-ms-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px;
+	background: #f40;
 }
 
-ul.countdown li span {
-	font-size: 20px;
-	font-weight: 300;
-}
-
-ul.countdown li.seperator {
-	font-size: 20px;
-	vertical-align: top;
-}
-
-ul.countdown li p {
-	color: #a7abb1;
-	font-size: 14px;
+.countdown span {
+	font-size: 24.0px;
+	color: #dc442f;
+	line-height: 32.0px;
 }

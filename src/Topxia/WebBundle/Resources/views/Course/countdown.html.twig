@@ -1,31 +1,18 @@
 {% if course.freeLimitType != 0 %}
-<div class="countdown-div">
-    <div class="countdown-img">
-       {% if course.freeLimitType == 1 %} <img src="{{asset('/bundles/topxiaweb/img/course/start-icon.png')}}"> {% endif %}
-       {% if course.freeLimitType == 2 %} <img src="{{asset('/bundles/topxiaweb/img/course/end-icon.png')}}"> {% endif %}
+<div class="{% if pageType == 'show' %}countdown-show{% else %} countdown-dashboard{% endif %}" id="countdown-div">
+    <div class="countdown-em">
+       {% if course.freeLimitType == 1 %} <em class="countdown-font">限时免费</em> {% endif %}
+       {% if course.freeLimitType == 2 %} <em class="countdown-font">即将限时</em> {% endif %}
     </div>
-<ul class="countdown" data-starttime="{{course.freeStartTime|default()|data_format('Y-m-d H:i:s')}}" data-endtime="{{course.freeEndTime|default()|data_format('Y-m-d H:i:s')}}">
-        <li>
-            <span class="days">00</span>
-            <p class="days_ref">天</p>
-        </li>
-        <li class="seperator">.</li>
-        <li>
-            <span class="hours">00</span>
-            <p class="hours_ref">时</p>
-        </li>
-        <li class="seperator">:</li>
-        <li>
-            <span class="minutes">00</span>
-            <p class="minutes_ref">分</p>
-        </li>
-        <li class="seperator">:</li>
-        <li>
-            <span class="seconds">00</span>
-            <p class="seconds_ref">秒</p>
-        </li>
-    </ul>
+
+    <div  class="countdown" data-starttime="{{course.freeStartTime|default()|data_format('Y-m-d H:i:s')}}" data-endtime="{{course.freeEndTime|default()|data_format('Y-m-d H:i:s')}}">
+        <span class="days">00</span>天
+        <span class="hours">00</span>时
+        <span class="minutes">00</span>分
+        <span class="seconds">00</span>秒
+    </div>
 
 </div>
+
 
 {% endif %}

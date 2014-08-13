@@ -2,7 +2,8 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         require('./common').run();
-
+        require('./timeleft').run();
+        
         $("#course-item-list").on('click', '.lesson-item', function(e) {
             window.location.href = $(this).find('.title').attr('href');
         });

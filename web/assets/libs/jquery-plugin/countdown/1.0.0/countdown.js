@@ -71,13 +71,13 @@
             var days = Math.floor(difference / _day),
                 hours = Math.floor((difference % _day) / _hour),
                 minutes = Math.floor((difference % _hour) / _minute),
-                seconds = Math.floor((difference % _minute) / _second);
-
+                seconds = ((difference % _minute) / _second).toFixed(1);
+                
                 // fix dates so that it will show two digets
                 days = (String(days).length >= 2) ? days : '0' + days;
                 hours = (String(hours).length >= 2) ? hours : '0' + hours;
                 minutes = (String(minutes).length >= 2) ? minutes : '0' + minutes;
-                seconds = (String(seconds).length >= 2) ? seconds : '0' + seconds;
+                seconds = (String(seconds).length >= 4) ? seconds : '0' + seconds;
 
             // based on the date change the refrence wording
             //Commneted this,we don't need it.
@@ -101,7 +101,7 @@
         };
         
         // start
-        var interval = setInterval(countdown, 1000);
+        var interval = setInterval(countdown, 100);
     };
 
 })(jQuery);

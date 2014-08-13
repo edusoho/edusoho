@@ -230,6 +230,7 @@ class CourseController extends BaseController
                 $nextLiveLesson = $nextLiveLesson[0];
             }
         };
+        $course['freeLimitType'] = $this->getFreeLimitType($course);
 
         $previewAs = $request->query->get('previewAs');
 
@@ -268,9 +269,7 @@ class CourseController extends BaseController
                 $checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
             }
         }
-
-        $course['freeLimitType'] = $this->freeLimitType($course);
-        var_dump($course['freeLimitType']);
+        
         return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
             'course' => $course,
             'member' => $member,
@@ -547,7 +546,6 @@ class CourseController extends BaseController
             $vipChecked = 'ok';
         }
 
-
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course' => $course,
             'canManage' => $this->getCourseService()->canManageCourse($course['id']),
@@ -631,7 +629,7 @@ class CourseController extends BaseController
             ->getForm();
     }
 
-    private function freeLimitType(array $course)
+    private function getFreeLimitType(array $course)
     {
         $startTime = $course['freeStartTime'];
         $endTime = $course['freeEndTime'];
