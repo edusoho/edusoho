@@ -24,7 +24,7 @@
 
     {% if paperResult.passedStatus == 'unpassed' %}
       <div class="alert alert-danger">
-        您未通过考试，请<a href="{{ path('course_manage_redo_test', {testId:paperResult.testId}) }}">重新参加考试</a>，或者<a href="#">重新学习课程</a>。
+        您未通过考试，请<a href="{{ path('course_manage_redo_test', {testId:paperResult.testId}) }}">重新参加考试</a>，或者重新学习课程。
       </div>
     {% elseif paperResult.passedStatus == 'passed' %}
       <div class="alert alert-success">恭喜您已通过本次考试。</div>
