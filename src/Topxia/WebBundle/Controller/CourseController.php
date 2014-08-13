@@ -229,7 +229,6 @@ class CourseController extends BaseController
                 $nextLiveLesson = $nextLiveLesson[0];
             }
         };
-        $course['freeLimitType'] = $this->getFreeLimitType($course);
 
         $previewAs = $request->query->get('previewAs');
 
@@ -545,8 +544,6 @@ class CourseController extends BaseController
             $vipChecked = 'ok';
         }
 
-        $course['freeLimitType'] = $this->getFreeLimitType($course);
-
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course' => $course,
             'canManage' => $this->getCourseService()->canManageCourse($course['id']),
@@ -630,28 +627,6 @@ class CourseController extends BaseController
             ->getForm();
     }
 
-    private function getFreeLimitType(array $course)
-    {
-        $startTime = $course['freeStartTime'];
-        $endTime = $course['freeEndTime'];
-        $now = time();
-
-        //不是限免
-        if(empty($startTime)){
-            return 0;
-        }
-        //即将限免
-        if($startTime > $now){
-            return 1;
-        }
-        //正在限免
-        if($endTime >= $now){
-            return 2;
-        }
-
-        return 0;
-
-    }
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');

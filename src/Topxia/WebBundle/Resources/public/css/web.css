@@ -4072,13 +4072,13 @@ body {
 }
 
 .countdown-show{
-/*	position: absolute;
-	top: 139px;
-	left: 670px;
-	display: none;*/
 	float: right;
 }
 
+.countdown-list{
+	float: right;
+	margin-top: -130px;
+}
 .countdown-dashboard{
 	float: right;
 	margin-top: -50px;

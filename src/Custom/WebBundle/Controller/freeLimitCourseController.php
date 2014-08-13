@@ -14,7 +14,8 @@ class freeLimitCourseController extends BaseController
         $now = time();
         $conditions = array(
             'status' => 'published',
-            'freeEndTime' => $now,
+            'freeType' => 'freeNow',
+            'currentTime' => $now,
         );
         $paginator = new Paginator(
             $this->get('request'),
@@ -22,7 +23,7 @@ class freeLimitCourseController extends BaseController
             , 10
         );
 
-        $sort = 'freeEndTime';
+        $sort = 'freeNow';
         $courses = $this->getCourseService()->searchCourses(
             $conditions, $sort,
             $paginator->getOffsetCount(),
@@ -31,7 +32,7 @@ class freeLimitCourseController extends BaseController
         
         return $this->render('CustomWebBundle:freeLimitCourse:free-course-explore.html.twig', array(
             'courses' => $courses,
-            'type' => 'now',
+            'type' => 'freeNow',
             'paginator' => $paginator,
         ));
     }
@@ -40,14 +41,15 @@ class freeLimitCourseController extends BaseController
         $now = time();
         $conditions = array(
             'status' => 'published',
-            'freeStartTime' => $now,
+            'freeType' => 'freeComing',
+            'currentTime' => $now,
         );
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchCourseCount($conditions)
             , 10
         );
-        $sort = 'freeStartTime';
+        $sort = 'freeComing';
         $courses = $this->getCourseService()->searchCourses(
             $conditions, $sort,
             $paginator->getOffsetCount(),
@@ -56,7 +58,7 @@ class freeLimitCourseController extends BaseController
 
         return $this->render('CustomWebBundle:freeLimitCourse:free-course-explore.html.twig', array(
             'courses' => $courses,
-            'type' => 'coming',
+            'type' => 'freeComing',
             'paginator' => $paginator,
         ));
     }

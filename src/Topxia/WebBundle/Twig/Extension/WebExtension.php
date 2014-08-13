@@ -58,6 +58,7 @@ class WebExtension extends \Twig_Extension
             'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
+            'freeLimitType' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
         );
     }
 
@@ -527,6 +528,27 @@ class WebExtension extends \Twig_Extension
         return 'topxia_web_twig';
     }
 
+    public function getFreeLimitType($course){
+        $startTime = $course['freeStartTime'];
+        $endTime = $course['freeEndTime'];
+        $now = time();
+
+        //不是限免
+        if(empty($startTime)){
+            return 0;
+        }
+        //即将限免
+        if($startTime > $now){
+            return 1;
+        }
+        //正在限免
+        if($endTime >= $now){
+            return 2;
+        }
+
+        return 0;
+    }
+    
     public function mb_trim($string, $charlist='\\\\s', $ltrim=true, $rtrim=true) 
     { 
         $both_ends = $ltrim && $rtrim; 

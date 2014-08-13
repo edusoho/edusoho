@@ -166,10 +166,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('rating > :ratingGreaterThan')
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
             ->andWhere('createdTime >= :startTime')
-            ->andWhere('createdTime <= :endTime')
-            ->andWhere('freeStartTime >= :freeStartTime')
-            ->andWhere('freeEndTime >= :freeEndTime');
-
+            ->andWhere('createdTime <= :endTime');
 
         if (isset($conditions['categoryIds'])) {
             $categoryIds = array();
@@ -196,6 +193,16 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 $builder->andStaticWhere("vipLevelId IN ($vipLevelIds)");
             }
 
+        }
+
+        if(isset($conditions['freeType'])){
+            if($conditions['freeType'] === 'freeNow'){
+                $builder->andWhere('freeStartTime <= :currentTime')
+                        ->andWhere('freeEndTime >= :currentTime');
+            }
+            if($conditions['freeType'] === 'freeComing'){
+                $builder->andWhere('freeStartTime >= :currentTime');
+            }
         }
 
         return $builder;

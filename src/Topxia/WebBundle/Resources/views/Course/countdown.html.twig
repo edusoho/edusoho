@@ -1,8 +1,18 @@
-{% if course.freeLimitType != 0 %}
-<div class="{% if pageType == 'show' %}countdown-show{% else %} countdown-dashboard{% endif %}" id="countdown-div">
+{% if freeLimitType(course) != 0 %}
+<div 
+    {% if pageType == 'show' %}
+        class="countdown-show"
+    {% endif %}
+    {% if pageType == 'dashboard' %}
+        class="countdown-dashboard"
+    {% endif %}
+    {% if pageType == 'list' %}
+        class="countdown-list"
+    {% endif %}>
+    
     <div class="countdown-em">
-       {% if course.freeLimitType == 1 %} <em class="countdown-font">即将限免</em> {% endif %}
-       {% if course.freeLimitType == 2 %} <em class="countdown-font">正在限免</em> {% endif %}
+       {% if freeLimitType(course) == 1 %} <em class="countdown-font">即将限免</em> {% endif %}
+       {% if freeLimitType(course) == 2 %} <em class="countdown-font">正在限免</em> {% endif %}
     </div>
 
     <div  class="countdown" data-starttime="{{course.freeStartTime|default()|data_format('Y-m-d H:i:s')}}" data-endtime="{{course.freeEndTime|default()|data_format('Y-m-d H:i:s')}}">

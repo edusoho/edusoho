@@ -3,8 +3,8 @@
 {% block content %}
 
       <div class="category-filters">
-        <a href="{{ path('free_now_explore') }}" {% if type == 'now' %}class="selected"{% endif %}>正在限免</a>        
-        <a href="{{ path('free_coming_explore') }}" {% if type == 'coming' %}class="selected"{% endif %}>即将限免</a>
+        <a href="{{ path('free_now_explore') }}" {% if type == 'freeNow' %}class="selected"{% endif %}>正在限免</a>        
+        <a href="{{ path('free_coming_explore') }}" {% if type == 'freeComing' %}class="selected"{% endif %}>即将限免</a>
       </div>
 
       {% if courses %}
