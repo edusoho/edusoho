@@ -21,7 +21,6 @@ class serviceDelegator
 		}
 
 		return $this->invokeFunction($name, $arguments);
-		return $functionResult;
 	}
 
 	public function stopInvoke()
@@ -34,7 +33,10 @@ class serviceDelegator
 		$functionResult = array();
 		array_push($this->invokeArray, 'before', $name, 'after');
 		while ($function = array_pop($this->invokeArray)) {
-			$functionResult = call_user_func(array($this->target, $function), $arguments);
+			$result = call_user_func(array($this->target, $function), $arguments);
+			if ($function == $name) {
+				$functionResult = $result;
+			}
 		}
 
 		return $functionResult;

@@ -83,7 +83,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         $result = array(
             'site' => $this->getSiteInfo($this->controller->request)
         );
-
+        
         return $result;
     }
 
