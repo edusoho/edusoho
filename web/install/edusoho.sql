@@ -36,7 +36,7 @@ CREATE TABLE `article_category` (
   `parentId` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`(64))
+  UNIQUE KEY `code` (`code`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `block`;
@@ -53,7 +53,7 @@ CREATE TABLE `block` (
   `createdTime` int(11) unsigned NOT NULL COMMENT '编辑区创建时间',
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '编辑区最后更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`(64))
+  UNIQUE KEY `code` (`code`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `block_history`;
@@ -76,7 +76,7 @@ CREATE TABLE `cache` (
   `expiredTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '缓存过期时间',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '缓存创建时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`(128)),
+  UNIQUE KEY `name` (`name`),
   KEY `expiredTime` (`expiredTime`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -92,7 +92,7 @@ CREATE TABLE `category` (
   `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父分类ID',
   `description` text,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uri` (`code`(64))
+  UNIQUE KEY `uri` (`code`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `category_group`;
@@ -118,7 +118,7 @@ CREATE TABLE `cloud_app` (
   `installedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '云应用安装时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '云应用最后更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`(64))
+  UNIQUE KEY `code` (`code`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='已安装的应用';
 
 DROP TABLE IF EXISTS `cloud_app_logs`;
@@ -316,7 +316,7 @@ CREATE TABLE `course_lesson_view` (
   `fileSource` varchar(32) NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_material`;
 CREATE TABLE `course_material` (
@@ -416,7 +416,7 @@ CREATE TABLE `course_thread_post` (
   `content` text NOT NULL COMMENT '正文',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `file`;
 CREATE TABLE `file` (
@@ -663,7 +663,7 @@ CREATE TABLE `setting` (
   `name` varchar(64) NOT NULL DEFAULT '' COMMENT '系统设置名',
   `value` longblob COMMENT '系统设置值',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`(64))
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tag`;
@@ -672,7 +672,7 @@ CREATE TABLE `tag` (
   `name` varchar(64) NOT NULL COMMENT '标签名称',
   `createdTime` int(10) unsigned NOT NULL COMMENT '标签创建时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`(64))
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `testpaper`;
@@ -783,7 +783,7 @@ CREATE TABLE `upgrade_logs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='本地升级日志表';
 
 DROP TABLE IF EXISTS `upload_files`;
-CREATE TABLE IF NOT EXISTS `upload_files` (
+CREATE TABLE `upload_files` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '上传文件ID',
   `hashId` varchar(128) NOT NULL DEFAULT '' COMMENT '文件的HashID',
   `targetId` int(11) NOT NULL COMMENT '所存目标ID',
@@ -807,8 +807,8 @@ CREATE TABLE IF NOT EXISTS `upload_files` (
   `createdUserId` int(10) unsigned NOT NULL COMMENT '文件上传人',
   `createdTime` int(10) unsigned NOT NULL COMMENT '文件上传时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `hashId` (`hashId`(120)),
-  UNIQUE KEY `convertHash` (`convertHash`(64))
+  UNIQUE KEY `convertHash` (`convertHash`(64)),
+  UNIQUE KEY `hashId` (`hashId`(120))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user`;
@@ -860,7 +860,7 @@ CREATE TABLE `user_approval` (
   `operatorId` int(10) unsigned DEFAULT NULL COMMENT '审核人',
   `createdTime` int(10) NOT NULL DEFAULT '0' COMMENT '申请时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户认证表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户认证表';
 
 DROP TABLE IF EXISTS `user_bind`;
 CREATE TABLE `user_bind` (
@@ -959,7 +959,7 @@ CREATE TABLE `user_profile` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_token`;
-CREATE TABLE IF NOT EXISTS `user_token` (
+CREATE TABLE `user_token` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'TOKEN编号',
   `token` varchar(64) NOT NULL COMMENT 'TOKEN值',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'TOKEN关联的用户ID',
