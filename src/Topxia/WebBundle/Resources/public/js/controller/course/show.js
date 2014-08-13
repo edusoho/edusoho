@@ -98,6 +98,10 @@ define(function(require, exports, module) {
             return false;
         });
 
+        // fix for youku iframe player in firefox.
+        $('#modal').on('shown.bs.modal', function () {
+            $('#modal').removeClass('in');
+        });
 
     };
 

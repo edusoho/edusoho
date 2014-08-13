@@ -94,6 +94,10 @@ define(function(require, exports, module) {
 		}
 
         if ($("#lesson-preview-iframe").length > 0) {
+
+            var html = '<iframe src="' + $("#lesson-preview-iframe").data('url') + '" style="height:360px; width:100%; border:0px;" scrolling="no"></iframe>';
+            $("#lesson-preview-iframe").html(html).show();
+
             $('#modal').one('hidden.bs.modal', function () {
                 $("#lesson-preview-iframe").remove();
             });
