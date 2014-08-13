@@ -203,7 +203,7 @@ define(function(require, exports, module) {
                 }
 
                 if (lesson.mediaSource == 'iframe') {
-                    var html = '<iframe src="' + lesson.mediaUri + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no">';
+                    var html = '<iframe src="' + lesson.mediaUri + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>';
 
                     $("#lesson-iframe-content").html(html);
                     $("#lesson-iframe-content").show();

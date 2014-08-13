@@ -6,7 +6,12 @@
 
 {% block body %}
 	{% if lesson.status == 'published' %}
-		{% if lesson.type == 'video' %}
+
+	  {% if lesson.mediaSource == 'iframe' %}
+      <div id="lesson-preview-iframe">
+        <iframe src="{{ lesson.mediaUri }}" style="height:360px; width:100%; border:0px;" scrolling="no"></iframe>
+      </div>
+		{% elseif lesson.type == 'video' %}
 			{% if lesson.mediaSource == 'self' %}
 				<div id="lesson-preview-video-player" data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" data-hls-url="{{ hlsUrl }}"
 

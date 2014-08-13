@@ -51,8 +51,24 @@ class CourseLessonController extends BaseController
                 }
 
             }
-        }
+        } else if ($lesson['mediaSource'] == 'youku') {
+            $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+            if ($matched) {
+                $lesson['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
+                $lesson['mediaSource'] = 'iframe';
+            } else {
+                $lesson['mediaUri'] = $lesson['mediaUri'];
+            }
 
+        } else if ($lesson['mediaSource'] == 'tudou'){
+            $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+            if ($matched) {
+                $lesson['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                $lesson['mediaSource'] = 'iframe';
+            } else {
+                $lesson['mediaUri'] = $lesson['mediaUri'];
+            }
+        }
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user' => $user,
             'course' => $course,
