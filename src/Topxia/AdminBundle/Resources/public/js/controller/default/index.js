@@ -33,9 +33,9 @@ define(function(require, exports, module) {
             $('#operation-analysis-table').html(html);
         });
 
-        $.post($('#onlineNum').data('url'),function(res){
-            $('#onlineNum').html("当前在线："+res.onlineCount+"人");
-        });
+        // $.post($('#onlineNum').data('url'),function(res){
+        //     $('#onlineNum').html("当前在线："+res.onlineCount+"人");
+        // });
 
         // setInterval(function(){
         //         $.post($('#onlineNum').data('url'),function(res){
