@@ -55,6 +55,7 @@ class WebExtension extends \Twig_Extension
             'dict_text' => new \Twig_Function_Method($this, 'getDictText', array('is_safe' => array('html'))) ,
             'upload_max_filesize' => new \Twig_Function_Method($this, 'getUploadMaxFilesize') ,
             'js_paths' => new \Twig_Function_Method($this, 'getJsPaths'),
+            'is_plugin_installed' => new \Twig_Function_Method($this, 'isPluginInstaled'),
             'is_exist_in_subarray_by_id' => new \Twig_Function_Method($this, 'isExistInSubArrayById'),
             'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
@@ -81,6 +82,17 @@ class WebExtension extends \Twig_Extension
             return 'theme/global-script';
         }
         return '';
+    }
+
+    public function isPluginInstaled($name)
+    {
+        $plugins = $this->container->get('kernel')->getPlugins();
+        foreach ($plugins as $plugin) {
+            if (strtolower($name) == strtolower($plugin)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function getJsPaths()
