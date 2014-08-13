@@ -546,6 +546,7 @@ class CourseController extends BaseController
             $vipChecked = 'ok';
         }
 
+        $course['freeLimitType'] = $this->getFreeLimitType($course);
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
             'course' => $course,
             'canManage' => $this->getCourseService()->canManageCourse($course['id']),

@@ -1,0 +1,16 @@
+<?php
+namespace Custom\WebBundle\Controller;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+use Topxia\Common\Paginator;
+use Topxia\WebBundle\Form\CourseType;
+use Topxia\Service\Course\CourseService;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\LiveClientFactory;
+
+class freeLimitCourseController extends BaseController
+{
+
+}
