@@ -26,11 +26,6 @@ class KernelRequestListener
                 return ;
             }
 
-
-            if (stripos($request->getPathInfo(), '/mapi/') === 0) {
-                return ;
-            }
-
     		if ($request->isXmlHttpRequest()) {
     			$token = $request->headers->get('X-CSRF-Token');
     		} else {
