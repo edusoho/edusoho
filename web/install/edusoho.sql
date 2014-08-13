@@ -783,7 +783,7 @@ CREATE TABLE `upgrade_logs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='本地升级日志表';
 
 DROP TABLE IF EXISTS `upload_files`;
-CREATE TABLE `upload_files` (
+CREATE TABLE IF NOT EXISTS `upload_files` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '上传文件ID',
   `hashId` varchar(128) NOT NULL DEFAULT '' COMMENT '文件的HashID',
   `targetId` int(11) NOT NULL COMMENT '所存目标ID',
@@ -792,6 +792,7 @@ CREATE TABLE `upload_files` (
   `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
   `size` bigint(20) NOT NULL DEFAULT '0' COMMENT '文件大小',
   `etag` varchar(256) NOT NULL DEFAULT '' COMMENT 'ETAG',
+  `length` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '长度（音视频则为时长，PPT/文档为页数）',
   `convertHash` varchar(128) NOT NULL DEFAULT '' COMMENT '文件转换时的查询转换进度用的Hash值',
   `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none' COMMENT '文件转换状态',
   `convertParams` text COMMENT '文件转换参数',
@@ -806,10 +807,9 @@ CREATE TABLE `upload_files` (
   `createdUserId` int(10) unsigned NOT NULL COMMENT '文件上传人',
   `createdTime` int(10) unsigned NOT NULL COMMENT '文件上传时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `hashId` (`hashId`(128)),
-  UNIQUE KEY `convertHash` (`convertHash`(128))
+  UNIQUE KEY `hashId` (`hashId`(120)),
+  UNIQUE KEY `convertHash` (`convertHash`(64))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -957,15 +957,18 @@ CREATE TABLE `user_profile` (
   `textField10` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `user_token`;
-CREATE TABLE `user_token` (
+CREATE TABLE IF NOT EXISTS `user_token` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'TOKEN编号',
   `token` varchar(64) NOT NULL COMMENT 'TOKEN值',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'TOKEN关联的用户ID',
   `type` varchar(255) NOT NULL COMMENT 'TOKEN类型',
   `data` text NOT NULL COMMENT 'TOKEN数据',
+  `times` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'TOKEN的校验次数限制(0表示不限制)',
+  `remainedTimes` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'TOKE剩余校验次数',
   `expiredTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'TOKEN过期时间',
   `createdTime` int(10) unsigned NOT NULL COMMENT 'TOKEN创建时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `token` (`token`(64))
+  UNIQUE KEY `token` (`token`(60))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
