@@ -3,7 +3,7 @@
 {% set billable = false %}
 {% if course.price > 0 and (course.freeStartTime is null or 
     date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}
-  {% set billable = false %}
+  {% set billable = true %}
 {% endif %}
 
 {% block title %}{% if billable %}购买课程{% else %}加入学习{% endif %}{% endblock %}
