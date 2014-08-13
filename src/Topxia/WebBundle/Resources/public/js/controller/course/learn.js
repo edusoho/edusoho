@@ -165,6 +165,8 @@ define(function(require, exports, module) {
 
             swfobject.removeSWF('lesson-swf-player');
 
+            $('#lesson-iframe-content').empty();
+
             this.element.find('[data-role=lesson-content]').hide();
 
             var that = this;

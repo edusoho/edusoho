@@ -93,6 +93,12 @@ define(function(require, exports, module) {
 	    	});
 		}
 
+        if ($("#lesson-preview-iframe").length > 0) {
+            $('#modal').one('hidden.bs.modal', function () {
+                $("#lesson-preview-iframe").remove();
+            });
+        }
+
 		$('#buy-btn').on('click', function(){
 			$modal = $('#modal');
 			$modal.modal('hide');
