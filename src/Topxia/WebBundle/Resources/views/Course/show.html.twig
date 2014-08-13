@@ -53,7 +53,7 @@
       <div class="subtitle">{{ course.subtitle }}</div>
       <div class="stats">
         <p>
-          价　ssssssssssxx格：
+          价　格：
           {% if course.price > 0 %}
             <span class="money-num">{{ course.price }}</span>
             <span class="money-text">元</span>
@@ -61,7 +61,6 @@
             <span class="money-num" style="font-size:16px;">免费</span>
           {% endif %}
         </p>
-        {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course,'pageType':'show'} %}
         <p>
           评　价：
           <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
