@@ -163,7 +163,7 @@ define(function(require, exports, module) {
                 this.set('audioPlayer', null);
             }
 
-            if (that.get('mediaPlayer')) {
+            if (this.get('mediaPlayer')) {
                 this.get('mediaPlayer').dispose();
                 this.set('mediaPlayer', null);
             }
