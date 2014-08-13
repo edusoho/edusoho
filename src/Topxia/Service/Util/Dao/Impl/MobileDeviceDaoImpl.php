@@ -7,7 +7,7 @@ use Topxia\Service\Util\Dao\MobileDeviceDao;
 
 class MobileDeviceDaoImpl extends BaseDao implements MobileDeviceDao
 {
-	protected $table = 'client_device';
+	protected $table = 'mobile_device';
 
 	public function getMobileDeviceById($id)
 	{
