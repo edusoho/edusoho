@@ -175,10 +175,11 @@
                             <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
                           </div>
                         </div>
-                      </div>
-                    
+                      </div>      
                     </li>
                   {% endfor %}
+                {% else %}
+                  <div class="empty">尚未设置会员等级</div>
                 {% endif %}
               </ul>
             </div>
@@ -198,16 +199,16 @@
           </div>
           <div class="es-box-body">
             {% set tags = data('Tags',{'count':5}) %}
-            {% if tags %}
             <div class="tag-list">
-            {% for tag in tags %}
-              {% if tag %} 
-                <a href="{{ path('tag_show', {name:tag.name}) }}"> {{ tag.name }}</a>
+              {% if tags %}
+                {% for tag in tags %}
+                  {% if tag %} 
+                    <a href="{{ path('tag_show', {name:tag.name}) }}"> {{ tag.name }}</a>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                  <div class="empty">还没有添加标签</div>
               {% endif %}
-            {% endfor %}
-            {% else %}
-                <div class="empty">还没有添加标签</div>
-            {% endif %}
             </div>
           </div>
         </div>
@@ -240,31 +241,31 @@
           </div>
           {% set learns = data('LatestFinishedLearns', {'count':5}) %}
           {% if learns %}
-          <div class="es-box-body">
-            <ul class="media-list">
-              {% for learn in learns %}
-                {% if learn.lesson is defined %}
-                  <li class="media">
-                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="img-circle media-object" src="{{ file_path(learn.user.mediumAvatar, 'avatar.png') }}">
-                    </a>
-                    <div class="media-body">
-                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      {% if learn.status == 'learning' %}
-                        正在学习
-                      {% else %}
-                        在{{ learn.finishedTime|smart_time }} 完成了
-                      {% endif %}
-                      <a href="{{ path('course_show', {id:learn.courseId}) }}">《{{ learn.lesson.title|plain_text(15) }}》</a>
-                      的学习
-                    </div>
-                  </li>
-                {% endif %}
-              {% endfor %}
-            </ul>
-          </div>
+            <div class="es-box-body">
+              <ul class="media-list">
+                {% for learn in learns %}
+                  {% if learn.lesson is defined %}
+                    <li class="media">
+                      <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
+                        <img class="media-object" src="{{ file_path(learn.user.mediumAvatar, 'avatar.png') }}">
+                      </a>
+                      <div class="media-body">
+                        <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+                        {% if learn.status == 'learning' %}
+                          正在学习
+                        {% else %}
+                          在{{ learn.finishedTime|smart_time }} 完成了
+                        {% endif %}
+                        <a href="{{ path('course_show', {id:learn.courseId}) }}">《{{ learn.lesson.title|plain_text(15) }}》</a>
+                        的学习
+                      </div>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
           {% else %}
-                 <div class="empty">还没有动态</div>
+            <div class="empty">还没有动态</div>
           {% endif %}
         </div>
 
