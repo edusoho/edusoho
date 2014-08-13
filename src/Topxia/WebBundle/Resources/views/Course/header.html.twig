@@ -18,6 +18,7 @@
             {% endif %}
           {% endif %}
         </h1>
+       {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course,'pageType':'dashboard'} %}
         <div class="teachers">
           {% if course.teacherIds|default(null) %}
             教师：
@@ -27,6 +28,7 @@
             {% endfor %}
           {% endif  %}
         </div>
+
         <div class="toolbar hidden-xs hidden-lt-ie8">
           {% if not manage %}
           <div class="btn-group">

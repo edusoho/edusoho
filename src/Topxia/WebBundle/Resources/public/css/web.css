@@ -4072,17 +4072,16 @@ body {
 }
 
 .countdown-show{
-	position: absolute;
+/*	position: absolute;
 	top: 139px;
 	left: 670px;
-	display: none;
+	display: none;*/
+	float: right;
 }
 
 .countdown-dashboard{
-	position: absolute;
-	top: 73px;
-	left: 955px;
-	display: none;
+	float: right;
+	margin-top: -50px;
 }
 
 .countdown-em{
