@@ -1514,12 +1514,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 				}	
 			}
 		} else {
+			$deadline = 0;
 			//如果处在限免期，则deadline为限免结束时间 减 当前时间
 			if($course['freeStartTime'] <= time() && $course['freeEndTime'] > time()){
 				$deadline = $course['freeEndTime'] - time();
 			}
-
-			$deadline = 0;
 		}
 
 		if (!empty($info['orderId'])) {
