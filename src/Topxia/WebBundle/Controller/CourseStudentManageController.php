@@ -35,6 +35,7 @@ class CourseStudentManageController extends BaseController
 
 		$courseSetting = $this->getSettingService()->get('course', array());
 		$isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1: 0;
+		$setting = $this->setting('course.buy_fill_userinfo',0);
 
 		return $this->render('TopxiaWebBundle:CourseStudentManage:index.html.twig', array(
 			'course' => $course,
@@ -44,6 +45,7 @@ class CourseStudentManageController extends BaseController
 			'followingIds' => $followingIds,
 			'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
 			'paginator' => $paginator,
+			'setting' => $setting,
 			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
 		));
 

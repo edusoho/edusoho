@@ -106,6 +106,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             }
         }
 
+        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
+            $deleteSubFile = true;
+        }
+
+        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'ppt') {
+            $deleteSubFile = true;
+        }
+
         $this->getFileImplementorByFile($file)->deleteFile($file, $deleteSubFile);
 
         return $this->getUploadFileDao()->deleteFile($id);

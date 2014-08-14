@@ -62,6 +62,7 @@ class CloudController extends BaseController
         foreach ($files as &$file) {
             $file['metas'] = empty($file['metas']) ?  array() : json_decode($file['metas'], true);
             $file['metas2'] = empty($file['metas2']) ?  array() : json_decode($file['metas2'], true);
+            $file['convertParams'] = empty($file['convertParams']) ?  array() : json_decode($file['convertParams'], true);
         }
 
         return $this->createJsonResponse($files);

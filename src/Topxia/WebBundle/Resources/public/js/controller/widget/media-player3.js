@@ -9,7 +9,8 @@ define(function(require, exports, module) {
             srcType: '',
             width: '100%',
             height: '100%',
-            _firstPlay: true
+            _firstPlay: true,
+            runtime: null
         },
 
         events: {},
@@ -36,12 +37,22 @@ define(function(require, exports, module) {
 
         },
 
+        dispose: function() {
+            var runtime = this.get('runtime');
+            if (runtime == 'flash') {
+                swfobject.removeSWF(this.get('playerId'));
+            } else if (runtime == 'html5') {
+                $("#" + this.get('playerId')).remove();
+            }
+        },
+
         _initHtml5Player: function() {
             var style= "width:" + this.get('width') + ';height:' + this.get('height');
             var html = '<video id="' + this.get('playerId') + '" src="';
             html += this.get('src') + '" autoplay controls style="' + style + '">';
             html += '</video>';
             this.element.html(html);
+            this.set('runtime', 'html5');
         },
 
         _isSupportHtml5Video: function() {
@@ -91,6 +102,8 @@ define(function(require, exports, module) {
                 this.get('playerId'),
                 this.get('width'),  this.get('height') , "10.2", null, flashvars, params, attrs
             );
+
+            this.set('runtime', 'flash');
         },
 
         _evetProcesser: function(playerId, event, data) {

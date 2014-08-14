@@ -25,7 +25,6 @@
     <div class="col-md-8 controls"><input id="chapter-title-field" type="text" name="title" value="{{ field_value(chapter, 'title') }}" class="form-control"></div>
   </div>
   <input type="hidden" name="type" value="{{ type }}">
-  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 
 <script>app.load('course-manage/chapter-modal')</script>

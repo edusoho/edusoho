@@ -106,10 +106,6 @@ uploadfile_cloud_callback:
     pattern:  /uploadfile/cloud_callback
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudCallback }
 
-uploadfile_cloud_fileinfo:
-    pattern:  /uploadfile/cloud_fileinfo
-    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudFileinfo }
-
 uploadfile_cloud_convert_callback:
     pattern:  /uploadfile/cloud_convertcallback
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback }
@@ -268,6 +264,10 @@ course_lesson_learn_cancel:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/cancel
     defaults: { _controller: TopxiaWebBundle:CourseLesson:learnCancel }
     methods: [POST]
+
+course_lesson_hlskeyurl:
+    pattern:  /course/{courseId}/lesson/{lessonId}/kan/{token}
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:hlskeyurl }
 
 course_lesson_plugin_lesson_list:
     pattern:  /lessonplugin/lesson/list

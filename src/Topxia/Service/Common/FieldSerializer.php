@@ -82,3 +82,16 @@ class JsonSerializeAlgorithm implements SerializeAlgorithm
         return json_decode($value, true);
     }
 }
+
+class PhpserializeSerializeAlgorithm implements SerializeAlgorithm
+{
+    public function serialize($value)
+    {
+        return serialize($value);
+    }
+
+    public function unserialize($value)
+    {
+        return unserialize($value);
+    }
+}

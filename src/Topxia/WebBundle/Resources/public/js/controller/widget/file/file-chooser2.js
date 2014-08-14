@@ -29,7 +29,6 @@ define(function(require, exports, module) {
             var choosed = this.get('choosed');
             if (choosed) {
                 this.trigger('change', choosed);
-                this.trigger('fileinfo.fetched', {});
             } else {
                 this.open();
             }
@@ -123,7 +122,6 @@ define(function(require, exports, module) {
 
             browser.on('select', function(file) {
                 self.trigger('change', self._convertFileToMedia(file));
-                self.trigger('fileinfo.fetched', {});
             });
         },
 
@@ -238,19 +236,10 @@ define(function(require, exports, module) {
                         var media = self._convertFileToMedia(response);
                         self.trigger('change',  media);
                         Notify.success('文件上传成功！');
-                        self.trigger('fileinfo.fetching');
-                        if (btnData.fileinfoUrl) {
-                            $.get($btn.data('fileinfoUrl'), {key:response.hashId}, function(info){
-                                self.trigger('fileinfo.fetched', info);
-                            }, 'json');
-                        } else {
-                            self.trigger('fileinfo.fetched', {});
-                        }
                     }, 'json');
                 } else {
                     var media = self._convertFileToMedia(response);
                     self.trigger('change',  media);
-                    self.trigger('fileinfo.fetched', {});
                     Notify.success('文件上传成功！');
                 }
             });

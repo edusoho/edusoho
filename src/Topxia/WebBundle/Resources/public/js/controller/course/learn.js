@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 
     var Toolbar = require('../lesson/lesson-toolbar');
 
-    var MediaPlayer = require('../widget/media-player2');
+    var MediaPlayer = require('../widget/media-player3');
     var SlidePlayer = require('../widget/slider-player');
 
     var LessonDashboard = Widget.extend({
@@ -163,7 +163,14 @@ define(function(require, exports, module) {
                 this.set('audioPlayer', null);
             }
 
+            if (this.get('mediaPlayer')) {
+                this.get('mediaPlayer').dispose();
+                this.set('mediaPlayer', null);
+            }
+
             swfobject.removeSWF('lesson-swf-player');
+
+            $('#lesson-iframe-content').empty();
 
             this.element.find('[data-role=lesson-content]').hide();
 
@@ -202,7 +209,13 @@ define(function(require, exports, module) {
                     return ;
                 }
 
-                if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
+                if (lesson.mediaSource == 'iframe') {
+                    var html = '<iframe src="' + lesson.mediaUri + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>';
+
+                    $("#lesson-iframe-content").html(html);
+                    $("#lesson-iframe-content").show();
+
+                } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
 
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
                     $("#lesson-video-content").show();
@@ -217,6 +230,8 @@ define(function(require, exports, module) {
                         that._onFinishLearnLesson();
                     });
                     mediaPlayer.play();
+
+                    that.set('mediaPlayer', mediaPlayer);
 
                 } else {
                     if (lesson.type == 'video') {

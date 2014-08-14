@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var BaseChooser = require('./base-chooser-3');
+    var BaseChooser = require('./base-chooser-4');
     var Notify = require('common/bootstrap-notify');
     require('jquery.perfect-scrollbar');
 
@@ -22,7 +22,11 @@ define(function(require, exports, module) {
                 if (this.qualitySwitcher) {
                     data.videoQuality = this.qualitySwitcher.get('videoQuality');
                     data.audioQuality = this.qualitySwitcher.get('audioQuality');
-                    data.convertor = 'HLSVideo';
+                    if (this.element.data('hlsEncrypted')) {
+                        data.convertor = 'HLSEncryptedVideo';
+                    } else {
+                        data.convertor = 'HLSVideo';
+                    }
                 }
 
                 $.ajax({
@@ -88,7 +92,6 @@ define(function(require, exports, module) {
                     uri: video.files[0].url
                 };
                 self.trigger('change', media);
-                self.trigger('fileinfo.fetched', {});
                 $urlInput.val('');
             }, 'json').error(function(jqXHR, textStatus, errorThrown) {
                 Notify.danger('读取视频页面信息失败，请检查您的输入的页面地址后重试');

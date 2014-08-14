@@ -194,6 +194,7 @@ class BuildCommand extends BaseCommand
 			'jdorn/sql-formatter/lib',
 			'kriswallsmith/assetic/src',
 			'monolog/monolog/src',
+			'phpoffice/phpexcel/Classes',
 			'psr/log/Psr',
 			'sensio/framework-extra-bundle',
 			'swiftmailer/swiftmailer/lib',

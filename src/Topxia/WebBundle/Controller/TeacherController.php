@@ -12,6 +12,7 @@ class TeacherController extends BaseController
 
         $conditions = array(
             'roles'=>'ROLE_TEACHER',
+            'locked'=>0
         );
 
         $paginator = new Paginator(
@@ -26,12 +27,6 @@ class TeacherController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        $teachers = array_filter($teachers,function($v){
-            if($v['locked'] === '0')
-                return true;
-            return false;
-        });
 
         $profiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($teachers, 'id'));
 

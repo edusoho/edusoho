@@ -1,18 +1,9 @@
 define(function(require, exports, module) {
 	window.$ = window.jQuery = require('jquery');
 	require('bootstrap');
-	require('common/bootstrap-modal-hack');
-	var Contact = require('/bundles/topxiaweb/js/util/contact.js');
+	require('common/bootstrap-modal-hack2');
 
 	exports.load = function(name) {
-		$contact = $('#hhService');
-		if($contact.length >0){
-		   require('/bundles/topxiaweb/css/contact.css');
-		   var contact = new Contact();
-		   contact.animate({float:'right',minStatue:true,skin:'green',durationTime:1000},$contact);
-		 		
-		}
-		
 		if (window.app.jsPaths[name.split('/', 1)[0]] == undefined) {
 			name = window.app.basePath + '/bundles/topxiaweb/js/controller/' + name;
 		}
@@ -46,10 +37,11 @@ define(function(require, exports, module) {
 		}
 
 		if (error.name == 'Unlogin') {
-			$('.modal.in').modal('hide');
+			$('.modal').modal('hide');
 
 			$("#login-modal").modal('show');
 			$.get($('#login-modal').data('url'), function(html){
+				$('.modal-loading').remove();
 				$("#login-modal").html(html);
 			});
 		}

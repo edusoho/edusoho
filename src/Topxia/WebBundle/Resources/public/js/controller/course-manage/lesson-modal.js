@@ -3,9 +3,9 @@ define(function(require, exports, module) {
     var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    var VideoChooser = require('../widget/media-chooser/video-chooser2');
-    var AudioChooser = require('../widget/media-chooser/audio-chooser2');
-    var PPTChooser = require('../widget/media-chooser/ppt-chooser2');
+    var VideoChooser = require('../widget/media-chooser/video-chooser3');
+    var AudioChooser = require('../widget/media-chooser/audio-chooser3');
+    var PPTChooser = require('../widget/media-chooser/ppt-chooser3');
     var Notify = require('common/bootstrap-notify');
         require('jquery.sortable');
         
@@ -177,6 +177,19 @@ define(function(require, exports, module) {
     }
 
     exports.run = function() {
+        var updateDuration = function (length) {
+            console.log(length);
+            length = parseInt(length);
+            if (isNaN(length) || length == 0) {
+                return ;
+            }
+            var minute = parseInt(length / 60);
+            var second = length - minute * 60;
+
+            $("#lesson-minute-field").val(minute);
+            $("#lesson-second-field").val(second);
+        }
+
         var $form = $("#course-lesson-form");
 
         var $content = $("#lesson-content-field");
@@ -203,14 +216,13 @@ define(function(require, exports, module) {
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
-            if (item.status == 'waiting') {
-                
-            }
+            updateDuration(item.length);
         });
 
         audioChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+            updateDuration(item.length);
         });
 
         pptChooser.on('change', function(item) {
@@ -218,36 +230,6 @@ define(function(require, exports, module) {
             $form.find('[name="media"]').val(value);
         });
 
-        var mediaFileInfoFetchingCallback = function () {
-            var $group = $("#lesson-length-form-group").show();
-            var $help = $group.find('.help-block');
-            $help.data('help', $help.text());
-            $help.text('正在读取时长，请稍等...');
-        };
-
-        var mediaFileInfoFetchedCallback = function (info) {
-            var $group = $("#lesson-length-form-group").show();
-            var $help = $group.find('.help-block');
-            if ($help.data('help')) {
-                $help.text($help.data('help'));
-            }
-
-            if (info.duration) {
-
-                if (info.duration.match(':')){
-                    var durations = info.duration.split(':');
-                    $("#lesson-minute-field").val(durations[0]);
-                    $("#lesson-second-field").val(durations[1]);
-                }
-
-            }
-        }
-
-        videoChooser.on('fileinfo.fetching', mediaFileInfoFetchingCallback);
-        videoChooser.on('fileinfo.fetched', mediaFileInfoFetchedCallback);
-        
-        audioChooser.on('fileinfo.fetching', mediaFileInfoFetchingCallback);
-        audioChooser.on('fileinfo.fetched', mediaFileInfoFetchedCallback);
 
         var validator = createValidator($form);
 
