@@ -190,8 +190,9 @@
 
       <div class="col-md-3">
         {# 在学课程 #}
-        {{ render(controller('TopxiaWebBundle:Default:userlearning')) }}
-
+        {% if app.user %}
+          {{ render(controller('TopxiaWebBundle:Default:userlearning')) }}
+        {% endif %}
         {# 热门标签 #}
         <div class="es-box teachers">
           <div class="es-box-heading">
