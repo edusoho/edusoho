@@ -48,7 +48,6 @@ define(function(require, exports, module) {
                     var id = '#' + $(html).attr('id'),
                     $item = $(id);
                     var $parent = $('#'+$form.data('parentid'));
-                    console.log($parent);
                     if ($item.length) {
                         $item.replaceWith(html);
                         Notify.success('课时已保存');

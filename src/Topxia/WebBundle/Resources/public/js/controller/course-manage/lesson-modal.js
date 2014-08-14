@@ -181,7 +181,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var updateDuration = function (length) {
-            console.log(length);
             length = parseInt(length);
             if (isNaN(length) || length == 0) {
                 return ;

@@ -70,7 +70,6 @@ class LiveCourseController extends BaseController
     {
         if($request->getMethod() == 'POST') {
             $data = $request->query->all();
-            var_dump($data);
             exit();
         }
             
