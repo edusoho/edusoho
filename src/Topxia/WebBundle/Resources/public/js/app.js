@@ -41,6 +41,7 @@ define(function(require, exports, module) {
 
 			$("#login-modal").modal('show');
 			$.get($('#login-modal').data('url'), function(html){
+				$('.modal-loading').remove();
 				$("#login-modal").html(html);
 			});
 		}

@@ -8,12 +8,12 @@ define(function(require, exports, module) {
             url = $(this).data('url');
         if (url) {
             var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, '')));        
-            var $loadingImg="<img src='"+imgUrl+"' style='width:60px;height:60px;position:absolute;top:50%;left:50%;margin-left:-30px;margin-top:-30px;'/>";
-            $target.html($loadingImg);
-            $target.load(url);
+            var $loadingImg="<img src='"+imgUrl+"' class='modal-loading' style='z-index:1050;width:60px;height:60px;position:absolute;top:50%;left:50%;margin-left:-30px;margin-top:-30px;'/>";
+            $('body').append($loadingImg);
+            $target.load(url, function(){
+                $('.modal-loading').remove();
+            });
         }
-/*        var $loadingImg="<img src='"+$("#modal").attr("loading-img")+"' style='weight:60px;height:60px;position:absolute;top:50%;left:45%;'/>";
-        $target.html('').html($loadingImg);*/
     
     });
 
