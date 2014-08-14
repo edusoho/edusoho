@@ -77,10 +77,12 @@ define(function(require, exports, module) {
 
                 $player.html(html);
 
-                var player = new SlidePlayer({
-                    element: '.slide-player',
-                    slides: response
-                });
+                if (!response.error) {
+                    var player = new SlidePlayer({
+                        element: '.slide-player',
+                        slides: response
+                    });
+                }
 
             }, 'json');
 		}

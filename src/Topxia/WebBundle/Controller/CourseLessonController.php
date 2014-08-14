@@ -19,8 +19,6 @@ class CourseLessonController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $user = $this->getCurrentUser();
 
-       
-
         if (empty($lesson)) {
             throw $this->createNotFoundException();
         }
@@ -57,6 +55,7 @@ class CourseLessonController extends BaseController
                 }
 
             }
+
         } else if ($lesson['mediaSource'] == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
             if ($matched) {
@@ -65,7 +64,6 @@ class CourseLessonController extends BaseController
             } else {
                 $lesson['mediaUri'] = $lesson['mediaUri'];
             }
-
         } else if ($lesson['mediaSource'] == 'tudou'){
             $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
             if ($matched) {
@@ -120,9 +118,9 @@ class CourseLessonController extends BaseController
 
     public function showAction(Request $request, $courseId, $lessonId)
     {
-    	list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
-    	$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $json = array();
         $json['number'] = $lesson['number'];
 
@@ -167,7 +165,7 @@ class CourseLessonController extends BaseController
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
+                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
                             $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                             $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
                         } else {
@@ -231,7 +229,7 @@ class CourseLessonController extends BaseController
 
         $json['canLearn'] = $this->getCourseService()->canLearnLesson($lesson['courseId'], $lesson['id']);
 
-    	return $this->createJsonResponse($json);
+        return $this->createJsonResponse($json);
     }
 
     public function mediaAction(Request $request, $courseId, $lessonId)
@@ -265,9 +263,16 @@ class CourseLessonController extends BaseController
 
     public function pptAction(Request $request, $courseId, $lessonId)
     {
-        $this->getCourseService()->tryTakeCourse($courseId);
-
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$lesson['free']) {
+            $this->getCourseService()->tryTakeCourse($courseId);
+        }
+
         if ($lesson['type'] != 'ppt' or empty($lesson['mediaId'])) {
             throw $this->createNotFoundException();
         }

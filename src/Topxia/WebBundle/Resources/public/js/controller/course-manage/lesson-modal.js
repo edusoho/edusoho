@@ -36,7 +36,16 @@ define(function(require, exports, module) {
 
         Validator.addRule('mediaValueEmpty', function(options) {
             var value = options.element.val();
-            return value != '""';
+            if (value == '""') {
+                return false;
+            }
+
+            var value = $.parseJSON(value);
+            if (!value || !value.source) {
+                return false;
+            }
+
+            return true;
         }, '请选择或上传{{display}}文件');
 
         Validator.addRule('timeLength', function(options) {
@@ -56,12 +65,6 @@ define(function(require, exports, module) {
 
             var $panel = $('.lesson-manage-panel');
             $.post($form.attr('action'), $form.serialize(), function(html) {
-                if(html.success == false){
-                    Notify.danger(html.message);
-                    $('#course-lesson-btn').button('submiting').removeClass('disabled');
-                    $('#course-lesson-btn').button('submiting').text('保存');
-                    return ;
-                }
                 var id = '#' + $(html).attr('id'),
                     $item = $(id);
                 var $parent = $('#'+$form.data('parentid'));
@@ -178,7 +181,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var updateDuration = function (length) {
-            console.log(length);
             length = parseInt(length);
             if (isNaN(length) || length == 0) {
                 return ;
