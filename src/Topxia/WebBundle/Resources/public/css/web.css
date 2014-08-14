@@ -4101,6 +4101,7 @@ body {
 	margin-right: 5px;
 	padding: 0 5px;
 	color: #fff;
+	font-size: 12px;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	-ms-border-radius: 2px;
@@ -4110,7 +4111,7 @@ body {
 }
 
 .countdown span {
-	font-size: 24.0px;
+	font-size: 16.0px;
 	color: #dc442f;
 	line-height: 32.0px;
 }
