@@ -19,7 +19,7 @@ class CourseLessonController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $user = $this->getCurrentUser();
 
-        if ($this->setting('course.allowAnonymousPreview') == 0 && !$user->isLogin()) {
+        if (empty($this->setting('course.allowAnonymousPreview', 1)) && !$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
 
