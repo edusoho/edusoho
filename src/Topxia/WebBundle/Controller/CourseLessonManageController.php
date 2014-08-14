@@ -129,10 +129,6 @@ class CourseLessonManageController extends BaseController
 				$fields['media'] = json_decode($fields['media'], true);
 			}
 
-			if ($fields['type'] == "video"&&empty($fields['media']['source'])){
-				return $this->createJsonResponse(array('success' => false, 'message' => '缺少视频（/音频/ppt）文件'));
-			}
-
 			if ($fields['second']) {
 				$fields['length'] = $this->textToSeconds($fields['minute'], $fields['second']);
 				unset($fields['minute']);
@@ -159,7 +155,7 @@ class CourseLessonManageController extends BaseController
 					'uri' => '',
 				);
 			} else {
-				$lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '', 'uri' => '');
+				$lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
 			}
 		} else {
 			$lesson['media'] = array(

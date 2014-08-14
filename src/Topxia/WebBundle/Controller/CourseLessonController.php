@@ -19,8 +19,6 @@ class CourseLessonController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $user = $this->getCurrentUser();
 
-       
-
         if (empty($lesson)) {
             throw $this->createNotFoundException();
         }
@@ -57,6 +55,7 @@ class CourseLessonController extends BaseController
                 }
 
             }
+
         } else if ($lesson['mediaSource'] == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
             if ($matched) {
@@ -65,7 +64,6 @@ class CourseLessonController extends BaseController
             } else {
                 $lesson['mediaUri'] = $lesson['mediaUri'];
             }
-
         } else if ($lesson['mediaSource'] == 'tudou'){
             $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
             if ($matched) {
@@ -120,9 +118,9 @@ class CourseLessonController extends BaseController
 
     public function showAction(Request $request, $courseId, $lessonId)
     {
-    	list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
-    	$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $json = array();
         $json['number'] = $lesson['number'];
 
@@ -231,7 +229,7 @@ class CourseLessonController extends BaseController
 
         $json['canLearn'] = $this->getCourseService()->canLearnLesson($lesson['courseId'], $lesson['id']);
 
-    	return $this->createJsonResponse($json);
+        return $this->createJsonResponse($json);
     }
 
     public function mediaAction(Request $request, $courseId, $lessonId)
