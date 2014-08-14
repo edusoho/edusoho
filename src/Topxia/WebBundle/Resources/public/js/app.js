@@ -37,7 +37,7 @@ define(function(require, exports, module) {
 		}
 
 		if (error.name == 'Unlogin') {
-			$('.modal.in').modal('hide');
+			$('.modal').modal('hide');
 
 			$("#login-modal").modal('show');
 			$.get($('#login-modal').data('url'), function(html){

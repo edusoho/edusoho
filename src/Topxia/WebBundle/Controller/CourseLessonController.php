@@ -19,7 +19,6 @@ class CourseLessonController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $user = $this->getCurrentUser();
 
-        $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
        
 
         if (empty($lesson)) {
@@ -32,16 +31,13 @@ class CourseLessonController extends BaseController
 
         if (empty($lesson['free'])) {
             if (!$user->isLogin()) {
-                return $this->forward('TopxiaWebBundle:Login:ajax', array(
-                ));
+                throw $this->createAccessDeniedException();
             }
-
             return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
         }else{
-
+            $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
             if (empty($allowAnonymousPreview) && !$user->isLogin()) {
-                 return $this->forward('TopxiaWebBundle:Login:ajax', array(
-                ));
+                throw $this->createAccessDeniedException();
             }
         }
 
