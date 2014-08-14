@@ -7,7 +7,7 @@ define(function(require, exports, module) {
             href = $this.attr('href'),
             url = $(this).data('url');
         if (url) {
-            var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, '')));        var $loadingImg="<img src='"+imgUrl+"' style='width:60px;height:60px;position:absolute;top:50%;left:45%;'/>";
+            var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, '')));        var $loadingImg="<img src='"+imgUrl+"' style='width:60px;height:60px;position:absolute;top:50%;left:50%;margin-left:-30px;margin-top:-30px;'/>";
             $target.html($loadingImg);
             $target.load(url);
         }
