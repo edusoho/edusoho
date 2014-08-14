@@ -28,7 +28,7 @@
 				{% endif %}
 				{% if app.user.isAdmin() %}
 					<button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_students_show', { id:user.id})}}">查看资料</button>
-				{% elseif setting %}
+				{% elseif setting("course.buy_fill_userinfo") %}
 					<button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_students_defined_show', { id:user.id})}}">查看资料</button>
 				{% endif %}
 			<a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">管理
