@@ -263,9 +263,16 @@ class CourseLessonController extends BaseController
 
     public function pptAction(Request $request, $courseId, $lessonId)
     {
-        $this->getCourseService()->tryTakeCourse($courseId);
-
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$lesson['free']) {
+            $this->getCourseService()->tryTakeCourse($courseId);
+        }
+
         if ($lesson['type'] != 'ppt' or empty($lesson['mediaId'])) {
             throw $this->createNotFoundException();
         }
