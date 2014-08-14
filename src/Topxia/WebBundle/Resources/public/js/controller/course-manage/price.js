@@ -66,6 +66,7 @@ define(function(require, exports, module) {
     Validator.addRule('time_check',
         function(a) {
           var thisTime = $(a.element.selector).val();
+          thisTime = thisTime.replace(/-/g,"/");
           if (!Date.parse(thisTime)) {
            return false;
           }else{

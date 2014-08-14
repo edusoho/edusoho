@@ -58,7 +58,7 @@ class WebExtension extends \Twig_Extension
             'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
-            'freeLimitType' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
+            'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
         );
     }
 
@@ -529,25 +529,25 @@ class WebExtension extends \Twig_Extension
     }
 
     public function getFreeLimitType($course){
-        if(isset($course['freeStartTime']) && isset($course)){
+        if(isset($course['freeStartTime']) && isset($course['freeEndTime'])){
             $startTime = $course['freeStartTime'];
             $endTime = $course['freeEndTime'];
             $now = time();
 
             //不是限免
             if(empty($startTime)){
-                return 0;
+                return 'no_free';
             }
             //即将限免
             if($startTime > $now){
-                return 1;
+                return 'free_coming';
             }
             //正在限免
             if($endTime >= $now){
-                return 2;
+                return 'free_now';
             }
         }else{
-            return 0;
+            return 'no_free';
         }
     }
     

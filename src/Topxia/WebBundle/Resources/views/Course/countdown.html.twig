@@ -1,4 +1,4 @@
-{% if freeLimitType(course) != 0 %}
+{% if free_limit_type(course) != 'no_free' %}
 <div 
     {% if pageType == 'show' %}
         class="countdown-show"
@@ -10,7 +10,7 @@
         class="countdown-list"
     {% endif %}>
     
-    {% if freeLimitType(course) == 1 %}
+    {% if free_limit_type(course) == 'free_coming' %}
     <div class="countdown-em">
         <em class="countdown-font">即将限免</em> 
     </div>
@@ -24,7 +24,7 @@
     </div>
     {% endif %}
 
-    {% if freeLimitType(course) == 2 %}
+    {% if free_limit_type(course) == 'free_now' %}
     <div class="countdown-em">
         <em class="countdown-font">正在限免</em> 
     </div>

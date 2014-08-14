@@ -11,6 +11,7 @@
                 offset: null
             }, options);
 
+        settings.date = settings.date.replace(/-/g,"/")
         // Throw error if date is not set
         if (!settings.date) {
             $.error('Date is not defined.');

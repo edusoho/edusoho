@@ -50,7 +50,7 @@
           {% endif %}
           <span class="course-price">
             {% if course.price > 0 %}
-              {% if freeLimitType(course) == 2 %}
+              {% if free_limit_type(course) == 'free_now' %}
                 0.0 元
               {% else %}
                 {{ course.price }}元
@@ -58,7 +58,7 @@
             {% else %}免费{% endif %}
           </span>
         </div>
-           {% if course.price > 0 and freeLimitType(course) == 2 %}
+           {% if course.price > 0 and free_limit_type(course) == 'free_now' %}
             <span class="free-money-text">(原价：<del>{{ course.price }}</del> 元)</span>
           {% endif %}
       </div>
