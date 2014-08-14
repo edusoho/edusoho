@@ -53,7 +53,7 @@ class CourseLessonController extends BaseController
                 $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
 
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $token = $this->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
+                    $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lessonId, 'times' => 1, 'duration' => 3600));
                     $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                     $hls = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
                 } else {
@@ -89,7 +89,8 @@ class CourseLessonController extends BaseController
 
     public function hlskeyurlAction(Request $request, $courseId, $lessonId, $token)
     {
-        if (!$this->getTokenService()->verifyToken('hlsvideo.view', $token)) {
+        $token = $this->getTokenService()->verifyToken('hlsvideo.view', $token);
+        if (empty($token)) {
             $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
             return new Response($fakeKey);
         }
@@ -98,6 +99,11 @@ class CourseLessonController extends BaseController
 
         if (empty($lesson)) {
             throw $this->createNotFoundException();
+        }
+
+        if ($token['data'] != $lesson['id']) {
+            $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
+            return new Response($fakeKey);
         }
 
         if (empty($lesson['mediaId'])) {
@@ -112,10 +118,6 @@ class CourseLessonController extends BaseController
         if (empty($file['convertParams']['hlsKey'])) {
             throw $this->createNotFoundException();
         }
-
-        // if (!$lesson['free']) {
-        //     list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-        // }
 
         return new Response($file['convertParams']['hlsKey']);
     }

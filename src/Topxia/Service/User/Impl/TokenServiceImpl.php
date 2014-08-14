@@ -48,7 +48,7 @@ class TokenServiceImpl extends BaseService implements TokenService
 
         $this->_gcToken($token);
 
-        return true;
+        return $token;
     }
 
     public function destoryToken($token)
