@@ -132,7 +132,8 @@
 
   {% block contact %}{% endblock %}
   {% block bottom %}{% endblock %}
-  <div id="modal" class="modal" data-login-url="{{ path('login_ajax') }}"></div>
+  <div id="login-modal" class="modal" data-url="/login/ajax"></div>
+<div id="modal" class="modal"></div>
 {% endblock %}
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}

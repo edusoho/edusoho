@@ -15,10 +15,6 @@ define(function(require, exports, module) {
         }
     });
 
-    $(document).on('hide.bs.modal', '.modal', function() {
-        $('.modal-loading').remove();
-    });
-
     $('.modal').on('click', '[data-toggle=form-submit]', function(e) {
         e.preventDefault();
         $($(this).data('target')).submit();
