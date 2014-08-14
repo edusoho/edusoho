@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 	window.$ = window.jQuery = require('jquery');
 	require('bootstrap');
-	require('common/bootstrap-modal-hack');
+	require('common/bootstrap-modal-hack2');
 
 	exports.load = function(name) {
 		if (window.app.jsPaths[name.split('/', 1)[0]] == undefined) {
