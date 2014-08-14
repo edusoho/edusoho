@@ -529,24 +529,26 @@ class WebExtension extends \Twig_Extension
     }
 
     public function getFreeLimitType($course){
-        $startTime = $course['freeStartTime'];
-        $endTime = $course['freeEndTime'];
-        $now = time();
+        if(isset($course['freeStartTime']) && isset($course)){
+            $startTime = $course['freeStartTime'];
+            $endTime = $course['freeEndTime'];
+            $now = time();
 
-        //不是限免
-        if(empty($startTime)){
+            //不是限免
+            if(empty($startTime)){
+                return 0;
+            }
+            //即将限免
+            if($startTime > $now){
+                return 1;
+            }
+            //正在限免
+            if($endTime >= $now){
+                return 2;
+            }
+        }else{
             return 0;
         }
-        //即将限免
-        if($startTime > $now){
-            return 1;
-        }
-        //正在限免
-        if($endTime >= $now){
-            return 2;
-        }
-
-        return 0;
     }
     
     public function mb_trim($string, $charlist='\\\\s', $ltrim=true, $rtrim=true) 
