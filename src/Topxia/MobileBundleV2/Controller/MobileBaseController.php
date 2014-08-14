@@ -43,7 +43,7 @@ class MobileBaseController extends BaseController
 
     protected function getParam($request, $name, $default = null)
     {
-        $result = $request->query->get($name);
+        $result = $request->request->get($name);
         return $result ? $result : $default;
     }
 
@@ -223,6 +223,11 @@ class MobileBaseController extends BaseController
     public function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    public function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
 }
