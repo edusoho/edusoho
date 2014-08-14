@@ -661,3 +661,11 @@ a:hover {
 .user-learn .continue {
     overflow: hidden;
 }
+
+.autumn-grids .live-course-lesson {
+    margin: 0 20px;
+}
+
+.autumn-grids .live-course-lesson .live-time {
+    color: #428bca;
+}
