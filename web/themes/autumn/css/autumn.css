@@ -8,7 +8,7 @@ a {
 
 a:hover {
     text-decoration: none;
-    color: #83BB36
+    color: #83BB36;
 }
 
 .site-navbar {
@@ -587,6 +587,10 @@ a:hover {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+} 
+
+.courses-rank a:hover .course-title {
+    color: #83BB36;
 } 
 
 .media-list.courses-rank,
