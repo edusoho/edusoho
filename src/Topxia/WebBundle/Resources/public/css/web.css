@@ -4115,3 +4115,10 @@ body {
 	color: #dc442f;
 	line-height: 32.0px;
 }
+
+.countdown em {
+	color: #939292;
+	font-style: normal;
+	font-weight: 400;
+}
+

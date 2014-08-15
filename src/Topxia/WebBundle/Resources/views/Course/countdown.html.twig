@@ -17,9 +17,12 @@
 
 
     <div  class="countdown">
-        <span>{{course.freeStartTime|date('m')}}</span>月
-        <span>{{course.freeStartTime|date('d')}}</span>日
-        <span>{{course.freeStartTime|date('H')}}</span>:
+        <span>{{course.freeStartTime|date('m')}}</span>
+        <em>月</em>
+        <span>{{course.freeStartTime|date('d')}}</span>
+        <em>日</em>
+        <span>{{course.freeStartTime|date('H')}}</span>
+        <em>:</em>
         <span>{{course.freeStartTime|date('i')}}</span>
     </div>
     {% endif %}
@@ -29,10 +32,14 @@
         <em class="countdown-font">正在限免</em> 
     </div>
     <div  class="countdown" data-starttime="{{course.freeStartTime|default()|data_format('Y-m-d H:i:s')}}" data-endtime="{{course.freeEndTime|default()|data_format('Y-m-d H:i:s')}}">
-        <span class="days">00</span>天
-        <span class="hours">00</span>时
-        <span class="minutes">00</span>分
-        <span class="seconds">00</span>秒
+        <span class="days">00</span>
+        <em>天</em>
+        <span class="hours">00</span>
+        <em>时</em>
+        <span class="minutes">00</span>
+        <em>分</em>
+        <span class="seconds">00</span>
+        <em>秒</em>
     </div>
     {% endif %}
 </div>
