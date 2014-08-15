@@ -1509,15 +1509,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$deadline = $course['expiryDay']*24*60*60 + time();
 
 			if($course['freeStartTime'] <= time() && $course['freeEndTime'] > time()){
-				if($course['freeEndTime'] - time() - $deadline < 0){
-					$deadline = $course['freeEndTime'] - time();
+				if($course['freeEndTime'] < $deadline){
+					$deadline = $course['freeEndTime'];
 				}	
 			}
 		} else {
 			$deadline = 0;
 			//如果处在限免期，则deadline为限免结束时间 减 当前时间
 			if($course['freeStartTime'] <= time() && $course['freeEndTime'] > time()){
-				$deadline = $course['freeEndTime'] - time();
+				$deadline = $course['freeEndTime'];
 			}
 		}
 
