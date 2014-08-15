@@ -36,21 +36,22 @@
     <div class="col-md-6">
        <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">系统状态</h3>
+          <h3 class="panel-title" id="open-message-title" data-url="">EduSoho官方消息</h3>
         </div>
-        <div id="aa">
-          <table class="table table-condensed table-bordered table-striped table-hover">
-                  <tr><td>主系统</td><td><img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 当前版本3.4.0可升级3.5.0</td></tr>
-                  <tr><td>应用更新</td><td><img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已是最新版本</td></tr>
-                  <tr><td>新应用</td><td><img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已是最新版本</td></tr>
-                  <tr><td>云视频</td><td><img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已是最新版本</td></tr>
-                  <tr><td>直播</td><td><img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已是最新版本</td></tr>
-                  <tr><td>移动客户端</td><td><img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已是最新版本</td></tr>
-          </table>
-          
+        <div id="edusoho-open-message" >
+          <div class="empty">正在载入数据，请稍等。</div>
         </div>
       </div>
-      
+    </div>
+    <div class="col-md-6">
+       <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title" id="system-status-title" data-url="{{path('admin_syatem_status')}}">系统状态</h3>
+        </div>
+        <div id="system-status" >
+          <div class="empty">正在载入数据，请稍等。</div>
+        </div>
+      </div>
     </div>
     <div id="popular-courses-panel" class="col-md-6">
        <div class="panel panel-default">

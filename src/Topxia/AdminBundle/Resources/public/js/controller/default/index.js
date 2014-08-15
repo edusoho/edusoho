@@ -33,6 +33,14 @@ define(function(require, exports, module) {
             $('#operation-analysis-table').html(html);
         });
 
+/*        $.post($('#open-message-title').data('url'),function(html){
+            $('#edusoho-open-message').html(html);
+        });*/
+
+        $.post($('#system-status-title').data('url'),function(html){
+            $('#system-status').html(html);
+        });
+
         $.post($('#onlineNum').data('url'),function(res){
             $('#onlineNum').html("当前在线："+res.onlineCount+"人");
         });

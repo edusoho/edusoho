@@ -46,8 +46,28 @@ class DefaultController extends BaseController
     }
 
     public function indexAction(Request $request)
-    {
+    {   
         return $this->render('TopxiaAdminBundle:Default:index.html.twig');
+    }
+
+
+    public function systemStatusAction()
+    {   
+        $apps = $this->getAppService()->checkAppUpgrades();
+
+        $appsAll = $this->getAppService()->getCenterApps();
+
+        $codes = ArrayToolkit::column($appsAll, 'code');
+
+        $installedApps = $this->getAppService()->findAppsByCodes($codes);
+
+        $unInstallAppCount=count($appsAll)-count($installedApps);
+
+        return $this->render('TopxiaAdminBundle:Default:system.status.html.twig',array(
+            "apps"=>$apps,
+            "app_count"=>count($apps),
+            "unInstallAppCount"=>$unInstallAppCount,
+        ));
     }
 
     public function latestUsersBlockAction(Request $request)
@@ -265,6 +285,11 @@ class DefaultController extends BaseController
     protected function getLogService()
     {
         return $this->getServiceKernel()->createService('System.LogService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
 }

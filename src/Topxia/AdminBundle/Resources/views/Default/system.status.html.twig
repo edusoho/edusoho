@@ -1,0 +1,24 @@
+<table class="table table-condensed table-bordered table-striped table-hover">
+
+      {% for app in apps %}
+      {% if app.code=="MAIN" %}
+        <tr><td>主系统</td><td>{% if app.package.fromVersion ==app.latestVersion %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> {% else %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 最新版本:{{app.latestVersion}} 当前版本:{{app.package.fromVersion}} <a class="pull-right" href="{{path("admin_app_upgrades")}}">马上更新</a>{% endif %}</td></tr>
+      {% endif %}
+      {% endfor %}
+
+        <tr><td>应用更新</td><td>{% if app_count %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还有 <span class="badge" style="background-color:#cc0000;">{{app_count}}</span> 个应用没有更新<a class="pull-right" href="{{path("admin_app_upgrades")}}">马上更新</a>{% else %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 所有应用都已是最新版本
+      {% endif %}</td></tr>
+
+        <tr><td>新应用</td><td>{% if unInstallAppCount>0 %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还有 <span class="badge" style="background-color:#cc0000;">{{unInstallAppCount}}</span> 个应用没有安装<a class="pull-right" href="{{path("admin_app_center")}}">查看</a>{% else %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已安装了全部应用
+      {% endif %}</td></tr>
+
+        <tr><td>云视频</td><td>{% if setting("storage").upload_mode=="cloud" %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已开通{% else %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还未开通<a class="pull-right" href="{{path("admin_setting_storage")}}">查看</a>
+      {% endif %}</td></tr>
+
+        <tr><td>直播</td><td>{% if setting("course").live_course_enabled==1 %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已开通{% else %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还未开通<a class="pull-right" href="{{path("admin_setting_course_setting")}}">查看</a>
+      {% endif %}</td></tr>
+
+        <tr><td>移动客户端</td><td>{% if setting("mobile").enabled==1 %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已启用{% else %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还未启用<a class="pull-right" href="{{path("admin_setting_mobile")}}">查看</a>
+      {% endif %}</td></tr>
+
+</table>
