@@ -4073,11 +4073,13 @@ body {
 
 .countdown-show{
 	float: right;
+	padding-right: 10px;
 }
 
 .countdown-list{
 	float: right;
 	margin-top: -130px;
+	padding-right: 10px;
 }
 .countdown-dashboard{
 	float: right;
@@ -4111,14 +4113,17 @@ body {
 }
 
 .countdown span {
-	font-size: 16.0px;
+	font-size: 14.0px;
 	color: #dc442f;
 	line-height: 32.0px;
+	margin-right: -5px;
 }
 
 .countdown em {
 	color: #939292;
 	font-style: normal;
 	font-weight: 400;
+	margin-right: -5px;
+	font-size: 14px;
 }
 

@@ -22,8 +22,14 @@
         <p>
           价　格：
           {% if course.price > 0 %}
-            <span class="money-num">{{ course.price }}</span>
-            <span class="money-text">元</span>
+            {% if free_limit_type(course) == 'free_now' %}
+              <span class="money-num">0.0</span>
+              <span class="money-text">元</span>
+              <span class="money-text">(原价：<del>{{ course.price }}</del> 元)</span>
+            {% else %}
+              <span class="money-num">{{ course.price }}</span>
+              <span class="money-text">元</span>
+            {% endif %}  
           {% else %}
             <span class="money-num" style="font-size:16px;">免费</span>
           {% endif %}
