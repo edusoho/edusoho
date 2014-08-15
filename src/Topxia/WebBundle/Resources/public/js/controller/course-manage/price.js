@@ -44,7 +44,7 @@ define(function(require, exports, module) {
     });
 
     $("#freeStartTime").datetimepicker({
-        format: 'yyyy-mm-dd hh:ii:ss',
+        format: 'yyyy-mm-dd hh:ii',
         language: 'zh-CN',
         todayBtn: true,
         autoclose: true,
@@ -54,7 +54,7 @@ define(function(require, exports, module) {
     });
 
     $("#freeEndTime").datetimepicker({
-        format: 'yyyy-mm-dd hh:ii:ss',
+        format: 'yyyy-mm-dd hh:ii',
         language: 'zh-CN',
         todayBtn: true,
         autoclose: true,
