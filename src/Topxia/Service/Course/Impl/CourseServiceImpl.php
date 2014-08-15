@@ -1766,10 +1766,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("course, member参数不能为空");
 		}
 
+		/*
+		如果课程设置了限免时间，那么即使expiryDay为0，学员到了deadline也不能参加学习
 		if ($course['expiryDay'] == 0) {
 			return true;
 		}
-
+		*/
 		if ($member['deadline'] == 0) {
 			return true;
 		}
