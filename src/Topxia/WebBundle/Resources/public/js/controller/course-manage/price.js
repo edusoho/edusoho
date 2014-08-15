@@ -22,19 +22,22 @@ define(function(require, exports, module) {
               return false;
           }
           $form = $('#price-form');
-          var startTime = $('#freeStartTime').val();
-          startTime = startTime.replace(/-/g,"/");
-          startTime = Date.parse(startTime)/1000;
-          var endTime = $('#freeEndTime').val();
-          endTime = endTime.replace(/-/g,"/");
-          endTime = Date.parse(endTime)/1000;
-          var nowTime = Date.parse(new Date())/1000;
+          if($('#freeStartTime').length > 0){
+            var startTime = $('#freeStartTime').val();
+            startTime = startTime.replace(/-/g,"/");
+            startTime = Date.parse(startTime)/1000;
+            var endTime = $('#freeEndTime').val();
+            endTime = endTime.replace(/-/g,"/");
+            endTime = Date.parse(endTime)/1000;
+            var nowTime = Date.parse(new Date())/1000;
 
-          if(startTime > endTime){
-             Notify.danger('请输入一个小于结束时间的开始时间');
-            $('#freeStartTime').focus();
-            return false;
+            if(startTime > endTime){
+               Notify.danger('请输入一个小于结束时间的开始时间');
+              $('#freeStartTime').focus();
+              return false;
+            }
           }
+
           $.post($form.attr('action'), $form.serialize(), function(html) {
             Notify.success('课程价格已经修改成功');
           }).error(function(){

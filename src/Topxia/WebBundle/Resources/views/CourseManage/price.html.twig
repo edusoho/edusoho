@@ -26,6 +26,7 @@
 					</div>
 				</div>
 
+				{% if is_feature_enabled('free_limit') %}
 				<div class="form-group">
 					<div class="col-md-2 control-label">
 						<label for="freeStartTime">限免开始时间</label>
@@ -45,6 +46,7 @@
 						<div class="help-block" style="display:none;"></div>
 					</div>
 				</div>
+				{% endif %}
 
 				{% if setting('vip.enabled') %}
 

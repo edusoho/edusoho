@@ -1,4 +1,4 @@
-{% if free_limit_type(course) != 'no_free' %}
+{% if free_limit_type(course) != 'no_free' and is_feature_enabled('free_limit') %}
 <div 
     {% if pageType == 'show' %}
         class="countdown-show"
@@ -38,7 +38,7 @@
         <em>时</em>
         <span class="minutes">00</span>
         <em>分</em>
-        <span class="seconds">00</span>
+        <span class="seconds">00.0</span>
         <em>秒</em>
     </div>
     {% endif %}
