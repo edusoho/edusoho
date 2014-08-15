@@ -4115,15 +4115,15 @@ body {
 .countdown span {
 	font-size: 14.0px;
 	color: #dc442f;
-	line-height: 32.0px;
-	margin-right: -5px;
+	line-height: 28.0px;
+	/*margin-right: -2px;*/
 }
 
 .countdown em {
 	color: #939292;
 	font-style: normal;
 	font-weight: 400;
-	margin-right: -5px;
+/*	margin-right: -2px;*/
 	font-size: 14px;
 }
 
