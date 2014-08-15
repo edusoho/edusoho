@@ -31,7 +31,7 @@
 						<label for="freeStartTime">限免开始时间</label>
 					</div>
 					<div class="col-md-8 controls">
-						<input type="text" id="freeStartTime" name="freeStartTime" class="form-control" value="{{course.freeStartTime|default()|data_format('Y-m-d H:i:s')}}">
+						<input type="text" id="freeStartTime" name="freeStartTime" class="form-control" value="{{course.freeStartTime|default()|data_format('Y-m-d H:i')}}">
 						<div class="help-block" style="display:none;" id="start-help-block"></div>
 					</div>
 				</div>
@@ -41,7 +41,7 @@
 						<label for="freeEndTime">限免结束时间</label>
 					</div>
 					<div class="col-md-8 controls">
-						<input type="text" id="freeEndTime" name="freeEndTime" class="form-control" value="{{course.freeEndTime|default()|data_format('Y-m-d H:i:s')}}">
+						<input type="text" id="freeEndTime" name="freeEndTime" class="form-control" value="{{course.freeEndTime|default()|data_format('Y-m-d H:i')}}">
 						<div class="help-block" style="display:none;"></div>
 					</div>
 				</div>

@@ -8,7 +8,8 @@
     $.fn.downCount = function (options, callback) {
         var settings = $.extend({
                 date: null,
-                offset: null
+                offset: null,
+                timestep: 100
             }, options);
 
         settings.date = settings.date.replace(/-/g,"/")
@@ -51,12 +52,11 @@
 
             // difference of dates
             var difference = target_date - current_date;
-
             // if difference is negative than it's pass the target date
             if (difference < 0) {
                 // stop timer
                 clearInterval(interval);
-
+                container.find('.seconds').text('00.0');
                 if (callback && typeof callback === 'function') callback();
 
                 return;
@@ -102,7 +102,7 @@
         };
         
         // start
-        var interval = setInterval(countdown, 100);
+        var interval = setInterval(countdown, settings.timestep);
     };
 
 })(jQuery);

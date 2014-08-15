@@ -17,7 +17,8 @@ define(function(require, exports, module) {
                 
                     $(this).downCount({
                         date: targetTime,
-                        offset: 8
+                        offset: 8,
+                        timestep: 100
                     });
                 }
                
