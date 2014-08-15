@@ -3,6 +3,7 @@ namespace Topxia\Service\User\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\UserFieldService;
+use Topxia\Common\ArrayToolkit;
 
 class UserFieldServiceImpl extends BaseService implements UserFieldService
 {
@@ -48,6 +49,12 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
 
     public function updateField($id,$fields)
     {   
+        $fields = ArrayToolkit::filter($fields, array(
+            "title"=>"",
+            "seq"=>"",
+            "enabled"=>0,
+        ));
+
         if (isset($fields['title']) && empty($fields['title'])) throw $this->createServiceException('字段名称不能为空！');
         
         if (isset($fields['seq']) && empty($fields['seq'])) throw $this->createServiceException('字段排序不能为空！');
