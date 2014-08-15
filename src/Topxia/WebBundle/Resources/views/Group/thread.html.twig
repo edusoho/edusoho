@@ -36,9 +36,8 @@
                       <img src="{{ file_path(owner.largeAvatar, 'avatar-large.png') }}">
                     </a></div>
                     
-                    <div class="media">  {{ web_macro.user_link(owner , 'link-muted ') }}</div>
-                    <div class="media"> <span class="label label-danger">楼主</span>
-                    </div>                    
+                    <div class="media">  {{ web_macro.user_link(owner , 'link-muted ') }}<span class="label label-danger" style="padding:.2em .2em .2em;">楼主</span></div>
+                     
                   </div>
                   <div class="col-md-10 " >
                     <div class="media"> </div>
@@ -111,11 +110,8 @@
                     </a>
                     </div> 
 
-                    <div class="media">  {{ web_macro.user_link(postMember[post.userId] , 'link-muted ') }}
+                    <div class="media">  {{ web_macro.user_link(postMember[post.userId] , 'link-muted ') }}{% if post.userId==owner.id %}<span class="label label-danger" style="padding:.2em .2em .2em;">楼主</span>{% endif %}
                     </div>
-
-                    <div class="media">{% if post.userId==owner.id %}<span class="label label-danger">楼主</span>{% endif %}
-                    </div> 
 
                 </div>
 

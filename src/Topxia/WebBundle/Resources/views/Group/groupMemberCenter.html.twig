@@ -18,7 +18,7 @@
               {% include 'TopxiaWebBundle:Group:groupMember.nav.pill.html.twig' %}
 
               <div class="page-header">
-                <h4> 我加入的小组<a class="badge pull-right" href="{{path('group_member_join')}}">{{groupsCount}}</a></h4>
+                <h4> 我加入的小组<a class="badge pull-right" href="{{path('group_member_join')}}" style="background-color:#3cb373;">{{groupsCount}}</a></h4>
               </div>
 
               {% include 'TopxiaWebBundle:Group:groups.ul.html.twig' with {
@@ -30,7 +30,7 @@
             <div class="col-md-12">
 
               <div class="page-header">
-                <h4>我发起的话题<a class="badge pull-right" href="{{path('group_member_threads')}}">{{threadsCount}}</a></h4>
+                <h4>我发起的话题<a class="badge pull-right" href="{{path('group_member_threads')}}" style="background-color:#3cb373;">{{threadsCount}}</a></h4>
               </div>
 
               {% include 'TopxiaWebBundle:Group:groups.threads.ul.html.twig' with {
@@ -43,7 +43,7 @@
             <div class="col-md-12">
 
               <div class="page-header">
-                <h4>我的回复<a class="badge pull-right" href="{{path('group_member_posts')}}">{{postsCount}}</a></h4>
+                <h4>我的回复<a class="badge pull-right" href="{{path('group_member_posts')}}" style="background-color:#3cb373;">{{postsCount}}</a></h4>
               </div>
               
               {% include 'TopxiaWebBundle:Group:groups.threads.posts.ul.html.twig' with {

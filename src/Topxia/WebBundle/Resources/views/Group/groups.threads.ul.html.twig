@@ -8,7 +8,7 @@
                    <a href="{{path('group_thread_index',{id:ownThread.groupId,threadId:ownThread.id})}}">"{{ownThread.title|sub_text(50)}}"</a> 
                    <div class="pull-right">                      
                      {% if ownThread.postNum %}
-                      <span class="badge pull-right" >{{ownThread.postNum}}</span>
+                      <span class="badge pull-right" style="background-color:#3cb373;">{{ownThread.postNum}}</span>
                      {% endif %}
                     &nbsp;
                   </div>
