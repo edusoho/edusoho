@@ -84,7 +84,7 @@
         <div class="pull-left">
           {% if course.status != 'published' or course.studentNum >= course.maxStudentNum %}
           {% else %}
-            <a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">{% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}</a>
+            <a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
 
             {% if courseMemberLevel %}
               {% if checkMemberLevelResult == 'not_login' %}
