@@ -292,4 +292,10 @@ interface CourseService
 
 	public function updateAnnouncement($courseId, $id, $fields);
 
+	public function generateLessonReplay($courseId,$lessonId);
+
+	public function entryReplay($lessonId, $courseLessonReplayId);
+
+	public function getCourseLessonReplayByLessonId($lessonId);
+
 }

@@ -200,6 +200,25 @@ class LiveCourseController extends BaseController
         );
     }
 
+    public function replayCreateAction(Request $request, $courseId, $lessonId)
+    {
+        $this->getCourseService()->generateLessonReplay($courseId,$lessonId);
+        return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+            'course' => $this->getCourseService()->getCourse($courseId),
+            'lesson' => $this->getCourseService()->getCourseLesson($courseId, $lessonId),
+        ));
+    }
+
+    public function entryReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
+    {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $url = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+        return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
+            'lesson' => $lesson,
+            'url' => $url
+        ));
+    }
+
     private function getRootCategory($categoryTree, $category)
     {
         $start = false;

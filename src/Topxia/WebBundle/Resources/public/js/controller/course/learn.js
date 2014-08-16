@@ -360,8 +360,12 @@ define(function(require, exports, module) {
 
                         if (endLeftSeconds <= 0) {
                             $liveNotice = "<p>直播已结束</p>";
-                            // $countDown = "<a class='btn btn-primary' href='http://www.edusoho-dev.com/live/replay/course/"+courseId+"/lesson/"+lessonId+"''>查看录播实况</a><br><br>";
                             $countDown = "";
+                            if(lesson.replays && lesson.replays.length>0){
+                                $.each(lesson.replays, function(i,n){
+                                    $countDown += "<a class='btn btn-primary' href='"+n.url+"' target='_blank'>录播实况"+(i+1)+"</a><br><br>";
+                                });
+                            }
                         };
 
                         $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice + '<div style="padding-bottom:15px; border-bottom:1px dashed #ccc;">' + lesson.summary + '</div>' + '<br>' + $countDown);

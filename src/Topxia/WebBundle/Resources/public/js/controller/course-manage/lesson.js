@@ -66,6 +66,17 @@ define(function(require, exports, module) {
             }, 'json');
         });
 
+        $list.on('click', '.replay-lesson-btn', function(e) {
+            if (!confirm('您真的要录制回放吗？')) {
+                return ;
+            }
+            $.post($(this).data('url'), function(html) {
+                var id = '#' + $(html).attr('id');
+                $(id).replaceWith(html);
+                Notify.success('课时已录制！');
+            });
+        });
+
         $list.on('click', '.publish-lesson-btn', function(e) {
             var $btn = $(e.currentTarget);
             $.post($(this).data('url'), function(html) {
