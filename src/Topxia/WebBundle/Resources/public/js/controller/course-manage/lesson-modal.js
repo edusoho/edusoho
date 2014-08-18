@@ -6,6 +6,7 @@ define(function(require, exports, module) {
     var VideoChooser = require('../widget/media-chooser/video-chooser3');
     var AudioChooser = require('../widget/media-chooser/audio-chooser3');
     var PPTChooser = require('../widget/media-chooser/ppt-chooser3');
+    var ChunkUpload = require('../widget/media-chooser/chunk-upload');
     var Notify = require('common/bootstrap-notify');
         require('jquery.sortable');
         
@@ -214,7 +215,10 @@ define(function(require, exports, module) {
             choosed: choosedMedia,
         });
 
-
+        var chunkUpload = new ChunkUpload({
+            element: '#selectFiles'
+        });
+        
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
