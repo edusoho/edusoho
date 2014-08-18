@@ -42,16 +42,10 @@
                           {% if recentlyThread%}
                                 {% for threadinfo in recentlyThread%}  
                                     <li class="media"> 
-                                          {% if threadinfo.postNum %}
-                                          <a href="{{path('group_thread_index',{id:threadinfo.groupId,threadId:threadinfo.id})}}">  
-                                            <h5><span class="badge pull-right" style="margin-top:15px;background-color:#3cb373;">{{threadinfo.postNum}}</span></h5> 
-                                          </a>   
-                                          {% endif %}        
-                                           {% if groupinfo[threadinfo.groupId].logo %}
-                                                  <a class="pull-left" title="{{groupinfo[threadinfo.groupId].title}}" href="{{path('group_index',{id:threadinfo.groupId})}}"><img src="{{file_path(groupinfo[threadinfo.groupId].logo)}}" alt="{{groupinfo[threadinfo.groupId].title}}"  style="width:47px;height:47px;"></a>
-                                           {% else %}
-                                                  <a class="pull-left" title="{{groupinfo[threadinfo.groupId].title}}" href="{{path('group_index',{id:threadinfo.groupId})}}"><img src="{{asset('assets/img/default/group.png')}}" alt="{{groupinfo[threadinfo.groupId].title}}" class="pull-left" style="width:47px;height:47px;"></a>
-                                           {% endif %}
+                                          <a href="{{path('group_index',{id:threadinfo.groupId})}}" title="{{groupinfo[threadinfo.groupId].title}}" class="pull-right" style="color:#3cb373">
+                                          {{groupinfo[threadinfo.groupId].title}} 
+                                          </a>
+                                          {{ web_macro.user_avatar(owners[threadinfo.userId], 'pull-left media-object media-object-small')}}
 
                                           <div class="media-body" style="word-break: break-all;" >
                                                  <a href="{{path('group_thread_index',{id:threadinfo.groupId,threadId:threadinfo.id})}}">{{threadinfo.title|sub_text(40)}} </a>
