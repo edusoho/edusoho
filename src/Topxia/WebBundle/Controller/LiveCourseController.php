@@ -202,8 +202,11 @@ class LiveCourseController extends BaseController
 
     public function replayCreateAction(Request $request, $courseId, $lessonId)
     {
-        $this->getCourseService()->generateLessonReplay($courseId,$lessonId);
-        return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+        $resultList = $this->getCourseService()->generateLessonReplay($courseId,$lessonId);
+        if(array_key_exists("error", $resultList)) {
+            return $this->createJsonResponse($resultList);
+        }
+        return $this->render('TopxiaWebBundle:LiveCourseReplay:list-item.html.twig', array(
             'course' => $this->getCourseService()->getCourse($courseId),
             'lesson' => $this->getCourseService()->getCourseLesson($courseId, $lessonId),
         ));
@@ -218,6 +221,18 @@ class LiveCourseController extends BaseController
             'url' => $url
         ));
     }
+
+    public function replayManageAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        $courseItems = $this->getCourseService()->getCourseItems($course['id']);
+
+        return $this->render('TopxiaWebBundle:LiveCourseReplay:index.html.twig', array(
+            'course' => $course,
+            'items' => $courseItems
+        ));
+    }
+
 
     private function getRootCategory($categoryTree, $category)
     {

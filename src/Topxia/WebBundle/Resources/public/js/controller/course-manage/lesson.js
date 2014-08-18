@@ -71,9 +71,16 @@ define(function(require, exports, module) {
                 return ;
             }
             $.post($(this).data('url'), function(html) {
-                var id = '#' + $(html).attr('id');
-                $(id).replaceWith(html);
-                Notify.success('课时已录制！');
+                if(html.error){
+                    if(html.error.code == 10019)
+                        Notify.danger("录制失败，没有找到可录制的回放！");
+                    else
+                        Notify.danger("录制失败！");
+                }else{
+                    var id = '#' + $(html).attr('id');
+                    $(id).replaceWith(html);
+                    Notify.success('课时已录制！');
+                }
             });
         });
 

@@ -147,6 +147,10 @@ live_course_create:
     pattern:  /livecourse/create
     defaults: { _controller: TopxiaWebBundle:LiveCourse:create }
 
+live_course_manage_replay:
+    pattern:  /livecourse/{id}/manage/replay
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:replayManage }
+
 live_course_lesson_replay_create:
     pattern:  /livecourse/{courseId}/lesson/{lessonId}/replay/create
     defaults: { _controller: TopxiaWebBundle:LiveCourse:replayCreate }

@@ -333,29 +333,56 @@ define(function(require, exports, module) {
                         $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
 
                         if (days == 0) {
-                                     $countDown = "还剩: <strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+                            $countDown = "还剩: <strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
                         };
 
                         if (hours == 0 && days != 0) {
-                               $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+                            $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
                         };
 
                         if (hours == 0 && days == 0) {
-                               $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+                            $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
                         };
 
                         if (0< startLeftSeconds && startLeftSeconds < 3600) {
                              $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
                              var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
-                              $countDown = "<p>还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                             if(lesson.isTeacher) {
+                                $countDown = "老师们：";
+                                $countDown += "<br>";
+                                $countDown += "&nbsp;&nbsp;&nbsp;&nbsp;录制直播课程时，需在直播课程间点击“";
+                                $countDown += "<span style='color:red'>录制面板</span>";
+                                $countDown += "”，录制完成后点击“";
+                                $countDown += "<span style='color:red'>暂停</span>";
+                                $countDown += "”结束录播，录播结束后在“";
+                                $countDown += "<span style='color:red'>录播管理</span>";
+                                $countDown += "”界面生成回放。";
+                                $countDown += "<br>";
+                                $countDown += "<p>还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                            }else{
+                                $countDown = "<p>还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                            }
                         };
 
                         if (startLeftSeconds <= 0) {
                             clearInterval(iID);
                              $liveNotice = "<p>直播已经开始，直播将于 <strong>"+liveEndTimeFormat+"</strong> 结束。</p>";
                              var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
-
-                            $countDown = "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                            if(lesson.isTeacher) {
+                                $countDown = "老师们：";
+                                $countDown += "<br>";
+                                $countDown += "&nbsp;&nbsp;&nbsp;&nbsp;录制直播课程时，需在直播课程间点击“";
+                                $countDown += "<span style='color:red'>录制面板</span>";
+                                $countDown += "”，录制完成后点击“";
+                                $countDown += "<span style='color:red'>暂停</span>";
+                                $countDown += "”结束录播，录播结束后在“";
+                                $countDown += "<span style='color:red'>录播管理</span>";
+                                $countDown += "”界面生成回放。";
+                                $countDown += "<br>";
+                                $countDown += "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                            }else{
+                                $countDown = "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                            }
                         };
 
                         if (endLeftSeconds <= 0) {
