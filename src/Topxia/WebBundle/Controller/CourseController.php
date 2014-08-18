@@ -620,6 +620,14 @@ class CourseController extends BaseController
         ));
     }
 
+    public function rebuyAction(Request $request,$courseId){
+        $user = $this->getCurrentUser();
+
+        $this->getCourseService()->removeStudent($courseId, $user['id']);
+
+        return $this->redirect($this->generateUrl('course_show',array('id' => $courseId)));
+    }
+    
     private function createCourseForm()
     {
         return $this->createNamedFormBuilder('course')

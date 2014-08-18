@@ -1,4 +1,4 @@
-{% if free_limit_type(course) != 'no_free' and is_feature_enabled('free_limit') %}
+{% if free_limit_type(course) != 'no_free' and is_feature_enabled('free_limit') and free_limit_type(course) != 'free_end' %}
 <div 
     {% if pageType == 'show' %}
         class="countdown-show"

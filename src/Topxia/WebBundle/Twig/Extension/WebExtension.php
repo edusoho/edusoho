@@ -534,17 +534,16 @@ class WebExtension extends \Twig_Extension
             $endTime = $course['freeEndTime'];
             $now = time();
 
-            //不是限免
             if(empty($startTime)){
+                return 'no_free';//不是限免
+            }elseif($startTime > $now){
+                return 'free_coming';//即将限免
+            }elseif($endTime >= $now){
+                return 'free_now';//正在限免
+            }elseif($endTime < $now){
+                return 'free_end';//限免结束
+            }else{
                 return 'no_free';
-            }
-            //即将限免
-            if($startTime > $now){
-                return 'free_coming';
-            }
-            //正在限免
-            if($endTime >= $now){
-                return 'free_now';
             }
         }else{
             return 'no_free';

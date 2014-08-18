@@ -1156,7 +1156,9 @@ mobile_download:
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
-
+re_buy:
+    pattern:  /course/{courseId}/re_buy
+    defaults: { _controller: TopxiaWebBundle:Course:rebuy }
 #占位
 vip:
     pattern: /vip/

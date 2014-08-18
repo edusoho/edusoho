@@ -126,10 +126,17 @@
     {% endif %}
 
     {% if not isNonExpired %}
-      <div class="alert alert-danger alert-dismissable">
+      {% if free_limit_type(course) == 'free_end' %}
+        <div class="alert alert-danger alert-dismissable">
+          <a class="btn btn-primary" href="{{path('re_buy',{courseId:course.id})}}" style="float:right;margin-top: -6px;margin-right:-20px" title="">购买</a>
+          您购买的课程限时免费活动已结束，无法继续学习课时、提问等。请重新购买该课程。
+        </div>
+      {% else %}
+       <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师。
+          您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师。
       </div>
+      {% endif %}
     {% endif %}
 
   </div>
