@@ -390,7 +390,7 @@ define(function(require, exports, module) {
                             $countDown = "";
                             if(lesson.replays && lesson.replays.length>0){
                                 $.each(lesson.replays, function(i,n){
-                                    $countDown += "<a class='btn btn-primary' href='"+n.url+"' target='_blank'>录播实况"+(i+1)+"</a><br><br>";
+                                    $countDown += "<a class='btn btn-primary' href='"+n.url+"' target='_blank'>"+n.title+"</a><br><br>";
                                 });
                             }
                         };
