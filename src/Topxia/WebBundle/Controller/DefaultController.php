@@ -54,6 +54,7 @@ class DefaultController extends BaseController
             $course = array();
             $nextLearnLesson = array();
             $progress = array();
+            $teachers = array();
         }
 
         return $this->render('TopxiaWebBundle:Default:user-learning.html.twig', array(
