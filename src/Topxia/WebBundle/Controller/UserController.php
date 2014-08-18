@@ -72,6 +72,16 @@ class UserController extends BaseController
         ));
     }
 
+    public function groupAction(Request $request, $id)
+    {
+        $user = $this->tryGetUser($id);
+
+        return $this->render('TopxiaWebBundle:User:group.html.twig', array(
+            'user' => $user,
+            'type' => 'group',
+        ));
+    }
+
     public function followingAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);

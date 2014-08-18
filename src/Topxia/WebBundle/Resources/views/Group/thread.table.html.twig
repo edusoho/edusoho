@@ -13,10 +13,10 @@
               {% endif %}
 
               {% if threadinfo.isStick %}
-                <span class="label label-danger">置顶</span>
+              <span class="label label-danger">置顶</span>
               {% endif %}
               
-              <a href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadinfo.id})}}" >{{threadinfo.title|sub_text(38)}}</a> 
+              <a class="link-muted" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadinfo.id})}}" >{{threadinfo.title|sub_text(80)}}</a> 
 
               {% if threadinfo.isElite %}
               <span class="label label-warning">精</span>

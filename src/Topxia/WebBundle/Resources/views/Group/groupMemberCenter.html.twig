@@ -18,7 +18,7 @@
               {% include 'TopxiaWebBundle:Group:groupMember.nav.pill.html.twig' %}
 
               <div class="page-header">
-                <h4> 我加入的小组<a class="badge pull-right" href="{{path('group_member_join')}}" style="background-color:#3cb373;">{{groupsCount}}</a></h4>
+                <h4> 我加入的小组<a class="badge pull-right" href="{{path('group_member_join',{type:'myGroup'})}}" style="background-color:#3cb373;">{{groupsCount}}</a></h4>
               </div>
 
               {% include 'TopxiaWebBundle:Group:groups.ul.html.twig' with {

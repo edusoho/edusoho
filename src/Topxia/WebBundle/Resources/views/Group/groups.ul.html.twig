@@ -3,7 +3,7 @@
 
     {% for group in groups %}
       {% if group.status=='open' %} 
-            <li class="col-md-4"> 
+            <li class="col-md-6"> 
 
                   <div class="panel panel-default">
                     <div class="panel-body">
@@ -16,7 +16,7 @@
                               {%endif%}
                             </a>
                             <div class="media-body">
-                              <p ><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(8)}}</a></p>
+                              <p ><a class="btn-link" href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title}}</a></p>
                               <div class="text-muted text-normal">
                                 {{group.memberNum}}个成员
                                 {{group.threadNum}}个话题

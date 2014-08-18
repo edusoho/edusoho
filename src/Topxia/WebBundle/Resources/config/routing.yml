@@ -1009,6 +1009,10 @@ user_friend:
     pattern:  /user/{id}/friend
     defaults: { _controller: TopxiaWebBundle:User:friend }
 
+user_group: 
+    pattern:  /user/{id}/group
+    defaults: { _controller: TopxiaWebBundle:User:group }
+
 user_following:
     pattern:  /user/{id}/following
     defaults: { _controller: TopxiaWebBundle:User:following }
@@ -1169,7 +1173,7 @@ group_member_center:
     pattern:  /mygroup/center
     defaults: { _controller: TopxiaWebBundle:Group:memberCenter }
 group_member_join:
-    pattern:  /mygroup/center/join
+    pattern:  /mygroup/center/join/{type}
     defaults: { _controller: TopxiaWebBundle:Group:memberJoin}
 group_member_threads:
     pattern:  /mygroup/center/threads
