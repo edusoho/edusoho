@@ -31,7 +31,6 @@
           <a class="pull-right more-autumn-primary" href="{{ path('course_explore', {'sort':'recommendedSeq'}) }}">More&gt;</a>
         </div>
         <div class="panel-body">
-          {# {{ _self.course_grids(data('RecommendCourses',{ count:3 })) }} #}
           <ul class="autumn-grids">
             {% for course in data('RecommendCourses',{ count:3 }) %}
               {% if course %}
