@@ -34,6 +34,38 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function userlearningAction()
+    {
+        $user = $this->getCurrentUser();
+
+        $courses = $this->getCourseService()->findUserLearnCourses($user->id, 0, 1);
+
+        if (!empty($courses)) {
+            foreach ($courses as $course) {
+                $member = $this->getCourseService()->getCourseMember($course['id'], $user->id);
+
+                $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
+            }
+
+            $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user->id, $course['id']);
+
+            $progress = $this->calculateUserLearnProgress($course, $member);
+        } else {
+            $course = array();
+            $nextLearnLesson = array();
+            $progress = array();
+            $teachers = array();
+        }
+
+        return $this->render('TopxiaWebBundle:Default:user-learning.html.twig', array(
+                'user' => $user,
+                'course' => $course,
+                'nextLearnLesson' => $nextLearnLesson,
+                'progress'  => $progress,
+                'teachers' => $teachers
+            ));
+    }
+
     private function getRecentLiveCourses()
     {
 
@@ -141,6 +173,21 @@ class DefaultController extends BaseController
         }
         </script>";
         exit();
+    }
+
+    private function calculateUserLearnProgress($course, $member)
+    {
+        if ($course['lessonNum'] == 0) {
+            return array('percent' => '0%', 'number' => 0, 'total' => 0);
+        }
+
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+
+        return array (
+            'percent' => $percent,
+            'number' => $member['learnedNum'],
+            'total' => $course['lessonNum']
+        );
     }
 
     protected function getSettingService()
