@@ -73,7 +73,7 @@ define(function(require, exports, module) {
             $.post($(this).data('url'), function(html) {
                 if(html.error){
                     if(html.error.code == 10019)
-                        Notify.danger("录制失败，没有找到可录制的回放！");
+                        Notify.danger("录制失败，直播时您没有进行录制！");
                     else
                         Notify.danger("录制失败！");
                 }else{
