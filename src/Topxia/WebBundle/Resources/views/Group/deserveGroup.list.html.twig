@@ -2,10 +2,8 @@
   <div class="panel-heading">值得加入的小组</div>
   <div class="panel-body">
     
-    <table class="table">
-
       {% if deserveGroup%}
-
+      <table class="table">
         {% for group in deserveGroup%}
 
           <tr class="media-list" style="word-break: break-all;">
@@ -36,12 +34,13 @@
             </tr>
 
           {% endfor %}
+            </table>
         {% else %}
 
-          <tr><td></td></tr>
+          <div class="empty">还没有小组信息！</div>
 
         {% endif %}
         
-      </table>
+    
     </div>
 </div>
