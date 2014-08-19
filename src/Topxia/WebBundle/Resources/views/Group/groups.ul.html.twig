@@ -3,7 +3,7 @@
 
     {% for group in groups %}
       {% if group.status=='open' %} 
-            <li class="col-md-4"> 
+            <li class="col-md-{{colNum|default(4)}}"> 
 
                   <div class="panel">
               

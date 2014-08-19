@@ -588,12 +588,13 @@ class GroupController extends BaseController
 
     }
     
-    public function hotGroupAction()
+    public function hotGroupAction($count=15,$colNum=4)
     {
-        $hotGroups = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 15);
+        $hotGroups = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, $count);
         
         return $this->render('TopxiaWebBundle:Group:groups.ul.html.twig', array(
                 'groups' => $hotGroups,
+                'colNum'=>$colNum,
                 )
         );       
     }
