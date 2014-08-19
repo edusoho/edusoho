@@ -29,7 +29,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
 
 	public function getCourseLessonReplayByLessonId($lessonId)
 	{
-        $sql ="SELECT * FROM {$this->getTablename()} WHERE lessonId = ?;";
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE lessonId = ? ORDER BY replayId ASC";
         return $this->getConnection()->fetchAll($sql, array($lessonId));
 	}
 

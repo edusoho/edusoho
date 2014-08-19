@@ -25,9 +25,13 @@
 		  <span class="text-warning">(未发布)</span>
 		{% endif %}
 
-		{% if lesson.status == 'published' and lesson.type == 'live' and lesson.replayStatus == 'ungenerated' %}
+		{% if lesson.status == 'published' and not lesson.isEnd %}
+		  <span class="text-warning">(直播未结束)</span>
+		{% endif %}
+
+		{% if lesson.status == 'published' and lesson.isEnd and lesson.type == 'live' and lesson.replayStatus == 'ungenerated' %}
 		  <span class="text-warning">(未录制回放)</span>
-		{% elseif lesson.status == 'published' and lesson.type == 'live' and lesson.replayStatus == 'generated' %}
+		{% elseif lesson.status == 'published' and lesson.isEnd and lesson.type == 'live' and lesson.replayStatus == 'generated' %}
 		  <span class="text-warning">(已录制回放)</span>
 		{% endif %}
 
@@ -35,14 +39,13 @@
 
 	<div class="item-actions prs">
 		<a class="btn btn-link" title="预览" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
-	{% if lesson.status == 'published' and lesson.type == 'live' %}
+	{% if lesson.status == 'published' and lesson.replayStatus == 'ungenerated' and lesson.type == 'live' and lesson.isEnd %}
 		<button class="btn btn-link replay-lesson-btn" 
 		{% if lesson.replayStatus == 'ungenerated' %}
-		title="录制回放"
+		title="录制"
 		{% else %}
 		title="重新录制"
 		{% endif %}
-
 		 data-url="{{ path('live_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-facetime-video"></span></button>
 	{% endif %}
 

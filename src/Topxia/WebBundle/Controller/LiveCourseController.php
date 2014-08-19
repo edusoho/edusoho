@@ -227,6 +227,13 @@ class LiveCourseController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($id);
         $courseItems = $this->getCourseService()->getCourseItems($course['id']);
 
+        foreach ($courseItems as $key => $item) {
+            if($item["itemType"] == "lesson"){
+                $item["isEnd"] = intval(time()-$item["endTime"])>0;
+                $courseItems[$key] = $item;
+            }
+        }
+
         return $this->render('TopxiaWebBundle:LiveCourseReplay:index.html.twig', array(
             'course' => $course,
             'items' => $courseItems
