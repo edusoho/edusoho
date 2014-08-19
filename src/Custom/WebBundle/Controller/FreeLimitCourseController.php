@@ -7,7 +7,7 @@ use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\Paginator;
 
 
-class freeLimitCourseController extends BaseController
+class FreeLimitCourseController extends BaseController
 {
     public function freeNowAction(Request $request){
         
@@ -31,7 +31,7 @@ class freeLimitCourseController extends BaseController
             $paginator->getPerPageCount()
         );
         
-        return $this->render('CustomWebBundle:freeLimitCourse:free-course-explore.html.twig', array(
+        return $this->render('CustomWebBundle:FreeLimitCourse:free-course-explore.html.twig', array(
             'courses' => $courses,
             'type' => 'freeNow',
             'paginator' => $paginator,
@@ -57,7 +57,7 @@ class freeLimitCourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('CustomWebBundle:freeLimitCourse:free-course-explore.html.twig', array(
+        return $this->render('CustomWebBundle:FreeLimitCourse:free-course-explore.html.twig', array(
             'courses' => $courses,
             'type' => 'freeComing',
             'paginator' => $paginator,
