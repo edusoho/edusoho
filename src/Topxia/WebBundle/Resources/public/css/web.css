@@ -2928,6 +2928,7 @@ body {
 
 .course-wide-list .course-metas {
 	float: right;
+	text-align: right;
 	margin-top: 10px;
 }
 
@@ -4070,60 +4071,3 @@ body {
 	margin-top: 10px;
 
 }
-
-.countdown-show{
-	float: right;
-	padding-right: 10px;
-}
-
-.countdown-list{
-	float: right;
-	margin-top: -130px;
-	padding-right: 10px;
-}
-.countdown-dashboard{
-	float: right;
-	margin-top: -50px;
-}
-
-.countdown-em{
-	float: left;
-	padding-top: 6px;
-}
-
-.countdown{
-	float: left;
-	padding-left: 0px;
-	color: #3e3e3e;
-	font-family: tahoma arial 宋体;
-}
-.countdown-font{
-	display: inline;
-	float: left;
-	margin-right: 5px;
-	padding: 0 5px;
-	color: #fff;
-	font-size: 12px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	-ms-border-radius: 2px;
-	-o-border-radius: 2px;
-	border-radius: 2px;
-	background: #f40;
-}
-
-.countdown span {
-	font-size: 14.0px;
-	color: #dc442f;
-	line-height: 28.0px;
-	/*margin-right: -2px;*/
-}
-
-.countdown em {
-	color: #939292;
-	font-style: normal;
-	font-weight: 400;
-/*	margin-right: -2px;*/
-	font-size: 14px;
-}
-
