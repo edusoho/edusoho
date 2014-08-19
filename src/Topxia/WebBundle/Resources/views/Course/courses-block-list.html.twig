@@ -63,7 +63,9 @@
           {% endif %}
       </div>
     </div>
-    {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course,'pageType':'list'} %}
+    <div class="countdown-list">
+    {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}
+  </div>
   </li>
   {% endfor %}
 </ul>

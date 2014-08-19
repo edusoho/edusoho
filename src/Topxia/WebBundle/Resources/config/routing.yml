@@ -188,6 +188,10 @@ course_buy:
     pattern:  /course/{id}/buy
     defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
 
+course_rebuy:
+    pattern:  /course/{courseId}/course_rebuy
+    defaults: { _controller: TopxiaWebBundle:Course:rebuy }
+
 coupon_check:
     pattern:  /{type}/{id}/coupon/check
     defaults: { _controller: TopxiaWebBundle:Order:couponCheck }
@@ -1156,9 +1160,7 @@ mobile_download:
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
-re_buy:
-    pattern:  /course/{courseId}/re_buy
-    defaults: { _controller: TopxiaWebBundle:Course:rebuy }
+
 #占位
 vip:
     pattern: /vip/

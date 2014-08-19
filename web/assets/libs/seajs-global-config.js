@@ -15,7 +15,6 @@ seajs.config({
 		"jquery.nouislider": "jquery-plugin/nouislider/5.0.0/nouislider",
 		"jquery.nouislider-css": "jquery-plugin/nouislider/5.0.0/nouislider.css",
 		'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker",
-		"datetimepicker-css": "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker.css",
 		"plupload": "jquery-plugin/plupload-queue/2.0.0/plupload",
 		"jquery.plupload-queue-css": "jquery-plugin/plupload-queue/2.0.0/css/queue.css",
 		"jquery.plupload-queue": "jquery-plugin/plupload-queue/2.0.0/queue",
@@ -45,8 +44,7 @@ seajs.config({
 		'swfupload': 'gallery2/swfupload/2.2.0/swfupload',
 		'webuploader': 'gallery2/webuploader/0.1.2/webuploader',
 		'screenfull': 'gallery2/screenfull/1.1.1/screenfull',
-		'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js',
-		'countdown': 'jquery-plugin/countdown/1.0.0/countdown',
+		'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js'
 	},
 
 	// 预加载项

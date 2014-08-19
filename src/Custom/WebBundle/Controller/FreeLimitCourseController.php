@@ -15,7 +15,8 @@ class freeLimitCourseController extends BaseController
         $conditions = array(
             'status' => 'published',
             'freeType' => 'freeNow',
-            'currentTime' => $now,
+            'freeStartTimeLessThan' => $now,
+            'freeEndTimeGreaterThan' => $now,
         );
         $paginator = new Paginator(
             $this->get('request'),
@@ -42,7 +43,7 @@ class freeLimitCourseController extends BaseController
         $conditions = array(
             'status' => 'published',
             'freeType' => 'freeComing',
-            'currentTime' => $now,
+            'freeStartTimeGreaterThan' => $now,
         );
         $paginator = new Paginator(
             $this->get('request'),

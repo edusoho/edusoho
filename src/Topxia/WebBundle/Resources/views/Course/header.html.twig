@@ -18,7 +18,7 @@
             {% endif %}
           {% endif %}
         </h1>
-       {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course,'pageType':'dashboard'} %}
+
         <div class="teachers">
           {% if course.teacherIds|default(null) %}
             教师：
@@ -128,7 +128,7 @@
     {% if not isNonExpired %}
       {% if free_limit_type(course) == 'free_end' %}
         <div class="alert alert-danger alert-dismissable">
-          <a class="btn btn-primary" href="{{path('re_buy',{courseId:course.id})}}" style="float:right;margin-top: -6px;margin-right:-20px" title="">购买</a>
+          <a class="btn btn-primary" href="{{path('course_rebuy',{courseId:course.id})}}" style="float:right;margin-top: -6px;margin-right:-20px" title="">购买</a>
           您购买的课程限时免费活动已结束，无法继续学习课时、提问等。请重新购买该课程。
         </div>
       {% else %}

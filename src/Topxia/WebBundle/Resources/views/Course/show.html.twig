@@ -25,7 +25,10 @@
 </div>
 {% endif %}
 
-{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course,'pageType':'show'} %}
+<div class="countdown-show">
+  {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %} 
+</div>
+
 {% if course.type == 'live' %}
 
   {% include 'TopxiaWebBundle:Course:live-course.html.twig' %}

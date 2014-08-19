@@ -1,15 +1,4 @@
 {% if free_limit_type(course) != 'no_free' and is_feature_enabled('free_limit') and free_limit_type(course) != 'free_end' %}
-<div 
-    {% if pageType == 'show' %}
-        class="countdown-show"
-    {% endif %}
-    {% if pageType == 'dashboard' %}
-        class="countdown-dashboard"
-    {% endif %}
-    {% if pageType == 'list' %}
-        class="countdown-list"
-    {% endif %}>
-    
     {% if free_limit_type(course) == 'free_coming' %}
     <div class="countdown-em">
         <em class="countdown-font">即将限免</em> 
@@ -31,7 +20,7 @@
     <div class="countdown-em">
         <em class="countdown-font">正在限免</em> 
     </div>
-    <div  class="countdown" data-starttime="{{course.freeStartTime|default()|data_format('Y-m-d H:i:s')}}" data-endtime="{{course.freeEndTime|default()|data_format('Y-m-d H:i:s')}}">
+    <div  class="countdown" data-starttime="{{course.freeStartTime|date('Y-m-d H:i:s')}}" data-endtime="{{course.freeEndTime|date('Y-m-d H:i:s')}}">
         <span class="days">00</span>
         <em>天</em>
         <span class="hours">00</span>
@@ -42,7 +31,5 @@
         <em>秒</em>
     </div>
     {% endif %}
-</div>
-
 
 {% endif %}

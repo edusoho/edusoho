@@ -133,11 +133,11 @@ class WebExtension extends \Twig_Extension
         return $this->container->getParameter($name);
     }
 
-    public function dataformatFilter ($time,$format = 'Y-m-d H:i') {
+    public function dataformatFilter ($time) {
         if (empty($time)) {
             return ;
         }
-        return date($format,$time);
+        return date('Y-m-d H:i',$time);
     }
 
     public function smarttimeFilter ($time) {
@@ -529,23 +529,21 @@ class WebExtension extends \Twig_Extension
     }
 
     public function getFreeLimitType($course){
-        if(isset($course['freeStartTime']) && isset($course['freeEndTime'])){
+        if(!empty($course['freeStartTime']) && !empty($course['freeEndTime'])) {
             $startTime = $course['freeStartTime'];
             $endTime = $course['freeEndTime'];
             $now = time();
 
-            if(empty($startTime)){
-                return 'no_free';//不是限免
-            }elseif($startTime > $now){
+            if($startTime > $now) {
                 return 'free_coming';//即将限免
-            }elseif($endTime >= $now){
+            } elseif ($endTime >= $now){
                 return 'free_now';//正在限免
-            }elseif($endTime < $now){
+            } elseif ($endTime < $now){
                 return 'free_end';//限免结束
-            }else{
+            } else {
                 return 'no_free';
             }
-        }else{
+        } else {
             return 'no_free';
         }
     }

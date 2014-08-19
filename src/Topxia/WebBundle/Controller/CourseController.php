@@ -620,7 +620,8 @@ class CourseController extends BaseController
         ));
     }
 
-    public function rebuyAction(Request $request,$courseId){
+    public function rebuyAction(Request $request,$courseId)
+    {
         $user = $this->getCurrentUser();
 
         $this->getCourseService()->removeStudent($courseId, $user['id']);
