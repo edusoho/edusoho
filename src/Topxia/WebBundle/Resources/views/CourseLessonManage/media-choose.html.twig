@@ -16,7 +16,6 @@
         <li class="active"><a class="file-chooser-uploader-tab" href="#video-chooser-upload-pane" data-toggle="tab">上传视频</a></li>
         <li><a href="#video-chooser-disk-pane" data-toggle="tab">从视频库中选择</a></li>
         <li><a href="#video-chooser-import-pane" data-toggle="tab">导入网络视频</a></li>
-        <li><a href="#video-chooser-batch-uploader" data-toggle="tab">断点续传</a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="video-chooser-upload-pane">
@@ -118,60 +117,6 @@
             <span class="input-group-btn">
               <button type="button" class="btn btn-default" data-role="import" data-url="{{ path('course_manage_media_import', {id:course.id}) }}" data-loading-text="正在导入，请稍等">导入</button>
             </span>
-          </div>
-        </div>
-        <div class="tab-pane" id="video-chooser-batch-uploader">
-          <style type="text/css">
-            .filePrew {
-              display: block;
-              position: absolute;
-              top: 10;
-              left: 0;
-              width: 400px;
-              height: 40px;
-              font-size: 100px;
-              /* 增大不同浏览器的可点击区域 */
-              opacity: 0;
-              /* 实现的关键点 */
-            }
-            #progressbar {
-              float: left;
-              width:350px;
-              height: 20px;
-            }
-            .progress {
-              /*width:300px;*/
-              margin-bottom: 0px;
-            }
-          </style>
-          <a href="javascript:void(0);" class="btn_addPic btn btn-default btn-lg">
-                <span>
-                    <i class="glyphicon glyphicon-plus"></i>
-                    添加待上传文件
-                </span>
-                <input id="selectFiles" name="pic" class="filePrew" type="file"/>
-          </a>
-
-          <a href="javascript:void(0);" class="btn_addPic btn btn-default btn-lg">
-                <span>
-                    <i class="glyphicon glyphicon-plus"></i>
-                    上传
-                </span>
-                <input id="btn_upload" name="pic" type="button" />
-          </a>
-          <div id="fileList">
-            <table style="width:600px;margin-top:20px;">
-              <thead>
-                <tr>
-                  <td>文件名称</td>
-                  <td>文件大小</td>
-                  <td>状态</td>
-                </tr>
-              </thead>
-              <tbody>
-                
-              </tbody>
-            </table>
           </div>
         </div>
       </div>

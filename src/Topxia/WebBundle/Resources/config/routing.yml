@@ -449,6 +449,10 @@ course_manage_upload_course_files:
     pattern:  /course/{id}/manage/upload/course/files/{targetType}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseFiles }
 
+course_manage_batch_upload_course_files:
+    pattern:  /course/{id}/manage/batchupload/course/files/{targetType}
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:batchUploadCourseFiles }
+
 course_manage_students:
     pattern:  /course/{id}/manage/students
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }
