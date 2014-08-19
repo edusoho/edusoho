@@ -25,8 +25,8 @@ class BaseService
 
 	protected function getParam($name, $default = null)
 	{
-		$result = $this->request->request->get($name);
-        		return $result ? $result : $default;
+		$result = $this->request->request->get($name, $default);
+        		return $result;
 	}
 
 	public function setDelegator($serviceDelegator)

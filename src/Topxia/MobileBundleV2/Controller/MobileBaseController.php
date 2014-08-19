@@ -10,6 +10,7 @@ use Topxia\Common\ArrayToolkit;
 
 class MobileBaseController extends BaseController
 {
+    const MOBILE_MODULE = 'mobile';
     const TOKEN_TYPE = 'mobile_login';
 
     protected $result = array();
@@ -60,9 +61,9 @@ class MobileBaseController extends BaseController
         $this->getServiceKernel()->setCurrentUser($currentUser);
     }
 
-    protected function getUserToken($request)
+    public function getUserToken($request)
     {
-        $token = $request->query->get('token');
+        $token = $request->headers->get('token', '');
         $token = $this->getUserService()->getToken(self::TOKEN_TYPE, $token);
         if ($token) {
             $this->setCurrentUser($token['userId'], $request);
@@ -70,7 +71,7 @@ class MobileBaseController extends BaseController
         return $token;
     }
 
-    protected function createToken($user, $request)
+    public function createToken($user, $request)
     {
         $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], time() + 3600 * 24 * 30);
         if ($token) {
@@ -171,6 +172,56 @@ class MobileBaseController extends BaseController
 
     }
 
+    public function filterUser($user)
+    {
+        if (empty($user)) {
+            return null;
+        }
+        
+        $users = $this->filterUsers(array(
+            $user
+        ));
+        
+        return current($users);
+    }
+    
+    public function filterUsers($users)
+    {
+        if (empty($users)) {
+            return array();
+        }
+        
+        $container = $this->container;
+        
+        return array_map(function($user) use ($container)
+        {
+            $user['smallAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
+            $user['mediumAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
+            $user['largeAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
+            $user['createdTime']  = date('c', $user['createdTime']);
+            
+            $user['email'] = '';
+            $user['roles'] = array();
+            unset($user['password']);
+            unset($user['salt']);
+            unset($user['createdIp']);
+            unset($user['loginTime']);
+            unset($user['loginIp']);
+            unset($user['loginSessionId']);
+            unset($user['newMessageNum']);
+            unset($user['newNotificationNum']);
+            unset($user['promoted']);
+            unset($user['promotedTime']);
+            unset($user['approvalTime']);
+            unset($user['approvalStatus']);
+            unset($user['tags']);
+            unset($user['point']);
+            unset($user['coin']);
+            
+            return $user;
+        }, $users);
+    }
+
     /**
      * @todo 要移走，放这里不合适
      */
@@ -228,6 +279,16 @@ class MobileBaseController extends BaseController
     public function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    public function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    public function getLogService()
+    {
+        return $this->getServiceKernel()->createService('System.LogService');
     }
 
 }

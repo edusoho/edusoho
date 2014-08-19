@@ -12,11 +12,33 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->formData;
 	}
 
-	public function after(){
-		var_dump("CourseServiceImpl->after");
+
+	public function getCourses()
+	{
+		$conditions['status'] = 'published';
+        		$conditions['type'] = 'normal';
+
+		$start = (int) $this->getParam("start", 0);
+		$limit = (int) $this->getParam("limit", 10);
+		$total = $this->controller->getCourseService()->searchCourseCount($conditions);
+
+		$sort = $this->$this->getParam("start", "latest");
+		$conditions['sort'] = $sort;
+        		$courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
+		
+		$result = array(
+			"start"=>$start,
+			"limit"=>$limit,
+			"totla"=>$total,
+			"data"=>$this->controller->filterCourses($courses)
+			);
+
+		return $result;
 	}
 
-	public function before(){
-		var_dump("CourseServiceImpl->before");
+	public function getLearningCourse()
+	{
+		$token = $this->controller->getUserToken($this->request);
+		return $token;
 	}
 }
