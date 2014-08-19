@@ -399,6 +399,11 @@ admin_setting_refund:
     pattern:  /setting/refund
     defaults: { _controller: TopxiaAdminBundle:Setting:refund }
 
+admin_setting_default:
+    pattern:  /setting/default
+    defaults: { _controller: TopxiaAdminBundle:Setting:default }
+
+
 admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
