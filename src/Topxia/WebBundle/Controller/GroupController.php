@@ -267,8 +267,7 @@ class GroupController extends BaseController
             return $this->createMessageResponse('info','该小组已被关闭');
         }
 
-        $recentlyJoinMember=$this->getGroupService()->searchMembers(array('groupId'=>$id,
-            'role'=>'member'),
+        $recentlyJoinMember=$this->getGroupService()->searchMembers(array('groupId'=>$id),
             array('createdTime','DESC'),0,12);
 
         $memberIds = ArrayToolkit::column($recentlyJoinMember, 'userId');
@@ -589,7 +588,33 @@ class GroupController extends BaseController
 
     }
     
-    public function getGroupMemberRole($userId)
+    public function hotGroupAction()
+    {
+        $hotGroups = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 15);
+        
+        return $this->render('TopxiaWebBundle:Group:groups.ul.html.twig', array(
+                'groups' => $hotGroups,
+                )
+        );       
+    }
+
+    public function hotThreadAction()
+    {
+        $hotThreads = $this->getThreadService()->searchThreads(
+            array(
+                'createdTime'=>time()-7*24*60*60,
+                'status'=>'open'
+                ),
+            $this->filterSort('byPostNum'),0, 11
+        );
+        /*print_r($hotThreads);*/
+        return $this->render('TopxiaWebBundle:Group:hotThread.html.twig', array(
+                'hotThreads' => $hotThreads,
+                )
+        );       
+    }
+
+    private function getGroupMemberRole($userId)
     {
         $user = $this->getCurrentUser();
 

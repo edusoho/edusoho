@@ -141,8 +141,7 @@ class GroupThreadController extends BaseController
 
         $postMember=$this->getUserService()->findUsersByIds($postMemberIds);
 
-        $activeMembers=$this->getGroupService()->searchMembers(array('groupId'=>$id,
-            'role'=>'member'),
+        $activeMembers=$this->getGroupService()->searchMembers(array('groupId'=>$id),
             array('postNum','DESC'),0,12);
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');

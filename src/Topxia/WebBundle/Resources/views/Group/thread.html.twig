@@ -16,7 +16,6 @@
                 <a type="button" {% if filters.type=='onlyOwner' %}class="btn btn-default active" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}"{% else %} class="btn btn-default"  href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}" {% endif %}>只看楼主</a>
                 <a type="button" {% if filters.sort=='desc' %}class="btn btn-default active" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"{% else %}class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"{% endif %}><span class="glyphicon glyphicon-circle-arrow-down"></span> 倒序查看</a>
                 <a type="button" class="btn btn-default" href="#post-thread-form"><span class="glyphicon glyphicon-comment"></span>  回复({{threadMain.postNum}})</a>
-              
             </div>
         <div class="clearfix">
           <h4 style="word-break: break-all;" ><b>{{threadMain.title|sub_text(25)}}</b>{% if threadMain.isElite %}
@@ -41,7 +40,7 @@
                   </div>
                   <div class="col-md-10 " >
                     <div class="media"> </div>
-                    <div class="media">
+                    <div class="media">                      
                       <div class="media-body" >
                         {{threadMain.content|raw}}
                       </div>
@@ -50,9 +49,9 @@
                 </div>
                             
           </div>
+           
           {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3%}
-          
-            
+
               <div class="pull-right" id="post-action">
                   {% if user.id==owner.id or is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
                       <a class="btn btn-link" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
@@ -84,18 +83,19 @@
                             <span class="glyphicon glyphicon-remove-sign"></span> 关闭话题
                             </a>
                   {% endif %}
-              </div>
-    
+              </div>{% include 'TopxiaWebBundle:Group:share.html.twig'%}
+  
           {% else %}
-            <div class="bottom-thread-post col-md-12">  
-              <div class="text-muted pull-right" >
-                1&nbsp;楼 {{threadMain.createdTime|date('Y-m-d H:i:s')}} &nbsp;
-              </div>
+            <div class="bottom-thread-post col-md-12">            
+      {#         <div class="text-muted pull-right" >           
+                &nbsp;&nbsp;1&nbsp;楼 {{threadMain.createdTime|date('Y-m-d H:i:s')}} &nbsp;
+              </div> #}
+              {% include 'TopxiaWebBundle:Group:share.html.twig'%}
             </div>
           {% endif %}
                
       {% endif %}
-  
+
       <table class="table table-hover">
         
       {% if post %}

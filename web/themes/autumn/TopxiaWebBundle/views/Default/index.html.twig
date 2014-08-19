@@ -215,4 +215,31 @@
     </div>
   </div>
 
+  <div class="row row-9-3">
+    <div class="col-lg-9">
+      <div class="panel panel-autumn panel-autumn-default">
+          <div class="panel-heading panel-heading-important">
+            <h2 class="panel-title">
+                最热小组 / <small>Groups</small>
+            </h2><a href="{{path('group_search_group')}}" class="pull-right">&raquo;更多</a>
+          </div>
+          <div class="panel-body">
+            {{ render(controller('TopxiaWebBundle:Group:hotGroup')) }}
+          </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="panel panel-autumn panel-autumn-default">
+          <div class="panel-heading panel-heading-important">
+            <h2 class="panel-title">
+                最热话题 / <small>Threads</small>
+            </h2>
+          </div>
+          <div class="panel-body">
+             {{ render(controller('TopxiaWebBundle:Group:hotTHread')) }}
+          </div>
+      </div>
+    </div>
+  </div>
+
 {% endblock %}

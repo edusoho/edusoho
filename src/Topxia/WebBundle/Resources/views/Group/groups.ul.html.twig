@@ -3,10 +3,10 @@
 
     {% for group in groups %}
       {% if group.status=='open' %} 
-            <li class="col-md-6"> 
+            <li class="col-md-4"> 
 
-                  <div class="panel panel-default">
-                    <div class="panel-body">
+                  <div class="panel">
+              
                         <div class="media">
                             <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}" class="pull-left">
                               {% if group.logo %}
@@ -16,14 +16,14 @@
                               {%endif%}
                             </a>
                             <div class="media-body">
-                              <p ><a class="btn-link" href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title}}</a></p>
+                              <p ><a  href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></p>
                               <div class="text-muted text-normal">
                                 {{group.memberNum}}个成员
                                 {{group.threadNum}}个话题
                               </div>
                             </div> 
                           </div>
-                      </div>
+                   
                     </div>
 
               </li>

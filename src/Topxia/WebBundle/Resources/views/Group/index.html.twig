@@ -21,7 +21,7 @@
                                             <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
                                      {% endif %}
                                     </a>
-                                    <p class="mvs"><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}" >{{group.title}}</a></p>
+                                    <p class="mvs"><a  href="{{path('group_index',{id:group.id})}}" title="{{group.title}}" >{{group.title}}</a></p>
                          </div>
                           
                         {% endfor %}
@@ -34,7 +34,7 @@
 
         <div class="es-row-wrap ">
             <div class="row">        
-                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 热门话题
+                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 最近话题
                 </div> 
 
                 <div class="col-md-12">           
@@ -43,12 +43,12 @@
                                 {% for threadinfo in recentlyThread%}  
                                     <li class="media"> 
                                           <a href="{{path('group_index',{id:threadinfo.groupId})}}" title="{{groupinfo[threadinfo.groupId].title}}" class="pull-right" style="color:#3cb373">
-                                          {{groupinfo[threadinfo.groupId].title}} 
+                                          {{groupinfo[threadinfo.groupId].title|sub_text(8)}} 
                                           </a>
                                           {{ web_macro.user_avatar(owners[threadinfo.userId], 'pull-left media-object media-object-small')}}
 
                                           <div class="media-body" style="word-break: break-all;" >
-                                                 <a class="link-muted" href="{{path('group_thread_index',{id:threadinfo.groupId,threadId:threadinfo.id})}}">{{threadinfo.title|sub_text(40)}} </a>
+                                                 <a  href="{{path('group_thread_index',{id:threadinfo.groupId,threadId:threadinfo.id})}}">{{threadinfo.title|sub_text(40)}} </a>
                                                  <br>
                                                  <div class="text-muted text-normal"><br>
                                                 
