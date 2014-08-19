@@ -1,6 +1,6 @@
 .course-grid:hover {
-	box-shadow: 0 2px 8px #bbb;
-	border-color: #e57259\9;
+	/*box-shadow: 0 2px 8px #bbb;*/
+	border-color: #e57259;
 }
 
 .homepage .news li em {
@@ -96,7 +96,7 @@
 .teachers-item p {
 	margin-top: 20px;
 	font-size: 12px;
-	min-height: 40px;
+	height: 40px;
 	text-align: left;
 }
 
