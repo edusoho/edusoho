@@ -54,7 +54,7 @@
           <span class="course-price">
             {% if course.price > 0 %}
               {% if free_limit_type(course) == 'free_now' %}
-                0.0 元
+                0.00 元
               {% else %}
                 {{ course.price }}元
               {% endif %}  

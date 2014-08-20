@@ -55,7 +55,7 @@
           价　格：
           {% if course.price > 0 %}
             {% if free_limit_type(course) == 'free_now' %}
-              <span class="money-num">0.0</span>
+              <span class="money-num">0.00</span>
               <span class="money-text">元</span>
               <span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
               <span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
