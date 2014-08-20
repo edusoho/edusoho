@@ -15,10 +15,36 @@
         <label >用户默认头像</label>
       </div>
       <div class="controls col-md-8 radios">
+        {{ radios('defaultAvatar', {1:'开启', 0:'关闭'}, defaultSetting.defaultAvatar) }}
+      <p class="help-block">网校内未上传头像的用户，都会显示该默认头像</p>    
 
-      <p class="help-block">网校内未上传头像的用户，都会显示该默认头像</p>
+        <div class="form-group">
+          <div class="col-md-2 control-label"><b>头像</b></div>
+          <div class="controls col-md-8 controls">
+            <img src="">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label">
+          
+          </div>
+          <div class="controls col-md-8 controls">
+            <input id="course-picture-field" type="file" name="picture" accept="image/gif,image/jpeg,image/png">
+            <p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"></div>
+          <div class="controls col-md-8 controls">
+            
+            <button type="submit" class="btn btn-primary">上传</button>
+          </div>
+        </div>
       </div>
     </div>
+
   </fieldset>
 
 <div class="page-header"><h1>课程</h1></div>
@@ -26,13 +52,40 @@
   <fieldset>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >课程默认头像</label>
+        <label >课程默认图片</label>
       </div>
       <div class="controls col-md-8 radios">
-
+        {{ radios('defaultCoursePicture', {1:'开启', 0:'关闭'}, defaultSetting.defaultCoursePicture) }}        
       <p class="help-block">网校内未上传图片的课程，都会显示该图片</p>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><b>课程图片</b></div>
+          <div class="controls col-md-8 controls">
+            <img src="">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label">
+          
+          </div>
+          <div class="controls col-md-8 controls">
+            <input id="course-picture-field" type="file" name="picture" accept="image/gif,image/jpeg,image/png">
+            <p class="help-block">你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"></div>
+          <div class="controls col-md-8 controls">
+            
+            <button type="submit" class="btn btn-primary">上传</button>
+          </div>
+        </div>
       </div>
     </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </fieldset>
 
 <div class="page-header"><h1>分享内容</h1></div>

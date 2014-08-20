@@ -368,22 +368,22 @@ class SettingController extends BaseController
     public function defaultAction(Request $request)
     {
         $defaultSetting = $this->getSettingService()->get('default', array());
-        // var_dump($defaultSetting);exit();
-        // $default = array(
-        //     'maxRefundDays' => 0,
-        //     'applyNotification' => '',
-        //     'successNotification' => '',
-        //     'failedNotification' => '',
-        // );
 
-        // $defaultSetting = array_merge($default, $defaultSetting);
+        $default = array(
+            'defaultAvatar' => 0,
+            'defaultCoursePicture' => 0,
+            'articleShareContent' => '',
+            'courseShareContent' => '',
+        );
 
-        // if ($request->getMethod() == 'POST') {
-        //     $refundSetting = $request->request->all();
-        //     $this->getSettingService()->set('refund', $refundSetting);
-        //     $this->getLogService()->info('system', 'update_settings', "更新退款设置", $refundSetting);
-        //     $this->setFlashMessage('success', '退款设置已保存！');
-        // }
+        $defaultSetting = array_merge($default, $defaultSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $refundSetting = $request->request->all();
+            $this->getSettingService()->set('default', $defaultSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新系统默认设置", $defaultSetting);
+            $this->setFlashMessage('success', '系统默认设置已保存！');
+        }
 
         return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
             'defaultSetting' => $defaultSetting,
