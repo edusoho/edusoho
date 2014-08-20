@@ -1173,7 +1173,7 @@ group_member_center:
     pattern:  /mygroup/center
     defaults: { _controller: TopxiaWebBundle:Group:memberCenter }
 group_member_join:
-    pattern:  /mygroup/center/join/{type}
+    pattern:  /mygroup/center/join
     defaults: { _controller: TopxiaWebBundle:Group:memberJoin}
 group_member_threads:
     pattern:  /mygroup/center/threads

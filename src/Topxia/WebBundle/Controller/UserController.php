@@ -76,9 +76,35 @@ class UserController extends BaseController
     {
         $user = $this->tryGetUser($id);
 
+        $admins=$this->getGroupService()->searchMembers(array('userId'=>$user['id'],'role'=>'admin'),
+            array('createdTime',"DESC"),0,1000
+            );
+        $owners=$this->getGroupService()->searchMembers(array('userId'=>$user['id'],'role'=>'owner'),
+            array('createdTime',"DESC"),0,1000
+            );
+        $members=array_merge($admins,$owners);
+        $groupIds = ArrayToolkit::column($members, 'groupId');
+        $adminGroups=$this->getGroupService()->getGroupsByids($groupIds);
+
+        $paginator=new Paginator(
+            $this->get('request'),
+            $this->getGroupService()->searchMembersCount(array('userId'=>$user['id'])),
+            12
+            );
+
+        $members=$this->getGroupService()->searchMembers(array('userId'=>$user['id']),array('createdTime',"DESC"),$paginator->getOffsetCount(),
+                $paginator->getPerPageCount());
+
+        $groupIds = ArrayToolkit::column($members, 'groupId');
+        $groups=$this->getGroupService()->getGroupsByids($groupIds);
+
+
         return $this->render('TopxiaWebBundle:User:group.html.twig', array(
             'user' => $user,
             'type' => 'group',
+            'adminGroups'=>$adminGroups,
+            'paginator'=>$paginator,
+            'groups'=>$groups
         ));
     }
 
@@ -249,6 +275,11 @@ class UserController extends BaseController
             'paginator' => $paginator,
             'type' => 'teach',
         ));
+    }
+
+    private function getGroupService() 
+    {   
+        return $this->getServiceKernel()->createService('Group.GroupService');
     }
 
 }

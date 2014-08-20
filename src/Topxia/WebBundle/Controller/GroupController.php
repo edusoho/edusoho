@@ -162,7 +162,7 @@ class GroupController extends BaseController
           ));
     }
 
-    public function memberJoinAction(Request $request,$type)
+    public function memberJoinAction(Request $request)
     {
         $user=$this->getCurrentUser();
 
@@ -188,12 +188,7 @@ class GroupController extends BaseController
         $groupIds = ArrayToolkit::column($members, 'groupId');
         $groups=$this->getGroupService()->getGroupsByids($groupIds);
         
-        if($type=="userIndex"){
-            $name="join";
-        }else{
-            $name="groupMemberJoin";
-        }
-        return $this->render("TopxiaWebBundle:Group:{$name}.html.twig",array(
+        return $this->render("TopxiaWebBundle:Group:groupMemberJoin.html.twig",array(
             'user'=>$user,
             'adminGroups'=>$adminGroups,
             'paginator'=>$paginator,

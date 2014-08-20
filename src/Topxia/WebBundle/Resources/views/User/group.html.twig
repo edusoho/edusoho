@@ -5,10 +5,27 @@
 {% set pageNav = 'group' %}
 
 {% block main %}
-
-<div class="row">
-  <div class="col-md-12">
-     {{ render(controller('TopxiaWebBundle:Group:memberJoin', {type:"userIndex"})) }}
-  </div>
-</div>
+      <div class="row">
+        <div class="col-md-12"> 
+          <div class="page-header">
+            <h4> 我管理的小组</h4>
+          </div>
+          {% include 'TopxiaWebBundle:Group:groups.ul.html.twig' with {
+          'groups':adminGroups,  }
+          %}
+          
+        </div>
+        <div class="col-md-12">
+          <div class="page-header">
+            <h4> 我加入的小组</h4>
+          </div>
+          {% include 'TopxiaWebBundle:Group:groups.ul.html.twig' with {
+          'groups':groups,  }
+          %}
+          
+        </div>
+        <div class="col-md-12 pull-left">
+          {{ web_macro.paginator(paginator) }}
+        </div>
+      </div>
 {% endblock %}
