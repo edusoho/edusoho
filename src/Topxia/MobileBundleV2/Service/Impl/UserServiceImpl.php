@@ -36,7 +36,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $result = array(
             'token' => empty($token) ? '' : $token['token'],
-            'user' => empty($user) ? null : $this->filterUser($user),
+            'user' => empty($user) ? null : $this->controller->filterUser($user),
             'site' => $this->getSiteInfo($this->request)
         );
         
