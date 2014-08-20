@@ -102,8 +102,8 @@ services:
             password: %database_password%
 
     session.handler.pdo:
-        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
-        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%]
+        class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
+        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context]
 
     kernel.listener.ajax_exception_listener:
         class: Topxia\WebBundle\Listener\AjaxExceptionListener
