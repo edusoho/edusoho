@@ -821,7 +821,6 @@ class SettingController extends BaseController
             );
 
         $consult = array_merge($default, $consult);
-        var_dump($consult);exit();
         if ($request->getMethod() == 'POST') {
             $consult = $request->request->all();
             ksort($consult['qq']);
