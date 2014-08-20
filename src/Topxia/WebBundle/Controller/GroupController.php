@@ -13,7 +13,17 @@ use Topxia\Common\Paginator;
 
 class GroupController extends BaseController 
 {
+    public function flashAction(Request $request)
+    {   
+        $data=$request->query->all();
+        $this->getSettingService()->set("flash",$data);
+        return new Response(json_encode($this->getSettingService()->get("flash")));
+    }
 
+        protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
     public function indexAction() 
     {   
         $mycreatedGroup = array();

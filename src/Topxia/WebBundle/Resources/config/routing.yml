@@ -1013,6 +1013,10 @@ user_group:
     pattern:  /user/{id}/group
     defaults: { _controller: TopxiaWebBundle:User:group }
 
+user_group_flash: 
+    pattern:  /flash
+    defaults: { _controller: TopxiaWebBundle:Group:flash }
+
 user_following:
     pattern:  /user/{id}/following
     defaults: { _controller: TopxiaWebBundle:User:following }
