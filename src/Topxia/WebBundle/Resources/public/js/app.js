@@ -63,4 +63,34 @@ define(function(require, exports, module) {
 		}
 	});
 
+
+    floatConsult();
+
+    function floatConsult()
+    {
+        var $element = $('#float-consult');
+        if ($element.length == 0) {
+            return ;
+        }
+
+        if ($element.data('display') == 'off') {
+            return ;
+        }
+
+        var marginTop = (0 - $element.height() / 2) + 'px' ;
+        $element.css( {marginTop: marginTop, visibility: 'visible'});
+
+        $element.find('.btn-group-vertical .btn').popover({
+            placement: 'left',
+            trigger: 'hover',
+            html: true,
+            content: function() {
+                return $($(this).data('contentElement')).html();
+            }
+        });
+    }
+
+
+
+
 });

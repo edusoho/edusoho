@@ -30,7 +30,8 @@ class DefaultController extends BaseController
             'courses' => $courses,
             'categories' => $categories,
             'blocks' => $blocks,
-            'recentLiveCourses' => $recentLiveCourses
+            'recentLiveCourses' => $recentLiveCourses,
+            'consultDisplay' => true
         ));
     }
 
