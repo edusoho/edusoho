@@ -227,7 +227,7 @@ define(function(require, exports, module) {
                                 Notify.warning('视频文件正在转换中，稍后完成后即可查看');
                                 return ;
                             }
-console.log(lesson)
+
                             var player = VideoJS("lesson-video-player", {
                                 techOrder: ['flash','html5']
                             });
@@ -259,7 +259,7 @@ console.log(lesson)
 
                             that.set('videoPlayer', player);
 
-                        } else {console.log(lesson)
+                        } else {
                             $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
                             swfobject.embedSWF(lesson.mediaUri, 
                                 'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
