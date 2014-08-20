@@ -22,7 +22,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $token = $this->controller->getUserToken($this->request);
-        if (empty($token) or  $token['type'] != self::TOKEN_TYPE) {
+        if ($token == null ||  $token['type'] != self::TOKEN_TYPE) {
             $token = null;
         }
 
