@@ -215,7 +215,7 @@ define(function(require, exports, module) {
                     mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
                     mediaPlayer.on('ended', function() {
                         that._onFinishLearnLesson();
-                    });console.log(lesson)
+                    });
                     mediaPlayer.play();
 
                 } else {
