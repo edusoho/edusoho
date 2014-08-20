@@ -21,7 +21,7 @@ class UserServiceImpl extends BaseService implements UserService
             return $this->createErrorResponse('client_closed', '没有搜索到该网校！');
         }
 
-        $token = $this->getUserToken($request);
+        $token = $this->controller->getUserToken($this->request);
         if (empty($token) or  $token['type'] != self::TOKEN_TYPE) {
             $token = null;
         }
@@ -37,10 +37,10 @@ class UserServiceImpl extends BaseService implements UserService
         $result = array(
             'token' => empty($token) ? '' : $token['token'],
             'user' => empty($user) ? null : $this->filterUser($user),
-            'site' => $this->getSiteInfo($request)
+            'site' => $this->getSiteInfo($this->request)
         );
         
-        $this->controller->getLogService()->info(MobileController::MOBILE_MODULE, "user_login", "用户二维码登录",  array(
+        $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_login", "用户二维码登录",  array(
             "userToken" => $token)
         );
 
