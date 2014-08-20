@@ -3987,6 +3987,7 @@ body {
     right: 0;
     top: 50%;
     visibility: hidden;
+    z-index: 999999;
 }
 
 .float-consult .popover {
