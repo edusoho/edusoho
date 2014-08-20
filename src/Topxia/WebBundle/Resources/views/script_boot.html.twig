@@ -20,9 +20,11 @@
         <span class="btn {{consult.color}} float-consult-phone-btn" data-container=".float-consult-phone-btn" data-title="电话客服" data-content-element="#consult-phone-content"><span class="icon icon-phone"></span></span>
         {% set break = 1 %}
       {% endfor %} 
+
       {% if consult.webchatURI is not empty %}
         <span class="btn {{consult.color}} float-consult-weixin-btn" data-container=".float-consult-weixin-btn" data-title="微信" data-content-element="#consult-weixin-content"><span class="icon icon-weixin"></span></span>
       {% endif %}
+      
       {% if consult.email is not empty %}
         <span class="btn {{consult.color}} float-consult-email-btn" data-container=".float-consult-email-btn" data-title="电子邮箱" data-content-element="#consult-email-content"><span class="icon icon-email"></span></span>
       {% endif %}
