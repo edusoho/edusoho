@@ -113,32 +113,5 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         );
         return $banner;
     }
-
-    private function getSiteInfo($request) {
-        $site = $this->controller->getSettingService()->get('site', array());
-        $mobile = $this->controller->getSettingService()->get('mobile', array());
-        if (!empty($mobile['logo'])) {
-            $logo = $request->getSchemeAndHttpHost() . '/' . $mobile['logo'];
-        } else {
-            $logo = '';
-        }
-        $splashs = array();
-        for ($i = 1; $i < 5; $i++) {
-            if (!empty($mobile['splash' . $i])) {
-                $splashs[] = $request->getSchemeAndHttpHost() . '/' . $mobile['splash' . $i];
-            }
-        }
-        return array(
-            'name' => $site['name'],
-            'url' => $request->getSchemeAndHttpHost() . '/mapi_v2',
-            'host'=> $request->getSchemeAndHttpHost(),
-            'logo' => $logo,
-            'splashs' => $splashs,
-            'apiVersionRange' => array(
-                "min" => "2.0.0",
-                "max" => "2.0.0"
-            ) ,
-        );
-    }
 }
 

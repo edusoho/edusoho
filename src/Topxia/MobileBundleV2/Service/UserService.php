@@ -5,4 +5,5 @@ interface UserService
 {
 	public function getVersion();
 	public function login();
+	public function loginWithToken();
 }

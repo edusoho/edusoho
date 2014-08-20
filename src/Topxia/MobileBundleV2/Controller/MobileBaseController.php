@@ -201,7 +201,6 @@ class MobileBaseController extends BaseController
             $user['createdTime']  = date('c', $user['createdTime']);
             
             $user['email'] = '';
-            $user['roles'] = array();
             unset($user['password']);
             unset($user['salt']);
             unset($user['createdIp']);
