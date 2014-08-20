@@ -9,19 +9,16 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function getCategorys()
     {
         $category = $this->getParam("category");
+        
         if (empty($category)) {
-            return $this->controller->getCategoryService()->findAllCategories();
-        }
-
-        $group= $this->controller->getCategoryService()->getCategoryByCode($category);
-
-        if (empty($group)) {
-            $categories = array();
+            $categories = $this->controller->getCategoryService()->findGroupRootCategories("course");
         } else {
-            if ($this->controller->getCategoryService()->getGroupByCode($group['code'])){
-                $categories = $this->controller->getCategoryService()->findCategories($group['id']);
-            } else {
+            $group= $this->controller->getCategoryService()->getCategoryByCode($category);
+            if (empty($group)) {
                 $categories = array();
+            } else {
+                $ids = $this->controller->getCategoryService()->findCategoryChildrenIds($group['id']);
+                $categories = $this->controller->getCategoryService()->findCategoriesByIds($ids);
             }
         }
 
