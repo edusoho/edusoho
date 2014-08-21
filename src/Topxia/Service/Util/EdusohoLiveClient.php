@@ -74,6 +74,21 @@ class EdusohoLiveClient
         return $this->callRemoteApi('GET', 'LiveCapacity', $args);
     }
 
+    public function entryReplay($liveId, $replayId)
+    {
+        $url = "http://webinar.vhall.com/record.php?module=viewrec&id={$liveId}&rsid={$replayId}";
+        return $url;
+    }
+
+    public function createReplayList($liveId, $title)
+    {
+        $args = array(
+            "liveId" => $liveId, 
+            "title" => $title
+        );
+        return $this->callRemoteApi('POST', 'LiveReplayCreate', $args);
+    }
+
     private function callRemoteApi($httpMethod, $action, array $args)
     {
         $url = $this->makeApiUrl($action);

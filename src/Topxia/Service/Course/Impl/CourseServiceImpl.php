@@ -1881,6 +1881,53 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getAnnouncementDao()->deleteAnnouncement($id);
 	}
 	
+	public function generateLessonReplay($courseId,$lessonId)
+	{
+		$lesson = $this->getLessonDao()->getLesson($lessonId);
+		$mediaId = $lesson["mediaId"];
+		$client = LiveClientFactory::createClient();
+		$replayList = $client->createReplayList($mediaId, "录播回放");
+		if(array_key_exists("error", $replayList)){
+			return $replayList;
+		}
+		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
+		foreach (json_decode($replayList["data"],true) as $key => $replay) {
+			$fields = array();
+			$fields["courseId"] = $courseId;
+			$fields["lessonId"] = $lessonId;
+			$fields["title"] = $replay["subject"];
+			$fields["replayId"] = $replay["id"];
+			$fields["userId"] = $this->getCurrentUser()->id;
+			$fields["createdTime"] = time();
+			$this->getCourseLessonReplayDao()->addCourseLessonReplay($fields);
+		}
+		$fields = array(
+			"replayStatus" => "generated"
+		);
+		$this->getLessonDao()->updateLesson($lessonId, $fields);
+		return $replayList;
+	}
+
+	public function entryReplay($lessonId, $courseLessonReplayId)
+	{
+		$lesson = $this->getLessonDao()->getLesson($lessonId);
+		$mediaId = $lesson["mediaId"];
+		$client = LiveClientFactory::createClient();
+		$email = $this->getCurrentUser()->email;
+		$courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);
+		$url = $client->entryReplay($mediaId, $courseLessonReplay["replayId"]);
+		return $url;
+	}
+
+	public function getCourseLessonReplayByLessonId($lessonId)
+	{
+		return $this->getCourseLessonReplayDao()->getCourseLessonReplayByLessonId($lessonId);
+	}
+
+	private function getCourseLessonReplayDao()
+    {
+        return $this->createDao('Course.CourseLessonReplayDao');
+    }
 
     private function getAnnouncementDao()
     {

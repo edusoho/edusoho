@@ -200,6 +200,47 @@ class LiveCourseController extends BaseController
         );
     }
 
+    public function replayCreateAction(Request $request, $courseId, $lessonId)
+    {
+        $resultList = $this->getCourseService()->generateLessonReplay($courseId,$lessonId);
+        if(array_key_exists("error", $resultList)) {
+            return $this->createJsonResponse($resultList);
+        }
+        return $this->render('TopxiaWebBundle:LiveCourseReplay:list-item.html.twig', array(
+            'course' => $this->getCourseService()->getCourse($courseId),
+            'lesson' => $this->getCourseService()->getCourseLesson($courseId, $lessonId),
+        ));
+    }
+
+    public function entryReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
+    {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $url = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+        return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
+            'lesson' => $lesson,
+            'url' => $url
+        ));
+    }
+
+    public function replayManageAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        $courseItems = $this->getCourseService()->getCourseItems($course['id']);
+
+        foreach ($courseItems as $key => $item) {
+            if($item["itemType"] == "lesson"){
+                $item["isEnd"] = intval(time()-$item["endTime"])>0;
+                $courseItems[$key] = $item;
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:LiveCourseReplay:index.html.twig', array(
+            'course' => $course,
+            'items' => $courseItems
+        ));
+    }
+
+
     private function getRootCategory($categoryTree, $category)
     {
         $start = false;
