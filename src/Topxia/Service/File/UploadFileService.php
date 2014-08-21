@@ -36,5 +36,7 @@ interface UploadFileService
 
     public function reconvertFile($id, $convertCallback);
 
+    public function reconvertOldFile($id, $convertCallback, $pipeline);
+
 
 }
