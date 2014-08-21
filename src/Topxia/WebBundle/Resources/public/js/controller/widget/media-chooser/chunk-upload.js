@@ -74,7 +74,7 @@ define(function(require, exports, module) {
 			return token;
 		},
 		upload: function(fileScop){
-	        if (file.size < fileScop.defaultBlockSize) {
+	        if (fileScop.file.size < fileScop.defaultBlockSize) {
                 this.uploadSmallFile(fileScop.file);
             } else {
                 this.uploadLargeFile(fileScop);
@@ -86,7 +86,7 @@ define(function(require, exports, module) {
 	        return (fileSize + blockMask) >> blockBits;
 	    },
 	    getBlocksize: function(fsize, blkIdex) {
-	    	var blkSize = this.get("blkSize");
+	    	var blkSize = this.get("defaultBlockSize");
 	        var s = fsize > (blkIdex + 1) * blkSize ? blkSize : fsize - blkIdex * blkSize;
 	        return s;
 	    },
@@ -108,12 +108,13 @@ define(function(require, exports, module) {
 	    },
 		uploadBlock: function(fileScop){
 			fileScop.currentBlockSize = this.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex); 
-			fileScop.currentChunkSize = this.getChunkSize(fileScop.currentChunkOffset, fileScop.currentBlockSize);
+			fileScop.currentChunkSize = this.getChunkSize(0, fileScop.currentBlockSize);
 			
-			var chunk = this.getChunk(fileScop.file, fileScop.currentChunkOffsetInBlockInFile, chunkSize);
+			var chunk = this.getChunk(fileScop.file, fileScop.uploadedBytes, fileScop.currentChunkSize);
 			this.mkBlock(fileScop, chunk);
 		},
 		mkBlock: function(fileScop, chunk){
+			console.log(fileScop);
 			var self=this;
 			var xhr = new XMLHttpRequest();
             xhr.open('POST', this.get("uploadUrl") + "/mkblk/" + fileScop.currentBlockSize, true);
@@ -123,7 +124,7 @@ define(function(require, exports, module) {
                 if (evt.lengthComputable) {
                     var nowDate = new Date().getTime();
                     var x = (evt.loaded) / 1024;
-                    var y = (nowDate - fileScop.startDate)) / 1000;
+                    var y = (nowDate - fileScop.startDate) / 1000;
                     var uploadSpeed = (x / y);
                     var formatSpeed;
                     if (uploadSpeed > 1024) {
@@ -144,12 +145,12 @@ define(function(require, exports, module) {
                 	fileScop.uploadedBytes += fileScop.currentChunkSize;
         			fileScop.currentChunkIndex ++;
 					fileScop.currentChunkSize = self.getChunkSize(fileScop.defaultChunkSize*fileScop.currentChunkIndex, fileScop.currentBlockSize);
-
+					console.log("fileScop.currentChunkSize:"+ fileScop.currentChunkSize);
 					if(fileScop.currentChunkSize>0){
 						var chunk = self.getChunk(fileScop.file, fileScop.uploadedBytes, fileScop.currentChunkSize);
                     	self.putChunk(fileScop, chunk, blkRet);
 					}else{
-						fileScop.blockCtx[blkIdex] = blkRet.ctx;
+						fileScop.blockCtxs[fileScop.currentBlockIndex] = blkRet.ctx;
 						self.mkFile(fileScop);
 					}
                 }
@@ -162,8 +163,8 @@ define(function(require, exports, module) {
             xhr.open('POST', this.get("uploadUrl") + "/mkfile/" + fileScop.file.size, true);
             xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token.postParams.token);
             var ctxs="";
-            $.each(fileScop.ctxList, function(i,n){
-            	if(i < (ctxList.length-1))
+            $.each(fileScop.blockCtxs, function(i,n){
+            	if(i < (fileScop.blockCtxs.length-1))
             		ctxs += n+",";
             	else
             		ctxs += n;
@@ -210,7 +211,7 @@ define(function(require, exports, module) {
 						var chunk = self.getChunk(file, fileScop.uploadedBytes, chunkSize);
 						blkRet = self.putChunk(fileScop, chunk, blkRet);
 					}else{
-						fileScop.blockCtx[fileScop.currentBlockIndex] = blkRet.ctx;
+						fileScop.blockCtxs[fileScop.currentBlockIndex] = blkRet.ctx;
 						fileScop.currentBlockIndex++;
 						if(fileScop.currentBlockIndex<fileScop.blockCount){
 							fileScop.blockSize = self.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex); 
@@ -266,18 +267,16 @@ define(function(require, exports, module) {
 					file: file,
 					startDate: new Date().getTime(),
 					uploadedBytes: 0,
+					blockCtxs: blockCtxs,
+					token: token,
 
-					defaultBlockSize: this.get("blkSize"),
+					defaultBlockSize: this.get("defaultBlockSize"),
 					blockCount: blockCount,
 					currentBlockIndex: 0,
 					currentBlockSize: 0,
 
 					currentChunkSize: 0,
-					currentChunkOffsetInBlock: 0,
-					currentChunkOffsetInBlockInFile: 0,
-					currentChunkIndex: 0,
-
-					token: token
+					currentChunkIndex: 0
 				};
 				this.upload(fileScop);
 				fileIndex++;
