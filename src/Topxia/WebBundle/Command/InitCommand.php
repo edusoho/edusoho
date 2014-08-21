@@ -26,7 +26,7 @@ class InitCommand extends BaseCommand
 		$user = $this->initAdminUser($output);
 
 		$this->initSiteSetting($output);
-		$this->initContactSetting($output);
+		$this->initConsultSetting($output);
 		$this->initRegisterSetting($user, $output);
 		$this->initMailerSetting($output);
 		$this->initPaymentSetting($output);
