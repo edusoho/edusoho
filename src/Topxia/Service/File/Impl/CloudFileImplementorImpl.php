@@ -85,30 +85,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $file;
     }
 
-    public function saveConvertResult3($file, array $result = array())
-    {
-        if (empty($result['id'])) {
-            throw new \RuntimeException('数据中id不能为空');
-        }
-
-        if ($result['code'] != 0) {
-            $file['convertStatus'] = 'error';
-            goto return_result;
-        }
-
-        if (empty($file['convertParams']['convertor'])) {
-            $file['convertStatus'] = 'error';
-            goto return_result;
-        }
-
-        $convertor = $this->getConvertor($file['convertParams']['convertor']);
-
-        $file = $convertor->saveConvertResult3($file, $result);
-
-        return_result:
-        return $file;
-    }
-
     public function convertFile($file, $status, $result=null, $callback = null)
     {
         if ($status == 'doing') {

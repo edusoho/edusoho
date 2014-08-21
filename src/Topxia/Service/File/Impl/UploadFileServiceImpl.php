@@ -150,28 +150,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (empty($file)) {
             throw $this->createServiceException("文件(#{$id})不存在，转换失败");
         }
+        $file['convertParams']['convertor'] = 'HLSEncryptedVideo';
 
         $fileNeedUpdateFields = array();
-
-        if (empty($file['convertParams'])) {
-            $convertParams = array(
-                'convertor' => 'HLSEncryptedVideo',
-                'segtime' => 10,
-                'videoQuality' => 'low',
-                'audioQuality' => 'low',
-                'video' => array('240k', '440k', '640k'),
-                'audio' => array('32k', '48k', '64k'),
-                'hlsKeyUrl' => 'http://hlskey.edusoho.net/placeholder',
-                'hlsKey' => $this->generateKey(16),
-            );
-
-            $file['convertParams'] = $convertParams;
-            $fileNeedUpdateFields['convertParams'] = json_encode($convertParams);
-        }
 
         $file = $this->getFileImplementorByFile($file)->saveConvertResult($file, $result);
 
         if ($file['convertStatus'] == 'success') {
+            $fileNeedUpdateFields['convertParams'] = json_encode($file['convertParams']);
             $fileNeedUpdateFields['metas2'] = json_encode($file['metas2']);
             $fileNeedUpdateFields['updatedTime'] = time();
             $this->getUploadFileDao()->updateFile($id, $fileNeedUpdateFields);
