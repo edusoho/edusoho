@@ -6,10 +6,11 @@ define(function(require, exports, module) {
 			fileQueue : [],
 			uploadButton:'',
 			tokenUrl: '/uploadfile/params',
-			blkSize: 4 * 1024 * 1024,
+			defaultBlockSize: 4 * 1024 * 1024,
 			uploadUrl:'http://up.qiniu.com',
 			defaultChunkSize: 1024 * 1024,
-			tableArray: null
+			tableArray: null,
+			uploadTmps: 0
 		},
 
 		events: {
@@ -72,11 +73,11 @@ define(function(require, exports, module) {
 			});
 			return token;
 		},
-		upload: function(file){
-	        if (file.size < this.get("blkSize")) {
-                this.uploadSmallFile(file);
+		upload: function(fileScop){
+	        if (file.size < fileScop.defaultBlockSize) {
+                this.uploadSmallFile(fileScop.file);
             } else {
-                this.uploadLargeFile(file);
+                this.uploadLargeFile(fileScop);
             }
 		},
 		blockCnt: function(fileSize) {
@@ -89,13 +90,8 @@ define(function(require, exports, module) {
 	        var s = fsize > (blkIdex + 1) * blkSize ? blkSize : fsize - blkIdex * blkSize;
 	        return s;
 	    },
-		uploadLargeFile: function(file){
-			this.set("startDate", new Date().getTime());
-			var blockCount = this.blockCnt(file.size);
-			blockCtxs = new Array();
-			var token = this.getToken();
-			this.uploadBlock(blockCount, token, file, blockCtxs);
-//			this.mkFile(token, file, blockCtxs)
+		uploadLargeFile: function(fileScop){
+			this.uploadBlock(fileScop);
 		},
 		getChunkSize: function(offset, blkSize) {
 			var defaultChunkSize = this.get("defaultChunkSize");
@@ -110,26 +106,24 @@ define(function(require, exports, module) {
 	        }
 	        return null;
 	    },
-		uploadBlock: function(blockCount, token, file, blockCtxs){
-			var blkIdex=0;
-			var blockSize=this.getBlocksize(file.size, blkIdex); 
-			var chunkSize = this.getChunkSize(0, blockSize);
-			var offset = blkIdex*this.get("blkSize");
-			var chunk = this.getChunk(file, offset, chunkSize);
-			this.mkBlock(blockCount, token, file, chunk, blkIdex, blockSize, blockCtxs);
+		uploadBlock: function(fileScop){
+			fileScop.currentBlockSize = this.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex); 
+			fileScop.currentChunkSize = this.getChunkSize(fileScop.currentChunkOffset, fileScop.currentBlockSize);
+			
+			var chunk = this.getChunk(fileScop.file, fileScop.currentChunkOffsetInBlockInFile, chunkSize);
+			this.mkBlock(fileScop, chunk);
 		},
-		mkBlock: function(blockCount, token, file, firstChunk, blkIdex, blockSize, blockCtx){
-			console.log("chunkIndex:"+0+"blkIdex:"+blkIdex);
+		mkBlock: function(fileScop, chunk){
 			var self=this;
 			var xhr = new XMLHttpRequest();
-            xhr.open('POST', this.get("uploadUrl") + "/mkblk/" + blockSize, true);
-            xhr.setRequestHeader("Authorization", "UpToken " + token.postParams.token);
+            xhr.open('POST', this.get("uploadUrl") + "/mkblk/" + fileScop.currentBlockSize, true);
+            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token.postParams.token);
 			
             xhr.upload.addEventListener("progress", function(evt) {
                 if (evt.lengthComputable) {
                     var nowDate = new Date().getTime();
                     var x = (evt.loaded) / 1024;
-                    var y = (nowDate - self.get("startDate")) / 1000;
+                    var y = (nowDate - fileScop.startDate)) / 1000;
                     var uploadSpeed = (x / y);
                     var formatSpeed;
                     if (uploadSpeed > 1024) {
@@ -137,37 +131,38 @@ define(function(require, exports, module) {
                     } else {
                         formatSpeed = uploadSpeed.toFixed(2) + "Kb\/s";
                     }
-                    var tmp = evt.loaded;
-                    var percentComplete = Math.round(100 * tmp / file.size);
-                    // if (events["progress"]) {
-                    //     fireEvent("progress")(percentComplete, formatSpeed);
-                    // }
+                    var tmp = self.get("uploadTmps")+evt.loaded;
+                    var percentComplete = Math.round(100 * tmp / fileScop.file.size);
+                    $("#progressbar0").attr("style", "width: " + percentComplete + "%");
+                    $("#progressbarLabel0").text(percentComplete + "%" + ", 速度: " + formatSpeed);
                 }
             }, false);
             xhr.onreadystatechange = function(response) {
                 if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
                 	var blkRet = JSON.parse(xhr.responseText);
-        			var chunkIndex=1;
-					var chunkSize = self.getChunkSize(self.get("defaultChunkSize")*(chunkIndex), blockSize);
-					if(chunkSize>0){
-						var offset = blkIdex*self.get("blkSize")+self.get("defaultChunkSize")*chunkIndex;
-						var chunk = self.getChunk(file, offset, chunkSize);
-                    	self.putChunk(blockCount,file, chunk, blkRet, token, chunkIndex, blkIdex, blockSize, blockCtx);
+
+                	fileScop.uploadedBytes += fileScop.currentChunkSize;
+        			fileScop.currentChunkIndex ++;
+					fileScop.currentChunkSize = self.getChunkSize(fileScop.defaultChunkSize*fileScop.currentChunkIndex, fileScop.currentBlockSize);
+
+					if(fileScop.currentChunkSize>0){
+						var chunk = self.getChunk(fileScop.file, fileScop.uploadedBytes, fileScop.currentChunkSize);
+                    	self.putChunk(fileScop, chunk, blkRet);
 					}else{
-						blockCtx[blkIdex] = blkRet.ctx;
-						self.mkFile(token, file, blockCtx);
+						fileScop.blockCtx[blkIdex] = blkRet.ctx;
+						self.mkFile(fileScop);
 					}
                 }
             };
-            xhr.send(firstChunk);
+            xhr.send(chunk);
 
 		},
-		mkFile: function(token, file, ctxList){
+		mkFile: function(fileScop){
 			var xhr = new XMLHttpRequest();
-            xhr.open('POST', this.get("uploadUrl") + "/mkfile/" + file.size, true);
-            xhr.setRequestHeader("Authorization", "UpToken " + token.postParams.token);
+            xhr.open('POST', this.get("uploadUrl") + "/mkfile/" + fileScop.file.size, true);
+            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token.postParams.token);
             var ctxs="";
-            $.each(ctxList, function(i,n){
+            $.each(fileScop.ctxList, function(i,n){
             	if(i < (ctxList.length-1))
             		ctxs += n+",";
             	else
@@ -180,35 +175,51 @@ define(function(require, exports, module) {
             }
             xhr.send(ctxs);
 		},
-		putChunk: function(blockCount, file, chunk, blkRet, token, chunkIndex, blkIdex, blockSize, blockCtx){
-			console.log("chunkIndex:"+chunkIndex+"blkIdex:"+blkIdex+" "+blkRet.offset);
+		putChunk: function(fileScop, chunk, blkRet){
+			var uploadChunkSize = chunk.size;
 			var self = this;
 			var xhr = new XMLHttpRequest();
             xhr.open('POST', this.get("uploadUrl") + "/bput/" + blkRet.ctx + "/" + blkRet.offset, true);
-            xhr.setRequestHeader("Authorization", "UpToken " + token.postParams.token);
+            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token.postParams.token);
             xhr.upload.addEventListener("progress", function(evt) {
-            	//console.log("progress");
+            	if (evt.lengthComputable) {
+                    var nowDate = new Date().getTime();
+                    var x = (evt.loaded) / 1024;
+                    var y = (nowDate - fileScop.startDate) / 1000;
+                    var uploadSpeed = (x / y);
+                    var formatSpeed;
+                    if (uploadSpeed > 1024) {
+                        formatSpeed = (uploadSpeed / 1024).toFixed(2) + "Mb\/s";
+                    } else {
+                        formatSpeed = uploadSpeed.toFixed(2) + "Kb\/s";
+                    }
+                    var tmp = fileScop.uploadedBytes+evt.loaded;
+                    var percentComplete = Math.round(100 * tmp / file.size);
+                    $("#progressbar0").attr("style", "width: " + percentComplete + "%");
+                    $("#progressbarLabel0").text(percentComplete + "%" + ", 速度: " + formatSpeed);
+                }
             },false);
             xhr.onreadystatechange = function(response) {
 				if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
+					fileScop.uploadedBytes += fileScop.currentChunkSize;
 					var blkRet=JSON.parse(xhr.responseText);
-					chunkIndex++;
-					var chunkSize = self.getChunkSize(self.get("defaultChunkSize")*(chunkIndex), blockSize);
+					fileScop.currentChunkIndex++;
+					var chunkSize = self.getChunkSize(fileScop.defaultChunkSize*(fileScop.currentChunkIndex), fileScop.currentBlockSize);
 					if(chunkSize>0){
-						var offset = blkIdex*self.get("blkSize")+self.get("defaultChunkSize")*chunkIndex;
-						var chunk = self.getChunk(file, offset, chunkSize);
-						blkRet = self.putChunk(blockCount, file, chunk, blkRet, token, chunkIndex, blkIdex, blockSize, blockCtx);
+						fileScop.currentChunkSize = chunkSize;
+						var chunk = self.getChunk(file, fileScop.uploadedBytes, chunkSize);
+						blkRet = self.putChunk(fileScop, chunk, blkRet);
 					}else{
-						blockCtx[blkIdex] = blkRet.ctx;
-						blkIdex++;
-						if(blkIdex<blockCount){
-							blockSize=self.getBlocksize(file.size, blkIdex); 
-							chunkSize = self.getChunkSize(0, blockSize);
-							offset = blkIdex*self.get("blkSize");
-							chunk = self.getChunk(file, offset, chunkSize);
-							self.mkBlock(blockCount, token, file, chunk, blkIdex, blockSize, blockCtx);
+						fileScop.blockCtx[fileScop.currentBlockIndex] = blkRet.ctx;
+						fileScop.currentBlockIndex++;
+						if(fileScop.currentBlockIndex<fileScop.blockCount){
+							fileScop.blockSize = self.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex); 
+							fileScop.currentChunkIndex=0;
+							fileScop.currentChunkSize = self.getChunkSize(fileScop.currentChunkIndex, fileScop.blockSize);
+							var chunk = self.getChunk(fileScop.file, fileScop.uploadedBytes, fileScop.currentChunkSize);
+							self.mkBlock(fileScop, chunk);
 						}else{
-							self.mkFile(token, file, blockCtx);
+							self.mkFile(fileScop);
 						}
 					}
 				}
@@ -244,10 +255,32 @@ define(function(require, exports, module) {
 	        console.log(file.name);
 	    },
 		onUpload: function(element){
-			var index=0;
+			var fileIndex = 0;
 			while(this.get("fileQueue").length>0) {
 				var file = this.get("fileQueue").pop();
-				this.upload(file);
+				var blockCount = this.blockCnt(file.size);
+				var token = this.getToken();
+				var blockCtxs = new Array();
+				var fileScop = {
+					fileIndex: fileIndex,
+					file: file,
+					startDate: new Date().getTime(),
+					uploadedBytes: 0,
+
+					defaultBlockSize: this.get("blkSize"),
+					blockCount: blockCount,
+					currentBlockIndex: 0,
+					currentBlockSize: 0,
+
+					currentChunkSize: 0,
+					currentChunkOffsetInBlock: 0,
+					currentChunkOffsetInBlockInFile: 0,
+					currentChunkIndex: 0,
+
+					token: token
+				};
+				this.upload(fileScop);
+				fileIndex++;
 			}
 		},
 		setup: function() {
