@@ -48,7 +48,7 @@ define(function(require, exports, module) {
             $parent.append($template.html());
 
             $('[data-role=item-delete]').on('click',function(){
-                $(this).parent().remove();
+                $(this).parent().parent().remove();
             });
             
             nextIndex = nextIndex + 1;
@@ -56,7 +56,7 @@ define(function(require, exports, module) {
         });
         
         $('[data-role=item-delete]').on('click',function(){
-                $(this).parent().remove();
+                $(this).parent().parent().remove();
             });
     }
 });
