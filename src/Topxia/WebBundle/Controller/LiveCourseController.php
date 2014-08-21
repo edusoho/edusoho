@@ -66,18 +66,6 @@ class LiveCourseController extends BaseController
         ));
 	}
 
-  	public function createAction(Request $request)
-    {
-        if($request->getMethod() == 'POST') {
-            $data = $request->query->all();
-            exit();
-        }
-            
-        return $this->render('TopxiaWebBundle:LiveCourse:live-lesson-modal.html.twig',array(
-        	
-        ));
-    }
-
     public function ratingCoursesBlockAction()
     {   
         $conditions = array(
