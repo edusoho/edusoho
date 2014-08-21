@@ -87,6 +87,8 @@ interface CourseService
 	
 	public function getCourseLessons($courseId);
 
+	public function findLessonsByTypeAndMediaId($type, $mediaId);
+
 	public function searchLessons($conditions, $orderBy, $start, $limit);
 
 	public function searchLessonCount($conditions);

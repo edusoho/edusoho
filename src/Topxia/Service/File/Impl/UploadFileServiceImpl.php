@@ -308,7 +308,17 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $this->getUploadFileDao()->updateFile($file['id'], $fileNeedUpdateFields);
 
-        return array('convertHash' => $convertHash);
+
+        $subTarget = $this->createService('Course.CourseService')->findLessonsByTypeAndMediaId('video', $file['id']) ? : array();
+        if (!empty($subTarget)) {
+            $subTarget = $subTarget[0];
+        }
+
+        return array(
+            'convertHash' => $convertHash,
+            'courseId' => empty($subTarget['courseId']) ? $target['targetId'] : $subTarget['courseId'],
+            'lessonId' => empty($subTarget['id']) ? 0 : $subTarget['id'],
+        );
     }
 
     private function generateKey ($length = 0 )
