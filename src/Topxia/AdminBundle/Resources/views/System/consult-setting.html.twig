@@ -26,7 +26,8 @@
       <label >浮动条颜色</label>
     </div>
     <div class="controls col-md-8 radios">
-      {{ radios('color', {'default':'<span class="btn btn-default btn-lg" disabled></span>', 'success':'<span class="btn btn-success btn-lg" disabled></span>', 'warning':'<span class="btn btn-warning btn-lg" disabled></span>', 'info':'<span class="btn btn-info btn-lg" disabled></span>', 'primary':'<span class="btn btn-primary btn-lg" disabled></span>', 'danger':'<span class="btn btn-danger btn-lg" disabled></span>'}, consult.color) }}
+{#       {{ radios('color', {'default':'<span class="btn btn-default btn-lg" disabled></span>', 'success':'<span class="btn btn-success btn-lg" disabled></span>', 'warning':'<span class="btn btn-warning btn-lg" disabled></span>', 'info':'<span class="btn btn-info btn-lg" disabled></span>', 'primary':'<span class="btn btn-primary btn-lg" disabled></span>', 'danger':'<span class="btn btn-danger btn-lg" disabled></span>'}, consult.color) }} #}
+  {{ radios('color', {'default':'<span class="btn btn-default btn-lg" disabled></span>', 'warning':'<span class="btn btn-warning btn-lg" disabled></span>','danger':'<span class="btn btn-danger btn-lg" disabled></span>'}, consult.color) }}
     </div>
   </div>
   <div data-role="template" style="display:none">
