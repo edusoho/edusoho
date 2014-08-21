@@ -23,7 +23,8 @@ class GroupThreadController extends BaseController
         if($request->getMethod()=="POST"){
             $thread = $request->request->all();
 
-            if(empty(trim($thread['thread']['title']))){
+            $title=trim($thread['thread']['title']);
+            if(empty($title)){
                 $this->setFlashMessage('danger',"话题名称不能为空！");
 
                 return $this->render('TopxiaWebBundle:Group:addThread.html.twig',
