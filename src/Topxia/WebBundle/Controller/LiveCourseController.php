@@ -206,9 +206,11 @@ class LiveCourseController extends BaseController
         if(array_key_exists("error", $resultList)) {
             return $this->createJsonResponse($resultList);
         }
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $lesson["isEnd"] = intval(time()-$lesson["endTime"])>0;
         return $this->render('TopxiaWebBundle:LiveCourseReplay:list-item.html.twig', array(
             'course' => $this->getCourseService()->getCourse($courseId),
-            'lesson' => $this->getCourseService()->getCourseLesson($courseId, $lessonId),
+            'lesson' => $lesson,
         ));
     }
 
