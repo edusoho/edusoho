@@ -259,34 +259,36 @@ CREATE TABLE `course_favorite` (
 
 DROP TABLE IF EXISTS `course_lesson`;
 CREATE TABLE `course_lesson` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课时ID',
-  `courseId` int(10) unsigned NOT NULL COMMENT '课时所属课程ID',
-  `chapterId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课时所属章节ID',
-  `number` int(10) unsigned NOT NULL COMMENT '课时编号',
-  `seq` int(10) unsigned NOT NULL COMMENT '课时在课程中的序号',
-  `free` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为免费课时',
-  `status` enum('unpublished','published') NOT NULL DEFAULT 'published' COMMENT '课时状态',
-  `title` varchar(255) NOT NULL COMMENT '课时标题',
-  `summary` text COMMENT '课时摘要',
-  `tags` text COMMENT '课时标签',
-  `type` varchar(64) NOT NULL DEFAULT 'text' COMMENT '课时类型',
-  `content` text COMMENT '课时正文',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `courseId` int(10) unsigned NOT NULL,
+  `chapterId` int(10) unsigned NOT NULL DEFAULT '0',
+  `number` int(10) unsigned NOT NULL,
+  `seq` int(10) unsigned NOT NULL,
+  `free` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `status` enum('unpublished','published') NOT NULL DEFAULT 'published',
+  `title` varchar(255) NOT NULL,
+  `summary` text,
+  `tags` text,
+  `type` varchar(64) NOT NULL DEFAULT 'text',
+  `content` text,
   `giveCredit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学完课时获得的学分',
   `requireCredit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习课时前，需达到的学分',
-  `mediaId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '媒体文件ID',
+  `mediaId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '媒体文件ID(user_disk_file.id)',
   `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
   `mediaName` varchar(255) NOT NULL DEFAULT '' COMMENT '媒体文件名称',
   `mediaUri` text COMMENT '媒体文件资源名',
-  `length` int(11) unsigned DEFAULT NULL COMMENT '时长',
+  `length` int(11) unsigned DEFAULT NULL,
   `materialNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传的资料数量',
   `quizNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '测验题目数量',
-  `learnedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学的学员数',
-  `viewedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '查看数',
+  `learnedNum` int(10) unsigned NOT NULL DEFAULT '0',
+  `viewedNum` int(10) unsigned NOT NULL DEFAULT '0',
   `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时开始时间',
   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时结束时间',
   `memberNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时加入人数',
-  `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
-  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+  `replayStatus` enum('ungenerated','generating','generated') NOT NULL DEFAULT 'ungenerated',
+  `userId` int(10) unsigned NOT NULL,
+  `createdTime` int(10) unsigned NOT NULL,
+  `limitNum` int(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -303,6 +305,18 @@ CREATE TABLE `course_lesson_learn` (
   UNIQUE KEY `userId_lessonId` (`userId`,`lessonId`),
   KEY `userId_courseId` (`userId`,`courseId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `course_lesson_replay`;
+CREATE TABLE IF NOT EXISTS `course_lesson_replay` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `lessonId` int(10) unsigned NOT NULL COMMENT '所属课时',
+  `courseId` int(10) unsigned NOT NULL COMMENT '所属课程',
+  `title` varchar(255) NOT NULL COMMENT '名称',
+  `replayId` text NOT NULL COMMENT '云直播中的回放id',
+  `userId` int(10) unsigned NOT NULL COMMENT '创建者',
+  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 DROP TABLE IF EXISTS `course_lesson_view`;
 CREATE TABLE `course_lesson_view` (
