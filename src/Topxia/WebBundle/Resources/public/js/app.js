@@ -81,8 +81,10 @@ define(function(require, exports, module) {
 
         var isIE10 = /MSIE\s+10.0/i.test(navigator.userAgent)
 	    && (function() {"use strict";return this === undefined;}());
-	    
-    	if (isIE10) {
+
+	    var isIE11 = (/Trident\/7\./).test(navigator.userAgent);
+
+    	if (isIE10 || isIE11) {
 	        $element.css( {marginTop: marginTop, visibility: 'visible',marginRight:'16px'});
     	} else {
 	        $element.css( {marginTop: marginTop, visibility: 'visible'});
