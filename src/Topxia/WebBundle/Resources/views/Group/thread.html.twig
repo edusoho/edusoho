@@ -29,17 +29,11 @@
           <div style="word-break: break-all;" class="thread-list">
            
               <div class="row">
-                <div class="col-md-2">
-                    <div class="media"> </div>
-                    <div class="media"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:owner.id}) }}">
-                      <img src="{{ file_path(owner.largeAvatar, 'avatar-large.png') }}">
+                  <div class="col-md-12" >
+                     <div class="pull-left" style="width:80px;"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:owner.id}) }}">
+                      <img src="{{ file_path(owner.largeAvatar, 'avatar-large.png') }}" >
                     </a></div>
-                    
-                    <div class="media">  {{ web_macro.user_link(owner , 'link-muted ') }}<span class="label label-danger" style="padding:.2em .2em .2em;">楼主</span></div>
-                     
-                  </div>
-                  <div class="col-md-10 " >
-                    <div class="media"> </div>
+                    {{ web_macro.user_link(owner , 'link-muted ') }}<span class="label label-danger" style="padding:.2em .2em .2em;">楼主</span>
                     <div class="media">                      
                       <div class="media-body" >
                         {{threadMain.content|raw}}
@@ -87,36 +81,26 @@
   
           {% else %}
             <div class="bottom-thread-post col-md-12">            
-      {#         <div class="text-muted pull-right" >           
-                &nbsp;&nbsp;1&nbsp;楼 {{threadMain.createdTime|date('Y-m-d H:i:s')}} &nbsp;
-              </div> #}
               {% include 'TopxiaWebBundle:Group:share.html.twig'%}
             </div>
           {% endif %}
                
       {% endif %}
 
-      <table class="table table-hover">
+      <table class="table ">
         
       {% if post %}
         {% for post in post %}
           <tr style="word-break: break-all;" class="thread-list" id="post-{{post.id}}">
             <td>
-                <div class="col-md-2 " >
-                    <div class="media"> </div>
+                <div class="col-md-12" >
 
-                    <div class="media"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:post.userId}) }}">
+                    <div class="pull-left" style="width:80px;"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:post.userId}) }}">
                       <img src="{{ file_path(postMember[post.userId].largeAvatar, 'avatar-large.png') }}">
                     </a>
                     </div> 
-
-                    <div class="media">  {{ web_macro.user_link(postMember[post.userId] , 'link-muted ') }}{% if post.userId==owner.id %}<span class="label label-danger" style="padding:.2em .2em .2em;">楼主</span>{% endif %}
-                    </div>
-
-                </div>
-
-                <div class="col-md-10" >
-                    <div class="media"> </div>
+                     {{ web_macro.user_link(postMember[post.userId] , 'link-muted ') }}{% if post.userId==owner.id %}<span class="label label-danger" style="padding:.2em .2em .2em;">楼主</span>{% endif %}
+                                     
                     <div class="media"  >
                       <div class="media-body" >
                         {{post.content|raw}}
@@ -131,7 +115,7 @@
                     {% else %}
                       {{ (loop.index+1)+10*(paginator.currentPage-1) }}
                     {% endif %}
-                    楼 {{post.createdTime|date('Y-m-d H:i:s')}}
+                    楼 {{post.createdTime|smart_time}}
                   </div>
                   {% if user.id==post.userId%}
                   <div class="course-view">
