@@ -5,28 +5,28 @@
 
       {% set break = 0 %}
       {% for qq in consult.qq if qq.name is not empty and break == 0 %}
-        <span class="btn {{consult.color}} float-consult-qq-btn" data-container=".float-consult-qq-btn" data-title="QQ客服" data-content-element="#consult-qq-content"><span class="icon icon-qq"></span></span>
+        <span class="btn btn-{{consult.color}} float-consult-qq-btn" data-container=".float-consult-qq-btn" data-title="QQ客服" data-content-element="#consult-qq-content"><span class="icon icon-qq"></span></span>
         {% set break = 1 %}
       {% endfor %}
 
       {% set break = 0 %}
       {% for qqgroup in consult.qqgroup if qqgroup.name is not empty and break == 0 %}
-        <span class="btn {{consult.color}} float-consult-qqgroup-btn" data-container=".float-consult-qqgroup-btn" data-title="QQ群" data-content-element="#consult-qqgroup-content"><span class="icon icon-qqgroup"></span></span>
+        <span class="btn btn-{{consult.color}} float-consult-qqgroup-btn" data-container=".float-consult-qqgroup-btn" data-title="QQ群" data-content-element="#consult-qqgroup-content"><span class="icon icon-qqgroup"></span></span>
         {% set break = 1 %}
       {% endfor %} 
 
       {% set break = 0 %}
-      {% for hotline in consult.hotline if hotline.name is not empty and break == 0 %} 
-        <span class="btn {{consult.color}} float-consult-phone-btn" data-container=".float-consult-phone-btn" data-title="电话客服" data-content-element="#consult-phone-content"><span class="icon icon-phone"></span></span>
+      {% for phone in consult.phone if phone.name is not empty and break == 0 %} 
+        <span class="btn btn-{{consult.color}} float-consult-phone-btn" data-container=".float-consult-phone-btn" data-title="电话客服" data-content-element="#consult-phone-content"><span class="icon icon-phone"></span></span>
         {% set break = 1 %}
       {% endfor %} 
 
       {% if consult.webchatURI is not empty %}
-        <span class="btn {{consult.color}} float-consult-weixin-btn" data-container=".float-consult-weixin-btn" data-title="微信" data-content-element="#consult-weixin-content"><span class="icon icon-weixin"></span></span>
+        <span class="btn btn-{{consult.color}} float-consult-weixin-btn" data-container=".float-consult-weixin-btn" data-title="微信" data-content-element="#consult-weixin-content"><span class="icon icon-weixin"></span></span>
       {% endif %}
       
       {% if consult.email is not empty %}
-        <span class="btn {{consult.color}} float-consult-email-btn" data-container=".float-consult-email-btn" data-title="电子邮箱" data-content-element="#consult-email-content"><span class="icon icon-email"></span></span>
+        <span class="btn btn-{{consult.color}} float-consult-email-btn" data-container=".float-consult-email-btn" data-title="电子邮箱" data-content-element="#consult-email-content"><span class="icon icon-email"></span></span>
       {% endif %}
     </div>
 
@@ -56,16 +56,16 @@
           <strong>服务时间：</strong> {{ consult.worktime }}
         </p>
 
-        {% for hotline in consult.hotline if hotline.name is not empty %}
+        {% for phone in consult.phone if phone.name is not empty %}
           <p>
-            {{ hotline.name }}： {{ hotline.number }}
+            {{ phone.name }}： {{ phone.number }}
           </p>
         {% endfor %}
       </div>
 
       
       <div id="consult-weixin-content">
-        <img src="{{ asset(consult.webchatURI) }}" class="qrcode">
+        <img src="{{ asset(consult.webchatURI) }}" class="qrcode center-block">
       </div>
 
       <div id="consult-email-content">

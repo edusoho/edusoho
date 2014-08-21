@@ -459,6 +459,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getCourseDao()->deleteCourse($id);
 
+		if($course["type"] == "live"){
+			$this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id);
+		}
+
 		$this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
 
 		return true;
@@ -808,7 +812,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 						$memberFields = array();
 						$memberFields['learnedNum'] = $this->getLessonLearnDao()->getLearnCountByUserIdAndCourseIdAndStatus($learn['userId'], $learn['courseId'], 'finished') - 1;
 						$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
-						// var_dump($member);exit();
 						$this->getMemberDao()->updateMember($member['id'], $memberFields);
 					}
 				}
@@ -1922,6 +1925,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getCourseLessonReplayByLessonId($lessonId)
 	{
 		return $this->getCourseLessonReplayDao()->getCourseLessonReplayByLessonId($lessonId);
+	}
+
+	public function deleteCourseLessonReplayByLessonId($lessonId)
+	{
+		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
 	}
 
 	private function getCourseLessonReplayDao()

@@ -326,6 +326,9 @@ class CourseLessonManageController extends BaseController
 		$client->deleteLive($lesson['mediaId']);
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);
 		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
+		if($course['type']=='live'){
+			$this->getCourseService()->deleteCourseLessonReplayByLessonId($lessonId);
+		}
 		return $this->createJsonResponse(true);
 	}
 
