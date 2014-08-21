@@ -63,6 +63,7 @@ class CourseController extends BaseController
 			'sort' => $sort,
 			'paginator' => $paginator,
 			'categories' => $categories,
+			'consultDisplay' => true,
 		));
 	}
 
@@ -284,7 +285,8 @@ class CourseController extends BaseController
 			'nextLiveLesson' => $nextLiveLesson,
 			'currentTime' => $currentTime,
 			'courseReviews' => $courseReviews,
-			'weeks' => $weeks
+			'weeks' => $weeks,
+			'consultDisplay' => true,
 		));
 
 	}
