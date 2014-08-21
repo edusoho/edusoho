@@ -173,7 +173,7 @@ define(function(require, exports, module) {
                     return true;
                 }
             },
-            '{{display}}必须小于5M'
+            '{{display}}必须小于2M'
         ],
         [
             'remote',

@@ -1,4 +1,4 @@
-{% if setting('consult.enabled', 0) and consultDisplay|default(false) %}
+{% if setting('consult.enabled', 0) and (consultDisplay|default(false) or siteNav|default() == '/' ) %}
 {% set consult = setting('consult') %}
   <div id="float-consult" class="float-consult">
     <div class="btn-group-vertical">
@@ -22,7 +22,7 @@
       {% endfor %} 
 
       {% if consult.webchatURI is not empty %}
-        <span class="btn btn-{{consult.color}} float-consult-weixin-btn" data-container=".float-consult-weixin-btn" data-title="微信" data-content-element="#consult-weixin-content"><span class="icon icon-weixin"></span></span>
+        <span class="btn btn-{{consult.color}} float-consult-weixin-btn" data-container=".float-consult-weixin-btn" data-title="微信公众号" data-content-element="#consult-weixin-content"><span class="icon icon-weixin"></span></span>
       {% endif %}
       
       {% if consult.email is not empty %}
@@ -35,7 +35,7 @@
         {% for qq in consult.qq if qq.name is not empty %}
           <p>
             <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" >
-              <img border="0" src="http://wpa.qq.com/pa?p=2:{{ qq.number }}:52" alt="点击这里给我发消息" title="点击这里给我发消息"/>
+              <img border="0" src="http://wpa.qq.com/pa?p=2:{{ qq.number }}:52" alt="" title="点击这里给我发消息"/>
               {{ qq.name }}
             </a>
           </p>
