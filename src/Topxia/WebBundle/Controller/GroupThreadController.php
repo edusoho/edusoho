@@ -22,6 +22,18 @@ class GroupThreadController extends BaseController
 
         if($request->getMethod()=="POST"){
             $thread = $request->request->all();
+
+            if(empty(trim($thread['thread']['title']))){
+                $this->setFlashMessage('danger',"话题名称不能为空！");
+
+                return $this->render('TopxiaWebBundle:Group:addThread.html.twig',
+                    array(
+                    'id'=>$id,
+                    'groupinfo'=>$groupinfo,
+                    'is_groupmember' => $this->getGroupMemberRole($id)
+                    ));
+            }
+
             $info=array(
                 'title'=>$thread['thread']['title'],
                 'content'=>$thread['thread']['content'],

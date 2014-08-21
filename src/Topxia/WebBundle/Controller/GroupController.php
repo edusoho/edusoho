@@ -84,6 +84,13 @@ class GroupController extends BaseController
         if ($request->getMethod() == 'POST') {
 
             $mygroup = $request->request->all();
+
+            if(empty(trim($mygroup['group']['grouptitle']))){
+                $this->setFlashMessage('danger',"小组名称不能为空！");
+
+                return $this->render("TopxiaWebBundle:Group:groupadd.html.twig");
+            }
+
             $group = array(
                 'title' => $mygroup['group']['grouptitle'],
                 'about' => $mygroup['group']['about'],
