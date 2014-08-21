@@ -812,12 +812,12 @@ class SettingController extends BaseController
             'qqgroup' => array(
                 array('name' => '','number' => ''),
                 ),
-            'hotline' => array(
+            'phone' => array(
                 array('name' => '','number' => ''),
                 ),
             'webchatURI' => '',
             'email' => '',
-            'color' => 'btn-default',
+            'color' => 'default',
             );
 
         $consult = array_merge($default, $consult);
@@ -825,7 +825,7 @@ class SettingController extends BaseController
             $consult = $request->request->all();
             ksort($consult['qq']);
             ksort($consult['qqgroup']);
-            ksort($consult['hotline']);
+            ksort($consult['phone']);
             $this->getSettingService()->set('consult', $consult);
             $this->getLogService()->info('system', 'update_settings', "更新QQ客服设置", $consult);
             $this->setFlashMessage('success', 'QQ客服设置已保存！');
