@@ -1,4 +1,4 @@
-{% if setting('consult.enabled', 0) and consultDisplay|default(false) %}
+{% if setting('consult.enabled', 0) and (consultDisplay|default(false) or setting('theme.uri') == 'graceful' ) %}
 {% set consult = setting('consult') %}
   <div id="float-consult" class="float-consult">
     <div class="btn-group-vertical">
