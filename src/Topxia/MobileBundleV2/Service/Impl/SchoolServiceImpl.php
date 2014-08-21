@@ -7,6 +7,16 @@ use Topxia\MobileBundleV2\Service\SchoolService;
 
 class SchoolServiceImpl extends BaseService implements SchoolService {
 
+    public function getUserterms()
+    {
+        $setting = $this->controller->getSettingService()->get('auth', array());
+        if (array_key_exists("user_terms_body", $setting)) {
+            $userTerms = $setting['user_terms_body'];
+        }
+        return array(
+            'userTerms' => $userTerms
+            );
+    }
 
     public function getWeekRecommendCourses()
     {
