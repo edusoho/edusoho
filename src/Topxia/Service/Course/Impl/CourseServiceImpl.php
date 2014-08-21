@@ -1894,7 +1894,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return $replayList;
 		}
 		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
-		foreach (json_decode($replayList["data"],true) as $key => $replay) {
+		foreach ($replayList as $key => $replay) {
 			$fields = array();
 			$fields["courseId"] = $courseId;
 			$fields["lessonId"] = $lessonId;

@@ -23,9 +23,9 @@
 
 			{% for id, item in items %}
 			  {% if 'chapter' in id %}
-			    {% include 'TopxiaWebBundle:LiveCourseReplay:chapter-item.html.twig' with {chapter: item} %}
+			    {% include 'TopxiaWebBundle:LiveCourseReplayManage:chapter-item.html.twig' with {chapter: item} %}
 			  {% elseif 'lesson' in id %}
-			    {% include 'TopxiaWebBundle:LiveCourseReplay:list-item.html.twig' with {lesson: item} %}
+			    {% include 'TopxiaWebBundle:LiveCourseReplayManage:list-item.html.twig' with {lesson: item} %}
 			  {% endif %}
 			{% endfor %}
 			

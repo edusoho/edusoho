@@ -196,7 +196,7 @@ class LiveCourseController extends BaseController
         }
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $lesson["isEnd"] = intval(time()-$lesson["endTime"])>0;
-        return $this->render('TopxiaWebBundle:LiveCourseReplay:list-item.html.twig', array(
+        return $this->render('TopxiaWebBundle:LiveCourseReplayManage:list-item.html.twig', array(
             'course' => $this->getCourseService()->getCourse($courseId),
             'lesson' => $lesson,
         ));
@@ -224,7 +224,7 @@ class LiveCourseController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:LiveCourseReplay:index.html.twig', array(
+        return $this->render('TopxiaWebBundle:LiveCourseReplayManage:index.html.twig', array(
             'course' => $course,
             'items' => $courseItems
         ));
