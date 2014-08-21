@@ -278,6 +278,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file['convertParams']['hlsKeyUrl'] = 'http://hlskey.edusoho.net/placeholder';
             $file['convertParams']['hlsKey'] = $this->generateKey(16);
             $fileNeedUpdateFields['convertParams'] = json_encode($file['convertParams']);
+            $file['convertParams']['convertor'] = 'HLSEncryptedVideo';
         }
 
         if (empty($file['convertParams'])) {
