@@ -135,9 +135,7 @@ class DefaultController extends BaseController
     public function jumpAction(Request $request)
     {
         $courseId = intval($request->query->get('id'));
-        $userId = $this->getCurrentUser()->id;
-        $course = $this->getCourseService()->getCourse($courseId);
-        if($course["userId"] == $userId){
+        if($this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id)){
             $url = $this->generateUrl('live_course_manage_replay', array('id' => $courseId));
         }else{
             $url = $this->generateUrl('course_show', array('id' => $courseId));
