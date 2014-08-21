@@ -31,15 +31,15 @@ define(function(require, exports, module) {
 			var tr = "<tr>";
 			tr += "<td>"+file.name+"</td>";
 			tr += "<td>"+file.size+"</td>";
-			tr += "<td id='file_"+index+"'>"+this.createProccess(file)+"</td>";
+			tr += "<td id='file_"+index+"'>"+this.createProccess(file, index)+"</td>";
 			tr += "</tr>";
 			$("#fileList table tbody").prepend($(tr));
 		},
-		createProccess: function(file){
+		createProccess: function(file, index){
 			return '<div class="progress">'
-			+'<div id="progressbar0" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">'
+			+'<div id="progressbar'+index+'" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">'
 			+'</div>'
-			+'<div class="pLabel" id="progressbarLabel0"></div>'
+			+'<div class="pLabel" id="progressbarLabel'+index+'"></div>'
 			+'</div>';
 		},
 		showUploadButton: function(){
@@ -47,7 +47,7 @@ define(function(require, exports, module) {
 			$("#btn_upload").prop("disabled", false);
 			self.on('upload', self.onUpload);
 			$("#btn_upload").on("click", function(e){
-				self.trigger("upload", this);
+				self.trigger("upload", self.get("fileQueue").length-1);
 			});
 		},
 		preUpload: function(){
@@ -73,7 +73,28 @@ define(function(require, exports, module) {
 			});
 			return token;
 		},
-		upload: function(fileScop){
+		upload: function(file, fileIndex){
+			var blockCount = this.blockCnt(file.size);
+			var token = this.getToken();
+			var blockCtxs = new Array();
+			var fileScop = {
+				fileIndex: fileIndex,
+				file: file,
+				startDate: new Date().getTime(),
+				uploadedBytes: 0,
+				blockCtxs: blockCtxs,
+				token: token,
+
+				defaultBlockSize: this.get("defaultBlockSize"),
+				blockCount: blockCount,
+				currentBlockIndex: 0,
+				currentBlockSize: 0,
+
+				currentChunkSize: 0,
+				currentChunkIndex: 0,
+				currentChunkOffsetInBlock: 0
+			};
+
 	        if (fileScop.file.size < fileScop.defaultBlockSize) {
                 this.uploadSmallFile(fileScop.file);
             } else {
@@ -115,6 +136,7 @@ define(function(require, exports, module) {
 		},
 		mkBlock: function(fileScop, chunk){
 			console.log(fileScop);
+			fileScop.currentBlockSize = this.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex);
 			var self=this;
 			var xhr = new XMLHttpRequest();
             xhr.open('POST', this.get("uploadUrl") + "/mkblk/" + fileScop.currentBlockSize, true);
@@ -132,20 +154,21 @@ define(function(require, exports, module) {
                     } else {
                         formatSpeed = uploadSpeed.toFixed(2) + "Kb\/s";
                     }
-                    var tmp = self.get("uploadTmps")+evt.loaded;
+                    var tmp = fileScop.uploadedBytes+evt.loaded;
                     var percentComplete = Math.round(100 * tmp / fileScop.file.size);
-                    $("#progressbar0").attr("style", "width: " + percentComplete + "%");
-                    $("#progressbarLabel0").text(percentComplete + "%" + ", 速度: " + formatSpeed);
+                    $("#progressbar"+fileScop.fileIndex).attr("style", "width: " + percentComplete + "%");
+                    $("#progressbarLabel"+fileScop.fileIndex).text(percentComplete + "%" + ", 速度: " + formatSpeed);
                 }
             }, false);
+
             xhr.onreadystatechange = function(response) {
                 if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
                 	var blkRet = JSON.parse(xhr.responseText);
 
                 	fileScop.uploadedBytes += fileScop.currentChunkSize;
         			fileScop.currentChunkIndex ++;
-					fileScop.currentChunkSize = self.getChunkSize(fileScop.defaultChunkSize*fileScop.currentChunkIndex, fileScop.currentBlockSize);
-					console.log("fileScop.currentChunkSize:"+ fileScop.currentChunkSize);
+        			fileScop.currentChunkOffsetInBlock += fileScop.currentChunkSize;
+					fileScop.currentChunkSize = self.getChunkSize(fileScop.currentChunkOffsetInBlock, fileScop.currentBlockSize);
 					if(fileScop.currentChunkSize>0){
 						var chunk = self.getChunk(fileScop.file, fileScop.uploadedBytes, fileScop.currentChunkSize);
                     	self.putChunk(fileScop, chunk, blkRet);
@@ -159,6 +182,7 @@ define(function(require, exports, module) {
 
 		},
 		mkFile: function(fileScop){
+			var self=this;
 			var xhr = new XMLHttpRequest();
             xhr.open('POST', this.get("uploadUrl") + "/mkfile/" + fileScop.file.size, true);
             xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token.postParams.token);
@@ -172,11 +196,14 @@ define(function(require, exports, module) {
             xhr.onreadystatechange = function(response) {
                 if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
                 	console.log(xhr.responseText);
+                	fileScop.fileIndex--;
+                	self.trigger("upload", fileScop.fileIndex);
                 }
             }
             xhr.send(ctxs);
 		},
 		putChunk: function(fileScop, chunk, blkRet){
+			console.log(fileScop);
 			var uploadChunkSize = chunk.size;
 			var self = this;
 			var xhr = new XMLHttpRequest();
@@ -195,9 +222,9 @@ define(function(require, exports, module) {
                         formatSpeed = uploadSpeed.toFixed(2) + "Kb\/s";
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
-                    var percentComplete = Math.round(100 * tmp / file.size);
-                    $("#progressbar0").attr("style", "width: " + percentComplete + "%");
-                    $("#progressbarLabel0").text(percentComplete + "%" + ", 速度: " + formatSpeed);
+                    var percentComplete = Math.round(100 * tmp / fileScop.file.size);
+                    $("#progressbar"+fileScop.fileIndex).attr("style", "width: " + percentComplete + "%");
+                    $("#progressbarLabel"+fileScop.fileIndex).text(percentComplete + "%" + ", 速度: " + formatSpeed);
                 }
             },false);
             xhr.onreadystatechange = function(response) {
@@ -205,18 +232,20 @@ define(function(require, exports, module) {
 					fileScop.uploadedBytes += fileScop.currentChunkSize;
 					var blkRet=JSON.parse(xhr.responseText);
 					fileScop.currentChunkIndex++;
-					var chunkSize = self.getChunkSize(fileScop.defaultChunkSize*(fileScop.currentChunkIndex), fileScop.currentBlockSize);
-					if(chunkSize>0){
+					fileScop.currentChunkOffsetInBlock += fileScop.currentChunkSize;
+					var chunkSize = self.getChunkSize(fileScop.currentChunkOffsetInBlock, fileScop.currentBlockSize);
+					if(chunkSize > 0){
 						fileScop.currentChunkSize = chunkSize;
-						var chunk = self.getChunk(file, fileScop.uploadedBytes, chunkSize);
+						var chunk = self.getChunk(fileScop.file, fileScop.uploadedBytes, chunkSize);
 						blkRet = self.putChunk(fileScop, chunk, blkRet);
 					}else{
 						fileScop.blockCtxs[fileScop.currentBlockIndex] = blkRet.ctx;
 						fileScop.currentBlockIndex++;
 						if(fileScop.currentBlockIndex<fileScop.blockCount){
 							fileScop.blockSize = self.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex); 
-							fileScop.currentChunkIndex=0;
-							fileScop.currentChunkSize = self.getChunkSize(fileScop.currentChunkIndex, fileScop.blockSize);
+							fileScop.currentChunkIndex = 0;
+							fileScop.currentChunkOffsetInBlock = 0;
+							fileScop.currentChunkSize = self.getChunkSize(fileScop.currentChunkOffsetInBlock, fileScop.blockSize);
 							var chunk = self.getChunk(fileScop.file, fileScop.uploadedBytes, fileScop.currentChunkSize);
 							self.mkBlock(fileScop, chunk);
 						}else{
@@ -255,31 +284,10 @@ define(function(require, exports, module) {
 		uploadSmallFile: function(file) {
 	        console.log(file.name);
 	    },
-		onUpload: function(element){
-			var fileIndex = 0;
-			while(this.get("fileQueue").length>0) {
-				var file = this.get("fileQueue").pop();
-				var blockCount = this.blockCnt(file.size);
-				var token = this.getToken();
-				var blockCtxs = new Array();
-				var fileScop = {
-					fileIndex: fileIndex,
-					file: file,
-					startDate: new Date().getTime(),
-					uploadedBytes: 0,
-					blockCtxs: blockCtxs,
-					token: token,
-
-					defaultBlockSize: this.get("defaultBlockSize"),
-					blockCount: blockCount,
-					currentBlockIndex: 0,
-					currentBlockSize: 0,
-
-					currentChunkSize: 0,
-					currentChunkIndex: 0
-				};
-				this.upload(fileScop);
-				fileIndex++;
+		onUpload: function(fileIndex){
+			var file = this.get("fileQueue").pop();
+			if(file){
+				this.upload(file, fileIndex);
 			}
 		},
 		setup: function() {
