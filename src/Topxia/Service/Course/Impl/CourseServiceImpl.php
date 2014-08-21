@@ -459,6 +459,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getCourseDao()->deleteCourse($id);
 
+		if($course["type"] == "live"){
+			$this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id);
+		}
+
 		$this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
 
 		return true;
@@ -1922,6 +1926,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getCourseLessonReplayByLessonId($lessonId)
 	{
 		return $this->getCourseLessonReplayDao()->getCourseLessonReplayByLessonId($lessonId);
+	}
+
+	public function deleteCourseLessonReplayByLessonId($lessonId)
+	{
+		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
 	}
 
 	private function getCourseLessonReplayDao()
