@@ -7,3 +7,4 @@
 7 登录用户                                User/login
 8 注册用户                                User/regist
 9 获取发现                                Category/getCategories
+10 获取服务条款                        School/getUserterms
