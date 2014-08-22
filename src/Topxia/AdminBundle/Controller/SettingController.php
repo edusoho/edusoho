@@ -688,6 +688,17 @@ class SettingController extends BaseController
         ));
     }
 
+    public function developerChangeVersionAction(Request $request,$code,$fromVersion,$version)
+    {
+
+        $fromVersionArray['fromVersion'] = $fromVersion;
+        $versionArray['version'] = $version;
+
+        $this->getAppservice()->updateAppVersion($code,$fromVersionArray,$versionArray);
+
+        echo "change version $fromVersion => $version ok !";die();
+    }
+
     public function userFieldsAction()
     {   
 

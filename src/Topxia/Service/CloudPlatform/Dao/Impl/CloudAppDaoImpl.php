@@ -66,4 +66,15 @@ class CloudAppDaoImpl extends BaseDao implements CloudAppDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
+    public function updateAppVersion($code,$version)
+    {
+        $this->getConnection()->update($this->table, $version, array('code' => $code));
+        return true;
+    }
+    
+    public function updateAppFromVersion($code,$fromVersion)
+    {
+        $this->getConnection()->update($this->table, $fromVersion, array('code' => $code));
+        return true; 
+    }
 }

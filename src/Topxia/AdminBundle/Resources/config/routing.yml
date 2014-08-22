@@ -436,6 +436,10 @@ admin_setting_admin_sync:
     pattern:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
 
+admin_setting_developer_change_version:
+    pattern:  /setting/developer/{code}/{fromVersion}/{version}
+    defaults: { _controller: TopxiaAdminBundle:Setting:developerChangeVersion }
+
 admin_setting_developer:
     pattern:  /setting/developer
     defaults: { _controller: TopxiaAdminBundle:Setting:developer }
