@@ -4048,7 +4048,9 @@ body {
 	height: 25px;
 }
 
-
+.float-consult-qq-btn .popover p {
+	margin: 0 0 10px
+}
 /**
  * </在线客服>
  */
