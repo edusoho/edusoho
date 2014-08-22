@@ -106,18 +106,18 @@
             </div>
         </div>
         {% endif %}
-        {% if mycreatedGroup %}                  
+        {% if myJoinGroup %}                  
         <div class="es-row-wrap " >
                               
             <div class="row">
 
-                <div class="page-header">我创建的小组
+                <div class="page-header">我的小组
                   {% if user.id %} <a href="{{ path ('group_member_join',{type:'myGroup'}) }}" class="pull-right">&raquo;更多</a>{% endif %}
                 </div> 
                 <div class="row">
            
                     
-                        {% for group in mycreatedGroup %}
+                        {% for group in myJoinGroup %}
                             <div class="grouplist">  
                                 <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
                                 {% if group.logo %}
@@ -139,41 +139,9 @@
         </div>
         {% endif %}
 
-        {% if myjionGroup %}
-        <div class="es-row-wrap ">
-            <div class="row">
-
-                <div class="page-header">我加入的小组
-                 {% if user.id %}
-                 <a href="{{ path ('group_member_join',{type:'myGroup'}) }}" class="pull-right">&raquo;更多</a>
-                 {% endif %}
-                </div> 
-
-                <div class="row">
-
-                         {% for group in myjionGroup %}
-                             {% if group.status=='open' %}
-                                <div class="grouplist" >  <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
-                                    {% if group.logo %}
-                                        <img src="{{file_path(group.logo)}}" alt="{{group.title}}" >
-                                        {%else%}
-                                        <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
-                                    {% endif %}
-                                        </a> 
-                                        <p class="mvs"><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}" style="text-overflow:ellipsis;">{{group.title|sub_text(9)}}</a>
-                                        </p>
-                                </div>
-                             {% endif %}
-                         {% endfor %}    
-
-                </div><br>
-            </div>
-        </div>
-        {% endif %}
-
         <div class="es-row ">
          
-         {% include 'TopxiaWebBundle:Group:deserveGroup.list.html.twig' %}
+         {% include 'TopxiaWebBundle:Group:newGroup.list.html.twig' %}
            
         </div>
     </div>

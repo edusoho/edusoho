@@ -1,10 +1,10 @@
 <div class="panel panel-default">
-  <div class="panel-heading">值得加入的小组</div>
+  <div class="panel-heading">新晋小组</div>
   <div class="panel-body">
     
-      {% if deserveGroup%}
-      <table class="table">
-        {% for group in deserveGroup%}
+      {% if newGroups%}
+      <table class="table"  border frame=void>
+        {% for group in newGroups%}
 
           <tr class="media-list" style="word-break: break-all;">
 
@@ -17,15 +17,19 @@
                   {%endif%}
               </a>
 
-                <div class="media-body" ><p><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title}}</a></p>
-
-                    <div class="text-muted text-normal">
-                      {{group.memberNum}}个成员
-                      {{group.threadNum}}个话题
-                      <a type="button" class="btn btn-success btn-xs pull-right" href="{{path('group_index',{id:group.id})}}">
-                        <span class="glyphicon glyphicon-hand-right"></span> 进入小组
-                      </a>
-                    </div>
+                <div class="media-body" ><p><a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title}}</a>
+                      <span style="color:#999">{{group.memberNum}}个成员</span>
+                    
+                    </p>
+                      {% if group.about %}
+                      {{group.about|raw|sub_text(30)}}
+                      {% else %}
+                      暂无简介
+                      {% endif %}           
+                    {#   <a href="{{path('group_index',{id:group.id})}}">
+                     &raquo;进入小组 #}
+                   {#    </a> #}
+                    
                     
                 </div>
                 

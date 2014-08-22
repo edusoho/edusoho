@@ -41,32 +41,29 @@ class GroupController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($user['id']) {
-            $members=$this->getGroupService()->searchMembers(array('userId'=>$user['id']),array('createdTime',"DESC"),0,
-            20);
+
+            $membersCount=$this->getGroupService()->searchMembersCount(array('userId'=>$user['id']));
+
+            $start=$membersCount>12 ? rand(0,$membersCount-12) : 0 ;
+
+            $members=$this->getGroupService()->searchMembers(array('userId'=>$user['id']),array('createdTime',"DESC"),$start,
+            12);
 
             $groupIds = ArrayToolkit::column($members, 'groupId');
 
             $myJoinGroup=$this->getGroupService()->getGroupsByids($groupIds);
 
-            $mycreatedGroup = $this->getGroupService()->searchGroups(
-                array('ownerId'=>$user['id'],'status'=>'open'),
-                array('createdTime','DESC'), 0, 8);
         }
 
-        $groupCount=$this->getGroupService()->searchGroupsCount(array('status'=>'open'));
-
-        $start=$groupCount>8 ? rand(0,$groupCount-8) : 0 ;
-
-        $deserveGroup=$this->getGroupService()->searchGroups(array('status'=>'open',),
-            array('createdTime','DESC'),$start,8);
+        $newGroups=$this->getGroupService()->searchGroups(array('status'=>'open',),
+            array('createdTime','DESC'),0,8);
 
         return $this->render("TopxiaWebBundle:Group:index.html.twig", array(
             'activeGroup' => $activeGroup,
-            'mycreatedGroup' => $mycreatedGroup,
-            'myjionGroup' => $myJoinGroup,
+            'myJoinGroup' => $myJoinGroup,
             'lastPostMembers'=>$lastPostMembers,
             'owners'=>$owners,
-            'deserveGroup'=>$deserveGroup,
+            'newGroups'=>$newGroups,
             'groupinfo'=>$groups,
             'user'=>$user,  
             'recentlyThread'=>$recentlyThread,
