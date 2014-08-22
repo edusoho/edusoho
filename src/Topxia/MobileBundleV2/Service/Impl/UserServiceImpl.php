@@ -3,6 +3,7 @@ namespace Topxia\MobileBundleV2\Service\Impl;
 
 use Topxia\MobileBundleV2\Service\BaseService;
 use Topxia\MobileBundleV2\Service\UserService;
+use Topxia\Common\SimpleValidator;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class UserServiceImpl extends BaseService implements UserService
@@ -13,6 +14,45 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->formData;
     }
     
+    public function regist()
+    {
+        $email = $this->getParam('email');
+        $nickname = $this->getParam('nickname');
+        $password = $this->getParam('password');
+
+        if (!SimpleValidator::email($email)) {
+            return $this->createErrorResponse('email_invalid', '邮箱地址格式不正确');
+        }
+
+        if (!SimpleValidator::nickname($nickname)) {
+            return $this->createErrorResponse('nickname_invalid', '昵称格式不正确');
+        }
+
+        if (!SimpleValidator::password($password)) {
+            return $this->createErrorResponse('password_invalid', '密码格式不正确');
+        }
+
+        if (!$this->controller->getUserService()->isEmailAvaliable($email)) {
+            return $this->createErrorResponse('email_exist', '该邮箱已被注册');
+        }
+
+        if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
+            return $this->createErrorResponse('nickname_exist', '该昵称已被注册');
+        }
+
+        $user = $this->controller->getAuthService()->register(array(
+            'email' => $email,
+            'nickname' => $nickname,
+            'password' => $password,
+        ));
+
+        $token = $this->controller->createToken($user, $this->request);
+
+        return array (
+            'user' => $this->controller->filterUser($user),
+            'token' => $token
+        );
+    }
 
     public function loginWithToken()
     {
