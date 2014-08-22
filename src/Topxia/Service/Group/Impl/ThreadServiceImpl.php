@@ -85,7 +85,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadDao()->searchThreads($conditions,$orderBy,$start,$limit);
     }
 
-    public function postThread($threadContent,$groupId,$memberId,$threadId)
+    public function postThread($threadContent,$groupId,$memberId,$threadId,$postId=0)
     {
         if (empty($threadContent['content'])) {
             throw $this->createServiceException("回复内容不能为空！");
@@ -94,6 +94,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         $threadContent['userId']=$memberId;
         $threadContent['createdTime']=time();
         $threadContent['threadId']=$threadId;
+        $threadContent['postId']=$postId;
         $post=$this->getThreadPostDao()->addPost($threadContent);  
         $this->getThreadDao()->updateThread($threadId,array('lastPostMemberId'=>$memberId,'lastPostTime'=>time()));
         $this->getGroupService()->waveGroup($groupId,'postNum',+1);

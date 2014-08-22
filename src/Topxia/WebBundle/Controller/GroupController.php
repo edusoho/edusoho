@@ -671,7 +671,7 @@ class GroupController extends BaseController
         )));
     }
    
-    public function transferGroupAction(Request $request,$id)
+/*    public function transferGroupAction(Request $request,$id)
     {
        $data=$request->request->all();
       
@@ -679,7 +679,7 @@ class GroupController extends BaseController
         if (!$this->getGroupService()->isOwner($id, $currentUser['id']) ) {
                 return $this->createMessageResponse('info', '您没有权限!');
        }
-
+       
        if($this->getUserService()->verifyPassword($currentUser['id'],$data['user']['password'])){
 
             $user=$this->getUserService()->getUserByNickname($data['user']['nickname']);
@@ -710,7 +710,7 @@ class GroupController extends BaseController
         )));
 
     }
-
+*/
     private function getThreadService()
     {
         return $this->getServiceKernel()->createService('Group.ThreadService');

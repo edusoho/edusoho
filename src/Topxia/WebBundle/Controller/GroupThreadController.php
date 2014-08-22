@@ -125,8 +125,9 @@ class GroupThreadController extends BaseController
         }
 
         if($request->query->get('post'))
-        {
+        {   
             $url=$this->getPost($request->query->get('post'),$threadId,$id);
+            
             return $this->redirect($url);
         }
 
@@ -152,6 +153,14 @@ class GroupThreadController extends BaseController
 
         $postMemberIds = ArrayToolkit::column($post, 'userId');
 
+        $postId=ArrayToolkit::column($post, 'id');
+
+        foreach ($postId as $key => $value) {
+            $postReply[$value]=$this->getThreadService()->searchPosts(array('postId'=>$value),array('createdTime','asc'),
+            0,
+            1000);
+        }
+
         $postMember=$this->getUserService()->findUsersByIds($postMemberIds);
 
         $activeMembers=$this->getGroupService()->searchMembers(array('groupId'=>$id),
@@ -170,6 +179,7 @@ class GroupThreadController extends BaseController
             'postMember'=>$postMember,
             'filters'=>$filters,
             'postCount'=>$postCount,
+            'postReply'=>$postReply,
             'activeMembers'=>$activeMembers,
             'members'=>$members,
             'is_groupmember' => $this->getGroupMemberRole($id)));
@@ -189,7 +199,16 @@ class GroupThreadController extends BaseController
             $postContent=$request->request->all();
             $content=array(
             'content'=>$postContent['content'],);
-            $post=$this->getThreadService()->postThread($content,$groupId,$user['id'],$threadId);
+
+            if(isset($postContent['postId'])){
+
+                 $post=$this->getThreadService()->postThread($content,$groupId,$user['id'],$threadId,$postContent['postId']);
+
+            }else{
+
+                 $post=$this->getThreadService()->postThread($content,$groupId,$user['id'],$threadId);
+
+            }       
 
             $url=$this->getPost($post['id'],$threadId,$groupId);
             return new Response($url);
@@ -323,12 +342,15 @@ class GroupThreadController extends BaseController
             )));
     }
     private function getPost($postId,$threadId,$id)
-    {
+    {   
+        $post=$this->getThreadService()->getPost($postId);
+        if($post['postId']!=0)$postId=$post['postId'];
         $count=$this->getThreadService()->searchPostsCount(array('threadId'=>$threadId,'status'=>'open','id'=>$postId));
 
         $page=floor(($count+1)/10)+1;
    
         $url=$this->generateUrl('group_thread_index',array('id'=>$id,'threadId'=>$threadId));
+
         $url=$url."?page=$page#post-$postId";
         return $url;
     }
@@ -368,9 +390,9 @@ class GroupThreadController extends BaseController
     }
     private function getPostCondition($filters,$ownId,$threadId)
     {
-        if($filters=='all') return array('threadId'=>$threadId,'status'=>'open');
+        if($filters=='all') return array('threadId'=>$threadId,'status'=>'open','postId'=>0);
 
-        if($filters=='onlyOwner') return array('threadId'=>$threadId,'status'=>'open','userId'=>$ownId);
+        if($filters=='onlyOwner') return array('threadId'=>$threadId,'status'=>'open','userId'=>$ownId,'postId'=>0);
 
         return false;
 

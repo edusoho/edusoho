@@ -20,7 +20,7 @@ interface ThreadService
 
     public function searchThreadsCount($conditions);
 
-    public function postThread($threadContent,$groupId,$memberId,$threadId);
+    public function postThread($threadContent,$groupId,$memberId,$threadId,$postId=0);
 
     public function searchPosts($conditions,$orderBy,$start,$limit);
 

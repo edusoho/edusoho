@@ -80,6 +80,7 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
             ->from($this->table,$this->table)
             ->andWhere('userId = :userId')
             ->andWhere('id < :id')
+            ->andWhere('postId = :postId')
             ->andWhere('threadId = :threadId');
         return $builder;
     }

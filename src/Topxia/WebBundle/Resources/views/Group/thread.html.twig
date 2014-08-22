@@ -115,8 +115,11 @@
                     {% else %}
                       {{ (loop.index+1)+10*(paginator.currentPage-1) }}
                     {% endif %}
-                    楼 {{post.createdTime|smart_time}}
+                    楼 {{post.createdTime|smart_time}} 
+                    {% if not postReply[post.id] %}<a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}">回复</a><a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">收起</a>{% else %}<a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}">回复</a><a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >收起</a>{% endif %}
+
                   </div>
+
                   {% if user.id==post.userId%}
                   <div class="course-view">
                     <div class="deletePost"><a title="确定删除这条回复"  id="deletePostByself"
@@ -137,7 +140,46 @@
                         href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a>
                       </div>
                   </div>
-                  {% endif %} 
+                  {% endif %}
+                <br>
+                <div class="reply-{{post.id}} " style="{% if not postReply[post.id] %}display:none;{% endif %}position: relative;"> 
+             
+                 <ul class="list-unstyled col-md-10 col-md-offset-2" style="background-color:#f0f1f2">
+                    {% if postReply[post.id] %}
+                    {% for reply in postReply[post.id] %} 
+                        
+                        <li {% if loop.index > 5 %} style="display:none;"{% endif %} class="li-reply-{{post.id}}">
+                            <div class="pull-left" style="width:80px;"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:reply.userId}) }}">
+                              <img src="{{ file_path(postMember[reply.userId].largeAvatar, 'avatar-large.png') }}">
+                            </a>
+                            </div>
+                           <div class="media">
+                            <div class="media-body">
+                              {{ web_macro.user_link(postMember[reply.userId] , 'link-muted ') }}
+                              <p >{{reply.content}}</p>
+                              <div class="text-muted text-normal pull-right">{{reply.createdTime|smart_time}}<a href="javascript:" class="li-reply" postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}"> 回复</a>
+                              </div>
+                            </div> 
+                          </div>
+                        </li>
+                        {% if loop.index > 5 and  loop.index==loop.length %}<hr>
+                        <li class="lookOver-{{post.id}} pull-left" >&nbsp;&nbsp;&nbsp;还有{{loop.length-5}}条回复<a href="javascript:" postId="{{post.id}}" class="lookOver">/点击查看</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% endif %}<br>
+                  {% if postReply[post.id] %}
+                  <li><a class="replyToo btn btn-default btn-xs pull-right" postId="{{post.id}}" href="javascript:" type="button">我也要说</a></li><br><br>
+                  {% endif %}
+                  <li id="li-{{post.id}}" style="position: relative;top:-4px; {% if postReply[post.id] %}display:none;{% endif %}"> <form  class="reply-thread-form form-horizontal" method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
+                  <textarea id="reply-content-{{post.id}}" class="form-control" ></textarea><br>
+                  <span class="danger-{{post.id}}" style="color:red;display:none;" > 回复内容不能为空！</span>  
+                   <button type="button" postId="{{post.id}}" class="reply-btn btn btn-sm btn-primary pull-right">回复</button></form>
+                 </li>{% if not postReply[post.id] %}<br><br><br>{% endif %}
+                   </ul>
+           
+               
+
+                 </div>
               </div>
               </td>   
             </tr>                  
@@ -146,18 +188,18 @@
       </table>
       <div class="pull-right">{{ web_macro.paginator(paginator) }}</div>
           <div class="page-header clearfix"></div>
-          <form id="post-thread-form" class="form-horizontal" method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
-
+          <form id="post-thread-form" class="post-thread-form form-horizontal" method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
+    
             <div class="form-group">
               <label class="col-md-2 control-label" for="post_content"><span class="glyphicon glyphicon-comment"></span> 回复内容</label>
               <div class="col-md-9 controls">
-                <textarea name="content" rows="10" id="post_content" class="form-control"></textarea>
+                <textarea name="content" value="" rows="10" id="post_content" class="form-control"></textarea>
               </div>
             </div>
 
             <div class="row">
               <div class="col-md-5 col-md-offset-2">
-                <button id="post-thread-btn" data-submiting-text="正在回复" type="submit" class="btn btn-primary">回复</button>
+                <button id="post-thread-btn" data-submiting-text="正在回复" type="submit" class="post-thread-btn btn btn-primary">回复</button>
               </div>
             </div>
             <br>
@@ -173,4 +215,5 @@
       </div>
     </div>
   </div>
+
 {% endblock %}

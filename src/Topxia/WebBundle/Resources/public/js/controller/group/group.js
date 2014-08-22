@@ -35,8 +35,7 @@
         validator_thread.addItem({
             element: '[name="thread[content]"]',
             required: true,
-            rule: 'minlength{min:2}',
-           
+            rule: 'minlength{min:2}'
             
         });
         }
@@ -75,35 +74,98 @@
                             window.location.reload();
                     }                        
                 }
-                });
-
-/*                $.post($("#post-thread-form").attr('action'),$("#post-thread-form").serialize(), function(url) {
-                    if(url){ 
-                        href=window.location.href;
-                        var olderHref=checkUrl(href);
-                        if(checkUrl(url)==olderHref){
-                            window.location.reload();
-                        }else{
-                            window.location.href=url;
-                        }
-                    }
-                    else{
-                            window.location.reload();
-                    }                              
-                }).error(function(){
-                  console.log(3);
-                });*/
-               
+                });          
             }
         });
         validator_thread.addItem({
             element: '[name="content"]',
             required: true,
-            rule: 'minlength{min:2}',
-           
-            
+            rule: 'minlength{min:2}'
+                    
         });
         }
+
+        if($('.reply').length>0){
+
+            $('.reply').on('click',function(){
+               
+               var postId=$(this).attr('postId');
+
+               $(this).hide();
+               $('#unreply-'+postId).show();
+               $('.reply-'+postId).slideDown('slow');
+               
+            });
+
+            $('.unreply').on('click',function(){
+               
+               var postId=$(this).attr('postId');
+
+               $(this).hide();
+               $('#reply-'+postId).show();
+               $('.reply-'+postId).slideUp('slow');
+               
+            });
+
+
+            $('.replyToo').on('click',function(){
+               
+               var postId=$(this).attr('postId');
+
+               $('#li-'+postId).show();
+
+               $('#reply-content-'+postId).val("");
+               
+            });
+
+            $('.lookOver').on('click',function(){
+               
+               var postId=$(this).attr('postId');
+               $('.li-reply-'+postId).css('display',"");
+               $('.lookOver-'+postId).hide();    
+               
+            });
+
+            $('.li-reply').on('click',function(){
+               
+               var postId=$(this).attr('postId');
+
+               $('#li-'+postId).show();
+
+               $('#reply-content-'+postId).val("回复 "+$(this).attr("postName")+":");
+               
+            });
+
+            $('.reply-btn').on('click',function(){
+                
+                var postId=$(this).attr('postId');
+
+                var replyContent=$('#reply-content-'+postId+'').val();
+
+                if(replyContent.replace(/[ ]/g,"")==""){
+                   
+                    $('.danger-'+postId).css("display","");
+                }else{
+                    $.ajax({
+                    url : $(".reply-thread-form").attr('post-url'),
+                    data:"content="+replyContent+'&'+'postId='+postId,
+                    cache : false, 
+                    async : false,
+                    type : "POST",
+                    dataType : 'text',
+                    success : function (url){
+                        window.location.reload();                
+                    }
+                    });
+
+                }
+             
+                
+               
+            });
+
+        }
+
 
         if($('#post-action').length>0){
           

@@ -32,9 +32,6 @@
                   <li {% if app.request.get('action')=='setLogo' %}class="active"{% endif %}> <a  href="{{path('group_set',{id:groupinfo.id,action:'setLogo'})}}">logo设置</a></li>
                   <li {% if app.request.get('action')=='setBackGroundLogo' %}class="active"{% endif %}>  <a  href="{{path('group_set',{id:groupinfo.id,action:'setBackGroundLogo'})}}">背景设置</a></li>
                   <li  {% if app.request.get('action')=='setGroupInfo' %}class="active"{% endif %}><a href="{{path('group_set',{id:groupinfo.id,action:'setGroupInfo'})}}">编辑小组 </a></li>
-                   {% if is_groupmember==2 %}
-                  <li  {% if app.request.get('action')=='transferGroup' %}class="active"{% endif %}><a href="{{path('group_set',{id:groupinfo.id,action:'transferGroup'})}}">转移小组 </a></li>
-                  {% endif %}
                 </ul><br>
 
             {{ web_macro.flash_messages() }}
