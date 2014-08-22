@@ -148,7 +148,7 @@
                     {% if postReply[post.id] %}
                     {% for reply in postReply[post.id] %} 
                         
-                        <li {% if loop.index > 5 %} style="display:none;"{% endif %} class="li-reply-{{post.id}}">
+                        <li style="{% if loop.index > 5 %} display:none;{% endif %}border-bottom:1px solid #ddd;" class="li-reply-{{post.id}}">
                             <div class="pull-left" style="width:80px;"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:reply.userId}) }}">
                               <img src="{{ file_path(postMember[reply.userId].largeAvatar, 'avatar-large.png') }}">
                             </a>
@@ -162,7 +162,7 @@
                             </div> 
                           </div>
                         </li>
-                        {% if loop.index > 5 and  loop.index==loop.length %}<hr>
+                        {% if loop.index > 5 and  loop.index==loop.length %}
                         <li class="lookOver-{{post.id}} pull-left" >&nbsp;&nbsp;&nbsp;还有{{loop.length-5}}条回复<a href="javascript:" postId="{{post.id}}" class="lookOver">/点击查看</a></li>
                         {% endif %}
                     {% endfor %}
