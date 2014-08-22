@@ -4,3 +4,6 @@
 4 获取网校公告			School/getSchoolBanner
 5 获取推荐课程			School/getRecommendCourses
 6 获取每周精选			School/getWeekRecommendCourses
+7 登录用户                                User/login
+8 注册用户                                User/regist
+9 获取发现                                Category/getCategories

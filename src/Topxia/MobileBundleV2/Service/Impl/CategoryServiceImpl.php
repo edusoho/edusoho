@@ -6,7 +6,7 @@ use Topxia\MobileBundleV2\Service\CategoryService;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {
-    public function getCategorys()
+    public function getCategories()
     {
         $category = $this->getParam("category");
         
