@@ -4039,10 +4039,17 @@ body {
 
 .float-consult .icon-qqgroup:before { content: "\e608"; }
 
+#float-consult h3.popover-title	{
+	padding: 8px 14px;
+}
+
+.float-consult-qq-btn .popover img {
+	width: 25px;
+	height: 25px;
+}
+
+
 /**
  * </在线客服>
  */
 
-#float-consult h3.popover-title	{
-	padding: 8px 14px;
-}

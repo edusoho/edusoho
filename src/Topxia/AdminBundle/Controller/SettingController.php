@@ -688,15 +688,29 @@ class SettingController extends BaseController
         ));
     }
 
-    public function developerChangeVersionAction(Request $request,$code,$fromVersion,$version)
+    public function modifyVersionAction(Request $request)
     {
+        $fromVersion = $request->query->get('fromVersion');
+        $version = $request->query->get('version');
+        $code = $request->query->get('code');
+
+        if (empty($fromVersion) || empty($version) || empty($code)) {
+            exit('注意参数为:<br><br>code<br>fromVersion<br>version<br><br>全填，不能为空！');
+        }
+
+        $appCount = $this->getAppservice()->findAppCount();
+        $apps = $this->getAppservice()->findApps(0,$appCount);
+        $appsCodes = ArrayToolkit::column($apps,'code');
+
+        if (!in_array($code, $appsCodes)) {
+           exit('code 填写有问题！请检查!');
+        }
 
         $fromVersionArray['fromVersion'] = $fromVersion;
         $versionArray['version'] = $version;
-
         $this->getAppservice()->updateAppVersion($code,$fromVersionArray,$versionArray);
 
-        echo "change version $fromVersion => $version ok !";die();
+        return $this->redirect($this->generateUrl('admin_app_upgrades'));
     }
 
     public function userFieldsAction()
