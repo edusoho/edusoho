@@ -13,7 +13,10 @@
 {% block testpaper_heading_content %}
   <div class="testpaper-description">{{ paper.description|bbCode2Html|raw }}</div>
   <div class="testpaper-metas">
-    共 {{ paper.itemCount }} 题，总分 {{ paper.score }} 分{% if paper.limitedTime >0 %}，请在 {{ paper.limitedTime }} 分钟内作答{% endif %}。
+    共 {{ paper.itemCount }} 题，总分 {{ paper.score }} 分
+    {% if paper.passedScore > 0 %}，及格为 {{ paper.passedScore }} 分{% endif %}
+    {% if paper.limitedTime >0 %}，请在 {{ paper.limitedTime }} 分钟内作答{% endif %}
+    。
   </div>
 {% endblock %}
 

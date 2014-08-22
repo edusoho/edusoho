@@ -1,12 +1,16 @@
 define(function(require, exports, module) {
 
     $(document).on('click.modal.data-api', '[data-toggle="modal"]', function(e) {
+
+        var imgUrl=app.config.loading_img_path;
         var $this = $(this),
             href = $this.attr('href'),
             url = $(this).data('url');
         if (url) {
             var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, '')));
-            $target.html('').load(url);
+            var $loadingImg="<img src='"+imgUrl+"' class='modal-loading' style='z-index:1041;width:60px;height:60px;position:absolute;top:50%;left:50%;margin-left:-30px;margin-top:-30px;'/>";
+            $target.html($loadingImg);
+            $target.load(url);
         }
     });
 

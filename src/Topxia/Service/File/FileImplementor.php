@@ -18,5 +18,5 @@ interface FileImplementor
 
     public function makeUploadParams($params);
 
-    public function reconvertFile($file, $convertCallback);
+    public function reconvertFile($file, $convertCallback, $pipeline = null);
 }

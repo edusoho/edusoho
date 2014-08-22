@@ -7,12 +7,13 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 use PHPExcel_IOFactory;
 use PHPExcel_Cell;
+use Topxia\Common\SimpleValidator;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
-
+use Topxia\Common\ConvertIpToolkit;
 
 class UserController extends BaseController 
 {
@@ -42,6 +43,7 @@ class UserController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+      
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
             'paginator' => $paginator
@@ -113,9 +115,12 @@ class UserController extends BaseController
             return $this->redirect($this->generateUrl('settings'));
         }
 
+        $fields=$this->getFields();
+
         return $this->render('TopxiaAdminBundle:User:edit-modal.html.twig', array(
             'user' => $user,
-            'profile'=>$profile
+            'profile'=>$profile,
+            'fields'=>$fields,
         ));
     }
 
@@ -125,15 +130,8 @@ class UserController extends BaseController
         $profile = $this->getUserService()->getUserProfile($id);
         $profile['title'] = $user['title'];
 
-        $fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-        for($i=0;$i<count($fields);$i++){
-           if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['type']="text";
-           if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['type']="varchar";
-           if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['type']="int";
-           if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['type']="float";
-           if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
-        }
-        
+        $fields=$this->getFields();
+            
         return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
             'user' => $user,
             'profile' => $profile,
@@ -223,6 +221,20 @@ class UserController extends BaseController
             'user' => $this->getUserService()->getUser($user['id']),
             'partnerAvatar' => $partnerAvatar,
         ));
+    }
+
+    private function getFields()
+    {
+        $fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        for($i=0;$i<count($fields);$i++){
+            if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['type']="text";
+            if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['type']="varchar";
+            if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['type']="int";
+            if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['type']="float";
+            if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
+        }
+
+        return $fields;
     }
 
     private function avatar_2 ($id, $filename)
@@ -367,212 +379,6 @@ class UserController extends BaseController
             'user' => $user
         ));
 
-    }
-
-    public function userInfoLeadByExcelAction(Request $request)
-    {
-         if ($request->getMethod() == 'POST') {
-
-            $chechkType=$request->request->get("rule");
-            $file=$request->files->get('excel');
-            $errorInfo=array();
-            $userCount=0;
-
-            if(!$file){
-                $this->setFlashMessage('danger', '请选择上传的文件');
-
-                return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
-                ));
-            }
-            if (FileToolkit::validateFileExtension($file,'xls xlsx')) {
-
-                $this->setFlashMessage('danger', 'Excel格式不正确！');
-
-                return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
-                ));
-            }
-
-            $objPHPExcel = PHPExcel_IOFactory::load($file);
-
-            $objWorksheet = $objPHPExcel->getActiveSheet();
-            $highestRow = $objWorksheet->getHighestRow(); 
-
-            $highestColumn = $objWorksheet->getHighestColumn();
-            $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);   
-
-            $fieldNameArray=$this->getFieldNameArray();
-            $fieldArray=$this->getFieldArray();
-
-            for ($col = 0;$col < $highestColumnIndex;$col++)
-            {
-                $strs[$col] =$objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
-                    
-            }   
-            $excelField=$strs;
-
-            if(!$this->checkNecessaryFields($excelField)){
-
-                $this->setFlashMessage('danger', '缺少必要的字段');
-
-                return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
-                ));
-            }
-
-            $fieldSort=$this->getFieldSort($excelField,$fieldNameArray,$fieldArray);
-
-                //start import
-            for ($row = 3;$row <= $highestRow;$row++) 
-            {
-                $strs=array();
-
-                for ($col = 0;$col < $highestColumnIndex;$col++)
-                {
-                    $strs[$col] =$objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-                }    
-
-                foreach ($fieldSort as $sort) {
-
-                    $num=$sort['num'];
-                    $key=$sort['fieldName'];
-
-                    $userData[$key]=$strs[$num];
-                }
-
-                if(!$this->getUserService()->isNicknameAvaliable($userData['nickname'])){ 
-
-                    if($chechkType=="ignore") {
-                        $errorInfo[]="第".$row."行的用户已存在，已略过"; 
-                        continue;
-                    }
-                    if($chechkType=="update") {
-                        $errorInfo[]="第".$row."行的用户已存在，将会更新";          
-                    }
-                    $userCount=$userCount+1;            
-                    continue;
-                }
-                if(!$this->getUserService()->isEmailAvaliable($userData['email'])){          
-
-                    if($chechkType=="ignore") {
-                        $errorInfo[]="第".$row."行的用户已存在，已略过";
-                        continue;
-                    };
-                    if($chechkType=="update") {
-                        $errorInfo[]="第".$row."行的用户已存在，将会更新";
-                    }  
-                    $userCount=$userCount+1;       
-                    continue;
-                }
-                $userCount=$userCount+1;    
-                $allUserData[]= $userData;
-
-
-                //do sql  insert   $userData
-
-            }
-            //print_r($allUserData);
-
-            return $this->render('TopxiaAdminBundle:User:userinfo.excel.step2.html.twig', array(
-                'userCount'=>$userCount,
-                'errorInfo'=>$errorInfo,
-            ));
-
-        }
-
-        return $this->render('TopxiaAdminBundle:User:userinfo.excel.html.twig', array(
-        ));
-    }
-
-
-    private function getFieldSort($excelField,$fieldNameArray,$fieldArray)
-    {       
-        $fieldSort=array();
-        foreach ($excelField as $key => $value) {
-
-            $value=$this->trim($value);
-
-            if(in_array($value, $fieldNameArray)){
-                //自定义字段名重复  将导入第一个字段
-                foreach ($fieldArray as $fieldKey => $fieldValue) {
-                    if($value==$fieldValue) {
-                         $fieldSort[]=array("num"=>$key,"fieldName"=>$fieldKey);
-                         break;
-                    }
-                }
-            }
-
-         }
-
-         return $fieldSort;
-    }
-
-    private function checkNecessaryFields($data)
-    {       
-        $data=implode("", $data);
-        $data=$this->trim($data);
-        $tmparray = explode("用户名",$data);
-        if (count($tmparray)<=1) return false; 
-
-        $tmparray = explode("邮箱",$data);
-        if (count($tmparray)<=1) return false; 
-
-        $tmparray = explode("密码",$data);
-        if (count($tmparray)<=1) return false; 
-
-        return true;
-    }
-
-    private function getFieldNameArray()
-    {   
-        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-        $fieldNameArray=array("用户名","邮箱","密码","姓名","性别","身份证号","手机号码","公司","职业","个人主页","微博","微信","QQ");
-   
-        foreach ($userFields as $userField) {
-                $title=$userField['title'];
-                array_push($fieldNameArray,$title);
-        }
-
-        return $fieldNameArray;
-    }
-
-    private function getFieldArray()
-    {       
-        $userFieldArray=array();
-
-        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-        $fieldArray=array(
-                "nickname"=>'用户名',
-                "email"=>'邮箱',
-                "password"=>'密码',
-                "truename"=>'姓名',
-                "gender"=>'性别',
-                "idcard"=>'身份证号',
-                "mobile"=>'手机号码',
-                "company"=>'公司',
-                "job"=>'职业',
-                "site"=>'个人主页',
-                "weibo"=>'微博',
-                "weixin"=>'微信',
-                "qq"=>'QQ',
-                );
-        foreach ($userFields as $userField) {
-            $title=$userField['title'];
-
-            $userFieldArray[$userField['fieldName']]=$title;
-        }
-        $fieldArray=array_merge($fieldArray,$userFieldArray);
-        return $fieldArray;
-    }
-
-
-    private function trim($data)
-    {       
-        $data=trim($data);
-        $data=str_replace(" ","",$data);
-        $data=str_replace('\n','',$data);
-        $data=str_replace('\r','',$data);
-        $data=str_replace('\t','',$data);
-
-        return $data;
     }
 
     protected function getNotificationService()

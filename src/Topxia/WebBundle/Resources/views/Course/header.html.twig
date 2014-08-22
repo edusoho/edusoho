@@ -57,27 +57,18 @@
                 data-url="{{ url('course_show', {id:course.id}) }}"
                 ></div>
             </div>
-
-            <div class="btn-group" data-role="tooltip" title="操作" >
-              <button class="btn btn-default btn-sm " data-toggle="dropdown">
-                <i class="glyphicon glyphicon-cog"></i>
-              </button>
-              <ul class="dropdown-menu pull-right">
-                {% if canManage %}
-                  <li><a href="{{ path('course_manage', {id:course.id}) }}">课程管理</a></li>
-                {% endif %}
-                {% if member.role|default(null) == 'student' %}
+            {% if member.role|default(null) == 'student' %}
                   {% if member.orderId %}
-                    <li><a class="course-refund-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}">退出学习</a></li>
+                   <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
                   {% else %}
-                    <li><a class="course-exit-btn" href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}">退出学习</a></li>
+                  <a class="btn btn-default btn-sm " title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
                     {% endif %}
                 {% endif %}
-              </ul>
-            </div>
-
-
-
+            {% if canManage %}
+            <a class="btn btn-default btn-sm " type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="课程管理"  >
+            <i class="glyphicon glyphicon-cog"></i>
+            </a>
+            {% endif %}
           </div>
 
           {% else %}

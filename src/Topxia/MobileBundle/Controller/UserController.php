@@ -37,12 +37,21 @@ class UserController extends MobileController
             'user' => $this->filterUser($user),
         );
 
+        $this->getLogService()->info(MobileController::MOBILE_MODULE, "user_login", "用户登录",  array(
+            "username" => $username)
+        );
         return $this->createJson($request, $result);
     }
 
     public function logoutAction(Request $request)
     {
         $token = $request->query->get('token', '');
+        if (! empty($token)) {
+            $userToken = $this->getUserToken($request);
+            $this->getLogService()->info(MobileController::MOBILE_MODULE, "user_logout", "用户退出",  array(
+                "userToken" => $userToken)
+            );
+        }
         $this->getUserService()->deleteToken(self::TOKEN_TYPE, $token);
         return $this->createJson($request, true);
     }
@@ -73,6 +82,10 @@ class UserController extends MobileController
             'site' => $this->getSiteInfo($request)
         );
         
+        $this->getLogService()->info(MobileController::MOBILE_MODULE, "user_login", "用户二维码登录",  array(
+            "userToken" => $token)
+        );
+
         return $this->createJson($request, $result);
     }
 
@@ -278,11 +291,12 @@ class UserController extends MobileController
         return array(
             'name' => $site['name'],
             'url' => $request->getSchemeAndHttpHost() . '/mapi_v1',
+            'host'=> $request->getSchemeAndHttpHost(),
             'logo' => $logo,
             'splashs' => $splashs,
             'apiVersionRange' => array(
                 "min" => "1.0.0",
-                "max" => "1.0.0"
+                "max" => "1.1.0"
             ),
         );
     }

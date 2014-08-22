@@ -5,6 +5,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\ConvertIpToolkit;
 
 class WebExtension extends \Twig_Extension
 {
@@ -54,12 +55,14 @@ class WebExtension extends \Twig_Extension
             'dict_text' => new \Twig_Function_Method($this, 'getDictText', array('is_safe' => array('html'))) ,
             'upload_max_filesize' => new \Twig_Function_Method($this, 'getUploadMaxFilesize') ,
             'js_paths' => new \Twig_Function_Method($this, 'getJsPaths'),
+            'is_plugin_installed' => new \Twig_Function_Method($this, 'isPluginInstaled'),
             'is_exist_in_subarray_by_id' => new \Twig_Function_Method($this, 'isExistInSubArrayById'),
             'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
             'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
+            'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
         );
     }
 
@@ -81,6 +84,17 @@ class WebExtension extends \Twig_Extension
             return 'theme/global-script';
         }
         return '';
+    }
+
+    public function isPluginInstaled($name)
+    {
+        $plugins = $this->container->get('kernel')->getPlugins();
+        foreach ($plugins as $plugin) {
+            if (strtolower($name) == strtolower($plugin)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function getJsPaths()
@@ -126,6 +140,7 @@ class WebExtension extends \Twig_Extension
         return in_array($feature, $features);
     }
 
+
     public function getParameter($name, $default = null)
     {
         if (!$this->container->hasParameter($name)) {
@@ -133,6 +148,19 @@ class WebExtension extends \Twig_Extension
         }
         return $this->container->getParameter($name);
     }
+
+    public function getConvertIP($IP)
+    {
+        
+        if(!empty($IP)){
+                $location = ConvertIpToolkit::convertIp($IP);
+            if ($location === 'INNA') 
+                return '未知区域';
+            return $location;
+        }
+        return '';
+    }
+
 
     public function dataformatFilter ($time) {
         if (empty($time)) {

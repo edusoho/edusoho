@@ -9,6 +9,7 @@ use Topxia\Common\ArrayToolkit;
 
 class CourseController extends MobileController
 {
+
     public function coursesAction(Request $request)
     {
         $conditions = $request->query->all();
@@ -33,6 +34,11 @@ class CourseController extends MobileController
         return $this->createJson($request, $result);
     }
 
+    public function searchCourses(Request $request)
+    {
+
+    }
+    
     public function courseAction(Request $request, $courseId)
     {
         $this->getUserToken($request);
@@ -78,6 +84,13 @@ class CourseController extends MobileController
 
         $result['userFavorited'] = $user->isLogin() ? $this->getCourseService()->hasFavoritedCourse($courseId) : false;
 
+        if ($course) {
+            $this->getLogService()->info(MobileController::MOBILE_MODULE, "view_course", "浏览课程",  array(
+                "courseId" => $course["id"],
+                "title" => $course["title"]
+                )
+            );
+        }
         return $this->createJson($request, $result);
     }
 
@@ -145,7 +158,7 @@ class CourseController extends MobileController
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
 
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
+                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
                             $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                             $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
                         } else {
@@ -316,13 +329,26 @@ class CourseController extends MobileController
         }
 
         $result = array();
-        $result['total'] = $this->getCourseService()->findUserLearnCourseCount($user['id']);
+        $result['total'] = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
-        $courses = $this->getCourseService()->findUserLearnCourses($user['id'], $result['start'], $result['limit']);
-        $result['data'] = $this->filterCourses($courses);
+        $courses = $this->getCourseService()->findUserLeaningCourses($user['id'], $result['start'], $result['limit']);
+        $result['data'] = $this->array2Map($this->filterCourses($courses));
 
         return $this->createJson($request, $result);
+    }
+
+    private function array2Map($learnCourses)
+    {
+        $mapCourses = array();
+        if (empty($learnCourses)) {
+            return $mapCourses;
+        }        
+        foreach ($learnCourses as $key => $learnCourse) {
+            $mapCourses[$learnCourse['id']] = $learnCourse;
+        }
+
+        return $mapCourses;
     }
 
     /**
@@ -342,7 +368,7 @@ class CourseController extends MobileController
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
         $courses = $this->getCourseService()->findUserLeanedCourses($user['id'], $result['start'], $result['limit']);
-        $result['data'] = $this->filterCourses($courses);
+        $result['data'] = $this->array2Map($this->filterCourses($courses));
 
         return $this->createJson($request, $result);
     }

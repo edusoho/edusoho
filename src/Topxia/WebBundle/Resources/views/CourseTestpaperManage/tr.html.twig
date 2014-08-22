@@ -9,7 +9,12 @@
       {% if testpaper.status == 'open' %}已发布{% endif %}
       {% if testpaper.status == 'closed' %}已关闭{% endif %}
     </td>
-    <td>{{ testpaper.itemCount}}题 <span class="text-muted">/</span> {{testpaper.score}}分</td>
+    <td>
+      {{ testpaper.itemCount}}题 <span class="text-muted">/</span> {{testpaper.score}}分
+      {% if testpaper.passedScore > 0 %}
+        <div class="text-muted"><small>及格：{{ testpaper.passedScore }}分</small></div>
+      {% endif %}
+    </td>
     <td>
       {% if testpaper.limitedTime > 0 %}{{ testpaper.limitedTime}}分钟{% else %}无限制{% endif %}
     </td>

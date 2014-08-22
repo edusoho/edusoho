@@ -6,7 +6,7 @@
 
 {% block body %}
 	
-  <form class="form-horizontal" id="live-lesson-form"　method="post" 
+  <form class="form-horizontal" id="live-lesson-form"　method="post"  {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   
 	  {% if liveLesson|default(null) %}
 	  	action="{{ path('live_course_manage_lesson_edit',{courseId:liveCourse.id,lessonId:liveLesson.id}) }}" 

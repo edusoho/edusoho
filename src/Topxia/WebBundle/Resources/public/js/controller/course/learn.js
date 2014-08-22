@@ -14,6 +14,8 @@ define(function(require, exports, module) {
     var MediaPlayer = require('../widget/media-player3');
     var SlidePlayer = require('../widget/slider-player');
 
+    var iID = null;
+
     var LessonDashboard = Widget.extend({
 
         _router: null,
@@ -163,7 +165,14 @@ define(function(require, exports, module) {
                 this.set('audioPlayer', null);
             }
 
+            if (this.get('mediaPlayer')) {
+                this.get('mediaPlayer').dispose();
+                this.set('mediaPlayer', null);
+            }
+
             swfobject.removeSWF('lesson-swf-player');
+
+            $('#lesson-iframe-content').empty();
 
             this.element.find('[data-role=lesson-content]').hide();
 
@@ -202,7 +211,13 @@ define(function(require, exports, module) {
                     return ;
                 }
 
-                if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
+                if (lesson.mediaSource == 'iframe') {
+                    var html = '<iframe src="' + lesson.mediaUri + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>';
+
+                    $("#lesson-iframe-content").html(html);
+                    $("#lesson-iframe-content").show();
+
+                } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
 
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
                     $("#lesson-video-content").show();
@@ -217,6 +232,8 @@ define(function(require, exports, module) {
                         that._onFinishLearnLesson();
                     });
                     mediaPlayer.play();
+
+                    that.set('mediaPlayer', mediaPlayer);
 
                 } else {
                     if (lesson.type == 'video') {
@@ -303,56 +320,86 @@ define(function(require, exports, module) {
                         var courseId = lesson.courseId;
                         var lessonId = lesson.id;
                         var $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
-
-                            var iID = setInterval(function () {
-                                var nowDate = new Date();
-                                var startLeftSeconds = parseInt((startTime*1000 - nowDate) / 1000);
-                                var endLeftSeconds = parseInt((endTime*1000 - nowDate) / 1000);
-                                var days = Math.floor(startLeftSeconds / (60 * 60 * 24));
-                                var modulo = startLeftSeconds % (60 * 60 * 24);
-                                var hours = Math.floor(modulo / (60 * 60));
-                                modulo = modulo % (60 * 60);
-                                var minutes = Math.floor(modulo / 60);
-                                var seconds = modulo % 60;
-
-                        $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
-
-                        if (days == 0) {
-                                     $countDown = "还剩: <strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                        };
-
-                        if (hours == 0 && days != 0) {
-                               $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                        };
-
-                        if (hours == 0 && days == 0) {
-                               $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                        };
-
-                        if (0< startLeftSeconds && startLeftSeconds < 3600) {
-                             $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
-                             var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
-                              $countDown = "<p>还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
-                        };
-
-                        if (startLeftSeconds <= 0) {
+                        if(iID) {
                             clearInterval(iID);
-                             $liveNotice = "<p>直播已经开始，直播将于 <strong>"+liveEndTimeFormat+"</strong> 结束。</p>";
-                             var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
+                        }
 
-                            $countDown = "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
-                        };
+                        function generateHtml() {
+                            var nowDate = new Date();
+                            var startLeftSeconds = parseInt((startTime*1000 - nowDate) / 1000);
+                            var endLeftSeconds = parseInt((endTime*1000 - nowDate) / 1000);
+                            var days = Math.floor(startLeftSeconds / (60 * 60 * 24));
+                            var modulo = startLeftSeconds % (60 * 60 * 24);
+                            var hours = Math.floor(modulo / (60 * 60));
+                            modulo = modulo % (60 * 60);
+                            var minutes = Math.floor(modulo / 60);
+                            var seconds = modulo % 60;
+                            var $replayGuid = "老师们：";
+                            $replayGuid += "<br>";
+                            $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;录制直播课程时，需在直播课程间点击“";
+                            $replayGuid += "<span style='color:red'>录制面板</span>";
+                            $replayGuid += "”，录制完成后点击“";
+                            $replayGuid += "<span style='color:red'>暂停</span>";
+                            $replayGuid += "”结束录播，录播结束后在“";
+                            $replayGuid += "<span style='color:red'>录播管理</span>";
+                            $replayGuid += "”界面生成回放。";
+                            $replayGuid += "<br>";
 
-                        if (endLeftSeconds <= 0) {
-                            $liveNotice = "<p>直播已结束</p>";
-                            // $countDown = "<a class='btn btn-primary' href='http://www.edusoho-dev.com/live/replay/course/"+courseId+"/lesson/"+lessonId+"''>查看录播实况</a><br><br>";
-                            $countDown = "";
-                        };
+                            $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
 
-                        $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice + '<div style="padding-bottom:15px; border-bottom:1px dashed #ccc;">' + lesson.summary + '</div>' + '<br>' + $countDown);
+                            if (days == 0) {
+                                $countDown = "还剩: <strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+                            };
+
+                            if (hours == 0 && days != 0) {
+                                $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+                            };
+
+                            if (hours == 0 && days == 0) {
+                                $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+                            };
+
+                            if (0< startLeftSeconds && startLeftSeconds < 3600) {
+                                 $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
+                                 var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
+                                 if(lesson.isTeacher) {
+                                    $countDown = $replayGuid;
+                                    $countDown += "<p>还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                                }else{
+                                    $countDown = "<p>还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                                }
+                            };
+
+                            if (startLeftSeconds <= 0) {
+                                clearInterval(iID);
+                                 $liveNotice = "<p>直播已经开始，直播将于 <strong>"+liveEndTimeFormat+"</strong> 结束。</p>";
+                                 var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
+                                if(lesson.isTeacher) {
+                                    $countDown = $replayGuid;
+                                    $countDown += "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                                }else{
+                                    $countDown = "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                                }
+                            };
+
+                            if (endLeftSeconds <= 0) {
+                                $liveNotice = "<p>直播已经结束</p>";
+                                $countDown = "";
+                                if(lesson.replays && lesson.replays.length>0){
+                                    $.each(lesson.replays, function(i,n){
+                                        $countDown += "<a class='btn btn-primary' href='"+n.url+"' target='_blank'>"+n.title+"</a>&nbsp;&nbsp;";
+                                    });
+                                }
+                            };
+
+                            $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice + '<div style="padding-bottom:15px; border-bottom:1px dashed #ccc;">' + lesson.summary + '</div>' + '<br>' + $countDown);
 
 
-                            }, 1000);
+                        }
+
+                        generateHtml();
+
+                        iID = setInterval(generateHtml, 1000);
 
                         $("#lesson-live-content").show();
                         $("#lesson-live-content").perfectScrollbar({wheelSpeed:50});

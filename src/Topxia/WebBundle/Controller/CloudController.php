@@ -36,6 +36,31 @@ class CloudController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function reconvertOldFileAction(Request $request)
+    {
+        $sign = $request->query->get('sign');
+        if (empty($sign)) {
+            return $this->createJsonResponse(array('error' => 'sign param is empty.'));
+        }
+
+        $setting = $this->getSettingService()->get('storage', array());
+        if (empty($setting['cloud_secret_key'])) {
+            return $this->createJsonResponse(array('error' => 'secret key not set.'));
+        }
+
+        $fileId = $request->query->get('id');
+        $pipeline = $request->query->get('pipeline');
+
+        if ($sign != md5($fileId . $setting['cloud_secret_key'])) {
+            return $this->createJsonResponse(array('error' => 'sign error.'));
+        }
+
+        $callback = $this->generateUrl('uploadfile_cloud_convert_callback3', array(), true);
+
+        $result = $this->getUploadFileService()->reconvertOldFile($fileId, $callback, $pipeline);
+        return $this->createJsonResponse($result);
+    }
+
     public function oldkeysAction(Request $request)
     {
         $sign = $request->query->get('sign');

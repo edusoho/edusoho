@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var EditorFactory = require('common/kindeditor-factory');
 
-	exports.run = function() {
+    exports.run = function() {
 
         var editor = EditorFactory.create('#about', 'simple', {extraFileUploadParams:{group:'course'}});
 
@@ -14,21 +14,22 @@ define(function(require, exports, module) {
         var validator = new Validator({
             element: '#user-edit-form',
             autoSubmit: false,
+             failSilently: true,
             onFormValidated: function(error, results, $form) {
-            	if (error) {
-            		return false;
-            	}
+                if (error) {
+                    return false;
+                }
                 $('#edit-user-btn').button('submiting').addClass('disabled');
                 editor.sync();
 
-				$.post($form.attr('action'), $form.serialize(), function(html) {
+                $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
                     Notify.success('用户信息保存成功');
                     var $tr = $(html);
-					$('#' + $tr.attr('id')).replaceWith($tr);
-				}).error(function(){
-					Notify.danger('操作失败');
-				});
+                    $('#' + $tr.attr('id')).replaceWith($tr);
+                }).error(function(){
+                    Notify.danger('操作失败');
+                });
             }
         });
 
@@ -56,14 +57,31 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="mobile"]',
-            rule: 'phone',
+            rule: 'phone'
         });
 
         validator.addItem({
             element: '[name="idcard"]',
-            rule: 'idcard',
+            rule: 'idcard'
         });
 
-	};
+        for(var i=1;i<=5;i++){
+             validator.addItem({
+             element: '[name="intField'+i+'"]',
+             rule: 'int'
+             });
+
+             validator.addItem({
+            element: '[name="floatField'+i+'"]',
+            rule: 'float'
+            });
+
+             validator.addItem({
+            element: '[name="dateField'+i+'"]',
+            rule: 'date'
+             });
+        }
+
+        };
 
 });

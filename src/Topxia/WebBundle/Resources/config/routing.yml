@@ -114,6 +114,10 @@ uploadfile_cloud_convert_callback2:
     pattern:  /uploadfile/cloud_convertcallback2
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback2 }
 
+uploadfile_cloud_convert_callback3:
+    pattern:  /uploadfile/cloud_convertcallback3
+    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback3 }
+
 kindeditor_upload:
     pattern:  /kindeditor/upload
     defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }
@@ -146,6 +150,18 @@ live_classroom_iframe:
 live_course_create:
     pattern:  /livecourse/create
     defaults: { _controller: TopxiaWebBundle:LiveCourse:create }
+
+live_course_manage_replay:
+    pattern:  /livecourse/{id}/manage/replay
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:replayManage }
+
+live_course_lesson_replay_create:
+    pattern:  /livecourse/{courseId}/lesson/{lessonId}/replay/create
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:replayCreate }
+
+live_course_lesson_replay_entry:
+    pattern: /livecourse/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/entry
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:entryReplay }
 
 course_explore:
     pattern:  /course/explore/{category}
@@ -460,6 +476,10 @@ course_manage_students:
 course_manage_students_show:
     pattern:  /course/{id}/manage/students/show
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:show }
+
+course_manage_students_defined_show:
+    pattern:  /course/{id}/manage/students/defined/show
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:definedShow }
 
 course_manage_student_create:
     pattern:  /course/{id}/manage/student/create
@@ -1120,6 +1140,10 @@ cloud_set_server:
 cloud_oldkeys:
     pattern: /cloud/oldkeys
     defaults: {_controller: TopxiaWebBundle:Cloud:oldkeys }
+
+cloud_reconvert_old_file:
+    pattern: /cloud/reconvert_old_file
+    defaults: {_controller: TopxiaWebBundle:Cloud:reconvertOldFile }
 
 cloud_video_fingerprint:
     pattern: /cloud/video_fingerprint

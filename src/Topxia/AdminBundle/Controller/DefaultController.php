@@ -8,7 +8,6 @@ use Topxia\Service\Util\CloudClientFactory;
 
 class DefaultController extends BaseController
 {
-
     public function popularCoursesAction(Request $request)
     {
         $dateType = $request->query->get('dateType');
@@ -171,6 +170,18 @@ class DefaultController extends BaseController
         ));        
     }
 
+    public function onlineCountAction(Request $request)
+    {
+        $onlineCount =  $this->getStatisticsService()->getOnlineCount(10*60);
+        return $this->createJsonResponse(array('onlineCount' => $onlineCount, 'message' => 'ok'));
+    }
+
+    public function loginCountAction(Request $request)
+    {
+        $loginCount = $this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
+        return $this->createJsonResponse(array('loginCount' => $loginCount, 'message' => 'ok'));
+    }
+
     public function unsolvedQuestionsBlockAction(Request $request)
     {
         $questions = $this->getThreadService()->searchThreads(
@@ -224,6 +235,11 @@ class DefaultController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getStatisticsService()
+    {
+        return $this->getServiceKernel()->createService('System.StatisticsService');
     }
 
     protected function getThreadService()

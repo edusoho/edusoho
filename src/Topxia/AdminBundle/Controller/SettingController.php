@@ -581,6 +581,7 @@ class SettingController extends BaseController
             'student_download_media' => '0',
             'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
+            'allowAnonymousPreview' => '1',
             'live_course_enabled' => '0',
             'userinfoFields'=>array(),
             "userinfoFieldNameArray"=>array(),
@@ -685,6 +686,31 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:developer-setting.html.twig', array(
             'developerSetting' => $developerSetting
         ));
+    }
+
+    public function modifyVersionAction(Request $request)
+    {
+        $fromVersion = $request->query->get('fromVersion');
+        $version = $request->query->get('version');
+        $code = $request->query->get('code');
+
+        if (empty($fromVersion) || empty($version) || empty($code)) {
+            exit('注意参数为:<br><br>code<br>fromVersion<br>version<br><br>全填，不能为空！');
+        }
+
+        $appCount = $this->getAppservice()->findAppCount();
+        $apps = $this->getAppservice()->findApps(0,$appCount);
+        $appsCodes = ArrayToolkit::column($apps,'code');
+
+        if (!in_array($code, $appsCodes)) {
+           exit('code 填写有问题！请检查!');
+        }
+
+        $fromVersionArray['fromVersion'] = $fromVersion;
+        $versionArray['version'] = $version;
+        $this->getAppservice()->updateAppVersion($code,$fromVersionArray,$versionArray);
+
+        return $this->redirect($this->generateUrl('admin_app_upgrades'));
     }
 
     public function userFieldsAction()
@@ -799,6 +825,71 @@ class SettingController extends BaseController
         return $this->redirect($this->generateUrl('admin_setting_user_fields')); 
     }
 
+    public function consultSettingAction(Request $request)
+    { 
+        $consult = $this->getSettingService()->get('consult', array());
+        $default = array(
+            'enabled' => 0,
+            'worktime' => '9:00 - 17:00',
+            'qq' => array(
+                array('name' => '','number' => ''),
+                ),
+            'qqgroup' => array(
+                array('name' => '','number' => ''),
+                ),
+            'phone' => array(
+                array('name' => '','number' => ''),
+                ),
+            'webchatURI' => '',
+            'email' => '',
+            'color' => 'default',
+            );
+
+        $consult = array_merge($default, $consult);
+        if ($request->getMethod() == 'POST') {
+            $consult = $request->request->all();
+            ksort($consult['qq']);
+            ksort($consult['qqgroup']);
+            ksort($consult['phone']);
+            $this->getSettingService()->set('consult', $consult);
+            $this->getLogService()->info('system', 'update_settings', "更新QQ客服设置", $consult);
+            $this->setFlashMessage('success', 'QQ客服设置已保存！');
+        }
+        return $this->render('TopxiaAdminBundle:System:consult-setting.html.twig', array(
+            'consult' => $consult,
+        ));
+    }
+
+    public function consultUploadAction(Request $request)
+    {
+        $file = $request->files->get('consult');
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+
+        $filename = 'webchat.' . $file->getClientOriginalExtension();
+        
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file = $file->move($directory, $filename);
+
+        $consult = $this->getSettingService()->get('consult', array());
+
+        $consult['webchatURI'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $consult['webchatURI'] = ltrim($consult['webchatURI'], '/');
+
+        $this->getSettingService()->set('consult', $consult);
+
+        $this->getLogService()->info('system', 'update_settings', "更新微信二维码", array('webchatURI' => $consult['webchatURI']));
+
+        $response = array(
+            'path' => $consult['webchatURI'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($consult['webchatURI']),
+        );
+
+        return new Response(json_encode($response));
+
+    }
+    
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');

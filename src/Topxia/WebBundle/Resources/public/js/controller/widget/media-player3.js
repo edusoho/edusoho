@@ -38,8 +38,11 @@ define(function(require, exports, module) {
         },
 
         dispose: function() {
-            if (this.get('runtime') == 'flash') {
+            var runtime = this.get('runtime');
+            if (runtime == 'flash') {
                 swfobject.removeSWF(this.get('playerId'));
+            } else if (runtime == 'html5') {
+                $("#" + this.get('playerId')).remove();
             }
         },
 
@@ -49,6 +52,7 @@ define(function(require, exports, module) {
             html += this.get('src') + '" autoplay controls style="' + style + '">';
             html += '</video>';
             this.element.html(html);
+            this.set('runtime', 'html5');
         },
 
         _isSupportHtml5Video: function() {

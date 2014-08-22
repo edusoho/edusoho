@@ -17,6 +17,8 @@ class LiveCourseController extends BaseController
 
         $courses = ArrayToolkit::index($courses, 'id');
 
+        $conditions['type']="live";
+        
         switch ($status) {
             case 'coming':
                 $conditions['startTimeGreaterThan'] = time();

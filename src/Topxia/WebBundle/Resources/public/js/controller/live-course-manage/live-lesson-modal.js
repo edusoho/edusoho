@@ -4,8 +4,31 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
     require("jquery.bootstrap-datetimepicker");
-
+    require('jquery.sortable');
 	exports.run = function() {
+       
+         var sortList = function($list) {
+            var data = $list.sortable("serialize").get();
+            $.post($list.data('sortUrl'), {ids:data}, function(response){
+                var lessonNum = chapterNum = unitNum = 0;
+
+                $list.find('.item-lesson, .item-chapter').each(function() {
+                    var $item = $(this);
+                    if ($item.hasClass('item-lesson')) {
+                        lessonNum ++;
+                        $item.find('.number').text(lessonNum);
+                    } else if ($item.hasClass('item-chapter-unit')) {
+                        unitNum ++;
+                        $item.find('.number').text(unitNum);
+                    } else if ($item.hasClass('item-chapter')) {
+                        chapterNum ++;
+                        unitNum = 0;
+                        $item.find('.number').text(chapterNum);
+                    }
+
+                });
+            });
+        };
 
         var $modal = $('#live-lesson-form').parents('.modal');
         var $content = $("#live-lesson-content-field");
@@ -24,14 +47,50 @@ define(function(require, exports, module) {
 
                     var id = '#' + $(html).attr('id'),
                     $item = $(id);
-                    
+                    var $parent = $('#'+$form.data('parentid'));
                     if ($item.length) {
                         $item.replaceWith(html);
                         Notify.success('课时已保存');
                     } else {
                         $panel.find('.empty').remove();
-                        $("#course-item-list").append(html);
-                        Notify.success('添加直播课时成功');
+
+                    if($parent.length){
+
+                        var add = 0;
+                        if($parent.hasClass('item-chapter  clearfix')){
+                            $parent.nextAll().each(function(){
+                            if($(this).hasClass('item-chapter  clearfix')){
+                                $(this).before(html);
+                                add = 1;
+                                return false;
+                             }
+                          });
+                            if(add !=1 ){
+                                $("#course-item-list").append(html);
+                                add = 1;
+                            }
+                            
+                        }else{
+                           
+                             $parent.nextAll().each(function(){
+                                if($(this).hasClass('item-chapter  clearfix'))
+                                    return false;
+                                if($(this).hasClass('item-chapter item-chapter-unit clearfix')){
+                                    $(this).before(html);
+                                    add = 1;
+                                    return false;
+                             }
+                          });
+                        }
+                     if(add != 1 )
+                        $parent.after(html);  
+                        var $list = $("#course-item-list");
+                        sortList($list);
+                     }else{
+                      $("#course-item-list").append(html);
+                 }
+                       
+                    Notify.success('添加直播课时成功');
                     }
                     $modal.modal('hide');
 

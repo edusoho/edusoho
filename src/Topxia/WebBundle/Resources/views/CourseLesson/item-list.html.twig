@@ -49,7 +49,17 @@
 						{% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
 							<small class="type">正在直播中</small>
 						{% elseif item.endTime < currentTime %}
-							<small class="type">直播结束</small>
+
+							<small class="type" >
+					    		{% if item.replayStatus == 'generated' %}
+					    		<span class="type">回放</span>
+					    		<span class="glyphicon 
+					    		glyphicon-play-circle"></span>
+					    		{% else %}
+					    		<span class="type">直播结束</span>
+					    		{% endif %}
+					    	</small>
+							
 						{% endif %}
 				    {% endif %}
 			    {% else %}
@@ -58,7 +68,7 @@
 
 		    	<span class="name ">课时{{ item.number }}</span>
 		    	<span class="pie ">&nbsp;</span>
-		    	<a class=" title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}">
+		    	<a class=" title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}" style="white-space:nowrap; overflow:hidden; text-overflow: ellipsis;">
 			    	{% if item.title|length > 30 %}
 			    		{{ item.title|slice(0,30) }}...
 		    		{% else %}

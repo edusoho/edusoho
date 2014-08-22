@@ -12,6 +12,11 @@
     </a>
   </li>
 
+  <li class="{% if submenu == 'consult_setting' %}active{% endif %}">
+    <a href="{{ url('admin_setting_consult_setting') }}">客服设置
+    </a>
+  </li>
+
   <li class="{% if submenu == 'payment' %}active{% endif %}">
   	<a href="{{ url('admin_setting_payment') }}">支付方式
   	</a>

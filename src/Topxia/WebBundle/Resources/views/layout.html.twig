@@ -114,6 +114,7 @@
       </div>
     {% endif %}
     {% block content %}{% endblock %}
+    
   </div><!-- /container -->
 
   <div class="site-footer container clearfix">
@@ -130,9 +131,8 @@
   </div>
 
   {% block bottom %}{% endblock %}
-
-  <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
-  <div id="modal" class="modal"></div>
+  <div id="login-modal" class="modal" data-url="/login/ajax"></div>
+<div id="modal" class="modal"></div>
 {% endblock %}
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}

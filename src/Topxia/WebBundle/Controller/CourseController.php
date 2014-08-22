@@ -62,6 +62,8 @@ class CourseController extends BaseController
 			'sort' => $sort,
 			'paginator' => $paginator,
 			'categories' => $categories,
+			'consultDisplay' => true,
+
 		));
 	}
 
@@ -239,7 +241,7 @@ class CourseController extends BaseController
 		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
 		$this->getCourseService()->hitCourse($id);
-		
+
 		$member = $this->previewAsMember($previewAs, $member, $course);
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
@@ -267,7 +269,9 @@ class CourseController extends BaseController
 				$checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
 			}
 		}
-		
+
+		$courseReviews = $this->getReviewService()->findCourseReviews($course['id'],'0','1');
+
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
@@ -280,7 +284,9 @@ class CourseController extends BaseController
 			'tags' => $tags,
 			'nextLiveLesson' => $nextLiveLesson,
 			'currentTime' => $currentTime,
-			'weeks' => $weeks
+			'courseReviews' => $courseReviews,
+			'weeks' => $weeks,
+			'consultDisplay' => true,
 		));
 
 	}
@@ -669,6 +675,11 @@ class CourseController extends BaseController
 	private function getTagService()
 	{
 		return $this->getServiceKernel()->createService('Taxonomy.TagService');
+	}
+
+	private function getReviewService()
+	{
+		return $this->getServiceKernel()->createService('Course.ReviewService');
 	}
 
 }

@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 	window.$ = window.jQuery = require('jquery');
 	require('bootstrap');
-	require('common/bootstrap-modal-hack');
+	require('common/bootstrap-modal-hack2');
 
 	exports.load = function(name) {
 		if (window.app.jsPaths[name.split('/', 1)[0]] == undefined) {
@@ -37,7 +37,7 @@ define(function(require, exports, module) {
 		}
 
 		if (error.name == 'Unlogin') {
-			$('.modal.in').modal('hide');
+			$('.modal').modal('hide');
 
 			$("#login-modal").modal('show');
 			$.get($('#login-modal').data('url'), function(html){
@@ -62,5 +62,45 @@ define(function(require, exports, module) {
 			b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
 		}
 	});
+
+
+    floatConsult();
+
+    function floatConsult()
+    {
+        var $element = $('#float-consult');
+        if ($element.length == 0) {
+            return ;
+        }
+
+        if ($element.data('display') == 'off') {
+            return ;
+        }
+
+        var marginTop = (0 - $element.height() / 2) + 'px' ;
+
+        var isIE10 = /MSIE\s+10.0/i.test(navigator.userAgent)
+	    && (function() {"use strict";return this === undefined;}());
+
+	    var isIE11 = (/Trident\/7\./).test(navigator.userAgent);
+
+    	if (isIE10 || isIE11) {
+	        $element.css( {marginTop: marginTop, visibility: 'visible',marginRight:'16px'});
+    	} else {
+	        $element.css( {marginTop: marginTop, visibility: 'visible'});
+    	}
+
+        $element.find('.btn-group-vertical .btn').popover({
+            placement: 'left',
+            trigger: 'hover',
+            html: true,
+            content: function() {
+                return $($(this).data('contentElement')).html();
+            }
+        });
+    }
+
+
+
 
 });
