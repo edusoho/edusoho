@@ -150,12 +150,12 @@
                         
                         <li style="{% if loop.index > 5 %} display:none;{% endif %}border-bottom:1px solid #ddd;" class="li-reply-{{post.id}}">
                             <div class="pull-left" style="width:80px;"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:reply.userId}) }}">
-                              <img src="{{ file_path(postMember[reply.userId].largeAvatar, 'avatar-large.png') }}">
+                              <img src="{{ file_path(postReplyMembers[reply.userId].largeAvatar, 'avatar-large.png') }}">
                             </a>
                             </div>
                            <div class="media">
                             <div class="media-body">
-                              {{ web_macro.user_link(postMember[reply.userId] , 'link-muted ') }}
+                              {{ web_macro.user_link(postReplyMembers[reply.userId] , 'link-muted ') }}
                               <p >{{reply.content}}</p>
                               <div class="text-muted text-normal pull-right">{{reply.createdTime|smart_time}}<a href="javascript:" class="li-reply" postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}"> 回复</a>
                               </div>

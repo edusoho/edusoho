@@ -155,11 +155,20 @@ class GroupThreadController extends BaseController
 
         $postId=ArrayToolkit::column($post, 'id');
 
+        $postReplyAll=array();
         foreach ($postId as $key => $value) {
-            $postReply[$value]=$this->getThreadService()->searchPosts(array('postId'=>$value),array('createdTime','asc'),
+
+            $reply=$this->getThreadService()->searchPosts(array('postId'=>$value),array('createdTime','asc'),
             0,
             1000);
+            $postReply[$value]=$reply;
+
+            if($reply){
+                $postReplyAll=array_merge($postReplyAll,ArrayToolkit::column($reply, 'userId'));
+            }
         }
+
+        $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
 
         $postMember=$this->getUserService()->findUsersByIds($postMemberIds);
 
@@ -181,6 +190,7 @@ class GroupThreadController extends BaseController
             'postCount'=>$postCount,
             'postReply'=>$postReply,
             'activeMembers'=>$activeMembers,
+            'postReplyMembers'=>$postReplyMembers,
             'members'=>$members,
             'is_groupmember' => $this->getGroupMemberRole($id)));
     }
