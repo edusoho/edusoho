@@ -10,6 +10,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     public function getUserterms()
     {
         $setting = $this->controller->getSettingService()->get('auth', array());
+        $userTerms = "暂无服务条款";
         if (array_key_exists("user_terms_body", $setting)) {
             $userTerms = $setting['user_terms_body'];
         }
