@@ -16,7 +16,9 @@ define(function(require, exports, module) {
 		events: {
 			putFailure: null
 		},
-
+		getFileSize: function(size) {
+        	return (size / (1024 * 1024)).toFixed(2) + "MB";
+    	},
 		onChanged: function(files){
 			var globalFiles = this.get("fileQueue");
 
@@ -30,7 +32,7 @@ define(function(require, exports, module) {
 		addFileItem: function(file, index){
 			var tr = "<tr>";
 			tr += "<td>"+file.name+"</td>";
-			tr += "<td>"+file.size+"</td>";
+			tr += "<td>"+this.getFileSize(file.size)+"</td>";
 			tr += "<td id='file_"+index+"'>"+this.createProccess(file, index)+"</td>";
 			tr += "</tr>";
 			$("#fileList table tbody").prepend($(tr));
