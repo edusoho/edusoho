@@ -10,7 +10,7 @@ class UserServiceImpl extends BaseService implements UserService
 {
     public function getVersion()
     {
-        var_dump("CourseServiceImpl->getVersion");
+        var_dump($this->request->get("name"));
         return $this->formData;
     }
     
