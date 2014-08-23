@@ -87,7 +87,15 @@ class MobileApiController extends MobileBaseController
 
 	    	$instance = call_user_func(array($class, "getInstance"), $class, $this);
 	    	$result = call_user_func(array($instance, $method));
-	    	return $this->createJson($request, $result);
+	    	return $this->createResponse($request, $result);
+	    }
+
+	    private function createResponse($request, $result)
+	    {
+	    	if (is_a($result, "Symfony\Component\HttpFoundation\Response")) {
+	    		return $result;
+	    	}
+	    	return $this->createJson($request, $result); 
 	    }
 
 	    private function getClassName($name)

@@ -4,6 +4,7 @@
 namespace Topxia\MobileBundleV2\Service\Impl;
 use Topxia\MobileBundleV2\Service\BaseService;
 use Topxia\MobileBundleV2\Service\SchoolService;
+use Symfony\Component\HttpFoundation\Response;
 
 class SchoolServiceImpl extends BaseService implements SchoolService {
 
@@ -14,7 +15,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         if (array_key_exists("user_terms_body", $setting)) {
             $userTerms = $setting['user_terms_body'];
         }
-        return $userTerms;
+        return new Response($userTerms);
     }
 
     public function getWeekRecommendCourses()
