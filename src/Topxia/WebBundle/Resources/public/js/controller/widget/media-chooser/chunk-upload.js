@@ -10,11 +10,18 @@ define(function(require, exports, module) {
 			uploadUrl:'http://up.qiniu.com',
 			defaultChunkSize: 1024 * 1024,
 			tableArray: null,
-			uploadTmps: 0
+			uploadTmps: 0,
+			currentFile: null
 		},
 
 		events: {
-			putFailure: null
+			putFailure: null,
+			"proccess": "onProccess"
+		},
+		onProccess: function(percentComplete,formatSpeed,fileIndex){
+			console.log(formatSpeed);
+			$("#progressbar"+fileIndex).attr("style", "width: " + percentComplete + "%");
+            $("#progressbarLabel"+fileIndex).text(percentComplete + "%" + ", 速度: " + formatSpeed);
 		},
 		getFileSize: function(size) {
         	return (size / (1024 * 1024)).toFixed(2) + "MB";
@@ -85,7 +92,7 @@ define(function(require, exports, module) {
 				startDate: new Date().getTime(),
 				uploadedBytes: 0,
 				blockCtxs: blockCtxs,
-				token: token,
+				token: token.postParams.token,
 
 				defaultBlockSize: this.get("defaultBlockSize"),
 				blockCount: blockCount,
@@ -93,7 +100,7 @@ define(function(require, exports, module) {
 				currentBlockSize: 0,
 
 				currentChunkSize: 0,
-				currentChunkIndex: 0,
+				currentChunkIndex: -1,
 				currentChunkOffsetInBlock: 0
 			};
 
@@ -114,7 +121,32 @@ define(function(require, exports, module) {
 	        return s;
 	    },
 		uploadLargeFile: function(fileScop){
-			this.uploadBlock(fileScop);
+			var self = this;
+			var keySize = fileScop.file.size>1024*1024?1024*1024:fileScop.file.size;
+			var startChunk = self.getChunk(fileScop.file, 0, keySize);
+
+			var _reader = new FileReader();
+	        _reader.onloadend = function(evt) {
+	            if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+	            	var crc = self.crc32(evt.target.result);
+	            	fileScop.key=crc+fileScop.file.name;
+	            	var savedFileInfo = Cookie.get("fileScop");
+	            	if(savedFileInfo){
+	            		var savedFileInfoArray = JSON.parse(savedFileInfo);
+	            		if(savedFileInfoArray.key == fileScop.key){
+	            			fileScop = $.extend(fileScop, savedFileInfoArray);
+	            			self.uploadAfterGetCrc(fileScop, fileScop.blkRet);
+	            			return;
+	            		}
+	            	}
+	            	self.uploadAfterGetCrc(fileScop);
+	            }
+	        };
+	        _reader.onerror = function(evt) {
+	            alert("Error: " + evt.target.error.code);
+	        };
+	        _reader.readAsBinaryString(startChunk);
+			
 		},
 		getChunkSize: function(offset, blkSize) {
 			var defaultChunkSize = this.get("defaultChunkSize");
@@ -129,20 +161,17 @@ define(function(require, exports, module) {
 	        }
 	        return null;
 	    },
-		uploadBlock: function(fileScop){
-			fileScop.currentBlockSize = this.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex); 
-			fileScop.currentChunkSize = this.getChunkSize(0, fileScop.currentBlockSize);
-			
-			var chunk = this.getChunk(fileScop.file, fileScop.uploadedBytes, fileScop.currentChunkSize);
-			this.mkBlock(fileScop, chunk);
-		},
 		mkBlock: function(fileScop, chunk){
-			console.log(fileScop);
-			fileScop.currentBlockSize = this.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex);
+			var uploadButton = $("#btn_upload");
+			if(uploadButton.attr("status")=="pause"){
+				return;
+			}
 			var self=this;
+			fileScop.currentBlockSize = self.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex);
+			
 			var xhr = new XMLHttpRequest();
             xhr.open('POST', this.get("uploadUrl") + "/mkblk/" + fileScop.currentBlockSize, true);
-            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token.postParams.token);
+            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token);
 			
             xhr.upload.addEventListener("progress", function(evt) {
                 if (evt.lengthComputable) {
@@ -158,26 +187,15 @@ define(function(require, exports, module) {
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
                     var percentComplete = Math.round(100 * tmp / fileScop.file.size);
-                    $("#progressbar"+fileScop.fileIndex).attr("style", "width: " + percentComplete + "%");
-                    $("#progressbarLabel"+fileScop.fileIndex).text(percentComplete + "%" + ", 速度: " + formatSpeed);
+                    self.element.trigger("proccess", percentComplete, formatSpeed, fileScop.fileIndex);
+                    
                 }
             }, false);
 
             xhr.onreadystatechange = function(response) {
                 if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
                 	var blkRet = JSON.parse(xhr.responseText);
-
-                	fileScop.uploadedBytes += fileScop.currentChunkSize;
-        			fileScop.currentChunkIndex ++;
-        			fileScop.currentChunkOffsetInBlock += fileScop.currentChunkSize;
-					fileScop.currentChunkSize = self.getChunkSize(fileScop.currentChunkOffsetInBlock, fileScop.currentBlockSize);
-					if(fileScop.currentChunkSize>0){
-						var chunk = self.getChunk(fileScop.file, fileScop.uploadedBytes, fileScop.currentChunkSize);
-                    	self.putChunk(fileScop, chunk, blkRet);
-					}else{
-						fileScop.blockCtxs[fileScop.currentBlockIndex] = blkRet.ctx;
-						self.mkFile(fileScop);
-					}
+                	self.uploadAfterGetCrc(fileScop, blkRet);
                 }
             };
             xhr.send(chunk);
@@ -187,7 +205,7 @@ define(function(require, exports, module) {
 			var self=this;
 			var xhr = new XMLHttpRequest();
             xhr.open('POST', this.get("uploadUrl") + "/mkfile/" + fileScop.file.size, true);
-            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token.postParams.token);
+            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token);
             var ctxs="";
             $.each(fileScop.blockCtxs, function(i,n){
             	if(i < (fileScop.blockCtxs.length-1))
@@ -197,20 +215,24 @@ define(function(require, exports, module) {
             });
             xhr.onreadystatechange = function(response) {
                 if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
-                	console.log(xhr.responseText);
                 	fileScop.fileIndex--;
+                	Cookie.del("fileScop");
+                	this.set("currentFile",null);
                 	self.trigger("upload", fileScop.fileIndex);
                 }
             }
             xhr.send(ctxs);
 		},
 		putChunk: function(fileScop, chunk, blkRet){
-			console.log(fileScop);
+			var uploadButton = $("#btn_upload");
+			if(uploadButton.attr("status")=="pause"){
+				return;
+			}
 			var uploadChunkSize = chunk.size;
 			var self = this;
 			var xhr = new XMLHttpRequest();
             xhr.open('POST', this.get("uploadUrl") + "/bput/" + blkRet.ctx + "/" + blkRet.offset, true);
-            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token.postParams.token);
+            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token);
             xhr.upload.addEventListener("progress", function(evt) {
             	if (evt.lengthComputable) {
                     var nowDate = new Date().getTime();
@@ -225,35 +247,13 @@ define(function(require, exports, module) {
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
                     var percentComplete = Math.round(100 * tmp / fileScop.file.size);
-                    $("#progressbar"+fileScop.fileIndex).attr("style", "width: " + percentComplete + "%");
-                    $("#progressbarLabel"+fileScop.fileIndex).text(percentComplete + "%" + ", 速度: " + formatSpeed);
+                    self.element.trigger("proccess", percentComplete, formatSpeed, fileScop.fileIndex);
                 }
             },false);
             xhr.onreadystatechange = function(response) {
 				if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
-					fileScop.uploadedBytes += fileScop.currentChunkSize;
 					var blkRet=JSON.parse(xhr.responseText);
-					fileScop.currentChunkIndex++;
-					fileScop.currentChunkOffsetInBlock += fileScop.currentChunkSize;
-					var chunkSize = self.getChunkSize(fileScop.currentChunkOffsetInBlock, fileScop.currentBlockSize);
-					if(chunkSize > 0){
-						fileScop.currentChunkSize = chunkSize;
-						var chunk = self.getChunk(fileScop.file, fileScop.uploadedBytes, chunkSize);
-						blkRet = self.putChunk(fileScop, chunk, blkRet);
-					}else{
-						fileScop.blockCtxs[fileScop.currentBlockIndex] = blkRet.ctx;
-						fileScop.currentBlockIndex++;
-						if(fileScop.currentBlockIndex<fileScop.blockCount){
-							fileScop.blockSize = self.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex); 
-							fileScop.currentChunkIndex = 0;
-							fileScop.currentChunkOffsetInBlock = 0;
-							fileScop.currentChunkSize = self.getChunkSize(fileScop.currentChunkOffsetInBlock, fileScop.blockSize);
-							var chunk = self.getChunk(fileScop.file, fileScop.uploadedBytes, fileScop.currentChunkSize);
-							self.mkBlock(fileScop, chunk);
-						}else{
-							self.mkFile(fileScop);
-						}
-					}
+					self.uploadAfterGetCrc(fileScop, blkRet);
 				}
 			};
 			xhr.send(chunk);
@@ -269,8 +269,8 @@ define(function(require, exports, module) {
 		},
 		crc32: function(str, crc) {
 	        if (crc == window.undefined) crc = 0;
-	        var n = 0; //a number between 0 and 255
-	        var x = 0; //an hex number
+	        var n = 0;
+	        var x = 0;
 	        crc = crc ^ (-1);
 	        for (var i = 0, iTop = str.length; i < iTop; i++) {
 	            n = (crc ^ str.charCodeAt(i)) & 0xFF;
@@ -283,14 +283,95 @@ define(function(require, exports, module) {
 	        return number;
 
 	    },
+	    uploadAfterGetCrc : function(fileScop, blkRet) {
+
+	    	var saveFileScop = {
+	    		key: fileScop.key,
+				uploadedBytes: fileScop.uploadedBytes,
+				blockCtxs: fileScop.blockCtxs,
+				token: fileScop.token,
+				blkRet: blkRet,
+
+				defaultBlockSize: fileScop.defaultBlockSize,
+				blockCount: fileScop.blockCount,
+				currentBlockIndex: fileScop.currentBlockIndex,
+				currentBlockSize: fileScop.currentBlockSize,
+
+				currentChunkSize: fileScop.currentChunkSize,
+				currentChunkIndex: fileScop.currentChunkIndex,
+				currentChunkOffsetInBlock: fileScop.currentChunkOffsetInBlock
+			};
+
+        	Cookie.set("fileScop",JSON.stringify(saveFileScop));
+
+	    	var self=this;
+
+	    	fileScop.currentChunkIndex++;
+	    	fileScop.currentBlockSize = self.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex);
+	    	fileScop.currentChunkSize = self.getChunkSize(fileScop.currentChunkOffsetInBlock, fileScop.currentBlockSize);
+	    	
+	    	if(!fileScop.currentChunkSize > 0){
+	    		
+	    		fileScop.currentChunkIndex = 0;
+	    		fileScop.currentBlockIndex++;
+	    		fileScop.currentChunkOffsetInBlock = 0;
+
+	    		fileScop.currentBlockSize = self.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex);
+	    		fileScop.currentChunkSize = self.getChunkSize(fileScop.currentChunkOffsetInBlock, fileScop.currentBlockSize);
+	    	
+	    	}
+
+	    	var chunk = self.getChunk(fileScop.file, fileScop.uploadedBytes, fileScop.currentChunkSize);
+
+	    	fileScop.uploadedBytes += fileScop.currentChunkSize;
+	    	fileScop.currentChunkOffsetInBlock += fileScop.currentChunkSize;
+
+	        var _reader = new FileReader();
+	        _reader.onloadend = function(evt) {
+	            if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+	            	fileScop.crc = self.crc32(evt.target.result);
+	            	if(fileScop.currentChunkIndex == 0 && fileScop.currentBlockIndex>0){
+            			fileScop.blockCtxs[fileScop.currentBlockIndex-1]=blkRet.ctx;
+            		}
+	            	if(fileScop.currentChunkIndex == 0 && fileScop.currentBlockIndex < fileScop.blockCount){
+	            		self.mkBlock(fileScop, chunk);
+	            	} else if(fileScop.currentBlockIndex >= fileScop.blockCount){
+						self.mkFile(fileScop);
+					} else {
+						self.putChunk(fileScop, chunk, blkRet);
+					}
+	            }
+	        };
+	        _reader.onerror = function(evt) {
+	            alert("Error: " + evt.target.error.code);
+	        };
+	        _reader.readAsBinaryString(chunk);
+	    },
 		uploadSmallFile: function(file) {
 	        console.log(file.name);
 	    },
 		onUpload: function(fileIndex){
-			var file = this.get("fileQueue").pop();
+			var uploadButton = $("#btn_upload");
+			var status = uploadButton.attr("status");
+			if(status=="proccess" || status==""){
+				uploadButton.attr("status", "pause");
+				uploadButton.find("span").html("继续");
+				return;
+			}
+			uploadButton.attr("status", "proccess");
+			uploadButton.find("span").html("暂停");
+			var file=this.get("currentFile");
+			if(!file){
+				file = this.get("fileQueue").pop();
+				this.set("currentFile",file);
+			}
+			var startChunk = this.getChunk(file, 0, 1024*1024);
+			var endChunk = this.getChunk(file,file.size-1024*1024, 1024*1024);
+
 			if(file){
 				this.upload(file, fileIndex);
 			}
+			
 		},
 		setup: function() {
 			$("#btn_upload").prop("disabled", true);
@@ -323,25 +404,6 @@ define(function(require, exports, module) {
 	        var cval = this.get(name);
 	        if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
 	    }
-	};
-
-	JSON.stringifyArray = function(arr) {
-	    var rest = "";
-	    for (var i = 0; i < arr.length - 1; i++) {
-	        rest += JSON.stringify(arr[i]);
-	        rest += "+";
-	    }
-	    rest += JSON.stringify(arr[arr.length - 1]);
-	    return rest;
-	};
-
-	JSON.parseArray = function(str) {
-	    var rest = [];
-	    strs = str.split("+");
-	    for (var i = 0; i < strs.length; i++) {
-	        rest.push(JSON.parse(strs[i]));
-	    }
-	    return rest;
 	};
 
 	module.exports = ChunkUpload;
