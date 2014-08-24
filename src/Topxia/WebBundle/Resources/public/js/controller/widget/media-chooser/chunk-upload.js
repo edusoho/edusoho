@@ -5,86 +5,22 @@ define(function(require, exports, module) {
 		attrs: {
 			fileQueue : [],
 			uploadButton:'',
-			tokenUrl: '/uploadfile/params',
 			defaultBlockSize: 4 * 1024 * 1024,
-			uploadUrl:'http://up.qiniu.com',
+			uploadUrl:null,
 			defaultChunkSize: 1024 * 1024,
 			tableArray: null,
-			uploadTmps: 0,
 			currentFile: null
 		},
 
 		events: {
-			putFailure: null,
-			"proccess": "onProccess"
-		},
-		onProccess: function(percentComplete,formatSpeed,fileIndex){
-			console.log(formatSpeed);
-			$("#progressbar"+fileIndex).attr("style", "width: " + percentComplete + "%");
-            $("#progressbarLabel"+fileIndex).text(percentComplete + "%" + ", 速度: " + formatSpeed);
+			"click .btn-default": "onUploadButtonClick",
+			"change input[data-role='fileSelected']": "onSelectFileChange"
 		},
 		getFileSize: function(size) {
         	return (size / (1024 * 1024)).toFixed(2) + "MB";
     	},
-		onChanged: function(files){
-			var globalFiles = this.get("fileQueue");
-
-			for (var i = 0; i < files.length; i++) {
-                globalFiles.push(files[i]);
-                this.addFileItem(files[i], i);
-            }
-            this.showUploadButton();
-            this.set("fileQueue", globalFiles);
-		},
-		addFileItem: function(file, index){
-			var tr = "<tr>";
-			tr += "<td>"+file.name+"</td>";
-			tr += "<td>"+this.getFileSize(file.size)+"</td>";
-			tr += "<td id='file_"+index+"'>"+this.createProccess(file, index)+"</td>";
-			tr += "</tr>";
-			$("#fileList table tbody").prepend($(tr));
-		},
-		createProccess: function(file, index){
-			return '<div class="progress">'
-			+'<div id="progressbar'+index+'" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">'
-			+'</div>'
-			+'<div class="pLabel" id="progressbarLabel'+index+'"></div>'
-			+'</div>';
-		},
-		showUploadButton: function(){
-			var self = this;
-			$("#btn_upload").prop("disabled", false);
-			self.on('upload', self.onUpload);
-			$("#btn_upload").on("click", function(e){
-				self.trigger("upload", self.get("fileQueue").length-1);
-			});
-		},
-		preUpload: function(){
-
-		},
-		getToken: function(){
-			var params = {
-				storage : "cloud",
-				targetType : "courselesson",
-				targetId: "26",
-				videoQuality: "low",
-				audioQuality: "low",
-				convertor: "HLSEncryptedVideo"
-			};
-			var token;
-			$.ajax({
-				url: this.get("tokenUrl"), 
-				data: params, 
-				async: false,
-				success: function(response){
-					token = response;
-				}
-			});
-			return token;
-		},
 		upload: function(file, fileIndex){
 			var blockCount = this.blockCnt(file.size);
-			var token = this.getToken();
 			var blockCtxs = new Array();
 			var fileScop = {
 				fileIndex: fileIndex,
@@ -92,7 +28,7 @@ define(function(require, exports, module) {
 				startDate: new Date().getTime(),
 				uploadedBytes: 0,
 				blockCtxs: blockCtxs,
-				token: token.postParams.token,
+				postParams: this.get("postParams"),
 
 				defaultBlockSize: this.get("defaultBlockSize"),
 				blockCount: blockCount,
@@ -104,11 +40,7 @@ define(function(require, exports, module) {
 				currentChunkOffsetInBlock: 0
 			};
 
-	        if (fileScop.file.size < fileScop.defaultBlockSize) {
-                this.uploadSmallFile(fileScop.file);
-            } else {
-                this.uploadLargeFile(fileScop);
-            }
+            this.uploadLargeFile(fileScop);
 		},
 		blockCnt: function(fileSize) {
 			var blockBits = 22;
@@ -170,8 +102,8 @@ define(function(require, exports, module) {
 			fileScop.currentBlockSize = self.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex);
 			
 			var xhr = new XMLHttpRequest();
-            xhr.open('POST', this.get("uploadUrl") + "/mkblk/" + fileScop.currentBlockSize, true);
-            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token);
+            xhr.open('POST', this.get("uploadUrl") + "mkblk/" + fileScop.currentBlockSize, true);
+            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.postParams.token);
 			
             xhr.upload.addEventListener("progress", function(evt) {
                 if (evt.lengthComputable) {
@@ -186,9 +118,7 @@ define(function(require, exports, module) {
                         formatSpeed = uploadSpeed.toFixed(2) + "Kb\/s";
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
-                    var percentComplete = Math.round(100 * tmp / fileScop.file.size);
-                    self.element.trigger("proccess", percentComplete, formatSpeed, fileScop.fileIndex);
-                    
+                    self.get("upload_progress_handler")(self.get("currentFile"), tmp, fileScop.file.size);
                 }
             }, false);
 
@@ -201,11 +131,70 @@ define(function(require, exports, module) {
             xhr.send(chunk);
 
 		},
+
+		base64encode: function(str) {
+			var base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
+		    var out, i, len;
+		    var c1, c2, c3;
+		    len = str.length;
+		    i = 0;
+		    out = "";
+		    while (i < len) {
+		        c1 = str.charCodeAt(i++) & 0xff;
+		        if (i == len) {
+		            out += base64EncodeChars.charAt(c1 >> 2);
+		            out += base64EncodeChars.charAt((c1 & 0x3) << 4);
+		            out += "==";
+		            break;
+		        }
+		        c2 = str.charCodeAt(i++);
+		        if (i == len) {
+		            out += base64EncodeChars.charAt(c1 >> 2);
+		            out += base64EncodeChars.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+		            out += base64EncodeChars.charAt((c2 & 0xF) << 2);
+		            out += "=";
+		            break;
+		        }
+		        c3 = str.charCodeAt(i++);
+		        out += base64EncodeChars.charAt(c1 >> 2);
+		        out += base64EncodeChars.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+		        out += base64EncodeChars.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6));
+		        out += base64EncodeChars.charAt(c3 & 0x3F);
+		    }
+		    return out;
+		},
+
+		utf16to8: function(str) {
+		    var out, i, len, c;
+		    out = "";
+		    len = str.length;
+		    for (i = 0; i < len; i++) {
+		        c = str.charCodeAt(i);
+		        if ((c >= 0x0001) && (c <= 0x007F)) {
+		            out += str.charAt(i);
+		        } else if (c > 0x07FF) {
+		            out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+		            out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
+		            out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+		        } else {
+		            out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
+		            out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+		        }
+		    }
+		    return out;
+		},
+
 		mkFile: function(fileScop){
 			var self=this;
+
+			var url = this.get("uploadUrl") + "mkfile/" + fileScop.file.size;
+			url = url + "/key/" + self.base64encode(self.utf16to8(fileScop.postParams.key));
+            url = url + "/x:convertParams/" + self.base64encode(self.utf16to8(fileScop.postParams["x:convertParams"]));
+			
 			var xhr = new XMLHttpRequest();
-            xhr.open('POST', this.get("uploadUrl") + "/mkfile/" + fileScop.file.size, true);
-            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token);
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.postParams.token);
             var ctxs="";
             $.each(fileScop.blockCtxs, function(i,n){
             	if(i < (fileScop.blockCtxs.length-1))
@@ -215,10 +204,14 @@ define(function(require, exports, module) {
             });
             xhr.onreadystatechange = function(response) {
                 if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
+                	var response = JSON.parse(xhr.responseText);
+                	response.filename=self.get("currentFile").name;
+                	self.get("upload_success_handler")(self.get("currentFile"),JSON.stringify(response));
                 	fileScop.fileIndex--;
                 	Cookie.del("fileScop");
-                	this.set("currentFile",null);
+                	self.set("currentFile",null);
                 	self.trigger("upload", fileScop.fileIndex);
+
                 }
             }
             xhr.send(ctxs);
@@ -231,8 +224,8 @@ define(function(require, exports, module) {
 			var uploadChunkSize = chunk.size;
 			var self = this;
 			var xhr = new XMLHttpRequest();
-            xhr.open('POST', this.get("uploadUrl") + "/bput/" + blkRet.ctx + "/" + blkRet.offset, true);
-            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.token);
+            xhr.open('POST', this.get("uploadUrl") + "bput/" + blkRet.ctx + "/" + blkRet.offset, true);
+            xhr.setRequestHeader("Authorization", "UpToken " + fileScop.postParams.token);
             xhr.upload.addEventListener("progress", function(evt) {
             	if (evt.lengthComputable) {
                     var nowDate = new Date().getTime();
@@ -246,8 +239,7 @@ define(function(require, exports, module) {
                         formatSpeed = uploadSpeed.toFixed(2) + "Kb\/s";
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
-                    var percentComplete = Math.round(100 * tmp / fileScop.file.size);
-                    self.element.trigger("proccess", percentComplete, formatSpeed, fileScop.fileIndex);
+                    self.get("upload_progress_handler")(self.get("currentFile"), tmp, fileScop.file.size);
                 }
             },false);
             xhr.onreadystatechange = function(response) {
@@ -289,7 +281,7 @@ define(function(require, exports, module) {
 	    		key: fileScop.key,
 				uploadedBytes: fileScop.uploadedBytes,
 				blockCtxs: fileScop.blockCtxs,
-				token: fileScop.token,
+				postParams: fileScop.postParams,
 				blkRet: blkRet,
 
 				defaultBlockSize: fileScop.defaultBlockSize,
@@ -347,42 +339,47 @@ define(function(require, exports, module) {
 	        };
 	        _reader.readAsBinaryString(chunk);
 	    },
-		uploadSmallFile: function(file) {
-	        console.log(file.name);
-	    },
 		onUpload: function(fileIndex){
-			var uploadButton = $("#btn_upload");
-			var status = uploadButton.attr("status");
-			if(status=="proccess" || status==""){
-				uploadButton.attr("status", "pause");
-				uploadButton.find("span").html("继续");
-				return;
-			}
-			uploadButton.attr("status", "proccess");
-			uploadButton.find("span").html("暂停");
 			var file=this.get("currentFile");
 			if(!file){
 				file = this.get("fileQueue").pop();
 				this.set("currentFile",file);
 			}
-			var startChunk = this.getChunk(file, 0, 1024*1024);
-			var endChunk = this.getChunk(file,file.size-1024*1024, 1024*1024);
 
 			if(file){
+				this.get("upload_start_handler").call(this,this,file);
 				this.upload(file, fileIndex);
 			}
 			
 		},
-		setup: function() {
-			$("#btn_upload").prop("disabled", true);
+		setUploadURL: function(url){
+			this.set("uploadUrl", url);
+		},
+		setPostParams: function(postParams){
+			this.set("postParams", postParams);
+		},
+		_initFileQueue: function(files){
+			var globalFiles = this.get("fileQueue");
 
+			for (var i = 0; i < files.length; i++) {
+                globalFiles.push(files[i]);
+            }
+            this.set("fileQueue", globalFiles);
+		},
+
+		onUploadButtonClick: function(){
+			this.element.find("input[data-role='fileSelected']").click();
+		},
+		onSelectFileChange: function(){
+			this.element.find("a.uploadBtn").prop("disabled", true);
+			this._initFileQueue(this.element.find("input[data-role='fileSelected']")[0].files);
+			var files = this.get("fileQueue");
+			this.onUpload(files.length-1);
+		},
+		setup: function() {
 			this.set("tableArray", this.getTableArray());
-			var self = this;
-			self.on('change', self.onChanged);
-			self.element.on("change", function(e){
-				self.trigger("change", this.files);
-			});
-			
+			var fileTypes=this.get("file_types").replace(/\*/g,"").replace(/;/g,",");
+			this.element.find("input[data-role='fileSelected']").attr("accept",fileTypes);
 		}
 	});
 	

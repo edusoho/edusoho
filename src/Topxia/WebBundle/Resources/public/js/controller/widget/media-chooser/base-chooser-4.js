@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     require('swfupload');
     var Widget = require('widget');
     var FileBrowser = require('../file/file-browser');
+    var ChunkUpload = require('./chunk-upload');
     var Notify = require('common/bootstrap-notify');
 
     var BaseChooser = Widget.extend({
@@ -121,6 +122,15 @@ define(function(require, exports, module) {
 
             this.set('uploaderProgressbar', progressbar);
             this.set('uploader', this._createSWFUpload($btn, progressbar));
+            //this.set('uploader', this._createChunkUpload($btn, progressbar));
+        },
+
+        _createChunkUpload: function($btn, progressbar){
+            var element = this.element;
+            var chunkUpload = new ChunkUpload({
+                element: element,
+                progressbar: progressbar
+            });
         },
 
         _createSWFUpload: function($btn, progressbar) {
@@ -199,9 +209,10 @@ define(function(require, exports, module) {
                 settings.file_types = $btn.data('filetypes');
             }
 
-            var swfu = new SWFUpload(settings);
-
-            return swfu;
+            //var swfu = new SWFUpload(settings);
+            settings.element=this.element;
+            var uploader = new ChunkUpload(settings);
+            return uploader;
         }
 
     });
