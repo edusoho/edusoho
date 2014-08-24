@@ -94,10 +94,6 @@ define(function(require, exports, module) {
 	        return null;
 	    },
 		mkBlock: function(fileScop, chunk){
-			var uploadButton = $("#btn_upload");
-			if(uploadButton.attr("status")=="pause"){
-				return;
-			}
 			var self=this;
 			fileScop.currentBlockSize = self.getBlocksize(fileScop.file.size, fileScop.currentBlockIndex);
 			
