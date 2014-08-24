@@ -800,41 +800,44 @@ class SettingController extends BaseController
         return $this->redirect($this->generateUrl('admin_setting_user_fields')); 
     }
 
-    public function contactSettingAction(Request $request)
+    public function consultSettingAction(Request $request)
     { 
-        $contact = $this->getSettingService()->get('contact', array());
+        $consult = $this->getSettingService()->get('consult', array());
         $default = array(
-            'enabled'=>0,
-            'title'=>'马上咨询',
-            'worktime'=>'9:00 - 17:00',
-            'qq1'=>'',
-            'qq2'=>'',
-            'qq3'=>'',
-            'qqgroup1'=>'',
-            'qqgroup2'=>'',
-            'qqgroup3'=>'',
-            'hotline1'=>'',
-            'hotline2'=>'',
-            'hotline3'=>'',
-            'webchat'=>'',
+            'enabled' => 0,
+            'worktime' => '9:00 - 17:00',
+            'qq' => array(
+                array('name' => '','number' => ''),
+                ),
+            'qqgroup' => array(
+                array('name' => '','number' => ''),
+                ),
+            'phone' => array(
+                array('name' => '','number' => ''),
+                ),
             'webchatURI' => '',
-            'email'=>'',
+            'email' => '',
+            'color' => 'default',
             );
-        $contact = array_merge($default, $contact);
+
+        $consult = array_merge($default, $consult);
         if ($request->getMethod() == 'POST') {
-            $contact = $request->request->all();
-            $this->getSettingService()->set('contact', $contact);
-            $this->getLogService()->info('system', 'update_settings', "更新QQ客服设置", $contact);
+            $consult = $request->request->all();
+            ksort($consult['qq']);
+            ksort($consult['qqgroup']);
+            ksort($consult['phone']);
+            $this->getSettingService()->set('consult', $consult);
+            $this->getLogService()->info('system', 'update_settings', "更新QQ客服设置", $consult);
             $this->setFlashMessage('success', 'QQ客服设置已保存！');
         }
-        return $this->render('TopxiaAdminBundle:System:contact-setting.html.twig', array(
-            'contact' => $contact,
+        return $this->render('TopxiaAdminBundle:System:consult-setting.html.twig', array(
+            'consult' => $consult,
         ));
     }
 
-    public function contactUploadAction(Request $request)
+    public function consultUploadAction(Request $request)
     {
-        $file = $request->files->get('contact');
+        $file = $request->files->get('consult');
         if (!FileToolkit::isImageFile($file)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
@@ -844,18 +847,18 @@ class SettingController extends BaseController
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
-        $contact = $this->getSettingService()->get('contact', array());
+        $consult = $this->getSettingService()->get('consult', array());
 
-        $contact['webchatURI'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
-        $contact['webchatURI'] = ltrim($contact['webchatURI'], '/');
+        $consult['webchatURI'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $consult['webchatURI'] = ltrim($consult['webchatURI'], '/');
 
-        $this->getSettingService()->set('contact', $contact);
+        $this->getSettingService()->set('consult', $consult);
 
-        $this->getLogService()->info('system', 'update_settings', "更新微信二维码", array('webchatURI' => $contact['webchatURI']));
+        $this->getLogService()->info('system', 'update_settings', "更新微信二维码", array('webchatURI' => $consult['webchatURI']));
 
         $response = array(
-            'path' => $contact['webchatURI'],
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($contact['webchatURI']),
+            'path' => $consult['webchatURI'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($consult['webchatURI']),
         );
 
         return new Response(json_encode($response));

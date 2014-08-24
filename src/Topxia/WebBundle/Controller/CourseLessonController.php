@@ -153,6 +153,21 @@ class CourseLessonController extends BaseController
         $json['id'] = $lesson['id'];
         $json['courseId'] = $lesson['courseId'];
 
+        $json['isTeacher'] = $this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
+        if($lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated') {
+            $json['replays'] = $this->getCourseService()->getCourseLessonReplayByLessonId($lesson['id']);
+            if(!empty($json['replays'])) {
+                foreach ($json['replays'] as $key => $value) {
+                    $url = $this->generateUrl('live_course_lesson_replay_entry', array(
+                        'courseId' => $lesson['courseId'], 
+                        'lessonId' => $lesson['id'], 
+                        'courseLessonReplayId' => $value['id']
+                    ), true);
+                    $json['replays'][$key]["url"] = $url;
+                }
+            }
+        }
+
         if ($json['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 

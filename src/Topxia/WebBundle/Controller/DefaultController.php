@@ -30,7 +30,8 @@ class DefaultController extends BaseController
             'courses' => $courses,
             'categories' => $categories,
             'blocks' => $blocks,
-            'recentLiveCourses' => $recentLiveCourses
+            'recentLiveCourses' => $recentLiveCourses,
+            'consultDisplay' => true
         ));
     }
 
@@ -134,7 +135,11 @@ class DefaultController extends BaseController
     public function jumpAction(Request $request)
     {
         $courseId = intval($request->query->get('id'));
-        $url = $this->generateUrl('course_show', array('id' => $courseId));
+        if($this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id)){
+            $url = $this->generateUrl('live_course_manage_replay', array('id' => $courseId));
+        }else{
+            $url = $this->generateUrl('course_show', array('id' => $courseId));
+        }
         echo "<script type=\"text/javascript\"> 
         if (top.location !== self.location) {
         top.location = \"{$url}\";

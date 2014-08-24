@@ -424,13 +424,13 @@ admin_setting_course_setting:
     pattern:  /setting/course-setting
     defaults: { _controller: TopxiaAdminBundle:Setting:courseSetting }
 
-admin_setting_contact_setting:
-    pattern:  /setting/contact-setting
-    defaults: { _controller: TopxiaAdminBundle:Setting:contactSetting }
+admin_setting_consult_setting:
+    pattern:  /setting/consult-setting
+    defaults: { _controller: TopxiaAdminBundle:Setting:consultSetting }
 
-admin_setting_contact_upload:
-    pattern:  /setting/contact-upload
-    defaults: { _controller: TopxiaAdminBundle:Setting:contactUpload }
+admin_setting_consult_upload:
+    pattern:  /setting/consult-upload
+    defaults: { _controller: TopxiaAdminBundle:Setting:consultUpload }
 
 admin_setting_admin_sync:
     pattern:  /setting/admin_sync

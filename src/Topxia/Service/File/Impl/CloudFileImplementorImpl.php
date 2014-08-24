@@ -241,7 +241,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $params;
     }
 
-    public function reconvertFile($file, $convertCallback)
+    public function reconvertFile($file, $convertCallback, $pipeline = null)
     {
         if (empty($file['convertParams'])) {
             return null;
@@ -252,6 +252,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'convertor' => $file['convertParams']['convertor'],
             'convertParams' => $file['convertParams'],
         );
+
+        if ($pipeline) {
+            $params['pipeline'] = $pipeline;
+        }
 
         $result = $this->getCloudClient()->reconvertFile($file['hashId'], $params);
 
