@@ -121,7 +121,7 @@ define(function(require, exports, module) {
             var progressbar = new UploadProgressBar($btn.data('progressbar'));
 
             this.set('uploaderProgressbar', progressbar);
-            this.set('uploader', this._createSWFUpload($btn, progressbar));
+            this.set('uploader', this._createUpload($btn, progressbar));
             //this.set('uploader', this._createChunkUpload($btn, progressbar));
         },
 
@@ -133,7 +133,7 @@ define(function(require, exports, module) {
             });
         },
 
-        _createSWFUpload: function($btn, progressbar) {
+        _createUpload: function($btn, progressbar) {
             var self = this;
 
             var settings = $.extend({}, {
@@ -208,11 +208,12 @@ define(function(require, exports, module) {
             if ($btn.data('filetypes')) {
                 settings.file_types = $btn.data('filetypes');
             }
-
-            //var swfu = new SWFUpload(settings);
-            settings.element=this.element;
-            var uploader = new ChunkUpload(settings);
-            return uploader;
+            if(FileReader && FileReader.DONE){
+                settings.element=this.element;
+                return new ChunkUpload(settings);
+            }else{
+                return new SWFUpload(settings);
+            }
         }
 
     });
