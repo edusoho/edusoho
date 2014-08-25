@@ -15,6 +15,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         if (array_key_exists("user_terms_body", $setting)) {
             $userTerms = $setting['user_terms_body'];
         }
+        
         return new Response($userTerms);
     }
 
