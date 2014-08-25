@@ -87,56 +87,62 @@
 
         if($('.reply').length>0){
 
-            $('.reply').on('click',function(){
-               
-               var postId=$(this).attr('postId');
-
-               $(this).hide();
-               $('#unreply-'+postId).show();
-               $('.reply-'+postId).slideDown('slow');
-               
-            });
-
-            $('.unreply').on('click',function(){
-               
-               var postId=$(this).attr('postId');
-
-               $(this).hide();
-               $('#reply-'+postId).show();
-               $('.reply-'+postId).slideUp('slow');
-               
-            });
-
-
-            $('.replyToo').on('click',function(){
-               
-               var postId=$(this).attr('postId');
-
-               $('#li-'+postId).show();
-
-               $('#reply-content-'+postId).val("");
-               
-            });
-
-            $('.lookOver').on('click',function(){
-               
-               var postId=$(this).attr('postId');
-               $('.li-reply-'+postId).css('display',"");
-               $('.lookOver-'+postId).hide();    
-               
-            });
-
-            $('.li-reply').on('click',function(){
-               
+            $('.table').on('click','.li-reply',function(){
                var postId=$(this).attr('postId');
 
                $('#li-'+postId).show();
 
                $('#reply-content-'+postId).val("回复 "+$(this).attr("postName")+":");
-               
+
             });
 
-            $('.reply-btn').on('click',function(){
+            $('.table').on('click','.reply',function(){
+               var postId=$(this).attr('postId');
+
+               $(this).hide();
+               $('#unreply-'+postId).show();
+               $('.reply-'+postId).slideDown('slow');
+
+            });
+
+            $('.table').on('click','.unreply',function(){
+               var postId=$(this).attr('postId');
+
+               $(this).hide();
+               $('#reply-'+postId).show();
+               $('.reply-'+postId).slideUp('slow');
+
+            });
+
+            $('.table').on('click','.replyToo',function(){
+               var postId=$(this).attr('postId');
+
+               $('#li-'+postId).show();
+
+               $('#reply-content-'+postId).val("");
+
+            });
+
+            $('.table').on('click','.lookOver',function(){
+               
+               var postId=$(this).attr('postId');
+               $('.li-reply-'+postId).css('display',"");
+               $('.lookOver-'+postId).hide();
+               $('.paginator-'+postId).css('display',"");
+
+            });
+
+            $('.table').on('click','.postReply-page',function(){
+
+                var postId=$(this).attr('postId');
+                $.post($(this).data('url'),"",function(html){
+                $('.reply-post-list-'+postId).replaceWith(html);
+                
+                })
+
+            });
+
+            $('.table').on('click','.reply-btn',function(){
                 
                 var postId=$(this).attr('postId');
 
@@ -160,8 +166,6 @@
 
                 }
              
-                
-               
             });
 
         }

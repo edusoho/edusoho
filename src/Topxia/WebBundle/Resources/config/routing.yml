@@ -1259,6 +1259,9 @@ group_thread_closeThread:
 group_thread_deletePost:
     pattern:  /group/thread/deletePost/{postId}/{memberId}/{threadOwnerId}/{groupOwnerId}/{groupId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:deletePost }
+group_thread_post_reply:
+    pattern:  /group/post/reply/{postId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
 
 #占位
 vip:

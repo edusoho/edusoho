@@ -156,12 +156,25 @@ class GroupThreadController extends BaseController
         $postId=ArrayToolkit::column($post, 'id');
 
         $postReplyAll=array();
+        $postReply=array();
+        $postReplyCount=array();
+        $postReplyPaginator=array();
         foreach ($postId as $key => $value) {
 
+            $replyCount=$this->getThreadService()->searchPostsCount(array('postId'=>$value));
+            $replyPaginator = new Paginator(
+                $this->get('request'),
+                $replyCount,
+                10  
+            );
+
             $reply=$this->getThreadService()->searchPosts(array('postId'=>$value),array('createdTime','asc'),
-            0,
-            1000);
+                $replyPaginator->getOffsetCount(),
+                $replyPaginator->getPerPageCount());
+
+            $postReplyCount[$value]=$replyCount;
             $postReply[$value]=$reply;
+            $postReplyPaginator[$value]=$replyPaginator;
 
             if($reply){
                 $postReplyAll=array_merge($postReplyAll,ArrayToolkit::column($reply, 'userId'));
@@ -192,7 +205,38 @@ class GroupThreadController extends BaseController
             'activeMembers'=>$activeMembers,
             'postReplyMembers'=>$postReplyMembers,
             'members'=>$members,
+            'postReplyCount'=>$postReplyCount,
+            'postReplyPaginator'=>$postReplyPaginator,
             'is_groupmember' => $this->getGroupMemberRole($id)));
+    }
+
+    public function postReplyAction(Request $request,$postId)
+    {   
+        $postReplyAll=array();
+
+        $replyCount=$this->getThreadService()->searchPostsCount(array('postId'=>$postId));
+
+        $postReplyPaginator = new Paginator(
+                $this->get('request'),
+                $replyCount,
+                10  
+            );
+
+        $postReply=$this->getThreadService()->searchPosts(array('postId'=>$postId),array('createdTime','asc'),
+                $postReplyPaginator->getOffsetCount(),
+                $postReplyPaginator->getPerPageCount());
+
+        if($postReply){
+                $postReplyAll=array_merge($postReplyAll,ArrayToolkit::column($postReply, 'userId'));
+        }
+        $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
+        return $this->render('TopxiaWebBundle:Group:thread.reply.list.html.twig',array(
+            'post' => array('id'=>$postId),
+            'postReply'=>$postReply,
+            'postReplyMembers'=>$postReplyMembers,
+            'postReplyCount'=>$replyCount,
+            'postReplyPaginator'=>$postReplyPaginator,
+            ));
     }
 
     public function postThreadAction(Request $request,$groupId,$threadId)

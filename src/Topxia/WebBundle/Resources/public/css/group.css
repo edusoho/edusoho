@@ -73,3 +73,6 @@
 .label {
     padding: .2em .6em .2em;
 }
+.pagination li{
+    cursor: pointer;
+}

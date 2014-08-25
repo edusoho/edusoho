@@ -108,7 +108,7 @@
                     </div>        
                 </div>
                 
-                <div class="bottom-thread-post col-md-12">     
+                <div class="bottom-thread-post col-md-12" >     
                     <div class="text-muted pull-right" >&nbsp;
                     {% if filters.sort=='desc' %}
                       {{ (postCount+1)-10*(paginator.currentPage-1)-loop.index0 }}
@@ -116,7 +116,7 @@
                       {{ (loop.index+1)+10*(paginator.currentPage-1) }}
                     {% endif %}
                     楼 {{post.createdTime|smart_time}} 
-                    {% if not postReply[post.id] %}<a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}">回复</a><a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">收起</a>{% else %}<a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}">回复</a><a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >收起</a>{% endif %}
+                    {% if not postReply[post.id] %}<a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}">回复</a><a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">收起</a>{% else %}<a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}">回复({{postReplyCount[post.id]}})</a><a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >收起</a>{% endif %}
 
                   </div>
 
@@ -145,6 +145,7 @@
                 <div class="reply-{{post.id}} " style="{% if not postReply[post.id] %}display:none;{% endif %}position: relative;"> 
              
                  <ul class="list-unstyled col-md-10 col-md-offset-2" style="background-color:#f0f1f2">
+                    <div class="reply-post-list-{{post.id}}">
                     {% if postReply[post.id] %}
                     {% for reply in postReply[post.id] %} 
                         
@@ -156,25 +157,46 @@
                            <div class="media">
                             <div class="media-body">
                               {{ web_macro.user_link(postReplyMembers[reply.userId] , 'link-muted ') }}
-                              <p >{{reply.content}}</p>
-                              <div class="text-muted text-normal pull-right">{{reply.createdTime|smart_time}}<a href="javascript:" class="li-reply" postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}"> 回复</a>
+                              <p >{{reply.content|raw}}&nbsp;</p>
+                              <div class="text-muted text-normal pull-right">{{reply.createdTime|smart_time}}<a href="javascript:" class="li-reply" postId="{{post.id}}" postName="{{postReplyMembers[reply.userId].nickname}}"> 回复</a>
                               </div>
                             </div> 
                           </div>
                         </li>
                         {% if loop.index > 5 and  loop.index==loop.length %}
-                        <li class="lookOver-{{post.id}} pull-left" >&nbsp;&nbsp;&nbsp;还有{{loop.length-5}}条回复<a href="javascript:" postId="{{post.id}}" class="lookOver">/点击查看</a></li>
+                        <li class="lookOver-{{post.id}} pull-left" >&nbsp;&nbsp;&nbsp;还有{{postReplyCount[post.id]-5}}条回复<a href="javascript:" postId="{{post.id}}" class="lookOver">/点击查看</a></li>
                         {% endif %}
                     {% endfor %}
                     {% endif %}<br>
                   {% if postReply[post.id] %}
-                  <li><a class="replyToo btn btn-default btn-xs pull-right" postId="{{post.id}}" href="javascript:" type="button">我也要说</a></li><br><br>
+                  <li>
+                     {% if postReplyPaginator[post.id].lastPage > 1 %}
+                      <ul  class="paginator-{{post.id}} pagination pagination-sm pull-left " style="display:none;">
+                        {% if postReplyPaginator[post.id].currentPage == postReplyPaginator[post.id].firstPage %}
+                          <li class="disabled"><span>上一页</span></li>
+                        {% else %}
+                          <li class="postReply-page"  postId="{{post.id}}"  data-url="{{path('group_thread_post_reply',{postId:post.id,page:postReplyPaginator[post.id].previousPage})}}"><a >上一页</a></li>
+                        {% endif %}
+                        {% for page in postReplyPaginator[post.id].pages %}
+                          <li {% if page == postReplyPaginator[post.id].currentPage %}class="active"{% endif %} class="postReply-page"  postId="{{post.id}}"  data-url="{{path('group_thread_post_reply',{postId:post.id,page:page})}}"><a  >{{ page }}</a></li>
+                        {% endfor %}
+
+                        {% if postReplyPaginator[post.id].currentPage == postReplyPaginator[post.id].lastPage %}
+                          <li class="disabled"><span>下一页</span></li>
+                        {% else %}
+                          <li class="postReply-page"  postId="{{post.id}}" data-url="{{path('group_thread_post_reply',{postId:post.id,page:postReplyPaginator[post.id].nextPage})}}"><a>下一页</a></li>
+                        {% endif %}
+                      </ul>
+                    {% endif %}
+
+                    <a class="replyToo btn btn-default btn-xs pull-right" postId="{{post.id}}" href="javascript:" type="button">我也要说</a></li><br><br>
                   {% endif %}
+                  </div>
                   <li id="li-{{post.id}}" style="position: relative;top:-4px; {% if postReply[post.id] %}display:none;{% endif %}"> <form  class="reply-thread-form form-horizontal" method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
                   <textarea id="reply-content-{{post.id}}" class="form-control" ></textarea><br>
                   <span class="danger-{{post.id}}" style="color:red;display:none;" > 回复内容不能为空！</span>  
-                   <button type="button" postId="{{post.id}}" class="reply-btn btn btn-sm btn-primary pull-right">回复</button></form>
-                 </li>{% if not postReply[post.id] %}<br><br><br>{% endif %}
+                   <button type="button" postId="{{post.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;">回复</button></form>
+                 </li>{% if not postReply[post.id] %}<br>{% endif %}
                    </ul>
            
                

@@ -24,7 +24,6 @@ define(function(require, exports, module) {
 		});
 
         $('.transfer-group').on('click',function(){
-            console.log(1);
             $('#myModal').modal('show');
             $('#transfer-group-form').attr('action',$(this).data('url'));
 
