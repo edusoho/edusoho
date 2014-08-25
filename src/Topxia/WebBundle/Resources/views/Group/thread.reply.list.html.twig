@@ -3,20 +3,21 @@
 {% if postReply %}
 {% for reply in postReply %} 
                         
-                        <li style="border-bottom:1px solid #ddd;" class="li-reply-{{post.id}}">
-                            <div class="pull-left" style="width:80px;"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:reply.userId}) }}">
-                              <img src="{{ file_path(postReplyMembers[reply.userId].largeAvatar, 'avatar-large.png') }}">
-                            </a>
-                            </div>
-                           <div class="media">
-                            <div class="media-body">
-                              {{ web_macro.user_link(postReplyMembers[reply.userId] , 'link-muted ') }}
-                              <p >{{reply.content|raw}}&nbsp;</p>
-                              <div class="text-muted text-normal pull-right">{{reply.createdTime|smart_time}}<a href="javascript:" class="li-reply" postId="{{post.id}}" postName="{{postReplyMembers[reply.userId].nickname}}"> 回复</a>
-                              </div>
-                            </div> 
-                          </div>
-                        </li>
+    <li style="border-bottom:1px solid #ddd;" class="li-reply-{{post.id}}">
+        <div class="pull-left" style="width:80px;"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:reply.userId}) }}">
+          <img src="{{ file_path(postReplyMembers[reply.userId].largeAvatar, 'avatar-large.png') }}">
+        </a>
+        </div>
+       <div class="media">
+        <div class="media-body">
+          {{ web_macro.user_link(postReplyMembers[reply.userId] , 'link-muted ') }}
+          <p >{{reply.content|raw}}&nbsp;</p>
+          <div class="text-muted text-normal pull-right">{{reply.createdTime|smart_time}}<a href="javascript:" class="li-reply" postId="{{post.id}}" postName="{{postReplyMembers[reply.userId].nickname}}"> 回复</a>
+          </div>
+        </div> 
+      </div>
+    </li>
+    
 {% endfor %}
 {% endif %}<br>
 {% if postReply %}

@@ -96,6 +96,7 @@
 
                $('#li-'+postId).show();
 
+               $('#reply-content-'+postId).focus();
                $('#reply-content-'+postId).val("回复 "+$(this).attr("postName")+":");
 
             });
@@ -122,7 +123,7 @@
                var postId=$(this).attr('postId');
 
                $('#li-'+postId).show();
-
+               $('#reply-content-'+postId).focus();
                $('#reply-content-'+postId).val("");
 
             });
