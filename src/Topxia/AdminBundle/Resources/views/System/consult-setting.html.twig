@@ -1,0 +1,164 @@
+{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+
+{% block title %}客服设置 - {{ parent() }}{% endblock %}
+
+{% set submenu = 'consult_setting' %}
+
+{% set script_controller = 'setting/consult-setting' %}
+
+{% block maincontent %}
+
+<div class="page-header"><h1>客服设置</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" id="consult-setting-form" novalidate>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label >客服功能</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('enabled', {1:'开启', 0:'关闭'}, consult.enabled) }}
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label >浮动条颜色</label>
+    </div>
+    <div class="controls col-md-8 radios">
+{#       {{ radios('color', {'default':'<span class="btn btn-default btn-lg" disabled></span>', 'success':'<span class="btn btn-success btn-lg" disabled></span>', 'warning':'<span class="btn btn-warning btn-lg" disabled></span>', 'info':'<span class="btn btn-info btn-lg" disabled></span>', 'primary':'<span class="btn btn-primary btn-lg" disabled></span>', 'danger':'<span class="btn btn-danger btn-lg" disabled></span>'}, consult.color) }} #}
+  {{ radios('color', {'default':'<span class="btn btn-default btn-lg" disabled></span>', 'warning':'<span class="btn btn-warning btn-lg" disabled></span>','danger':'<span class="btn btn-danger btn-lg" disabled></span>'}, consult.color) }}
+    </div>
+  </div>
+  <div data-role="template" style="display:none">
+    <div class="row form-group has-feedback">
+      <div class="controls col-md-4 col-md-offset-3">
+        <input type="text" name="" class="form-control" value="" placeholder="">
+      </div>
+      <div class="controls col-md-4">
+        <input type="text" name="" class="form-control" value="" placeholder="">
+        <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="删除">×</button></input>
+      </div>
+    </div>
+  </div>
+  <fieldset>
+    <legend>QQ客服设置</legend>
+    <div id="consult-qq">
+      {% for qq in consult.qq %}
+      <div class="row form-group has-feedback">
+        <div class="controls col-md-4 col-md-offset-3">
+          <input type="text" name="qq[{{loop.index0}}][name]" class="form-control" value="{{qq.name}}" placeholder="QQ客服名称">
+        </div>
+        <div class="controls col-md-4">
+          <input type="text" name="qq[{{loop.index0}}][number]" class="form-control" value="{{qq.number}}" placeholder="QQ号">
+          {% if loop.index0 > 0 %}
+          <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="删除">×</button>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="row form-group">
+      <div class="controls col-md-4 col-md-offset-3">
+        <span class="btn-link" data-role="item-add" data-parentId='consult-qq' data-length='{{consult.qq | length}}'>新增</span>
+      </div>
+    </div>
+  </fieldset>
+
+
+  <fieldset>
+    <legend>QQ群设置</legend>
+    <div id="consult-qqgroup">
+      {% for qqgroup in consult.qqgroup %}
+      <div class="row form-group has-feedback">
+        <div class="controls col-md-4 col-md-offset-3">
+          <input type="text" name="qqgroup[{{loop.index0}}][name]" class="form-control" value="{{qqgroup.name }}" placeholder="QQ群名称">
+        </div>
+        <div class="controls col-md-4">
+          <input type="text" name="qqgroup[{{loop.index0}}][number]" class="form-control" value="{{qqgroup.number}}" placeholder="QQ群号">
+          {% if loop.index0 > 0 %}
+          <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="删除">×</button>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="row form-group">
+      <div class="controls col-md-4 col-md-offset-3">
+        <span class="btn-link" data-role="item-add" data-parentId='consult-qqgroup' data-length='{{consult.qqgroup | length}}'>新增</span>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>联系电话设置</legend>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="worktime">工作时间</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="worktime" name="worktime" class="form-control" value="{{consult.worktime}}">
+      </div>
+    </div>
+    
+
+    <div id="consult-phone">
+      {% for phone in consult.phone %}
+      <div class="row form-group has-feedback">
+        <div class="controls col-md-4 col-md-offset-3">
+          <input type="text" name="phone[{{loop.index0}}][name]" class="form-control" value="{{phone.name}}" placeholder="联系人">
+        </div>
+        <div class="controls col-md-4">
+          <input type="text" name="phone[{{loop.index0}}][number]" class="form-control" value="{{phone.number}}" placeholder="联系电话">
+          {% if loop.index0 > 0 %}
+          <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="删除">×</button>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="row form-group">
+      <div class="controls col-md-4 col-md-offset-3">
+        <span class="btn-link" data-role="item-add" data-parentId='consult-phone' data-length='{{consult.phone | length}}'>新增</span>
+      </div>
+    </div>
+  </fieldset>
+  
+  <fieldset>
+    <legend>其他设置</legend>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>微信二维码</label>
+      </div>
+      <div class="col-md-8 controls">
+        <div id="consult-container">{% if consult.webchatURI %}<img src="{{ asset(consult.webchatURI) }}">{% endif %}</div>
+        <button class="btn btn-default btn-sm" id="consult-upload" type="button" data-url="{{ path('admin_setting_consult_upload') }}">上传</button>
+        <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
+        <input type="hidden" name="webchatURI" value="{{ consult.webchatURI }}">
+      </div>
+    </div>
+    
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="email">工作邮箱</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="email" name="email" class="form-control" value="{{consult.email}}">
+      </div>
+    </div>
+  </fieldset>
+
+  
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}

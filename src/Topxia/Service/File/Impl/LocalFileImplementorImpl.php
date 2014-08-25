@@ -85,7 +85,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $uploadParams;
     }
 
-    public function reconvertFile($file, $convertCallback)
+    public function reconvertFile($file, $convertCallback, $pipeline = null)
     {
         
     }

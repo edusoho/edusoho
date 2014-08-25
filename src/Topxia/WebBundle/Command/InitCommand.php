@@ -26,7 +26,7 @@ class InitCommand extends BaseCommand
 		$user = $this->initAdminUser($output);
 
 		$this->initSiteSetting($output);
-		$this->initContactSetting($output);
+		$this->initConsultSetting($output);
 		$this->initRegisterSetting($user, $output);
 		$this->initMailerSetting($output);
 		$this->initPaymentSetting($output);
@@ -80,29 +80,28 @@ class InitCommand extends BaseCommand
 
 	}
 
-	private function initContactSetting($output)
+	private function initConsultSetting($output)
 	{
 		$output->write('  初始化客服设置');
 
 
-        $default = array(
-			'enabled'=>0,
-			'title'=>'马上咨询',
-			'worktime'=>'9:00 - 17:00',
-			'qq1'=>'',
-			'qq2'=>'',
-			'qq3'=>'',
-			'qqgroup1'=>'',
-			'qqgroup2'=>'',
-			'qqgroup3'=>'',
-			'hotline1'=>'',
-			'hotline2'=>'',
-			'hotline3'=>'',
-			'webchat'=>'',
-			'webchatURI' => '',
-			'email'=>'',
-			);
-
+         $default = array(
+            'enabled' => 0,
+            'worktime' => '9:00 - 17:00',
+            'qq' => array(
+                array('name' => '','number' => ''),
+                ),
+            'qqgroup' => array(
+                array('name' => '','number' => ''),
+                ),
+            'phone' => array(
+                array('name' => '','number' => ''),
+                ),
+            'webchatURI' => '',
+            'email' => '',
+            'color' => 'default',
+            );
+         
         $site = $this->getSettingService()->set('contact', $default);
 
 

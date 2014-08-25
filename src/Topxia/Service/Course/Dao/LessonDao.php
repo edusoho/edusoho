@@ -9,6 +9,8 @@ interface LessonDao
 
     public function findLessonsByCourseId($courseId);
 
+    public function findLessonsByTypeAndMediaId($type, $mediaId);
+
     public function findMinStartTimeByCourseId($courseId);
 
     public function findLessonIdsByCourseId($courseId);
