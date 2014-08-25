@@ -16,14 +16,18 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
             $userTerms = $setting['user_terms_body'];
         }
         
-        return new Response($userTerms);
+        return $this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', array(
+            'content' => $userTerms
+        ));
     }
 
     public function getSchoolInfo()
     {
         $mobile = $this->controller->getSettingService()->get('mobile', array());
-
-        return new Response($this->controller->convertAbsoluteUrl($this->request, $mobile['about']));
+        
+        return $this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', array(
+            'content' => $this->controller->convertAbsoluteUrl($this->request, $mobile['about'])
+        ));
     }
 
     public function getWeekRecommendCourses()
