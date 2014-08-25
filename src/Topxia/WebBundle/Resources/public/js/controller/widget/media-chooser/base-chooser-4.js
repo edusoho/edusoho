@@ -122,7 +122,6 @@ define(function(require, exports, module) {
 
             this.set('uploaderProgressbar', progressbar);
             this.set('uploader', this._createUpload($btn, progressbar));
-            //this.set('uploader', this._createChunkUpload($btn, progressbar));
         },
 
         _createChunkUpload: function($btn, progressbar){
