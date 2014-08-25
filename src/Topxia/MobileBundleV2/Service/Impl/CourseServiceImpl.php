@@ -12,6 +12,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->formData;
 	}
 
+	public function searchCourse()
+	{
+		$start = (int) $this->getParam("start", 0);
+		$limit = (int) $this->getParam("limit", 10);
+	}
 
 	public function getCourses()
 	{
@@ -22,8 +27,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$limit = (int) $this->getParam("limit", 10);
 		$total = $this->controller->getCourseService()->searchCourseCount($conditions);
 
-		$sort = $this->$this->getParam("start", "latest");
+		$sort = $this->getParam("sort", "latest");
 		$conditions['sort'] = $sort;
+
+		$categoryId = (int) $this->getParam("categoryId", 0);
+		$conditions['categoryId'] = $categoryId;
         		$courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
 		
 		$result = array(

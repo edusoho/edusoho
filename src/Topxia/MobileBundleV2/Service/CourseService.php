@@ -6,4 +6,5 @@ interface CourseService
 	public function getVersion();
 	public function getCourses();
 	public function getLearningCourse();
+	public function searchCourse();
 }
