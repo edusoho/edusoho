@@ -26,16 +26,16 @@
     {% if postReplyPaginator.currentPage == postReplyPaginator.firstPage %}
       <li class="disabled"><span>上一页</span></li>
     {% else %}
-      <li><a  postId="{{post.id}}" class="postReply-page" data-url="{{path('group_thread_post_reply',{postId:post.id,page:postReplyPaginator.previousPage})}}">上一页</a></li>
+      <li   postId="{{post.id}}" class="postReply-page" data-url="{{path('group_thread_post_reply',{postId:post.id,page:postReplyPaginator.previousPage})}}"><a>上一页</a></li>
     {% endif %}
     {% for page in postReplyPaginator.pages %}
-      <li {% if page == postReplyPaginator.currentPage %}class="active"{% endif %}><a   postId="{{post.id}}" class="postReply-page" data-url="{{path('group_thread_post_reply',{postId:post.id,page:page})}}">{{ page }}</a></li>
+      <li {% if page == postReplyPaginator.currentPage %}class="active"{% endif %}   postId="{{post.id}}" class="postReply-page" data-url="{{path('group_thread_post_reply',{postId:post.id,page:page})}}"><a>{{ page }}</a></li>
     {% endfor %}
 
     {% if postReplyPaginator.currentPage == postReplyPaginator.lastPage %}
       <li class="disabled"><span>下一页</span></li>
     {% else %}
-      <li><a   postId="{{post.id}}" class="postReply-page" data-url="{{path('group_thread_post_reply',{postId:post.id,page:postReplyPaginator.nextPage})}}">下一页</a></li>
+      <li  postId="{{post.id}}" class="postReply-page" data-url="{{path('group_thread_post_reply',{postId:post.id,page:postReplyPaginator.nextPage})}}"><a>下一页</a></li>
     {% endif %}
   </ul>
 {% endif %}
