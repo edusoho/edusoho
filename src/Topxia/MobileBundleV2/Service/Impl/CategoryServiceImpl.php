@@ -28,10 +28,13 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function getAllCategories()
     {
-        $categories = $this->controller->getCategoryService()->findAllCategories();
-        $newCategories = $this->sortCategories($categories);
+        $group = $this->controller->getCategoryService()->getGroupByCode('course');
+        f (empty($group)) {
+            return array();
+        } 
+        $categories = $this->controller->getCategoryService()->getCategoryTree($group['id']);
 
-        return $newCategories;
+        return $categories;
     }
 
     private function sortCategories($categories)
