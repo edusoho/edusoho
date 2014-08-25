@@ -29,7 +29,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function getAllCategories()
     {
         $group = $this->controller->getCategoryService()->getGroupByCode('course');
-        f (empty($group)) {
+        if (empty($group)) {
             return array();
         } 
         $categories = $this->controller->getCategoryService()->getCategoryTree($group['id']);
