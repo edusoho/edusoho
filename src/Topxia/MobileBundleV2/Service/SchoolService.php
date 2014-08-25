@@ -10,4 +10,5 @@ interface SchoolService
 	public function getRecommendCourses();
 	public function getWeekRecommendCourses();
 	public function getUserterms();
+	public function getSchoolInfo();
 }

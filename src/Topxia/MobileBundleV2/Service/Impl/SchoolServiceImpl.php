@@ -19,6 +19,13 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         return new Response($userTerms);
     }
 
+    public function getSchoolInfo()
+    {
+        $mobile = $this->controller->getSettingService()->get('mobile', array());
+
+        return new Response($this->controller->convertAbsoluteUrl($this->request, $mobile['about']));
+    }
+
     public function getWeekRecommendCourses()
     {
         $sort = "recommend";

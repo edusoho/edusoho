@@ -9,3 +9,5 @@
 9 获取发现                                Category/getCategories
 10 获取服务条款                        School/getUserterms
 11 获取所有发现                        Category/getAllCategories
+12 获取课程                               Course/getCourses
+13 获取网校简介                         School/getSchoolInfo
