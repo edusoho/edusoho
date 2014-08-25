@@ -122,6 +122,39 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($file['metas2']);
     }
 
+    public function cloudConvertCallback3Action(Request $request)
+    {
+        $result = $request->getContent();
+
+        $result = preg_replace_callback(
+          "(\\\\x([0-9a-f]{2}))i",
+          function($a) {return chr(hexdec($a[1]));},
+          $result
+        );
+
+        $this->getLogService()->info('uploadfile', 'cloud_convert_callback3', "文件云处理回调", array('result' => $result));
+        $result = json_decode($result, true);
+        $result = array_merge($request->query->all(), $result);
+        if (empty($result['id'])) {
+            throw new \RuntimeException('数据中id不能为空');
+        }
+
+        if ($result['code'] != 0) {
+            $this->getLogService()->error('uploadfile', 'cloud_convert_error', "文件云处理失败", array('result' => $result));
+            return $this->createJsonResponse(true);
+        }
+
+        $file = $this->getUploadFileService()->getFileByConvertHash($result['id']);
+        if (empty($file)) {
+            $this->getLogService()->error('uploadfile', 'cloud_convert_error', "文件云处理失败，文件记录不存在", array('result' => $result));
+            throw new \RuntimeException('文件不存在');
+        }
+
+        $file = $this->getUploadFileService()->saveConvertResult3($file['id'], $result);
+
+        return $this->createJsonResponse($file['metas2']);
+    }    
+
     public function cloudConvertCallbackAction(Request $request)
     {
         $data = $request->getContent();

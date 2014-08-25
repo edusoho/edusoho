@@ -285,6 +285,7 @@ CREATE TABLE `course_lesson` (
   `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时开始时间',
   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时结束时间',
   `memberNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时加入人数',
+  `replayStatus` enum('ungenerated','generating','generated') NOT NULL DEFAULT 'ungenerated',
   `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
@@ -303,6 +304,18 @@ CREATE TABLE `course_lesson_learn` (
   UNIQUE KEY `userId_lessonId` (`userId`,`lessonId`),
   KEY `userId_courseId` (`userId`,`courseId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `course_lesson_replay`;
+CREATE TABLE IF NOT EXISTS `course_lesson_replay` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `lessonId` int(10) unsigned NOT NULL COMMENT '所属课时',
+  `courseId` int(10) unsigned NOT NULL COMMENT '所属课程',
+  `title` varchar(255) NOT NULL COMMENT '名称',
+  `replayId` text NOT NULL COMMENT '云直播中的回放id',
+  `userId` int(10) unsigned NOT NULL COMMENT '创建者',
+  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 DROP TABLE IF EXISTS `course_lesson_view`;
 CREATE TABLE `course_lesson_view` (

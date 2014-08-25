@@ -38,8 +38,6 @@ class CourseLessonManageController extends BaseController
 				$courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
 			}
 		}
-		 //print_r($courseItems);
-						  //exit();
 		return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
 			'course' => $course,
 			'items' => $courseItems
@@ -328,6 +326,9 @@ class CourseLessonManageController extends BaseController
 		$client->deleteLive($lesson['mediaId']);
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);
 		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
+		if($course['type']=='live'){
+			$this->getCourseService()->deleteCourseLessonReplayByLessonId($lessonId);
+		}
 		return $this->createJsonResponse(true);
 	}
 

@@ -86,7 +86,11 @@ class EdusohoLiveClient
             "liveId" => $liveId, 
             "title" => $title
         );
-        return $this->callRemoteApi('POST', 'LiveReplayCreate', $args);
+        $replayList = $this->callRemoteApi('POST', 'LiveReplayCreate', $args);
+        if(array_key_exists("error", $replayList)){
+            return $replayList;
+        }
+        return json_decode($replayList["data"], true);
     }
 
     private function callRemoteApi($httpMethod, $action, array $args)

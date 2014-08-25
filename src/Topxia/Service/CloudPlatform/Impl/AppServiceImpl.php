@@ -459,6 +459,14 @@ class AppServiceImpl extends BaseService implements AppService
 
     }
 
+    public function updateAppVersion($code,$fromVersion,$version)
+    {
+        $this->getAppDao()->updateAppVersion($code,$version);
+        $this->getAppDao()->updateAppFromVersion($code,$fromVersion);
+        
+        return true;
+    }
+
     private function _replaceFileForPackageUpdate($package, $packageDir)
     {
         $filesystem = new Filesystem();
