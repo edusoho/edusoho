@@ -3,51 +3,28 @@
 {% block title %}系统默认设置 - {{ parent() }}{% endblock %}
 
 {% set submenu = 'default' %}
+{% set script_controller = 'setting/default' %}
 
 {% block maincontent %}
-<div class="page-header"><h1>用户</h1></div>
 
-{{ web_macro.flash_messages() }}
-  
+  {{ web_macro.flash_messages() }}
+
+  <div class="page-header"><h1>用户</h1></div>
+
   <fieldset>
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label >用户默认头像</label>
       </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('defaultAvatar', {1:'开启', 0:'关闭'}, defaultSetting.defaultAvatar) }}
-      <p class="help-block">网校内未上传头像的用户，都会显示该默认头像</p>    
-
-        <div class="form-group">
-          <div class="col-md-2 control-label"><b>头像</b></div>
-          <div class="controls col-md-8 controls">
-            <img src="">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="col-md-2 control-label">
-          
-          </div>
-          <div class="controls col-md-8 controls">
-            <input id="course-picture-field" type="file" name="picture" accept="image/gif,image/jpeg,image/png">
-            <p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。</p>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="col-md-2 control-label"></div>
-          <div class="controls col-md-8 controls">
-            
-            <button type="submit" class="btn btn-primary">上传</button>
-          </div>
-        </div>
+      <div class="controls col-md-8 radios" id="" >
+        {{ radios('avatar', {1:'开启', 0:'关闭'}, defaultSetting.defaultAvatar) }}
+        <p>网校内未上传头像的用户，都会显示该默认头像</p>    
+        {% include 'TopxiaAdminBundle:System:default-avatar.html.twig' %}
       </div>
     </div>
-
   </fieldset>
 
-<div class="page-header"><h1>课程</h1></div>
+  <div class="page-header"><h1>课程</h1></div>
 
   <fieldset>
     <div class="form-group">
@@ -55,83 +32,15 @@
         <label >课程默认图片</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('defaultCoursePicture', {1:'开启', 0:'关闭'}, defaultSetting.defaultCoursePicture) }}        
-      <p class="help-block">网校内未上传图片的课程，都会显示该图片</p>
-
-        <div class="form-group">
-          <div class="col-md-2 control-label"><b>课程图片</b></div>
-          <div class="controls col-md-8 controls">
-            <img src="">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="col-md-2 control-label">
-          
-          </div>
-          <div class="controls col-md-8 controls">
-            <input id="course-picture-field" type="file" name="picture" accept="image/gif,image/jpeg,image/png">
-            <p class="help-block">你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。</p>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="col-md-2 control-label"></div>
-          <div class="controls col-md-8 controls">
-            
-            <button type="submit" class="btn btn-primary">上传</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-  </fieldset>
-
-<div class="page-header"><h1>分享内容</h1></div>
-
-  <fieldset>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="welcome_message_body">资讯分享内容</label>
-      </div>
-      <div class="controls col-md-8">
-        <textarea id="welcome_message_body" name="welcome_message_body" class="form-control" rows="5"></textarea>
-        <div class="help-block">
-          {% verbatim %}
-          <div>变量说明：</div>
-          <ul>
-            <li>{{articletitle}} 为资讯标题</li>
-            <li>{{sitename}} 为网校名称</li>
-          </ul>
-          {% endverbatim %}
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="welcome_message_body">课程分享内容</label>
-      </div>
-      <div class="controls col-md-8">
-        <textarea id="welcome_message_body" name="welcome_message_body" class="form-control" rows="5"></textarea>
-        <div class="help-block">
-          {% verbatim %}
-          <div>变量说明：</div>
-          <ul>
-            <li>{{course}} 为课程名称</li>
-          </ul>
-          {% endverbatim %}
-        </div>
+        {{ radios('coursePicture', {1:'开启', 0:'关闭'}, defaultSetting.defaultCoursePicture) }}
+        <p>网校内未上传图片的课程，都会显示该图片</p>
+        {% include 'TopxiaAdminBundle:System:default-course-picture.html.twig' %}
       </div>
     </div>
   </fieldset>
 
-   <div class="form-group">
-    <div class="controls col-md-offset-3 col-md-8">
-      <button type="submit" class="btn btn-primary">提交</button>
-    </div>
-  </div>
-  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <div class="page-header"><h1>分享内容</h1></div>
+
+  {% include 'TopxiaAdminBundle:System:default-share-content.html.twig' %}
 
 {% endblock %}

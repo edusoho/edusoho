@@ -8,19 +8,19 @@ use Topxia\Common\ArrayToolkit;
 class ArticleController extends BaseController
 {
 
-	public function indexAction(Request $request)
-	{	
+    public function indexAction(Request $request)
+    {   
 
-		$setting = $this->getSettingService()->get('article', array());
-		if (empty($setting)) {
-			$setting = array('name' => '资讯频道', 'pageNums' => 20);
-		}
-		
-		$categoryTree = $this->getCategoryService()->getCategoryTree();
+        $setting = $this->getSettingService()->get('article', array());
+        if (empty($setting)) {
+            $setting = array('name' => '资讯频道', 'pageNums' => 20);
+        }
+        
+        $categoryTree = $this->getCategoryService()->getCategoryTree();
 
-		$conditions = array(
-			'status' => 'published'
-		);
+        $conditions = array(
+            'status' => 'published'
+        );
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -28,61 +28,61 @@ class ArticleController extends BaseController
             $setting['pageNums']
         );
 
-		$latestArticles = $this->getArticleService()->searchArticles(
-			$conditions, 'published', 
-			$paginator->getOffsetCount(),
+        $latestArticles = $this->getArticleService()->searchArticles(
+            $conditions, 'published', 
+            $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-		);
-		
-		$categoryIds = ArrayToolkit::column($latestArticles, 'categoryId');
+        );
+        
+        $categoryIds = ArrayToolkit::column($latestArticles, 'categoryId');
 
-		$categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-		
-		$featuredConditions = array(
-			'status' => 'published',
-			'featured' => 1,
-			'hasPicture' => 1
-		);
-		
-		$featuredArticles = $this->getArticleService()->searchArticles(
-			$featuredConditions,'normal',
-			0, 5
-		);
-		return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
-			'categoryTree' => $categoryTree,
-			'latestArticles' => $latestArticles,
-			'featuredArticles' => $featuredArticles,
-			'paginator' => $paginator,
-			'setting' => $setting,
-			'categories' => $categories
-		));
-	}
+        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+        
+        $featuredConditions = array(
+            'status' => 'published',
+            'featured' => 1,
+            'hasPicture' => 1
+        );
+        
+        $featuredArticles = $this->getArticleService()->searchArticles(
+            $featuredConditions,'normal',
+            0, 5
+        );
+        return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
+            'categoryTree' => $categoryTree,
+            'latestArticles' => $latestArticles,
+            'featuredArticles' => $featuredArticles,
+            'paginator' => $paginator,
+            'setting' => $setting,
+            'categories' => $categories
+        ));
+    }
 
-	public function categoryAction(Request $request, $categoryCode)
-	{	
-		$category = $this->getCategoryService()->getCategoryByCode($categoryCode);
+    public function categoryAction(Request $request, $categoryCode)
+    {   
+        $category = $this->getCategoryService()->getCategoryByCode($categoryCode);
 
-		if (empty($category)) {
-			throw $this->createNotFoundException('资讯栏目页面不存在');
-		}
+        if (empty($category)) {
+            throw $this->createNotFoundException('资讯栏目页面不存在');
+        }
 
-		$conditions = array(
-			'categoryId' => $category['id'],
-			'includeChildren' => true,
-			'status' => 'published'
-		);
+        $conditions = array(
+            'categoryId' => $category['id'],
+            'includeChildren' => true,
+            'status' => 'published'
+        );
 
 
-		$categoryTree = $this->getCategoryService()->getCategoryTree();
+        $categoryTree = $this->getCategoryService()->getCategoryTree();
 
-		$rootCategory = $this->getRootCategory($categoryTree,$category);
+        $rootCategory = $this->getRootCategory($categoryTree,$category);
 
-		$subCategories = $this->getSubCategories($categoryTree, $rootCategory);
+        $subCategories = $this->getSubCategories($categoryTree, $rootCategory);
 
-		$setting = $this->getSettingService()->get('article', array());
-		if (empty($setting)) {
-			$setting = array('name' => '资讯频道', 'pageNums' => 20);
-		}
+        $setting = $this->getSettingService()->get('article', array());
+        if (empty($setting)) {
+            $setting = array('name' => '资讯频道', 'pageNums' => 20);
+        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -90,160 +90,168 @@ class ArticleController extends BaseController
             $setting['pageNums']
         );
 
-		$articles = $this->getArticleService()->searchArticles(
-			$conditions,'published',
-			$paginator->getOffsetCount(),
+        $articles = $this->getArticleService()->searchArticles(
+            $conditions,'published',
+            $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-		);
+        );
 
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
 
-		$categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-		return $this->render('TopxiaWebBundle:Article:list.html.twig', array(
-			'categoryTree' => $categoryTree,
-			'categoryCode' => $categoryCode,
-			'category' => $category,
-			'rootCategory' => $rootCategory,
-			'articles' => $articles,
-			'paginator' => $paginator,
-			'setting' => $setting,
-			'categories' => $categories,
-			'subCategories' => $subCategories
-		));
-	}
+        return $this->render('TopxiaWebBundle:Article:list.html.twig', array(
+            'categoryTree' => $categoryTree,
+            'categoryCode' => $categoryCode,
+            'category' => $category,
+            'rootCategory' => $rootCategory,
+            'articles' => $articles,
+            'paginator' => $paginator,
+            'setting' => $setting,
+            'categories' => $categories,
+            'subCategories' => $subCategories
+        ));
+    }
 
-	public function detailAction(Request $request,$id)
-	{
-		$article = $this->getArticleService()->getArticle($id);
+    public function detailAction(Request $request,$id)
+    {
+        $article = $this->getArticleService()->getArticle($id);
 
-		if (empty($article)) {
-			throw $this->createNotFoundException('文章已删除或者未发布！');
-		}
+        $defaultSetting = $this->getSettingService()->get('default', array());
+        $site = $this->getSettingService()->get('site', array());
 
-		if ($article['status'] != 'published') {
-			return $this->createMessageResponse('error','文章不是发布状态，请查看！');
-		}
+        $valuesToBeReplace = array('{{articletitle}}', '{{sitename}}');
+        $valuesToReplace = array($article['title'], $site['name']);
+        $articleShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $defaultSetting['articleShareContent']);
 
-		$setting = $this->getSettingService()->get('article', array());
+        if (empty($article)) {
+            throw $this->createNotFoundException('文章已删除或者未发布！');
+        }
 
-		if (empty($setting)) {
-			$setting = array('name' => '资讯频道', 'pageNums' => 20);
-		}
+        if ($article['status'] != 'published') {
+            return $this->createMessageResponse('error','文章不是发布状态，请查看！');
+        }
 
-		$conditions = array(
-			'status' => 'published'
-		);
-		
-		$createdTime = $article['createdTime'];
+        $setting = $this->getSettingService()->get('article', array());
 
-		$currentArticleId = $article['id'];
-		$articlePrevious = $this->getArticleService()->getArticlePrevious($currentArticleId);
-		$articleNext = $this->getArticleService()->getArticleNext($currentArticleId);
-	
-		$articleSetting = $this->getSettingService()->get('article', array());
-		$categoryTree = $this->getCategoryService()->getCategoryTree();
+        if (empty($setting)) {
+            $setting = array('name' => '资讯频道', 'pageNums' => 20);
+        }
 
-		$category = $this->getCategoryService()->getCategory($article['categoryId']);
-		if(empty($article['tagIds'])){
-			$article['tagIds'] = array();
-		}
-		$tags = $this->getTagService()->findTagsByIds($article['tagIds']);
+        $conditions = array(
+            'status' => 'published'
+        );
+        
+        $createdTime = $article['createdTime'];
 
-		$seoKeyword = "";
-		if($tags){
-			$seoKeyword = ArrayToolkit::column($tags, 'name');
-			$seoKeyword = implode(",", $seoKeyword);
-		}
+        $currentArticleId = $article['id'];
+        $articlePrevious = $this->getArticleService()->getArticlePrevious($currentArticleId);
+        $articleNext = $this->getArticleService()->getArticleNext($currentArticleId);
+    
+        $articleSetting = $this->getSettingService()->get('article', array());
+        $categoryTree = $this->getCategoryService()->getCategoryTree();
 
-		$this->getArticleService()->hitArticle($id);
+        $category = $this->getCategoryService()->getCategory($article['categoryId']);
+        if(empty($article['tagIds'])){
+            $article['tagIds'] = array();
+        }
+        $tags = $this->getTagService()->findTagsByIds($article['tagIds']);
 
-		$breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($category['id']);
+        $seoKeyword = "";
+        if($tags){
+            $seoKeyword = ArrayToolkit::column($tags, 'name');
+            $seoKeyword = implode(",", $seoKeyword);
+        }
 
-		return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
-			'categoryTree' => $categoryTree,
-			'articleSetting' => $articleSetting,
-			'articlePrevious' => $articlePrevious,
-			'article' => $article,
-			'articleNext' => $articleNext,
-			'tags' => $tags,
-			'setting' => $setting,
-			'seoKeyword' => $seoKeyword,
-			'seoDesc' => $article['body'],
-			'breadcrumbs' => $breadcrumbs,
-			'categoryName' => $category['name'],
-			'categoryCode' => $category['code'],
-		));
-	}
+        $this->getArticleService()->hitArticle($id);
 
-	public function popularArticlesBlockAction()
-	{	
-		$conditions = array(
-			'type' => 'article',
-			'status' => 'published'
-		);
+        $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($category['id']);
 
-		$articles = $this->getArticleService()->searchArticles($conditions, 'popular', 0 , 10);
+        return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
+            'categoryTree' => $categoryTree,
+            'articleSetting' => $articleSetting,
+            'articlePrevious' => $articlePrevious,
+            'article' => $article,
+            'articleNext' => $articleNext,
+            'tags' => $tags,
+            'setting' => $setting,
+            'seoKeyword' => $seoKeyword,
+            'seoDesc' => $article['body'],
+            'breadcrumbs' => $breadcrumbs,
+            'categoryName' => $category['name'],
+            'categoryCode' => $category['code'],
+            'articleShareContent' => $articleShareContent,
+        ));
+    }
 
-		return $this->render('TopxiaWebBundle:Article:popular-articles-block.html.twig', array(
-			'articles' => $articles
-		));
-	}
+    public function popularArticlesBlockAction()
+    {   
+        $conditions = array(
+            'type' => 'article',
+            'status' => 'published'
+        );
 
-	public function recommendArticlesBlockAction()
-	{	
-		$conditions = array(
-			'type' => 'article',
-			'status' => 'published',
-			'promoted' => 1
-		);
+        $articles = $this->getArticleService()->searchArticles($conditions, 'popular', 0 , 10);
 
-		$articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0 , 10);
+        return $this->render('TopxiaWebBundle:Article:popular-articles-block.html.twig', array(
+            'articles' => $articles
+        ));
+    }
 
-		return $this->render('TopxiaWebBundle:Article:recommend-articles-block.html.twig', array(
-			'articles' => $articles
-		));
-	}
+    public function recommendArticlesBlockAction()
+    {   
+        $conditions = array(
+            'type' => 'article',
+            'status' => 'published',
+            'promoted' => 1
+        );
 
-	private function getRootCategory($categoryTree, $category)
-	{
-		$start = false;
-		foreach (array_reverse($categoryTree) as $treeCategory) {
-			if ($treeCategory['id'] == $category['id']) {
-				$start = true;
-			}
+        $articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0 , 10);
 
-			if ($start && $treeCategory['depth'] ==1) {
-				return $treeCategory;
-			}
-		}
+        return $this->render('TopxiaWebBundle:Article:recommend-articles-block.html.twig', array(
+            'articles' => $articles
+        ));
+    }
 
-		return null;
-	}
+    private function getRootCategory($categoryTree, $category)
+    {
+        $start = false;
+        foreach (array_reverse($categoryTree) as $treeCategory) {
+            if ($treeCategory['id'] == $category['id']) {
+                $start = true;
+            }
 
-	private function getSubCategories($categoryTree, $rootCategory)
-	{
-		$categories = array();
+            if ($start && $treeCategory['depth'] ==1) {
+                return $treeCategory;
+            }
+        }
 
-		$start = false;
-		foreach ($categoryTree as $treeCategory) {
-			
-			if ($start && ($treeCategory['depth'] == 1) && ($treeCategory['id'] != $rootCategory['id'])) {
-				break;
-			}
+        return null;
+    }
 
-			if ($treeCategory['id'] == $rootCategory['id']) {
-				$start = true;
-			}
+    private function getSubCategories($categoryTree, $rootCategory)
+    {
+        $categories = array();
 
-			if ($start == true) {
-				$categories[] = $treeCategory;
-			}
+        $start = false;
+        foreach ($categoryTree as $treeCategory) {
+            
+            if ($start && ($treeCategory['depth'] == 1) && ($treeCategory['id'] != $rootCategory['id'])) {
+                break;
+            }
 
-		}
+            if ($treeCategory['id'] == $rootCategory['id']) {
+                $start = true;
+            }
 
-		return $categories;
-	}
+            if ($start == true) {
+                $categories[] = $treeCategory;
+            }
+
+        }
+
+        return $categories;
+    }
 
     private function getCategoryService()
     {
@@ -260,9 +268,9 @@ class ArticleController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
- 	private function getTagService()
- 	{
-   		return $this->getServiceKernel()->createService('Taxonomy.TagService');
- 	}
+    private function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
 
 }
