@@ -54,7 +54,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         if (0 == $id) {
             return array(
                 "id"=>"0",
-                "code"=>"course",
+                "code"=>"group",
                 "name"=>"分组",
                 "icon"=>"",
                 "path"=>"",
@@ -65,7 +65,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                 );
         }
 
-        return $this->controller->getCategoryService()->getCategory($id);
+        $categorie = $this->controller->getCategoryService()->getCategory($id);
+        $categorie["code"] = "group";
+        return $categorie;
     }
 
 }
