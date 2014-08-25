@@ -17,7 +17,11 @@
 
       <div class="form-group clearfix">
         <div class="col-md-offset-2 col-md-8 controls">
+          {% if setting('default.defaultCoursePicture') %}
           <img src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" />
+          {% else %}
+          <img src="{{ file_path(course.largePicture, 'system-course-default-475x250.png') }}" />
+          {% endif %}
         </div>
       </div>
 
