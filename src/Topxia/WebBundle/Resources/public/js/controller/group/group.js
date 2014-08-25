@@ -61,7 +61,11 @@
                 type : "POST",
                 dataType : 'text',
                 success : function (url){
-                    if(url){ 
+                    if(url){
+                        if(url=="/login"){
+                            window.location.href=url;
+                            return ;
+                        }
                         href=window.location.href;
                         var olderHref=checkUrl(href);
                         if(checkUrl(url)==olderHref){
@@ -160,6 +164,10 @@
                     type : "POST",
                     dataType : 'text',
                     success : function (url){
+                        if(url=="/login"){
+                            window.location.href=url;
+                            return;
+                        }
                         window.location.reload();                
                     }
                     });
