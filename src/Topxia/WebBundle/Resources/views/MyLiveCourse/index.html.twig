@@ -15,11 +15,7 @@
           {% set lesson = course['lesson'] %}
             <li class="course-item clearfix">
               <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
-                {% if setting('default.defaultCoursePicture') %}
-                  <img class="course-picture" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}">
-                {% else %}
-                  <img class="course-picture" src="{{ file_path(course.middlePicture, 'system-course-large.png') }}" alt="{{ course.title }}">
-                {% endif %}
+                <img class="course-picture" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}">
               </a>
               <div class="course-body">
                 <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>

@@ -5,11 +5,7 @@
     <div class="panel panel-default  course-header">
       <div class="panel-body clearfix">
         <a href="{{ path('course_show', {id:course.id}) }}">
-          {% if setting('default.defaultCoursePicture') %}
             <img class="picture" src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" />
-          {% else %}
-            <img class="picture" src="{{ file_path(course.largePicture, 'system-course-default-475x250.png') }}" />
-          {% endif %}
         </a>
         <h1 class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a> 
           {% if course.status=='closed' %}  

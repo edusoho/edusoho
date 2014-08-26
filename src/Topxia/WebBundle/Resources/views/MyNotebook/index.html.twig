@@ -14,11 +14,7 @@
       {% for member in courseMembers %}
         {% set course = courses[member.courseId] %}
         <div class="media">
-          {% if setting('default.defaultCoursePicture') %}
-            <img class="pull-left media-object" src="{{ file_path(course.largePicture, 'course-large.png') }}">
-          {% else %}
-            <img class="pull-left media-object" src="{{ file_path(course.largePicture, 'system-course-large.png') }}">
-          {% endif %}
+          <img class="pull-left media-object" src="{{ file_path(course.largePicture, 'course-large.png') }}">
           <div class="media-body">
             <h4 class="media-heading">{{course.title}}</h4>
             <div class="notebook-metas">
