@@ -186,4 +186,13 @@ interface UserService
 
     public function dropFieldData($fieldName);
 
+    /**班级成员相关*/
+    public function searchClassMembers(array $conditions, array $orderBy, $start, $limit);
+
+    public function searchClassMemberCount(array $conditions);
+
+    public function addClassMember(array $classMember);
+
+    public function getUserByNumber($number);
+
 }

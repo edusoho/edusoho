@@ -37,7 +37,7 @@ class Version20140826101048 extends AbstractMigration
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-            ALTER TABLE  `user` ADD  `firstLogin` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '第一次登录' AFTER  `loginSessionId`
+            ALTER TABLE  `user` ADD  `firstLogin` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '第一次登录' AFTER  `loginSessionId`;
             ALTER TABLE  `user` ADD  `number` VARCHAR( 32 ) NOT NULL COMMENT  '学号/工号' AFTER  `id`;
             ALTER TABLE  `course` ADD  `classId` INT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '班级ID' AFTER  `id`;
             ALTER TABLE  `course` ADD  `gradeId` INT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '年级ID' AFTER  `classId`;

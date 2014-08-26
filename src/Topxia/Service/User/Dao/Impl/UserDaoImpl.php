@@ -17,6 +17,11 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
+    public function getUserByNumber($number){
+        $sql = "SELECT * FROM {$this->table} WHERE number = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($number)) ? : null;
+    }
+
     public function findUserByEmail($email)
     {
         $sql = "SELECT * FROM {$this->table} WHERE email = ? LIMIT 1";

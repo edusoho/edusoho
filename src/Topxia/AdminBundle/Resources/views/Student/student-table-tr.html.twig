@@ -1,0 +1,81 @@
+{% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
+<tr id="user-table-tr-{{ user.id }}">
+  <td>
+    <strong>{{ admin_macro.user_link(user) }}</strong>
+
+    {% if user.locked %}
+      <label class="label label-danger">禁</label>
+    {% endif %}
+
+    <br>
+    <span class="text-muted text-sm">
+      {% for role in user.roles %}
+        {{ dict_text('userRole', role) }}
+      {% endfor %}
+    </span>
+  </td>
+
+  <td>
+    {{ user.email }}
+    <br>
+    {% if user.emailVerified %}
+      <label class="label label-success" title="该Email地址已验证">已验证</label>
+    {% endif %}
+  </td>
+
+  <td>
+    <span class="text-sm">{{ user.createdTime|date('Y-n-d H:i:s') }}</span>
+    <br>
+    <span class="text-muted text-sm">
+    <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ user.createdIp }}" target="_blank">{{ user.createdIp }}</a>
+    {{convertIP(user.createdIp)}}
+  </span>
+    <span></span>
+  </td>
+  <td>
+    <span class="text-sm">
+      {% if user.loginTime == 0 %}
+       --
+      {% else %}
+        {{ user.loginTime|date('Y-n-d H:i:s') }}
+      {% endif %}
+    </span>
+    <br>
+    <span class="text-muted text-sm">
+    <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ user.loginIp }}" target="_blank">{{ user.loginIp }}</a>
+    {{convertIP(user.loginIp)}}
+  </span>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_edit', {id:user.id}) }}">编辑用户信息</a></li>
+
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+
+        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_roles', {id:user.id}) }}">设置用户组</a></li>
+
+        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_avatar', {id:user.id}) }}">修改用户头像</a></li>
+
+        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_change_password', {userId:user.id}) }}">修改密码</a></li>
+
+        {% endif %}
+
+        <li><a class="send-passwordreset-email" href="javascript:" data-url="{{ path('admin_user_send_passwordreset_email', {id:user.id}) }}">发送密码重置邮件</a></li>
+
+        <li><a class="send-emailverify-email" href="javascript:" data-url="{{ path('admin_user_send_emailverify_email', {id:user.id}) }}">发送Email验证邮件</a></li>
+
+        {% if user.locked %}
+          <li><a class="unlock-user" href="javascript:" title="解禁用户{{ user.nickname }}" data-url="{{ path('admin_user_unlock', {id:user.id }) }}">解禁用户</a></li>
+        {% else %}
+          <li><a class="lock-user" href="javascript:" title="封禁用户{{ user.nickname }}" data-url="{{ path('admin_user_lock', {id:user.id}) }}">封禁用户</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </td>
+</tr>
+
