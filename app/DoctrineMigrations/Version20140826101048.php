@@ -28,12 +28,13 @@ class Version20140826101048 extends AbstractMigration
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
             CREATE TABLE `class_member` (
-            `id` int(10) unsigned NOT NULL,
+            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
             `classId` int(10) unsigned NOT NULL COMMENT '班级ID',
             `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
             `role` varchar(64) NOT NULL,
             `title` varchar(255) NOT NULL DEFAULT '',
-            `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间'
+            `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+             PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

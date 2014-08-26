@@ -2,7 +2,6 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    require('jquery.bootstrap-datetimepicker');
     var Notify = require('common/bootstrap-notify');
 
 

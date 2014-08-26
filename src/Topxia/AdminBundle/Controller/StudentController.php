@@ -53,6 +53,9 @@ class StudentController extends BaseController
             $numbers=explode(',', $formData['numbers']);
             foreach ($numbers as $number) {
                 $user=$this->getUserService()->getUserByNumber($number);
+                if(empty($user)){
+                    throw $this->createNotFoundException('学号'.$number.'对应的用户不存在！');
+                }
                 $classMember['classId']=$classId;
                 $classMember['userId']=$user['id'];
                 $classMember['role']='student';
