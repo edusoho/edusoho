@@ -1177,6 +1177,10 @@ mobile_download:
     pattern: /mobile/download
     defaults: { _controller: TopxiaWebBundle:Mobile:download }
 
+class_show:
+    pattern: /class/{id}
+    defaults: { _controller: TopxiaWebBundle:Class:show }
+
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }

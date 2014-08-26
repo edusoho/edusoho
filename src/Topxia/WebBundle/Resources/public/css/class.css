@@ -1,0 +1,57 @@
+.class-header {
+    margin-bottom: 20px;
+}
+
+.class-header-inner {
+    border-radius: 5px;
+    height: 150px;
+    position: relative;
+
+}
+
+.class-header .media {
+    background-color: rgba(255, 255, 255, 0.70);
+    filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#ccffffff,endcolorstr=#ccffffff);
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+.class-header .media-object {
+    width: 48px;
+    height: 48px;
+}
+
+.class-header .media-heading {
+    font-size: 18px;
+    font-weight: bold;
+    }
+
+.class-header .media-metas {
+
+}
+
+.class-header .nav {
+    position: absolute;
+    bottom: 0;
+    left: 15px;
+}
+
+.class-header .nav-pills > li > a {
+    background-color: rgba(255, 255, 255, 0.70);
+    color: #444;
+    padding:6px 15px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+
+.class-header .nav-pills>li.active>a, 
+.class-header .nav-pills>li.active>a:hover, 
+.class-header .nav-pills>li.active>a:focus {
+    background-color: rgba(255, 255, 255, 0.90);
+    color: #444;
+    font-weight: bold;
+}
