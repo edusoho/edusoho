@@ -119,7 +119,6 @@ define(function(require, exports, module) {
         _initUploadPane: function() {
             var $btn = this.$('[data-role=uploader-btn]');
             var progressbar = new UploadProgressBar($btn.data('progressbar'));
-
             this.set('uploaderProgressbar', progressbar);
             this.set('uploader', this._createUpload($btn, progressbar));
         },
@@ -207,7 +206,7 @@ define(function(require, exports, module) {
             if ($btn.data('filetypes')) {
                 settings.file_types = $btn.data('filetypes');
             }
-            if(this._supportHtml5()){
+            if(this._supportHtml5() && $btn.data('storageType')=="cloud"){
                 settings.element=this.element;
                 return new ChunkUpload(settings);
             }else{

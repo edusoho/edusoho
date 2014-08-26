@@ -84,9 +84,7 @@
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
                 data-progressbar="#video-chooser-progress"
-                data-keySet="{{path('uploadfile_status_set')}}"
-                data-keyDelete="{{path('uploadfile_status_delete_key')}}"
-                data-keyGet="{{path('uploadfile_status_get_key')}}"
+                data-storage-type="{{storageSetting.upload_mode}}"
                 >
                 <a class="uploadBtn btn btn-default btn-lg">
                   上传
@@ -160,7 +158,9 @@
                 data-role="uploader-btn"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
-                data-progressbar="#audio-chooser-progress">
+                data-progressbar="#audio-chooser-progress"
+                data-storage-type="{{storageSetting.upload_mode}}"
+                >
                 <a class="uploadBtn btn btn-default btn-lg">
                   上传
                 </a>
@@ -223,6 +223,7 @@
                 data-role="uploader-btn"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
+                data-storage-type="{{storageSetting.upload_mode}}"
                 data-progressbar="#ppt-chooser-progress">
                 <a class="uploadBtn btn btn-default btn-lg">
                   上传
