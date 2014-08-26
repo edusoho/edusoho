@@ -535,6 +535,10 @@ class CourseController extends BaseController
 
         $defaultSetting = $this->getSettingService()->get('default', array());
 
+        if (empty($defaultSetting)){
+            $courseShareContent = array();
+        }
+
         $courseShareContent = str_replace('{{course}}',$course['title'], $defaultSetting['courseShareContent']);
 
         $users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);

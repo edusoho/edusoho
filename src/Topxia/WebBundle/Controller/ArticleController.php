@@ -117,13 +117,6 @@ class ArticleController extends BaseController
     {
         $article = $this->getArticleService()->getArticle($id);
 
-        $defaultSetting = $this->getSettingService()->get('default', array());
-        $site = $this->getSettingService()->get('site', array());
-
-        $valuesToBeReplace = array('{{articletitle}}', '{{sitename}}');
-        $valuesToReplace = array($article['title'], $site['name']);
-        $articleShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $defaultSetting['articleShareContent']);
-
         if (empty($article)) {
             throw $this->createNotFoundException('文章已删除或者未发布！');
         }
@@ -141,6 +134,17 @@ class ArticleController extends BaseController
         $conditions = array(
             'status' => 'published'
         );
+
+        $defaultSetting = $this->getSettingService()->get('default', array());
+        $site = $this->getSettingService()->get('site', array());
+
+        if (empty($defaultSetting)){
+            $articleShareContent = array();
+        }
+
+        $valuesToBeReplace = array('{{articletitle}}', '{{sitename}}');
+        $valuesToReplace = array($article['title'], $site['name']);
+        $articleShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $defaultSetting['articleShareContent']);
         
         $createdTime = $article['createdTime'];
 
