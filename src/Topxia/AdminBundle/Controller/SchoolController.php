@@ -2,15 +2,10 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Util\LiveClientFactory;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
-use Topxia\Service\Util\PluginUtil;
-use Topxia\Service\Util\CloudClientFactory;
+
 
 class SchoolController extends BaseController
 {
@@ -26,14 +21,36 @@ class SchoolController extends BaseController
         }
       
 		return $this->render('TopxiaAdminBundle:School:school-setting.html.twig', array(
-            'school'=>$school
+            'school' => $school
         ));
 	}
 
 	public function classSettingAction(Request $request) 
 	{
-		return null;
+        $conditions = $request->query->All();
+            
+            $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassesService()->searchClassCount($conditions),
+            5);
+
+        $classes = $this->getClassesService()->searchClasses(
+            $conditions,
+            array(),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );  
+
+		return $this->render('TopxiaAdminBundle:School:class-setting.html.twig',array(
+            'classes' => $classes
+        ));
 	}
+
+    public function classCreateAction(Request $request)
+    {
+
+        return $this->render('TopxiaAdminBundle:School:class-create-modal.html.twig');
+    }
 
 	public function homePageUploadAction(Request $request)
 	{
@@ -66,5 +83,10 @@ class SchoolController extends BaseController
 	protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getClassesService()
+    {
+        return $this->getServiceKernel()->createService('Classes.ClassesService');
     }
 }

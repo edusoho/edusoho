@@ -1,0 +1,11 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}新建班级{% endblock %}
+{% block body %}
+
+<form id="class-form" class="form-horizontal" method="post" action="{{ path('admin_class_createOrupdate')}}">
+
+</form>
+{% endblock %}
