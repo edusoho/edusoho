@@ -389,25 +389,27 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $defaultSetting = $request->request->all();
 
+            $path = $this->container->getParameter('kernel.root_dir');
+
             if (!$defaultSetting['defaultAvatar']){
-                $largefile = '/var/www/edusoho-dev/app/../web/assets/img/default/system-avatar-large.png';
-                $targetLargefile = '/var/www/edusoho-dev/app/../web/assets/img/default/avatar-large.png';
+                $largefile = $path.'/../web/assets/img/default/system-avatar-large.png';
+                $targetLargefile = $path.'/../web/assets/img/default/avatar-large.png';
                 $this->filesystem = new Filesystem();
                 $this->filesystem->copy($largefile,$targetLargefile,'ture');
 
-                $smallfile = '/var/www/edusoho-dev/app/../web/assets/img/default/system-avatar.png';
-                $targetSmallfile = '/var/www/edusoho-dev/app/../web/assets/img/default/avatar.png';
+                $smallfile = $path.'/../web/assets/img/default/system-avatar.png';
+                $targetSmallfile = $path.'/../web/assets/img/default/avatar.png';
                 $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
             }
 
             if (!$defaultSetting['defaultCoursePicture']){
-                $largefile = '/var/www/edusoho-dev/app/../web/assets/img/default/system-course-large.png';
-                $targetLargefile = '/var/www/edusoho-dev/app/../web/assets/img/default/course-large.png';
+                $largefile = $path.'/../web/assets/img/default/system-course-large.png';
+                $targetLargefile = $path.'/../web/assets/img/default/course-large.png';
                 $this->filesystem = new Filesystem();
                 $this->filesystem->copy($largefile,$targetLargefile,'ture');
 
-                $smallfile = '/var/www/edusoho-dev/app/../web/assets/img/default/system-course-default-475x250.png';
-                $targetSmallfile = '/var/www/edusoho-dev/app/../web/assets/img/default/course-default-475x250.png';
+                $smallfile = $path.'/../web/assets/img/default/system-course-default-475x250.png';
+                $targetSmallfile = $path.'/../web/assets/img/default/course-default-475x250.png';
                 $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
             }
 
