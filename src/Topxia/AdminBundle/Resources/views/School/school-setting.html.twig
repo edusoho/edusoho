@@ -1,0 +1,72 @@
+{% extends 'TopxiaAdminBundle:School:layout.html.twig' %}
+
+{% block title %}学校设置 - {{ parent() }}{% endblock %}
+
+{% set menu = 'schoolSetting' %}
+{% set script_controller = 'school/school-setting' %}
+
+{% block main %}
+
+
+
+<div class="page-header"><h1>学校设置</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" id="school-form" method="post">
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label>启用年级</label>
+    </div>
+    <div class="col-md-8 controls checkbox">
+      {{ checkboxs('primarySchool',{'1':'小学'},school.primarySchool | default(0)) }}
+
+      <span class="mll">
+        {{ radios('primaryYear', {'6':'6年制（1年级到6年级）'}, school.primaryYear | default(6)) }}
+      </span>
+      <span class="mll">
+        {{ radios('primaryYear', {'5':'5年制（1年级到5年级）'}, school.primaryYear | default(6)) }}
+      </span> 
+
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-8 controls checkbox col-md-offset-2">
+      {{ checkboxs('middleSchool',{'1':'初中'},school.middleSchool | default(0)) }}
+      <span class="mll">3年制（初1到初3）</span>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-8 controls checkbox col-md-offset-2">
+      {{ checkboxs('highSchool',{'1':'高中'},school.highSchool | default(0)) }}
+      <span class="mll">3年制（高1到高3）</span>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label>首页图片</label>
+    </div>
+    <div class="col-md-8 controls">
+      <div id="school-homepage-container">{% if school.homePage %}<img src="{{ asset(school.homePage) }}">{% endif %}</div>
+      <button class="btn btn-default" id="school-homepage-upload" type="button" data-url="{{ path('admin_school_homepage_upload') }}">上传</button>
+      <p class="help-block">
+        请上传png, jpg, gif格式的图片文件。推荐尺寸比例：600px * 400px。</p>
+        <input type="hidden" name="homePage" value="{{ school.homePage }}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="controls col-md-offset-2 col-md-8">
+        <button type="submit" class="btn btn-primary">提交</button>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+
+  {% endblock %}

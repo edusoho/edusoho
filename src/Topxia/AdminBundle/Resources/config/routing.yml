@@ -331,6 +331,18 @@ admin_setting_site:
     pattern:  /setting/site
     defaults: { _controller: TopxiaAdminBundle:Setting:site }
 
+admin_school_setting:
+    pattern:  /school/setting
+    defaults: { _controller: TopxiaAdminBundle:School:schoolSetting }
+
+admin_school_class_setting:
+    pattern:  /school/class/setting/index
+    defaults: { _controller: TopxiaAdminBundle:School:classSetting }
+
+admin_school_homepage_upload:
+    pattern:  /school/homepage/upload
+    defaults: { _controller: TopxiaAdminBundle:School:homePageUpload }
+
 admin_setting_mobile:
     pattern:  /setting/mobile
     defaults: { _controller: TopxiaAdminBundle:Setting:mobile }
