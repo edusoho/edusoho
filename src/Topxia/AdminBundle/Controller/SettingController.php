@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Filesystem\Filesystem;
+
 use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
@@ -386,6 +388,30 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $defaultSetting = $request->request->all();
+
+            if (!$defaultSetting['defaultAvatar']){
+                $largefile = '/var/www/edusoho-dev/app/../web/assets/img/default/system-avatar-large.png';
+                $targetLargefile = '/var/www/edusoho-dev/app/../web/assets/img/default/avatar-large.png';
+                $this->filesystem = new Filesystem();
+                $this->filesystem->copy($largefile,$targetLargefile,'ture');
+
+                $smallfile = '/var/www/edusoho-dev/app/../web/assets/img/default/system-avatar.png';
+                $targetSmallfile = '/var/www/edusoho-dev/app/../web/assets/img/default/avatar.png';
+                $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
+            }
+
+            if (!$defaultSetting['defaultCoursePicture']){
+                $largefile = '/var/www/edusoho-dev/app/../web/assets/img/default/system-course-large.png';
+                $targetLargefile = '/var/www/edusoho-dev/app/../web/assets/img/default/course-large.png';
+                $this->filesystem = new Filesystem();
+                $this->filesystem->copy($largefile,$targetLargefile,'ture');
+
+                $smallfile = '/var/www/edusoho-dev/app/../web/assets/img/default/system-course-default-475x250.png';
+                $targetSmallfile = '/var/www/edusoho-dev/app/../web/assets/img/default/course-default-475x250.png';
+                $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
+            }
+
+
             $this->getSettingService()->set('default', $defaultSetting);
             $this->getLogService()->info('system', 'update_settings', "更新系统默认设置", $defaultSetting);
             $this->setFlashMessage('success', '系统默认设置已保存！');
