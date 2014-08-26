@@ -19,4 +19,6 @@ interface FileImplementor
     public function makeUploadParams($params);
 
     public function reconvertFile($file, $convertCallback, $pipeline = null);
+
+    public function getFileAvinfo($hashid);
 }

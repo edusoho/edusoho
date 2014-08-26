@@ -206,10 +206,17 @@ define(function(require, exports, module) {
                 	response.filename=self.get("currentFile").name;
 
                 	$.ajax({
-                		url: '',
-                	})
+                		url: self.$('[data-role=uploader-btn]').data("getFileAvinfo"),
+                		data: {hashId: response.key},
+                		async: false,
+                		success: function(data){
+                			response.length = data;
+                		}
+                	});
 
-                	self.get("upload_success_handler")(self.get("currentFile"),JSON.stringify(response));
+
+
+                	self.get("upload_success_handler")(self.get("currentFile"), JSON.stringify(response));
                 	fileScop.fileIndex--;
                 	FileScopStorage.del(fileScop.key);
                 	self.set("currentFile",null);

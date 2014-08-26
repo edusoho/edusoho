@@ -118,17 +118,9 @@ uploadfile_cloud_convert_callback3:
     pattern:  /uploadfile/cloud_convertcallback3
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback3 }
 
-uploadfile_status_set:
-    pattern:  /uploadfile/status/set
-    defaults: { _controller: TopxiaWebBundle:UploadFileStatus:set }
-
-uploadfile_status_get_key:
-    pattern:  /uploadfile/status/key/get
-    defaults: { _controller: TopxiaWebBundle:UploadFileStatus:getByKey }
-
-uploadfile_status_delete_key:
-    pattern:  /uploadfile/status/key/delete
-    defaults: { _controller: TopxiaWebBundle:UploadFileStatus:deleteByKey }
+uploadfile_cloud_get_avinfo:
+    pattern:  /uploadfile/getAvinfo
+    defaults: { _controller: TopxiaWebBundle:UploadFile:getAvinfo }
 
 kindeditor_upload:
     pattern:  /kindeditor/upload

@@ -30,4 +30,6 @@ interface CloudClient
 
     public function deleteFiles(array $keys, array $prefixs = array());
 
+    public function getFileAvinfo($hashid);
+
 }
