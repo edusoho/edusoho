@@ -12,7 +12,11 @@
     <div class="notebook" id="notebook">
       <div class="notebook-heading">
         <a class="btn btn-default btn-sm pull-right notebook-back-btn" href="{{ path('my_notebooks') }}" >返回</a>
+        {% if setting('default.defaultCoursePicture') %}
         <img class="notebook-icon" src="{{ file_path(course.largePicture, 'course-large.png') }}" />
+        {% else %}
+        <img class="notebook-icon" src="{{ file_path(course.largePicture, 'system-course-large.png') }}" />
+        {% endif %}
         《{{ course.title }}》的笔记
       </div>
       <div class="notebook-body">

@@ -35,7 +35,11 @@
           <td>
 
             <a class="pull-left mrm" href="{{ path('course_show', {id:course.id}) }}">
+              {% if setting('default.defaultCoursePicture') %}
               <img class="course-picture" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}" width="100">
+              {% else %}
+              <img class="course-picture" src="{{ file_path(course.middlePicture, 'system-course-large.png') }}" alt="{{ course.title }}" width="100">
+              {% endif %}
             </a>
 
             <div class="mlm">
