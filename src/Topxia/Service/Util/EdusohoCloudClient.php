@@ -429,7 +429,7 @@ class EdusohoCloudClient implements CloudClient
         $args['bucket'] = $this->bucket;
         $args['hashId'] = $hashid;
         $result = $this->callRemoteApi('GET', 'GetAvinfo', $args);
-        return json_decode($result,true);
+        return json_decode("{}",true);
     }
 
     private function generateViewToken($bucket, $key)
