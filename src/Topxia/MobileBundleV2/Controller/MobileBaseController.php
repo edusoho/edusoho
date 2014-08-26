@@ -48,6 +48,11 @@ class MobileBaseController extends BaseController
         return $result ? $result : $default;
     }
 
+    public function getUser()
+    {
+        return $this->getCurrentUser();
+    }
+
     private function setCurrentUser($userId, $request)
     {
         $user = $this->getUserService()->getUser($userId);
