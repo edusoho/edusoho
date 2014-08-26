@@ -207,12 +207,15 @@ define(function(require, exports, module) {
             if ($btn.data('filetypes')) {
                 settings.file_types = $btn.data('filetypes');
             }
-            if(FileReader && FileReader.DONE){
+            if(this._supportHtml5()){
                 settings.element=this.element;
                 return new ChunkUpload(settings);
             }else{
                 return new SWFUpload(settings);
             }
+        },
+        _supportHtml5: function(){
+            return FileReader && FileReader.DONE && XMLHttpRequest;
         }
 
     });

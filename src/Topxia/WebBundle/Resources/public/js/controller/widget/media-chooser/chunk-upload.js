@@ -63,7 +63,7 @@ define(function(require, exports, module) {
 	            if (evt.target.readyState == FileReader.DONE) { // DONE == 2
 	            	var crc = self.crc32(evt.target.result);
 	            	fileScop.key = crc;
-	            	var savedFileInfo = FileScopStorage.get(self.element.find('[data-role="uploader-btn"]').attr("data-keyGet"), fileScop.key);
+	            	var savedFileInfo = FileScopStorage.get(fileScop.key);
 	            	if(savedFileInfo){
 	            		var savedFileInfoArray = JSON.parse(savedFileInfo);
 	            		if(savedFileInfoArray.key == fileScop.key){
@@ -204,9 +204,14 @@ define(function(require, exports, module) {
                 if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
                 	var response = JSON.parse(xhr.responseText);
                 	response.filename=self.get("currentFile").name;
+
+                	$.ajax({
+                		url: '',
+                	})
+
                 	self.get("upload_success_handler")(self.get("currentFile"),JSON.stringify(response));
                 	fileScop.fileIndex--;
-                	FileScopStorage.del(self.element.find('[data-role="uploader-btn"]').attr("data-keyDelete"), fileScop.key);
+                	FileScopStorage.del(fileScop.key);
                 	self.set("currentFile",null);
                 	self.trigger("upload", fileScop.fileIndex);
 
@@ -287,7 +292,7 @@ define(function(require, exports, module) {
 				currentChunkIndex: fileScop.currentChunkIndex,
 				currentChunkOffsetInBlock: fileScop.currentChunkOffsetInBlock
 			};
-        	FileScopStorage.set(this.element.find('[data-role="uploader-btn"]').attr("data-keySet"), fileScop.key, JSON.stringify(saveFileScop));
+        	FileScopStorage.set(fileScop.key, JSON.stringify(saveFileScop));
 	    },
 
 	    uploadAfterGetCrc : function(fileScop, blkRet) {
@@ -367,7 +372,6 @@ define(function(require, exports, module) {
 			this.element.find("input[data-role='fileSelected']").click();
 		},
 		onSelectFileChange: function(){
-			this.element.find("a.uploadBtn").prop("disabled", true);
 
 			var files = this.element.find("input[data-role='fileSelected']")[0].files;
 			var maxSize = this.get("file_size_limit");
@@ -378,7 +382,12 @@ define(function(require, exports, module) {
 			}
 
 			if(files[0].size>maxSize){
-				Notify.danger('选择的文件太大，只能选择小于'+this.get("file_size_limit")+'的文件。');
+				Notify.info('选择的文件太大，只能选择小于'+this.get("file_size_limit")+'的文件。');
+				return;
+			}
+
+			if(this.get("currentFile")){
+				Notify.info('文件正在上传中，请等待本次上传完毕后，再上传。');
 				return;
 			}
 
@@ -396,38 +405,14 @@ define(function(require, exports, module) {
 	});
 	
 	var FileScopStorage = {
-	    set: function(url, key, fileScop) {
-	        var postData = {
-	        	scopKey: key,
-	        	fileScop: fileScop
-	        }
-	        $.ajax({
-	        	url: url, 
-	        	type: 'post',
-	        	data: postData, 
-	        	async: false,
-	        	success: function(data){}
-	        });
+	    set: function(key, fileScop) {
+	    	localStorage[key]=fileScop;
 	    },
-	    get: function(url, key) {
-	    	var fileScop;
-	        $.ajax({
-	        	url: url, 
-	        	data: {scopKey: key}, 
-	        	async: false,
-	        	success: function(data){
-	        		fileScop=data.fileScop;
-	        	}
-	        });
-	        return fileScop;
+	    get: function(key) {
+	    	return localStorage.getItem(key);
 	    },
-	    del: function(url, key) {
-	        $.ajax({
-	        	url: url, 
-	        	data: {scopKey: key}, 
-	        	async: false,
-	        	success: function(data){}
-	        });
+	    del: function(key) {
+	    	localStorage.removeItem(key); 
 	    }
 	};
 
