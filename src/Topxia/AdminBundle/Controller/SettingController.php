@@ -473,16 +473,15 @@ class SettingController extends BaseController
         $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
         $largeImage->save($largeFilePath, array('quality' => 90));
 
-        $largefile = new File($largeFilePath);
-        $largefile = $largefile->move('/var/www/edusoho-dev/app/../web/assets/img/default', 'avatar-large.png');
+        $this->filesystem = new Filesystem();
+        $this->filesystem->copy($largeFilePath, '/var/www/edusoho-dev/app/../web/assets/img/default/avatar-large.png','ture');
 
         $smallImage = $rawImage->copy();
         $smallImage->resize(new Box(120, 120));
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $smallImage->save($smallFilePath, array('quality' => 90));
 
-        $smallfile = new File($smallFilePath);
-        $smallfile = $smallfile->move('/var/www/edusoho-dev/app/../web/assets/img/default', 'avatar.png');
+        $this->filesystem->copy($smallFilePath, '/var/www/edusoho-dev/app/../web/assets/img/default/avatar.png','ture');
 
         return $this->redirect($this->generateUrl('admin_setting_default'));
     }
@@ -538,16 +537,15 @@ class SettingController extends BaseController
         $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
         $largeImage->save($largeFilePath, array('quality' => 90));
 
-        $largefile = new File($largeFilePath);
-        $largefile = $largefile->move('/var/www/edusoho-dev/app/../web/assets/img/default', 'course-large.png');
+        $this->filesystem = new Filesystem();
+        $this->filesystem->copy($largeFilePath, '/var/www/edusoho-dev/app/../web/assets/img/default/course-large.png','ture');
 
         $smallImage = $rawImage->copy();
         $smallImage->resize(new Box(475,250));
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $smallImage->save($smallFilePath, array('quality' => 90));
 
-        $smallfile = new File($smallFilePath);
-        $smallfile = $smallfile->move('/var/www/edusoho-dev/app/../web/assets/img/default', 'course-default-475x250.png');
+        $this->filesystem->copy($smallFilePath, '/var/www/edusoho-dev/app/../web/assets/img/default/course-default-475x250.png','ture');
 
         return $this->redirect($this->generateUrl('admin_setting_default'));
     }
