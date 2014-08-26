@@ -429,23 +429,7 @@ class EdusohoCloudClient implements CloudClient
         $args['bucket'] = $this->bucket;
         $args['hashId'] = $hashid;
         $result = $this->callRemoteApi('GET', 'GetAvinfo', $args);
-        return json_decode('"format": {
-                "nb_streams": 2,
-                "nb_programs": 0,
-                "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
-                "format_long_name": "QuickTime / MOV",
-                "start_time": "0.000000",
-                "duration": "1330.083000",
-                "size": "53333068",
-                "bit_rate": "320780",
-                "probe_score": 100,
-                "tags": {
-                    "major_brand": "isom",
-                    "minor_version": "512",
-                    "compatible_brands": "isomiso2avc1mp41",
-                    "encoder": "Lavf54.29.104"
-                }
-            }',true);
+        return json_decode($result, true);
     }
 
     private function generateViewToken($bucket, $key)
