@@ -78,21 +78,24 @@ define(function(require, exports, module) {
                         var add = 0;
                         if($parent.hasClass('item-chapter  clearfix')){
                             $parent.nextAll().each(function(){
-                            if($(this).hasClass('item-chapter  clearfix')){
-                                $(this).before(html);
-                                add = 1;
-                                return false;
-                            }
-                        });
+                                if($(this).hasClass('item-chapter  clearfix')){
+                                    $(this).before(html);
+                                    add = 1;
+                                    return false;
+                                }
+                            });
                             if(add !=1 ){
                                 $("#course-item-list").append(html);
                                 add = 1;
                             }
 
                         }else{
-                             $parent.nextAll().each(function(){
-                                if($(this).hasClass('item-chapter  clearfix'))
+                             $parent.nextAll().each(function() {
+                                if($(this).hasClass('item-chapter  clearfix')){
+                                    $(this).before(html);
+                                    add = 1;
                                     return false;
+                                }
                                 if($(this).hasClass('item-chapter item-chapter-unit clearfix')){
                                     $(this).before(html);
                                     add = 1;
@@ -100,8 +103,9 @@ define(function(require, exports, module) {
                                 }
                             });
                         }
-                    if(add != 1 )
-                        $parent.after(html);  
+                        if(add != 1 ) {
+                         $("#course-item-list").append(html); 
+                        }
                         var $list = $("#course-item-list");
                         sortList($list);
                     }else{

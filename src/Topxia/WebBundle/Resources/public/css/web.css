@@ -3465,97 +3465,6 @@ body {
   display: block !important;
 }
 
-
-/*customer-service-online*/
-
-.customer-service-online {
-	background:rgba(51, 51, 51, 0.9);
-	position: fixed;
-	top: 130px;
-	right: 0px;
-	z-index: 999;
-	filter:progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr='#E5333333', endColorstr='#E5333333');
-}
-
-.customer-service-online a {
-	color: #00A0E9;
-}
-
-.customer-service-online a:hover {
-	color: #ff8100;
-	text-decoration: none;
-}
-
-.customer-service-online .float-left {
-	width: 36px;
-	float:left;
-	position: relative;
-	z-index:1;
-}
-
-.customer-service-online .float-left a {
-	font-size:0;
-	text-indent: -999em;
-	display: block;
-}
-
-.customer-service-online .float-right {
-	overflow:hidden;
-}
-
-.customer-service-online .float-right .service-category {
-	background: #F7F7F7;
-	width:  148px;
-}
-
-.customer-service-online .service-category h3 {
-	font-size: 14px;
-	color: #333;
-	font-weight:600;
-	line-height: 24px;
-	margin-top: 10px;
-}
-
-.customer-service-online .service-category ul {
-	padding: 0 0 0 8px;
-}
-
-.customer-service-online .service-category ul li {
-	border-bottom: solid 1px #E6E4E4;
-}
-
-.customer-service-online .service-category ul li a{
-	padding-left:8px; 
-}
-
-.customer-service-online .service-category ul li span {
-	color: #777;
-}
-
-.customer-service-online .service-category ul li img {
-	vertical-align: middle;
-}
-
-.customer-service-online .btn-open, .customer-service-online .btn-ctn {
-	position: relative;
-	z-index:9;
-	top:0;
-	left: 0;
-	background-image: url(../img/customer-service-online.png);
-	background-repeat: no-repeat;
-	display:block;
-	height: 146px;
-	padding: 8px;
-}
-
-.customer-service-online .btn-open {
-	background-position: 0px 0;
-}
-
-.customer-service-online .btn-ctn {
-	background-position: -35px 0;
-}
-
 .select2-no-results {
     display: none !important;
 }
@@ -3582,7 +3491,6 @@ body {
 {
 	color:#333;
 }
-
 
 .question-stem-fill-blank {
 	padding-left: 15px;
@@ -4068,5 +3976,82 @@ body {
 
 .quality-switcher .quality-actions {
 	margin-top: 10px;
-
 }
+
+/**
+ * <在线客服>
+ */
+
+.float-consult {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    visibility: hidden;
+    z-index: 999999;
+}
+
+.float-consult .popover {
+  width: 250px;
+  color: #444;
+  cursor: default;
+  -webkit-user-select: text;
+     -moz-user-select: text;
+      -ms-user-select: text;
+          user-select: text;
+}
+
+.float-consult .popover .qrcode {
+  max-width: 220px;
+}
+
+.float-consult .btn-group-vertical .btn:active {
+  box-shadow: none;
+}
+
+.float-consult .consult-contents {
+  display: none;
+}
+
+@font-face {font-family: "consultfont";
+  src: url('fonts/consult-font.eot'); /* IE9*/ 
+  src: url('fonts/consult-font.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('fonts/consult-font.woff') format('woff'), /* chrome、firefox */
+  url('fonts/consult-font.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('fonts/consult-font.svg#consultfont') format('svg'); /* iOS 4.1- */
+}
+
+.float-consult .icon {
+  font-family:"consultfont" !important;
+  font-size:20px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.float-consult .icon-phone:before { content: "\e600"; }
+
+.float-consult .icon-email:before { content: "\e601"; }
+
+.float-consult .icon-qq:before { content: "\e603"; }
+
+.float-consult .icon-weixin:before { content: "\e606"; }
+
+.float-consult .icon-qqgroup:before { content: "\e608"; }
+
+#float-consult h3.popover-title	{
+	padding: 8px 14px;
+}
+
+.float-consult-qq-btn .popover img {
+	width: 25px;
+	height: 25px;
+}
+
+.float-consult-qq-btn .popover p {
+	margin: 0 0 6px
+}
+/**
+ * </在线客服>
+ */
+

@@ -1,7 +1,8 @@
 define(function(require, exports, module) {
 
     var EditorFactory = require('common/kindeditor-factory');
-	var Validator = require('bootstrap.validator');
+    var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
         require('./common').run();
@@ -14,7 +15,8 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="thread[title]"]',
-            required: true
+            required: true,
+            rule:'visible_character'
         });
 
         validator.addItem({

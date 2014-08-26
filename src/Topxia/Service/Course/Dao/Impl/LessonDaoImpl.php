@@ -23,6 +23,12 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findLessonsByTypeAndMediaId($type, $mediaId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE type = ? AND mediaId = ?";
+        return $this->getConnection()->fetchAll($sql, array($type, $mediaId));
+    }
+
     public function findMinStartTimeByCourseId($courseId)
     {
         $sql = "select min(`startTime`) as startTime from `course_lesson` where courseId =?;";

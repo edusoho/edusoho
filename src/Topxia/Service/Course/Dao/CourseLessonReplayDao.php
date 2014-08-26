@@ -13,4 +13,6 @@ interface CourseLessonReplayDao
 	public function deleteLessonReplayByLessonId($lessonId);
 
 	public function getCourseLessonReplayByLessonId($lessonId);
+
+	public function deleteLessonReplayByCourseId($courseId);
 }
