@@ -1,0 +1,7 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
+{% block description %}{{ setting('site.seo_description') }}{% endblock %}
+
+{% set bodyClass = 'homepage' %}
+{% set script_controller = 'customwebbundle/controller/freelimit/freelimit' %}

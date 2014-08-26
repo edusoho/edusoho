@@ -13,7 +13,7 @@ define(function(require, exports, module) {
                     downCount($(this),{
                         date: targetTime,
                         offset: 8,
-                        timestep: 100
+                        timestep: 1000
                     });
                 }
                
@@ -27,7 +27,7 @@ define(function(require, exports, module) {
         var settings = $.extend({
                 date: null,
                 offset: null,
-                timestep: 100
+                timestep: 1000
             }, options);
 
         settings.date = settings.date.replace(/-/g,"/")
@@ -74,7 +74,6 @@ define(function(require, exports, module) {
             if (difference < 0) {
                 // stop timer
                 clearInterval(interval);
-                container.find('.seconds').text('00.0');
                 if (callback && typeof callback === 'function') callback();
 
                 return;
@@ -90,13 +89,13 @@ define(function(require, exports, module) {
             var days = Math.floor(difference / _day),
                 hours = Math.floor((difference % _day) / _hour),
                 minutes = Math.floor((difference % _hour) / _minute),
-                seconds = ((difference % _minute) / _second).toFixed(1);
+                seconds = Math.floor((difference % _minute) / _second);
                 
                 // fix dates so that it will show two digets
                 days = (String(days).length >= 2) ? days : '0' + days;
                 hours = (String(hours).length >= 2) ? hours : '0' + hours;
                 minutes = (String(minutes).length >= 2) ? minutes : '0' + minutes;
-                seconds = (String(seconds).length >= 4) ? seconds : '0' + seconds;         
+                seconds = (String(seconds).length >= 2) ? seconds : '0' + seconds;         
                 
             // set to DOM
             container.find('.days').text(days);
