@@ -137,16 +137,30 @@ class CourseStudentManageController extends BaseController
 
 	public function exportCsvAction (Request $request, $id)
 	{   
+		$gender=array('female'=>'女','male'=>'男','secret'=>'秘密');
 		$courseSetting = $this->getSettingService()->get('course', array());
 
-		if (!empty($courseSetting['teacher_manage_student'])) {
+		if (isset($courseSetting['teacher_export_student']) && $courseSetting['teacher_export_student']=="1") {
 			$course = $this->getCourseService()->tryManageCourse($id);
 		} else {
 			$course = $this->getCourseService()->tryAdminCourse($id);
 		}
 
+		$userinfoFields=array_diff($courseSetting['userinfoFields'], array('truename','job','mobile','qq','company','gender','idcard','weixin'));
 		$courseMembers = $this->getCourseService()->searchMembers( array('courseId' => $course['id'],'role' => 'student'),array('createdTime', 'DESC'), 0, 1000);
 
+		$userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
+		$fields['weibo']="微博";
+		foreach ($userFields as $userField) {
+			$fields[$userField['fieldName']]=$userField['title'];
+		}
+
+		$userinfoFields=array_flip($userinfoFields);
+
+		$fields=array_intersect_key($fields, $userinfoFields);
+		
+		if(!$courseSetting['buy_fill_userinfo']) $fields=array();
 		$studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
 
 		$users = $this->getUserService()->findUsersByIds($studentUserIds);
@@ -160,7 +174,13 @@ class CourseStudentManageController extends BaseController
 			$progresses[$student['userId']] = $this->calculateUserLearnProgress($course, $student);
 		}
 
-		$str = "用户名,加入学习时间,学习进度,姓名,Email,公司,头衔,电话,微信号,QQ号"."\r\n";
+		$str = "用户名,加入学习时间,学习进度,姓名,Email,公司,头衔,电话,微信号,QQ号,性别,职业,手机号";
+
+		foreach ($fields as $key => $value) {
+			$str.=",".$value;
+		}
+
+		$str.="\r\n";
 
 		$students = array();
 
@@ -175,7 +195,13 @@ class CourseStudentManageController extends BaseController
 			$member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
 			$member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
 			$member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
-			$member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-";
+			$member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-".",";
+			$member .= $gender[$profiles[$courseMember['userId']]['gender']].",";
+			$member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job']."," : "-".",";
+			$member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
+			foreach ($fields as $key => $value) {
+			$member.=$profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key]."," : "-".",";
+			}
 			$students[] = $member;   
 		};
 

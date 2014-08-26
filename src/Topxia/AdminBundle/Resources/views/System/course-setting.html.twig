@@ -229,6 +229,15 @@ glyphicon glyphicon-chevron-up"></span></a></div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
+        <label >允许教师导出学员资料</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('teacher_export_student', {1:'是', 0:'否'}, courseSetting.teacher_export_student) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
         <label >允许学员下载课时的音视频</label>
       </div>
       <div class="controls col-md-8 radios">
