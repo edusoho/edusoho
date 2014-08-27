@@ -27,13 +27,13 @@ interface ThreadService
 
 	public function deleteThread($threadId);
 
-	public function stickThread($courseId, $threadId);
+	public function stickThread($threadId);
 
-	public function unstickThread($courseId, $threadId);
+	public function unstickThread($threadId);
 
-	public function eliteThread($courseId, $threadId);
+	public function eliteThread($threadId);
 
-	public function uneliteThread($courseId, $threadId);
+	public function uneliteThread($threadId);
 
 	/**
 	 * 点击查看话题

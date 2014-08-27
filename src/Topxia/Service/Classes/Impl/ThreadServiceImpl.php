@@ -173,13 +173,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	public function deleteThread($threadId)
 	{
-		$thread = $this->getThreadDao()->getThread($threadId);
+		$thread = $this->getThread($threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $threadId));
-		}
-
-		if (!$this->getCourseService()->canManageCourse($thread['courseId'])) {
-			throw $this->createServiceException('您无权限删除该话题');
 		}
 
 		$this->getThreadPostDao()->deletePostsByThreadId($threadId);
@@ -188,11 +184,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
 	}
 
-	public function stickThread($courseId, $threadId)
+	public function stickThread($threadId)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-
-		$thread = $this->getThread($courseId, $threadId);
+		$thread = $this->getThread($threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
 		}
@@ -200,11 +194,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadDao()->updateThread($thread['id'], array('isStick' => 1));
 	}
 
-	public function unstickThread($courseId, $threadId)
+	public function unstickThread($threadId)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-
-		$thread = $this->getThread($courseId, $threadId);
+		$thread = $this->getThread($threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
 		}
@@ -212,11 +204,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadDao()->updateThread($thread['id'], array('isStick' => 0));
 	}
 
-	public function eliteThread($courseId, $threadId)
+	public function eliteThread($threadId)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-
-		$thread = $this->getThread($courseId, $threadId);
+		$thread = $this->getThread($threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
 		}
@@ -224,11 +214,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadDao()->updateThread($thread['id'], array('isElite' => 1));
 	}
 
-	public function uneliteThread($courseId, $threadId)
+	public function uneliteThread($threadId)
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 
-		$thread = $this->getThread($courseId, $threadId);
+		$thread = $this->getThread($threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
 		}

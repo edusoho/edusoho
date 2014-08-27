@@ -164,33 +164,33 @@ class ClassThreadController extends BaseController
             ->getForm();
     }
 
-    public function deleteAction(Request $request, $courseId, $id)
+    public function deleteAction(Request $request, $classId, $threadId)
     {
-        $this->getThreadService()->deleteThread($id);
+        $this->getThreadService()->deleteThread($threadId);
         return $this->createJsonResponse(true);
     }
 
-    public function stickAction(Request $request, $courseId, $id)
+    public function stickAction(Request $request, $classId, $threadId)
     {
-        $this->getThreadService()->stickThread($courseId, $id);
+        $this->getThreadService()->stickThread($threadId);
         return $this->createJsonResponse(true);
     }
 
-    public function unstickAction(Request $request, $courseId, $id)
+    public function unstickAction(Request $request, $classId, $threadId)
     {
-        $this->getThreadService()->unstickThread($courseId, $id);
+        $this->getThreadService()->unstickThread($threadId);
         return $this->createJsonResponse(true);
     }
 
-    public function eliteAction(Request $request, $courseId, $id)
+    public function eliteAction(Request $request, $classId, $threadId)
     {
-        $this->getThreadService()->eliteThread($courseId, $id);
+        $this->getThreadService()->eliteThread($threadId);
         return $this->createJsonResponse(true);
     }
 
-    public function uneliteAction(Request $request, $courseId, $id)
+    public function uneliteAction(Request $request, $classId, $threadId)
     {
-        $this->getThreadService()->uneliteThread($courseId, $id);
+        $this->getThreadService()->uneliteThread($threadId);
         return $this->createJsonResponse(true);
     }
 

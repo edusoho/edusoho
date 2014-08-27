@@ -1,7 +1,7 @@
 <form id="thread-post-form" class="form-vertical" method="post" action="{{ path('class_thread_post', {classId:thread.classId, threadId:thread.id}) }}" data-auto-submit="false" novalidate>
   <div class="form-group">
     <div class="controls">
-      <textarea class="form-control" name="content" rows="8" placeholder="请输入回复的内容"></textarea>
+      <textarea id="post-content-field" class="form-control" name="content" rows="8" data-display="回复内容"></textarea>
     </div>
   </div>
   <div class="form-group">
