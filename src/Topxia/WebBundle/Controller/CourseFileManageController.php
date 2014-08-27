@@ -114,18 +114,6 @@ class CourseFileManageController extends BaseController
         ));
     }
 
-    public function batchUploadCourseFilesAction(Request $request, $id, $targetType)
-    {
-        $course = $this->getCourseService()->tryManageCourse($id);
-        $storageSetting = $this->getSettingService()->get('storage', array());
-        return $this->render('TopxiaWebBundle:CourseFileManage:batch-upload.html.twig', array(
-            'course' => $course,
-            'storageSetting' => $storageSetting,
-            'targetType' => $targetType,
-            'targetId'=>$course['id'],
-        ));
-    }
-
     public function deleteCourseFilesAction(Request $request, $id, $type)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
