@@ -85,7 +85,7 @@
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
                 data-progressbar="#video-chooser-progress"
                 data-storage-type="{{storageSetting.upload_mode}}"
-                data-get-file-avinfo="{{path('uploadfile_cloud_get_avinfo')}}"
+                data-get-media-info="{{path('uploadfile_cloud_get_media_info')}}"
                 >
                 <a class="uploadBtn btn btn-default btn-lg">
                   上传
@@ -161,6 +161,7 @@
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
                 data-progressbar="#audio-chooser-progress"
                 data-storage-type="{{storageSetting.upload_mode}}"
+                data-get-media-info="{{path('uploadfile_cloud_get_media_info')}}"
                 >
                 <a class="uploadBtn btn btn-default btn-lg">
                   上传

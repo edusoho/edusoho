@@ -216,14 +216,17 @@ define(function(require, exports, module) {
                 	var response = JSON.parse(xhr.responseText);
                 	response.filename=self.get("currentFile").name;
 
-                	$.ajax({
-                		url: self.$('[data-role=uploader-btn]').data("getFileAvinfo"),
-                		data: {hashId: response.key},
-                		async: false,
-                		success: function(data){
-                			response.length = data;
-                		}
-                	});
+                	var mediaInfoUrl = self.$('[data-role=uploader-btn]').data("getMediaInfo");
+                	if(mediaInfoUrl)
+	                	$.ajax({
+	                		url: mediaInfoUrl,
+	                		data: {hashId: response.key},
+	                		async: false,
+	                		success: function(data){
+	                			response.length = data;
+	                		}
+	                	});
+                	}
 
                 	self.get("upload_success_handler")(self.get("currentFile"), JSON.stringify(response));
                 	fileScop.fileIndex--;
