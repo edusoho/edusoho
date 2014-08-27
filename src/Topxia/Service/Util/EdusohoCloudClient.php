@@ -425,11 +425,7 @@ class EdusohoCloudClient implements CloudClient
 
     public function getMediaInfo($hashid)
     {
-        $args = array();
-        $args['bucket'] = $this->bucket;
-        $args['hashId'] = $hashid;
-        $result = $this->callRemoteApi('GET', 'GetMediaInfo', $args);
-        return json_decode($result, true);
+        return $this->getVideoInfo($this->bucket, $hashid);
     }
 
     private function generateViewToken($bucket, $key)
