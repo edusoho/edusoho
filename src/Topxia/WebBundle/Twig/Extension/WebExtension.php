@@ -368,9 +368,11 @@ class WebExtension extends \Twig_Extension
         
         $key = 'default'.ucfirst($category);
 
+        $fileName = $key.'FileName';
+
         if (array_key_exists($key,$defaultSetting)) {
-            if ($defaultAvatar['defaultAvatar'] == 1) {
-                $url = $assets->getUrl($publicUrlpath . $size .$key);
+            if ($defaultSetting[$key] == 1) {
+                $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
             } else {
                 if ($absolute) {
                     $url = $request->getSchemeAndHttpHost() . $url;
