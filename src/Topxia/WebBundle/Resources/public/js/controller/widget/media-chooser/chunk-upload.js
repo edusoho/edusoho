@@ -16,12 +16,7 @@ define(function(require, exports, module) {
 
 		events: {
 			"click .btn-default": "onUploadButtonClick",
-			"change input[data-role='fileSelected']": "onSelectFileChange",
-			"hide.bs.modal .modal": "onHide"
-		},
-
-		onHide: function(){
-			alert(111);
+			"change input[data-role='fileSelected']": "onSelectFileChange"
 		},
 		getFileSize: function(size) {
         	return (size / (1024 * 1024)).toFixed(2) + "MB";
