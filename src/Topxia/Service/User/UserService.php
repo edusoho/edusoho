@@ -186,4 +186,6 @@ interface UserService
 
     public function dropFieldData($fieldName);
 
+    public function getUserByNumber($number);
+
 }

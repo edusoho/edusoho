@@ -186,6 +186,7 @@ admin_user_send_emailverify_email:
     defaults: { _controller: TopxiaAdminBundle:User:sendEmailVerifyEmail }
     methods:  [POST]
 
+
 admin_comment:
     pattern:  /comment
     defaults: { _controller: TopxiaAdminBundle:Comment:index }
@@ -878,5 +879,15 @@ admin_user_fields_delete:
     pattern:  /user_fields/delete/{id}
     defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }
 
+admin_class_student:
+    pattern:  /class/{classId}/student
+    defaults: { _controller: TopxiaAdminBundle:Student:index }
 
+admin_class_student_import:
+    pattern:  /class/{classId}/student/import
+    defaults: { _controller: TopxiaAdminBundle:Student:import }
+
+admin_class_student_remove:
+    pattern:  /class/student/{userId}/remove
+    defaults: { _controller: TopxiaAdminBundle:Student:remove }
 
