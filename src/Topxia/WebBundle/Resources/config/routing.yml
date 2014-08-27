@@ -120,7 +120,7 @@ uploadfile_cloud_convert_callback3:
 
 uploadfile_cloud_get_media_info:
     pattern:  /uploadfile/get_media_info
-    defaults: { _controller: TopxiaWebBundle:UploadFile:getAvinfo }
+    defaults: { _controller: TopxiaWebBundle:UploadFile:getMediaInfo }
 
 kindeditor_upload:
     pattern:  /kindeditor/upload

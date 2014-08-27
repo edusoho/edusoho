@@ -20,5 +20,5 @@ interface FileImplementor
 
     public function reconvertFile($file, $convertCallback, $pipeline = null);
 
-    public function getFileAvinfo($hashid);
+    public function getMediaInfo($hashid);
 }

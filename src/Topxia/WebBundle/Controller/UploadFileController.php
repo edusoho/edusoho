@@ -209,10 +209,10 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($file['metas2']);
     }
 
-    public function getAvinfoAction(Request $request)
+    public function getMediaInfoAction(Request $request)
     {
         $hashId = $request->query->get('hashId');
-        $info = $this->getUploadFileService()->getFileAvinfo($hashId);
+        $info = $this->getUploadFileService()->getMediaInfo($hashId);
         return $this->createJsonResponse($info['format']['duration']);
     }
 
