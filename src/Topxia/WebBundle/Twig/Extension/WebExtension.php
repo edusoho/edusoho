@@ -61,6 +61,7 @@ class WebExtension extends \Twig_Extension
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
+            'class_name' => new \Twig_Function_Method($this, 'getClassName') ,
         );
     }
 
@@ -159,6 +160,52 @@ class WebExtension extends \Twig_Extension
         return '';
     }
 
+    public function getClassName($class)
+    {
+        switch ($class['gradeId']) {
+            case '1':
+                return '小一'.$class['name'];
+                break;
+            case '2':
+                return '小二'.$class['name'];
+                break;
+            case '3':
+                return '小三'.$class['name'];
+                break;
+            case '4':
+                return '小四'.$class['name'];
+                break;
+            case '5':
+                return '小五'.$class['name'];
+                break;
+            case '6':
+                return '小六'.$class['name'];
+                break;
+            case '7':
+                return '初一'.$class['name'];
+                break;
+            case '8':
+                return '初二'.$class['name'];
+                break;
+            case '9':
+                return '初三'.$class['name'];
+                break;
+            case '10':
+                return '高一'.$class['name'];
+                break;
+            case '11':
+                return '高二'.$class['name'];
+                break;
+            case '12':
+                return '高三'.$class['name'];
+                break;
+                                                                                                
+            default:
+                return $class['name'];
+                break;
+        }
+       
+    }
 
     public function dataformatFilter ($time) {
         if (empty($time)) {

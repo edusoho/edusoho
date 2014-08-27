@@ -80,6 +80,14 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->searchUserCount($conditions);
     }
 
+    
+    public function getUserByNumber($number){
+        if (empty($number)) {
+            return null;
+        }
+        return $this->getUserDao()->getUserByNumber($number);
+    }
+
     public function setEmailVerified($userId)
     {
         $this->getUserDao()->updateUser($userId, array('emailVerified' => 1));
@@ -837,6 +845,7 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
     
+
     public function dropFieldData($fieldName)
     {
         $this->getProfileDao()->dropFieldData($fieldName);

@@ -186,6 +186,7 @@ admin_user_send_emailverify_email:
     defaults: { _controller: TopxiaAdminBundle:User:sendEmailVerifyEmail }
     methods:  [POST]
 
+
 admin_comment:
     pattern:  /comment
     defaults: { _controller: TopxiaAdminBundle:Comment:index }
@@ -346,6 +347,14 @@ admin_school_homepage_upload:
 admin_schcool_classes_create:
     pattern:  /school/classes/create
     defaults: { _controller: TopxiaAdminBundle:School:classCreate }
+
+admin_school_class_icon_upload:
+    pattern:  /school/classes/icon/upload
+    defaults: { _controller: TopxiaAdminBundle:School:classIconUpload }
+
+admin_school_class_backgroundImg_upload:
+    pattern:  /school/classes/backgroundImg/upload
+    defaults: { _controller: TopxiaAdminBundle:School:classBackgroundImgUpload }
 
 admin_setting_mobile:
     pattern:  /setting/mobile
@@ -870,5 +879,15 @@ admin_user_fields_delete:
     pattern:  /user_fields/delete/{id}
     defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }
 
+admin_class_student:
+    pattern:  /class/{classId}/student
+    defaults: { _controller: TopxiaAdminBundle:Student:index }
 
+admin_class_student_import:
+    pattern:  /class/{classId}/student/import
+    defaults: { _controller: TopxiaAdminBundle:Student:import }
+
+admin_class_student_remove:
+    pattern:  /class/student/{userId}/remove
+    defaults: { _controller: TopxiaAdminBundle:Student:remove }
 

@@ -21,7 +21,6 @@
     </div>
     <div class="col-md-8 controls checkbox">
       {{ checkboxs('primarySchool',{'1':'小学'},school.primarySchool | default(0)) }}
-
       <span class="mll">
         {{ radios('primaryYear', {'6':'6年制（1年级到6年级）'}, school.primaryYear | default(6)) }}
       </span>

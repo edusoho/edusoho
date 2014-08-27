@@ -1,0 +1,23 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}批量导入学生{% endblock %}
+{% block body %}
+	<form id="number-form" class="form-horizontal" method="post" 
+	action="{{ path('admin_class_student_import', { classId:classId })}}">
+	  <div class="row form-group">
+	    <div class="col-md-3 control-label">
+	      <label for="numbers">学号:</label>
+	    </div>
+	    <div class="col-md-7 controls">
+	      <textarea id="numbers" name="numbers" class="form-control"></textarea>
+	    </div>
+	  </div>
+	</form>
+{% endblock %}
+
+{% block footer %}
+  <button type="submit" id="student-import-btn" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#number-form">提交</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('user/student-import-modal')</script>
+{% endblock %}
