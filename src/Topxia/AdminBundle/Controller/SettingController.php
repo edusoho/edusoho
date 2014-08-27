@@ -376,7 +376,6 @@ class SettingController extends BaseController
     public function defaultAction(Request $request)
     {
         $defaultSetting = $this->getSettingService()->get('default', array());
-var_dump($defaultSetting);
         $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
         $default = array(
@@ -438,8 +437,9 @@ var_dump($defaultSetting);
         $ext = $file->getClientOriginalExtension();
         $filename = $filenamePrefix . $hash . '.' . $ext;
 
+        $defaultSetting = $this->getSettingService()->get('default', array());
         $defaultSetting['defaultAvatarFileName'] = $filename;
-        $this->getSettingService()->set("default['defaultAvatarFileName']", $defaultSetting);
+        $this->getSettingService()->set("default", $defaultSetting);
 
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $file = $file->move($directory, $filename);
@@ -469,9 +469,8 @@ var_dump($defaultSetting);
     {
         $options = $request->request->all();
 
-        $filename = $this->getSettingService()->get("default['defaultAvatarFileName']",'defaultAvatarFileName');
+        $filename = $this->getSettingService()->get("default",array());
         $filename = $filename['defaultAvatarFileName'];
-
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
