@@ -36,6 +36,25 @@
         </div>
       </div>
     </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="course_share_content">小组分享内容</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea id="groupShareContent" name="groupShareContent" class="form-control" rows="5">{{ defaultSetting.groupShareContent }}</textarea>
+        <div class="help-block">
+          {% verbatim %}
+          <div>变量说明：</div>
+          <ul>
+            <li>{{sitename}} 为网校名称</li>
+            <li>{{group}} 为小组名称</li>
+          </ul>
+          {% endverbatim %}
+        </div>
+      </div>
+    </div>
+
   </fieldset>
 
   <div class="form-group">
