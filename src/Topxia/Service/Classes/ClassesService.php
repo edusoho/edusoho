@@ -14,4 +14,8 @@ interface ClassesService
     public function searchClassCount($conditions);
 
     public function createClass($class);
+
+    public function editClass($fields, $id);
+
+    public function deleteClass($id);
 }

@@ -337,16 +337,32 @@ admin_school_setting:
     defaults: { _controller: TopxiaAdminBundle:School:schoolSetting }
 
 admin_school_classes_setting:
-    pattern:  /school/classes/setting/index
+    pattern:  /school/classes/setting
     defaults: { _controller: TopxiaAdminBundle:School:classSetting }
 
 admin_school_homepage_upload:
     pattern:  /school/homepage/upload
     defaults: { _controller: TopxiaAdminBundle:School:homePageUpload }
 
-admin_schcool_classes_create:
-    pattern:  /school/classes/create
+admin_school_class_create:
+    pattern:  /school/class/create
     defaults: { _controller: TopxiaAdminBundle:School:classCreate }
+
+admin_school_class_edit:
+    pattern:  /school/class/{classId}/edit
+    defaults: { _controller: TopxiaAdminBundle:School:classEdit }
+
+admin_school_class_delete:
+    pattern:  /school/class/delete/{classId}
+    defaults: { _controller: TopxiaAdminBundle:School:classDelete }
+
+admin_school_class_course_manage:
+    pattern:  /school/class/{classId}/course/manage
+    defaults: { _controller: TopxiaAdminBundle:School:classCourseManage }
+
+admin_school_class_member_manage:
+    pattern:  /school/class/{classId}/member/manage
+    defaults: { _controller: TopxiaAdminBundle:School:classMemberManage }
 
 admin_school_class_icon_upload:
     pattern:  /school/classes/icon/upload

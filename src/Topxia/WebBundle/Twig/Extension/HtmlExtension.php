@@ -87,10 +87,10 @@ class HtmlExtension extends \Twig_Extension
             $highSchool = DataDict::dict('highSchool');
         }
 
-        $choices = array_merge($primarySchool, $middleSchool, $highSchool);
+        $choices = $primarySchool + $middleSchool + $highSchool;
 
         foreach ($choices as $value => $name) {
-            if ($selected === $value) {
+            if ($selected == $value) {
                 $html .= "<option value=\"{$value}\" selected=\"selected\">{$name}</option>";
             } else {
                 $html .= "<option value=\"{$value}\">{$name}</option>";

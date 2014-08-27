@@ -54,14 +54,47 @@ class SchoolController extends BaseController
 
     public function classCreateAction(Request $request)
     {
+
         if ($request->getMethod() == 'POST') {
             $class = $request->request->all();
             $class = $this->getClassesService()->createClass($class);
             return new Response(json_encode($class));
         }
-        return $this->render('TopxiaAdminBundle:School:class-create-modal.html.twig');
+
+        return $this->render('TopxiaAdminBundle:School:class-create.html.twig');
     }
 
+    public function classEditAction(Request $request, $classId)
+    {
+        $class = $this->getClassesService()->getClass($classId);
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $class = $this->getClassesService()->editClass($fields,$classId);
+            return new Response(json_encode($class));
+        }
+
+        return $this->render('TopxiaAdminBundle:School:class-edit.html.twig',array(
+            'class' => $class,
+        ));
+    }
+
+    public function classDeleteAction(Request $request, $classId)
+    {
+        $this->getClassesService()->deleteClass($classId);
+        return $this->redirect($this->generateUrl('admin_school_classes_setting'));
+    }
+
+    public function classCourseManageAction(Request $request)
+    {
+
+    }
+
+    public function classMemberManageAction(Request $request)
+    {
+
+    }
+    
     public function homePageUploadAction(Request $request)
     {
         $file = $request->files->get('homePage');
