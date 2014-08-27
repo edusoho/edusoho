@@ -295,7 +295,7 @@ class ClassThreadController extends BaseController
     {
         $filters = array();
         $filters['type'] = $request->query->get('type');
-        if (!in_array($filters['type'], array('all', 'question', 'elite'))) {
+        if (!in_array($filters['type'], array('all', 'elite'))) {
             $filters['type'] = 'all';
         }
         $filters['sort'] = $request->query->get('sort');

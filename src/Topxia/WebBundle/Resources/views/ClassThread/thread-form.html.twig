@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle:Class:layout.html.twig' %}
 
+{% set script_controller = 'class-thread/thread-form' %}
+
 {% block class_main %}
 
 <form id="thread-form" class="form-vertical" method="post" 
@@ -12,13 +14,13 @@
 
   <div class="form-group">
     <div class="controls">
-      <input type="text" name="title" class="form-control" placeholder="标题">
+      <input id="thread-title-field" type="text" name="title" class="form-control" placeholder="标题">
     </div>
   </div>
 
   <div class="form-group">
     <div class="controls">
-      <textarea class="form-control" name="content" rows="15" placeholder="正文"> </textarea>
+      <textarea id="thread-content-field" class="form-control" name="content" rows="15" placeholder="正文"> </textarea>
     </div>
   </div>
 
