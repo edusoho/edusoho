@@ -6,8 +6,6 @@ interface ClassMemberDao
 {
 	public function getClassMember($id);
 	
-	public function getClassMemberByUserId($userId);
-
 	public function searchClassMembers($conditions, $orderBy, $start, $limit);
 
 	public function searchClassMemberCount($conditions);

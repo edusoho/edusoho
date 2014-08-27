@@ -10,7 +10,18 @@
               <button class="btn btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</button>
             {% endif %}
           </div>
-          <h1>{{user.nickname}} <small>{{ user.title }}</small></h1>
+          <h1>{{user.truename}}</h1>
+          {% if 'ROLE_TEACHER' in user.roles %}
+            {% for classMember in classMembers %}
+              {{ class_name(classMember.class) }}（{{classMember.class.year}}届）{{classMember.title}}/  
+            {% endfor %}
+          {% else %}
+            {% for classMember in classMembers %}
+              {{ class_name(classMember.class) }}（{{classMember.class.year}}届）<br/>
+              学号：{{user.number}}
+            {% endfor %}
+          {% endif %}
+
           <div class="about">{{ user.about|raw }}</div>
           <div class="links">
             {% if user %}
