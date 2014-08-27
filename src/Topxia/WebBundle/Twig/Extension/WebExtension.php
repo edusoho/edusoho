@@ -46,7 +46,7 @@ class WebExtension extends \Twig_Extension
             'file_uri_parse'  => new \Twig_Function_Method($this, 'parseFileUri'),
             // file_path即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
-            'avator_path'  => new \Twig_Function_Method($this, 'getAvatarPath'),
+            'default_path'  => new \Twig_Function_Method($this, 'getDefaultPath'),
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,
@@ -358,12 +358,11 @@ class WebExtension extends \Twig_Extension
         }
     }
 
-    public function getAvatarPath($uri, $size = '', $absolute = false)
+    public function getDefaultPath($category, $size = '', $absolute = false)
     {
         $assets = $this->container->get('templating.helper.assets');
-        $defaultName = 'avatar';
         $publicUrlpath = 'assets/img/default/';
-        $url = $assets->getUrl($publicUrlpath . $size . $defaultName);
+        $url = $assets->getUrl($publicUrlpath . $size . $category);
 
         $defaultAvatar = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
         
