@@ -80,20 +80,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->searchUserCount($conditions);
     }
 
-    public function searchClassMembers(array $conditions, array $oderBy, $start, $limit)
-    {
-        return $this->getClassMemberDao()->searchClassMembers($conditions, $oderBy, $start, $limit);
-    }
-
-    public function searchClassMemberCount(array $conditions)
-    {
-        return $this->getClassMemberDao()->searchClassMemberCount($conditions);
-    }
-
-    public function addClassMember(array $classMember){
-        return $this->getClassMemberDao()->addClassMember($classMember);
-    }
-
+    
     public function getUserByNumber($number){
         if (empty($number)) {
             return null;
@@ -925,11 +912,6 @@ class UserServiceImpl extends BaseService implements UserService
     private function getUserFortuneLogDao()
     {
         return $this->createDao('User.UserFortuneLogDao');
-    }
-
-    private function getClassMemberDao()
-    {
-        return $this->createDao('User.ClassMemberDao');
     }
 
     private function getFileService()

@@ -1,9 +1,9 @@
 <?php
 
-namespace Topxia\Service\User\Dao\Impl;
+namespace Topxia\Service\Classes\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\User\Dao\ClassMemberDao;
+use Topxia\Service\Classes\Dao\ClassMemberDao;
 use Topxia\Common\DaoException;
 use PDO;
 
@@ -14,6 +14,11 @@ class ClassMemberDaoImpl extends BaseDao implements ClassMemberDao
     public function getClassMember($id){
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+    }
+
+    public function getClassMemberByUserId($userId){
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($userId)) ? : null;
     }
     
     public function searchClassMembers($conditions, $orderBy, $start, $limit)
@@ -42,6 +47,10 @@ class ClassMemberDaoImpl extends BaseDao implements ClassMemberDao
         return $this->getClassMember($this->getConnection()->lastInsertId());
     }
 
+    public function deleteClassMemberByUserId($userId){
+        return $this->getConnection()->delete($this->table,  array('userId' => $userId));
+    }
+    
     private function createClassMemberQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions,function($v){

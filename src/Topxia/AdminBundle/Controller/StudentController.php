@@ -27,11 +27,11 @@ class StudentController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->searchClassMemberCount($conditions),
+            $this->getClassMemberService()->searchClassMemberCount($conditions),
             20
         );
         /**1.获取该班学生的classeMember数据*/
-        $classMembers = $this->getUserService()->searchClassMembers(
+        $classMembers = $this->getClassMemberService()->searchClassMembers(
             $conditions,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
@@ -47,60 +47,53 @@ class StudentController extends BaseController
     }
 
     public function importAction(Request $request, $classId){
-
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $numbers=explode(',', $formData['numbers']);
+            $users=array();
             foreach ($numbers as $number) {
                 $user=$this->getUserService()->getUserByNumber($number);
                 if(empty($user)){
-                    throw $this->createNotFoundException('学号'.$number.'对应的用户不存在！');
+                    return $this->createJsonResponse('学号'.$number.'对应的用户不存在！');
                 }
+                $classMember=$this->getClassMemberService()->getClassMemberByUserId($user['id']);
+                if(!empty($classMember) && $classMember['classId']!=$classId){
+                    return $this->createJsonResponse('学号'.$number.'对应的用户已经属于其他班级！');
+                }
+                if(!empty($classMember) && $classMember['classId']==$classId){
+                    continue;
+                }
+                $users[]=$user;
+            }
+            foreach ($users as $user) {
                 $classMember['classId']=$classId;
                 $classMember['userId']=$user['id'];
                 $classMember['role']='student';
                 $classMember['title']='';
                 $classMember['createdTime']=time();
-                $this->getUserService()->addClassMember($classMember);
+                $this->getClassMemberService()->addClassMember($classMember);
             }
-            /**该怎么写？*/
-            return $this->render('TopxiaAdminBundle:Student:student-import-modal.html.twig', array(
-                'classId' => $classId
-            ));
+            return $this->createJsonResponse(true);
         }
 
         return $this->render('TopxiaAdminBundle:Student:student-import-modal.html.twig', array(
             'classId' => $classId
         ));
     }
-
-    protected function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+    
+    public function removeAction(Request $request, $userId){
+        $this->getClassMemberService()->deleteClassMemberByUserId($userId);
+        return $this->createJsonResponse(true);
     }
 
-    protected function getLogService()
+    protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    protected function getSettingService()
+    protected function getClassMemberService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return $this->getServiceKernel()->createService('Classes.ClassMemberService');
     }
 
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getAuthService()
-    {
-        return $this->getServiceKernel()->createService('User.AuthService');
-    }
-
-    protected function getUserFieldService()
-    {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
-    }
 }

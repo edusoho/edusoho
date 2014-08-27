@@ -16,9 +16,13 @@ define(function(require, exports, module) {
             	}
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
-                    $modal.modal('hide');
-                    Notify.success('批量导入学生成功');
-                    window.location.reload();
+                    if(html==true){
+                        $modal.modal('hide');
+                        Notify.success('批量导入学生成功');
+                        window.location.reload();
+                    }else{
+                        Notify.danger(html);
+                    }
                 }).error(function(){
                     Notify.danger('批量导入学生失败');
                 });
