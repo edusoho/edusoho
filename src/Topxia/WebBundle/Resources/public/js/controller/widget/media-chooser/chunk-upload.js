@@ -69,7 +69,7 @@ define(function(require, exports, module) {
 	            if (evt.target.readyState == FileReader.DONE) { // DONE == 2
 	            	var crc = self.crc32(evt.target.result);
 	            	fileScop.key = crc;
-	            	var savedFileInfo = FileScopStorage.get(fileScop.key);
+	            	var savedFileInfo = FileScopStorage.get();
 	            	if(savedFileInfo){
 	            		var savedFileInfoArray = JSON.parse(savedFileInfo);
 	            		if(savedFileInfoArray.key == fileScop.key){
@@ -224,7 +224,7 @@ define(function(require, exports, module) {
 
                 	self.get("upload_success_handler")(self.get("currentFile"), JSON.stringify(response));
                 	fileScop.fileIndex--;
-                	FileScopStorage.del(fileScop.key);
+                	FileScopStorage.del();
                 	self.set("currentFile",null);
                 	self.trigger("upload", fileScop.fileIndex);
 
@@ -305,7 +305,7 @@ define(function(require, exports, module) {
 				currentChunkIndex: fileScop.currentChunkIndex,
 				currentChunkOffsetInBlock: fileScop.currentChunkOffsetInBlock
 			};
-        	FileScopStorage.set(fileScop.key, JSON.stringify(saveFileScop));
+        	FileScopStorage.set(JSON.stringify(saveFileScop));
 	    },
 
 	    uploadAfterGetCrc : function(fileScop, blkRet) {
@@ -423,14 +423,14 @@ define(function(require, exports, module) {
 	});
 	
 	var FileScopStorage = {
-	    set: function(key, fileScop) {
-	    	localStorage[key]=fileScop;
+	    set: function(fileScop) {
+	    	localStorage["fileScop"]=fileScop;
 	    },
-	    get: function(key) {
-	    	return localStorage.getItem(key);
+	    get: function() {
+	    	return localStorage.getItem("fileScop");
 	    },
-	    del: function(key) {
-	    	localStorage.removeItem(key); 
+	    del: function() {
+	    	localStorage.removeItem("fileScop"); 
 	    }
 	};
 
