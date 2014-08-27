@@ -218,7 +218,6 @@ define(function(require, exports, module) {
             choosed: choosedMedia,
         });
 
-
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
@@ -236,6 +235,12 @@ define(function(require, exports, module) {
             $form.find('[name="media"]').val(value);
         });
 
+        $('.modal').unbind("hide.bs.modal");
+        $(".modal").on("hide.bs.modal", function(){
+            videoChooser.destroy();
+            audioChooser.destroy();
+            pptChooser.destroy();
+        });
 
         var validator = createValidator($form);
 

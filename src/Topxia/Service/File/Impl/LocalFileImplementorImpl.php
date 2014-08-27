@@ -85,6 +85,11 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $uploadParams;
     }
 
+    public function getMediaInfo($hashid)
+    {
+
+    }
+
     public function reconvertFile($file, $convertCallback, $pipeline = null)
     {
         
