@@ -420,8 +420,12 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', '系统默认设置已保存！');
         }
 
+        $avatarUrl = $path.$default['defaultAvatarFileName'];
+        $coursePictureUrl = $path.$default['defaultCoursePictureFileName'];
         return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
             'defaultSetting' => $defaultSetting,
+            'avatarUrl' => $avatarUrl,
+            'coursePictureUrl' => $coursePictureUrl,
         ));
     }
 
@@ -506,13 +510,14 @@ class SettingController extends BaseController
             return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
         }
 
-        $filenamePrefix = "avatar";
+        $filenamePrefix = "course-picture";
         $hash = substr(md5($filenamePrefix . time()), -8);
         $ext = $file->getClientOriginalExtension();
         $filename = $filenamePrefix . $hash . '.' . $ext;
 
+        $defaultSetting = $this->getSettingService()->get('default', array());
         $defaultSetting['defaultCoursePictureFileName'] = $filename;
-        $this->getSettingService()->set('default', $defaultSetting);
+        $this->getSettingService()->set("default", $defaultSetting);
 
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $file = $file->move($directory, $filename);
@@ -538,7 +543,7 @@ class SettingController extends BaseController
     {
         $options = $request->request->all();
 
-        $filename = $this->getSettingService()->get('default','defaultAvatarFileName');
+        $filename = $this->getSettingService()->get('default','defaultCoursePictureFileName');
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
