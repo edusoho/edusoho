@@ -358,28 +358,33 @@ class WebExtension extends \Twig_Extension
         }
     }
 
-    public function getDefaultPath($category, $size = '', $absolute = false)
+    public function getDefaultPath($category, $uri="", $size = '', $absolute = false)
     {
-        $assets = $this->container->get('templating.helper.assets');
-        $publicUrlpath = 'assets/img/default/';
-        $url = $assets->getUrl($publicUrlpath . $size . $category);
+        if (empty($uri)) {
+            $assets = $this->container->get('templating.helper.assets');
+            $publicUrlpath = 'assets/img/default/';
+            $url = $assets->getUrl($publicUrlpath . $size . $category);
 
-        $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
-        
-        $key = 'default'.ucfirst($category);
+            $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
+            
+            $key = 'default'.ucfirst($category);
 
-        $fileName = $key.'FileName';
-
-        if (array_key_exists($key,$defaultSetting)) {
-            if ($defaultSetting[$key] == 1) {
-                $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
-            } else {
-                if ($absolute) {
-                    $url = $request->getSchemeAndHttpHost() . $url;
+            $fileName = $key.'FileName';
+            if (array_key_exists($key,$defaultSetting)) {
+                if ($defaultSetting[$key] == 1) {
+                    $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
+                } else {
+                    if ($absolute) {
+                        $url = $request->getSchemeAndHttpHost() . $url;
+                    }
+                   return $url;
                 }
-               return $url;
             }
         }
+
+        $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri;
+        $url = ltrim($url, ' /');
+        $url = $assets->getUrl($url);
 
         if ($absolute) {
             $url = $request->getSchemeAndHttpHost() . $url;
