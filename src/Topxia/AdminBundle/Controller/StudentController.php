@@ -19,7 +19,7 @@ class StudentController extends BaseController
 {
 
     public function indexAction (Request $request,$classId)
-    {
+    {   
         $conditions = array(
             'classId'=>$classId,
             'role'=>array('student')
@@ -56,11 +56,15 @@ class StudentController extends BaseController
                 if(empty($user)){
                     return $this->createJsonResponse('学号'.$number.'对应的用户不存在！');
                 }
-                $classMember=$this->getClassMemberService()->getClassMemberByUserId($user['id']);
-                if(!empty($classMember) && $classMember['classId']!=$classId){
+                $conditions=array(
+                    'userId'=>$user['id'],
+                    'role'=>array('student')
+                );
+                $classMember=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+                if(count($classMember)>0 && $classMember[0]['classId']!=$classId){
                     return $this->createJsonResponse('学号'.$number.'对应的用户已经属于其他班级！');
                 }
-                if(!empty($classMember) && $classMember['classId']==$classId){
+                if(count($classMember)>0 && $classMember[0]['classId']==$classId){
                     continue;
                 }
                 $users[]=$user;
