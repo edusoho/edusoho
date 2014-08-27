@@ -376,10 +376,14 @@ class SettingController extends BaseController
     public function defaultAction(Request $request)
     {
         $defaultSetting = $this->getSettingService()->get('default', array());
+var_dump($defaultSetting);
+        $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
         $default = array(
             'defaultAvatar' => 0,
             'defaultCoursePicture' => 0,
+            'defaultAvatarFileName' => 'system-avatar.png',
+            'defaultCoursePictureFileName' => 'system-course-default-475x250.png',
             'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
             'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
             'groupShareContent' => '我在{{sitename}},参加了{{group}},很不错哦,一起来看看吧!',
@@ -389,8 +393,6 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $defaultSetting = $request->request->all();
-
-            $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
             if (!$defaultSetting['defaultAvatar']){
                 $largefile = $path.'system-avatar-large.png';
@@ -414,7 +416,6 @@ class SettingController extends BaseController
                 $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
             }
 
-
             $this->getSettingService()->set('default', $defaultSetting);
             $this->getLogService()->info('system', 'update_settings', "更新系统默认设置", $defaultSetting);
             $this->setFlashMessage('success', '系统默认设置已保存！');
@@ -432,7 +433,14 @@ class SettingController extends BaseController
             return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
         }
 
-        $filename = 'avatar.png' ;
+        $filenamePrefix = "avatar";
+        $hash = substr(md5($filenamePrefix . time()), -8);
+        $ext = $file->getClientOriginalExtension();
+        $filename = $filenamePrefix . $hash . '.' . $ext;
+
+        $defaultSetting['defaultAvatarFileName'] = $filename;
+        $this->getSettingService()->set("default['defaultAvatarFileName']", $defaultSetting);
+
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $file = $file->move($directory, $filename);
 
@@ -444,7 +452,11 @@ class SettingController extends BaseController
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen(270)->heighten(270);
 
+        // @todo fix it.
+        $assets = $this->container->get('templating.helper.assets');
         $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
+        $pictureUrl = ltrim($pictureUrl, ' /');
+        $pictureUrl = $assets->getUrl($pictureUrl);
 
         return $this->render('TopxiaAdminBundle:System:default-avatar-crop.html.twig',array(
             'pictureUrl' => $pictureUrl,
@@ -457,7 +469,9 @@ class SettingController extends BaseController
     {
         $options = $request->request->all();
 
-        $filename = 'avatar.png' ;
+        $filename = $this->getSettingService()->get("default['defaultAvatarFileName']",'defaultAvatarFileName');
+        $filename = $filename['defaultAvatarFileName'];
+
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
@@ -474,14 +488,14 @@ class SettingController extends BaseController
         $largeImage->save($largeFilePath, array('quality' => 90));
 
         $this->filesystem = new Filesystem();
-        $this->filesystem->copy($largeFilePath, $path.'avatar-large.png','ture');
+        $this->filesystem->copy($largeFilePath, $path.'large-'.$filename);
 
         $smallImage = $largeImage->copy();
         $smallImage->resize(new Box(120, 120));
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $smallImage->save($smallFilePath, array('quality' => 90));
 
-        $this->filesystem->copy($smallFilePath, $path.'avatar.png','ture');
+        $this->filesystem->copy($smallFilePath, $path.$filename);
 
         return $this->redirect($this->generateUrl('admin_setting_default'));
     }
@@ -493,7 +507,14 @@ class SettingController extends BaseController
             return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
         }
 
-        $filename = 'course-picture.png' ;
+        $filenamePrefix = "avatar";
+        $hash = substr(md5($filenamePrefix . time()), -8);
+        $ext = $file->getClientOriginalExtension();
+        $filename = $filenamePrefix . $hash . '.' . $ext;
+
+        $defaultSetting['defaultCoursePictureFileName'] = $filename;
+        $this->getSettingService()->set('default', $defaultSetting);
+
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $file = $file->move($directory, $filename);
 
@@ -518,7 +539,7 @@ class SettingController extends BaseController
     {
         $options = $request->request->all();
 
-        $filename = 'course-picture.png' ;
+        $filename = $this->getSettingService()->get('default','defaultAvatarFileName');
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
@@ -535,14 +556,14 @@ class SettingController extends BaseController
         $largeImage->save($largeFilePath, array('quality' => 90));
 
         $this->filesystem = new Filesystem();
-        $this->filesystem->copy($largeFilePath, $path.'course-large.png','ture');
+        $this->filesystem->copy($largeFilePath, $path.'large-'.$filename,'ture');
 
         $smallImage = $largeImage->copy();
         $smallImage->resize(new Box(475,250));
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $smallImage->save($smallFilePath, array('quality' => 90));
 
-        $this->filesystem->copy($smallFilePath, $path.'course-default-475x250.png','ture');
+        $this->filesystem->copy($smallFilePath, $path.$filename,'ture');
 
         return $this->redirect($this->generateUrl('admin_setting_default'));
     }
