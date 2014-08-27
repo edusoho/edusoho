@@ -48,6 +48,7 @@
         {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock', {number:5})) }}
       </div>
     </div>
+    {% if setting('group').group_show|default(1) %}
     <div class="row row-9-3">
 
       <div class="col-md-9">
@@ -69,5 +70,6 @@
       </div>
 
     </div>
+    {% endif %}
   </div>
 {% endblock %}

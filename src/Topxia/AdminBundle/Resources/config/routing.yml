@@ -785,6 +785,9 @@ admin_article_delete:
 admin_group:
     pattern:  /group/
     defaults: { _controller: TopxiaAdminBundle:Group:index }
+admin_group_set:
+    pattern:  /group/set
+    defaults: { _controller: TopxiaAdminBundle:Group:set }
 admin_groupThread:
     pattern:  /group/thread
     defaults: { _controller: TopxiaAdminBundle:Group:thread }

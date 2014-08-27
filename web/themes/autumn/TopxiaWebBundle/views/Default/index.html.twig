@@ -214,7 +214,7 @@
       </div>
     </div>
   </div>
-
+  {% if setting('group').group_show|default(1) %}
   <div class="row row-9-3">
     <div class="col-lg-9">
       <div class="panel panel-autumn panel-autumn-default">
@@ -241,5 +241,5 @@
       </div>
     </div>
   </div>
-
+  {% endif %}
 {% endblock %}

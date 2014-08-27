@@ -157,6 +157,17 @@ class GroupController extends BaseController
         return new Response("success");
     }
 
+    public function setAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $set=$request->request->all();
+
+            $this->getSettingService()->set('group', $set);
+        }
+
+        return $this->render('TopxiaAdminBundle:Group:set.html.twig', array(
+        ));
+    }
     public function removeEliteAction($threadId)
     {
         return $this->postAction($threadId,'removeElite');
@@ -278,6 +289,11 @@ class GroupController extends BaseController
                 throw $this->createServiceException('参数sort不正确。');
         }
         return $orderBys;
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }
