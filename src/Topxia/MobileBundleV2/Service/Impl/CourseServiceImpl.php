@@ -37,7 +37,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         		return array(
         			"userIsStudent"=>$userIsStudent,
-        			"course"=>$course,
+        			"course"=>$this->controller->filterCourse($course),
         			"userFavorited"=>$userFavorited,
         			"member"=>$member
         			);
