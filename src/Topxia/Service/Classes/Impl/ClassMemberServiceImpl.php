@@ -6,10 +6,6 @@ use Topxia\Service\Common\BaseService;
 
 class ClassMemberServiceImpl extends BaseService implements ClassMemberService
 {
-    public function getClassMemberByUserId($userId){
-        return $this->getClassMemberDao()->getClassMemberByUserId($userId);
-    }
-
     public function searchClassMembers(array $conditions, array $oderBy, $start, $limit)
     {
         return $this->getClassMemberDao()->searchClassMembers($conditions, $oderBy, $start, $limit);

@@ -19,7 +19,7 @@ class UserController extends BaseController
         } else {
             $isFollowed = false;
         }
-
+        $classMembers=$this->getClassMemberService()->getClassMemberByUserId($user['id']);
         return $this->render('TopxiaWebBundle:User:header-block.html.twig', array(
             'user' => $user,
             'isFollowed' => $isFollowed,
@@ -188,6 +188,10 @@ class UserController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
+    protected function getClassMemberService(){
+
+        return $this->getServiceKernel()->createService('Classes.ClassMemberService');
+    } 
     private function tryGetUser($id)
     {
         $user = $this->getUserService()->getUser($id);
