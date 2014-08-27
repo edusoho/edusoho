@@ -591,7 +591,7 @@ class GroupController extends BaseController
     {
         $hotGroups = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, $count);
         
-        return $this->render('TopxiaWebBundle:Group:groups.ul.html.twig', array(
+        return $this->render('TopxiaWebBundle:Group:gracefulTheme.group.html.twig', array(
                 'groups' => $hotGroups,
                 'colNum'=>$colNum,
                 )
