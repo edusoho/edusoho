@@ -432,7 +432,7 @@ class SettingController extends BaseController
             return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
         }
 
-        $filename = 'avatar-large.png' ;
+        $filename = 'avatar.png' ;
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $file = $file->move($directory, $filename);
 
@@ -461,7 +461,7 @@ class SettingController extends BaseController
     {
         $options = $request->request->all();
 
-        $filename = 'avatar-large.png' ;
+        $filename = 'avatar.png' ;
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $path = $this->container->getParameter('kernel.root_dir');
 
@@ -497,7 +497,7 @@ class SettingController extends BaseController
             return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
         }
 
-        $filename = 'course-picture-large.png' ;
+        $filename = 'course-picture.png' ;
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $file = $file->move($directory, $filename);
 
@@ -526,7 +526,7 @@ class SettingController extends BaseController
     {
         $options = $request->request->all();
 
-        $filename = 'course-picture-large.png' ;
+        $filename = 'course-picture.png' ;
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $path = $this->container->getParameter('kernel.root_dir');
 
