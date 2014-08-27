@@ -212,6 +212,7 @@ define(function(require, exports, module) {
             }
             if(this._supportHtml5() && $btn.data('storageType')=="cloud"){
                 settings.element=this.element;
+                settings.progressbar = progressbar;
                 return new ChunkUpload(settings);
             }else{
                 return new SWFUpload(settings);

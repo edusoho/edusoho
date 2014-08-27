@@ -125,10 +125,20 @@ define(function(require, exports, module) {
                 	var blkRet = JSON.parse(xhr.responseText);
                 	self.saveUploadStatus(fileScop, blkRet);
                 	self.uploadAfterGetCrc(fileScop, blkRet);
-                }
+                } else if (xhr.readyState == 4 && xhr.status == 401) {
+					self.tokenError();
+				}
             };
             xhr.send(chunk);
 
+		},
+
+		tokenError: function(){
+			this.element.find("input[data-role='fileSelected']").val("");
+			this.get('progressbar').reset().hide();
+			this.set("currentFile", null);
+			FileScopStorage.del();
+			Notify.danger('授权信息已失效，请重新上传。');
 		},
 
 		base64encode: function(str) {
@@ -215,15 +225,15 @@ define(function(require, exports, module) {
                 		}
                 	});
 
-
-
                 	self.get("upload_success_handler")(self.get("currentFile"), JSON.stringify(response));
                 	fileScop.fileIndex--;
                 	FileScopStorage.del();
                 	self.set("currentFile",null);
                 	self.trigger("upload", fileScop.fileIndex);
 
-                }
+                } else if (xhr.readyState == 4 && xhr.status == 401) {
+					self.tokenError();
+				}
             }
             xhr.send(ctxs);
 		},
@@ -253,8 +263,13 @@ define(function(require, exports, module) {
 					var blkRet=JSON.parse(xhr.responseText);
 					self.saveUploadStatus(fileScop, blkRet);
 					self.uploadAfterGetCrc(fileScop, blkRet);
+				} else if (xhr.readyState == 4 && xhr.status == 401) {
+					self.tokenError();
 				}
 			};
+			xhr.upload.onerror = function(evt) {
+                self.putChunk(fileScop, chunk, blkRet);
+            };
 			xhr.send(chunk);
 		},
 		_initTableArray: function(){
@@ -288,7 +303,7 @@ define(function(require, exports, module) {
 	    		key: fileScop.key,
 				uploadedBytes: fileScop.uploadedBytes,
 				blockCtxs: fileScop.blockCtxs,
-				postParams: fileScop.postParams,
+
 				blkRet: blkRet,
 
 				defaultBlockSize: fileScop.defaultBlockSize,
