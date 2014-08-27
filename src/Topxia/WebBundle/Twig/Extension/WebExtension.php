@@ -373,6 +373,7 @@ class WebExtension extends \Twig_Extension
             if (array_key_exists($key,$defaultSetting)) {
                 if ($defaultSetting[$key] == 1) {
                     $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
+                    return $url;
                 } else {
                     if ($absolute) {
                         $url = $request->getSchemeAndHttpHost() . $url;
