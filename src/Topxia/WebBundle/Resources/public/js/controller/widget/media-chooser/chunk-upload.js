@@ -217,7 +217,7 @@ define(function(require, exports, module) {
                 	response.filename=self.get("currentFile").name;
 
                 	var mediaInfoUrl = self.$('[data-role=uploader-btn]').data("getMediaInfo");
-                	if(mediaInfoUrl)
+                	if(mediaInfoUrl){
 	                	$.ajax({
 	                		url: mediaInfoUrl,
 	                		data: {hashId: response.key},
