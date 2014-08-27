@@ -1938,6 +1938,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
 	}
 
+	public function copyCourse($templateId)
+	{
+		
+	}
 	private function getCourseLessonReplayDao()
     {
         return $this->createDao('Course.CourseLessonReplayDao');

@@ -22,9 +22,13 @@ interface ClassesDao
 
     public function createClass($class);
 
+    public function editClass($fields, $id);
+
+    public function deleteClass($id);
+
  /*   public function updateCourse($id, $fields);
 
-    public function deleteCourse($id);
+
     
     public function waveCourse($id,$field,$diff);
 

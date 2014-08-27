@@ -5,26 +5,23 @@ define(function(require, exports, module) {
     var Uploader = require('upload');
 
     exports.run = function() {
-        var $form = $("#class-create-form");
+        var $form = $("#class-edit-form");
 
-        var $modal = $('#class-create-form').parents('.modal');
-        
         var validator = new Validator({
-            element: '#class-create-form',
+            element: '#class-edit-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
                     return false;
                 }
 
-                $('#class-create-btn').button('submiting').addClass('disabled');
+                $('#class-edit-btn').button('submiting').addClass('disabled');
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
-                    $modal.modal('hide');
-                    Notify.success('新用户添加成功');
-                   
+                    Notify.success('修改班级成功');
+                    window.location.href=$('#backto').attr('href');
                 }).error(function(){
-                    Notify.danger('新用户添加失败');
+                    Notify.danger('修改班级失败');
                 });
 
             }

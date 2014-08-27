@@ -26,6 +26,15 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return $this->getClassesDao()->createClass($class);
     }
 
+    public function editClass($fields, $id)
+    {
+        return $this->getClassesDao()->editClass($fields, $id);
+    }
+
+    public function deleteClass($id)
+    {
+        return $this->getClassesDao()->deleteClass($id);
+    }
     private function getClassesDao ()
     {
         return $this->createDao('Classes.ClassesDao');

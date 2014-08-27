@@ -1,0 +1,115 @@
+{% extends 'TopxiaAdminBundle:School:layout.html.twig' %}
+
+{% block title %}班级编辑 - {{ parent() }}{% endblock %}
+
+{% set menu = 'classSetting' %}
+{% set script_controller = 'school/class-edit' %}
+
+{% block main %}
+<div class="page-header clearfix">
+
+  <h1 class="pull-left">班级编辑</h1>
+</div>
+<form id="class-edit-form" class="form-horizontal" method="post" action="{{ path('admin_school_class_edit' ,{ classId:class.id })}}">
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label>年级</label>
+    </div>
+    <div class="col-md-7 controls">
+      <select class="form-control" name="gradeId" id="gradeId">
+        {{ select_options_for_school('', class.gradeId , '--选择年级--') }}
+      </select>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="name">班级名称</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="name" name="name" class="form-control" value="{{ class.name }}" placeholder="如：1班、2班等">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label>学期</label>
+    </div>
+    <div class="col-md-7 controls radios">
+      {{ radios('term',{'first':'一学期','second':'二学期'},  class.term )}}
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label>入学年份</label>
+    </div>
+    <div class="col-md-7 controls">
+      <select class="form-control" name="year" id="year">
+        {{ select_options(dict('year'), class.year , '--入学年份--') }}
+      </select>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="headteacherid">班主任</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="headteacherid" name="headteacherid" value="{{ class.headTeacherId }}" class="form-control">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label>开启状态</label>
+    </div>
+    <div class="col-md-7 controls radios">
+      {{ radios('enabled',{1:'开启', 0:'关闭'}, class.enabled )}}
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label>缩略示意图</label>
+    </div>
+    <div class="col-md-7 controls">
+      <div id="icon-container">
+        {% if class.icon %}
+        <img src="{{ asset(class.icon) }}" >
+        {% endif %}
+      </div>
+      <button class="btn btn-default" id="school-class-icon-upload" type="button" data-url="{{ path('admin_school_class_icon_upload') }}">上传</button>
+      <p class="help-block">
+        请上传png, jpg, gif格式的图片文件。推荐尺寸比例：220px * 120px。</p>
+        <input type="hidden" name="icon" value="{{ class.icon }}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label>班级背景图</label>
+      </div>
+      <div class="col-md-8 controls">
+        <div id="backgroudImg-container">
+          {% if class.backgroundImg %}
+          <img src="{{ asset(class.backgroundImg) }}" >
+          {% endif %}
+        </div>
+        <button class="btn btn-default" id="school-class-backgroundImg-upload" type="button" data-url="{{ path('admin_school_class_backgroundImg_upload') }}">上传</button>
+        <p class="help-block">
+          请上传png, jpg, gif格式的图片文件。推荐尺寸比例：1140px * 120px。</p>
+          <input type="hidden" name="backgroundImg" value="{{ class.backgroundImg }}">
+        </div>
+      </div>
+
+      <div class="row form-group">
+
+        <div class="controls col-md-4 col-md-offset-4">
+          <a class="btn btn-link" id="backto" href="{{ path('admin_school_classes_setting') }}">返回</a>
+          <button type="submit" class="btn btn-primary">提交</button>
+        </div>
+      </div>
+    </form>
+    {% endblock %}

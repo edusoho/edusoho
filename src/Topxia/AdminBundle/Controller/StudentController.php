@@ -60,11 +60,11 @@ class StudentController extends BaseController
                     'userId'=>$user['id'],
                     'role'=>array('student')
                 );
-                $classMember=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
-                if(count($classMember)>0 && $classMember[0]['classId']!=$classId){
+                $classMembers=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+                if(count($classMembers)>0 && $classMembers[0]['classId']!=$classId){
                     return $this->createJsonResponse('学号'.$number.'对应的用户已经属于其他班级！');
                 }
-                if(count($classMember)>0 && $classMember[0]['classId']==$classId){
+                if(count($classMembers)>0 && $classMembers[0]['classId']==$classId){
                     continue;
                 }
                 $users[]=$user;

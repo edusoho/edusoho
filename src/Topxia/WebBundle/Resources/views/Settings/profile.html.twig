@@ -12,14 +12,15 @@
 		{% block body %}
 			<form id="user-profile-form" class="form-horizontal" method="post">
 				{{ web_macro.flash_messages() }}
-
-					<div class="form-group">
-					<label class="col-md-2 control-label" >昵称</label>
-						<div class="col-md-7 controls">
-						<div class="control-text">
-							{{app.user.nickname}} {% if setting('user_partner.nickname_enabled') %} <a href="{{ path('setting_nickname') }}">修改</a> {% endif %}</div>
+					{% if 'ROLE_TEACHER' in app.user.roles %}
+						<div class="form-group">
+							<label class="col-md-2 control-label" >昵称</label>
+							<div class="col-md-7 controls">
+							<div class="control-text">
+								{{app.user.nickname}} {% if setting('user_partner.nickname_enabled') %} <a href="{{ path('setting_nickname') }}">修改</a> {% endif %}</div>
+							</div>
 						</div>
-					</div>
+					{% endif %}
 
 					{# <div class="form-group form-iam-group">
 						<label class="col-md-2 control-label">我是</label>
@@ -31,16 +32,39 @@
 								<label for="profile_iam_1" class="required">非在校生</label></div>
 							</div>
 					</div> #}
+					{% if 'ROLE_TEACHER' not in app.user.roles %}
+						<div class="form-group">
+							<label class="col-md-2 control-label" >学号</label>
+							<div class="col-md-7 controls">
+								<div class="control-text">
+									{{app.user.number|default('')}}
+								</div>
+							</div>
+						</div>
+					{% endif %}
 
 					<div class="form-group">
-					<label class="col-md-2 control-label" for="profile_truename">姓名</label>
+						<label class="col-md-2 control-label" for="profile_truename">姓名</label>
 						<div class="col-md-7 controls">
-							<input type="text" id="profile_truename" name="profile[truename]" class="form-control" data-widget-cid="widget-1" data-explain="" value="{{ profile.truename|default('') }}">              
-							<div class="help-block" style="display:none;"></div>
+							{{ profile.truename|default('') }}
 						</div>
 					</div>
+					{% if 'ROLE_TEACHER' not in app.user.roles %}
+						<div class="form-group">
+							<label class="col-md-2 control-label" >所在班级</label>
+							<div class="col-md-7 controls">
+								<div class="control-text">
+									{% if classes %}
+										{{ class_name(classes)|default('') }}
+									{% else %}
+										尚未加入任何班级
+									{% endif %}	
+								</div>
+							</div>
+						</div>
+					{% endif %}
 
-					<div class="help-block approval">
+					{# <div class="help-block approval">
 						<label class="col-md-2 control-label" ></label>
 							{% if app.user.approvalStatus == 'approving' %}
 								<p class="text-primary" > 
@@ -61,7 +85,7 @@
 									</strong>
 								 </p>
 							{% endif %}
-					</div>
+					</div> #}
 
 					<div class="form-group">
 						<label class="col-md-2 control-label">性别</label>
@@ -75,7 +99,7 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					{# <div class="form-group">
 						<label class="col-md-2 control-label" for="profile_idcard">身份证号</label>
 						<div class="col-md-7 controls radios">
 							<input type="text" id="profile_idcard" name="profile[idcard]" class="form-control" value="{{ profile.idcard|default('') }}">
@@ -89,7 +113,7 @@
 							<input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile.mobile|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-					</div>
+					</div> #}
 
 					{# <div class="form-group form-forIam-group form-student-group">
 						<label class="col-md-2 control-label">学校</label>
@@ -107,7 +131,7 @@
 						</div>
 					</div> #}
 
-					<div class="form-group form-forIam-group form-notStudent-group">
+					{# <div class="form-group form-forIam-group form-notStudent-group">
 						<label class="col-md-2 control-label">公司</label>
 						<div class="col-md-7 controls">
 							<input type="text" id="profile_company" name="profile[company]" class="form-control" value="{{ profile.company|default('') }}">
@@ -121,7 +145,7 @@
 							<input type="text" id="profile_job" name="profile[job]" class="form-control" value="{{ profile.job|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-					</div>
+					</div> #}
 
 					<div class="form-group">
 						<label class="col-md-2 control-label">头衔</label>

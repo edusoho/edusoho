@@ -1,14 +1,19 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:School:layout.html.twig' %}
 
-{% set modalSize = 'large' %}
+{% block title %}新建班级 - {{ parent() }}{% endblock %}
 
-{% block title %}新建班级{% endblock %}
-{% block body %}
+{% set menu = 'classSetting' %}
+{% set script_controller = 'school/class-create' %}
 
-<form id="class-create-form" class="form-horizontal" method="post" action="{{ path('admin_schcool_classes_create')}}">
+{% block main %}
+<div class="page-header clearfix">
+
+  <h1 class="pull-left">新建班级</h1>
+</div>
+<form id="class-create-form" class="form-horizontal" method="post" action="{{ path('admin_school_class_create')}}">
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
+    <div class="col-md-2 control-label">
       <label>年级</label>
     </div>
     <div class="col-md-7 controls">
@@ -19,7 +24,7 @@
   </div>
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
+    <div class="col-md-2 control-label">
       <label for="name">班级名称</label>
     </div>
     <div class="col-md-7 controls">
@@ -28,7 +33,7 @@
   </div>
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
+    <div class="col-md-2 control-label">
       <label>学期</label>
     </div>
     <div class="col-md-7 controls radios">
@@ -37,7 +42,7 @@
   </div>
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
+    <div class="col-md-2 control-label">
       <label>入学年份</label>
     </div>
     <div class="col-md-7 controls">
@@ -48,7 +53,7 @@
   </div>
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
+    <div class="col-md-2 control-label">
       <label for="headteacherid">班主任</label>
     </div>
     <div class="col-md-7 controls">
@@ -57,7 +62,7 @@
   </div>
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
+    <div class="col-md-2 control-label">
       <label>开启状态</label>
     </div>
     <div class="col-md-7 controls radios">
@@ -66,7 +71,7 @@
   </div>
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
+    <div class="col-md-2 control-label">
       <label>缩略示意图</label>
     </div>
     <div class="col-md-7 controls">
@@ -79,7 +84,7 @@
     </div>
 
     <div class="row form-group">
-      <div class="col-md-3 control-label">
+      <div class="col-md-2 control-label">
         <label>班级背景图</label>
       </div>
       <div class="col-md-8 controls">
@@ -91,11 +96,12 @@
         </div>
       </div>
 
-    </form>
-    {% endblock %}
+      <div class="row form-group">
 
-    {% block footer %}
-    <button id="class-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#class-create-form">提交</button>
-    <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-    <script>app.load('school/class-create-modal')</script>
+        <div class="controls col-md-4 col-md-offset-4">
+          <a class="btn btn-link" id="backto" href="{{ path('admin_school_classes_setting') }}">返回</a>
+          <button type="submit" class="btn btn-primary">提交</button>
+        </div>
+      </div>
+    </form>
     {% endblock %}
