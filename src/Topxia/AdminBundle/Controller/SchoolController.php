@@ -40,8 +40,12 @@ class SchoolController extends BaseController
             array(),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-        );  
-
+        );
+        foreach ($classes as $key => $class) {
+            $headTeacherProfile = $this->getUserService()->getUserProfile($class['headTeacherId']);
+            $class['headTeacherName'] = $headTeacherProfile['truename'];
+            $classes[$key] = $class;
+        }  
         return $this->render('TopxiaAdminBundle:School:class-setting.html.twig',array(
             'classes' => $classes,
             'paginator' => $paginator,
@@ -141,4 +145,5 @@ class SchoolController extends BaseController
     {
         return $this->getServiceKernel()->createService('Classes.ClassesService');
     }
+
 }
