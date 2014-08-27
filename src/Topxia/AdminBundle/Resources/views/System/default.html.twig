@@ -1,12 +1,10 @@
 {% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
-
 {% block title %}系统默认设置 - {{ parent() }}{% endblock %}
-
 {% set submenu = 'default' %}
 {% set script_controller = 'setting/default' %}
 
 {% block maincontent %}
-
+<meta http-equiv="pragma" content="no-cache" />
   {{ web_macro.flash_messages() }}
 
   <div class="page-header"><h1>用户</h1></div>
