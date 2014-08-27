@@ -46,6 +46,7 @@ class WebExtension extends \Twig_Extension
             'file_uri_parse'  => new \Twig_Function_Method($this, 'parseFileUri'),
             // file_path即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
+            'avator_path'  => new \Twig_Function_Method($this, 'getAvatarPath'),
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,
@@ -355,6 +356,33 @@ class WebExtension extends \Twig_Extension
         } else {
 
         }
+    }
+
+    public function getAvatarPath($uri, $size = '', $absolute = false)
+    {
+        $assets = $this->container->get('templating.helper.assets');
+        $defaultName = 'avatar';
+        $publicUrlpath = 'assets/img/default/';
+        $url = $assets->getUrl($publicUrlpath . $defaultName.$size);
+
+        $defaultAvatar = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
+        
+        if (array_key_exists('defaultAvatar', $defaultAvatar)) {
+            if ($defaultAvatar['defaultAvatar'] == 1) {
+                // $url = $assets->getUrl($publicUrlpath . $defaultAvatar['defaultAvatarFileName'].$size);
+            } else {
+                if ($absolute) {
+                    $url = $request->getSchemeAndHttpHost() . $url;
+                }
+               return $url;
+            }
+        }
+
+        if ($absolute) {
+            $url = $request->getSchemeAndHttpHost() . $url;
+        }
+
+        return $url;
     }
 
     public function getFileUrl($uri, $default = '', $absolute = false)
