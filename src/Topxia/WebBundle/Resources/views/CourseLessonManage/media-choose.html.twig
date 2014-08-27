@@ -83,7 +83,17 @@
                 data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv;*.mov{% else %}*.mp4{% endif %}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
-                data-progressbar="#video-chooser-progress"></span>
+                data-progressbar="#video-chooser-progress"
+                data-storage-type="{{storageSetting.upload_mode}}"
+                data-get-media-info="{{path('uploadfile_cloud_get_media_info')}}"
+                >
+                <a class="uploadBtn btn btn-default btn-lg">
+                  上传
+                </a>
+                <div style="display:none">
+                  <input data-role="fileSelected" class="filePrew" type="file" />
+                </div>
+              </span>
             </div>
             <div class="progress" id="video-chooser-progress" style="display:none;">
               <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
@@ -149,7 +159,17 @@
                 data-role="uploader-btn"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
-                data-progressbar="#audio-chooser-progress"></span>
+                data-progressbar="#audio-chooser-progress"
+                data-storage-type="{{storageSetting.upload_mode}}"
+                data-get-media-info="{{path('uploadfile_cloud_get_media_info')}}"
+                >
+                <a class="uploadBtn btn btn-default btn-lg">
+                  上传
+                </a>
+                <div style="display:none">
+                  <input data-role="fileSelected" class="filePrew" type="file" />
+                </div>
+              </span>
             </div>
             <div class="progress" id="audio-chooser-progress" style="display:none;">
               <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
@@ -205,7 +225,15 @@
                 data-role="uploader-btn"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
-                data-progressbar="#ppt-chooser-progress"></span>
+                data-storage-type="{{storageSetting.upload_mode}}"
+                data-progressbar="#ppt-chooser-progress">
+                <a class="uploadBtn btn btn-default btn-lg">
+                  上传
+                </a>
+                <div style="display:none">
+                  <input data-role="fileSelected" class="filePrew" type="file" />
+                </div>
+              </span>
             </div>
             <div class="progress" id="ppt-chooser-progress" style="display:none;">
               <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
