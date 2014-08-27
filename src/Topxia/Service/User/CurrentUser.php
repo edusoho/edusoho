@@ -63,6 +63,11 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         return $this->email;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function eraseCredentials() {
 
     }
