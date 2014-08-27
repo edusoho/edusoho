@@ -364,11 +364,13 @@ class WebExtension extends \Twig_Extension
         $publicUrlpath = 'assets/img/default/';
         $url = $assets->getUrl($publicUrlpath . $size . $category);
 
-        $defaultAvatar = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
+        $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
         
-        if (array_key_exists('defaultAvatar', $defaultAvatar)) {
+        $key = 'default'.ucfirst($category);
+
+        if (array_key_exists($key,$defaultSetting)) {
             if ($defaultAvatar['defaultAvatar'] == 1) {
-                $url = $assets->getUrl($publicUrlpath . $size .$defaultAvatar['defaultAvatarFileName']);
+                $url = $assets->getUrl($publicUrlpath . $size .$key);
             } else {
                 if ($absolute) {
                     $url = $request->getSchemeAndHttpHost() . $url;
