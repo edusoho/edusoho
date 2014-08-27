@@ -19,10 +19,19 @@ class UserController extends BaseController
         } else {
             $isFollowed = false;
         }
-        $classMembers=$this->getClassMemberService()->getClassMemberByUserId($user['id']);
+        $conditions=array(
+            'userId'=>$user['id'],
+            'role'=>array('teacher','student')
+        );
+        $classMembers=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        foreach ($classMembers as &$classMember) {
+            $class=$this->getClassesService()->getClass($classMember['classId']);
+            $classMember['class']=$class;
+        }
         return $this->render('TopxiaWebBundle:User:header-block.html.twig', array(
             'user' => $user,
             'isFollowed' => $isFollowed,
+            'classMembers'=>$classMembers
         ));
     }
 
@@ -192,6 +201,12 @@ class UserController extends BaseController
 
         return $this->getServiceKernel()->createService('Classes.ClassMemberService');
     } 
+
+    protected function getClassesService(){
+
+        return $this->getServiceKernel()->createService('Classes.ClassesService');
+    }
+
     private function tryGetUser($id)
     {
         $user = $this->getUserService()->getUser($id);
