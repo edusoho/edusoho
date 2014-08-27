@@ -5,12 +5,20 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Filesystem\Filesystem;
+
 use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\PluginUtil;
 use Topxia\Service\Util\CloudClientFactory;
+
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
 
 class SettingController extends BaseController
 {
@@ -363,6 +371,205 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:refund.html.twig', array(
             'refundSetting' => $refundSetting,
         ));
+    }
+
+    public function defaultAction(Request $request)
+    {
+        $defaultSetting = $this->getSettingService()->get('default', array());
+        $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
+
+        $default = array(
+            'defaultAvatar' => 0,
+            'defaultCoursePicture' => 0,
+            'defaultAvatarFileName' => 'system-avatar.png',
+            'defaultCoursePictureFileName' => 'system-course-default-475x250.png',
+            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+            'groupShareContent' => '我在{{sitename}},参加了{{group}},很不错哦,一起来看看吧!',
+        );
+
+        $defaultSetting = array_merge($default, $defaultSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $defaultSetting = $request->request->all();
+
+            if (!$defaultSetting['defaultAvatar']){
+                $largefile = $path.'system-avatar-large.png';
+                $targetLargefile = $path.'avatar-large.png';
+                $this->filesystem = new Filesystem();
+                $this->filesystem->copy($largefile,$targetLargefile,'ture');
+
+                $smallfile = $path.'system-avatar.png';
+                $targetSmallfile = $path.'avatar.png';
+                $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
+            }
+
+            if (!$defaultSetting['defaultCoursePicture']){
+                $largefile = $path.'system-course-large.png';
+                $targetLargefile = $path.'course-large.png';
+                $this->filesystem = new Filesystem();
+                $this->filesystem->copy($largefile,$targetLargefile,'ture');
+
+                $smallfile = $path.'system-course-default-475x250.png';
+                $targetSmallfile = $path.'course-default-475x250.png';
+                $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
+            }
+
+            $this->getSettingService()->set('default', $defaultSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新系统默认设置", $defaultSetting);
+            $this->setFlashMessage('success', '系统默认设置已保存！');
+        }
+
+        $avatarUrl = $path.$default['defaultAvatarFileName'];
+        $coursePictureUrl = $path.$default['defaultCoursePictureFileName'];
+        return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
+            'defaultSetting' => $defaultSetting,
+            'avatarUrl' => $avatarUrl,
+            'coursePictureUrl' => $coursePictureUrl,
+        ));
+    }
+
+    public function defaultAvatarAction(Request $request)
+    {
+        $file = $request->files->get('picture');
+        if (!FileToolkit::isImageFile($file)) {
+            return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
+        }
+
+        $filenamePrefix = "avatar";
+        $hash = substr(md5($filenamePrefix . time()), -8);
+        $ext = $file->getClientOriginalExtension();
+        $filename = $filenamePrefix . $hash . '.' . $ext;
+
+        $defaultSetting = $this->getSettingService()->get('default', array());
+        $defaultSetting['defaultAvatarFileName'] = $filename;
+        $this->getSettingService()->set("default", $defaultSetting);
+
+        $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
+        $file = $file->move($directory, $filename);
+
+        $pictureFilePath = $directory.'/'.$filename;
+
+        $imagine = new Imagine();
+        $image = $imagine->open($pictureFilePath);
+
+        $naturalSize = $image->getSize();
+        $scaledSize = $naturalSize->widen(270)->heighten(270);
+
+        // @todo fix it.
+        $assets = $this->container->get('templating.helper.assets');
+        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
+        $pictureUrl = ltrim($pictureUrl, ' /');
+        $pictureUrl = $assets->getUrl($pictureUrl);
+
+        return $this->render('TopxiaAdminBundle:System:default-avatar-crop.html.twig',array(
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,
+        ));
+    }
+
+    public function defaultAvatarCropAction(Request $request)
+    {
+        $options = $request->request->all();
+
+        $filename = $this->getSettingService()->get("default",array());
+        $filename = $filename['defaultAvatarFileName'];
+        $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
+        $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
+
+        $pictureFilePath = $directory.'/'.$filename;
+        $pathinfo = pathinfo($pictureFilePath);
+
+        $imagine = new Imagine();
+        $rawImage = $imagine->open($pictureFilePath);
+
+        $largeImage = $rawImage->copy();
+        $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
+        $largeImage->resize(new Box(220, 220));
+        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
+        $largeImage->save($largeFilePath, array('quality' => 90));
+
+        $this->filesystem = new Filesystem();
+        $this->filesystem->copy($largeFilePath, $path.'large-'.$filename);
+
+        $smallImage = $largeImage->copy();
+        $smallImage->resize(new Box(120, 120));
+        $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
+        $smallImage->save($smallFilePath, array('quality' => 90));
+
+        $this->filesystem->copy($smallFilePath, $path.$filename);
+
+        return $this->redirect($this->generateUrl('admin_setting_default'));
+    }
+
+    public function defaultCoursePictureAction(Request $request)
+    {
+        $file = $request->files->get('picture');
+        if (!FileToolkit::isImageFile($file)) {
+            return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
+        }
+
+        $filenamePrefix = "course-picture";
+        $hash = substr(md5($filenamePrefix . time()), -8);
+        $ext = $file->getClientOriginalExtension();
+        $filename = $filenamePrefix . $hash . '.' . $ext;
+
+        $defaultSetting = $this->getSettingService()->get('default', array());
+        $defaultSetting['defaultCoursePictureFileName'] = $filename;
+        $this->getSettingService()->set("default", $defaultSetting);
+
+        $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
+        $file = $file->move($directory, $filename);
+
+        $pictureFilePath = $directory.'/'.$filename;
+
+        $imagine = new Imagine();
+        $image = $imagine->open($pictureFilePath);
+
+        $naturalSize = $image->getSize();
+        $scaledSize = $naturalSize->widen(480)->heighten(270);
+
+        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
+
+        return $this->render('TopxiaAdminBundle:System:default-course-picture-crop.html.twig',array(
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,
+        ));
+    }
+
+    public function defaultCoursePictureCropAction(Request $request)
+    {
+        $options = $request->request->all();
+
+        $filename = $this->getSettingService()->get('default','defaultCoursePictureFileName');
+        $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
+        $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
+
+        $pictureFilePath = $directory.'/'.$filename;
+        $pathinfo = pathinfo($pictureFilePath);
+
+        $imagine = new Imagine();
+        $rawImage = $imagine->open($pictureFilePath);
+
+        $largeImage = $rawImage->copy();
+        $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
+        $largeImage->resize(new Box(480, 270));
+        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
+        $largeImage->save($largeFilePath, array('quality' => 90));
+
+        $this->filesystem = new Filesystem();
+        $this->filesystem->copy($largeFilePath, $path.'large-'.$filename,'ture');
+
+        $smallImage = $largeImage->copy();
+        $smallImage->resize(new Box(475,250));
+        $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
+        $smallImage->save($smallFilePath, array('quality' => 90));
+
+        $this->filesystem->copy($smallFilePath, $path.$filename,'ture');
+
+        return $this->redirect($this->generateUrl('admin_setting_default'));
     }
 
     public function ipBlacklistAction(Request $request)
@@ -911,4 +1118,8 @@ class SettingController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
+    protected function getDefaultService()
+    {
+        return $this->getServiceKernel()->createService('System.DefaultService');
+    }
 }
