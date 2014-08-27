@@ -390,27 +390,27 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $defaultSetting = $request->request->all();
 
-            $path = $this->container->getParameter('kernel.root_dir');
+            $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
             if (!$defaultSetting['defaultAvatar']){
-                $largefile = $path.'/../web/assets/img/default/system-avatar-large.png';
-                $targetLargefile = $path.'/../web/assets/img/default/avatar-large.png';
+                $largefile = $path.'system-avatar-large.png';
+                $targetLargefile = $path.'avatar-large.png';
                 $this->filesystem = new Filesystem();
                 $this->filesystem->copy($largefile,$targetLargefile,'ture');
 
-                $smallfile = $path.'/../web/assets/img/default/system-avatar.png';
-                $targetSmallfile = $path.'/../web/assets/img/default/avatar.png';
+                $smallfile = $path.'system-avatar.png';
+                $targetSmallfile = $path.'avatar.png';
                 $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
             }
 
             if (!$defaultSetting['defaultCoursePicture']){
-                $largefile = $path.'/../web/assets/img/default/system-course-large.png';
-                $targetLargefile = $path.'/../web/assets/img/default/course-large.png';
+                $largefile = $path.'system-course-large.png';
+                $targetLargefile = $path.'course-large.png';
                 $this->filesystem = new Filesystem();
                 $this->filesystem->copy($largefile,$targetLargefile,'ture');
 
-                $smallfile = $path.'/../web/assets/img/default/system-course-default-475x250.png';
-                $targetSmallfile = $path.'/../web/assets/img/default/course-default-475x250.png';
+                $smallfile = $path.'system-course-default-475x250.png';
+                $targetSmallfile = $path.'course-default-475x250.png';
                 $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
             }
 
@@ -444,11 +444,7 @@ class SettingController extends BaseController
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen(270)->heighten(270);
 
-        // @todo fix it.
-        $assets = $this->container->get('templating.helper.assets');
         $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
-        $pictureUrl = ltrim($pictureUrl, ' /');
-        $pictureUrl = $assets->getUrl($pictureUrl);
 
         return $this->render('TopxiaAdminBundle:System:default-avatar-crop.html.twig',array(
             'pictureUrl' => $pictureUrl,
@@ -463,7 +459,7 @@ class SettingController extends BaseController
 
         $filename = 'avatar.png' ;
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-        $path = $this->container->getParameter('kernel.root_dir');
+        $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
         $pictureFilePath = $directory.'/'.$filename;
         $pathinfo = pathinfo($pictureFilePath);
@@ -478,14 +474,14 @@ class SettingController extends BaseController
         $largeImage->save($largeFilePath, array('quality' => 90));
 
         $this->filesystem = new Filesystem();
-        $this->filesystem->copy($largeFilePath, $path.'/../web/assets/img/default/avatar-large.png','ture');
+        $this->filesystem->copy($largeFilePath, $path.'avatar-large.png','ture');
 
         $smallImage = $largeImage->copy();
         $smallImage->resize(new Box(120, 120));
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $smallImage->save($smallFilePath, array('quality' => 90));
 
-        $this->filesystem->copy($smallFilePath, $path.'/../web/assets/img/default/avatar.png','ture');
+        $this->filesystem->copy($smallFilePath, $path.'avatar.png','ture');
 
         return $this->redirect($this->generateUrl('admin_setting_default'));
     }
@@ -509,11 +505,7 @@ class SettingController extends BaseController
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen(480)->heighten(270);
 
-        // @todo fix it.
-        $assets = $this->container->get('templating.helper.assets');
         $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
-        $pictureUrl = ltrim($pictureUrl, ' /');
-        $pictureUrl = $assets->getUrl($pictureUrl);
 
         return $this->render('TopxiaAdminBundle:System:default-course-picture-crop.html.twig',array(
             'pictureUrl' => $pictureUrl,
@@ -528,7 +520,7 @@ class SettingController extends BaseController
 
         $filename = 'course-picture.png' ;
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-        $path = $this->container->getParameter('kernel.root_dir');
+        $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
         $pictureFilePath = $directory.'/'.$filename;
         $pathinfo = pathinfo($pictureFilePath);
@@ -543,14 +535,14 @@ class SettingController extends BaseController
         $largeImage->save($largeFilePath, array('quality' => 90));
 
         $this->filesystem = new Filesystem();
-        $this->filesystem->copy($largeFilePath, $path.'/../web/assets/img/default/course-large.png','ture');
+        $this->filesystem->copy($largeFilePath, $path.'course-large.png','ture');
 
         $smallImage = $largeImage->copy();
         $smallImage->resize(new Box(475,250));
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $smallImage->save($smallFilePath, array('quality' => 90));
 
-        $this->filesystem->copy($smallFilePath, $path.'/../web/assets/img/default/course-default-475x250.png','ture');
+        $this->filesystem->copy($smallFilePath, $path.'course-default-475x250.png','ture');
 
         return $this->redirect($this->generateUrl('admin_setting_default'));
     }
