@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+  <div class="panel-heading">活跃成员</div>
+  <div class="panel-body">
+    {% if activeMembers %} 
+
+        <ul class="user-grids">
+
+        {% for member in activeMembers %}
+
+          <li style="width:22%;">
+            {{ web_macro.user_avatar(members[member.userId] , 'pull-left media-object media-object-small ')}}
+              <p>
+              {{ web_macro.user_link(members[member.userId] , 'link-muted') }}
+              </p>
+          </li>  
+
+        {% endfor %}
+
+       </ul>
+
+    {% else %}
+
+      还没有小组成员！
+      
+    {% endif %}
+      <br>
+  </div>     
+</div>

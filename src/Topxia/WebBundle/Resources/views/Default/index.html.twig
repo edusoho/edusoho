@@ -49,7 +49,27 @@
     </div>
 
   </div>
+  <div class="row row-9-3">
 
+    <div class="col-md-9">
+      <div class="es-box">
+        <div class="es-box-heading"><h2>最热小组</h2><a href="{{path('group_search_group')}}" class="pull-right">&raquo;更多</a></div>
+        <div class="es-box-body">
+           {{ render(controller('TopxiaWebBundle:Group:hotGroup')) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="es-box">
+        <div class="es-box-heading"><h2>最热话题</h2></div>
+        <div class="es-box-body">
+          {{ render(controller('TopxiaWebBundle:Group:hotTHread')) }}
+        </div>
+      </div>
+    </div>
+
+  </div>
   <div class="row"><div class="col-md-12"></div></div>
 
 </div>

@@ -64,3 +64,15 @@
     height: 18px;
     width: 18px;
 }
+.title-thread{
+    background: #fff6ee;
+}
+.bottom-thread-post{
+    margin-bottom: 0px;
+}
+.label {
+    padding: .2em .6em .2em;
+}
+.pagination li{
+    cursor: pointer;
+}

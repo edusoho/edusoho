@@ -1,0 +1,14 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% block title %}- {{ parent() }}{% endblock %}
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/group.css') }}" />
+{% endblock %}
+{% block content %}
+	<div class="row">
+		
+		<div class="col-md-12">
+			{% block main %}{% endblock %}
+		</div>
+	</div>
+{% endblock %}

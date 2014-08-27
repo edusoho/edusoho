@@ -1,0 +1,92 @@
+{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+
+  {% if app.request.get('action')=='transferGroup' %}
+      {% set script_controller = 'group/group_transferGroup' %}
+
+      {% 
+        set script_arguments = {
+          followingMatchByNickname: path('following_match_bynickname')
+        } 
+      %}
+  {% else %}
+      {% set script_controller = 'group/group_logo' %}
+  {% endif %}
+
+  {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+
+  {% block content %}
+
+    {% include 'TopxiaWebBundle:Group:groupHeader.html.twig' with {
+    'groupinfo':groupinfo,
+    'is_groupmember':is_groupmember,}
+    %}
+
+    <div class="es-row-wrap container-gap userpage-body">
+      
+      {% include 'TopxiaWebBundle:Group:group.tab.ul.html.twig' with 
+      {'tab':'set', }%}
+   
+        <div class="row">
+          <div class="col-md-12">
+                <ul class="nav nav-pills">
+                  <li {% if app.request.get('action')=='setLogo' %}class="active"{% endif %}> <a  href="{{path('group_set',{id:groupinfo.id,action:'setLogo'})}}">logo设置</a></li>
+                  <li {% if app.request.get('action')=='setBackGroundLogo' %}class="active"{% endif %}>  <a  href="{{path('group_set',{id:groupinfo.id,action:'setBackGroundLogo'})}}">背景设置</a></li>
+                  <li  {% if app.request.get('action')=='setGroupInfo' %}class="active"{% endif %}><a href="{{path('group_set',{id:groupinfo.id,action:'setGroupInfo'})}}">编辑小组 </a></li>
+                </ul><br>
+
+            {{ web_macro.flash_messages() }}
+
+            {% if app.request.get('action')=='setLogo' %}
+              {% include 'TopxiaWebBundle:Group:setGroupLogo.form.html.twig' with {
+              'id':id,
+              'logo':logo,}
+              %}
+            {% endif %}
+
+            {% if app.request.get('action')=='setBackGroundLogo' %}
+              {% include 'TopxiaWebBundle:Group:setBackGroundLogo.form.html.twig' with {
+              'id':id,
+              'logo':backgroundLogo,}
+              %}
+            {% endif %}
+
+            {% if app.request.get('action')=='transferGroup' %}
+              {% include 'TopxiaWebBundle:Group:transferGroup.form.html.twig' %}
+            {% endif %}
+
+            {% if app.request.get('action')=='setGroupInfo' %}
+                  <form id="user-group-form" class="form-horizontal" method="post" action="{{path('group_edit',{id:groupinfo.id})}}">
+                    
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="group_grouptitle">小组名称</label>
+                      <div class="col-md-9 controls">
+                        <input type="text" id="group_grouptitle" name="group[grouptitle]" class="form-control"
+                        value="{{groupinfo.title}}" >
+                        <div class="help-block" style="display:none;"></div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="group_about">小组介绍</label>
+                      <div class="col-md-9 controls">
+                        <textarea name="group[about]" rows="10" id="group_about" class="form-control">{{groupinfo.about}}</textarea>
+                      </div>
+                    </div>
+                    
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+                    
+                 
+                    <div class="row">
+                      <div class="col-xs-7 col-xs-offset-2">
+                        <button id="group-save-btn" data-submiting-text="正在修改" type="submit" class="btn btn-primary">修改</button>
+                      </div>
+                    </div>
+                  
+                  </form><br>
+            
+            {% endif %}
+        </div>
+      </div>
+    </div>
+
+  {% endblock %}

@@ -1,0 +1,29 @@
+<div class="jumbotron " {% if groupinfo.backgroundLogo %}style="background:url({{file_path(groupinfo.backgroundLogo)}});"{% else %}style="background:url({{asset('assets/img/default/background_group.jpg')}});"{% endif %}>
+
+    <div class="row">    
+      <div class="panel panel-default col-md-5">
+        <div class="panel-body">
+          <div class="media">
+            
+                {% if groupinfo.logo%}
+                  <img src="{{file_path(groupinfo.logo)}}" alt="" class="pull-left" >
+                {% else %}
+                  <img src="{{asset('assets/img/default/group.png')}}" alt=""class="pull-left" >
+                {% endif %}
+            
+                <div class="media-body">
+                  <h4>{{groupinfo.title}}</h4>
+                  <span class="group-header-tip "> 
+                    <span class="glyphicon glyphicon-user"></span>成员: {{groupinfo.memberNum}} &nbsp;
+                    <span class="glyphicon glyphicon-fire"></span>话题: {{groupinfo.threadNum}} &nbsp;
+                    <span class="glyphicon glyphicon-comment"></span>回复: {{groupinfo.postNum}}</span>
+                  </span>
+                </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> 
+    <br>
+
+</div>

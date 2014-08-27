@@ -1029,6 +1029,10 @@ user_friend:
     pattern:  /user/{id}/friend
     defaults: { _controller: TopxiaWebBundle:User:friend }
 
+user_group: 
+    pattern:  /user/{id}/group
+    defaults: { _controller: TopxiaWebBundle:User:group }
+
 user_following:
     pattern:  /user/{id}/following
     defaults: { _controller: TopxiaWebBundle:User:following }
@@ -1180,6 +1184,108 @@ mobile_download:
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
+group:
+    pattern:  /group
+    defaults: { _controller: TopxiaWebBundle:Group:index }
+group_search_group:
+    pattern:  /group/search_group
+    defaults: { _controller: TopxiaWebBundle:Group:search }
+group_add:
+    pattern:  /mygroup/add
+    defaults: { _controller: TopxiaWebBundle:Group:addGroup }
+group_member_center:
+    pattern:  /mygroup/center
+    defaults: { _controller: TopxiaWebBundle:Group:memberCenter }
+group_member_join:
+    pattern:  /mygroup/center/join
+    defaults: { _controller: TopxiaWebBundle:Group:memberJoin}
+group_member_threads:
+    pattern:  /mygroup/center/threads
+    defaults: { _controller: TopxiaWebBundle:Group:memberThreads}
+group_member_posts:
+    pattern:  /mygroup/center/posts
+    defaults: { _controller: TopxiaWebBundle:Group:memberPosts}
+group_index:
+    pattern:  /group/{id}
+    defaults: { _controller: TopxiaWebBundle:Group:groupIndex }
+group_join:
+    pattern:  /mygroup_join/{id}/{title}
+    defaults: { _controller: TopxiaWebBundle:Group:groupJoin }
+group_exit:
+    pattern:  /mygroup_exit/{id}/{title}
+    defaults: { _controller: TopxiaWebBundle:Group:groupExit }
+group_member:
+    pattern:  /group/member/{id}
+    defaults: { _controller: TopxiaWebBundle:Group:groupMember }
+group_member_delete:
+    pattern:  /group/member/delete/{id}
+    defaults: { _controller: TopxiaWebBundle:Group:deleteMembers }
+group_set_admin:
+    pattern:  /group/set/admin/{id}
+    defaults: { _controller: TopxiaWebBundle:Group:setAdmin }
+group_remove_admin:
+    pattern:  /group/remove/admin/{id}
+    defaults: { _controller: TopxiaWebBundle:Group:removeAdmin }
+group_set:
+    pattern:  /group/set/{id}
+    defaults: { _controller: TopxiaWebBundle:Group:groupSet }
+group_transfer:
+    pattern:  /group/transferGroup/{id}
+    defaults: { _controller: TopxiaWebBundle:Group:transferGroup }
+group_setLogoCrop:
+    pattern:  /group/set/crop/{file}/{id}
+    defaults: { _controller: TopxiaWebBundle:Group:groupSetLogoCrop }
+group_logo_set:
+    pattern:  /group/set_logo/{id}
+    defaults: { _controller: TopxiaWebBundle:Group:setGrouplogo }
+group_logo_crop_set:
+    pattern:  /group/set_logo/crop/{file}/{id}
+    defaults: { _controller: TopxiaWebBundle:Group:setGrouplogo_crop }
+group_edit:
+    pattern:  /group/info_edit/{id}
+    defaults: { _controller: TopxiaWebBundle:Group:groupEdit }
+group_backgroundlogo_set:
+    pattern:  /group/set_backgroundlogo/{id}
+    defaults: { _controller: TopxiaWebBundle:Group:setGroupBackgroundLogo }
+group_search:
+    pattern:  /group/serach/{id}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:searchResult }
+group_thread_post:
+    pattern:  /group/thread/post/{groupId}/{threadId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:postThread }
+group_thread_add:
+    pattern:  /mygroup/publishthread/{id}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:addThread }
+group_thread_update:
+    pattern:  /mygroup/updatethread/{id}/{threadId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:updateThread }
+group_thread_check_user:
+    pattern:  /mygroup/checkuser
+    defaults: { _controller: TopxiaWebBundle:GroupThread:checkUser }
+group_thread_index:
+    pattern:  /group/thread/home/{id}/{threadId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:groupThreadIndex }
+group_thread_setElite:
+    pattern:  /group/thread/setElite/{threadId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:setElite }
+group_thread_removeElite:
+    pattern:  /group/thread/removeElite/{threadId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:removeElite }
+group_thread_setStick:
+    pattern:  /group/thread/setStick/{threadId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:setStick }
+group_thread_removeStick:
+    pattern:  /group/thread/removeStick/{threadId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:removeStick }
+group_thread_closeThread:
+    pattern:  /group/thread/closeThread/{threadId}/{memberId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:closeThread }
+group_thread_deletePost:
+    pattern:  /group/thread/deletePost/{postId}/{memberId}/{threadOwnerId}/{groupOwnerId}/{groupId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:deletePost }
+group_thread_post_reply:
+    pattern:  /group/post/reply/{postId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
 
 #占位
 vip:

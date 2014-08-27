@@ -1,0 +1,46 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<div class="reply-post-list-{{post.id}}">
+{% if postReply %}
+{% for reply in postReply %} 
+                        
+    <li style="border-bottom:1px solid #ddd;" class="li-reply-{{post.id}}">
+        <div class="pull-left" style="width:80px;"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:reply.userId}) }}">
+          <img src="{{ file_path(postReplyMembers[reply.userId].largeAvatar, 'avatar-large.png') }}">
+        </a>
+        </div>
+       <div class="media">
+        <div class="media-body">
+          {{ web_macro.user_link(postReplyMembers[reply.userId] , 'link-muted ') }}
+          <p >{{reply.content|raw}}&nbsp;</p>
+          <div class="text-muted text-normal pull-right">{{reply.createdTime|smart_time}}<a href="javascript:" class="li-reply" postId="{{post.id}}" postName="{{postReplyMembers[reply.userId].nickname}}"> 回复</a>
+          </div>
+        </div> 
+      </div>
+    </li>
+    
+{% endfor %}
+{% endif %}<br>
+{% if postReply %}
+<li>
+ {% if postReplyPaginator.lastPage > 1 %}
+  <ul  class="paginator-{{post.id}} pagination pagination-sm pull-left ">
+    {% if postReplyPaginator.currentPage == postReplyPaginator.firstPage %}
+      <li class="disabled"><span>上一页</span></li>
+    {% else %}
+      <li   postId="{{post.id}}" class="postReply-page" data-url="{{path('group_thread_post_reply',{postId:post.id,page:postReplyPaginator.previousPage})}}"><a>上一页</a></li>
+    {% endif %}
+    {% for page in postReplyPaginator.pages %}
+      <li {% if page == postReplyPaginator.currentPage %}class="active"{% endif %}   postId="{{post.id}}" class="postReply-page" data-url="{{path('group_thread_post_reply',{postId:post.id,page:page})}}"><a>{{ page }}</a></li>
+    {% endfor %}
+
+    {% if postReplyPaginator.currentPage == postReplyPaginator.lastPage %}
+      <li class="disabled"><span>下一页</span></li>
+    {% else %}
+      <li  postId="{{post.id}}" class="postReply-page" data-url="{{path('group_thread_post_reply',{postId:post.id,page:postReplyPaginator.nextPage})}}"><a>下一页</a></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+<a class="replyToo btn btn-default btn-xs pull-right" postId="{{post.id}}" href="javascript:" type="button">我也要说</a></li><br><br>
+{% endif %}
+</div>

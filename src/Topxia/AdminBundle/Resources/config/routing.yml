@@ -782,6 +782,46 @@ admin_article_delete:
     defaults: { _controller: TopxiaAdminBundle:Article:delete }
     methods:  [POST]
 
+admin_group:
+    pattern:  /group/
+    defaults: { _controller: TopxiaAdminBundle:Group:index }
+admin_groupThread:
+    pattern:  /group/thread
+    defaults: { _controller: TopxiaAdminBundle:Group:thread }
+admin_batch_deleteThread:
+    pattern:  /group/batchDeleteThread
+    defaults: { _controller: TopxiaAdminBundle:Group:batchDeleteThread }
+admin_close_group:
+    pattern:  /group/{id}/close
+    defaults: { _controller: TopxiaAdminBundle:Group:closeGroup }
+admin_open_group:
+    pattern:  /group/{id}/open
+    defaults: { _controller: TopxiaAdminBundle:Group:openGroup }
+admin_removeElite:
+    pattern:  /group/thread/{threadId}/removeElite
+    defaults: { _controller: TopxiaAdminBundle:Group:removeElite }
+admin_setElite:
+    pattern:  /group/thread/{threadId}/setElite
+    defaults: { _controller: TopxiaAdminBundle:Group:setElite }
+admin_removeStick:
+    pattern:  /group/thread/{threadId}/removeStick
+    defaults: { _controller: TopxiaAdminBundle:Group:removeStick }
+admin_setStick:
+    pattern:  /group/thread/{threadId}/setStick
+    defaults: { _controller: TopxiaAdminBundle:Group:setStick }
+admin_closeThread:
+    pattern:  /group/thread/{threadId}/closeThread
+    defaults: { _controller: TopxiaAdminBundle:Group:closeThread }
+admin_openThread:
+    pattern:  /group/thread/{threadId}/openThread
+    defaults: { _controller: TopxiaAdminBundle:Group:openThread }
+admin_deleteThread:
+    pattern:  /group/thread/{threadId}/deleteThread
+    defaults: { _controller: TopxiaAdminBundle:Group:deleteThread }
+admin_transferGroup:
+    pattern:  /group/transfer/{groupId}
+    defaults: { _controller: TopxiaAdminBundle:Group:transferGroup }
+
 admin_operation_analysis_register:
     pattern:  /operation/analysis/register/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:register }
@@ -853,6 +893,3 @@ admin_user_fields_edit:
 admin_user_fields_delete:
     pattern:  /user_fields/delete/{id}
     defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }
-
-
-

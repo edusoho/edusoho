@@ -1,0 +1,43 @@
+{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+{% block title %}搜索 - {{ parent() }}{% endblock %}
+{% block main %}
+  {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
+    {% block heading %}
+        <h3><b>小组搜索</b></h3>
+        <div class="row">
+            <div class="col-md-4 pull-right " >
+              <form action="{{path('group_search_group')}}" method="get">
+                  <div class="input-group">
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+                    <input type="text" class="form-control" placeholder="小组搜索" name="keyWord" value="{{app.request.get('keyWord') }}">
+
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                      <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                    </span>
+
+                  </div>
+              </form>
+                
+            </div> 
+        </div>
+    {% endblock %}
+
+    {% block body %}
+        <div class="row">
+          <div class="col-md-12">
+            {% include 'TopxiaWebBundle:Group:groups.ul.html.twig' with {
+            'groups':groups,  }
+            %}
+            
+          </div>
+          <div class="col-md-9 pull-left">
+            {{ web_macro.paginator(paginator) }}
+          </div>
+        </div>
+    {% endblock %}
+
+  {% endembed %}
+{% endblock %}

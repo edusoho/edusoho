@@ -27,6 +27,7 @@ class WebExtension extends \Twig_Extension
             'tags_html' => new \Twig_Filter_Method($this, 'tagsHtmlFilter', array('is_safe' => array('html'))),
             'file_size'  => new \Twig_Filter_Method($this, 'fileSizeFilter'),
             'plain_text' => new \Twig_Filter_Method($this, 'plainTextFilter', array('is_safe' => array('html'))),
+            'sub_text' => new \Twig_Filter_Method($this, 'subTextFilter', array('is_safe' => array('html'))),
             'duration'  => new \Twig_Filter_Method($this, 'durationFilter'),
             'tags_join' => new \Twig_Filter_Method($this, 'tagsJoinFilter'),
             'navigation_url' => new \Twig_Filter_Method($this, 'navigationUrlFilter'),
@@ -424,6 +425,23 @@ class WebExtension extends \Twig_Extension
 
         $length = (int) $length;
         if ( ($length > 0) && (mb_strlen($text) > $length) )  {
+            $text = mb_substr($text, 0, $length, 'UTF-8');
+            $text .= '...';
+        }
+
+        return $text;
+    }
+
+    public function subTextFilter($text, $length = null)
+    {
+        $text = strip_tags($text);
+
+        $text = str_replace(array("\n", "\r", "\t") , '', $text);
+        $text = str_replace('&nbsp;' , ' ', $text);
+        $text = trim($text);
+
+        $length = (int) $length;
+        if ( ($length > 0) && (mb_strlen($text,'utf-8') > $length) )  {
             $text = mb_substr($text, 0, $length, 'UTF-8');
             $text .= '...';
         }
