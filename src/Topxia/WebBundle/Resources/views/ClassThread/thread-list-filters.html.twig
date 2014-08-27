@@ -1,0 +1,28 @@
+  <div class="thread-filters clearfix">
+    <ul class="nav nav-pills nav-mini pull-left">
+      <li{% if filters.type == 'all' %} class="active"{% endif %}><a href="{{ path('class_threads', {classId:class.id}|merge(filters)|merge({type:'all'})) }}">全部</a></li>
+      <li{% if filters.type == 'elite' %} class="active"{% endif %}><a href="{{ path('class_threads', {classId:class.id}|merge(filters)|merge({type:'elite'})) }}">精华</a></li>
+
+      <li><span class="mhm text-muted">|</span></li>
+
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          <span class="text-muted">排序：</span>
+          {% if filters.sort == 'posted' %}
+            最后回复
+          {% elseif filters.sort == 'created'%} 
+            最新发帖
+          {% endif %}
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li class="{% if filters.sort == 'posted' %}active{% endif %}"><a href="{{ path('class_threads', {classId:class.id}|merge(filters)|merge({sort:'posted'})) }}">最后回复</a></li>
+          <li class="{% if filters.sort == 'created' %}active{% endif %}"><a href="{{ path('class_threads', {classId:class.id}|merge(filters)|merge({sort:'created'})) }}">最新发帖</a></li>
+        </ul>
+      </li>
+
+
+    </ul>
+
+
+  </div>

@@ -1,0 +1,43 @@
+<ul class="media-list thread-list">
+  {% for thread in threads %}
+    {% set author = users[thread.userId] %}
+    <li class="media">
+      <a href="{{ path('user_show', {id:author.id}) }}" class="pull-left">
+        <img src="{{ file_path(author.smallAvatar, 'avatar.png') }}" class="media-object">
+      </a>
+      <div class="media-body">
+        {% if thread.postNum > 0 %}
+          <span class="badge post-num">{{ thread.postNum }}</span>
+        {% endif %}
+        <div class="media-heading">
+          {% if thread.isStick %}
+            <span class="label label-info" title="置顶帖">置顶</span>
+          {% endif %}
+          <a href="{{ path('class_thread_show', {classId:class.id, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+
+          {% if thread.isElite %}
+            <span class="label label-warning" title="精华帖">精</span>
+          {% endif %}
+        </div>
+        
+        <div class="thread-metas">
+          by {{ web_macro.user_link(author, 'link-muted') }}
+
+          {% if thread.postNum > 0 %}
+            {% set poster = users[thread.latestPostUserId] %}
+            <span class="bullet">•</span>
+            <span>最后回复 {{ web_macro.user_link(poster, 'link-muted') }}</span>
+          {% endif %}
+          <span class="bullet">•</span>
+          <span>{{ thread.latestPostTime|smart_time }}</span>
+          <span class="bullet">•</span>
+          <span>{{ thread.hitNum }}浏览</span>
+        </div>
+      </div>
+    </li>
+  {% else %}
+    <li class="mvl tac text-muted">班级暂无话题</li>
+  {% endfor %}
+</ul>
+
+{{ web_macro.paginator(paginator) }}

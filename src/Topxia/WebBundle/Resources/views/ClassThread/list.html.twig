@@ -1,0 +1,13 @@
+{% extends 'TopxiaWebBundle:Class:layout.html.twig' %}
+
+{% block class_main %}
+
+
+  <div class="pull-right">
+    <a class="btn btn-sm btn-info" href="{{ path('class_thread_create', {classId:class.id, type:'discussion'}) }}">发话题</a>
+  </div>
+
+  {% include 'TopxiaWebBundle:ClassThread:thread-list-filters.html.twig' %}
+  {% include 'TopxiaWebBundle:ClassThread:thread-list.html.twig' %}
+
+{% endblock %}
