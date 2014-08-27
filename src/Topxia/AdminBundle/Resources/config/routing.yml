@@ -347,6 +347,14 @@ admin_schcool_classes_create:
     pattern:  /school/classes/create
     defaults: { _controller: TopxiaAdminBundle:School:classCreate }
 
+admin_school_class_icon_upload:
+    pattern:  /school/classes/icon/upload
+    defaults: { _controller: TopxiaAdminBundle:School:classIconUpload }
+
+admin_school_class_backgroundImg_upload:
+    pattern:  /school/classes/backgroundImg/upload
+    defaults: { _controller: TopxiaAdminBundle:School:classBackgroundImgUpload }
+
 admin_setting_mobile:
     pattern:  /setting/mobile
     defaults: { _controller: TopxiaAdminBundle:Setting:mobile }

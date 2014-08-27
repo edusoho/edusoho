@@ -21,7 +21,7 @@ class Version20140826101048 extends AbstractMigration
             `headTeacherId` int(10) NOT NULL,
             `enabled` tinyint(3) NOT NULL DEFAULT '1',
             `icon` varchar(64) DEFAULT NULL COMMENT '图标',
-            `backgroudImg` varchar(255) DEFAULT '',
+            `backgroundImg` varchar(255) DEFAULT '',
             `studentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学生数',
             `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
             PRIMARY KEY (`id`)

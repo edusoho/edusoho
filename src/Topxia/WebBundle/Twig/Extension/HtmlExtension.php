@@ -1,6 +1,9 @@
 <?php
 namespace Topxia\WebBundle\Twig\Extension;
 
+use Topxia\WebBundle\Twig\Extension\DataDict;
+use Topxia\Service\Common\ServiceKernel;
+
 class HtmlExtension extends \Twig_Extension
 {
 
@@ -12,6 +15,7 @@ class HtmlExtension extends \Twig_Extension
             new \Twig_SimpleFunction('radios', array($this, 'radios'), $options),
             new \Twig_SimpleFunction('checkboxs', array($this, 'checkboxs'), $options),
             new \Twig_SimpleFunction('field_value', array($this, 'fieldValue'), $options),
+            new \Twig_SimpleFunction('select_options_for_school', array($this, 'selectOptions2'), $options),
         );
     }
 
@@ -49,6 +53,52 @@ class HtmlExtension extends \Twig_Extension
         return $html;
     }
 
+    public function selectOptions2($choices, $selected = null, $empty = null)
+    {
+        $html = '';
+        if (!is_null($empty)) {
+            $html .= "<option value=\"\">{$empty}</option>";
+        }
+
+        $school = ServiceKernel::instance()
+        ->createService('System.SettingService')->get('school');
+
+        $choices = array();
+        $primarySchool = array();
+        $middleSchool = array();
+        $highSchool = array();
+
+        $dict = new DataDict();
+        if(!empty($school['primarySchool'])) {
+            if($school['primaryYear'] == '6'){
+                $primarySchool = DataDict::dict('primarySchool');
+            }else{
+                $primarySchool = DataDict::dict('primarySchool');
+                unset($primarySchool[6]);
+            }
+
+        }
+
+        if(!empty($school['middleSchool'])) {
+            $middleSchool = DataDict::dict('middleSchool');
+        }
+
+        if(!empty($school['highSchool'])) {
+            $highSchool = DataDict::dict('highSchool');
+        }
+
+        $choices = array_merge($primarySchool, $middleSchool, $highSchool);
+
+        foreach ($choices as $value => $name) {
+            if ($selected === $value) {
+                $html .= "<option value=\"{$value}\" selected=\"selected\">{$name}</option>";
+            } else {
+                $html .= "<option value=\"{$value}\">{$name}</option>";
+            }
+        }
+
+        return $html;
+    }
     public function radios($name, $choices, $checked = null)
     {
         $html = '';
