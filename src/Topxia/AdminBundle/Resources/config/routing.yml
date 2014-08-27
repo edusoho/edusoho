@@ -364,6 +364,10 @@ admin_school_class_member_manage:
     pattern:  /school/class/{classId}/member/manage
     defaults: { _controller: TopxiaAdminBundle:School:classMemberManage }
 
+admin_school_class_course_add:
+    pattern:  /school/class/{classId}/course/add
+    defaults: { _controller: TopxiaAdminBundle:School:classCourseAdd }
+
 admin_school_class_icon_upload:
     pattern:  /school/classes/icon/upload
     defaults: { _controller: TopxiaAdminBundle:School:classIconUpload }

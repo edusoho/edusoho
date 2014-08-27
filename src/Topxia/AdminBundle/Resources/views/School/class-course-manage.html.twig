@@ -1,0 +1,71 @@
+{% extends 'TopxiaAdminBundle:School:layout.html.twig' %}
+
+{% block title %}课程设置 - {{ parent() }}{% endblock %}
+
+{% set menu = 'classSetting' %}
+{# {% set script_controller = 'school/class-course-manage' %} #}
+
+{% block main %}
+<div class="page-header clearfix">
+  <button class="btn btn-info btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{path('admin_school_class_course_add', { classId:class.id ,gradeId:class.gradeId })}}" >选增课程</button>
+  <h1 class="pull-left"><strong>课程设置</strong></h1>
+  <h5 class="text-center">
+    {{ class_name(class) }}
+
+    <span class="text-muted mll">
+      {{ class.year}}届
+      {% if class.term == 'first' %}
+      一学期  
+      {% else %}
+      二学期
+      {% endif %}
+    </span>
+  </h5>
+
+</div>
+
+  <div>
+
+    {% if courses %}
+     {% for course in courses %}
+      <div class="media table-bordered">
+        <a class="pull-left" href="#">
+          <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}" style="width: 140px; height: 78px;">
+        </a>
+        <div class="media-body">
+          <span class="media-heading">{{ course.title }}</span>
+          <div>
+            <span class="text-muted">{{ dict_text('gradeName', course.gradeId) }}</span>
+            <span class="text-muted mll">
+              {% if course.term == 'first' %}
+              一学期  
+              {% else %}
+              二学期
+              {% endif %}
+            </span>
+            {% for teachername in course.teachername %}
+              <span class="text-muted mll">{{teachername}}</span>
+            {% endfor %}
+          </div>
+          <span class="text-muted">
+            {% if course.compulsory == '1' %}
+              必修
+            {% else %}
+              选修
+            {% endif %}
+          </span>
+      
+          <a class="btn btn-link pull-right" href="">移除</a>
+        </div>
+      </div>
+    {% endfor %}
+    {{ web_macro.paginator(paginator) }} 
+    {% else %}
+    <div class="empty">该班暂无课程</div>
+    {% endif %}
+  </div>
+
+
+
+
+{% endblock %}

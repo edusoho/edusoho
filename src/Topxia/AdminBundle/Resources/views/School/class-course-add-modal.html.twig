@@ -1,0 +1,26 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}选增课程{% endblock %}
+{% block body %}
+
+<form id="class-course-add-form" class="form-horizontal" method="post" action="{{ path('admin_school_class_course_add', { classId:classId })}}">
+
+<ul class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active"><a href="#">{{dict_text('gradeName',gradeId)}}</a></li>
+  <li role="presentation"><a href="#">公共课</a></li>
+</ul>
+
+
+
+
+
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button id="user-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-create-form">提交</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('user/create-modal')</script>
+{% endblock %}
