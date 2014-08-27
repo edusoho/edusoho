@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     require('swfupload');
     var Widget = require('widget');
     var FileBrowser = require('../file/file-browser');
+    var ChunkUpload = require('./chunk-upload');
     var Notify = require('common/bootstrap-notify');
 
     var BaseChooser = Widget.extend({
@@ -86,7 +87,11 @@ define(function(require, exports, module) {
 
                 if ($(e.relatedTarget).hasClass('file-chooser-uploader-tab')) {
                     if (self.isUploading()) {
-                        return confirm('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？');
+                        var result = confirm('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？');
+                        if(result){
+                            self.destroy();
+                        }
+                        return result;
                     }
                 }
             });
@@ -118,12 +123,11 @@ define(function(require, exports, module) {
         _initUploadPane: function() {
             var $btn = this.$('[data-role=uploader-btn]');
             var progressbar = new UploadProgressBar($btn.data('progressbar'));
-
             this.set('uploaderProgressbar', progressbar);
-            this.set('uploader', this._createSWFUpload($btn, progressbar));
+            this.set('uploader', this._createUpload($btn, progressbar));
         },
 
-        _createSWFUpload: function($btn, progressbar) {
+        _createUpload: function($btn, progressbar) {
             var self = this;
 
             var settings = $.extend({}, {
@@ -198,10 +202,23 @@ define(function(require, exports, module) {
             if ($btn.data('filetypes')) {
                 settings.file_types = $btn.data('filetypes');
             }
+            if(this._supportHtml5() && $btn.data('storageType')=="cloud"){
+                settings.element=this.element;
+                settings.progressbar = progressbar;
+                return new ChunkUpload(settings);
+            }else{
+                return new SWFUpload(settings);
+            }
+        },
+        _supportHtml5: function(){
+            return FileReader && FileReader.DONE && XMLHttpRequest;
+        },
 
-            var swfu = new SWFUpload(settings);
-
-            return swfu;
+        destroy: function(){
+            if(this._supportHtml5() && this.$('[data-role=uploader-btn]').data('storageType')=="cloud"){
+                var uploader = this.get("uploader");
+                uploader.destroy();
+            }
         }
 
     });

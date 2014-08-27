@@ -16,9 +16,9 @@
                               {%endif%}
                             </a>
                             <div class="media-body">
-                              <p ><a  href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></p>
+                              <p style="margin:0 0 10px;"><a  href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></p>
                               <div class="text-muted text-normal">
-                                {{group.memberNum}}个成员
+                                {{group.memberNum}}个成员&nbsp;
                                 {{group.threadNum}}个话题
                               </div>
                             </div> 

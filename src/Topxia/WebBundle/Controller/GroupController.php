@@ -591,7 +591,7 @@ class GroupController extends BaseController
     {
         $hotGroups = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, $count);
         
-        return $this->render('TopxiaWebBundle:Group:gracefulTheme.group.html.twig', array(
+        return $this->render('TopxiaWebBundle:Group:groups.ul.html.twig', array(
                 'groups' => $hotGroups,
                 'colNum'=>$colNum,
                 )
@@ -602,12 +602,12 @@ class GroupController extends BaseController
     {
         $hotThreads = $this->getThreadService()->searchThreads(
             array(
-                'createdTime'=>time()-7*24*60*60,
+                'createdTime'=>time()-14*24*60*60,
                 'status'=>'open'
                 ),
             $this->filterSort('byPostNum'),0, 11
         );
-        /*print_r($hotThreads);*/
+
         return $this->render('TopxiaWebBundle:Group:hotThread.html.twig', array(
                 'hotThreads' => $hotThreads,
                 )
@@ -671,46 +671,6 @@ class GroupController extends BaseController
         )));
     }
    
-/*    public function transferGroupAction(Request $request,$id)
-    {
-       $data=$request->request->all();
-      
-       $currentUser = $this->getCurrentUser();
-        if (!$this->getGroupService()->isOwner($id, $currentUser['id']) ) {
-                return $this->createMessageResponse('info', '您没有权限!');
-       }
-       
-       if($this->getUserService()->verifyPassword($currentUser['id'],$data['user']['password'])){
-
-            $user=$this->getUserService()->getUserByNickname($data['user']['nickname']);
-            
-            $this->getGroupService()->updateGroup($id,array('ownerId'=>$user['id']));
-
-            $member=$this->getGroupService()->getMemberByGroupIdAndUserId($id,$user['id']);
-
-            if($member){
-                $this->getGroupService()->updateMember($member['id'],array('role'=>'owner'));
-            }else{
-                $this->getGroupService()->addOwner($id,$user['id']);
-            }
-
-            $member=$this->getGroupService()->getMemberByGroupIdAndUserId($id,$currentUser['id']);
-
-            $this->getGroupService()->updateMember($member['id'],array('role'=>'member'));
-
-           return $this->redirect($this->generateUrl('group_index', array(
-                'id'=>$id,
-            )));
-       }
-
-       $this->setFlashMessage('danger', '密码不正确，请重试。');
-       return $this->redirect($this->generateUrl('group_set', array(
-            'id'=>$id,
-            'action'=>'transferGroup',
-        )));
-
-    }
-*/
     private function getThreadService()
     {
         return $this->getServiceKernel()->createService('Group.ThreadService');
