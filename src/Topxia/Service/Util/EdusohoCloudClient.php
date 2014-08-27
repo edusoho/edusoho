@@ -332,7 +332,6 @@ class EdusohoCloudClient implements CloudClient
         $httpParams['accessKey'] = $this->accessKey;
         $httpParams['args'] = $args;
         $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
-
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
 
         return json_decode($result, true);
@@ -423,9 +422,18 @@ class EdusohoCloudClient implements CloudClient
         return $this->callRemoteApi('GET', 'PPTImages', $args);
     }
 
-    public function getMediaInfo($hashid)
+    public function getMediaInfo($key, $mediaType)
     {
-        return $this->getVideoInfo($this->bucket, $hashid);
+        $args = array();
+        $args['key'] = $key;
+        if($mediaType == "video"){
+            $args["storageType"]="public";
+        }
+        if($mediaType == "audio"){
+            $args["storageType"]="private";
+        }
+        $args['duration'] = "3600";
+        return json_decode($this->callRemoteApi('GET', 'GetMediaInfo', $args), true);
     }
 
     private function generateViewToken($bucket, $key)

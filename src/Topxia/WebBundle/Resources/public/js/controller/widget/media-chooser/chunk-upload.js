@@ -220,7 +220,7 @@ define(function(require, exports, module) {
                 	if(mediaInfoUrl){
 	                	$.ajax({
 	                		url: mediaInfoUrl,
-	                		data: {hashId: response.key},
+	                		data: {key: response.key},
 	                		async: false,
 	                		success: function(data){
 	                			response.length = data;
