@@ -139,6 +139,17 @@ class MobileBaseController extends BaseController
         }, $reviews);
     }
 
+    public function filterCourse($course)
+    {
+        if (empty($course)) {
+            return null;
+        }
+
+        $courses = $this->filterCourses(array($course));
+
+        return current($courses);
+    }
+    
     public function filterCourses($courses)
     {
         if (empty($courses)) {

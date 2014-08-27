@@ -13,7 +13,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	}
 
 	public function getCourse()
-	{
+	{	
 		$token = $this->controller->getUserToken($this->request);
 		$user = $this->controller->getUser();
 		$courseId = $this->getParam("courseId");
