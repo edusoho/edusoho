@@ -250,7 +250,10 @@ class GroupServiceImpl extends BaseService implements GroupService {
     public function deleteMemberByGroupIdAndUserId($groupId,$userId)
     {
         $member=$this->getGroupMemberDao()->getMemberByGroupIdAndUserId($groupId,$userId);
+
         $this->getGroupMemberDao()->deleteMember($member['id']); 
+
+        $this->reCountGroupMember($groupId);
     }
 
     private function prepareGroupConditions($conditions)
