@@ -215,6 +215,13 @@ define(function(require, exports, module) {
         },
         _supportHtml5: function(){
             return FileReader && FileReader.DONE && XMLHttpRequest;
+        },
+
+        destroy: function(){
+            if(this._supportHtml5() && this.$('[data-role=uploader-btn]').data('storageType')=="cloud"){
+                var uploader = this.get("uploader");
+                uploader.destroy();
+            }
         }
 
     });

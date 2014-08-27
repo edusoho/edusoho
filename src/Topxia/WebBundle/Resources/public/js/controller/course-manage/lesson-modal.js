@@ -231,6 +231,12 @@ define(function(require, exports, module) {
             $form.find('[name="media"]').val(value);
         });
 
+        $('.modal').unbind("hide.bs.modal");
+        $(".modal").on("hide.bs.modal", function(){
+            videoChooser.destroy();
+            audioChooser.destroy();
+            pptChooser.destroy();
+        });
 
         var validator = createValidator($form);
 

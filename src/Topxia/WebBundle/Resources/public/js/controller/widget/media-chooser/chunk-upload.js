@@ -10,12 +10,18 @@ define(function(require, exports, module) {
 			uploadUrl:null,
 			defaultChunkSize: 1024 * 1024,
 			tableArray: null,
-			currentFile: null
+			currentFile: null,
+			destroy: false
 		},
 
 		events: {
 			"click .btn-default": "onUploadButtonClick",
-			"change input[data-role='fileSelected']": "onSelectFileChange"
+			"change input[data-role='fileSelected']": "onSelectFileChange",
+			"hide.bs.modal .modal": "onHide"
+		},
+
+		onHide: function(){
+			alert(111);
 		},
 		getFileSize: function(size) {
         	return (size / (1024 * 1024)).toFixed(2) + "MB";
@@ -303,7 +309,9 @@ define(function(require, exports, module) {
 	    },
 
 	    uploadAfterGetCrc : function(fileScop, blkRet) {
-
+	    	if(this.get("destroy")){
+	    		return;
+	    	}
 	    	var self = this;
 
 	    	fileScop.currentChunkIndex ++;
@@ -408,6 +416,9 @@ define(function(require, exports, module) {
 		setup: function() {
 			this._initTableArray();
 			this._initFileTypes();
+		},
+		destroy: function() {
+			this.set("destroy", true);
 		}
 	});
 	
