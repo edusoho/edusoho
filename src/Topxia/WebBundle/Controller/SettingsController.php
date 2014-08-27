@@ -20,7 +20,17 @@ class SettingsController extends BaseController
 	public function profileAction(Request $request)
 	{
 		$user = $this->getCurrentUser();
-
+		$class=array();
+		if(!in_array('ROLE_TEACHER', $user['roles'])){
+			$conditions=array(
+	            'userId'=>$user['id'],
+	            'role'=>array('student')
+	        );
+	        $classMembers=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+	        if(count($classMembers)>0){
+	        	$class=$this->getClassesService()->getClass($classMembers[0]['classId']);
+	        }
+		}
 		$profile = $this->getUserService()->getUserProfile($user['id']);
 
 		$profile['title'] = $user['title'];
@@ -49,6 +59,7 @@ class SettingsController extends BaseController
 		return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
 			'profile' => $profile,
 			'fields'=>$fields,
+			'classes'=>$class
 		));
 	}
 
@@ -533,4 +544,14 @@ class SettingsController extends BaseController
 	{
 		return $this->getServiceKernel()->createService('User.UserFieldService');
 	}
+
+	protected function getClassMemberService()
+    {
+        return $this->getServiceKernel()->createService('Classes.ClassMemberService');
+    }
+
+    protected function getClassesService(){
+
+        return $this->getServiceKernel()->createService('Classes.ClassesService');
+    }
 }
