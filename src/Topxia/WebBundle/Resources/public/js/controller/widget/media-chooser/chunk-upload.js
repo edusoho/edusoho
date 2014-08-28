@@ -326,6 +326,7 @@ define(function(require, exports, module) {
 	    },
 	    uploadAfterGetCrc : function(fileScop, blkRet) {
 	    	if(this.get("destroy")){
+	    		this.set("destroy",false);
 	    		return;
 	    	}
 	    	var self = this;
