@@ -90,6 +90,18 @@ class AppController extends BaseController
         ));
     }
 
+    public function checkOwnCopyrightUserAction(Request $request,$userId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+
+        if (empty($user)) {
+            return $this->createMessageResponse('error','user exists error');
+        }
+
+        $res = $this->getAppService()->checkOwnCopyrightUser($userId);
+        return $this->createJsonResponse($res);
+    }
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
@@ -98,6 +110,11 @@ class AppController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
 }

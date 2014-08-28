@@ -47,6 +47,12 @@ class EduSohoAppClient implements AppClient
         return $this->callRemoteApi('POST', 'CheckAppCop', $args);
     }
 
+    public function checkOwnCopyrightUser($id)
+    {
+        $args = array('id' => $id);
+        return $this->callRemoteApi('POST', 'CheckOwnCopyrightUser', $args);
+    }
+
     public function submitRunLog($log)
     {
         $args = array('log' => $log);
@@ -83,7 +89,6 @@ class EduSohoAppClient implements AppClient
     private function callRemoteApi($httpMethod, $action, array $args)
     {
         list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams($action, $args);
-
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
 
         return json_decode($result, true);
@@ -92,7 +97,6 @@ class EduSohoAppClient implements AppClient
     private function assembleCallRemoteApiUrlAndParams($action, array $args)
     {
         $url = "{$this->apiUrl}?action={$action}";
-
         $edusoho = array(
             'edition' => 'opensource', 
             'host' => $_SERVER['HTTP_HOST'],
@@ -147,7 +151,6 @@ class EduSohoAppClient implements AppClient
                 $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
             }
         }
-
         curl_setopt($curl, CURLOPT_URL, $url );
 
         $response = curl_exec($curl);
