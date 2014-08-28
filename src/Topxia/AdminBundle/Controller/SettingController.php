@@ -381,51 +381,49 @@ class SettingController extends BaseController
         $default = array(
             'defaultAvatar' => 0,
             'defaultCoursePicture' => 0,
-            'defaultAvatarFileName' => 'system-avatar.png',
-            'defaultCoursePictureFileName' => 'system-course-default-475x250.png',
+            'defaultAvatarFileName' => 'avatar.png',
+            'defaultCoursePictureFileName' => 'course-default-475x250.png',
             'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
             'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
-            'groupShareContent' => '我在{{sitename}},参加了{{group}},很不错哦,一起来看看吧!',
+            'groupShareContent' => '我在{{groupname}}小组,发表了{{article}},很不错哦,一起来看看吧!',
         );
 
         $defaultSetting = array_merge($default, $defaultSetting);
 
         if ($request->getMethod() == 'POST') {
             $defaultSetting = $request->request->all();
+            $default = $this->getSettingService()->get('default', array());
+            $defaultSetting = array_merge($default, $defaultSetting);
 
-            if (!$defaultSetting['defaultAvatar']){
-                $largefile = $path.'system-avatar-large.png';
-                $targetLargefile = $path.'avatar-large.png';
-                $this->filesystem = new Filesystem();
-                $this->filesystem->copy($largefile,$targetLargefile,'ture');
+            // if (!$defaultSetting['defaultAvatar']){
+            //     $largefile = $path.'system-avatar-large.png';
+            //     $targetLargefile = $path.'avatar-large.png';
+            //     $this->filesystem = new Filesystem();
+            //     $this->filesystem->copy($largefile,$targetLargefile,'ture');
 
-                $smallfile = $path.'system-avatar.png';
-                $targetSmallfile = $path.'avatar.png';
-                $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
-            }
+            //     $smallfile = $path.'system-avatar.png';
+            //     $targetSmallfile = $path.'avatar.png';
+            //     $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
+            // }
 
-            if (!$defaultSetting['defaultCoursePicture']){
-                $largefile = $path.'system-course-large.png';
-                $targetLargefile = $path.'course-large.png';
-                $this->filesystem = new Filesystem();
-                $this->filesystem->copy($largefile,$targetLargefile,'ture');
+            // if (!$defaultSetting['defaultCoursePicture']){
+            //     $largefile = $path.'system-course-large.png';
+            //     $targetLargefile = $path.'course-large.png';
+            //     $this->filesystem = new Filesystem();
+            //     $this->filesystem->copy($largefile,$targetLargefile,'ture');
 
-                $smallfile = $path.'system-course-default-475x250.png';
-                $targetSmallfile = $path.'course-default-475x250.png';
-                $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
-            }
+            //     $smallfile = $path.'system-course-default-475x250.png';
+            //     $targetSmallfile = $path.'course-default-475x250.png';
+            //     $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
+            // }
 
             $this->getSettingService()->set('default', $defaultSetting);
             $this->getLogService()->info('system', 'update_settings', "更新系统默认设置", $defaultSetting);
             $this->setFlashMessage('success', '系统默认设置已保存！');
         }
 
-        $avatarUrl = $path.$default['defaultAvatarFileName'];
-        $coursePictureUrl = $path.$default['defaultCoursePictureFileName'];
         return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
             'defaultSetting' => $defaultSetting,
-            'avatarUrl' => $avatarUrl,
-            'coursePictureUrl' => $coursePictureUrl,
         ));
     }
 
@@ -510,7 +508,7 @@ class SettingController extends BaseController
             return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
         }
 
-        $filenamePrefix = "course-picture";
+        $filenamePrefix = "coursePicture";
         $hash = substr(md5($filenamePrefix . time()), -8);
         $ext = $file->getClientOriginalExtension();
         $filename = $filenamePrefix . $hash . '.' . $ext;
@@ -543,7 +541,9 @@ class SettingController extends BaseController
     {
         $options = $request->request->all();
 
-        $filename = $this->getSettingService()->get('default','defaultCoursePictureFileName');
+        $filename = $this->getSettingService()->get("default",array());
+        $filename = $filename['defaultCoursePictureFileName'];
+
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
@@ -560,14 +560,14 @@ class SettingController extends BaseController
         $largeImage->save($largeFilePath, array('quality' => 90));
 
         $this->filesystem = new Filesystem();
-        $this->filesystem->copy($largeFilePath, $path.'large-'.$filename,'ture');
+        $this->filesystem->copy($largeFilePath, $path.'large-'.$filename);
 
         $smallImage = $largeImage->copy();
         $smallImage->resize(new Box(475,250));
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $smallImage->save($smallFilePath, array('quality' => 90));
 
-        $this->filesystem->copy($smallFilePath, $path.$filename,'ture');
+        $this->filesystem->copy($smallFilePath, $path.$filename);
 
         return $this->redirect($this->generateUrl('admin_setting_default'));
     }
