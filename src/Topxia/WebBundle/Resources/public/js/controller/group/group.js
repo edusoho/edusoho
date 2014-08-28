@@ -158,7 +158,7 @@
                     $('.danger-'+postId).css("display","");
                 }else{
 
-                    $('.reply-btn').button('submiting').addClass('disabled');
+                    $(this).button('submiting').addClass('disabled');
                     $.ajax({
                     url : $(".reply-thread-form").attr('post-url'),
                     data:"content="+replyContent+'&'+'postId='+postId,
