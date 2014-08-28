@@ -11,7 +11,7 @@
         {% set key = key + 1 %}
           <li class="course-grid related-course-grid">
             <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
-              <img src="{{ file_path(course.largePicture, 'course-large.png') }}" class="img-responsive thumb">
+              <img src="{{ default_path('coursePicture',course.largePicture, 'large-') }}" class="img-responsive thumb">
             <span class="title" style="max-height: 15px;overflow: hidden;line-height: 20px;">{{ course.title }}</span>  
           </a>
         </li>

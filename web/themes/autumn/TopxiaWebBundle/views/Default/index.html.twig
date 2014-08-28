@@ -33,7 +33,7 @@
             {% for course in data('RecommendCourses',{ count:8 }) %}
               {% if course %}
                 <li class="autumn-grid autumn-course-grid">
-                  <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ file_path(course.largePicture, 'course-large.png') }}">
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ default_path('coursePicture',course.largePicture, 'large-') }}">
                     {% if course.serializeMode == 'serialize' %}
                       <span class="label label-success series-mode-label">更新中</span>
                     {% elseif course.serializeMode == 'finished' %}
@@ -73,7 +73,7 @@
             {% for course in data('LatestCourses',{ count:8 }) %}
               {% if course %}
               <li class="media">
-                <a href="{{ path('course_show', {id:course.id}) }}" class="pic-link pull-left hidden-xs"><img src="{{ file_path(course.largePicture, 'course-large.png') }}" class="media-object">
+                <a href="{{ path('course_show', {id:course.id}) }}" class="pic-link pull-left hidden-xs"><img src="{{ default_path('coursePicture',course.largePicture, 'large-') }}" class="media-object">
                   {% if course.serializeMode == 'serialize' %}
                     <span class="label label-success series-mode-label">更新中</span>
                   {% elseif course.serializeMode == 'finished' %}
@@ -114,7 +114,7 @@
             {% for course in recentLiveCourses %}
             {% set lesson = course.lesson %}
             <li class="media">
-              <a href="{{ path('course_show', {id:course.id}) }}" class="pic-link pull-left hidden-xs"><img src="{{ file_path(course.largePicture, 'course-large.png') }}" class="media-object">
+              <a href="{{ path('course_show', {id:course.id}) }}" class="pic-link pull-left hidden-xs"><img src="{{ default_path('coursePicture',course.largePicture, 'large-') }}" class="media-object">
                 {% if course.serializeMode == 'serialize' %}
                   <span class="label label-success series-mode-label">更新中</span>
                 {% elseif course.serializeMode == 'finished' %}
@@ -167,7 +167,7 @@
             {% for course in data('CourseRankByHit',{'count':10}) %}
               {% if course %}
                 <li class="media">
-                  <a href="{{ path('course_show', {id:course.id}) }}" class="pull-left"><img src="{{ file_path(course.largePicture, 'course-large.png') }}" class="media-object"></a>
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="pull-left"><img src="{{ default_path('coursePicture',course.largePicture, 'large-') }}" class="media-object"></a>
                   <div class="media-body">
                     <h4 class="media-heading"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h4>
                     {{ course.subtitle }}
@@ -198,7 +198,7 @@
                 {% if teacher %} 
                   <li class="autumn-grid">
                     <div class="media teacher-media">
-                      <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-left"><img class="media-object" src="{{ file_path(teacher.mediumAvatar, 'avatar.png') }}"></a>
+                      <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-left"><img class="media-object" src="{{ default_path('avatar',teacher.mediumAvatar, '') }}"></a>
                       <div class="media-body">
                         <h4 class="media-heading">{{ web_macro.user_link(teacher) }}</h4>
                         <div class="teacher-title">{{ teacher.title }}</div>

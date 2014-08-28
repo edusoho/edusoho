@@ -1,7 +1,7 @@
 <div class="es-row-wrap  container-gap userpage-header">
   <div class="row">
     <div class="col-md-12">
-      <img class="avatar" src="{{ file_path(user.largeAvatar, 'avatar-large.png') }}">
+      <img class="avatar" src="{{ default_path('avatar',user.largeAvatar, 'large-') }}">
       <div class="userpage-header-info">
           <div class="actions">
             {% if (not app.user) or (app.user.id != user.id) %}
