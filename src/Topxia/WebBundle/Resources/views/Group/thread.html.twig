@@ -87,14 +87,12 @@
                
       {% endif %}
 
-      <table class="table ">
+      <div class="table ">
         
       {% if post %}
         {% for post in post %}
-          <tr style="word-break: break-all;" class="thread-list" id="post-{{post.id}}">
-            <td>
-                <div class="col-md-12" >
-
+                <div class="col-md-12"  style="border-top:1px solid #ddd;word-break:break-all;">
+                    <br>
                     <div class="pull-left" style="width:80px;"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:post.userId}) }}">
                       <img src="{{ file_path(postMember[post.userId].largeAvatar, 'avatar-large.png') }}">
                     </a>
@@ -149,7 +147,7 @@
                     {% if postReply[post.id] %}
                     {% for reply in postReply[post.id] %} 
                         
-                        <li style="{% if loop.index > 5 %} display:none;{% endif %}border-bottom:1px solid #ddd;" class="li-reply-{{post.id}}">
+                        <li style="{% if loop.index > 5 %} display:none;{% endif %}border-bottom:1px solid #ddd;word-break:break-all;" class="li-reply-{{post.id}}">
                             <div class="pull-left" style="width:80px;"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:reply.userId}) }}">
                               <img src="{{ file_path(postReplyMembers[reply.userId].largeAvatar, 'avatar-large.png') }}">
                             </a>
@@ -202,12 +200,10 @@
                
 
                  </div>
-              </div>
-              </td>   
-            </tr>                  
+              </div>                 
           {% endfor %}
         {% endif %}
-      </table>
+      </div>
       <div class="pull-right">{{ web_macro.paginator(paginator) }}</div>
           <div class="page-header clearfix"></div>
           <form id="post-thread-form" class="post-thread-form form-horizontal" method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
