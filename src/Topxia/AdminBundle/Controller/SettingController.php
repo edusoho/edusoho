@@ -385,7 +385,7 @@ class SettingController extends BaseController
             'defaultCoursePictureFileName' => 'system-course-default-475x250.png',
             'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
             'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
-            'groupShareContent' => '我在{{sitename}},参加了{{group}},很不错哦,一起来看看吧!',
+            'groupShareContent' => '我在{{groupname}}小组,发表了{{article}},很不错哦,一起来看看吧!',
         );
 
         $defaultSetting = array_merge($default, $defaultSetting);
