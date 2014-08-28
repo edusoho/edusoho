@@ -171,6 +171,13 @@ class SchoolController extends BaseController
         ));
     }
 
+    public function classCourseRemoveAction(Request $request,$classId,$courseId)
+    {
+
+        $this->getCourseService()->updateCourse($courseId, array('classId'=>0));
+        return $this->redirect($this->generateUrl('admin_school_class_course_manage',array('classId'=>$classId)));
+    }
+
     public function homePageUploadAction(Request $request)
     {
         $file = $request->files->get('homePage');
