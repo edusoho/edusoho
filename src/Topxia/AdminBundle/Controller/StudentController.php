@@ -39,8 +39,10 @@ class StudentController extends BaseController
         );
         /**2.获取学生user数据*/
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($classMembers, 'userId'));
-        return $this->render('TopxiaAdminBundle:Student:index.html.twig', array(
+        $userProfiles=$this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($classMembers, 'userId'));
+        return $this->render('TopxiaAdminBundle:Student:student-list.html.twig', array(
             'users' => $users ,
+            'userProfiles'=>$userProfiles,
             'classId'=>$classId,
             'paginator' => $paginator
         ));

@@ -1,0 +1,59 @@
+{% extends 'TopxiaAdminBundle:School:layout.html.twig' %}
+{% block title %}学生管理 - {{ parent() }}{% endblock %}
+
+{% set menu = 'classSetting' %}
+
+{% set script_controller = 'user/student-list' %}
+
+{% block main %}
+
+<button class="btn btn-info btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{path('admin_class_student_import',{ classId:classId })}}" >批量导入学生</button>
+<div class="page-header clearfix">
+  <h1 class="pull-left">学生管理</h1>
+</div>
+<table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
+  <thead>
+    {# <tr>
+      <th width="20%">姓名</th>
+      <th width="60%">学号</th>
+      <th>操作</th>
+    </tr> #}
+  </thead>
+  <tbody>
+    {% for user in users %}
+      {% set userProfile = userProfiles[user.id]|default(null) %}
+      {% include 'TopxiaAdminBundle:Student:student-list-tr.html.twig' with {user:user} %}
+    {% endfor %}
+  </tbody>
+</table>
+ {{ web_macro.paginator(paginator) }} 
+{% endblock %}
+
+
+
+
+{# {% extends 'TopxiaAdminBundle:School:layout.html.twig' %}
+{% block title %}学生管理 - {{ parent() }}{% endblock %}
+
+{% set menu = 'classSetting' %}
+
+{% set script_controller = 'user/student-list' %}
+
+{% block main %}
+
+  <button class="btn btn-info btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{path('admin_class_student_import',{ classId:classId })}}" >批量导入学生</button>
+  <div class="page-header clearfix">
+    <h1 class="pull-left">学生管理</h1>
+  </div>
+
+  <ul id="student-list" class="media-list">
+    {% for user in users %}
+      {% set userProfile = userProfiles[user.id]|default(null) %}
+      {% include 'TopxiaAdminBundle:Student:student-list-tr.html.twig'%}
+      <hr/>
+    {% else %}
+      <div class="empty">暂无学生</div>
+    {% endfor %}
+  </ul>
+  {{ web_macro.paginator(paginator) }} 
+{% endblock %} #}

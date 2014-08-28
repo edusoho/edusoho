@@ -5,10 +5,8 @@ define(function(require, exports, module) {
 	exports.run = function() {
 
 		var $table = $('#user-table');
-
 		$table.on('click', '.remove-student', function() {
 			var $trigger = $(this);
-
 			if (!confirm('真的要' + $trigger.attr('title') + '吗？')) {
 				return ;
 			}
