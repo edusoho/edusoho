@@ -116,7 +116,9 @@ define(function(require, exports, module) {
                         formatSpeed = uploadSpeed.toFixed(2) + "Kb\/s";
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
-                    self.get("upload_progress_handler")(self.get("currentFile"), tmp, fileScop.file.size);
+                    if(self.get("destroy")) {
+                    	self.get("upload_progress_handler")(self.get("currentFile"), tmp, fileScop.file.size);
+                    }
                 }
             }, false);
 
@@ -258,7 +260,9 @@ define(function(require, exports, module) {
                         formatSpeed = uploadSpeed.toFixed(2) + "Kb\/s";
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
-                    self.get("upload_progress_handler")(self.get("currentFile"), tmp, fileScop.file.size);
+                    if(self.get("destroy")) {
+                    	self.get("upload_progress_handler")(self.get("currentFile"), tmp, fileScop.file.size);
+                    }
                 }
             },false);
             xhr.onreadystatechange = function(response) {
@@ -320,7 +324,6 @@ define(function(require, exports, module) {
 			};
         	FileScopStorage.set(JSON.stringify(saveFileScop));
 	    },
-
 	    uploadAfterGetCrc : function(fileScop, blkRet) {
 	    	if(this.get("destroy")){
 	    		return;
@@ -402,6 +405,11 @@ define(function(require, exports, module) {
 		onSelectFileChange: function(){
 
 			var files = this.element.find("input[data-role='fileSelected']")[0].files;
+
+			if(files.length == 0) {
+				return;
+			}
+
 			var maxSize = this.get("file_size_limit");
 			if(maxSize.indexOf('G')>-1){
 				maxSize = parseFloat(maxSize)*1024*1024*1024;
@@ -416,6 +424,7 @@ define(function(require, exports, module) {
 
 			if(this.get("currentFile")){
 				Notify.info('文件正在上传中，请等待本次上传完毕后，再上传。');
+				this.element.find("input[data-role='fileSelected']").val("");
 				return;
 			}
 
@@ -432,6 +441,9 @@ define(function(require, exports, module) {
 		},
 		destroy: function() {
 			this.set("destroy", true);
+			this.get('progressbar').reset().hide();
+			this.element.find("input[data-role='fileSelected']").val("");
+			this.set("currentFile", null);
 		}
 	});
 	
