@@ -197,7 +197,7 @@
                   <li id="li-{{post.id}}" style="position: relative;top:-4px; {% if postReply[post.id] %}display:none;{% endif %}"> <form  class="reply-thread-form form-horizontal" method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
                   <textarea id="reply-content-{{post.id}}" class="form-control" ></textarea><br>
                   <span class="danger-{{post.id}}" style="color:red;display:none;" > 回复内容不能为空！</span>  
-                   <button type="button" postId="{{post.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;">回复</button></form>
+                   <button type="button" postId="{{post.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="正在回复">回复</button></form>
                  </li>{% if not postReply[post.id] %}<br>{% endif %}
                    </ul>
            
