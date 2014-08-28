@@ -205,6 +205,33 @@ class MobileBaseController extends BaseController
         return current($users);
     }
     
+    public function filterItems($items)
+    {
+        if (empty($items)) {
+            return array();
+        }
+
+        $self = $this;
+        $container = $this->container;
+
+        return array_map(function($item) use ($self, $container) {
+            $item['createdTime'] = date('c', $item['createdTime']);
+            if (!empty($item['length']) and in_array($item['type'], array('audio', 'video'))) {
+                $item['length'] =  $container->get('topxia.twig.web_extension')->durationFilter($item['length']);
+            } else {
+                $item['length'] = 0;
+            }
+
+            if (empty($item['content'])) {
+                $item['content'] = "";
+            }
+            $item['content'] = $self->convertAbsoluteUrl($container->get('request'), $item['content']);
+
+            return $item;
+        }, $items);
+
+    }
+
     public function filterUsers($users)
     {
         if (empty($users)) {
