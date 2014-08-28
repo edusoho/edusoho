@@ -49,7 +49,7 @@ define(function(require, exports, module) {
             $.post($('#loginNum').data('url'),function(res){
                 $('#loginNum').html("登录人数："+res.loginCount+"人");
             });
-        }, 1000);
+        }, 1000*60*5);
 
     };
 
