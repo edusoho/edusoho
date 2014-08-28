@@ -53,32 +53,32 @@
            {% if thread.isElite==1 %}
            <li> <a class="removeElite"   title="取消加精" 
             href="javascript:"
-            data-url="{{path('admin_removeElite',{threadId:thread.id})}}"><span class="glyphicon glyphicon-minus"></span> 取消加精</a></li>
+            data-url="{{path('admin_groupThread_removeElite',{threadId:thread.id})}}"><span class="glyphicon glyphicon-minus"></span> 取消加精</a></li>
 
             {% else %}
             <li><a class="setElite"  title="加精" 
-            href="javascript:" data-url="{{path('admin_setElite',{threadId:thread.id})}}"><span class="glyphicon glyphicon-heart-empty"></span> 加精</a></li>
+            href="javascript:" data-url="{{path('admin_groupThread_setElite',{threadId:thread.id})}}"><span class="glyphicon glyphicon-heart-empty"></span> 加精</a></li>
 
             {% endif %}
             {% if thread.isStick==1 %}
             <li><a class="removeStick"  title="取消置顶" 
-            href="javascript:" data-url="{{path('admin_removeStick',{threadId:thread.id})}}"><span class="glyphicon glyphicon-remove-sign"></span> 取消置顶</a></li>
+            href="javascript:" data-url="{{path('admin_groupThread_removeStick',{threadId:thread.id})}}"><span class="glyphicon glyphicon-remove-sign"></span> 取消置顶</a></li>
 
             {% else %}
             <li><a class="setStick"  title="置顶" 
-            href="javascript:" data-url="{{path('admin_setStick',{threadId:thread.id})}}"><span class="glyphicon glyphicon-ok-sign"></span>  置顶</a></li>
+            href="javascript:" data-url="{{path('admin_groupThread_setStick',{threadId:thread.id})}}"><span class="glyphicon glyphicon-ok-sign"></span>  置顶</a></li>
             
             {% endif %}
            
             <li class="divider"></li>
 
             {% if thread.status=='open' %}
-             <li><a href="javascript:" class="close-thread" title="关闭话题({{thread.title}})" data-url="{{path('admin_closeThread',{threadId:thread.id})}}"><span class="glyphicon glyphicon-off"></span> 关闭话题</a></li>
+             <li><a href="javascript:" class="close-thread" title="关闭话题({{thread.title}})" data-url="{{path('admin_groupThread_close',{threadId:thread.id})}}"><span class="glyphicon glyphicon-off"></span> 关闭话题</a></li>
 
             {% else %}
-            <li><a href="javascript:" class="open-thread" title="开启话题({{thread.title}})" data-url="{{path('admin_openThread',{threadId:thread.id})}}"><span class="glyphicon glyphicon-ok"></span> 开启话题</a></li>
+            <li><a href="javascript:" class="open-thread" title="开启话题({{thread.title}})" data-url="{{path('admin_groupThread_open',{threadId:thread.id})}}"><span class="glyphicon glyphicon-ok"></span> 开启话题</a></li>
 
-             <li><a href="javascript:" class="delete-thread" title="永久删除话题({{thread.title}})" data-url="{{path('admin_deleteThread',{threadId:thread.id})}}"><span class="glyphicon glyphicon-trash"></span> 永久删除</a></li>
+             <li><a href="javascript:" class="delete-thread" title="永久删除话题({{thread.title}})" data-url="{{path('admin_groupThread_delete',{threadId:thread.id})}}"><span class="glyphicon glyphicon-trash"></span> 永久删除</a></li>
 
             {% endif %}
           </ul>

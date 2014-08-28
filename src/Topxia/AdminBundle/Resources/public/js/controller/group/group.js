@@ -23,7 +23,7 @@ define(function(require, exports, module) {
 
 		});
 
-        $('.transfer-group').on('click',function(){
+        $table.on('click','.transfer-group',function(){
             $('#myModal').modal('show');
             $('#transfer-group-form').attr('action',$(this).data('url'));
 
