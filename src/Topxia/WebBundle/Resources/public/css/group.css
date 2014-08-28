@@ -50,7 +50,7 @@
     visibility: hidden;
 }
 
-.thread-list:hover .course-view {
+.list:hover .course-view {
     visibility: visible;
 }
 .thread-img img{

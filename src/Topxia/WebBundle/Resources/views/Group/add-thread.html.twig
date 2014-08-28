@@ -1,35 +1,40 @@
 {% extends 'TopxiaWebBundle:Group:groupindex.html.twig' %}
 {% block group %}
   <div class="es-row-wrap container-gap userpage-body">
- {% include 'TopxiaWebBundle:Group:group.tab.ul.html.twig' with 
+  {% include 'TopxiaWebBundle:Group:group-tab-ul.html.twig' with 
     {'tab':'', }%}
     <div class="row">
       <div class="col-xs-12"><div class="row row-offcanvas row-offcanvas-right">
-        <div class="page-header"><span class="glyphicon glyphicon-hand-right"></span> 编辑话题
+        <div class="page-header"><span class="glyphicon glyphicon-hand-right"></span> 发布话题
         </div>
         
         <form id="user-thread-form" class="form-horizontal" method="post">
+
           <div class="form-group">
             <label class="col-xs-2 control-label" for="thread_title">标题</label>
             <div class="col-xs-7 controls">
-              <input type="text" id="thread_title" name="thread[title]" class="form-control" value="{{thread.title}}"
-              >
+              <input type="text" id="thread_title" name="thread[title]" class="form-control">
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>
+
           <div class="form-group">
             <label class="col-xs-2 control-label" for="thread_content">内容</label>
             <div class="col-xs-7 controls">
-              <textarea name="thread[content]" rows="10" id="thread_content" class="form-control">{{thread.content}}</textarea>
+              <textarea name="thread[content]" rows="10" id="thread_content" class="form-control"></textarea>
             </div>
           </div>
+
           <div class="row">
             <div class="col-xs-7 col-xs-offset-2">
-              <button id="groupthread-save-btn" data-submiting-text="正在保存" type="submit" class="btn btn-primary">保存</button>
+              <button id="groupthread-save-btn" data-submiting-text="正在创建" type="submit" class="btn btn-primary">发布</button>
             </div>
           </div>
+          
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-        </form><br>
+        </form>
+
+        <br>
       </div>   </div>
     </div>
   </div>

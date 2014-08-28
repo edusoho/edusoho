@@ -16,42 +16,42 @@
 
   {% block content %}
 
-    {% include 'TopxiaWebBundle:Group:groupHeader.html.twig' with {
+    {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {
     'groupinfo':groupinfo,
     'is_groupmember':is_groupmember,}
     %}
 
     <div class="es-row-wrap container-gap userpage-body">
       
-      {% include 'TopxiaWebBundle:Group:group.tab.ul.html.twig' with 
+      {% include 'TopxiaWebBundle:Group:group-tab-ul.html.twig' with 
       {'tab':'set', }%}
    
         <div class="row">
           <div class="col-md-12">
                 <ul class="nav nav-pills">
+                  <li  {% if app.request.get('action')=='setGroupInfo' %}class="active"{% endif %}><a href="{{path('group_set',{id:groupinfo.id,action:'setGroupInfo'})}}">编辑小组 </a></li>
                   <li {% if app.request.get('action')=='setLogo' %}class="active"{% endif %}> <a  href="{{path('group_set',{id:groupinfo.id,action:'setLogo'})}}">logo设置</a></li>
                   <li {% if app.request.get('action')=='setBackGroundLogo' %}class="active"{% endif %}>  <a  href="{{path('group_set',{id:groupinfo.id,action:'setBackGroundLogo'})}}">背景设置</a></li>
-                  <li  {% if app.request.get('action')=='setGroupInfo' %}class="active"{% endif %}><a href="{{path('group_set',{id:groupinfo.id,action:'setGroupInfo'})}}">编辑小组 </a></li>
                 </ul><br>
 
             {{ web_macro.flash_messages() }}
 
             {% if app.request.get('action')=='setLogo' %}
-              {% include 'TopxiaWebBundle:Group:setGroupLogo.form.html.twig' with {
+              {% include 'TopxiaWebBundle:Group:set-group-logo-form.html.twig' with {
               'id':id,
               'logo':logo,}
               %}
             {% endif %}
 
             {% if app.request.get('action')=='setBackGroundLogo' %}
-              {% include 'TopxiaWebBundle:Group:setBackGroundLogo.form.html.twig' with {
+              {% include 'TopxiaWebBundle:Group:set-backgroundlogo-form.html.twig' with {
               'id':id,
               'logo':backgroundLogo,}
               %}
             {% endif %}
 
             {% if app.request.get('action')=='transferGroup' %}
-              {% include 'TopxiaWebBundle:Group:transferGroup.form.html.twig' %}
+              {% include 'TopxiaWebBundle:Group:transfer-group-form.html.twig' %}
             {% endif %}
 
             {% if app.request.get('action')=='setGroupInfo' %}

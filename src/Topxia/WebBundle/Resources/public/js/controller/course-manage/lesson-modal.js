@@ -32,7 +32,7 @@ define(function(require, exports, module) {
             });
         };
 
-    function createValidator ($form) {
+    function createValidator ($form, $choosers) {
 
         Validator.addRule('mediaValueEmpty', function(options) {
             var value = options.element.val();
@@ -61,6 +61,13 @@ define(function(require, exports, module) {
             if (error) {
                 return;
             }
+            for(var i=0; i<$choosers.length; i++){
+                if($choosers[i].isUploading()){
+                    Notify.danger('文件正在上传，等待上传完后再保存。');
+                    return;
+                }
+            }
+
             $('#course-lesson-btn').button('submiting').addClass('disabled');
 
             var $panel = $('.lesson-manage-panel');
@@ -242,7 +249,7 @@ define(function(require, exports, module) {
             pptChooser.destroy();
         });
 
-        var validator = createValidator($form);
+        var validator = createValidator($form, [videoChooser,pptChooser,audioChooser]);
 
         $form.on('change', '[name=type]', function(e) {
             var type = $(this).val();

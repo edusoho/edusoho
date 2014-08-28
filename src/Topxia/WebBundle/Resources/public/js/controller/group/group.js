@@ -157,6 +157,8 @@
                    
                     $('.danger-'+postId).css("display","");
                 }else{
+
+                    $(this).button('submiting').addClass('disabled');
                     $.ajax({
                     url : $(".reply-thread-form").attr('post-url'),
                     data:"content="+replyContent+'&'+'postId='+postId,
@@ -182,18 +184,29 @@
 
         if($('#post-action').length>0){
           
-            $('#post-action').on('click','#elite,#stick,#closeThread',function(){
+            $('#post-action').on('click','#closeThread',function(){
            
                 var $trigger = $(this);
                  if (!confirm($trigger.attr('title') + '？')) {
                     return false;
                  }
                
-                    $.post($trigger.data('url'), function(data){
-                    
-                        window.location.href=data;
-                  
-                    });
+                $.post($trigger.data('url'), function(data){
+                
+                    window.location.href=data;
+              
+                });
+            })
+
+            $('#post-action').on('click','#elite,#stick',function(){
+           
+                var $trigger = $(this);
+               
+                $.post($trigger.data('url'), function(data){
+                
+                    window.location.href=data;
+              
+                });
             })
 
         }

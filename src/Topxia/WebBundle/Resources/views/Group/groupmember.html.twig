@@ -3,13 +3,13 @@
 {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
 {% block content %}
   {{ web_macro.flash_messages() }}
-  {% include 'TopxiaWebBundle:Group:groupHeader.html.twig' with {
+  {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {
   'groupinfo':groupinfo,
   'is_groupmember':is_groupmember,}
   %}
   <div class="es-row-wrap container-gap userpage-body">
  
-       {% include 'TopxiaWebBundle:Group:group.tab.ul.html.twig' with 
+       {% include 'TopxiaWebBundle:Group:group-tab-ul.html.twig' with 
     {'tab':'member', }%}
     
     <div class="row">
