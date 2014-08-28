@@ -534,6 +534,10 @@ admin_app_logs:
     pattern:  /app/logs
     defaults: { _controller: TopxiaAdminBundle:App:logs }
 
+admin_app_check_ownCopyrightUser:
+    pattern:  /app/check/{userId}/ownCopyrightUser
+    defaults: { _controller: TopxiaAdminBundle:App:checkOwnCopyrightUser }
+
 admin_app_package_update_modal:
     pattern:  /app/package_update/{id}/modal
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:modal }
