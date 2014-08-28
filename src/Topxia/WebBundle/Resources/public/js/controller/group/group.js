@@ -92,7 +92,11 @@
         }
 
         if($('.share').length>0){
-            var share=Share.create('.share','itemsAll','dropdown');
+            Share.create({
+                selector: '.share',
+                icons: 'itemsAll',
+                display: 'dropdown'
+            });
             $('.table').on('click','.li-reply',function(){
                var postId=$(this).attr('postId');
 

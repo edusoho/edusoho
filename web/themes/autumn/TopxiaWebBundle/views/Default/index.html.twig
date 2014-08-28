@@ -167,7 +167,7 @@
             {% for course in data('CourseRankByHit',{'count':10}) %}
               {% if course %}
                 <li class="media">
-                  <a href="{{ path('course_show', {id:course.id}) }}" class="pull-left"><img src="{{ default_path('coursePicture',course.largePicture, 'large-') }}" class="media-object"></a>
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="pull-left"><img src="{{ default_path('coursePicture',course.largePicture, 'large') }}" class="media-object"></a>
                   <div class="media-body">
                     <h4 class="media-heading"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h4>
                     {{ course.subtitle }}

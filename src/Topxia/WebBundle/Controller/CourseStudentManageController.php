@@ -174,7 +174,7 @@ class CourseStudentManageController extends BaseController
 			$progresses[$student['userId']] = $this->calculateUserLearnProgress($course, $student);
 		}
 
-		$str = "用户名,加入学习时间,学习进度,姓名,Email,公司,头衔,电话,微信号,QQ号,性别,职业,手机号";
+		$str = "用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔";
 
 		foreach ($fields as $key => $value) {
 			$str.=",".$value;
@@ -187,18 +187,17 @@ class CourseStudentManageController extends BaseController
 		foreach ($courseMembers as $courseMember) {
 			$member = "";
 			$member .= $users[$courseMember['userId']]['nickname'].",";
+			$member .= $users[$courseMember['userId']]['email'].",";
 			$member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
 			$member .= $progresses[$courseMember['userId']]['percent'].",";
 			$member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename']."," : "-".",";
-			$member .= $users[$courseMember['userId']]['email'].",";
-			$member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company']."," : "-".",";
-			$member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
-			$member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
-			$member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
-			$member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-".",";
 			$member .= $gender[$profiles[$courseMember['userId']]['gender']].",";
-			$member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job']."," : "-".",";
+			$member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-".",";
+			$member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
 			$member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
+			$member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company']."," : "-".",";
+			$member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job']."," : "-".",";
+			$member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
 			foreach ($fields as $key => $value) {
 			$member.=$profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key]."," : "-".",";
 			}
