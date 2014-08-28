@@ -3,6 +3,7 @@
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var EditorFactory = require('common/kindeditor-factory');
+    var Share=require('../../util/share.js');
 
     function checkUrl (url){
         var hrefArray=new Array();
@@ -11,6 +12,7 @@
         return hrefArray[1];
     }
     exports.run = function() {
+        
         if($('#thread_content').length>0){
             var editor_thread = EditorFactory.create('#thread_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
             var validator_thread = new Validator({
@@ -89,8 +91,8 @@
         });
         }
 
-        if($('.reply').length>0){
-
+        if($('.share').length>0){
+            var share=Share.create('.share','itemsAll','dropdown');
             $('.table').on('click','.li-reply',function(){
                var postId=$(this).attr('postId');
 
