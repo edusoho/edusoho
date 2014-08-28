@@ -361,25 +361,26 @@ class WebExtension extends \Twig_Extension
 
     public function getDefaultPath($category, $uri="", $size = '', $absolute = false)
     {
+        $assets = $this->container->get('templating.helper.assets');
         if (empty($uri)) {
-            $assets = $this->container->get('templating.helper.assets');
             $publicUrlpath = 'assets/img/default/';
             $url = $assets->getUrl($publicUrlpath . $size . $category);
 
             $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
             
             $key = 'default'.ucfirst($category);
-
             $fileName = $key.'FileName';
-            if (array_key_exists($key,$defaultSetting)) {
-                if ($defaultSetting[$key] == 1) {
-                    $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
-                    return $url;
-                } else {
-                    if ($absolute) {
-                        $url = $request->getSchemeAndHttpHost() . $url;
+            if (array_key_exists($fileName,$defaultSetting)){
+                if (array_key_exists($key,$defaultSetting)) {
+                    if ($defaultSetting[$key] == 1) {
+                        $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
+                        return $url;
+                    } else {
+                        if ($absolute) {
+                            $url = $request->getSchemeAndHttpHost() . $url;
+                        }
+                       return $url;
                     }
-                   return $url;
                 }
             }
         }

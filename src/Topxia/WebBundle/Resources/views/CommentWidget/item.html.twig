@@ -1,6 +1,6 @@
 <li class="media comment {% if (app.user and app.user.id == comment.userId) or is_granted('ROLE_ADMIN') %}comment-operated{% endif %}" data-id="{{ comment.id }}">
   <a class="pull-left" href="javascript:">
-    <img class="media-object media-object-small" src="{{ file_path(user.smallAvatar, 'avatar.png') }}">
+    <img class="media-object media-object-small" src="{{ default_path('avatar',user.smallAvatar, '') }}">
   </a>
   <div class="media-body">
     <div class="media-heading">

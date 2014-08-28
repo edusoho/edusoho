@@ -145,7 +145,7 @@ class ArticleController extends BaseController
         $valuesToBeReplace = array('{{articletitle}}', '{{sitename}}');
         $valuesToReplace = array($article['title'], $site['name']);
         $articleShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $defaultSetting['articleShareContent']);
-        
+
         $createdTime = $article['createdTime'];
 
         $currentArticleId = $article['id'];

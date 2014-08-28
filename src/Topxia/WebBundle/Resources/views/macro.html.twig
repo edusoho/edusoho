@@ -1,6 +1,6 @@
 {%- macro user_avatar(user, class) -%}
   <a class="user-link user-avatar-link {{ class }}" href="{{ path('user_show', {id:user.id}) }}">
-    <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}">
+    <img src="{{ default_path('avatar',user.smallAvatar, '') }}">
   </a>
 {%- endmacro -%}
 
