@@ -25,7 +25,6 @@ class EduSohoAppClient implements AppClient
         if (!empty($options['apiUrl'])) {
             $this->apiUrl = $options['apiUrl'];
         }
-
         $this->debug = empty($options['debug']) ? false : true;
         $this->tmpDir = empty($options['tmpDir']) ? sys_get_temp_dir() : $options['tmpDir'];
     }
