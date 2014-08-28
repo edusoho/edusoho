@@ -129,7 +129,7 @@ class GroupController extends BaseController
         $groupIdsAsPostThreads = ArrayToolkit::column($threads, 'groupId');
         $groupsAsPostThreads=$this->getGroupService()->getGroupsByids($groupIdsAsPostThreads);
 
-        return $this->render("TopxiaWebBundle:Group:groupMemberCenter.html.twig",array(
+        return $this->render("TopxiaWebBundle:Group:group-member-center.html.twig",array(
             'user'=>$user,
             'groups'=>$groups,
             'postThreads'=>$postThreads,
@@ -192,7 +192,7 @@ class GroupController extends BaseController
         $groupIds = ArrayToolkit::column($members, 'groupId');
         $groups=$this->getGroupService()->getGroupsByids($groupIds);
         
-        return $this->render("TopxiaWebBundle:Group:groupMemberJoin.html.twig",array(
+        return $this->render("TopxiaWebBundle:Group:group-member-join.html.twig",array(
             'user'=>$user,
             'adminGroups'=>$adminGroups,
             'paginator'=>$paginator,
@@ -219,7 +219,7 @@ class GroupController extends BaseController
         $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
         $groups=$this->getGroupService()->getGroupsByids($groupIds);
 
-        return $this->render("TopxiaWebBundle:Group:groupMemberThreads.html.twig",array(
+        return $this->render("TopxiaWebBundle:Group:group-member-threads.html.twig",array(
             'user'=>$user,
             'paginator'=>$paginator,
             'lastPostMembers'=>$lastPostMembers,
@@ -249,7 +249,7 @@ class GroupController extends BaseController
         $groupIdsAsPostThreads = ArrayToolkit::column($threads, 'groupId');
         $groupsAsPostThreads=$this->getGroupService()->getGroupsByids($groupIdsAsPostThreads);
 
-        return $this->render("TopxiaWebBundle:Group:groupMemberPosts.html.twig",array(
+        return $this->render("TopxiaWebBundle:Group:group-member-posts.html.twig",array(
             'user'=>$user,
             'paginator'=>$paginator,
             'threads'=>$threads,
@@ -451,7 +451,7 @@ class GroupController extends BaseController
                 return $this->createMessageResponse('info', '您没有权限!');
         }
 
-        return $this->render("TopxiaWebBundle:Group:setLogo.html.twig", array(
+        return $this->render("TopxiaWebBundle:Group:set-logo.html.twig", array(
                     'groupinfo' => $group,
                     'is_groupmember' => $this->getGroupMemberRole($id),
                     'id'=>$id,
@@ -508,7 +508,7 @@ class GroupController extends BaseController
       
         $pictureUrl = 'tmp/' . $filename;
 
-        return $this->render('TopxiaWebBundle:Group:setLogoCrop.html.twig',array(
+        return $this->render('TopxiaWebBundle:Group:set-logo-crop.html.twig',array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
             'pictureUrl' => $pictureUrl,
@@ -591,7 +591,7 @@ class GroupController extends BaseController
     {
         $hotGroups = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, $count);
         
-        return $this->render('TopxiaWebBundle:Group:groups.ul.html.twig', array(
+        return $this->render('TopxiaWebBundle:Group:groups-ul.html.twig', array(
                 'groups' => $hotGroups,
                 'colNum'=>$colNum,
                 )
@@ -608,7 +608,7 @@ class GroupController extends BaseController
             $this->filterSort('byPostNum'),0, 11
         );
 
-        return $this->render('TopxiaWebBundle:Group:hotThread.html.twig', array(
+        return $this->render('TopxiaWebBundle:Group:hot-thread.html.twig', array(
                 'hotThreads' => $hotThreads,
                 )
         );       

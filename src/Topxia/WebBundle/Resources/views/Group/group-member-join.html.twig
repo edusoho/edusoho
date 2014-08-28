@@ -11,11 +11,11 @@
     {% block body %}
       <div class="row">
         <div class="col-md-12"> 
-          {% include 'TopxiaWebBundle:Group:groupMember.nav.pill.html.twig' %}
+          {% include 'TopxiaWebBundle:Group:group-member-nav-pill.html.twig' %}
           <div class="page-header">
             <h4> 我管理的小组</h4>
           </div>
-          {% include 'TopxiaWebBundle:Group:groups.ul.html.twig' with {
+          {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {
           'groups':adminGroups,  }
           %}
           
@@ -24,7 +24,7 @@
           <div class="page-header">
             <h4> 我加入的小组</h4>
           </div>
-          {% include 'TopxiaWebBundle:Group:groups.ul.html.twig' with {
+          {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {
           'groups':groups,  }
           %}
           

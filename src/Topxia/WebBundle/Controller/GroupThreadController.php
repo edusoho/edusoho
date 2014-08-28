@@ -27,7 +27,7 @@ class GroupThreadController extends BaseController
             if(empty($title)){
                 $this->setFlashMessage('danger',"话题名称不能为空！");
 
-                return $this->render('TopxiaWebBundle:Group:addThread.html.twig',
+                return $this->render('TopxiaWebBundle:Group:add-thread.html.twig',
                     array(
                     'id'=>$id,
                     'groupinfo'=>$groupinfo,
@@ -48,7 +48,7 @@ class GroupThreadController extends BaseController
                 )));
             
         }
-        return $this->render('TopxiaWebBundle:Group:addThread.html.twig',
+        return $this->render('TopxiaWebBundle:Group:add-thread.html.twig',
             array(
             'id'=>$id,
             'groupinfo'=>$groupinfo,
@@ -85,7 +85,7 @@ class GroupThreadController extends BaseController
             
         }
 
-        return $this->render('TopxiaWebBundle:Group:updateThread.html.twig',array(
+        return $this->render('TopxiaWebBundle:Group:update-thread.html.twig',array(
             'id'=>$id,
             'groupinfo'=>$groupinfo,
             'thread'=>$thread,
@@ -230,7 +230,7 @@ class GroupThreadController extends BaseController
                 $postReplyAll=array_merge($postReplyAll,ArrayToolkit::column($postReply, 'userId'));
         }
         $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
-        return $this->render('TopxiaWebBundle:Group:thread.reply.list.html.twig',array(
+        return $this->render('TopxiaWebBundle:Group:thread-reply-list.html.twig',array(
             'post' => array('id'=>$postId),
             'postReply'=>$postReply,
             'postReplyMembers'=>$postReplyMembers,
@@ -293,7 +293,7 @@ class GroupThreadController extends BaseController
 
         $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('TopxiaWebBundle:Group:groupSearchResult.html.twig',array(
+        return $this->render('TopxiaWebBundle:Group:group-search-result.html.twig',array(
             'groupinfo' => $group,
             'threads'=>$threads,
             'owner'=>$owner,
@@ -401,7 +401,7 @@ class GroupThreadController extends BaseController
         if($post['postId']!=0)$postId=$post['postId'];
         $count=$this->getThreadService()->searchPostsCount(array('threadId'=>$threadId,'status'=>'open','id'=>$postId));
 
-        $page=floor(($count+1)/10)+1;
+        $page=floor(($count)/10)+1;
    
         $url=$this->generateUrl('group_thread_index',array('id'=>$id,'threadId'=>$threadId));
 

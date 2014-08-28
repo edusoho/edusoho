@@ -3,18 +3,21 @@
 {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
 {% block content %}
   {{ web_macro.flash_messages() }}
-  {% include 'TopxiaWebBundle:Group:groupHeader.html.twig' with {
+  {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {
   'groupinfo':groupinfo,
   'is_groupmember':is_groupmember,}
   %}
   <div class="es-row-wrap container-gap userpage-body">
-  {% include 'TopxiaWebBundle:Group:group.tab.ul.html.twig' with 
+  {% include 'TopxiaWebBundle:Group:group-tab-ul.html.twig' with 
     {'tab':'', }%}
     <div class="row">
       <div class="col-md-8">    
           <div class="btn-group-xs pull-right" >
-                <a type="button" {% if filters.type=='onlyOwner' %}class="btn btn-default active" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}"{% else %} class="btn btn-default"  href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}" {% endif %}>只看楼主</a>
-                <a type="button" {% if filters.sort=='desc' %}class="btn btn-default active" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"{% else %}class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"{% endif %}><span class="glyphicon glyphicon-circle-arrow-down"></span> 倒序查看</a>
+                <a type="button" {% if filters.type=='onlyOwner' %}class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}"{% else %} class="btn btn-default"  href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}" {% endif %}>只看楼主</a>
+                {% if filters.sort=='desc' %}<a type="button" class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"><span class="glyphicon glyphicon-circle-arrow-up"></span> 顺序查看</a>
+                {% else %}
+                <a type="button" class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"><span class="glyphicon glyphicon-circle-arrow-down"></span> 倒序查看</a>
+                {% endif %}
                 <a type="button" class="btn btn-default" href="#post-thread-form"><span class="glyphicon glyphicon-comment"></span>  回复({{threadMain.postNum}})</a>
             </div>
         <div class="clearfix">
@@ -91,7 +94,8 @@
         
       {% if post %}
         {% for post in post %}
-                <div class="col-md-12"  style="border-top:1px solid #ddd;word-break:break-all;">
+        <div class="list" id="post-{{post.id}}">
+                <div class="col-md-12 "  style="border-top:1px solid #ddd;word-break:break-all;">
                     <br>
                     <div class="pull-left" style="width:80px;"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:post.userId}) }}">
                       <img src="{{ file_path(postMember[post.userId].largeAvatar, 'avatar-large.png') }}">
@@ -118,7 +122,7 @@
 
                   </div>
 
-                  {% if user.id==post.userId%}
+                  {% if user.id==post.userId %}
                   <div class="course-view">
                     <div class="deletePost"><a title="确定删除这条回复"  id="deletePostByself"
                     href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id,memberId:user.id,threadOwnerId:threadMain.userId,groupOwnerId:groupinfo.ownerId,groupId:groupinfo.id})}}">删除</a>
@@ -200,7 +204,8 @@
                
 
                  </div>
-              </div>                 
+              </div> 
+          </div>                 
           {% endfor %}
         {% endif %}
       </div>
@@ -228,7 +233,7 @@
       <div class="col-md-4">
         {% if activeMembers %}
           
-          {% include 'TopxiaWebBundle:Group:activeMember.list.html.twig' with {activeMembers:activeMembers} %}
+          {% include 'TopxiaWebBundle:Group:active-member-list.html.twig' with {activeMembers:activeMembers} %}
         {% endif %}
       </div>
     </div>
