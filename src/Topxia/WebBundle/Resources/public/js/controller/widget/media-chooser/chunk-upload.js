@@ -116,7 +116,7 @@ define(function(require, exports, module) {
                         formatSpeed = uploadSpeed.toFixed(2) + "Kb\/s";
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
-                    if(self.get("destroy")) {
+                    if(!self.get("destroy")) {
                     	self.get("upload_progress_handler")(self.get("currentFile"), tmp, fileScop.file.size);
                     }
                 }
@@ -260,7 +260,7 @@ define(function(require, exports, module) {
                         formatSpeed = uploadSpeed.toFixed(2) + "Kb\/s";
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
-                    if(self.get("destroy")) {
+                    if(!self.get("destroy")) {
                     	self.get("upload_progress_handler")(self.get("currentFile"), tmp, fileScop.file.size);
                     }
                 }
