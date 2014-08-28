@@ -2,7 +2,7 @@
   <div class="col-md-8 control-label"><b>自定义默认课程图片</b></div>
   <form id="course-picture-form" method="post" action="{{ path('admin_setting_default_course_picture') }}" enctype="multipart/form-data">
     <div class="controls col-md-8 controls">
-      <img src="{{ file_path('', 'course-default-475x250.png') }}">
+      <img src="{{ default_path('Course', '' ,'large') }}">
     </div>
 
     <div class="form-group">

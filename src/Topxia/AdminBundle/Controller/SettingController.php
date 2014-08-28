@@ -392,6 +392,8 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $defaultSetting = $request->request->all();
+            $default = $this->getSettingService()->get('default', array());
+            $defaultSetting = array_merge($default, $defaultSetting);
 
             if (!$defaultSetting['defaultAvatar']){
                 $largefile = $path.'system-avatar-large.png';
@@ -420,12 +422,8 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', '系统默认设置已保存！');
         }
 
-        $avatarUrl = $path.$default['defaultAvatarFileName'];
-        $coursePictureUrl = $path.$default['defaultCoursePictureFileName'];
         return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
             'defaultSetting' => $defaultSetting,
-            'avatarUrl' => $avatarUrl,
-            'coursePictureUrl' => $coursePictureUrl,
         ));
     }
 
@@ -543,7 +541,9 @@ class SettingController extends BaseController
     {
         $options = $request->request->all();
 
-        $filename = $this->getSettingService()->get('default','defaultCoursePictureFileName');
+        $filename = $this->getSettingService()->get("default",array());
+        $filename = $filename['defaultCoursePictureFileName'];
+
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
@@ -560,14 +560,14 @@ class SettingController extends BaseController
         $largeImage->save($largeFilePath, array('quality' => 90));
 
         $this->filesystem = new Filesystem();
-        $this->filesystem->copy($largeFilePath, $path.'large-'.$filename,'ture');
+        $this->filesystem->copy($largeFilePath, $path.'large-'.$filename);
 
         $smallImage = $largeImage->copy();
         $smallImage->resize(new Box(475,250));
         $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
         $smallImage->save($smallFilePath, array('quality' => 90));
 
-        $this->filesystem->copy($smallFilePath, $path.$filename,'ture');
+        $this->filesystem->copy($smallFilePath, $path.$filename);
 
         return $this->redirect($this->generateUrl('admin_setting_default'));
     }
