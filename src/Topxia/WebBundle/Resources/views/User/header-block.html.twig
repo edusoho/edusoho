@@ -12,14 +12,16 @@
           </div>
           <h1>{{user.truename}}</h1>
           {% if 'ROLE_TEACHER' in user.roles %}
-            {% for classMember in classMembers %}
-              {{ class_name(classMember.class) }}（{{classMember.class.year}}届）{{classMember.title}}/  
+            {% for course in courses %}
+              {% set cl = classes[course.classId]|default(null) %}
+              {{ class_name(cl) }}（{{cl.year}}届）{{course.title}}老师/  
+            {% endfor %}
+            {% for headTeacherClass in headTeacherClasses %}
+              {{ class_name(cl) }}（{{cl.year}}届）班主任/    
             {% endfor %}
           {% else %}
-            {% for classMember in classMembers %}
-              {{ class_name(classMember.class) }}（{{classMember.class.year}}届）<br/>
-              学号：{{user.number}}
-            {% endfor %}
+            {{ class_name(cl) }}（{{cl.year}}届）<br/>
+            学号：{{user.number}}
           {% endif %}
 
           <div class="about">{{ user.about|raw }}</div>

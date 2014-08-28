@@ -1,0 +1,51 @@
+{% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
+<tr id="user-table-tr-{{ user.id }}">
+  <td width="80%">
+    <div class="col-md-1">
+      <img class="media-object pull-left" src="{{file_path(user.smallAvatar, 'avatar.png')}}" alt="{{userProfile.truename}}">
+    </div>
+    <div class="col-md-11">
+      <strong>{{userProfile.truename}}</strong>
+      {% if user.locked %}
+        <label class="label label-danger">禁</label>
+      {% endif %}
+      <br>
+      学号：{{ user.number }}
+    </div>
+  </td>
+
+  <td>
+    <div class="btn-group">
+      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="#modal" data-toggle="modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</a></li>
+        
+        <li><a class="remove-student" href="javascript:" title="移除学生{{ user.nickname }}" data-url="{{ path('admin_class_student_remove', {userId:user.id}) }}">移除</a></li>
+      </ul>
+    </div>
+  </td>
+</tr>
+
+{# {% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
+<li class="media">
+  <a class="pull-left" href="#">
+    <img class="media-object pull-left" src="{{file_path(user.smallAvatar, 'avatar.png')}}" alt="{{userProfile.truename}}">
+  </a>
+  <div class="media-body">
+    <h4 class="media-heading">{{userProfile.truename}}</h4>
+    学号：{{user.number}}
+    <div class="btn-group pull-right">
+      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="#modal" data-toggle="modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</a></li>
+        <li><a class="remove-student" href="javascript:" title="移除学生{{ user.nickname }}" data-url="{{ path('admin_class_student_remove', {userId:user.id}) }}">移除</a></li>
+      </ul>
+    </div>
+  </div>
+</li> #}

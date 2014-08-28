@@ -9,6 +9,8 @@ interface ClassesService
     */
     public function getClass($id);
 
+    public function findClassesByIds(array $ids);
+
     public function searchClasses($conditions, $sort = 'latest', $start, $limit);
 
     public function searchClassCount($conditions);

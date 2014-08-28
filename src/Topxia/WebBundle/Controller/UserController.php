@@ -8,7 +8,6 @@ use Topxia\Common\StringToolkit;
 
 class UserController extends BaseController
 {
-
     public function headerBlockAction($user)
     {
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
@@ -19,19 +18,43 @@ class UserController extends BaseController
         } else {
             $isFollowed = false;
         }
-        $conditions=array(
+        /*$conditions=array(
             'userId'=>$user['id'],
-            'roles'=>array('teacher','student')
+            'roles'=>array('headTeacher','student')
         );
         $classMembers=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
         foreach ($classMembers as &$classMember) {
             $class=$this->getClassesService()->getClass($classMember['classId']);
             $classMember['class']=$class;
+        }*/
+        /**为任课老师准备*/
+        $courses=array();
+        $classes=array();
+        /**为班主任准备*/
+        $headTeacherClasses=array();
+        /**为学生准备*/
+        $class='';
+        if(in_array('ROLE_TEACHER', $user['roles'])) {
+            $courses=$this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX);
+            $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($courses,'classId'));
+            $headTeacherClasses=$this->getClassesService()->searchClasses(array('headTeacherId'=>$user['id']), array('createdTime'=>'DESC'), 0, PHP_INT_MAX);
+        }else{
+            $conditions=array(
+                'userId'=>$user['id'],
+                'roles'=>array('student')
+            );
+            $classMembers=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+            if(count($classMembers)>0){
+                $class=$this->getClassesService()->getClass($classMembers[0]['classId']);
+            }
         }
         return $this->render('TopxiaWebBundle:User:header-block.html.twig', array(
             'user' => $user,
             'isFollowed' => $isFollowed,
-            'classMembers'=>$classMembers
+            'courses'=>$courses,
+            'classes'=>$classes,
+            'headTeacherClasses'=>$headTeacherClasses,
+            'cl'=>$class
         ));
     }
 

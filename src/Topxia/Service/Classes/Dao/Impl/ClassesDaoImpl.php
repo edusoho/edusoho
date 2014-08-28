@@ -14,6 +14,14 @@ class ClassesDaoImpl extends BaseDao implements ClassesDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
+    public function findClassesByIds(array $ids)
+    {
+        if(empty($ids)){ return array(); }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
     public function searchClasses($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -65,6 +73,7 @@ class ClassesDaoImpl extends BaseDao implements ClassesDao
         ->from(self::TABLENAME, 'class')
         ->andWhere('enabled = :enabled')
         ->andWhere('gradeId = :gradeId')
+        ->andWhere('headTeacherId = :headTeacherId')
         ->andWhere('year = :year');
 
         return $builder;

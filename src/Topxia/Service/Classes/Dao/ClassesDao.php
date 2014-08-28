@@ -8,6 +8,7 @@ interface ClassesDao
 
     public function getClass($id);
 
+    public function findClassesByIds(array $ids);
   /*  public function getCoursesCount();
 
     public function findCoursesByIds(array $ids);
