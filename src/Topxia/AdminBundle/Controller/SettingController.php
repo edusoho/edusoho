@@ -470,7 +470,7 @@ class SettingController extends BaseController
         $largeImage->save($largeFilePath, array('quality' => 90));
 
         $this->filesystem = new Filesystem();
-        $this->filesystem->copy($largeFilePath, $path.'large-'.$filename);
+        $this->filesystem->copy($largeFilePath, $path.'large'.$filename);
 
         $smallImage = $largeImage->copy();
         $smallImage->resize(new Box(120, 120));
@@ -541,7 +541,7 @@ class SettingController extends BaseController
         $largeImage->save($largeFilePath, array('quality' => 90));
 
         $this->filesystem = new Filesystem();
-        $this->filesystem->copy($largeFilePath, $path.'large-'.$filename);
+        $this->filesystem->copy($largeFilePath, $path.'large'.$filename);
 
         $smallImage = $largeImage->copy();
         $smallImage->resize(new Box(475,250));
