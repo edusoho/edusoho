@@ -47,6 +47,7 @@ class WebExtension extends \Twig_Extension
             'file_uri_parse'  => new \Twig_Function_Method($this, 'parseFileUri'),
             // file_path即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
+            'default_path'  => new \Twig_Function_Method($this, 'getDefaultPath'),
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,
@@ -356,6 +357,42 @@ class WebExtension extends \Twig_Extension
         } else {
 
         }
+    }
+
+    public function getDefaultPath($category, $uri="", $size = '', $absolute = false)
+    {
+        if (empty($uri)) {
+            $assets = $this->container->get('templating.helper.assets');
+            $publicUrlpath = 'assets/img/default/';
+            $url = $assets->getUrl($publicUrlpath . $size . $category);
+
+            $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
+            
+            $key = 'default'.ucfirst($category);
+
+            $fileName = $key.'FileName';
+            if (array_key_exists($key,$defaultSetting)) {
+                if ($defaultSetting[$key] == 1) {
+                    $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
+                    return $url;
+                } else {
+                    if ($absolute) {
+                        $url = $request->getSchemeAndHttpHost() . $url;
+                    }
+                   return $url;
+                }
+            }
+        }
+
+        $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri;
+        $url = ltrim($url, ' /');
+        $url = $assets->getUrl($url);
+
+        if ($absolute) {
+            $url = $request->getSchemeAndHttpHost() . $url;
+        }
+
+        return $url;
     }
 
     public function getFileUrl($uri, $default = '', $absolute = false)

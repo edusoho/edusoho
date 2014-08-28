@@ -127,14 +127,6 @@ define(function(require, exports, module) {
             this.set('uploader', this._createUpload($btn, progressbar));
         },
 
-        _createChunkUpload: function($btn, progressbar){
-            var element = this.element;
-            var chunkUpload = new ChunkUpload({
-                element: element,
-                progressbar: progressbar
-            });
-        },
-
         _createUpload: function($btn, progressbar) {
             var self = this;
 

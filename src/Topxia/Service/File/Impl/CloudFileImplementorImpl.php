@@ -266,8 +266,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $result['persistentId'];
     }
 
-    public function getMediaInfo($hashid) {
-        return $this->getCloudClient()->getMediaInfo($hashid);
+    public function getMediaInfo($key, $mediaType) {
+        return $this->getCloudClient()->getMediaInfo($key, $mediaType);
     }
 
     private function getFileFullName($file)

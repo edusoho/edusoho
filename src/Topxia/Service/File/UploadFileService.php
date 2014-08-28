@@ -38,6 +38,6 @@ interface UploadFileService
 
     public function reconvertOldFile($id, $convertCallback, $pipeline);
 
-    public function getMediaInfo($hashId);
+    public function getMediaInfo($key, $type);
 
 }
