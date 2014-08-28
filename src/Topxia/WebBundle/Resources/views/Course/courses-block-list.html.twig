@@ -2,7 +2,7 @@
   {% for course in courses %}
   <li class="course-item clearfix">
     <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
-      <img class="course-picture" src="{{ default_path('coursePicture',course.middlePicture, 'large-') }}" alt="{{ course.title }}">
+      <img class="course-picture" src="{{ default_path('coursePicture',course.middlePicture, 'large') }}" alt="{{ course.title }}">
     </a>
     <div class="course-body">
       <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
