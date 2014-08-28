@@ -120,7 +120,7 @@ class MobileBaseController extends BaseController
     /**
      * @todo 要移走，放这里不合适
      */
-    protected function filterReviews($reviews)
+    public function filterReviews($reviews)
     {
         if (empty($reviews)) {
             return array();
@@ -271,7 +271,7 @@ class MobileBaseController extends BaseController
     /**
      * @todo 要移走，放这里不合适
      */
-    protected function filterReview($review)
+    public function filterReview($review)
     {
         if (empty($review)) {
             return null;

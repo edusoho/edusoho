@@ -12,6 +12,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->formData;
 	}
 
+	public function getReviews()
+	{
+		$courseId = $this->getParam("courseId");
+		$reviews = $this->controller->getReviewService()->findCourseReviews($courseId, 0, 3);
+		$reviews = $this->controller->filterReviews($reviews);
+		return $reviews;
+	}
+
 	public function getCourse()
 	{	
 		$token = $this->controller->getUserToken($this->request);

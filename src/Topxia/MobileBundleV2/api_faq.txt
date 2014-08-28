@@ -13,3 +13,4 @@
 13 获取网校简介                         School/getSchoolInfo
 14 获取用户信息                         User/getUserInfo
 15 获取课程课时列表                   Lesson/getCourseLessons
+16 获取课程所有评价                   Course/getReviews

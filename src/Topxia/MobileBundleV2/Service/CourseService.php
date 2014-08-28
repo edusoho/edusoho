@@ -8,4 +8,5 @@ interface CourseService
 	public function getLearningCourse();
 	public function searchCourse();
 	public function getCourse();
+	public function getReviews();
 }
