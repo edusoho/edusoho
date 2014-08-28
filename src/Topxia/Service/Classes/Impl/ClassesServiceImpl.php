@@ -3,12 +3,20 @@ namespace Topxia\Service\Classes\Impl;
 
 use Topxia\Service\Classes\ClassesService;
 use Topxia\Service\Common\BaseService;
+use Topxia\Common\ArrayToolkit;
 
 class ClassesServiceImpl extends BaseService implements ClassesService
 {
     public function getClass($id)
     {
         return $this->getClassesDao()->getClass($id);
+    }
+
+
+    public function findClassesByIds(array $ids)
+    {
+        $classes=$this->getClassesDao()->findClassesByIds($ids);
+        return ArrayToolkit::index($classes, 'id');
     }
 
     public function searchClasses($conditions, $sort = array(), $start, $limit) 
