@@ -540,12 +540,12 @@ class CourseController extends BaseController
         $defaultSetting = $this->getSettingService()->get('default', array());
 
         if (empty($defaultSetting)){
-            $articleShareContent = array();
+            $courseShareContent = array();
         }
 
         $valuesToBeReplace = array('{{course}}');
-        $valuesToReplace = array($course['name']);
-        $articleShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $defaultSetting['courseShareContent']);
+        $valuesToReplace = array($course['title']);
+        $courseShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $defaultSetting['courseShareContent']);
 
 		if (empty($member)) {
 			$member['deadline'] = 0; 
