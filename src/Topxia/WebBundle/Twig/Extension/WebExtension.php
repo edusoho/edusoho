@@ -369,15 +369,17 @@ class WebExtension extends \Twig_Extension
             
             $key = 'default'.ucfirst($category);
             $fileName = $key.'FileName';
-            if (array_key_exists($key,$defaultSetting)) {
-                if ($defaultSetting[$key] == 1) {
-                    $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
-                    return $url;
-                } else {
-                    if ($absolute) {
-                        $url = $request->getSchemeAndHttpHost() . $url;
+            if (array_key_exists($defaultSetting[$fileName])){
+                if (array_key_exists($key,$defaultSetting)) {
+                    if ($defaultSetting[$key] == 1) {
+                        $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
+                        return $url;
+                    } else {
+                        if ($absolute) {
+                            $url = $request->getSchemeAndHttpHost() . $url;
+                        }
+                       return $url;
                     }
-                   return $url;
                 }
             }
         }
