@@ -33,10 +33,11 @@ define(function(require, exports, module) {
     if(config[name].indexOf("more")>=0){
          html+='<a href="#" class="bds_more" data-cmd="more"></a>'; 
     }
+    var bdText=$(select).attr("data-bdText");
     html+='</div>';
      window._bd_share_config={     
     "common":{       "bdSnsKey":{},
-           "bdText":"aasfasdasdasdasdasddasd",
+           "bdText":bdText,
            "bdMini":"2",       
            "bdMiniList":false,       
            "bdPic":"",       
