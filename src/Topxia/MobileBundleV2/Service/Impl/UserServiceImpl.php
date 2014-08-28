@@ -14,6 +14,35 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->formData;
     }
     
+    public function getUserInfo()
+    {
+        $userId = $this->getParam('userId');
+        $user = $this->controller->getUserService()->getUser($userId);
+        $userProfile = $this->controller->getUserService()->getUserProfile($userId);
+        $userProfile = $this->filterUserProfile($userProfile);
+        $user = array_merge($user, $userProfile);
+        return empty($user) ? null : $this->controller->filterUser($user);
+    }
+
+    private function filterUserProfile($userProfile)
+    {
+        foreach ($userProfile as $key => $value) {
+            if (stripos($key, "intField") === 0 || stripos($key, "dateField") === 0) {
+                unset($userProfile[$key]);
+                continue;
+            }
+            if (stripos($key, "textField") === 0) {
+                unset($userProfile[$key]);
+                continue;
+            }
+            if (stripos($key, "floatField") === 0 || stripos($key, "varcharField") === 0) {
+                unset($userProfile[$key]);
+                continue;
+            }
+        }
+        return $userProfile;
+    }
+
     public function regist()
     {
         $email = $this->getParam('email');
