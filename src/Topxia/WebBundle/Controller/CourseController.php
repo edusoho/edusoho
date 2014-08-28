@@ -685,4 +685,9 @@ class CourseController extends BaseController
 		return $this->getServiceKernel()->createService('Course.ReviewService');
 	}
 
+	private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
 }
