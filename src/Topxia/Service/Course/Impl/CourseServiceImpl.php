@@ -1938,9 +1938,67 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
 	}
 
-	public function copyCourse($templateId)
+	public function copyCourseForClass($templateId, $classId, $compulsory, $teacherId)
 	{
+		$courseDao = $this->getCourseDao();
+		$chapterDao = $this->getChapterDao();
+		$lessonDao = $this->getLessonDao();
+		$classService = $this->getClassesService();
+		$templateCourse = $courseDao->getCourse($templateId);
+		$class = $classService->getClass($classId);
+
+		unset($templateCourse['id']);
+		$templateCourse['templateId'] = $templateId;
+		$templateCourse['classId'] = $classId;
+		$templateCourse['gradeId'] = $class['gradeId'];
+		$templateCourse['term'] = $class['term'];
+		$templateCourse['compulsory'] = $compulsory;
+		$templateCourse['teacherIds'] = array(0 => $teacherId);
 		
+		$newCourse = $courseDao->addCourse(CourseSerialize::serialize($templateCourse));
+		$chapters = $chapterDao->findChaptersByCourseId($templateId);
+		$lessons = $lessonDao->findLessonsByCourseId($templateId);
+		
+		$chapterIdMap = array();
+		$newChapters = array();
+		foreach ($chapters as $key1 => $chapter) {
+			$tempId = $chapter['id'];
+			unset($chapter['id']);
+			$chapter['courseId'] = $newCourse['id'];
+			$newChapter = $chapterDao->addChapter($chapter);
+			$chapterIdMap[$tempId] = $newChapter['id'];
+			$newChapters[] = $newChapter; 
+		}
+
+		$newLessons = array();
+		foreach ($lessons as $key2 => $lesson) {
+			unset($lesson['id']);
+			$lesson['courseId'] = $newCourse['id'];
+			$newLesson = $lessonDao->addLesson($lesson);
+			$newLessons[] = $newLesson;
+		}
+
+		//修改复制的Chapter的parentId
+		foreach ($newChapters as $key3 => $newChapter) {
+
+			if(array_key_exists($newChapter['parentId'], $chapterIdMap)) {
+				$newChapter['parentId'] = $chapterIdMap[$newChapter['parentId']];
+				$chapterDao->updateChapter($newChapter['id'],
+					array('parentId'=>$newChapter['parentId']));
+			}
+
+		}
+
+		//修改复制的Lesson的chapterId
+		foreach ($newLessons as $key4 => $newLesson) {
+			if(array_key_exists($newLesson['chapterId'], $chapterIdMap)) {
+				$newLesson['chapterId'] = $chapterIdMap[$newLesson['chapterId']];
+				$lessonDao->updateLesson($newLesson['id'],
+					array('chapterId'=>$newLesson['chapterId']));
+			}
+		}
+
+		return CourseSerialize::unserialize($newCourse);
 	}
 	private function getCourseLessonReplayDao()
     {
@@ -2084,6 +2142,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getTagService()
     {
         return $this->createService('Taxonomy.TagService');
+    }
+
+    private function getClassesService()
+    {
+        return $this->createService('Classes.ClassesService');
     }
 
 }

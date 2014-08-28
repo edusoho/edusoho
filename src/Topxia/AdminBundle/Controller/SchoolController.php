@@ -129,6 +129,10 @@ class SchoolController extends BaseController
     public function classCourseAddAction(Request $request, $classId)
     {
         $gradeId = $request->query->get('gradeId');
+        if($request->getMethod() == 'POST') {
+            $this->getCourseService()->copyCourseForClass(3,$classId,1,6);
+        }
+        
         return $this->render('TopxiaAdminBundle:School:class-course-add-modal.html.twig',array(
             'classId' => $classId,
             'gradeId' => $gradeId,             

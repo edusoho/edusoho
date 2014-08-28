@@ -302,4 +302,8 @@ interface CourseService
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
 
+	/**
+	*复制课程
+	*/
+	public function copyCourseForClass($templateId, $classId, $compulsory, $teacherId);
 }
