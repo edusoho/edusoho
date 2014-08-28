@@ -539,8 +539,8 @@ class CourseController extends BaseController
 
         $defaultSetting = $this->getSettingService()->get('default', array());
 
-        if (empty($defaultSetting)){
-            $courseShareContent = array();
+        if (isset($defaultSetting['courseShareContent'])){
+            $courseShareContent = '';
         }
 
         $valuesToBeReplace = array('{{course}}');
