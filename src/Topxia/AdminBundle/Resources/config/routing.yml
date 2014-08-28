@@ -368,6 +368,10 @@ admin_school_class_course_add:
     pattern:  /school/class/{classId}/course/add
     defaults: { _controller: TopxiaAdminBundle:School:classCourseAdd }
 
+admin_school_class_course_remove:
+    pattern:  /school/class/{classId}/course/{courseId}/remove
+    defaults: { _controller: TopxiaAdminBundle:School:classCourseRemove }
+
 admin_school_class_icon_upload:
     pattern:  /school/classes/icon/upload
     defaults: { _controller: TopxiaAdminBundle:School:classIconUpload }

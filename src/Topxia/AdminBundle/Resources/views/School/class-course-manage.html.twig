@@ -24,46 +24,46 @@
 
 </div>
 
-  <div>
+<div>
 
-    {% if courses %}
-     {% for course in courses %}
-      <div class="media table-bordered">
-        <a class="pull-left" href="#">
-          <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}" style="width: 140px; height: 78px;">
-        </a>
-        <div class="media-body">
-          <span class="media-heading">{{ course.title }}</span>
-          <div>
-            <span class="text-muted">{{ dict_text('gradeName', course.gradeId) }}</span>
-            <span class="text-muted mll">
-              {% if course.term == 'first' %}
-              一学期  
-              {% else %}
-              二学期
-              {% endif %}
-            </span>
-            {% for teachername in course.teachername %}
-              <span class="text-muted mll">{{teachername}}</span>
-            {% endfor %}
-          </div>
-          <span class="text-muted">
-            {% if course.compulsory == '1' %}
-              必修
-            {% else %}
-              选修
-            {% endif %}
-          </span>
-      
-          <a class="btn btn-link pull-right" href="">移除</a>
-        </div>
+  {% if courses %}
+  {% for course in courses %}
+  <div class="media table-bordered">
+    <a class="pull-left" href="#">
+      <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}" style="width: 140px; height: 78px;">
+    </a>
+    <div class="media-body">
+      <span class="media-heading">{{ course.title }}</span>
+      <div>
+        <span class="text-muted">{{ dict_text('gradeName', course.gradeId) }}</span>
+        <span class="text-muted mll">
+          {% if course.term == 'first' %}
+          一学期  
+          {% else %}
+          二学期
+          {% endif %}
+        </span>
+        {% for teachername in course.teachername %}
+        <span class="text-muted mll">{{teachername}}</span>
+        {% endfor %}
       </div>
-    {% endfor %}
-    {{ web_macro.paginator(paginator) }} 
-    {% else %}
-    <div class="empty">该班暂无课程</div>
-    {% endif %}
+      <span class="text-muted">
+        {% if course.compulsory == '1' %}
+        必修
+        {% else %}
+        选修
+        {% endif %}
+      </span>
+      
+      <a class="btn btn-link pull-right" href="{{ path('admin_school_class_course_remove', {classId:class.id, courseId:course.id}) }}">移除</a>
+    </div>
   </div>
+  {% endfor %}
+  {{ web_macro.paginator(paginator) }} 
+  {% else %}
+  <div class="empty">该班暂无课程</div>
+  {% endif %}
+</div>
 
 
 

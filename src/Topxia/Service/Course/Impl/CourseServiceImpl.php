@@ -336,7 +336,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'endTime'  => 0,
 			'locationId' => 0,
 			'address' => '',
-			'maxStudentNum' => 0
+			'maxStudentNum' => 0,
+			'classId' => 0
 		));
 
 		if (!empty($fields['about'])) {
