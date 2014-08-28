@@ -191,6 +191,7 @@ class GroupThreadController extends BaseController
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
         $members=$this->getUserService()->findUsersByIds($memberIds);
 
+        $groupShareContent="";
         $defaultSetting = $this->getSettingService()->get('default', array());
         if(isset($defaultSetting['groupShareContent'])){
             $groupShareContent = str_replace("{{groupname}}", $group['title'], $defaultSetting['groupShareContent']);
