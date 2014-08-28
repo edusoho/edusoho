@@ -505,6 +505,8 @@ class EdusohoCloudClient implements CloudClient
         $response = curl_exec($curl);
         curl_close($curl);
 
+        var_dump($url);
+
         return $response;
     }
 
