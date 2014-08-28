@@ -38,6 +38,36 @@ class MyTeachingController extends BaseController
         ));
     }
 
+    public function coursesK12Action(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->findUserTeachCourseCount($user['id'], false),
+            12
+        );
+        
+        $courses = $this->getCourseService()->findUserTeachCourses(
+            $user['id'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount(),
+            false
+        );
+
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        return $this->render('TopxiaWebBundle:MyTeaching:teaching-k12.html.twig', array(
+            'courses'=>$courses,
+            'paginator' => $paginator,
+            'live_course_enabled' => empty($courseSetting['live_course_enabled']) ? 0 : $courseSetting['live_course_enabled']
+        ));
+    }
+
 	public function threadsAction(Request $request, $type)
 	{
 		$user = $this->getCurrentUser();
