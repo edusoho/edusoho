@@ -58,19 +58,20 @@ class ClassMemberDaoImpl extends BaseDao implements ClassMemberDao
             }
             return true;
         });
-        $roles="('";
-        if (isset($conditions['role'])) {
-            foreach ($conditions['role'] as $role) {
-                $roles.=($role."','");
-            }
-            $conditions['role']=substr($roles, 0,-2).")";
-        }
-
-        return  $this->createDynamicQueryBuilder($conditions)
+        $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'class_member')
             ->andWhere('classId = :classId')
-            ->andWhere('userId = :userId')
-            ->andStaticWhere('role in '.$conditions['role']);
+            ->andWhere('userId = :userId');
+            
+        $roles="('";
+        if (isset($conditions['roles'])) {
+            foreach ($conditions['roles'] as $role) {
+                $roles.=($role."','");
+            }
+            $conditions['roles']=substr($roles, 0,-2).")";
+            $builder=$builder->andStaticWhere('role in '.$conditions['roles']);
+        }
+        return $builder;
     }
 
 

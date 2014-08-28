@@ -1,0 +1,31 @@
+<li class="media">
+	<a class="pull-left" href="#">
+	  <img class="media-object pull-left" src="{{file_path(user.smallAvatar, 'avatar.png')}}" alt="{{userProfile.truename}}">
+	</a>
+	<div class="media-body">
+	  <h4 class="media-heading">{{userProfile.truename}}</h4>
+
+	  <div class="short-long-text">
+      <div class="short-text">
+      	{{ note.content|plain_text(100) }} <span class="trigger">(展开)</span>
+      </div>
+      <div class="long-text">
+      	{{ note.content|raw }} <span class="trigger">(收起)</span>
+      </div>
+    </div>
+
+    <div class="text-sm mts">
+    	<span class="text-muted text-sm pull-right">
+    		{{ note.createdTime|date('Y-n-d H:i') }}
+    	</span>	
+      {% if course %}
+        <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>
+        {% if lesson %}
+          <span class="text-muted mhs">&raquo;</span>
+          <a class="text-success"  href="{{ path('course_learn', {id:lesson.courseId}) }}#lesson/{{lesson.id}}" target="_blank">课时{{lesson.number}}：{{ lesson.title }}</a>
+				{% endif %}
+      {% endif %}
+    </div>
+
+	</div>
+</li>

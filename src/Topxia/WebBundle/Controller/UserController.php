@@ -21,7 +21,7 @@ class UserController extends BaseController
         }
         $conditions=array(
             'userId'=>$user['id'],
-            'role'=>array('teacher','student')
+            'roles'=>array('teacher','student')
         );
         $classMembers=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
         foreach ($classMembers as &$classMember) {

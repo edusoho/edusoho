@@ -24,7 +24,7 @@ class SettingsController extends BaseController
 		if(!in_array('ROLE_TEACHER', $user['roles'])){
 			$conditions=array(
 	            'userId'=>$user['id'],
-	            'role'=>array('student')
+	            'roles'=>array('student')
 	        );
 	        $classMembers=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 	        if(count($classMembers)>0){
