@@ -537,6 +537,16 @@ class CourseController extends BaseController
 
 		$users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
 
+        $defaultSetting = $this->getSettingService()->get('default', array());
+
+        if (empty($defaultSetting)){
+            $articleShareContent = array();
+        }
+
+        $valuesToBeReplace = array('{{course}}');
+        $valuesToReplace = array($course['name']);
+        $articleShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $defaultSetting['courseShareContent']);
+
 		if (empty($member)) {
 			$member['deadline'] = 0; 
 			$member['levelId'] = 0;
@@ -559,6 +569,7 @@ class CourseController extends BaseController
 			'manage' => $manage,
 			'isNonExpired' => $isNonExpired,
 			'vipChecked' => $vipChecked,
+			'courseShareContent' => $courseShareContent,
 			'isAdmin' => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
 		));
 	}
@@ -673,5 +684,10 @@ class CourseController extends BaseController
 	{
 		return $this->getServiceKernel()->createService('Course.ReviewService');
 	}
+
+	private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 
 }
