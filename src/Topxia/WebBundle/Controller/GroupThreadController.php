@@ -190,9 +190,16 @@ class GroupThreadController extends BaseController
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
         $members=$this->getUserService()->findUsersByIds($memberIds);
+
+        $defaultSetting = $this->getSettingService()->get('default', array());
+        if(isset($defaultSetting['groupShareContent'])){
+            $groupShareContent = str_replace("{{groupname}}", $group['title'], $defaultSetting['groupShareContent']);
+            $groupShareContent = str_replace("{{threadname}}", $threadMain['title'], $groupShareContent);
+        }
         
         return $this->render('TopxiaWebBundle:Group:thread.html.twig',array(
             'groupinfo' => $group,
+            'groupShareContent'=>$groupShareContent,
             'threadMain'=>$threadMain,
             'user'=>$user,
             'owner'=>$owner,
@@ -456,6 +463,11 @@ class GroupThreadController extends BaseController
         if($sort=='asc') return array('createdTime','asc');
 
         if($sort=='desc') return array('createdTime','desc');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
      private function filterSort($sort)

@@ -80,11 +80,11 @@
                             <span class="glyphicon glyphicon-remove-sign"></span> 关闭话题
                             </a>
                   {% endif %}
-              </div> <div class="share"></div> {# {% include 'TopxiaWebBundle:Group:share.html.twig'%} #}
+              </div> <div class="share" data-bdText="{{groupShareContent|default('')}}"></div> {# {% include 'TopxiaWebBundle:Group:share.html.twig'%} #}
   
           {% else %}
             <div class="bottom-thread-post col-md-12">         
-              <div class="share"></div>{# {% include 'TopxiaWebBundle:Group:share.html.twig'%} #}
+              <div class="share"  data-bdText="{{groupShareContent|default('')}}"></div>{# {% include 'TopxiaWebBundle:Group:share.html.twig'%} #}
             </div>
           {% endif %}
                
