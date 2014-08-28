@@ -33,7 +33,7 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
-        <li><a href="{ path('admin_school_class_member_manage', { classId:class.id }) }}">成员设置</a></li>
+        <li><a href="{{ path('admin_class_student', { classId:class.id }) }}">成员设置</a></li>
 
         <li><a href="{{ path('admin_school_class_course_manage', { classId:class.id }) }}">课程设置</a></li>
 
