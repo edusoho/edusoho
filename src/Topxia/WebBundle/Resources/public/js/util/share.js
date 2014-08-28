@@ -1,6 +1,10 @@
 define(function(require, exports, module) {
 
-    exports.create = function(select,name,type) {
+    exports.create = function(object) {
+
+    var select=object.selector;
+    var name=object.icons;
+    var type=object.display;
 
     var itemsAll = ['tsina','qq','weixin','renren','more'
     ];
@@ -17,7 +21,7 @@ define(function(require, exports, module) {
     }else{
         var html='<div><ul><div class="bdsharebuttonbox" style="padding:10px;">';
     }
- 
+    
     if(config[name].indexOf("qq")>=0){
          html+='<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>';
     }
