@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 		},
 
 		events: {
-			"click .btn-default": "onUploadButtonClick",
+			"click .uploadBtn": "onUploadButtonClick",
 			"change input[data-role='fileSelected']": "onSelectFileChange"
 		},
 		getFileSize: function(size) {
