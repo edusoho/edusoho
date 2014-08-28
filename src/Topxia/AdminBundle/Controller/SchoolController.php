@@ -128,14 +128,46 @@ class SchoolController extends BaseController
     
     public function classCourseAddAction(Request $request, $classId)
     {
-        $gradeId = $request->query->get('gradeId');
         if($request->getMethod() == 'POST') {
-            $this->getCourseService()->copyCourseForClass(3,$classId,1,6);
+            $fields = $request->request->all();
+            $this->getCourseService()->copyCourseForClass(
+                $fields['templateId'],
+                $classId,
+                $fields['compulsory'],
+                $fields['teacherId']);
+
+            return new Response(json_encode("success"));
         }
-        
-        return $this->render('TopxiaAdminBundle:School:class-course-add-modal.html.twig',array(
+
+        $class = $request->query->all();
+        $class['classId'] = $classId;
+        $conditions =array(
             'classId' => $classId,
-            'gradeId' => $gradeId,             
+            'term' => $class['term']
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchCourseCount($conditions),
+            5);
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            'latest',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        foreach ($courses as $key => $course) {
+            $creatorProfile = $this->getUserService()->getUserProfile($course['userId']);
+            $course['creatorName'] = $creatorProfile['truename'];
+            $courses[$key] = $course;
+        }
+
+        return $this->render('TopxiaAdminBundle:School:class-course-add-modal.html.twig',array(
+            'class' => $class,
+            'courses' => $courses, 
+            'paginator' => $paginator,            
         ));
     }
 

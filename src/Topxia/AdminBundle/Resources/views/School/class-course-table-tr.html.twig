@@ -1,0 +1,21 @@
+<tr id="user-table-tr-{{ course.id }}" data-title="{{course.title}}" data-teachername="{{course.creatorName}}" data-id="{{ course.id }}">
+  <td>
+    {{course.title}}
+  </td>
+
+  <td>
+    <span class="text-muted mll">
+      {% if course.term == 'first' %}
+      一学期  
+      {% else %}
+      二学期
+      {% endif %}
+    </span>
+  </td>
+
+  <td>
+   {{course.creatorName}}
+ </td>
+
+</tr>
+

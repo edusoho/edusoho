@@ -5,22 +5,55 @@
 {% block title %}选增课程{% endblock %}
 {% block body %}
 
-<form id="class-course-add-form" class="form-horizontal" method="post" action="{{ path('admin_school_class_course_add', { classId:classId })}}">
+<form id="class-course-add-form" class="form-horizontal" method="post" action="{{ path('admin_school_class_course_add', { classId:class.classId })}}">
 
-<ul class="nav nav-tabs" role="tablist">
-  <li role="presentation" class="active"><a href="#">{{dict_text('gradeName',gradeId)}}</a></li>
-  <li role="presentation"><a href="#">公共课</a></li>
-</ul>
-
-
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#">{{dict_text('gradeName',class.gradeId)}}</a></li>
+    <li role="presentation"><a href="#">公共课</a></li>
+  </ul>
 
 
+  <table id="course-table" class="table table-striped table-hover">
+    <tbody>
+      {% for course in courses %}
+      {% include 'TopxiaAdminBundle:School:class-course-table-tr.html.twig' with {course:course} %}
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="text-center">{{ web_macro.paginator(paginator) }}</div> 
+  <div class="hidden" id="select-area">
+    <div class="row form-group">
+      <div class="col-md-8 col-md-offset-1 ">
+        <span id="title-span">122</span> <span class="text-muted mll" id="name-span">123</span>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label>必修课</label>
+      </div>
+      <div class="col-md-7 controls radios">
+        {{ radios('compulsory',{'1':'必修','0':'选修'},'1')}}
+      </div>
+    </div>
+
+     <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="teacherId">任课老师</label>
+      </div>
+      <div class="col-md-7 controls radios">
+        <input type="text" id="teacherId" name="teacherId" class="form-control" required>
+      </div>
+    </div>
+  </div>
+
+<input class="hidden" name="templateId" id="templateId" value="">
 
 </form>
 {% endblock %}
 
 {% block footer %}
-  <button id="user-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-create-form">提交</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-  <script>app.load('user/create-modal')</script>
+<button id="class-course-add-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#class-course-add-form">提交</button>
+<button type="button" class="btn btn-link pull-right" data-dismiss="modal" id="backto" data-url="{{ path('admin_school_class_course_manage', { classId:class.classId }) }}">取消</button>
+<script>app.load('school/course-add-modal')</script>
 {% endblock %}
