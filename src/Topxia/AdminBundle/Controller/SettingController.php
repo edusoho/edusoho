@@ -395,28 +395,6 @@ class SettingController extends BaseController
             $default = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default, $defaultSetting);
 
-            // if (!$defaultSetting['defaultAvatar']){
-            //     $largefile = $path.'system-avatar-large.png';
-            //     $targetLargefile = $path.'avatar-large.png';
-            //     $this->filesystem = new Filesystem();
-            //     $this->filesystem->copy($largefile,$targetLargefile,'ture');
-
-            //     $smallfile = $path.'system-avatar.png';
-            //     $targetSmallfile = $path.'avatar.png';
-            //     $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
-            // }
-
-            // if (!$defaultSetting['defaultCoursePicture']){
-            //     $largefile = $path.'system-course-large.png';
-            //     $targetLargefile = $path.'course-large.png';
-            //     $this->filesystem = new Filesystem();
-            //     $this->filesystem->copy($largefile,$targetLargefile,'ture');
-
-            //     $smallfile = $path.'system-course-default-475x250.png';
-            //     $targetSmallfile = $path.'course-default-475x250.png';
-            //     $this->filesystem->copy($smallfile,$targetSmallfile,'ture');
-            // }
-
             $this->getSettingService()->set('default', $defaultSetting);
             $this->getLogService()->info('system', 'update_settings', "更新系统默认设置", $defaultSetting);
             $this->setFlashMessage('success', '系统默认设置已保存！');
