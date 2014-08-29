@@ -89,6 +89,11 @@
     height: 48px;
 }
 
+.media .media-object {
+    width: 48px;
+    height: 48px;
+}
+
 .group-header .media-heading {
     font-size: 18px;
     font-weight: bold;
