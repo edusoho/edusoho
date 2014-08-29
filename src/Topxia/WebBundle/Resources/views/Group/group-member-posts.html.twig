@@ -13,11 +13,9 @@
         
         <div class="col-md-12">
           {% include 'TopxiaWebBundle:Group:group-member-nav-pill.html.twig' %} <br>
-          {% include 'TopxiaWebBundle:Group:groups-threads-posts-ul.html.twig' with {
-          'postThreads':postThreads,
-          'groupsAsPostThreads':groupsAsPostThreads,
+          {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {
           'threads':threads,
-          'user':user, }
+          'groups':groups, }
           %}
         </div>
         <div class="col-md-12 pull-left">

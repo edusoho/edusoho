@@ -17,8 +17,12 @@ interface ThreadService
     public function openThread($threadId);
 
     public function searchThreads($conditions,$orderBy,$start, $limit);
-
+    
     public function searchThreadsCount($conditions);
+
+    public function searchPostsThreadIds($conditions,$orderBy,$start,$limit);
+
+    public function searchPostsThreadIdsCount($conditions);
 
     public function postThread($threadContent,$groupId,$memberId,$threadId,$postId=0);
 

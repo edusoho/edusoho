@@ -234,27 +234,33 @@ class GroupController extends BaseController
 
         $paginator=new Paginator(
             $this->get('request'),
-            $this->getThreadService()->searchPostsCount(array('userId'=>$user['id'])),
+            $this->getThreadService()->searchPostsThreadIdsCount(array('userId'=>$user['id'])),
             12
             );
 
-        $postThreads=$this->getThreadService()->searchPosts(array('userId'=>$user['id']),
-            array('createdTime',"DESC"),
+        $postThreadsIds=$this->getThreadService()->searchPostsThreadIds(array('userId'=>$user['id']),
+            array('id',"DESC"),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
-        $threadIds = ArrayToolkit::column($postThreads, 'threadId');
-        $threads=$this->getThreadService()->getThreadsByIds($threadIds);
+        foreach ($postThreadsIds as $postThreadsId) {
+            $threads[]=$this->getThreadService()->getThread($postThreadsId['threadId']);
+        
+        }
 
+       
         $groupIdsAsPostThreads = ArrayToolkit::column($threads, 'groupId');
         $groupsAsPostThreads=$this->getGroupService()->getGroupsByids($groupIdsAsPostThreads);
 
+        $userIds =  ArrayToolkit::column($threads, 'lastPostMemberId');
+        $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
         return $this->render("TopxiaWebBundle:Group:group-member-posts.html.twig",array(
             'user'=>$user,
             'paginator'=>$paginator,
             'threads'=>$threads,
-            'groupsAsPostThreads'=>$groupsAsPostThreads,
-            'postThreads'=>$postThreads));
+            'lastPostMembers'=>$lastPostMembers,
+            'groups'=>$groupsAsPostThreads,
+            ));
 
     }
 
