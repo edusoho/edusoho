@@ -121,23 +121,30 @@ class GroupController extends BaseController
         $userIds = ArrayToolkit::column($ownThreads, 'lastPostMemberId');
         $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
 
-        $postThreads=$this->getThreadService()->searchPosts(array('userId'=>$user['id']),array('createdTime','DESC'),0,10);
-        $threadIds = ArrayToolkit::column($postThreads, 'threadId');
-        $postsCount=$this->getThreadService()->searchPostsCount(array('userId'=>$user['id']));
+        $postThreadsIds=$this->getThreadService()->searchPostsThreadIds(array('userId'=>$user['id']),array('id','DESC'),0,10);
+        
+        foreach ($postThreadsIds as $postThreadsId) {
+            $threads[]=$this->getThreadService()->getThread($postThreadsId['threadId']);
+        
+        }
 
-        $threads=$this->getThreadService()->getThreadsByIds($threadIds);
+        $postsCount=$this->getThreadService()->searchPostsThreadIdsCount(array('userId'=>$user['id']));
+
         $groupIdsAsPostThreads = ArrayToolkit::column($threads, 'groupId');
         $groupsAsPostThreads=$this->getGroupService()->getGroupsByids($groupIdsAsPostThreads);
+
+        $userIds =  ArrayToolkit::column($threads, 'lastPostMemberId');
+        $postLastPostMembers=$this->getUserService()->findUsersByIds($userIds);
 
         return $this->render("TopxiaWebBundle:Group:group-member-center.html.twig",array(
             'user'=>$user,
             'groups'=>$groups,
-            'postThreads'=>$postThreads,
             'threads'=>$threads,
             'threadsCount'=>$threadsCount,
             'postsCount'=>$postsCount,
-            'lastPostMembers'=>$lastPostMembers,
+            'postLastPostMembers'=>$postLastPostMembers,
             'groupsAsPostThreads'=>$groupsAsPostThreads,
+            'lastPostMembers'=>$lastPostMembers,
             'groupsAsOwnThreads'=>$groupsAsOwnThreads,
             'ownThreads'=>$ownThreads,
             'groupsCount'=>$groupsCount));
@@ -247,8 +254,7 @@ class GroupController extends BaseController
             $threads[]=$this->getThreadService()->getThread($postThreadsId['threadId']);
         
         }
-
-       
+        
         $groupIdsAsPostThreads = ArrayToolkit::column($threads, 'groupId');
         $groupsAsPostThreads=$this->getGroupService()->getGroupsByids($groupIdsAsPostThreads);
 
