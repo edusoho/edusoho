@@ -47,14 +47,16 @@ class ClassesServiceImpl extends BaseService implements ClassesService
             'classId' => $class['id'],
             'role' => 'HEAD_TEACHER'
             );
+
         $oldClassMember = $this->getClassMemberService()->searchClassMembers(
             $conditions,
             array('id','DESC'),
             0,
             1);
-        if($oldClassMember['userId'] != $class['headTeacherId']) {
+
+        if($oldClassMember[0]['userId'] != $class['headTeacherId']) {
             $this->getClassMemberService()
-            ->updateClassMember($class['headTeacherId'], $oldClassMember['id']);
+            ->updateClassMember(array('userId'=>$class['headTeacherId']), $oldClassMember[0]['id']);
         }
         
         return $class;

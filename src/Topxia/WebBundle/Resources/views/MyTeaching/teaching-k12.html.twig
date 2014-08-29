@@ -2,7 +2,7 @@
 
 {% block title %}在教课程 - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'my-teaching-courses-k12' %}
+{% set side_nav = 'my-teaching-courses' %}
 
 {% block main %}
 <div class="panel panel-default panel-col lesson-manage-panel">
@@ -16,12 +16,12 @@
         {% for classMember in classMembers %}
         <tr>
           <td>
-            <a class="pull-left" href="#">
-              <img class="media-object" src="{{ asset(classMember.class.icon) }}" alt="{{ classMember.class.name }}" style="width: 140px; height: 78px;">
+            <a class="pull-left" href="{{ path('class_show',{ classId: classMember.classId })}}">
+              <img src="{{ asset(classMember.class.icon) }}" alt="{{ classMember.class.name }}" style="width: 140px; height: 78px;">
             </a>
           </td>
           <td> 
-            <a href="#" class="btn-link pull-left">{{ class_name(classMember.class) }}</a>
+            <a href="{{ path('class_show',{ classId: classMember.classId })}}" class="btn-link pull-left">{{ class_name(classMember.class) }}</a>
           </td>
           <td>
             {% if classMember.role == 'HEAD_TEACHER' %}

@@ -180,6 +180,7 @@ class SchoolController extends BaseController
             $course['creatorName'] = $creatorProfile['truename'];
             $publicCourses[$key2] = $course;
         }
+
         return $this->render('TopxiaAdminBundle:School:class-course-add-modal.html.twig',array(
             'class' => $class,
             'courses' => $courses,

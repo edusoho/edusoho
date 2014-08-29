@@ -105,6 +105,7 @@ define(function(require, exports, module) {
                 var data = [];
                 data['id'] = element.data('id');
                 data['name'] = element.data('name');
+                element.val(element.data('id'));
                 callback(data);
             },
             formatSelection: function(item) {

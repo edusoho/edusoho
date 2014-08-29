@@ -44,7 +44,7 @@ class ClassMemberDaoImpl extends BaseDao implements ClassMemberDao
 
     public function updateClassMember($fields, $id)
     {
-        $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getClassMember($id);
     }
     public function deleteClassMemberByUserId($userId){
@@ -66,6 +66,7 @@ class ClassMemberDaoImpl extends BaseDao implements ClassMemberDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'class_member')
             ->andWhere('classId = :classId')
+            ->andWhere('role = :role')
             ->andWhere('userId = :userId');
             
         $roles="('";

@@ -8,22 +8,14 @@
 <form id="class-course-add-form" class="form-horizontal" method="post" action="{{ path('admin_school_class_course_add', { classId:class.classId })}}">
 
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active" data-target="#public-course-table"><a href="#">{{dict_text('gradeName',class.gradeId)}}</a></li>
-    <li role="presentation" data-target="#course-table"><a href="#">公共课</a></li>
+    <li role="presentation" {% if class.gradeId != '0' %} class="active" {% endif %}><a href="#" data-url="{{path('admin_school_class_course_add', { classId:class.classId, gradeId:class.gradeId, term:class.term })}}">{{dict_text('gradeName',class.gradeId)}}</a></li>
+    <li role="presentation" {% if class.gradeId == '0' %}class="active" {% endif %}><a href="#" data-url="{{path('admin_school_class_course_add', { classId:class.classId, gradeId:0, term:class.term })}}">公共课</a></li>
   </ul>
 
 
   <table id="course-table" class="table table-striped table-hover">
     <tbody>
       {% for course in courses %}
-      {% include 'TopxiaAdminBundle:School:class-course-table-tr.html.twig' with {course:course} %}
-      {% endfor %}
-    </tbody>
-  </table>
-
-    <table id="public-course-table" class="table table-striped table-hover hidden">
-    <tbody>
-      {% for course in publicCourses %}
       {% include 'TopxiaAdminBundle:School:class-course-table-tr.html.twig' with {course:course} %}
       {% endfor %}
     </tbody>
