@@ -255,8 +255,8 @@
         validator.addItem({
             element: '[name="group[grouptitle]"]',
             required: true,
-            rule: 'minlength{min:2} maxlength{max:12}',
-            errormessageUrl: '长度为2-12位'
+            rule: 'minlength{min:2} maxlength{max:100}',
+            errormessageUrl: '长度为2-100位'
            
             
         });

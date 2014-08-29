@@ -18,7 +18,7 @@ class GroupController extends BaseController
         $mycreatedGroup = array();
         $myJoinGroup = array();
 
-        $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 16);
+        $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 12);
     
         $recentlyThread = $this->getThreadService()->searchThreads(
             array(
