@@ -5,8 +5,12 @@
 		{% for teacher in teachers %}
 			<div class="col-md-6">
 				{% set teacherProfile = teacherProfiles[teacher.id]|default(null) %}
-				<img class="media-object pull-left" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacherProfile.truename}}">
-				<h4>{{teacherProfile.truename}}</h4>
+				<a href="{{ path('user_show', {id:teacher.id}) }}">
+					<img class="media-object pull-left" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacherProfile.truename}}">
+				</a>
+				<a href="{{ path('user_show', {id:teacher.id}) }}">
+					<h4>{{teacherProfile.truename}}</h4>
+				</a>
 			</div>
 		{% else %}
 			尚无任课老师
@@ -16,7 +20,9 @@
 	<div class="col-md-12">
 		{% for student in students %}
 			<div class="col-md-1">
-				<img class="media-object pull-left" width="48" height="48" src="{{file_path(student.smallAvatar, 'avatar.png')}}" alt="">
+				<a href="{{ path('user_show', {id:student.id}) }}">
+					<img class="media-object pull-left" width="48" height="48" src="{{file_path(student.smallAvatar, 'avatar.png')}}" alt="">
+				</a>
 			</div>
 		{% else %}
 			尚无学生(去添加)

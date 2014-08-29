@@ -1,10 +1,11 @@
 <li class="media">
-	<a class="pull-left" href="#">
+	<a class="pull-left" href="{{ path('user_show', {id:user.id}) }}">
 	  <img class="media-object pull-left"  width="48" height="48" src="{{file_path(user.smallAvatar, 'avatar.png')}}" alt="{{userProfile.truename}}">
 	</a>
 	<div class="media-body">
-	  <h4 class="media-heading">{{userProfile.truename}}</h4>
-
+    <a href="{{ path('user_show', {id:user.id}) }}">
+	    <h4 class="media-heading">{{userProfile.truename}}</h4>
+    </a>
 	  <div class="short-long-text">
       <div class="short-text">
       	{{ note.content|plain_text(100) }} <span class="trigger">(展开)</span>
