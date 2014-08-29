@@ -451,7 +451,7 @@ class GroupController extends BaseController
                 return $this->createMessageResponse('info', '您没有权限!');
         }
 
-        return $this->render("TopxiaWebBundle:Group:set-logo.html.twig", array(
+        return $this->render("TopxiaWebBundle:Group:set-group-info.html.twig", array(
                     'groupinfo' => $group,
                     'is_groupmember' => $this->getGroupMemberRole($id),
                     'id'=>$id,
@@ -547,6 +547,7 @@ class GroupController extends BaseController
     {
         $user=$this->getCurrentUser();
 
+        $group = $this->getGroupService()->getGroup($id);
         if (!$this->getGroupService()->isOwner($id, $user['id']) && !$this->getGroupService()->isAdmin($id, $user['id']) && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true) {
         return $this->createMessageResponse('info', '您没有权限!');
         }
@@ -559,16 +560,25 @@ class GroupController extends BaseController
                 'file' => $fileName,
                 'id'=>$id,
                 'page'=>'logoCrop',
-                'action'=>'setLogo'
+                'type'=>'logo'
                 )
             ));
         }
+
+        return $this->render("TopxiaWebBundle:Group:set-logo.html.twig", array(
+                'groupinfo' => $group,
+                'is_groupmember' => $this->getGroupMemberRole($id),
+                'id'=>$id,
+                'logo'=>$group['logo'],
+                'backgroundLogo'=>$group['backgroundLogo'],)
+        );
 
     }
      public function setGroupBackgroundLogoAction(Request $request,$id)
      {
         $user=$this->getCurrentUser();
         
+        $group = $this->getGroupService()->getGroup($id);
         if (!$this->getGroupService()->isOwner($id, $user['id'])&& !$this->getGroupService()->isAdmin($id, $user['id'])  && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
@@ -580,10 +590,17 @@ class GroupController extends BaseController
                 'file' => $fileName,
                 'id'=>$id,
                 'page'=>'backGroundLogoCrop',
-                'action'=>'setBackGroundLogo'
+                'type'=>'background',
                 )
             ));       
         }
+
+        return $this->render("TopxiaWebBundle:Group:set-background-logo.html.twig", array(
+                'groupinfo' => $group,
+                'is_groupmember' => $this->getGroupMemberRole($id),
+                'id'=>$id,
+                'logo'=>$group['backgroundLogo'],)
+        );
 
     }
     
