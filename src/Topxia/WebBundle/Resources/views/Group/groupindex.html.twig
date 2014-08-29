@@ -66,7 +66,7 @@
 
       </div>
 
-      {% include 'TopxiaWebBundle:Group:thread-table.html.twig' %}
+      {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {users:owner} %}
 
       {{ web_macro.paginator(paginator) }}
     </div>
@@ -108,7 +108,6 @@
       </div>
     </div>
   {% endif %}
-
 
   <div class="panel panel-default">
     <div class="panel-heading">最近加入</div>
