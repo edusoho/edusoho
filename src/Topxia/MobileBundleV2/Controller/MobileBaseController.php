@@ -219,7 +219,7 @@ class MobileBaseController extends BaseController
             if (!empty($item['length']) and in_array($item['type'], array('audio', 'video'))) {
                 $item['length'] =  $container->get('topxia.twig.web_extension')->durationFilter($item['length']);
             } else {
-                $item['length'] = 0;
+                $item['length'] = "";
             }
 
             if (empty($item['content'])) {
