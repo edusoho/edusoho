@@ -26,6 +26,7 @@ define(function(require, exports, module) {
         coursePictureValidator.addItem({
             element: '#course-picture-field',
             required: true,
+            failSilently: true,
             rule: 'maxsize_image',
             errormessageRequired: '请选择要上传的默认课程图片文件'
         });
