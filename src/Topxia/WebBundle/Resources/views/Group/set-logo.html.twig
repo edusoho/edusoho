@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+{% extends 'TopxiaWebBundle:Group:layout2.html.twig' %}
 
   {% if app.request.get('action')=='transferGroup' %}
       {% set script_controller = 'group/group_transferGroup' %}
@@ -16,15 +16,12 @@
 
   {% block content %}
 
-    {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {
-    'groupinfo':groupinfo,
-    'is_groupmember':is_groupmember,}
-    %}
-
-    <div class="es-row-wrap container-gap userpage-body">
+    {% include 'TopxiaWebBundle:Group:group-header.html.twig' %}
       
         <div class="row">
           <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
                 <ul class="nav nav-pills">
                   <li  {% if app.request.get('action')=='setGroupInfo' %}class="active"{% endif %}><a href="{{path('group_set',{id:groupinfo.id,action:'setGroupInfo'})}}">编辑小组 </a></li>
                   <li {% if app.request.get('action')=='setLogo' %}class="active"{% endif %}> <a  href="{{path('group_set',{id:groupinfo.id,action:'setLogo'})}}">logo设置</a></li>
@@ -82,8 +79,11 @@
                   </form><br>
             
             {% endif %}
+          </div>
         </div>
+
       </div>
     </div>
+
 
   {% endblock %}
