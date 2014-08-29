@@ -7,8 +7,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Filesystem\Filesystem;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Service\Util\PluginUtil;
+use Topxia\Service\Util\CloudClientFactory;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;

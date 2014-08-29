@@ -124,6 +124,8 @@ class GroupThreadController extends BaseController
             return $this->createMessageResponse('info','该话题已被关闭');
         }
 
+        $this->getThreadService()->waveHitNum($threadId);
+
         if($request->query->get('post'))
         {   
             $url=$this->getPost($request->query->get('post'),$threadId,$id);
@@ -144,7 +146,7 @@ class GroupThreadController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $postCount,
-            10  
+            30  
         );
 
         $post=$this->getThreadService()->searchPosts($condition,$sort,
@@ -409,7 +411,7 @@ class GroupThreadController extends BaseController
         if($post['postId']!=0)$postId=$post['postId'];
         $count=$this->getThreadService()->searchPostsCount(array('threadId'=>$threadId,'status'=>'open','id'=>$postId,'postId'=>0));
 
-        $page=floor(($count)/10)+1;
+        $page=floor(($count)/30)+1;
    
         $url=$this->generateUrl('group_thread_index',array('id'=>$id,'threadId'=>$threadId));
 

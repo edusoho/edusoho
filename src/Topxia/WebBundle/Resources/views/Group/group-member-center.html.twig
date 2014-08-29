@@ -46,9 +46,9 @@
                 <h4>我的回复<a class="badge pull-right" href="{{path('group_member_posts')}}" style="background-color:#3cb373;">{{postsCount}}</a></h4>
               </div>
               
-              {% include 'TopxiaWebBundle:Group:groups-threads-posts-ul.html.twig' with {
-              'postThreads':postThreads,
-              'groupsAsPostThreads':groupsAsPostThreads,
+              {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {
+              'postLastPostMembers':postLastPostMembers,
+              'groups':groupsAsPostThreads,
               'threads':threads,
               'user':user,}
               %}

@@ -75,7 +75,7 @@
               {% if course %}
 
                 <li class="autumn-grid autumn-course-grid">
-                  <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ file_path(course.largePicture, 'course-large.png') }}">
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ default_path('coursePicture',course.largePicture, 'large') }}">
                     {% if course.status == 'draft' %}
                       <span class="label  label-warning course-status">未发布</span>
                     {% elseif course.status == 'closed' %}
@@ -133,7 +133,7 @@
 
               {% if course %}
                 <li class="autumn-grid autumn-course-grid">
-                  <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ file_path(course.largePicture, 'course-large.png') }}">
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ default_path('coursePicture',course.largePicture, '') }}">
                     {% if course.status == 'draft' %}
                       <span class="label  label-warning course-status">未发布</span>
                     {% elseif course.status == 'closed' %}
@@ -227,7 +227,7 @@
                         <div class="topic-body">
                           {% set user = thread.user %}
                           {% set latestPostUser = thread.latestPostUser %}
-                          <img src="{{ file_path(thread.user.mediumAvatar, 'avatar.png') }}" class="pull-left">
+                          <img src="{{ default_path('avatar',thread.user.mediumAvatar, '') }}" class="pull-left">
                           <h3>{{ user.nickname }}</h3>
                           <p><a href="{{ path('course_show', {id:thread.course.id}) }}">{{ thread.course.title }}</a></p>
                         </div>
@@ -261,7 +261,7 @@
                   <li class="col-sm-6 col-md-4">
                     <div class="teachers-item">
                       <a href="{{ path('user_show', {id:teacher.id}) }}">
-                       <img class="img-circle" src="{{ file_path(teacher.mediumAvatar, 'avatar.png') }}">
+                       <img class="img-circle" src="{{ default_path('avatar',teacher.mediumAvatar, '') }}">
                       </a>
                
                         <span>{{ web_macro.user_link(teacher) }}</span>
@@ -359,7 +359,7 @@
                 <li class="media">
                   <a href="{{ path('course_show', {id:course.id}) }}">
                     <div class="course-item">
-                      <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb pull-left">
+                      <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb pull-left">
                       <div class="course-title">{{ course.title }}</div>
                     </div>
                   </a>
@@ -385,7 +385,7 @@
                   {% if learn.lesson is defined %}
                     <li class="media">
                       <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ file_path(learn.user.mediumAvatar, 'avatar.png') }}">
+                        <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
                       </a>
                       <div class="media-body">
                         <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>

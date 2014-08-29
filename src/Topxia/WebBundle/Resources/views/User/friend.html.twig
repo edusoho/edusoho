@@ -20,7 +20,7 @@
 	{% for friend in friends %}
 	<div class="col-md-4">
 		<div class="friendcard clearfix">
-			<a href="{{ path('user_show', {id:friend.id}) }}"><img src="{{ file_path(friend.mediumAvatar, 'avatar.png')  }}" class="avatar"></a>
+			<a href="{{ path('user_show', {id:friend.id}) }}"><img src="{{ default_path('avatar',friend.mediumAvatar, '')  }}" class="avatar"></a>
 			<div class="infos">
 				<a href="{{ path('user_show', {id:friend.id}) }}" class="nickname">{{ friend.nickname }}</a>
 				<div class="title">{{ friend.title }}</div>
