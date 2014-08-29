@@ -1,42 +1,36 @@
 {% extends 'TopxiaWebBundle:Group:layout2.html.twig' %}
 {% set script_controller = 'group/group' %}
-{% block content %}
- {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {'groupinfo':groupinfo,'is_groupmember':is_groupmember,} %}
+{% block group_body %}
 
-  <div class="es-row-wrap container-gap userpage-body">
-    <div class="row">
-      <div class="col-xs-12"><div class="row row-offcanvas row-offcanvas-right">
-        <div class="page-header"><span class="glyphicon glyphicon-hand-right"></span> 发布话题
+  <div class="panel panel-default">
+    <div class="panel-heading"><strong>发表话题</strong></div>
+    <div class="panel-body">
+      <form id="user-thread-form" class="form-horizontal" method="post">
+
+        <div class="form-group">
+          <label class="col-xs-2 control-label" for="thread_title">标题</label>
+          <div class="col-xs-7 controls">
+            <input type="text" id="thread_title" name="thread[title]" class="form-control">
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-xs-2 control-label" for="thread_content">内容</label>
+          <div class="col-xs-7 controls">
+            <textarea name="thread[content]" rows="10" id="thread_content" class="form-control"></textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-7 col-xs-offset-2">
+            <button id="groupthread-save-btn" data-submiting-text="正在创建" type="submit" class="btn btn-primary">发布</button>
+          </div>
         </div>
         
-        <form id="user-thread-form" class="form-horizontal" method="post">
-
-          <div class="form-group">
-            <label class="col-xs-2 control-label" for="thread_title">标题</label>
-            <div class="col-xs-7 controls">
-              <input type="text" id="thread_title" name="thread[title]" class="form-control">
-              <div class="help-block" style="display:none;"></div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-xs-2 control-label" for="thread_content">内容</label>
-            <div class="col-xs-7 controls">
-              <textarea name="thread[content]" rows="10" id="thread_content" class="form-control"></textarea>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-xs-7 col-xs-offset-2">
-              <button id="groupthread-save-btn" data-submiting-text="正在创建" type="submit" class="btn btn-primary">发布</button>
-            </div>
-          </div>
-          
-          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-        </form>
-
-        <br>
-      </div>   </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+      
     </div>
   </div>
 {% endblock %}
