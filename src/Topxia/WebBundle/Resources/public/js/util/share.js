@@ -53,6 +53,7 @@ define(function(require, exports, module) {
             "common":{       
                    "bdSnsKey":{},
                    "bdText":bdText,
+                   "bdDesc":"",
                    "bdMini":"2",       
                    "bdMiniList":false,       
                    "bdPic":"",       
