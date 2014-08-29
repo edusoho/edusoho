@@ -9,4 +9,7 @@ interface CourseService
 	public function searchCourse();
 	public function getCourse();
 	public function getReviews();
+
+	public function favoriteCourse();
+	public function unFavoriteCourse();
 }

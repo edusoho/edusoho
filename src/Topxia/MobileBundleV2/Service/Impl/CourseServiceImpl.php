@@ -20,10 +20,44 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $reviews;
 	}
 
+
+	public function favoriteCourse()
+	{
+        		$user = $this->controller->getUserByToken($this->request);
+        		$courseId = $this->getParam("courseId");
+
+        		if (empty($user) || !$user->isLogin()) {
+            		return $this->createErrorResponse('not_login', "您尚未登录，不能收藏课程！");
+        		}
+
+        		if (!$this->controller->getCourseService()->hasFavoritedCourse($courseId)) {
+            		$this->controller->getCourseService()->favoriteCourse($courseId);
+        		}
+
+        		return true;
+	}
+
+	public function unFavoriteCourse()
+	{
+		$user = $this->controller->getUserByToken($this->request);
+        		$courseId = $this->getParam("courseId");
+
+        		if (empty($user) || !$user->isLogin()) {
+            		return $this->createErrorResponse('not_login', "您尚未登录，不能收藏课程！");
+        		}
+
+        		if (!$this->controller->getCourseService()->hasFavoritedCourse($courseId)) {
+            		return $this->createErrorResponse('runtime_error', "您尚未收藏课程，不能取消收藏！");
+        		}
+
+        		$this->controller->getCourseService()->unfavoriteCourse($courseId);
+
+        		return true;
+	}
+
 	public function getCourse()
 	{	
-		$token = $this->controller->getUserToken($this->request);
-		$user = $this->controller->getUser();
+		$user = $this->controller->getUserByToken($this->request);
 		$courseId = $this->getParam("courseId");
 		$course = $this->controller->getCourseService()->getCourse($courseId);
 		if (empty($course)) {

@@ -80,6 +80,23 @@ class MobileBaseController extends BaseController
         return $token;
     }
 
+    public function getUserByToken($request)
+    {
+        if ($request->getMethod() == "POST") {
+            $token = $request->headers->get('token', '');
+        } else {
+            $token = $request->query->get('token', '');
+        }
+
+        $token = $this->getUserService()->getToken(self::TOKEN_TYPE, $token);
+        if ($token) {
+            $this->setCurrentUser($token['userId'], $request);
+            return $this->getUser();
+        }
+
+        return null;
+    }
+
     public function createToken($user, $request)
     {
         $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], time() + 3600 * 24 * 30);
