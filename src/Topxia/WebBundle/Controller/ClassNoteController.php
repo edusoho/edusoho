@@ -8,7 +8,6 @@ use Topxia\Common\Paginator;
 class ClassNoteController extends BaseController
 {
     public function listAction(Request $request,$classId){
-        $user = $this->getCurrentUser();
         $class = $this->getClassService()->getClass($classId);
         if (empty($class)) {
             throw $this->createNotFoundException("班级不存在，或已删除。");

@@ -1,0 +1,25 @@
+{% extends 'TopxiaWebBundle:Class:layout.html.twig' %}
+{% set script_controller = 'class-note/note' %}
+{% block class_main %}
+	<div class="col-md-12">
+		{% for teacher in teachers %}
+			<div class="col-md-6">
+				{% set teacherProfile = teacherProfiles[teacher.id]|default(null) %}
+				<img class="media-object pull-left	" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacherProfile.truename}}">
+				<h4>{{teacherProfile.truename}}</h4>
+			</div>
+		{% else %}
+			尚无任课老师
+		{% endfor %}
+	</div>
+	<div class="col-md-12"><hr/></div>
+	<div class="col-md-12">
+		{% for student in students %}
+			<div class="col-md-1">
+				<img class="media-object pull-left	" src="{{file_path(student.smallAvatar, 'avatar.png')}}" alt="">
+			</div>
+		{% else %}
+			尚无学生(去添加)
+		{% endfor %}
+	</div>
+{% endblock %}

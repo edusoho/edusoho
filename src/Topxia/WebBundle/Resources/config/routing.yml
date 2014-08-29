@@ -1258,3 +1258,7 @@ vip_upgrade:
 class_notes:
     pattern:  /class/{classId}/note
     defaults: { _controller: TopxiaWebBundle:ClassNote:list }
+
+class_members:
+    pattern:  /class/{classId}/member
+    defaults: { _controller: TopxiaWebBundle:ClassMember:list }
