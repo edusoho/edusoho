@@ -412,8 +412,11 @@ class WebExtension extends \Twig_Extension
 
         $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
 
-        if($systemDefault && isset($defaultSetting[$fileName])){
+        if($systemDefault && isset($defaultSetting)){
             $fileName = 'default'.ucfirst($category).'FileName';
+            if (empty($defaultSetting[$fileName])) {
+                $url = $assets->getUrl($publicUrlpath . $category);
+            }
             $url = $assets->getUrl($publicUrlpath .$defaultSetting[$fileName]);
         } else {
             $url = $assets->getUrl($publicUrlpath . $category);
