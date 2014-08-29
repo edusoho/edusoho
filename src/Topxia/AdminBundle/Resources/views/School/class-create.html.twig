@@ -4,7 +4,11 @@
 
 {% set menu = 'classSetting' %}
 {% set script_controller = 'school/class-create' %}
-
+{% 
+  set script_arguments = {
+    teacherUrl: path('admin_school_teacher_name'),
+  } 
+%}
 {% block main %}
 <div class="page-header clearfix">
 
@@ -16,7 +20,7 @@
     <div class="col-md-2 control-label">
       <label>年级</label>
     </div>
-    <div class="col-md-7 controls">
+    <div class="col-md-4 controls">
       <select class="form-control" name="gradeId" id="gradeId">
         {{ select_options_for_school('', '', '--选择年级--') }}
       </select>
@@ -27,7 +31,7 @@
     <div class="col-md-2 control-label">
       <label for="name">班级名称</label>
     </div>
-    <div class="col-md-7 controls">
+    <div class="col-md-4 controls">
       <input type="text" id="name" name="name" class="form-control" placeholder="如：1班、2班等">
     </div>
   </div>
@@ -45,19 +49,17 @@
     <div class="col-md-2 control-label">
       <label>入学年份</label>
     </div>
-    <div class="col-md-7 controls">
+    <div class="col-md-4 controls">
       <select class="form-control" name="year" id="year">
         {{ select_options(dict('year'),'' , '--入学年份--') }}
       </select>
     </div>
   </div>
 
-  <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="headteacherid">班主任</label>
-    </div>
-    <div class="col-md-7 controls">
-      <input type="text" id="headteacherid" name="headteacherid" class="form-control">
+  <div class="form-group">
+    <label class="col-md-2 control-label">班主任</label>
+    <div class="col-md-4 controls">
+    <input type="text" id="headteacherid" name="headteacherid" required="required" class="width-full select2-offscreen" tabindex="-1" value="">
     </div>
   </div>
 
@@ -98,7 +100,7 @@
 
       <div class="row form-group">
 
-        <div class="controls col-md-4 col-md-offset-4">
+        <div class="controls col-md-4 col-md-offset-2">
           <a class="btn btn-link" id="backto" href="{{ path('admin_school_classes_setting') }}">返回</a>
           <button type="submit" class="btn btn-primary">提交</button>
         </div>

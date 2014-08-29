@@ -1,0 +1,21 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    班级动态
+  </div>
+  <div class="panel-body">
+    <ul class="media-list">
+      {% for status in statuses %}
+        {% set user = users[status.userId] %}
+        <li class="media">
+          <a class="pull-left" href="{{ path('user_show', {id:user.id}) }}">
+            <img class="media-object"  src="{{ file_path(user.smallAvatar, 'avatar.png') }}">
+          </a>
+          <div class="media-body">
+            <a href="{{ path('user_show', {id:user.id}) }}"> {{ user.nickname }}</a> 在{{ status.createdTime|smart_time }} 学习了课时 <a href="{{ path('course_show', {id: status.properties.course.id}) }}">{{ status.properties.lesson.title }}</a>
+          </div>
+
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

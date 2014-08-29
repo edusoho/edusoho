@@ -332,6 +332,11 @@ admin_setting_site:
     pattern:  /setting/site
     defaults: { _controller: TopxiaAdminBundle:Setting:site }
 
+admin_school_teacher_name:
+    pattern:  /school/teachers
+    defaults: { _controller: TopxiaAdminBundle:School:teacherName }
+    methods: [GET]
+
 admin_school_setting:
     pattern:  /school/setting
     defaults: { _controller: TopxiaAdminBundle:School:schoolSetting }

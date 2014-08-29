@@ -17,9 +17,14 @@
             <div class="list-group-panel">
               <div class="list-group-heading">我的教学</div>
               <ul class="list-group">
+{#                <a class="list-group-item
+               {% if side_nav == 'my-teaching-courses' %} active {% endif %}" 
+               href="{{path('my_teaching_courses')}}">在教课程</a> #}
+
                <a class="list-group-item
                {% if side_nav == 'my-teaching-courses' %} active {% endif %}" 
-               href="{{path('my_teaching_courses')}}">在教课程</a>
+               href="{{path('my_teaching_courses_k12')}}">在教课程</a>
+
                <a class="list-group-item 
                {% if side_nav == 'my-teaching-questions' %} active {% endif %}" 
                 href="{{path('my_teaching_threads', {type:'question'}) }}">学员问答</a>

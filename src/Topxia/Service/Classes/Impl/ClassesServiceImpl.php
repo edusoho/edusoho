@@ -31,12 +31,33 @@ class ClassesServiceImpl extends BaseService implements ClassesService
 
     public function createClass($class)
     {
-        return $this->getClassesDao()->createClass($class);
+        $class = $this->getClassesDao()->createClass($class);
+        $classMember['classId'] = $class['id'];
+        $classMember['userId'] = $class['headTeacherId'];
+        $classMember['role'] = 'HEAD_TEACHER';
+        $classMember['createdTime'] = time();
+        $this->getClassMemberService()->addClassMember($classMember);
+        return $class;
     }
 
     public function editClass($fields, $id)
     {
-        return $this->getClassesDao()->editClass($fields, $id);
+        $class = $this->getClassesDao()->editClass($fields, $id);
+      /*  $conditions = array(
+            'classId' => $class['id'],
+            'role' => 'HEAD_TEACHER'
+            );
+        $oldClassMember = $this->getClassMemberService()->searchClassMembers(
+            $conditions,
+            array('id','DESC'),
+            0,
+            1);
+        if($oldClassMember['userId'] != $class['headTeacherId']) {
+            $this->getClassMemberService()->addClassMember($classMember);
+        }*/
+
+        
+        return $class;
     }
 
     public function deleteClass($id)
@@ -48,4 +69,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return $this->createDao('Classes.ClassesDao');
     }
 
+    private function getClassMemberService(){
+        return $this->createService('Classes.ClassMemberService');
+    }
 }

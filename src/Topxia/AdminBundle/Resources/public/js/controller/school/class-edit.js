@@ -4,6 +4,9 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Uploader = require('upload');
 
+    require('jquery.select2-css');
+    require('jquery.select2');
+
     exports.run = function() {
         var $form = $("#class-edit-form");
 
@@ -68,6 +71,55 @@ define(function(require, exports, module) {
                 Notify.success('上传班级背景图片成功！');
             }
         }); 
+
+        $('#headteacherid').select2({
+            ajax: {
+                url: app.arguments.teacherUrl + '#',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function(term, page) {
+                    return {
+                        q: term,
+                        page_limit: 10
+                    };
+                },
+                results: function(data) {
+
+                    var results = [];
+
+                    $.each(data, function(index, item) {
+
+                        results.push({
+                            id: item.id,
+                            name: item.name
+                        });
+                    });
+
+                    return {
+                        results: results
+                    };
+
+                }
+            },
+            initSelection: function(element, callback) {
+                var data = [];
+                data['id'] = element.data('id');
+                data['name'] = element.data('name');
+                callback(data);
+            },
+            formatSelection: function(item) {
+                return item.name;
+            },
+            formatResult: function(item) {
+                return item.name;
+            },
+            width: 'off',
+            multiple: false,
+            placeholder: "选择班主任",
+            createSearchChoice: function() {
+                return null;
+            }
+        });
     };
 
 });

@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
-
+use Topxia\Common\ArrayToolkit;
 
 class SchoolController extends BaseController
 {
@@ -61,19 +61,22 @@ class SchoolController extends BaseController
             return new Response(json_encode($class));
         }
 
-        return $this->render('TopxiaAdminBundle:School:class-create.html.twig');
+        return $this->render('TopxiaAdminBundle:School:class-create.html.twig',array(
+          
+            ));
     }
 
     public function classEditAction(Request $request, $classId)
     {
-        $class = $this->getClassesService()->getClass($classId);
-
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
             $class = $this->getClassesService()->editClass($fields,$classId);
             return new Response(json_encode($class));
         }
 
+        $class = $this->getClassesService()->getClass($classId);
+        $headTheacher = $this->getUserService()->getUserProfile($class['headTeacherId']);
+        $class['headTeacherName'] = $headTheacher['truename'];
         return $this->render('TopxiaAdminBundle:School:class-edit.html.twig',array(
             'class' => $class,
         ));
@@ -142,8 +145,8 @@ class SchoolController extends BaseController
         $class = $request->query->all();
         $class['classId'] = $classId;
         $conditions =array(
-            'classId' => $classId,
-            'term' => $class['term']
+            'classId' => 0,
+            'gradeId' => $class['gradeId']
         );
 
         $paginator = new Paginator(
@@ -158,15 +161,29 @@ class SchoolController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $conditions['gradeId'] = 0;
+        $publicCourses =$this->getCourseService()->searchCourses(
+            $conditions,
+            'latest',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
         foreach ($courses as $key => $course) {
             $creatorProfile = $this->getUserService()->getUserProfile($course['userId']);
             $course['creatorName'] = $creatorProfile['truename'];
             $courses[$key] = $course;
         }
 
+         foreach ($publicCourses as $key2 => $course) {
+            $creatorProfile = $this->getUserService()->getUserProfile($course['userId']);
+            $course['creatorName'] = $creatorProfile['truename'];
+            $publicCourses[$key2] = $course;
+        }
         return $this->render('TopxiaAdminBundle:School:class-course-add-modal.html.twig',array(
             'class' => $class,
-            'courses' => $courses, 
+            'courses' => $courses,
+            'publicCourses' => $publicCourses,
             'paginator' => $paginator,            
         ));
     }
@@ -252,9 +269,27 @@ class SchoolController extends BaseController
         return new Response(json_encode($response));
     }
     
-    private function getTeacherName()
+    public function teacherNameAction()
     {
-
+        $conditions = array(
+            'roles' => 'ROLE_TEACHER' 
+            );
+        $total = $this->getUserService()->searchUserCount($conditions);
+        $teachers = $this->getUserService()->searchUsers(
+            $conditions,
+            array('id','ASC'),
+            0,
+            $total);
+        $ids = ArrayToolkit::column($teachers,'id');
+        $teacherProfiles = $this->getUserService()->findUserProfilesByIds($ids);
+        $response = array();
+        foreach ($teacherProfiles as $key => $teacherProfile) {
+            $temp = array();
+            $temp['id'] = $teacherProfile['id'];
+            $temp['name'] = $teacherProfile['truename'];
+            $response[] = $temp;
+        }
+        return new Response(json_encode($response)); 
     }
 
     protected function getSettingService()
