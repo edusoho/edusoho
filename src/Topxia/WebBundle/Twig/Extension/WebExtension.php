@@ -416,11 +416,13 @@ class WebExtension extends \Twig_Extension
             $fileName = 'default'.ucfirst($category).'FileName';
             if (array_key_exists($fileName, $defaultSetting)) {
                 $url = $assets->getUrl($publicUrlpath .$defaultSetting[$fileName]);
-            }
+            } else {
             $url = $assets->getUrl($publicUrlpath . $category);
+            }
         } else {
             $url = $assets->getUrl($publicUrlpath . $category);
         }
+
         return $url;
     }
 
