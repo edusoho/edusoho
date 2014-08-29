@@ -22,7 +22,7 @@ class StudentController extends BaseController
     {   
         $conditions = array(
             'classId'=>$classId,
-            'roles'=>array('student')
+            'roles'=>array('STUDENT')
         );
 
         $paginator = new Paginator(
@@ -60,7 +60,7 @@ class StudentController extends BaseController
                 }
                 $conditions=array(
                     'userId'=>$user['id'],
-                    'roles'=>array('student')
+                    'roles'=>array('STUDENT')
                 );
                 $classMembers=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
                 if(count($classMembers)>0 && $classMembers[0]['classId']!=$classId){
