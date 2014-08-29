@@ -139,12 +139,14 @@ class ArticleController extends BaseController
         $site = $this->getSettingService()->get('site', array());
 
         if (empty($defaultSetting)){
-            $articleShareContent = array();
+            $articleShareContent = '';
+        } else {
+            $articleShareContent = $defaultSetting['articleShareContent'];
         }
 
         $valuesToBeReplace = array('{{articletitle}}', '{{sitename}}');
         $valuesToReplace = array($article['title'], $site['name']);
-        $articleShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $defaultSetting['articleShareContent']);
+        $articleShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $articleShareContent);
 
         $createdTime = $article['createdTime'];
 
