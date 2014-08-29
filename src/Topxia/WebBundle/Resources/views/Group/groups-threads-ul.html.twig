@@ -1,35 +1,29 @@
-<ul class="media-list">
-  {% if ownThreads%}
-    {% for ownThread in ownThreads%}
-       {% if ownThread.status =='open' %}
-          <li class="media">
-            
-              <div class="media-body" style="word-break: break-all;" >
-                   <a href="{{path('group_thread_index',{id:ownThread.groupId,threadId:ownThread.id})}}">"{{ownThread.title|sub_text(50)}}"</a> 
-                   <div class="pull-right">                      
-                     {% if ownThread.postNum %}
-                      <span class="badge pull-right" style="background-color:#3cb373;">{{ownThread.postNum}}</span>
-                     {% endif %}
-                    &nbsp;
-                  </div>
-                  <br>
-                  <div class="text-muted text-normal"><br>
-                    <a class="link-muted" href="{{path('group_index',{id:ownThread.groupId})}}" title="{{groupsAsOwnThreads[ownThread.groupId].title}}" >{{groupsAsOwnThreads[ownThread.groupId].title}}</a> &nbsp;
-                    <span class="glyphicon glyphicon-user"></span>
-                    {{ web_macro.user_link(user , 'link-muted') }} &nbsp;
-                     <span class="glyphicon glyphicon-time"></sapn>{{ownThread.createdTime|smart_time}}&nbsp;
-                      {% if ownThread.lastPostTime %}
-                        最后回复:{{ web_macro.user_link(lastPostMembers[ownThread.lastPostMemberId] , 'link-muted') }}
-                        &nbsp;最后回复时间:{{ ownThread.lastPostTime|smart_time}}
-                      {% endif %}
-                  </div>
-
-              </div>
-          </li>
-
-        {% endif %}
-    {% endfor %}
+<ul class="media-list thread-list">
+  {% for thread in ownThreads %}
+    {% set group = groupsAsOwnThreads[thread.groupId]|default(null) %}
+    <li class="media">
+      <a class="pull-left" href="{{ path('user_show', {id:user.id}) }}">
+        <img src="{{ default_path('avatar',user.smallAvatar, '') }}" class="media-object">
+      </a>
+      <div class="media-body">
+        {% if thread.postNum %}<span class="badge pull-right">{{thread.postNum}}</span>{% endif %}
+        <a class="title" href="{{ path('group_thread_index', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(50)}}</a>
+        <div class="metas">
+          {% if group %}
+            <a class="link-muted" href="{{path('group_index',{id:thread.groupId})}}" title="{{ group.title }}" >{{ group.title }}</a>
+          {% endif %}
+          <span class="divider">•</span>
+          {{ web_macro.user_link(user , 'link-muted') }}
+          <span class="divider">•</span>
+          {{thread.createdTime|smart_time}}
+          {% if thread.lastPostTime %}
+            <span class="divider">•</span>
+            最后回复 {{ web_macro.user_link(lastPostMembers[thread.lastPostMemberId] , 'link-muted') }} {{ thread.lastPostTime|smart_time}}
+          {% endif %}
+        </div> 
+      </div>
+    </li>
   {% else %}
-    <div class="empty">暂无话题！</div>
-  {% endif %}
+    <li class="empty">暂无话题！</li>
+  {% endfor %}
 </ul>

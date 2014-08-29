@@ -127,3 +127,18 @@
 .group-main > .panel {
     min-height: 500px;
 }
+
+.group-grids .grid > p{
+    text-align: center;
+}
+
+.group-grids .grid > p.title {
+    height: 40px;
+    overflow: hidden;
+
+}
+
+.group-grids .logo {
+    width: 58px;
+    height: 58px;
+}

@@ -2,43 +2,37 @@
 
 {% block title %}小组 - {{ parent() }}{% endblock %}
 {% block content %}
-<div class="row row-offcanvas row-offcanvas-right">
-    <div class="col-md-8">
-        <div class="es-row-wrap ">
-            <div class="row">
 
-                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 热门小组<a href="{{path('group_search_group')}}" class="pull-right">&raquo;更多</a> </div>
-              
-                {% if activeGroup %}
-                        {% for group in activeGroup %}
+<div class="row">
+  <div class="col-md-8">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        热门小组<a href="{{path('group_search_group')}}" class="pull-right">&raquo;更多</a>
+      </div>
+      <div class="panel-body">
+        <div class="row group-grids">
+          {% for group in activeGroup %}
 
-                         <div class="grouplist" style="height:110px;width: 90px;"> 
-
-                                     <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
-                                     {% if group.logo %}
-                                            <img src="{{file_path(group.logo)}}" alt="{{group.title}}" >
-                                     {% else %}
-                                            <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
-                                     {% endif %}
-                                    </a>
-                                    <p class="mvs"><a  href="{{path('group_index',{id:group.id})}}" title="{{group.title}}" >{{group.title}}</a></p>
-                         </div>
-                          
-                        {% endfor %}
-                {% else %}
-                <div class="empty">暂无小组信息！</div>
-                {% endif %}                        
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 grid">
+              <p>
+                <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
+                  <img src="{{file_path(group.logo, 'group.png')}}" alt="{{group.title}}" class="logo">
+                </a>
+              </p>
+              <p class="title"><a  href="{{path('group_index',{id:group.id})}}" title="{{group.title}}" >{{group.title}}</a></p>
             </div>
-             <br>
+
+          {% else %}
+            <div class="empty">暂无小组信息！</div>
+          {% endfor %}
         </div>
+      </div>
+    </div>
 
-        <div class="es-row-wrap ">
-            <div class="row">        
-                <div class="page-header"><span class="glyphicon glyphicon-leaf"></span> 最近话题
-                </div> 
-
-                <div class="col-md-12">           
-                   <ul class="media-list">
+    <div class="panel panel-default">
+      <div class="panel-heading">最近话题</div>
+      <div class="panel-body">
+        <ul class="media-list">
                           {% if recentlyThread%}
                                 {% for threadinfo in recentlyThread%}  
                                     <li class="media"> 
@@ -69,13 +63,59 @@
                             {% endif %}
   
                     </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  <div class="col-md-4">
+    {% if user.id %}
+    <div class="es-row ">
+        <div class="panel panel-default" >
+            <div class="panel-body">
+                <div class="media">
+                 {{ web_macro.user_avatar(user, ' pull-left media-object media-object-small') }}
+                    <div class="media-body">
+                        <p >{{ web_macro.user_link(user , 'link-muted') }}</p>
+                        <a href="{{ path ('group_member_center') }}" class="btn btn-primary btn-xs btn-default active" role="button">我的小组主页</a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path ('group_add') }}" class="btn btn-primary btn-xs btn-default active" role="button">创建小组</a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    {% endif %}
 
-    <div class=" col-md-4" >
-        <div class="es-row " >  
+    {% if myJoinGroup %} 
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          我的小组
+          {% if user.id %} <a href="{{ path ('group_member_join',{type:'myGroup'}) }}" class="pull-right">&raquo;更多</a>{% endif %}
+        </div>
+        <div class="panel-body">
+          <div class="row group-grids">
+            {% for group in myJoinGroup %}
+              <div class="col-lg-3 col-md-4 col-sm-2 col-xs-4 grid">
+                <p>
+                  <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
+                    <img src="{{file_path(group.logo, 'group.png')}}" alt="{{group.title}}" class="logo">
+                  </a> 
+                </p>
+                <p class="title">
+                  <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(9)}}</a>
+                </p>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% include 'TopxiaWebBundle:Group:new-group-list.html.twig' %}
+
                 <form action="{{path('group_search_group')}}" method="get">
                       <div class="input-group">
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -85,65 +125,10 @@
                         </span>
                       </div>
                 </form>
-                <br>  
-        </div> 
 
-        {% if user.id %}
-        <div class="es-row ">
-            <div class="panel panel-default" >
-                <div class="panel-body">
-                    <div class="media">
-                     {{ web_macro.user_avatar(user, ' pull-left media-object media-object-small') }}
-                        <div class="media-body">
-                            <p >{{ web_macro.user_link(user , 'link-muted') }}</p>
-                            <a href="{{ path ('group_member_center') }}" class="btn btn-primary btn-xs btn-default active" role="button">我的小组主页</a>
-                            {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path ('group_add') }}" class="btn btn-primary btn-xs btn-default active" role="button">创建小组</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-        {% if myJoinGroup %}                  
-        <div class="es-row-wrap " >
-                              
-            <div class="row">
 
-                <div class="page-header">我的小组
-                  {% if user.id %} <a href="{{ path ('group_member_join',{type:'myGroup'}) }}" class="pull-right">&raquo;更多</a>{% endif %}
-                </div> 
-                <div class="row">
-           
-                    
-                        {% for group in myJoinGroup %}
-                            <div class="grouplist">  
-                                <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">
-                                {% if group.logo %}
-                                    <img src="{{file_path(group.logo)}}" alt="{{group.title}}" >
-                                    {% else %}
-                                    <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}" >
-                                {% endif %}
+  </div>
 
-                                </a> 
-                                <p class="mvs">
-                                    <a href="{{path('group_index',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(9)}}</a>
-                                </p>
-                            </div>
-                         
-                        {% endfor %}            
-                </div>
-                  <br>
-            </div>
-        </div>
-        {% endif %}
-
-        <div class="es-row ">
-         
-         {% include 'TopxiaWebBundle:Group:new-group-list.html.twig' %}
-           
-        </div>
-    </div>
 </div>
+
 {% endblock %}

@@ -4055,3 +4055,25 @@ body {
  * </在线客服>
  */
 
+.thread-list {
+
+}
+
+.thread-list .media-object {
+    width: 36px;
+}
+
+.thread-list .title {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.thread-list .metas {
+	font-size: 12px;
+	color: #999;
+}
+
+.thread-list .metas .divider {
+	margin: 0 5px;
+	color: #ccc;
+}
