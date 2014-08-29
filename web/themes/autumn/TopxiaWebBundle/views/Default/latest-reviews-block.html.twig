@@ -10,7 +10,7 @@
         {% if author and course %}
             <li class="media">
               <a href="{{ path('user_show', {id:author.id}) }}" class="author-picture-link">
-                  <img class="author-picture" src="{{ file_path(author.smallAvatar, 'avatar.png') }}">
+                  <img class="author-picture" src="{{ default_path('avatar',author.smallAvatar, '') }}">
               </a>
               <a href="{{ path('user_show', {id:author.id}) }}" class="author-nickname">{{ author.nickname }}</a> <span class="text-muted">说：</span> <br>
               <div class="review-content">{{ review.content|plain_text(50) }}</div>
