@@ -1,32 +1,29 @@
-{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+{% extends 'TopxiaWebBundle:Group:layout2.html.twig' %}
 {% set script_controller = 'group/group' %}
 {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
-{% block content %}
-  {{ web_macro.flash_messages() }}
-  {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {
-  'groupinfo':groupinfo,
-  'is_groupmember':is_groupmember,}
-  %}
-  <div class="es-row-wrap container-gap userpage-body">
-    <div class="row">
-      <div class="col-md-8">     
-          <div class="btn-group-xs pull-right" >
-                <a type="button" {% if filters.type=='onlyOwner' %}class="btn btn-default active" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}"{% else %} class="btn btn-default"  href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}" {% endif %}>只看楼主</a>
-                {% if filters.sort=='desc' %}<a type="button" class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"><span class="glyphicon glyphicon-circle-arrow-down"></span> 顺序查看</a>
-                {% else %}
-                <a type="button" class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"><span class="glyphicon glyphicon-circle-arrow-up"></span> 倒序查看</a>
-                {% endif %}
-                <a type="button" class="btn btn-default" href="#post-thread-form"><span class="glyphicon glyphicon-comment"></span>  回复({{threadMain.postNum}})</a>
-            </div>
-        <div class="clearfix">
-          <h4 style="word-break: break-all;" ><b>{{threadMain.title|sub_text(25)}}</b>{% if threadMain.isElite %}
-            <span class="label label-warning">精</span>
-          {% endif %}{% if threadMain.isStick==1 %}
-          <span class="label label-danger">置顶</span>
-        {% endif %}</h4>
-        <br>
-      </div>
-        {% if paginator.currentPage==1 %}
+
+{% block group_main %}
+  
+  <div class="panel panel-default">
+  <div class="panel-body">
+    <div class="btn-group-xs pull-right" >
+        <a type="button" {% if filters.type=='onlyOwner' %}class="btn btn-default active" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}"{% else %} class="btn btn-default"  href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}" {% endif %}>只看楼主</a>
+        {% if filters.sort=='desc' %}<a type="button" class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"><span class="glyphicon glyphicon-circle-arrow-down"></span> 顺序查看</a>
+        {% else %}
+        <a type="button" class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"><span class="glyphicon glyphicon-circle-arrow-up"></span> 倒序查看</a>
+        {% endif %}
+        <a type="button" class="btn btn-default" href="#post-thread-form"><span class="glyphicon glyphicon-comment"></span>  回复({{threadMain.postNum}})</a>
+    </div>
+
+    <div class="clearfix">
+      <h4 style="word-break: break-all;" ><b>{{threadMain.title|sub_text(25)}}</b>{% if threadMain.isElite %}
+        <span class="label label-warning">精</span>
+      {% endif %}{% if threadMain.isStick==1 %}
+      <span class="label label-danger">置顶</span>
+      {% endif %}
+      </h4>
+    </div>
+            {% if paginator.currentPage==1 %}
           <div style="word-break: break-all;" class="thread-list">
            
               <div class="row">
@@ -226,15 +223,14 @@
             <br>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           </form>
-      </div>
-
-      <div class="col-md-4">
-        {% if activeMembers %}
-          
-          {% include 'TopxiaWebBundle:Group:active-member-list.html.twig' with {activeMembers:activeMembers} %}
-        {% endif %}
-      </div>
-    </div>
+  </div>
   </div>
 
+{% endblock %}
+
+{% block group_side %}
+    {% if activeMembers %}
+      
+      {% include 'TopxiaWebBundle:Group:active-member-list.html.twig' with {activeMembers:activeMembers} %}
+    {% endif %}
 {% endblock %}
