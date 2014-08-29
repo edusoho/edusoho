@@ -11,7 +11,7 @@
       <div class="media-body">
         {% if thread.postNum %}<span class="badge pull-right">{{thread.postNum}}</span>{% endif %}
         <div class="media-heading">
-          {% if thread.isStick %}
+          {% if thread.isStick and not group %}
             <span class="label label-danger">置顶</span>
           {% endif %}
           <a class="title" href="{{ path('group_thread_index', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(90)}}</a>
