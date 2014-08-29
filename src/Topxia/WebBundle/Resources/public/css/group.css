@@ -30,6 +30,7 @@
     height: 48px;
 
 }
+
 .post-delete-btn {
     visibility: hidden;
 }
@@ -209,4 +210,11 @@
 .group-logo-sm {
     width: 50px;
     height: 50px;
+}
+
+.alert {
+    word-break:break-all;
+}
+.alert img{
+    width:100%;
 }
