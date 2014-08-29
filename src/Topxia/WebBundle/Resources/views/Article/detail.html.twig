@@ -8,8 +8,6 @@
 
 {% block article_main %}
 
-{% set script_controller = 'article/detail' %}
-
   <ul class="breadcrumb">
       <li><a href="{{path('article_show')}}">{{setting.name}}</a></li>
       {% for breadcrumb in breadcrumbs %}
@@ -51,8 +49,7 @@
       <li class="next disabled"><a href="javascript:;"> 下一篇 &rarr;</a></li>
     {% endif %}
   </ul>
-
-{% include 'TopxiaWebBundle:Article:detail-share.html.twig' %}
+  <div><div class="share" data-bdText="{{articleShareContent|default('')}}"></div></div>
 
 {% endblock %}
 
