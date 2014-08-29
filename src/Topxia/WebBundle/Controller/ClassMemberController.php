@@ -29,7 +29,7 @@ class ClassMemberController extends BaseController
         /**本班所有学生*/
         $conditions = array(
             'classId'=>$classId,
-            'roles'=>array('student')
+            'roles'=>array('STUDENT')
         );
         $studentMembers = $this->getClassMemberService()->searchClassMembers(
             $conditions,

@@ -14,7 +14,7 @@ class ClassNoteController extends BaseController
         }
         $conditions = array(
             'classId'=>$classId,
-            'roles'=>array('student')
+            'roles'=>array('STUDENT')
         );
         $classMembers = $this->getClassMemberService()->searchClassMembers(
             $conditions,
