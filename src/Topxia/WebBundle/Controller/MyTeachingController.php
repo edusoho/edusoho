@@ -65,7 +65,10 @@ class MyTeachingController extends BaseController
 
         $classes = array();
         foreach ($results as $id => $course) {
-            $classes[$id] = $this->getClassesService()->getClass($id);
+            $class = $this->getClassesService()->getClass($id);
+            if(!empty($class)) {
+                $classes[$id] = $class;
+            }
         }
 
         $conditions =  array(
