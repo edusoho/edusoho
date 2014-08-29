@@ -24,12 +24,7 @@
 .nav-pills{
     border-bottom:none;
 }
-.group-header-btn{
-   right: 0px;
-}
-.group-header-tip{
-    font-size: 14px;
-}
+
 .modal-body img{
     width: auto;
     height: auto;
@@ -37,9 +32,7 @@
 .mvs{
     text-align: center;
 }
-.group-header-btn{
-    text-align: right;
-}
+
 .threadimg{
     width: 48px;
     height: 48px;
@@ -75,4 +68,68 @@
 }
 .pagination li{
     cursor: pointer;
+}
+
+
+
+
+
+.group-header {
+    margin-bottom: 20px;
+}
+
+.group-header-inner {
+    border-radius: 5px;
+    height: 150px;
+    position: relative;
+
+}
+
+.group-header .media {
+    background-color: rgba(255, 255, 255, 0.70);
+    filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#ccffffff,endcolorstr=#ccffffff);
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+.group-header .media-object {
+    width: 48px;
+    height: 48px;
+}
+
+.group-header .media-heading {
+    font-size: 18px;
+    font-weight: bold;
+    }
+
+.group-header .media-metas {
+    font-size: 12px;
+    color: #666;
+
+}
+
+.group-header .nav {
+    position: absolute;
+    bottom: 0;
+    left: 15px;
+}
+
+.group-header .nav-pills > li > a {
+    background-color: rgba(255, 255, 255, 0.70);
+    color: #444;
+    padding:6px 15px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+
+.group-header .nav-pills>li.active>a, 
+.group-header .nav-pills>li.active>a:hover, 
+.group-header .nav-pills>li.active>a:focus {
+    background-color: rgba(255, 255, 255, 0.90);
+    color: #444;
+    font-weight: bold;
 }
