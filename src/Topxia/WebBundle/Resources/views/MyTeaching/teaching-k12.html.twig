@@ -36,7 +36,7 @@
       <div class="panel-heading">我的任课</div>
     <table class="table table-hover table-condensed">
       <tbody>
-        {% if classes %}
+        {% if classes and classes[0] != null %}
         {% for class in classes %}
         <tr>
           <td>
@@ -75,7 +75,7 @@
         </tr>
         {% endfor %}
         {% else %}
-        <span  class="empty">暂无在教的课程</span>
+        <div  class="empty">暂无在教的课程</div>
         {% endif %}
       </tbody>
     </table>

@@ -78,7 +78,6 @@ class MyTeachingController extends BaseController
             1
             );
         
-
         return $this->render('TopxiaWebBundle:MyTeaching:teaching-k12.html.twig', array(
             'manageClasses'=>$manageClasses,
             'classes' => $classes,
