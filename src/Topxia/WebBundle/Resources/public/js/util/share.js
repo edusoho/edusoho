@@ -50,8 +50,15 @@ define(function(require, exports, module) {
     var bdText=$(select).attr("data-bdText");
     html+='</div>';
      window._bd_share_config={     
-            "common":{
-                   "bdText":bdText,    
+            "common":{       
+                   "bdSnsKey":{},
+                   "bdText":bdText,
+                   "bdDesc":"",
+                   "bdMini":"2",       
+                   "bdMiniList":false,       
+                   "bdPic":"",       
+                   "bdStyle":"0",       
+                   "bdSize":"24"       
                     },       
             "share":{},
         };       
