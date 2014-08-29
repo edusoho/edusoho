@@ -262,6 +262,8 @@ class GroupController extends BaseController
     {
         $group = $this->getGroupService()->getGroup($id);
 
+        $groupOwner=$this->getUserService()->getUser($group['ownerId']);
+
         if($group['status']=="close"){
             return $this->createMessageResponse('info','该小组已被关闭');
         }
@@ -313,6 +315,7 @@ class GroupController extends BaseController
             'recentlyJoinMember'=>$recentlyJoinMember,
             'owner'=>$owners,
             'user'=>$user,
+            'groupOwner'=>$groupOwner,
             'id'=>$id,
             'threads'=>$threads,
             'paginator'=>$paginator,
