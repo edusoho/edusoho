@@ -52,7 +52,6 @@
                 if (error) {
                     return false;
                 }
-              
                 $('#post-thread-btn').button('submiting').addClass('disabled');
 
                 $.ajax({
@@ -84,10 +83,9 @@
             }
         });
         validator_thread.addItem({
-            element: '[name="content"]',
+            element: '#post_content',
             required: true,
-            rule: 'minlength{min:2}'
-                    
+            rule: 'minlength{min:2} visible_character'            
         });
         }
 
@@ -170,9 +168,6 @@
                         if (error) {
                             return false;
                         }
-                         if(replyContent.replace(/[ ]/g,"")==""){
-                            return false;
-                        }
                         $(this).button('submiting').addClass('disabled');
                             $.ajax({
                             url : $(".thread-post-reply-form").attr('post-url'),
@@ -193,7 +188,8 @@
                     });
                     validator_threadPost.addItem({
                         element: '#reply-content-'+postId+'',
-                        required: true,                     
+                        required: true,
+                        rule: 'visible_character'                     
                     });
              
             });
