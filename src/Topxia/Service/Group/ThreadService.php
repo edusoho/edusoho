@@ -44,6 +44,6 @@ interface ThreadService
 
     public function removeStick($threadId);
 
-
+    public function waveHitNum($threadId);
 
 }

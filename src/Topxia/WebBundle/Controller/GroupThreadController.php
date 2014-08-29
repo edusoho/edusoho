@@ -124,6 +124,8 @@ class GroupThreadController extends BaseController
             return $this->createMessageResponse('info','该话题已被关闭');
         }
 
+        $this->getThreadService()->waveHitNum($threadId);
+
         if($request->query->get('post'))
         {   
             $url=$this->getPost($request->query->get('post'),$threadId,$id);

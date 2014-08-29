@@ -67,6 +67,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $thread;
     }
 
+    public function waveHitNum($threadId)
+    {
+        $this->getThreadDao()->waveThread($threadId,'hitNum',+1);
+    }
+
     public function updateThread($id,$fields)
     {
         if (empty($fields['title'])) {
