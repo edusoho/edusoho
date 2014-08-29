@@ -45,39 +45,44 @@ class MyTeachingController extends BaseController
         if(!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
-
-        $conditions =array(
-            'userId' => $user['id']
+        $conditions = array(
+            'teacherIds' => $user['id']
             );
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getClassMemberService()->searchClassMemberCount($conditions),
-            10
-        );
-        
-        $classMembers = $this->getClassMemberService()->searchClassMembers(
-            $conditions,
-            array('createdTime','DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
 
-        foreach ($classMembers as $key => $classMember) {
-            $class = $this->getClassesService()->getClass($classMember['classId']);
-            $courseCondtions = array(
-                'classId' => $classMember['classId'],
-                'teacherIds' => $classMember['userId']
-                );
-            $courses = $this->getCourseService()
-                ->searchCourses($conditions,'',0,100);
-            $classMember['class'] = $class;
-            $classMember['courses'] = $courses;
-            $classMembers[$key] = $classMember;    
+        $total = $this->getCourseService()->getCoursesCount($conditions);
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            'lastet',
+            0,
+            $total
+            );
+        $results = array();
+
+        foreach ($courses as $key => $course) {
+             $results[$course['classId']][] = $course;
         }
 
+        $classes = array();
+        foreach ($results as $id => $course) {
+            $classes[$id] = $this->getClassesService()->getClass($id);
+        }
+
+        $conditions =  array(
+                'headTeacherId' => $user['id']
+            );
+        $manageClasses = $this->getClassesService()->searchClasses(
+            $conditions,
+            array(),
+            0,
+            1
+            );
+        
+
         return $this->render('TopxiaWebBundle:MyTeaching:teaching-k12.html.twig', array(
-            'classMembers'=>$classMembers,
-            'paginator' => $paginator,
+            'manageClasses'=>$manageClasses,
+            'classes' => $classes,
+            'results' => $results,
         ));
     }
 

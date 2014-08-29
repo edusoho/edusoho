@@ -1979,12 +1979,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lessons = $lessonDao->findLessonsByCourseId($templateId);
 		
 		//增加classmember记录
-		$classMember = array();
+/*		$classMember = array();
 		$classMember['userId'] = $teacherId;
 		$classMember['classId'] = $classId;
 		$classMember['role'] = 'TEACHER';
 		$classMember['createdTime'] = time();
-		$this->getClassMemberService()->addClassMember($classMember);
+		$this->getClassMemberService()->addClassMember($classMember);*/
 
 		$chapterIdMap = array();
 		$newChapters = array();

@@ -6,40 +6,67 @@
 
 {% block main %}
 <div class="panel panel-default panel-col lesson-manage-panel">
-  <div class="panel-heading">
-    在教课程
-  </div>
+
   <div class="panel-body">
-    <table class="table table-hover table-condensed">
-      <tbody>
-        {% if classMembers %}
-        {% for classMember in classMembers %}
+    {% if manageClasses %}
+    <div class="" id="manageClasses">
+      <div class="panel-heading">管理的班级</div>
+      <table class="table table-hover table-condensed">
+        <tbody>
+          {% for manageClass in manageClasses %}
         <tr>
           <td>
-            <a class="pull-left" href="{{ path('class_show',{ classId: classMember.classId })}}">
-              <img src="{{ asset(classMember.class.icon) }}" alt="{{ classMember.class.name }}" style="width: 140px; height: 78px;">
+            <a class="pull-left" href="{{ path('class_show',{ classId: manageClass.id })}}">
+              <img src="{{ asset(manageClass.icon) }}" alt="{{ manageClass.name }}" style="width: 140px; height: 78px;">
             </a>
           </td>
           <td> 
-            <a href="{{ path('class_show',{ classId: classMember.classId })}}" class="btn-link pull-left">{{ class_name(classMember.class) }}</a>
+            <a href="{{ path('class_show',{ classId: manageClass.id })}}" class="btn-link pull-left">{{ class_name(manageClass) }}</a>
           </td>
           <td>
-            {% if classMember.role == 'HEAD_TEACHER' %}
             <span class="text-danger">班主任</span>
-            {% else %}
+          </td>
+        </tr>  
+          {% endfor %}
+        </tbody>
+      </table>    
+    </div> 
+    {% endif %}
+    <div class="" id="myTeaching">
+      <div class="panel-heading">我的任课</div>
+    <table class="table table-hover table-condensed">
+      <tbody>
+        {% if classes %}
+        {% for class in classes %}
+        <tr>
+          <td>
+            <a class="pull-left" href="{{ path('class_show',{ classId: class.id })}}">
+              <img src="{{ asset(class.icon) }}" alt="{{ class.name }}" style="width: 140px; height: 78px;">
+            </a>
+          </td>
+          <td> 
+            <a href="{{ path('class_show',{ classId: class.id })}}" class="btn-link pull-left">{{ class_name(class) }}</a>
+          </td>
+          <td>
             <span>任课</span>
-            {% endif %}
           </td>
           <td>
         
-            {% if classMember.courses %}
-            {% for course in classMember.courses %}
-            {{ course.title }}<br>
+            {% for course in results[class.id] %}
+              <span>{{ course.title }}</span><div class="btn-group mll btn-sm">
+              <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}">管理</a>
+
+              <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu pull-right">
+                <li><a href="{{ path('course_manage_lesson', {id:course.id}) }}">课时管理</a></li>
+                <li><a href="{{ path('course_manage_files', {id:course.id}) }}">文件管理</a></li>
+                <li><a href="{{ path('course_manage_students', {id:course.id}) }}">学员管理</a></li>
+              </ul>
+            </div><br>
 
             {% endfor %}
-            {% else %}
-            暂无在教的课程
-            {% endif %}
          
         </td>
         <td>
@@ -52,8 +79,7 @@
         {% endif %}
       </tbody>
     </table>
-    
-    {{ web_macro.paginator(paginator) }} 
+    </div>
 
   </div>
 </div>
