@@ -14,7 +14,7 @@ define(function(require, exports, module) {
     Share.create({
         selector: '.share',
         icons: 'itemsAll',
-        display: 'dropdown',
+        display: '',
     });
     };
 
