@@ -6,14 +6,9 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var $avatarForm = $("#avatar-form");
-        var $coursePictureForm = $("#course-picture-form");
 
         avatarValidator = new Validator({
             element: $avatarForm
-        })
-
-        coursePictureValidator = new Validator({
-            element: $coursePictureForm
         })
 
         avatarValidator.addItem({
@@ -52,6 +47,12 @@ define(function(require, exports, module) {
         });
 
         if ($('#system-course-picture-class').length > 0) {
+            
+            var $coursePictureForm = $("#course-picture-form");
+            coursePictureValidator = new Validator({
+                element: $coursePictureForm
+            });
+
             var $systemCoursePictureClass = $('#system-course-picture-class');
 
             if ($('[name=coursePicture]:checked').val() == 0)$('#course-picture-class').hide();
