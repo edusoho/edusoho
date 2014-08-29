@@ -363,7 +363,8 @@ class WebExtension extends \Twig_Extension
     public function getDefaultPath($category, $uri="", $size = '', $absolute = false)
     {
         $assets = $this->container->get('templating.helper.assets');
-
+        $request = $this->container->get('request');
+        
         if (empty($uri)) {
             $publicUrlpath = 'assets/img/default/';
             $url = $assets->getUrl($publicUrlpath . $size . $category);
