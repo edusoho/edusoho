@@ -48,6 +48,7 @@ class WebExtension extends \Twig_Extension
             // file_path即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
             'default_path'  => new \Twig_Function_Method($this, 'getDefaultPath'),
+            'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,
@@ -402,6 +403,22 @@ class WebExtension extends \Twig_Extension
 
         }
 
+    }
+
+    public function getSystemDefaultPath($category,$systemDefault = false)
+    {
+        $assets = $this->container->get('templating.helper.assets');
+        $publicUrlpath = 'assets/img/default/';
+
+        $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
+
+        if($systemDefault && isset($defaultSetting)){
+            $fileName = 'default'.ucfirst($category).'FileName';
+            $url = $assets->getUrl($publicUrlpath .$defaultSetting[$fileName]);
+        } else {
+            $url = $assets->getUrl($publicUrlpath . $category);
+        }
+        return $url;
     }
 
     public function getFileUrl($uri, $default = '', $absolute = false)

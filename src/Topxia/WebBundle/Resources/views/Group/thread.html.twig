@@ -23,10 +23,8 @@
       {% endif %}
       </h4>
     </div>
-            {% if paginator.currentPage==1 %}
+          {% if paginator.currentPage==1 %}
           <div style="word-break: break-all;" class="thread-list">
-           
-              <div class="row">
                   <div class="col-md-12" >
                      <div class="pull-left" style="width:80px;"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:owner.id}) }}">
                       <img src="{{ file_path(owner.largeAvatar, 'avatar-large.png') }}" >
@@ -38,8 +36,7 @@
                       </div>
                     </div>     
                   </div>
-                </div>
-                            
+                                
           </div>
            
           {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3%}

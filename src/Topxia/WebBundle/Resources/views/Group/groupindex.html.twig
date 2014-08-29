@@ -15,7 +15,7 @@
             {% endif %}
 
             <span class="text-muted fsn mrm">创建时间：{{groupinfo.createdTime|date('Y-m-d')}}</span>
-            <span class="text-muted fsn mrm">组长：<a href="#">xxxx</a></span>
+            <span class="text-muted fsn mrm">组长：{{ web_macro.user_link(groupOwner, 'link-muted ') }}</span>
 
             {% if is_groupmember==1 or is_groupmember==3 %}
               <span class="text-muted fsn ">你已经是小组成员，
