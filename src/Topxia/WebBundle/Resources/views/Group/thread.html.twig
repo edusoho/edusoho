@@ -3,84 +3,88 @@
 {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
 
 {% block group_main %}
-  
+  <div class="panel panel-default group-thread">
+    <div class="panel-heading">
+      <h2>
+        {{ threadMain.title }}
+        {% if threadMain.isElite %}
+        <span class="label label-warning">精</span>
+      {% endif %}
+      </h2>
+      <div class="metas">
+        发表于 {{ threadMain.createdTime|smart_time }}
+        <span class="divider">•</span>
+        <span>XX 次查看</span>
+      </div>
+    </div>
+    <div class="panel-body">
+      {{threadMain.content|raw}}
+
+      <div>
+
+        {% if filters.type=='onlyOwner' %}
+          <a class="btn btn-link" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}" %}><span class="glyphicon glyphicon-filter"></span> 查看全部回复</a>
+        {% else %}
+          <a class="btn btn-link" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}"><span class="glyphicon glyphicon-filter"></span> 只看楼主回复</a>
+        {% endif %}
+        
+        {% if filters.sort=='desc' %}
+          <a type="button" class="btn btn-link " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"><span class="glyphicon glyphicon-sort"></span> 顺序查看回复</a>
+        {% else %}
+          <a type="button" class="btn btn-link " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"><span class="glyphicon glyphicon-sort"></span> 倒序查看回复</a>
+        {% endif %}
+
+        
+        {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3%}
+          <a class="btn btn-link" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
+        {% endif %}
+
+        {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
+          {% if threadMain.isElite==1 %}
+            <a id="elite"  title="取消加精" class="btn btn-link"
+              href="javascript:"
+            data-url="{{path('group_thread_removeElite',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-hand-right"></span> 取消加精</a>
+          {% else %}
+            <a id="elite"  title="加精" class="btn btn-link"
+            href="javascript:" data-url="{{path('group_thread_setElite',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-thumbs-up"></span> 加精</a>
+          {% endif %}
+
+          {% if threadMain.isStick==1 %}
+             <a id="stick" title="取消置顶" class="btn btn-link"
+            href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
+          {% else %}
+            <a id="stick"  title="置顶" class="btn btn-link"
+            href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-circle-arrow-up"></span>  置顶</a>
+          {% endif %}
+{# 
+          <a id="closeThread"  title="一但关闭话题将删除！确定关闭话题" class="btn btn-link"
+          href="javascript:" data-url="{{path('group_thread_closeThread',{threadId:threadMain.id,memberId:user.id})}}">
+          <span class="glyphicon glyphicon-remove-sign"></span> 关闭话题
+          </a> #}
+
+        {% endif %}
+        <div class="share pull-right"  data-bdText="{{groupShareContent|default('')}}"></div>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {{threadMain.postNum}}回复
+    </div>
+    <div class="panel-body">
+
+    </div>
+  </div>
+
   <div class="panel panel-default">
   <div class="panel-body">
-    <div class="btn-group-xs pull-right" >
-        <a type="button" {% if filters.type=='onlyOwner' %}class="btn btn-default active" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}"{% else %} class="btn btn-default"  href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}" {% endif %}>只看楼主</a>
-        {% if filters.sort=='desc' %}<a type="button" class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"><span class="glyphicon glyphicon-circle-arrow-down"></span> 顺序查看</a>
-        {% else %}
-        <a type="button" class="btn btn-default " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"><span class="glyphicon glyphicon-circle-arrow-up"></span> 倒序查看</a>
-        {% endif %}
-        <a type="button" class="btn btn-default" href="#post-thread-form"><span class="glyphicon glyphicon-comment"></span>  回复({{threadMain.postNum}})</a>
-    </div>
 
-    <div class="clearfix">
-      <h4 style="word-break: break-all;" ><b>{{threadMain.title|sub_text(25)}}</b>{% if threadMain.isElite %}
-        <span class="label label-warning">精</span>
-      {% endif %}{% if threadMain.isStick==1 %}
-      <span class="label label-danger">置顶</span>
-      {% endif %}
-      </h4>
-    </div>
-          {% if paginator.currentPage==1 %}
-          <div style="word-break: break-all;" class="thread-list">
-                  <div class="col-md-12" >
-                     <div class="pull-left" style="width:80px;"> <a class="user-link user-avatar-link thread-img" href="{{ path('user_show', {id:owner.id}) }}">
-                      <img src="{{ file_path(owner.largeAvatar, 'avatar-large.png') }}" >
-                    </a></div>
-                    {{ web_macro.user_link(owner , 'link-muted ') }}<span class="label label-danger" style="padding:.2em .2em .2em;">楼主</span>
-                    <div class="media">                      
-                      <div class="media-body" >
-                        {{threadMain.content|raw}}
-                      </div>
-                    </div>     
-                  </div>
-                                
-          </div>
-           
-          {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3%}
 
-              <div class="pull-right" id="post-action">
-                  {% if user.id==owner.id or is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
-                      <a class="btn btn-link" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
-                  {% endif %}
 
-                  {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
-                      {% if threadMain.isElite==1 %}
-                        <a id="elite"  title="取消加精" class="btn btn-link"
-                          href="javascript:"
-                        data-url="{{path('group_thread_removeElite',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-hand-right"></span> 取消加精</a>
-                      {% else %}
-                        <a id="elite"  title="加精" class="btn btn-link"
-                        href="javascript:" data-url="{{path('group_thread_setElite',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-thumbs-up"></span> 加精</a>
-                      {% endif %}
 
-                      {% if threadMain.isStick==1 %}
-                         <a id="stick" title="取消置顶" class="btn btn-link"
-                        href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
-                      {% else %}
-                        <a id="stick"  title="置顶" class="btn btn-link"
-                        href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-circle-arrow-up"></span>  置顶</a>
-                      {% endif %}
-
-                  {% endif %}
-
-                  {% if user.id==owner.id or is_granted('ROLE_ADMIN') or is_groupmember==3 or is_groupmember==2%}
-                            <a id="closeThread"  title="一但关闭话题将删除！确定关闭话题" class="btn btn-link"
-                            href="javascript:" data-url="{{path('group_thread_closeThread',{threadId:threadMain.id,memberId:user.id})}}">
-                            <span class="glyphicon glyphicon-remove-sign"></span> 关闭话题
-                            </a>
-                  {% endif %}
-              </div> <div class="share" data-bdText="{{groupShareContent|default('')}}"></div> {# {% include 'TopxiaWebBundle:Group:share.html.twig'%} #}
-  
-          {% else %}
-            <div class="bottom-thread-post col-md-12">         
-              <div class="share"  data-bdText="{{groupShareContent|default('')}}"></div>{# {% include 'TopxiaWebBundle:Group:share.html.twig'%} #}
-            </div>
-          {% endif %}
-               
-      {% endif %}
 
       <div class="table ">
         
