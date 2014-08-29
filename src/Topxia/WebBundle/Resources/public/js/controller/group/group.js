@@ -97,44 +97,47 @@
                 icons: 'itemsAll',
                 display: 'dropdown'
             });
-            $('.table').on('click','.li-reply',function(){
+            $('.group-post-list').on('click','.li-reply',function(){
                var postId=$(this).attr('postId');
 
                $('#li-'+postId).show();
-
                $('#reply-content-'+postId).focus();
                $('#reply-content-'+postId).val("回复 "+$(this).attr("postName")+":");
 
             });
 
-            $('.table').on('click','.reply',function(){
+            $('.group-post-list').on('click','.reply',function(){
                var postId=$(this).attr('postId');
-
                $(this).hide();
                $('#unreply-'+postId).show();
-               $('.reply-'+postId).slideDown('slow');
-
+               $('.reply-'+postId).css('display',"");
             });
 
-            $('.table').on('click','.unreply',function(){
+            $('.group-post-list').on('click','.unreply',function(){
                var postId=$(this).attr('postId');
 
                $(this).hide();
                $('#reply-'+postId).show();
-               $('.reply-'+postId).slideUp('slow');
+               $('.reply-'+postId).css('display',"none");
 
             });
 
-            $('.table').on('click','.replyToo',function(){
+            $('.group-post-list').on('click','.replyToo',function(){
                var postId=$(this).attr('postId');
+               if($(this).attr('data-status')=='hidden'){
+                   $(this).attr('data-status',"");
+                   $('#li-'+postId).show();
+                   $('#reply-content-'+postId).focus();
+                   $('#reply-content-'+postId).val("");
+               }else{
+                   $('#li-'+postId).hide();
+                   $(this).attr('data-status',"hidden");
+               }
 
-               $('#li-'+postId).show();
-               $('#reply-content-'+postId).focus();
-               $('#reply-content-'+postId).val("");
 
             });
 
-            $('.table').on('click','.lookOver',function(){
+            $('.group-post-list').on('click','.lookOver',function(){
                
                var postId=$(this).attr('postId');
                $('.li-reply-'+postId).css('display',"");
@@ -143,7 +146,7 @@
 
             });
 
-            $('.table').on('click','.postReply-page',function(){
+            $('.group-post-list').on('click','.postReply-page',function(){
 
                 var postId=$(this).attr('postId');
                 $.post($(this).data('url'),"",function(html){
@@ -153,35 +156,45 @@
 
             });
 
-            $('.table').on('click','.reply-btn',function(){
+            $('.group-post-list').on('click','.reply-btn',function(){
                 
                 var postId=$(this).attr('postId');
 
                 var replyContent=$('#reply-content-'+postId+'').val();
 
-                if(replyContent.replace(/[ ]/g,"")==""){
-                   
-                    $('.danger-'+postId).css("display","");
-                }else{
-
-                    $(this).button('submiting').addClass('disabled');
-                    $.ajax({
-                    url : $(".reply-thread-form").attr('post-url'),
-                    data:"content="+replyContent+'&'+'postId='+postId,
-                    cache : false, 
-                    async : false,
-                    type : "POST",
-                    dataType : 'text',
-                    success : function (url){
-                        if(url=="/login"){
-                            window.location.href=url;
-                            return;
+                var validator_threadPost = new Validator({
+                    element: '.thread-post-reply-form',
+                    failSilently: true,
+                    autoSubmit: false,
+                    onFormValidated: function(error){
+                        if (error) {
+                            return false;
                         }
-                        window.location.reload();                
-                    }
+                         if(replyContent.replace(/[ ]/g,"")==""){
+                            return false;
+                        }
+                        $(this).button('submiting').addClass('disabled');
+                            $.ajax({
+                            url : $(".thread-post-reply-form").attr('post-url'),
+                            data:"content="+replyContent+'&'+'postId='+postId,
+                            cache : false, 
+                            async : false,
+                            type : "POST",
+                            dataType : 'text',
+                            success : function (url){
+                                if(url=="/login"){
+                                    window.location.href=url;
+                                    return;
+                                }
+                                window.location.reload();                
+                            }
+                            });
+                        }
                     });
-
-                }
+                    validator_threadPost.addItem({
+                        element: '#reply-content-'+postId+'',
+                        required: true,                     
+                    });
              
             });
 
@@ -224,9 +237,9 @@
         })
 
         }
-        if($('.deletePost').length>0){
+        if($('.actions').length>0){
        
-            $('.deletePost').on('click','#deletePostByself,#deletePostBythreadowner,#deletePostBygroupowner',function(){
+            $('.actions').on('click','.post-delete-btn',function(){
                 
                 var $trigger = $(this);
                  if (!confirm($trigger.attr('title') + '？')) {

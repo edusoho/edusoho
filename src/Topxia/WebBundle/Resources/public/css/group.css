@@ -30,12 +30,11 @@
     height: 48px;
 
 }
-.course-view {
-    float:right;
+.post-delete-btn {
     visibility: hidden;
 }
 
-.list:hover .course-view {
+.media:hover .post-delete-btn {
     visibility: visible;
 }
 .thread-img img{
@@ -173,6 +172,7 @@
 
 .group-post-list .content {
     margin-bottom: 20px;
+    word-break:break-all;
 }
 
 .group-post-list .actions {
@@ -192,4 +192,15 @@
 .group-post-list .well .actions {
     text-align: left;
     margin: 15px 0;
+}
+
+.media-list .media:last-child {
+    border-bottom: 1px solid #eee;
+}
+#post-action img{
+    width: 100%;
+}
+
+#post-action {
+    word-break:break-all;
 }

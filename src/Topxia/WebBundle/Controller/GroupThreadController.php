@@ -241,7 +241,7 @@ class GroupThreadController extends BaseController
         }
         $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
         return $this->render('TopxiaWebBundle:Group:thread-reply-list.html.twig',array(
-            'post' => array('id'=>$postId),
+            'postMain' => array('id'=>$postId),
             'postReply'=>$postReply,
             'postReplyMembers'=>$postReplyMembers,
             'postReplyCount'=>$replyCount,
