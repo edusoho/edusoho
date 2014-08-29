@@ -32,6 +32,7 @@ define(function(require, exports, module) {
         });
 
         var $defaultAvatar = $("[name=defaultAvatar]");
+
         $("[name=avatar]").change(function(){
             $defaultAvatar.val($("[name=avatar]:checked").val());
         });
@@ -50,19 +51,23 @@ define(function(require, exports, module) {
             }
         });
 
-        if ($('[name=coursePicture]:checked').val() == 0)$('#course-picture-class').hide();
-        if ($('[name=coursePicture]:checked').val() == 1)$('#system-course-picture-class').hide();
+        if ($('#system-course-picture-class').length > 0) {
+            var $systemCoursePictureClass = $('#system-course-picture-class');
 
-        $("[name=coursePicture]").on("click",function(){
-            if($("[name=coursePicture]:checked").val()==0){
-                $('#system-course-picture-class').show();
-                $('#course-picture-class').hide();
-            }
-            if($("[name=coursePicture]:checked").val()==1){
-                $('#system-course-picture-class').hide();
-                $('#course-picture-class').show();
-            }
-        });
+            if ($('[name=coursePicture]:checked').val() == 0)$('#course-picture-class').hide();
+            if ($('[name=coursePicture]:checked').val() == 1)$systemCoursePictureClass.hide();
+
+            $("[name=coursePicture]").on("click",function(){
+                if($("[name=coursePicture]:checked").val()==0){
+                    $systemCoursePictureClass.show();
+                    $('#course-picture-class').hide();
+                }
+                if($("[name=coursePicture]:checked").val()==1){
+                    $systemCoursePictureClass.hide();
+                    $('#course-picture-class').show();
+                }
+            });
+        };
 
         var $defaultCoursePicture = $("[name=defaultCoursePicture]");
         $("[name=coursePicture]").change(function(){
