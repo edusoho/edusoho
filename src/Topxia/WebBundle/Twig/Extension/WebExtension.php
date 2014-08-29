@@ -415,9 +415,9 @@ class WebExtension extends \Twig_Extension
         if($systemDefault && isset($defaultSetting)){
             $fileName = 'default'.ucfirst($category).'FileName';
             if (array_key_exists($fileName, $defaultSetting)) {
-                $url = $assets->getUrl($publicUrlpath . $category);
+                $url = $assets->getUrl($publicUrlpath .$defaultSetting[$fileName]);
             }
-            $url = $assets->getUrl($publicUrlpath .$defaultSetting[$fileName]);
+            $url = $assets->getUrl($publicUrlpath . $category);
         } else {
             $url = $assets->getUrl($publicUrlpath . $category);
         }
