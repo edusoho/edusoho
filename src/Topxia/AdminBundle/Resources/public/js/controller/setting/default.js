@@ -6,14 +6,9 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var $avatarForm = $("#avatar-form");
-        var $coursePictureForm = $("#course-picture-form");
 
         avatarValidator = new Validator({
             element: $avatarForm
-        })
-
-        coursePictureValidator = new Validator({
-            element: $coursePictureForm
         })
 
         avatarValidator.addItem({
@@ -23,14 +18,9 @@ define(function(require, exports, module) {
             errormessageRequired: '请选择要上传的默认头像文件'
         });
 
-        coursePictureValidator.addItem({
-            element: '#course-picture-field',
-            required: true,
-            rule: 'maxsize_image',
-            errormessageRequired: '请选择要上传的默认课程图片文件'
-        });
 
         var $defaultAvatar = $("[name=defaultAvatar]");
+
         $("[name=avatar]").change(function(){
             $defaultAvatar.val($("[name=avatar]:checked").val());
         });
@@ -49,24 +39,41 @@ define(function(require, exports, module) {
             }
         });
 
-        if ($('[name=coursePicture]:checked').val() == 0)$('#course-picture-class').hide();
-        if ($('[name=coursePicture]:checked').val() == 1)$('#system-course-picture-class').hide();
+        if ($('#system-course-picture-class').length > 0) {
+            
+            var $coursePictureForm = $("#course-picture-form");
+            coursePictureValidator = new Validator({
+                element: $coursePictureForm
+            });
 
-        $("[name=coursePicture]").on("click",function(){
-            if($("[name=coursePicture]:checked").val()==0){
-                $('#system-course-picture-class').show();
-                $('#course-picture-class').hide();
-            }
-            if($("[name=coursePicture]:checked").val()==1){
-                $('#system-course-picture-class').hide();
-                $('#course-picture-class').show();
-            }
-        });
+            coursePictureValidator.addItem({
+                element: '#course-picture-field',
+                required: true,
+                rule: 'maxsize_image',
+                errormessageRequired: '请选择要上传的默认课程图片文件'
+            });
+            
+            var $systemCoursePictureClass = $('#system-course-picture-class');
 
-        var $defaultCoursePicture = $("[name=defaultCoursePicture]");
-        $("[name=coursePicture]").change(function(){
-            $defaultCoursePicture.val($("[name=coursePicture]:checked").val());
-        });
+            if ($('[name=coursePicture]:checked').val() == 0)$('#course-picture-class').hide();
+            if ($('[name=coursePicture]:checked').val() == 1)$systemCoursePictureClass.hide();
+
+            $("[name=coursePicture]").on("click",function(){
+                if($("[name=coursePicture]:checked").val()==0){
+                    $systemCoursePictureClass.show();
+                    $('#course-picture-class').hide();
+                }
+                if($("[name=coursePicture]:checked").val()==1){
+                    $systemCoursePictureClass.hide();
+                    $('#course-picture-class').show();
+                }
+            });
+            var $defaultCoursePicture = $("[name=defaultCoursePicture]");
+            $("[name=coursePicture]").change(function(){
+                $defaultCoursePicture.val($("[name=coursePicture]:checked").val());
+            });
+        };
+
     };
 
 });
