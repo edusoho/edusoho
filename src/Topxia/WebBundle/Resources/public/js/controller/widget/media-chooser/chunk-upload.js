@@ -234,6 +234,7 @@ define(function(require, exports, module) {
                 	fileScop.fileIndex--;
                 	FileScopStorage.del();
                 	self.set("currentFile",null);
+                	self.element.find("input[data-role='fileSelected']").val("");
                 	self.trigger("upload", fileScop.fileIndex);
 
                 } else if (xhr.readyState == 4 && xhr.status == 401) {
@@ -323,9 +324,11 @@ define(function(require, exports, module) {
 				currentChunkOffsetInBlock: fileScop.currentChunkOffsetInBlock
 			};
         	FileScopStorage.set(JSON.stringify(saveFileScop));
+        	fileScop.uploadedBytes += fileScop.currentChunkSize;
 	    },
 	    uploadAfterGetCrc : function(fileScop, blkRet) {
 	    	if(this.get("destroy")){
+	    		this.set("destroy",false);
 	    		return;
 	    	}
 	    	var self = this;
@@ -347,7 +350,6 @@ define(function(require, exports, module) {
 
 	    	var chunk = self.getChunk(fileScop.file, fileScop.uploadedBytes, fileScop.currentChunkSize);
 
-	    	fileScop.uploadedBytes += fileScop.currentChunkSize;
 	    	fileScop.currentChunkOffsetInBlock += fileScop.currentChunkSize;
 
 	        var _reader = new FileReader();

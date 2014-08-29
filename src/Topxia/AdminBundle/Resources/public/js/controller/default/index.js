@@ -40,17 +40,6 @@ define(function(require, exports, module) {
         $.post($('#loginNum').data('url'),function(res){
             $('#loginNum').html("登录人数："+res.loginCount+"人");
         });
-
-        setInterval(function(){
-            $.post($('#onlineNum').data('url'),function(res){
-                $('#onlineNum').html("当前在线："+res.onlineCount+"人");
-            });
-
-            $.post($('#loginNum').data('url'),function(res){
-                $('#loginNum').html("登录人数："+res.loginCount+"人");
-            });
-        }, 1000*60*5);
-
     };
 
 });

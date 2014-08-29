@@ -1,86 +1,89 @@
-{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+{% extends 'TopxiaWebBundle:Group:layout2.html.twig' %}
 {% set script_controller = 'group/group' %}
 {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
-{% block content %}
+
+{% block group_main %}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      {% if paginator.currentPage == paginator.firstPage %}
+        <div class="alert alert-info clearfix">
+          {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} 暂无简介 {% endif %}
+          <div class="pull-right text-muted"> 创建时间：{{groupinfo.createdTime|date('Y-m-d')}}</div>
+        </div>
+      {% endif %}
+
+      <ul class="nav nav-pills nav-mini  pull-left ">
+
+        <li{% if condition.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_index',{id:id,num:condition.num,sort:condition.sort,isElite:0})}}">全部</a></li>
+            
+        <li{% if condition.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_index',{id:id,type:'elite',num:condition.num,sort:condition.sort})}}">精华</a></li>
+
+        <li><span class="mhm text-muted">|</span></li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            <span class="text-muted">排序：</span>
+            {% if condition.sort == 'byLastPostTime' %}
+              最后回复
+            {% elseif condition.sort == 'byCreatedTime' %}
+              最新发帖
+            {% elseif condition.sort == 'byPostNum' %}
+              回复数
+            {% endif %}
+            <span class="caret"></span>
+          </a>
+
+          <ul class="dropdown-menu">
+            <li class="{% if condition.sort == 'byCreatedTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_index',{id:id,isElite:condition.type,num:condition.num,sort:'byCreatedTime'})}}">最新发帖</a></li>
+            <li class="{% if condition.sort == 'byLastPostTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_index',{id:id,isElite:condition.type,num:condition.num,sort:'byLastPostTime'})}}">最后回复</a></li>
+            <li class="{% if condition.sort == 'byPostNum' %}active{% endif %}"><a class="js-nav" href="{{path('group_index',{id:id,isElite:condition.type,num:condition.num,sort:'byPostNum'})}}">回复数</a></li>
+          </ul>
+
+        </li>
+
+      </ul>
+
+      {% if is_groupmember !=0 %}
+          <div class="pull-right"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-primary btn-sm " role="button">发话题</a>
+          </div>
+      {% endif %}
+
+      {% include 'TopxiaWebBundle:Group:thread-table.html.twig' %}
+
+      {{ web_macro.paginator(paginator) }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block group_side %}
+
+{% endblock %}
+
+{% block contenta %}
   {{ web_macro.flash_messages() }}
-  {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {
-  'groupinfo':groupinfo,
-  'is_groupmember':is_groupmember,}
-  %}
+ 
   {% block group %}
     <div class="es-row-wrap container-gap userpage-body">
-      {% include 'TopxiaWebBundle:Group:group-tab-ul.html.twig' with
-      {'tab':'index', }%}
       <div class="row">
           
         <div class="col-md-8">
           
           <div class="row">
 
-            {% if paginator.currentPage == paginator.firstPage %}
-              <div class="page" style="background:#effcfc;">
-                    <br>
-                    {% if groupinfo.about%}
-
-                      {{groupinfo.about|raw}}
-
-                    {% else %}
-                      暂无简介
-                    {% endif %} <br> <br>
-                    <div class="pull-right"> 创建时间：{{groupinfo.createdTime|date('Y-m-d')}}
-                    </div><br>
-              </div>
-
-            {% endif %}
+            
 
               <div class="col-md-12">
                 
                 <div class="page clearfix">
                   
-                  {% if is_groupmember !=0%}
-                      <div class="pull-right"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-primary btn-sm " role="button">发话题</a>
-                      </div>
-                  {% endif %}
 
-                  <ul class="nav nav-pills nav-mini  pull-left ">
 
-                        <li{% if condition.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_index',{id:id,num:condition.num,sort:condition.sort,isElite:0})}}">全部</a></li>
-                        
-                        <li{% if condition.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_index',{id:id,type:'elite',num:condition.num,sort:condition.sort})}}">精华</a></li>
 
-                        <li><span class="mhm text-muted">|</span></li>
-
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                              <span class="text-muted">排序：</span>
-                              {% if condition.sort == 'byLastPostTime' %}
-                                最后回复
-                              {% elseif condition.sort == 'byCreatedTime' %}
-                                最新发帖
-                              {% elseif condition.sort == 'byPostNum' %}
-                                回复数
-                              {% endif %}
-                              <span class="caret"></span>
-                            </a>
-
-                            <ul class="dropdown-menu">
-                              <li class="{% if condition.sort == 'byCreatedTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_index',{id:id,isElite:condition.type,num:condition.num,sort:'byCreatedTime'})}}">最新发帖</a></li>
-                              <li class="{% if condition.sort == 'byLastPostTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_index',{id:id,isElite:condition.type,num:condition.num,sort:'byLastPostTime'})}}">最后回复</a></li>
-                              <li class="{% if condition.sort == 'byPostNum' %}active{% endif %}"><a class="js-nav" href="{{path('group_index',{id:id,isElite:condition.type,num:condition.num,sort:'byPostNum'})}}">回复数</a></li>
-                            </ul>
-
-                        </li>
-
-                    </ul>
                   
                   </div>
 
-                {% include 'TopxiaWebBundle:Group:thread-table.html.twig' with {
-                'threads':threads,
-                'owner':owner,
-                'lastPostMembers':lastPostMembers,}
-                %}
-                {{ web_macro.paginator(paginator) }}
+                
+                
                 
               </div>
             </div>  

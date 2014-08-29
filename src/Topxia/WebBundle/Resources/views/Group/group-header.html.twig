@@ -1,29 +1,28 @@
-<div class="jumbotron " {% if groupinfo.backgroundLogo %}style="background:url({{file_path(groupinfo.backgroundLogo)}});"{% else %}style="background:url({{asset('assets/img/default/background_group.jpg')}});"{% endif %}>
+ {% set groupNav = groupNav|default(null) %} 
 
-    <div class="row">    
-      <div class="panel panel-default col-md-5">
-        <div class="panel-body">
-          <div class="media">
-            
-                {% if groupinfo.logo%}
-                  <img src="{{file_path(groupinfo.logo)}}" alt="" class="pull-left" >
-                {% else %}
-                  <img src="{{asset('assets/img/default/group.png')}}" alt=""class="pull-left" >
-                {% endif %}
-            
-                <div class="media-body">
-                  <h4>{{groupinfo.title}}</h4>
-                  <span class="group-header-tip "> 
-                    <span class="glyphicon glyphicon-user"></span>成员: {{groupinfo.memberNum}} &nbsp;
-                    <span class="glyphicon glyphicon-fire"></span>话题: {{groupinfo.threadNum}} &nbsp;
-                    <span class="glyphicon glyphicon-comment"></span>回复: {{groupinfo.postNum}}</span>
-                  </span>
-                </div>
-            
+  <div class="row group-header">
+    <div class="col-md-12"  >
+      <div class="group-header-inner" style="background:url({{file_path(groupinfo.backgroundLogo, 'background_group.jpg')}});">
+        <div class="media">
+          <a class="pull-left" href="#">
+            <img src="{{file_path(groupinfo.logo, 'group.png')}}" alt="" class="media-object" >
+          </a>
+          <div class="media-body">
+            <h1 class="media-heading">{{groupinfo.title}}</h1>
+            <div class="media-metas">
+              {{groupinfo.memberNum}}个成员
+            </div>
           </div>
         </div>
-      </div>
-    </div> 
-    <br>
 
-</div>
+        <ul class="nav nav-pills">
+          <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_index',{id:groupinfo.id})}}">小组首页</a></li>
+          <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">小组成员</a></li>
+          {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3%}
+            <li {% if groupNav=="setting" %}class="active" {% endif %}><a  href="{{path('group_set',{id:groupinfo.id,action:'setGroupInfo'})}}">小组设置</a></li>
+          {% endif %}
+        </ul>
+
+      </div>
+    </div>
+  </div>

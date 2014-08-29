@@ -407,7 +407,7 @@ class GroupThreadController extends BaseController
     {   
         $post=$this->getThreadService()->getPost($postId);
         if($post['postId']!=0)$postId=$post['postId'];
-        $count=$this->getThreadService()->searchPostsCount(array('threadId'=>$threadId,'status'=>'open','id'=>$postId));
+        $count=$this->getThreadService()->searchPostsCount(array('threadId'=>$threadId,'status'=>'open','id'=>$postId,'postId'=>0));
 
         $page=floor(($count)/10)+1;
    

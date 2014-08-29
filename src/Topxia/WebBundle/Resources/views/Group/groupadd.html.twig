@@ -4,7 +4,7 @@
 {% set side_nav = 'group' %}
 {% block main %}
   {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
-  {% block heading %}<span class="glyphicon glyphicon-hand-right"></span> 创建小组{% endblock %}
+  {% block heading %}<h4>创建小组</h4>{% endblock %}
   {% block body %}
     <form id="user-group-form" class="form-horizontal" method="post" action="{{path ('group_add')}}">
       {{ web_macro.flash_messages() }}
