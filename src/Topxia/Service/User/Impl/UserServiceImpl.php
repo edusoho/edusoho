@@ -172,6 +172,9 @@ class UserServiceImpl extends BaseService implements UserService
         ));
     }
 
+    public function changeFirstLogin($id,$isFirstLogin='0'){
+        return $this->getUserDao()->updateUser($id,array('firstLogin'=>$isFirstLogin));
+    }
     public function isNicknameAvaliable($nickname)
     {
         if (empty($nickname)) {

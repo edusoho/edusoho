@@ -13,7 +13,6 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
         // $this->getUserService()->markLoginInfo();
-
         if ($request->isXmlHttpRequest()) {
             $content = array(
                 'success' => true
@@ -32,7 +31,12 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             $url = $url . '?' . http_build_query($queries);
             return $this->httpUtils->createRedirectResponse($request, $url);
         }
+        $user=$this->getUserService()->getUser($userId);
 
+        if($user['firstLogin']==1){
+            $this->getUserService()->changeFirstLogin($userId);
+            return $this->httpUtils->createRedirectResponse($request, 'settings_first_password');
+        }
         return parent::onAuthenticationSuccess($request, $token);
     }
 

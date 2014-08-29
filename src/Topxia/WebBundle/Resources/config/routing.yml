@@ -825,6 +825,10 @@ settings_password:
     pattern:  /settings/password
     defaults: { _controller: TopxiaWebBundle:Settings:password }
 
+settings_first_password:
+    pattern:  /settings/first/password
+    defaults: { _controller: TopxiaWebBundle:Default:password }
+
 settings_email:
     pattern:  /settings/email
     defaults: { _controller: TopxiaWebBundle:Settings:email }

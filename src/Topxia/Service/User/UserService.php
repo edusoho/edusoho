@@ -76,6 +76,8 @@ interface UserService
 
     public function changeUserRoles($id, array $roles);
 
+    public function changeFirstLogin($id,$isFirstLogin='0');
+
     /**
      * @deprecated move to TokenService
      */
