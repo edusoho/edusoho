@@ -1181,6 +1181,10 @@ class_show:
     pattern: /class/{classId}
     defaults: { _controller: TopxiaWebBundle:Class:show }
 
+class_course_show:
+    pattern: /class/{classId}/courses
+    defaults: { _controller: TopxiaWebBundle:ClassCourses:showCourse }
+
 class_threads:
     pattern:  /class/{classId}/thread
     defaults: { _controller: TopxiaWebBundle:ClassThread:list }
