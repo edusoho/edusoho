@@ -2,13 +2,17 @@
 <tr id="user-table-tr-{{ user.id }}">
   <td width="80%">
     <div class="col-md-1">
-      <img class="media-object pull-left" src="{{file_path(user.smallAvatar, 'avatar.png')}}" alt="{{userProfile.truename}}">
+      <a href="{{ path('user_show', {id:user.id}) }}">
+        <img class="media-object pull-left"  width="48" height="48" src="{{file_path(user.smallAvatar, 'avatar.png')}}" alt="{{userProfile.truename}}">
+      </a>
     </div>
     <div class="col-md-11">
-      <strong>{{userProfile.truename}}</strong>
-      {% if user.locked %}
-        <label class="label label-danger">禁</label>
-      {% endif %}
+      <a href="{{ path('user_show', {id:user.id}) }}">
+        <strong>{{userProfile.truename}}</strong>
+        {% if user.locked %}
+          <label class="label label-danger">禁</label>
+        {% endif %}
+      </a>
       <br>
       学号：{{ user.number }}
     </div>
@@ -23,7 +27,7 @@
       <ul class="dropdown-menu">
         <li><a href="#modal" data-toggle="modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</a></li>
         
-        <li><a class="remove-student" href="javascript:" title="移除学生{{ user.nickname }}" data-url="{{ path('admin_class_student_remove', {userId:user.id}) }}">移除</a></li>
+        <li><a class="remove-student" href="javascript:" title="移除学生{{userProfile.truename}}" data-url="{{ path('admin_class_student_remove', {userId:user.id}) }}">移除</a></li>
       </ul>
     </div>
   </td>
