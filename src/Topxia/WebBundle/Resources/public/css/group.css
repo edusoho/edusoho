@@ -12,15 +12,7 @@
     height:110px;width: 76px; float: left;text-align:center;
 }
 
-.jumbotron{
-    background: #fff;
-    position: relative;
-    
-}
-.jumbotron img{
-     width: 60px;
-    height: 60px;
-}
+
 .nav-pills{
     border-bottom:none;
 }
@@ -69,9 +61,6 @@
 .pagination li{
     cursor: pointer;
 }
-
-
-
 
 
 .group-header {
@@ -132,4 +121,9 @@
     background-color: rgba(255, 255, 255, 0.90);
     color: #444;
     font-weight: bold;
+}
+
+
+.group-main > .panel {
+    min-height: 500px;
 }
