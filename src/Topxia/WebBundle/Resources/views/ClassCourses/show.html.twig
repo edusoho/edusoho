@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle:Class:layout.html.twig' %}
+
+{% block class_main %}
+<div class="row">
+  {% if courses %}
+  {% for course in courses%}
+  <div class="col-sm-6 col-md-4">
+    <div class="thumbnail">
+      <img  alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}" style="height: 200px; width: 120%; display: block;">
+      <div class="caption">
+        <h3 class="text-primary">{{ course.title }}</h3>
+        <span>{{ course.teachername[0]}}</span>
+        <span class="pull-right">{{ course.lessonCount}}个课时</span>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <span class="empty">该班级暂无课程，快去增加课程吧！</span>
+  {% endif %}
+</div>
+{% endblock %}
