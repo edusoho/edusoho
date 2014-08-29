@@ -14,19 +14,14 @@
 
   {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
 
-  {% block content %}
+  {% block group_body %}
 
-    {% include 'TopxiaWebBundle:Group:group-header.html.twig' %}
       
         <div class="row">
           <div class="col-md-12">
-              <div class="panel panel-default">
-                <div class="panel-body">
-                <ul class="nav nav-pills">
-                  <li  {% if app.request.get('action')=='setGroupInfo' %}class="active"{% endif %}><a href="{{path('group_set',{id:groupinfo.id,action:'setGroupInfo'})}}">编辑小组 </a></li>
-                  <li {% if app.request.get('action')=='setLogo' %}class="active"{% endif %}> <a  href="{{path('group_set',{id:groupinfo.id,action:'setLogo'})}}">logo设置</a></li>
-                  <li {% if app.request.get('action')=='setBackGroundLogo' %}class="active"{% endif %}>  <a  href="{{path('group_set',{id:groupinfo.id,action:'setBackGroundLogo'})}}">背景设置</a></li>
-                </ul><br>
+            <div class="panel panel-default">
+              <div class="panel-body">
+                {% include 'TopxiaWebBundle:Group:group-setting-nav.html.twig' with {nav: 'info'} %}
 
             {{ web_macro.flash_messages() }}
 

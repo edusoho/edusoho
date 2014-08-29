@@ -1,0 +1,5 @@
+<ul class="nav nav-pills">
+  <li  {% if nav == 'info' %}class="active"{% endif %}><a href="{{path('group_set',{id:groupinfo.id,action:'setGroupInfo'})}}">编辑小组 </a></li>
+  <li {% if nav == 'logo' %}class="active"{% endif %}> <a  href="{{path('group_set',{id:groupinfo.id,action:'setLogo'})}}">logo设置</a></li>
+  <li {% if nav == 'background' %}class="active"{% endif %}>  <a  href="{{path('group_set',{id:groupinfo.id,action:'setBackGroundLogo'})}}">背景设置</a></li>
+</ul>
