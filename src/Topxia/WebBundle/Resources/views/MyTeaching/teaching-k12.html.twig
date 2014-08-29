@@ -1,0 +1,61 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}在教课程 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-courses-k12' %}
+
+{% block main %}
+<div class="panel panel-default panel-col lesson-manage-panel">
+  <div class="panel-heading">
+    在教课程
+  </div>
+  <div class="panel-body">
+    <table class="table table-hover table-condensed">
+      <tbody>
+        {% if classMembers %}
+        {% for classMember in classMembers %}
+        <tr>
+          <td>
+            <a class="pull-left" href="#">
+              <img class="media-object" src="{{ asset(classMember.class.icon) }}" alt="{{ classMember.class.name }}" style="width: 140px; height: 78px;">
+            </a>
+          </td>
+          <td> 
+            <a href="#" class="btn-link pull-left">{{ class_name(classMember.class) }}</a>
+          </td>
+          <td>
+            {% if classMember.role == 'HEAD_TEACHER' %}
+            <span class="text-danger">班主任</span>
+            {% else %}
+            <span>任课</span>
+            {% endif %}
+          </td>
+          <td>
+        
+            {% if classMember.courses %}
+            {% for course in classMember.courses %}
+            {{ course.title }}<br>
+
+            {% endfor %}
+            {% else %}
+            暂无在教的课程
+            {% endif %}
+         
+        </td>
+        <td>
+      
+        </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <span  class="empty">暂无在教的课程</span>
+        {% endif %}
+      </tbody>
+    </table>
+    
+    {{ web_macro.paginator(paginator) }} 
+
+  </div>
+</div>
+
+{% endblock %}

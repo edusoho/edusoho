@@ -24,6 +24,10 @@ class ClassMemberServiceImpl extends BaseService implements ClassMemberService
         $this->getClassMemberDao()->deleteClassMemberByUserId($userId);
     }
 
+    public function updateClassMember(array $fields, $id)
+    {
+        return $this->getClassMemberDao()->updateClassMember($fields, $id);
+    }
 
     private function getClassMemberDao()
     {

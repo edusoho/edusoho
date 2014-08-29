@@ -12,5 +12,7 @@ interface ClassMemberDao
 
 	public function addClassMember($classMember);
 
+	public function updateClassMember($fields, $id);
+
 	public function deleteClassMemberByUserId($userId);
 }

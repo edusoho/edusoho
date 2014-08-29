@@ -42,6 +42,11 @@ class ClassMemberDaoImpl extends BaseDao implements ClassMemberDao
         return $this->getClassMember($this->getConnection()->lastInsertId());
     }
 
+    public function updateClassMember($fields, $id)
+    {
+        $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
+        return $this->getClassMember($id);
+    }
     public function deleteClassMemberByUserId($userId){
         return $this->getConnection()->delete($this->table,  array('userId' => $userId));
     }

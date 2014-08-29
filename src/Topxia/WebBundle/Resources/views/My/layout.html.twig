@@ -15,26 +15,26 @@
 
           {% if app.user.isTeacher() %}
             <div class="list-group-panel">
-              <div class="list-group-heading">我的教学</div>
+              {# <div class="list-group-heading">我的教学</div> #}
               <ul class="list-group">
-{#                <a class="list-group-item
+             {#   <a class="list-group-item
                {% if side_nav == 'my-teaching-courses' %} active {% endif %}" 
                href="{{path('my_teaching_courses')}}">在教课程</a> #}
 
                <a class="list-group-item
-               {% if side_nav == 'my-teaching-courses' %} active {% endif %}" 
-               href="{{path('my_teaching_courses_k12')}}">在教课程</a>
+               {% if side_nav == 'my-teaching-courses-k12' %} active {% endif %}" 
+               href="{{path('my_teaching_courses_k12')}}">我的教学</a>
 
                <a class="list-group-item 
                {% if side_nav == 'my-teaching-questions' %} active {% endif %}" 
-                href="{{path('my_teaching_threads', {type:'question'}) }}">学员问答</a>
+                href="{{path('my_teaching_threads', {type:'question'}) }}">学生问答</a>
                <a class="list-group-item {% if side_nav == 'my-teaching-discussions' %} active {% endif %}"
-                href="{{path('my_teaching_threads', {type:'discussion'}) }}">学员话题</a>
+                href="{{path('my_teaching_threads', {type:'discussion'}) }}">学生话题</a>
                <a class="list-group-item {% if side_nav == 'my-teaching-check' %} active {% endif %}"
                 href="{{path('course_manage_list_teacher_test_reviewing') }}">我的批阅</a>
               </ul>
             </div>
-          {% endif %}
+          {% else %}
 
           <div class="list-group-panel">
             <div class="list-group-heading">我的学习</div>
@@ -62,15 +62,15 @@
                 href="{{path('my_quiz')}}">我的考试</a>
             </ul>
           </div>
-
-          <div class="list-group-panel">
+          {% endif %}
+          {# <div class="list-group-panel">
             <div class="list-group-heading">订单</div>
             <ul class="list-group">
               <a class="list-group-item 
                {% if side_nav == 'my-orders' %} active {% endif %} " 
                href="{{path('my_orders')}}">我的订单</a>
             </ul>
-          </div>
+          </div> #}
           
         </div>
       </div>

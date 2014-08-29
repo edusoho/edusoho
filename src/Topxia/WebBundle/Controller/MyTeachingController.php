@@ -46,25 +46,38 @@ class MyTeachingController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
+        $conditions =array(
+            'userId' => $user['id']
+            );
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserTeachCourseCount($user['id'], false),
-            12
+            $this->getClassMemberService()->searchClassMemberCount($conditions),
+            10
         );
         
-        $courses = $this->getCourseService()->findUserTeachCourses(
-            $user['id'],
+        $classMembers = $this->getClassMemberService()->searchClassMembers(
+            $conditions,
+            array('createdTime','DESC'),
             $paginator->getOffsetCount(),
-            $paginator->getPerPageCount(),
-            false
+            $paginator->getPerPageCount()
         );
 
-        $courseSetting = $this->getSettingService()->get('course', array());
+        foreach ($classMembers as $key => $classMember) {
+            $class = $this->getClassesService()->getClass($classMember['classId']);
+            $courseCondtions = array(
+                'classId' => $classMember['classId'],
+                'teacherIds' => $classMember['userId']
+                );
+            $courses = $this->getCourseService()
+                ->searchCourses($conditions,'',0,100);
+            $classMember['class'] = $class;
+            $classMember['courses'] = $courses;
+            $classMembers[$key] = $classMember;    
+        }
 
         return $this->render('TopxiaWebBundle:MyTeaching:teaching-k12.html.twig', array(
-            'courses'=>$courses,
+            'classMembers'=>$classMembers,
             'paginator' => $paginator,
-            'live_course_enabled' => empty($courseSetting['live_course_enabled']) ? 0 : $courseSetting['live_course_enabled']
         ));
     }
 
@@ -136,6 +149,16 @@ class MyTeachingController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getClassMemberService()
+    {
+        return $this->getServiceKernel()->createService('Classes.ClassMemberService');
+    }
+
+    protected function getClassesService()
+    {
+        return $this->getServiceKernel()->createService('Classes.ClassesService');
     }
 
 }

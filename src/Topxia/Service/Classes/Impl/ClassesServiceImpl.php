@@ -43,7 +43,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
     public function editClass($fields, $id)
     {
         $class = $this->getClassesDao()->editClass($fields, $id);
-      /*  $conditions = array(
+        $conditions = array(
             'classId' => $class['id'],
             'role' => 'HEAD_TEACHER'
             );
@@ -53,9 +53,9 @@ class ClassesServiceImpl extends BaseService implements ClassesService
             0,
             1);
         if($oldClassMember['userId'] != $class['headTeacherId']) {
-            $this->getClassMemberService()->addClassMember($classMember);
-        }*/
-
+            $this->getClassMemberService()
+            ->updateClassMember($class['headTeacherId'], $oldClassMember['id']);
+        }
         
         return $class;
     }
@@ -69,7 +69,8 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return $this->createDao('Classes.ClassesDao');
     }
 
-    private function getClassMemberService(){
+    private function getClassMemberService()
+    {
         return $this->createService('Classes.ClassMemberService');
     }
 }

@@ -151,6 +151,11 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             $conditions['notFree'] = 0;
         }
         
+        if (isset($conditions['teacherIds'])) {
+            $conditions['teacherIdsLike'] = "%|{$conditions['teacherIds']}|%";
+            unset($conditions['teacherIds']);
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'course')
             ->andWhere('status = :status')
@@ -167,6 +172,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
             ->andWhere('classId =:classId')
             ->andWhere('gradeId =:gradeId')
+            ->andWhere('teacherIds LIKE :teacherIdsLike')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime');
 

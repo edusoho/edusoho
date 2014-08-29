@@ -9,5 +9,7 @@ interface ClassMemberService
 
     public function addClassMember(array $classMember);
 
+    public function updateClassMember(array $fields, $id);
+
     public function deleteClassMemberByUserId($userId);
 }

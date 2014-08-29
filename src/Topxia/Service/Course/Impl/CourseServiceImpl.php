@@ -1962,6 +1962,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$chapters = $chapterDao->findChaptersByCourseId($templateId);
 		$lessons = $lessonDao->findLessonsByCourseId($templateId);
 		
+		//增加classmember记录
+		$classMember = array();
+		$classMember['userId'] = $teacherId;
+		$classMember['classId'] = $classId;
+		$classMember['role'] = 'TEACHER';
+		$classMember['createdTime'] = time();
+		$this->getClassMemberService()->addClassMember($classMember);
+
 		$chapterIdMap = array();
 		$newChapters = array();
 		foreach ($chapters as $key1 => $chapter) {
@@ -2150,6 +2158,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getClassesService()
     {
         return $this->createService('Classes.ClassesService');
+    }
+
+    private function getClassMemberService()
+    {
+        return $this->createService('Classes.ClassMemberService');
     }
 
 }
