@@ -2,6 +2,14 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         require('./common').run();
+        var Share = require('../../util/share.js');
+        require('jquery.cycle2');
+
+        Share.create({
+            selector: '.share',
+            icons: 'itemsAll',
+            display: '',
+        });
 
         $("#course-item-list").on('click', '.lesson-item', function(e) {
             window.location.href = $(this).find('.title').attr('href');
