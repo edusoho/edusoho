@@ -91,10 +91,9 @@ class MobileBaseController extends BaseController
         $token = $this->getUserService()->getToken(self::TOKEN_TYPE, $token);
         if ($token) {
             $this->setCurrentUser($token['userId'], $request);
-            return $this->getUser();
         }
 
-        return null;
+        return $this->getUser();;
     }
 
     public function createToken($user, $request)
