@@ -85,7 +85,7 @@
         validator_post_content.addItem({
             element: '[name="content"]',
             required: true,
-            rule: 'minlength{min:2} visible_character'            
+            rule: 'visible_character'            
         });
         }
 
