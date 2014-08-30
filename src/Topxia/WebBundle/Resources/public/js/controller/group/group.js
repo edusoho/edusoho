@@ -43,7 +43,7 @@
         }
         
         if($('#post-thread-form').length>0){
-        var editor_thread = EditorFactory.create('#post_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+        EditorFactory.create('#post_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
         var validator_post_content = new Validator({
             element: '#post-thread-form',
             failSilently: true,
