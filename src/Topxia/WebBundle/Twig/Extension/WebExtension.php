@@ -63,6 +63,8 @@ class WebExtension extends \Twig_Extension
             'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
+            'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
+            'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
         );
     }
@@ -220,6 +222,29 @@ class WebExtension extends \Twig_Extension
         }
 
         return round($remain / 86400) . '天';
+    }
+
+    public function getCountdownTime($value)
+    {
+        $countdown = array('days' => 0, 'hours' => 0, 'minutes' => 0, 'seconds' => 0);
+
+        $remain = $value - time();
+        if ($remain <=0 ) {
+            return $countdown;
+        }
+
+        $countdown['days'] = intval($remain / 86400);
+        $remain = $remain - 86400 * $countdown['days'];
+
+        $countdown['hours'] = intval($remain / 3600);
+        $remain = $remain - 3600 * $countdown['hours'];
+
+        $countdown['minutes'] = intval($remain / 60);
+        $remain = $remain - 60 * $countdown['minutes'];
+
+        $countdown['seconds'] = $remain;
+
+        return $countdown;
     }
 
     public function durationFilter($value)
@@ -642,6 +667,26 @@ class WebExtension extends \Twig_Extension
         return 'topxia_web_twig';
     }
 
+    public function getFreeLimitType($course){
+        if(!empty($course['freeStartTime']) && !empty($course['freeEndTime'])) {
+            $startTime = $course['freeStartTime'];
+            $endTime = $course['freeEndTime'];
+            $now = time();
+
+            if($startTime > $now) {
+                return 'free_coming';//即将限免
+            } elseif ($endTime >= $now){
+                return 'free_now';//正在限免
+            } elseif ($endTime < $now){
+                return 'free_end';//限免结束
+            } else {
+                return 'no_free';
+            }
+        } else {
+            return 'no_free';
+        }
+    }
+    
     public function mb_trim($string, $charlist='\\\\s', $ltrim=true, $rtrim=true) 
     { 
         $both_ends = $ltrim && $rtrim; 

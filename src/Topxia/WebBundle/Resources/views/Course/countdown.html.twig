@@ -1,0 +1,23 @@
+{% if is_feature_enabled('free_limit') and free_limit_type(course) == 'free_coming' %}
+  <span class="countdown">
+    <span class="text-info">{{course.freeStartTime|date('m')}}</span>
+    <span class="text-muted">月</span>
+    <span class="text-info">{{course.freeStartTime|date('d')}}</span>
+    <span class="text-muted">日</span>
+    <span class="text-info">{{course.freeStartTime|date('H')}}</span>
+    <span class="text-info">:</span>
+    <span class="text-info">{{course.freeStartTime|date('i')}}</span>
+  </span>
+  <span class="label label-primary">即将限免</span>
+{% endif %}
+
+{% if is_feature_enabled('free_limit') and  free_limit_type(course) == 'free_now' %}
+  {% set countdown = countdown_time(course.freeEndTime) %}
+  <span class="text-danger countdown" data-endtime="{{ course.freeEndTime|date('Y-n-d H:i:s') }}">仅剩
+    <span class="days">{{ "%02d"|format(countdown.days) }}</span>天
+    <span class="hours">{{ "%02d"|format(countdown.hours) }}</span>时
+    <span class="minutes">{{ "%02d"|format(countdown.minutes) }}</span>分
+    <span class="seconds">{{ "%02d"|format(countdown.seconds) }}</span>秒
+  </span>
+  <span class="label label-danger">正在限免</span> 
+{% endif %}
