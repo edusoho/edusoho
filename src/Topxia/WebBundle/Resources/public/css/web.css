@@ -2928,6 +2928,7 @@ body {
 
 .course-wide-list .course-metas {
 	float: right;
+	text-align: right;
 	margin-top: 10px;
 }
 

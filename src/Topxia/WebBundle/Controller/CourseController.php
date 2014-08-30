@@ -30,7 +30,6 @@ class CourseController extends BaseController
 
 
 		$sort = $request->query->get('sort', 'latest');
-
 		$conditions = array(
 			'status' => 'published',
 			'type' => 'normal',
@@ -64,6 +63,7 @@ class CourseController extends BaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
+
 		));
 	}
 
@@ -241,7 +241,7 @@ class CourseController extends BaseController
 		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
 		$this->getCourseService()->hitCourse($id);
-	
+
 		$member = $this->previewAsMember($previewAs, $member, $course);
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
@@ -562,7 +562,6 @@ class CourseController extends BaseController
 			$vipChecked = 'ok';
 		}
 
-
 		return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
 			'course' => $course,
 			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
@@ -640,6 +639,15 @@ class CourseController extends BaseController
 		));
 	}
 
+	public function rebuyAction(Request $request,$courseId)
+	{
+		$user = $this->getCurrentUser();
+
+		$this->getCourseService()->removeStudent($courseId, $user['id']);
+
+		return $this->redirect($this->generateUrl('course_show',array('id' => $courseId)));
+	}
+	
 	private function createCourseForm()
 	{
 		return $this->createNamedFormBuilder('course')
