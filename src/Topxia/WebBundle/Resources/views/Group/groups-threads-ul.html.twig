@@ -1,7 +1,9 @@
 <ul class="media-list thread-list">
   {% for thread in threads %}
     {% set group = groups[thread.groupId]|default(null) %}
+    {% if users|default(null) %}
     {% set user = users[thread.userId]|default(null) %}
+    {% endif %}
     <li class="media">
       <a class="pull-left" href="{{ path('user_show', {id:user.id}) }}">
         <img src="{{ default_path('avatar',user.smallAvatar, '') }}" class="media-object">
@@ -9,7 +11,7 @@
       <div class="media-body">
         {% if thread.postNum %}<span class="badge pull-right">{{thread.postNum}}</span>{% endif %}
         <div class="media-heading">
-          {% if thread.isStick %}
+          {% if thread.isStick and not group %}
             <span class="label label-danger">置顶</span>
           {% endif %}
           <a class="title" href="{{ path('group_thread_index', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(90)}}</a>

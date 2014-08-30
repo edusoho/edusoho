@@ -4076,3 +4076,12 @@ body {
 	margin: 0 5px;
 	color: #ccc;
 }
+
+.group-media-sm {
+	margin-bottom: 15px;
+}
+
+.group-media-sm .media-object {
+	width: 60px;
+	height: 60px;
+}

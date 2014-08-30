@@ -10,6 +10,9 @@
         {% if threadMain.isElite %}
         <span class="label label-warning">精</span>
       {% endif %}
+        {% if threadMain.isStick %}
+        <span class="label label-danger">置顶</span>
+      {% endif %}
       </h2>
       <div class="metas">
         发表于 {{ threadMain.createdTime|smart_time }}
@@ -17,7 +20,7 @@
         <span>{{ threadMain.hitNum }} 次查看</span>
       </div>
     </div>
-    <div class="panel-body">
+    <div class="panel-body" id="post-action">
       {{threadMain.content|raw}}
 
       <div>
@@ -63,7 +66,7 @@
           </a> #}
 
         {% endif %}
-        <div class="share pull-right"  data-bdText="{{groupShareContent|default('')}}"></div>
+
 
 
       </div>
@@ -111,11 +114,27 @@
                   <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >收起</a>
                 {% endif %}
               </div>
-
+              <div class="reply-{{post.id}}">
               {% if subPosts %}
-                {% include 'TopxiaWebBundle:Group:post-reply-list.html.twig' with {posts:subPosts, users:postReplyMembers} %}
+                {% include 'TopxiaWebBundle:Group:post-reply-list.html.twig' with {posts:subPosts, users:postReplyMembers,postMain:post} %}
+              {% else %}
+                
+                <div class="reply-{{post.id}}" style="display:none;">
+                  <form  class="thread-post-reply-form reply-{{post.id}}" method="post"  post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
+                    <div class="form-group">
+                      <label class="control-label hide" for="reply-content-{{post.id}}">回复内容</label>
+                      <div class="controls">
+                      <textarea id="reply-content-{{post.id}}" class="form-control"></textarea>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                      <button type="submit" postId="{{post.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
+                    </div>
+                  </form>
+                </div>
               {% endif %}
-              
+              </div>
+                <div>
             </div>
           </li>
         {% endfor %}
@@ -131,10 +150,13 @@
   <div class="panel panel-default">
     <div class="panel-heading">发表回复</div>
     <div class="panel-body">
-      <form id="post-thread-form" class="post-thread-form" method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
+      <form id="post-thread-form" class="post-thread-form " method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
 
         <div class="form-group">
+            <label class="control-label hide" for="post_content">回复内容</label>
+            <div class="controls">
             <textarea name="content" value="" rows="10" id="post_content" class="form-control"></textarea>
+            </div>
         </div>
         <div class="form-group">
           <button id="post-thread-btn" data-submiting-text="正在回复" type="submit" class="post-thread-btn btn btn-primary pull-right">发表</button>
@@ -153,7 +175,15 @@
     <div class="panel-heading">话题作者</div>
     <div class="panel-body">
       <div class="media">
-        
+        <a class="pull-left" href="{{ path('user_show', {id:owner.id}) }}">
+          <img src="{{ default_path('avatar',owner.smallAvatar, '') }}" class="media-object">
+        </a>
+        <div class="media-body">
+          <div class="metas mbm">
+            <strong>{{ web_macro.user_link(owner)}}</strong>
+          </div>
+          <div class="content"> <span class="text-muted">头衔:</span>{{owner.title|default("无")}}</div>
+        </div>
       </div>
     </div>
   </div>

@@ -7,6 +7,7 @@
         <a href="{{ path('course_show', {id:course.id}) }}">
             <img class="picture" src="{{ default_path('coursePicture',course.largePicture, '') }}" />
         </a>
+
         <h1 class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a> 
           {% if course.status=='closed' %}  
             <span class="label label-danger ">已关闭</span>
@@ -45,7 +46,11 @@
                 <i class="glyphicon glyphicon-share"></i>
               </button>
               <ul class="dropdown-menu pull-right shares-dropdown-menu js-social-shares">
-                <div class="share" data-bdText="{{courseShareContent|default('')}}"></div>
+                <li class="disabled"><a href="javascript:">分享到：</a></li>
+                <li><a href="javascript:" data-share="weibo" data-params="#course-social-share-params"><span class="social-icon-weibo"></span> 新浪微博</a></li>
+                <li><a href="javascript:" data-share="qq" data-params="#course-social-share-params"><span class="social-icon-qq"></span> QQ空间</a></li>
+                <li><a href="javascript:" data-share="renren" data-params="#course-social-share-params"><span class="social-icon-renren"></span> 人人网</a></li>
+                <li><a href="javascript:" data-share="douban" data-params="#course-social-share-params"><span class="social-icon-douban"></span> 豆瓣</a></li>
               </ul>
               <div id="course-social-share-params" style="display:none;"
                 data-title="课程 《{{ course.title }}》"

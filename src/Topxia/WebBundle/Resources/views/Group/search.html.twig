@@ -1,43 +1,46 @@
-{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+{% extends 'TopxiaWebBundle:Group:layout2.html.twig' %}
 {% block title %}搜索 - {{ parent() }}{% endblock %}
-{% block main %}
-  {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
-    {% block heading %}
-        <h3><b>小组搜索</b></h3>
-        <div class="row">
-            <div class="col-md-4 pull-right " >
-              <form action="{{path('group_search_group')}}" method="get">
-                  <div class="input-group">
+{% block content %}
 
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-                    <input type="text" class="form-control" placeholder="小组搜索" name="keyWord" value="{{app.request.get('keyWord') }}">
+  <div class="panel panel-default panel-lg">
+    <div class="panel-heading">
 
-                    <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">
-                      <span class="glyphicon glyphicon-search"></span>
-                    </button>
-                    </span>
+      <div class="row">
+        <div class="col-sm-8"><h1>小组搜索</h1></div>
+        <div class="col-sm-4">
+          <form class="form-inline pull-right" action="{{path('group_search_group')}}" method="get">
+            <div class="form-group">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="小组搜索" name="keyWord" value="{{app.request.get('keyWord') }}">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </button>
+                </span>
 
-                  </div>
-              </form>
-                
-            </div> 
+              </div>
+            </div>
+          </form>
         </div>
-    {% endblock %}
+      </div>
 
-    {% block body %}
-        <div class="row">
-          <div class="col-md-12">
-            {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {
-            'groups':groups,  }
-            %}
+    </div>
+
+    <div class="panel-body">
+      <div class="row">
+        {% for group in groups %}
+          <div class="col-md-3">
+
+            {% include 'TopxiaWebBundle:Group:group-media-small.html.twig'  %}
             
           </div>
-          <div class="col-md-9 pull-left">
-            {{ web_macro.paginator(paginator) }}
-          </div>
-        </div>
-    {% endblock %}
+        {% endfor %}
+      </div>
 
-  {% endembed %}
+      {{ web_macro.paginator(paginator) }}
+
+
+    </div>
+  </div>
+
 {% endblock %}
