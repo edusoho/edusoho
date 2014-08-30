@@ -239,7 +239,7 @@ class GroupController extends BaseController
     public function memberPostsAction()
     {
         $user=$this->getCurrentUser();
-
+        $threads=array();
         $paginator=new Paginator(
             $this->get('request'),
             $this->getThreadService()->searchPostsThreadIdsCount(array('userId'=>$user['id'])),
