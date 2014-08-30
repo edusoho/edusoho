@@ -42,12 +42,12 @@
         });
 
         validator_thread.on('formValidate', function(elemetn, event) {
-            editor.sync();
-        })
+            editor_thread.sync();
+        });
         }
         
         if($('#post-thread-form').length>0){
-        EditorFactory.create('#post_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+        var editor=EditorFactory.create('#post_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
         var validator_post_content = new Validator({
             element: '#post-thread-form',
             failSilently: true,
@@ -94,7 +94,7 @@
 
         validator_post_content.on('formValidate', function(elemetn, event) {
             editor.sync();
-        })
+        });
         }
 
         if($('.group-post-list').length>0){
@@ -280,7 +280,7 @@
 
         validator.on('formValidate', function(elemetn, event) {
             editor.sync();
-        })
+        });
 
        }
     
