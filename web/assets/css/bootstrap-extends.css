@@ -6,6 +6,17 @@
   font-size: 16px;
 }
 
+.panel-lg .panel-heading {
+  padding: 15px 20px;
+
+}
+
+.panel-lg h1 {
+  margin: 0px 0;
+  font-size: 24px;
+  line-height: 1.5;
+}
+
 .btn-muted {
   color: #999999;
 }
