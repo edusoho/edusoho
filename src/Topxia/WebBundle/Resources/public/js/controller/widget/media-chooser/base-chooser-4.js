@@ -211,7 +211,10 @@ define(function(require, exports, module) {
             }
         },
         _supportHtml5: function(){
-            return FileReader && FileReader.DONE && XMLHttpRequest;
+            if(typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
+                return false;
+            }
+            return true;
         },
 
         destroy: function(){
