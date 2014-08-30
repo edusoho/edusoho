@@ -48,7 +48,7 @@
             element: '#post-thread-form',
             failSilently: true,
             autoSubmit: false,
-            onFormValidated: function(error){
+            onFormValidated: function(error){alert($('#post_content').val())
                 if (error) {
                     return false;
                 }
