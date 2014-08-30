@@ -189,11 +189,11 @@ class GroupController extends BaseController
 
         $paginator=new Paginator(
             $this->get('request'),
-            $this->getGroupService()->searchMembersCount(array('userId'=>$user['id'])),
+            $this->getGroupService()->searchMembersCount(array('userId'=>$user['id'],'role'=>'member')),
             12
             );
 
-        $members=$this->getGroupService()->searchMembers(array('userId'=>$user['id']),array('createdTime',"DESC"),$paginator->getOffsetCount(),
+        $members=$this->getGroupService()->searchMembers(array('userId'=>$user['id'],'role'=>'member'),array('createdTime',"DESC"),$paginator->getOffsetCount(),
                 $paginator->getPerPageCount());
 
         $groupIds = ArrayToolkit::column($members, 'groupId');
