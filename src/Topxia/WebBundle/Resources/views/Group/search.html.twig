@@ -27,6 +27,7 @@
     </div>
 
     <div class="panel-body">
+      {% if groups %}
       <div class="row">
         {% for group in groups %}
           <div class="col-md-3">
@@ -38,7 +39,9 @@
       </div>
 
       {{ web_macro.paginator(paginator) }}
-
+      {% else %}
+      <div class="empty">暂无小组信息</div>
+      {% endif %}
 
     </div>
   </div>

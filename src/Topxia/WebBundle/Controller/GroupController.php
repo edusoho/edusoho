@@ -571,7 +571,7 @@ class GroupController extends BaseController
         if ($request->getMethod() == 'POST') {
 
             $fileName=$this->setLogo($request,$user);
-
+            
             return $this->redirect($this->generateUrl('group_setLogoCrop', array(
                 'file' => $fileName,
                 'id'=>$id,

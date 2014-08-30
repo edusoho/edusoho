@@ -1242,7 +1242,7 @@ group_transfer:
     pattern:  /group/transferGroup/{id}
     defaults: { _controller: TopxiaWebBundle:Group:transferGroup }
 group_setLogoCrop:
-    pattern:  /group/{id}/setting/logo/crop/{file}
+    pattern:  /group/setting/logoCrop/{file}/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupSetLogoCrop }
 group_logo_set:
     pattern:  /group/{id}/setting/logo
