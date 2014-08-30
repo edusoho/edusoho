@@ -85,7 +85,7 @@
         validator_thread.addItem({
             element: '#post_content',
             required: true,
-            rule: 'minlength{min:2} visible_character'            
+            rule: 'minlength{min:2}'            
         });
         }
 
