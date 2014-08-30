@@ -7,7 +7,7 @@ use Topxia\Service\System\Dao\SessionDao;
 
 class SessionDaoImpl extends BaseDao implements SessionDao
 {
-	protected $table = "session";
+	protected $table = "session2";
 
 	public function get($id)
 	{
