@@ -123,6 +123,7 @@ class GroupController extends BaseController
 
         $postThreadsIds=$this->getThreadService()->searchPostsThreadIds(array('userId'=>$user['id']),array('id','DESC'),0,10);
         
+        $threads = array();
         foreach ($postThreadsIds as $postThreadsId) {
             $threads[]=$this->getThreadService()->getThread($postThreadsId['threadId']);
         
