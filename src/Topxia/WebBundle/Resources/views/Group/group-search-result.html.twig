@@ -1,12 +1,8 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% set script_controller = 'group/group_member' %}
 {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
-{% block content %}
-  {{ web_macro.flash_messages() }}
-  {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {
-  'groupinfo':groupinfo,
-  'is_groupmember':is_groupmember,}
-  %}
+
+{% block group_body %}
   <div class="panel panel-default panel-lg">
     <div class="panel-heading">
 
