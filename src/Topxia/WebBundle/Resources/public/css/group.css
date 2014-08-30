@@ -194,9 +194,7 @@
     margin: 15px 0;
 }
 
-.media-list .media:last-child {
-    border-bottom: 1px solid #eee;
-}
+
 #post-action img{
     width: 100%;
 }
