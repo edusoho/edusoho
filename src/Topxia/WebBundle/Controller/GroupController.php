@@ -466,7 +466,7 @@ class GroupController extends BaseController
                 return $this->createMessageResponse('info', '您没有权限!');
         }
 
-        return $this->render("TopxiaWebBundle:Group:set-group-info.html.twig", array(
+        return $this->render("TopxiaWebBundle:Group:setting-info.html.twig", array(
                     'groupinfo' => $group,
                     'is_groupmember' => $this->getGroupMemberRole($id),
                     'id'=>$id,
@@ -523,7 +523,7 @@ class GroupController extends BaseController
       
         $pictureUrl = 'tmp/' . $filename;
 
-        return $this->render('TopxiaWebBundle:Group:set-logo-crop.html.twig',array(
+        return $this->render('TopxiaWebBundle:Group:setting-logo-crop.html.twig',array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
             'pictureUrl' => $pictureUrl,
@@ -580,7 +580,7 @@ class GroupController extends BaseController
             ));
         }
 
-        return $this->render("TopxiaWebBundle:Group:set-logo.html.twig", array(
+        return $this->render("TopxiaWebBundle:Group:setting-logo.html.twig", array(
                 'groupinfo' => $group,
                 'is_groupmember' => $this->getGroupMemberRole($id),
                 'id'=>$id,
@@ -610,7 +610,7 @@ class GroupController extends BaseController
             ));       
         }
 
-        return $this->render("TopxiaWebBundle:Group:set-background-logo.html.twig", array(
+        return $this->render("TopxiaWebBundle:Group:setting-background.html.twig", array(
                 'groupinfo' => $group,
                 'is_groupmember' => $this->getGroupMemberRole($id),
                 'id'=>$id,

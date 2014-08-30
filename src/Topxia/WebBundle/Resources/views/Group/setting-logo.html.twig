@@ -11,19 +11,14 @@
   <form id="group-avatar-form" class="form-horizontal" method="post" enctype="multipart/form-data" action="{{path ('group_logo_set',{id:id})}}">
   
   <div class="form-group">
-    <div class="col-md-2 control-label"><b>当前logo</b></div>
+    <label class="col-md-2 control-label">当前图标</label>
     <div class="controls col-md-8 controls">
-      {% if logo %}
-        <img src="{{file_path(logo)}}">
-      {% else %}
-        <img src="{{asset('assets/img/default/group.png')}}">
-      {% endif %}
-      
+      <img src="{{file_path(logo, 'group.png')}}">
     </div>
   </div>
   <div class="form-group">
     <div class="col-md-2 control-label">
-      <label for="form_avatar" class="required">新logo </label>
+      <label for="form_avatar" class="required">新图标 </label>
     </div>
     <div class="controls col-md-8 controls">
       <input type="file" id="form_avatar" name="form[avatar]" required="required" accept="image/gif,image/jpeg,image/png" />

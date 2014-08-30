@@ -1,6 +1,9 @@
 {% extends 'TopxiaWebBundle:Group:layout2.html.twig' %}
 {% set script_controller = 'group/group_member' %}
 {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+
+{% set groupNav = 'member' %}
+
 {% block group_body %}
   {{ web_macro.flash_messages() }}
 
