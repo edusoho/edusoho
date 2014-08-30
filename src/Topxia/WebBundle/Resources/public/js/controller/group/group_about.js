@@ -4,21 +4,6 @@
     var EditorFactory = require('common/kindeditor-factory');
 
     exports.run = function() {
-        if($('#group-avatar-form').length>0){
-            var validator = new Validator({
-            element: '#group-avatar-form'
-            });
-
-            validator.addItem({
-            element: '[name="form[avatar]"]',
-            required: true,
-            rule: 'maxsize_image',
-            requiredErrorMessage: '请选择要上传的文件。'
-            });
-
-        }
-    
-        if($('#group_about').length>0){
 
             var editor = EditorFactory.create('#group_about', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
             var validator = new Validator({
@@ -41,7 +26,6 @@
             
         });
 
-           }
     };
 
 });

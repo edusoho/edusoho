@@ -30,6 +30,7 @@
     height: 48px;
 
 }
+
 .post-delete-btn {
     visibility: hidden;
 }
@@ -84,6 +85,11 @@
 }
 
 .group-header .media-object {
+    width: 48px;
+    height: 48px;
+}
+
+.media .media-object {
     width: 48px;
     height: 48px;
 }
@@ -196,7 +202,7 @@
 
 
 #post-action img{
-    width: 100%;
+    max-width: 100%;
 }
 
 #post-action {
@@ -207,4 +213,11 @@
 .group-logo-sm {
     width: 50px;
     height: 50px;
+}
+
+.alert {
+    word-break:break-all;
+}
+.alert img{
+    max-width:100%;
 }

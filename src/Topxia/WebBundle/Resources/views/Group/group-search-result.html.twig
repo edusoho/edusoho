@@ -33,9 +33,9 @@
                 </div>
 
                 <div class="col-md-12">
-                  {% include 'TopxiaWebBundle:Group:thread-table.html.twig' with {
+                  {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {
                   'threads':threads,
-                  'owner':owner,
+                  'users':owner,
                   'lastPostMembers':lastPostMembers,}
                   %}
                   {{ web_macro.paginator(paginator) }}

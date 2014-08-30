@@ -44,7 +44,7 @@
         
         if($('#post_content').length>0){
         var editor_thread = EditorFactory.create('#post_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
-        var validator_thread = new Validator({
+        var validator_post_content = new Validator({
             element: '#post-thread-form',
             failSilently: true,
             autoSubmit: false,
@@ -52,7 +52,6 @@
                 if (error) {
                     return false;
                 }
-              
                 $('#post-thread-btn').button('submiting').addClass('disabled');
 
                 $.ajax({
@@ -83,11 +82,10 @@
                 });          
             }
         });
-        validator_thread.addItem({
-            element: '[name="content"]',
+        validator_post_content.addItem({
+            element: '#post_content',
             required: true,
-            rule: 'minlength{min:2}'
-                    
+            rule: 'minlength{min:2} visible_character'            
         });
         }
 
@@ -170,9 +168,6 @@
                         if (error) {
                             return false;
                         }
-                         if(replyContent.replace(/[ ]/g,"")==""){
-                            return false;
-                        }
                         $(this).button('submiting').addClass('disabled');
                             $.ajax({
                             url : $(".thread-post-reply-form").attr('post-url'),
@@ -193,7 +188,8 @@
                     });
                     validator_threadPost.addItem({
                         element: '#reply-content-'+postId+'',
-                        required: true,                     
+                        required: true,
+                        rule: 'visible_character'                     
                     });
              
             });

@@ -25,7 +25,7 @@ class GroupController extends BaseController
                 'createdTime'=>time()-30*24*60*60,
                 'status'=>'open'
                 ),
-            $this->filterSort('byPostNum'),0, 25
+            $this->filterSort('byCreatedTimeOnly'),0, 25
         );
 
         $ownerIds = ArrayToolkit::column($recentlyThread, 'userId');
@@ -690,9 +690,8 @@ class GroupController extends BaseController
 
         $groupinfo=$request->request->all();
         $group=array();
-        
         if($groupinfo){
-              $group=array(
+            $group=array(
             'title'=>$groupinfo['group']['grouptitle'],
             'about'=>$groupinfo['group']['about']); 
         }        
@@ -744,10 +743,9 @@ class GroupController extends BaseController
                     array('lastPostTime','DESC'),
                 );
                 break;
-            case 'byPostNum':
+            case 'byCreatedTimeOnly':
                 $orderBys=array(
-                    array('isStick','DESC'),
-                    array('postNum','DESC'),
+                    array('createdTime','DESC'),
                 );
                 break;
             default:

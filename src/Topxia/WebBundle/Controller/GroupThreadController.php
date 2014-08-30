@@ -85,7 +85,7 @@ class GroupThreadController extends BaseController
             
         }
 
-        return $this->render('TopxiaWebBundle:Group:update-thread.html.twig',array(
+        return $this->render('TopxiaWebBundle:Group:add-thread.html.twig',array(
             'id'=>$id,
             'groupinfo'=>$groupinfo,
             'thread'=>$thread,
