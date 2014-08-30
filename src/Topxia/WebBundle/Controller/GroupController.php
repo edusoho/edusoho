@@ -690,9 +690,9 @@ class GroupController extends BaseController
 
         $groupinfo=$request->request->all();
         $group=array();
-        
+        print_r($groupinfo);die;
         if($groupinfo){
-              $group=array(
+            $group=array(
             'title'=>$groupinfo['group']['grouptitle'],
             'about'=>$groupinfo['group']['about']); 
         }        
