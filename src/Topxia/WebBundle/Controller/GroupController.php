@@ -694,7 +694,7 @@ class GroupController extends BaseController
         if($groupinfo){
             $group=array(
             'title'=>$groupinfo['group']['grouptitle'],
-            'about'=>$groupinfo['group']['abouts']); 
+            'about'=>$groupinfo['group']['about']); 
         }        
         $this->getGroupService()->updateGroup($id,$group);
   
