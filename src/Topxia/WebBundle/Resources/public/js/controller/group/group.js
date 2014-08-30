@@ -248,8 +248,8 @@
 
         }
 
-        if($('#group_about').length>0){
-            var editor = EditorFactory.create('#group_about', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+        if($('#group').length>0){
+            var editor = EditorFactory.create('#group', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
             var validator = new Validator({
             element: '#user-group-form',
             failSilently: true,

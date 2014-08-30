@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:Group:layout2.html.twig' %}
 
-{% set script_controller = 'group/group_about' %}
+{% set script_controller = 'group/group' %}
 
 {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
 
@@ -26,9 +26,9 @@
                     </div>
 
                     <div class="form-group">
-                      <label class="col-md-2 control-label" for="group_about">小组介绍</label>
+                      <label class="col-md-2 control-label" for="group">小组介绍</label>
                       <div class="col-md-9 controls">
-                        <textarea name="group[about]" rows="10" id="group_about" class="form-control">{{groupinfo.about}}</textarea>
+                        <textarea name="group[about]" rows="10" id="group" class="form-control">{{groupinfo.about}}</textarea>
                       </div>
                     </div>
                     
