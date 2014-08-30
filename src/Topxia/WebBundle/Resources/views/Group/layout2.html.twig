@@ -5,7 +5,7 @@
   <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/group.css') }}" />
 {% endblock %}
 {% block content %}
-   {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {'groupinfo':groupinfo,'is_groupmember':is_groupmember,} %}
+   {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {'groupinfo':groupinfo,'is_groupmember':is_groupmember|default('')} %}
 
   {% block group_body %}
     <div class="row">
