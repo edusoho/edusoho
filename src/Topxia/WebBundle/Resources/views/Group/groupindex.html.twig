@@ -13,7 +13,7 @@
           <hr>
           <div class="">
             {% if is_groupmember==0%}
-              <a class="btn btn-info btn-sm pull-right" href="{{path('group_join',{id:groupinfo.id,title:groupinfo.title})}}">加入小组</a>
+              <a class="btn btn-info btn-sm pull-right" href="{{path('group_join',{id:groupinfo.id})}}">加入小组</a>
             {% endif %}
 
             <span class="text-muted fsn mrm">创建时间：{{groupinfo.createdTime|date('Y-m-d')}}</span>
@@ -21,7 +21,7 @@
 
             {% if is_groupmember==1 or is_groupmember==3 %}
               <span class="text-muted fsn ">你已经是小组成员，
-              <a  id="exit-btn" class="text-muted" href="{{path('group_exit',{id:groupinfo.id,title:groupinfo.title})}}"> &raquo; 退出小组</a></span>
+              <a  id="exit-btn" class="text-muted" href="{{path('group_exit',{id:groupinfo.id})}}"> &raquo; 退出小组</a></span>
             {% endif %}
 
           </div>

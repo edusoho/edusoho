@@ -1214,10 +1214,10 @@ group_show:
     pattern:  /group/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupIndex }
 group_join:
-    pattern:  /mygroup/join/{id}/{title}
+    pattern:  /group/{id}/join
     defaults: { _controller: TopxiaWebBundle:Group:groupJoin }
 group_exit:
-    pattern:  /mygroup/exit/{id}/{title}
+    pattern:  /group/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Group:groupExit }
 group_member:
     pattern:  /group/member/{id}
@@ -1232,16 +1232,16 @@ group_remove_admin:
     pattern:  /group/remove/admin/{id}
     defaults: { _controller: TopxiaWebBundle:Group:removeAdmin }
 group_set:
-    pattern:  /group/set/{id}
+    pattern:  /group/{id}/setting/info
     defaults: { _controller: TopxiaWebBundle:Group:groupSet }
 group_transfer:
     pattern:  /group/transferGroup/{id}
     defaults: { _controller: TopxiaWebBundle:Group:transferGroup }
 group_setLogoCrop:
-    pattern:  /group/set/crop/{file}/{id}
+    pattern:  /group/{id}/setting/logo/crop/{file}
     defaults: { _controller: TopxiaWebBundle:Group:groupSetLogoCrop }
 group_logo_set:
-    pattern:  /group/set/logo/{id}
+    pattern:  /group/{id}/setting/logo
     defaults: { _controller: TopxiaWebBundle:Group:setGrouplogo }
 group_logo_crop_set:
     pattern:  /group/set/logo/crop/{file}/{id}
@@ -1259,10 +1259,10 @@ group_thread_post:
     pattern:  /group/thread/{groupId}/{threadId}/post
     defaults: { _controller: TopxiaWebBundle:GroupThread:postThread }
 group_thread_add:
-    pattern:  /mygroup/publishthread/{id}
+    pattern:  /group/{id}/thread/create
     defaults: { _controller: TopxiaWebBundle:GroupThread:addThread }
 group_thread_update:
-    pattern:  /mygroup/{id}/thread/{threadId}/update
+    pattern:  /group/{id}/thread/{threadId}/update
     defaults: { _controller: TopxiaWebBundle:GroupThread:updateThread }
 group_thread_check_user:
     pattern:  /mygroup/checkuser
