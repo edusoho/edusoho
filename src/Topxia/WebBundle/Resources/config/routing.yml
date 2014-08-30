@@ -1213,10 +1213,10 @@ group_index:
     pattern:  /group/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupIndex }
 group_join:
-    pattern:  /mygroup_join/{id}/{title}
+    pattern:  /mygroup/join/{id}/{title}
     defaults: { _controller: TopxiaWebBundle:Group:groupJoin }
 group_exit:
-    pattern:  /mygroup_exit/{id}/{title}
+    pattern:  /mygroup/exit/{id}/{title}
     defaults: { _controller: TopxiaWebBundle:Group:groupExit }
 group_member:
     pattern:  /group/member/{id}
@@ -1240,16 +1240,16 @@ group_setLogoCrop:
     pattern:  /group/set/crop/{file}/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupSetLogoCrop }
 group_logo_set:
-    pattern:  /group/set_logo/{id}
+    pattern:  /group/set/logo/{id}
     defaults: { _controller: TopxiaWebBundle:Group:setGrouplogo }
 group_logo_crop_set:
-    pattern:  /group/set_logo/crop/{file}/{id}
+    pattern:  /group/set/logo/crop/{file}/{id}
     defaults: { _controller: TopxiaWebBundle:Group:setGrouplogo_crop }
 group_edit:
-    pattern:  /group/info_edit/{id}
+    pattern:  /group/info/edit/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupEdit }
 group_backgroundlogo_set:
-    pattern:  /group/set_backgroundlogo/{id}
+    pattern:  /group/set/backgroundlogo/{id}
     defaults: { _controller: TopxiaWebBundle:Group:setGroupBackgroundLogo }
 group_search:
     pattern:  /group/serach/{id}
