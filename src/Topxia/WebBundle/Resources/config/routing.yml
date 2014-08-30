@@ -1252,7 +1252,7 @@ group_backgroundlogo_set:
     pattern:  /group/set/backgroundlogo/{id}
     defaults: { _controller: TopxiaWebBundle:Group:setGroupBackgroundLogo }
 group_search:
-    pattern:  /group/serach/{id}
+    pattern:  /group/{id}/serach
     defaults: { _controller: TopxiaWebBundle:GroupThread:searchResult }
 group_thread_post:
     pattern:  /group/thread/{groupId}/{threadId}/post
