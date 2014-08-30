@@ -63,6 +63,14 @@
           <div class="countdown-list">
             {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}
           </div>
+          {% if free_limit_type(course) == 'free_now' %}
+           <span class="text-muted text-sm">
+            到期时间
+            <span>{{course.freeEndTime|date('n')}}</span>月
+            <span>{{course.freeEndTime|date('d')}}</span>日
+            <span>{{course.freeEndTime|date('H')}}</span>时
+          </span>
+           {% endif %}
         </div>
       </div>
     </div>
