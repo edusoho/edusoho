@@ -17,7 +17,7 @@
         <div class="clearfix">
           <div class="grouplist" >  
             <a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}"  >
-            <img src="{{file_path(owner_info.largeAvatar, 'avatar-large.png') }}" alt="{{owner_info.nickname}}" >
+            <img src="{{ default_path('avatar',owner_info.largeAvatar, 'large') }}" alt="{{owner_info.nickname}}" >
             </a> 
             <p class="mvs"><a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}">{{owner_info.nickname}}</a>
             </p>
