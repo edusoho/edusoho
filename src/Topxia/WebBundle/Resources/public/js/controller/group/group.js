@@ -83,7 +83,7 @@
             }
         });
         validator_post_content.addItem({
-            element: '#post_content',
+            element: 'name=["content"]',
             required: true,
             rule: 'minlength{min:2} visible_character'            
         });
