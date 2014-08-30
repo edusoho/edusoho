@@ -211,7 +211,7 @@
       {# 推荐话题 #}
       <div class="panel panel-autumn panel-autumn-primary">
         <div class="panel-heading panel-heading-important">
-          <h2 class="panel-title">推荐话题 / <small>Recommended Copics</small></h2>
+          <h2 class="panel-title">课程讨论 / <small>Recommended Copics</small></h2>
         </div>
         <div class="panel-body topic">
           {% set threads = data('EliteCourseThreadsByType',{'count':4, 'type':'discussion'}) %}
@@ -240,7 +240,7 @@
                       </div>
                     </li>
                   {% else %}
-                    <div class="empty">还没有推荐话题</div>
+                    <div class="empty">还没有课程讨论</div>
                   {% endif %}
                 {% endfor %}
               </ul>
