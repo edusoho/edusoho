@@ -40,6 +40,10 @@
             rule: 'minlength{min:2}'
             
         });
+
+        validator_thread.on('formValidate', function(elemetn, event) {
+            editor.sync();
+        })
         }
         
         if($('#post-thread-form').length>0){
@@ -87,6 +91,10 @@
             required: true,
             rule: 'minlength{min:2} visible_character'            
         });
+
+        validator_post_content.on('formValidate', function(elemetn, event) {
+            editor.sync();
+        })
         }
 
         if($('.group-post-list').length>0){
@@ -269,6 +277,10 @@
            
             
         });
+
+        validator.on('formValidate', function(elemetn, event) {
+            editor.sync();
+        })
 
        }
     

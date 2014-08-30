@@ -2,10 +2,12 @@
 
 {% if app.request.get('page')=='logoCrop' %}
   {% set script_controller = 'group/group_logo_crop' %}
+  {% set settingNav = 'logo' %}
 {% endif %}
 
 {% if app.request.get('page')=='backGroundLogoCrop' %}
   {% set script_controller = 'group/group_backgroundlogo_crop' %}
+  {% set settingNav = 'background' %}
 {% endif %}
 
 {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
