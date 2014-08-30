@@ -69,6 +69,7 @@
     left: 15px;
     border-radius: 3px;
     padding: 10px;
+    min-width: 20%;
 }
 
 .group-header .media-object {

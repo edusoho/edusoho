@@ -1255,40 +1255,40 @@ group_search:
     pattern:  /group/serach/{id}
     defaults: { _controller: TopxiaWebBundle:GroupThread:searchResult }
 group_thread_post:
-    pattern:  /group/thread/post/{groupId}/{threadId}
+    pattern:  /group/thread/{groupId}/{threadId}/post
     defaults: { _controller: TopxiaWebBundle:GroupThread:postThread }
 group_thread_add:
     pattern:  /mygroup/publishthread/{id}
     defaults: { _controller: TopxiaWebBundle:GroupThread:addThread }
 group_thread_update:
-    pattern:  /mygroup/updatethread/{id}/{threadId}
+    pattern:  /mygroup/{id}/thread/{threadId}/update
     defaults: { _controller: TopxiaWebBundle:GroupThread:updateThread }
 group_thread_check_user:
     pattern:  /mygroup/checkuser
     defaults: { _controller: TopxiaWebBundle:GroupThread:checkUser }
 group_thread_index:
-    pattern:  /group/thread/home/{id}/{threadId}
+    pattern:  /group/{id}/thread/{threadId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:groupThreadIndex }
 group_thread_setElite:
-    pattern:  /group/thread/setElite/{threadId}
+    pattern:  /group/thread/{threadId}/setElite
     defaults: { _controller: TopxiaWebBundle:GroupThread:setElite }
 group_thread_removeElite:
-    pattern:  /group/thread/removeElite/{threadId}
+    pattern:  /group/thread/{threadId}/removeElite
     defaults: { _controller: TopxiaWebBundle:GroupThread:removeElite }
 group_thread_setStick:
-    pattern:  /group/thread/setStick/{threadId}
+    pattern:  /group/thread/{threadId}/setStick
     defaults: { _controller: TopxiaWebBundle:GroupThread:setStick }
 group_thread_removeStick:
-    pattern:  /group/thread/removeStick/{threadId}
+    pattern:  /group/thread/{threadId}/removeStick
     defaults: { _controller: TopxiaWebBundle:GroupThread:removeStick }
 group_thread_closeThread:
-    pattern:  /group/thread/closeThread/{threadId}/{memberId}
+    pattern:  /group/thread/{threadId}/closeThread/{memberId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:closeThread }
 group_thread_deletePost:
-    pattern:  /group/thread/deletePost/{postId}/{memberId}/{threadOwnerId}/{groupOwnerId}/{groupId}
+    pattern:  /group/{groupId}/thread/deletePost/{postId}/{memberId}/{threadOwnerId}/{groupOwnerId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:deletePost }
 group_thread_post_reply:
-    pattern:  /group/post/reply/{postId}
+    pattern:  /group/post/{postId}/reply
     defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
 
 #占位
