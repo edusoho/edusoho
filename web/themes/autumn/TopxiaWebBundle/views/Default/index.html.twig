@@ -414,8 +414,8 @@
 
   </div>
   {% if setting('group').group_show|default(1) %}
-  <div class="row row-9-3">
-    <div class="col-lg-9">
+  <div class="row row-8-4">
+    <div class="col-lg-8">
       <div class="panel panel-autumn panel-autumn-default">
           <div class="panel-heading panel-heading-important">
             <h2 class="panel-title">
@@ -423,11 +423,11 @@
             </h2><a href="{{path('group_search_group')}}" class="pull-right">&raquo;更多</a>
           </div>
           <div class="panel-body">
-            {{ render(controller('TopxiaWebBundle:Group:hotGroup')) }}
+            {{ render(controller('TopxiaWebBundle:Group:hotGroup',{'colNum':6,'count':10})) }}
           </div>
       </div>
     </div>
-    <div class="col-lg-3">
+    <div class="col-lg-4">
       <div class="panel panel-autumn panel-autumn-default">
           <div class="panel-heading panel-heading-important">
             <h2 class="panel-title">
