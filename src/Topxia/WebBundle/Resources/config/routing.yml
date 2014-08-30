@@ -1214,10 +1214,10 @@ group_show:
     pattern:  /group/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupIndex }
 group_join:
-    pattern:  /mygroup/join/{id}/{title}
+    pattern:  /group/{id}/join
     defaults: { _controller: TopxiaWebBundle:Group:groupJoin }
 group_exit:
-    pattern:  /mygroup/exit/{id}/{title}
+    pattern:  /group/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Group:groupExit }
 group_member:
     pattern:  /group/member/{id}
