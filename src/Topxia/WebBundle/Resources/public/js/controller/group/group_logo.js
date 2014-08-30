@@ -19,7 +19,7 @@
         }
     
         if($('#group_about').length>0){
-            console.log(1);
+
             var editor = EditorFactory.create('#group_about', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
             var validator = new Validator({
             element: '#user-group-form',
