@@ -7,13 +7,14 @@
 {% block main %}
       <div class="row">
         <div class="col-md-12"> 
+          {% if adminGroups %}
           <div class="page-header">
             <h4> 管理的小组</h4>
           </div>
           {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {
           'groups':adminGroups,  }
           %}
-          
+          {% endif %}
         </div>
         <div class="col-md-12">
           <div class="page-header">
