@@ -14,6 +14,7 @@ class Version20140831062546 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE  `session` CHANGE  `user_id`  `user_id` INT UNSIGNED NOT NULL DEFAULT  '0'");
+        $this->addSql("RENAME TABLE `session` TO `session2` ;");
     }
 
     public function down(Schema $schema)
