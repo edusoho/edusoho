@@ -182,7 +182,7 @@
           <div class="metas mbm">
             <strong>{{ web_macro.user_link(owner)}}</strong>
           </div>
-          <div class="content"> <span class="text-muted">头衔:</span>{{owner.title}}</div>
+          <div class="content"> <span class="text-muted">头衔:</span>{{owner.title|default("无")}}</div>
         </div>
       </div>
     </div>
