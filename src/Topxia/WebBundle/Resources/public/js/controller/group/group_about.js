@@ -5,7 +5,7 @@
 
     exports.run = function() {
 
-            var editor = EditorFactory.create('#group_about', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+            //var editor = EditorFactory.create('#group_about', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
             var validator = new Validator({
             element: '#user-group-form',
             failSilently: true,
