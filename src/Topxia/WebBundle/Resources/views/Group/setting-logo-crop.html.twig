@@ -1,3 +1,17 @@
+{% extends 'TopxiaWebBundle:Group:setting-layout.html.twig' %}
+
+{% if app.request.get('page')=='logoCrop' %}
+  {% set script_controller = 'group/group_logo_crop' %}
+{% endif %}
+
+{% if app.request.get('page')=='backGroundLogoCrop' %}
+  {% set script_controller = 'group/group_backgroundlogo_crop' %}
+{% endif %}
+
+{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+
+{% block group_setting_body %}
+
 <form id="avatar-crop-form" method="post" enctype="multipart/form-data">
   <div class="form-group clearfix">
     <div class="col-md-offset-2 col-md-8 controls">
@@ -17,3 +31,5 @@
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   
 </form>
+
+{% endblock %}
