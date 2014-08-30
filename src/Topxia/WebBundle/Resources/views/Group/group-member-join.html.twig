@@ -10,7 +10,6 @@
        {% endblock %}
     {% block body %}
       <div class="row">
-        {% if adminGroups %}
         <div class="col-md-12"> 
           {% include 'TopxiaWebBundle:Group:group-member-nav-pill.html.twig' %}
           <div class="page-header">
@@ -21,7 +20,6 @@
           %}
           
         </div>
-        {% endif %}
         <div class="col-md-12">
           <div class="page-header">
             <h4> 我加入的小组</h4>
