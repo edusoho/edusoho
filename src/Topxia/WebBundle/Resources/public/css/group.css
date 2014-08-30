@@ -13,23 +13,11 @@
 }
 
 
-.nav-pills{
-    border-bottom:none;
-}
-
-.modal-body img{
-    width: auto;
-    height: auto;
-}
 .mvs{
     text-align: center;
 }
 
-.threadimg{
-    width: 48px;
-    height: 48px;
 
-}
 
 .post-delete-btn {
     visibility: hidden;
@@ -61,7 +49,6 @@
 .pagination li{
     cursor: pointer;
 }
-
 
 .group-header {
     margin-bottom: 20px;
