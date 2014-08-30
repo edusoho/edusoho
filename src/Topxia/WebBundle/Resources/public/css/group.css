@@ -204,7 +204,7 @@
     border-bottom: 1px solid #eee;
 }
 #post-action img{
-    width: 100%;
+    max-width: 100%;
 }
 
 #post-action {
@@ -221,5 +221,5 @@
     word-break:break-all;
 }
 .alert img{
-    width:100%;
+    max-width:100%;
 }
