@@ -631,7 +631,7 @@ class GroupController extends BaseController
         );       
     }
 
-    public function hotThreadAction()
+    public function hotThreadAction($textNum=15)
     {
         $hotThreads = $this->getThreadService()->searchThreads(
             array(
@@ -643,6 +643,7 @@ class GroupController extends BaseController
 
         return $this->render('TopxiaWebBundle:Group:hot-thread.html.twig', array(
                 'hotThreads' => $hotThreads,
+                'textNum'=>$textNum,
                 )
         );       
     }
