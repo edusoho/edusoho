@@ -1218,7 +1218,7 @@ group_show:
     pattern:  /group/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupIndex }
 group_join:
-    pattern:  /group/{id}/join
+    pattern:  /my/group/{id}/join
     defaults: { _controller: TopxiaWebBundle:Group:groupJoin }
 group_exit:
     pattern:  /group/{id}/exit
