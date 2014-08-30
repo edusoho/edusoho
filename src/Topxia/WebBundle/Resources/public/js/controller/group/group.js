@@ -89,7 +89,7 @@
         });
         }
 
-        if($('.share').length>0){
+        if($('.group-post-list').length>0){
             Share.create({
                 selector: '.share',
                 icons: 'itemsAll',
