@@ -4,24 +4,9 @@ use Symfony\Component\Filesystem\Filesystem;
 
  class EduSohoUpgrade extends AbstractUpdater
  {
-     public function update()
-     {
-        $this->getConnection()->beginTransaction();
-        try{
-            $this->updateScheme();
-
-            $this->getConnection()->commit();
-        } catch(\Exception $e) {
-            $this->getConnection()->rollback();
-            throw $e;
-        }
-     }
-
-    protected function isFieldExist($table, $filedName)
+    public function update()
     {
-        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
+        $this->updateScheme();
     }
 
      private function updateScheme()
@@ -100,6 +85,13 @@ use Symfony\Component\Filesystem\Filesystem;
         if ($this->isFieldExist('user', 'title')) {
             $connection->exec( "ALTER TABLE  `user` CHANGE  `title`  `title` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' COMMENT  '头像'");
         }
+    }
+
+    protected function isFieldExist($table, $filedName)
+    {
+        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
     }
 
     private function getSettingService() 
