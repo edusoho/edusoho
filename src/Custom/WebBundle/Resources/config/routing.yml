@@ -1,7 +1,0 @@
-free_now_explore:
-    pattern:  /course/freelimit/now
-    defaults: { _controller: CustomWebBundle:FreeLimitCourse:freeNow }
-
-free_coming_explore:
-    pattern:  /course/freelimit/coming
-    defaults: { _controller: CustomWebBundle:FreeLimitCourse:freeComing }
