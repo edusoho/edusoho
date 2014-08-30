@@ -101,6 +101,7 @@
 
 .group-header .nav-pills > li > a {
     background-color: rgba(255, 255, 255, 0.70);
+    filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#ccffffff,endcolorstr=#ccffffff);
     color: #444;
     padding:6px 15px;
     border-bottom-right-radius: 0px;
@@ -111,6 +112,7 @@
 .group-header .nav-pills>li.active>a, 
 .group-header .nav-pills>li.active>a:hover, 
 .group-header .nav-pills>li.active>a:focus {
+    background-color: #fff;
     background-color: rgba(255, 255, 255, 0.90);
     color: #444;
     font-weight: bold;
