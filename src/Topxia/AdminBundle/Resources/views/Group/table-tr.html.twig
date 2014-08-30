@@ -4,7 +4,7 @@
 
     <td>
     <strong>  
-      <a target="_blank" href="{{ path('group_index', {id:group.id}) }}">{{ group.title}}</a>
+      <a target="_blank" href="{{ path('group_show', {id:group.id}) }}">{{ group.title}}</a>
     </strong>
     {% if group.status=='close' %}
           <label class="label label-danger">关闭</label>
@@ -46,7 +46,7 @@
     </button>
 
     <ul class="dropdown-menu">
-       <li><a href="{{path('group_index',{id:group.id})}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 查看小组</a></li>
+       <li><a href="{{path('group_show',{id:group.id})}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 查看小组</a></li>
 
        {% if group.status=='open'%}
        <li><a href="javascript:" class="close-group" title="关闭小组({{group.title}})" data-url="{{path('admin_group_close',{id:group.id})}}"><span class="glyphicon glyphicon-off"></span> 关闭小组</a></li>

@@ -16,7 +16,7 @@
         </div>
 
         <ul class="nav nav-pills">
-          <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_index',{id:groupinfo.id})}}">小组首页</a></li>
+          <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_show',{id:groupinfo.id})}}">小组首页</a></li>
           <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">小组成员</a></li>
           {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3%}
             <li {% if groupNav=="setting" %}class="active" {% endif %}><a  href="{{path('group_set',{id:groupinfo.id})}}">小组设置</a></li>

@@ -5,7 +5,7 @@
    </td>
 
    <td style="word-break:break-all;">
-    <strong ><a target="_blank" href="{{path('group_thread_index',{id:thread.groupId,threadId:thread.id})}}">{{ thread.title|plain_text(50)}}</a></strong>
+    <strong ><a target="_blank" href="{{path('group_thread_show',{id:thread.groupId,threadId:thread.id})}}">{{ thread.title|plain_text(50)}}</a></strong>
     {% if thread.isElite %}
           <span class="label label-warning">精</span>
           {% endif %}{% if thread.isStick==1 %}
@@ -23,7 +23,7 @@
    </td>
 
    <td>
-    <a target="_blank" href="{{ path('group_index', {id:group[thread.groupId].id}) }}">
+    <a target="_blank" href="{{ path('group_show', {id:group[thread.groupId].id}) }}">
     {{ group[thread.groupId].title}}</a>
    </td>
 
@@ -43,7 +43,7 @@
  
    <td>
         <div class="btn-group">
-          <a type="button" class="btn btn-default btn-sm" target="_blank" href="{{path('group_thread_index',{id:thread.groupId,threadId:thread.id})}}" {% if thread.status=='close' %}disabled="disabled"{% endif %}>查看</a>
+          <a type="button" class="btn btn-default btn-sm" target="_blank" href="{{path('group_thread_show',{id:thread.groupId,threadId:thread.id})}}" {% if thread.status=='close' %}disabled="disabled"{% endif %}>查看</a>
           <button type="button" class="btn btn-default dropdown-toggle btn-sm " data-toggle="dropdown">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>

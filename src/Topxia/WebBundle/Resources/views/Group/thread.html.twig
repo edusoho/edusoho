@@ -26,15 +26,15 @@
       <div>
 
         {% if filters.type=='onlyOwner' %}
-          <a class="btn btn-link" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}" %}><span class="glyphicon glyphicon-filter"></span> 查看全部回复</a>
+          <a class="btn btn-link" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}" %}><span class="glyphicon glyphicon-filter"></span> 查看全部回复</a>
         {% else %}
-          <a class="btn btn-link" href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}"><span class="glyphicon glyphicon-filter"></span> 只看楼主回复</a>
+          <a class="btn btn-link" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}"><span class="glyphicon glyphicon-filter"></span> 只看楼主回复</a>
         {% endif %}
         
         {% if filters.sort=='desc' %}
-          <a type="button" class="btn btn-link " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"><span class="glyphicon glyphicon-sort"></span> 顺序查看回复</a>
+          <a type="button" class="btn btn-link " href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"><span class="glyphicon glyphicon-sort"></span> 顺序查看回复</a>
         {% else %}
-          <a type="button" class="btn btn-link " href="{{path('group_thread_index',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"><span class="glyphicon glyphicon-sort"></span> 倒序查看回复</a>
+          <a type="button" class="btn btn-link " href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"><span class="glyphicon glyphicon-sort"></span> 倒序查看回复</a>
         {% endif %}
 
         

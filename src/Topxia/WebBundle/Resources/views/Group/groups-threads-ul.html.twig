@@ -14,7 +14,7 @@
           {% if thread.isStick and not group %}
             <span class="label label-danger">置顶</span>
           {% endif %}
-          <a class="title" href="{{ path('group_thread_index', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(90)}}</a>
+          <a class="title" href="{{ path('group_thread_show', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(90)}}</a>
           {% if thread.isElite %}
             <span class="label label-warning">精</span>
           {% endif %}
@@ -22,7 +22,7 @@
         
         <div class="metas">
           {% if group %}
-            <a class="link-muted" href="{{path('group_index',{id:thread.groupId})}}" title="{{ group.title }}" >{{ group.title }}</a>
+            <a class="link-muted" href="{{path('group_show',{id:thread.groupId})}}" title="{{ group.title }}" >{{ group.title }}</a>
             <span class="divider">•</span>
           {% endif %}
           {{ web_macro.user_link(user , 'link-muted') }}

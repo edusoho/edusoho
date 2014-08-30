@@ -42,7 +42,7 @@ class GroupThreadController extends BaseController
                 'userId'=>$user['id']);
             $thread=$this->getThreadService()->addThread($info);
                 
-            return $this->redirect($this->generateUrl('group_thread_index', array(
+            return $this->redirect($this->generateUrl('group_thread_show', array(
                 'id'=>$id,
                 'threadId'=>$thread['id'],
                 )));
@@ -78,7 +78,7 @@ class GroupThreadController extends BaseController
                 'content'=>$thread['thread']['content'],);
         $thread=$this->getThreadService()->updateThread($threadId,$fields);
             
-        return $this->redirect($this->generateUrl('group_thread_index', array(
+        return $this->redirect($this->generateUrl('group_thread_show', array(
             'id'=>$id,
             'threadId'=>$threadId,
             )));
@@ -341,14 +341,14 @@ class GroupThreadController extends BaseController
 
         if($groupMemberRole!==2 && $thread['userId']!==$memberId ){
 
-        return new Response($this->generateUrl('group_index', array(
+        return new Response($this->generateUrl('group_show', array(
             'id'=>$thread['groupId'],
             )));
 
         }
         $this->getThreadService()->closeThread($threadId);
 
-        return new Response($this->generateUrl('group_index', array(
+        return new Response($this->generateUrl('group_show', array(
             'id'=>$thread['groupId'],
             )));     
     }
@@ -362,13 +362,13 @@ class GroupThreadController extends BaseController
 
         if($post['userId']!==$memberId && $memberId!==$threadOwnerId && $groupMemberRole!==2 && $groupMemberRole!==3 && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true){
             
-        return new Response($this->generateUrl('group_thread_index', array(
+        return new Response($this->generateUrl('group_thread_show', array(
             'id'=>$groupId,'threadId'=>$post['threadId'],
              ))); 
         }
         $this->getThreadService()->deletePost($postId);
 
-        return new Response($this->generateUrl('group_thread_index', array(
+        return new Response($this->generateUrl('group_thread_show', array(
             'id'=>$groupId,'threadId'=>$post['threadId'],
             ))); 
 
@@ -382,7 +382,7 @@ class GroupThreadController extends BaseController
 
         if($groupMemberRole!==2 && $groupMemberRole!==3 && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true ){
 
-        return new Response($this->generateUrl('group_thread_index', array(
+        return new Response($this->generateUrl('group_thread_show', array(
             'id'=>$thread['groupId'],
             'threadId'=>$threadId,
             )));        
@@ -400,7 +400,7 @@ class GroupThreadController extends BaseController
            $this->getThreadService()->removeStick($threadId); 
         }
 
-        return new Response($this->generateUrl('group_thread_index', array(
+        return new Response($this->generateUrl('group_thread_show', array(
             'id'=>$thread['groupId'],
             'threadId'=>$threadId,
             )));
@@ -413,7 +413,7 @@ class GroupThreadController extends BaseController
 
         $page=floor(($count)/30)+1;
    
-        $url=$this->generateUrl('group_thread_index',array('id'=>$id,'threadId'=>$threadId));
+        $url=$this->generateUrl('group_thread_show',array('id'=>$id,'threadId'=>$threadId));
 
         $url=$url."?page=$page#post-$postId";
         return $url;

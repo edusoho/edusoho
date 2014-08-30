@@ -95,7 +95,7 @@ class GroupController extends BaseController
             );
 
             $group = $this->getGroupService()->addGroup($user,$group);
-            return $this->redirect($this->generateUrl('group_index',array('id'=>$group['id'])));
+            return $this->redirect($this->generateUrl('group_show',array('id'=>$group['id'])));
         }
 
         return $this->render("TopxiaWebBundle:Group:groupadd.html.twig");
@@ -501,7 +501,7 @@ class GroupController extends BaseController
                $this->getGroupService()->changeGroupLogo($id, $pictureFilePath, $options);
             }
           
-        return $this->redirect($this->generateUrl('group_index', array(
+        return $this->redirect($this->generateUrl('group_show', array(
                     'id'=>$id,
                     )));
         }
@@ -666,7 +666,7 @@ class GroupController extends BaseController
         $user=$this->getCurrentUser();
         $this->getGroupService()->joinGroup($user,$id);
         
-        return $this->redirect($this->generateUrl('group_index', array(
+        return $this->redirect($this->generateUrl('group_show', array(
             'id'=>$id,
         )));
     }
@@ -676,7 +676,7 @@ class GroupController extends BaseController
         $user=$this->getCurrentUser();
         $this->getGroupService()->exitGroup($user,$id);
 
-        return $this->redirect($this->generateUrl('group_index', array(
+        return $this->redirect($this->generateUrl('group_show', array(
             'id'=>$id,
         )));
     }
@@ -697,7 +697,7 @@ class GroupController extends BaseController
         }        
         $this->getGroupService()->updateGroup($id,$group);
   
-        return $this->redirect($this->generateUrl('group_index', array(
+        return $this->redirect($this->generateUrl('group_show', array(
             'id'=>$id,
         )));
     }

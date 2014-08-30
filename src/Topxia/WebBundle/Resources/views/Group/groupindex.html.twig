@@ -32,9 +32,9 @@
 
       <ul class="nav nav-pills nav-mini  pull-left ">
 
-        <li{% if condition.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_index',{id:id,num:condition.num,sort:condition.sort,isElite:0})}}">全部</a></li>
+        <li{% if condition.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,num:condition.num,sort:condition.sort,isElite:0})}}">全部</a></li>
             
-        <li{% if condition.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_index',{id:id,type:'elite',num:condition.num,sort:condition.sort})}}">精华</a></li>
+        <li{% if condition.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'elite',num:condition.num,sort:condition.sort})}}">精华</a></li>
 
         <li><span class="mhm text-muted">|</span></li>
 
@@ -52,9 +52,9 @@
           </a>
 
           <ul class="dropdown-menu">
-            <li class="{% if condition.sort == 'byCreatedTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_index',{id:id,isElite:condition.type,num:condition.num,sort:'byCreatedTime'})}}">最新发帖</a></li>
-            <li class="{% if condition.sort == 'byLastPostTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_index',{id:id,isElite:condition.type,num:condition.num,sort:'byLastPostTime'})}}">最后回复</a></li>
-            <li class="{% if condition.sort == 'byPostNum' %}active{% endif %}"><a class="js-nav" href="{{path('group_index',{id:id,isElite:condition.type,num:condition.num,sort:'byPostNum'})}}">回复数</a></li>
+            <li class="{% if condition.sort == 'byCreatedTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byCreatedTime'})}}">最新发帖</a></li>
+            <li class="{% if condition.sort == 'byLastPostTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byLastPostTime'})}}">最后回复</a></li>
+            <li class="{% if condition.sort == 'byPostNum' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byPostNum'})}}">回复数</a></li>
           </ul>
 
         </li>

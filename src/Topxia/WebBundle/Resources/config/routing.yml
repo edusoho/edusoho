@@ -1209,7 +1209,7 @@ group_member_threads:
 group_member_posts:
     pattern:  /mygroup/center/posts
     defaults: { _controller: TopxiaWebBundle:Group:memberPosts}
-group_index:
+group_show:
     pattern:  /group/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupIndex }
 group_join:
@@ -1266,7 +1266,7 @@ group_thread_update:
 group_thread_check_user:
     pattern:  /mygroup/checkuser
     defaults: { _controller: TopxiaWebBundle:GroupThread:checkUser }
-group_thread_index:
+group_thread_show:
     pattern:  /group/{id}/thread/{threadId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:groupThreadIndex }
 group_thread_setElite:
