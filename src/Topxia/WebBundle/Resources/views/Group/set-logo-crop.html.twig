@@ -1,30 +1,21 @@
-{% extends 'TopxiaWebBundle:Group:layout2.html.twig' %}
+{% extends 'TopxiaWebBundle:Group:setting-layout.html.twig' %}
+
 {% if app.request.get('page')=='logoCrop' %}
   {% set script_controller = 'group/group_logo_crop' %}
 {% endif %}
+
 {% if app.request.get('page')=='backGroundLogoCrop' %}
   {% set script_controller = 'group/group_backgroundlogo_crop' %}
 {% endif %}
+
 {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
-{% block content %}
-  {{ web_macro.flash_messages() }}
-  {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {
-  'groupinfo':groupinfo,
-  'is_groupmember':is_groupmember,}
-  %}
-    <div class="row">
-      <div class="col-md-12">
-       <div class="panel panel-default">
-        <div class="panel-body">
-        {% include 'TopxiaWebBundle:Group:group-setting-nav.html.twig' with {nav: app.request.get('type')} %}<br>
-        
-        {% include 'TopxiaWebBundle:Group:set-logo-crop-form.html.twig' with {
+
+{% block group_setting_body %}
+
+{% include 'TopxiaWebBundle:Group:set-logo-crop-form.html.twig' with {
         'pictureUrl' : pictureUrl,
         'naturalSize' : naturalSize,
         'scaledSize' : scaledSize,}
         %}
-        </div>
-        </div>
-      </div>
-    </div>
+
 {% endblock %}
