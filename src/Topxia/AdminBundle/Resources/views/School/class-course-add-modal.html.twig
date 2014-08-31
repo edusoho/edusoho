@@ -8,20 +8,14 @@
 <form id="class-course-add-form" class="form-horizontal" method="post" action="{{ path('admin_school_class_course_add', { classId:class.classId })}}">
 
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" {% if class.gradeId != '0' %} class="active" {% endif %}><a href="#" data-url="{{path('admin_school_class_course_add', { classId:class.classId, gradeId:class.gradeId, term:class.term })}}">{{dict_text('gradeName',class.gradeId)}}</a></li>
-    <li role="presentation" {% if class.gradeId == '0' %}class="active" {% endif %}><a href="#" data-url="{{path('admin_school_class_course_add', { classId:class.classId, gradeId:0, term:class.term })}}">公共课</a></li>
+    <li role="presentation" {% if class.public == 0 %} class="active" {% endif %}data-url="{{path('admin_school_class_course_add', { classId:class.classId, gradeId:class.gradeId, term:class.term, public:0 })}}"><a href="#" >{{dict_text('gradeName',class.gradeId)}}</a></li>
+    <li role="presentation" {% if class.public == 1 %} class="active" {% endif %} data-url="{{path('admin_school_class_course_add', { classId:class.classId, gradeId:class.gradeId, term:class.term, public:1 })}}"><a href="#" >公共课</a></li>
   </ul>
 
+  <div class="tab-target">
+    {% include 'TopxiaAdminBundle:School:ajax-tab.html.twig' with {courses:courses, paginator:paginator } %}
+  </div>
 
-  <table id="course-table" class="table table-striped table-hover">
-    <tbody>
-      {% for course in courses %}
-      {% include 'TopxiaAdminBundle:School:class-course-table-tr.html.twig' with {course:course} %}
-      {% endfor %}
-    </tbody>
-  </table>
-
-  <div class="text-center">{{ web_macro.paginator(paginator) }}</div> 
   <div class="hidden" id="select-area">
     <div class="row form-group">
       <div class="col-md-8 col-md-offset-1 ">

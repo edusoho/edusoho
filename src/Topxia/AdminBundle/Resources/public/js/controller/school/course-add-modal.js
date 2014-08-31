@@ -6,7 +6,6 @@ define(function(require, exports, module) {
     require('jquery.select2');
     exports.run = function() {
 
-
         $('#course-table tbody tr').on('click',function(){
             $('#course-table tbody').find('.success').removeClass('success');
             $(this).addClass('success');
@@ -16,15 +15,25 @@ define(function(require, exports, module) {
             $('#templateId').val($(this).data('id'));
         });
 
-/*        $('[role=tablist]').on('click','li', function(){
+        $('[role=tablist]').on('click','li', function(){
             var $priorli = $(this).parent().find('.active');
-            console.log($priorli);
             $priorli.removeClass('active');
-            $($priorli.data('target')).addClass('hidden');
             $(this).addClass('active');
-            $($(this).data('target')).removeClass('hidden').addClass('show');
+            $.get($(this).data('url'),function(html) {
+                $('#select-area').attr('class','hidden');
+                $('.tab-target').html($(html).find('.tab-target').html());
+                $('#course-table tbody tr').on('click',function(){
+                    $('#course-table tbody').find('.success').removeClass('success');
+                    $(this).addClass('success');
+                    $('#select-area').attr('class','show');
+                    $('#title-span').html($(this).data('title'));
+                    $('#name-span').html($(this).data('teachername'));
+                    $('#templateId').val($(this).data('id'));
+                });
+
+            });
         });
-*/
+
         var $modal = $('#class-create-form').parents('.modal');
         var $form = $("#class-course-add-form");
 

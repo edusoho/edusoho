@@ -146,7 +146,8 @@ class SchoolController extends BaseController
         $class['classId'] = $classId;
         $conditions =array(
             'classId' => 0,
-            'gradeId' => $class['gradeId']
+            'gradeId' => $class['gradeId'],
+            'public' => $class['public']
         );
 
         $paginator = new Paginator(
@@ -161,30 +162,15 @@ class SchoolController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $conditions['gradeId'] = 0;
-        $publicCourses =$this->getCourseService()->searchCourses(
-            $conditions,
-            'latest',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
         foreach ($courses as $key => $course) {
             $creatorProfile = $this->getUserService()->getUserProfile($course['userId']);
             $course['creatorName'] = $creatorProfile['truename'];
             $courses[$key] = $course;
         }
 
-         foreach ($publicCourses as $key2 => $course) {
-            $creatorProfile = $this->getUserService()->getUserProfile($course['userId']);
-            $course['creatorName'] = $creatorProfile['truename'];
-            $publicCourses[$key2] = $course;
-        }
-
         return $this->render('TopxiaAdminBundle:School:class-course-add-modal.html.twig',array(
             'class' => $class,
             'courses' => $courses,
-            'publicCourses' => $publicCourses,
             'paginator' => $paginator,            
         ));
     }
