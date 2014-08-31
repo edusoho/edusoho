@@ -6,7 +6,9 @@ define(function(require, exports, module) {
 
     var simpleNoImageItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', '|', 'removeformat', 'source'];
 
+
     var simpleItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', 'image', 'code', '|', 'removeformat', 'source'];
+
 
     var standardItems = [
         'bold', 'italic', 'underline', 'strikethrough', 'removeformat', '|',
@@ -33,6 +35,9 @@ define(function(require, exports, module) {
 
     var questionItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', '|', 'removeformat', 'source', '|', 'insertblank'];
 
+
+    var simpleHaveEmoticonsItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', 'image', '|', 'removeformat', 'source','emoticons'];
+
     var contentCss = [];
     contentCss.push('body {font-size: 14px; line-height: 1.428571429;color: #333333;}');
     contentCss.push('a {color: #428bca;}');
@@ -52,6 +57,7 @@ define(function(require, exports, module) {
     var configs = {};
     configs.simple_noimage = $.extend({}, defaultConfig, {items:simpleNoImageItems});
     configs.simple = $.extend({}, defaultConfig, {items:simpleItems});
+    configs.simpleHaveEmoticons = $.extend({}, defaultConfig, {items:simpleHaveEmoticonsItems});
     configs.standard = $.extend({}, defaultConfig, {items:standardItems});
     configs.full = $.extend({}, defaultConfig, {items:fullItems});
     configs.question = $.extend({}, defaultConfig, {items:questionItems});

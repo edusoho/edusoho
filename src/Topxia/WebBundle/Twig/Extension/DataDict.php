@@ -254,7 +254,10 @@ class DataDict
             '11' => '高二',
             '12' => '高三',
 		),
-
+    	'groupstatus'=>array(
+    		'open'=>'开启',
+    		'close'=>'关闭',
+    	),
 	);
 
 	public static function dict($type)

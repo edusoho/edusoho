@@ -1,7 +1,7 @@
 {% if app.user %}
 <div class="media">
   <a class="pull-left" href="javascript:">
-    <img class="media-object media-object-small" src="{{ file_path(app.user.smallAvatar, 'avatar.png') }}">
+    <img class="media-object media-object-small" src="{{ default_path('avatar',app.user.smallAvatar, '') }}">
   </a>
   <div class="media-body">
     <form class="comment-widget-form" action="{{ path('comment_widget_create') }}" method="post">

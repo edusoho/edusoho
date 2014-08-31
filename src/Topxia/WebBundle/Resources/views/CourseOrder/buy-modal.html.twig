@@ -1,8 +1,13 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}{% endblock %}
+{% set billable = false %}
+{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}
+  {% set billable = true %}
+{% endif %}
+
+{% block title %}{% if billable %}购买课程{% else %}加入学习{% endif %}{% endblock %}
 {% block body %}
-  {% if course.price > 0 and course.type=="live" %}
+  {% if billable and course.type=="live" %}
     <div class="alert alert-info">注意：请在30分钟内完成支付，否则订单将会过期失效</div>
   {% endif %}
   <form id="course-buy-form" class="form-horizontal" method="post" action="{{ path('course_order_pay') }}">
@@ -14,7 +19,7 @@
       </div>
     </div>
 
-    {% if course.price > 0 %}
+    {% if billable %}
     <div class="form-group">
       <div class="col-md-3 control-label">价格</div>
       <div class="col-md-9 controls money-text">
@@ -25,7 +30,7 @@
     </div>
     {% endif %}
 
-    {% if course.price > 0 %}
+    {% if billable %}
       {% if payments %}
         <div class="form-group">
           <div class="col-md-3 control-label">选择支付方式</div>
@@ -235,7 +240,7 @@
 {% endblock %}
 
 {% block footer %}
-  {% if course.price > 0 %}
+  {% if billable %}
     {% if payments %}
       {% if member %}
         <span class="text-muted">预览模式无法支付</span>

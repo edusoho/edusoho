@@ -1,0 +1,37 @@
+{% extends 'TopxiaWebBundle:Group:setting-layout.html.twig' %}
+
+{% set script_controller = 'group/group_logo' %}
+
+{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+
+{% set settingNav = 'background' %}
+
+{% block group_setting_body %}
+
+<form id="group-avatar-form" class="form-horizontal" method="post" enctype="multipart/form-data" action="{{path ('group_backgroundlogo_set',{id:id})}}"> 
+
+  <div class="form-group">
+    <label class="col-md-2 control-label">当前背景</label>
+    <div class="controls col-md-8">
+      <img src="{{file_path(logo, 'background_group.jpg')}}" style="width:400px;height:100px;">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-2 control-label" for="form_avatar">新背景</label>
+    <div class="controls col-md-8">
+      <input type="file" id="form_avatar" name="form[avatar]" required="required" accept="image/gif,image/jpeg,image/png" />
+      <p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。</p>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-8 col-md-offset-2">
+      <button id="group-save-btn" data-submiting-text="正在上传" type="submit" class="btn btn-primary">上传</button>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </div>
+  </div>
+
+</form>
+
+{% endblock %}

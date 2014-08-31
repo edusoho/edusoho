@@ -1,0 +1,67 @@
+<form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
+  <input type="hidden" name="defaultAvatar" value="{{ defaultSetting.defaultAvatar }}">
+  <input type="hidden" name="defaultCoursePicture" value="{{ defaultSetting.defaultCoursePicture }}">
+  <div style="display:none;">
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="article_share_content">资讯分享内容</label>
+        </div>
+        <div class="controls col-md-8">
+          <textarea id="courseShareContent" name="articleShareContent" class="form-control" rows="5">{{ defaultSetting.articleShareContent }}</textarea>
+          <div class="help-block">
+            {% verbatim %}
+            <div>变量说明：</div>
+            <ul>
+              <li>{{articletitle}} 为资讯标题</li>
+              <li>{{sitename}} 为网校名称</li>
+            </ul>
+            {% endverbatim %}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="course_share_content">课程分享内容</label>
+        </div>
+        <div class="controls col-md-8">
+          <textarea id="courseShareContent" name="courseShareContent" class="form-control" rows="5">{{ defaultSetting.courseShareContent }}</textarea>
+          <div class="help-block">
+            {% verbatim %}
+            <div>变量说明：</div>
+            <ul>
+              <li>{{course}} 为课程名称</li>
+            </ul>
+            {% endverbatim %}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="course_share_content">小组分享内容</label>
+        </div>
+        <div class="controls col-md-8">
+          <textarea id="groupShareContent" name="groupShareContent" class="form-control" rows="5">{{ defaultSetting.groupShareContent }}</textarea>
+          <div class="help-block">
+            {% verbatim %}
+            <div>变量说明：</div>
+            <ul>
+              <li>{{groupname}} 为小组名称</li>
+              <li>{{threadname}} 为话题名称</li>
+            </ul>
+            {% endverbatim %}
+          </div>
+        </div>
+      </div>
+
+    </fieldset>
+  </div>
+  <div class="form-group">
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>

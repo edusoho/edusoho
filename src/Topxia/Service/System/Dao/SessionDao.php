@@ -12,4 +12,6 @@ interface SessionDao
 	public function deleteSessionByUserId($userId);
 
 	public function getOnlineCount($retentionTime);
+	
+	public function getLoginCount($retentionTime);
 }

@@ -4,7 +4,10 @@
   <div class="col-md-12">
     <div class="panel panel-default  course-header">
       <div class="panel-body clearfix">
-        <a href="{{ path('course_show', {id:course.id}) }}"><img class="picture" src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" /></a>
+        <a href="{{ path('course_show', {id:course.id}) }}">
+            <img class="picture" src="{{ default_path('coursePicture',course.largePicture, '') }}" />
+        </a>
+
         <h1 class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a> 
           {% if course.status=='closed' %}  
             <span class="label label-danger ">已关闭</span>
@@ -18,6 +21,7 @@
             {% endif %}
           {% endif %}
         </h1>
+
         <div class="teachers">
           {% if course.teacherIds|default(null) %}
             教师：
@@ -27,6 +31,7 @@
             {% endfor %}
           {% endif  %}
         </div>
+
         <div class="toolbar hidden-xs hidden-lt-ie8">
           {% if not manage %}
           <div class="btn-group">
@@ -51,7 +56,7 @@
               </ul>
               <div id="course-social-share-params" style="display:none;"
                 data-title="课程 《{{ course.title }}》"
-                data-picture="{{ file_path(course.largePicture, 'course-large.png', true) }}"
+                data-picture="{{ default_path('coursePicture',course.largePicture, 'large', true) }}"
                 data-url="{{ url('course_show', {id:course.id}) }}"
                 ></div>
             </div>
@@ -115,10 +120,17 @@
     {% endif %}
 
     {% if not isNonExpired %}
-      <div class="alert alert-danger alert-dismissable">
+      {% if free_limit_type(course) == 'free_end' %}
+        <div class="alert alert-danger alert-dismissable">
+          <a class="btn btn-primary" href="{{path('course_rebuy',{courseId:course.id})}}" style="float:right;margin-top: -6px;margin-right:-20px" title="">购买</a>
+          您购买的课程限时免费活动已结束，无法继续学习课时、提问等。请重新购买该课程。
+        </div>
+      {% else %}
+       <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师。
+          您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师。
       </div>
+      {% endif %}
     {% endif %}
 
   </div>

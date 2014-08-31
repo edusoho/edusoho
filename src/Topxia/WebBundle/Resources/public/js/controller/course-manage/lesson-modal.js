@@ -32,7 +32,7 @@ define(function(require, exports, module) {
             });
         };
 
-    function createValidator ($form) {
+    function createValidator ($form, $choosers) {
 
         Validator.addRule('mediaValueEmpty', function(options) {
             var value = options.element.val();
@@ -61,6 +61,13 @@ define(function(require, exports, module) {
             if (error) {
                 return;
             }
+            for(var i=0; i<$choosers.length; i++){
+                if($choosers[i].isUploading()){
+                    Notify.danger('文件正在上传，等待上传完后再保存。');
+                    return;
+                }
+            }
+
             $('#course-lesson-btn').button('submiting').addClass('disabled');
 
             var $panel = $('.lesson-manage-panel');
@@ -78,21 +85,24 @@ define(function(require, exports, module) {
                         var add = 0;
                         if($parent.hasClass('item-chapter  clearfix')){
                             $parent.nextAll().each(function(){
-                            if($(this).hasClass('item-chapter  clearfix')){
-                                $(this).before(html);
-                                add = 1;
-                                return false;
-                            }
-                        });
+                                if($(this).hasClass('item-chapter  clearfix')){
+                                    $(this).before(html);
+                                    add = 1;
+                                    return false;
+                                }
+                            });
                             if(add !=1 ){
                                 $("#course-item-list").append(html);
                                 add = 1;
                             }
 
                         }else{
-                             $parent.nextAll().each(function(){
-                                if($(this).hasClass('item-chapter  clearfix'))
+                             $parent.nextAll().each(function() {
+                                if($(this).hasClass('item-chapter  clearfix')){
+                                    $(this).before(html);
+                                    add = 1;
                                     return false;
+                                }
                                 if($(this).hasClass('item-chapter item-chapter-unit clearfix')){
                                     $(this).before(html);
                                     add = 1;
@@ -100,8 +110,9 @@ define(function(require, exports, module) {
                                 }
                             });
                         }
-                    if(add != 1 )
-                        $parent.after(html);  
+                        if(add != 1 ) {
+                         $("#course-item-list").append(html); 
+                        }
                         var $list = $("#course-item-list");
                         sortList($list);
                     }else{
@@ -214,7 +225,6 @@ define(function(require, exports, module) {
             choosed: choosedMedia,
         });
 
-
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
@@ -232,8 +242,14 @@ define(function(require, exports, module) {
             $form.find('[name="media"]').val(value);
         });
 
+        $('.modal').unbind("hide.bs.modal");
+        $(".modal").on("hide.bs.modal", function(){
+            videoChooser.destroy();
+            audioChooser.destroy();
+            pptChooser.destroy();
+        });
 
-        var validator = createValidator($form);
+        var validator = createValidator($form, [videoChooser,pptChooser,audioChooser]);
 
         $form.on('change', '[name=type]', function(e) {
             var type = $(this).val();

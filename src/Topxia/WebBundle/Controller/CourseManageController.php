@@ -187,7 +187,13 @@ class CourseManageController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $course = $this->getCourseService()->updateCourse($id, $request->request->all());
+            $fields = $request->request->all();
+            if(isset($fields['freeStartTime'])){
+                $fields['freeStartTime'] = strtotime($fields['freeStartTime']);
+                $fields['freeEndTime'] = strtotime($fields['freeEndTime']);
+            }
+            
+            $course = $this->getCourseService()->updateCourse($id, $fields);
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 

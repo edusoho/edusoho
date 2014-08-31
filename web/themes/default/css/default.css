@@ -1,0 +1,96 @@
+.homepage .news li em {
+	width: 85px;
+	float: right;
+	text-align: right;
+	font-style: normal;
+	color: #a9a9a9;
+}
+
+.homepage .news ul.row {
+	margin-right: -10px;
+	margin-left: -10px;
+	padding-left: 0px;
+	list-style: none;
+}
+
+.homepage .news li span {
+	color: #428bca;
+	margin-right: 10px;
+	text-decoration: none;
+}
+
+.homepage .news li a {
+	color: #222;
+	display: block;
+	height: 20px;
+	line-height: 20px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.homepage .vip ul {
+	margin-right: -10px;
+	margin-left: -10px;
+	padding-left: 0px;
+	list-style: none;
+}
+
+.vip li {
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+.vip-item {
+	border: 1px solid #e1e1e1;
+}
+
+.vip-item .row {
+	margin-left: -15px;
+	margin-right: -15;
+}
+
+.vip-lists li {
+	margin-bottom: 20px;
+}
+
+.vip-item h3, p {
+	color: #555;
+}
+
+.vip-item h4 {
+	color: #e57259;
+	text-decoration: none;
+	text-align: center;
+}
+
+.vip-item img {
+	width: 100%;
+}
+
+.vip-item a {
+	overflow: hidden;
+}
+
+.vip-price {
+	margin-top: 20px;
+}
+
+.status-side ul {
+	padding-left: 0;
+	list-style: none;
+}
+
+.status-side li {
+	overflow: hidden;
+}
+
+.status-side li img {
+	width: 50px;
+	height: 50px;
+}
+
+.course-wide-list .course-item:hover {
+	background: #f9f9f9;
+	border-color: #e57259;
+}
