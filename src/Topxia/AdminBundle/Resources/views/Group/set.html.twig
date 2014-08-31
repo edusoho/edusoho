@@ -11,11 +11,11 @@
            
             <div class="row form-group">
               <div class="col-md-2 control-label">
-                <label >小组信息在首页显示</label>
+                <label >首页显示小组信息</label>
               </div>
               <div class="controls col-md-7 radios">
-                {{ radios('group_show', {1:'是', 0:'否'}, setting('group').group_show|default(1)) }}
-                <div class="help-block"></div>
+                {{ radios('group_show', {1:'显示', 0:'不显示'}, setting('group').group_show|default(1)) }}
+                <div class="help-block">此功能开关只针对默认主题、默认主题B、清秋主题。</div>
               </div>
             </div>
 
