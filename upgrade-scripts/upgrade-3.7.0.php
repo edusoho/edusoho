@@ -13,6 +13,18 @@ use Symfony\Component\Filesystem\Filesystem;
      {
         $connection = $this->getConnection();
 
+        if (!$this->isTableExist('session2')) {
+          $connection->exec("
+              CREATE TABLE IF NOT EXISTS `session2` (
+                `session_id` varchar(255) NOT NULL,
+                `session_value` text NOT NULL,
+                `session_time` int(11) NOT NULL,
+                `user_id` int(10) NOT NULL DEFAULT '0',
+                PRIMARY KEY (`session_id`)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+          ");
+        }
+
         $connection->exec("
             CREATE TABLE IF NOT EXISTS `groups` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '小组id',
@@ -78,9 +90,9 @@ use Symfony\Component\Filesystem\Filesystem;
             $connection->exec("ALTER TABLE `course` ADD `freeStartTime` INT(10) NOT NULL DEFAULT 0 , ADD `freeEndTime` INT(10) NOT NULL DEFAULT 0");
         }
 
-        if (!$this->isFieldExist('session', 'user_id')) {
-            $connection->exec( "ALTER TABLE `session` ADD `user_id` INT(10) NOT NULL DEFAULT 0 AFTER `session_time`;");
-        }
+        // if (!$this->isFieldExist('session', 'user_id')) {
+        //     $connection->exec( "ALTER TABLE `session` ADD `user_id` INT(10) NOT NULL DEFAULT 0 AFTER `session_time`;");
+        // }
 
         if ($this->isFieldExist('user', 'title')) {
             $connection->exec( "ALTER TABLE  `user` CHANGE  `title`  `title` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' COMMENT  '头像'");
@@ -90,6 +102,13 @@ use Symfony\Component\Filesystem\Filesystem;
     protected function isFieldExist($table, $filedName)
     {
         $sql = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
+    }
+
+    protected function isTableExist($table)
+    {
+        $sql = "SHOW TABLES LIKE '{$table}'";
         $result = $this->getConnection()->fetchAssoc($sql);
         return empty($result) ? false : true;
     }
