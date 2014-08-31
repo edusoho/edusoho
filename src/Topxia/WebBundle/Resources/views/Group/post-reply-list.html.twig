@@ -4,7 +4,7 @@
       {% for post in posts %}
         <li class="media li-reply-{{postMain.id}}" {% if loop.index > 5 %}style="display:none;"{% endif %}>
           <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left">
-            <img src="{{ file_path(users[post.userId].smallAvatar, 'avatar.png') }}" class="media-object">
+            <img src="{{ default_path('avatar', users[post.userId].smallAvatar, '') }}" class="media-object">
           </a>
           <div class="media-body">
             <div class="metas">
