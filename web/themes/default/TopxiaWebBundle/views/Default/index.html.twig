@@ -129,7 +129,7 @@
                   {% if learn.lesson is defined %}
                     <li class="media">
                       <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ file_path(learn.user.mediumAvatar, 'avatar.png') }}">
+                        <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
                       </a>
                       <div class="media-body">
                         <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -190,7 +190,7 @@
     {% for course in courses %}
     <li class="course-item clearfix">
       <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
-        <img class="course-picture" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}">
+        <img class="course-picture" src="{{ default_path('coursePicture', course.middlePicture, 'large') }}" alt="{{ course.title }}">
       </a>
       <div class="course-body">
         <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
@@ -225,7 +225,7 @@
           {% set teacher = course.teachers|first|default(null) %}
           {% if teacher %}
             <div class="teacher">
-              <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ default_path('avatar',teacher.smallAvatar, '') }}" class="teacher-avatar"></a>
+              <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ default_path('avatar', teacher.smallAvatar, '') }}" class="teacher-avatar"></a>
               <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
               <span class="teacher-title ellipsis">{{ teacher.title }}</span>
             </div>

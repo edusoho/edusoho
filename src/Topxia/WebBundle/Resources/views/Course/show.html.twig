@@ -34,7 +34,7 @@
 
 	<div class="row row-5-7 course-cover-heading">
 		<div class="col-sm-5 picture hidden-xs">
-			<img src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" class="img-responsive" />
+			<img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
 		</div>
 		<div class="col-sm-7 info">
 			{% if is_granted('ROLE_ADMIN') %}

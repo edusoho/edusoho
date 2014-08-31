@@ -6,7 +6,7 @@
   <div class="panel-body">
     <div class="user-learn clearfix">
       <a href="{{ path('course_show', {id:course.id}) }}">
-      <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb pull-left">
+      <img src="{{ default_path('coursePicture', course.largePicture, 'large') }}"  class="img-responsive thumb pull-left">
     </a>
     <p>《{{ course.title }}》</p>
     {% set teacher = teachers|first %}

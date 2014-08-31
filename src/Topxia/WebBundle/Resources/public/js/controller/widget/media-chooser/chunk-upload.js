@@ -104,6 +104,7 @@ define(function(require, exports, module) {
             xhr.setRequestHeader("Authorization", "UpToken " + fileScop.postParams.token);
 			
             xhr.upload.addEventListener("progress", function(evt) {
+            	self.needAbortXHR(xhr);
                 if (evt.lengthComputable) {
                     var nowDate = new Date().getTime();
                     var x = (evt.loaded) / 1024;
@@ -240,7 +241,10 @@ define(function(require, exports, module) {
                 } else if (xhr.readyState == 4 && xhr.status == 401) {
 					self.tokenError();
 				}
-            }
+            };
+            xhr.upload.addEventListener("progress", function(evt) {
+        		self.needAbortXHR(xhr);
+		    });
             xhr.send(ctxs);
 		},
 		putChunk: function(fileScop, chunk, blkRet){
@@ -249,7 +253,9 @@ define(function(require, exports, module) {
             xhr.open('POST', this.get("uploadUrl") + "bput/" + blkRet.ctx + "/" + blkRet.offset, true);
             xhr.setRequestHeader("Authorization", "UpToken " + fileScop.postParams.token);
             xhr.upload.addEventListener("progress", function(evt) {
+        		self.needAbortXHR(xhr);
             	if (evt.lengthComputable) {
+
                     var nowDate = new Date().getTime();
                     var x = (evt.loaded) / 1024;
                     var y = (nowDate - fileScop.startDate) / 1000;
@@ -325,6 +331,12 @@ define(function(require, exports, module) {
 			};
         	FileScopStorage.set(JSON.stringify(saveFileScop));
         	fileScop.uploadedBytes += fileScop.currentChunkSize;
+	    },
+	    needAbortXHR: function(xhr){
+	    	if(this.get("destroy")){
+		    	xhr.abort();
+		    	this.set("destroy",false);
+	    	}
 	    },
 	    uploadAfterGetCrc : function(fileScop, blkRet) {
 	    	if(this.get("destroy")){
@@ -447,6 +459,7 @@ define(function(require, exports, module) {
 			this.element.find("input[data-role='fileSelected']").val("");
 			this.set("currentFile", null);
 		}
+
 	});
 	
 	var FileScopStorage = {

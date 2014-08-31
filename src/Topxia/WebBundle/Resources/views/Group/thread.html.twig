@@ -83,7 +83,7 @@
         {% for post in post %}
           {% set subPosts = postReply[post.id]|default(null) %}
           <li id="post-{{post.id}}" class="media">
-            <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left"><img src="{{ file_path(postMember[post.userId].smallAvatar, 'avatar.png') }}" class="media-object"></a>
+            <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left"><img src="{{ default_path('avatar', postMember[post.userId].smallAvatar, '') }}" class="media-object"></a>
             <div class="media-body">
               <div class="metas">
                 <span class="floor">
