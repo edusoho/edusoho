@@ -351,7 +351,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'maxStudentNum' => 0,
 			'classId' => 0,
 			'term' => 'first',
-			'gradeId' => 0
+			'gradeId' => 0,
 			'freeStartTime' => 0,
 			'freeEndTime' => 0
 		));
