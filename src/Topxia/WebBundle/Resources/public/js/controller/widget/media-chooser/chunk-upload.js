@@ -200,7 +200,7 @@ define(function(require, exports, module) {
 		mkFile: function(fileScop){
 			var self=this;
 			var url = this.get("uploadUrl") + "mkfile/" + fileScop.file.size;
-			url = url + "/key/" + self.base64encode(self.utf16to8(fileScop.postParams.key+fileScop.file.type));
+			url = url + "/key/" + self.base64encode(self.utf16to8(fileScop.postParams.key+'.'+fileScop.file.type));
             url = url + "/x:convertParams/" + self.base64encode(self.utf16to8(fileScop.postParams["x:convertParams"]));
 			
 			var xhr = new XMLHttpRequest();
