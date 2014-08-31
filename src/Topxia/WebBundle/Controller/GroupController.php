@@ -666,6 +666,11 @@ class GroupController extends BaseController
     public function groupJoinAction($id) 
     {   
         $user=$this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        }
+       
         $this->getGroupService()->joinGroup($user,$id);
         
         return $this->redirect($this->generateUrl('group_show', array(
