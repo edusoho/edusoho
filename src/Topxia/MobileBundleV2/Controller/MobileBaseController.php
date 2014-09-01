@@ -255,8 +255,8 @@ class MobileBaseController extends BaseController
         }
         
         $container = $this->container;
-        
-        return array_map(function($user) use ($container)
+        $controller = $this;
+        return array_map(function($user) use ($container, $controller)
         {
             $user['smallAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
             $user['mediumAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
@@ -264,7 +264,7 @@ class MobileBaseController extends BaseController
             $user['createdTime']  = date('c', $user['createdTime']);
             
             $user['email'] = '';
-            $vip = $this->getVipService()->getMemberByUserId($user['id']);
+            $vip = $controller->getVipService()->getMemberByUserId($user['id']);
             $user["vip"] = $vip;
             unset($user['password']);
             unset($user['salt']);
