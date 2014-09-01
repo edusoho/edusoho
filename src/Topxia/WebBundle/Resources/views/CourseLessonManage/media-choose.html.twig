@@ -104,6 +104,7 @@
               <ul>
                 {% if storageSetting.upload_mode == 'cloud' %}
                   <li>支持<strong>mp4, avi, flv, wmv, mov</strong>格式的视频文件上传，文件大小不能超过<strong>1 GB</strong>。</li>
+                  <li>如果您的浏览器支持HTML5，会自动开启<strong>断点续传</strong>功能。</li>
                   <li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
                 {% else %}
                   <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>300 MB</strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
@@ -180,6 +181,7 @@
               <ul>
                 <li>支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过<strong>100 MB</strong>。</li>
                 {% if storageSetting.upload_mode == 'cloud' %}
+                  <li>如果您的浏览器支持HTML5，会自动开启<strong>断点续传</strong>功能。</li>
                   <li>音频将上传到<strong>云服务器</strong></li>
                 {% else %}
                   <li>音频将上传到<strong>网站服务器</strong></li>
