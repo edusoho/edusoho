@@ -200,7 +200,7 @@ define(function(require, exports, module) {
 		mkFile: function(fileScop){
 			var self=this;
 			var url = this.get("uploadUrl") + "mkfile/" + fileScop.file.size;
-			//console.log('.'+JSON.parse(fileScop.postParams["x:convertParams"]).convertor);
+			
 			url = url + "/key/" + self.base64encode(self.utf16to8(fileScop.postParams.key));
             url = url + "/x:convertParams/" + self.base64encode(self.utf16to8(fileScop.postParams["x:convertParams"]));
 			
