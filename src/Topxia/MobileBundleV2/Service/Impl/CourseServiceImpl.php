@@ -49,7 +49,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$courses = $this->controller->getCourseService()->findUserTeachCourses(
 	            	$userId, 0, 10
 	        	);
-
+		$courses = $this->controller->filterCourses($courses);
 		return $courses;
 	}
 
