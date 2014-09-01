@@ -60,6 +60,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$user = $this->controller->getUserByToken($this->request);
 		$courseId = $this->getParam("courseId");
 		$course = $this->controller->getCourseService()->getCourse($courseId);
+
 		if (empty($course)) {
 		            $error = array('error' => 'not_found', 'message' => "课程#{$courseId}不存在。");
 		            return $error;
@@ -72,6 +73,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         		$userIsStudent = $user->isLogin() ? $this->controller->getCourseService()->isCourseStudent($courseId, $user['id']) : false;
         		$userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
+		
+		$vip = $this->controller->getVipService()->getMemberByUserId($user['id']);
+		$vipLevels = $this->controller->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
+
 		$member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
         		if ($member) {
             		$member['createdTime'] = date('c', $member['createdTime']);
@@ -81,7 +86,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         			"userIsStudent"=>$userIsStudent,
         			"course"=>$this->controller->filterCourse($course),
         			"userFavorited"=>$userFavorited,
-        			"member"=>$member
+        			"member"=>$member,
+        			"vip"=>$vip,
+        			"vipLevels"=>$vipLevels
         			);
 	}
 

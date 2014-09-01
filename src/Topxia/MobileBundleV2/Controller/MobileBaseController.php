@@ -353,4 +353,13 @@ class MobileBaseController extends BaseController
         return $this->getServiceKernel()->createService('System.LogService');
     }
 
+    public function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }
+
+    public function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
 }
