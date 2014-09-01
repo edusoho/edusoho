@@ -15,7 +15,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getReviews()
 	{
 		$courseId = $this->getParam("courseId");
-		$reviews = $this->controller->getReviewService()->findCourseReviews($courseId, 0, 3);
+
+		$start = (int) $this->getParam("start", 0);
+		$limit = (int) $this->getParam("limit", 10);
+		$reviews = $this->controller->getReviewService()->findCourseReviews($courseId, $start, $limit);
 		$reviews = $this->controller->filterReviews($reviews);
 		return $reviews;
 	}
