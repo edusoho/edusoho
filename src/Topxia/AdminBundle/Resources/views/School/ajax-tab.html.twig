@@ -1,0 +1,10 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<table id="course-table" class="table table-striped table-hover">
+  <tbody>
+    {% for course in courses %}
+    {% include 'TopxiaAdminBundle:School:class-course-table-tr.html.twig' with {course:course} %}
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="text-center">{{ web_macro.paginator(paginator) }}</div> 
