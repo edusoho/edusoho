@@ -67,6 +67,55 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return array_merge($user, $profile);
     }
 
+    public function canViewClass($classId)
+    {
+        $class = $this->getClass($classId);
+        if (empty($class)) {
+            return false;
+        }
+
+        $user = $this->getCurrentUser();
+        if (empty($user)) {
+            return false;
+        }
+
+        $member = $this->getClassMemberDao()->getMemberByUserIdAndClassId($user['id'], $classId);
+
+        if ($user->isAdmin()) {
+            $member = array(
+                'userId' => $user['id'],
+                'classId' => $class['id'],
+                'role' => 'ADMIN',
+            );
+        } else {
+            if (!in_array($member['role'], array('HEAD_TEACHER', 'STUDENT'))) {
+                return false;
+            }
+        }
+
+        return array($class, $member);
+    }
+
+    public function canManageClass($classId)
+    {
+        $user = $this->getCurrentUser();
+        if (empty($user)) {
+            return false;
+        }
+
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        $member = $this->getClassMemberDao()->getMemberByUserIdAndClassId($user['id'], $classId);
+
+        if (in_array($member['role'], array('HEAD_TEACHER', 'STUDENT'))) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function editClass($fields, $id)
     {
         $class = $this->getClassesDao()->editClass($fields, $id);

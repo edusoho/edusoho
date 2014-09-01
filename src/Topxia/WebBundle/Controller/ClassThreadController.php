@@ -5,16 +5,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-class ClassThreadController extends BaseController
+class ClassThreadController extends ClassBaseController
 {
     public function listAction(Request $request, $classId)
     {
-        $user = $this->getCurrentUser();
-
-        $class = $this->getClassService()->getClass($classId);
-        if (empty($class)) {
-            throw $this->createNotFoundException("班级不存在，或已删除。");
-        }
+        list($class, $member) = $this->tryViewClass($classId);
 
         $filters = $this->getThreadSearchFilters($request);
         $conditions = $this->convertFiltersToConditions($class, $filters);
@@ -49,11 +44,8 @@ class ClassThreadController extends BaseController
 
     public function showAction(Request $request, $classId, $threadId)
     {
-        $class = $this->getClassService()->getClass($classId);
-        if (empty($class)) {
-            throw $this->createNotFoundException("班级不存在，或已删除。");
-        }
-        
+        list($class, $member) = $this->tryViewClass($classId);
+
         $thread = $this->getThreadService()->getThread($threadId);
         if (empty($thread)) {
             throw $this->createNotFoundException();
@@ -96,9 +88,9 @@ class ClassThreadController extends BaseController
 
     public function createAction(Request $request, $classId)
     {
-        $type = $request->query->get('type') ? : 'discussion';
+        list($class, $member) = $this->tryViewClass($classId);
 
-        $class = $this->getClassService()->getClass($classId);
+        $type = $request->query->get('type') ? : 'discussion';
 
         if ($request->getMethod() == 'POST') {
 
@@ -121,6 +113,8 @@ class ClassThreadController extends BaseController
 
     public function editAction(Request $request, $courseId, $id)
     {
+        list($class, $member) = $this->tryViewClass($classId);
+        
         $thread = $this->getThreadService()->getThread($courseId, $id);
         if (empty($thread)) {
             throw $this->createNotFoundException();

@@ -4,7 +4,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
-class ClassController extends BaseController
+class ClassController extends ClassBaseController
 {
     public function showAction(Request $request, $classId)
     {
@@ -40,10 +40,4 @@ class ClassController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.StatusService');
     }
-
-    protected function getClassesService()
-    {
-        return $this->getServiceKernel()->createService('Classes.ClassesService');
-    }
-
 }
