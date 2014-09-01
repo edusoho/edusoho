@@ -12,7 +12,7 @@ define(function(require, exports, module) {
             $('#select-area').attr('class','show');
             $('#title-span').html($(this).data('title'));
             $('#name-span').html($(this).data('teachername'));
-            $('#templateId').val($(this).data('id'));
+            $('#parentId').val($(this).data('id'));
         });
 
         $('[role=tablist]').on('click','li', function(){
@@ -28,7 +28,7 @@ define(function(require, exports, module) {
                     $('#select-area').attr('class','show');
                     $('#title-span').html($(this).data('title'));
                     $('#name-span').html($(this).data('teachername'));
-                    $('#templateId').val($(this).data('id'));
+                    $('#parentId').val($(this).data('id'));
                 });
 
             });

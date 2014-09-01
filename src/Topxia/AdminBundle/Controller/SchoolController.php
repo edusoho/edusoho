@@ -18,7 +18,7 @@ class SchoolController extends BaseController
             $this->getLogService()->info('school', 'update_settings', "更新学校设置", $school);
             $this->setFlashMessage('success', '学校信息设置已保存！');
         }
-        
+
         $school = $this->getSettingService()->get('school', array());
 
         $default = array(
@@ -145,7 +145,7 @@ class SchoolController extends BaseController
         if($request->getMethod() == 'POST') {
             $fields = $request->request->all();
             $this->getCourseService()->copyCourseForClass(
-                $fields['templateId'],
+                $fields['parentId'],
                 $classId,
                 $fields['compulsory'],
                 $fields['teacherId']);
@@ -156,7 +156,7 @@ class SchoolController extends BaseController
         $class = $request->query->all();
         $class['classId'] = $classId;
         $conditions =array(
-            'classId' => 0,
+            'parentId' => 0,
             'gradeId' => $class['gradeId'],
             'public' => $class['public']
         );

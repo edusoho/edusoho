@@ -305,5 +305,5 @@ interface CourseService
 	/**
 	*复制课程
 	*/
-	public function copyCourseForClass($templateId, $classId, $compulsory, $teacherId);
+	public function copyCourseForClass($parentId, $classId, $compulsory, $teacherId);
 }

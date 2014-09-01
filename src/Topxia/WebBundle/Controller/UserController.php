@@ -35,7 +35,13 @@ class UserController extends BaseController
         /**为学生准备*/
         $class='';
         if(in_array('ROLE_TEACHER', $user['roles'])) {
+            
             $courses=$this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX);
+            // $conditions=array(
+            //     'teacherIds'=>$user['id'],
+            //     'defaultClassId'=>0
+            // );
+            // $courses=$this->getCourseService()->searchCourses($conditions, $sort = 'latest', 0, PHP_INT_MAX);
             $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($courses,'classId'));
             $headTeacherClasses=$this->getClassesService()->searchClasses(array('headTeacherId'=>$user['id']), array('createdTime'=>'DESC'), 0, PHP_INT_MAX);
         }else{

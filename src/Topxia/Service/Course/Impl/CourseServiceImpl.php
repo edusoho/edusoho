@@ -284,7 +284,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course['tags'] = !empty($course['tags']) ? $course['tags'] : '';
 		$course['userId'] = $this->getCurrentUser()->id;
 		$course['createdTime'] = time();
-		$course['teacherIds'] = array($course['userId']);
+		//$course['teacherIds'] = array($course['userId']);
 		$course = $this->getCourseDao()->addCourse(CourseSerialize::serialize($course));
 		
 		$member = array(
@@ -1983,17 +1983,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
 	}
 
-	public function copyCourseForClass($templateId, $classId, $compulsory, $teacherId)
+	public function copyCourseForClass($parentId, $classId, $compulsory, $teacherId)
 	{
 		$courseDao = $this->getCourseDao();
 		$chapterDao = $this->getChapterDao();
 		$lessonDao = $this->getLessonDao();
 		$classService = $this->getClassesService();
-		$templateCourse = $courseDao->getCourse($templateId);
+		$templateCourse = $courseDao->getCourse($parentId);
 		$class = $classService->getClass($classId);
 
 		unset($templateCourse['id']);
-		$templateCourse['templateId'] = $templateId;
+		$templateCourse['parentId'] = $parentId;
 		$templateCourse['classId'] = $classId;
 		$templateCourse['gradeId'] = $class['gradeId'];
 		$templateCourse['term'] = $class['term'];
@@ -2001,8 +2001,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$templateCourse['teacherIds'] = array(0 => $teacherId);
 		
 		$newCourse = $courseDao->addCourse(CourseSerialize::serialize($templateCourse));
-		$chapters = $chapterDao->findChaptersByCourseId($templateId);
-		$lessons = $lessonDao->findLessonsByCourseId($templateId);
+		$chapters = $chapterDao->findChaptersByCourseId($parentId);
+		$lessons = $lessonDao->findLessonsByCourseId($parentId);
 		
 		//增加classmember记录
 /*		$classMember = array();

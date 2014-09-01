@@ -176,6 +176,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('classId =:classId')
             ->andWhere('gradeId =:gradeId')
             ->andWhere('public =:public')
+            ->andWhere('parentId =:parentId')
             ->andWhere('teacherIds LIKE :teacherIdsLike')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
