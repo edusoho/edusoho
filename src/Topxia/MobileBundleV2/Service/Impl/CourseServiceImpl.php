@@ -37,6 +37,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         		return true;
 	}
 
+	public function getTeacherCourses()
+	{
+		$userId = $this->getParam("userId");
+		if (empty($userId)) {
+			return array();
+		}
+		$courses = $this->controller->getCourseService()->findUserTeachCourses(
+	            	$userId, 0, 10
+	        	);
+
+		return $courses;
+	}
+
 	public function unFavoriteCourse()
 	{
 		$user = $this->controller->getUserByToken($this->request);
