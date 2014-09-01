@@ -129,6 +129,9 @@ define(function(require, exports, module) {
                             + '</strong><span class="text-muted"> 元</span></span>';
 
                     $('.money-text').html(html);
+                    if (response.afterAmount === '0.00') {
+                        $('#course-pay').text('去学习');
+                    }
 
                     $('.coupon-error').hide();
                     $('.btn-cancel-coupon').hide();
