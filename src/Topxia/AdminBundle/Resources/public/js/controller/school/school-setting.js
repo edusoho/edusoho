@@ -17,7 +17,7 @@ define(function(require, exports, module) {
             },
             success: function(response) {
                 response = $.parseJSON(response);
-                $("#school-homepage-container").html('<img src="' + response.url + '?'+(new Date()).getTime()+'">');
+                $("#school-homepage-container").html('<img src="' + response.url + '?'+(new Date()).getTime()+'" style="max-width:400px;">');
                 $form.find('[name=homepagePicture]').val(response.path);
                 Notify.success('上传微信二维码成功！');
             }

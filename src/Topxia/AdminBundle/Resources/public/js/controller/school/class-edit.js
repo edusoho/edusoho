@@ -35,9 +35,19 @@ define(function(require, exports, module) {
             errormessage:'请选择年级'
         });
         validator.addItem({
+            element: '#name',
+            required: true,
+            errormessage:'请输入班级名称'
+        });
+        validator.addItem({
             element: '#year',
             required: true,
             errormessage:'请选择入学年份'
+        });
+        validator.addItem({
+            element: '#headteacherid',
+            required: true,
+            errormessage:'请选择班主任'
         });
 
         var uploader = new Uploader({
@@ -50,7 +60,7 @@ define(function(require, exports, module) {
             },
             success: function(response) {
                 response = $.parseJSON(response);
-                $("#icon-container").html('<img src="' + response.url + '?'+(new Date()).getTime()+'">');
+                $("#icon-container").html('<img src="' + response.url + '?'+(new Date()).getTime()+'" style="max-width:400px;">');
                 $form.find('[name=icon]').val(response.path);
                 Notify.success('上传班级图标成功！');
             }
@@ -66,7 +76,7 @@ define(function(require, exports, module) {
             },
             success: function(response) {
                 response = $.parseJSON(response);
-                $("#backgroudImg-container").html('<img src="' + response.url + '?'+(new Date()).getTime()+'">');
+                $("#backgroudImg-container").html('<img src="' + response.url + '?'+(new Date()).getTime()+'" style="max-width:400px;">');
                 $form.find('[name=backgroundImg]').val(response.path);
                 Notify.success('上传班级背景图片成功！');
             }

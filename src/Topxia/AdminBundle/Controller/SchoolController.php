@@ -12,6 +12,13 @@ class SchoolController extends BaseController
 {
     public function schoolSettingAction(Request $request) 
     {
+        if ($request->getMethod() == 'POST') {
+            $school = $request->request->all();
+            $this->getSettingService()->set('school', $school);
+            $this->getLogService()->info('school', 'update_settings', "更新学校设置", $school);
+            $this->setFlashMessage('success', '学校信息设置已保存！');
+        }
+        
         $school = $this->getSettingService()->get('school', array());
 
         $default = array(
@@ -24,12 +31,6 @@ class SchoolController extends BaseController
 
         $school = array_merge($default, $school);
 
-        if ($request->getMethod() == 'POST') {
-            $school = $request->request->all();
-            $this->getSettingService()->set('school', $school);
-            $this->getLogService()->info('school', 'update_settings', "更新学校设置", $school);
-            $this->setFlashMessage('success', '学校信息设置已保存！');
-        }
       
         return $this->render('TopxiaAdminBundle:School:school-setting.html.twig', array(
             'school' => $school

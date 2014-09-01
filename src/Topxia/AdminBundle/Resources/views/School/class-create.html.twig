@@ -68,13 +68,13 @@
       <label>开启状态</label>
     </div>
     <div class="col-md-7 controls radios">
-      {{ radios('enabled',{1:'开启', 0:'关闭'},0)}}
+      {{ radios('enabled',{1:'开启', 0:'关闭'},1)}}
     </div>
   </div>
 
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label>缩略示意图</label>
+      <label>班级图标</label>
     </div>
     <div class="col-md-7 controls">
       <div id="icon-container"></div>
@@ -93,7 +93,7 @@
         <div id="backgroudImg-container"></div>
         <button class="btn btn-default" id="school-class-backgroundImg-upload" type="button" data-url="{{ path('admin_school_class_backgroundImg_upload') }}">上传</button>
         <p class="help-block">
-          请上传png, jpg, gif格式的图片文件。推荐尺寸比例：1140px * 120px。</p>
+          请上传png, jpg, gif格式的图片文件。推荐尺寸比例：1140px * 150px。</p>
           <input type="hidden" name="backgroundImg" value="">
         </div>
       </div>

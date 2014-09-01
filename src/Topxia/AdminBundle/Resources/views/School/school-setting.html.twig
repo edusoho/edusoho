@@ -33,14 +33,14 @@
 
   <div class="row form-group">
     <div class="col-md-8 controls checkbox col-md-offset-2">
-      {{ checkboxs('middleSchool',{'1':'初中'},school.middleSchool | default(0)) }}
+      {{ checkboxs('middleSchool',{'1':'初中'},school.middleSchool) }}
       <span class="mll">3年制<span class="text-muted">（初1到初3）</span></span>
     </div>
   </div>
 
   <div class="row form-group">
     <div class="col-md-8 controls checkbox col-md-offset-2">
-      {{ checkboxs('highSchool',{'1':'高中'},school.highSchool | default(0)) }}
+      {{ checkboxs('highSchool',{'1':'高中'},school.highSchool) }}
       <span class="mll">3年制<span class="text-muted">（高1到高3）</span></span>
     </div>
   </div>
@@ -54,7 +54,7 @@
       <button class="btn btn-default" id="school-homepage-upload" type="button" data-url="{{ path('admin_school_homepage_upload') }}">上传</button>
       <p class="help-block">
         请上传png, jpg, gif格式的图片文件。推荐尺寸比例：600px * 400px。</p>
-        <input type="hidden" name="homepagePicture" value=" {{ school.homepagePicture | default() }} ">
+        <input type="hidden" name="homepagePicture" value=" {{ school.homepagePicture }} ">
       </div>
     </div>
 
