@@ -7,11 +7,15 @@ use Topxia\Service\Classes\Dao\ClassesDao;
 
 class ClassesDaoImpl extends BaseDao implements ClassesDao
 {
+    protected $cached = array();
 
     public function getClass($id)
     {
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $self = $this;
+        return $this->cachedCall($id, function($id) use ($self) {
+            $sql = "SELECT * FROM {$self->getTablename()} WHERE id = ? LIMIT 1";
+            return $self->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        });
     }
 
     public function findClassesByIds(array $ids)
@@ -79,8 +83,20 @@ class ClassesDaoImpl extends BaseDao implements ClassesDao
         return $builder;
     }
 
-    private function getTablename()
+    public function getTablename()
     {
         return self::TABLENAME;
     }
+
+    protected function cachedCall($id, $callback)
+    {
+        if (isset($this->cached[$id])) {
+            return $this->cached[$id];
+        }
+
+        $this->cached[$id] = $callback($id);
+
+        return $this->cached[$id];
+    }
+
 }

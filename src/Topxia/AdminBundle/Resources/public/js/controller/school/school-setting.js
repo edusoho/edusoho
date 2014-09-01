@@ -8,7 +8,7 @@ define(function(require, exports, module) {
         var $form = $("#school-form");
         var uploader = new Uploader({
             trigger: '#school-homepage-upload',
-            name: 'homePage',
+            name: 'homepagePicture',
             action: $('#school-homepage-upload').data('url'),
             data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
             accept: 'image/*',
@@ -18,7 +18,7 @@ define(function(require, exports, module) {
             success: function(response) {
                 response = $.parseJSON(response);
                 $("#school-homepage-container").html('<img src="' + response.url + '?'+(new Date()).getTime()+'">');
-                $form.find('[name=homePage]').val(response.path);
+                $form.find('[name=homepagePicture]').val(response.path);
                 Notify.success('上传微信二维码成功！');
             }
         });

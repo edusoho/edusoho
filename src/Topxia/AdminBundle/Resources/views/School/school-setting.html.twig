@@ -20,12 +20,12 @@
       <label>启用年级</label>
     </div>
     <div class="col-md-8 controls checkbox">
-      {{ checkboxs('primarySchool',{'1':'小学'},school.primarySchool | default(0)) }}
+      {{ checkboxs('primarySchool',{'1':'小学'},school.primarySchool) }}
       <span class="mll">
-        {{ radios('primaryYear', {'6':'6年制（1年级到6年级）'}, school.primaryYear | default(6)) }}
+        {{ radios('primaryYear', {'6':'6年制<span class="text-muted">（1年级到6年级）</span>'}, school.primaryYear) }}
       </span>
       <span class="mll">
-        {{ radios('primaryYear', {'5':'5年制（1年级到5年级）'}, school.primaryYear | default(6)) }}
+        {{ radios('primaryYear', {'5':'5年制<span class="text-muted">（1年级到5年级）</span>'}, school.primaryYear) }}
       </span> 
 
     </div>
@@ -34,14 +34,14 @@
   <div class="row form-group">
     <div class="col-md-8 controls checkbox col-md-offset-2">
       {{ checkboxs('middleSchool',{'1':'初中'},school.middleSchool | default(0)) }}
-      <span class="mll">3年制（初1到初3）</span>
+      <span class="mll">3年制<span class="text-muted">（初1到初3）</span></span>
     </div>
   </div>
 
   <div class="row form-group">
     <div class="col-md-8 controls checkbox col-md-offset-2">
       {{ checkboxs('highSchool',{'1':'高中'},school.highSchool | default(0)) }}
-      <span class="mll">3年制（高1到高3）</span>
+      <span class="mll">3年制<span class="text-muted">（高1到高3）</span></span>
     </div>
   </div>
 
@@ -50,11 +50,11 @@
       <label>首页图片</label>
     </div>
     <div class="col-md-8 controls">
-      <div id="school-homepage-container">{% if school.homePage | default() %}<img src="{{ asset(school.homePage) }}">{% endif %}</div>
+      <div id="school-homepage-container">{% if school.homepagePicture %}<img src="{{ asset(school.homepagePicture) }}" style="max-width:400px;">{% endif %}</div>
       <button class="btn btn-default" id="school-homepage-upload" type="button" data-url="{{ path('admin_school_homepage_upload') }}">上传</button>
       <p class="help-block">
         请上传png, jpg, gif格式的图片文件。推荐尺寸比例：600px * 400px。</p>
-        <input type="hidden" name="homePage" value=" {{ school.homePage | default() }} ">
+        <input type="hidden" name="homepagePicture" value=" {{ school.homepagePicture | default() }} ">
       </div>
     </div>
 

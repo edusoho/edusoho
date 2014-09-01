@@ -14,6 +14,16 @@ class SchoolController extends BaseController
     {
         $school = $this->getSettingService()->get('school', array());
 
+        $default = array(
+            'primarySchool' => 0,
+            'primaryYear' => 6,
+            'middleSchool' => 0,
+            'highSchool' => 0,
+            'homepagePicture' => '',
+        );
+
+        $school = array_merge($default, $school);
+
         if ($request->getMethod() == 'POST') {
             $school = $request->request->all();
             $this->getSettingService()->set('school', $school);
@@ -184,7 +194,7 @@ class SchoolController extends BaseController
 
     public function homePageUploadAction(Request $request)
     {
-        $file = $request->files->get('homePage');
+        $file = $request->files->get('homepagePicture');
         if (!FileToolkit::isImageFile($file)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
@@ -195,16 +205,16 @@ class SchoolController extends BaseController
 
         $school = $this->getSettingService()->get('school', array());
 
-        $school['homePage'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/school/{$filename}";
-        $school['homePage'] = ltrim($school['homePage'], '/');
+        $school['homepagePicture'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/school/{$filename}";
+        $school['homepagePicture'] = ltrim($school['homepagePicture'], '/');
 
         $this->getSettingService()->set('school', $school);
 
-        $this->getLogService()->info('school', 'update_settings', "更新学校首页图片", array('homePage' => $school['homePage']));
+        $this->getLogService()->info('school', 'update_settings', "更新学校首页图片", array('homepagePicture' => $school['homepagePicture']));
 
         $response = array(
-            'path' => $school['homePage'],
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($school['homePage']),
+            'path' => $school['homepagePicture'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($school['homepagePicture']),
         );
 
         return new Response(json_encode($response));
