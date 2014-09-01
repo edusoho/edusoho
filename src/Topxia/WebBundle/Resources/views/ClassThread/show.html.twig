@@ -22,10 +22,13 @@
       </div>
     </div>
     <div class="thread-body">{{ thread.content|raw }}</div>
-    {% if isManager or app.user.id == author.id %}
       <div class="thread-footer" >
-        <a href="{{ path('class_thread_edit', {classId:thread.classId, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
-        {% if isManager %}
+        {% set hasManagePermission = check_class_permission('manage', class) %}
+        {% if hasManagePermission or app.user.id == author.id %}
+          <a href="{{ path('class_thread_edit', {classId:thread.classId, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
+        {% endif %}
+
+        {% if hasManagePermission %}
           <a href="javascript:;" class="btn btn-link" data-url="{{ path('class_thread_delete', {classId:thread.classId, threadId:thread.id}) }}" data-after-url="{{ path('class_threads', {classId:thread.classId}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>
           {% if thread.isStick %}
             <a href="javascript:" class="btn btn-link" data-url="{{ path('class_thread_unstick', {classId:thread.classId, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
@@ -40,7 +43,6 @@
           {% endif %}
         {% endif %}
       </div>
-    {% endif %}
   </div>
 
 

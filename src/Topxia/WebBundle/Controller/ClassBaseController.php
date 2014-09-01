@@ -8,16 +8,18 @@ abstract class ClassBaseController extends BaseController
 {
     protected function tryViewClass($classId)
     {
-        list($class, $member) = $this->getClassesService()->canViewClass($classId);
+        $class = $this->getClassesService()->getClass($classId);
         if (empty($class)) {
             throw $this->createNotFoundException('班级不存在');
         }
 
-        if (empty($member)) {
-            throw $this->createAccessDeniedException('您无权限查看班级');
+        $checked = $this->getClassesService()->checkPermission('view', $classId);
+
+        if (empty($checked)) {
+            throw $this->createAccessDeniedException('您无权查看班级');
         }
 
-        return array($class, $member);
+        return $class;
     }
 
     protected function getClassesService()

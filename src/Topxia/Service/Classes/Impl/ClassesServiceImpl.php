@@ -67,6 +67,45 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return array_merge($user, $profile);
     }
 
+    public function checkPermission($name, $classId)
+    {
+        $class = $this->getClass($classId);
+        if (empty($class)) {
+            return false;
+        }
+
+        $user = $this->getCurrentUser();
+        if (empty($user)) {
+            return false;
+        }
+
+
+        $member = $this->getClassMemberDao()->getMemberByUserIdAndClassId($user['id'], $classId);
+        if ($user->isAdmin()) {
+            $member = array(
+                'id' => null,
+                'userId' => $user['id'],
+                'classId' => $class['id'],
+                'role' => 'ADMIN',
+            );
+        }
+
+        if (empty($member)) {
+            return false;
+        }
+
+        $permissionRoles = array(
+            'view' => array('STUDENT', 'HEAD_TEACHER', 'ADMIN'),
+            'manage' => array('HEAD_TEACHER', 'ADMIN'),
+        );
+
+        if (!array_key_exists($name, $permissionRoles)) {
+            return false;
+        }
+
+        return in_array($member['role'], $permissionRoles[$name]);
+    }
+
     public function canViewClass($classId)
     {
         $class = $this->getClass($classId);
@@ -83,6 +122,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
 
         if ($user->isAdmin()) {
             $member = array(
+                'id' => null,
                 'userId' => $user['id'],
                 'classId' => $class['id'],
                 'role' => 'ADMIN',
@@ -98,22 +138,45 @@ class ClassesServiceImpl extends BaseService implements ClassesService
 
     public function canManageClass($classId)
     {
+        $class = $this->getClass($classId);
+        if (empty($class)) {
+            return false;
+        }
+
         $user = $this->getCurrentUser();
         if (empty($user)) {
             return false;
         }
 
-        if ($user->isAdmin()) {
-            return true;
-        }
-
         $member = $this->getClassMemberDao()->getMemberByUserIdAndClassId($user['id'], $classId);
 
-        if (in_array($member['role'], array('HEAD_TEACHER', 'STUDENT'))) {
-            return true;
+        if ($user->isAdmin()) {
+            $member = array(
+                'id' => null,
+                'userId' => $user['id'],
+                'classId' => $class['id'],
+                'role' => 'ADMIN',
+            );
+        } else {
+            if (!in_array($member['role'], array('HEAD_TEACHER'))) {
+                return false;
+            }
         }
 
-        return false;
+        return array($class, $member);
+    }
+
+    public function canMemberManageClass($class, $member)
+    {
+        if (empty($class) or empty($member)) {
+            return false;
+        }
+
+        if (!in_array($member['role'], array('HEAD_TEACHER', 'ADMIN'))) {
+            return false;
+        }
+
+        return true;
     }
 
     public function editClass($fields, $id)

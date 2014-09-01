@@ -9,7 +9,7 @@ class ClassThreadController extends ClassBaseController
 {
     public function listAction(Request $request, $classId)
     {
-        list($class, $member) = $this->tryViewClass($classId);
+        $class = $this->tryViewClass($classId);
 
         $filters = $this->getThreadSearchFilters($request);
         $conditions = $this->convertFiltersToConditions($class, $filters);
@@ -44,7 +44,7 @@ class ClassThreadController extends ClassBaseController
 
     public function showAction(Request $request, $classId, $threadId)
     {
-        list($class, $member) = $this->tryViewClass($classId);
+        $class = $this->tryViewClass($classId);
 
         $thread = $this->getThreadService()->getThread($threadId);
         if (empty($thread)) {
@@ -88,7 +88,7 @@ class ClassThreadController extends ClassBaseController
 
     public function createAction(Request $request, $classId)
     {
-        list($class, $member) = $this->tryViewClass($classId);
+        $class = $this->tryViewClass($classId);
 
         $type = $request->query->get('type') ? : 'discussion';
 
@@ -113,7 +113,7 @@ class ClassThreadController extends ClassBaseController
 
     public function editAction(Request $request, $courseId, $id)
     {
-        list($class, $member) = $this->tryViewClass($classId);
+        $class = $this->tryViewClass($classId);
         
         $thread = $this->getThreadService()->getThread($courseId, $id);
         if (empty($thread)) {
