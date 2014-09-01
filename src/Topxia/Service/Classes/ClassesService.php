@@ -15,6 +15,10 @@ interface ClassesService
 
     public function searchClassCount($conditions);
 
+    public function getStudentClass($userId);
+
+    public function getClassHeadTeacher($classId);
+
     public function createClass($class);
 
     public function editClass($fields, $id);

@@ -13,29 +13,7 @@
 
 <div class="container-gap course-dashboard-container">
 
-  <div class="row class-header">
-    <div class="col-md-12">
-      <div class="class-header-inner" style="background-image:url({{ asset('files/bg.jpg') }})">
-        <div class="media">
-          <a class="pull-left" href="#">
-            <img class="media-object" src="{{ asset('assets/img/default/avatar.png') }}" alt="...">
-          </a>
-          <div class="media-body">
-            <h1 class="media-heading">高一（５）班</h1>
-            <div class="media-metas">班主任： 王老师</div>
-          </div>
-        </div>
-
-        <ul class="nav nav-pills">
-          <li {% if classNav == 'threads' %}class="active"{% endif %}><a href="{{ path('class_threads', {classId:class.id}) }}">班级讨论区</a></li>
-          <li {% if classNav == 'courses' %}class="active"{% endif %}><a href="{{ path('class_course_show', { classId:class.id })}}">班级课程</a></li>
-          <li {% if classNav == 'notes' %}class="active"{% endif %}><a href="{{ path('class_notes', {classId:class.id}) }}">同学笔记</a></li>
-          <li {% if classNav == 'members' %}class="active"{% endif %}><a href="{{ path('class_members', {classId:class.id}) }}">班级成员</a></li>
-        </ul>
-
-      </div>
-    </div>
-  </div>
+  {{ render(controller('TopxiaWebBundle:Class:headerBlock', {class:class, classNav:classNav})) }}
 
   <div class="row">
     <div class="col-md-8">

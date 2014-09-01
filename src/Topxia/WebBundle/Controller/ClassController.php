@@ -11,6 +11,17 @@ class ClassController extends BaseController
         return $this->forward('TopxiaWebBundle:ClassThread:list', array('classId' => $classId), $request->query->all());
     }
 
+    public function headerBlockAction($class, $classNav)
+    {
+        $headTeacher = $this->getClassesService()->getClassHeadTeacher($class['id']);
+
+        return $this->render('TopxiaWebBundle:Class:header-block.html.twig', array(
+            'class' => $class,
+            'classNav' => $classNav,
+            'headTeacher' => $headTeacher,
+        ));
+    }
+
     public function statusBlockAction(Request $request)
     {
         $statuses = $this->getStatusService()->findStatusesByUserIds(array(1,2,3), 0, 10);
@@ -28,6 +39,11 @@ class ClassController extends BaseController
     protected function getStatusService()
     {
         return $this->getServiceKernel()->createService('User.StatusService');
+    }
+
+    protected function getClassesService()
+    {
+        return $this->getServiceKernel()->createService('Classes.ClassesService');
     }
 
 }

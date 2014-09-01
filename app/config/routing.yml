@@ -1,8 +1,15 @@
-__web:
+__topxia_web:
     resource: "@TopxiaWebBundle/Resources/config/routing.yml"
 
-topxia_admin:
+__topxia_web_k12:
+    resource: "@TopxiaWebBundle/Resources/config/routing_k12.yml"
+
+__topxia_admin:
     resource: "@TopxiaAdminBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+__topxia_admin_k12:
+    resource: "@TopxiaAdminBundle/Resources/config/routing_k12.yml"
     prefix:   /admin
 
 topxia_mobile:

@@ -75,5 +75,7 @@ security:
         - { path: ^/admin/upgrade, role: ROLE_SUPER_ADMIN }
         - { path: ^/admin/optimize, role: ROLE_SUPER_ADMIN }
         - { path: ^/admin, role: ROLE_BACKEND }
-        - { path: /.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY } #K12
+        - { path: ^/login_check, role: IS_AUTHENTICATED_ANONYMOUSLY } #K12
+        - { path: /.*, role: ROLE_USER } #K12
         #- { path: ^/_internal, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }

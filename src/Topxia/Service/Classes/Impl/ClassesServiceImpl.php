@@ -40,6 +40,33 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return $class;
     }
 
+    public function getStudentClass($userId)
+    {
+        $member = $this->getClassMemberDao()->getMemberByUserId($userId);
+        if (empty($member)) {
+            return null;
+        }
+
+        return $this->getClass($member['classId']);
+    }
+
+    public function getClassHeadTeacher($classId)
+    {
+        $member = $this->getClassMemberDao()->getMemberByClassIdAndRole($classId, 'HEAD_TEACHER');
+        if (empty($member)) {
+            return null;
+        }
+
+        $user = $this->getUserService()->getUser($member['userId']);
+        $profile = $this->getUserService()->getUserProfile($member['userId']);
+
+        if (empty($user) or empty($profile)) {
+            return null;
+        }
+
+        return array_merge($user, $profile);
+    }
+
     public function editClass($fields, $id)
     {
         $class = $this->getClassesDao()->editClass($fields, $id);
@@ -71,8 +98,18 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return $this->createDao('Classes.ClassesDao');
     }
 
+    private function getClassMemberDao ()
+    {
+        return $this->createDao('Classes.ClassMemberDao');
+    }
+
     private function getClassMemberService()
     {
         return $this->createService('Classes.ClassMemberService');
+    }
+
+    private function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 }

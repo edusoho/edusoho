@@ -5,6 +5,10 @@ namespace Topxia\Service\Classes\Dao;
 interface ClassMemberDao
 {
 	public function getClassMember($id);
+
+    public function getMemberByUserId($userId);
+
+    public function getMemberByClassIdAndRole($classId, $role);
 	
 	public function searchClassMembers($conditions, $orderBy, $start, $limit);
 
