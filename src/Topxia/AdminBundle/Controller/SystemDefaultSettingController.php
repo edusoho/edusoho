@@ -68,7 +68,7 @@ class SystemDefaultSettingController extends BaseController
         $this->getSettingService()->set("default",$setting);
         $filename = $setting['defaultAvatarFileName'];
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-        $path = $this->container->getParameter('topxia.upload.public_directory') . '/system/';
+        $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
         $pictureFilePath = $directory.'/'.$filename;
         $pathinfo = pathinfo($pictureFilePath);
@@ -141,7 +141,7 @@ class SystemDefaultSettingController extends BaseController
         $filename = $setting['defaultCoursePictureFileName'];
 
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-        $path = $this->container->getParameter('topxia.upload.public_directory') . '/system/';
+        $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
         $pictureFilePath = $directory.'/'.$filename;
         $pathinfo = pathinfo($pictureFilePath);
