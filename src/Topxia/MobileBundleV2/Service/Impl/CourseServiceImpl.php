@@ -73,8 +73,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         		$userIsStudent = $user->isLogin() ? $this->controller->getCourseService()->isCourseStudent($courseId, $user['id']) : false;
         		$userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
-		
-		$vip = $this->controller->getVipService()->getMemberByUserId($user['id']);
+
 		$vipLevels = $this->controller->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
 
 		$member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
@@ -87,7 +86,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         			"course"=>$this->controller->filterCourse($course),
         			"userFavorited"=>$userFavorited,
         			"member"=>$member,
-        			"vip"=>$vip,
         			"vipLevels"=>$vipLevels
         			);
 	}

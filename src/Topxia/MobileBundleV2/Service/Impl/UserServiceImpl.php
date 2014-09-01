@@ -18,10 +18,13 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $userId = $this->getParam('userId');
         $user = $this->controller->getUserService()->getUser($userId);
+        if (empty($user)) {
+            return array();
+        }
         $userProfile = $this->controller->getUserService()->getUserProfile($userId);
         $userProfile = $this->filterUserProfile($userProfile);
         $user = array_merge($user, $userProfile);
-        return empty($user) ? null : $this->controller->filterUser($user);
+        return $this->controller->filterUser($user);
     }
 
     private function filterUserProfile($userProfile)
@@ -120,7 +123,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $username = $this->getParam('_username');
         $password = $this->getParam('_password');
-        $user     = $this->loadUserByUsername($this->request, $username);
+        $user  = $this->loadUserByUsername($this->request, $username);
         
         if (empty($user)) {
             return $this->createErrorResponse('username_error', '用户帐号不存在');
