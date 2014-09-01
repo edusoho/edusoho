@@ -218,7 +218,7 @@ define(function(require, exports, module) {
         },
 
         destroy: function(){
-            if(this._supportHtml5() && this.$('[data-role=uploader-btn]').data('storageType')=="cloud"){
+            if(this._supportChunkUpload() && this.$('[data-role=uploader-btn]').data('storageType')=="cloud"){
                 var uploader = this.get("uploader");
                 uploader.destroy();
             }
