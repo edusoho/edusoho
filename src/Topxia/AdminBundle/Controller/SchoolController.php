@@ -145,7 +145,7 @@ class SchoolController extends BaseController
         if($request->getMethod() == 'POST') {
             $fields = $request->request->all();
             $this->getCourseService()->copyCourseForClass(
-                $fields['templateId'],
+                $fields['parentId'],
                 $classId,
                 $fields['compulsory'],
                 $fields['teacherId']);
@@ -156,7 +156,7 @@ class SchoolController extends BaseController
         $class = $request->query->all();
         $class['classId'] = $classId;
         $conditions =array(
-            'classId' => 0,
+            'parentId' => 0,
             'gradeId' => $class['gradeId'],
             'public' => $class['public']
         );
