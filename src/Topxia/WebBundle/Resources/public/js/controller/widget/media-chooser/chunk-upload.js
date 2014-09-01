@@ -199,8 +199,8 @@ define(function(require, exports, module) {
 
 		mkFile: function(fileScop){
 			var self=this;
-
 			var url = this.get("uploadUrl") + "mkfile/" + fileScop.file.size;
+			//console.log('.'+JSON.parse(fileScop.postParams["x:convertParams"]).convertor);
 			url = url + "/key/" + self.base64encode(self.utf16to8(fileScop.postParams.key));
             url = url + "/x:convertParams/" + self.base64encode(self.utf16to8(fileScop.postParams["x:convertParams"]));
 			
@@ -217,6 +217,7 @@ define(function(require, exports, module) {
             xhr.onreadystatechange = function(response) {
                 if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
                 	var response = JSON.parse(xhr.responseText);
+
                 	response.filename=self.get("currentFile").name;
 
                 	var mediaInfoUrl = self.$('[data-role=uploader-btn]').data("getMediaInfo");
@@ -230,7 +231,6 @@ define(function(require, exports, module) {
 	                		}
 	                	});
                 	}
-
                 	self.get("upload_success_handler")(self.get("currentFile"), JSON.stringify(response));
                 	fileScop.fileIndex--;
                 	FileScopStorage.del();
