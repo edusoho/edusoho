@@ -12,12 +12,12 @@ define(function(require, exports, module) {
             $form.find('input[value=ROLE_SUPER_ADMIN]').attr('disabled', 'disabled');
         };
 
-        $form.find('input[value=ROLE_USER]').on('change', function(){
-            if ($(this).prop('checked') === false) {
-                $(this).prop('checked', true);
-                Notify.info('用户必须拥有学员角色');
-            }
-        });
+        // $form.find('input[value=ROLE_USER]').on('change', function(){
+        //     if ($(this).prop('checked') === false) {
+        //         $(this).prop('checked', true);
+        //         Notify.info('用户必须拥有学员角色');
+        //     }
+        // });
 
         $form.on('submit', function() {
             var roles = [];
@@ -28,10 +28,10 @@ define(function(require, exports, module) {
                 roles.push($(this).val());
             });
 
-            if ($.inArray('ROLE_USER', roles) < 0) {
-                Notify.danger('用户必须拥有学员角色');
-                return false;
-            }
+            // if ($.inArray('ROLE_USER', roles) < 0) {
+            //     Notify.danger('用户必须拥有学员角色');
+            //     return false;
+            // }
 
             if (isTeacher && $.inArray('ROLE_TEACHER', roles) < 0) {
                 if (!confirm('取消该用户的教师角色，同时将收回该用户所有教授的课程的教师权限。您真的要这么做吗？')) {
