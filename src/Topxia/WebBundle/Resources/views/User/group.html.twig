@@ -1,0 +1,32 @@
+{% extends 'TopxiaWebBundle:User:layout.html.twig' %}
+
+{% block title %} {{user.nickname}}的公共主页 - {{ parent() }}{% endblock %}
+
+{% set pageNav = 'group' %}
+
+{% block main %}
+      <div class="row">
+        <div class="col-md-12"> 
+          {% if adminGroups %}
+          <div class="page-header">
+            <h4> 管理的小组</h4>
+          </div>
+          {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {
+          'groups':adminGroups,  }
+          %}
+          {% endif %}
+        </div>
+        <div class="col-md-12">
+          <div class="page-header">
+            <h4> 加入的小组</h4>
+          </div>
+          {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {
+          'groups':groups,  }
+          %}
+          
+        </div>
+        <div class="col-md-12 pull-left">
+          {{ web_macro.paginator(paginator) }}
+        </div>
+      </div>
+{% endblock %}

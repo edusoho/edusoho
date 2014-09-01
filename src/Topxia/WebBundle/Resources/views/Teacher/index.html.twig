@@ -24,7 +24,7 @@
           {% set profile = profiles[teacher.id] %}
           <li class="media teacher">
             <a class="pull-left" href="{{ path('user_show', {id:teacher.id}) }}">
-              <img class="media-object" src="{{ file_path(teacher.mediumAvatar, 'avatar.png') }}">
+              <img class="media-object" src="{{ default_path('avatar',teacher.mediumAvatar, '') }}">
             </a>
             <div class="media-body">
               <button class="btn btn-default pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</button>

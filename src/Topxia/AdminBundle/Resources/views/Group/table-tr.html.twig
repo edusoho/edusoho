@@ -1,0 +1,64 @@
+{% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
+<tr id="group-table-tr-{{ group.id }}">
+    <td>{{ group.id}}</td>
+
+    <td>
+    <strong>  
+      <a target="_blank" href="{{ path('group_show', {id:group.id}) }}">{{ group.title}}</a>
+    </strong>
+    {% if group.status=='close' %}
+          <label class="label label-danger">关闭</label>
+    {% endif %}
+    </td>
+
+    <td>
+    <a target="_blank" href="{{ path('user_show', {id:owners[group.ownerId].id}) }}">
+   {{owners[group.ownerId].nickname}}</a>
+    </td>
+
+    <td>
+    {{ group.memberNum }}
+    </td>
+
+    <td>
+    {{ group.threadNum }}
+    </td>
+
+    <td>
+    {{ group.postNum }}
+    </td>
+
+    <td>
+    {% if group.status=='open' %}
+    开启
+    {% else %}
+    关闭
+    {% endif %}
+    </td>
+
+    <td>
+
+  <div class="btn-group">
+
+    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+      编辑
+      <span class="caret"></span>
+    </button>
+
+    <ul class="dropdown-menu">
+       <li><a href="{{path('group_show',{id:group.id})}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 查看小组</a></li>
+
+       {% if group.status=='open'%}
+       <li><a href="javascript:" class="close-group" title="关闭小组({{group.title}})" data-url="{{path('admin_group_close',{id:group.id})}}"><span class="glyphicon glyphicon-off"></span> 关闭小组</a></li>
+
+       {% else %}
+       <li><a href="javascript:" class="open-group" title="开启小组({{group.title}})" data-url="{{path('admin_group_open',{id:group.id})}}"><span class="glyphicon glyphicon-ok"></span>开启小组</a></li>
+
+       {% endif %}
+
+       <li  ><a href="javascript:" class="transfer-group" data-url="{{path('admin_group_transfer',{groupId:group.id})}}"><span class="glyphicon glyphicon-refresh"></span> 转移小组</a></li>
+       
+    </ul>
+  </div>
+ </td>
+</tr>

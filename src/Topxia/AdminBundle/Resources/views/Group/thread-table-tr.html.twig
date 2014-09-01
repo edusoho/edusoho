@@ -1,0 +1,87 @@
+{% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
+<tr id="thread-table-tr-{{ thread.id }}">
+   <td>
+    <input name="ID[]" data-role="batch-item" type="checkbox" value="{{thread.id}}"/> {{ thread.id}}
+   </td>
+
+   <td style="word-break:break-all;">
+    <strong ><a target="_blank" href="{{path('group_thread_show',{id:thread.groupId,threadId:thread.id})}}">{{ thread.title|plain_text(50)}}</a></strong>
+    {% if thread.isElite %}
+          <span class="label label-warning">精</span>
+          {% endif %}{% if thread.isStick==1 %}
+          <span class="label label-info">置顶</span>
+    {% endif %}
+
+    {% if thread.status=='close'%}
+          <label class="label label-danger">关闭</label>
+    {% endif %}
+
+   </td>
+
+   <td><a target="_blank" href="{{ path('user_show', {id:owners[thread.userId].id}) }}">
+   {{ owners[thread.userId].nickname}}</a>
+   </td>
+
+   <td>
+    <a target="_blank" href="{{ path('group_show', {id:group[thread.groupId].id}) }}">
+    {{ group[thread.groupId].title}}</a>
+   </td>
+
+   <td>
+    {{ thread.postNum}}
+   </td>
+
+   <td>
+    {% if thread.status=='open' %}
+    正常
+    {% else %}
+    关闭
+    {% endif %}
+ 
+   </td>
+
+ 
+   <td>
+        <div class="btn-group">
+          <a type="button" class="btn btn-default btn-sm" target="_blank" href="{{path('group_thread_show',{id:thread.groupId,threadId:thread.id})}}" {% if thread.status=='close' %}disabled="disabled"{% endif %}>查看</a>
+          <button type="button" class="btn btn-default dropdown-toggle btn-sm " data-toggle="dropdown">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+
+           {% if thread.isElite==1 %}
+           <li> <a class="removeElite"   title="取消加精" 
+            href="javascript:"
+            data-url="{{path('admin_groupThread_removeElite',{threadId:thread.id})}}"><span class="glyphicon glyphicon-minus"></span> 取消加精</a></li>
+
+            {% else %}
+            <li><a class="setElite"  title="加精" 
+            href="javascript:" data-url="{{path('admin_groupThread_setElite',{threadId:thread.id})}}"><span class="glyphicon glyphicon-heart-empty"></span> 加精</a></li>
+
+            {% endif %}
+            {% if thread.isStick==1 %}
+            <li><a class="removeStick"  title="取消置顶" 
+            href="javascript:" data-url="{{path('admin_groupThread_removeStick',{threadId:thread.id})}}"><span class="glyphicon glyphicon-remove-sign"></span> 取消置顶</a></li>
+
+            {% else %}
+            <li><a class="setStick"  title="置顶" 
+            href="javascript:" data-url="{{path('admin_groupThread_setStick',{threadId:thread.id})}}"><span class="glyphicon glyphicon-ok-sign"></span>  置顶</a></li>
+            
+            {% endif %}
+           
+            <li class="divider"></li>
+
+            {% if thread.status=='open' %}
+             <li><a href="javascript:" class="close-thread" title="关闭话题({{thread.title}})" data-url="{{path('admin_groupThread_close',{threadId:thread.id})}}"><span class="glyphicon glyphicon-off"></span> 关闭话题</a></li>
+
+            {% else %}
+            <li><a href="javascript:" class="open-thread" title="开启话题({{thread.title}})" data-url="{{path('admin_groupThread_open',{threadId:thread.id})}}"><span class="glyphicon glyphicon-ok"></span> 开启话题</a></li>
+
+             <li><a href="javascript:" class="delete-thread" title="永久删除话题({{thread.title}})" data-url="{{path('admin_groupThread_delete',{threadId:thread.id})}}"><span class="glyphicon glyphicon-trash"></span> 永久删除</a></li>
+
+            {% endif %}
+          </ul>
+        </div>
+  </td>
+</tr>

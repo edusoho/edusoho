@@ -266,6 +266,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $result['persistentId'];
     }
 
+    public function getMediaInfo($key, $mediaType) {
+        return $this->getCloudClient()->getMediaInfo($key, $mediaType);
+    }
+
     private function getFileFullName($file)
     {
         $diskDirectory= $this->getFilePath($file['targetType'],$file['targetId']);
@@ -366,6 +370,7 @@ class HLSVideoConvertor
 
         return $file;
     }
+
 }
 
 class HLSEncryptedVideoConvertor extends HLSVideoConvertor
