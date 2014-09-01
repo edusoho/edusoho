@@ -34,7 +34,6 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         $user=$this->getUserService()->getUser($userId);
 
         if($user['firstLogin']==1){
-            $this->getUserService()->changeFirstLogin($userId);
             return $this->httpUtils->createRedirectResponse($request, 'settings_first_password');
         }
         return parent::onAuthenticationSuccess($request, $token);
