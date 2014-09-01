@@ -51,9 +51,17 @@ class StudentController extends BaseController
     public function importAction(Request $request, $classId){
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
-            $numbers=explode(',', $formData['numbers']);
+            $formData['numbers'] = str_replace('，', ',', $formData['numbers']); 
+            $formData['numbers'] = str_replace("\n", ',', $formData['numbers']); 
+            $formData['numbers'] = str_replace("\rn", ',', $formData['numbers']); 
+            $formData['numbers'] = str_replace(' ', ',', $formData['numbers']); 
+            $numbers = explode(',', $formData['numbers']);
             $users=array();
             foreach ($numbers as $number) {
+                $number=trim($number);
+                if($number==''){
+                    continue;
+                }
                 $user=$this->getUserService()->getUserByNumber($number);
                 if(empty($user)){
                     return $this->createJsonResponse('学号'.$number.'对应的用户不存在！');
