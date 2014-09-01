@@ -18,7 +18,7 @@ class SchoolController extends BaseController
             $this->getLogService()->info('school', 'update_settings', "更新学校设置", $school);
             $this->setFlashMessage('success', '学校信息设置已保存！');
         }
-        
+
         $school = $this->getSettingService()->get('school', array());
 
         $default = array(
