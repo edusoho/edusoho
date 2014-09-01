@@ -27,6 +27,7 @@ class WebExtension extends \Twig_Extension
             'tags_html' => new \Twig_Filter_Method($this, 'tagsHtmlFilter', array('is_safe' => array('html'))),
             'file_size'  => new \Twig_Filter_Method($this, 'fileSizeFilter'),
             'plain_text' => new \Twig_Filter_Method($this, 'plainTextFilter', array('is_safe' => array('html'))),
+            'sub_text' => new \Twig_Filter_Method($this, 'subTextFilter', array('is_safe' => array('html'))),
             'duration'  => new \Twig_Filter_Method($this, 'durationFilter'),
             'tags_join' => new \Twig_Filter_Method($this, 'tagsJoinFilter'),
             'navigation_url' => new \Twig_Filter_Method($this, 'navigationUrlFilter'),
@@ -46,6 +47,8 @@ class WebExtension extends \Twig_Extension
             'file_uri_parse'  => new \Twig_Function_Method($this, 'parseFileUri'),
             // file_path即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
+            'default_path'  => new \Twig_Function_Method($this, 'getDefaultPath'),
+            'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,
@@ -55,10 +58,13 @@ class WebExtension extends \Twig_Extension
             'dict_text' => new \Twig_Function_Method($this, 'getDictText', array('is_safe' => array('html'))) ,
             'upload_max_filesize' => new \Twig_Function_Method($this, 'getUploadMaxFilesize') ,
             'js_paths' => new \Twig_Function_Method($this, 'getJsPaths'),
+            'is_plugin_installed' => new \Twig_Function_Method($this, 'isPluginInstaled'),
             'is_exist_in_subarray_by_id' => new \Twig_Function_Method($this, 'isExistInSubArrayById'),
             'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
+            'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
+            'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
         );
     }
@@ -81,6 +87,17 @@ class WebExtension extends \Twig_Extension
             return 'theme/global-script';
         }
         return '';
+    }
+
+    public function isPluginInstaled($name)
+    {
+        $plugins = $this->container->get('kernel')->getPlugins();
+        foreach ($plugins as $plugin) {
+            if (strtolower($name) == strtolower($plugin)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function getJsPaths()
@@ -125,6 +142,7 @@ class WebExtension extends \Twig_Extension
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
         return in_array($feature, $features);
     }
+
 
     public function getParameter($name, $default = null)
     {
@@ -204,6 +222,29 @@ class WebExtension extends \Twig_Extension
         }
 
         return round($remain / 86400) . '天';
+    }
+
+    public function getCountdownTime($value)
+    {
+        $countdown = array('days' => 0, 'hours' => 0, 'minutes' => 0, 'seconds' => 0);
+
+        $remain = $value - time();
+        if ($remain <=0 ) {
+            return $countdown;
+        }
+
+        $countdown['days'] = intval($remain / 86400);
+        $remain = $remain - 86400 * $countdown['days'];
+
+        $countdown['hours'] = intval($remain / 3600);
+        $remain = $remain - 3600 * $countdown['hours'];
+
+        $countdown['minutes'] = intval($remain / 60);
+        $remain = $remain - 60 * $countdown['minutes'];
+
+        $countdown['seconds'] = $remain;
+
+        return $countdown;
     }
 
     public function durationFilter($value)
@@ -344,6 +385,73 @@ class WebExtension extends \Twig_Extension
         }
     }
 
+    public function getDefaultPath($category, $uri="", $size = '', $absolute = false)
+    {
+        $assets = $this->container->get('templating.helper.assets');
+        $request = $this->container->get('request');
+        
+        if (empty($uri)) {
+            $publicUrlpath = 'assets/img/default/';
+            $url = $assets->getUrl($publicUrlpath . $size . $category);
+
+            $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
+
+            $key = 'default'.ucfirst($category);
+            $fileName = $key.'FileName';
+            if (array_key_exists($key, $defaultSetting) && array_key_exists($fileName, $defaultSetting)){
+                if ($defaultSetting[$key] == 1) {
+                    $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
+                    return $url;
+                } else {
+                    if ($absolute) {
+                        $url = $request->getSchemeAndHttpHost() . $url;
+                    }
+                   return $url;
+                }
+            } else {
+                return $url;
+            }
+        }
+
+        $uri = $this->parseFileUri($uri);
+        if ($uri['access'] == 'public') {
+            
+            $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri['path'];
+            $url = ltrim($url, ' /');
+            $url = $assets->getUrl($url);
+
+            if ($absolute) {
+                $url = $request->getSchemeAndHttpHost() . $url;
+            }
+
+            return $url;
+        }else{
+
+        }
+
+    }
+
+    public function getSystemDefaultPath($category,$systemDefault = false)
+    {
+        $assets = $this->container->get('templating.helper.assets');
+        $publicUrlpath = 'assets/img/default/';
+
+        $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
+
+        if($systemDefault && isset($defaultSetting)){
+            $fileName = 'default'.ucfirst($category).'FileName';
+            if (array_key_exists($fileName, $defaultSetting)) {
+                $url = $assets->getUrl($publicUrlpath .$defaultSetting[$fileName]);
+            } else {
+            $url = $assets->getUrl($publicUrlpath . $category);
+            }
+        } else {
+            $url = $assets->getUrl($publicUrlpath . $category);
+        }
+
+        return $url;
+    }
+
     public function getFileUrl($uri, $default = '', $absolute = false)
     {
         $assets = $this->container->get('templating.helper.assets');
@@ -411,6 +519,23 @@ class WebExtension extends \Twig_Extension
 
         $length = (int) $length;
         if ( ($length > 0) && (mb_strlen($text) > $length) )  {
+            $text = mb_substr($text, 0, $length, 'UTF-8');
+            $text .= '...';
+        }
+
+        return $text;
+    }
+
+    public function subTextFilter($text, $length = null)
+    {
+        $text = strip_tags($text);
+
+        $text = str_replace(array("\n", "\r", "\t") , '', $text);
+        $text = str_replace('&nbsp;' , ' ', $text);
+        $text = trim($text);
+
+        $length = (int) $length;
+        if ( ($length > 0) && (mb_strlen($text,'utf-8') > $length) )  {
             $text = mb_substr($text, 0, $length, 'UTF-8');
             $text .= '...';
         }
@@ -542,6 +667,26 @@ class WebExtension extends \Twig_Extension
         return 'topxia_web_twig';
     }
 
+    public function getFreeLimitType($course){
+        if(!empty($course['freeStartTime']) && !empty($course['freeEndTime'])) {
+            $startTime = $course['freeStartTime'];
+            $endTime = $course['freeEndTime'];
+            $now = time();
+
+            if($startTime > $now) {
+                return 'free_coming';//即将限免
+            } elseif ($endTime >= $now){
+                return 'free_now';//正在限免
+            } elseif ($endTime < $now){
+                return 'free_end';//限免结束
+            } else {
+                return 'no_free';
+            }
+        } else {
+            return 'no_free';
+        }
+    }
+    
     public function mb_trim($string, $charlist='\\\\s', $ltrim=true, $rtrim=true) 
     { 
         $both_ends = $ltrim && $rtrim; 

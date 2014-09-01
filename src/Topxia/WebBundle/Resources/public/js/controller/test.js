@@ -52,7 +52,6 @@ define(function(require, exports, module) {
     });
 
     uploader.on( 'uploadSuccess', function( file, response ) {
-        console.log(file, response);
         $( '#'+file.id ).find('p.state').text('已上传');
     });
 

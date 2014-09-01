@@ -19,10 +19,6 @@ class CourseLessonController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $user = $this->getCurrentUser();
 
-        if ($this->setting('course.freeCourses') == 0 && !$user->isLogin()) {
-            throw $this->createAccessDeniedException();
-        }
-        
         if (empty($lesson)) {
             throw $this->createNotFoundException();
         }
@@ -32,7 +28,15 @@ class CourseLessonController extends BaseController
         }
 
         if (empty($lesson['free'])) {
+            if (!$user->isLogin()) {
+                throw $this->createAccessDeniedException();
+            }
             return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
+        }else{
+            $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
+            if (empty($allowAnonymousPreview) && !$user->isLogin()) {
+                throw $this->createAccessDeniedException();
+            }
         }
 
         if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
@@ -43,7 +47,7 @@ class CourseLessonController extends BaseController
                 $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
 
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $token = $this->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
+                    $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lessonId, 'times' => 1, 'duration' => 3600));
                     $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                     $hls = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
                 } else {
@@ -51,8 +55,24 @@ class CourseLessonController extends BaseController
                 }
 
             }
-        }        
 
+        } else if ($lesson['mediaSource'] == 'youku') {
+            $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+            if ($matched) {
+                $lesson['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
+                $lesson['mediaSource'] = 'iframe';
+            } else {
+                $lesson['mediaUri'] = $lesson['mediaUri'];
+            }
+        } else if ($lesson['mediaSource'] == 'tudou'){
+            $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+            if ($matched) {
+                $lesson['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                $lesson['mediaSource'] = 'iframe';
+            } else {
+                $lesson['mediaUri'] = $lesson['mediaUri'];
+            }
+        }
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user' => $user,
             'course' => $course,
@@ -63,7 +83,8 @@ class CourseLessonController extends BaseController
 
     public function hlskeyurlAction(Request $request, $courseId, $lessonId, $token)
     {
-        if (!$this->getTokenService()->verifyToken('hlsvideo.view', $token)) {
+        $token = $this->getTokenService()->verifyToken('hlsvideo.view', $token);
+        if (empty($token)) {
             $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
             return new Response($fakeKey);
         }
@@ -72,6 +93,11 @@ class CourseLessonController extends BaseController
 
         if (empty($lesson)) {
             throw $this->createNotFoundException();
+        }
+
+        if ($token['data'] != $lesson['id']) {
+            $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
+            return new Response($fakeKey);
         }
 
         if (empty($lesson['mediaId'])) {
@@ -86,10 +112,6 @@ class CourseLessonController extends BaseController
         if (empty($file['convertParams']['hlsKey'])) {
             throw $this->createNotFoundException();
         }
-
-        // if (!$lesson['free']) {
-        //     list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-        // }
 
         return new Response($file['convertParams']['hlsKey']);
     }
@@ -131,6 +153,21 @@ class CourseLessonController extends BaseController
         $json['id'] = $lesson['id'];
         $json['courseId'] = $lesson['courseId'];
 
+        $json['isTeacher'] = $this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
+        if($lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated') {
+            $json['replays'] = $this->getCourseService()->getCourseLessonReplayByLessonId($lesson['id']);
+            if(!empty($json['replays'])) {
+                foreach ($json['replays'] as $key => $value) {
+                    $url = $this->generateUrl('live_course_lesson_replay_entry', array(
+                        'courseId' => $lesson['courseId'], 
+                        'lessonId' => $lesson['id'], 
+                        'courseLessonReplayId' => $value['id']
+                    ), true);
+                    $json['replays'][$key]["url"] = $url;
+                }
+            }
+        }
+
         if ($json['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
@@ -143,7 +180,7 @@ class CourseLessonController extends BaseController
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
+                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
                             $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                             $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
                         } else {
@@ -183,6 +220,23 @@ class CourseLessonController extends BaseController
                 } else if ($lesson['type'] == 'ppt') {
                     $json['mediaError'] = '抱歉，PPT文件不存在，暂时无法学习。';
                 }
+            }
+        } else if ($json['mediaSource'] == 'youku') {
+            $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+            if ($matched) {
+                $json['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
+                $json['mediaSource'] = 'iframe';
+            } else {
+                $json['mediaUri'] = $lesson['mediaUri'];
+            }
+
+        } else if ($json['mediaSource'] == 'tudou'){
+            $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+            if ($matched) {
+                $json['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                $json['mediaSource'] = 'iframe';
+            } else {
+                $json['mediaUri'] = $lesson['mediaUri'];
             }
         } else {
             $json['mediaUri'] = $lesson['mediaUri'];
@@ -224,9 +278,16 @@ class CourseLessonController extends BaseController
 
     public function pptAction(Request $request, $courseId, $lessonId)
     {
-        $this->getCourseService()->tryTakeCourse($courseId);
-
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$lesson['free']) {
+            $this->getCourseService()->tryTakeCourse($courseId);
+        }
+
         if ($lesson['type'] != 'ppt' or empty($lesson['mediaId'])) {
             throw $this->createNotFoundException();
         }

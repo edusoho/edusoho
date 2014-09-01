@@ -3,7 +3,7 @@
   {% for course in courses %}
     <li class="course-grid">
       <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
-        <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb">
+        <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb">
           {% if course.status == 'draft' %}
             <span class="label  label-warning course-status">未发布</span>
           {% elseif course.status == 'closed' %}
@@ -75,7 +75,7 @@
           {% set user = users[course.teacherIds|first]|default(null) %}
           {% if user %}
             <span class="teacher clearfix">
-              <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="thumb">
+              <img src="{{ default_path('avatar',user.smallAvatar, '') }}" class="thumb">
               <span class="nickname ellipsis">{{ user.nickname }}</span>
               <span class="user-title ellipsis">{{ user.title }}</span>
             </span>

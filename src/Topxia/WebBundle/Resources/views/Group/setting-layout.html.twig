@@ -1,0 +1,29 @@
+{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+
+{% block title %}小组设置 - {{ parent() }}{% endblock %}
+
+{% set settingNav = settingNav|default(null) %}
+
+{% set groupNav = 'setting' %}
+
+{% block group_body %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default panel-lg">
+      <div class="panel-heading"><h1>小组设置</h1></div>
+      <div class="panel-body">
+        <ul class="nav nav-pills mbl">
+          <li  {% if settingNav == 'info' %}class="active"{% endif %}><a href="{{path('group_set',{id:groupinfo.id})}}">编辑小组 </a></li>
+          <li {% if settingNav == 'logo' %}class="active"{% endif %}> <a  href="{{path('group_logo_set',{id:groupinfo.id})}}">图标设置</a></li>
+          <li {% if settingNav == 'background' %}class="active"{% endif %}>  <a  href="{{path('group_backgroundlogo_set',{id:groupinfo.id})}}">背景设置</a></li>
+        </ul>
+
+        {{ web_macro.flash_messages() }}
+        {% block group_setting_body %}{% endblock %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

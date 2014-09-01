@@ -20,6 +20,8 @@ define(function(require, exports, module) {
 			errormessageRequired: '请选择要上传的课程图片'
 		});
 
+		
+
 	};
 
 });

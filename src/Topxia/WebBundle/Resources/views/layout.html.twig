@@ -57,6 +57,8 @@
           {% endif %}
         </div>
         <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+      </ul>
           {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
 
           <ul class="nav navbar-nav navbar-right">
@@ -130,11 +132,9 @@
     </div>
   </div>
 
-  {% block contact %}{% endblock %}
   {% block bottom %}{% endblock %}
-
-  <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
-  <div id="modal" class="modal" loading-img="{{asset('assets/img/default/loading.gif')}}"></div>
+  <div id="login-modal" class="modal" data-url="/login/ajax"></div>
+<div id="modal" class="modal"></div>
 {% endblock %}
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}

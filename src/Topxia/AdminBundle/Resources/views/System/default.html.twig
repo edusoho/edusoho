@@ -1,0 +1,43 @@
+{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+{% block title %}系统默认设置 - {{ parent() }}{% endblock %}
+{% set submenu = 'default' %}
+{% set script_controller = 'setting/default' %}
+
+{% block maincontent %}
+<meta http-equiv="pragma" content="no-cache" />
+  {{ web_macro.flash_messages() }}
+
+  <div class="page-header"><h1>系统默认设置</h1></div>
+
+  <fieldset>
+    <legend>用户默认头像</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-8 radios" id="default-avatar" >
+        {{ radios('avatar', {1:'自定义默认头像', 0:'系统默认头像'}, defaultSetting.defaultAvatar) }}
+        <p>网校内未上传头像的用户，都会显示该默认头像</p>    
+        {% include 'TopxiaAdminBundle:System:default-avatar.html.twig' %}
+      </div>
+    </div>
+  </fieldset>
+
+{% if hasOwnCopyright %}
+
+  <fieldset>
+    <legend>课程默认图片</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-8 radios" id="defaultCoursePicture">
+        {{ radios('coursePicture', {1:'自定义默认课程图片', 0:'系统默认课程图片'}, defaultSetting.defaultCoursePicture) }}
+        <p>网校内未上传图片的课程，都会显示该图片</p>
+        {% include 'TopxiaAdminBundle:System:default-course-picture.html.twig' %}
+      </div>
+    </div>
+  </fieldset>
+{% endif %}
+
+  <div class="page-header" style="display:none;"><h1>分享内容</h1></div>
+<legend></legend>
+  {% include 'TopxiaAdminBundle:System:default-share-content.html.twig' %}
+
+{% endblock %}

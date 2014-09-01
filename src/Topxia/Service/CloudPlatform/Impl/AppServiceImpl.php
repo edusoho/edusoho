@@ -93,6 +93,11 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getAppLogDao()->findLogs($start, $limit);
     }
 
+    public function checkOwnCopyrightUser($id)
+    {
+        return $this->createAppClient()->checkOwnCopyrightUser($id);
+    }
+
     public function findLogCount()
     {
         return $this->getAppLogDao()->findLogCount();
@@ -457,6 +462,14 @@ class AppServiceImpl extends BaseService implements AppService
 
         $this->getAppDao()->deleteApp($app['id']);
 
+    }
+
+    public function updateAppVersion($code,$fromVersion,$version)
+    {
+        $this->getAppDao()->updateAppVersion($code,$version);
+        $this->getAppDao()->updateAppFromVersion($code,$fromVersion);
+        
+        return true;
     }
 
     private function _replaceFileForPackageUpdate($package, $packageDir)

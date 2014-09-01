@@ -82,7 +82,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$orderBy = array('recommendedSeq', 'ASC');
 		}elseif ($sort == 'createdTimeByAsc') {
 			$orderBy = array('createdTime', 'ASC');
-		} else {
+		}elseif($sort == 'freeNow'){
+			$orderBy =array('freeEndTime','ASC');
+		}elseif($sort == 'freeComing'){
+			$orderBy =array('freeStartTime','ASC');
+		}else {
 			$orderBy = array('createdTime', 'DESC');
 		}
 		
@@ -336,9 +340,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'endTime'  => 0,
 			'locationId' => 0,
 			'address' => '',
-			'maxStudentNum' => 0
+			'maxStudentNum' => 0,
+			'freeStartTime' => 0,
+			'freeEndTime' => 0
 		));
-
+		
 		if (!empty($fields['about'])) {
 			$fields['about'] = $this->purifyHtml($fields['about'],true);
 		}
@@ -458,6 +464,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getChapterDao()->deleteChaptersByCourseId($id);
 
 		$this->getCourseDao()->deleteCourse($id);
+
+		if($course["type"] == "live"){
+			$this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id);
+		}
 
 		$this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
 
@@ -598,6 +608,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getCourseLessons($courseId)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
+		return LessonSerialize::unserializes($lessons);
+	}
+
+	public function findLessonsByTypeAndMediaId($type, $mediaId)
+	{
+		$lessons = $this->getLessonDao()->findLessonsByTypeAndMediaId($type, $mediaId);
 		return LessonSerialize::unserializes($lessons);
 	}
 
@@ -808,7 +824,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 						$memberFields = array();
 						$memberFields['learnedNum'] = $this->getLessonLearnDao()->getLearnCountByUserIdAndCourseIdAndStatus($learn['userId'], $learn['courseId'], 'finished') - 1;
 						$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
-						// var_dump($member);exit();
 						$this->getMemberDao()->updateMember($member['id'], $memberFields);
 					}
 				}
@@ -1499,9 +1514,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if ($course['expiryDay'] > 0) {
+			//如果处在限免期，则deadline为限免结束时间 减 当前时间
 			$deadline = $course['expiryDay']*24*60*60 + time();
+
+			if($course['freeStartTime'] <= time() && $course['freeEndTime'] > time()){
+				if($course['freeEndTime'] < $deadline){
+					$deadline = $course['freeEndTime'];
+				}	
+			}
 		} else {
 			$deadline = 0;
+			//如果处在限免期，则deadline为限免结束时间 减 当前时间
+			if($course['freeStartTime'] <= time() && $course['freeEndTime'] > time()){
+				$deadline = $course['freeEndTime'];
+			}
 		}
 
 		if (!empty($info['orderId'])) {
@@ -1749,10 +1775,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("course, member参数不能为空");
 		}
 
+		/*
+		如果课程设置了限免时间，那么即使expiryDay为0，学员到了deadline也不能参加学习
 		if ($course['expiryDay'] == 0) {
 			return true;
 		}
-
+		*/
 		if ($member['deadline'] == 0) {
 			return true;
 		}
@@ -1881,6 +1909,58 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getAnnouncementDao()->deleteAnnouncement($id);
 	}
 	
+	public function generateLessonReplay($courseId,$lessonId)
+	{
+		$lesson = $this->getLessonDao()->getLesson($lessonId);
+		$mediaId = $lesson["mediaId"];
+		$client = LiveClientFactory::createClient();
+		$replayList = $client->createReplayList($mediaId, "录播回放");
+		if(array_key_exists("error", $replayList)){
+			return $replayList;
+		}
+		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
+		foreach ($replayList as $key => $replay) {
+			$fields = array();
+			$fields["courseId"] = $courseId;
+			$fields["lessonId"] = $lessonId;
+			$fields["title"] = $replay["subject"];
+			$fields["replayId"] = $replay["id"];
+			$fields["userId"] = $this->getCurrentUser()->id;
+			$fields["createdTime"] = time();
+			$this->getCourseLessonReplayDao()->addCourseLessonReplay($fields);
+		}
+		$fields = array(
+			"replayStatus" => "generated"
+		);
+		$this->getLessonDao()->updateLesson($lessonId, $fields);
+		return $replayList;
+	}
+
+	public function entryReplay($lessonId, $courseLessonReplayId)
+	{
+		$lesson = $this->getLessonDao()->getLesson($lessonId);
+		$mediaId = $lesson["mediaId"];
+		$client = LiveClientFactory::createClient();
+		$email = $this->getCurrentUser()->email;
+		$courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);
+		$url = $client->entryReplay($mediaId, $courseLessonReplay["replayId"]);
+		return $url;
+	}
+
+	public function getCourseLessonReplayByLessonId($lessonId)
+	{
+		return $this->getCourseLessonReplayDao()->getCourseLessonReplayByLessonId($lessonId);
+	}
+
+	public function deleteCourseLessonReplayByLessonId($lessonId)
+	{
+		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
+	}
+
+	private function getCourseLessonReplayDao()
+    {
+        return $this->createDao('Course.CourseLessonReplayDao');
+    }
 
     private function getAnnouncementDao()
     {

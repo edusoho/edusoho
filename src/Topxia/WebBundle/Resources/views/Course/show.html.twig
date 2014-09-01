@@ -3,9 +3,9 @@
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
 {%- block keywords -%}
-	{% if category %}{{ category.name }}{% endif %}
-	{% for tag in tags %}{{ tag.name }}{% endfor %}
-	{{ course.title }} {{ setting('site.name') }}
+  {% if category %}{{ category.name }}{% endif %}
+  {% for tag in tags %}{{ tag.name }}{% endfor %}
+  {{ course.title }} {{ setting('site.name') }}
 {%- endblock -%}
 {% block description %}{{ course.about|plain_text(150) }}{% endblock %}
 
@@ -16,26 +16,25 @@
 
 {% if member and member.locked %}
 <div class="row">
-	<div class="col-md-12">
-		<div class="mtl alert alert-warning">
-			您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。
-			<button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('course_order_cancel_refund', {id:course.id}) }}">取消退款，继续学习！</button>
-		</div>
-	</div>
+  <div class="col-md-12">
+    <div class="mtl alert alert-warning">
+      您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。
+      <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('course_order_cancel_refund', {id:course.id}) }}">取消退款，继续学习！</button>
+    </div>
+  </div>
 </div>
 {% endif %}
 
-
 {% if course.type == 'live' %}
 
-	{% include 'TopxiaWebBundle:Course:live-course.html.twig' %}
+  {% include 'TopxiaWebBundle:Course:live-course.html.twig' %}
 
 {% else %}
 <div class="es-row-wrap container-gap course-cover">
 
 	<div class="row row-5-7 course-cover-heading">
 		<div class="col-sm-5 picture hidden-xs">
-			<img src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" class="img-responsive" />
+			<img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
 		</div>
 		<div class="col-sm-7 info">
 			{% if is_granted('ROLE_ADMIN') %}
@@ -55,8 +54,15 @@
 				<p>
 					价　格：
 					{% if course.price > 0 %}
-						<span class="money-num">{{ course.price }}</span>
-						<span class="money-text">元</span>
+						{% if free_limit_type(course) == 'free_now' %}
+							<span class="money-num">0.00</span>
+							<span class="money-text">元</span>
+							<span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
+							<span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
+						{% else %}
+							<span class="money-num">{{ course.price }}</span>
+							<span class="money-text">元</span>
+						{% endif %}  
 					{% else %}
 						<span class="money-num" style="font-size:16px;">免费</span>
 					{% endif %}
@@ -93,7 +99,7 @@
 				<div class="pull-left">
 					{% if course.status != 'published' %}
 					{% else %}
-						<a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">{% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}</a>
+						<a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
 
 						{% if courseMemberLevel %}
 							{% if checkMemberLevelResult == 'not_login' %}
@@ -187,7 +193,7 @@
 			{% if course.goals %}
 				{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-goal-pane'} %}
 					{% block heading %}
-						<h3 class="panel-title">课时目标</h3>
+						<h3 class="panel-title">课程目标</h3>
 					{% endblock %}
 					{% block body %}
 						<ul class="media-list">
@@ -235,6 +241,7 @@
 				{% endblock %}
 			{% endembed %}
 
+
 			{% if courseReviews %}
 			{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-review-pane'} %}
 				{% block heading %}
@@ -267,19 +274,11 @@
 </div>
 {% endif %}
 </div>
-{% endblock %}
 
-{%  set contact = setting('contact') %}
-
-{% block contact %}
-{% if contact %}
-{% if contact.enabled == 1 %}
-{% include 'TopxiaWebBundle:ContactFloat:contact.html.twig'   with {contact:contact} %}
-{% endif %}
-{% endif %}
 {% endblock %}
 
 {% block bottom %}
 <div id="course-modal" class="modal"></div>
 <div id="course-edit-modal" class="modal"></div>
 {% endblock %}
+

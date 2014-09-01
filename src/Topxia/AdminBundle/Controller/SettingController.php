@@ -5,12 +5,19 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\File;
+
 use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\PluginUtil;
 use Topxia\Service\Util\CloudClientFactory;
+
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
 
 class SettingController extends BaseController
 {
@@ -365,6 +372,41 @@ class SettingController extends BaseController
         ));
     }
 
+    public function defaultAction(Request $request)
+    {
+        $defaultSetting = $this->getSettingService()->get('default', array());
+        $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
+
+        $default = array(
+            'defaultAvatar' => 0,
+            'defaultCoursePicture' => 0,
+            'defaultAvatarFileName' => 'avatar',
+            'defaultCoursePictureFileName' => 'coursePicture',
+            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+            'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+        );
+
+        $defaultSetting = array_merge($default, $defaultSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $defaultSetting = $request->request->all();
+            $default = $this->getSettingService()->get('default', array());
+            $defaultSetting = array_merge($default, $defaultSetting);
+
+            $this->getSettingService()->set('default', $defaultSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新系统默认设置", $defaultSetting);
+            $this->setFlashMessage('success', '系统默认设置已保存！');
+        }
+
+        $hasOwnCopyright = $this->getAppService()->checkOwnCopyrightUser($this->getCurrentUser()->id);
+        
+        return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
+            'defaultSetting' => $defaultSetting,
+            'hasOwnCopyright' => $hasOwnCopyright,
+        ));
+    }
+
     public function ipBlacklistAction(Request $request)
     {
         $ips = $this->getSettingService()->get('blacklist_ip', array());
@@ -578,10 +620,11 @@ class SettingController extends BaseController
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
             'teacher_manage_student' => '0',
+            'teacher_export_student'=>'0',
             'student_download_media' => '0',
             'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
-            'freeCourses' => '0',
+            'allowAnonymousPreview' => '1',
             'live_course_enabled' => '0',
             'userinfoFields'=>array(),
             "userinfoFieldNameArray"=>array(),
@@ -686,6 +729,31 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:developer-setting.html.twig', array(
             'developerSetting' => $developerSetting
         ));
+    }
+
+    public function modifyVersionAction(Request $request)
+    {
+        $fromVersion = $request->query->get('fromVersion');
+        $version = $request->query->get('version');
+        $code = $request->query->get('code');
+
+        if (empty($fromVersion) || empty($version) || empty($code)) {
+            exit('注意参数为:<br><br>code<br>fromVersion<br>version<br><br>全填，不能为空！');
+        }
+
+        $appCount = $this->getAppservice()->findAppCount();
+        $apps = $this->getAppservice()->findApps(0,$appCount);
+        $appsCodes = ArrayToolkit::column($apps,'code');
+
+        if (!in_array($code, $appsCodes)) {
+           exit('code 填写有问题！请检查!');
+        }
+
+        $fromVersionArray['fromVersion'] = $fromVersion;
+        $versionArray['version'] = $version;
+        $this->getAppservice()->updateAppVersion($code,$fromVersionArray,$versionArray);
+
+        return $this->redirect($this->generateUrl('admin_app_upgrades'));
     }
 
     public function userFieldsAction()
@@ -800,41 +868,44 @@ class SettingController extends BaseController
         return $this->redirect($this->generateUrl('admin_setting_user_fields')); 
     }
 
-    public function contactSettingAction(Request $request)
+    public function consultSettingAction(Request $request)
     { 
-        $contact = $this->getSettingService()->get('contact', array());
+        $consult = $this->getSettingService()->get('consult', array());
         $default = array(
-            'enabled'=>0,
-            'title'=>'马上咨询',
-            'worktime'=>'9:00 - 17:00',
-            'qq1'=>'',
-            'qq2'=>'',
-            'qq3'=>'',
-            'qqgroup1'=>'',
-            'qqgroup2'=>'',
-            'qqgroup3'=>'',
-            'hotline1'=>'',
-            'hotline2'=>'',
-            'hotline3'=>'',
-            'webchat'=>'',
+            'enabled' => 0,
+            'worktime' => '9:00 - 17:00',
+            'qq' => array(
+                array('name' => '','number' => ''),
+                ),
+            'qqgroup' => array(
+                array('name' => '','number' => ''),
+                ),
+            'phone' => array(
+                array('name' => '','number' => ''),
+                ),
             'webchatURI' => '',
-            'email'=>'',
+            'email' => '',
+            'color' => 'default',
             );
-        $contact = array_merge($default, $contact);
+
+        $consult = array_merge($default, $consult);
         if ($request->getMethod() == 'POST') {
-            $contact = $request->request->all();
-            $this->getSettingService()->set('contact', $contact);
-            $this->getLogService()->info('system', 'update_settings', "更新QQ客服设置", $contact);
+            $consult = $request->request->all();
+            ksort($consult['qq']);
+            ksort($consult['qqgroup']);
+            ksort($consult['phone']);
+            $this->getSettingService()->set('consult', $consult);
+            $this->getLogService()->info('system', 'update_settings', "更新QQ客服设置", $consult);
             $this->setFlashMessage('success', 'QQ客服设置已保存！');
         }
-        return $this->render('TopxiaAdminBundle:System:contact-setting.html.twig', array(
-            'contact' => $contact,
+        return $this->render('TopxiaAdminBundle:System:consult-setting.html.twig', array(
+            'consult' => $consult,
         ));
     }
 
-    public function contactUploadAction(Request $request)
+    public function consultUploadAction(Request $request)
     {
-        $file = $request->files->get('contact');
+        $file = $request->files->get('consult');
         if (!FileToolkit::isImageFile($file)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
@@ -844,18 +915,18 @@ class SettingController extends BaseController
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
-        $contact = $this->getSettingService()->get('contact', array());
+        $consult = $this->getSettingService()->get('consult', array());
 
-        $contact['webchatURI'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
-        $contact['webchatURI'] = ltrim($contact['webchatURI'], '/');
+        $consult['webchatURI'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $consult['webchatURI'] = ltrim($consult['webchatURI'], '/');
 
-        $this->getSettingService()->set('contact', $contact);
+        $this->getSettingService()->set('consult', $consult);
 
-        $this->getLogService()->info('system', 'update_settings', "更新微信二维码", array('webchatURI' => $contact['webchatURI']));
+        $this->getLogService()->info('system', 'update_settings', "更新微信二维码", array('webchatURI' => $consult['webchatURI']));
 
         $response = array(
-            'path' => $contact['webchatURI'],
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($contact['webchatURI']),
+            'path' => $consult['webchatURI'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($consult['webchatURI']),
         );
 
         return new Response(json_encode($response));
@@ -881,5 +952,4 @@ class SettingController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }
-
 }

@@ -31,6 +31,11 @@
         {{ uploadFile.filename }}
       {% endif %}
     {% endif %}
+
+    {% if setting('developer.debug') and uploadFile.convertParams.convertor|default(null) %}
+      <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换(调试模式)</a>
+    {% endif %}
+
   </td>
   <td> 
     {{ dict_text('fileType', uploadFile.type) }}

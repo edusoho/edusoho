@@ -125,6 +125,51 @@ class EdusohoCloudClient implements CloudClient
         return json_decode($content, true);
     }
 
+    public function generateHLSEncryptedListUrl($convertParams, $videos, $hlsKeyUrl, $duration = 3600)
+    {
+
+        $types = array('sd', 'hd', 'shd');
+        $names = array('sd' => '标清', 'hd' => '高清', 'shd' => '超清');
+
+        $bandwidths = array();
+        foreach ($convertParams['video'] as $index => $videoBandwidth) {
+            $type = $types[$index];
+            $bandwidths[$type] = (intval($videoBandwidth) + intval($convertParams['audio'][$index])) * 1024; 
+        }
+
+        $items = array();
+        foreach (array('sd', 'hd', 'shd') as $type) {
+            if (!isset($videos[$type])) {
+                continue;
+            }
+
+            $items[] = array(
+                'name' => $names[$type],
+                'bandwidth' => $bandwidths[$type],
+                'key' => $videos[$type]['key'],
+            );
+        }
+
+        $onceToken = $this->makeToken('hlslist.view', array('once' => false, 'duration' => 3600));
+
+        $args = array(
+            'items' => $items,
+            'hlsKeyUrl' => $hlsKeyUrl,
+            '_once' => $onceToken['token'],
+        );
+
+        $httpParams = array();
+        $httpParams['accessKey'] = $this->accessKey;
+        $httpParams['args'] = $this->urlsafeBase64Encode(json_encode($args));
+        $httpParams['encode'] = 'base64';
+        $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
+
+        $url = $this->apiServer . '/api.m3u8?action=HLSEncryptedList';
+        $url = $url . '&' . http_build_query($httpParams);
+
+        return array('url' => $url);
+    }    
+
     public function generateHLSQualitiyListUrl($videos, $duration = 3600)
     {
         $url = $this->apiServer . '/api.m3u8?action=HLSQualitiyList';
@@ -233,6 +278,9 @@ class EdusohoCloudClient implements CloudClient
 
     }
 
+    /**
+     * 即将废除
+     */
     public function deleteFiles(array $keys, array $prefixs = array())
     {
         $args = array();
@@ -244,6 +292,38 @@ class EdusohoCloudClient implements CloudClient
         return $this->callRemoteApi('POST', 'FileDelete', $args);
     }
 
+    public function deleteFilesByKeys($storageType, array $keys)
+    {
+        $args = array();
+        $args['storageType'] = $storageType;
+        $args['keys'] = $keys;
+        return $this->callRemoteApiWithBase64('POST', 'FilesDeleteByKeys', $args);
+    }
+
+    public function deleteFilesByPrefixs($storageType, array $prefixs)
+    {
+        $args = array();
+        $args['storageType'] = $storageType;
+        $args['prefixs'] = $prefixs;
+        return $this->callRemoteApiWithBase64('POST', 'FilesDeleteByPrefixs', $args);
+    }
+
+    public function moveFiles(array $files)
+    {
+        $args = array();
+        $args['moves'] = $files;
+        return $this->callRemoteApiWithBase64('POST', 'FileMove', $args);
+    }
+
+    public function makeToken($type, array $tokenArgs = array())
+    {
+        $args = array();
+        $args['type'] = $type;
+        $args['args'] = $tokenArgs;
+
+        return $this->callRemoteApiWithBase64('POST', 'MakeToken', $args);
+    }
+
     protected function callRemoteApi($httpMethod, $action, array $args)
     {
         $url = $this->makeApiUrl($action);
@@ -252,7 +332,6 @@ class EdusohoCloudClient implements CloudClient
         $httpParams['accessKey'] = $this->accessKey;
         $httpParams['args'] = $args;
         $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
-
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
 
         return json_decode($result, true);
@@ -341,6 +420,20 @@ class EdusohoCloudClient implements CloudClient
         $args['key'] = $key;
         $args['length'] = $length;
         return $this->callRemoteApi('GET', 'PPTImages', $args);
+    }
+
+    public function getMediaInfo($key, $mediaType)
+    {
+        $args = array();
+        $args['key'] = $key;
+        if($mediaType == "video"){
+            $args["storageType"]="public";
+        }
+        if($mediaType == "audio"){
+            $args["storageType"]="private";
+        }
+        $args['duration'] = "3600";
+        return json_decode($this->callRemoteApi('GET', 'GetMediaInfo', $args), true);
     }
 
     private function generateViewToken($bucket, $key)

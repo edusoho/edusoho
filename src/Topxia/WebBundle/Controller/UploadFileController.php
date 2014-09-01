@@ -81,33 +81,6 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($file);
     }
 
-    public function cloudFileinfoAction(Request $request)
-    {
-        $type = $request->query->get('type', '');
-        $key = $request->query->get('key', '');
-
-        if (empty($key)) {
-            return $this->createNotFoundException();
-        }
-
-        $factory = new CloudClientFactory();
-        $client = $factory->createClient();
-
-        if ($type == 'video') {
-            $info = $client->getVideoInfo($client->getBucket(), $key);
-        } else if ($type == 'audio') {
-            $info = $client->getAudioInfo($client->getBucket(), $key);
-        } else {
-            $info = array();
-        }
-
-        if (!empty($info['duration'])) {
-            $info['duration'] = StringToolkit::secondsToText($info['duration']);
-        }
-
-        return $this->createJsonResponse($info);
-    }
-
     public function cloudConvertCallback2Action(Request $request)
     {
         $result = $request->getContent();
@@ -148,6 +121,39 @@ class UploadFileController extends BaseController
 
         return $this->createJsonResponse($file['metas2']);
     }
+
+    public function cloudConvertCallback3Action(Request $request)
+    {
+        $result = $request->getContent();
+
+        $result = preg_replace_callback(
+          "(\\\\x([0-9a-f]{2}))i",
+          function($a) {return chr(hexdec($a[1]));},
+          $result
+        );
+
+        $this->getLogService()->info('uploadfile', 'cloud_convert_callback3', "文件云处理回调", array('result' => $result));
+        $result = json_decode($result, true);
+        $result = array_merge($request->query->all(), $result);
+        if (empty($result['id'])) {
+            throw new \RuntimeException('数据中id不能为空');
+        }
+
+        if ($result['code'] != 0) {
+            $this->getLogService()->error('uploadfile', 'cloud_convert_error', "文件云处理失败", array('result' => $result));
+            return $this->createJsonResponse(true);
+        }
+
+        $file = $this->getUploadFileService()->getFileByConvertHash($result['id']);
+        if (empty($file)) {
+            $this->getLogService()->error('uploadfile', 'cloud_convert_error', "文件云处理失败，文件记录不存在", array('result' => $result));
+            throw new \RuntimeException('文件不存在');
+        }
+
+        $file = $this->getUploadFileService()->saveConvertResult3($file['id'], $result);
+
+        return $this->createJsonResponse($file['metas2']);
+    }    
 
     public function cloudConvertCallbackAction(Request $request)
     {
@@ -201,6 +207,13 @@ class UploadFileController extends BaseController
         }
 
         return $this->createJsonResponse($file['metas2']);
+    }
+
+    public function getMediaInfoAction(Request $request, $type)
+    {
+        $key = $request->query->get('key');
+        $info = $this->getUploadFileService()->getMediaInfo($key, $type);
+        return $this->createJsonResponse($info['format']['duration']);
     }
 
     private function getUploadFileService()

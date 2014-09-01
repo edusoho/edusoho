@@ -1,0 +1,55 @@
+<li class="item-lesson clearfix" id="lesson-{{ lesson.id }}">
+	<div class="item-line"></div>
+	<div class="item-content">
+	  {% set mediaStatus = lesson.mediaStatus|default(null) %}
+		
+		{% if lesson.type in ['video', 'live'] %}
+		  {% if mediaStatus == 'waiting' %}
+			<span class="glyphicon glyphicon-facetime-video text-warning"></span>
+		  {% elseif mediaStatus == 'doing' %}
+			<span class="glyphicon glyphicon-facetime-video text-info"></span>
+		  {% elseif mediaStatus == 'error' %}
+			<span class="glyphicon glyphicon-facetime-video text-danger"></span>
+		  {% else %}
+			<span class="glyphicon glyphicon-facetime-video text-success"></span>
+		  {% endif %}
+		{% endif %}
+
+		课时 <span class="number">{{ lesson.number }}</span>： {{ lesson.title }}
+
+		{% if lesson.type in ['live'] %}
+		  <span class="text-muted">{{ lesson.startTime|data_format }}</span>
+		{% endif %}
+
+		{% if lesson.status == 'unpublished' %}
+		  <span class="text-warning">(未发布)</span>
+		{% endif %}
+
+		{% if lesson.status == 'published' and not lesson.isEnd %}
+		  <span class="text-warning">(直播未结束)</span>
+		{% endif %}
+
+		{% if lesson.status == 'published' and lesson.isEnd and lesson.type == 'live' and lesson.replayStatus == 'ungenerated' %}
+		  <span class="text-warning">(未录制回放)</span>
+		{% elseif lesson.status == 'published' and lesson.isEnd and lesson.type == 'live' and lesson.replayStatus == 'generated' %}
+		  <span class="text-warning">(已录制回放)</span>
+		{% endif %}
+
+	</div>
+
+	<div class="item-actions prs">
+		<a class="btn btn-link" title="预览" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
+	{% if lesson.status == 'published' and lesson.replayStatus == 'ungenerated' and lesson.type == 'live' and lesson.isEnd %}
+		<button class="btn btn-link replay-lesson-btn" 
+		{% if lesson.replayStatus == 'ungenerated' %}
+		title="录制"
+		{% else %}
+		title="重新录制"
+		{% endif %}
+		 data-url="{{ path('live_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-facetime-video"></span></button>
+	{% endif %}
+
+
+	 
+	</div>
+</li>

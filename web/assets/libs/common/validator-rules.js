@@ -23,6 +23,19 @@ define(function(require, exports, module) {
             'not_all_digital',
             /(^(?![^0-9a-zA-Z]+$))(?![0-9]+$).+/,
             '{{display}}不能全为数字'
+        ], 
+        [
+            'visible_character',
+            function(options) {
+                var element = options.element  ;
+                if ($.trim(element.val()).length <= 0 )
+                { 
+                    return false
+                } else {
+                    return true;
+                }
+            },
+            '{{display}}请输入可见性字符'
         ],
         [
             'chinese',
@@ -173,7 +186,7 @@ define(function(require, exports, module) {
                     return true;
                 }
             },
-            '{{display}}必须小于5M'
+            '{{display}}必须小于2M'
         ],
         [
             'remote',

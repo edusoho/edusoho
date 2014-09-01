@@ -36,6 +36,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['ext'] = pathinfo($uploadFile['filename'], PATHINFO_EXTENSION);
         $uploadFile['size'] = (int) $fileInfo['size'];
         $uploadFile['etag'] = empty($fileInfo['etag']) ? '' : $fileInfo['etag'];
+        $uploadFile['length'] = empty($fileInfo['length']) ? 0 : intval($fileInfo['length']);
 
         $uploadFile['metas'] = $this->encodeMetas(empty($fileInfo['metas']) ? array() : $fileInfo['metas']);    
         $uploadFile['metas2'] = $this->encodeMetas(empty($fileInfo['metas2']) ? array() : $fileInfo['metas2']);    
@@ -166,15 +167,28 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $keyPrefixs = array();
 
         if ($deleteSubFile) {
-            foreach (array('sd', 'hd', 'shd') as $key) {
+            foreach (array('sd', 'hd', 'shd', 'pdf') as $key) {
                 if (empty($file['metas2'][$key]) or empty($file['metas2'][$key]['key'])) {
                     continue ;
                 }
+
+                // 防错
+                if (strlen($file['metas2'][$key]['key']) < 5) {
+                    continue;
+                }
+
                 $keyPrefixs[] = $file['metas2'][$key]['key'];
             }
         }
 
-        $this->getCloudClient()->deleteFiles($keys, $keyPrefixs);
+        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
+            $this->getCloudClient()->deleteFilesByKeys('private', $keys);
+            $this->getCloudClient()->deleteFilesByPrefixs('public', $keyPrefixs);
+        } else {
+            $this->getCloudClient()->deleteFilesByKeys('private', $keys);
+            $this->getCloudClient()->deleteFilesByPrefixs('private', $keyPrefixs);
+        }
+
     }
 
     public function makeUploadParams($rawParams)
@@ -227,7 +241,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $params;
     }
 
-    public function reconvertFile($file, $convertCallback)
+    public function reconvertFile($file, $convertCallback, $pipeline = null)
     {
         if (empty($file['convertParams'])) {
             return null;
@@ -239,6 +253,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'convertParams' => $file['convertParams'],
         );
 
+        if ($pipeline) {
+            $params['pipeline'] = $pipeline;
+        }
+
         $result = $this->getCloudClient()->reconvertFile($file['hashId'], $params);
 
         if (empty($result['persistentId'])) {
@@ -246,6 +264,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
 
         return $result['persistentId'];
+    }
+
+    public function getMediaInfo($key, $mediaType) {
+        return $this->getCloudClient()->getMediaInfo($key, $mediaType);
     }
 
     private function getFileFullName($file)
@@ -303,9 +325,9 @@ class HLSVideoConvertor
 
     protected $config = array();
 
-
     public function __construct($client, $config)
     {
+        $this->client = $client;
         $this->config = $config[self::NAME];
     }
 
@@ -325,7 +347,6 @@ class HLSVideoConvertor
             'video' => $videoDefinitions,
             'audio' => $audioDefinitions,
         );
-
     }
 
     public function saveConvertResult($file, $result)
@@ -349,6 +370,46 @@ class HLSVideoConvertor
 
         return $file;
     }
+
+}
+
+class HLSEncryptedVideoConvertor extends HLSVideoConvertor
+{
+    public function getCovertParams($params)
+    {
+        $params = parent::getCovertParams($params);
+        $params['convertor'] = 'HLSEncryptedVideo';
+        $params['hlsKeyUrl'] = 'http://hlskey.edusoho.net/placeholder';
+        $params['hlsKey'] = $this->generateKey(16);
+        return $params;
+    }
+
+    public function saveConvertResult($file, $result)
+    {
+        $file = parent::saveConvertResult($file, $result);
+
+        $moves = array(
+            array("public:{$file['hashId']}", "private:{$file['hashId']}")
+        );
+        $result = $this->client->moveFiles($moves);
+
+        $file['metas2']['protectSourceFile'] = empty($result['success_count']) ? 0 : $result['success_count'];
+
+        return $file;
+    }
+
+    private function generateKey ($length = 0 )
+    {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+        $key = '';
+        for ( $i = 0; $i < 16; $i++ ) {
+            $key .= $chars[ mt_rand(0, strlen($chars) - 1) ];
+        }
+        
+        return $key;
+    }
+
 }
 
 class AudioConvertor

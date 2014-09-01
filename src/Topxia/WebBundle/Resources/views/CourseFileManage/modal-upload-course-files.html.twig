@@ -20,7 +20,10 @@
 	<div id="file-uploader-container" 
     class="mbl" 
     data-target-type="{{targetType}}" 
-    data-upload-mode="{{ storageSetting.upload_mode }}" >
+    data-upload-mode="{{ storageSetting.upload_mode }}"
+    data-hls-encrypted="{{ setting('developer.hls_encrypted', 1) }}"
+
+    >
 	
      <div
       id="file-chooser-uploader-div"
@@ -29,7 +32,6 @@
       data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
       {% if storageSetting.upload_mode == 'cloud' %}
         data-callback="{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}"
-        data-fileinfo-url="{{ path('uploadfile_cloud_fileinfo') }}"
       {% endif %}
      ></div>
 	

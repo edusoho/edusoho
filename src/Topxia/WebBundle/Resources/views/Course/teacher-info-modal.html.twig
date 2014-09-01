@@ -5,7 +5,7 @@
 
 <div class="row teacher-profile-card">
   <div class="col-md-4">
-    <img class="img-responsive" src="{{ file_path(user.largeAvatar, 'avatar-large.png') }}">
+    <img class="img-responsive" src="{{ default_path('avatar',user.largeAvatar, 'large') }}">
     {% if user.id != app.user.id %}
       <div class="actions">
         <button class="btn btn-primary btn-sm btn-block follow-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>

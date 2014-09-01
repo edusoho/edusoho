@@ -12,12 +12,11 @@
     </a>
   </li>
 
-{# 暂时去掉 by wenqin 2014/8/12 
-  <li class="{% if submenu == 'contact_setting' %}active{% endif %}">
-    <a href="{{ url('admin_setting_contact_setting') }}">客服设置
+  <li class="{% if submenu == 'consult_setting' %}active{% endif %}">
+    <a href="{{ url('admin_setting_consult_setting') }}">客服设置
     </a>
   </li>
-#}
+
   <li class="{% if submenu == 'payment' %}active{% endif %}">
   	<a href="{{ url('admin_setting_payment') }}">支付方式
   	</a>
@@ -36,6 +35,10 @@
   <li class="{% if submenu == 'refund' %}active{% endif %}">
   	<a href="{{ url('admin_setting_refund') }}">退款设置
   	</a>
+  </li>
+   <li class="{% if submenu == 'default' %}active{% endif %}">
+    <a href="{{ url('admin_setting_default') }}">系统默认设置
+    </a>
   </li>
 
   <li class="{% if submenu == 'customer_service' %}active{% endif %}" style="display:none;">

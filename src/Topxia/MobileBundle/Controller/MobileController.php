@@ -11,6 +11,7 @@ use Topxia\Common\ArrayToolkit;
 class MobileController extends BaseController
 {
     const TOKEN_TYPE = 'mobile_login';
+    const MOBILE_MODULE = "mobile";
 
     protected $result = array();
 
@@ -24,6 +25,46 @@ class MobileController extends BaseController
         return $this->createJson($request, $result);
     }
 
+    public function mobileSchoolLoginAction(Request $request)
+    {
+        if ($request->getMethod() == "POST"){
+            $parames = $request->request->all();
+        } else {
+            $parames = $request->query->all();
+        }
+
+        $this->getLogService()->info(MobileController::MOBILE_MODULE, "school_login", "网校登录",  $parames);
+
+        return $this->createJson($request, null);
+    }
+
+    public function mobileDeviceRegistAction(Request $request)
+    {
+        $result = false;
+        $parames = array();
+        $parames["imei"] = $this->getPostParam($request, "imei",  "");
+        $parames["platform"] = $this->getPostParam($request, "platform",  "");
+        $parames["version"] = $this->getPostParam($request, "version",  "");
+        $parames["screenresolution"] = $this->getPostParam($request, "screenresolution",  "");
+        $parames["kernel"] = $this->getPostParam($request, "kernel",  "");
+
+        if (empty($parames["imei"]) || empty($parames["platform"])) {
+            return $this->createErrorResponse($request, "info_error", "串号或平台版本不能为空!");
+        }
+        if ($this->getMobileDeviceService()->addMobileDevice($parames)) {
+            $result = true;
+        }
+        
+        $this->getLogService()->info(MobileController::MOBILE_MODULE, "regist_device", "注册客户端",  $parames);
+        return $this->createJson($request, $result);
+    }
+
+    protected function getPostParam($request, $name, $default = null)
+    {
+        $result = $request->request->get($name);
+        return $result ? $result : $default;
+    }
+    
     public function notifyMobileVersionAction(Request $request)
     {
         return new JsonResponse("success");
@@ -158,6 +199,11 @@ class MobileController extends BaseController
     {
         $error = array('error' => array('name' => $name, 'message' => $message));
         return $this->createJson($request, $error);
+    }
+
+    protected function getMobileDeviceService()
+    {
+        return $this->getServiceKernel()->createService('Util.MobileDeviceService');
     }
 
 }

@@ -30,7 +30,6 @@ class CourseController extends BaseController
 
 
 		$sort = $request->query->get('sort', 'latest');
-
 		$conditions = array(
 			'status' => 'published',
 			'type' => 'normal',
@@ -63,6 +62,8 @@ class CourseController extends BaseController
 			'sort' => $sort,
 			'paginator' => $paginator,
 			'categories' => $categories,
+			'consultDisplay' => true,
+
 		));
 	}
 
@@ -240,7 +241,7 @@ class CourseController extends BaseController
 		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
 		$this->getCourseService()->hitCourse($id);
-	
+
 		$member = $this->previewAsMember($previewAs, $member, $course);
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
@@ -284,7 +285,8 @@ class CourseController extends BaseController
 			'nextLiveLesson' => $nextLiveLesson,
 			'currentTime' => $currentTime,
 			'courseReviews' => $courseReviews,
-			'weeks' => $weeks
+			'weeks' => $weeks,
+			'consultDisplay' => true,
 		));
 
 	}
@@ -535,6 +537,18 @@ class CourseController extends BaseController
 
 		$users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
 
+        $defaultSetting = $this->getSettingService()->get('default', array());
+
+        if (isset($defaultSetting['courseShareContent'])){
+            $courseShareContent = $defaultSetting['courseShareContent'];
+        } else {
+        	$courseShareContent = "";
+        }
+
+        $valuesToBeReplace = array('{{course}}');
+        $valuesToReplace = array($course['title']);
+        $courseShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $courseShareContent);
+
 		if (empty($member)) {
 			$member['deadline'] = 0; 
 			$member['levelId'] = 0;
@@ -548,7 +562,6 @@ class CourseController extends BaseController
 			$vipChecked = 'ok';
 		}
 
-
 		return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
 			'course' => $course,
 			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
@@ -557,6 +570,7 @@ class CourseController extends BaseController
 			'manage' => $manage,
 			'isNonExpired' => $isNonExpired,
 			'vipChecked' => $vipChecked,
+			'courseShareContent' => $courseShareContent,
 			'isAdmin' => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
 		));
 	}
@@ -625,6 +639,15 @@ class CourseController extends BaseController
 		));
 	}
 
+	public function rebuyAction(Request $request,$courseId)
+	{
+		$user = $this->getCurrentUser();
+
+		$this->getCourseService()->removeStudent($courseId, $user['id']);
+
+		return $this->redirect($this->generateUrl('course_show',array('id' => $courseId)));
+	}
+	
 	private function createCourseForm()
 	{
 		return $this->createNamedFormBuilder('course')
@@ -671,5 +694,10 @@ class CourseController extends BaseController
 	{
 		return $this->getServiceKernel()->createService('Course.ReviewService');
 	}
+
+	private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 
 }

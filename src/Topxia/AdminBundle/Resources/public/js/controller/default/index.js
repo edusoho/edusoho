@@ -45,22 +45,9 @@ define(function(require, exports, module) {
             $('#onlineNum').html("当前在线："+res.onlineCount+"人");
         });
 
-        // setInterval(function(){
-        //         $.post($('#onlineNum').data('url'),function(res){
-        //             $('#onlineNum').html("当前在线："+res.onlineCount+"人");
-        //         });
-        // }, 1000*60*10);
-
-        // $.post($('#loginNum').data('url'),function(res){
-        //     $('#loginNum').html("登陆人数："+res.loginCount+"人");
-        // });
-
-        // setInterval(function(){
-        //         $.post($('#loginNum').data('url'),function(res){
-        //             $('#loginNum').html("登陆人数："+res.loginCount+"人");
-        //         });
-        // }, 1000*60*10);
-
+        $.post($('#loginNum').data('url'),function(res){
+            $('#loginNum').html("登录人数："+res.loginCount+"人");
+        });
     };
 
 });

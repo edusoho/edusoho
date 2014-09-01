@@ -25,6 +25,11 @@ interface AppService
     public function findLogCount();
 
     /**
+     * 是否是去版权用户
+     */
+    public function checkOwnCopyrightUser($id);
+
+    /**
      * 是否存在需要回滚的升级
      */
     public function hasLastErrorForPackageUpdate($packageId);
@@ -64,5 +69,7 @@ interface AppService
     public function repairProblem($token);
 
     public function uninstallApp($code);
+
+    public function updateAppVersion($code,$fromVersion,$version);
 
 }

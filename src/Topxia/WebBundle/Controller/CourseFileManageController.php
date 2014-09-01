@@ -148,6 +148,7 @@ class CourseFileManageController extends BaseController
         $response->trustXSendfileTypeHeader();
 
         $file['filename'] = urlencode($file['filename']);
+        $file['filename'] = str_replace('+', '%20', $file['filename']);
         if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
             $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
         } else {

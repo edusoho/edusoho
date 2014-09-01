@@ -48,7 +48,6 @@ define(function(require, exports, module) {
                     var id = '#' + $(html).attr('id'),
                     $item = $(id);
                     var $parent = $('#'+$form.data('parentid'));
-                    console.log($parent);
                     if ($item.length) {
                         $item.replaceWith(html);
                         Notify.success('课时已保存');
@@ -192,7 +191,8 @@ define(function(require, exports, module) {
         });
      
         $("[name=startTime]").datetimepicker({
-            language: 'zh-CN'
+            language: 'zh-CN',
+            autoclose:true
         }).on('hide', function(ev){
             validator.query('[name=startTime]').execute();
         });
