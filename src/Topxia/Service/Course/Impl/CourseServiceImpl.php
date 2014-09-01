@@ -284,7 +284,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course['tags'] = !empty($course['tags']) ? $course['tags'] : '';
 		$course['userId'] = $this->getCurrentUser()->id;
 		$course['createdTime'] = time();
-		$course['teacherIds'] = array($course['userId']);
+		//$course['teacherIds'] = array($course['userId']);
 		$course = $this->getCourseDao()->addCourse(CourseSerialize::serialize($course));
 		
 		$member = array(
