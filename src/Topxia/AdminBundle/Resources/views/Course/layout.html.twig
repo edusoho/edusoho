@@ -11,10 +11,10 @@
         <a href="{{ path('admin_live_course', {status: 'underway'}) }}" class="list-group-item {% if menu == 'live-course' %}active{% endif %}">直播管理</a>
         {% endif %}
         <a href="{{ path('admin_course_recommend_list') }}" class="list-group-item {% if menu == 'course-recommend-list' %}active{% endif %}">推荐课程列表</a>
-
+    {#     hidden this by wenqin
         <a href="{{ url('admin_course_order_manage') }}" class="list-group-item {% if menu == 'order' %}active{% endif %}">订单管理</a>
 
-        <a href="{{ url('admin_order_refunds', {status:'created'}) }}" class="list-group-item {% if menu == 'refunds' %}active{% endif %}">退款管理</a>
+        <a href="{{ url('admin_order_refunds', {status:'created'}) }}" class="list-group-item {% if menu == 'refunds' %}active{% endif %}">退款管理</a> #}
 
         <a href="{{ path('admin_review') }}" class="list-group-item {% if menu == 'review' %}active{% endif %}">评价管理</a>
 
