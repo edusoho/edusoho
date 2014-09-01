@@ -391,7 +391,7 @@ class WebExtension extends \Twig_Extension
         $request = $this->container->get('request');
         
         if (empty($uri)) {
-            $publicUrlpath = 'assets/img/default/';
+            $publicUrlpath = 'files/system/';
             $url = $assets->getUrl($publicUrlpath . $size . $category);
 
             $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
@@ -406,10 +406,10 @@ class WebExtension extends \Twig_Extension
                     if ($absolute) {
                         $url = $request->getSchemeAndHttpHost() . $url;
                     }
-                   return $url;
+                   return $assets->getUrl("assets/img/default/" . $size . $category);
                 }
             } else {
-                return $url;
+                return $assets->getUrl("assets/img/default/" . $size . $category);
             }
         }
 
@@ -434,7 +434,7 @@ class WebExtension extends \Twig_Extension
     public function getSystemDefaultPath($category,$systemDefault = false)
     {
         $assets = $this->container->get('templating.helper.assets');
-        $publicUrlpath = 'assets/img/default/';
+        $publicUrlpath = 'files/system/';
 
         $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
 
@@ -443,10 +443,10 @@ class WebExtension extends \Twig_Extension
             if (array_key_exists($fileName, $defaultSetting)) {
                 $url = $assets->getUrl($publicUrlpath .$defaultSetting[$fileName]);
             } else {
-            $url = $assets->getUrl($publicUrlpath . $category);
+            $url = $assets->getUrl("assets/img/default/" . $category);
             }
         } else {
-            $url = $assets->getUrl($publicUrlpath . $category);
+            $url = $assets->getUrl("assets/img/default/" . $category);
         }
 
         return $url;
