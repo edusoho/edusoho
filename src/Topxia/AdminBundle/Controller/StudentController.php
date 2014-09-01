@@ -74,7 +74,7 @@ class StudentController extends BaseController
             foreach ($users as $user) {
                 $classMember['classId']=$classId;
                 $classMember['userId']=$user['id'];
-                $classMember['role']='student';
+                $classMember['role']='STUDENT';
                 $classMember['title']='';
                 $classMember['createdTime']=time();
                 $this->getClassMemberService()->addClassMember($classMember);
