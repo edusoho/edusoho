@@ -41,12 +41,12 @@ class K12DefaultController extends BaseController
             $passwords = $request->request->all();
             $this->getAuthService()->changePassword($user['id'], null, $passwords['newPassword']);
             $this->setFlashMessage('success', '密码修改成功。');
+            $this->getUserService()->changeFirstLogin($user['id']);
             return $this->redirect($this->generateUrl('homepage'));
         }
         if($user['firstLogin']!=1){
              throw $this->createAccessDeniedException("不是首登陆,请去账号设置处修改密码");
         }
-        $this->getUserService()->changeFirstLogin($user['id']);
         return $this->render('TopxiaWebBundle:K12Default:change-password.html.twig',array(
             'user'=>$user
         ));
