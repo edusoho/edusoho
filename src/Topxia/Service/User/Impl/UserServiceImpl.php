@@ -85,7 +85,8 @@ class UserServiceImpl extends BaseService implements UserService
         if (empty($number)) {
             return null;
         }
-        return $this->getUserDao()->getUserByNumber($number);
+        $user=$this->getUserDao()->getUserByNumber($number);
+        return UserSerialize::unserialize($user);
     }
 
     public function setEmailVerified($userId)
