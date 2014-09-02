@@ -75,10 +75,22 @@ class UserController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function numberCheckAction(Request $request)
+    {
+        $number = $request->query->get('value');
+        $user=$this->getUserService()->getUserByNumber($number);
+        if(empty($user)){
+            $response = array('success' => true, 'message' => '该学号可以使用');
+        }else{
+            $response = array('success' => false, 'message' => array('error_duplicate', '学号/工号已存在!'));
+        }
+        return $this->createJsonResponse($response);
+    }
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
+            $userData['number'] = $formData['number'];
             $userData['email'] = $formData['email'];
             $userData['nickname'] = $formData['nickname'];
             $userData['password'] = $formData['password'];

@@ -184,6 +184,15 @@ class UserServiceImpl extends BaseService implements UserService
         return empty($user) ? true : false;
     }
 
+    public function isNumberAvaliable($number)
+    {
+        if (empty($nickname)) {
+            return false;
+        }
+        $user = $this->getUserDao()->getUserByNumber($number);
+        return empty($user) ? true : false;
+    }
+
     public function isEmailAvaliable($email)
     {
         if (empty($email)) {
@@ -236,6 +245,9 @@ class UserServiceImpl extends BaseService implements UserService
         if (!SimpleValidator::nickname($registration['nickname'])) {
             throw $this->createServiceException('nickname error!');
         }
+        if(!$this->isNumberAvaliable($registration['number'])){
+            throw $this->createServiceException('学号/工号已存在');
+        }
 
         if (!$this->isEmailAvaliable($registration['email'])) {
             throw $this->createServiceException('Email已存在');
@@ -246,6 +258,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $user = array();
+        $user['number'] =$registration['number'];
         $user['email'] = $registration['email'];
         $user['nickname'] = $registration['nickname'];
         $user['roles'] =  array('ROLE_USER');
