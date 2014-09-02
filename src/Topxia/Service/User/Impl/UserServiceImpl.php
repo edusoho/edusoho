@@ -188,7 +188,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function isNumberAvaliable($number)
     {
         if (empty($number)) {
-            return false;
+            throw $this->createServiceException('参数不正确。');
         }
         $user = $this->getUserDao()->getUserByNumber($number);
         return empty($user) ? true : false;

@@ -22,7 +22,11 @@
               {% endfor %}
             </div>
           {% else %}
-            {{ class_name(cl) }}（{{cl.year}}届）<br/>
+            {% if cl %}
+              {{ class_name(cl) }}（{{cl.year}}届）<br/>
+            {% else %}
+              尚未加入任何班级<br/>
+            {% endif %}
             学号：{{user.number}}
           {% endif %}
 
