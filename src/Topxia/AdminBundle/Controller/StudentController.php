@@ -53,7 +53,7 @@ class StudentController extends BaseController
             $formData = $request->request->all();
             $formData['numbers'] = str_replace('，', ',', $formData['numbers']); 
             $formData['numbers'] = str_replace("\n", ',', $formData['numbers']); 
-            $formData['numbers'] = str_replace("\rn", ',', $formData['numbers']); 
+            $formData['numbers'] = str_replace("\r", ',', $formData['numbers']); 
             $formData['numbers'] = str_replace(' ', ',', $formData['numbers']); 
             $numbers = explode(',', $formData['numbers']);
             $users=array();

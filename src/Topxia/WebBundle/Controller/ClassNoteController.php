@@ -22,22 +22,30 @@ class ClassNoteController extends BaseController
             0,
             PHP_INT_MAX
         );
-        $conditions = array(
-            'status'=>1,
-            'userIds'=>ArrayToolkit::column($classMembers, 'userId')
-        );
+        $notes=array();
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getNoteService()->searchNoteCount($conditions),
+            0,
             20
-        );
+        ); 
+        if(count($classMembers)>0){
+            $conditions = array(
+                'status'=>1,
+                'userIds'=>ArrayToolkit::column($classMembers, 'userId')
+            );
+            $paginator = new Paginator(
+                $this->get('request'),
+                $this->getNoteService()->searchNoteCount($conditions),
+                20
+            );
 
-        $notes=$this->getNoteService()->searchNotes(
-            $conditions,
-            'created',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+            $notes=$this->getNoteService()->searchNotes(
+                $conditions,
+                'created',
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $userProfiles=$this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($notes, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($notes, 'courseId'));
