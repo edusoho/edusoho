@@ -29,7 +29,8 @@ define(function(require, exports, module) {
         });
         validator.addItem({
             element: '[name="number"]',
-            required: true
+            required: true,
+            rule: 'remote'
         });
 
         validator.addItem({

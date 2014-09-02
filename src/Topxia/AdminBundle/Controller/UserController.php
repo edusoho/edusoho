@@ -82,7 +82,7 @@ class UserController extends BaseController
         if(empty($user)){
             $response = array('success' => true, 'message' => '该学号可以使用');
         }else{
-            $response = array('success' => false, 'message' => array('error_duplicate', '学号/工号已存在!'));
+            $response = array('success' => false, 'message' => '学号/工号已存在!');
         }
         return $this->createJsonResponse($response);
     }
