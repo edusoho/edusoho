@@ -111,37 +111,30 @@ class ClassThreadController extends ClassBaseController
         ));
     }
 
-    public function editAction(Request $request, $courseId, $id)
+    public function editAction(Request $request, $classId, $threadId)
     {
-        $class = $this->tryViewClass($classId);
-        
-        $thread = $this->getThreadService()->getThread($courseId, $id);
+        $thread = $this->getThreadService()->getThread($threadId);
         if (empty($thread)) {
             throw $this->createNotFoundException();
         }
 
         $user = $this->getCurrentUser();
-        if ($user->isLogin() and $user->id == $thread['userId']) {
-            $course = $this->getCourseService()->getCourse($courseId);
+        if ($user['id'] != $thread['userId']) {
+            $class = $this->tryManageClass($classId);
         } else {
-            $course = $this->getCourseService()->tryManageCourse($courseId);
+            $class = $this->getClassService()->getClass($classId);
         }
 
-        $form = $this->createThreadForm($thread);
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $thread = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
-                return $this->redirect($this->generateUrl('course_thread_show', array(
-                   'courseId' => $thread['courseId'],
-                   'id' => $thread['id'], 
-                )));
-            }
+            $thread = $this->getThreadService()->updateThread($thread['id'], $request->request->all());
+            return $this->redirect($this->generateUrl('class_thread_show', array(
+               'classId' => $thread['classId'],
+               'threadId' => $thread['id'], 
+            )));
         }
 
-        return $this->render("TopxiaWebBundle:CourseThread:form.html.twig", array(
-            'form' => $form->createView(),
-            'course' => $course,
+        return $this->render("TopxiaWebBundle:ClassThread:thread-form.html.twig", array(
+            'class' => $class,
             'thread' => $thread,
             'type' => $thread['type'],
         ));
@@ -217,47 +210,41 @@ class ClassThreadController extends ClassBaseController
         ));
     }
 
-    public function editPostAction(Request $request, $courseId, $threadId, $id)
+    public function editPostAction(Request $request, $classId, $threadId, $postId)
     {
-        $post = $this->getThreadService()->getPost($courseId, $id);
+        $post = $this->getThreadService()->getPost($postId);
         if (empty($post)) {
             throw $this->createNotFoundException();
         }
 
         $user = $this->getCurrentUser();
-        if ($user->isLogin() and $user->id == $post['userId']) {
-            $course = $this->getCourseService()->getCourse($courseId);
+        if ($user['id'] != $post['userId']) {
+            $class = $this->tryManageClass($classId);
         } else {
-            $course = $this->getCourseService()->tryManageCourse($courseId);
+            $class = $this->getClassService()->getClass($classId);
         }
 
-        $thread = $this->getThreadService()->getThread($courseId, $threadId);
-
-        $form = $this->createPostForm($post);
+        $thread = $this->getThreadService()->getThread($threadId);
 
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $post = $this->getThreadService()->updatePost($post['courseId'], $post['id'], $form->getData());
-                return $this->redirect($this->generateUrl('course_thread_show', array(
-                    'courseId' => $post['courseId'],
-                    'id' => $post['threadId']
-                )));
-            }
+            $post = $this->getThreadService()->updatePost($post['id'], $request->request->all());
+            return $this->redirect($this->generateUrl('class_thread_show', array(
+                'classId' => $post['classId'],
+                'threadId' => $post['threadId']
+            )));
         }
 
-        return $this->render('TopxiaWebBundle:CourseThread:post-form.html.twig', array(
-            'course' => $course,
-            'form' => $form->createView(),
+        return $this->render('TopxiaWebBundle:ClassThread:post-edit.html.twig', array(
+            'class' => $class,
             'post' => $post,
             'thread' => $thread,
         ));
 
     }
 
-    public function deletePostAction(Request $request, $courseId, $threadId, $id)
+    public function deletePostAction(Request $request, $classId, $threadId, $postId)
     {
-        $this->getThreadService()->deletePost($courseId, $id);
+        $this->getThreadService()->deletePost($postId);
         return $this->createJsonResponse(true);
     }
 
