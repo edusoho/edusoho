@@ -28,6 +28,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
+	public function findCoursesByClassId($classId)
+	{
+		return $this->getCourseDao()->findCoursesByClassId($classId);
+	}
 	public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
 	{
 		$courses = CourseSerialize::unserializes(
@@ -2053,6 +2057,18 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		return CourseSerialize::unserialize($newCourse);
 	}
+
+	public function classHasCourse($classId, $parentId)
+	{
+		$course = $this->getCourseDao()
+			->findCourseByClassIdAndParentId($classId, $parentId);
+		if (!empty($course)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	private function getCourseLessonReplayDao()
     {
         return $this->createDao('Course.CourseLessonReplayDao');

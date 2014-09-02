@@ -30,4 +30,8 @@ interface CourseDao
 
     public function analysisCourseDataByTime($startTime,$endTime);
 
+    public function findCourseByClassIdAndParentId($classId, $parentId);
+
+    public function findCoursesByClassId($classId);
+
 }

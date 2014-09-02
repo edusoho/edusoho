@@ -303,7 +303,13 @@ interface CourseService
 	public function deleteCourseLessonReplayByLessonId($lessonId);
 
 	/**
-	*复制课程
+	*K12 API
 	*/
+
+	//复制课程
 	public function copyCourseForClass($parentId, $classId, $compulsory, $teacherId);
+	//课程已添加
+	public function classHasCourse($classId, $parentId);
+
+	public function findCoursesByClassId($classId);
 }

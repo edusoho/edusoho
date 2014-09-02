@@ -144,21 +144,29 @@ class SchoolController extends BaseController
     {
         if($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            $this->getCourseService()->copyCourseForClass(
-                $fields['parentId'],
-                $classId,
-                $fields['compulsory'],
-                $fields['teacherId']);
+            $hasCourse = $this->getCourseService()->classHasCourse($classId, $fields['parentId']);
+            if ($hasCourse) {
+                throw $this->createNotFoundException("已经添加该课程");
+            } else {
+                $this->getCourseService()->copyCourseForClass(
+                    $fields['parentId'],
+                    $classId,
+                    $fields['compulsory'],
+                    $fields['teacherId']);
+            }
 
             return new Response(json_encode("success"));
         }
 
         $class = $request->query->all();
         $class['classId'] = $classId;
+        $classCourses = $this->getCourseService()->findCoursesByClassId($classId);
+        $excludeIds = ArrayToolkit::column($classCourses, 'parentId');
         $conditions =array(
             'parentId' => 0,
             'gradeId' => $class['gradeId'],
-            'public' => $class['public']
+            'public' => $class['public'],
+            'excludeIds' => $excludeIds
         );
 
         $paginator = new Paginator(
