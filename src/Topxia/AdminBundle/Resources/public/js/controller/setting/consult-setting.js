@@ -17,7 +17,7 @@ define(function(require, exports, module) {
             },
             success: function(response) {
                 response = $.parseJSON(response);
-                $("#consult-container").html('<img src="' + response.url + '">');
+                $("#consult-container").html('<img src="' + response.url + '?'+ (new Date()).getTime() + '">');
                 $form.find('[name=webchatURI]').val(response.path);
                 Notify.success('上传微信二维码成功！');
             }
