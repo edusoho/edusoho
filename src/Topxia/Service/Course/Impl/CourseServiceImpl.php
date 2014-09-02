@@ -318,7 +318,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
 		$fields = CourseSerialize::serialize($fields);
-
+		
 		return CourseSerialize::unserialize(
 			$this->getCourseDao()->updateCourse($id, $fields)
 		);
@@ -357,9 +357,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'term' => 'first',
 			'gradeId' => 0,
 			'freeStartTime' => 0,
-			'freeEndTime' => 0
+			'freeEndTime' => 0,
+			'compulsory' => 0
 		));
-		
 		if (!empty($fields['about'])) {
 			$fields['about'] = $this->purifyHtml($fields['about'],true);
 		}

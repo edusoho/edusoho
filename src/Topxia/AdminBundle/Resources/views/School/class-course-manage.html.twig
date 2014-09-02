@@ -54,8 +54,10 @@
         选修
         {% endif %}
       </span>
-      
-      <a class="btn btn-link pull-right" href="{{ path('admin_school_class_course_remove', {classId:class.id, courseId:course.id}) }}">移除</a>
+      <div class="pull-right">
+        <button class="btn btn-link" data-toggle="modal" data-target="#modal"  data-url="{{ path('admin_school_class_course_edit', {classId:class.id, courseId:course.id}) }}">编辑</button>
+        <a class="btn btn-link" href="{{ path('admin_school_class_course_remove', {classId:class.id, courseId:course.id}) }}">移除</a>
+      </div>
     </div>
   </div>
   {% endfor %}
