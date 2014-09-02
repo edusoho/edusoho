@@ -63,7 +63,7 @@ class StudentController extends BaseController
                     continue;
                 }
                 $user=$this->getUserService()->getUserByNumber($number);
-                if(empty($user)){
+                if(empty($user) || in_array('ROLE_TEACHER', $user['roles'])){
                     return $this->createJsonResponse('学号'.$number.'对应的用户不存在！');
                 }
                 $conditions=array(
