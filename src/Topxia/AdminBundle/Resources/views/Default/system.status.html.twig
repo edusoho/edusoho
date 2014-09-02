@@ -18,7 +18,7 @@
         <tr><td>直播</td><td>{% if setting("course").live_course_enabled==1 %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已开通{% else %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还未开通<a class="pull-right" href="{{path("admin_setting_course_setting")}}">查看</a>
       {% endif %}</td></tr>
 
-        <tr><td>移动客户端</td><td>{% if setting("mobile").enabled==1 %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已启用{% else %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还未启用<a class="pull-right" href="{{path("admin_setting_mobile")}}">查看</a>
+        <tr><td>移动客户端</td><td>{% if setting("mobile").enabled|default(null) %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已启用{% else %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还未启用<a class="pull-right" href="{{path("admin_setting_mobile")}}">查看</a>
       {% endif %}</td></tr>
 
 </table>

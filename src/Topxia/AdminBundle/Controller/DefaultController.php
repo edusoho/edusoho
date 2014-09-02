@@ -62,7 +62,7 @@ class DefaultController extends BaseController
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
 
         $unInstallAppCount=count($appsAll)-count($installedApps);
-
+print_r($apps);
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig',array(
             "apps"=>$apps,
             "app_count"=>count($apps),
