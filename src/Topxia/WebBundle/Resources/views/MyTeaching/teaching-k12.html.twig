@@ -51,7 +51,7 @@
         
             {% for course in results[class.id] %}
             <div class="mbs">
-              <span>{{ course.title }}</span>
+              <a href="{{ path('course_show',{id:course.id}) }}"><span>{{ course.title }}</span></a>
               <div class="btn-group">
                 <a class="btn btn-default btn-xs" href="{{ path('course_manage', {id:course.id}) }}">管理</a>
                 <a href="#" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
