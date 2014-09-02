@@ -3,12 +3,12 @@
 <li id="post-{{ post.id }}" class="thread-post media clearfix">
   {{ web_macro.user_avatar(author, 'pull-left media-object') }}
 
-  {% if isManager or app.user.id == author.id %}
+  {% if hasManagePermission or app.user.id == author.id %}
   <div class="thread-post-dropdown">
     <a href="javascript:" class="dropdown-toggle text-muted" data-toggle="dropdown"><i class="glyphicon glyphicon-collapse-down"></i></a>
     <ul class="dropdown-menu pull-right">
       <li><a href="{{ path('class_thread_post_edit', {classId:post.classId, threadId:post.threadId, postId:post.id}) }}"><i class="glyphicon glyphicon-edit"></i> 编辑</a></li>
-      {% if isManager %}
+      {% if hasManagePermission %}
         <li><a href="javascript:" data-action="post-delete" data-url="{{ path('class_thread_post_delete', {classId:post.classId, threadId:post.threadId, postId:post.id}) }}" data-for="#post-{{ post.id }}"><i class="glyphicon glyphicon-remove"></i> 删除</a></li>
       {% endif %}
     </ul>
