@@ -81,7 +81,6 @@ class ClassThreadController extends ClassBaseController
             'posts' => $posts,
             'elitePosts' => $elitePosts,
             'users' => $users,
-            'isManager' => true,    // todo
             'paginator' => $paginator,
         ));
     }
@@ -113,6 +112,7 @@ class ClassThreadController extends ClassBaseController
 
     public function editAction(Request $request, $classId, $threadId)
     {
+        
         $thread = $this->getThreadService()->getThread($threadId);
         if (empty($thread)) {
             throw $this->createNotFoundException();
@@ -120,7 +120,7 @@ class ClassThreadController extends ClassBaseController
 
         $user = $this->getCurrentUser();
         if ($user['id'] != $thread['userId']) {
-            $class = $this->tryManageClass($classId);
+            $class=  $this->tryManageClass($classId);
         } else {
             $class = $this->getClassService()->getClass($classId);
         }
@@ -153,6 +153,7 @@ class ClassThreadController extends ClassBaseController
 
     public function deleteAction(Request $request, $classId, $threadId)
     {
+        $this->tryManageClass($classId);
         $this->getThreadService()->deleteThread($threadId);
         return $this->createJsonResponse(true);
     }
@@ -199,7 +200,6 @@ class ClassThreadController extends ClassBaseController
                 'thread' => $thread,
                 'post' => $post,
                 'author' => $this->getUserService()->getUser($post['userId']),
-                'isManager' => true // @todo
             ));
 
         }
@@ -244,6 +244,7 @@ class ClassThreadController extends ClassBaseController
 
     public function deletePostAction(Request $request, $classId, $threadId, $postId)
     {
+        $this->tryManageClass($classId);
         $this->getThreadService()->deletePost($postId);
         return $this->createJsonResponse(true);
     }

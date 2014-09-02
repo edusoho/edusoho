@@ -1,9 +1,11 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
+{% set hasManagePermission = check_class_permission('manage', class) %}
+
 <li id="post-{{ post.id }}" class="thread-post media clearfix">
   {{ web_macro.user_avatar(author, 'pull-left media-object') }}
 
-  {% if hasManagePermission or app.user.id == author.id %}
+  {% if hasManagePermission or app.user.id == post.userId %}
   <div class="thread-post-dropdown">
     <a href="javascript:" class="dropdown-toggle text-muted" data-toggle="dropdown"><i class="glyphicon glyphicon-collapse-down"></i></a>
     <ul class="dropdown-menu pull-right">
