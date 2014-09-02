@@ -17,7 +17,7 @@
         <tr>
           <td width="40%">
             <a class="pull-left" href="{{ path('class_show',{ classId: manageClass.id })}}">
-              <img src="{{ file_path(manageClass.icon, 'class.png') }}" alt="{{ manageClass.name }}" class="class-picture">
+              <img src="{{ file_url(manageClass.icon, 'class.png') }}" alt="{{ manageClass.name }}" class="class-picture">
             </a>
             <a href="{{ path('class_show',{ classId: manageClass.id })}}" class="btn-link pull-left">{{ class_name(manageClass) }}</a>
           </td>
@@ -40,7 +40,7 @@
         <tr>
           <td width="40%">
             <a class="pull-left" href="{{ path('class_show',{ classId: class.id })}}">
-              <img src="{{ file_path(class.icon, 'class.png') }}" alt="{{ class.name }}" class="pull-left class-picture" >
+              <img src="{{ file_url(class.icon, 'class.png') }}" alt="{{ class.name }}" class="pull-left class-picture" >
             </a>
             <a href="{{ path('class_show',{ classId: class.id })}}" class="btn-link pull-left">{{ class_name(class) }}</a>
           </td>
@@ -51,7 +51,7 @@
         
             {% for course in results[class.id] %}
             <div class="mbs">
-              <span>{{ course.title }}</span>
+              <a href="{{ path('course_show',{id:course.id}) }}"><span>{{ course.title }}</span></a>
               <div class="btn-group">
                 <a class="btn btn-default btn-xs" href="{{ path('course_manage', {id:course.id}) }}">管理</a>
                 <a href="#" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">

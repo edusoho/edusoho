@@ -50,7 +50,7 @@
       <label>首页图片</label>
     </div>
     <div class="col-md-8 controls">
-      <div id="school-homepage-container">{% if school.homepagePicture %}<img src="{{ asset(school.homepagePicture) }}" style="max-width:400px;">{% endif %}</div>
+      <div id="school-homepage-container">{% if school.homepagePicture %}<img src="{{ file_url(school.homepagePicture) }}" style="max-width:400px;">{% endif %}</div>
       <button class="btn btn-default" id="school-homepage-upload" type="button" data-url="{{ path('admin_school_homepage_upload') }}">上传</button>
       <p class="help-block">
         请上传png, jpg, gif格式的图片文件。推荐尺寸比例：600px * 400px。</p>

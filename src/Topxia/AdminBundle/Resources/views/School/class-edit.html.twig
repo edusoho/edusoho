@@ -80,7 +80,7 @@
     <div class="col-md-7 controls">
       <div id="icon-container">
         {% if class.icon %}
-        <img src="{{ asset(class.icon) }}" >
+        <img src="{{ file_url(class.icon) }}" >
         {% endif %}
       </div>
       <button class="btn btn-default" id="school-class-icon-upload" type="button" data-url="{{ path('admin_school_class_icon_upload') }}">上传</button>
@@ -97,7 +97,7 @@
       <div class="col-md-8 controls">
         <div id="backgroudImg-container">
           {% if class.backgroundImg %}
-          <img src="{{ asset(class.backgroundImg) }}" >
+          <img src="{{ file_url(class.backgroundImg) }}" >
           {% endif %}
         </div>
         <button class="btn btn-default" id="school-class-backgroundImg-upload" type="button" data-url="{{ path('admin_school_class_backgroundImg_upload') }}">上传</button>
