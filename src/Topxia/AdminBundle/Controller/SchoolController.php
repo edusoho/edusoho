@@ -206,16 +206,18 @@ class SchoolController extends BaseController
 
         $school = $this->getSettingService()->get('school', array());
 
-        $school['homepagePicture'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/school/{$filename}";
-        $school['homepagePicture'] = ltrim($school['homepagePicture'], '/');
+
+        $path = "school/{$filename}";
+        $url = $this->container->getParameter('topxia.upload.public_url_path') .  '/' . $path;
+
+        $school['homepagePicture'] = $path;
 
         $this->getSettingService()->set('school', $school);
-
         $this->getLogService()->info('school', 'update_settings', "更新学校首页图片", array('homepagePicture' => $school['homepagePicture']));
 
         $response = array(
-            'path' => $school['homepagePicture'],
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($school['homepagePicture']),
+            'path' => $path,
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($url),
         );
 
         return new Response(json_encode($response));
@@ -228,17 +230,17 @@ class SchoolController extends BaseController
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $filename = 'class-icon_' . time() . '.' . $file->getClientOriginalExtension();
+        $filename = time() . '.' . $file->getClientOriginalExtension();
         
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/school/class";
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/school/class/icon";
         $file = $file->move($directory, $filename);
 
-        $path = "{$this->container->getParameter('topxia.upload.public_url_path')}/school/class/{$filename}";
-        $path = ltrim($path, '/');
-
+        $path = "school/class/icon/{$filename}";
+        $url = $this->container->getParameter('topxia.upload.public_url_path') .  '/' . $path;
+        
         $response = array(
             'path' => $path,
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($path),
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($url),
         );
 
         return new Response(json_encode($response));
@@ -251,17 +253,16 @@ class SchoolController extends BaseController
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $filename = 'class-backgroundImg_' . time() . '.' . $file->getClientOriginalExtension();
+        $filename = time() . '.' . $file->getClientOriginalExtension();
         
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/school/class";
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/school/class/backgroundImg";
         $file = $file->move($directory, $filename);
 
-        $path = "{$this->container->getParameter('topxia.upload.public_url_path')}/school/class/{$filename}";
-        $path = ltrim($path, '/');
-
+        $path = "school/class/backgroundImg/{$filename}";
+        $url = $this->container->getParameter('topxia.upload.public_url_path') .  '/' . $path;
         $response = array(
             'path' => $path,
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($path),
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($url),
         );
 
         return new Response(json_encode($response));

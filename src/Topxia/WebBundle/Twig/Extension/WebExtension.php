@@ -519,7 +519,6 @@ class WebExtension extends \Twig_Extension
         if ($absolute) {
             $url = $request->getSchemeAndHttpHost() . $url;
         }
-
         return $url;
     }
 
