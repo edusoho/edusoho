@@ -214,7 +214,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
 
         $token = $this->context->getToken();
 
-        if (empty($token) or ($token instanceof AnonymousToken) or empty($token->getUser())) {
+        if (empty($token) or ($token instanceof AnonymousToken) or !$token->getUser()) {
             $userId = 0;
         } else {
             $userId = $token->getUser()->getId();
