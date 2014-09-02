@@ -6,6 +6,14 @@
 {% block body %}
 
 <form id="user-create-form" class="form-horizontal" method="post" action="{{ path('admin_user_create')}}">
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="number">学号/工号</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="number" data-url="{{path('admin_user_create_number_check')}}" name="number" class="form-control" >
+    </div>
+  </div>
 
   <div class="row form-group">
     <div class="col-md-2 control-label">
@@ -21,7 +29,7 @@
       <label for="nickname">用户名</label>
     </div>
     <div class="col-md-7 controls">
-      <input type="text" id="nickname" name="nickname" data-url="{{path('admin_user_create_nickname_check')}}" class="form-control" >
+      <input type="text" id="nickname" name="nickname" data-url="{{path('admin_user_create_nickname_check')}}" class="form-control" value="">
     </div>
   </div>
 
@@ -30,7 +38,7 @@
       <label for="password">密码</label>
     </div>
       <div class="col-md-7 controls">
-        <input type="password" id="password" name="password" class="form-control">
+        <input type="password" id="password" name="password" class="form-control" value="">
       <p class="help-block">5-20位英文、数字、符号，区分大小写</p>
     </div>
   </div>
