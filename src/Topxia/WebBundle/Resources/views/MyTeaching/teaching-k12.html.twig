@@ -17,7 +17,7 @@
         <tr>
           <td>
             <a class="pull-left" href="{{ path('class_show',{ classId: manageClass.id })}}">
-              <img src="{{ asset(manageClass.icon) }}" alt="{{ manageClass.name }}" style="width: 140px; height: 78px;">
+              <img src="{{ file_path(manageClass.icon, 'class.png') }}" alt="{{ manageClass.name }}" style="width: 140px; height: 78px;">
             </a>
           </td>
           <td> 
@@ -41,7 +41,7 @@
         <tr>
           <td>
             <a class="pull-left" href="{{ path('class_show',{ classId: class.id })}}">
-              <img src="{{ asset(class.icon) }}" alt="{{ class.name }}" style="width: 140px; height: 78px;">
+              <img src="{{ file_path(class.icon, 'class.png') }}" alt="{{ class.name }}" style="width: 140px; height: 78px;">
             </a>
           </td>
           <td> 
