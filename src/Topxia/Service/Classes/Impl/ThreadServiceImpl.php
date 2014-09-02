@@ -151,23 +151,23 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $thread;
 	}
 
-	public function updateThread($courseId, $threadId, $fields)
+	public function updateThread($threadId, $fields)
 	{
-		$thread = $this->getThread($courseId, $threadId);
+		$thread = $this->getThread($threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException('话题不存在，更新失败！');
 		}
 
 		$user = $this->getCurrentUser();
-		($user->isLogin() and $user->id == $thread['userId']) or $this->getCourseService()->tryManageCourse($courseId);
 
 		$fields = ArrayToolkit::parts($fields, array('title', 'content'));
+
 		if (empty($fields)) {
 			throw $this->createServiceException('参数缺失，更新失败。');
 		}
 
-		//更新thread过滤html
 		$fields['content'] = $this->purifyHtml($fields['content']);
+
 		return $this->getThreadDao()->updateThread($threadId, $fields);
 	}
 

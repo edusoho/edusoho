@@ -111,37 +111,30 @@ class ClassThreadController extends ClassBaseController
         ));
     }
 
-    public function editAction(Request $request, $courseId, $id)
+    public function editAction(Request $request, $classId, $threadId)
     {
-        $class = $this->tryViewClass($classId);
-        
-        $thread = $this->getThreadService()->getThread($courseId, $id);
+        $thread = $this->getThreadService()->getThread($threadId);
         if (empty($thread)) {
             throw $this->createNotFoundException();
         }
 
         $user = $this->getCurrentUser();
-        if ($user->isLogin() and $user->id == $thread['userId']) {
-            $course = $this->getCourseService()->getCourse($courseId);
+        if ($user['id'] != $thread['userId']) {
+            $class = $this->tryManageClass($classId);
         } else {
-            $course = $this->getCourseService()->tryManageCourse($courseId);
+            $class = $this->getClassService()->getClass($classId);
         }
 
-        $form = $this->createThreadForm($thread);
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $thread = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
-                return $this->redirect($this->generateUrl('course_thread_show', array(
-                   'courseId' => $thread['courseId'],
-                   'id' => $thread['id'], 
-                )));
-            }
+            $thread = $this->getThreadService()->updateThread($thread['id'], $request->request->all());
+            return $this->redirect($this->generateUrl('class_thread_show', array(
+               'classId' => $thread['classId'],
+               'threadId' => $thread['id'], 
+            )));
         }
 
-        return $this->render("TopxiaWebBundle:CourseThread:form.html.twig", array(
-            'form' => $form->createView(),
-            'course' => $course,
+        return $this->render("TopxiaWebBundle:ClassThread:thread-form.html.twig", array(
+            'class' => $class,
             'thread' => $thread,
             'type' => $thread['type'],
         ));
