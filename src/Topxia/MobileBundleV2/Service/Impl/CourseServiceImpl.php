@@ -18,9 +18,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$start = (int) $this->getParam("start", 0);
 		$limit = (int) $this->getParam("limit", 10);
+		$total = $this->controller->getReviewService()->getCourseReviewCount($courseId);
 		$reviews = $this->controller->getReviewService()->findCourseReviews($courseId, $start, $limit);
 		$reviews = $this->controller->filterReviews($reviews);
-		return $reviews;
+		return array(
+			"start"=>$start,
+			"limit"=>$limit,
+			"total"=>$total,
+			"data"=>$reviews
+			);
 	}
 
 
