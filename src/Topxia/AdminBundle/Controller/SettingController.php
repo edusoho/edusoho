@@ -5,12 +5,19 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\File;
+
 use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\PluginUtil;
 use Topxia\Service\Util\CloudClientFactory;
+
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
 
 class SettingController extends BaseController
 {
@@ -365,6 +372,41 @@ class SettingController extends BaseController
         ));
     }
 
+    public function defaultAction(Request $request)
+    {
+        $defaultSetting = $this->getSettingService()->get('default', array());
+        $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
+
+        $default = array(
+            'defaultAvatar' => 0,
+            'defaultCoursePicture' => 0,
+            'defaultAvatarFileName' => 'avatar',
+            'defaultCoursePictureFileName' => 'coursePicture',
+            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+            'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+        );
+
+        $defaultSetting = array_merge($default, $defaultSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $defaultSetting = $request->request->all();
+            $default = $this->getSettingService()->get('default', array());
+            $defaultSetting = array_merge($default, $defaultSetting);
+
+            $this->getSettingService()->set('default', $defaultSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新系统默认设置", $defaultSetting);
+            $this->setFlashMessage('success', '系统默认设置已保存！');
+        }
+
+        $hasOwnCopyright = $this->getAppService()->checkOwnCopyrightUser($this->getCurrentUser()->id);
+        
+        return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
+            'defaultSetting' => $defaultSetting,
+            'hasOwnCopyright' => $hasOwnCopyright,
+        ));
+    }
+
     public function ipBlacklistAction(Request $request)
     {
         $ips = $this->getSettingService()->get('blacklist_ip', array());
@@ -578,6 +620,7 @@ class SettingController extends BaseController
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
             'teacher_manage_student' => '0',
+            'teacher_export_student'=>'0',
             'student_download_media' => '0',
             'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
@@ -909,5 +952,4 @@ class SettingController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }
-
 }

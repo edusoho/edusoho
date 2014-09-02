@@ -1,0 +1,46 @@
+{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+{% set script_controller = 'group/group' %}
+{% block group_body %}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {% if thread|default(null) %}
+      <strong>编辑话题</strong>
+      {% else %}
+      <strong>发表话题</strong>
+      {% endif %}
+    </div>
+    <div class="panel-body">
+      <form id="user-thread-form" class="form-horizontal" method="post">
+
+        <div class="form-group">
+          <label class="col-xs-2 control-label" for="thread_title">标题</label>
+          <div class="col-xs-7 controls">
+            <input type="text" id="thread_title" name="thread[title]" class="form-control" value="{{thread.title|default('')}}">
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-xs-2 control-label" for="thread_content">内容</label>
+          <div class="col-xs-7 controls">
+            <textarea name="thread[content]" rows="10" id="thread_content" class="form-control">{{thread.content|default('')}}</textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-7 col-xs-offset-2">
+            {% if thread|default(null) %}
+            <button id="groupthread-save-btn" data-submiting-text="正在修改" type="submit" class="btn btn-primary">修改</button>
+            {% else %}
+            <button id="groupthread-save-btn" data-submiting-text="正在创建" type="submit" class="btn btn-primary">发布</button>
+            {% endif %}
+          </div>
+        </div>
+        
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+      
+    </div>
+  </div>
+{% endblock %}

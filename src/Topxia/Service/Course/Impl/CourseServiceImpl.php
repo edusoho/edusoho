@@ -83,7 +83,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$orderBy = array('recommendedSeq', 'ASC');
 		}elseif ($sort == 'createdTimeByAsc') {
 			$orderBy = array('createdTime', 'ASC');
-		} else {
+		}elseif($sort == 'freeNow'){
+			$orderBy =array('freeEndTime','ASC');
+		}elseif($sort == 'freeComing'){
+			$orderBy =array('freeStartTime','ASC');
+		}else {
 			$orderBy = array('createdTime', 'DESC');
 		}
 		
@@ -337,9 +341,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'endTime'  => 0,
 			'locationId' => 0,
 			'address' => '',
-			'maxStudentNum' => 0
+			'maxStudentNum' => 0,
+			'freeStartTime' => 0,
+			'freeEndTime' => 0
 		));
-
+		
 		if (!empty($fields['about'])) {
 			$fields['about'] = $this->purifyHtml($fields['about'],true);
 		}
@@ -1524,9 +1530,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if ($course['expiryDay'] > 0) {
+			//如果处在限免期，则deadline为限免结束时间 减 当前时间
 			$deadline = $course['expiryDay']*24*60*60 + time();
+
+			if($course['freeStartTime'] <= time() && $course['freeEndTime'] > time()){
+				if($course['freeEndTime'] < $deadline){
+					$deadline = $course['freeEndTime'];
+				}	
+			}
 		} else {
 			$deadline = 0;
+			//如果处在限免期，则deadline为限免结束时间 减 当前时间
+			if($course['freeStartTime'] <= time() && $course['freeEndTime'] > time()){
+				$deadline = $course['freeEndTime'];
+			}
 		}
 
 		if (!empty($info['orderId'])) {
@@ -1774,10 +1791,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("course, member参数不能为空");
 		}
 
+		/*
+		如果课程设置了限免时间，那么即使expiryDay为0，学员到了deadline也不能参加学习
 		if ($course['expiryDay'] == 0) {
 			return true;
 		}
-
+		*/
 		if ($member['deadline'] == 0) {
 			return true;
 		}

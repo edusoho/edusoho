@@ -1,0 +1,31 @@
+<div class="panel panel-autumn panel-autumn-primary">
+  <div class="panel-heading side-autumn-primary">
+    <h2 class="panel-title">学员评价 / <small>Student Evaluation</small></h2>
+  </div>
+  <div class="panel-body">
+    <ul class="media-list latest-review-list">
+      {% for review in reviews %}
+        {% set author = users[review.userId]|default(null) %}
+        {% set course = courses[review.courseId]|default(null) %}
+        {% if author and course %}
+            <li class="media">
+              <a href="{{ path('user_show', {id:author.id}) }}" class="author-picture-link">
+                  <img class="author-picture" src="{{ default_path('avatar',author.smallAvatar, '') }}">
+              </a>
+              <a href="{{ path('user_show', {id:author.id}) }}" class="author-nickname">{{ author.nickname }}</a> <span class="text-muted">说：</span> <br>
+              <div class="review-content">{{ review.content|plain_text(50) }}</div>
+
+                <div class="review-footer">
+                    <a href="{{ path('course_show', {id:course.id}) }}" class="course-title"> 《 {{ course.title }} 》</a>
+                    <span class="divider"></span>
+                    <span class="stars-{{review.rating }}">&nbsp;</span>
+                </div>
+
+            </li>
+        {% endif %}
+      {% else %}
+        <li class="empty">还没有评价</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

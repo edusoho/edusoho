@@ -15,7 +15,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 3.6.0
+        assets_version: 3.7.1
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -76,7 +76,7 @@ swiftmailer:
 
 parameters:
     session.handler.pdo.options:
-        db_table:    session
+        db_table:    session2
         db_id_col:   session_id
         db_data_col: session_value
         db_time_col: session_time
@@ -102,8 +102,8 @@ services:
             password: %database_password%
 
     session.handler.pdo:
-        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
-        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%]
+        class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
+        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context]
 
     kernel.listener.ajax_exception_listener:
         class: Topxia\WebBundle\Listener\AjaxExceptionListener

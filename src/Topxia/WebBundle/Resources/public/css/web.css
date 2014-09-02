@@ -2928,6 +2928,7 @@ body {
 
 .course-wide-list .course-metas {
 	float: right;
+	text-align: right;
 	margin-top: 10px;
 }
 
@@ -4055,3 +4056,33 @@ body {
  * </在线客服>
  */
 
+.thread-list {
+
+}
+
+.thread-list .media-object {
+    width: 36px;
+}
+
+.thread-list .title {
+	margin-bottom: 5px;
+}
+
+.thread-list .metas {
+	font-size: 12px;
+	color: #999;
+}
+
+.thread-list .metas .divider {
+	margin: 0 5px;
+	color: #ccc;
+}
+
+.group-media-sm {
+	margin-bottom: 15px;
+}
+
+.group-media-sm .media-object {
+	width: 60px;
+	height: 60px;
+}

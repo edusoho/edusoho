@@ -2,7 +2,7 @@
   {% for course in courses %}
   <li class="course-item clearfix">
     <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
-      <img class="course-picture" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}">
+      <img class="course-picture" src="{{ default_path('coursePicture',course.middlePicture, 'large') }}" alt="{{ course.title }}">
     </a>
     <div class="course-body">
       <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
@@ -37,7 +37,7 @@
         {% set teacher = users[course.teacherIds|first]|default(null) %}
         {% if teacher %}
           <div class="teacher">
-            <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ file_path(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>
+            <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ default_path('avatar',teacher.smallAvatar, '') }}" class="teacher-avatar"></a>
             <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
             <span class="teacher-title ellipsis">{{ teacher.title }}</span>
           </div>
@@ -48,7 +48,29 @@
           {% if course.showStudentNumType == 'opened' %}
           <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学员</span>
           {% endif %}
-          <span class="course-price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+          {% if course.price > 0 and free_limit_type(course) == 'free_now' %}
+            <span class="free-money-text"><del>{{ course.price }}</del></span>
+          {% endif %}
+          <span class="course-price">
+            {% if course.price > 0 %}
+              {% if free_limit_type(course) == 'free_now' %}
+                0.00 元
+              {% else %}
+                {{ course.price }}元
+              {% endif %}  
+            {% else %}免费{% endif %}
+          </span>
+          <div class="countdown-list">
+            {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}
+          </div>
+          {% if free_limit_type(course) == 'free_now' %}
+           <span class="text-muted text-sm">
+            到期时间
+            <span>{{course.freeEndTime|date('n')}}</span>月
+            <span>{{course.freeEndTime|date('d')}}</span>日
+            <span>{{course.freeEndTime|date('H')}}</span>时
+          </span>
+           {% endif %}
         </div>
       </div>
     </div>

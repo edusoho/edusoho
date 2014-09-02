@@ -1,0 +1,6 @@
+	 <ul class="nav nav-pills">
+      <li {% if tab_nav == 'index' %} class="active"{% endif %}><a href="{{path('group_member_center')}}">小组主页</a></li>
+      <li {% if tab_nav == 'join' %} class="active"{% endif %}><a href="{{path('group_member_join')}}">加入的小组</a></li>
+      <li {% if tab_nav == 'thread' %} class="active"{% endif %}><a href="{{path('group_member_threads')}}">发起的话题</a></li>
+      <li {% if tab_nav == 'post' %} class="active"{% endif %}><a href="{{path('group_member_posts')}}">回复的话题</a></li>
+    </ul>
