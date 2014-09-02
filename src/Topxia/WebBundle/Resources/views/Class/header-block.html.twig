@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <div class="class-header-inner" style="background-image:url({{ asset('files/bg.jpg') }})">
       <div class="media">
-        <a class="pull-left" href="#">
+        <a class="pull-left" href="{{ path('class_show', {classId:class.id}) }}">
           <img class="media-object" src="{{ asset('assets/img/default/avatar.png') }}" alt="...">
         </a>
         <div class="media-body">
