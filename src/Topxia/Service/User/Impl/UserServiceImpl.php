@@ -186,7 +186,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function isNumberAvaliable($number)
     {
-        if (empty($nickname)) {
+        if (empty($number)) {
             return false;
         }
         $user = $this->getUserDao()->getUserByNumber($number);
