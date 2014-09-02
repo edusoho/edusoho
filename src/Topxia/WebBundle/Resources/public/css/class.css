@@ -55,3 +55,9 @@
     color: #444;
     font-weight: bold;
 }
+
+
+.class-table .class-picture {
+    max-width: 140px;
+    margin-right: 10px;
+}
