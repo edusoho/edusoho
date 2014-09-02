@@ -61,3 +61,23 @@
     max-width: 140px;
     margin-right: 10px;
 }
+
+.course-thumbnail {
+
+}
+
+.course-thumbnail .title {
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    line-height: 20px;
+    height: 40px;
+    overflow: hidden;
+    font-weight: bold;
+}
+
+.course-thumbnail .metas a,
+.course-thumbnail .metas {
+    font-size: 12px;
+    color: #777;
+}

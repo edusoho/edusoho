@@ -7,12 +7,14 @@
   {% if courses %}
   {% for course in courses%}
   <div class="col-sm-6 col-md-4">
-    <div class="thumbnail">
-      <a href="{{ path('course_show',{id:course.id}) }}"><img  alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}" style="height: 200px; width: 120%; display: block;"></a>
+    <div class="thumbnail course-thumbnail">
+      <a href="{{ path('course_show',{id:course.id}) }}"><img  alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}"></a>
       <div class="caption">
-        <a href="{{ path('course_show',{id:course.id}) }}"><h3 class="text-primary">{{ course.title }}</h3></a>
-        <span>{{ course.teachername[0]}}</span>
-        <span class="pull-right">{{ course.lessonCount}}个课时</span>
+        <a href="{{ path('course_show',{id:course.id}) }}"><h3 class="title">{{ course.title }}</h3></a>
+        <div class="metas clearfix">
+          <a href="#" class="pull-left">{{ course.teachername[0]}}</a>
+          <span class="pull-right">{{ course.lessonCount}}个课时</span>
+        </div>
       </div>
     </div>
   </div>
