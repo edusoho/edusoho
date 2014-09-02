@@ -13,6 +13,8 @@ namespace Topxia\WebBundle\Handler;
 
 use Symfony\Component\Security\Core\SecurityContext;
 
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+
 /**
  * Session handler using a PDO connection to read and write data.
  *
@@ -211,7 +213,12 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
         $encoded = base64_encode($data);
 
         $token = $this->context->getToken();
-        $userId = ($token && $token->getUser()) ? $token->getUser()->getId() : 0;
+
+        if (empty($token) or ($token instanceof AnonymousToken) or empty($token->getUser())) {
+            $userId = 0;
+        } else {
+            $userId = $token->getUser()->getId();
+        }
 
         // The session ID can be different from the one previously received in read()
         // when the session ID changed due to session_regenerate_id(). So we have to
