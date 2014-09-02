@@ -82,7 +82,7 @@ class UserController extends BaseController
         if(empty($user)){
             $response = array('success' => true, 'message' => '该学号可以使用');
         }else{
-            $response = array('success' => false, 'message' => array('error_duplicate', '学号/工号已存在!'));
+            $response = array('success' => false, 'message' => '学号/工号已存在!');
         }
         return $this->createJsonResponse($response);
     }
@@ -95,6 +95,7 @@ class UserController extends BaseController
             $userData['nickname'] = $formData['nickname'];
             $userData['password'] = $formData['password'];
             $userData['createdIp'] = $request->getClientIp();
+            $userData['truename'] = $formData['truename'];
             $user = $this->getAuthService()->register($userData);
             $this->get('session')->set('registed_email', $user['email']);
 

@@ -13,25 +13,22 @@ class ClassNoteController extends BaseController
             throw $this->createNotFoundException("班级不存在，或已删除。");
         }
         $conditions = array(
-            'classId'=>$classId,
-            'roles'=>array('STUDENT')
+            'classId'=>$class['id'],
+            'gradeId'=>$class['gradeId'],
+            'term'=>$class['term']
         );
-        $classMembers = $this->getClassMemberService()->searchClassMembers(
-            $conditions,
-            array('createdTime', 'DESC'),
-            0,
-            PHP_INT_MAX
-        );
+        /**本班所有课程*/
+        $courses=$this->getCourseService()->searchCourses($conditions,null, 0, PHP_INT_MAX);
         $notes=array();
         $paginator = new Paginator(
             $this->get('request'),
             0,
             20
         ); 
-        if(count($classMembers)>0){
+        if(count($courses)>0){
             $conditions = array(
                 'status'=>1,
-                'userIds'=>ArrayToolkit::column($classMembers, 'userId')
+                'courseIds'=>ArrayToolkit::column($courses, 'id')
             );
             $paginator = new Paginator(
                 $this->get('request'),
@@ -48,8 +45,8 @@ class ClassNoteController extends BaseController
         }
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $userProfiles=$this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($notes, 'userId'));
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($notes, 'courseId'));
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($notes, 'lessonId'));
+        $courses=ArrayToolkit::index($courses, 'id');
         return $this->render("TopxiaWebBundle:ClassNote:note-list.html.twig", array(
             'class' => $class,
             'classNav'=>'notes',

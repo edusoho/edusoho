@@ -29,7 +29,14 @@ define(function(require, exports, module) {
         });
         validator.addItem({
             element: '[name="number"]',
-            required: true
+            required: true,
+            rule: 'remote'
+        });
+
+        validator.addItem({
+            element: '[name="truename"]',
+            required: true,
+            rule: 'chinese minlength{min:2} maxlength{max:5}'
         });
 
         validator.addItem({
