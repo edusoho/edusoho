@@ -34,6 +34,12 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
+            element: '[name="truename"]',
+            required: true,
+            rule: 'chinese minlength{min:2} maxlength{max:5}'
+        });
+
+        validator.addItem({
             element: '[name="email"]',
             required: true,
             rule: 'email email_remote'
