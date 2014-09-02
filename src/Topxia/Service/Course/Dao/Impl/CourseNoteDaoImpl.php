@@ -91,13 +91,13 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
 			->andWhere('lessonId = :lessonId')
 			->andWhere('status = :status')
 			->andWhere('content LIKE :content');
-		$userIds="('";	
-		if (isset($conditions['userIds'])) {
-            foreach ($conditions['userIds'] as $userId) {
-                $userIds.=($userId."','");
+		$courseIds="('";	
+		if (isset($conditions['courseIds'])) {
+            foreach ($conditions['courseIds'] as $courseId) {
+                $courseIds.=($courseId."','");
             }
-            $conditions['userIds']=substr($userIds, 0,-2).")";
-            $builder=$builder->andStaticWhere('userId in '.$conditions['userIds']);
+            $conditions['courseIds']=substr($courseIds, 0,-2).")";
+            $builder=$builder->andStaticWhere('courseId in '.$conditions['courseIds']);
         }
 		return $builder;
 	}
