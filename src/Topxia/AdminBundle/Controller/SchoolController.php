@@ -201,25 +201,6 @@ class SchoolController extends BaseController
         return $this->redirect($this->generateUrl('admin_school_class_course_manage',array('classId'=>$classId)));
     }
 
-    public function classCourseEditAction(Request $request,$classId,$courseId)
-    {
-        if ($request->getMethod() == 'POST') {
-            $fields = $request->request->all();
-            $this->getCourseService()->updateCourse($courseId,array('title'=>$fields['title'],'compulsory'=>$fields['compulsory']));
-            $teacher = $this->getUserService()->getUser($fields['teacherId']);
-            //$this->getCourseService()->setCourseTeachers($courseId, array($teacher));
-            return new Response(json_encode("success"));
-        }
-           
-        $course = $this->getCourseService()->getCourse($courseId);
-        $teacher = $this->getUserService()->getUserProfile($course['teacherIds'][0]);
-        return $this->render('TopxiaAdminBundle:School:class-course-edit-moadl.html.twig',array(
-            'course' => $course,
-            'teacher' => $teacher,
-            'classId' => $classId,
-            ));
-    }
-
     public function homePageUploadAction(Request $request)
     {
         $file = $request->files->get('homepagePicture');

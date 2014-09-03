@@ -13,6 +13,12 @@ define(function(require, exports, module) {
             $('#title-span').html($(this).data('title'));
             $('#name-span').html($(this).data('teachername'));
             $('#parentId').val($(this).data('id'));
+            var $tr = $(this);
+            $('[name=compulsory').each(function(){
+                if($(this).val() == $tr.data('compulsory')){
+                    $(this).attr('checked','checked');
+                }
+            });
         });
 
         $('[role=tablist]').on('click','li', function(){

@@ -55,6 +55,15 @@
 				</div>
 			</div>
 
+		    <div class="row form-group">
+		      <div class="col-md-2 control-label">
+		        <label>必修课</label>
+		      </div>
+		      <div class="col-md-8 controls radios">
+		        {{ radios('compulsory',{'1':'必修','0':'选修'},course.compulsory)}}
+		      </div>
+		    </div>
+
 			<div class="form-group">
 			  <label class="col-md-2 control-label">标签</label>
 			  <div class="col-md-8 controls">
