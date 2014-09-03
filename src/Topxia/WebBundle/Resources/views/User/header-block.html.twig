@@ -18,7 +18,7 @@
                 {{ class_name(cl) }}（{{cl.year}}届）{{course.title}}老师/  
               {% endfor %}
               {% for headTeacherClass in headTeacherClasses %}
-                {{ class_name(cl) }}（{{cl.year}}届）班主任/    
+                {{ class_name(headTeacherClass) }}（{{headTeacherClass.year}}届）班主任/    
               {% endfor %}
             </div>
           {% else %}

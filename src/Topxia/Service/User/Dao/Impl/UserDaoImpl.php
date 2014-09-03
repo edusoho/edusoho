@@ -90,12 +90,17 @@ class UserDaoImpl extends BaseDao implements UserDao
             $conditions['nickname'] = "%{$conditions['nickname']}%";
         }
 
+        if (isset($conditions['truename'])) {
+            $conditions['truename'] = "%{$conditions['truename']}%";
+        }
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'user')
             ->andWhere('promoted = :promoted')
             ->andWhere('roles LIKE :roles')
             ->andWhere('roles = :role')
             ->andWhere('nickname LIKE :nickname')
+            ->andWhere('truename LIKE :truename')
+            ->andWhere('number = :number')
             ->andWhere('loginIp = :loginIp')
             ->andWhere('approvalStatus = :approvalStatus')
             ->andWhere('email = :email')

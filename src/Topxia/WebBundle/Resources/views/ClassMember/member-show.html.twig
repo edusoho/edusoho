@@ -6,10 +6,10 @@
 			<div class="col-md-6">
 				{% set teacherProfile = teacherProfiles[teacher.id]|default(null) %}
 				<a href="{{ path('user_show', {id:teacher.id}) }}">
-					<img class="media-object pull-left" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacherProfile.truename}}">
+					<img class="media-object pull-left" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
 				</a>
 				<a href="{{ path('user_show', {id:teacher.id}) }}">
-					<h4>{{teacherProfile.truename}}</h4>
+					<h4>{{teacher.truename}}</h4>
 				</a>
 			</div>
 		{% else %}
@@ -21,11 +21,11 @@
 		{% for student in students %}
 			<div class="col-md-1">
 				<a href="{{ path('user_show', {id:student.id}) }}">
-					<img class="media-object pull-left" width="48" height="48" src="{{file_path(student.smallAvatar, 'avatar.png')}}" alt="">
+					<img class="media-object pull-left" width="48" height="48" src="{{file_path(student.smallAvatar, 'avatar.png')}}" alt="{{student.truename}}">
 				</a>
 			</div>
 		{% else %}
-			尚无学生(去添加)
+			尚无学生
 		{% endfor %}
 	</div>
 {% endblock %}

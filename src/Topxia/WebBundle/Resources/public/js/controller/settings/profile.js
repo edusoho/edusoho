@@ -29,6 +29,7 @@
 
         validator.addItem({
             element: '[name="profile[truename]"]',
+            required: true,
             rule: 'chinese minlength{min:2} maxlength{max:12}'
         });
 

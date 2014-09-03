@@ -26,6 +26,8 @@ interface UserService
 
     public function changeEmail($userId, $email);
 
+    public function changeTrueName($userId,$truename);
+
     public function changeAvatar($userId, $filePath, array $options);
 
     public function isNicknameAvaliable($nickname);

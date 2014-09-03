@@ -110,8 +110,10 @@ class InitCommand extends BaseCommand
 	private function initAdminUser($output)
 	{
 		$fields = array(
+			'number'=> 't001',
 			'email' => 'test@edusoho.com',
-			'nickname' => '测试管理员',
+			'nickname' => 't001',
+			'truename' => '测试管理员',
 			'password' => 'kaifazhe',
 			'roles' => array(),
 			'createdIp' => '127.0.0.1',

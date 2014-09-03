@@ -18,15 +18,6 @@ class UserController extends BaseController
         } else {
             $isFollowed = false;
         }
-        /*$conditions=array(
-            'userId'=>$user['id'],
-            'roles'=>array('headTeacher','student')
-        );
-        $classMembers=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
-        foreach ($classMembers as &$classMember) {
-            $class=$this->getClassesService()->getClass($classMember['classId']);
-            $classMember['class']=$class;
-        }*/
         /**为任课老师准备*/
         $courses=array();
         $classes=array();

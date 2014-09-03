@@ -1,6 +1,6 @@
 {% macro user_link(user, class) %}
   {% if user %}
-		<a {% if class %}class="{{ class }}"{% endif %} href="javascript:;" role="show-user" data-toggle="modal" data-target="#modal" data-url="{{ url('admin_user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+		<a {% if class %}class="{{ class }}"{% endif %} href="javascript:;" role="show-user" data-toggle="modal" data-target="#modal" data-url="{{ url('admin_user_show', {id:user.id}) }}">{{ user.truename }}</a>
 	{% else %}
 	  <span class="text-muted">用户已删除</span>
 	{% endif %}

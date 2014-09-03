@@ -38,9 +38,9 @@ class SettingsController extends BaseController
 		if ($request->getMethod() == 'POST') {
 			$profile = $request->request->get('profile');
 			$this->getUserService()->updateUserProfile($user['id'], $profile);
+			$this->getUserService()->changeTrueName($user['id'],$profile['truename']);
 			$this->setFlashMessage('success', '基础信息保存成功。');
 			return $this->redirect($this->generateUrl('settings'));
-
 		}
 
 		$fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();

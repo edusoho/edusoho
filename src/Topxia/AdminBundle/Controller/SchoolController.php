@@ -53,8 +53,8 @@ class SchoolController extends BaseController
             $paginator->getPerPageCount()
         );
         foreach ($classes as $key => $class) {
-            $headTeacherProfile = $this->getUserService()->getUserProfile($class['headTeacherId']);
-            $class['headTeacherName'] = $headTeacherProfile['truename'];
+            $headTeacher = $this->getUserService()->getUser($class['headTeacherId']);
+            $class['headTeacherName'] = $headTeacher['truename'];
             $classes[$key] = $class;
         }  
         return $this->render('TopxiaAdminBundle:School:class-setting.html.twig',array(
@@ -86,7 +86,7 @@ class SchoolController extends BaseController
         }
 
         $class = $this->getClassesService()->getClass($classId);
-        $headTheacher = $this->getUserService()->getUserProfile($class['headTeacherId']);
+        $headTheacher = $this->getUserService()->getUser($class['headTeacherId']);
         $class['headTeacherName'] = $headTheacher['truename'];
         return $this->render('TopxiaAdminBundle:School:class-edit.html.twig',array(
             'class' => $class,
@@ -121,8 +121,8 @@ class SchoolController extends BaseController
         foreach ($courses as $key => $course) {
             foreach ($course['teacherIds'] as $key2 => $id) {
 
-                $headTeacherProfile = $this->getUserService()->getUserProfile($id);
-                $course['teachername'][$key2] = $headTeacherProfile['truename'];
+                $headTeacher = $this->getUserService()->getUser($id);
+                $course['teachername'][$key2] = $headTeacher['truename'];
 
             }
             $courses[$key] = $course;
@@ -161,6 +161,9 @@ class SchoolController extends BaseController
         $class = $request->query->all();
         $class['classId'] = $classId;
         $classCourses = $this->getCourseService()->findCoursesByClassId($classId);
+        if (empty($classCourses)) {
+            $classCourses=array();
+        }
         $excludeIds = ArrayToolkit::column($classCourses, 'parentId');
         $conditions =array(
             'parentId' => 0,
@@ -182,8 +185,8 @@ class SchoolController extends BaseController
         );
 
         foreach ($courses as $key => $course) {
-            $creatorProfile = $this->getUserService()->getUserProfile($course['userId']);
-            $course['creatorName'] = $creatorProfile['truename'];
+            $creator = $this->getUserService()->getUser($course['userId']);
+            $course['creatorName'] = $creator['truename'];
             $courses[$key] = $course;
         }
 
@@ -306,13 +309,13 @@ class SchoolController extends BaseController
             array('id','ASC'),
             0,
             $total);
-        $ids = ArrayToolkit::column($teachers,'id');
-        $teacherProfiles = $this->getUserService()->findUserProfilesByIds($ids);
+        // $ids = ArrayToolkit::column($teachers,'id');
+        // $teacherProfiles = $this->getUserService()->findUserProfilesByIds($ids);
         $response = array();
-        foreach ($teacherProfiles as $key => $teacherProfile) {
+        foreach ($teachers as $key => $teacher) {
             $temp = array();
-            $temp['id'] = $teacherProfile['id'];
-            $temp['name'] = $teacherProfile['truename'];
+            $temp['id'] = $teacher['id'];
+            $temp['name'] = $teacher['truename'];
             $response[] = $temp;
         }
         return new Response(json_encode($response)); 
