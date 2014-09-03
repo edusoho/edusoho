@@ -984,6 +984,6 @@ admin_class_student_import:
     defaults: { _controller: TopxiaAdminBundle:Student:import }
 
 admin_class_student_remove:
-    pattern:  /class/student/{userId}/remove
+    pattern:  /class/{classId}/student/{userId}/remove
     defaults: { _controller: TopxiaAdminBundle:Student:remove }
 
