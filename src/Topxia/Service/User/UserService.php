@@ -12,6 +12,8 @@ interface UserService
 
     public function getUserByEmail($email);
 
+    public function getUserByNumber($number);
+
     public function findUsersByIds(array $ids);
 
     public function findUserProfilesByIds(array $ids);
@@ -187,7 +189,5 @@ interface UserService
     public function analysisRegisterDataByTime($startTime,$endTime);
 
     public function dropFieldData($fieldName);
-
-    public function getUserByNumber($number);
 
 }

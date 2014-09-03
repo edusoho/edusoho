@@ -5,3 +5,7 @@ homepage:
 first_password:
     pattern:  /first/password
     defaults: { _controller: TopxiaWebBundle:K12Default:password }
+
+login:
+    pattern:  /login
+    defaults: { _controller: TopxiaWebBundle:K12Default:login }
