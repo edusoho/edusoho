@@ -407,7 +407,7 @@ class CourseLessonController extends BaseController
         return $response;
     }
 
-    public static function isMobile() {
+    private function isMobile() {
         // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
         if (isset($_SERVER['HTTP_X_WAP_PROFILE'])) {
             return true;
