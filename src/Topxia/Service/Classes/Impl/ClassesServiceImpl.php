@@ -210,6 +210,12 @@ class ClassesServiceImpl extends BaseService implements ClassesService
     {
         return $this->getClassesDao()->deleteClass($id);
     }
+
+    public function getMemberByUserIdAndClassId($userId,$classId)
+    {
+        return $this->getClassMemberDao()->getMemberByUserIdAndClassId($userId, $classId);
+    }
+
     private function getClassesDao ()
     {
         return $this->createDao('Classes.ClassesDao');

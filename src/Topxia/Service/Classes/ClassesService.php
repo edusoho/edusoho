@@ -28,4 +28,6 @@ interface ClassesService
     public function deleteClass($id);
 
     public function checkPermission($name, $classId);
+
+    public function getMemberByUserIdAndClassId($userId, $classId);
 }
