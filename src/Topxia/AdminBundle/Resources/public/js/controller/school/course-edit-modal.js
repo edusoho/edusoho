@@ -6,53 +6,25 @@ define(function(require, exports, module) {
     require('jquery.select2');
     exports.run = function() {
 
-        $('#course-table tbody tr').on('click',function(){
-            $('#course-table tbody').find('.success').removeClass('success');
-            $(this).addClass('success');
-            $('#select-area').attr('class','show');
-            $('#title-span').html($(this).data('title'));
-            $('#name-span').html($(this).data('teachername'));
-            $('#parentId').val($(this).data('id'));
-        });
 
-        $('[role=tablist]').on('click','li', function(){
-            var $priorli = $(this).parent().find('.active');
-            $priorli.removeClass('active');
-            $(this).addClass('active');
-            $.get($(this).data('url'),function(html) {
-                $('#select-area').attr('class','hidden');
-                $('.tab-target').html($(html).find('.tab-target').html());
-                $('#course-table tbody tr').on('click',function(){
-                    $('#course-table tbody').find('.success').removeClass('success');
-                    $(this).addClass('success');
-                    $('#select-area').attr('class','show');
-                    $('#title-span').html($(this).data('title'));
-                    $('#name-span').html($(this).data('teachername'));
-                    $('#parentId').val($(this).data('id'));
-                });
-
-            });
-        });
-
-        var $modal = $('#class-create-form').parents('.modal');
-        var $form = $("#class-course-add-form");
+        var $modal = $('#class-course-edit-form').parents('.modal');
+        var $form = $("#class-course-edit-form");
 
         var validator = new Validator({
-            element: '#class-course-add-form',
+            element: '#class-course-edit-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
                     return false;
                 }
 
-                $('#class-course-add-btn').button('submiting').addClass('disabled');
+                $('#class-course-edit-btn').button('submiting').addClass('disabled');
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
-                    Notify.success('添加课程成功');
-                    window.location.href=$('#backto').data('url');
-                }).error(function(result,b,c,d,e){
-                    Notify.danger(result.responseJSON.error.message);
+                    Notify.success('课程修改成功');
+                }).error(function(result){
+                    Notify.danger('课程修改失败');
                 });
 
             }
@@ -88,6 +60,11 @@ define(function(require, exports, module) {
                 }
             },
             initSelection: function(element, callback) {
+                var data = [];
+                data['id'] = element.data('id');
+                data['name'] = element.data('name');
+                element.val(element.data('id'));
+                callback(data);
             },
             formatSelection: function(item) {
                 return item.name;

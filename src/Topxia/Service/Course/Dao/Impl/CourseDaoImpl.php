@@ -209,6 +209,17 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
         }
 
+        if (isset($conditions['excludeIds']) and is_array($conditions['excludeIds'])) {
+            $excludeIds = array();
+            foreach ($conditions['excludeIds'] as $id) {
+                $excludeIds[] = intval($id);
+            }
+
+            if (!empty($excludeIds)) {
+                $builder->andStaticWhere("id NOT IN (" . implode(',', $excludeIds) . ")");
+            }
+        }
+
         return $builder;
     }
 
@@ -217,6 +228,18 @@ class CourseDaoImpl extends BaseDao implements CourseDao
              $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
             return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function findCourseByClassIdAndParentId($classId, $parentId)
+    {
+        $sql = "SELECT id FROM {$this->getTablename()} WHERE classId = ? AND parentId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($classId, $parentId)) ? : null;
+    }
+    
+    public function findCoursesByClassId($classId)
+    {
+        $sql = "SELECT * FROM {$this->getTablename()} WHERE classId = ?";
+        return $this->getConnection()->fetchAll($sql, array($classId)) ? : null;
     }
 
     private function getTablename()

@@ -144,21 +144,29 @@ class SchoolController extends BaseController
     {
         if($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            $this->getCourseService()->copyCourseForClass(
-                $fields['parentId'],
-                $classId,
-                $fields['compulsory'],
-                $fields['teacherId']);
+            $hasCourse = $this->getCourseService()->classHasCourse($classId, $fields['parentId']);
+            if ($hasCourse) {
+                throw $this->createNotFoundException("已经添加该课程");
+            } else {
+                $this->getCourseService()->copyCourseForClass(
+                    $fields['parentId'],
+                    $classId,
+                    $fields['compulsory'],
+                    $fields['teacherId']);
+            }
 
             return new Response(json_encode("success"));
         }
 
         $class = $request->query->all();
         $class['classId'] = $classId;
+        $classCourses = $this->getCourseService()->findCoursesByClassId($classId);
+        $excludeIds = ArrayToolkit::column($classCourses, 'parentId');
         $conditions =array(
             'parentId' => 0,
             'gradeId' => $class['gradeId'],
-            'public' => $class['public']
+            'public' => $class['public'],
+            'excludeIds' => $excludeIds
         );
 
         $paginator = new Paginator(
@@ -191,6 +199,25 @@ class SchoolController extends BaseController
 
         $this->getCourseService()->updateCourse($courseId, array('classId'=>0));
         return $this->redirect($this->generateUrl('admin_school_class_course_manage',array('classId'=>$classId)));
+    }
+
+    public function classCourseEditAction(Request $request,$classId,$courseId)
+    {
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $this->getCourseService()->updateCourse($courseId,array('title'=>$fields['title'],'compulsory'=>$fields['compulsory']));
+            $teacher = $this->getUserService()->getUser($fields['teacherId']);
+            //$this->getCourseService()->setCourseTeachers($courseId, array($teacher));
+            return new Response(json_encode("success"));
+        }
+           
+        $course = $this->getCourseService()->getCourse($courseId);
+        $teacher = $this->getUserService()->getUserProfile($course['teacherIds'][0]);
+        return $this->render('TopxiaAdminBundle:School:class-course-edit-moadl.html.twig',array(
+            'course' => $course,
+            'teacher' => $teacher,
+            'classId' => $classId,
+            ));
     }
 
     public function homePageUploadAction(Request $request)

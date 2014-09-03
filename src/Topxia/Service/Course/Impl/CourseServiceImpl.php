@@ -28,6 +28,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
+	public function findCoursesByClassId($classId)
+	{
+		return $this->getCourseDao()->findCoursesByClassId($classId);
+	}
 	public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
 	{
 		$courses = CourseSerialize::unserializes(
@@ -314,7 +318,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
 		$fields = CourseSerialize::serialize($fields);
-
+		
 		return CourseSerialize::unserialize(
 			$this->getCourseDao()->updateCourse($id, $fields)
 		);
@@ -353,9 +357,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'term' => 'first',
 			'gradeId' => 0,
 			'freeStartTime' => 0,
-			'freeEndTime' => 0
+			'freeEndTime' => 0,
+			'compulsory' => 0
 		));
-		
 		if (!empty($fields['about'])) {
 			$fields['about'] = $this->purifyHtml($fields['about'],true);
 		}
@@ -2053,6 +2057,18 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		return CourseSerialize::unserialize($newCourse);
 	}
+
+	public function classHasCourse($classId, $parentId)
+	{
+		$course = $this->getCourseDao()
+			->findCourseByClassIdAndParentId($classId, $parentId);
+		if (!empty($course)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	private function getCourseLessonReplayDao()
     {
         return $this->createDao('Course.CourseLessonReplayDao');
