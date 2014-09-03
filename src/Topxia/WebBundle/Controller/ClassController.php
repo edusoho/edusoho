@@ -14,10 +14,11 @@ class ClassController extends ClassBaseController
     public function headerBlockAction($class, $classNav)
     {
         $headTeacher = $this->getClassesService()->getClassHeadTeacher($class['id']);
-
+        $user = $this->getCurrentUser();
         return $this->render('TopxiaWebBundle:Class:header-block.html.twig', array(
             'class' => $class,
             'classNav' => $classNav,
+            'user' => $user,
             'headTeacher' => $headTeacher,
         ));
     }
