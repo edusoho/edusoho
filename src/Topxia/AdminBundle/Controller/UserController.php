@@ -30,7 +30,6 @@ class UserController extends BaseController
         if(!empty($fields)){
             $conditions =$fields;
         }
-
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->searchUserCount($conditions),
@@ -63,6 +62,7 @@ class UserController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    /**已废弃*/
     public function nicknameCheckAction(Request $request)
     {
         $nickname = $request->query->get('value');
@@ -92,10 +92,10 @@ class UserController extends BaseController
             $formData = $request->request->all();
             $userData['number'] = $formData['number'];
             $userData['email'] = $formData['email'];
-            $userData['nickname'] = $formData['nickname'];
+            $userData['nickname'] = $formData['number'];
+            $userData['truename'] = $formData['truename'];
             $userData['password'] = $formData['password'];
             $userData['createdIp'] = $request->getClientIp();
-            $userData['truename'] = $formData['truename'];
             $user = $this->getAuthService()->register($userData);
             $this->get('session')->set('registed_email', $user['email']);
 
@@ -120,11 +120,10 @@ class UserController extends BaseController
         $profile['title'] = $user['title'];
 
         if ($request->getMethod() == 'POST') {
-            $profile = $this->getUserService()->updateUserProfile($user['id'], $request->request->all());
-
+            $fields=$request->request->all();
+            $profile = $this->getUserService()->updateUserProfile($user['id'], $fields);
+            $this->getUserService()->changeTrueName($user['id'],$fields['truename']);
             $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
-
-
             return $this->redirect($this->generateUrl('settings'));
         }
 

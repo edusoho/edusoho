@@ -27,7 +27,7 @@
             教师：
             {% for id in course.teacherIds %}
               {% set user = users[id] %}
-              <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.nickname }}</a>
+              <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.truename }}</a>
             {% endfor %}
           {% endif  %}
         </div>

@@ -1,8 +1,7 @@
 {% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
 <tr id="user-table-tr-{{ user.id }}">
   <td>
-    <strong>{{ admin_macro.user_link(user) }}</strong>
-
+     <strong>{{ admin_macro.user_link(user) }}</strong>
     {% if user.locked %}
       <label class="label label-danger">禁</label>
     {% endif %}
@@ -14,7 +13,9 @@
       {% endfor %}
     </span>
   </td>
-
+  <td>
+    {{ user.number }}
+  </td>
   <td>
     {{ user.email }}
     <br>

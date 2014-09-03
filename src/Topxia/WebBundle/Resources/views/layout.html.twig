@@ -81,9 +81,9 @@
                 {% if app.user.newMessageNum > 0 %}<span class="badge">{{ app.user.newMessageNum }}</span>{% endif %}
                 </a>
               </li>
-              <li class="visible-lt-ie8"><a href="{{ path('settings') }}">{{ app.user.nickname }}</a></li>
+              <li class="visible-lt-ie8"><a href="{{ path('settings') }}">{{ app.user.truename }}</a></li>
               <li class="dropdown hidden-lt-ie8">
-                <a href="javascript:;" class="dropdown-toggle"  data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
+                <a href="javascript:;" class="dropdown-toggle"  data-toggle="dropdown">{{ app.user.truename }} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
                   <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 帐号设置</a></li>

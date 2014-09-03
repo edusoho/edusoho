@@ -1,10 +1,10 @@
 <li class="media">
 	<a class="pull-left" href="{{ path('user_show', {id:user.id}) }}">
-	  <img class="media-object pull-left"  width="48" height="48" src="{{file_path(user.smallAvatar, 'avatar.png')}}" alt="{{userProfile.truename}}">
+	  <img class="media-object pull-left"  width="48" height="48" src="{{file_path(user.smallAvatar, 'avatar.png')}}" alt="{{user.truename}}">
 	</a>
 	<div class="media-body">
     <a href="{{ path('user_show', {id:user.id}) }}">
-	    <h4 class="media-heading">{{userProfile.truename}}</h4>
+	    <h4 class="media-heading">{{user.truename}}</h4>
     </a>
 	  <div class="short-long-text">
       <div class="short-text">

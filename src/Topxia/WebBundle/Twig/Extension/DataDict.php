@@ -151,7 +151,8 @@ class DataDict
 			'cancel' => '取消会员'
 		),
 		'userKeyWordType' => array(
-			'nickname' => '用户名',
+			'truename' => '姓名',
+			'number' => '学号',
 			'email' => '邮件地址',
 			'loginIp' => '登录IP'
 		),

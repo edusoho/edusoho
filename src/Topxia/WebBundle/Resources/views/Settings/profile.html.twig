@@ -12,26 +12,6 @@
 		{% block body %}
 			<form id="user-profile-form" class="form-horizontal" method="post">
 				{{ web_macro.flash_messages() }}
-					{% if 'ROLE_TEACHER' in app.user.roles %}
-						<div class="form-group">
-							<label class="col-md-2 control-label" >昵称</label>
-							<div class="col-md-7 controls">
-							<div class="control-text">
-								{{app.user.nickname}} {% if setting('user_partner.nickname_enabled') %} <a href="{{ path('setting_nickname') }}">修改</a> {% endif %}</div>
-							</div>
-						</div>
-					{% endif %}
-
-					{# <div class="form-group form-iam-group">
-						<label class="col-md-2 control-label">我是</label>
-						<div class="col-md-7 controls radios">
-							<div id="profile_iam">
-								<input type="radio" id="profile_iam_0" name="profile[iam]" required="required" value="student" {% if profile.iam == 'student' %}checked="checked"{% endif %}>
-								<label for="profile_iam_0" class="required">在校生</label>
-								<input type="radio" id="profile_iam_1" name="profile[iam]" required="required" value="notStudent" {% if profile.iam == 'notStudent' %}checked="checked"{% endif %}>
-								<label for="profile_iam_1" class="required">非在校生</label></div>
-							</div>
-					</div> #}
 					{% if 'ROLE_TEACHER' not in app.user.roles %}
 						<div class="form-group">
 							<label class="col-md-2 control-label" >学号</label>
@@ -46,9 +26,11 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="profile_truename">姓名</label>
 						<div class="col-md-7 controls">
-							{{ profile.truename|default('') }}
+							<input type="text" id="profile_truename" name="profile[truename]" class="form-control" value="{{ app.user.truename|default('') }}">
+							<div class="help-block" style="display:none;"></div>
 						</div>
 					</div>
+
 					{% if 'ROLE_TEACHER' not in app.user.roles %}
 						<div class="form-group">
 							<label class="col-md-2 control-label" >所在班级</label>
@@ -64,29 +46,6 @@
 						</div>
 					{% endif %}
 
-					{# <div class="help-block approval">
-						<label class="col-md-2 control-label" ></label>
-							{% if app.user.approvalStatus == 'approving' %}
-								<p class="text-primary" > 
-									正在实名认证中，管理员会尽快答复您。
-								</p>
-							{% elseif  app.user.approvalStatus == 'approved' %}
-								<p class="text-success" >
-									恭喜您，已通过实名认证！
-								</p>
-							{% elseif  app.user.approvalStatus == 'unapprove' %}
-								<p class="text-warning" > 
-									您尚未实名认证，<strong><a href="{{ path('setting_approval_submit') }}">点此认证</a>。
-									</strong>
-								</p>
-							{% elseif app.user.approvalStatus == 'approve_fail' %}
-								 <p class="text-danger" > 
-									实名认证审核尚未通过，请参照通知中的信息，修改后重新<strong><a href="{{ path('setting_approval_submit') }}">认证。</a>
-									</strong>
-								 </p>
-							{% endif %}
-					</div> #}
-
 					<div class="form-group">
 						<label class="col-md-2 control-label">性别</label>
 						<div class="col-md-7 controls radios">
@@ -98,54 +57,6 @@
 							</div>
 						</div>
 					</div>
-
-					{# <div class="form-group">
-						<label class="col-md-2 control-label" for="profile_idcard">身份证号</label>
-						<div class="col-md-7 controls radios">
-							<input type="text" id="profile_idcard" name="profile[idcard]" class="form-control" value="{{ profile.idcard|default('') }}">
-							<div class="help-block" style="display:none;"></div>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label for="profile_mobile" class="col-md-2 control-label">手机号码</label>
-						<div class="col-md-7 controls">
-							<input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile.mobile|default('') }}">
-							<div class="help-block" style="display:none;"></div>
-						</div>
-					</div> #}
-
-					{# <div class="form-group form-forIam-group form-student-group">
-						<label class="col-md-2 control-label">学校</label>
-						<div class="col-md-7 controls">
-							<input type="text" id="profile_school" name="profile[school]" class="form-control" value="{{ profile.school|default('') }}">
-							<div class="help-block" style="display:none;"></div>
-						</div>
-					</div>
-
-					<div class="form-group form-forIam-group form-student-group">
-						<label class="col-md-2 control-label">班级</label>
-						<div class="col-md-7 controls">
-							<input type="text" id="profile_class" name="profile[class]" class="form-control" value="{{ profile.class|default('') }}">
-							<div class="help-block" style="display:none;"></div>
-						</div>
-					</div> #}
-
-					{# <div class="form-group form-forIam-group form-notStudent-group">
-						<label class="col-md-2 control-label">公司</label>
-						<div class="col-md-7 controls">
-							<input type="text" id="profile_company" name="profile[company]" class="form-control" value="{{ profile.company|default('') }}">
-							<div class="help-block" style="display:none;"></div>
-						</div>
-					</div>
-
-					<div class="form-group form-forIam-group form-notStudent-group">
-						<label class="col-md-2 control-label">职业</label>
-						<div class="col-md-7 controls">
-							<input type="text" id="profile_job" name="profile[job]" class="form-control" value="{{ profile.job|default('') }}">
-							<div class="help-block" style="display:none;"></div>
-						</div>
-					</div> #}
 
 					<div class="form-group">
 						<label class="col-md-2 control-label">头衔</label>

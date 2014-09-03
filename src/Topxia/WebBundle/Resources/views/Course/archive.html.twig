@@ -20,7 +20,7 @@
 		        	<h4><a href="{{ path('course_archive_show', {id:course.id}) }}">{{ course.title }}</a></h4>
               <div class="fsn text-muted">
 		        	{% if teacher %}
-  		        	教师： <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+  		        	教师： <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.truename }}</a>
 		        	{% endif %}
 		        	{% if tags %}
 			        	<span class="text-muted">标签：</span>

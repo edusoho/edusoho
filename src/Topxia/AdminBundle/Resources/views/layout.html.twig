@@ -62,7 +62,7 @@
 
         <ul class="nav navbar-nav navbar-right">
           <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> 回首页</a></li>
-          <li><a href="{{ path('user_show', {id:app.user.uri|default(app.user.id)}) }}"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }}</a></li>
+          <li><a href="{{ path('user_show', {id:app.user.uri|default(app.user.id)}) }}"><i class="glyphicon glyphicon-user"></i> {{ app.user.truename }}</a></li>
           <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
         </ul>
 

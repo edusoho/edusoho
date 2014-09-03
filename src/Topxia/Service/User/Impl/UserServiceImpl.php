@@ -123,6 +123,14 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getUserDao()->updateUser($userId, array('email' => $email));
     }
 
+    public function changeTrueName($userId,$truename)
+    {
+         if (!SimpleValidator::truename($truename)) {
+            throw $this->createServiceException('姓名格式不正确，变更姓名失败。');
+        }
+        $this->getUserDao()->updateUser($userId, array('truename' => $truename));
+    }
+
     public function changeAvatar($userId, $filePath, array $options)
     {
         $user = $this->getUser($userId);
@@ -243,9 +251,12 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('email error!');
         }
         
-        if (!SimpleValidator::nickname($registration['nickname'])) {
-            throw $this->createServiceException('nickname error!');
+        if (!isset($registration['truename']) || ($registration['truename']!="" && !SimpleValidator::truename($registration['truename']))) {
+            throw $this->createServiceException('truename error!');
         }
+        // if (!SimpleValidator::nickname($registration['nickname'])) {
+        //     throw $this->createServiceException('nickname error!');
+        // }
         if(!$this->isNumberAvaliable($registration['number'])){
             throw $this->createServiceException('学号/工号已存在');
         }
@@ -254,14 +265,15 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('Email已存在');
         }
 
-        if (!$this->isNicknameAvaliable($registration['nickname'])) {
-            throw $this->createServiceException('昵称已存在');
-        }
+        // if (!$this->isNicknameAvaliable($registration['nickname'])) {
+        //     throw $this->createServiceException('昵称已存在');
+        // }
 
         $user = array();
         $user['number'] =$registration['number'];
         $user['email'] = $registration['email'];
         $user['nickname'] = $registration['nickname'];
+        $user['truename'] = $registration['truename'];
         $user['roles'] =  array('ROLE_USER');
         $user['type'] = $type;
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
@@ -288,15 +300,12 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('idcard error!');
         }
 
-        if (isset($registration['truename']) &&$registration['truename']!=""&& !SimpleValidator::truename($registration['truename'])) {
-            throw $this->createServiceException('truename error!');
-        }
 
         $profile = array();
         $profile['id'] = $user['id'];
         $profile['mobile'] = empty($registration['mobile']) ? '' : $registration['mobile'];
         $profile['idcard'] = empty($registration['idcard']) ? '' : $registration['idcard'];
-        $profile['truename'] = empty($registration['truename']) ? '' : $registration['truename'];
+        //$profile['truename'] = empty($registration['truename']) ? '' : $registration['truename'];
         $profile['company'] = empty($registration['company']) ? '' : $registration['company'];
         $profile['job'] = empty($registration['job']) ? '' : $registration['job'];
         $profile['weixin'] = empty($registration['weixin']) ? '' : $registration['weixin'];
@@ -371,7 +380,6 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $fields = ArrayToolkit::filter($fields, array(
-            'truename' => '',
             'gender' => 'secret',
             'iam' => '',
             'idcard'=>'',
@@ -425,7 +433,6 @@ class UserServiceImpl extends BaseService implements UserService
             'varcharField9'=>"",
             'varcharField10'=>"",
         ));
-
         if (empty($fields)) {
             return $this->getProfileDao()->getProfile($id);
         }
