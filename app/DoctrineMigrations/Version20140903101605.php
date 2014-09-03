@@ -14,7 +14,7 @@ class Version20140903101605 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
     	$this->addSql("ALTER TABLE `user` ADD `truename` VARCHAR(64)  NOT NULL AFTER `nickname`;");
-    	$this->addSql("ALTER TABLE `user_profile` drop column `truename`;");
+    	//$this->addSql("ALTER TABLE `user_profile` drop column `truename`;");
     }
 
     public function down(Schema $schema)
