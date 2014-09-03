@@ -12,6 +12,32 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->formData;
 	}
 
+	public function getCourseNotice()
+	{
+		$courseId = $this->getParam("courseId");
+		if (empty($courseId)) {
+			return array();
+		}
+		$announcements = $this->controller->getCourseService()->findAnnouncements($courseId, 0, 10);
+		return $this->filterAnnouncements($announcements);
+	}
+
+	private function filterAnnouncements($announcements)
+	{
+		return array_map(function($announcement){
+			unset($announcement["userId"]);
+			unset($announcement["courseId"]);
+			unset($announcement["updatedTime"]);
+			$announcement["createdTime"] = date('Y-m-d h:i:s', $announcement['createdTime']);
+			return $announcement;
+		}, $announcements);
+	}
+
+	private function filterAnnouncement($announcement)
+	{
+		return $this->filterAnnouncements(array($announcement));
+	}
+
 	public function getReviews()
 	{
 		$courseId = $this->getParam("courseId");

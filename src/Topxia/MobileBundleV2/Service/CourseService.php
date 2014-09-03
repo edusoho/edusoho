@@ -13,4 +13,6 @@ interface CourseService
 	public function favoriteCourse();
 	public function unFavoriteCourse();
 	public function getTeacherCourses();
+
+	public function getCourseNotice();
 }
