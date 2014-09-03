@@ -201,6 +201,10 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return $class;
     }
 
+    public function updateClassStudentNum($num,$id){
+        $this->getClassesDao()->updateClassStudentNum($num,$id);
+    }
+
     public function deleteClass($id)
     {
         return $this->getClassesDao()->deleteClass($id);

@@ -23,6 +23,8 @@ interface ClassesService
 
     public function editClass($fields, $id);
 
+    public function updateClassStudentNum($num,$id);
+
     public function deleteClass($id);
 
     public function checkPermission($name, $classId);

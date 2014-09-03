@@ -77,6 +77,7 @@ class StudentController extends BaseController
                 if(count($classMembers)>0 && $classMembers[0]['classId']==$classId){
                     continue;
                 }
+
                 $users[]=$user;
             }
             foreach ($users as $user) {
@@ -87,6 +88,7 @@ class StudentController extends BaseController
                 $classMember['createdTime']=time();
                 $this->getClassMemberService()->addClassMember($classMember);
             }
+            $this->getClassService()->updateClassStudentNum(count($users),$classId);
             return $this->createJsonResponse(true);
         }
 
@@ -95,8 +97,9 @@ class StudentController extends BaseController
         ));
     }
     
-    public function removeAction(Request $request, $userId){
+    public function removeAction(Request $request, $userId ,$classId){
         $this->getClassMemberService()->deleteClassMemberByUserId($userId);
+        $this->getClassService()->updateClassStudentNum(-1,$classId);
         return $this->createJsonResponse(true);
     }
 
@@ -108,6 +111,10 @@ class StudentController extends BaseController
     protected function getClassMemberService()
     {
         return $this->getServiceKernel()->createService('Classes.ClassMemberService');
+    }
+
+    protected function getClassService(){
+        return $this->getServiceKernel()->createService('Classes.ClassesService');
     }
 
 }
