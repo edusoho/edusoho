@@ -21,6 +21,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
 
     public function searchClasses($conditions, $sort = array(), $start, $limit) 
     {
+        $conditions = array_filter($conditions);   
         return $this->getClassesDao()->searchClasses($conditions, $sort, $start, $limit);
     }
 

@@ -48,11 +48,20 @@ class UserServiceImpl extends BaseService implements UserService
             return null;
         }
         $user = $this->getUserDao()->findUserByEmail($email);
-        if(!$user){
+        if (!$user) {
             return null;
         } else {
             return UserSerialize::unserialize($user);
         }
+    }
+
+    public function getUserByNumber($number)
+    {
+        if (empty($number)) {
+            return null;
+        }
+        $user=$this->getUserDao()->getUserByNumber($number);
+        return UserSerialize::unserialize($user);
     }
 
     public function findUsersByIds(array $ids)
@@ -78,15 +87,6 @@ class UserServiceImpl extends BaseService implements UserService
     public function searchUserCount(array $conditions)
     {
         return $this->getUserDao()->searchUserCount($conditions);
-    }
-
-    
-    public function getUserByNumber($number){
-        if (empty($number)) {
-            return null;
-        }
-        $user=$this->getUserDao()->getUserByNumber($number);
-        return UserSerialize::unserialize($user);
     }
 
     public function setEmailVerified($userId)
