@@ -236,11 +236,17 @@ class CourseController extends BaseController
 
 		$user = $this->getCurrentUser();
 
+		$classMember = $this->getClassesService()->getMemberByUserIdAndClassId($user['id'], $course['classId']);
+
 		$items = $this->getCourseService()->getCourseItems($course['id']);
 
 		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
 		$this->getCourseService()->hitCourse($id);
+
+		if ($classMember && $classMember['role'] == 'STUDENT' && empty($member)) {
+			$member = $this->getCourseService()->becomeStudent($course['id'], $user['id']);
+		}
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
 		if ($member && empty($member['locked'])) {
@@ -700,4 +706,8 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
+    private function getClassesService()
+    {
+    	return $this->getServiceKernel()->createService('Classes.ClassesService');
+    }
 }

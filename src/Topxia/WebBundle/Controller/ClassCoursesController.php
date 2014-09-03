@@ -42,7 +42,7 @@ class ClassCoursesController extends BaseController
         	'courses' => $courses,
         	));
     }
-     
+    
     protected function getClassService()
     {
         return $this->getServiceKernel()->createService('Classes.ClassesService');
