@@ -104,15 +104,16 @@ define(function(require, exports, module) {
 
         }
         $('#show-coupon-input').on('click', function(){
+            var $form = $(this).parents('form');
             if ($(this).data('status') == 'hide') {
-                $(this).parents('form').find('.coupon-input-group').removeClass('hide');
-                $(this).parents('form').find('#show-coupon').addClass('hide');
-                $(this).parents('form').find('#hide-coupon').removeClass('hide');
+                $form.find('.coupon-input-group').removeClass('hide');
+                $form.find('#show-coupon').addClass('hide');
+                $form.find('#hide-coupon').removeClass('hide');
                 $(this).data('status', 'show');
             } else if ($(this).data('status') == 'show') {
-                $(this).parents('form').find('.coupon-input-group').addClass('hide');
-                $(this).parents('form').find('#show-coupon').removeClass('hide');
-                $(this).parents('form').find('#hide-coupon').addClass('hide');
+                $form.find('.coupon-input-group').addClass('hide');
+                $form.find('#show-coupon').removeClass('hide');
+                $form.find('#hide-coupon').addClass('hide');
                 $(this).data('status', 'hide');
             }
         });
