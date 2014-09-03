@@ -5,43 +5,40 @@ define(function(require, exports, module) {
     require('jquery.select2-css');
     require('jquery.select2');
     exports.run = function() {
-
-        $('#course-table tbody tr').on('click',function(){
-            $('#course-table tbody').find('.success').removeClass('success');
+        var $form = $("#class-course-add-form");
+        $form.find('#course-table tbody tr').on('click',function(){
+            $form.find('#course-table tbody').find('.success').removeClass('success');
             $(this).addClass('success');
-            $('#select-area').attr('class','show');
-            $('#title-span').html($(this).data('title'));
-            $('#name-span').html($(this).data('teachername'));
-            $('#parentId').val($(this).data('id'));
-            var $tr = $(this);
-            $('[name=compulsory').each(function(){
-                if($(this).val() == $tr.data('compulsory')){
-                    $(this).attr('checked','checked');
-                }
-            });
+            $form.find('#select-area').attr('class','show');
+            $form.find('#title-span').html($(this).data('title'));
+            $form.find('#name-span').html($(this).data('teachername'));
+            $form.find('#parentId').val($(this).data('id'));
+            $form.find('[name=compulsory][value=' + $(this).data('compulsory') + ']').prop('checked', true);
         });
 
-        $('[role=tablist]').on('click','li', function(){
+        $form.find('[role=tablist]').on('click','li', function(){
             var $priorli = $(this).parent().find('.active');
             $priorli.removeClass('active');
             $(this).addClass('active');
             $.get($(this).data('url'),function(html) {
-                $('#select-area').attr('class','hidden');
-                $('.tab-target').html($(html).find('.tab-target').html());
-                $('#course-table tbody tr').on('click',function(){
-                    $('#course-table tbody').find('.success').removeClass('success');
+                $form.find('#select-area').attr('class','hidden');
+                $form.find('.tab-target').html($(html).find('.tab-target').html());
+                
+
+                $form.find('#course-table tbody tr').on('click',function(){
+                    $form.find('#course-table tbody').find('.success').removeClass('success');
                     $(this).addClass('success');
-                    $('#select-area').attr('class','show');
-                    $('#title-span').html($(this).data('title'));
-                    $('#name-span').html($(this).data('teachername'));
-                    $('#parentId').val($(this).data('id'));
+                    $form.find('#select-area').attr('class','show');
+                    $form.find('#title-span').html($(this).data('title'));
+                    $form.find('#name-span').html($(this).data('teachername'));
+                    $form.find('#parentId').val($(this).data('id'));
+                    $form.find('[name=compulsory][value=' + $(this).data('compulsory') + ']').prop('checked', true);
                 });
 
             });
         });
 
         var $modal = $('#class-create-form').parents('.modal');
-        var $form = $("#class-course-add-form");
 
         var validator = new Validator({
             element: '#class-course-add-form',
