@@ -165,12 +165,20 @@ class SchoolController extends BaseController
             $classCourses=array();
         }
         $excludeIds = ArrayToolkit::column($classCourses, 'parentId');
-        $conditions =array(
+        if($class['public'] == '1') {
+            $conditions =array(
             'parentId' => 0,
-            'gradeId' => $class['gradeId'],
-            'public' => $class['public'],
+            'gradeId' => 0,
             'excludeIds' => $excludeIds
         );
+        }else{
+            $conditions =array(
+            'parentId' => 0,
+            'gradeId' => $class['gradeId'],
+            'excludeIds' => $excludeIds
+            );
+        }
+        
 
         $paginator = new Paginator(
             $this->get('request'),
