@@ -21,7 +21,7 @@
 		{% for student in students %}
 			<div class="col-md-1">
 				<a href="{{ path('user_show', {id:student.id}) }}">
-					<img class="media-object pull-left" width="48" height="48" src="{{file_path(student.smallAvatar, 'avatar.png')}}" alt="{{student.truename}}">
+					<img class="media-object pull-left" width="48" height="48" src="{{file_path(student.smallAvatar, 'avatar.png')}}" title="{{student.truename}}" alt="{{student.truename}}">
 				</a>
 			</div>
 		{% else %}
