@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\SecurityContext;
 
 class K12DefaultController extends BaseController
 {
@@ -27,9 +28,24 @@ class K12DefaultController extends BaseController
         return $this->redirect($this->generateUrl('class_show', array('classId' => $class['id'])));
     }
 
-    public function loginAction()
+    public function loginAction(Request $request)
     {
-        
+        $user = $this->getCurrentUser();
+        if ($user->isLogin()) {
+            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
+        }
+
+        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
+            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
+        } else {
+            $error = $request->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
+        }
+
+        return $this->render('TopxiaWebBundle:K12Default:login.html.twig',array(
+            'last_username' => $request->getSession()->get(SecurityContext::LAST_USERNAME),
+            'error'         => $error,
+            'targetPath' => $this->generateUrl('homepage'),
+        ));
     }
 
     public function passwordAction(Request $request){

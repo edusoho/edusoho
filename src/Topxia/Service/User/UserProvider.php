@@ -20,7 +20,7 @@ class UserProvider implements UserProviderInterface {
         if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
             $user = $this->getUserService()->getUserByEmail($username);
         } else {
-            $user = $this->getUserService()->getUserByNickname($username);
+            $user = $this->getUserService()->getUserByNumber($username);
         }
 
         if (empty($user)) {
