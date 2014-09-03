@@ -14,3 +14,5 @@
 14 获取用户信息                         User/getUserInfo
 15 获取课程课时列表                   Lesson/getCourseLessons
 16 获取课程所有评价                   Course/getReviews
+17 获取课程公告                          Course/getCourseNotice
+18 获取教室课程                          Course/getTeacherCourses
