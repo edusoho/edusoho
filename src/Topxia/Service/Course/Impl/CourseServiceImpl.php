@@ -1442,6 +1442,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				throw $this->createServiceException("教师ID不能为空，设置课程(#{$courseId})教师失败");
 			}
 			$user = $this->getUserService()->getUser($teacher['id']);
+
 			if (empty($user)) {
 				throw $this->createServiceException("用户不存在或没有教师角色，设置课程(#{$courseId})教师失败");
 			}
@@ -2002,19 +2003,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$templateCourse['gradeId'] = $class['gradeId'];
 		$templateCourse['term'] = $class['term'];
 		$templateCourse['compulsory'] = $compulsory;
-		$templateCourse['teacherIds'] = array(0 => $teacherId);
 		
 		$newCourse = $courseDao->addCourse(CourseSerialize::serialize($templateCourse));
 		$chapters = $chapterDao->findChaptersByCourseId($parentId);
 		$lessons = $lessonDao->findLessonsByCourseId($parentId);
 		
-		//增加classmember记录
-/*		$classMember = array();
-		$classMember['userId'] = $teacherId;
-		$classMember['classId'] = $classId;
-		$classMember['role'] = 'TEACHER';
-		$classMember['createdTime'] = time();
-		$this->getClassMemberService()->addClassMember($classMember);*/
+		//设置课程老师
+		$this->setCourseTeachers($newCourse['id'], array(0 => array(
+			'id' => $teacherId,
+			'isVisible' => 1
+			)));
 
 		$chapterIdMap = array();
 		$newChapters = array();
