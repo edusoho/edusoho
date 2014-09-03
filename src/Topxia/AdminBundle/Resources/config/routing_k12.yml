@@ -1,0 +1,11 @@
+admin_user_import:
+    pattern:  /user/import/
+    defaults: { _controller: TopxiaAdminBundle:UserImporter:importUserInfoByExcel }
+
+admin_user_import_to_base:
+    pattern:  /user/import/to/base
+    defaults: { _controller: TopxiaAdminBundle:UserImporter:importUserDataToBase }
+
+admin_userImport:
+    pattern:  /userimporter/index
+    defaults: { _controller: TopxiaAdminBundle:UserImporter:index }
