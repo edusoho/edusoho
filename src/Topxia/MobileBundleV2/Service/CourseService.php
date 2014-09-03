@@ -15,5 +15,4 @@ interface CourseService
 	public function getTeacherCourses();
 
 	public function getCourseNotice();
-	public function learnCourse();
 }

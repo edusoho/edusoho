@@ -24,7 +24,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         		$order = $this->controller->getCourseOrderService()->createOrder($this->formData);
 
         		if ($order['status'] == 'paid') {
-            		return array('status' => 'ok', 'paid' => true);
+            		return array('status' => 'ok', 'paid' => true, "message"=>"", "payUrl"=>"");
                         }
 
                         return $this->payCourseByAlipay($order["id"], $token);
@@ -32,7 +32,12 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             private function payCourseByAlipay($orderId, $token)
             {
-                $result = array('status' => 'error', 'message' => '支付功能未开启！');
+                $result = array(
+                    'status' => 'error',
+                     'message' => '',
+                     'paid' => false,
+                     'payUrl' => ""
+                );
                 $payment = $this->setting('payment', array());
                 if (empty($payment['enabled'])) {
                     $result["message"] = "支付功能未开启！";
@@ -51,17 +56,13 @@ class OrderServiceImpl extends BaseService implements OrderService
 
                 if (empty($payment['alipay_type']) or $payment['alipay_type'] != 'direct') {
                     $payUrl = $this->generateUrl('mapi_order_submit_pay_request', array('id' => $orderId, 'token' => $token), true);
-                    return array(
-                        'status' => 'ok', 
-                        'paid' => false, 
-                        'payUrl' => $payUrl
-                    );
+                    $result["payUrl"] = $payUrl;
                 } else {
-                    return array(
-                        'status' => 'ok', 
-                        'paid' => false, 
-                        'payUrl' => MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order)
-                    );
+                    $result["payUrl"] = MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order);
                 }
+
+                $result["status"] = "ok";
+                return $result;
+
             }
 }
