@@ -243,8 +243,7 @@ class CourseLessonController extends BaseController
         }
 
         $json['canLearn'] = $this->getCourseService()->canLearnLesson($lesson['courseId'], $lesson['id']);
-print_r($json);
-die;
+
         return $this->createJsonResponse($json);
     }
 
