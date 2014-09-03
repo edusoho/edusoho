@@ -34,6 +34,8 @@ interface UserService
 
     public function isNicknameAvaliable($nickname);
 
+    public function isNumberAvaliable($number);
+
     public function isEmailAvaliable($email);
 
     public function hasAdminRoles($userId);

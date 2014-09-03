@@ -1,0 +1,18 @@
+{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+
+{% block title %}用户导入 - {{ parent() }}{% endblock %}
+
+{% set menu = 'user-lead' %}
+{% set script_controller = 'user/lead-excel' %}
+
+{% block main %}
+{{ web_macro.flash_messages() }}
+<div class="page-header clearfix">
+  <h1 class="pull-left">用户导入-步骤3</h1>
+</div>
+
+    <div class="row">
+        <div class="col-md-offset-2"><b>导入成功！<a type="button" class="btn btn-primary" href="{{ url('admin_user_import') }}">继续导入</a></b></div>
+    </div>
+
+{% endblock %}
