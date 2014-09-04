@@ -3,18 +3,17 @@ define(function(require, exports, module) {
     require('swfupload');
     var Widget = require('widget');
     var FileBrowser = require('../file/file-browser');
-    var ChunkUpload = require('./chunk-upload');
-    var UploadProgressBar = require('./upload-progress-bar');
     var UploadPanel = require('./upload-panel');
-    var Notify = require('common/bootstrap-notify');
 
     var BaseChooser = Widget.extend({
+
         attrs: {
             choosed: null,
             uploader: null,
             uploaderSettings: {},
             preUpload: null,
-            uploadPanel: null
+            uploadPanel: null,
+            uploaderProgressbar : null
         },
 
         events: {
@@ -25,9 +24,9 @@ define(function(require, exports, module) {
             this._chooses = {};
             this.on('change', this.onChanged);
 
+            this._initUploadPanel();
             this._initTabs();
             this.FileBrowser();
-            this._initUploadPane();
 
             var choosed = this.get('choosed');
             if (choosed) {
@@ -80,12 +79,11 @@ define(function(require, exports, module) {
                 this.close();
             }
         },
-
         _initTabs: function() {
             var self = this;
             this.$('.file-chooser-tabs [data-toggle="tab"]').on('show.bs.tab', function(e) {
                 if ($(e.target).hasClass('file-chooser-uploader-tab')) {
-                    self.get('uploaderProgressbar').reset().hide();
+                    self.get("uploaderProgressbar").reset().hide();
                 }
 
                 if ($(e.relatedTarget).hasClass('file-chooser-uploader-tab')) {
@@ -112,7 +110,7 @@ define(function(require, exports, module) {
             });
         },
 
-        _initUploadPane: function(){
+        _initUploadPanel: function(){
             var uploadPanel = new UploadPanel({
                 element: this.element,
                 uploaderSettings: this.get("uploaderSettings"),
