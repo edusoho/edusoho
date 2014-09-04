@@ -1997,60 +1997,69 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$templateCourse = $courseDao->getCourse($parentId);
 		$class = $classService->getClass($classId);
 
+		$courseDao->getConnection()->beginTransaction();
 		unset($templateCourse['id']);
 		$templateCourse['parentId'] = $parentId;
 		$templateCourse['classId'] = $classId;
 		$templateCourse['gradeId'] = $class['gradeId'];
 		$templateCourse['term'] = $class['term'];
 		$templateCourse['compulsory'] = $compulsory;
-		
-		$newCourse = $courseDao->addCourse(CourseSerialize::serialize($templateCourse));
-		$chapters = $chapterDao->findChaptersByCourseId($parentId);
-		$lessons = $lessonDao->findLessonsByCourseId($parentId);
-		
-		//设置课程老师
-		$this->setCourseTeachers($newCourse['id'], array(0 => array(
-			'id' => $teacherId,
-			'isVisible' => 1
-			)));
+		try {
+			$newCourse = $courseDao->addCourse(CourseSerialize::serialize($templateCourse));
+			$chapters = $chapterDao->findChaptersByCourseId($parentId);
+			$lessons = $lessonDao->findLessonsByCourseId($parentId);
+			
+			//设置课程老师
+			$this->setCourseTeachers($newCourse['id'], array(0 => array(
+				'id' => $teacherId,
+				'isVisible' => 1
+				)));
 
-		$chapterIdMap = array();
-		$newChapters = array();
-		foreach ($chapters as $key1 => $chapter) {
-			$tempId = $chapter['id'];
-			unset($chapter['id']);
-			$chapter['courseId'] = $newCourse['id'];
-			$newChapter = $chapterDao->addChapter($chapter);
-			$chapterIdMap[$tempId] = $newChapter['id'];
-			$newChapters[] = $newChapter; 
-		}
-
-		$newLessons = array();
-		foreach ($lessons as $key2 => $lesson) {
-			unset($lesson['id']);
-			$lesson['courseId'] = $newCourse['id'];
-			$newLesson = $lessonDao->addLesson($lesson);
-			$newLessons[] = $newLesson;
-		}
-
-		//修改复制的Chapter的parentId
-		foreach ($newChapters as $key3 => $newChapter) {
-
-			if(array_key_exists($newChapter['parentId'], $chapterIdMap)) {
-				$newChapter['parentId'] = $chapterIdMap[$newChapter['parentId']];
-				$chapterDao->updateChapter($newChapter['id'],
-					array('parentId'=>$newChapter['parentId']));
+			$chapterIdMap = array();
+			$newChapters = array();
+			foreach ($chapters as $key1 => $chapter) {
+				$tempId = $chapter['id'];
+				unset($chapter['id']);
+				$chapter['courseId'] = $newCourse['id'];
+				$newChapter = $chapterDao->addChapter($chapter);
+				$chapterIdMap[$tempId] = $newChapter['id'];
+				$newChapters[] = $newChapter; 
 			}
 
-		}
-
-		//修改复制的Lesson的chapterId
-		foreach ($newLessons as $key4 => $newLesson) {
-			if(array_key_exists($newLesson['chapterId'], $chapterIdMap)) {
-				$newLesson['chapterId'] = $chapterIdMap[$newLesson['chapterId']];
-				$lessonDao->updateLesson($newLesson['id'],
-					array('chapterId'=>$newLesson['chapterId']));
+			$newLessons = array();
+			foreach ($lessons as $key2 => $lesson) {
+				unset($lesson['id']);
+				$lesson['courseId'] = $newCourse['id'];
+				$newLesson = $lessonDao->addLesson($lesson);
+				$newLessons[] = $newLesson;
 			}
+			
+			//修改复制的Chapter的parentId
+			foreach ($newChapters as $key3 => $newChapter) {
+
+				if(array_key_exists($newChapter['parentId'], $chapterIdMap)) {
+					$newChapter['parentId'] = $chapterIdMap[$newChapter['parentId']];
+					$chapterDao->updateChapter($newChapter['id'],
+						array('parentId'=>$newChapter['parentId']));
+				}
+
+			}
+
+			//修改复制的Lesson的chapterId
+			foreach ($newLessons as $key4 => $newLesson) {
+				if(array_key_exists($newLesson['chapterId'], $chapterIdMap)) {
+					$newLesson['chapterId'] = $chapterIdMap[$newLesson['chapterId']];
+					$lessonDao->updateLesson($newLesson['id'],
+						array('chapterId'=>$newLesson['chapterId']));
+				}
+			}
+			//commit if no error
+			$courseDao->getConnection()->commit();
+
+		} catch(\Exception $e) {
+			//roll back if has error
+			$courseDao->getConnection()->rollback();
+			throw $e; 
 		}
 
 		return CourseSerialize::unserialize($newCourse);
