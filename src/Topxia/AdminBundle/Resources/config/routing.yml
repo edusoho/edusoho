@@ -975,6 +975,10 @@ admin_user_fields_edit:
     pattern:  /user_fields/edit/{id}
     defaults: { _controller: TopxiaAdminBundle:Setting:editUserFields }
 
+admin_user_fields_delete:
+    pattern:  /user_fields/delete/{id}
+    defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }
+
 admin_class_student:
     pattern:  /class/{classId}/student
     defaults: { _controller: TopxiaAdminBundle:Student:index }
