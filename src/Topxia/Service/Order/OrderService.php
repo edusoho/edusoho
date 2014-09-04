@@ -26,6 +26,8 @@ interface OrderService
 
     public function sumOrderPriceByTarget($targetType, $targetId);
 
+    public function sumCouponDiscountByOrderIds($orderIds);
+
     public function findUserRefundCount($userId);
 
     public function findRefundsByIds(array $ids);
