@@ -673,3 +673,12 @@ a:hover {
 .autumn-grids .live-course-lesson .live-time {
     color: #428bca;
 }
+
+.homepage .hot-group img {
+    width: 58px;
+    height: 58px;
+}
+
+.homepage .hot-group p {
+    margin-bottom: 10px;
+}
