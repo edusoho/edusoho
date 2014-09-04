@@ -1068,7 +1068,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$memberFields['credit'] = $totalCredits;
 
 		$this->getStatusService()->publishStatus(array(
-			'type' => 'lesson_learned',
+			'type' => 'learned_lesson',
 			'objectType' => 'lesson',
 			'objectId' => $lessonId,
 			'properties' => array(
@@ -1585,6 +1585,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    	$fields['income'] = $this->getOrderService()->sumOrderPriceByTarget('course', $courseId);
 	    }
 		$this->getCourseDao()->updateCourse($courseId, $fields);
+
+		$this->getStatusService()->publishStatus(array(
+			'type' => 'become_student',
+			'objectType' => 'course',
+			'objectId' => $courseId,
+			'properties' => array(
+				'course' => $this->simplifyCousrse($course),
+			)
+		));
 
 		return $member;
 	}
