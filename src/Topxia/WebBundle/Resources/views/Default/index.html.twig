@@ -185,23 +185,26 @@
       {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock',{number:5})) }}
 
       {# 最热话题 #}
-      {% set hotThreads = data('HotThreads', {'count':11}) %}
-      {% if hotThreads %}
-        <div class="es-box hot-threads">
-          <div class="es-box-heading"><h2>最热话题</h2></div>
-          <div class="es-box-body">
-            <ul class="text-list">
-              {% for thread in hotThreads %}
-                <li style="border-bottom:none;background:url('{{asset('assets/img/default/triangle.png')}}') no-repeat 0 3px;padding-left:8px;padding-top:0px;margin-bottom:8px;"><a  href="{{path('group_thread_show',{id:thread.groupId,threadId:thread.id})}}">{{thread.title|sub_text(15)}}</a></li>
-              {% endfor %}
-            </ul>
+      {% if setting('group').group_show|default(1) %}
+        {% set hotThreads = data('HotThreads', {'count':11}) %}
+        {% if hotThreads %}
+          <div class="es-box hot-threads">
+            <div class="es-box-heading"><h2>最热话题</h2></div>
+            <div class="es-box-body">
+              <ul class="text-list">
+                {% for thread in hotThreads %}
+                  <li style="border-bottom:none;background:url('{{asset('assets/img/default/triangle.png')}}') no-repeat 0 3px;padding-left:8px;padding-top:0px;margin-bottom:8px;"><a  href="{{path('group_thread_show',{id:thread.groupId,threadId:thread.id})}}">{{thread.title|sub_text(15)}}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
           </div>
-        </div>
+        {% endif %}
       {% endif %}
+    
     </div>
 
   </div>
-  
+
 </div>
 {% endblock %}
 
