@@ -9,7 +9,6 @@ use PHPExcel_Cell;
 use Topxia\Common\SimpleValidator;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Topxia\WebBundle\Controller\BaseController;
 
 class UserImporterController extends BaseController
 {   
