@@ -23,7 +23,7 @@
     <div class="panel-body" id="post-action">
       {{threadMain.content|raw}}
 
-      <div>
+      <div class="mtl">
 
         {% if filters.type=='onlyOwner' %}
           <a class="btn btn-link" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}" %}><span class="glyphicon glyphicon-filter"></span> 查看全部回复</a>

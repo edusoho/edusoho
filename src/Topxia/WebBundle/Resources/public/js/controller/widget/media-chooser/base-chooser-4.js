@@ -202,7 +202,7 @@ define(function(require, exports, module) {
             if ($btn.data('filetypes')) {
                 settings.file_types = $btn.data('filetypes');
             }
-            if(this._supportHtml5() && $btn.data('storageType')=="cloud"){
+            if(this._supportChunkUpload() && $btn.data('storageType')=="cloud"){
                 settings.element=this.element;
                 settings.progressbar = progressbar;
                 return new ChunkUpload(settings);
@@ -210,15 +210,15 @@ define(function(require, exports, module) {
                 return new SWFUpload(settings);
             }
         },
-        _supportHtml5: function(){
-            if(typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
+        _supportChunkUpload: function(){
+            if(this.get("uploaderSettings").file_types.indexOf("ppt")>-1 || typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
                 return false;
             }
             return true;
         },
 
         destroy: function(){
-            if(this._supportHtml5() && this.$('[data-role=uploader-btn]').data('storageType')=="cloud"){
+            if(this._supportChunkUpload() && this.$('[data-role=uploader-btn]').data('storageType')=="cloud"){
                 var uploader = this.get("uploader");
                 uploader.destroy();
             }

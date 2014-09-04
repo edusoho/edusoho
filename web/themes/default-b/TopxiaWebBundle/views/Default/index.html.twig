@@ -80,7 +80,7 @@
         {# 推荐话题 #}
         <div class="es-box topic">
           <div class="es-box-heading">
-            <h2>推荐话题</h2>
+            <h2>课程讨论</h2>
           </div>
           <div class="es-box-body">
             {% set threads = data('EliteCourseThreadsByType',{'count':4, 'type':'discussion'}) %}
@@ -109,7 +109,7 @@
                       </div>
                     </li>
                   {% else %}
-                    <div class="empty">还没有推荐话题</div>
+                    <div class="empty">还没有课程讨论</div>
                   {% endif %}
                 {% endfor %}
               </ul>
