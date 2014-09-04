@@ -70,7 +70,7 @@ class UserImporterServiceImpl extends BaseService implements UserImporterService
 
     }
 
-    public function importUpdateNickname(array $users)
+    public function importUpdateNumber(array $users)
     {
 
         $this->getUserDao()->getConnection()->beginTransaction();

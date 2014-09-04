@@ -35,8 +35,8 @@ class UserImporterController extends BaseController
                 if ($user["gender"]=="女")$user["gender"]="female";
                 if ($user["gender"]=="")$user["gender"]="secret";
 
-                if($this->getUserService()->getUserByNickname($user["nickname"])){
-                    $userByNickname[]=$user;
+                if($this->getUserService()->getUserByNumber($user["number"])){
+                    $userByNumber[]=$user;
                 }
                 elseif ($this->getUserService()->getUserByEmail($user["email"])){
                     $userByEmail[]=$user;
@@ -44,7 +44,7 @@ class UserImporterController extends BaseController
                     $users[]=$user; 
                 }      
             }
-            $this->getUserImporterService()->importUpdateNickname($userByNickname); 
+            $this->getUserImporterService()->importUpdateNumber($userByNumber); 
             $this->getUserImporterService()->importUpdateEmail($userByEmail); 
             $this->getUserImporterService()->importUsers($users);      
         }

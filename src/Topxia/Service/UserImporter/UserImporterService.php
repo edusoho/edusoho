@@ -6,7 +6,7 @@ interface UserImporterService
 {
     public function importUsers(array $users);
 
-    public function importUpdateNickname(array $users);
+    public function importUpdateNumber(array $users);
 
     public function importUpdateEmail(array $users);
 }
