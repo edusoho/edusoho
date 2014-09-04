@@ -32,6 +32,29 @@
 
     {% if billable %}
       {% if payments %}
+
+        {% if setting('coupon.enabled') %}
+
+          <div class="form-group coupon-btn-group">
+            <div class="col-md-7 col-md-offset-3 controls">
+              <a href="javascript:;" id="show-coupon-input" data-status='hide'><span id="show-coupon" class="glyphicon glyphicon-plus"></span><span id="hide-coupon" class="glyphicon glyphicon-minus hide"></span>使用优惠码</a>
+            </div>
+          </div>
+
+        {% endif %}
+
+        <div class="form-group coupon-input-group hide">
+          <div class="col-md-7 col-md-offset-3 controls">
+            <div class="input-group">
+              <input type="text" class="form-control" name="coupon">
+              <span class="input-group-btn">
+                <button class="btn btn-default btn-use-coupon" data-url="{{ path('coupon_check', {type:'course', id:course.id}) }}" type="button">使用</button>
+              </span>
+            </div>
+            <div class="help-block coupon-error">温馨提示：点击【去支付】会生成订单，订单生成后，优惠码便不能再使用。</div>
+          </div>
+        </div>
+
         <div class="form-group">
           <div class="col-md-3 control-label">选择支付方式</div>
           <div class="col-md-9 controls">
@@ -54,29 +77,6 @@
           </div>
         </div>
         {% endif %}
-
-        {% if setting('coupon.enabled') %}
-
-          <div class="form-group coupon-btn-group">
-            <div class="col-md-7 col-md-offset-3 controls">
-              <a href="javascript:;" id="show-coupon-input">使用优惠码</a>
-            </div>
-          </div>
-
-        {% endif %}
-
-        <div class="form-group coupon-input-group" style="display:none">
-          <div class="col-md-7 col-md-offset-3 controls">
-            <div class="input-group">
-              <input type="text" class="form-control" name="coupon">
-              <span class="input-group-btn">
-                <button class="btn btn-default btn-use-coupon" data-url="{{ path('coupon_check', {type:'course', id:course.id}) }}" type="button">使用</button>
-                <button href="javascript:;" class="btn btn-link btn-cancel-coupon" type="button">取消</button>
-              </span>
-            </div>
-            <div class="help-block coupon-error" style="display:none;"></div>
-          </div>
-        </div>
 
       {% else %}
         <div class="alert alert-info">{{ setting('payment.disabled_message')|default('尚未开启支付模块，无法购买课程。')|raw }}</div>
@@ -246,7 +246,7 @@
         <span class="text-muted">预览模式无法支付</span>
         <button class="btn btn-primary" disabled="disabled">去支付</button> 
       {% else %}
-        <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
+        <button id="course-pay" class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
       {% endif %}
     {% endif %}
   {% else %}
