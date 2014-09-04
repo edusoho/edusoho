@@ -23,10 +23,13 @@ class ClassController extends ClassBaseController
         ));
     }
 
-    public function statusBlockAction(Request $request)
+    public function statusBlockAction($class)
     {
-        $statuses = $this->getStatusService()->findStatusesByUserIds(array(1,2,3), 0, 10);
+        $members = $this->getClassesService()->findClassStudentMembers($class['id']);
 
+        $userIds = ArrayToolkit::column($members, 'userId');
+
+        $statuses = $this->getStatusService()->findStatusesByUserIds($userIds, 0, 10);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($statuses, 'userId'));
         

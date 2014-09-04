@@ -30,4 +30,7 @@ interface ClassesService
     public function checkPermission($name, $classId);
 
     public function getMemberByUserIdAndClassId($userId, $classId);
+
+    public function findClassStudentMembers($classId);
+
 }

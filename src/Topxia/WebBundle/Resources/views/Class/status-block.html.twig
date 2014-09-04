@@ -3,10 +3,12 @@
     班级动态
   </div>
   <div class="panel-body">
-    <ul class="media-list">
+    <ul class="media-list status-list">
       {% for status in statuses %}
         {% set user = users[status.userId] %}
         {% include 'TopxiaWebBundle:Status:' ~ status.type ~ '-status.html.twig' %}
+      {% else %}
+        <li class="empty">还没有动态！</li>
       {% endfor %}
     </ul>
   </div>

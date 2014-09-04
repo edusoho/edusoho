@@ -34,6 +34,12 @@ class ClassMemberDaoImpl extends BaseDao implements ClassMemberDao
         return $this->getConnection()->fetchAssoc($sql, array($userId, $classId)) ? : null;
     }
 
+    public function findMembersByClassIdAndRole($classId, $role)
+    {
+        $sql ="SELECT * FROM {$this->table} WHERE classId = ? AND role = ?;";
+        return $this->getConnection()->fetchAll($sql, array($classId, $role));
+    }
+
     public function searchClassMembers($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
