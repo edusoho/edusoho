@@ -213,7 +213,6 @@ class UploadFileController extends BaseController
     {
         $key = $request->query->get('key');
         $info = $this->getUploadFileService()->getMediaInfo($key, $type);
-        var_dump($info);
         return $this->createJsonResponse($info['format']['duration']);
     }
 
