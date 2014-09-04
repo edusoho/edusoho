@@ -2015,6 +2015,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'type' => $course['type'],
 			'rating' => $course['rating'],
 			'about' => StringToolkit::plain($course['about'], 100),
+			'price' => $course['price'],
 		);
 	}
 
