@@ -92,7 +92,7 @@ define(function(require, exports, module) {
                     if (self.isUploading()) {
                         var result = confirm('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？');
                         if(result){
-                            self.destroy();
+                            self.get("uploadPanel").destroy();
                         }
                         return result;
                     }
