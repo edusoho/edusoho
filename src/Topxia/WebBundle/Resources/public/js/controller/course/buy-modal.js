@@ -104,15 +104,18 @@ define(function(require, exports, module) {
 
         }
         $('#show-coupon-input').on('click', function(){
-            $(this).parents('form').find('.coupon-input-group').show();
-            $(this).parents('form').find('.coupon-btn-group').hide();
-        });
-
-        $('.btn-cancel-coupon').on('click', function(){
-            $(this).parents('form').find('.coupon-btn-group').show();
-            $(this).parents('form').find('.coupon-input-group').hide();
-            $('[name="coupon"]').val('');
-            $('.coupon-error').hide();
+            var $form = $(this).parents('form');
+            if ($(this).data('status') == 'hide') {
+                $form.find('.coupon-input-group').removeClass('hide');
+                $form.find('#show-coupon').addClass('hide');
+                $form.find('#hide-coupon').removeClass('hide');
+                $(this).data('status', 'show');
+            } else if ($(this).data('status') == 'show') {
+                $form.find('.coupon-input-group').addClass('hide');
+                $form.find('#show-coupon').removeClass('hide');
+                $form.find('#hide-coupon').addClass('hide');
+                $(this).data('status', 'hide');
+            }
         });
 
         $('.btn-use-coupon').on('click', function(){
@@ -129,13 +132,17 @@ define(function(require, exports, module) {
                             + '</strong><span class="text-muted"> 元</span></span>';
 
                     $('.money-text').html(html);
+                    if (response.afterAmount === '0.00') {
+                        $('#course-pay').text('去学习');
+                    }
 
-                    $('.coupon-error').hide();
-                    $('.btn-cancel-coupon').hide();
-
+                    $('.coupon-error').html('');
+                    $('[name=coupon]').attr("readonly",true);
+                    $('.btn-use-coupon').addClass('disabled');
                 } else {
                     var message = '<span class="text-danger">'+response.message+'</span>';
                     $('.coupon-error').html(message).show();
+                    $('[name=coupon]').val('');
                 }
             });
         });

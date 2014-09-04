@@ -1,7 +1,8 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% set script_controller = 'group/group' %}
-{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
-
+{% block title %}{{threadMain.title}} - {{ parent() }}{% endblock %}
+{% block keywords %}{{threadMain.title|plain_text(15)}} {{ setting('site.name') }} {% endblock %}
+{% block description %}{{threadMain.content|plain_text(150)}}{% endblock %}
 {% block group_main %}
   <div class="panel panel-default group-thread">
     <div class="panel-heading">
@@ -66,9 +67,6 @@
           </a> #}
 
         {% endif %}
-
-
-
       </div>
     </div>
   </div>
