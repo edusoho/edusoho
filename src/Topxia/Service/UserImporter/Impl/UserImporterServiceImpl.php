@@ -1,9 +1,9 @@
 <?php
-namespace UserImporter\Service\UserImporter\Impl;
+namespace Topxia\Service\UserImporter\Impl;
 
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Topxia\Service\Common\BaseService;
-use UserImporter\Service\UserImporter\UserImporterService;
+use Topxia\Service\UserImporter\UserImporterService;
 
 class UserImporterServiceImpl extends BaseService implements UserImporterService
 {
@@ -21,7 +21,9 @@ class UserImporterServiceImpl extends BaseService implements UserImporterService
                 if ($users[$i]["gender"]=="")$users[$i]["gender"]="secret";
 
                 $userInfo['email'] = $users[$i]['email'];
-                $userInfo['nickname'] = $users[$i]['nickname'];
+                $userInfo['truename'] = $users[$i]['truename'];
+                $userInfo['nickname'] = $users[$i]['number'];
+                $userInfo['number'] = $users[$i]['number'];
                 $userInfo["roles"]=array('ROLE_USER');
                 $userInfo['type'] = "default";
                 $userInfo['createdIp'] = "";
@@ -38,7 +40,6 @@ class UserImporterServiceImpl extends BaseService implements UserImporterService
                 $profile['id'] = $user['id'];
                 $profile['mobile'] = empty($users[$i]['mobile']) ? '' : $users[$i]['mobile'];
                 $profile['idcard'] = empty($users[$i]['idcard']) ? '' : $users[$i]['idcard'];
-                $profile['truename'] = empty($users[$i]['truename']) ? '' : $users[$i]['truename'];
                 $profile['company'] = empty($users[$i]['company']) ? '' : $users[$i]['company'];
                 $profile['job'] = empty($users[$i]['job']) ? '' : $users[$i]['job'];
                 $profile['weixin'] = empty($users[$i]['weixin']) ? '' : $users[$i]['weixin'];
@@ -76,7 +77,7 @@ class UserImporterServiceImpl extends BaseService implements UserImporterService
         try{
 
             for($i=0;$i<count($users);$i++){
-                $member = $this->getUserDao()->findUserByNickname($users[$i]["nickname"]);
+                $member = $this->getUserDao()->getUserByNumber($users[$i]["number"]);
                 $member=UserSerialize::unserialize($member);
                 $this->getUserService()->changePassword($member["id"],$users[$i]["password"]);
                 $this->getUserService()->updateUserProfile($member["id"],$users[$i]);              

@@ -14,25 +14,6 @@ use Topxia\WebBundle\Controller\BaseController;
 class UserImporterController extends BaseController
 {   
 
-    public function indexAction(Request $request)
-    {   
-
-        if($request->getMethod()=="POST"){
-
-            $enabled=$request->request->get('enabled');
-
-            $this->getSettingService()->set('plugin_userImporter_enabled', $enabled);
-
-            $this->setFlashMessage("success","用户导入设置成功!");
-        }
-
-        $plugin_userImporter_enabled=$this->getSettingService()->get('plugin_userImporter_enabled', 1);
-
-        return $this->render('TopxiaAdminBundle:UserImporter:index.html.twig', array(
-            "plugin_userImporter_enabled"=>$plugin_userImporter_enabled,
-        ));
-    }
-
     public function importUserDataToBaseAction(Request $request)
     {   
         
@@ -119,9 +100,9 @@ class UserImporterController extends BaseController
                  $strs[$col]=$fieldTitle."";
             }   
             $excelField=$strs;
-            if(!$this->checkNecessaryFields($excelField)){
+            if(!$this->checkNecessaryFields($excelField,$errorInfo)){
 
-                $this->setFlashMessage('danger', '缺少必要的字段');
+                $this->setFlashMessage('danger', '缺少必要的字段:' . implode(",",$errorInfo));
 
                 return $this->render('TopxiaAdminBundle:UserImporter:userinfo.excel.html.twig', array(
                 ));
@@ -175,11 +156,11 @@ class UserImporterController extends BaseController
                 if(!$this->getUserService()->isNumberAvaliable($userData['number'])){ 
 
                     if($checkType=="ignore") {
-                        $checkInfo[]="第".$row."行的用户已存在，已略过"; 
+                        $checkInfo[]="第".$row."行的学号/工号已存在，已略过"; 
                         continue;
                     }
                     if($checkType=="update") {
-                        $checkInfo[]="第".$row."行的用户已存在，将会更新";          
+                        $checkInfo[]="第".$row."行的学号/工号已存在，将会更新";          
                     }
                     $userCount=$userCount+1; 
                     $allUserData[]= $userData;            
@@ -188,11 +169,11 @@ class UserImporterController extends BaseController
                 if(!$this->getUserService()->isEmailAvaliable($userData['email'])){          
 
                     if($checkType=="ignore") {
-                        $checkInfo[]="第".$row."行的用户已存在，已略过";
+                        $checkInfo[]="第".$row."行的邮箱已存在，已略过";
                         continue;
                     };
                     if($checkType=="update") {
-                        $checkInfo[]="第".$row."行的用户已存在，将会更新";
+                        $checkInfo[]="第".$row."行的邮箱已存在，将会更新";
                     }  
                     $userCount=$userCount+1; 
                     $allUserData[]= $userData;     
@@ -229,8 +210,8 @@ class UserImporterController extends BaseController
             $errorInfo[]="第 ".$row."行".$fieldCol["email"]." 列 的数据存在问题，请检查。";
         }
 
-        if (!SimpleValidator::nickname($userData['nickname'])) {
-            $errorInfo[]="第 ".$row."行".$fieldCol["nickname"]." 列 的数据存在问题，请检查。";
+        if (!SimpleValidator::number($userData['number'])) {
+            $errorInfo[]="第 ".$row."行".$fieldCol["number"]." 列 的数据存在问题，请检查。";
         }
 
         if (!SimpleValidator::password($userData['password'])) {
@@ -282,11 +263,11 @@ class UserImporterController extends BaseController
     {
         $errorInfo=array();
         $emailData=array();
-        $nicknameData=array();
+        $numberData=array();
 
         foreach ($fieldSort as $key => $value) {
-            if($value["fieldName"]=="nickname"){
-                $nickNameCol=$value["num"];
+            if($value["fieldName"]=="number"){
+                $numberCol=$value["num"];
             }
             if($value["fieldName"]=="email"){
                 $emailCol=$value["num"];
@@ -297,19 +278,19 @@ class UserImporterController extends BaseController
 
             $emailColData =$objWorksheet->getCellByColumnAndRow($emailCol, $row)->getValue(); 
             if($emailColData.""=="") continue;
-            $emailData[]=$emailColData."";         
+            $emailData[$row]=$emailColData."";         
         }
 
         $errorInfo=$this->arrayRepeat($emailData);
 
         for ($row=3 ;$row <= $highestRow;$row++) {
 
-            $nickNameColData=$objWorksheet->getCellByColumnAndRow($nickNameCol, $row)->getValue();      
-            if($nickNameColData.""=="") continue;
-            $nicknameData[]=$nickNameColData.""; 
+            $numberColData=$objWorksheet->getCellByColumnAndRow($numberCol, $row)->getValue();      
+            if($numberColData.""=="") continue;
+            $numberData[$row]=$numberColData.""; 
         }
 
-        $errorInfo.=$this->arrayRepeat($nicknameData);
+        $errorInfo.=$this->arrayRepeat($numberData);
 
         return $errorInfo;
     }
@@ -323,9 +304,9 @@ class UserImporterController extends BaseController
         foreach ($repeatArrayCount as $key => $value) {
             if($value>1) {$repeatRow.="重复:<br>";
                for($i=1;$i<=$value;$i++){
-                $row=array_search($key, $array)+3;
+                $row=array_search($key, $array);
                 $repeatRow.="第".$row."行"."    ".$key."<br>";
-                unset($array[$row-3]);
+                unset($array[$row]);
                }
             }
         }
@@ -354,18 +335,24 @@ class UserImporterController extends BaseController
          return $fieldSort;
     }
 
-    private function checkNecessaryFields($data)
-    {       
-        $data=implode("", $data);
-        $data=$this->trim($data);
-        $tmparray = explode("用户名",$data);
-        if (count($tmparray)<=1) return false; 
-
-        $tmparray = explode("邮箱",$data);
-        if (count($tmparray)<=1) return false; 
-
-        $tmparray = explode("密码",$data);
-        if (count($tmparray)<=1) return false; 
+    private function checkNecessaryFields($columns,&$errorInfo)
+    {   
+        if (!in_array('学号/工号', $columns)) {
+            $errorInfo[] = '学号/工号';
+            return false;
+        }
+        if (!in_array('密码', $columns)) {
+            $errorInfo[] = '密码'; 
+            return false;
+        }
+        if (!in_array('姓名', $columns)) {
+            $errorInfo[] = '姓名';
+            return false;
+        }
+        if (!in_array('邮箱', $columns)) {
+            $errorInfo[] = '邮箱';
+            return false;
+        }
 
         return true;
     }
@@ -376,15 +363,15 @@ class UserImporterController extends BaseController
 
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         $fieldArray=array(
-                "nickname"=>'用户名',
+                "number"=>'学号/工号',
                 "email"=>'邮箱',
                 "password"=>'密码',
                 "truename"=>'姓名',
                 "gender"=>'性别',
-                "idcard"=>'身份证号',
+                //"idcard"=>'身份证号',
                 "mobile"=>'手机号码',
-                "company"=>'公司',
-                "job"=>'职业',
+                //"company"=>'公司',
+                //"job"=>'职业',
                 "site"=>'个人主页',
                 "weibo"=>'微博',
                 "weixin"=>'微信',
@@ -419,7 +406,7 @@ class UserImporterController extends BaseController
 
     protected function getUserImporterService()
     {
-        return $this->getServiceKernel()->createService('UserImporter:UserImporter.UserImporterService');
+        return $this->getServiceKernel()->createService('UserImporter.UserImporterService');
     }
 
     protected function getUserService()

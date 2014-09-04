@@ -1,5 +1,5 @@
 <?php
-namespace UserImporter\Service\UserImporter;
+namespace Topxia\Service\UserImporter;
 
 
 interface UserImporterService

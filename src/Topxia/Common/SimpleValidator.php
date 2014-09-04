@@ -29,6 +29,10 @@ class SimpleValidator
         return !!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-z0-9_.]+$/u', $value);
     }
 
+    public static function number($value)
+    {
+        return !!preg_match('/^[\S]{4,20}$/u', $value);
+    }
     public static function password($value, array $option = array())
     {
         return !!preg_match('/^[\S]{5,20}$/u', $value);
