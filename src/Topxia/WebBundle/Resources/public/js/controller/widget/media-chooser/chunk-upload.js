@@ -416,6 +416,7 @@ define(function(require, exports, module) {
 		onUploadButtonClick: function(){
 			this.element.find("input[data-role='fileSelected']").click();
 		},
+		
 		onSelectFileChange: function(){
 
 			var files = this.element.find("input[data-role='fileSelected']")[0].files;

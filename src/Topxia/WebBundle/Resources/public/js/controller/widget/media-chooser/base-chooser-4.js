@@ -3,9 +3,7 @@ define(function(require, exports, module) {
     require('swfupload');
     var Widget = require('widget');
     var FileBrowser = require('../file/file-browser');
-    var ChunkUpload = require('./chunk-upload');
-    var UploadProgressBar = require('./upload-progress-bar');
-    var UploadPanel = require('./upload-panel');
+    var UploadPanel = require('edusoho.uploadpanel');
     var Notify = require('common/bootstrap-notify');
 
     var BaseChooser = Widget.extend({

@@ -118,6 +118,7 @@ define(function(require, exports, module) {
                 return new SWFUpload(settings);
             }
         },
+        
         _supportChunkUpload: function(){
             if(this.get("uploaderSettings").file_types.indexOf("ppt")>-1 || typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
                 return false;

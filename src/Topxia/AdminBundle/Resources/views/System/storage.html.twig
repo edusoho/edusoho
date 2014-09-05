@@ -136,7 +136,7 @@
 
   <hr>
 
-  <div class="row form-group">
+  <div class="row form-group" >
     <div class="col-md-3 control-label">
       <label>云视频指纹</label>
     </div>  
@@ -146,8 +146,11 @@
     </div>
   </div>
   {% if storageSetting.upload_mode == 'cloud' %}
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
+  <div class="row form-group" id="upload-panel"
+  data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:'headleader', targetId:'1'}) }}"
+  data-hls-encrypted="1"
+  >
+    <div class="col-md-3 control-label" >
       <label>云视频片头</label>
     </div>  
     <div class="controls col-md-8 radios">
