@@ -12,6 +12,23 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->formData;
 	}
 
+	public function getFavoriteCoruse()
+	{
+		$user = $this->controller->getUserToken($this->request);
+		$start = (int) $this->getParam("start", 0);
+		$limit = (int) $this->getParam("limit", 10);
+
+		$total = $this->controller->getCourseService()->findUserFavoritedCourseCount($user['id']);
+		$courses = $this->controller->getCourseService()->findUserFavoritedCourses($user['id'], $start, $limit);
+
+		return array(
+			"start"=>$start,
+			"limit"=>$limit,
+			"total"=>$total,
+			"data"=>$this->controller->filterCourses($courses)
+			);
+	}
+
 	public function getCourseNotice()
 	{
 		$courseId = $this->getParam("courseId");
@@ -174,9 +191,45 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $result;
 	}
 
+	public function getLearnedCourse()
+	{
+		$user = $this->controller->getUserByToken($this->request);
+		if (!$user->isLogin()) {
+            		return $this->createErrorResponse('not_login', "您尚未登录！");
+        		}
+
+		$start = (int) $this->getParam("start", 0);
+		$limit = (int) $this->getParam("limit", 10);
+        		$total = $this->controller->getCourseService()->findUserLeanedCourseCount($user['id']);
+        		$courses = $this->controller->getCourseService()->findUserLeanedCourses($user['id'], $start, $limit);
+        		
+        		$result = array(
+			"start"=>$start,
+			"limit"=>$limit,
+			"totla"=>$total,
+			"data"=> $this->array2Map($this->controller->filterCourses($courses))
+			);
+		return $result;
+	}
+
 	public function getLearningCourse()
 	{
-		$token = $this->controller->getUserToken($this->request);
-		return $token;
+		$user = $this->controller->getUserByToken($this->request);
+		if (!$user->isLogin()) {
+            		return $this->createErrorResponse('not_login', "您尚未登录！");
+        		}
+
+		$start = (int) $this->getParam("start", 0);
+		$limit = (int) $this->getParam("limit", 10);
+        		$total = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
+        		$courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
+        		
+        		$result = array(
+			"start"=>$start,
+			"limit"=>$limit,
+			"totla"=>$total,
+			"data"=> $this->array2Map($this->controller->filterCourses($courses))
+			);
+		return $result;
 	}
 }

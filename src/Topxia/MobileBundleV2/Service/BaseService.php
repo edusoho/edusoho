@@ -51,6 +51,19 @@ class BaseService
 	    return $error;
 	}
 
+	public function array2Map($learnCourses)
+	    {
+	        $mapCourses = array();
+	        if (empty($learnCourses)) {
+	            return $mapCourses;
+	        }        
+	        foreach ($learnCourses as $key => $learnCourse) {
+	            $mapCourses[$learnCourse['id']] = $learnCourse;
+	        }
+
+	        return $mapCourses;
+	    }
+
 	protected function getSiteInfo($request) {
 	        $site = $this->controller->getSettingService()->get('site', array());
 	        $mobile = $this->controller->getSettingService()->get('mobile', array());
