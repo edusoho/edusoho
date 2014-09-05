@@ -14,6 +14,11 @@ class LessonServiceImpl extends BaseService implements LessonService
 
 		$lessons = $this->controller->getCourseService()->getCourseItems($courseId);
 		$lessons = $this->controller->filterItems($lessons);
+		if ($user->isLogin()) {
+			$learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId)
+		} else {
+			$learnStatuses = array();
+		}
 		return array_values($lessons);
 	}
 }

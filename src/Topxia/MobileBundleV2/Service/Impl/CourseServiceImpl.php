@@ -120,6 +120,28 @@ class CourseServiceImpl extends BaseService implements CourseService
         		return true;
 	}
 
+	public function unLearnCourse()
+	{	
+		$courseId = $this->getParam("courseId");
+        		$user = $this->controller->getUserByToken($this->request);
+        		list($course, $member) = $this->controller->getCourseService()->tryTakeCourse($courseId);
+        
+        		if (empty($member) or empty($member['orderId'])) {
+            		return $this->createErrorResponse('not_member', '您不是课程的学员或尚未购买该课程，不能退学。');
+        		}
+
+        		$order = $this->controller->getOrderService()->getOrder($member['orderId']);
+        		if (empty($order)) {
+            		return $this->createErrorResponse( 'order_error', '订单不存在，不能退学。');
+            	}
+
+        		$reason = $this->getParam("reason", "");
+        		$amount = $this->getParam("amount", 0);
+
+        		$refund = $this->getCourseOrderService()->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
+		return $refund;
+	}
+
 	public function getCourse()
 	{	
 		$user = $this->controller->getUserByToken($this->request);

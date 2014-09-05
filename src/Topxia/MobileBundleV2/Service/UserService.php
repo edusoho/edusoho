@@ -8,4 +8,5 @@ interface UserService
 	public function regist();
 	public function loginWithToken();
 	public function getUserInfo();
+	public function logout();
 }
