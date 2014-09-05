@@ -20,6 +20,7 @@ class StudentController extends BaseController
 
     public function indexAction (Request $request,$classId)
     {   
+        $class=$this->getClassService()->getClass($classId);
         $conditions = array(
             'classId'=>$classId,
             'roles'=>array('STUDENT')
@@ -43,7 +44,7 @@ class StudentController extends BaseController
         return $this->render('TopxiaAdminBundle:Student:student-list.html.twig', array(
             'users' => $users ,
             'userProfiles'=>$userProfiles,
-            'classId'=>$classId,
+            'class'=>$class,
             'paginator' => $paginator
         ));
     }

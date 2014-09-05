@@ -7,14 +7,14 @@
       </a>
     </div>
     <div class="col-md-11">
-      <a href="{{ path('user_show', {id:user.id}) }}">
+      <a href="{{ path('user_show', {id:user.id}) }}" target="_blank" >
         <strong>{{user.truename}}</strong>
         {% if user.locked %}
           <label class="label label-danger">禁</label>
         {% endif %}
       </a>
       <br>
-      学号：{{ user.number }}
+      <span class="text-muted"><small>{{ user.number }}</small></span>
     </div>
   </td>
 
@@ -27,7 +27,7 @@
       <ul class="dropdown-menu">
         <li><a href="#modal" data-toggle="modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</a></li>
         
-        <li><a class="remove-student" href="javascript:" title="移除学生{{user.truename}}" data-url="{{ path('admin_class_student_remove', {userId:user.id,classId:classId}) }}">移除</a></li>
+        <li><a class="remove-student" href="javascript:" title="移除学生{{user.truename}}" data-url="{{ path('admin_class_student_remove', {userId:user.id,classId:class.id}) }}">移除</a></li>
       </ul>
     </div>
   </td>

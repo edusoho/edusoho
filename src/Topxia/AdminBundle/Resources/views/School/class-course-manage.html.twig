@@ -1,4 +1,4 @@
-{% extends 'TopxiaAdminBundle:School:layout.html.twig' %}
+  {% extends 'TopxiaAdminBundle:School:layout.html.twig' %}
 
 {% block title %}课程设置 - {{ parent() }}{% endblock %}
 
@@ -8,19 +8,30 @@
 {% block main %}
 <div class="page-header clearfix">
   <button class="btn btn-info btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{path('admin_school_class_course_add', { classId:class.id, gradeId:class.gradeId, term:class.term, public:0 })}}" >选增课程</button>
-  <h1 class="pull-left"><strong>课程设置</strong></h1>
-  <h5 class="text-center">
-    {{ class_name(class) }}
-
-    <span class="text-muted mll">
+  <h1 class="pull-left">
+    课程设置
+    <small class="text-success">
+      {{ class_name(class) }}
       {{ class.year}}届
       {% if class.term == 'first' %}
-      一学期  
+        一学期  
       {% else %}
-      二学期
+        二学期
       {% endif %}
-    </span>
-  </h5>
+    </small>
+  </h1>
+  {# <h5 class="text-center">
+
+  <span class="text-success pull-left ">
+    {{ class_name(class) }}
+    {{ class.year}}届
+    {% if class.term == 'first' %}
+    一学期  
+    {% else %}
+    二学期
+    {% endif %}
+  </span>
+   </h5> #}
 
 </div>
 
