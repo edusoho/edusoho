@@ -79,7 +79,4 @@ class ClassNoteController extends BaseController
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    protected function getClassMemberService(){
-        return $this->getServiceKernel()->createService('Classes.ClassMemberService');
-    }
 }

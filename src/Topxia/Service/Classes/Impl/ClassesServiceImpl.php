@@ -37,7 +37,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         $classMember['userId'] = $class['headTeacherId'];
         $classMember['role'] = 'HEAD_TEACHER';
         $classMember['createdTime'] = time();
-        $this->getClassMemberService()->addClassMember($classMember);
+        $this->addClassMember($classMember);
         return $class;
     }
 
@@ -188,15 +188,14 @@ class ClassesServiceImpl extends BaseService implements ClassesService
             'role' => 'HEAD_TEACHER'
             );
 
-        $oldClassMember = $this->getClassMemberService()->searchClassMembers(
+        $oldClassMember = $this->searchClassMembers(
             $conditions,
             array('id','DESC'),
             0,
             1);
 
         if($oldClassMember[0]['userId'] != $class['headTeacherId']) {
-            $this->getClassMemberService()
-            ->updateClassMember(array('userId'=>$class['headTeacherId']), $oldClassMember[0]['id']);
+            $this->updateClassMember(array('userId'=>$class['headTeacherId']), $oldClassMember[0]['id']);
         }
         
         return $class;
@@ -221,6 +220,29 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return $this->getClassMemberDao()->findMembersByClassIdAndRole($classId, 'STUDENT');
     }
 
+    public function searchClassMembers(array $conditions, array $oderBy, $start, $limit)
+    {
+        return $this->getClassMemberDao()->searchClassMembers($conditions, $oderBy, $start, $limit);
+    }
+
+    public function searchClassMemberCount(array $conditions)
+    {
+        return $this->getClassMemberDao()->searchClassMemberCount($conditions);
+    }
+
+    public function addClassMember(array $classMember){
+        return $this->getClassMemberDao()->addClassMember($classMember);
+    }
+
+    public function deleteClassMemberByUserId($userId){
+        $this->getClassMemberDao()->deleteClassMemberByUserId($userId);
+    }
+
+    public function updateClassMember(array $fields, $id)
+    {
+        return $this->getClassMemberDao()->updateClassMember($fields, $id);
+    }
+
     private function getClassesDao ()
     {
         return $this->createDao('Classes.ClassesDao');
@@ -229,11 +251,6 @@ class ClassesServiceImpl extends BaseService implements ClassesService
     private function getClassMemberDao ()
     {
         return $this->createDao('Classes.ClassMemberDao');
-    }
-
-    private function getClassMemberService()
-    {
-        return $this->createService('Classes.ClassMemberService');
     }
 
     private function getUserService()

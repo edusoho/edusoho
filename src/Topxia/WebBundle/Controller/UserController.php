@@ -33,16 +33,16 @@ class UserController extends BaseController
                 'defaultClassId'=>0
             );
             $courses=$this->getCourseService()->searchCourses($conditions, $sort = 'latest', 0, PHP_INT_MAX);
-            $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($courses,'classId'));
-            $headTeacherClasses=$this->getClassesService()->searchClasses(array('headTeacherId'=>$user['id']), array('createdTime'=>'DESC'), 0, PHP_INT_MAX);
+            $classes=$this->getClassService()->findClassesByIds(ArrayToolkit::column($courses,'classId'));
+            $headTeacherClasses=$this->getClassService()->searchClasses(array('headTeacherId'=>$user['id']), array('createdTime'=>'DESC'), 0, PHP_INT_MAX);
         }else{
             $conditions=array(
                 'userId'=>$user['id'],
                 'roles'=>array('STUDENT')
             );
-            $classMembers=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+            $classMembers=$this->getClassService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
             if(count($classMembers)>0){
-                $class=$this->getClassesService()->getClass($classMembers[0]['classId']);
+                $class=$this->getClassService()->getClass($classMembers[0]['classId']);
             }
         }
         return $this->render('TopxiaWebBundle:User:header-block.html.twig', array(
@@ -253,12 +253,7 @@ class UserController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    protected function getClassMemberService(){
-
-        return $this->getServiceKernel()->createService('Classes.ClassMemberService');
-    } 
-
-    protected function getClassesService(){
+    protected function getClassService(){
 
         return $this->getServiceKernel()->createService('Classes.ClassesService');
     }

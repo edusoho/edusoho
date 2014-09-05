@@ -158,11 +158,6 @@ class MyTeachingController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    protected function getClassMemberService()
-    {
-        return $this->getServiceKernel()->createService('Classes.ClassMemberService');
-    }
-
     protected function getClassesService()
     {
         return $this->getServiceKernel()->createService('Classes.ClassesService');

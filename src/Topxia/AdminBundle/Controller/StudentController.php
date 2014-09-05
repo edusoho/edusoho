@@ -28,11 +28,11 @@ class StudentController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getClassMemberService()->searchClassMemberCount($conditions),
+            $this->getClassService()->searchClassMemberCount($conditions),
             20
         );
         /**1.获取该班学生的classeMember数据*/
-        $classMembers = $this->getClassMemberService()->searchClassMembers(
+        $classMembers = $this->getClassService()->searchClassMembers(
             $conditions,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
@@ -71,7 +71,7 @@ class StudentController extends BaseController
                     'userId'=>$user['id'],
                     'roles'=>array('STUDENT')
                 );
-                $classMembers=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+                $classMembers=$this->getClassService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
                 if(count($classMembers)>0 && $classMembers[0]['classId']!=$classId){
                     return $this->createJsonResponse('学号'.$number.'对应的用户已经属于其他班级！');
                 }
@@ -87,7 +87,7 @@ class StudentController extends BaseController
                 $classMember['role']='STUDENT';
                 $classMember['title']='';
                 $classMember['createdTime']=time();
-                $this->getClassMemberService()->addClassMember($classMember);
+                $this->getClassService()->addClassMember($classMember);
             }
             $this->getClassService()->updateClassStudentNum(count($users),$classId);
             return $this->createJsonResponse(true);
@@ -99,7 +99,7 @@ class StudentController extends BaseController
     }
     
     public function removeAction(Request $request, $userId ,$classId){
-        $this->getClassMemberService()->deleteClassMemberByUserId($userId);
+        $this->getClassService()->deleteClassMemberByUserId($userId);
         $this->getClassService()->updateClassStudentNum(-1,$classId);
         return $this->createJsonResponse(true);
     }
@@ -107,11 +107,6 @@ class StudentController extends BaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
-    }
-
-    protected function getClassMemberService()
-    {
-        return $this->getServiceKernel()->createService('Classes.ClassMemberService');
     }
 
     protected function getClassService(){

@@ -31,7 +31,7 @@ class ClassMemberController extends BaseController
             'classId'=>$classId,
             'roles'=>array('STUDENT')
         );
-        $studentMembers = $this->getClassMemberService()->searchClassMembers(
+        $studentMembers = $this->getClassService()->searchClassMembers(
             $conditions,
             array('createdTime', 'DESC'),
             0,
@@ -63,7 +63,4 @@ class ClassMemberController extends BaseController
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    protected function getClassMemberService(){
-        return $this->getServiceKernel()->createService('Classes.ClassMemberService');
-    }
 }

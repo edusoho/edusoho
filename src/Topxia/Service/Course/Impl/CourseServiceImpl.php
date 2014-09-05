@@ -2248,11 +2248,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('Classes.ClassesService');
     }
 
-    private function getClassMemberService()
-    {
-        return $this->createService('Classes.ClassMemberService');
-	}
-	
     private function getStatusService()
     {
         return $this->createService('User.StatusService');

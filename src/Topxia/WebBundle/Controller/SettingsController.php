@@ -26,7 +26,7 @@ class SettingsController extends BaseController
 	            'userId'=>$user['id'],
 	            'roles'=>array('STUDENT')
 	        );
-	        $classMembers=$this->getClassMemberService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+	        $classMembers=$this->getClassService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 	        if(count($classMembers)>0){
 	        	$class=$this->getClassesService()->getClass($classMembers[0]['classId']);
 	        }
@@ -545,12 +545,7 @@ class SettingsController extends BaseController
 		return $this->getServiceKernel()->createService('User.UserFieldService');
 	}
 
-	protected function getClassMemberService()
-    {
-        return $this->getServiceKernel()->createService('Classes.ClassMemberService');
-    }
-
-    protected function getClassesService(){
+    protected function getClassService(){
 
         return $this->getServiceKernel()->createService('Classes.ClassesService');
     }
