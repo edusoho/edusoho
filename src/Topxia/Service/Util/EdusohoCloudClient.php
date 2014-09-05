@@ -433,7 +433,6 @@ class EdusohoCloudClient implements CloudClient
             $args["storageType"]="private";
         }
         $args['duration'] = "3600";
-        var_dump($this->callRemoteApi('GET', 'GetMediaInfo', $args));exit();
         return json_decode($this->callRemoteApi('GET', 'GetMediaInfo', $args), true);
     }
 
