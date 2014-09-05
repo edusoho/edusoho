@@ -37,6 +37,7 @@ class UserServiceImpl extends BaseService implements UserService
             );
         }
         $this->getUserService()->deleteToken(self::TOKEN_TYPE, $token);
+        return true;
     }
 
     private function filterUserProfile($userProfile)
