@@ -229,7 +229,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			"start"=>$start,
 			"limit"=>$limit,
 			"total"=>$total,
-			"data"=> $this->array2Map($this->controller->filterCourses($courses))
+			"data"=> $this->controller->filterCourses($courses)
 			);
 		return $result;
 	}
@@ -250,7 +250,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			"start"=>$start,
 			"limit"=>$limit,
 			"total"=>$total,
-			"data"=> $this->array2Map($this->controller->filterCourses($courses))
+			"data"=> $this->controller->filterCourses($courses)
 			);
 		return $result;
 	}
