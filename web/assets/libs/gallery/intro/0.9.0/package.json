@@ -1,0 +1,30 @@
+{
+  "family": "gallery",
+  "name": "intro",
+  "version": "0.9.0",
+  "description": "A better way for new feature introduction and step-by-step users guide for your website and project.",
+  "homepage": "http://usablica.github.io/intro.js/",
+  "author": "usabli.ca",
+  "maintainers": [
+    "usabli.ca",
+    "hanchao.shc"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://gitlab.alibaba-inc.com/alinw/intro"
+  },
+  "bugs": {
+    "url": "http://gitlab.alibaba-inc.com/alinw/intro/issues"
+  },
+  "keywords": [],
+  "licenses": "MIT",
+  "spm": {
+    "output": [
+      "intro.js",
+      "intro.css"
+    ],
+    "alias": {},
+    "devAlias": {},
+    "engines": {}
+  }
+}
