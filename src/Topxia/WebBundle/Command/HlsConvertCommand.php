@@ -77,6 +77,7 @@ class HlsConvertCommand extends BaseCommand
 	        $client = $factory->createClient();
 
 	        $commands = array_keys($client->getVideoConvertCommands());
+	        var_dump($commands);exit();
 	        $convertKey = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
 
 	        $callbackUrl = $siteUrl . $this->getContainer()->get('router')->generate('uploadfile_cloud_convert_callback', array('key' => $convertKey));
