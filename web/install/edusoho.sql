@@ -907,7 +907,7 @@ CREATE TABLE `user` (
   `promotedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否被禁止',
   `loginTime` int(11) NOT NULL DEFAULT '0' COMMENT '最后登录时间',
-  `loginIp` varchar(64) NOT NULL DEFAULT '' COMMENT '最后登录ID',
+  `loginIp` varchar(64) NOT NULL DEFAULT '' COMMENT '最后登录IP',
   `loginSessionId` varchar(255) NOT NULL DEFAULT '' COMMENT '最后登录会话ID',
   `approvalTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '实名认证时间',
   `approvalStatus` enum('unapprove','approving','approved','approve_fail') NOT NULL DEFAULT 'unapprove' COMMENT '实名认证状态',
