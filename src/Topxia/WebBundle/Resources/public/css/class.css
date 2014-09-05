@@ -82,3 +82,11 @@
     font-size: 12px;
     color: #777;
 }
+
+.status-list {
+    font-size: 13px;
+}
+
+.status-list .media-object {
+    width: 36px;
+}
