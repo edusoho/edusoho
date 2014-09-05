@@ -4098,3 +4098,9 @@ body {
 	width: 60px;
 	height: 60px;
 }
+
+.navbar-user-avatar {
+	width: 24px;
+	height: 24px;
+	border-radius: 3px;
+}

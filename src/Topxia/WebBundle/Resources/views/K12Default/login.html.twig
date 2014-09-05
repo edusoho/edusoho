@@ -47,13 +47,6 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
 
-      <div class="ptl">
-          <a href="{{ path('password_reset') }}">找回密码</a>
-          <span class="text-muted mhs">|</span>
-          <span class="text-muted">还没有注册帐号？</span>
-          <a href="{{ path('register') }}">立即注册</a>
-      </div>
-
       {% include 'TopxiaWebBundle:Login:social-logins-block.html.twig' %}
     </div>
 
