@@ -26,6 +26,9 @@
                 <span>该课时已删除</span>
               {% endif %}
               <span class="pull-right notebook-note-length">共{{ note.length }}字</span>
+              {% if note.status == 0 %}
+                <span class="btn-xs btn-link"><i class="glyphicon glyphicon-lock pull-right"></span></i>
+              {% endif %}  
             </div>
             <div class="notebook-note-summary">{{ note.content|plain_text(97) }}</div>
             <div class="notebook-note-body">
