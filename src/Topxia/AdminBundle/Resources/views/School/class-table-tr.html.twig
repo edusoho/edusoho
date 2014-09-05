@@ -1,7 +1,8 @@
 <tr id="user-table-tr-{{ class.id }}">
   <td>
-    {{ class_name(class) }}
-
+    <a class="pull-left" href="{{ path('class_show',{ classId: class.id })}}">
+      {{ class_name(class) }}
+    </a>
     <span class="text-muted mll">
       {{ class.year}}届
       {% if class.term == 'first' %}
@@ -18,7 +19,7 @@
 
   <td>
    {{class.headTeacherName}}
- </td>
+  </td>
  <td>
   {% if class.enabled == '1' %}
     开启
