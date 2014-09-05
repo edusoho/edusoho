@@ -352,7 +352,7 @@ class GroupController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getGroupService()->getMembersCountByGroupId($id),
+            $this->getGroupService()->searchMembersCount(array('groupId'=>$id,'role'=>'member')),
             30
         );
 
@@ -368,8 +368,8 @@ class GroupController extends BaseController
 
         $groupAdmin=$this->getGroupService()->searchMembers(array('groupId'=>$id,'role'=>'admin'),
             array('createdTime','DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount());
+            0,
+            1000);
 
         $groupAdminIds = ArrayToolkit::column($groupAdmin, 'userId');
         $usersLikeAdmin=$this->getUserService()->findUsersByIds($groupAdminIds);

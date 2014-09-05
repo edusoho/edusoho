@@ -1,5 +1,7 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
+
+
 <div class="row row-12">
   <div class="col-md-12">
     <div class="panel panel-default  course-header">
@@ -64,7 +66,7 @@
                   {% if member.orderId %}
                    <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
                   {% else %}
-                  <a class="btn btn-default btn-sm " title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
+                  <a class="btn btn-default btn-sm course-exit-btn" id="exit-course-learning" title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
                     {% endif %}
                 {% endif %}
             {% if canManage %}
