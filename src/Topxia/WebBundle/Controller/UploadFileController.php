@@ -63,10 +63,9 @@ class UploadFileController extends BaseController
 
         $setting = $this->getSettingService()->get('storage', array());
         $params['videoWatermarkImage'] = "";
-        
         if ($setting['video_watermark'] == 2 and $setting['video_watermark_image']) {
             $waterMarkImg = $setting['video_watermark_image'];
-            $params['videoWatermarkImage'] = $this->getRequest()->getHost()."/".$this->container->getParameter('topxia.upload.public_url_path')."/".$waterMarkImg;
+            $params['videoWatermarkImage'] = "http://".$this->getRequest()->getHost()."/".$this->container->getParameter('topxia.upload.public_url_path')."/".$waterMarkImg;
         }
 
         $params = $this->getUploadFileService()->makeUploadParams($params);
