@@ -62,12 +62,13 @@ class UploadFileController extends BaseController
         $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true);
 
         $setting = $this->getSettingService()->get('storage', array());
-
+        $params['videoWatermarkImage'] = "";
+        
         if ($setting['video_watermark'] == 2 and $setting['video_watermark_image']) {
             $waterMarkImg = $setting['video_watermark_image'];
-            $params['waterMarkImg'] = $this->getRequest()->getHost()."/".$this->container->getParameter('topxia.upload.public_url_path')."/".$waterMarkImg;
+            $params['videoWatermarkImage'] = $this->getRequest()->getHost()."/".$this->container->getParameter('topxia.upload.public_url_path')."/".$waterMarkImg;
         }
-        
+
         $params = $this->getUploadFileService()->makeUploadParams($params);
 
         return $this->createJsonResponse($params);
