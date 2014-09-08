@@ -50,7 +50,7 @@ class EdusohoCloudClient implements CloudClient
     public function makeUploadParams($params)
     {
         $params = ArrayToolkit::parts($params, array(
-            'convertor', 'convertCallback', 'convertParams', 'duration', 'user',
+            'convertor', 'convertCallback', 'convertParams', 'duration', 'user','videoWatermarkImage'
         ));
         $params = $this->callRemoteApiWithBase64('GET', 'MakeUploadToken', $params);
 
