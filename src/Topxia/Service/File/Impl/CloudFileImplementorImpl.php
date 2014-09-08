@@ -204,13 +204,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
             );
 
-            $setting = $this->getSettingService()->get('storage', array());
-
-            if ($setting['video_watermark'] == 2 and $setting['video_watermark_image']) {
-                $waterMarkImg = $setting['video_watermark_image'];
-            }
-            $rawUploadParams['waterMarkImg'] = $waterMarkImg;
-            
         } else {
             $rawUploadParams = array(
                 'convertor' => null,
