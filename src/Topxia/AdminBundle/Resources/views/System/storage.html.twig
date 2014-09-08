@@ -1,4 +1,4 @@
-{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+  {% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
 
 {% block title %}云平台设置 - {{ parent() }}{% endblock %}
 
@@ -106,7 +106,7 @@
       <label>云视频水印</label>
     </div>
     <div class="controls col-md-8 radios">
-      {{ radios('video_watermark', {'0':'关闭', '1':'开启'}, storageSetting.video_watermark) }}
+      {{ radios('video_watermark', {'0':'关闭', '1':'开启播放器水印', '2':'开启内嵌水印'}, storageSetting.video_watermark) }}
     </div>
   </div>
 

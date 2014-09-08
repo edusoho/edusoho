@@ -35,7 +35,7 @@
 
         <div class="dashboard-body">
           <div class="lesson-content" id="lesson-video-content" data-role="lesson-content" style="display:none;"
-            {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
+            {% if setting('storage.video_watermark') == 1 and setting('storage.video_watermark_image') %}
               data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
             {% endif %}
             {% if setting('storage.video_fingerprint') and app.user %}

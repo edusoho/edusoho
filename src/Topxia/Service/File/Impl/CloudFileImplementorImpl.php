@@ -203,6 +203,14 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 'duration' => empty($rawParams['duration']) ? 18000 : $rawParams['duration'],
                 'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
             );
+
+            $setting = $this->getSettingService()->get('storage', array());
+
+            if ($setting['video_watermark'] == 2 and $setting['video_watermark_image']) {
+                $waterMarkImg = $setting['video_watermark_image'];
+            }
+            $rawUploadParams['waterMarkImg'] = $waterMarkImg;
+            
         } else {
             $rawUploadParams = array(
                 'convertor' => null,
@@ -314,6 +322,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     {
         $class = __NAMESPACE__ . '\\' .  ucfirst($name) . 'Convertor';
         return new $class($this->getCloudClient(), $this->getKernel()->getParameter('cloud_convertor'));
+    }
+
+    private function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 }
 
