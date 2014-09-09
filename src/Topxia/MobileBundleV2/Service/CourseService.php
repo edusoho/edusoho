@@ -18,4 +18,7 @@ interface CourseService
 
 	public function getCourseNotice();
 	public function unLearnCourse();
+
+	public function getCourseTheads();
+	public function getThread();
 }

@@ -3,6 +3,7 @@ namespace Topxia\MobileBundleV2\Service\Impl;
 
 use Topxia\MobileBundleV2\Service\BaseService;
 use Topxia\MobileBundleV2\Service\CourseService;
+use Topxia\Common\ArrayToolkit;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -10,6 +11,43 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		var_dump("CourseServiceImpl->getVersion");
 		return $this->formData;
+	}
+
+	public function getCourseTheads()
+	{
+		$user = $this->controller->getUserByToken($this->request);
+		$conditions = array(
+            		'userId' => $user['id'],
+            		'type' => 'question',
+        		);
+
+		$start = (int) $this->getParam("start", 0);
+		$limit = (int) $this->getParam("limit", 10);
+		$total = $this->controller->getThreadService()->searchThreadCount($conditions);
+
+        		$threads = $this->controller->getThreadService()->searchThreads(
+            		$conditions,
+            		'createdNotStick',
+            		$start,
+            		$limit
+        		);
+
+        		$courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+        		$users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
+
+        		return array(
+			"start"=>$start,
+			"limit"=>$limit,
+			"total"=>$total,
+			"users"=>$this->controller->filterUsers($users),
+			"courses"=>$this->controller->filterCourses($courses),
+			'threads'=>$threads,
+			);
+	}
+
+	public function getThread()
+	{
+		
 	}
 
 	public function getFavoriteCoruse()

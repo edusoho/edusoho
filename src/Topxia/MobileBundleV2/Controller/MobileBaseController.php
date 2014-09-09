@@ -372,4 +372,9 @@ class MobileBaseController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseOrderService');
     }
 
+    public function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
 }

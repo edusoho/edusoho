@@ -33,10 +33,12 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     public function getWeekRecommendCourses()
     {
         $sort = "recommend";
-        $courses = $this->controller->getCourseService()->searchCourses(array(), $sort, 0,  3);
+        $start = (int) $this->getParam("start", 0);
+        $limit = (int) $this->getParam("limit", 10);
+        $courses = $this->controller->getCourseService()->searchCourses(array(), $sort, $start,  $limit);
         $result = array(
-            "start"=>"0",
-            "limit"=>"3",
+            "start"=>$start,
+            "limit"=>$limit,
             "data"=>$this->controller->filterCourses($courses));
         return $result;
     }
@@ -44,10 +46,12 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     public function getRecommendCourses()
     {
         $sort = "latest";
-        $courses = $this->controller->getCourseService()->searchCourses(array(), $sort, 0,  2);
+        $start = (int) $this->getParam("start", 0);
+        $limit = (int) $this->getParam("limit", 10);
+        $courses = $this->controller->getCourseService()->searchCourses(array(), $sort, $start,  $limit);
         $result = array(
-            "start"=>"0",
-            "limit"=>"2",
+            "start"=>$start
+            "limit"=>$limit,
             "data"=>$this->controller->filterCourses($courses));
         return $result;
     }
