@@ -73,7 +73,7 @@ class StudentController extends BaseController
                 );
                 $classMembers=$this->getClassService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
                 if(count($classMembers)>0 && $classMembers[0]['classId']!=$classId){
-                    return $this->createJsonResponse('学号'.$number.'对应的用户已经属于其他班级！');
+                    return $this->createJsonResponse($user['truename'].'('.'学号'.$number.')'.'对应的用户已经属于其他班级！');
                 }
                 if(count($classMembers)>0 && $classMembers[0]['classId']==$classId){
                     continue;
