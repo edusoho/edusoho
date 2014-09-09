@@ -202,9 +202,9 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 'convertParams' => $convertor->getCovertParams($rawParams),
                 'duration' => empty($rawParams['duration']) ? 18000 : $rawParams['duration'],
                 'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
-                'videoWatermarkImage' => $rawParams['videoWatermarkImage']
             );
 
+            $rawUploadParams['convertParams']['videoWatermarkImage'] = empty($rawParams['videoWatermarkImage']) ? "" : $rawParams['videoWatermarkImage'];
         } else {
             $rawUploadParams = array(
                 'convertor' => null,

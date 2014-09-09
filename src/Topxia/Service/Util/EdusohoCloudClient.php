@@ -50,10 +50,9 @@ class EdusohoCloudClient implements CloudClient
     public function makeUploadParams($params)
     {
         $params = ArrayToolkit::parts($params, array(
-            'convertor', 'convertCallback', 'convertParams', 'duration', 'user','videoWatermarkImage'
+            'convertor', 'convertCallback', 'convertParams', 'duration', 'user'
         ));
         $params = $this->callRemoteApiWithBase64('GET', 'MakeUploadToken', $params);
-
         return $params;
     }
 
@@ -339,13 +338,11 @@ class EdusohoCloudClient implements CloudClient
     protected function callRemoteApiWithBase64($httpMethod, $action, array $args)
     {
         $url = $this->makeApiUrl($action);
-
         $httpParams = array();
         $httpParams['accessKey'] = $this->accessKey;
         $httpParams['args'] = $this->urlsafeBase64Encode(json_encode($args));
         $httpParams['encode'] = 'base64';
         $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
-
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
 
         return json_decode($result, true);
