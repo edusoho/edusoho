@@ -29,6 +29,8 @@
     {% for user in users %}
       {% set userProfile = userProfiles[user.id]|default(null) %}
       {% include 'TopxiaAdminBundle:Student:student-list-tr.html.twig' with {user:user} %}
+    {% else %}
+      <div class="empty">该班级暂无学生，快去添加学生吧！</div>
     {% endfor %}
   </tbody>
 </table>
