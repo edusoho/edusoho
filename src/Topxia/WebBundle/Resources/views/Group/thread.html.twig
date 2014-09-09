@@ -18,7 +18,7 @@
       <div class="metas">
         发表于 {{ threadMain.createdTime|smart_time }}
         <span class="divider">•</span>
-        <span>{{ threadMain.hitNum }} 次查看</span>
+        <span>{{ threadMain.hitNum }} 次查看</span><div class="share pull-right"></div>
       </div>
     </div>
     <div class="panel-body" id="post-action">
@@ -69,7 +69,7 @@
 
         {% endif %}
       </div>
-    </div><div class="share"></div>
+    </div>
   </div>
   {% if threadMain.postNum %}
   <div class="panel panel-default group-post-list">
