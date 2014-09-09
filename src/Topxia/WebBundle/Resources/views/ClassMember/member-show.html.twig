@@ -1,22 +1,24 @@
 {% extends 'TopxiaWebBundle:Class:layout.html.twig' %}
 {% set script_controller = 'class-member/member' %}
 {% block class_main %}
+	<div class="col-md-12"><h5>任课老师</h5><hr/></div>
 	<div class="col-md-12">
 		{% for teacher in teachers %}
-			<div class="col-md-6">
+			<div class="col-md-6 member-teacher">
 				{% set teacherProfile = teacherProfiles[teacher.id]|default(null) %}
 				<a href="{{ path('user_show', {id:teacher.id}) }}">
 					<img class="media-object pull-left" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
 				</a>
+				<button class="btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">发私信</button>
 				<a href="{{ path('user_show', {id:teacher.id}) }}">
-					<h4>{{teacher.truename}}</h4>
+					<h5>{{teacher.truename}}</h5>
 				</a>
 			</div>
 		{% else %}
 			尚无任课老师
 		{% endfor %}
 	</div>
-	<div class="col-md-12"><hr/></div>
+	<div class="col-md-12"><h5>同学</h5><hr/></div>
 	<div class="col-md-12">
 		{% for student in students %}
 			<div class="col-md-1">
