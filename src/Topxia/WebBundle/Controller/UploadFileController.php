@@ -60,7 +60,6 @@ class UploadFileController extends BaseController
         $params['user'] = $user->id;
         $params['defaultUploadUrl'] = $this->generateUrl('uploadfile_upload', array('targetType' => $params['targetType'], 'targetId' => $params['targetId']));
         $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true);
-
         $params = $this->getUploadFileService()->makeUploadParams($params);
 
         return $this->createJsonResponse($params);

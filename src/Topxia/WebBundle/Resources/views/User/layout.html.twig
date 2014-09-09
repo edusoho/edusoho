@@ -19,7 +19,7 @@
     	<li {% if pageNav == 'learn' %}class="active"{% endif %}><a href="{{ path('user_learn', {id:user.id}) }}">在学课程</a></li>
     {% endif %}
     <li {% if pageNav == 'favorited' %}class="active"{% endif %}><a href="{{ path('user_favorited', {id:user.id}) }}">收藏的课程</a></li>
-    <li {% if pageNav == 'group' %}class="active"{% endif %}><a href="{{path('user_group',{id:user.id})}}">加入的小组</a></li>
+    {# <li {% if pageNav == 'group' %}class="active"{% endif %}><a href="{{path('user_group',{id:user.id})}}">加入的小组</a></li> #}
     <li {% if pageNav == 'friend' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.id}) }}">关注/粉丝</a></li>
   </ul>
 
