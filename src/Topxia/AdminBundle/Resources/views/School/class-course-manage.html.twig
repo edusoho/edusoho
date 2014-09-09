@@ -3,7 +3,6 @@
 {% block title %}课程设置 - {{ parent() }}{% endblock %}
 
 {% set menu = 'classSetting' %}
-{# {% set script_controller = 'school/class-course-manage' %} #}
 
 {% block main %}
 <div class="page-header clearfix">
@@ -20,64 +19,45 @@
       {% endif %}
     </small>
   </h1>
-  {# <h5 class="text-center">
-
-  <span class="text-success pull-left ">
-    {{ class_name(class) }}
-    {{ class.year}}届
-    {% if class.term == 'first' %}
-    一学期  
-    {% else %}
-    二学期
-    {% endif %}
-  </span>
-   </h5> #}
 
 </div>
 
-<div>
-
+<div class="row">
   {% if courses %}
-  {% for course in courses %}
-  <div class="media table-bordered">
-    <a class="pull-left" href="{{ path('course_manage_base', { id:course.id })}}">
-      <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}" style="width: 140px; height: 78px;">
-    </a>
-    <div class="media-body">
-      <span class="media-heading">{{ course.title }}</span>
-      <div>
-        <span class="text-muted">{{ dict_text('gradeName', course.gradeId) }}</span>
-        <span class="text-muted mll">
-          {% if course.term == 'first' %}
-          一学期  
-          {% else %}
-          二学期
-          {% endif %}
-        </span>
-        {% for teachername in course.teachername %}
-        <span class="text-muted mll">{{teachername}}</span>
-        {% endfor %}
-      </div>
-      <span class="text-muted">
-        {% if course.compulsory == '1' %}
-        必修
-        {% else %}
-        选修
-        {% endif %}
-      </span>
-      <div class="pull-right">
-        <a class="btn btn-link" href="{{ path('admin_school_class_course_remove', {classId:class.id, courseId:course.id}) }}">移除</a>
+  {% for course in courses%}
+  <div class="col-sm-4 col-md-3 class-course-grid">
+    <div class="thumbnail course-thumbnail">
+      {% if course.compulsory == '1' %}
+        <span class="label label-success pull-left span-margin">必修</span>
+      {% else %}
+        <span class="label label-warning pull-left span-margin">选修</span>
+      {% endif %}
+      <a type="button" class="close pull-right course-thumbnail-a" href="{{ path('admin_school_class_course_remove', {classId:class.id, courseId:course.id}) }}" onclick="return confirm('确定移除吗？');"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></a>
+      
+      <a href="{{ path('course_show',{id:course.id}) }}"><img  alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}"></a>
+      <div class="caption">
+        <a href="{{ path('course_show',{id:course.id}) }}"><h3 class="title">{{ course.title }}</h3></a>
+        <div class="metas clearfix">
+          <span class="pull-left">
+            {{ dict_text('gradeName', course.gradeId) }}
+            {% if course.term == 'first' %}
+            一学期  
+            {% else %}
+            二学期
+            {% endif %}
+          </span>
+          <span class="pull-right">{{ course.teachername[0]}}</span>
+        </div>
       </div>
     </div>
   </div>
   {% endfor %}
-  {{ web_macro.paginator(paginator) }} 
   {% else %}
-  <div class="empty">该班暂无课程</div>
+  <div class="empty">
+    <span>该班级暂无课程，快去增加课程吧！</span>
+  </div>
   {% endif %}
 </div>
-
-
 
 
 {% endblock %}

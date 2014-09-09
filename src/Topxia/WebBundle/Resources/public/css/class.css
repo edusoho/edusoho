@@ -67,6 +67,11 @@
 
 }
 
+.course-thumbnail .span-margin{
+    margin: 0 0 -20px 0;
+    opacity: 0.99;    
+}
+
 .course-thumbnail .title {
     font-size: 14px;
     margin: 0;
@@ -146,5 +151,9 @@
 }
 
 .login-box .login-header .logo {
+    margin-bottom: 20px;
+}
+
+.member-teacher {
     margin-bottom: 20px;
 }
