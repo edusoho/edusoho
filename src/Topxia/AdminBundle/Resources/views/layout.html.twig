@@ -56,7 +56,7 @@
             <li {% if nav == 'system' %}class="active"{% endif %}><a href="{{ path('admin_setting_site') }}">系统</a></li>
           {% endif %}
           {% if is_granted('ROLE_SUPER_ADMIN') %}
-            <li {% if nav == 'school' %}class="active"{% endif %}><a href="{{ path('admin_school_setting') }}">学校</a></li>
+            <li {% if nav == 'school' %}class="active"{% endif %}><a href="{{ path('admin_school_classes_setting') }}">学校</a></li>
           {% endif %}
         </ul>
 

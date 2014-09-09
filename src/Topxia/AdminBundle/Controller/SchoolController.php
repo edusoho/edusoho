@@ -161,12 +161,14 @@ class SchoolController extends BaseController
         $excludeIds = ArrayToolkit::column($classCourses, 'parentId');
         if($class['public'] == '1') {
             $conditions =array(
+            'status' => 'published',
             'parentId' => 0,
             'gradeId' => 0,
             'excludeIds' => $excludeIds
         );
         }else{
             $conditions =array(
+            'status' => 'published',
             'parentId' => 0,
             'gradeId' => $class['gradeId'],
             'excludeIds' => $excludeIds
