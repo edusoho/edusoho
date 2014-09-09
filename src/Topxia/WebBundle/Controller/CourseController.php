@@ -209,7 +209,6 @@ class CourseController extends BaseController
 	public function showAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->getCourse($id);
-
 		$nextLiveLesson = null;
 
 		$weeks = array("日","一","二","三","四","五","六");
@@ -238,6 +237,8 @@ class CourseController extends BaseController
 
 		$classMember = $this->getClassesService()->getMemberByUserIdAndClassId($user['id'], $course['classId']);
 
+		$class=$this->getClassesService()->getClass($course['classId']);
+
 		$items = $this->getCourseService()->getCourseItems($course['id']);
 
 		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
@@ -249,19 +250,31 @@ class CourseController extends BaseController
 		}
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
-		if ($member && empty($member['locked'])) {
-			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-			return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
-				'course' => $course,
-				'type' => $course['type'],
-				'member' => $member,
-				'items' => $items,
-				'learnStatuses' => $learnStatuses,
-				'currentTime' => $currentTime,
-				'weeks' => $weeks
-			));
-		}
 		
+		/**1.非本班非管理员的学生*/
+		if (!in_array('ROLE_TEACHER', $user['roles']) && !$user->isAdmin() && empty($classMember)){
+			throw $this->createAccessDeniedException('只能查看自己班级的课程');
+		}
+
+		/**2.非班主任非该课程任课老师非超级管理员的老师*/
+		if(in_array('ROLE_TEACHER', $user['roles']) && !$user->isAdmin() && $class['headTeacherId']!=$user['id'] && !in_array($user['id'], $course['teacherIds'])){
+			throw $this->createAccessDeniedException('只能查看自己班级的课程');
+		}
+		/**3.符合查看条件,但用户被封禁*/
+		if($member && !empty($member['locked'])){
+			throw $this->createAccessDeniedException('用户被封禁,无权查看该课程');
+		}
+		$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
+		return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
+			'course' => $course,
+			'type' => $course['type'],
+			'member' => $member,
+			'items' => $items,
+			'learnStatuses' => $learnStatuses,
+			'currentTime' => $currentTime,
+			'weeks' => $weeks
+		));
+
 		$groupedItems = $this->groupCourseItems($items);
 		$hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
 
@@ -277,7 +290,6 @@ class CourseController extends BaseController
 		}
 
 		$courseReviews = $this->getReviewService()->findCourseReviews($course['id'],'0','1');
-
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
 			'course' => $course,
 			'member' => $member,

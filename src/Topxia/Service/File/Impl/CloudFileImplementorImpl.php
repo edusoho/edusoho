@@ -214,7 +214,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
 
         $tokenAndUrl = $this->getCloudClient()->makeUploadParams($rawUploadParams);
-
         $key = null;
         if (!empty($rawParams['key'])) {
             $key = $rawParams['key'];
