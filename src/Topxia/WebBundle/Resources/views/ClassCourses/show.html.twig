@@ -8,6 +8,11 @@
   {% for course in courses%}
   <div class="col-sm-6 col-md-4">
     <div class="thumbnail course-thumbnail">
+      {% if course.compulsory == '1' %}
+        <span class="label label-success pull-left span-margin">必修</span>
+      {% else %}
+        <span class="label label-warning pull-left span-margin">选修</span>
+      {% endif %}
       <a href="{{ path('course_show',{id:course.id}) }}"><img  alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}"></a>
       <div class="caption">
         <a href="{{ path('course_show',{id:course.id}) }}"><h3 class="title">{{ course.title }}</h3></a>

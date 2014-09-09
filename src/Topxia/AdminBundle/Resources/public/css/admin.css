@@ -203,26 +203,35 @@ input.LargeInput {width: 600px;}
 .course-thumbnail {
 
 }
-
-.course-thumbnail-close{
-  visibility: show;
-  float: right;
-  margin: 0 5px -20px 0;
+.course-thumbnail .span-margin{
+  margin: 0 0 -20px 0;
+  opacity: 0.99;
 }
 
+.course-thumbnail-a{
+  margin: 0 0 -20px 0;
+}
 
 .course-thumbnail .title {
-    font-size: 14px;
-    margin: 0;
-    padding: 0;
-    line-height: 20px;
-    height: 40px;
-    overflow: hidden;
-    font-weight: bold;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  line-height: 20px;
+  height: 40px;
+  overflow: hidden;
+  font-weight: bold;
 }
 
 .course-thumbnail .metas span,
 .course-thumbnail .metas {
     font-size: 12px;
     color: #777;
+}
+
+.class-course-grid .close {
+  visibility: hidden;
+}
+
+.class-course-grid:hover .close {
+  visibility: visible;
 }
