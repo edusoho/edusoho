@@ -9,7 +9,9 @@
 				<a href="{{ path('user_show', {id:teacher.id}) }}">
 					<img class="media-object pull-left" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
 				</a>
-				<button class="btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">发私信</button>
+				{% if app.user.id!=teacher.id %}
+					<button class="btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">发私信</button>
+				{% endif %}
 				<a href="{{ path('user_show', {id:teacher.id}) }}">
 					<h5>{{teacher.truename}}</h5>
 				</a>
