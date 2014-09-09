@@ -90,3 +90,61 @@
 .status-list .media-object {
     width: 36px;
 }
+
+.login-page {
+    background: url(../img/login-background.jpg) 0 0 no-repeat;
+    background-size: 100%;
+    /*position: relative;*/
+    height: 100%;
+    overflow: hidden;
+}
+
+.login-box {
+    width: 800px;
+    height: 600px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -370px;
+    margin-top: -260px;
+}
+
+.login-box .login-picture {
+    float: left;
+    width: 400px;
+    height: 400px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.login-box .login-main {
+    padding-top: 35px;
+    margin-left: 400px;
+    width: 300px;
+    height: 400px;
+    background: #fff url(../img/login-line.png) 0 0 no-repeat;
+}
+
+.login-box .login-avatar {
+    margin: 0 auto;
+    width: 120px;
+    height: 120px;
+    background: url(../img/login-avatar.png) 0 0 no-repeat;
+    background-size: 100%;
+}
+
+.login-box .login-form {
+    padding: 30px;
+}
+
+.login-box h1 {
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 20px;
+    font-size: 36px;
+}
+
+.login-box .login-header .logo {
+    margin-bottom: 20px;
+}
