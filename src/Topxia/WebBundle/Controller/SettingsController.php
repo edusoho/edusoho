@@ -28,7 +28,7 @@ class SettingsController extends BaseController
 	        );
 	        $classMembers=$this->getClassService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 	        if(count($classMembers)>0){
-	        	$class=$this->getClassesService()->getClass($classMembers[0]['classId']);
+	        	$class=$this->getClassService()->getClass($classMembers[0]['classId']);
 	        }
 		}
 		$profile = $this->getUserService()->getUserProfile($user['id']);
