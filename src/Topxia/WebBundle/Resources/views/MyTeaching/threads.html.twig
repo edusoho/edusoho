@@ -3,11 +3,11 @@
 {% block title %} 
 
 {% if type == 'question' %}
-	学员问答
+	学生问答
 {% set side_nav = 'my-teaching-questions' %}
 
 {% elseif type == 'discussion' %}
-	学员话题
+	学生话题
 {% set side_nav = 'my-teaching-discussions' %}
 
 {% endif %}
@@ -28,9 +28,9 @@
 <div class="panel panel-default panel-col">
   	<div class="panel-heading">
 		{% if type == 'question' %}
-			学员问答
+			学生问答
 		{% elseif type == 'discussion' %}
-			学员话题
+			学生话题
 		{% endif %}
 	</div>
 
@@ -41,9 +41,9 @@
 	  {% else %}
 	  
 	  	{% if type == 'question' %}
-			<div class="empty">您的课程中还没有学员提问过...</div>
+			<div class="empty">您的课程中还没有学生提问过...</div>
 		{% elseif type == 'discussion' %}
-			<div class="empty">您的课程中还没有学员话题...</div>
+			<div class="empty">您的课程中还没有学生话题...</div>
 		{% endif %}
 	    
 	  {% endif %}
