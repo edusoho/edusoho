@@ -17,10 +17,10 @@
 				</a>
 			</div>
 		{% else %}
-			尚无任课老师
+			<p class="text-center">尚无任课老师</p>
 		{% endfor %}
 	</div>
-	<div class="col-md-12"><h5>同学</h5><hr/></div>
+	<div class="col-md-12"><h5>学生</h5><hr/></div>
 	<div class="col-md-12">
 		{% for student in students %}
 			<div class="col-md-1">
@@ -29,7 +29,7 @@
 				</a>
 			</div>
 		{% else %}
-			尚无学生
+			<p class="text-center">尚无学生</p>
 		{% endfor %}
 	</div>
 {% endblock %}
