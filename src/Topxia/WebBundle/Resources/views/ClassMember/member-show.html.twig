@@ -9,16 +9,18 @@
 				<a href="{{ path('user_show', {id:teacher.id}) }}">
 					<img class="media-object pull-left" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
 				</a>
-				<button class="btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">发私信</button>
+				{% if app.user.id!=teacher.id %}
+					<button class="btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">发私信</button>
+				{% endif %}
 				<a href="{{ path('user_show', {id:teacher.id}) }}">
 					<h5>{{teacher.truename}}</h5>
 				</a>
 			</div>
 		{% else %}
-			尚无任课老师
+			<div class="empty">尚无任课老师</div>
 		{% endfor %}
 	</div>
-	<div class="col-md-12"><h5>同学</h5><hr/></div>
+	<div class="col-md-12"><h5>学生</h5><hr/></div>
 	<div class="col-md-12">
 		{% for student in students %}
 			<div class="col-md-1">
@@ -27,7 +29,7 @@
 				</a>
 			</div>
 		{% else %}
-			尚无学生
+			<div class="empty">尚无学生</div>
 		{% endfor %}
 	</div>
 {% endblock %}

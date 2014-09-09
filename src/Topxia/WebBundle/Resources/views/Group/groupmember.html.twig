@@ -16,10 +16,10 @@
         <h4>组长</h4>
         <div class="clearfix">
           <div class="grouplist" >  
-            <a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}"  >
-            <img src="{{ default_path('avatar',owner_info.largeAvatar, 'large') }}" alt="{{owner_info.nickname}}" >
+            <a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.truename}}"  >
+            <img src="{{ default_path('avatar',owner_info.largeAvatar, 'large') }}" alt="{{owner_info.truename}}" >
             </a> 
-            <p class="mvs"><a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}">{{owner_info.nickname}}</a>
+            <p class="mvs"><a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.truename}}">{{owner_info.truename}}</a>
             </p>
           </div>
         </div>
