@@ -107,16 +107,11 @@ class SchoolController extends BaseController
 
         $class = $this->getClassesService()->getClass($classId);
         
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions),
-            5);
-
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
             'latest',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
+            0,
+            1000
         );
         foreach ($courses as $key => $course) {
             foreach ($course['teacherIds'] as $key2 => $id) {
@@ -130,7 +125,6 @@ class SchoolController extends BaseController
 
         return $this->render('TopxiaAdminBundle:School:class-course-manage.html.twig',array(
             'courses' => $courses,
-            'paginator' => $paginator,
             'class' => $class,
         ));
     }
