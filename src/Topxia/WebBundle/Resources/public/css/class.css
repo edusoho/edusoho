@@ -154,6 +154,10 @@
     margin-bottom: 20px;
 }
 
+.login-box .login-checkbox {
+    font-weight: normal;
+}
+
 .member-teacher {
     margin-bottom: 20px;
 }
