@@ -3,7 +3,7 @@
 {% block class_main %}
 	<div class="col-md-12">
 		{% for teacher in teachers %}
-			<div class="col-md-6">
+			<div class="col-md-6 member-teacher">
 				{% set teacherProfile = teacherProfiles[teacher.id]|default(null) %}
 				<a href="{{ path('user_show', {id:teacher.id}) }}">
 					<img class="media-object pull-left" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
