@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% set modal_class = 'modal-lg' %}
 
-{% block title %}批量导入学生{% endblock %}
+{% block title %}添加学生{% endblock %}
 {% block body %}
 	<form id="number-form" class="form-horizontal" method="post" 
 	action="{{ path('admin_class_student_import', { classId:classId })}}">
