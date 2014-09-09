@@ -80,7 +80,7 @@
     <div class="col-md-7 controls">
       <div id="icon-container">
         {% if class.icon %}
-        <img src="{{ file_url(class.icon) }}" >
+        <img src="{{ file_url(class.icon) }}" style="max-width:400px;">
         {% endif %}
       </div>
       <button class="btn btn-default" id="school-class-icon-upload" type="button" data-url="{{ path('admin_school_class_icon_upload') }}">上传</button>
@@ -97,12 +97,12 @@
       <div class="col-md-8 controls">
         <div id="backgroudImg-container">
           {% if class.backgroundImg %}
-          <img src="{{ file_url(class.backgroundImg) }}" >
+          <img src="{{ file_url(class.backgroundImg) }}" style="max-width:400px;">
           {% endif %}
         </div>
         <button class="btn btn-default" id="school-class-backgroundImg-upload" type="button" data-url="{{ path('admin_school_class_backgroundImg_upload') }}">上传</button>
         <p class="help-block">
-          请上传png, jpg, gif格式的图片文件。推荐尺寸比例：1140px * 120px。</p>
+          请上传png, jpg, gif格式的图片文件。推荐尺寸比例：1140px * 150px。</p>
           <input type="hidden" name="backgroundImg" value="{{ class.backgroundImg }}">
         </div>
       </div>
