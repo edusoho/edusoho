@@ -59,7 +59,7 @@ define(function(require, exports, module) {
                    "bdMiniList":false,       
                    "bdPic":"",       
                    "bdStyle":"0"      
-                          
+                   "bdSign":"on",       
                     },       
             "share":{
                     "bdSize":"24"
