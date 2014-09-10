@@ -160,3 +160,40 @@
 .member-teacher {
     margin-bottom: 20px;
 }
+
+.class-student-grids {
+
+
+}
+
+
+.class-student-grids .grid {
+    margin-bottom: 20px;
+}
+
+.class-student-grids .avatar {
+    display: block;
+    margin: 0 auto 5px;
+}
+
+.class-student-grids .truename {
+    text-align: center;
+    display: block;
+}
+
+.class-student-grids .popover.right {
+    /*margin-left: -10px;*/
+}
+
+.class-student-grids .student-card-content {
+    display: none;
+}
+
+.class-student-grids .popover {
+    width: 250px;
+}
+
+.class-student-grids .popover .media-object {
+    width: 48px;
+    height: 48px;
+}

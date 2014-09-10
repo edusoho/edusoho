@@ -20,13 +20,33 @@
 			<div class="empty">尚无任课老师</div>
 		{% endfor %}
 	</div>
-	<div class="col-md-12"><h5>学生们</h5><hr/></div>
-	<div class="col-md-12">
+
+	<div class="row">
+	  <div class="col-xs-12">
+	    <h5>学生们</h5>
+	    <hr/>
+	  </div>
+	</div>
+
+	<div class="row class-student-grids">
 		{% for student in students %}
-			<div class="col-md-1">
+			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 grid">
 				<a href="{{ path('user_show', {id:student.id}) }}">
-					<img class="media-object pull-left" width="48" height="48" src="{{file_path(student.smallAvatar, 'avatar.png')}}" title="{{student.truename}}" alt="{{student.truename}}">
+					<img class="avatar" width="48" height="48" src="{{ file_path(student.smallAvatar, 'avatar.png') }}" alt="{{student.truename}}">
 				</a>
+				<a href="#" class="truename">{{student.truename}}</a>
+				<div class="student-card-content">
+					<div class="media">
+						<img class="media-object pull-left" src="{{ file_path(student.smallAvatar, 'avatar.png') }}">
+						<div class="media-body">
+							<spann class="text-success">{{student.truename}} </spann>
+							<span class="text-muted"> ({{ student.number }})</span>
+							<div class="actions clearfix">
+								<button class="btn btn-xs btn-success pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:student.id})}}">发私信</button>
+							</div>
+						</div>
+					</div>
+				</div> 
 			</div>
 		{% else %}
 			<div class="empty">尚无学生</div>
