@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %} - {{ parent() }}{% endblock %}
+{% block title %} {{ class_name(class) }} - {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
   {{ parent() }}
