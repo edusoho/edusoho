@@ -348,7 +348,6 @@ class EdusohoCloudClient implements CloudClient
         $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
 
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
-
         return json_decode($result, true);
     }
 
