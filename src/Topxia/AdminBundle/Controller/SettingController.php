@@ -933,6 +933,13 @@ class SettingController extends BaseController
 
     }
     
+    public function addVideoUploadFileAction(Request $request)
+    {   
+        $fields = $request->request->all();
+        $fields = $this->getSettingService()->set('',$fields);
+        return $this->createJsonResponse($fields);
+    }
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');

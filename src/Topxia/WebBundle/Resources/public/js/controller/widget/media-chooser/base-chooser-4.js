@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     require('swfupload');
     var Widget = require('widget');
     var FileBrowser = require('../file/file-browser');
-    var UploadPanel = require('edusoho.uploadpanel');
+    var UploadPanel = require('./upload-panel');
     var Notify = require('common/bootstrap-notify');
 
     var BaseChooser = Widget.extend({
