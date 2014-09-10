@@ -20,7 +20,7 @@ class UserImporterController extends BaseController
         $userData=unserialize($userData);
         $checkType=$request->request->get("checkType");
         $userByEmail=array();
-        $userByNickname=array();
+        $userByNumber=array();
         $users=array();
 
         if($checkType=="ignore"){
@@ -108,6 +108,7 @@ class UserImporterController extends BaseController
             }
 
             $fieldSort=$this->getFieldSort($excelField,$fieldArray);
+  
             unset($fieldArray,$excelField);
 
             $repeatInfo=$this->checkRepeatData($row=3,$fieldSort,$highestRow,$objWorksheet);
@@ -141,6 +142,12 @@ class UserImporterController extends BaseController
                     $fieldCol[$key]=$num+1;
                 }
                 unset($strs);
+                //填充email
+                if(!isset($userData['email'])) {
+                    $userData['email'] = $userData['number'] . '@' . 'edusoho' . '.' . 'com';
+                    $fieldCol['email'] = 'NoRequired';
+                }
+               
                 $emptyData=array_count_values($userData);
                 if(isset($emptyData[""])&&count($userData)==$emptyData[""]) {
                     $checkInfo[]="第".$row."行为空行，已跳过";
@@ -205,8 +212,10 @@ class UserImporterController extends BaseController
     {    
         $errorInfo=array();
 
-        if (!SimpleValidator::email($userData['email'])) {
-            $errorInfo[]="第 ".$row."行".$fieldCol["email"]." 列 的数据存在问题，请检查。";
+        if(!$fieldCol['email'] === 'NoRequired') {
+            if (!SimpleValidator::email($userData['email'])) {
+                $errorInfo[]="第 ".$row."行".$fieldCol["email"]." 列 的数据存在问题，请检查。";
+            }
         }
 
         if (!SimpleValidator::number($userData['number'])) {
@@ -272,16 +281,7 @@ class UserImporterController extends BaseController
                 $emailCol=$value["num"];
             }
         }
-
-        for ($row ;$row <= $highestRow;$row++) {
-
-            $emailColData =$objWorksheet->getCellByColumnAndRow($emailCol, $row)->getValue(); 
-            if($emailColData.""=="") continue;
-            $emailData[$row]=$emailColData."";         
-        }
-
-        $errorInfo=$this->arrayRepeat($emailData);
-
+        
         for ($row=3 ;$row <= $highestRow;$row++) {
 
             $numberColData=$objWorksheet->getCellByColumnAndRow($numberCol, $row)->getValue();      
@@ -289,7 +289,18 @@ class UserImporterController extends BaseController
             $numberData[$row]=$numberColData.""; 
         }
 
-        $errorInfo.=$this->arrayRepeat($numberData);
+        $errorInfo=$this->arrayRepeat($numberData);
+
+        if(isset($emailCol)) {
+            for ($row=3 ;$row <= $highestRow;$row++) {
+
+            $emailColData =$objWorksheet->getCellByColumnAndRow($emailCol, $row)->getValue(); 
+            if($emailColData.""=="") continue;
+            $emailData[$row]=$emailColData."";         
+        }
+
+        $errorInfo.=$this->arrayRepeat($emailData);
+        }
 
         return $errorInfo;
     }
@@ -348,11 +359,6 @@ class UserImporterController extends BaseController
             $errorInfo[] = '姓名';
             return false;
         }
-        if (!in_array('邮箱', $columns)) {
-            $errorInfo[] = '邮箱';
-            return false;
-        }
-
         return true;
     }
 
