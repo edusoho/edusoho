@@ -3989,8 +3989,6 @@ body {
 	min-height: 16.42857143px;
 }
 
-<<<<<<< HEAD
-
 /**
  * Question
  */
@@ -4138,7 +4136,9 @@ a.homework-essay-textarea-pack-up{
 	padding: 5px 25px;
 	border-radius: 3px;
 	font-size: 100%;
-=======
+
+}
+
 .quality-switcher {
 
 }
@@ -4368,5 +4368,4 @@ a.homework-essay-textarea-pack-up{
 
 .homepage .hot-group p {
 	margin-bottom: 10px;
->>>>>>> develop
 }
