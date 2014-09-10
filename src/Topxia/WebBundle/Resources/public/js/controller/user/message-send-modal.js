@@ -14,6 +14,7 @@ define(function(require, exports, module) {
                     return false;
                 }
                 
+                $('#message-submit').button('submiting').addClass('disabled');;
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
                     Notify.success('私信发送成功');
@@ -28,7 +29,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="message[receiver]"]',
             required: true,
-            rule: 'chinese_alphanumeric remote'
+            rule: 'chinese_alphanumeric'
         });
 
         validator.addItem({
