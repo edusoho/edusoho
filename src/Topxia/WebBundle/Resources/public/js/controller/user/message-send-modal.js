@@ -14,6 +14,7 @@ define(function(require, exports, module) {
                     return false;
                 }
                 
+                $('#message-submit').button('submiting').addClass('disabled');;
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
                     Notify.success('私信发送成功');
