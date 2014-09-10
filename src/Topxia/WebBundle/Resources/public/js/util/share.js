@@ -28,8 +28,9 @@ define(function(require, exports, module) {
 
     if(type=="dropdown"){
         var html='<div class="dropdown pull-right" style="padding:6px 12px;"><a class="dropdown-toggle text-muted "  href="#" id="dropdownMenu1" data-toggle="dropdown" >分享到<span class="caret"></span></a><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"><div class="bdsharebuttonbox" style="padding:10px;">';
-    }else{
-        var html='<div><ul><div class="bdsharebuttonbox" style="padding:10px;">';
+    }
+    else{
+        var html='<ul style="padding:20px;"><div class="bdsharebuttonbox " style="padding:10px;">';
     }
 
     if(contains(config[name],'qq')){
@@ -66,7 +67,7 @@ define(function(require, exports, module) {
         };       
     with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)]; 
     
-    html+='</ul></div>';
+    html+='</ul>';
     $(select).html(html);
 }
 
