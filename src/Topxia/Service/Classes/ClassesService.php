@@ -43,4 +43,6 @@ interface ClassesService
 
     public function deleteClassMemberByUserId($userId);
 
+    public function addOrUpdateTeacher($userId, $classId, $role);
+
 }

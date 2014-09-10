@@ -2023,7 +2023,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 				'id' => $teacherId,
 				'isVisible' => 1
 				)));
-
+			//添加课程老师到classmember
+			$classService->addOrUpdateTeacher($teacherId, $classId, 'TEACHER');
+			
 			$chapterIdMap = array();
 			$newChapters = array();
 			foreach ($chapters as $key1 => $chapter) {
