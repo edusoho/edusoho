@@ -215,7 +215,7 @@ class UploadFileController extends BaseController
         $result = $request->getContent();
 
         $this->getLogService()->info('uploadheadleader', 'uploadfile_cloud_head_leader_convert_callback', "文件云处理回调", array('content' => $result));
-        
+
         $result = preg_replace_callback(
           "(\\\\x([0-9a-f]{2}))i",
           function($a) {return chr(hexdec($a[1]));},
