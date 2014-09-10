@@ -85,6 +85,12 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getFile($id);
     }
 
+    public function getFileByTargetType($targetType)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE targetType = ? LIMIT 1";
+        return $this->getConnection()->fetchColumn($sql, array($targetType));
+    }
+
     private function createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);

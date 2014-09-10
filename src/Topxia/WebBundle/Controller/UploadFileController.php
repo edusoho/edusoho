@@ -66,7 +66,7 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($params);
     }
 
-    public function cloudCallbackAction(Request $request)
+    private function cloudCallBack(Request $request)
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -77,7 +77,19 @@ class UploadFileController extends BaseController
         $targetId = $request->query->get('targetId');
         $fileInfo = $request->request->all();
 
+        if($targetType == 'headLeader'){
+            $this->getSettingService()->delete('headLeader');
+            $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            $this->getUploadFileService()->deleteFile($file['id']);
+        }
+
         $file = $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, 'cloud');
+        return $file;
+    }
+
+    public function cloudCallbackAction(Request $request)
+    {
+        $file = $this->cloudCallBack($request);
         return $this->createJsonResponse($file);
     }
 
