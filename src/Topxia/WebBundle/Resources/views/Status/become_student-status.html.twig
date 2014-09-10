@@ -3,6 +3,6 @@
     <img class="media-object"  src="{{ file_path(user.smallAvatar, 'avatar.png') }}">
   </a>
   <div class="media-body">
-    <a href="{{ path('user_show', {id:user.id}) }}"> {{ user.nickname }}</a> 在{{ status.createdTime|smart_time }} 加入了课程 <a href="{{ path('course_show', {id: status.properties.course.id}) }}">{{ status.properties.course.title }}</a>
+    <a href="{{ path('user_show', {id:user.id}) }}"> {{ user.truename }}</a> 在{{ status.createdTime|smart_time }} 加入了课程 <a href="{{ path('course_show', {id: status.properties.course.id}) }}">{{ status.properties.course.title }}</a>
   </div>
 </li>
