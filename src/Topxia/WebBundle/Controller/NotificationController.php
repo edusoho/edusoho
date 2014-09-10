@@ -30,7 +30,6 @@ class NotificationController extends BaseController
         );
 
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
-
         return $this->render('TopxiaWebBundle:Notification:index.html.twig', array(
             'notifications' => $notifications,
             'paginator' => $paginator
