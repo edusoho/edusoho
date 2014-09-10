@@ -214,8 +214,6 @@ class UploadFileController extends BaseController
 
         $result = $request->getContent();
 
-        $this->getLogService()->info('uploadheadleader', 'uploadfile_cloud_head_leader_convert_callback', "文件云处理回调", array('content' => $result));
-
         $result = preg_replace_callback(
           "(\\\\x([0-9a-f]{2}))i",
           function($a) {return chr(hexdec($a[1]));},
@@ -227,7 +225,7 @@ class UploadFileController extends BaseController
         $result = json_decode($result, true);
         $result = array_merge($request->query->all(), $result);
 
-        $headLeader = $this->getSettingService()->get('headLeader');
+        $headLeader = $this->getSettingService()->get('headLeader', array());
         $headLeader = json_decode($headLeader, true);
         $headLeader['meta'] = $result;
         $headLeader = json_encode($headLeader);
