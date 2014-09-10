@@ -83,6 +83,13 @@ class UploadFileController extends BaseController
 
     public function cloudConvertCallback2Action(Request $request)
     {
+        $file = $this->cloudConvertCallback2($request);    
+
+        return $this->createJsonResponse($file['metas2']);
+    }
+
+    private function cloudConvertCallback2(Request $request)
+    {
         $result = $request->getContent();
 
         $result = preg_replace_callback(
@@ -118,8 +125,7 @@ class UploadFileController extends BaseController
                 'file' => $file,
             ));
         }
-
-        return $this->createJsonResponse($file['metas2']);
+        return $file;
     }
 
     public function cloudConvertCallback3Action(Request $request)
@@ -212,27 +218,11 @@ class UploadFileController extends BaseController
     public function cloudConvertHeadLeaderCallbackAction(Request $request)
     {
 
-        $result = $request->getContent();
+        $file = $this->cloudConvertCallback2($request); 
 
-        $result = preg_replace_callback(
-          "(\\\\x([0-9a-f]{2}))i",
-          function($a) {return chr(hexdec($a[1]));},
-          $result
-        );
+        $this->getSettingService()->set('headLeader', $file['id']);
 
-        $this->getLogService()->info('headLeader', 'cloud_convert_head_leader_callback', "片头处理回调", array('result' => $result));
-
-        $result = json_decode($result, true);
-        $result = array_merge($request->query->all(), $result);
-
-        $headLeader = $this->getSettingService()->get('headLeader', array());
-        $headLeader = json_decode($headLeader, true);
-        $headLeader['meta'] = $result;
-        $headLeader = json_encode($headLeader);
-
-        $this->getSettingService()->set('headLeader', $headLeader);
-
-        return $this->createJsonResponse($result);
+        return $this->createJsonResponse(true);
     } 
 
     public function getMediaInfoAction(Request $request, $type)
