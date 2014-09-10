@@ -214,8 +214,6 @@ class UploadFileController extends BaseController
 
         $result = $request->getContent();
 
-        $headLeader = $this->getSettingService()->set('headLeader', );
-
         $result = preg_replace_callback(
           "(\\\\x([0-9a-f]{2}))i",
           function($a) {return chr(hexdec($a[1]));},
