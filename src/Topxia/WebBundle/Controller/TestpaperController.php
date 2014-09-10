@@ -324,7 +324,7 @@ class TestpaperController extends BaseController
                 $teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testpaperResult['id']), true);
 
                 foreach ($course['teacherIds'] as $receiverId) {
-                    $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testpaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
+                    $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['truename']}</a> 刚刚完成了 {$testpaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
                 }
             }
 
@@ -370,7 +370,7 @@ class TestpaperController extends BaseController
             $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
             $testpaperResultUrl = $this->generateUrl('course_manage_test_results', array('id'=>$testpaperResult['id']), true);
 
-            $result = $this->getNotificationService()->notify($testpaperResult['userId'], 'default', "【试卷已批阅】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚批阅了 {$testpaperResult['paperName']} ，<a href='{$testpaperResultUrl}' target='_blank'>请点击查看结果</a>");
+            $result = $this->getNotificationService()->notify($testpaperResult['userId'], 'default', "【试卷已批阅】 <a href='{$userUrl}' target='_blank'>{$user['truename']}</a> 刚刚批阅了 {$testpaperResult['paperName']} ，<a href='{$testpaperResultUrl}' target='_blank'>请点击查看结果</a>");
             
             return $this->createJsonResponse(true);
         }

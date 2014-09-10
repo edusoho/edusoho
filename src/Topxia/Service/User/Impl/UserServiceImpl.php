@@ -835,7 +835,7 @@ class UserServiceImpl extends BaseService implements UserService
         );
         
         $currentUser = $this->getCurrentUser();
-        $this->getLogService()->info('user', 'approved', "用户{$user['nickname']}实名认证成功，操作人:{$currentUser['nickname']} !" );
+        $this->getLogService()->info('user', 'approved', "用户{$user['truename']}实名认证成功，操作人:{$currentUser['truename']} !" );
         $message = '您的个人实名认证，审核已经通过！' . ($note ? "({$note})" : '');
         $this->getNotificationService()->notify($user['id'], 'default', $message);
         return true;

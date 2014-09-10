@@ -177,7 +177,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			$this->getNotifiactionService()->notify($teacherId, 'thread', array(
 				'threadId' => $thread['id'],
 				'threadUserId' => $thread['userId'],
-				'threadUserNickname' => $this->getCurrentUser()->nickname,
+				'threadUserNickname' => $this->getCurrentUser()->truename,
 				'threadTitle' => $thread['title'],
 				'threadType' => $thread['type'],
 				'courseId' => $course['id'],
@@ -346,7 +346,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			$this->getNotifiactionService()->notify($thread['userId'], 'thread-post', array(
 				'postId' => $post['id'],
 				'postUserId' => $post['userId'],
-				'postUserNickname' => $this->getCurrentUser()->nickname,
+				'postUserNickname' => $this->getCurrentUser()->truename,
 				'threadId' => $thread['id'],
 				'threadTitle' => $thread['title'],
 				'threadType' => $thread['type'],
