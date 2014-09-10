@@ -80,7 +80,9 @@ class UploadFileController extends BaseController
         if($targetType == 'headLeader'){
             $this->getSettingService()->delete('headLeader');
             $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
-            $this->getUploadFileService()->deleteFile($file['id']);
+            if(!empty($file) && array_key_exists('id', $file)){
+                $this->getUploadFileService()->deleteFile($file['id']);
+            }
         }
 
         $file = $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, 'cloud');
