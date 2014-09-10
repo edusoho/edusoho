@@ -97,7 +97,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         }
 
         $permissionRoles = array(
-            'view' => array('STUDENT', 'HEAD_TEACHER', 'ADMIN'),
+            'view' => array('STUDENT', 'TEACHER', 'HEAD_TEACHER', 'ADMIN'),
             'manage' => array('HEAD_TEACHER', 'ADMIN'),
         );
 
@@ -250,12 +250,12 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return $this->getClassMemberDao()->updateClassMember($fields, $id);
     }
 
-    private function getClassesDao ()
+    private function getClassesDao()
     {
         return $this->createDao('Classes.ClassesDao');
     }
 
-    private function getClassMemberDao ()
+    private function getClassMemberDao()
     {
         return $this->createDao('Classes.ClassMemberDao');
     }
