@@ -214,25 +214,25 @@ class UploadFileController extends BaseController
 
         $result = $request->getContent();
 
-        $headLeader = $this->getSettingService()->set('headLeader', '{}');
+        $headLeader = $this->getSettingService()->set('headLeader', );
 
-        // $result = preg_replace_callback(
-        //   "(\\\\x([0-9a-f]{2}))i",
-        //   function($a) {return chr(hexdec($a[1]));},
-        //   $result
-        // );
+        $result = preg_replace_callback(
+          "(\\\\x([0-9a-f]{2}))i",
+          function($a) {return chr(hexdec($a[1]));},
+          $result
+        );
 
-        // $this->getLogService()->info('headLeader', 'cloud_convert_head_leader_callback', "片头处理回调", array('result' => $result));
+        $this->getLogService()->info('headLeader', 'cloud_convert_head_leader_callback', "片头处理回调", array('result' => $result));
 
-        // $result = json_decode($result, true);
-        // $result = array_merge($request->query->all(), $result);
+        $result = json_decode($result, true);
+        $result = array_merge($request->query->all(), $result);
 
-        // $headLeader = $this->getSettingService()->get('headLeader', array());
-        // $headLeader = json_decode($headLeader, true);
-        // $headLeader['meta'] = $result;
-        // $headLeader = json_encode($headLeader);
+        $headLeader = $this->getSettingService()->get('headLeader', array());
+        $headLeader = json_decode($headLeader, true);
+        $headLeader['meta'] = $result;
+        $headLeader = json_encode($headLeader);
 
-        // $this->getSettingService()->set('headLeader', $headLeader);
+        $this->getSettingService()->set('headLeader', $headLeader);
 
         return $this->createJsonResponse($result);
     } 
