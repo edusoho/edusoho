@@ -3,6 +3,11 @@ define(function(require, exports, module) {
     var Widget = require('widget');
 
     exports.run = function() {
+
+        $('#modal').on('hidden.bs.modal', function (e) {
+            window.location.reload();
+        })
+        
         var progressBar = new ProgressBar({
             element: '#package-update-progress'
         });
