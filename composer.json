@@ -7,8 +7,8 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.3.*",
-        "doctrine/orm": ">=2.2.3,<2.4-dev",
+        "symfony/symfony": "v2.3.18",
+        "doctrine/orm": "v2.3.6",
         "doctrine/doctrine-bundle": "1.2.*",
         "twig/extensions": "1.0.*",
         "symfony/assetic-bundle": "2.3.*",
@@ -23,7 +23,8 @@
         "imagine/imagine": "v0.5.0",
         "ezyang/htmlpurifier": "v4.5.0",
         "endroid/qrcode": "1.2.4",
-        "phpunit/phpunit": "4.1.*"
+        "phpunit/phpunit": "4.1.*",
+        "phpoffice/phpexcel": "1.8.0"
     },
     "scripts": {
         "post-install-cmd": [

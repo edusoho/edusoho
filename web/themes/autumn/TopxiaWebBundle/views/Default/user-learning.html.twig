@@ -1,0 +1,31 @@
+{% if course %}
+<div class="panel panel-autumn panel-autumn-primary">
+  <div class="panel-heading side-autumn-primary">
+    <h2 class="panel-title">在学课程 / <small>In The Course</small></h2>
+  </div>
+  <div class="panel-body">
+    <div class="user-learn clearfix">
+      <a href="{{ path('course_show', {id:course.id}) }}">
+      <img src="{{ default_path('coursePicture', course.largePicture, 'large') }}"  class="img-responsive thumb pull-left">
+    </a>
+    <p>《{{ course.title }}》</p>
+    {% set teacher = teachers|first %}
+    <p class="teacher-name">教师：{{ teacher.nickname }}</p>
+    <div class="progress-block clearfix">
+      <div class="progress" style="width:90%">
+        <span class="progress-bar" style="width: {{ progress.percent }};"></span>
+      </div>  
+      <div class="percentage clearfix">完成{{ progress.percent }}</div>
+
+      {% if nextLearnLesson %}
+        <div class="continue">
+          <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{nextLearnLesson.id}}" title="继续学习：{{ nextLearnLesson.title }}" class="btn btn-success pull-right">继续学习</a>
+        </div>
+      {% endif %}
+    </div>
+      
+    </div>
+    
+  </div>
+</div>
+{% endif %}

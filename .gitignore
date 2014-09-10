@@ -19,6 +19,7 @@
 /vendor/
 /bin/
 /composer.phar
+/scripts
 /etc/sublimetext2/edusoho.sublime-workspace
 /etc/UpgradeScripts
 /web/files/*

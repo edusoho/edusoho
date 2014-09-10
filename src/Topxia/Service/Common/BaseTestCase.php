@@ -105,8 +105,8 @@ class BaseTestCase extends WebTestCase
         $command = $application->find('doctrine:migrations:migrate');
         $commandTester = new CommandTester($command);
         $commandTester->execute(
-            array('command' => $command->getName(), '--no-interaction' => true),
-            array('interactive' => false)
+        array('command' => $command->getName()),
+        array('interactive' => false)
         );
     }
 

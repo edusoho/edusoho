@@ -9,7 +9,7 @@
 
 {% block body %}
 
-<form id="course-lesson-form" class="form-horizontal lesson-form" method="post"
+<form id="course-lesson-form" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   {% if lesson %}
     action="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
   {% else %}
@@ -82,6 +82,16 @@
     </div>
   </div>
 
+  {% if 'lesson_credit' in features %}
+  <div class="form-group for-text-type for-video-type for-audio-type for-ppt-type">
+    <div class="col-md-2 control-label"><label for="lesson-give-credit-field">学分</label></div>
+    <div class="col-md-9 controls">
+      <input class="form-control width-input width-input-small" id="lesson-give-credit-field" type="text" name="giveCredit" value="{{ lesson.giveCredit|default(0) }}"> 分
+      <div class="help-block">学完此课时，可获得的学分</div>
+    </div>
+  </div>
+  {% endif %}
+
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
 </form>
@@ -89,7 +99,6 @@
 <script>app.load('course-manage/lesson-modal')</script>
 
 {% endblock %}
-
 {% block footer %}
     <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
     <button id="course-lesson-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">{% if lesson %}保存{% else %}添加{% endif %}</button>

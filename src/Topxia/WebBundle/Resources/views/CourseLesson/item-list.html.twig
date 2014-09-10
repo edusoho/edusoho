@@ -1,9 +1,8 @@
 {% set learnStatuses = learnStatuses|default([]) %}
 {% set experience = experience|default(false) %}
-
 <div class="course-item-list-wrap">
 	{% set class = class|default('') %}
-	<ul class="course-item-list {{ class }}" id="course-item-list">
+	<ul class="course-item-list {{ class }} " id="course-item-list" >
 		{% for id, item in items %}
 		  {% if 'chapter' in id %}
 		    {% if item.type == 'unit' %}
@@ -18,7 +17,8 @@
 		  	  </li>
 		    {% endif %}
 		  {% elseif 'lesson' in id %}
-		    <li class="item lesson-item {% if learnStatuses[item.id]|default(null) %}lesson-item-{{ learnStatuses[item.id] }}{% endif %} lesson-item-{{item.id}} hover-item clearfix" data-id="{{ item.id }}">
+	    	  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
+		    <li class="item lesson-item {% if learnStatuses[item.id]|default(null) %}lesson-item-{{ learnStatuses[item.id] }}{% endif %} lesson-item-{{item.id}} hover-item clearfix " data-id="{{ item.id }}">
 		    	{% if item.status == 'published' %}	    	
 			    	{% if item.type == 'video' %}
 				    	<span class="type" title="视频时长{{ item.length|duration }}">
@@ -49,26 +49,39 @@
 						{% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
 							<small class="type">正在直播中</small>
 						{% elseif item.endTime < currentTime %}
-							<small class="type">直播结束</small>
+
+							<small class="type" >
+					    		{% if item.replayStatus == 'generated' %}
+					    		<span class="type">回放</span>
+					    		<span class="glyphicon 
+					    		glyphicon-play-circle"></span>
+					    		{% else %}
+					    		<span class="type">直播结束</span>
+					    		{% endif %}
+					    	</small>
+							
 						{% endif %}
 				    {% endif %}
 			    {% else %}
 			      	<span class="status">未发布</span>
 			    {% endif %}
-		    	<span class="name">课时{{ item.number }}</span>
-		    	<span class="pie">&nbsp;</span>
 
-
-	    	  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
-		    	<a class="title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}">
-			    	{% if item.title|length > 30 %}
-			    		{{ item.title|slice(0,30) }}...
-		    		{% else %}
+		    	<span class="name ">课时{{ item.number }}</span>
+		    	<span class="pie ">&nbsp;</span>
+		    	<a class=" title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}" style="white-space:nowrap; overflow:hidden; text-overflow: ellipsis;">
 			    		{{ item.title }}
-		    		{% endif %}
 				    {% if item.materialNum > 0 %}
 				      <span class="glyphicon  glyphicon-download" title="资料"></span>
 				    {% endif %}
+
+				    {% if item.giveCredit > 0 %}
+				      <small class="text-muted">({{ item.giveCredit }}学分)</small>
+				    {% endif %}
+
+				    {% if item.requireCredit > 0 %}
+				      <small class="text-muted">(需{{ item.requireCredit }}学分)</small>
+				    {% endif %}
+
 		    	</a>
 		    	<button class="btn btn-success btn-mini action">开始学习</button>
 		    </li>

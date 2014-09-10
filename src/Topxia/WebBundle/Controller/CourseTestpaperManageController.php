@@ -185,7 +185,6 @@ class CourseTestpaperManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            
             if (empty($data['questionId']) or empty($data['scores'])) {
                 return $this->createMessageResponse('error', '试卷题目不能为空！');
             }

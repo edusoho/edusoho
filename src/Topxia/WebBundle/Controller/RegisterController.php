@@ -17,11 +17,13 @@ class RegisterController extends BaseController
         $form = $this->createForm(new RegisterType());
         
         if ($request->getMethod() == 'POST') {
-            
+    
             $registration = $request->request->all();
+   
             $registration['createdIp'] = $request->getClientIp();
 
             $user = $this->getAuthService()->register($registration);
+
             $this->authenticateUser($user);
             $this->sendRegisterMessage($user);
 
@@ -36,9 +38,26 @@ class RegisterController extends BaseController
             return $this->redirect($goto);
             
         }
+
+        $auth=$this->getSettingService()->get('auth');
+
+        if(!isset($auth['registerSort']))$auth['registerSort']="";
+        
         $loginEnable  = $this->isLoginEnabled();
+
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        for($i=0;$i<count($userFields);$i++){
+           if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
+           if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
+           if(strstr($userFields[$i]['fieldName'], "intField")) $userFields[$i]['type']="int";
+           if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
+           if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
+        }
+        
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
-            'isLoginEnabled' => $loginEnable
+            'isLoginEnabled' => $loginEnable,
+            'registerSort'=>$auth['registerSort'],
+            'userFields'=>$userFields,
         ));
     }
 
@@ -152,6 +171,11 @@ class RegisterController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
     public function getEmailLoginUrl ($email)
     {
         $host = substr($email, strpos($email, '@') + 1);
@@ -165,6 +189,12 @@ class RegisterController extends BaseController
         }
 
         return 'http://mail.' . $host;
+    }
+
+
+    public function analysisAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Register:analysis.html.twig',array());
     }
 
     protected function getSettingService()

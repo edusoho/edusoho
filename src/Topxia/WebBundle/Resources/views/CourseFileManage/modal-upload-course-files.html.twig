@@ -20,16 +20,18 @@
 	<div id="file-uploader-container" 
     class="mbl" 
     data-target-type="{{targetType}}" 
-    data-upload-mode="{{ storageSetting.upload_mode }}" >
+    data-upload-mode="{{ storageSetting.upload_mode }}"
+    data-hls-encrypted="{{ setting('developer.hls_encrypted', 1) }}"
+
+    >
 	
      <div
       id="file-chooser-uploader-div"
       data-role="uploader-div"
       data-upload-url="{{ path('uploadfile_upload', {targetType:targetType, targetId:targetId}) }}"
-      data-params-url="{{ path('uploadfile_params', {targetType:targetType, targetId:targetId}) }}"
+      data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
       {% if storageSetting.upload_mode == 'cloud' %}
         data-callback="{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}"
-        data-fileinfo-url="{{ path('uploadfile_cloud_fileinfo') }}"
       {% endif %}
      ></div>
 	
@@ -47,6 +49,30 @@
         {% endif %}
       </ul>
     </div>
+
+    {% if storageSetting.upload_mode == 'cloud' %}
+    <div class="quality-switcher">
+      <div class="quality-switcher-bar">
+        视频转码类型<span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> 设置</a>
+      </div>
+      <div class="quality-switcher-control">
+        <div class="video-quality radios">
+          画质：
+        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality|default('low')) }}
+        </div>
+
+        <div class="audio-quality radios">
+          音质：
+          {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '高品'}, storageSetting.video_audio_quality|default('low')) }}
+        </div>
+
+        <div class="quality-actions">
+          <a href="javascript:;" class="btn btn-default btn-sm confrim-btn">确定</a>
+          <a href="javascript:;" class="btn btn-link btn-sm cancel-btn">取消</a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
   {% elseif targetType == 'coursematerial' %}
     <div class="alert alert-info">
       <ul>

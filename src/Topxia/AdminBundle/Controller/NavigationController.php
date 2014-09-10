@@ -14,22 +14,12 @@ class NavigationController extends BaseController
     {
         $type = $request->query->get('type', 'top');
 
-        $paginator = new Paginator(
-            $request,
-            $this->getNavigationService()->getNavigationsCountByType($type),
-            10
-        );
-
-        $navigations = $this->getNavigationService()->findNavigationsByType(
-            $type,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        $navigations = $this->getNavigationService()->getNavigationsListByType($type);
 
         return $this->render('TopxiaAdminBundle:Navigation:index.html.twig', array(
             'type' => $type,
             'navigations' => $navigations,
-            'paginator' => $paginator));
+        ));
     }
 
     public function deleteAction (Request $request, $id)
@@ -59,16 +49,21 @@ class NavigationController extends BaseController
             'sequence' => 1,
             'isNewWin'=>0,
             'isOpen'=>1,
-            'type'=>$request->query->get('type')
+            'type'=>$request->query->get('type'),
+            'parentId' => $request->query->get('parentId', 0),
         );
+        $parentNavigation = $navigation['parentId'] ? $this->getNavigationService()->getNavigation($navigation['parentId']) : null;
 
         return $this->render('TopxiaAdminBundle:Navigation:navigation-modal.html.twig', array(
-            'navigation'=>$navigation));
+            'navigation'=>$navigation,
+            'parentNavigation' => $parentNavigation
+        ));
     }
 
     public function updateAction (Request $request, $id)
     {
         $navigation = $this->getNavigationService()->getNavigation($id);
+        $parentNavigation = $navigation['parentId'] ? $this->getNavigationService()->getNavigation($navigation['parentId']) : null;
         if ('POST' == $request->getMethod()) {
                 $this->getNavigationService()->updateNavigation($id, $request->request->all());
                 $navigation = $this->getNavigationService()->getNavigation($id);
@@ -76,7 +71,8 @@ class NavigationController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Navigation:navigation-modal.html.twig', array(
-            'navigation'=>$navigation
+            'navigation'=>$navigation,
+            'parentNavigation' => $parentNavigation
         ));
     }
 

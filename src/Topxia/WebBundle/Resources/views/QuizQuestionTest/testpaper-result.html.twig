@@ -21,11 +21,23 @@
         <div class="mtm">{{ paperResult.teacherSay|bbCode2Html|raw }}</div>
       </div>
     {% endif %}
+
+    {% if paperResult.passedStatus == 'unpassed' %}
+      <div class="alert alert-danger">
+        您未通过考试，请<a href="{{ path('course_manage_redo_test', {testId:paperResult.testId}) }}">重新参加考试</a>，或者重新学习课程。
+      </div>
+    {% elseif paperResult.passedStatus == 'passed' %}
+      <div class="alert alert-success">恭喜您已通过本次考试。</div>
+    {% endif %}
   {% endif %}
 
 {% endblock %}
 
 {% block testpaper_body_sidebar %}
+
+{% if is_feature_enabled('hide_testpaper_result') and (paperResult|default(null) and paperResult.status == 'finished') and not app.user.isTeacher() %}
+
+{% else %}
 
   <div class="testpaper-card" data-spy="affix" data-offset-top="200">
     <div class="panel panel-default">
@@ -71,7 +83,7 @@
         </div>
     </div>
   </div>
-
+{% endif %}
 
 
 {% endblock %}

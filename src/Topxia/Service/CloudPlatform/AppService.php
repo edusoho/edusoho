@@ -18,9 +18,16 @@ interface AppService
 
     public function checkAppUpgrades();
 
+    public function checkAppCop();
+
     public function findLogs($start, $limit);
 
     public function findLogCount();
+
+    /**
+     * 是否是去版权用户
+     */
+    public function checkOwnCopyrightUser($id);
 
     /**
      * 是否存在需要回滚的升级
@@ -62,5 +69,7 @@ interface AppService
     public function repairProblem($token);
 
     public function uninstallApp($code);
+
+    public function updateAppVersion($code,$fromVersion,$version);
 
 }

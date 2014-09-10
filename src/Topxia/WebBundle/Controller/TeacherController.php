@@ -12,6 +12,7 @@ class TeacherController extends BaseController
 
         $conditions = array(
             'roles'=>'ROLE_TEACHER',
+            'locked'=>0
         );
 
         $paginator = new Paginator(

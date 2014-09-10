@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
 
     exports.run = function() {
-
         $('.follow-btn').on('click', function() {
             var $this = $(this);
             $.post($this.data('url'), function() {

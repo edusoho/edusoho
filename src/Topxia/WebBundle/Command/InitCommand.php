@@ -26,6 +26,7 @@ class InitCommand extends BaseCommand
 		$user = $this->initAdminUser($output);
 
 		$this->initSiteSetting($output);
+		$this->initConsultSetting($output);
 		$this->initRegisterSetting($user, $output);
 		$this->initMailerSetting($output);
 		$this->initPaymentSetting($output);
@@ -75,6 +76,33 @@ class InitCommand extends BaseCommand
         );
 
         $site = $this->getSettingService()->set('site', $default);
+
+
+	}
+
+	private function initConsultSetting($output)
+	{
+		$output->write('  初始化客服设置');
+
+
+         $default = array(
+            'enabled' => 0,
+            'worktime' => '9:00 - 17:00',
+            'qq' => array(
+                array('name' => '','number' => ''),
+                ),
+            'qqgroup' => array(
+                array('name' => '','number' => ''),
+                ),
+            'phone' => array(
+                array('name' => '','number' => ''),
+                ),
+            'webchatURI' => '',
+            'email' => '',
+            'color' => 'default',
+            );
+         
+        $site = $this->getSettingService()->set('contact', $default);
 
 
 	}

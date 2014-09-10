@@ -27,7 +27,17 @@ interface UploadFileService
 
     public function convertFile($id, $status, array $result = array(), $callback = null);
 
+    public function saveConvertResult($id, array $result = array());
+
     public function setFileConverting($id, $convertHash);
 
+
+    public function makeUploadParams($params);
+
+    public function reconvertFile($id, $convertCallback);
+
+    public function reconvertOldFile($id, $convertCallback, $pipeline);
+
+    public function getMediaInfo($key, $type);
 
 }

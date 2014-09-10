@@ -29,8 +29,11 @@ class LogServiceImpl extends BaseService implements  LogService
 
 		switch ($sort) {
 			case 'created':
-				$sort = 'createdTime';
+				$sort = array('createdTime','DESC');
 				break;
+			case 'createdByAsc':
+				$sort = array('createdTime','ASC');
+				break;				
 			
 			default:
 				throw $this->createServiceException('参数sort不正确。');
@@ -101,5 +104,15 @@ class LogServiceImpl extends BaseService implements  LogService
         }
 
 		return $conditions;
+	}
+
+	public function analysisLoginNumByTime($startTime,$endTime)
+	{
+		return $this->getLogDao()->analysisLoginNumByTime($startTime,$endTime);
+	}
+
+	public function analysisLoginDataByTime($startTime,$endTime)
+	{
+		return $this->getLogDao()->analysisLoginDataByTime($startTime,$endTime);
 	}
 }

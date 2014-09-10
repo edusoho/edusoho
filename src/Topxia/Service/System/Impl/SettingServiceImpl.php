@@ -43,6 +43,8 @@ class SettingServiceImpl extends BaseService implements SettingService
         $this->clearCache();
     }
 
+    
+
     protected function clearCache()
     {
         $this->getCacheService()->clear(self::CACHE_NAME);

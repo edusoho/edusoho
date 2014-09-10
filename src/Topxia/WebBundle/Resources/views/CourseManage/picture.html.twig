@@ -17,14 +17,16 @@
 
       <div class="form-group clearfix">
         <div class="col-md-offset-2 col-md-8 controls">
-          <img src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" />
+          <img src="{{ default_path('coursePicture',course.largePicture, '') }}" />
         </div>
       </div>
 
       <div class="form-group clearfix">
         <div class="col-md-offset-2 col-md-8 controls">
           <input id="course-picture-field" type="file" name="picture" accept="image/gif,image/jpeg,image/png">
-          <p class="help-block">你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。</p>
+
+          <p class="help-block">你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>2M</strong>。</p>
+
         </div>
       </div>
 

@@ -11,6 +11,8 @@ interface LessonDao
 
     public function findLessonsByCourseId($courseId);
 
+    public function findLessonsByTypeAndMediaId($type, $mediaId);
+
     public function findMinStartTimeByCourseId($courseId);
 
     public function findLessonIdsByCourseId($courseId);
@@ -38,4 +40,10 @@ interface LessonDao
     public function deleteLessonsByCourseId($courseId);
 
     public function findLessonsByIds(array $ids);
+
+    public function sumLessonGiveCreditByCourseId($courseId);
+
+    public function sumLessonGiveCreditByLessonIds(array $lesonIds);
+
+    public function analysisLessonDataByTime($startTime,$endTime);    
 }

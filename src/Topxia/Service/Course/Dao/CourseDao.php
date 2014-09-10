@@ -25,5 +25,9 @@ interface CourseDao
     public function updateCourse($id, $fields);
 
     public function deleteCourse($id);
+    
+    public function waveCourse($id,$field,$diff);
+
+    public function analysisCourseDataByTime($startTime,$endTime);
 
 }

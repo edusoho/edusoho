@@ -100,7 +100,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                 $success = true;
 
             } else {
-                $this->_createLog($order['id'], 'pay_ignore', '订单已处理，付款被忽略', $payData);
+                $this->_createLog($order['id'], 'pay_ignore', '订单已处理', $payData);
             }
         } else {
             $this->_createLog($order['id'], 'pay_unknown', '', $payData);
@@ -130,6 +130,37 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw new \InvalidArgumentException();
         }
         return in_array($order['status'], array('created'));
+    }
+
+    public function analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status)
+    {
+        return $this->getOrderDao()->analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
+    }
+
+    public function analysisPaidCourseOrderDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisPaidCourseOrderDataByTime($startTime,$endTime);
+    }
+
+    public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisExitCourseOrderDataByTime($startTime,$endTime);
+    }
+
+    public function analysisAmount($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->analysisAmount($conditions);
+    }
+
+    public function analysisAmountDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisAmountDataByTime($startTime,$endTime);
+    }
+
+    public function analysisCourseAmountDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisCourseAmountDataByTime($startTime,$endTime);
     }
 
     private function generateOrderSn($order)
@@ -165,9 +196,18 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->sumOrderPriceByTargetAndStatuses($targetType, $targetId, array('paid', 'cancelled'));
     }
 
+    public function sumCouponDiscountByOrderIds($orderIds)
+    {
+        return $this->getOrderDao()->sumCouponDiscountByOrderIds($orderIds);
+    }
+
     public function findUserRefundCount($userId)
     {
         return $this->getOrderRefundDao()->findRefundCountByUserId($userId);
+    }
+    public function findRefundsByIds(array $ids)
+    {
+        return $this->getOrderRefundDao()->findRefundsByIds($ids);
     }
 
     public function findUserRefunds($userId, $start, $limit)
@@ -361,6 +401,8 @@ class OrderServiceImpl extends BaseService implements OrderService
         $orderBy = array();
         if ($sort == 'latest') {
             $orderBy =  array('createdTime', 'DESC');
+        }  elseif ($sort == 'early') {
+            $orderBy =  array('createdTime', 'ASC');
         } else {
             $orderBy = array('createdTime', 'DESC');
         }

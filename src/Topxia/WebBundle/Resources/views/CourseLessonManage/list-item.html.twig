@@ -1,4 +1,4 @@
-<li class="item-lesson clearfix" id="lesson-{{ lesson.id }}">
+<li class="item-lesson clearfix" id="lesson-{{ lesson.id }}"style="word-break: break-all;" >
 	<div class="item-line"></div>
 	<div class="item-content">
 	  {% set mediaStatus = lesson.mediaStatus|default(null) %}
@@ -30,6 +30,14 @@
 		{% if lesson.type in ['live'] %}
 		  <span class="text-muted">{{ lesson.startTime|data_format }}</span>
 		{% endif %}
+
+		{% if lesson.giveCredit > 0 %}
+		  <small class="text-muted">({{ lesson.giveCredit }}学分)</small>
+		{% endif %}
+
+    {% if lesson.requireCredit > 0 %}
+      <small class="text-muted">(需{{ lesson.requireCredit }}学分)</small>
+    {% endif %}
 
 		{% if lesson.type != 'testpaper' %}
 			{% set mediaTypeName = lesson.type == 'video' ? '视频' : (lesson.type == 'audio' ? '音频' : '文件') %}
@@ -64,6 +72,7 @@
 			{% else %}
 				<a class="btn btn-link" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open prs"></span>预览</a>
 			{% endif %}
+			
           	<a class="dropdown-toggle" data-toggle="dropdown" href="#">    	
 		    	<span class="caret"></span>
 	        </a>
@@ -111,5 +120,6 @@
 	            <li><a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-trash prs"></span>删除</a></li>
 	        </ul>
         </span>
+
 	</div>
 </li>

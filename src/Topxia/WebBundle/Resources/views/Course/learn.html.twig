@@ -17,7 +17,8 @@
          data-course-uri="{{ path('course_show', {id:course.id}) }}"
          data-dashboard-uri="{{ path('course_learn', {id:course.id}) }}"
          data-progress-control="{{ course.progressControl }}"
-         data-learned-control="{{ course.learnedCondition }}">
+         data-learned-control="{{ course.learnedCondition }}"
+         data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
       <div class="dashboard-content">
          <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> 返回课程</a>
          <a class="btn btn-primary  nav-btn prev-lesson-btn" href="javascript:" data-role="prev-lesson" data-placement="right" title="上一课时"><span class="glyphicon glyphicon-chevron-up" title="上一课时"></span></a>
@@ -45,6 +46,7 @@
           ></div>
           <div class="lesson-content lesson-content-audio" id="lesson-audio-content" data-role="lesson-content" style="display:none;"></div>
           <div class="lesson-content" id="lesson-swf-content" data-role="lesson-content" style="display:none;"></div>
+          <div class="lesson-content" id="lesson-iframe-content" data-role="lesson-content" style="display:none;"></div>
           <div class="lesson-content lesson-content-text" id="lesson-text-content" data-role="lesson-content" style="display:none;">
             <div class="lesson-content-text-body"></div>
           </div>
@@ -54,8 +56,13 @@
           <div class="lesson-content lesson-content-text" id="lesson-unpublished-content" data-role="lesson-content" style="display:none;">
             <div class="lesson-content-text-body">当前课时正在编辑中，暂时无法观看。</div>
           </div>
+<<<<<<< HEAD
           <div class="lesson-content lesson-content-text" id="lesson-uncommitHomework-content" data-role="lesson-content" style="display:none;">
             <div class="lesson-content-text-body">课程设置必须点击上一课时学过了按钮才能进行这一课时的学习</div>
+=======
+          <div class="lesson-content lesson-content-text" id="lesson-alert-content" data-role="lesson-content" style="display:none;">
+            <div class="lesson-content-text-body"></div>
+>>>>>>> develop
           </div>
           <div class="lesson-content lesson-content-text" id="lesson-testpaper-content" data-role="lesson-content" style="display:none;">
             <div class="lesson-content-text-body"></div>
@@ -69,7 +76,7 @@
         <div class="dashboard-footer clearfix">
 
           <div class="pull-right">
-            <button class="btn btn-primary finish-btn" data-role="finish-lesson"><span class="glyphicon glyphicon-unchecked"></span> 学过了</button>
+            <button class="btn btn-primary finish-btn" data-role="finish-lesson" style="display:none;"><span class="glyphicon glyphicon-unchecked"></span> 学过了</button>
           </div>
 
         </div>

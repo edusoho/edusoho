@@ -11,6 +11,18 @@ admin_question_remind_teachers:
     defaults: { _controller: TopxiaAdminBundle:Default:questionRemindTeachers }
     methods:  [POST]
 
+admin_operation_analysis:
+    pattern:  /operation/analysis
+    defaults: { _controller: TopxiaAdminBundle:Default:operationAnalysisDashbordBlock }
+
+admin_online_count:
+    pattern: /online/count
+    defaults: { _controller: TopxiaAdminBundle:Default:onlineCount }
+
+admin_login_count:
+    pattern: /login/count
+    defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
+
 admin_dashboard:
     pattern:  /dashboard
     defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
@@ -387,6 +399,26 @@ admin_setting_refund:
     pattern:  /setting/refund
     defaults: { _controller: TopxiaAdminBundle:Setting:refund }
 
+admin_setting_default:
+    pattern:  /setting/default
+    defaults: { _controller: TopxiaAdminBundle:Setting:default }
+
+admin_setting_default_avatar:
+    pattern:  /setting/default/avatar
+    defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultAvatar }
+
+admin_setting_default_avatar_crop:
+    pattern:  /setting/default/avatar/crop
+    defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultAvatarCrop }
+
+admin_setting_default_course_picture:
+    pattern:  /setting/default/course/picture
+    defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultCoursePicture }
+
+admin_setting_default_course_picture_crop:
+    pattern:  /setting/default/course/picture/crop
+    defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultCoursePictureCrop }
+
 admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
@@ -404,13 +436,29 @@ admin_setting_user_center:
     pattern:  /setting/user-center
     defaults: { _controller: TopxiaAdminBundle:Setting:userCenter }
 
+admin_setting_user_fields:
+    pattern:  /setting/user-fields
+    defaults: { _controller: TopxiaAdminBundle:Setting:userFields }
+
 admin_setting_course_setting:
     pattern:  /setting/course-setting
     defaults: { _controller: TopxiaAdminBundle:Setting:courseSetting }
 
+admin_setting_consult_setting:
+    pattern:  /setting/consult-setting
+    defaults: { _controller: TopxiaAdminBundle:Setting:consultSetting }
+
+admin_setting_consult_upload:
+    pattern:  /setting/consult-upload
+    defaults: { _controller: TopxiaAdminBundle:Setting:consultUpload }
+
 admin_setting_admin_sync:
     pattern:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
+
+admin_setting_developer_change_version:
+    pattern:  /setting/developer/modifyVersion
+    defaults: { _controller: TopxiaAdminBundle:Setting:modifyVersion }
 
 admin_setting_developer:
     pattern:  /setting/developer
@@ -485,6 +533,10 @@ admin_oldUpgradeCheck:
 admin_app_logs:
     pattern:  /app/logs
     defaults: { _controller: TopxiaAdminBundle:App:logs }
+
+admin_app_check_ownCopyrightUser:
+    pattern:  /app/check/{userId}/ownCopyrightUser
+    defaults: { _controller: TopxiaAdminBundle:App:checkOwnCopyrightUser }
 
 admin_app_package_update_modal:
     pattern:  /app/package_update/{id}/modal
@@ -753,3 +805,118 @@ admin_article_delete:
     pattern:  /article/delete
     defaults: { _controller: TopxiaAdminBundle:Article:delete }
     methods:  [POST]
+
+admin_group:
+    pattern:  /group/
+    defaults: { _controller: TopxiaAdminBundle:Group:index }
+admin_group_set:
+    pattern:  /group/set
+    defaults: { _controller: TopxiaAdminBundle:Group:set }
+admin_groupThread:
+    pattern:  /group/thread
+    defaults: { _controller: TopxiaAdminBundle:Group:thread }
+admin_groupThread_batch_delete:
+    pattern:  /group/batchDeleteThread
+    defaults: { _controller: TopxiaAdminBundle:Group:batchDeleteThread }
+admin_group_close:
+    pattern:  /group/{id}/close
+    defaults: { _controller: TopxiaAdminBundle:Group:closeGroup }
+admin_group_open:
+    pattern:  /group/{id}/open
+    defaults: { _controller: TopxiaAdminBundle:Group:openGroup }
+admin_groupThread_removeElite:
+    pattern:  /group/thread/{threadId}/removeElite
+    defaults: { _controller: TopxiaAdminBundle:Group:removeElite }
+admin_groupThread_setElite:
+    pattern:  /group/thread/{threadId}/setElite
+    defaults: { _controller: TopxiaAdminBundle:Group:setElite }
+admin_groupThread_removeStick:
+    pattern:  /group/thread/{threadId}/removeStick
+    defaults: { _controller: TopxiaAdminBundle:Group:removeStick }
+admin_groupThread_setStick:
+    pattern:  /group/thread/{threadId}/setStick
+    defaults: { _controller: TopxiaAdminBundle:Group:setStick }
+admin_groupThread_close:
+    pattern:  /group/thread/{threadId}/closeThread
+    defaults: { _controller: TopxiaAdminBundle:Group:closeThread }
+admin_groupThread_open:
+    pattern:  /group/thread/{threadId}/openThread
+    defaults: { _controller: TopxiaAdminBundle:Group:openThread }
+admin_groupThread_delete:
+    pattern:  /group/thread/{threadId}/deleteThread
+    defaults: { _controller: TopxiaAdminBundle:Group:deleteThread }
+admin_group_transfer:
+    pattern:  /group/transfer/{groupId}
+    defaults: { _controller: TopxiaAdminBundle:Group:transferGroup }
+
+admin_operation_analysis_register:
+    pattern:  /operation/analysis/register/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:register }
+
+admin_operation_analysis_login:
+    pattern:  /operation/analysis/login/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:login }
+
+admin_operation_analysis_course:
+    pattern:  /operation/analysis/course/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:course }
+
+admin_operation_analysis_lesson:
+    pattern:  /operation/analysis/lesson/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:lesson }
+
+admin_operation_analysis_lesson_join:
+    pattern:  /operation/analysis/lesson/join/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:joinLesson }
+
+admin_operation_analysis_lesson_paid:
+    pattern:  /operation/analysis/lesson/paid/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:paidLesson }
+
+admin_operation_analysis_lesson_finished:
+    pattern:  /operation/analysis/lesson/finished/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:finishedLesson }
+
+admin_operation_analysis_video_viewed:
+    pattern:  /operation/analysis/video/viewed/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:videoViewed }
+
+admin_operation_analysis_video_cloud_viewed:
+    pattern:  /operation/analysis/video/cloud/viewed/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:cloudVideoViewed }
+
+admin_operation_analysis_video_local_viewed:
+    pattern:  /operation/analysis/video/local/viewed/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:localVideoViewed }
+
+admin_operation_analysis_video_net_viewed:
+    pattern:  /operation/analysis/video/net/viewed/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:netVideoViewed }
+
+admin_operation_analysis_income:
+    pattern:  /operation/analysis/income/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:income }
+
+admin_operation_analysis_course_income:
+    pattern:  /operation/analysis/course/income/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:courseIncome }
+
+admin_operation_analysis_rount:
+    pattern:  /operation/analysis/rountByanalysisDateType/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:rountByanalysisDateType }
+
+admin_operation_analysis_lesson_exit:
+    pattern:  /operation/analysis/lesson/exit/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:exitLesson }
+
+admin_user_fields_add:
+    pattern:  /user_fields/add
+    defaults: { _controller: TopxiaAdminBundle:Setting:addUserFields }
+
+admin_user_fields_edit:
+    pattern:  /user_fields/edit/{id}
+    defaults: { _controller: TopxiaAdminBundle:Setting:editUserFields }
+
+admin_user_fields_delete:
+    pattern:  /user_fields/delete/{id}
+    defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }

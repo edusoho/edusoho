@@ -9,7 +9,9 @@
 {% block main %}
 
   <div class="page-header">
+  {% if liveSetEnabled == 1 %}
     <a href="{{ path('course_create',{flag:'isLive'}) }}" class="btn btn-info btn-sm pull-right mls" target="_blank">创建直播课程</a>
+  {% endif %}
     <a href="{{ path('course_create') }}" class="btn btn-info btn-sm pull-right" target="_blank">创建课程</a>
     <h1>课程管理</h1>
   </div>

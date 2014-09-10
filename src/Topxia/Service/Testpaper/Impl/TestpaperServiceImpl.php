@@ -83,6 +83,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if (array_key_exists('limitedTime', $fields)) {
                 $filtedFields['limitedTime'] = empty($fields['limitedTime']) ? 0 : (int) $fields['limitedTime'];
             }
+
+            if (array_key_exists('passedScore', $fields)) {
+                $filtedFields['passedScore'] = empty($fields['passedScore']) ? 0 : (float) $fields['passedScore'] ;
+            }
         }
 
         return $filtedFields;
@@ -494,11 +498,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if ($answer['status'] == 'right') {
                 $answers[$questionId]['score'] = $items[$questionId]['score'];
             } elseif ($answer['status'] == 'partRight') {
-                if ($items[$questionId]['parentId'] == 0 and $items[$questionId]['missScore'] > 0){
-                    $answers[$questionId]['score'] = $items[$questionId]['missScore'];
-                } else {
-                    $answers[$questionId]['score'] = $items[$questionId]['score'] * $answer['percentage'] / 100;
-                }
+   
+                $answers[$questionId]['score'] = $items[$questionId]['missScore'];
             } else {
                 $answers[$questionId]['score'] = 0;
             }
@@ -525,6 +526,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         $fields['rightItemCount'] = $accuracy['rightItemCount'];
+
+        if ($testpaper['passedScore'] > 0) {
+            $fields['passedStatus'] = $fields['score'] >= $testpaper['passedScore'] ? 'passed' : 'unpassed';
+        } else {
+            $fields['passedStatus'] = 'none';
+        }
 
         $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
         $fields['endTime'] = time();

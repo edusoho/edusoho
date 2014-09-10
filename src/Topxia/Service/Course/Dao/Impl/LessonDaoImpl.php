@@ -29,6 +29,12 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findLessonsByTypeAndMediaId($type, $mediaId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE type = ? AND mediaId = ?";
+        return $this->getConnection()->fetchAll($sql, array($type, $mediaId));
+    }
+
     public function findMinStartTimeByCourseId($courseId)
     {
         $sql = "select min(`startTime`) as startTime from `course_lesson` where courseId =?;";
@@ -135,6 +141,22 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
+    public function sumLessonGiveCreditByCourseId($courseId)
+    {
+        $sql = "SELECT SUM(giveCredit) FROM {$this->table} WHERE  courseId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($courseId)) ? : 0;
+    }
+
+    public function sumLessonGiveCreditByLessonIds(array $lessonIds)
+    {
+        if(empty($lessonIds)){ 
+            return 0; 
+        }
+        $marks = str_repeat('?,', count($lessonIds) - 1) . '?';
+        $sql ="SELECT SUM(giveCredit) FROM {$this->table} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchColumn($sql, $lessonIds);
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
 
@@ -149,7 +171,9 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('endTime < :endTimeLessThan')
             ->andWhere('startTime <= :startTimeLessThan')
             ->andWhere('endTime > :endTimeGreaterThan')
-            ->andWhere('title LIKE :titleLike');
+            ->andWhere('title LIKE :titleLike')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime <= :endTime');
 
         if (isset($conditions['courseIds'])) {
             $courseIds = array();
@@ -165,6 +189,20 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         }
 
         return $builder;
+    }
+
+    public function analysisLessonNumByTime($startTime,$endTime)
+    {
+              $sql="SELECT count( id)  as num FROM `{$this->table}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime}  ";
+
+              return $this->getConnection()->fetchColumn($sql);
+    }
+
+    public function analysisLessonDataByTime($startTime,$endTime)
+    {
+             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+
+            return $this->getConnection()->fetchAll($sql);
     }
 
 }

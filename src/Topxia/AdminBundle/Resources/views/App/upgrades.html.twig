@@ -11,6 +11,7 @@
     <h1>检查应用更新</h1>
   </div>
 
+{% if apps %}
   <table class="table table-striped table-hover">
     <thead>
       <tr>
@@ -42,5 +43,7 @@
       {% endfor %}
     </tbody>
   </table>
-
+{% else %}
+当前已是最新版本!
+{% endif %}
 {% endblock %}

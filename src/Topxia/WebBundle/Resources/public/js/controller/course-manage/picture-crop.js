@@ -31,6 +31,9 @@ define(function(require, exports, module) {
             }
         });
 
+        $('.go-back').click(function(){
+            history.go(-1);
+        });
     };
   
 });
