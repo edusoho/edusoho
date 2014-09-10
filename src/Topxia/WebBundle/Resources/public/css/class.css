@@ -157,10 +157,6 @@
     font-weight: normal;
 }
 
-.member-teacher {
-    margin-bottom: 20px;
-}
-
 .class-student-grids {
 
 
@@ -196,4 +192,16 @@
 .class-student-grids .popover .media-object {
     width: 48px;
     height: 48px;
+}
+
+.panel-block {
+    margin-bottom: 30px;
+}
+
+.panel-block-heading h3 {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 5px 0 15px;
+    padding: 0 0 8px;
+    border-bottom: 1px solid #eee;
 }
