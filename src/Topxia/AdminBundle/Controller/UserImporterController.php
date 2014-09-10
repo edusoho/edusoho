@@ -140,6 +140,10 @@ class UserImporterController extends BaseController
 
                     $userData[$key]=$strs[$num];
                     $fieldCol[$key]=$num+1;
+
+                    if($key == 'truename') {
+                        $userData[$key] = str_replace(array(" ","　"), array(""), $userData[$key]);   
+                    }                    
                 }
                 unset($strs);
                 //填充email

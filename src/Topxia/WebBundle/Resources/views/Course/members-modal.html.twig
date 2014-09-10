@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% set modalSize = 'large' %}
-{% block title %}课程学员{% endblock %}
+{% block title %}课程学生{% endblock %}
 {% set hide_footer = true %}
 {% block body %}
 
@@ -21,7 +21,7 @@
           </div>
         {% endif %}
 
-        <p><a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a></p>
+        <p><a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.truename }}</a></p>
         
         {% if student.remark and canManage %}
           <p class="text-muted text-sm" title="{{student.remark}}">({{ student.remark|plain_text(8) }})</p>
