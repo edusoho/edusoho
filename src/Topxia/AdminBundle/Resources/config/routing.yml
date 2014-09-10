@@ -921,7 +921,11 @@ admin_user_fields_delete:
     pattern:  /user_fields/delete/{id}
     defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }
 
-admin_syatem_status:
+admin_system_status:
     pattern:  /system/status
     defaults: { _controller: TopxiaAdminBundle:Default:systemStatus }
+
+admin_official_messages:
+    pattern:  /official/messages
+    defaults: { _controller: TopxiaAdminBundle:Default:officialMessages }
 

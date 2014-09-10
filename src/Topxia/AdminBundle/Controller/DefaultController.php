@@ -50,11 +50,20 @@ class DefaultController extends BaseController
         return $this->render('TopxiaAdminBundle:Default:index.html.twig');
     }
 
+    public function officialMessagesAction()
+    {
+        $message=$this->getAppService()->getMessages();
+        
+        return $this->render('TopxiaAdminBundle:Default:official.messages.html.twig',array(
+            "message"=>$message,
+        ));
+    }
 
     public function systemStatusAction()
     {   
         $apps = $this->getAppService()->checkAppUpgrades();
 
+        
         $appsAll = $this->getAppService()->getCenterApps();
 
         $codes = ArrayToolkit::column($appsAll, 'code');

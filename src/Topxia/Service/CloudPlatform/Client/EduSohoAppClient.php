@@ -35,6 +35,12 @@ class EduSohoAppClient implements AppClient
         return $this->callRemoteApi('GET', 'GetApps', $args);
     }
 
+    public function getMessages()
+    {
+        $args = array();
+        return $this->callRemoteApi('GET', 'GetMessages', $args);
+    }
+
     public function checkUpgradePackages($apps, $extInfos)
     {
         $args = array('apps' => $apps, 'extInfo' => $extInfos);

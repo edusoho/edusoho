@@ -83,6 +83,11 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->createAppClient()->checkUpgradePackages($args, $extInfos);
     }
 
+    public function getMessages()
+    {
+        return $this->createAppClient()->getMessages();
+    }
+
     public function checkAppCop()
     {
         return $this->createAppClient()->checkAppCop();
