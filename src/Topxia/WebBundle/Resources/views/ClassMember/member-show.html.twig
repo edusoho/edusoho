@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle:Class:layout.html.twig' %}
 {% set script_controller = 'class-member/member' %}
 {% block class_main %}
-	<div class="col-md-12"><h5>任课老师</h5><hr/></div>
+	<div class="col-md-12"><h5>老师们</h5><hr/></div>
 	<div class="col-md-12">
 		{% for teacher in teachers %}
 			<div class="col-md-6 member-teacher">
@@ -20,7 +20,7 @@
 			<div class="empty">尚无任课老师</div>
 		{% endfor %}
 	</div>
-	<div class="col-md-12"><h5>学生</h5><hr/></div>
+	<div class="col-md-12"><h5>学生们</h5><hr/></div>
 	<div class="col-md-12">
 		{% for student in students %}
 			<div class="col-md-1">
