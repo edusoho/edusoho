@@ -35,7 +35,7 @@
      {% endif %}
      </span>
   {% endif %}
-  <p><br></p>
+  <p><br></p><div class="share pull-right" data-bdText="{{articleShareContent|default('')}}"></div>
   <ul class="pager">
     {% if articlePrevious %}
       <li class="previous"><a href="{{ path('article_detail',{id:articlePrevious.id}) }}">&larr; 上一篇</a></li>
