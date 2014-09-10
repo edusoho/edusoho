@@ -613,7 +613,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserializes($lessons);
 	}
 
-<<<<<<< HEAD
 	public function getCourseLessonByCourseIdAndNumber($courseId, $number)
 	{	
 		if ($number < 1) {
@@ -621,12 +620,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 		$lesson = $this->getLessonDao()->getLessonByCourseIdAndNumber($courseId, $number);
 		return LessonSerialize::unserialize($lesson);
-=======
+	}
+	
 	public function findLessonsByTypeAndMediaId($type, $mediaId)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByTypeAndMediaId($type, $mediaId);
 		return LessonSerialize::unserializes($lessons);
->>>>>>> develop
 	}
 
 	public function searchLessons($conditions, $orderBy, $start, $limit)
