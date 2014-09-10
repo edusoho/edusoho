@@ -17,7 +17,7 @@
     {% endif %}
   </div>
   <div class="login-body">
-    <div class="login-picture" style="background-image: url(/bundles/topxiaweb/img/login-picture.jpg)"></div>
+    <div class="login-picture" style="background-image: url({{ file_url(setting('school.homepagePicture'),'login-picture.jpg') }})"></div>
     <div class="login-main">
       <div class="login-avatar"></div>
       <form id="login-form" class="login-form" method="post" action="{{ path('login_check') }}">

@@ -118,8 +118,7 @@
     float: left;
     width: 400px;
     height: 400px;
-    background-size: 100%;
-    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 .login-box .login-main {
