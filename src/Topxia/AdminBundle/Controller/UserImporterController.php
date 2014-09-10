@@ -142,7 +142,7 @@ class UserImporterController extends BaseController
                     $fieldCol[$key]=$num+1;
 
                     if($key == 'truename') {
-                        $userData[$key] = str_replace(" ", "", $userData[$key]);   
+                        $userData[$key] = str_replace(array(" ","　"), array(""), $userData[$key]);   
                     }                    
                 }
                 unset($strs);
