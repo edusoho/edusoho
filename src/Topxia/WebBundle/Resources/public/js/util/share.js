@@ -58,8 +58,8 @@ define(function(require, exports, module) {
                    "bdMini":"2",       
                    "bdMiniList":false,       
                    "bdPic":"",       
-                   "bdStyle":"0"      
-                   "bdSign":"on",       
+                   "bdStyle":"0",      
+                   "bdSign":"on"       
                     },       
             "share":{
                     "bdSize":"24"
