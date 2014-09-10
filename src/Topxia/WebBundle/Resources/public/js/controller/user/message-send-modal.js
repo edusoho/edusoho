@@ -28,7 +28,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="message[receiver]"]',
             required: true,
-            rule: 'chinese_alphanumeric remote'
+            rule: 'chinese_alphanumeric'
         });
 
         validator.addItem({

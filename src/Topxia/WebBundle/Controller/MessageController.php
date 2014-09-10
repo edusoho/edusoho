@@ -98,17 +98,12 @@ class MessageController extends BaseController
         $user = $this->getCurrentUser();
 
         $receiver = $this->getUserService()->getUser($toId);
-        $form = $this->createForm(new MessageType(), array('receiver'=>$receiver['nickname']));
+        $form = $this->createForm(new MessageType(), array('receiver'=>$receiver['truename']));
         if($request->getMethod() == 'POST'){
             $form->bind($request);
             if($form->isValid()){
                 $message = $form->getData();
-                $nickname = $message['receiver'];
-                $receiver = $this->getUserService()->getUserByNickname($nickname);
-                if(empty($receiver)) {
-                    throw $this->createNotFoundException("抱歉，该收信人尚未注册!");
-                }
-                $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
+                $this->getMessageService()->sendMessage($user['id'], $toId, $message['content']);
                 return $this->redirect($this->generateUrl('message'));
             }
         }
