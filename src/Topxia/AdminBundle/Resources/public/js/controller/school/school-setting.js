@@ -19,7 +19,7 @@ define(function(require, exports, module) {
                 response = $.parseJSON(response);
                 $("#school-homepage-container").html('<img src="' + response.url + '?'+(new Date()).getTime()+'" style="max-width:400px;">');
                 $form.find('[name=homepagePicture]').val(response.path);
-                Notify.success('上传微信二维码成功！');
+                Notify.success('上传学校主页成功！');
             }
         });
 
