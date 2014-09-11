@@ -59,7 +59,8 @@
 
 
 .class-table .class-picture {
-    max-width: 140px;
+    width: 140px;
+    height: 70px;
     margin-right: 10px;
 }
 
