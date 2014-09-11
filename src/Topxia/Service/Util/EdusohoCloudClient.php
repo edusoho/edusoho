@@ -125,13 +125,14 @@ class EdusohoCloudClient implements CloudClient
         return json_decode($content, true);
     }
 
-    public function generateHLSEncryptedListUrl($convertParams, $videos, $hlsKeyUrl, $duration = 3600)
+    public function generateHLSEncryptedListUrl($convertParams, $videos, $hlsKeyUrl, $headLeaders, $headLeaderHlsKeyUrl, $duration = 3600)
     {
 
         $types = array('sd', 'hd', 'shd');
         $names = array('sd' => '标清', 'hd' => '高清', 'shd' => '超清');
 
         $bandwidths = array();
+
         foreach ($convertParams['video'] as $index => $videoBandwidth) {
             $type = $types[$index];
             $bandwidths[$type] = (intval($videoBandwidth) + intval($convertParams['audio'][$index])) * 1024; 
@@ -147,6 +148,7 @@ class EdusohoCloudClient implements CloudClient
                 'name' => $names[$type],
                 'bandwidth' => $bandwidths[$type],
                 'key' => $videos[$type]['key'],
+                'headLeader' => $headLeaders[$type]
             );
         }
 
@@ -156,6 +158,7 @@ class EdusohoCloudClient implements CloudClient
             'items' => $items,
             'hlsKeyUrl' => $hlsKeyUrl,
             '_once' => $onceToken['token'],
+            'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl
         );
 
         $httpParams = array();

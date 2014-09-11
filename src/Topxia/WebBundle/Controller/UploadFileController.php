@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Common\StringToolkit;
 use Topxia\Common\FileToolkit;
@@ -238,6 +238,13 @@ class UploadFileController extends BaseController
 
         return $this->createJsonResponse(true);
     } 
+
+    public function getHeadLeaderHlsKeyAction(Request $request)
+    {
+        $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
+        $convertParams = json_decode($file['convertParams'], true);
+        return new Response($convertParams['hlsKey']);
+    }
 
     public function getMediaInfoAction(Request $request, $type)
     {

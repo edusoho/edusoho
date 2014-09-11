@@ -121,11 +121,14 @@ uploadfile_cloud_convert_callback3:
 uploadfile_cloud_head_leader_convert_callback:
     pattern:  /uploadfile/cloud_convertheadleadercallback
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertHeadLeaderCallback }
-    
 
 uploadfile_cloud_get_media_info:
     pattern:  /uploadfile/get_media_info/{type}
     defaults: { _controller: TopxiaWebBundle:UploadFile:getMediaInfo }
+
+uploadfile_cloud_get_head_leader_hlskey:
+    pattern: /uploadfile/get_head_leader_hlsKey
+    defaults: { _controller: TopxiaWebBundle:UploadFile:getHeadLeaderHlsKey}
 
 kindeditor_upload:
     pattern:  /kindeditor/upload
@@ -1300,6 +1303,8 @@ group_thread_deletePost:
 group_thread_post_reply:
     pattern:  /group/post/{postId}/reply
     defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
+
+
 
 #占位
 vip:
