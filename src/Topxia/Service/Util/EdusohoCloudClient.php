@@ -150,8 +150,8 @@ class EdusohoCloudClient implements CloudClient
                 'key' => $videos[$type]['key']
                 
             );
-            if(empty($headLeaders) && array_key_exists($type, $headLeaders)){
-                $programe['headLeader'] => $headLeaders[$type];
+            if(!empty($headLeaders) && array_key_exists($type, $headLeaders)){
+                $programe['headLeader'] = $headLeaders[$type];
             }
             $items[] = $programe;
         }
