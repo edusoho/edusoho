@@ -28,7 +28,7 @@ define(function(require, exports, module) {
                               lessons.push(parseInt($item.data('id')));
                         });
                         toolbar.setLessons(lessons);
-                        var num=$('.lesson-item-'+toolbar.get('lessonId')).data('num')-1;
+                        var num=$('.lesson-item-'+toolbar.get('lessonId')).data('num')-5;
                         $('.course-item-list-in-toolbar-pane').perfectScrollbar({wheelSpeed:50});
                         $(".course-item-list-in-toolbar-pane").scrollTop(num*30);
                         $(".course-item-list-in-toolbar-pane").perfectScrollbar('update');
