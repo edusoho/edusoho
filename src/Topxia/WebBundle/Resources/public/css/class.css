@@ -139,6 +139,7 @@
 
 .login-box .login-form {
     padding: 30px;
+    position: relative;
 }
 
 .login-box h1 {
