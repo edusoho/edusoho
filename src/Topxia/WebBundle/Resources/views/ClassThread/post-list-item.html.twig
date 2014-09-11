@@ -19,7 +19,7 @@
 
   <div class="thread-post-body media-body">
     <div class="media-heading">
-      <a href="javascript:">{{ author.truename }}</a>
+      <a href="{{ path('user_show', {id:author.id}) }}">{{ author.truename }}</a>
       <span class="bullet">•</span>
       <span class="text-muted">{{ post.createdTime|smart_time }}</span>
 

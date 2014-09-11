@@ -17,7 +17,7 @@
       <div class="caption">
         <a href="{{ path('course_show',{id:course.id}) }}"><h3 class="title">{{ course.title }}</h3></a>
         <div class="metas clearfix">
-          <a href="#" class="pull-left">{{ course.teachername[0]}}</a>
+          <a href="{{ path('user_show',{id:course.teacher[0].id})}}}" class="pull-left">{{ course.teacher[0].truename}}</a>
           <span class="pull-right">{{ course.lessonCount}}个课时</span>
         </div>
       </div>

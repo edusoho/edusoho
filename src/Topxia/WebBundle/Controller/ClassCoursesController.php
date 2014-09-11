@@ -27,8 +27,8 @@ class ClassCoursesController extends BaseController
         foreach ($courses as $key => $course) {
             foreach ($course['teacherIds'] as $key2 => $id) {
 
-                $headTeacher = $this->getUserService()->getUser($id);
-                $course['teachername'][$key2] = $headTeacher['truename'];
+                $teacher = $this->getUserService()->getUser($id);
+                $course['teacher'][$key2] = $teacher;
 
             }
             $lessonCount = $this->getCourseService()
