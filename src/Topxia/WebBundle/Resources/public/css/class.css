@@ -147,6 +147,7 @@
     padding: 0;
     margin-bottom: 20px;
     font-size: 36px;
+    font-family:'Helvetica Neue', 'Microsoft Yahei', 'Hiragino Sans GB', 'Microsoft Sans Serif', 'WenQuanYi Micro Hei', sans-serif;
 }
 
 .login-box .login-header .logo {
