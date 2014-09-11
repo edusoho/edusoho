@@ -1,13 +1,18 @@
 <table class="table table-condensed table-bordered table-striped table-hover">
       {% set status = 0  %}
+      {% if systemVersion == "old" %}
       {% for app in apps %}
       {% if app.code=="MAIN" %}
-        <tr><td>主系统</td><td>{% if app.package.fromVersion ==app.latestVersion %}
-          <img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已是最新版本{% else %}{% set status = 1 %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 最新版本:{{app.latestVersion}} 当前版本:{{app.package.fromVersion}} <a class="pull-right" href="{{path("admin_app_upgrades")}}">马上更新</a>{% endif %}</td></tr>
+        <tr><td>主系统</td><td>{% if app.package.fromVersion ==app.edusohoNewestVersion|default('') %}
+          <img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已是最新版本{% else %}{% set status = 1 %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 最新版本:{{app.edusohoNewestVersion|default('')}} 当前版本:{{app.package.fromVersion}} <a class="pull-right" href="{{path("admin_app_upgrades")}}">马上更新</a>{% endif %}</td></tr>
       {% endif %}
       {% endfor %}
+      {% else %}
+        <tr><td>主系统</td><td>
+          <img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已是最新版本</td></tr>
+      {% endif %}
 
-        <tr><td>应用更新</td><td>{% if app_count %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还有 <span class="badge" style="background-color:#cc0000;">{% if status|default(0) == 1 %}{{app_count - 1}}{% else %}sss{{app_count}}{% endif %}</span> 个应用没有更新<a class="pull-right" href="{{path("admin_app_upgrades")}}">马上更新</a>{% else %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 所有应用都已是最新版本
+        <tr><td>应用更新</td><td>{% if app_count %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还有 <span class="badge" style="background-color:#cc0000;">{% if status|default(0) == 1 %}{{app_count - 1}}{% else %}{{app_count}}{% endif %}</span> 个应用没有更新<a class="pull-right" href="{{path("admin_app_upgrades")}}">马上更新</a>{% else %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 所有应用都已是最新版本
       {% endif %}</td></tr>
 
         <tr><td>新应用</td><td>{% if unInstallAppCount>0 %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还有 <span class="badge" style="background-color:#cc0000;">{{unInstallAppCount}}</span> 个应用没有安装<a class="pull-right" href="{{path("admin_app_center")}}">查看</a>{% else %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已安装了全部应用
