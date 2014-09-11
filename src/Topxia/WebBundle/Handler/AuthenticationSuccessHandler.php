@@ -24,7 +24,6 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         $sessionId = $request->getSession()->getId();
 
         $this->getUserService()->rememberLoginSessionId($userId, $sessionId);
-
         if ($this->getAuthService()->hasPartnerAuth()) {
             $url = $this->httpUtils->generateUri($request, 'partner_login');
             $queries = array('goto' => $this->determineTargetUrl($request));

@@ -30,7 +30,8 @@ class UserController extends BaseController
             //$courses=$this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX);
             $conditions=array(
                 'teacherIds'=>$user['id'],
-                'defaultClassId'=>0
+                'status' => 'published',
+                'defaultClassId'=>0,
             );
             $courses=$this->getCourseService()->searchCourses($conditions, $sort = 'latest', 0, PHP_INT_MAX);
             $classes=$this->getClassService()->findClassesByIds(ArrayToolkit::column($courses,'classId'));

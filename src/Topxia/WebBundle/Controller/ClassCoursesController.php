@@ -11,7 +11,8 @@ class ClassCoursesController extends BaseController
     {
     	$class = $this->getClassService()->getClass($classId);
     	 $conditions =array(
-            'classId' => $classId
+            'classId' => $classId,
+            'status' => 'published'
         );
 
         $total = $this->getCourseService()->searchCourseCount($conditions);

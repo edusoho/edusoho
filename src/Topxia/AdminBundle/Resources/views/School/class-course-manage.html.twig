@@ -32,7 +32,7 @@
       {% else %}
         <span class="label label-warning pull-left span-margin">选修</span>
       {% endif %}
-      <a type="button" class="close pull-right course-thumbnail-a" href="{{ path('admin_school_class_course_remove', {classId:class.id, courseId:course.id}) }}" onclick="return confirm('确定移除吗？');"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></a>
+      <a type="button" class="close pull-right course-thumbnail-a" href="{{ path('admin_school_class_course_remove', {classId:class.id, courseId:course.id}) }}" onclick="return confirm('确定关闭吗？');"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></a>
       
       <a href="{{ path('course_show',{id:course.id}) }}"><img  alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}"></a>
       <div class="caption">
