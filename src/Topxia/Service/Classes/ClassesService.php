@@ -19,6 +19,8 @@ interface ClassesService
 
     public function getClassHeadTeacher($classId);
 
+    public function getClassesByHeadTeacherId($headTeacherId);
+
     public function createClass($class);
 
     public function editClass($fields, $id);

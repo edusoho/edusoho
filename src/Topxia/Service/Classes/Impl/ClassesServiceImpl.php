@@ -69,6 +69,11 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return array_merge($user, $profile);
     }
 
+    public function getClassesByHeadTeacherId($headTeacherId)
+    {
+        return $this->getClassesDao()->findClassesByHeadTeacherId($headTeacherId);
+    }
+
     public function checkPermission($name, $classId)
     {
         $class = $this->getClass($classId);
