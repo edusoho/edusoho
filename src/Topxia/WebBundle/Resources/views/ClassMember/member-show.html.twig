@@ -10,23 +10,39 @@
 		</div>
 
 		<div class="row panel-block-body">
-			{% for teacher in teachers %}
-				<div class="col-md-6">
-					{% set teacherProfile = teacherProfiles[teacher.id]|default(null) %}
-				  <div class="media">
-						<a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-left">
-							<img class="media-object" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
+			<div class="col-md-6">
+			  <div class="media">
+					<a href="{{ path('user_show', {id:headTeacher.id}) }}" class="pull-left">
+						<img class="media-object" width="48" height="48" src="{{file_path(headTeacher.smallAvatar, 'avatar.png')}}" alt="{{headTeacher.truename}}">
+					</a>
+					<div class="media-body">
+						{% if app.user.id!=headTeacher.id %}
+							<button class="btn btn-success btn-xs pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:headTeacher.id})}}">发私信</button>
+						{% endif %}
+						<a href="{{ path('user_show', {id:headTeacher.id}) }}">
+							<h5>{{headTeacher.truename}}（班主任）</h5>
 						</a>
-						<div class="media-body">
-							{% if app.user.id!=teacher.id %}
-								<button class="btn btn-success btn-xs pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">发私信</button>
-							{% endif %}
-							<a href="{{ path('user_show', {id:teacher.id}) }}">
-								<h5>{{teacher.truename}}</h5>
-							</a>
-						</div>
 					</div>
 				</div>
+			</div>
+			{% for teacher in teachers %}
+				{% if teacher['id']!=headTeacher.id %}
+					<div class="col-md-6">
+					  <div class="media">
+							<a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-left">
+								<img class="media-object" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
+							</a>
+							<div class="media-body">
+								{% if app.user.id!=teacher.id %}
+									<button class="btn btn-success btn-xs pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">发私信</button>
+								{% endif %}
+								<a href="{{ path('user_show', {id:teacher.id}) }}">
+									<h5>{{teacher.truename}}</h5>
+								</a>
+							</div>
+						</div>
+					</div>
+				{% endif %}
 			{% else %}
 				<div class="empty">尚无任课老师</div>
 			{% endfor %}		
@@ -46,7 +62,7 @@
 					<a href="{{ path('user_show', {id:student.id}) }}">
 						<img class="avatar" width="48" height="48" src="{{ file_path(student.smallAvatar, 'avatar.png') }}" alt="{{student.truename}}">
 					</a>
-					<a href="#" class="truename">{{student.truename}}</a>
+					<a href="{{ path('user_show', {id:student.id}) }}" class="truename">{{student.truename}}</a>
 					<div class="student-card-content">
 						<div class="media">
 							<img class="media-object pull-left" src="{{ file_path(student.smallAvatar, 'avatar.png') }}">

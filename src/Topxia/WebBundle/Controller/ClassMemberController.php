@@ -9,6 +9,7 @@ class ClassMemberController extends BaseController
 {
 	public function listAction(Request $request,$classId){
 		$class = $this->getClassService()->getClass($classId);
+        $headTeacher = $this->getUserService()->getUser($class['headTeacherId']);
         if (empty($class)) {
             throw $this->createNotFoundException("班级不存在，或已删除。");
         }
@@ -25,7 +26,6 @@ class ClassMemberController extends BaseController
         	$userIds[]=$teacherId[0];
         }
         $teachers=$this->getUserService()->findUsersByIds($userIds);
-        $teaherProfiles=$this->getUserService()->findUserProfilesByIds($userIds);
         /**本班所有学生*/
         $conditions = array(
             'classId'=>$classId,
@@ -42,8 +42,8 @@ class ClassMemberController extends BaseController
 			'class'=>$class,
 			'classNav'=>'members',
 			'courses'=>$courses,
+            'headTeacher'=>$headTeacher,
 			'teachers'=>$teachers,
-			'teacherProfiles'=>$teaherProfiles,
 			'students'=>$students
 		));
 	}
