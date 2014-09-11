@@ -1,35 +1,70 @@
 {% extends 'TopxiaWebBundle:Class:layout.html.twig' %}
 {% set script_controller = 'class-member/member' %}
 {% block class_main %}
-	<div class="col-md-12"><h5>老师们</h5><hr/></div>
-	<div class="col-md-12">
-		{% for teacher in teachers %}
-			<div class="col-md-6 member-teacher">
-				{% set teacherProfile = teacherProfiles[teacher.id]|default(null) %}
-				<a href="{{ path('user_show', {id:teacher.id}) }}">
-					<img class="media-object pull-left" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
-				</a>
-				{% if app.user.id!=teacher.id %}
-					<button class="btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">发私信</button>
-				{% endif %}
-				<a href="{{ path('user_show', {id:teacher.id}) }}">
-					<h5>{{teacher.truename}}</h5>
-				</a>
-			</div>
-		{% else %}
-			<div class="empty">尚无任课老师</div>
-		{% endfor %}
-	</div>
-	<div class="col-md-12"><h5>学生们</h5><hr/></div>
-	<div class="col-md-12">
-		{% for student in students %}
-			<div class="col-md-1">
-				<a href="{{ path('user_show', {id:student.id}) }}">
-					<img class="media-object pull-left" width="48" height="48" src="{{file_path(student.smallAvatar, 'avatar.png')}}" title="{{student.truename}}" alt="{{student.truename}}">
-				</a>
-			</div>
-		{% else %}
-			<div class="empty">尚无学生</div>
-		{% endfor %}
-	</div>
+
+  <div class="panel-block">
+		<div class="row panel-block-heading">
+		  <div class="col-xs-12">
+		    <h3>老师们</h3>
+		  </div>
+		</div>
+
+		<div class="row panel-block-body">
+			{% for teacher in teachers %}
+				<div class="col-md-6">
+					{% set teacherProfile = teacherProfiles[teacher.id]|default(null) %}
+				  <div class="media">
+						<a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-left">
+							<img class="media-object" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
+						</a>
+						<div class="media-body">
+							{% if app.user.id!=teacher.id %}
+								<button class="btn btn-success btn-xs pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">发私信</button>
+							{% endif %}
+							<a href="{{ path('user_show', {id:teacher.id}) }}">
+								<h5>{{teacher.truename}}</h5>
+							</a>
+						</div>
+					</div>
+				</div>
+			{% else %}
+				<div class="empty">尚无任课老师</div>
+			{% endfor %}		
+		</div>
+	</div><!-- /panel-body-block -->
+
+  <div class="panel-block">
+		<div class="row panel-block-heading">
+		  <div class="col-xs-12">
+		    <h3>同学们</h3>
+		  </div>
+		</div>
+
+		<div class="row panel-block-body class-student-grids">
+			{% for student in students %}
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 grid">
+					<a href="{{ path('user_show', {id:student.id}) }}">
+						<img class="avatar" width="48" height="48" src="{{ file_path(student.smallAvatar, 'avatar.png') }}" alt="{{student.truename}}">
+					</a>
+					<a href="#" class="truename">{{student.truename}}</a>
+					<div class="student-card-content">
+						<div class="media">
+							<img class="media-object pull-left" src="{{ file_path(student.smallAvatar, 'avatar.png') }}">
+							<div class="media-body">
+								<spann class="text-success">{{student.truename}} </spann>
+								<span class="text-muted"> ({{ student.number }})</span>
+								<div class="actions clearfix">
+								  {% if app.user.id != student.id %}
+										<button class="btn btn-xs btn-success pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:student.id})}}">发私信</button>
+								  {% endif %}
+								</div>
+							</div>
+						</div>
+					</div> 
+				</div>
+			{% else %}
+				<div class="empty">尚无学生</div>
+			{% endfor %}
+		</div>
+	</div><!-- /panel-body-block -->
 {% endblock %}

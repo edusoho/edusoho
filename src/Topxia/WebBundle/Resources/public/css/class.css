@@ -147,6 +147,7 @@
     padding: 0;
     margin-bottom: 20px;
     font-size: 36px;
+    font-family:'Helvetica Neue', 'Microsoft Yahei', 'Hiragino Sans GB', 'Microsoft Sans Serif', 'WenQuanYi Micro Hei', sans-serif;
 }
 
 .login-box .login-header .logo {
@@ -157,6 +158,51 @@
     font-weight: normal;
 }
 
-.member-teacher {
+.class-student-grids {
+
+
+}
+
+
+.class-student-grids .grid {
     margin-bottom: 20px;
+}
+
+.class-student-grids .avatar {
+    display: block;
+    margin: 0 auto 5px;
+}
+
+.class-student-grids .truename {
+    text-align: center;
+    display: block;
+}
+
+.class-student-grids .popover.right {
+    /*margin-left: -10px;*/
+}
+
+.class-student-grids .student-card-content {
+    display: none;
+}
+
+.class-student-grids .popover {
+    width: 250px;
+}
+
+.class-student-grids .popover .media-object {
+    width: 48px;
+    height: 48px;
+}
+
+.panel-block {
+    margin-bottom: 30px;
+}
+
+.panel-block-heading h3 {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 5px 0 15px;
+    padding: 0 0 8px;
+    border-bottom: 1px solid #eee;
 }

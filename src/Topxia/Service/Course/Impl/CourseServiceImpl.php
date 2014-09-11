@@ -1461,6 +1461,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		foreach ($existTeacherMembers as $member) {
 			$this->getMemberDao()->deleteMember($member['id']);
 		}
+		$course = $this->getCourse($courseId);
 
 		// 逐个插入新的教师的学员数据
 		$visibleTeacherIds = array();
@@ -1473,6 +1474,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$this->getMemberDao()->addMember($member);
 			if ($member['isVisible']) {
 				$visibleTeacherIds[] = $member['userId'];
+			}
+			//如果是班级课程,将教师设置到班级中
+			if($course['parentId'] != 0)
+			{
+				$this->getClassesService()->addOrUpdateTeacher($member['userId'], $course['classId'], 'TEACHER');
 			}
 		}
 
@@ -2023,6 +2029,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 				'id' => $teacherId,
 				'isVisible' => 1
 				)));
+			//添加课程老师到classmember
+			$classService->addOrUpdateTeacher($teacherId, $classId, 'TEACHER');
 
 			$chapterIdMap = array();
 			$newChapters = array();

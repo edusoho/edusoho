@@ -33,11 +33,12 @@ class ClassesServiceImpl extends BaseService implements ClassesService
     public function createClass($class)
     {
         $class = $this->getClassesDao()->createClass($class);
-        $classMember['classId'] = $class['id'];
+        $this->addOrUpdateTeacher($class['headTeacherId'], $class['id'], 'HEAD_TEACHER');
+/*        $classMember['classId'] = $class['id'];
         $classMember['userId'] = $class['headTeacherId'];
         $classMember['role'] = 'HEAD_TEACHER';
         $classMember['createdTime'] = time();
-        $this->addClassMember($classMember);
+        $this->addClassMember($classMember);*/
         return $class;
     }
 
@@ -96,7 +97,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         }
 
         $permissionRoles = array(
-            'view' => array('STUDENT', 'HEAD_TEACHER', 'ADMIN'),
+            'view' => array('STUDENT', 'TEACHER', 'HEAD_TEACHER', 'ADMIN'),
             'manage' => array('HEAD_TEACHER', 'ADMIN'),
         );
 
@@ -183,22 +184,28 @@ class ClassesServiceImpl extends BaseService implements ClassesService
     public function editClass($fields, $id)
     {
         $class = $this->getClassesDao()->editClass($fields, $id);
-        $conditions = array(
-            'classId' => $class['id'],
-            'role' => 'HEAD_TEACHER'
-            );
-
-        $oldClassMember = $this->searchClassMembers(
-            $conditions,
-            array('id','DESC'),
-            0,
-            1);
-
-        if($oldClassMember[0]['userId'] != $class['headTeacherId']) {
-            $this->updateClassMember(array('userId'=>$class['headTeacherId']), $oldClassMember[0]['id']);
-        }
-        
+        $this->addOrUpdateTeacher($class['headTeacherId'], $id, 'HEAD_TEACHER');
         return $class;
+    }
+
+    public function addOrUpdateTeacher($userId, $classId, $role)
+    {
+        $classDao = $this->getClassMemberDao();
+        $classMember = $classDao->getMemberByUserIdAndClassId($userId, $classId);
+        if(empty($classMember)) {
+            $newClassMember = array();
+            $newClassMember['classId'] = $classId;
+            $newClassMember['userId'] = $userId;
+            $newClassMember['role'] = $role;
+            $newClassMember['createdTime'] = time();
+            $classMember = $classDao->addClassMember($newClassMember);
+        } else {
+            if ($role != $classMember['role'] && $role == 'HEAD_TEACHER') {
+                $this->updateClassMember(array('role'=>$role), $classMember['id']);
+            }
+        }
+
+        return $classMember;
     }
 
     public function updateClassStudentNum($num,$id){
@@ -243,12 +250,12 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return $this->getClassMemberDao()->updateClassMember($fields, $id);
     }
 
-    private function getClassesDao ()
+    private function getClassesDao()
     {
         return $this->createDao('Classes.ClassesDao');
     }
 
-    private function getClassMemberDao ()
+    private function getClassMemberDao()
     {
         return $this->createDao('Classes.ClassMemberDao');
     }
