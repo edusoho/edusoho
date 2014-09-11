@@ -26,6 +26,12 @@ class ClassesDaoImpl extends BaseDao implements ClassesDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findClassesByHeadTeacherId($headTeacherId)
+    {
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE headTeacherId = ?;";
+        return $this->getConnection()->fetchAll($sql, array($headTeacherId)) ? : null;
+    }  
+
     public function searchClasses($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

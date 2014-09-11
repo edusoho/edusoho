@@ -71,15 +71,7 @@ class MyTeachingController extends BaseController
             }
         }
 
-        $conditions =  array(
-                'headTeacherId' => $user['id']
-            );
-        $manageClasses = $this->getClassesService()->searchClasses(
-            $conditions,
-            array(),
-            0,
-            1
-            );
+        $manageClasses = $this->getClassesService()->getClassesByHeadTeacherId($user['id']);
         
         return $this->render('TopxiaWebBundle:MyTeaching:teaching-k12.html.twig', array(
             'manageClasses'=>$manageClasses,
