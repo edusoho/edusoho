@@ -665,7 +665,7 @@ body {
 }
 
 .thread {
-	margin-bottom: 50px;
+	margin-bottom: 20px;
 	overflow-x: auto;
 	overflow-y: hidden;
 }

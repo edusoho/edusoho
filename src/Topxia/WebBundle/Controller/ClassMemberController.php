@@ -23,7 +23,9 @@ class ClassMemberController extends BaseController
         $teacherIds=ArrayToolkit::column($courses, 'teacherIds');
         $userIds=array();
         foreach ($teacherIds as $teacherId) {
-        	$userIds[]=$teacherId[0];
+            if(is_array($teacherId)){
+        	   $userIds=array_merge($userIds,$teacherId);
+            }
         }
         $teachers=$this->getUserService()->findUsersByIds($userIds);
         /**本班所有学生*/
