@@ -144,12 +144,16 @@ class EdusohoCloudClient implements CloudClient
                 continue;
             }
 
-            $items[] = array(
+            $programe = array(
                 'name' => $names[$type],
                 'bandwidth' => $bandwidths[$type],
-                'key' => $videos[$type]['key'],
-                'headLeader' => $headLeaders[$type]
+                'key' => $videos[$type]['key']
+                
             );
+            if(empty($headLeaders) && array_key_exists($type, $headLeaders)){
+                $programe['headLeader'] => $headLeaders[$type];
+            }
+            $items[] = $programe;
         }
 
         $onceToken = $this->makeToken('hlslist.view', array('once' => false, 'duration' => 3600));
