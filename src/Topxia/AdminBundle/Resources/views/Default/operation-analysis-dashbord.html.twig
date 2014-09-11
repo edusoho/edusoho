@@ -56,14 +56,14 @@
 			{% endif %}	
 			</tr>
 
-			<tr>
+			{# <tr>
 				<td>购买课程数</td>
 				<td><span class="pull-right">{{todayBuyLessonNum}}</span></td>
 				<td><span class="pull-right">{{yesterdayBuyLessonNum}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
 				<td><a href="{{path('admin_operation_analysis_lesson_paid',{tab:"trend",analysisDateType:'paidLesson'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_lesson_paid',{tab:"detail",analysisDateType:'paidLesson'})}}">详情</a></td>
 			{% endif %}	
-			</tr>
+			</tr> #}
 
 			<tr>
 				<td>完成课时学习数</td>
@@ -115,7 +115,7 @@
 				<td><a href="{{path('admin_operation_analysis_video_net_viewed',{tab:"trend",analysisDateType:'netVideoViewed'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_video_net_viewed',{tab:"detail",analysisDateType:'netVideoViewed'})}}">详情</a></td>
 			{% endif %}	
 			</tr>
-			{% if is_granted('ROLE_SUPER_ADMIN') %}
+			{# {% if is_granted('ROLE_SUPER_ADMIN') %}
 			<tr>
 				<td>营收额</td>
 				<td><span class="pull-right">{{todayIncome}}</span></td>
@@ -129,7 +129,7 @@
 				<td><span class="pull-right">{{yesterdayCourseIncome}}</span></td>
 				<td><a href="{{path('admin_operation_analysis_course_income',{tab:"trend",analysisDateType:'courseIncome'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_course_income',{tab:"detail",analysisDateType:'courseIncome'})}}">详情</a></td>
 			</tr>
-			{% endif %}
+			{% endif %} #}
 {# 			<tr>
 				<td>退出学习数</td>
 				<td>{{todayExitLessonNum}}</td>
