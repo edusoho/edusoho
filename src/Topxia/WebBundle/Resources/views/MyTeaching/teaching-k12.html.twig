@@ -11,7 +11,7 @@
   <div class="panel-body">
     {% if manageClasses %}
       <h5>管理的班级</h5>
-      <table class="table table-hover table-condensed">
+    {#   <table class="table table-hover table-condensed">
         <tbody>
           {% for manageClass in manageClasses %}
         <tr>
@@ -29,7 +29,19 @@
         </tr>  
           {% endfor %}
         </tbody>
-      </table>
+      </table> #}
+    <div class="row">
+      {% for manageClass in manageClasses %}
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail course-thumbnail">
+            <a href="{{ path('class_show',{ classId: manageClass.id })}}"><img  alt="{{ manageClass.name }}" src="{{ file_url(manageClass.icon, 'class.png') }}"></a>
+            <div class="caption mycaption">
+              <a href="{{ path('class_show',{ classId: manageClass.id }) }}"><h3 class="title text-center">{{ class_name(manageClass) }}</h3></a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>  
     {% endif %}
     <div class="" id="myTeaching">
     <h5>我的任课</h5>

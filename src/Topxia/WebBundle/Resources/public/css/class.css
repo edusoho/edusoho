@@ -81,6 +81,9 @@
     overflow: hidden;
     font-weight: bold;
 }
+.course-thumbnail .mycaption {
+    padding: 0;
+}
 
 .course-thumbnail .metas a,
 .course-thumbnail .metas {
