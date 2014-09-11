@@ -19,10 +19,9 @@ class UserController extends BaseController
             $isFollowed = false;
         }
         /**为任课老师准备*/
-        $courses=array();
-        $classes=array();
+        $courseCount=0;
         /**为班主任准备*/
-        $headTeacherClasses=array();
+        $headTeacherCount=0;
         /**为学生准备*/
         $class=array();
         if(in_array('ROLE_TEACHER', $user['roles'])) {
@@ -33,9 +32,8 @@ class UserController extends BaseController
                 'status' => 'published',
                 'defaultClassId'=>0,
             );
-            $courses=$this->getCourseService()->searchCourses($conditions, $sort = 'latest', 0, PHP_INT_MAX);
-            $classes=$this->getClassService()->findClassesByIds(ArrayToolkit::column($courses,'classId'));
-            $headTeacherClasses=$this->getClassService()->searchClasses(array('headTeacherId'=>$user['id']), array('createdTime'=>'DESC'), 0, PHP_INT_MAX);
+            $courseCount=$this->getCourseService()->searchCourseCount($conditions);
+            $headTeacherCount=$this->getClassService()->searchClassCount(array('headTeacherId'=>$user['id']));
         }else{
             $conditions=array(
                 'userId'=>$user['id'],
@@ -49,9 +47,8 @@ class UserController extends BaseController
         return $this->render('TopxiaWebBundle:User:header-block.html.twig', array(
             'user' => $user,
             'isFollowed' => $isFollowed,
-            'courses'=>$courses,
-            'classes'=>$classes,
-            'headTeacherClasses'=>$headTeacherClasses,
+            'courseCount'=>$courseCount,
+            'headTeacherCount'=>$headTeacherCount,
             'cl'=>count($class)>0 ? $class : null
         ));
     }
