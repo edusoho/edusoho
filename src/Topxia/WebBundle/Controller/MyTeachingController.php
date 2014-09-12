@@ -45,32 +45,18 @@ class MyTeachingController extends BaseController
         if(!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
-        // @todo remove , include dao
-        $conditions = array(
-            'teacherIds' => $user['id']
-            );
-
-        $total = $this->getCourseService()->getCoursesCount($conditions);
-
-        $courses = $this->getCourseService()->searchCourses(
-            $conditions,
-            'lastet',
-            0,
-            $total
-            );
+        
+        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, 1000,false);
         $results = array();
 
-        foreach ($courses as $key => $course) {
+        foreach ($courses as $course) {
              $results[$course['classId']][] = $course;
         }
 
         $classes = array();
-        foreach ($results as $id => $course) {
-            $class = $this->getClassesService()->getClass($id);
-            if(!empty($class)) {
-                $classes[$id] = $class;
-            }
-        }
+        $classIds = array_keys($results);
+        $classes = $this->getClassesService()->findClassesByIds($classIds);
+        $classes = ArrayToolkit::index($classes, 'id');
 
         $manageClasses = $this->getClassesService()->getClassesByHeadTeacherId($user['id']);
         
