@@ -19,10 +19,23 @@ define(function(require, exports, module) {
                 response = $.parseJSON(response);
                 $("#school-homepage-container").html('<img src="' + response.url + '?'+(new Date()).getTime()+'" style="max-width:400px;">');
                 $form.find('[name=homepagePicture]').val(response.path);
+                $("#school-homepage-remove").show();
                 Notify.success('上传学校主页成功！');
             }
         });
 
+       $("#school-homepage-remove").on('click', function(){
+        if (!confirm('确认要删除吗？')) return false;
+        var $btn = $(this);
+        $.post($btn.data('url'), function(){
+            $("#school-homepage-container").html('');
+            $form.find('[name=homepagePicture]').val('');
+            $btn.hide();
+            Notify.success('删除学校主页成功！');
+        }).error(function(){
+            Notify.danger('删除学校主页失败！');
+        });
+    });
       
     }
 });

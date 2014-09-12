@@ -241,6 +241,18 @@ class SchoolController extends BaseController
         return new Response(json_encode($response));
     }
 
+    public function homePageRemoveAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get("school");
+        $setting['homepagePicture'] = '';
+
+        $this->getSettingService()->set('school', $setting);
+
+        $this->getLogService()->info('school', 'update_settings', "移除移除学校首页图片");
+
+        return $this->createJsonResponse(true);
+    }
+
     public function classIconUploadAction(Request $request)
     {
         $file = $request->files->get('icon');
