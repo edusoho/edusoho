@@ -52,8 +52,11 @@ class AppController extends BaseController
     {
         $apps = $this->getAppService()->checkAppUpgrades();
 
+        $version=$this->getAppService()->getMainVersion();
+
         return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
             'apps' => $apps,
+            'version'=>$version,
         ));
     }
 
