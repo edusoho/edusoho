@@ -54,9 +54,9 @@ define(function(require, exports, module) {
                     $modal.modal('hide');
                     Notify.success('添加课程成功');
                     window.location.href=$('#backto').data('url');
-                }).error(function(result,b,c,d,e){
+                }).error(function(result){
                     $('#class-course-add-btn').button('reset');
-                    Notify.danger(result.responseJSON.error.message);
+                    Notify.danger("添加课程失败");
                 });
 
             }

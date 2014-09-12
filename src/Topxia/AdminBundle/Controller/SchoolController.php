@@ -155,27 +155,22 @@ class SchoolController extends BaseController
             return new Response(json_encode("success"));
         }
 
-        $class = $request->query->all();
-        $class['classId'] = $classId;
+        $params = $request->query->all();
+        $params['classId'] = $classId;
         $classCourses = $this->getCourseService()->findCoursesByClassId($classId);
         if (empty($classCourses)) {
             $classCourses=array();
         }
         $excludeIds = ArrayToolkit::column($classCourses, 'parentId');
-        if($class['public'] == '1') {
-            $conditions =array(
+        $conditions = array(
             'status' => 'published',
             'parentId' => 0,
-            'gradeId' => 0,
             'excludeIds' => $excludeIds
         );
+        if($params['public'] == '1') {
+            $conditions['gradeId'] = 0;
         }else{
-            $conditions =array(
-            'status' => 'published',
-            'parentId' => 0,
-            'gradeId' => $class['gradeId'],
-            'excludeIds' => $excludeIds
-            );
+            $conditions['gradeId'] = $params['gradeId'];
         }
         
 
@@ -191,14 +186,17 @@ class SchoolController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $userIds = ArrayToolkit::column($courses, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = ArrayToolkit::index($users, 'id');
         foreach ($courses as $key => $course) {
-            $creator = $this->getUserService()->getUser($course['userId']);
+            $creator = $users[$course['userId']];
             $course['creatorName'] = $creator['truename'];
             $courses[$key] = $course;
         }
 
         return $this->render('TopxiaAdminBundle:School:class-course-add-modal.html.twig',array(
-            'class' => $class,
+            'class' => $params,
             'courses' => $courses,
             'paginator' => $paginator,            
         ));
