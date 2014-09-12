@@ -33,7 +33,7 @@ define(function(require, exports, module) {
             }
         });
         validator.addItem({
-            element: '#gradeId',
+            element: '#teacherId',
             required: true,
             errormessage:'请选择年级'
         });

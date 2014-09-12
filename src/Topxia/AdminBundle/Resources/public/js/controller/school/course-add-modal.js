@@ -55,10 +55,17 @@ define(function(require, exports, module) {
                     Notify.success('添加课程成功');
                     window.location.href=$('#backto').data('url');
                 }).error(function(result,b,c,d,e){
+                    $('#class-course-add-btn').button('reset');
                     Notify.danger(result.responseJSON.error.message);
                 });
 
             }
+        });
+
+        validator.addItem({
+            element: '#teacherId',
+            required: true,
+            errormessage:'请选择任课老师'
         });
 
         $('#teacherId').select2({
