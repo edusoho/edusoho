@@ -5,14 +5,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-class ClassNoteController extends BaseController
+class ClassNoteController extends ClassBaseController
 {
-    /**
-     * @todo 权限判断
-     */
     public function listAction(Request $request,$classId)
     {
-        $class = $this->getClassService()->getClass($classId);
+        $class = $this->tryViewClass($classId);
         if (empty($class)) {
             throw $this->createNotFoundException("班级不存在，或已删除。");
         }
