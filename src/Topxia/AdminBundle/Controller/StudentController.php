@@ -31,19 +31,15 @@ class StudentController extends BaseController
             $this->getClassService()->searchClassMemberCount($conditions),
             20
         );
-        /**1.获取该班学生的classeMember数据*/
         $classMembers = $this->getClassService()->searchClassMembers(
             $conditions,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        /**2.获取学生user数据*/
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($classMembers, 'userId'));
-        $userProfiles=$this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($classMembers, 'userId'));
         return $this->render('TopxiaAdminBundle:Student:student-list.html.twig', array(
             'users' => $users ,
-            'userProfiles'=>$userProfiles,
             'class'=>$class,
             'paginator' => $paginator
         ));
@@ -57,7 +53,7 @@ class StudentController extends BaseController
             $formData['numbers'] = str_replace("\r", ',', $formData['numbers']); 
             $formData['numbers'] = str_replace(' ', ',', $formData['numbers']); 
             $numbers = explode(',', $formData['numbers']);
-            $users=array();
+            $userIds=array();
             foreach ($numbers as $number) {
                 $number=trim($number);
                 if($number==''){
@@ -67,32 +63,20 @@ class StudentController extends BaseController
                 if(empty($user) || in_array('ROLE_TEACHER', $user['roles'])){
                     return $this->createJsonResponse('学号'.$number.'对应的用户不存在！');
                 }
-                $conditions=array(
-                    'userId'=>$user['id'],
-                    'roles'=>array('STUDENT')
-                );
-                $classMembers=$this->getClassService()->searchClassMembers($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
-                if(count($classMembers)>0 && $classMembers[0]['classId']!=$classId){
+                $studentMember=$this->getClassService()->getStudentMemberByUserIdAndClassId($user['id'],$classId);
+                
+                if(!empty($studentMember) && $studentMember['classId']!=$classId){
                     return $this->createJsonResponse($user['truename'].'('.'学号'.$number.')'.'对应的用户已经属于其他班级！');
                 }
-                if(count($classMembers)>0 && $classMembers[0]['classId']==$classId){
+                if(!empty($studentMember) && $studentMember['classId']==$classId){
                     continue;
                 }
 
-                $users[]=$user;
+                $userIds[]=$user['id'];
             }
-            foreach ($users as $user) {
-                $classMember['classId']=$classId;
-                $classMember['userId']=$user['id'];
-                $classMember['role']='STUDENT';
-                $classMember['title']='';
-                $classMember['createdTime']=time();
-                $this->getClassService()->addClassMember($classMember);
-            }
-            $this->getClassService()->updateClassStudentNum(count($users),$classId);
+            $this->getClassService()->importStudents($classId,$userIds);
             return $this->createJsonResponse(true);
         }
-
         return $this->render('TopxiaAdminBundle:Student:student-import-modal.html.twig', array(
             'classId' => $classId
         ));

@@ -227,6 +227,10 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return $this->getClassMemberDao()->getMemberByUserIdAndClassId($userId, $classId);
     }
 
+    public function getStudentMemberByUserIdAndClassId($userId ,$classId){
+        return $this->getClassMemberDao()->getStudentMemberByUserIdAndClassId($userId, $classId);
+    }
+
     public function findClassStudentMembers($classId)
     {
         return $this->getClassMemberDao()->findMembersByClassIdAndRole($classId, 'STUDENT');
@@ -253,6 +257,19 @@ class ClassesServiceImpl extends BaseService implements ClassesService
     public function updateClassMember(array $fields, $id)
     {
         return $this->getClassMemberDao()->updateClassMember($fields, $id);
+    }
+
+    public function importStudents($classId, array $userIds){
+        foreach ($userIds as $userId) 
+        {
+            $classMember['classId']=$classId;
+            $classMember['userId']=$userId;
+            $classMember['role']='STUDENT';
+            $classMember['title']='';
+            $classMember['createdTime']=time();
+            $this->addClassMember($classMember);
+        }
+        $this->updateClassStudentNum(count($userIds),$classId);
     }
 
     private function getClassesDao()
