@@ -1,0 +1,16 @@
+{% extends 'TopxiaWebBundle:Class:layout.html.twig' %}
+
+{% set classNav = 'courses' %}
+  
+{% block class_main %}
+<div class="row">
+  {% for course in courses %}
+    {% set teacher = users[course.teacherIds[0]|default(0)]|default(null) %}
+    <div class="col-sm-6 col-md-4">
+      {% include 'TopxiaWebBundle:ClassCourses:course-grid.html.twig' %}
+    </div>
+  {% else %}
+    <div class="empty">该班级暂无课程，快去增加课程吧！</div>
+  {% endfor %}
+</div>
+{% endblock %}

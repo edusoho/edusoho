@@ -7,10 +7,13 @@ use Topxia\Common\ArrayToolkit;
 class ClassCoursesController extends BaseController
 {
 
-    public function showCourseAction(Request $request,$classId)
+    /**
+     * @todo  缺少权限判断
+     */
+    public function listAction(Request $request,$classId)
     {
     	$class = $this->getClassService()->getClass($classId);
-    	 $conditions =array(
+        $conditions =array(
             'classId' => $classId,
             'status' => 'published'
         );
@@ -24,24 +27,32 @@ class ClassCoursesController extends BaseController
             $total
         );
 
-        foreach ($courses as $key => $course) {
-            foreach ($course['teacherIds'] as $key2 => $id) {
-
-                $teacher = $this->getUserService()->getUser($id);
-                $course['teacher'][$key2] = $teacher;
-
-            }
-            $lessonCount = $this->getCourseService()
-            	->searchLessonCount(array('courseId'=>$course['id']));
-            $course['lessonCount'] = $lessonCount;
-            $courses[$key] = $course;
+        $userIds = array();
+        foreach ($courses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
         }
 
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('TopxiaWebBundle:ClassCourses:show.html.twig',array(
+        // foreach ($courses as $key => $course) {
+        //     foreach ($course['teacherIds'] as $key2 => $id) {
+
+        //         $teacher = $this->getUserService()->getUser($id);
+        //         $course['teacher'][$key2] = $teacher;
+
+        //     }
+        //     $lessonCount = $this->getCourseService()
+        //     	->searchLessonCount(array('courseId'=>$course['id']));
+        //     $course['lessonCount'] = $lessonCount;
+        //     $courses[$key] = $course;
+        // }
+
+
+        return $this->render('TopxiaWebBundle:ClassCourses:list.html.twig',array(
         	'class' => $class,
         	'courses' => $courses,
-        	));
+            'users' => $users,
+    	));
     }
     
     protected function getClassService()
