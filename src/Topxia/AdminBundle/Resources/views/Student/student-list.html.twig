@@ -27,7 +27,6 @@
   </thead>
   <tbody>
     {% for user in users %}
-      {% set userProfile = userProfiles[user.id]|default(null) %}
       {% include 'TopxiaAdminBundle:Student:student-list-tr.html.twig' with {user:user} %}
     {% else %}
       <div class="empty">该班级暂无学生，快去添加学生吧！</div>
@@ -36,32 +35,3 @@
 </table>
  {{ web_macro.paginator(paginator) }} 
 {% endblock %}
-
-
-
-
-{# {% extends 'TopxiaAdminBundle:School:layout.html.twig' %}
-{% block title %}学生管理 - {{ parent() }}{% endblock %}
-
-{% set menu = 'classSetting' %}
-
-{% set script_controller = 'user/student-list' %}
-
-{% block main %}
-
-  <button class="btn btn-info btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{path('admin_class_student_import',{ classId:classId })}}" >批量导入学生</button>
-  <div class="page-header clearfix">
-    <h1 class="pull-left">学生管理</h1>
-  </div>
-
-  <ul id="student-list" class="media-list">
-    {% for user in users %}
-      {% set userProfile = userProfiles[user.id]|default(null) %}
-      {% include 'TopxiaAdminBundle:Student:student-list-tr.html.twig'%}
-      <hr/>
-    {% else %}
-      <div class="empty">暂无学生</div>
-    {% endfor %}
-  </ul>
-  {{ web_macro.paginator(paginator) }} 
-{% endblock %} #}

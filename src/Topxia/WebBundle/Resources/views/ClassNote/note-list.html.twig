@@ -6,9 +6,8 @@
 	{% for note in notes %}
 		{% set course = courses[note.courseId]|default(null) %}
     {% set lesson = lessons[note.lessonId]|default(null) %}
-    {% set userProfile = userProfiles[note.userId]|default(null) %}
     {% set user = users[note.userId]|default(null) %}
-    {% include 'TopxiaWebBundle:ClassNote:note-list-tr.html.twig'%}
+    {% include 'TopxiaWebBundle:ClassNote:note-list-item.html.twig'%}
   {% else %}
     <div class="empty">暂无笔记记录</div>
   {% endfor %}

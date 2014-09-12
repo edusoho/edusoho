@@ -48,7 +48,6 @@ class ClassNoteController extends BaseController
             );
         }
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
-        $userProfiles=$this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($notes, 'userId'));
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($notes, 'lessonId'));
         $courses=ArrayToolkit::index($courses, 'id');
         return $this->render("TopxiaWebBundle:ClassNote:note-list.html.twig", array(
@@ -58,8 +57,7 @@ class ClassNoteController extends BaseController
             'paginator' => $paginator,
             'users'=>$users,
             'lessons'=>$lessons,
-            'courses'=>$courses,
-            'userProfiles'=>$userProfiles
+            'courses'=>$courses
         ));
     }
 
