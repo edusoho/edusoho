@@ -35,19 +35,38 @@ class CourseServiceImpl extends BaseService implements CourseService
         		$courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
         		$users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
+        		$users = $this->controller->filterUsers($users);
         		return array(
 			"start"=>$start,
 			"limit"=>$limit,
 			"total"=>$total,
-			"users"=>$this->controller->filterUsers($users),
-			"courses"=>$this->controller->filterCourses($courses),
-			'threads'=>$threads,
+			'threads'=>$this->filterThreads($threads, $courses, $users),
 			);
+	}
+
+	private function filterThreads($threads, $courses, $users)
+	{
+		if (empty($threads)) {
+            		return array();
+        		}
+
+        		return array_map(function($thread) use ($courses, $users) {
+
+        			$thread["courseTitle"]  = "";
+        			if (isset($courses[$thread["courseId"]])) {
+        				$course = $courses[$thread["courseId"]];
+        				$thread["courseTitle"] = $course["title"];
+        			}
+            		$thread['latestPostUser'] = $users[$thread["latestPostUserId"]];
+            		$thread['createdTime'] = date('c', $thread['createdTime']);
+            		$thread['latestPostTime'] = date('c', $thread['latestPostTime']);
+            		return $thread;
+        		}, $threads);
 	}
 
 	public function getThread()
 	{
-		
+
 	}
 
 	public function getFavoriteCoruse()
