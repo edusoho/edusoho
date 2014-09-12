@@ -21,6 +21,7 @@ define(function(require, exports, module) {
         setup: function() {
             this._chooses = {};
             this.on('change', this.onChanged);
+            this.on('preUpload', this.get("preUpload"));
 
             this._initTabs();
             this.FileBrowser();

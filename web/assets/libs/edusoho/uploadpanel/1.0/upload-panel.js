@@ -11,7 +11,8 @@ define(function(require, exports, module) {
             uploader: null,
             uploaderSettings: {},
             preUpload: null,
-            uploaderProgressbar: null
+            uploaderProgressbar: null,
+            chooser: null
         },
 
         _convertFileToMedia: function(file) {
@@ -77,8 +78,10 @@ define(function(require, exports, module) {
                 },
 
                 upload_start_handler: function(file) {
-                    if (self.get('preUpload')) {
-                        self.get('preUpload').call(self, this, file);
+                    if(self.get("chooser")){
+                        self.get("chooser").trigger("preUpload", file);
+                    }else if(self.get("preUpload")){
+                        self.get("preUpload").call(self,this,file);
                     }
                     progressbar.reset().show();
                 },
