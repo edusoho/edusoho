@@ -148,8 +148,8 @@ class EdusohoCloudClient implements CloudClient
                 'name' => $names[$type],
                 'bandwidth' => $bandwidths[$type],
                 'key' => $videos[$type]['key']
-                
             );
+            
             if(!empty($headLeaders) && array_key_exists($type, $headLeaders)){
                 $programe['headLeader'] = $headLeaders[$type];
             }
