@@ -47,4 +47,6 @@ interface ClassesService
 
     public function addOrUpdateTeacher($userId, $classId, $role);
 
+    // public function importStudents($classId, array $numbers);
+
 }

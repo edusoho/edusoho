@@ -7,7 +7,11 @@ use Topxia\Common\Paginator;
 
 class ClassNoteController extends BaseController
 {
-    public function listAction(Request $request,$classId){
+    /**
+     * @todo 权限判断
+     */
+    public function listAction(Request $request,$classId)
+    {
         $class = $this->getClassService()->getClass($classId);
         if (empty($class)) {
             throw $this->createNotFoundException("班级不存在，或已删除。");
@@ -25,7 +29,7 @@ class ClassNoteController extends BaseController
             0,
             20
         ); 
-        if(count($courses)>0){
+        if(count($courses)>0) {
             $conditions = array(
                 'status'=>1,
                 'courseIds'=>ArrayToolkit::column($courses, 'id')

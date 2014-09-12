@@ -7,6 +7,9 @@ use Topxia\Common\Paginator;
 
 class ClassMemberController extends BaseController
 {
+        /**
+         * @todo 权限判断
+         */
 	public function listAction(Request $request,$classId){
 		$class = $this->getClassService()->getClass($classId);
         $headTeacher = $this->getUserService()->getUser($class['headTeacherId']);
@@ -20,13 +23,12 @@ class ClassMemberController extends BaseController
         );
         /**本班所有任课老师*/
         $courses=$this->getCourseService()->searchCourses($conditions,null, 0, PHP_INT_MAX);
-        $teacherIds=ArrayToolkit::column($courses, 'teacherIds');
-        $userIds=array();
-        foreach ($teacherIds as $teacherId) {
-            if(is_array($teacherId)){
-        	   $userIds=array_merge($userIds,$teacherId);
-            }
+
+        $userIds = array();
+        foreach ($courses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds'] ? : array());
         }
+
         $teachers=$this->getUserService()->findUsersByIds($userIds);
         /**本班所有学生*/
         $conditions = array(
@@ -40,6 +42,7 @@ class ClassMemberController extends BaseController
             PHP_INT_MAX
         );
         $students=$this->getUserService()->findUsersByIds(ArrayToolkit::column($studentMembers, 'userId'));
+        //@todo member-list.html.twig
 		return $this->render("TopxiaWebBundle:ClassMember:member-show.html.twig",array(
 			'class'=>$class,
 			'classNav'=>'members',

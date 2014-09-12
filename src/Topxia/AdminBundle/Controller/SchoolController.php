@@ -52,6 +52,8 @@ class SchoolController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        //@todo
         foreach ($classes as $key => $class) {
             $headTeacher = $this->getUserService()->getUser($class['headTeacherId']);
             $class['headTeacherName'] = $headTeacher['truename'];

@@ -45,6 +45,7 @@ class MyTeachingController extends BaseController
         if(!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
+        // @todo remove , include dao
         $conditions = array(
             'teacherIds' => $user['id']
             );
