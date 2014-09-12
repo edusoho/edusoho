@@ -33,6 +33,8 @@ interface ClassesService
 
     public function getMemberByUserIdAndClassId($userId, $classId);
 
+    public function getStudentMemberByUserIdAndClassId($userId, $classId);
+
     public function findClassStudentMembers($classId);
 
     public function searchClassMembers(array $conditions, array $orderBy, $start, $limit);
@@ -47,6 +49,6 @@ interface ClassesService
 
     public function addOrUpdateTeacher($userId, $classId, $role);
 
-    // public function importStudents($classId, array $numbers);
+    public function importStudents($classId, array $userIds);
 
 }
