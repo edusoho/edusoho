@@ -113,7 +113,8 @@ define(function(require, exports, module) {
             var uploadPanel = new UploadPanel({
                 element: this.element,
                 uploaderSettings: this.get("uploaderSettings"),
-                preUpload: this.get("preUpload")
+                preUpload: this.get("preUpload"),
+                chooser: this
             });
             this.set("uploadPanel", uploadPanel);
             this.set("uploaderProgressbar", uploadPanel.get("uploaderProgressbar"));

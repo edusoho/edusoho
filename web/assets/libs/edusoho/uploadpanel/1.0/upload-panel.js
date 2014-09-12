@@ -24,8 +24,14 @@ define(function(require, exports, module) {
             media.length = file.length;
             return media;
         },
-
+        onChange: function(item){
+            if(this.get("chooser")){
+                this.get("chooser").trigger("change", item);
+            }
+        },
         setup: function() {
+            this.on("change", this.onChange);
+
             var $btn = this.$('[data-role=uploader-btn]');
             var progressbar = new UploadProgressBar({
                 element: $btn.data('progressbar')
