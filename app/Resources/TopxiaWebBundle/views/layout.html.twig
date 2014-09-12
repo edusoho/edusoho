@@ -65,7 +65,7 @@
 
           <ul class="nav navbar-nav navbar-right">
             {% if app.user %}
-              {% if is_granted('ROLE_TEACHER') %}
+              {% if app.user.isTeacher() %}
                 <li><a href="{{ path('my_teaching_courses') }}"> 我的教学 </a></li>
               {% endif %}
               <li><a href="{{ path('notification') }}" class="badge-container notification-badge-container">
