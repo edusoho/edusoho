@@ -8,19 +8,19 @@ define(function(require, exports, module) {
     require('jquery.select2');
 
     exports.run = function() {
-        var $form = $("#class-create-form");
+        var $form = $("#class-editor-form");
 
-        var $modal = $('#class-create-form').parents('.modal');
+        var $modal = $('#class-editor-form').parents('.modal');
         
         var validator = new Validator({
-            element: '#class-create-form',
+            element: '#class-editor-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
                     return false;
                 }
 
-                $('#class-create-btn').button('submiting').addClass('disabled');
+                $('#class-editor-btn').button('submiting').addClass('disabled');
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
@@ -33,7 +33,7 @@ define(function(require, exports, module) {
             }
         });
         validator.addItem({
-            element: '#teacherId',
+            element: '#gradeId',
             required: true,
             errormessage:'请选择年级'
         });
@@ -117,12 +117,9 @@ define(function(require, exports, module) {
             },
             initSelection: function(element, callback) {
                 var data = [];
-                $(element.val().split(",")).each(function() {
-                    data.push({
-                        id: this,
-                        name: this
-                    });
-                });
+                data['id'] = element.data('id');
+                data['name'] = element.data('name');
+                element.val(element.data('id'));
                 callback(data);
             },
             formatSelection: function(item) {

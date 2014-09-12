@@ -53,10 +53,12 @@ class SchoolController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        //@todo
+        $userIds = ArrayToolkit::column($classes, 'headTeacherId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = ArrayToolkit::index($users, 'id');
         foreach ($classes as $key => $class) {
             $headTeacher = $this->getUserService()->getUser($class['headTeacherId']);
-            $class['headTeacherName'] = $headTeacher['truename'];
+            $class['headTeacherName'] = $users[$class['headTeacherId']]['truename'];
             $classes[$key] = $class;
         }  
         return $this->render('TopxiaAdminBundle:School:class-setting.html.twig',array(
@@ -65,34 +67,35 @@ class SchoolController extends BaseController
         ));
     }
 
-    public function classCreateAction(Request $request)
-    {
-
-        if ($request->getMethod() == 'POST') {
-            $class = $request->request->all();
-            $class = $this->getClassesService()->createClass($class);
-            return new Response(json_encode($class));
-        }
-
-        return $this->render('TopxiaAdminBundle:School:class-create.html.twig',array(
-          
-            ));
-    }
-
-    public function classEditAction(Request $request, $classId)
+    public function classEditorAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            $class = $this->getClassesService()->editClass($fields,$classId);
-            return new Response(json_encode($class));
+            $classId = $fields['classId'];
+            unset($fields['classId']);
+            if($classId) {
+                $class = $this->getClassesService()->editClass($fields,$classId);
+                return new Response('success');
+            } else {
+                $class = $this->getClassesService()->createClass($fields);
+                return new Response('sucess');
+            }
         }
 
-        $class = $this->getClassesService()->getClass($classId);
-        $headTheacher = $this->getUserService()->getUser($class['headTeacherId']);
-        $class['headTeacherName'] = $headTheacher['truename'];
-        return $this->render('TopxiaAdminBundle:School:class-edit.html.twig',array(
-            'class' => $class,
-        ));
+        $type = $request->query->get('type');
+        if($type == 'create') {
+            return $this->render('TopxiaAdminBundle:School:class-editor.html.twig',array());
+        } else {
+            $classId = $request->query->get('classId');
+            $class = $this->getClassesService()->getClass($classId);
+            $headTheacher = $this->getUserService()->getUser($class['headTeacherId']);
+            $class['headTeacherName'] = $headTheacher['truename'];
+            return $this->render('TopxiaAdminBundle:School:class-editor.html.twig',array(
+                'class' => $class,
+            ));
+        }
+
+        
     }
 
     public function classDeleteAction(Request $request, $classId)
