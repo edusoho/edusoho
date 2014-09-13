@@ -135,11 +135,6 @@ class SchoolController extends BaseController
         ));
     }
 
-    public function classMemberManageAction(Request $request)
-    {
-
-    }
-    
     public function classCourseAddAction(Request $request, $classId)
     {
         if($request->getMethod() == 'POST') {
@@ -310,8 +305,7 @@ class SchoolController extends BaseController
             array('id','ASC'),
             0,
             $total);
-        // $ids = ArrayToolkit::column($teachers,'id');
-        // $teacherProfiles = $this->getUserService()->findUserProfilesByIds($ids);
+
         $response = array();
         foreach ($teachers as $key => $teacher) {
             $temp = array();
