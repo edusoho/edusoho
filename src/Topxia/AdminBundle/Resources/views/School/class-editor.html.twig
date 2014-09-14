@@ -81,12 +81,13 @@
       <label>班级图标</label>
     </div>
     <div class="col-md-7 controls">
-      <div id="icon-container">
+      <div id="icon-container" style="margin-bottom:10px">
         {% if class.icon|default(null) %}
         <img src="{{ file_url(class.icon) }}" style="max-width:400px;">
         {% endif %}
       </div>
-      <button class="btn btn-default" id="school-class-icon-upload" type="button" data-url="{{ path('admin_school_class_icon_upload') }}">上传</button>
+      <button class="btn btn-default btn-sm" id="school-class-icon-upload" type="button" data-url="{{ path('admin_school_class_icon_upload') }}">上传</button>
+      <button class="btn btn-default btn-sm " id="delete-picture" type="button"  {% if not class.icon %} style="display:none" {% endif %}>删除</button>
       <p class="help-block">
         请上传png, jpg, gif格式的图片文件。推荐尺寸比例：220px * 120px。</p>
         <input type="hidden" name="icon" value="{{ class.icon|default('') }}">
@@ -98,12 +99,13 @@
         <label>班级背景图</label>
       </div>
       <div class="col-md-8 controls">
-        <div id="backgroudImg-container">
+        <div id="backgroudImg-container" style="margin-bottom:10px">
           {% if class.backgroundImg|default(null) %}
           <img src="{{ file_url(class.backgroundImg) }}" style="max-width:400px;">
           {% endif %}
         </div>
-        <button class="btn btn-default" id="school-class-backgroundImg-upload" type="button" data-url="{{ path('admin_school_class_backgroundImg_upload') }}">上传</button>
+        <button class="btn btn-default btn-sm" id="school-class-backgroundImg-upload" type="button" data-url="{{ path('admin_school_class_backgroundImg_upload') }}">上传</button>
+        <button class="btn btn-default btn-sm" id="delete-picture" type="button"  {% if not class.backgroundImg %} style="display:none" {% endif %}>删除</button>
         <p class="help-block">
           请上传png, jpg, gif格式的图片文件。推荐尺寸比例：1140px * 150px。</p>
           <input type="hidden" name="backgroundImg" value="{{ class.backgroundImg|default('') }}">

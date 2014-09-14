@@ -12,6 +12,12 @@ define(function(require, exports, module) {
 
         var $modal = $('#class-editor-form').parents('.modal');
         
+        $form.on('click','#delete-picture',function(){
+            var $container = $(this).parent().find("[id$='container']");
+            $container.html('');
+            $(this).parent().find('input').val('');
+            $(this).hide();
+        });
         var validator = new Validator({
             element: '#class-editor-form',
             autoSubmit: false,
@@ -65,6 +71,7 @@ define(function(require, exports, module) {
                 response = $.parseJSON(response);
                 $("#icon-container").html('<img src="' + response.url + '?'+(new Date()).getTime()+'" style="max-width:400px;">');
                 $form.find('[name=icon]').val(response.path);
+                $('#icon-container').parent().find('#delete-picture').show();
                 Notify.success('上传班级图标成功！');
             }
         }); 
@@ -81,6 +88,7 @@ define(function(require, exports, module) {
                 response = $.parseJSON(response);
                 $("#backgroudImg-container").html('<img src="' + response.url + '?'+(new Date()).getTime()+'" style="max-width:400px;">');
                 $form.find('[name=backgroundImg]').val(response.path);
+                $('#backgroudImg-container').parent().find('#delete-picture').show();
                 Notify.success('上传班级背景图片成功！');
             }
         }); 
