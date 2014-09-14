@@ -52,7 +52,7 @@
     <div class="col-md-8 controls">
       <div id="school-homepage-container" style="margin-bottom: 10px">{% if school.homepagePicture %}<img src="{{ file_url(school.homepagePicture) }}" style="max-width:400px;">{% endif %}</div>
       <button class="btn btn-default btn-sm" id="school-homepage-upload" type="button" data-url="{{ path('admin_school_homepage_upload') }}">上传</button>
-      <button class="btn btn-default btn-sm {% if not school.homepagePicture %} hidden {% endif %}" id="school-homepage-remove" type="button" data-url="{{ path('admin_school_homepage_remove') }}" style="">删除</button>
+      <button class="btn btn-default btn-sm" id="school-homepage-remove" type="button" data-url="{{ path('admin_school_homepage_remove') }}" {% if not school.homepagePicture %} style="display:none" {% endif %}>删除</button>
       <p class="help-block">
         请上传png, jpg, gif格式的图片文件。推荐尺寸比例：400px * 400px。</p>
         <input type="hidden" name="homepagePicture" value="{{ school.homepagePicture }}">

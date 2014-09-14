@@ -209,29 +209,18 @@ class SchoolController extends BaseController
 
     public function homePageUploadAction(Request $request)
     {
-        $file = $request->files->get('homepagePicture');
-        if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
-        }
-
-        $filename = 'school-homepage.' . $file->getClientOriginalExtension();
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/school";
-        $file = $file->move($directory, $filename);
-
         $school = $this->getSettingService()->get('school', array());
 
-
-        $path = "school/{$filename}";
-        $url = $this->container->getParameter('topxia.upload.public_url_path') .  '/' . $path;
-
-        $school['homepagePicture'] = $path;
+        $fileLocation = $this->savePicture($request, 'homepagePicture', 'school', 'school-homepage');
+        
+        $school['homepagePicture'] = $fileLocation['path'];
 
         $this->getSettingService()->set('school', $school);
         $this->getLogService()->info('school', 'update_settings', "更新学校首页图片", array('homepagePicture' => $school['homepagePicture']));
 
         $response = array(
-            'path' => $path,
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($url),
+            'path' => $fileLocation['path'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($fileLocation['url']),
         );
 
         return new Response(json_encode($response));
@@ -251,22 +240,11 @@ class SchoolController extends BaseController
 
     public function classIconUploadAction(Request $request)
     {
-        $file = $request->files->get('icon');
-        if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
-        }
+        $fileLocation = $this->savePicture($request, 'icon', 'school/class/icon', '');
 
-        $filename = time() . '.' . $file->getClientOriginalExtension();
-        
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/school/class/icon";
-        $file = $file->move($directory, $filename);
-
-        $path = "school/class/icon/{$filename}";
-        $url = $this->container->getParameter('topxia.upload.public_url_path') .  '/' . $path;
-        
         $response = array(
-            'path' => $path,
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($url),
+            'path' => $fileLocation['path'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($fileLocation['url']),
         );
 
         return new Response(json_encode($response));
@@ -274,21 +252,11 @@ class SchoolController extends BaseController
 
     public function classBackgroundImgUploadAction(Request $request)
     {
-        $file = $request->files->get('backgroundImg');
-        if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
-        }
-
-        $filename = time() . '.' . $file->getClientOriginalExtension();
+        $fileLocation = $this->savePicture($request, 'backgroundImg', 'school/class/backgroundImg', '');
         
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/school/class/backgroundImg";
-        $file = $file->move($directory, $filename);
-
-        $path = "school/class/backgroundImg/{$filename}";
-        $url = $this->container->getParameter('topxia.upload.public_url_path') .  '/' . $path;
         $response = array(
-            'path' => $path,
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($url),
+            'path' => $fileLocation['path'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($fileLocation['url']),
         );
 
         return new Response(json_encode($response));
@@ -314,6 +282,27 @@ class SchoolController extends BaseController
             $response[] = $temp;
         }
         return new Response(json_encode($response)); 
+    }
+
+    private function savePicture(Request $request, $uploadFileName, $folder, $newFileName = '')
+    {
+        $result = array();
+        $file = $request->files->get($uploadFileName);
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+        if(!$newFileName) {
+            $newFileName = time() . '.' . $file->getClientOriginalExtension();
+        } else {
+            $newFileName = $newFileName . '.' . $file->getClientOriginalExtension();
+        }
+            
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/" . $folder;
+        $file = $file->move($directory, $newFileName);
+
+        $result['path'] = $folder . "/{$newFileName}";
+        $result['url'] = $this->container->getParameter('topxia.upload.public_url_path') .  '/' . $result['path'];
+        return $result;
     }
 
     protected function getSettingService()
