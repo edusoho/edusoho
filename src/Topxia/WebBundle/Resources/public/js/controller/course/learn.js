@@ -179,7 +179,7 @@ define(function(require, exports, module) {
             var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
-                $(".watermarkEmbedded").html('<input type="hidden" id="videoWatermarkEmbedded" value='+lesson.videoWatermarkEmbedded+'/>');
+                $(".watermarkEmbedded").html('<input type="hidden" id="videoWatermarkEmbedded" value='+lesson.videoWatermarkEmbedded+'\/>');
                 $titleArray = document.title.split(' - ');
                 document.title = lesson.title + ' - ' + $titleArray[1] + ' - ' + $titleArray[2] + ' - ' +$titleArray[3]
 
