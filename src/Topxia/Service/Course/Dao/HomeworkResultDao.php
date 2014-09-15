@@ -22,6 +22,8 @@ interface HomeworkResultDao
 
     public function findHomeworkResultsByHomeworkIds($homeworkIds);
 
+    public function findHomeworkResultsByStatusAndUserId($userId, $status);
+
     public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId);
 
     public function findResultsByHomeworkIdAndStatus($homeworkId, $status, $start, $limit);

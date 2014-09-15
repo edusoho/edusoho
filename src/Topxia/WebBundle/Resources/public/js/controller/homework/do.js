@@ -10,7 +10,6 @@ define(function(require, exports, module) {
             this.sync();
             var essayInput = $('.question-essay-input-long').parents('.question');
             var essayQuestionId = essayInput.data('questionId');
-            console.log(this.html())
             $answerArr = {}
             if (this.html() != "") {
                 $answerArr[0] = this.html();
@@ -30,7 +29,8 @@ define(function(require, exports, module) {
 
        $('.question-set-card').affix({
             offset: {
-              top: 100
+              top: 100, 
+              // bottom: 200
             }
         });
     };
@@ -90,7 +90,7 @@ define(function(require, exports, module) {
                 $btn.attr('disabled', 'disabled');
 
             $.post($btn.data('url'),{data:changeAnswers},function(res){
-                // location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/learn";
+                // location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/learn#lesson/"+res.lessonId;
             });
         },
 

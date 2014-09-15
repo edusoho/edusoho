@@ -9,7 +9,10 @@
 
     <div class="question-set-item-main">
       {% set question = item.question %}
+      {% set itemResult = item.itemResult|default(null) %}
+
       {% include 'TopxiaWebBundle:Question:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
+
     </div>
 
   </div>

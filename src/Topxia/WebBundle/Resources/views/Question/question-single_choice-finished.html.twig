@@ -1,0 +1,26 @@
+{% extends 'TopxiaWebBundle:Question:question-choice-finished.html.twig' %}
+
+{% block body %}
+
+  {% include 'TopxiaWebBundle:Question:question-choice-options-result.html.twig' %}
+
+{% set itemResultAnswer = itemResult.answer|default(null)  %}
+
+{% if itemResultAnswer %}
+ {% set choiceIndex = (65+itemResult.answer)|chr %}
+
+  <div class="testpaper-question-result">
+
+    {% if itemResult.status == 'right' %}
+	   你答对了!
+    {% elseif itemResult.status == 'wrong' %}
+       你答错了,你选择了<strong style="color:red">{{ choiceIndex }}</strong>
+	{% elseif itemResult.status == 'partRight' %}
+       你部分答对,你选择了<strong style="color:red">{{ choiceIndex }}</strong>
+    {% elseif itemResult.status == 'noAnswer' %}
+　　　  你未答题，你选择了<strong style="color:red">{{ choiceIndex }}</strong>
+    {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

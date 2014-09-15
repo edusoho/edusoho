@@ -1,1 +1,46 @@
 {% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+{% if itemResult.status == 'right' %}
+  
+  {% set itemResultStatus = '回答正确' %}
+  
+{% elseif itemResult.status == 'wrong' %}
+
+  {% set itemResultStatus = '回答错误' %}
+
+{% elseif itemResult.status == 'partRight' %}
+
+  {% set itemResultStatus = '部分回答正确' %}
+
+{% elseif itemResult.status == 'noAnswer' %}
+
+  {% set itemResultStatus = '你未回答' %}
+
+{% endif %}
+
+  <div class="question-fill-inputs">
+
+  <div class="">
+      <div class="">
+         <ul>
+                {% for index,rightAnswer in question.answer %}
+                <li>
+                  填空({{index+1}})： 正确答案 <strong class="text-success">{{ rightAnswer|join(' 或 ') }}</strong>
+                  </li>
+                {% endfor %}
+            你的答案是 <strong class="text-danger">{{ itemResult.answer }}</strong>。{{ itemResultStatus }}
+         </ul>
+      </div>
+      </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+  {% include 'TopxiaWebBundle:Question:question-choice-options-result.html.twig' %}
+
+ {% set choiceIndex = (65+itemResult.answer)|chr %}
+
+  <div class="testpaper-question-result">
+
+    {% if itemResult.status == 'right' %}
+     你答对了!
+    {% elseif itemResult.status == 'wrong' %}
+       你答错了,你选择了<strong style="color:red">{{ choiceIndex }}</strong>
+  {% elseif itemResult.status == 'partRight' %}
+       你部分答对,你选择了<strong style="color:red">{{ choiceIndex }}</strong>
+    {% elseif itemResult.status == 'noAnswer' %}
+　　　  你未答题，你选择了<strong style="color:red">{{ choiceIndex }}</strong>
+    {% endif %}
+</div>
+{#   <div class="question-choices-inputs">
+    {% for key, choice in question.metas.choices %}
+      {% set choiceIndex = (65+key)|chr %}
+      <label class="checkbox-inline">
+        <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" name="answer[{{ question.id }}][]" value="{{ key }}"> {{ choiceIndex }}
+      </label>
+
+
+    {% endfor %}
+
+  </div> #}
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

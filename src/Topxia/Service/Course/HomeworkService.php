@@ -61,6 +61,8 @@ interface HomeworkService
      * 获得作业的问题集（含子题）
      */
     public function getItemSetByHomeworkId($homeworkId);
+    
+    public function getItemSetResultByHomeworkId($homeworkId);
 
     public function updateHomeworkItems($homeworkId, $items);
 

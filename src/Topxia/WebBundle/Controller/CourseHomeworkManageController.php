@@ -276,9 +276,8 @@ class CourseHomeworkManageController extends BaseController
     public function homeworkResultAction (Request $request,$id)
     {
         $homeworkResult = $this->getHomeworkService()->getHomeworkResult($id);
-
         if (empty($homeworkResult)) {
-            throw $this->createNotFoundException('试卷不存在!');
+            throw $this->createNotFoundException('作业不存在!');
         }
 
         if (in_array($homeworkResult['status'], array('doing'))){

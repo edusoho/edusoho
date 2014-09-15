@@ -244,7 +244,6 @@ define(function(require, exports, module) {
                     return;
                 }
 
-<<<<<<< HEAD
                 var number = lesson.number -1;
                 $.get(self.get('courseUri') + '/lesson/number/' + number , function(lesson) {
                     var prevId = lesson.id;
@@ -262,8 +261,6 @@ define(function(require, exports, module) {
                     }
                 }, 'json');
 
-                if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
-=======
                 if (lesson.canLearn.status != 'yes') {
                     $("#lesson-alert-content .lesson-content-text-body").html(lesson.canLearn.message);
                     $("#lesson-alert-content").show();
@@ -282,7 +279,6 @@ define(function(require, exports, module) {
                     $("#lesson-iframe-content").show();
 
                 } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
->>>>>>> develop
 
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
                     $("#lesson-video-content").show();

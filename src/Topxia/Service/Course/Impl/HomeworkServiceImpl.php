@@ -196,13 +196,15 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             throw $this->createServiceException('作业所属课时不存在！');
         }
 
-        $reviewingResults = $this->getHomeworkResultDao()->findResultsByHomeworkIdAndStatus($homework['id'], 'reviewing', 0, 1);
-        $finishedResults = $this->getHomeworkResultDao()->findResultsByHomeworkIdAndStatus($homework['id'], 'finished', 0, 1);
-        if (!empty($reviewingResults) or !empty($finishedResults)) {
+        $user = $this->getCurrentUser();
+
+        $homeworkResult = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndUserId($id,$user->id);
+
+        if (!empty($homeworkResult)) {
             throw $this->createServiceException('您已经做过该作业了！');
         }
 
-        $results = $this->getHomeworkResultDao()->findResultsByHomeworkIdAndStatus($homework['id'], 'doing', 0, 1);
+        $results = $this->getHomeworkResultDao()->findHomeworkResultsByStatusAndUserId($user->id, 'doing');
 
         if (empty($results)){
             $homeworkResult = array(
@@ -281,9 +283,9 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             $homeworkitemResult['checkedTime'] = time();
             $homeworkitemResult['status'] = 'finished';
         }
-        $this->getHomeworkResultDao()->updateHomeworkResult($homeworkResult['id'],$homeworkitemResult);
+        $result = $this->getHomeworkResultDao()->updateHomeworkResult($homeworkResult['id'],$homeworkitemResult);
 
-        return true;
+        return $result;
     }
 
     public function deleteHomeworksByCourseId($courseId)
@@ -375,6 +377,59 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             unset($indexdItems[$item['questionId']]);
         }
 
+        $set = array(
+            'items' => array_values($indexdItems),
+            'questionIds' => array(),
+            'total' => 0,
+        );
+
+        foreach ($set['items'] as $item) {
+            if (!empty($item['subItems'])) {
+                $set['total'] += count($item['subItems']);
+                $set['questionIds'] = array_merge($set['questionIds'], ArrayToolkit::column($item['subItems'],'questionId'));
+            } else {
+                $set['total'] ++;
+                $set['questionIds'][] = $item['questionId'];
+            }
+        }
+
+        return $set;
+    }
+
+    public function getItemSetResultByHomeworkId($homeworkId)
+    {
+        $items = $this->getHomeworkItemDao()->findItemsByHomeworkId($homeworkId);
+        $itemsResults = $this->getHomeworkItemResultDao()->findHomeworkItemsResultsbyHomeworkId($homeworkId);
+
+        $indexdItems = ArrayToolkit::index($items, 'questionId');
+        $indexdItemsResults = ArrayToolkit::index($itemsResults, 'questionId');
+
+        $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
+
+        $i = 0;
+        $validQuestionIds = array();
+
+        foreach ($indexdItems as $index => $item) {
+   
+            $item['question'] = empty($questions[$item['questionId']]) ? null : $questions[$item['questionId']];
+            if (empty($item['parentId'])) {
+                $indexdItems[$index] = $item;
+                $indexdItems[$index]['itemResult'] = $indexdItemsResults[$index];
+                $i = 0;
+                continue;
+            }
+
+            if (empty($indexdItems[$item['parentId']]['subItems'])) {
+                $indexdItems[$item['parentId']]['subItems'] = array();
+                $i = 0;
+            }
+
+            $indexdItems[$item['parentId']]['subItems'][] = $item;
+            $indexdItems[$item['parentId']]['subItems'][$i]['itemResult'] = $indexdItemsResults[$index];
+            $i++;
+
+            unset($indexdItems[$item['questionId']]);
+        }
         $set = array(
             'items' => array_values($indexdItems),
             'questionIds' => array(),

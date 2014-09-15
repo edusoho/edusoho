@@ -26,8 +26,6 @@ interface HomeworkDao
 
     public function findHomeworkResultsByCourseIdAndStatusAndCheckTeacherId($courseId,$checkTeacherId, $status);
 
-    public function findHomeworkResultsByStatusAndStatusAndUserId($userId, $status);
-
     public function findAllHomeworksByCourseId($courseId);
 
 }

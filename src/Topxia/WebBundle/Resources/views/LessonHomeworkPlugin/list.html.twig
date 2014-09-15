@@ -9,12 +9,12 @@
 	  	{% if homeworkResult.status == 'reviewing' %}
 	  		<span class="text-muted">作业批改中....</span>
 	  	{% elseif homeworkResult.status == 'finished' %}
-	  		<a href="#" class="btn btn-sm mlm">查看批改结果</a>
+	  		<a href="{{ path('course_homework_result',{courseId:course.id,homeworkId:homework.id,resultId:homeworkResult.id}) }}" class="btn btn-sm mlm" target="_blank">查看批改结果</a>
 	  	{% else %}
 	  		<a href="#" class="btn btn-primary btn-sm mlm">继续做题</a>
 	  	{% endif %}
 	  {% else %}
-	  	<a href="#" class="btn btn-primary btn-sm mlm">开始做题</a>
+	  	<a href="{{ path('course_homework_start_do',{courseId:course.id,homeworkId:homework.id}) }}" class="btn btn-primary btn-sm mlm">开始做题</a>
 	  {% endif %}
 	{% else %}
 	  此课时暂无作业
