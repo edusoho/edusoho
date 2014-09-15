@@ -218,7 +218,6 @@ define(function(require, exports, module) {
                     $("#lesson-iframe-content").show();
 
                 } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
-                    console.log(lesson.videoWatermarkEmbedded)
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
                     $("#lesson-video-content").show();
                     
