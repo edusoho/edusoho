@@ -71,6 +71,15 @@ define(function(require, exports, module) {
                 }
             });
         })
+
+        uploadPanel.on('change', function(media){
+            if (media) {
+                this.element.find('[data-role=placeholder]').html(media.name);
+                this.element.find(".file-chooser-main").hide();
+                this.element.find(".file-chooser-bar").show();
+                this.get('uploaderProgressbar').reset().hide();
+            }
+        })
     }
 
 })
