@@ -433,12 +433,6 @@ class EdusohoCloudClient implements CloudClient
     {
         $args = array();
         $args['key'] = $key;
-        if($mediaType == "video"){
-            $args["storageType"]="public";
-        }
-        if($mediaType == "audio"){
-            $args["storageType"]="private";
-        }
         $args['duration'] = "3600";
         return json_decode($this->callRemoteApi('GET', 'GetMediaInfo', $args), true);
     }
