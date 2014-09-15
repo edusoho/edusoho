@@ -39,7 +39,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['length'] = empty($fileInfo['length']) ? 0 : intval($fileInfo['length']);
 
         $uploadFile['metas'] = $this->encodeMetas(empty($fileInfo['metas']) ? array() : $fileInfo['metas']);    
-        $uploadFile['metas2'] = $this->encodeMetas(empty($fileInfo['metas2']) ? array() : $fileInfo['metas2']);    
+        $uploadFile['metas2'] = $this->encodeMetas(empty($fileInfo['metas2']) ? array() : $fileInfo['metas2']);
+
+        if ($fileInfo['lazyConvert']) {
+            $fileInfo['convertHash'] = "lazy-{$uploadFile['hashId']}";
+        }
 
         if (empty($fileInfo['convertHash'])) {
             $uploadFile['convertHash'] = "ch-{$uploadFile['hashId']}";
