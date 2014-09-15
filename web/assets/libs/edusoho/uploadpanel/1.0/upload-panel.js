@@ -10,7 +10,6 @@ define(function(require, exports, module) {
         attrs: {
             uploader: null,
             uploaderSettings: {},
-            preUpload: null,
             uploaderProgressbar: null,
             chooser: null
         },
@@ -25,13 +24,7 @@ define(function(require, exports, module) {
             media.length = file.length;
             return media;
         },
-        onChange: function(item){
-            if(this.get("chooser")){
-                this.get("chooser").trigger("change", item);
-            }
-        },
         setup: function() {
-            this.on("change", this.onChange);
 
             var $btn = this.$('[data-role=uploader-btn]');
             var progressbar = new UploadProgressBar({
@@ -78,11 +71,7 @@ define(function(require, exports, module) {
                 },
 
                 upload_start_handler: function(file) {
-                    if(self.get("chooser")){
-                        self.get("chooser").trigger("preUpload", file);
-                    }else if(self.get("preUpload")){
-                        self.get("preUpload").call(self,this,file);
-                    }
+                    self.trigger("preUpload", self.get("uploader"), file);
                     progressbar.reset().show();
                 },
 

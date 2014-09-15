@@ -111,11 +111,16 @@ define(function(require, exports, module) {
         },
 
         _initUploadPane: function(){
+            var self = this;
             var uploadPanel = new UploadPanel({
                 element: this.element,
-                uploaderSettings: this.get("uploaderSettings"),
-                preUpload: this.get("preUpload"),
-                chooser: this
+                uploaderSettings: this.get("uploaderSettings")
+            });
+            uploadPanel.on("preUpload", function(uploader, file){
+                self.trigger("preUpload", uploader, file);
+            });
+            uploadPanel.on("change", function(item){
+                self.trigger("change",item);
             });
             this.set("uploadPanel", uploadPanel);
             this.set("uploaderProgressbar", uploadPanel.get("uploaderProgressbar"));
