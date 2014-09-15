@@ -922,10 +922,6 @@ admin_user_fields_delete:
     defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }
 
 
-admin_uploadfile_video_head_leader:
-    pattern: /uploadfile/video/head/leader
-    defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeader }
-
 admin_uploadfile_head_leader_params:
     pattern: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }

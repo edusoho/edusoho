@@ -78,7 +78,10 @@ class UploadFileController extends BaseController
         $fileInfo = $request->request->all();
 
         if($targetType == 'headLeader'){
-            $this->getSettingService()->delete('headLeader');
+            $storage = $this->getSettingService()->get('storage');
+            unset($storage['headLeader']);
+            $this->getSettingService()->set('storage', $storage);
+
             $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
             if(!empty($file) && array_key_exists('id', $file)){
                 $this->getUploadFileService()->deleteFile($file['id']);
@@ -234,7 +237,9 @@ class UploadFileController extends BaseController
 
         $file = $this->cloudConvertCallback2($request); 
 
-        $this->getSettingService()->set('headLeader', $file['id']);
+        $storage = $this->getSettingService()->get('storage');
+        $storage['headLeader'] = $file['id'];
+        $this->getSettingService()->set('storage', $storage);
 
         return $this->createJsonResponse(true);
     } 

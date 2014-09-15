@@ -5,14 +5,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UploadFileController extends BaseController
 {
-	public function headLeaderAction(Request $request)
-	{
-		$formData = $request->request->all();
-		$formData = json_encode($formData);
-		$this->getSettingService()->set("headLeader", $formData);
-		return $this->createJsonResponse(true);
-	}
-
 	public function headLeaderParamsAction(Request $request)
     {
         $user = $this->getCurrentUser();
