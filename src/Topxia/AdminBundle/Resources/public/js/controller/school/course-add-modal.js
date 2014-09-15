@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     require('jquery.select2');
     exports.run = function() {
         var $form = $("#class-course-add-form");
-        $form.find('#course-table tbody tr').on('click',function(){
+        $form.find('#course-table tbody').on('click','tr',function(){
             $form.find('#course-table tbody').find('.success').removeClass('success');
             $(this).addClass('success');
             $form.find('#select-area').attr('class','show');
@@ -25,7 +25,7 @@ define(function(require, exports, module) {
                 $form.find('.tab-target').html($(html).find('.tab-target').html());
                 
 
-                $form.find('#course-table tbody tr').on('click',function(){
+                $form.find('#course-table tbody').on('click','tr',function(){
                     $form.find('#course-table tbody').find('.success').removeClass('success');
                     $(this).addClass('success');
                     $form.find('#select-area').attr('class','show');
@@ -54,9 +54,9 @@ define(function(require, exports, module) {
                     $modal.modal('hide');
                     Notify.success('添加课程成功');
                     window.location.href=$('#backto').data('url');
-                }).error(function(result,b,c,d,e){
+                }).error(function(result){
                     $('#class-course-add-btn').button('reset');
-                    Notify.danger(result.responseJSON.error.message);
+                    Notify.danger("添加课程失败");
                 });
 
             }

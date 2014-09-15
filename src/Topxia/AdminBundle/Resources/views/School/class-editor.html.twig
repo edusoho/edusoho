@@ -5,19 +5,20 @@
 {% block title %}{% if class %}编辑{% else %}创建{% endif %}班级 - {{ parent() }}{% endblock %}
 
 {% set menu = 'classSetting' %}
-{% set script_controller = 'school/class-edit' %}
+{% set script_controller = 'school/class-editor' %}
 {% 
   set script_arguments = {
     teacherUrl: path('admin_school_teacher_name'),
   } 
 %}
+{% set type = class ? 'edit':'create' %}
 
 {% block main %}
 <div class="page-header clearfix">
 
   <h1 class="pull-left">{% if class %}编辑{% else %}创建{% endif %}班级</h1>
 </div>
-<form id="class-edit-form" class="form-horizontal" method="post" action="{{ path('admin_school_class_edit' ,{ classId:class.id })}}">
+<form id="class-editor-form" class="form-horizontal" method="post" action="{{ path('admin_school_class_editor' ,{ type:type }) }}">
 
   <div class="row form-group">
     <div class="col-md-2 control-label">
@@ -44,7 +45,7 @@
       <label>学期</label>
     </div>
     <div class="col-md-7 controls radios">
-      {{ radios('term',{'first':'一学期','second':'二学期'},  class.term )}}
+      {{ radios('term',{'first':'一学期','second':'二学期'},  class.term|default('first') )}}
     </div>
   </div>
 
@@ -54,7 +55,7 @@
     </div>
     <div class="col-md-4 controls">
       <select class="form-control" name="year" id="year">
-        {{ select_options(dict('year'), class.year , '--入学年份--') }}
+        {{ select_options(dict('year'), class.year|default('') , '--入学年份--') }}
       </select>
     </div>
   </div>
@@ -62,7 +63,7 @@
   <div class="form-group">
     <label class="col-md-2 control-label">班主任</label>
     <div class="col-md-4 controls">
-    <input type="text" id="headteacherid" name="headteacherid" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ class.headTeacherName }}" data-id="{{ class.headTeacherId}}" data-name="{{ class.headTeacherName}}">
+    <input type="text" id="headteacherid" name="headteacherid" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ class.headTeacherName|default('') }}" data-id="{{ class.headTeacherId|default('')}}" data-name="{{ class.headTeacherName|default('')}}">
     </div>
   </div>
 
@@ -71,7 +72,7 @@
       <label>开启状态</label>
     </div>
     <div class="col-md-7 controls radios">
-      {{ radios('enabled',{1:'开启', 0:'关闭'}, class.enabled )}}
+      {{ radios('enabled',{1:'开启', 0:'关闭'}, class.enabled|default(1) )}}
     </div>
   </div>
 
@@ -80,15 +81,16 @@
       <label>班级图标</label>
     </div>
     <div class="col-md-7 controls">
-      <div id="icon-container">
-        {% if class.icon %}
+      <div id="icon-container" style="margin-bottom:10px">
+        {% if class.icon|default(null) %}
         <img src="{{ file_url(class.icon) }}" style="max-width:400px;">
         {% endif %}
       </div>
-      <button class="btn btn-default" id="school-class-icon-upload" type="button" data-url="{{ path('admin_school_class_icon_upload') }}">上传</button>
+      <button class="btn btn-default btn-sm" id="school-class-icon-upload" type="button" data-url="{{ path('admin_school_class_icon_upload') }}">上传</button>
+      <button class="btn btn-default btn-sm " id="delete-picture" type="button"  {% if not class.icon %} style="display:none" {% endif %}>删除</button>
       <p class="help-block">
         请上传png, jpg, gif格式的图片文件。推荐尺寸比例：220px * 120px。</p>
-        <input type="hidden" name="icon" value="{{ class.icon }}">
+        <input type="hidden" name="icon" value="{{ class.icon|default('') }}">
       </div>
     </div>
 
@@ -97,23 +99,24 @@
         <label>班级背景图</label>
       </div>
       <div class="col-md-8 controls">
-        <div id="backgroudImg-container">
+        <div id="backgroudImg-container" style="margin-bottom:10px">
           {% if class.backgroundImg|default(null) %}
           <img src="{{ file_url(class.backgroundImg) }}" style="max-width:400px;">
           {% endif %}
         </div>
-        <button class="btn btn-default" id="school-class-backgroundImg-upload" type="button" data-url="{{ path('admin_school_class_backgroundImg_upload') }}">上传</button>
+        <button class="btn btn-default btn-sm" id="school-class-backgroundImg-upload" type="button" data-url="{{ path('admin_school_class_backgroundImg_upload') }}">上传</button>
+        <button class="btn btn-default btn-sm" id="delete-picture" type="button"  {% if not class.backgroundImg %} style="display:none" {% endif %}>删除</button>
         <p class="help-block">
           请上传png, jpg, gif格式的图片文件。推荐尺寸比例：1140px * 150px。</p>
-          <input type="hidden" name="backgroundImg" value="{{ class.backgroundImg }}">
+          <input type="hidden" name="backgroundImg" value="{{ class.backgroundImg|default('') }}">
         </div>
       </div>
-
+      <input type="hidden" name="classId" value="{{  class.id|default(null) }}" >
       <div class="row form-group">
 
-        <div class="controls col-md-4 col-md-offset-4">
-          <a class="btn btn-link" id="backto" href="{{ path('admin_school_classes_setting') }}">返回</a>
+        <div class="controls col-md-4 col-md-offset-2">
           <button type="submit" class="btn btn-primary">提交</button>
+          <a class="btn btn-link" id="backto" href="{{ path('admin_school_classes_setting') }}">返回</a>
         </div>
       </div>
     </form>

@@ -8,19 +8,25 @@ define(function(require, exports, module) {
     require('jquery.select2');
 
     exports.run = function() {
-        var $form = $("#class-create-form");
+        var $form = $("#class-editor-form");
 
-        var $modal = $('#class-create-form').parents('.modal');
+        var $modal = $('#class-editor-form').parents('.modal');
         
+        $form.on('click','#delete-picture',function(){
+            var $container = $(this).parent().find("[id$='container']");
+            $container.html('');
+            $(this).parent().find('input').val('');
+            $(this).hide();
+        });
         var validator = new Validator({
-            element: '#class-create-form',
+            element: '#class-editor-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
                     return false;
                 }
 
-                $('#class-create-btn').button('submiting').addClass('disabled');
+                $('#class-editor-btn').button('submiting').addClass('disabled');
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
@@ -33,7 +39,7 @@ define(function(require, exports, module) {
             }
         });
         validator.addItem({
-            element: '#teacherId',
+            element: '#gradeId',
             required: true,
             errormessage:'请选择年级'
         });
@@ -65,6 +71,7 @@ define(function(require, exports, module) {
                 response = $.parseJSON(response);
                 $("#icon-container").html('<img src="' + response.url + '?'+(new Date()).getTime()+'" style="max-width:400px;">');
                 $form.find('[name=icon]').val(response.path);
+                $('#icon-container').parent().find('#delete-picture').show();
                 Notify.success('上传班级图标成功！');
             }
         }); 
@@ -81,6 +88,7 @@ define(function(require, exports, module) {
                 response = $.parseJSON(response);
                 $("#backgroudImg-container").html('<img src="' + response.url + '?'+(new Date()).getTime()+'" style="max-width:400px;">');
                 $form.find('[name=backgroundImg]').val(response.path);
+                $('#backgroudImg-container').parent().find('#delete-picture').show();
                 Notify.success('上传班级背景图片成功！');
             }
         }); 
@@ -117,12 +125,9 @@ define(function(require, exports, module) {
             },
             initSelection: function(element, callback) {
                 var data = [];
-                $(element.val().split(",")).each(function() {
-                    data.push({
-                        id: this,
-                        name: this
-                    });
-                });
+                data['id'] = element.data('id');
+                data['name'] = element.data('name');
+                element.val(element.data('id'));
                 callback(data);
             },
             formatSelection: function(item) {

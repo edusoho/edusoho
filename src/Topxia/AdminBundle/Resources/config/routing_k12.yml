@@ -31,13 +31,9 @@ admin_school_homepage_remove:
     pattern:  /school/homepage/remove
     defaults: { _controller: TopxiaAdminBundle:School:homePageRemove }
 
-admin_school_class_create:
-    pattern:  /school/class/create
-    defaults: { _controller: TopxiaAdminBundle:School:classCreate }
-
-admin_school_class_edit:
-    pattern:  /school/class/{classId}/edit
-    defaults: { _controller: TopxiaAdminBundle:School:classEdit }
+admin_school_class_editor:
+    pattern:  /school/class/editor
+    defaults: { _controller: TopxiaAdminBundle:School:classEditor }
 
 admin_school_class_delete:
     pattern:  /school/class/delete/{classId}

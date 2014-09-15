@@ -53,10 +53,12 @@ class SchoolController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        //@todo
+        $userIds = ArrayToolkit::column($classes, 'headTeacherId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = ArrayToolkit::index($users, 'id');
         foreach ($classes as $key => $class) {
             $headTeacher = $this->getUserService()->getUser($class['headTeacherId']);
-            $class['headTeacherName'] = $headTeacher['truename'];
+            $class['headTeacherName'] = $users[$class['headTeacherId']]['truename'];
             $classes[$key] = $class;
         }  
         return $this->render('TopxiaAdminBundle:School:class-setting.html.twig',array(
@@ -65,34 +67,35 @@ class SchoolController extends BaseController
         ));
     }
 
-    public function classCreateAction(Request $request)
-    {
-
-        if ($request->getMethod() == 'POST') {
-            $class = $request->request->all();
-            $class = $this->getClassesService()->createClass($class);
-            return new Response(json_encode($class));
-        }
-
-        return $this->render('TopxiaAdminBundle:School:class-create.html.twig',array(
-          
-            ));
-    }
-
-    public function classEditAction(Request $request, $classId)
+    public function classEditorAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            $class = $this->getClassesService()->editClass($fields,$classId);
-            return new Response(json_encode($class));
+            $classId = $fields['classId'];
+            unset($fields['classId']);
+            if($classId) {
+                $class = $this->getClassesService()->editClass($fields,$classId);
+                return new Response('success');
+            } else {
+                $class = $this->getClassesService()->createClass($fields);
+                return new Response('sucess');
+            }
         }
 
-        $class = $this->getClassesService()->getClass($classId);
-        $headTheacher = $this->getUserService()->getUser($class['headTeacherId']);
-        $class['headTeacherName'] = $headTheacher['truename'];
-        return $this->render('TopxiaAdminBundle:School:class-edit.html.twig',array(
-            'class' => $class,
-        ));
+        $type = $request->query->get('type');
+        if($type == 'create') {
+            return $this->render('TopxiaAdminBundle:School:class-editor.html.twig',array());
+        } else {
+            $classId = $request->query->get('classId');
+            $class = $this->getClassesService()->getClass($classId);
+            $headTheacher = $this->getUserService()->getUser($class['headTeacherId']);
+            $class['headTeacherName'] = $headTheacher['truename'];
+            return $this->render('TopxiaAdminBundle:School:class-editor.html.twig',array(
+                'class' => $class,
+            ));
+        }
+
+        
     }
 
     public function classDeleteAction(Request $request, $classId)
@@ -132,11 +135,6 @@ class SchoolController extends BaseController
         ));
     }
 
-    public function classMemberManageAction(Request $request)
-    {
-
-    }
-    
     public function classCourseAddAction(Request $request, $classId)
     {
         if($request->getMethod() == 'POST') {
@@ -155,27 +153,22 @@ class SchoolController extends BaseController
             return new Response(json_encode("success"));
         }
 
-        $class = $request->query->all();
-        $class['classId'] = $classId;
+        $params = $request->query->all();
+        $params['classId'] = $classId;
         $classCourses = $this->getCourseService()->findCoursesByClassId($classId);
         if (empty($classCourses)) {
             $classCourses=array();
         }
         $excludeIds = ArrayToolkit::column($classCourses, 'parentId');
-        if($class['public'] == '1') {
-            $conditions =array(
+        $conditions = array(
             'status' => 'published',
             'parentId' => 0,
-            'gradeId' => 0,
             'excludeIds' => $excludeIds
         );
+        if($params['public'] == '1') {
+            $conditions['gradeId'] = 0;
         }else{
-            $conditions =array(
-            'status' => 'published',
-            'parentId' => 0,
-            'gradeId' => $class['gradeId'],
-            'excludeIds' => $excludeIds
-            );
+            $conditions['gradeId'] = $params['gradeId'];
         }
         
 
@@ -191,14 +184,17 @@ class SchoolController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $userIds = ArrayToolkit::column($courses, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = ArrayToolkit::index($users, 'id');
         foreach ($courses as $key => $course) {
-            $creator = $this->getUserService()->getUser($course['userId']);
+            $creator = $users[$course['userId']];
             $course['creatorName'] = $creator['truename'];
             $courses[$key] = $course;
         }
 
         return $this->render('TopxiaAdminBundle:School:class-course-add-modal.html.twig',array(
-            'class' => $class,
+            'class' => $params,
             'courses' => $courses,
             'paginator' => $paginator,            
         ));
@@ -213,29 +209,18 @@ class SchoolController extends BaseController
 
     public function homePageUploadAction(Request $request)
     {
-        $file = $request->files->get('homepagePicture');
-        if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
-        }
-
-        $filename = 'school-homepage.' . $file->getClientOriginalExtension();
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/school";
-        $file = $file->move($directory, $filename);
-
         $school = $this->getSettingService()->get('school', array());
 
-
-        $path = "school/{$filename}";
-        $url = $this->container->getParameter('topxia.upload.public_url_path') .  '/' . $path;
-
-        $school['homepagePicture'] = $path;
+        $fileLocation = $this->savePicture($request, 'homepagePicture', 'school', 'school-homepage');
+        
+        $school['homepagePicture'] = $fileLocation['path'];
 
         $this->getSettingService()->set('school', $school);
         $this->getLogService()->info('school', 'update_settings', "更新学校首页图片", array('homepagePicture' => $school['homepagePicture']));
 
         $response = array(
-            'path' => $path,
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($url),
+            'path' => $fileLocation['path'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($fileLocation['url']),
         );
 
         return new Response(json_encode($response));
@@ -255,22 +240,11 @@ class SchoolController extends BaseController
 
     public function classIconUploadAction(Request $request)
     {
-        $file = $request->files->get('icon');
-        if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
-        }
+        $fileLocation = $this->savePicture($request, 'icon', 'school/class/icon', '');
 
-        $filename = time() . '.' . $file->getClientOriginalExtension();
-        
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/school/class/icon";
-        $file = $file->move($directory, $filename);
-
-        $path = "school/class/icon/{$filename}";
-        $url = $this->container->getParameter('topxia.upload.public_url_path') .  '/' . $path;
-        
         $response = array(
-            'path' => $path,
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($url),
+            'path' => $fileLocation['path'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($fileLocation['url']),
         );
 
         return new Response(json_encode($response));
@@ -278,21 +252,11 @@ class SchoolController extends BaseController
 
     public function classBackgroundImgUploadAction(Request $request)
     {
-        $file = $request->files->get('backgroundImg');
-        if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
-        }
-
-        $filename = time() . '.' . $file->getClientOriginalExtension();
+        $fileLocation = $this->savePicture($request, 'backgroundImg', 'school/class/backgroundImg', '');
         
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/school/class/backgroundImg";
-        $file = $file->move($directory, $filename);
-
-        $path = "school/class/backgroundImg/{$filename}";
-        $url = $this->container->getParameter('topxia.upload.public_url_path') .  '/' . $path;
         $response = array(
-            'path' => $path,
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($url),
+            'path' => $fileLocation['path'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($fileLocation['url']),
         );
 
         return new Response(json_encode($response));
@@ -309,8 +273,7 @@ class SchoolController extends BaseController
             array('id','ASC'),
             0,
             $total);
-        // $ids = ArrayToolkit::column($teachers,'id');
-        // $teacherProfiles = $this->getUserService()->findUserProfilesByIds($ids);
+
         $response = array();
         foreach ($teachers as $key => $teacher) {
             $temp = array();
@@ -319,6 +282,27 @@ class SchoolController extends BaseController
             $response[] = $temp;
         }
         return new Response(json_encode($response)); 
+    }
+
+    private function savePicture(Request $request, $uploadFileName, $folder, $newFileName = '')
+    {
+        $result = array();
+        $file = $request->files->get($uploadFileName);
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+        if(!$newFileName) {
+            $newFileName = time() . '.' . $file->getClientOriginalExtension();
+        } else {
+            $newFileName = $newFileName . '.' . $file->getClientOriginalExtension();
+        }
+            
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/" . $folder;
+        $file = $file->move($directory, $newFileName);
+
+        $result['path'] = $folder . "/{$newFileName}";
+        $result['url'] = $this->container->getParameter('topxia.upload.public_url_path') .  '/' . $result['path'];
+        return $result;
     }
 
     protected function getSettingService()
