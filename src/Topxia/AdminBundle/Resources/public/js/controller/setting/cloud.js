@@ -40,36 +40,37 @@ define(function(require, exports, module) {
         });
 
         var uploadPanel = new UploadPanel({
-            element: "#upload-panel",
-            preUpload: function(uploader, file) {
-                var data = {};
-                var self=this;
-                if (this.qualitySwitcher) {
-                    data.videoQuality = this.qualitySwitcher.get('videoQuality');
-                    data.audioQuality = this.qualitySwitcher.get('audioQuality');
-                    if (this.element.data('hlsEncrypted')) {
-                        data.convertor = 'HLSEncryptedVideo';
-                    } else {
-                        data.convertor = 'HLSVideo';
-                    }
-                }
-
-                $.ajax({
-                    url: this.element.data('paramsUrl'),
-                    async: false,
-                    dataType: 'json',
-                    data: data, 
-                    cache: false,
-                    success: function(response, status, jqXHR) {
-                        uploader.setUploadURL(response.url);
-                        uploader.setPostParams(response.postParams);
-                    },
-                    error: function(jqXHR, status, error) {
-                        Notify.danger('请求上传授权码失败！');
-                    }
-                });
-            }
+            element: "#upload-panel"
         });
+
+        uploadPanel.on("preUpload", function(uploader, file) {
+            var data = {};
+            var self=this;
+            if (this.qualitySwitcher) {
+                data.videoQuality = this.qualitySwitcher.get('videoQuality');
+                data.audioQuality = this.qualitySwitcher.get('audioQuality');
+                if (this.element.data('hlsEncrypted')) {
+                    data.convertor = 'HLSEncryptedVideo';
+                } else {
+                    data.convertor = 'HLSVideo';
+                }
+            }
+
+            $.ajax({
+                url: this.element.data('paramsUrl'),
+                async: false,
+                dataType: 'json',
+                data: data, 
+                cache: false,
+                success: function(response, status, jqXHR) {
+                    uploader.setUploadURL(response.url);
+                    uploader.setPostParams(response.postParams);
+                },
+                error: function(jqXHR, status, error) {
+                    Notify.danger('请求上传授权码失败！');
+                }
+            });
+        })
     }
 
 })
