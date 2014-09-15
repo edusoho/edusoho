@@ -221,7 +221,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$vipLevels = $this->controller->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
 
 		$member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
-     
+     		$member = $this->previewAsMember($member, $courseId, $user);
         		return array(
         			"userIsStudent"=>$userIsStudent,
         			"course"=>$this->controller->filterCourse($course),
