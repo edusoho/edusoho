@@ -12,6 +12,7 @@
 {% set bodyClass = 'lesson-dashboard-page' %}
 
 {% block content %}
+    <input type="hidden" data-url="{{path('course_learn_time',{id:course.id})}}" id="course_learn_time"/>
     <div class="container lesson-dashboard" id="lesson-dashboard"
          data-course-id="{{ course.id }}"
          data-course-uri="{{ path('course_show', {id:course.id}) }}"

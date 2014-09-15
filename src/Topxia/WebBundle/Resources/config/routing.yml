@@ -250,6 +250,11 @@ course_learn:
     pattern:  /course/{id}/learn
     defaults: { _controller: TopxiaWebBundle:Course:learn }
 
+course_learn_time:
+    pattern:  /course/{id}/learn/time
+    defaults: { _controller: TopxiaWebBundle:Course:recordLearningTime }
+    methods: [POST]
+
 course_lesson_show:
     pattern:  /course/{courseId}/lesson/{lessonId}
     defaults: { _controller: TopxiaWebBundle:CourseLesson:show }
@@ -450,6 +455,10 @@ course_manage_price:
 course_manage_teachers:
     pattern:  /course/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachers }
+
+course_manage_data:
+    pattern:  /course/{id}/manage/data
+    defaults: { _controller: TopxiaWebBundle:CourseManage:data }
 
 course_manage_files:
     pattern:  /course/{id}/manage/files

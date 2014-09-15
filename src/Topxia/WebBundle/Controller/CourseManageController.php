@@ -207,6 +207,18 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function dataAction($id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $isLearnedNum=$this->getCourseService()->searchMemberCount(array('isLearned'=>1,'courseId'=>$id));
+
+        return $this->render('TopxiaWebBundle:CourseManage:learning-data.html.twig', array(
+            'course' => $course,
+            'isLearnedNum'=>$isLearnedNum,
+        ));
+    }
+
     private function makeLevelChoices($levels)
     {
         $choices = array();
