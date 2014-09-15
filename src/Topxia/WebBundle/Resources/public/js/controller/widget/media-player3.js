@@ -73,7 +73,7 @@ define(function(require, exports, module) {
                 // flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayerCN/1.0.2/HLSProviderOSMF.swf";
                 flashvars.plugin_hls = app.httpHost + app.basePath + "/assets/libs/player/HLSProviderOSMF-1.0.2.swf";
             }
-
+console.log($('#videoWatermarkEmbedded').val())
             if (this.element.data('watermark') && $('#videoWatermarkEmbedded').val() !=1) {
                 flashvars.plugin_watermake = app.config.cloud.video_player_watermark_plugin;
                 flashvars.watermake_namespace = 'watermake';
