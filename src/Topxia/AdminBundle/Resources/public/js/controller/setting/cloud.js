@@ -38,6 +38,15 @@ define(function(require, exports, module) {
             });
         });
 
+        $('.video-watermark-property-tips')
+          .popover({
+            html: true,
+            placement: 'top',
+            trigger: 'hover',
+            animation:true,
+            container:'body'
+        });
+
     }
 
 })

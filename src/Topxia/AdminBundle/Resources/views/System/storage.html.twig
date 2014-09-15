@@ -105,8 +105,25 @@
     <div class="col-md-3 control-label">
       <label>云视频水印</label>
     </div>
-    <div class="controls col-md-8 radios">
-      {{ radios('video_watermark', {'0':'关闭', '1':'开启播放器水印', '2':'开启内嵌水印'}, storageSetting.video_watermark) }}
+    <div class="controls col-md-8 radios " data-content="123">
+      {# {{ radios('video_watermark', {'0':'关闭', '1':'开启播放器水印', '2':'开启内嵌水印'}, storageSetting.video_watermark) }} #}
+
+      <label>
+        <input type="radio" name="video_watermark" value="0" {% if storageSetting.video_watermark == 0 %}checked="checked"{% endif %}> 关闭
+      </label>
+      <label class="video-watermark-property-tips" data-content="
+      播放时水印将会覆盖在视频上，可随时更换；
+      已经通过系统使用了内嵌水印的视频，将不会显示播放器水印。
+      ">
+        <input type="radio" name="video_watermark" value="1" {% if storageSetting.video_watermark == 1 %}checked="checked"{% endif %}> 开启播放器水印
+      </label>
+      <label class="video-watermark-property-tips" data-content="
+      能够更好的保护视频版权；
+      上传时将水印嵌入视频编码中，不可删改；
+      未嵌入水印的视频在播放时将会显示播放器水印。
+      ">
+        <input type="radio" name="video_watermark" value="2" {% if storageSetting.video_watermark == 2 %}checked="checked"{% endif %}> 开启内嵌水印
+      </label>
     </div>
   </div>
 
