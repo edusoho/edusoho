@@ -118,10 +118,6 @@ uploadfile_cloud_convert_callback3:
     pattern:  /uploadfile/cloud_convertcallback3
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertCallback3 }
 
-uploadfile_cloud_head_leader_convert_callback:
-    pattern:  /uploadfile/cloud_convertheadleadercallback
-    defaults: { _controller: TopxiaWebBundle:UploadFile:cloudConvertHeadLeaderCallback }
-
 uploadfile_cloud_get_media_info:
     pattern:  /uploadfile/get_media_info/{type}
     defaults: { _controller: TopxiaWebBundle:UploadFile:getMediaInfo }

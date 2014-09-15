@@ -15,7 +15,7 @@ class UploadFileController extends BaseController
         $params = $request->query->all();
 
         $params['user'] = $user->id;
-        $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_head_leader_convert_callback', array(), true);
+        $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true);
         $params['key'] = "headLeader";
         $params['convertor'] = "HLSEncryptedVideo";
         $params['videoQuality'] = "low";

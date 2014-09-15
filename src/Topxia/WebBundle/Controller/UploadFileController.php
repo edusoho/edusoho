@@ -232,18 +232,6 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($file['metas2']);
     }
 
-    public function cloudConvertHeadLeaderCallbackAction(Request $request)
-    {
-
-        $file = $this->cloudConvertCallback2($request); 
-
-        $storage = $this->getSettingService()->get('storage');
-        $storage['headLeader'] = $file['id'];
-        $this->getSettingService()->set('storage', $storage);
-
-        return $this->createJsonResponse(true);
-    } 
-
     public function getHeadLeaderHlsKeyAction(Request $request)
     {
         $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
