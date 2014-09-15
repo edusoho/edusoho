@@ -178,10 +178,10 @@ class CourseLessonController extends BaseController
 
                     $json['mediaConvertStatus'] = $file['convertStatus'];
 
-                    if (isset($file['convertParams']['videoWatermarkImage'])) {
+                    if (!empty($file['convertParams']['videoWatermarkImage'])) {
                         $json['videoWatermarkEmbedded'] = 1;
                     }
-                    
+
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                             $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
