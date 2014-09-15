@@ -178,7 +178,6 @@ define(function(require, exports, module) {
 
             var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
-                console.log(lesson)
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
 
                 $titleArray = document.title.split(' - ');
@@ -221,6 +220,7 @@ define(function(require, exports, module) {
                 } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
 
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
+                    $("#lesson-video-content").html('<input id="videoWatermarkEmbedded" value='+lesson.videoWatermarkEmbedded+' />');
                     $("#lesson-video-content").show();
                     
                     var mediaPlayer = new MediaPlayer({
