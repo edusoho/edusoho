@@ -38,11 +38,11 @@
             {% if setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
               data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
             {% endif %}
-            <input type="hidden" id="videoWatermarkEmbedded" value='' />
             {% if setting('storage.video_fingerprint') and app.user %}
               data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
             {% endif %}
           ></div>
+            <input type="hidden" id="videoWatermarkEmbedded" />
           <div class="lesson-content lesson-content-audio" id="lesson-audio-content" data-role="lesson-content" style="display:none;"></div>
           <div class="lesson-content" id="lesson-swf-content" data-role="lesson-content" style="display:none;"></div>
           <div class="lesson-content" id="lesson-iframe-content" data-role="lesson-content" style="display:none;"></div>

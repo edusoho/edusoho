@@ -220,7 +220,6 @@ define(function(require, exports, module) {
                 } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
 
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
-                    $("#videoWatermarkEmbedded").val(lesson.videoWatermarkEmbedded);
                     $("#lesson-video-content").show();
                     
                     var mediaPlayer = new MediaPlayer({
@@ -240,7 +239,8 @@ define(function(require, exports, module) {
                     if (lesson.type == 'video') {
                         if (lesson.mediaSource == 'self') {
                             $("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
-
+                            $("#videoWatermarkEmbedded").val(lesson.videoWatermarkEmbedded);
+                            
                             if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
                                 Notify.warning('视频文件正在转换中，稍后完成后即可查看');
                                 return ;
