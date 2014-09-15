@@ -146,13 +146,22 @@
     </div>
   </div>
   {% if storageSetting.upload_mode == 'cloud' %}
+
+  <hr>
+
   <div class="row form-group" id="upload-panel"
   data-params-url="{{ path('admin_uploadfile_head_leader_params', {storage:storageSetting.upload_mode}) }}"
   data-hls-encrypted="1"
   >
+
     <div class="col-md-3 control-label" >
       <label>云视频片头</label>
-    </div>  
+    </div>
+
+    <div class="controls col-md-8 radios">
+      {{ radios('video_header', {'0':'关闭', '1':'开启'}, storageSetting.video_header|default(0)) }}
+    </div>
+
     <div class="controls col-md-8 radios">
       <div class="file-chooser-uploader-label">选择你要上传的视频文件：</div>
       <div class="file-chooser-uploader-control">

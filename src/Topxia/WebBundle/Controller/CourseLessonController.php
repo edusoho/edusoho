@@ -391,17 +391,27 @@ class CourseLessonController extends BaseController
 
     private function getHeadLeaderInfo()
     {
-        $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
-        $headLeaderArray = json_decode($headLeader['metas2'],true);
-        $headLeaders = array();
-        foreach ($headLeaderArray as $key => $value) {
-            $headLeaders[$key] = $value['key'];
+        $storage = $this->getSettingService()->get("storage");
+        if(!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]){
+
+            $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            $headLeaderArray = json_decode($headLeader['metas2'],true);
+            $headLeaders = array();
+            foreach ($headLeaderArray as $key => $value) {
+                $headLeaders[$key] = $value['key'];
+            }
+            $headLeaderHlsKeyUrl = $this->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
+
+            return array(
+                'headLeaders' => $headLeaders,
+                'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl
+            );
+        } else {
+            return array(
+                'headLeaders' => '',
+                'headLeaderHlsKeyUrl' => ''
+            );
         }
-        $headLeaderHlsKeyUrl = $this->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
-        return array(
-            'headLeaders' => $headLeaders,
-            'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl
-        );
     }
 
     private function createLocalMediaResponse(Request $request, $file, $isDownload = false)
@@ -422,6 +432,11 @@ class CourseLessonController extends BaseController
         }
 
         return $response;
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     private function getCourseService()
