@@ -221,10 +221,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$vipLevels = $this->controller->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
 
 		$member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
-        		if ($member) {
-            		$member['createdTime'] = date('c', $member['createdTime']);
-        		}
-
+     
         		return array(
         			"userIsStudent"=>$userIsStudent,
         			"course"=>$this->controller->filterCourse($course),
@@ -232,6 +229,36 @@ class CourseServiceImpl extends BaseService implements CourseService
         			"member"=>$member,
         			"vipLevels"=>$vipLevels
         			);
+	}
+
+	private function previewAsMember($member, $courseId, $user)
+	{
+		if (empty($member)) {
+			return null;
+		}
+		if ($this->controller->get('security.context')->isGranted('ROLE_ADMIN')) {
+	                return array(
+	                    'id' => 0,
+	                    'courseId' => $courseId,
+	                    'userId' => $user['id'],
+	                    'levelId' => 0,
+	                    'learnedNum' => 0,
+	                    'isLearned' => 0,
+	                    'seq' => 0,
+	                    'isVisible' => 0,
+	                    'role' => 'teacher',
+	                    'locked' => 0,
+	                    'createdTime' => time(),
+	                    'deadline' => 0
+	                );
+	            }
+
+	            $userIsStudent = $this->controller->getCourseService()->isCourseStudent($courseId, $user['id']);
+        		$userIsTeacher = $this->controller->getCourseService()->isCourseTeacher($courseId, $user['id']);
+            	$member['createdTime'] = date('c', $member['createdTime']);
+            	$member['role'] = $userIsTeacher ? "teacher" : $userIsStudent ? "student" : null;
+
+            	return $member;
 	}
 
 	public function searchCourse()

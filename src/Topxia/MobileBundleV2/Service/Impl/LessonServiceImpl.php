@@ -19,6 +19,10 @@ class LessonServiceImpl extends BaseService implements LessonService
 		} else {
 			$learnStatuses = array();
 		}
-		return array_values($lessons);
+
+		return array(
+			"lessons"=>array_values($lessons),
+			"learnStatuses"=>$learnStatuses
+			);
 	}
 }
