@@ -16,33 +16,24 @@
     left: 0;
     width: 400px;
     height: 40px;
-    font-size: 100px;
-    /* 增大不同浏览器的可点击区域 */
     opacity: 0;
-    /* 实现的关键点 */
-  }
-  #progressbar {
-    float: left;
-    width:350px;
-    height: 20px;
-  }
-  .progress {
-    /*width:300px;*/
-    margin-bottom: 0px;
   }
 </style>
 <div>
-  <a href="javascript:void(0);" id="selectFiles" 
-  data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
+  <button id="selectFiles" 
+    data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
+    data-target-type="{{targetType}}" 
+    data-upload-mode="{{ storageSetting.upload_mode }}"
     data-hls-encrypted="{{ setting('developer.hls_encrypted', 1) }}"
-  class="btn_addPic btn btn-default btn-lg">
-        <span>
-            <i class="glyphicon glyphicon-plus uploadBtn">
-            添加待上传文件
-            </i>
-        </span>
-        <input data-role='fileSelected' multiple="multiple" name="pic" class="filePrew" type="file"/>
-  </a>
+    data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}"
+    class="btn_addPic btn btn-default btn-lg">
+    <span>
+        <i class="glyphicon glyphicon-plus uploadBtn">
+        添加待上传文件
+        </i>
+    </span>
+    <input data-role='fileSelected' multiple="multiple" name="pic" class="filePrew" type="file"/>
+  </button>
 
   <button id="btn_upload" class="btn_addPic btn btn-default btn-lg">
         <span>
@@ -50,12 +41,12 @@
         </span>
   </button>
   <div id="fileList">
-    <table style="width:600px;margin-top:20px;">
+    <table style="width:800px;margin-top:20px;" class="table">
       <thead>
         <tr>
           <td>文件名称</td>
           <td>文件大小</td>
-          <td>状态</td>
+          <td width="60%">进度</td>
         </tr>
       </thead>
       <tbody>
@@ -63,6 +54,54 @@
       </tbody>
     </table>
   </div>
+  {% if targetType == 'courselesson' %}
+    <div class="alert alert-info">
+      <ul>
+        {% if storageSetting.upload_mode == 'cloud' %}
+          <li>支持<strong>mp3, mp4, avi, flv, wmv, mov, ppt, pptx</strong>格式的文件上传，文件大小不能超过<strong>1 GB</strong>。</li>
+          <li>视频将上传到<strong>云服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
+        {% else %}
+          <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+          <li>视频将上传到<strong>网站服务器</strong>，如需使用云视频，请联系EduSoho官方购买。</li>
+        {% endif %}
+      </ul>
+    </div>
+
+    {% if storageSetting.upload_mode == 'cloud' %}
+    <div class="quality-switcher">
+      <div class="quality-switcher-bar">
+        视频转码类型<span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> 设置</a>
+      </div>
+      <div class="quality-switcher-control">
+        <div class="video-quality radios">
+          画质：
+        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality|default('low')) }}
+        </div>
+
+        <div class="audio-quality radios">
+          音质：
+          {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '高品'}, storageSetting.video_audio_quality|default('low')) }}
+        </div>
+
+        <div class="quality-actions">
+          <a href="javascript:;" class="btn btn-default btn-sm confrim-btn">确定</a>
+          <a href="javascript:;" class="btn btn-link btn-sm cancel-btn">取消</a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  {% elseif targetType == 'coursematerial' %}
+    <div class="alert alert-info">
+      <ul>
+        <li>支持常见文档、图片、音视频、压缩包文件格式。{% if storageSetting.upload_mode == 'local' %}且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。{% endif %}</li>
+        {% if storageSetting.upload_mode == 'cloud' %}
+          <li>文件将上传到<strong>云服务器</strong>。</li>
+        {% else %}
+          <li>文件将上传到<strong>网站服务器</strong>，如需使用云视频，请联系EduSoho官方购买。</li>
+        {% endif %}
+      </ul>
+    </div>
+  {% endif %}
 </div>
 <script>app.load('course-manage-file/batch-upload-course-files')</script>
 {% endblock %}

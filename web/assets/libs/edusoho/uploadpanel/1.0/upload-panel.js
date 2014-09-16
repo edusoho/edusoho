@@ -116,6 +116,12 @@ define(function(require, exports, module) {
                 chunkUpload.on("upload_start_handler", settings.upload_start_handler);
                 chunkUpload.on("upload_progress_handler", settings.upload_progress_handler);
                 chunkUpload.on("upload_success_handler", settings.upload_success_handler);
+                chunkUpload.on("tokenError", function(element){
+                    progressbar.reset().hide();
+                });
+                chunkUpload.on("destroy", function(element){
+                    progressbar.reset().hide();
+                });
 
                 return chunkUpload;
             }else{

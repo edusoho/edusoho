@@ -12,18 +12,19 @@
 
   <div class="panel-heading">
 
+      {% if type == 'courselesson' %}    
       <button class="btn btn-info btn-sm pull-right" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_batch_upload_course_files', {id:course.id, targetType:'courselesson'}) }}">
         <i class="glyphicon glyphicon-cloud-upload"></i>上传课时文件
       </button>
-
-      {% if type == 'courselesson' %}    
 
       <button class="btn btn-info btn-sm pull-right" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_upload_course_files', {id:course.id, targetType:'courselesson'}) }}">
           <i class="glyphicon glyphicon-cloud-upload"></i>上传课时文件
         </button>
 
       {% elseif type == 'coursematerial' %}
-
+        <button class="btn btn-info btn-sm pull-right" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_batch_upload_course_files', {id:course.id, targetType:'coursematerial'}) }}">
+          <i class="glyphicon glyphicon-cloud-upload"></i>上传备用资料文件
+        </button>
         <button class="btn btn-info btn-sm pull-right" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_upload_course_files', {id:course.id, targetType:'coursematerial'}) }}">
           <i class="glyphicon glyphicon-cloud-upload"></i>上传备用资料文件
         </button>

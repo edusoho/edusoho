@@ -46,7 +46,8 @@ seajs.config({
 		'screenfull': 'gallery2/screenfull/1.1.1/screenfull',
 		'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js',
 		'edusoho.chunkupload': 'edusoho/uploadpanel/1.0/chunk-upload.js',
-		'edusoho.uploadpanel': 'edusoho/uploadpanel/1.0/upload-panel.js'
+		'edusoho.uploadpanel': 'edusoho/uploadpanel/1.0/upload-panel.js',
+		'edusoho.uploadProgressBar': 'edusoho/uploadpanel/1.0/upload-progress-bar.js'
 	},
 
 	// 预加载项

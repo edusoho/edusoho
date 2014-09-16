@@ -11,11 +11,14 @@ define(function(require, exports, module) {
 			defaultChunkSize: 1024 * 1024,
 			tableArray: null,
 			currentFile: null,
-			destroy: false
+			currentFileIndex: null,
+			destroy: false,
+			uploadOnSelected: true
 		},
 
 		events: {
-			"click .uploadBtn": "onUploadButtonClick"
+			"click .uploadBtn": "onUploadButtonClick",
+			"change input[data-role='fileSelected']": "onSelectFileChange"
 		},
 		getFileSize: function(size) {
         	return (size / (1024 * 1024)).toFixed(2) + "MB";
@@ -117,7 +120,7 @@ define(function(require, exports, module) {
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
                     if(!self.get("destroy")) {
-                    	self.trigger("upload_progress_handler", self.get("currentFile"), tmp, fileScop.file.size);
+                    	self.trigger("upload_progress_handler", self.get("currentFile"), tmp, fileScop.file.size, fileScop.fileIndex);
                     }
                 }
             }, false);
@@ -137,9 +140,9 @@ define(function(require, exports, module) {
 
 		tokenError: function(){
 			this.element.find("input[data-role='fileSelected']").val("");
-			this.get('progressbar').reset().hide();
 			this.set("currentFile", null);
 			FileScopStorage.del();
+			this.trigger("tokenError",this);
 			Notify.danger('授权信息已失效，请重新上传。');
 		},
 
@@ -217,7 +220,7 @@ define(function(require, exports, module) {
                 if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
                 	var response = JSON.parse(xhr.responseText);
 
-                	response.filename=self.get("currentFile").name;
+                	response.filename = self.get("currentFile").name;
 
                 	var mediaInfoUrl = self.$('[data-role=uploader-btn]').data("getMediaInfo");
                 	if(mediaInfoUrl){
@@ -230,7 +233,7 @@ define(function(require, exports, module) {
 	                		}
 	                	});
                 	}
-                	self.trigger("upload_success_handler", self.get("currentFile"), JSON.stringify(response));
+                	self.trigger("upload_success_handler", self.get("currentFile"), JSON.stringify(response), fileScop.fileIndex);
                 	fileScop.fileIndex--;
                 	FileScopStorage.del();
                 	self.set("currentFile",null);
@@ -267,7 +270,7 @@ define(function(require, exports, module) {
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
                     if(!self.get("destroy")) {
-                    	self.trigger("upload_progress_handler", self.get("currentFile"), tmp, fileScop.file.size);
+                    	self.trigger("upload_progress_handler", self.get("currentFile"), tmp, fileScop.file.size, fileScop.fileIndex);
                     }
                 }
             },false);
@@ -312,10 +315,12 @@ define(function(require, exports, module) {
 	    },
 
 	    saveUploadStatus: function(fileScop, blkRet){
+        	fileScop.uploadedBytes += fileScop.currentChunkSize;
 	    	var saveFileScop = {
 	    		key: fileScop.key,
 				uploadedBytes: fileScop.uploadedBytes,
 				blockCtxs: fileScop.blockCtxs,
+				postParams: fileScop.postParams,
 
 				blkRet: blkRet,
 
@@ -329,7 +334,6 @@ define(function(require, exports, module) {
 				currentChunkOffsetInBlock: fileScop.currentChunkOffsetInBlock
 			};
         	FileScopStorage.set(JSON.stringify(saveFileScop));
-        	fileScop.uploadedBytes += fileScop.currentChunkSize;
 	    },
 	    needAbortXHR: function(xhr){
 	    	if(this.get("destroy")){
@@ -370,6 +374,7 @@ define(function(require, exports, module) {
 	            	if(fileScop.currentChunkIndex == 0 && fileScop.currentBlockIndex > 0){
             			fileScop.blockCtxs[fileScop.currentBlockIndex-1] = blkRet.ctx;
             		}
+	            	console.log(fileScop);
 	            	if(fileScop.currentChunkIndex == 0 && fileScop.currentBlockIndex < fileScop.blockCount){
 	            		self.mkBlock(fileScop, chunk);
 	            	} else if(fileScop.currentBlockIndex >= fileScop.blockCount){
@@ -389,6 +394,7 @@ define(function(require, exports, module) {
 			if(!file){
 				file = this.get("fileQueue").pop();
 				this.set("currentFile",file);
+				this.set("currentFileIndex",fileIndex);
 			}
 
 			if(file){
@@ -445,7 +451,11 @@ define(function(require, exports, module) {
 			}
 
 			this._initFileQueue(files);
-			this.startUpload(files.length-1);
+			this.trigger("fileSelected", files);
+
+			if(this.get("uploadOnSelected")){
+				this.trigger("upload", files.length-1);
+			}
 		},
 		_initFileTypes: function(){
 			var fileTypes=this.get("file_types").replace(/\*/g,"").replace(/;/g,",");
@@ -454,13 +464,19 @@ define(function(require, exports, module) {
 		setup: function() {
 			this._initTableArray();
 			this._initFileTypes();
-			this.on("onSelectFileChange", this.onSelectFileChange);
+			this.on("upload", this.startUpload);
 		},
 		destroy: function() {
 			this.set("destroy", true);
-			this.get('progressbar').reset().hide();
 			this.element.find("input[data-role='fileSelected']").val("");
 			this.set("currentFile", null);
+			this.trigger("destroy",this);
+		},
+		stopUpload: function(){
+			this.set("destroy", true);
+		},
+		continueUpload: function(){
+			this.startUpload(this.get("currentFileIndex"));
 		}
 
 	});
