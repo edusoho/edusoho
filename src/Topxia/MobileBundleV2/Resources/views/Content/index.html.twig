@@ -48,6 +48,7 @@
 				imageArray.push(img.src);
 				img.addEventListener('click',
 				function() {
+					window.jsobj.showImages(this.alt,imageArray);
 					window.location = 'imageIndexNUrls://?' + this.alt + '.partation.' + imageArray.join('.partation.')
 				})
 			}
