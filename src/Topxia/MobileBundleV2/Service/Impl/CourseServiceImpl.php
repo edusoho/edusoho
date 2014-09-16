@@ -71,7 +71,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function getFavoriteCoruse()
 	{
-		$user = $this->controller->getUserToken($this->request);
+		$user = $this->controller->getUserByToken($this->request);
 		$start = (int) $this->getParam("start", 0);
 		$limit = (int) $this->getParam("limit", 10);
 
