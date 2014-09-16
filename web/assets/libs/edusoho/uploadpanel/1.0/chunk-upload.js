@@ -431,9 +431,11 @@ define(function(require, exports, module) {
 				maxSize = parseFloat(maxSize)*1024*1024;
 			}
 
-			if(files[0].size>maxSize){
-				Notify.info('选择的文件太大，只能选择小于'+this.get("file_size_limit")+'的文件。');
-				return;
+			for(var i=0; i<files.length; i++){
+				if(files[i].size>maxSize){
+					Notify.info('选择的文件太大，只能选择小于'+this.get("file_size_limit")+'的文件。');
+					return;
+				}
 			}
 
 			if(this.get("currentFile")){
