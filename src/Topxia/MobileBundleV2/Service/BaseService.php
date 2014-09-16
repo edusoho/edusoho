@@ -51,7 +51,7 @@ class BaseService
 	    return $error;
 	}
 
-	private function previewAsMember($member, $courseId, $user)
+	protected function previewAsMember($member, $courseId, $user)
 	{
 		if (empty($member)) {
 			return null;
