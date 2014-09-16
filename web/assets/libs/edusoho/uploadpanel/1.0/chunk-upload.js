@@ -11,7 +11,8 @@ define(function(require, exports, module) {
 			defaultChunkSize: 1024 * 1024,
 			tableArray: null,
 			currentFile: null,
-			destroy: false
+			destroy: false,
+			uploadOnSelected: true
 		},
 
 		events: {
@@ -218,7 +219,7 @@ define(function(require, exports, module) {
                 if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
                 	var response = JSON.parse(xhr.responseText);
 
-                	response.filename=self.get("currentFile").name;
+                	response.filename = self.get("currentFile").name;
 
                 	var mediaInfoUrl = self.$('[data-role=uploader-btn]').data("getMediaInfo");
                 	if(mediaInfoUrl){
@@ -432,9 +433,11 @@ define(function(require, exports, module) {
 				maxSize = parseFloat(maxSize)*1024*1024;
 			}
 
-			if(files[0].size>maxSize){
-				Notify.info('选择的文件太大，只能选择小于'+this.get("file_size_limit")+'的文件。');
-				return;
+			for(var i=0; i<files.length; i++){
+				if(files[i].size>maxSize){
+					Notify.info('选择的文件太大，只能选择小于'+this.get("file_size_limit")+'的文件。');
+					return;
+				}
 			}
 
 			if(this.get("currentFile")){
@@ -444,7 +447,10 @@ define(function(require, exports, module) {
 			}
 
 			this._initFileQueue(files);
-			this.startUpload(files.length-1);
+
+			if(this.get("uploadOnSelected")){
+				this.trigger("upload", files.length-1);
+			}
 		},
 		_initFileTypes: function(){
 			var fileTypes=this.get("file_types").replace(/\*/g,"").replace(/;/g,",");
@@ -453,6 +459,7 @@ define(function(require, exports, module) {
 		setup: function() {
 			this._initTableArray();
 			this._initFileTypes();
+			this.on("upload", this.startUpload);
 		},
 		destroy: function() {
 			this.set("destroy", true);
