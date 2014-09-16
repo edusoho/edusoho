@@ -9,3 +9,7 @@ first_password:
 login:
     pattern:  /login
     defaults: { _controller: TopxiaWebBundle:K12Default:login }
+
+user_sign:
+    pattern:  /sign/{classId}/{userId}
+    defaults: { _controller: TopxiaWebBundle:Sign:sign }

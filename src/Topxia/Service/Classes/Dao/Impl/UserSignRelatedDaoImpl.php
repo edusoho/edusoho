@@ -11,7 +11,7 @@ class UserSignRelatedDaoImpl extends BaseDao implements UserSignRelatedDao
 
 	public function addUserSignRelated($userSignRelated)
 	{
-        $affected = $this->getConnection()->insert($this->table, $userSign);
+        $affected = $this->getConnection()->insert($this->table, $userSignRelated);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert class sign related error.');
         }

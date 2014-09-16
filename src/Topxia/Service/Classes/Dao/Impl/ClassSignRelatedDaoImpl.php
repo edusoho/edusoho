@@ -11,7 +11,7 @@ class ClassSignRelatedDaoImpl extends BaseDao implements ClassSignRelatedDao
 
 	public function addClassSignRelated($classSignRelated)
 	{
-        $affected = $this->getConnection()->insert($this->table, $userSign);
+        $affected = $this->getConnection()->insert($this->table, $classSignRelated);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert class sign related error.');
         }

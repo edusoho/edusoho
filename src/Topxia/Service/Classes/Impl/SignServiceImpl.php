@@ -11,11 +11,11 @@ class SignServiceImpl extends BaseService implements SignService
     {
     	$member = $this->getClassMemberDao()->getMemberByUserIdAndClassId($userId, $classId);
     	if(empty($member)) {
-    		throw $this->createServiceException(sprintf('%s 非 %s 班成员，不能签到.',$userId,$classId));
+    		throw $this->createServiceException(sprintf('%s 非 %s 班成员，不能签到.', $userId, $classId));
     	}
 
     	$isSignedToday = $this->isSignedToday($userId); 
-    	if(!$isSignedToday) {
+    	if($isSignedToday) {
     		throw $this->createServiceException('今日已签到!');
     	}
 
@@ -28,7 +28,7 @@ class SignServiceImpl extends BaseService implements SignService
     	try {
 			$userSign = $userSignDao->addUserSign($userSign);
 			$classSignRelated = $this->classSignedNumIncrease($classId);
-			$this->refreshUserSignRelated($userId, $classSignRelated['todayRank']);
+			$this->refreshUserSignRelated($userId, $classSignRelated['signedNum']);
 			//commit if no error
 			$userSignDao->getConnection()->commit();
 
