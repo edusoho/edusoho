@@ -12,6 +12,10 @@ class SignController extends BaseController
 		return $this->createJsonResponse('success');
 	}
 
+	public function userInfoAction()
+	{
+		return $this->render('TopxiaWebBundle:Sign:show.html.twig');
+	}
 	public function getSignService()
 	{
 		return $this->getServiceKernel()->createService('Classes.SignService');

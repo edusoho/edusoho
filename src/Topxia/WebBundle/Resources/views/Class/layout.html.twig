@@ -25,6 +25,9 @@
     </div>
 
     <div class="col-md-4">
+          {% block user_info %}
+            {{ render(controller('TopxiaWebBundle:Sign:userInfo', {class:class})) }}
+          {% endblock %}
           {% block class_side %}
             {{ render(controller('TopxiaWebBundle:Class:statusBlock', {class:class})) }}
 
