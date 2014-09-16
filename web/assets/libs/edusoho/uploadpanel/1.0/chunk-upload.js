@@ -15,8 +15,7 @@ define(function(require, exports, module) {
 		},
 
 		events: {
-			"click .uploadBtn": "onUploadButtonClick",
-			"change input[data-role='fileSelected']": "onSelectFileChange"
+			"click .uploadBtn": "onUploadButtonClick"
 		},
 		getFileSize: function(size) {
         	return (size / (1024 * 1024)).toFixed(2) + "MB";
@@ -453,6 +452,7 @@ define(function(require, exports, module) {
 		setup: function() {
 			this._initTableArray();
 			this._initFileTypes();
+			this.on("onSelectFileChange", this.onSelectFileChange);
 		},
 		destroy: function() {
 			this.set("destroy", true);
