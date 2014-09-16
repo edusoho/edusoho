@@ -41,11 +41,11 @@
         </span>
   </button>
   <div id="fileList">
-    <table style="width:800px;margin-top:20px;" class="table">
+    <table style="margin-top:20px;" class="table table-bordered table-striped table-condensed">
       <thead>
         <tr>
           <td>文件名称</td>
-          <td>文件大小</td>
+          <td width="15%">文件大小</td>
           <td width="60%">进度</td>
         </tr>
       </thead>
@@ -105,3 +105,7 @@
 </div>
 <script>app.load('course-manage-file/batch-upload-course-files')</script>
 {% endblock %}
+{% block footer %}
+    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+{% endblock %}
+
