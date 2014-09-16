@@ -51,6 +51,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $uploadFile['convertParams'] = $fileInfo['convertParams'];
         }
 
+
         $uploadFile['type'] = FileToolkit::getFileTypeByMimeType($fileInfo['mimeType']);
         $uploadFile['canDownload'] = empty($uploadFile['canDownload']) ? 0 : 1;
         $uploadFile['storage'] = 'cloud';
@@ -203,6 +204,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 'duration' => empty($rawParams['duration']) ? 18000 : $rawParams['duration'],
                 'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
             );
+
+            $rawUploadParams['convertParams']['videoWatermarkImage'] = empty($rawParams['videoWatermarkImage']) ? "" : $rawParams['videoWatermarkImage'];
         } else {
             $rawUploadParams = array(
                 'convertor' => null,
@@ -314,6 +317,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     {
         $class = __NAMESPACE__ . '\\' .  ucfirst($name) . 'Convertor';
         return new $class($this->getCloudClient(), $this->getKernel()->getParameter('cloud_convertor'));
+    }
+
+    private function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 }
 

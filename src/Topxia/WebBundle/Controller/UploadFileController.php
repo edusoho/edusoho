@@ -61,6 +61,14 @@ class UploadFileController extends BaseController
         $params['defaultUploadUrl'] = $this->generateUrl('uploadfile_upload', array('targetType' => $params['targetType'], 'targetId' => $params['targetId']));
         $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true);
 
+        $setting = $this->getSettingService()->get('storage', array());
+        $params['videoWatermarkImage'] = "";
+        
+        if ($setting['video_watermark'] == 2 and $setting['video_watermark_image']) {
+            $waterMarkImg = $setting['video_watermark_image'];
+            $params['videoWatermarkImage'] = $request->getSchemeAndHttpHost().$request->getBasePath().$this->container->getParameter('topxia.upload.public_url_path').$waterMarkImg;
+        }
+
         $params = $this->getUploadFileService()->makeUploadParams($params);
 
         return $this->createJsonResponse($params);
@@ -229,6 +237,11 @@ class UploadFileController extends BaseController
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     private function createFilesJsonResponse($files)

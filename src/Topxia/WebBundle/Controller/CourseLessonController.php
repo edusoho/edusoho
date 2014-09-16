@@ -152,6 +152,7 @@ class CourseLessonController extends BaseController
         $json['endTime'] = $lesson['endTime'];
         $json['id'] = $lesson['id'];
         $json['courseId'] = $lesson['courseId'];
+        $json['videoWatermarkEmbedded'] = 0;
 
         $json['isTeacher'] = $this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
         if($lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated') {
@@ -170,13 +171,16 @@ class CourseLessonController extends BaseController
 
         if ($json['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
                     $factory = new CloudClientFactory();
                     $client = $factory->createClient();
 
                     $json['mediaConvertStatus'] = $file['convertStatus'];
+
+                    if (!empty($file['convertParams']['videoWatermarkImage'])) {
+                        $json['videoWatermarkEmbedded'] = 1;
+                    }
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
