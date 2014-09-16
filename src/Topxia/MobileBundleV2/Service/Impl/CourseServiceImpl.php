@@ -215,7 +215,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             		return $error;
         		}
 
-        		$userIsStudent = $user->isLogin() ? $this->controller->getCourseService()->isCourseStudent($courseId, $user['id']) : false;
         		$userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
 
 		$vipLevels = $this->controller->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
@@ -223,42 +222,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
      		$member = $this->previewAsMember($member, $courseId, $user);
         		return array(
-        			"userIsStudent"=>$userIsStudent,
         			"course"=>$this->controller->filterCourse($course),
         			"userFavorited"=>$userFavorited,
         			"member"=>$member,
         			"vipLevels"=>$vipLevels
         			);
-	}
-
-	private function previewAsMember($member, $courseId, $user)
-	{
-		if (empty($member)) {
-			return null;
-		}
-		if ($this->controller->get('security.context')->isGranted('ROLE_ADMIN')) {
-	                return array(
-	                    'id' => 0,
-	                    'courseId' => $courseId,
-	                    'userId' => $user['id'],
-	                    'levelId' => 0,
-	                    'learnedNum' => 0,
-	                    'isLearned' => 0,
-	                    'seq' => 0,
-	                    'isVisible' => 0,
-	                    'role' => 'teacher',
-	                    'locked' => 0,
-	                    'createdTime' => time(),
-	                    'deadline' => 0
-	                );
-	            }
-
-	            $userIsStudent = $this->controller->getCourseService()->isCourseStudent($courseId, $user['id']);
-        		$userIsTeacher = $this->controller->getCourseService()->isCourseTeacher($courseId, $user['id']);
-            	$member['createdTime'] = date('c', $member['createdTime']);
-            	$member['role'] = $userIsTeacher ? "teacher" : $userIsStudent ? "student" : null;
-
-            	return $member;
 	}
 
 	public function searchCourse()
