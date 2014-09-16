@@ -450,10 +450,12 @@ define(function(require, exports, module) {
 				return;
 			}
 
-			this._initFileQueue(files);
 			this.trigger("fileSelected", files);
+			
+			this._initFileQueue(files);
 
 			if(this.get("uploadOnSelected")){
+				files = this.get("fileQueue");
 				this.trigger("upload", files.length-1);
 			}
 		},

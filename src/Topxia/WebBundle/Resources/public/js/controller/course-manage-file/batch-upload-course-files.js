@@ -68,22 +68,28 @@ define(function(require, exports, module) {
     }
 
     function fileSelected(files){
+        var fileQueue = this.get('fileQueue');
+        var startLength=0;
+        if(fileQueue) {
+            startLength = fileQueue.length;
+        }
     	for (var i = 0; i < files.length; i++) {
     		var file = files[i];
+            var index = (i+startLength);
         	var tr = "<tr>";
 			tr += "<td>"+file.name+"</td>";
 			tr += "<td>"+getFileSize(file.size)+"</td>";
-			tr += "<td id='file_"+i+"'>";
-			tr += "<div class='progress' id='fileProgressBar"+i+"'>";
+			tr += "<td id='file_"+index+"'>";
+			tr += "<div class='progress' id='fileProgressBar"+index+"'>";
 			tr += "<div class='progress-bar' role='progressbar' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100' style='width: 0%; text-align:left;'>未开始</div>";
           	tr += "</div>";
           	tr += "</td>";
 			tr += "</tr>";
 			$("#fileList table tbody").prepend($(tr));
 			var progressbar = new UploadProgressBar({
-                element: "#fileProgressBar"+i
+                element: "#fileProgressBar"+index
             });
-            $("#fileProgressBar"+i).data("progressbar",progressbar);
+            $("#fileProgressBar"+index).data("progressbar",progressbar);
     	};
     }
 
