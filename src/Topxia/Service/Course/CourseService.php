@@ -143,6 +143,8 @@ interface CourseService
 
 	public function analysisLessonViewDataByTime($startTime,$endTime,$conditions);
 
+	public function waveLearningTime($lessonId,$userId);
+
 	/**
 	 * Chapter API
 	 */

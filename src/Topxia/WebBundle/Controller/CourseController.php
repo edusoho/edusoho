@@ -506,10 +506,13 @@ class CourseController extends BaseController
 		));
 	}
 
-	public function recordLearningTimeAction(Request $request)
+	public function recordLearningTimeAction(Request $request,$lessonId)
 	{	
+		$user = $this->getCurrentUser();
 
-		return $this->createJsonResponse(true);
+		$this->getCourseService()->waveLearningTime($lessonId,$user['id']);
+
+		return $this->creatpeJsonResponse(true);
 	}
 
 	public function addMemberExpiryDaysAction(Request $request, $courseId, $userId)

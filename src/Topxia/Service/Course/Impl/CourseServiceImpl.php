@@ -559,7 +559,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function analysisCourseDataByTime($startTime,$endTime)
 	{
-	    	return $this->getCourseDao()->analysisCourseDataByTime($startTime,$endTime);
+    	return $this->getCourseDao()->analysisCourseDataByTime($startTime,$endTime);
+	}
+
+	public function waveLearningTime($lessonId,$userId)
+	{
+		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
+
+		if($learn['status']!="finished")
+		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+				'learnTime' => $learn['learnTime']+1,
+		));
 	}
 
 	private function autosetCourseFields($courseId)

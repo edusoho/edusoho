@@ -251,9 +251,8 @@ course_learn:
     defaults: { _controller: TopxiaWebBundle:Course:learn }
 
 course_learn_time:
-    pattern:  /course/{id}/learn/time
+    pattern:  /course/{lessonId}/learn/time
     defaults: { _controller: TopxiaWebBundle:Course:recordLearningTime }
-    methods: [POST]
 
 course_lesson_show:
     pattern:  /course/{courseId}/lesson/{lessonId}

@@ -1,12 +1,12 @@
 define(function(require, exports, module) {
     function recordLearningTime(){
-        $.post($('#course_learn_time').attr('data-url'));
+        $.post(url);
         if(true)
         {
-        setTimeout(recordLearningTime, 5000);
+        setTimeout(recordLearningTime, 60000);
         }; 
     }
-    setTimeout(recordLearningTime, 1000);
+    setTimeout(recordLearningTime, 60000);
     var Widget = require('widget'),
         Backbone = require('backbone'),
         VideoJS = require('video-js'),
