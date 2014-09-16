@@ -100,7 +100,6 @@ define(function(require, exports, module) {
                         Notify.success('文件上传成功！');
                     }
 
-
                 }
             }, this.get('uploaderSettings'));
 
@@ -111,7 +110,14 @@ define(function(require, exports, module) {
             if(this._supportChunkUpload() && $btn.data('storageType')=="cloud"){
                 settings.element=this.element;
                 settings.progressbar = progressbar;
-                return new ChunkUpload(settings);
+
+                var chunkUpload = new ChunkUpload(settings);
+
+                chunkUpload.on("upload_start_handler", settings.upload_start_handler);
+                chunkUpload.on("upload_progress_handler", settings.upload_progress_handler);
+                chunkUpload.on("upload_success_handler", settings.upload_success_handler);
+
+                return chunkUpload;
             }else{
                 return new SWFUpload(settings);
             }

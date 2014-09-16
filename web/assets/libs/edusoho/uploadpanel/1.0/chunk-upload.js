@@ -117,7 +117,7 @@ define(function(require, exports, module) {
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
                     if(!self.get("destroy")) {
-                    	self.get("upload_progress_handler")(self.get("currentFile"), tmp, fileScop.file.size);
+                    	self.trigger("upload_progress_handler", self.get("currentFile"), tmp, fileScop.file.size);
                     }
                 }
             }, false);
@@ -230,7 +230,7 @@ define(function(require, exports, module) {
 	                		}
 	                	});
                 	}
-                	self.get("upload_success_handler")(self.get("currentFile"), JSON.stringify(response));
+                	self.trigger("upload_success_handler", self.get("currentFile"), JSON.stringify(response));
                 	fileScop.fileIndex--;
                 	FileScopStorage.del();
                 	self.set("currentFile",null);
@@ -267,7 +267,7 @@ define(function(require, exports, module) {
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
                     if(!self.get("destroy")) {
-                    	self.get("upload_progress_handler")(self.get("currentFile"), tmp, fileScop.file.size);
+                    	self.trigger("upload_progress_handler", self.get("currentFile"), tmp, fileScop.file.size);
                     }
                 }
             },false);
@@ -392,7 +392,7 @@ define(function(require, exports, module) {
 			}
 
 			if(file){
-				this.get("upload_start_handler").call(this,this,file);
+				this.trigger("upload_start_handler",file);
 				this.upload(file, fileIndex);
 			}
 			
