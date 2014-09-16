@@ -313,6 +313,7 @@ define(function(require, exports, module) {
 	    },
 
 	    saveUploadStatus: function(fileScop, blkRet){
+        	fileScop.uploadedBytes += fileScop.currentChunkSize;
 	    	var saveFileScop = {
 	    		key: fileScop.key,
 				uploadedBytes: fileScop.uploadedBytes,
@@ -330,7 +331,6 @@ define(function(require, exports, module) {
 				currentChunkOffsetInBlock: fileScop.currentChunkOffsetInBlock
 			};
         	FileScopStorage.set(JSON.stringify(saveFileScop));
-        	fileScop.uploadedBytes += fileScop.currentChunkSize;
 	    },
 	    needAbortXHR: function(xhr){
 	    	if(this.get("destroy")){
