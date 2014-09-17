@@ -6,6 +6,16 @@ use Topxia\MobileBundleV2\Service\LessonService;
 
 class LessonServiceImpl extends BaseService implements LessonService
 {
+
+	public function getMaterial()
+	{
+		$lessonId = $this->getParam("lessonId");
+		$start = (int) $this->getParam("start", 0);
+		$limit = (int) $this->getParam("limit", 10);
+		$lessonMaterials = $this->controller->getMaterialService()->findLessonMaterials($lessonId $start, $limit);
+		return $lessonMaterials;
+	}
+
 	public function getCourseLessons()
 	{
 		$token = $this->controller->getUserToken($this->request);

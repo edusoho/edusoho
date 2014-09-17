@@ -56,6 +56,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         			if (isset($courses[$thread["courseId"]])) {
         				$course = $courses[$thread["courseId"]];
         				$thread["courseTitle"] = $course["title"];
+            			$thread['coutsePicture'] = $course["largePicture"];
         			}
             		$thread['latestPostUser'] = $users[$thread["latestPostUserId"]];
             		$thread['createdTime'] = date('c', $thread['createdTime']);
