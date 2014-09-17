@@ -19,6 +19,23 @@ define(function(require, exports, module) {
             });
         });
 
+        $("button", ".panel-heading").on('click',function(){
+            var url="";
+            if(typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
+                url = $(this).data("normalUrl");
+            } else {
+                url = $(this).data("html5Url");
+            }
+            $("#modal").modal({
+                backdrop: 'static',
+                keyboard: false,
+                show: true
+            });
+            $.get(url, function(html){
+                $("#modal").html(html);
+            });
+        })
+
 
 
     };
