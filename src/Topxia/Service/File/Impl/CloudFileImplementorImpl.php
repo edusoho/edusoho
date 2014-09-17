@@ -209,7 +209,12 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
             );
 
-            $rawUploadParams['convertParams']['videoWatermarkImage'] = empty($rawParams['videoWatermarkImage']) ? "" : $rawParams['videoWatermarkImage'];
+            $setting = $this->getSettingService()->get('storage',array());
+            if ($setting['video_watermark'] == 2 && !empty($setting['video_watermark_image'])) {
+                $videoWatermarkImage = $this->getEnvVariable('baseUrl').$this->getKernel()->getParameter('topxia.upload.public_url_path')."/".$setting['video_watermark_image'];
+                $params['convertParams']['videoWatermarkImage'] = $videoWatermarkImage;
+            }
+
         } else {
             $rawUploadParams = array(
                 'convertor' => null,
@@ -260,6 +265,19 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'convertParams' => $file['convertParams'],
         );
 
+        $setting = $this->getSettingService()->get('storage',array());
+
+        if ($setting['video_watermark'] == 2 && !empty($setting['video_watermark_image'])) {
+            $videoWatermarkImage = $this->getEnvVariable('baseUrl').$this->getKernel()->getParameter('topxia.upload.public_url_path')."/".$setting['video_watermark_image'];
+            $params['convertParams']['videoWatermarkImage'] = $videoWatermarkImage;
+            $file['convertParams']['hasVideoWatermark'] = 1;
+        } else {
+            $file['convertParams']['hasVideoWatermark'] = 0;
+        }
+        
+        $file['convertParams'] = $this->encodeMetas($file['convertParams']);
+        $this->getUploadFileDao()->updateFile($file['id'],array('convertParams'=>$file['convertParams']));
+
         if ($pipeline) {
             $params['pipeline'] = $pipeline;
         }
@@ -269,7 +287,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         if (empty($result['persistentId'])) {
             return null;
         }
-
         return $result['persistentId'];
     }
 
@@ -321,6 +338,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     {
         $class = __NAMESPACE__ . '\\' .  ucfirst($name) . 'Convertor';
         return new $class($this->getCloudClient(), $this->getKernel()->getParameter('cloud_convertor'));
+    }
+
+    private function getUploadFileDao()
+    {
+        return $this->createDao('File.UploadFileDao');
     }
 
     private function getSettingService()

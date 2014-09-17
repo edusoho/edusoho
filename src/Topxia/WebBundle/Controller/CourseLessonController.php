@@ -178,7 +178,7 @@ class CourseLessonController extends BaseController
 
                     $json['mediaConvertStatus'] = $file['convertStatus'];
 
-                    if (!empty($file['convertParams']['videoWatermarkImage'])) {
+                    if (!empty($file['convertParams']['hasVideoWatermark']) && $file['convertParams']['hasVideoWatermark'] == 1) {
                         $json['videoWatermarkEmbedded'] = 1;
                     }
 
