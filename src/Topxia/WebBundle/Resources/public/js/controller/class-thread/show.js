@@ -2,8 +2,13 @@ define(function(require, exports, module) {
 
     var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
+    var UserSign = require('/bundles/topxiaweb/js/controller/widget/user-sign.js');
 
     exports.run = function() {
+
+        var userSign = new UserSign({
+            element: '#sign',
+        });
 
         var editor = EditorFactory.create('#post-content-field', 'simple', {extraFileUploadParams:{group:'course'}});
 

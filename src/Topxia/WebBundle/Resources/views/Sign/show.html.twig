@@ -1,5 +1,38 @@
-<div style="display:block;height:200px; width:auto;" class="well">
+
+
+<div style="display:block;height:200px; width:auto;" class="well" id="sign" data-url="{{ path('signed_records')}}">
 	<div class="" style="display:block;height:50px;width:180px">
-		<div class="btn btn-primary">签到</div>
+		<div class="btn btn-primary" data-role="sign">签到</div>
+		<div class="btn btn-primary" data-role="signed">已签到<br><span class="">连续1天</span></div>
 	</div>
+	<div class="class_sign_main">
+	<div class="">
+		<div class="">
+			<div class="calendar_title_month clearfix">
+				<span class="pull-left glyphicon glyphicon-chevron-left title-margin" data-role="previous"></span>
+				<span class="pull-right glyphicon glyphicon-chevron-right title-margin" data-role="next"></span>
+				<div class="text-center title-month title-margin" data-time="{{ "now"|date('Y/m') }}" id="title-month">{{ "now"|date('Y年m月') }}</div>
+			</div></div>
+			<table class="sign_succ_table ">
+				<thead align="center">
+					<tr class="sign_succ_canlerdar_head">
+						<td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td>
+					</tr>
+				</thead>
+				<tbody align="center" class="sign_succ_canlerdar_days j_canlerdar_days">
+					
+				</tbody>
+			</table>
+		</div>
+		<div class="sign_tip_boards">
+			<div class="sign_tip_board sign_tip_board_urank j_sign_ad_mobi">
+				<div class="sign_tip_board_ico">
+				</div><p>签到排名：今日本吧第<span class="sign_index_num j_signin_index">109</span>个签到，</p><p><span class="j_succ_text">离前十名还有些距离，大家来得更勤快些吧~</span></p></div><div class="sign_tip_board sign_tip_board_barrank"><div class="sign_tip_board_ico"></div><p>本吧排名：<a target="_blank" href="/sign/index?kw=%C9%A8%B6%BE">22</a></p><p>本吧签到人数：119</p></div>
+			</div>
+		</div>
 </div>
+
+
+
+
+
