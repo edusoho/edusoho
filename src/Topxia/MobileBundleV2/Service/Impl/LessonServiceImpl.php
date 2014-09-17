@@ -15,12 +15,13 @@ class LessonServiceImpl extends BaseService implements LessonService
 		$limit = (int) $this->getParam("limit", 10);
 		$lessonMaterials = $this->controller->getMaterialService()->findLessonMaterials($lessonId, $start, 1000);
 		$files = $this->controller->getUploadFileService()->findFilesByIds(ArrayToolkit::column($lessonMaterials, 'fileId'));
+		
 		return array(
 			"start"=>$start,
 			"limit"=>$limit,
 			"total"=>1000,
-			"data"=>$this->filterMaterial($lessonMaterials, $files);
-			)
+			"data"=>$this->filterMaterial($lessonMaterials, $files)
+			);
 	}
 
 	private function filterMaterial($lessonMaterials, $files)
