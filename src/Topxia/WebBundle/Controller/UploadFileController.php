@@ -97,7 +97,7 @@ class UploadFileController extends BaseController
                 $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
             );
         }
-
+var_dump($convertHash);exit();
         return $this->createJsonResponse($file);
     }
 
