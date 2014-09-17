@@ -27,6 +27,7 @@ define(function(require, exports, module) {
                     } else {
                         data.convertor = 'HLSVideo';
                     }
+                    data.lazyConvert = 1;
                 }
 
                 $.ajax({

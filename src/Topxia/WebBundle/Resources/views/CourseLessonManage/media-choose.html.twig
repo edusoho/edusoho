@@ -82,7 +82,7 @@
                 data-role="uploader-btn"
                 data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv;*.mov{% else %}*.mp4{% endif %}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
-                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
+                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId, lazyConvert:1}) }}{% endif %}" 
                 data-progressbar="#video-chooser-progress"
                 data-storage-type="{{storageSetting.upload_mode}}"
                 data-get-media-info="{{path('uploadfile_cloud_get_media_info',{type:'video'})}}"

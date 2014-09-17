@@ -59,7 +59,12 @@ class UploadFileController extends BaseController
 
         $params['user'] = $user->id;
         $params['defaultUploadUrl'] = $this->generateUrl('uploadfile_upload', array('targetType' => $params['targetType'], 'targetId' => $params['targetId']));
-        $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true);
+
+        if (empty($params['lazyConvert'])) {
+            $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true);
+        } else {
+            $params['convertCallback'] = null;
+        }
 
         $setting = $this->getSettingService()->get('storage', array());
         $params['videoWatermarkImage'] = "";
@@ -81,11 +86,21 @@ class UploadFileController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $fileInfo = $request->request->all();
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
-        $fileInfo = $request->request->all();
+        $lazyConvert = $request->query->get('lazyConvert') ? true : false;
+        $fileInfo['lazyConvert'] = $lazyConvert;
 
         $file = $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, 'cloud');
+
+        if ($lazyConvert) {
+            $convertHash = $this->getUploadFileService()->reconvertFile(
+                $file['id'],
+                $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+            );
+        }
+
         return $this->createJsonResponse($file);
     }
 
