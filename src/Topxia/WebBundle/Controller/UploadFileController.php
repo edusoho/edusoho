@@ -90,7 +90,7 @@ class UploadFileController extends BaseController
         $targetId = $request->query->get('targetId');
         $lazyConvert = $request->query->get('lazyConvert') ? true : false;
         $fileInfo['lazyConvert'] = $lazyConvert;
-
+var_dump($fileInfo);exit();
         $file = $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, 'cloud');
         if ($lazyConvert) {
             $convertHash = $this->getUploadFileService()->reconvertFile(
@@ -117,7 +117,6 @@ class UploadFileController extends BaseController
         if (empty($result['id'])) {
             throw new \RuntimeException('数据中id不能为空');
         }
-file_put_contents('/tmp/xxx', $result['convertHash']);
         if (!empty($result['convertHash'])) {
             $file = $this->getUploadFileService()->getFileByConvertHash($result['convertHash']);
         } else {
