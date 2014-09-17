@@ -304,7 +304,7 @@ class SchoolController extends BaseController
             $paginator->getPerPageCount()
         );
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($classMembers, 'userId'));
-        return $this->render('TopxiaAdminBundle:Student:student-list.html.twig', array(
+        return $this->render('TopxiaAdminBundle:School:student-list.html.twig', array(
             'users' => $users ,
             'class'=>$class,
             'paginator' => $paginator
@@ -344,7 +344,7 @@ class SchoolController extends BaseController
             $this->getClassesService()->importStudents($classId,$userIds);
             return $this->createJsonResponse(true);
         }
-        return $this->render('TopxiaAdminBundle:Student:student-import-modal.html.twig', array(
+        return $this->render('TopxiaAdminBundle:School:student-import-modal.html.twig', array(
             'classId' => $classId
         ));
     }

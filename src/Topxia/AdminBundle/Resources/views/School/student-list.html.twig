@@ -27,7 +27,7 @@
   </thead>
   <tbody>
     {% for user in users %}
-      {% include 'TopxiaAdminBundle:Student:student-list-item.html.twig' with {user:user} %}
+      {% include 'TopxiaAdminBundle:School:student-list-item.html.twig' with {user:user} %}
     {% else %}
       <div class="empty">该班级暂无学生，快去添加学生吧！</div>
     {% endfor %}

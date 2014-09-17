@@ -74,3 +74,60 @@ admin_school_class_student_import:
 admin_school_class_student_remove:
     pattern:  /school/class/{classId}/student/{userId}/remove
     defaults: { _controller: TopxiaAdminBundle:School:studentRemove }
+
+admin_student:
+    pattern:  /student
+    defaults: { _controller: TopxiaAdminBundle:Student:index }
+
+
+
+
+admin_user:
+    pattern:  /user
+    defaults: { _controller: TopxiaAdminBundle:User:index }
+
+admin_user_create:
+    pattern:  /user/create
+    defaults: { _controller: TopxiaAdminBundle:User:create }
+
+admin_user_create_number_check:
+    pattern:  /user/create/number/check
+    defaults: { _controller: TopxiaAdminBundle:User:numberCheck }
+
+admin_user_create_email_check:
+    pattern:  /user/create/email/check
+    defaults: { _controller: TopxiaAdminBundle:User:emailCheck }
+
+admin_user_create_nickname_check:
+    pattern:  /user/create/nickname/check
+    defaults: { _controller: TopxiaAdminBundle:User:nicknameCheck }
+
+admin_user_show:
+    pattern:  /user/{id}
+    defaults: { _controller: TopxiaAdminBundle:User:show }
+
+admin_user_edit:
+    pattern:  /user/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:User:edit }
+
+admin_user_lock:
+    pattern:  /user/{id}/lock
+    defaults: { _controller: TopxiaAdminBundle:User:lock }
+    methods:  [POST]
+
+admin_user_unlock:
+    pattern:  /user/{id}/unlock
+    defaults: { _controller: TopxiaAdminBundle:User:unlock }
+    methods:  [POST]
+
+admin_user_roles:
+    pattern:  /user/{id}/roles
+    defaults: { _controller: TopxiaAdminBundle:User:roles }
+
+admin_user_avatar:
+    pattern:  /user/{id}/avatar
+    defaults: { _controller: TopxiaAdminBundle:User:avatar }
+
+admin_user_avatar_crop:
+    pattern:  /user/{id}/avatar/crop
+    defaults: { _controller: TopxiaAdminBundle:User:avatarCrop }
