@@ -63,7 +63,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$thread["courseTitle"] = $course["title"];
 
-        		$thread['coutsePicture'] = $this->controller->coverPath($course["largePicture"], 'course-large.png');
+        		$thread['coursePicture'] = $this->controller->coverPath($course["largePicture"], 'course-large.png');
 
         		$isTeacherPost = $this->controller->getThreadService()->findThreadElitePosts($course['id'], $thread['id'], 0, 100);
         		$thread['isTeacherPost'] = empty($isTeacherPost) ? false : true;
