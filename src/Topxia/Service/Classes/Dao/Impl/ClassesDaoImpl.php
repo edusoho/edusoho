@@ -60,7 +60,7 @@ class ClassesDaoImpl extends BaseDao implements ClassesDao
     {
         $affected = $this->getConnection()->insert(self::TABLENAME, $class);
         if ($affected <= 0) {
-            throw $this->createDaoException('Insert course error.');
+            throw $this->createDaoException('Insert class error.');
         }
         return $this->getClass($this->getConnection()->lastInsertId());
     }

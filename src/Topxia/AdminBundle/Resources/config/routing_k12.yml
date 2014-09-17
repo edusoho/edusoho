@@ -62,3 +62,15 @@ admin_school_class_icon_upload:
 admin_school_class_backgroundImg_upload:
     pattern:  /school/classes/backgroundImg/upload
     defaults: { _controller: TopxiaAdminBundle:School:classBackgroundImgUpload }
+
+admin_class_student:
+    pattern:  /class/{classId}/student
+    defaults: { _controller: TopxiaAdminBundle:Student:index }
+
+admin_class_student_import:
+    pattern:  /class/{classId}/student/import
+    defaults: { _controller: TopxiaAdminBundle:Student:import }
+
+admin_class_student_remove:
+    pattern:  /class/{classId}/student/{userId}/remove
+    defaults: { _controller: TopxiaAdminBundle:Student:remove }

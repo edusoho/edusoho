@@ -10,6 +10,72 @@ login:
     pattern:  /login
     defaults: { _controller: TopxiaWebBundle:K12Default:login }
 
+user_sign:
+    pattern:  /sign/{classId}/{userId}
+    defaults: { _controller: TopxiaWebBundle:Sign:sign }
+
+class_show:
+    pattern: /class/{classId}
+    defaults: { _controller: TopxiaWebBundle:Class:show }
+
+class_courses:
+    pattern: /class/{classId}/courses
+    defaults: { _controller: TopxiaWebBundle:ClassCourses:list }
+
+class_threads:
+    pattern:  /class/{classId}/thread
+    defaults: { _controller: TopxiaWebBundle:ClassThread:list }
+
+class_thread_create:
+    pattern:  /class/{classId}/thread/create
+    defaults: { _controller: TopxiaWebBundle:ClassThread:create }
+
+class_thread_show:
+    pattern:  /class/{classId}/thread/{threadId}
+    defaults: { _controller: TopxiaWebBundle:ClassThread:show }
+
+class_thread_post:
+    pattern:  /class/{classId}/thread/{threadId}/post
+    defaults: { _controller: TopxiaWebBundle:ClassThread:post }
+
+class_thread_edit:
+    pattern:  /class/{classId}/thread/{threadId}/edit
+    defaults: { _controller: TopxiaWebBundle:ClassThread:edit }
+
+class_thread_post_delete:
+    pattern:  /class/{classId}/thread/{threadId}/post/{postId}/delete
+    defaults: { _controller: TopxiaWebBundle:ClassThread:deletePost }
+    methods: [POST]
+
+class_thread_post_edit:
+    pattern:  /class/{classId}/thread/{threadId}/post/{postId}/edit
+    defaults: { _controller: TopxiaWebBundle:ClassThread:editPost }
+
+class_thread_stick:
+    pattern:  /class/{classId}/thread/{threadId}/stick
+    defaults: { _controller: TopxiaWebBundle:ClassThread:stick }
+    methods: [POST]
+
+class_thread_unstick:
+    pattern:  /class/{classId}/thread/{threadId}/unstick
+    defaults: { _controller: TopxiaWebBundle:ClassThread:unstick }
+    methods: [POST]
+
+class_thread_elite:
+    pattern:  /class/{classId}/thread/{threadId}/elite
+    defaults: { _controller: TopxiaWebBundle:ClassThread:elite }
+    methods: [POST]
+
+class_thread_unelite:
+    pattern:  /class/{classId}/thread/{threadId}/unelite
+    defaults: { _controller: TopxiaWebBundle:ClassThread:unelite }
+    methods: [POST]
+
+class_thread_delete:
+    pattern:  /class/{classId}/thread/{threadId}/delete
+    defaults: { _controller: TopxiaWebBundle:ClassThread:delete }
+    methods: [POST]
+
 class_notes:
     pattern:  /class/{classId}/note
     defaults: { _controller: TopxiaWebBundle:ClassNote:list }
