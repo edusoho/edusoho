@@ -20,5 +20,21 @@ interface CourseService
 	public function unLearnCourse();
 
 	public function getCourseTheads();
+
+	/**
+	 *	courseId 课程id
+	 *	threadId 问答id
+	 *	token userToken
+	*/
 	public function getThread();
+
+	public function getThreadTeacherPost();
+
+	/**
+	 *	courseId 课程id
+	 *	threadId 问答id
+	 *	start 起始索引
+	 *	limit 分页
+	*/
+	public function getThreadPost();
 }

@@ -250,6 +250,11 @@ class MobileBaseController extends BaseController
 
     }
 
+    public function coverPath($path, $coverPath)
+    {
+        return $this->container->get('topxia.twig.web_extension')->getFilePath($path, $coverPath, true);
+    }
+
     public function filterUsers($users)
     {
         if (empty($users)) {

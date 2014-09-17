@@ -33,32 +33,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         		);
 
         		$courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
-        		$users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
-
-        		$users = $this->controller->filterUsers($users);
         		return array(
 			"start"=>$start,
 			"limit"=>$limit,
 			"total"=>$total,
-			'threads'=>$this->filterThreads($threads, $courses, $users),
+			'threads'=>$this->filterThreads($threads, $courses),
 			);
 	}
 
-	private function checkThreadPostByTeacher($courseId, $threadId)
-	{
-		$count = $this->controller->getThreadService()->getThreadPostCount($courseId, $threadId);
-		$posts = $this->controller->getThreadService()->findThreadPosts($courseId, $threadId, 'default', 0, $count);
-		
-		$users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
-		foreach ($users as $key => $user) {
-			if (in_array("ROLE_TEACHER", $user['roles'])) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private function filterThreads($threads, $courses, $users)
+	private function filterThreads($threads, $courses)
 	{
 		if (empty($threads)) {
             		return array();
@@ -67,26 +50,94 @@ class CourseServiceImpl extends BaseService implements CourseService
         		for ($i=0; $i < count($threads); $i++) { 
         			$thread = $threads[$i];
         			if (!isset($courses[$thread["courseId"]])) {
-        				unset($threads[$i]);
-        				continue;
-        			}
-
-        			$course = $courses[$thread["courseId"]];
-        			$thread["courseTitle"] = $course["title"];
-            		$thread['coutsePicture'] = $course["largePicture"];
-
-        			$thread['isTeacherPost'] = $this->checkThreadPostByTeacher($thread["courseId"], $thread["id"]);
-            		$thread['latestPostUser'] = $users[$thread["latestPostUserId"]];
-            		$thread['createdTime'] = date('c', $thread['createdTime']);
-            		$thread['latestPostTime'] = date('c', $thread['latestPostTime']);
-            		$threads[$i] = $thread;
+				unset($threads[$i]);
+				continue;
+			}
+			$course = $courses[$threads['courseId']];
+        			$threads[$i] = $this->filterThread($thread, $course, null);
         		}
         		return $threads;
 	}
 
+	private function filterThread($thread, $course, $user)
+	{
+		$thread["courseTitle"] = $course["title"];
+
+        		$thread['coutsePicture'] = $this->controller->coverPath($course["largePicture"], 'course-large.png');
+
+        		$isTeacherPost = $this->controller->getThreadService()->findThreadElitePosts($course['id'], $thread['id'], 0, 100);
+        		$thread['isTeacherPost'] = empty($isTeacherPost) ? false : true;
+        		$thread['user'] = $user;
+        		$thread['createdTime'] = date('c', $thread['createdTime']);
+        		$thread['latestPostTime'] = date('c', $thread['latestPostTime']);
+
+        		return $thread;
+	}
+
+	public function getThreadPost()
+	{
+		$courseId = $this->getParam("courseId", 0);
+		$threadId = $this->getParam("threadId", 0);
+		$start = (int) $this->getParam("start", 0);
+		$limit = (int) $this->getParam("limit", 10);
+
+		$user = $this->controller->getUserByToken($this->request);
+		if (!$user->isLogin()) {
+			return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+		}
+
+		$total = $this->controller->getThreadService()->getThreadPostCount($courseId, $threadId);
+		$posts = $this->controller->getThreadService()->findThreadPosts($courseId, $threadId, 'default', $start, $limit);
+		$users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
+		return array(
+			"start"=>$start,
+			"limit"=>$limit,
+			"total"=>$total,
+			"data"=>$this->filterPosts($posts, $this->controller->filterUsers($users))
+			);
+	}
+
 	public function getThread()
 	{
+		$courseId = $this->getParam("courseId", 0);
+		$threadId = $this->getParam("threadId", 0);
+		$user = $this->controller->getUserByToken($this->request);
+		if (!$user->isLogin()) {
+			return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+		}
 
+		$thread = $this->controller->getThreadService()->getThread($courseId, $threadId);
+		if (empty($thread)) {
+			return $this->createErrorResponse('no_thread', '没有找到指定问答!');
+		}
+
+		$course = $this->controller->getCourseService()->getCourse($thread['courseId']);
+            	$user = $this->controller->getUserService()->getUser($thread['userId']);
+		return $this->filterThread($thread, $course, $user);
+	}
+
+	public function getThreadTeacherPost()
+	{
+		$courseId = $this->getParam("courseId", 0);
+		$threadId = $this->getParam("threadId", 0);
+
+		$user = $this->controller->getUserByToken($this->request);
+		if (!$user->isLogin()) {
+			return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+		}
+
+		$posts = $this->controller->getThreadService()->findThreadElitePosts($courseId, $threadId, 'default', 0, 100);
+		$users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
+		
+		return $this->filterPosts($posts, $this->controller->filterUsers($users));
+	}
+
+	private function filterPosts($posts, $users)
+	{
+		return array_map(function($post) use ($users){
+			$post['user'] = $users[$post['userId']];
+			return $post;
+		}, $posts);
 	}
 
 	public function getFavoriteCoruse()
