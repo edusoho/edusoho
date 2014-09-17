@@ -41,7 +41,7 @@ class CourseLessonController extends BaseController
 
         if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-            if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
+            if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 $factory = new CloudClientFactory();
                 $client = $factory->createClient();
                 $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
@@ -182,7 +182,7 @@ class CourseLessonController extends BaseController
                         $json['videoWatermarkEmbedded'] = 1;
                     }
 
-                    if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
+                    if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                             $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
                             $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
