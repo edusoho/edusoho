@@ -377,16 +377,8 @@ class SettingController extends BaseController
         $defaultSetting = $this->getSettingService()->get('default', array());
         $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
-        $default = array(
-            'defaultAvatar' => 0,
-            'defaultCoursePicture' => 0,
-            'defaultAvatarFileName' => 'avatar',
-            'defaultCoursePictureFileName' => 'coursePicture',
-            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
-            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
-            'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
-        );
-
+        $default = $this->getDefaultSet();
+        
         $defaultSetting = array_merge($default, $defaultSetting);
 
         if ($request->getMethod() == 'POST') {
@@ -405,6 +397,44 @@ class SettingController extends BaseController
             'defaultSetting' => $defaultSetting,
             'hasOwnCopyright' => $hasOwnCopyright,
         ));
+    }
+
+    public function shareAction (Request $request)
+    {   
+        $defaultSetting = $this->getSettingService()->get('default', array());
+
+        $default = $this->getDefaultSet();
+
+        $defaultSetting = array_merge($default, $defaultSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $defaultSetting = $request->request->all();
+            $default = $this->getSettingService()->get('default', array());
+            $defaultSetting = array_merge($default, $defaultSetting);
+
+            $this->getSettingService()->set('default', $defaultSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新分享设置", $defaultSetting);
+            $this->setFlashMessage('success', '分享设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:share.html.twig', array(
+            'defaultSetting' => $defaultSetting,
+        ));
+    }
+
+    private function getDefaultSet()
+    {
+        $default = array(
+            'defaultAvatar' => 0,
+            'defaultCoursePicture' => 0,
+            'defaultAvatarFileName' => 'avatar',
+            'defaultCoursePictureFileName' => 'coursePicture',
+            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+            'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+        );
+
+        return $default;
     }
 
     public function ipBlacklistAction(Request $request)
