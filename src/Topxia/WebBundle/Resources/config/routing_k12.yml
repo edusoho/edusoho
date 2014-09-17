@@ -9,3 +9,19 @@ first_password:
 login:
     pattern:  /login
     defaults: { _controller: TopxiaWebBundle:K12Default:login }
+
+class_notes:
+    pattern:  /class/{classId}/note
+    defaults: { _controller: TopxiaWebBundle:ClassNote:list }
+
+class_notes_praise:
+    pattern:  /class/note/{noteId}/praise
+    defaults: { _controller: TopxiaWebBundle:ClassNote:praise }
+
+class_notes_cancle_praise:
+    pattern:  /class/note/{noteId}/canclePraise
+    defaults: { _controller: TopxiaWebBundle:ClassNote:canclePraise }
+
+class_members:
+    pattern:  /class/{classId}/member
+    defaults: { _controller: TopxiaWebBundle:ClassMember:list }

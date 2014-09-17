@@ -1251,9 +1251,6 @@ class_thread_delete:
     defaults: { _controller: TopxiaWebBundle:ClassThread:delete }
     methods: [POST]
 
-
-
-
 test:
     pattern:  /test/
     defaults: { _controller: TopxiaWebBundle:Test:index }
@@ -1374,10 +1371,3 @@ vip_renew:
 vip_upgrade:
     pattern: /vip/upgrade
 
-class_notes:
-    pattern:  /class/{classId}/note
-    defaults: { _controller: TopxiaWebBundle:ClassNote:list }
-
-class_members:
-    pattern:  /class/{classId}/member
-    defaults: { _controller: TopxiaWebBundle:ClassMember:list }

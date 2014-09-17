@@ -43,7 +43,7 @@ class AnalysisController extends BaseController
             array('createdTime', 'DESC'),
               $paginator->getOffsetCount(),
               $paginator->getPerPageCount()
-         );
+        );
 
         $registerData="";
         if($tab=="trend"){

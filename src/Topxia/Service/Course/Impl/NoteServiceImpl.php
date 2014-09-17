@@ -149,6 +149,44 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
     }
 
+    public function praise($noteId)
+    {
+        $user = $this->getCurrentUser();
+        $notePraise=array(
+            'noteId'=>$noteId,
+            'userId'=>$user['id'],
+            'truename'=>$user['truename'],
+            'createdTime'=>time()
+        );
+        return $this->getNotePraiseDao()->addNotePraise($notePraise);
+    }
+
+    public function canclePraise($noteId)
+    {
+        $user = $this->getCurrentUser();
+        $this->getNotePraiseDao()->deleteNotePraiseByNoteIdAndUserId($noteId,$user['id']);
+    }
+
+    public function findNotePraisesByUserId($userId)
+    {
+        return $this->getNotePraiseDao()->findNotePraisesByUserId($userId);
+    }
+
+    public function findNotePraisesByNoteId($noteId)
+    {
+        return $this->getNotePraiseDao()->findNotePraisesByNoteId($noteId);
+    }
+
+    public function findNotePraisesByNoteIds(array $noteIds)
+    {
+        $notePraises=array();
+        foreach ($noteIds as $noteId) {
+            $notePraiseArray=$this->getNotePraiseDao()->findNotePraisesByNoteId($noteId);
+            $notePraises[$noteId]=$notePraiseArray;
+        }
+        return $notePraises;
+    }
+
     // @todo HTML Purifier
     private function calculateContnentLength($content)
     {
@@ -159,6 +197,11 @@ class NoteServiceImpl extends BaseService implements NoteService
     private function getNoteDao()
     {
     	return $this->createDao('Course.CourseNoteDao');
+    }
+
+    private function getNotePraiseDao()
+    {
+        return $this->createDao('Course.CourseNotePraiseDao');
     }
 
    private function getCourseService()
