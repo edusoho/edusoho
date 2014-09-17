@@ -284,7 +284,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
 
         $result = $this->getCloudClient()->reconvertFile($file['hashId'], $params);
-        var_dump($result);exit();
 
         if (empty($result['persistentId'])) {
             return null;
