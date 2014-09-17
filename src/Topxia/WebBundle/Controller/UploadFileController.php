@@ -116,6 +116,7 @@ class UploadFileController extends BaseController
         if (empty($result['id'])) {
             throw new \RuntimeException('数据中id不能为空');
         }
+file_put_contents("/tmp/xxx", serialize($result));
         if (!empty($result['convertHash'])) {
             $file = $this->getUploadFileService()->getFileByConvertHash($result['convertHash']);
         } else {
@@ -128,7 +129,6 @@ class UploadFileController extends BaseController
         if (empty($file)) {
             throw new \RuntimeException('文件不存在');
         }
-file_put_contents("/tmp/xxx", 'xxx');
         $file = $this->getUploadFileService()->saveConvertResult($file['id'], $result);
 
         if (in_array($file['convertStatus'], array('success', 'error'))) {
