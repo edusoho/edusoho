@@ -92,15 +92,21 @@ define(function(require, exports, module) {
             $("#fileProgressBar"+index).data("progressbar",progressbar);
     	};
     }
+    function getFileExt(str) { 
+        var d=/\.[^\.]+$/.exec(str); 
+        return d; 
+    }
 
     exports.run = function() {
-		var chunkUpload = new ChunkUpload({
-	        element: '#selectFiles',
-            file_types : "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.ppt;*.pptx",
+
+        var fileExts = $("#selectFiles").data("fileExts");
+
+        var chunkUpload = new ChunkUpload({
+            element: '#selectFiles',
+            file_types : fileExts,
             file_size_limit : "1 GB",
             uploadOnSelected: false
-	    });
-
+        });
 		var switcher = null;
 		if ($('.quality-switcher').length > 0) {
 		    switcher = new VideoQualitySwitcher({
@@ -121,8 +127,36 @@ define(function(require, exports, module) {
         });
 
         chunkUpload.on("upload_success_handler", function(file, serverData, fileIndex) {
-        	if (this.element.data('callback')) {
-        		serverData = $.parseJSON(serverData);
+        	serverData = $.parseJSON(serverData);
+            var videoInfoUrl = this.element.data("getVideoInfo");
+            var audioInfoUrl = this.element.data("getAudioInfo");
+            var videoFileExts = "*.mp4;*.avi;*.flv;*.wmv;*.mov";
+            if(videoInfoUrl && videoFileExts.indexOf(getFileExt(file.name)[0])>-1){
+                $.ajax({
+                    url: videoInfoUrl,
+                    data: {key: serverData.key},
+                    async: false,
+                    success: function(data){
+                        serverData.length = data;
+                    }
+                });
+            } else if(audioInfoUrl && '*.mp3'.indexOf(getFileExt(file.name)[0])>-1){
+                $.ajax({
+                    url: audioInfoUrl,
+                    data: {key: serverData.key},
+                    async: false,
+                    success: function(data){
+                        serverData.length = data;
+                    }
+                });
+            } else if ('*.ppt;*.pptx'.indexOf(getFileExt(file.name)[0])>-1) {
+                serverData.mimeType='application/vnd.ms-powerpoint';
+            } else if ('*.pdf'.indexOf(getFileExt(file.name)[0])>-1) {
+                serverData.mimeType='application/pdf';
+            } else if ("*.doc;*.docx;".indexOf(getFileExt(file.name)[0])>-1){
+                serverData.mimeType='application/vnd.openxmlformats-officedocument';
+            }
+            if (this.element.data('callback')) {
                 $.post(this.element.data('callback'), serverData, function(response) {
         			$("div[role='progressbar']", "#fileProgressBar"+fileIndex).text("完成");
                 }, 'json');

@@ -21,11 +21,16 @@
 </style>
 <div>
   <button id="selectFiles" 
+
     data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
     data-target-type="{{targetType}}" 
     data-upload-mode="{{ storageSetting.upload_mode }}"
     data-hls-encrypted="{{ setting('developer.hls_encrypted', 1) }}"
     data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}"
+    data-get-video-info="{{path('uploadfile_cloud_get_media_info',{type:'video'})}}"
+    data-get-audio-info="{{path('uploadfile_cloud_get_media_info',{type:'audio'})}}"
+    data-file-exts="{{fileExts}}"
+
     class="btn_addPic btn btn-default btn-lg">
     <span>
         <i class="glyphicon glyphicon-plus uploadBtn">

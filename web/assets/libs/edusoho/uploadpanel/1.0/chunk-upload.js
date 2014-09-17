@@ -374,7 +374,6 @@ define(function(require, exports, module) {
 	            	if(fileScop.currentChunkIndex == 0 && fileScop.currentBlockIndex > 0){
             			fileScop.blockCtxs[fileScop.currentBlockIndex-1] = blkRet.ctx;
             		}
-	            	console.log(fileScop);
 	            	if(fileScop.currentChunkIndex == 0 && fileScop.currentBlockIndex < fileScop.blockCount){
 	            		self.mkBlock(fileScop, chunk);
 	            	} else if(fileScop.currentBlockIndex >= fileScop.blockCount){
