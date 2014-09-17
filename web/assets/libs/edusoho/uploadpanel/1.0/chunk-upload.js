@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 			defaultChunkSize: 1024 * 1024,
 			tableArray: null,
 			currentFile: null,
-			currentFileIndex: null,
+			currentFileIndex: 0,
 			destroy: false,
 			uploadOnSelected: true
 		},
@@ -234,7 +234,7 @@ define(function(require, exports, module) {
 	                	});
                 	}
                 	self.trigger("upload_success_handler", self.get("currentFile"), JSON.stringify(response), fileScop.fileIndex);
-                	fileScop.fileIndex--;
+                	fileScop.fileIndex++;
                 	FileScopStorage.del();
                 	self.set("currentFile",null);
                 	self.element.find("input[data-role='fileSelected']").val("");
@@ -389,16 +389,17 @@ define(function(require, exports, module) {
 	        _reader.readAsBinaryString(chunk);
 	    },
 		startUpload: function(fileIndex){
+			this.set("currentFileIndex",fileIndex);
 			var file=this.get("currentFile");
 			if(!file){
-				file = this.get("fileQueue").pop();
-				this.set("currentFile",file);
-				this.set("currentFileIndex",fileIndex);
+				file = this.get("fileQueue")[fileIndex];
 			}
-
 			if(file){
+				this.set("currentFile",file);
 				this.trigger("upload_start_handler",file);
 				this.upload(file, fileIndex);
+			} else {
+				this.trigger("allComplete");
 			}
 			
 		},
@@ -412,7 +413,7 @@ define(function(require, exports, module) {
 			var globalFiles = this.get("fileQueue");
 
 			for (var i = 0; i < files.length; i++) {
-                globalFiles.push(files[i]);
+                globalFiles[globalFiles.length] = files[i];
             }
             this.set("fileQueue", globalFiles);
 		},
@@ -443,7 +444,7 @@ define(function(require, exports, module) {
 				}
 			}
 
-			if(this.get("currentFile")){
+			if(this.get("currentFile") && this.get("uploadOnSelected")){
 				Notify.info('文件正在上传中，请等待本次上传完毕后，再上传。');
 				this.element.find("input[data-role='fileSelected']").val("");
 				return;
@@ -455,7 +456,7 @@ define(function(require, exports, module) {
 
 			if(this.get("uploadOnSelected")){
 				files = this.get("fileQueue");
-				this.trigger("upload", files.length-1);
+				this.trigger("upload", this.get("currentFileIndex"));
 			}
 		},
 		_initFileTypes: function(){
@@ -477,6 +478,7 @@ define(function(require, exports, module) {
 			this.set("destroy", true);
 		},
 		continueUpload: function(){
+			this.set("destroy", false);
 			this.startUpload(this.get("currentFileIndex"));
 		}
 

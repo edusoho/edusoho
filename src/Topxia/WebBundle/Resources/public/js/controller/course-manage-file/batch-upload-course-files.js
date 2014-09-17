@@ -11,9 +11,10 @@ define(function(require, exports, module) {
 
 	function stopUpload(chunkUpload){
 		var uploadButton = $("#btn_upload");
-    	uploadButton.find("span").text("继续");
+    	uploadButton.find("span").text("上传");
     	chunkUpload.stopUpload();
     	uploadButton.unbind("click");
+        $("#selectFiles").prop("disabled",false);
     	uploadButton.on("click", function(){
     		continueUpload(chunkUpload);
     	});
@@ -24,6 +25,7 @@ define(function(require, exports, module) {
     	uploadButton.find("span").text("暂停");
     	chunkUpload.continueUpload();
     	uploadButton.unbind("click");
+        $("#selectFiles").prop("disabled",true);
     	uploadButton.on("click", function(){
     		stopUpload(chunkUpload);
     	});
@@ -85,7 +87,7 @@ define(function(require, exports, module) {
           	tr += "</div>";
           	tr += "</td>";
 			tr += "</tr>";
-			$("#fileList table tbody").prepend($(tr));
+			$("#fileList table tbody").append($(tr));
 			var progressbar = new UploadProgressBar({
                 element: "#fileProgressBar"+index
             });
@@ -162,11 +164,20 @@ define(function(require, exports, module) {
                 }, 'json');
             }
         });
+        
+        chunkUpload.on("allComplete", function(){
+            stopUpload(chunkUpload);
+        });
 
 	    $("#btn_upload").on('click', function(){
+            var fileQueueLength = chunkUpload.get("fileQueue").length;
+            if(fileQueueLength==0){
+                Notify.danger('请先添加待上传文件！');
+                return ;
+            }
 	    	var uploadButton = $("#btn_upload");
 	    	$("#selectFiles").prop("disabled",true);
-	    	chunkUpload.trigger("upload", chunkUpload.get("fileQueue").length-1);
+	    	chunkUpload.trigger("upload", chunkUpload.get("currentFileIndex"));
 	    	uploadButton.unbind("click");
 	    	uploadButton.find("span").text("暂停");
 	    	uploadButton.on("click", function(){
@@ -174,7 +185,7 @@ define(function(require, exports, module) {
 	    	});
 	    });
 
-	    $(".modal").on("hide.bs.modal", function(){
+	    $("#modal").on("hide.bs.modal", function(){
             chunkUpload.destroy();
         });
 	}
