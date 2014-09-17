@@ -10,6 +10,7 @@ class ClassNoteController extends ClassBaseController
     public function listAction(Request $request,$classId)
     {
         $class = $this->tryViewClass($classId);
+        $user = $this->getCurrentUser();
         if (empty($class)) {
             throw $this->createNotFoundException("班级不存在，或已删除。");
         }
@@ -47,6 +48,10 @@ class ClassNoteController extends ClassBaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($notes, 'lessonId'));
         $courses=ArrayToolkit::index($courses, 'id');
+
+        $userPraises=$this->getNoteService()->findNotePraisesByUserId($user['id']);
+        $userPraises=ArrayToolkit::index($userPraises, 'noteId');
+        $notePraises=$this->getNoteService()->findNotePraisesByNoteIds(ArrayToolkit::column($notes, 'id'));    
         return $this->render("TopxiaWebBundle:ClassNote:note-list.html.twig", array(
             'class' => $class,
             'classNav'=>'notes',
@@ -54,8 +59,30 @@ class ClassNoteController extends ClassBaseController
             'paginator' => $paginator,
             'users'=>$users,
             'lessons'=>$lessons,
-            'courses'=>$courses
+            'courses'=>$courses,
+            'userPraises'=>$userPraises,
+            'notePraises'=>$notePraises
         ));
+    }
+
+    public function praiseAction(Request $request,$noteId)
+    {
+        $note=$this->getNoteService()->getNote($noteId);
+        if(empty($note)){
+            throw $this->createNotFoundException("笔记不存在，或已删除。");
+        }
+        $this->getNoteService()->praise($noteId);
+        return $this->createJsonResponse($this->getNoteService()->findNotePraisesByNoteId($noteId));
+    }
+
+    public function canclePraiseAction(Request $request,$noteId)
+    {
+        $note=$this->getNoteService()->getNote($noteId);
+        if(empty($note)){
+            throw $this->createNotFoundException("笔记不存在，或已删除。");
+        }
+        $this->getNoteService()->canclePraise($noteId);
+        return $this->createJsonResponse($this->getNoteService()->findNotePraisesByNoteId($noteId));
     }
 
 

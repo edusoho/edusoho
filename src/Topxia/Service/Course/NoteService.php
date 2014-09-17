@@ -22,4 +22,14 @@ interface NoteService
 	public function deleteNote($id);
 
 	public function deleteNotes(array $ids);
+
+    public function praise($noteId);
+
+    public function canclePraise($noteId);
+
+    public function findNotePraisesByUserId($userId);
+
+    public function findNotePraisesByNoteId($noteId);
+    
+    public function findNotePraisesByNoteIds(array $noteIds);
 }
