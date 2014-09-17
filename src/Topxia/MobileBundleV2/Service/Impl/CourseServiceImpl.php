@@ -44,25 +44,44 @@ class CourseServiceImpl extends BaseService implements CourseService
 			);
 	}
 
+	private function checkThreadPostByTeacher($courseId, $threadId)
+	{
+		$count = $this->controller->getThreadService()->getThreadPostCount($courseId, $threadId);
+		$posts = $this->controller->getThreadService()->findThreadPosts($courseId, $threadId, 'default', 0, $count);
+		
+		$users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
+		foreach ($users as $key => $user) {
+			if (in_array("ROLE_TEACHER", $user['roles'])) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private function filterThreads($threads, $courses, $users)
 	{
 		if (empty($threads)) {
             		return array();
         		}
 
-        		return array_map(function($thread) use ($courses, $users) {
-
-        			$thread["courseTitle"]  = "";
-        			if (isset($courses[$thread["courseId"]])) {
-        				$course = $courses[$thread["courseId"]];
-        				$thread["courseTitle"] = $course["title"];
-            			$thread['coutsePicture'] = $course["largePicture"];
+        		for ($i=0; $i < count($threads); $i++) { 
+        			$thread = $threads[$i];
+        			if (!isset($courses[$thread["courseId"]])) {
+        				unset($threads[$i]);
+        				continue;
         			}
+
+        			$course = $courses[$thread["courseId"]];
+        			$thread["courseTitle"] = $course["title"];
+            		$thread['coutsePicture'] = $course["largePicture"];
+
+        			$thread['isTeacherPost'] = $this->checkThreadPostByTeacher($thread["courseId"], $thread["id"]);
             		$thread['latestPostUser'] = $users[$thread["latestPostUserId"]];
             		$thread['createdTime'] = date('c', $thread['createdTime']);
             		$thread['latestPostTime'] = date('c', $thread['latestPostTime']);
-            		return $thread;
-        		}, $threads);
+            		$threads[$i] = $thread;
+        		}
+        		return $threads;
 	}
 
 	public function getThread()
