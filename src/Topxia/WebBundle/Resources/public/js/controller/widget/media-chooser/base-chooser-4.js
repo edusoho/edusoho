@@ -124,6 +124,9 @@ define(function(require, exports, module) {
             });
             this.set("uploadPanel", uploadPanel);
             this.set("uploaderProgressbar", uploadPanel.get("uploaderProgressbar"));
+        },
+        destroy: function(){
+            this.get("uploadPanel").destroy();
         }
 
     });
