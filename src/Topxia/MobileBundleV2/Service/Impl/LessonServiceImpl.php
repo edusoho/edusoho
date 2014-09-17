@@ -3,18 +3,96 @@ namespace Topxia\MobileBundleV2\Service\Impl;
 
 use Topxia\MobileBundleV2\Service\BaseService;
 use Topxia\MobileBundleV2\Service\LessonService;
+use Topxia\Common\ArrayToolkit;
 
 class LessonServiceImpl extends BaseService implements LessonService
 {
 
-	public function getMaterial()
+	public function getLessonMaterial()
 	{
 		$lessonId = $this->getParam("lessonId");
 		$start = (int) $this->getParam("start", 0);
 		$limit = (int) $this->getParam("limit", 10);
-		$lessonMaterials = $this->controller->getMaterialService()->findLessonMaterials($lessonId $start, $limit);
-		return $lessonMaterials;
+		$lessonMaterials = $this->controller->getMaterialService()->findLessonMaterials($lessonId, $start, 1000);
+		$files = $this->controller->getUploadFileService()->findFilesByIds(ArrayToolkit::column($lessonMaterials, 'fileId'));
+		return array(
+			"start"=>$start,
+			"limit"=>$limit,
+			"total"=>1000,
+			"data"=>$this->filterMaterial($lessonMaterials, $files);
+			)
 	}
+
+	private function filterMaterial($lessonMaterials, $files)
+	{
+		$newFiles = array();
+		foreach ($files as $key => $file) {
+			$newFiles[$file['id']] = $file;
+		}
+
+		return array_map(function($lessonMaterial) use ($newFiles){
+			$lessonMaterial['createdTime'] = date('c', $lessonMaterial['createdTime']);
+			$field = $lessonMaterial['fileId'];
+			$lessonMaterial['fileMime'] = $newFiles[$field]['type'];
+			return $lessonMaterial;
+		}, $lessonMaterials);
+	}
+
+	public function downMaterial()
+	{
+		$courseId = $this->getParam("courseId");
+		$materialId = $this->getParam("materialId");
+		list($course, $member) = $this->controller->getCourseService()->tryTakeCourse($courseId);
+
+        		if ($member && !$this->controller->getCourseService()->isMemberNonExpired($course, $member)) {
+            		return "course_materials";
+        		}
+
+        		if ($member && $member['levelId'] > 0) {
+            		if ($this->controller->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
+                				return "course_show";
+            		}
+        		}
+
+        		$material = $this->controller->getMaterialService()->getMaterial($courseId, $materialId);
+        		if (empty($material)) {
+            		throw "createNotFoundException";
+        		}		
+
+        		$file = $this->controller->getUploadFileService()->getFile($material['fileId']);
+        		if (empty($file)) {
+            		throw "createNotFoundException";
+        		}
+
+        		if ($file['storage'] == 'cloud') {
+            		$factory = new CloudClientFactory();
+            		$client = $factory->createClient();
+            		$client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
+        		} else {
+            		return $this->createPrivateFileDownloadResponse($request, $file);
+        		}
+	}
+
+	private function createPrivateFileDownloadResponse(Request $request, $file)
+    	{
+
+        		$response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
+        		$response->trustXSendfileTypeHeader();
+
+        		$file['filename'] = urlencode($file['filename']);
+        		if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+            		$response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+        		} else {
+            		$response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+        		}
+
+        		$mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
+        		if ($mimeType) {
+            		$response->headers->set('Content-Type', $mimeType);
+        		}
+
+        		return $response;
+    	}	
 
 	public function getCourseLessons()
 	{

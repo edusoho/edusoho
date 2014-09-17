@@ -5,5 +5,5 @@ interface LessonService
 {
 	public function getCourseLessons();
 	public function getLesson();
-	public function getMaterial();
+	public function getLessonMaterial();
 }

@@ -312,6 +312,11 @@ class MobileBaseController extends BaseController
         return $this->createJson($request, $error);
     }
 
+    public function getMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.MaterialService');
+    }
+    
     public function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
