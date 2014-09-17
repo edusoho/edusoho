@@ -2,11 +2,6 @@
 
 {% block title %} {{ class_name(class) }} - {{ parent() }}{% endblock %}
 
-{% block stylesheets %}
-  {{ parent() }}
-  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/class.css') }}" />
-{% endblock %}
-
 {% block content %}
 
 {% set classNav = classNav|default('threads') %}

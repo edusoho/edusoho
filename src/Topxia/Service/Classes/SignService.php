@@ -9,4 +9,6 @@ interface SignService
     public function classMemberSign($userId, $classId);
 
     public function isSignedToday($userId);
+
+    public function getSignsRecordsByMonth($userId, $startDay, $endDay);
 }

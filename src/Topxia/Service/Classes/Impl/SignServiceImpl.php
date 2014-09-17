@@ -55,6 +55,16 @@ class SignServiceImpl extends BaseService implements SignService
     	}	
     }
 
+    public function getSignsRecordsByMonth($userId, $startDay, $endDay)
+    {
+        $startTime = mktime(0, 0, 0, $startDay[0], $startDay[1], $startDay[2]);
+        $endTime = mktime(23, 59, 59, $endDay[0], $endDay[1], $endDay[2]);
+        $userSigns = $this->getUserSignDao()->
+            findUserSignByUserIdAndPeriod($userId, $startTime, $endTime);
+
+        return $userSigns;
+    }
+
     public function refreshUserSignRelated($userId, $todayRank)
     {
     	$userSignRelatedDao = $this->getUserSignRelatedDao();
@@ -125,3 +135,24 @@ class SignServiceImpl extends BaseService implements SignService
         return $this->createDao('Classes.ClassMemberDao');
     }
 }
+
+/*class UserSignSerialize
+{
+    public static function serialize(array $lesson)
+    {
+        
+        return $lesson;
+    }
+
+    public static function unserialize(array $lesson = null)
+    {
+        return $lesson;
+    }
+
+    public static function unserializes(array $lessons)
+    {
+        return array_map(function($lesson) {
+            return UserSignSerialize::unserialize($lesson);
+        }, $lessons);
+    }
+}*/
