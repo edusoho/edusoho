@@ -276,6 +276,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
         
         $file['convertParams'] = $this->encodeMetas($file['convertParams']);
+        var_dump($file['convertParams']);exit();
         $this->getUploadFileDao()->updateFile($file['id'],array('convertParams'=>$file['convertParams']));
 
         if ($pipeline) {

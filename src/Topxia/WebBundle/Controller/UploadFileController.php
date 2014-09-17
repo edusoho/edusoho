@@ -106,13 +106,13 @@ class UploadFileController extends BaseController
     public function cloudConvertCallback2Action(Request $request)
     {
         $result = $request->getContent();
-
         $result = preg_replace_callback(
           "(\\\\x([0-9a-f]{2}))i",
           function($a) {return chr(hexdec($a[1]));},
           $result
         );
 
+        file_put_contents('/tmp/aaa', serialize($result));
         $this->getLogService()->info('uploadfile', 'cloud_convert_callback', "文件云处理回调", array('result' => $result));
         $result = json_decode($result, true);
         $result = array_merge($request->query->all(), $result);
