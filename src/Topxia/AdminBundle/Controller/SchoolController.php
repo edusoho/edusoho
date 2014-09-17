@@ -284,6 +284,78 @@ class SchoolController extends BaseController
         return new Response(json_encode($response)); 
     }
 
+    public function studentListAction (Request $request,$classId)
+    {   
+        $class=$this->getClassesService()->getClass($classId);
+        $conditions = array(
+            'classId'=>$classId,
+            'roles'=>array('STUDENT')
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassesService()->searchClassMemberCount($conditions),
+            20
+        );
+        $classMembers = $this->getClassesService()->searchClassMembers(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($classMembers, 'userId'));
+        return $this->render('TopxiaAdminBundle:Student:student-list.html.twig', array(
+            'users' => $users ,
+            'class'=>$class,
+            'paginator' => $paginator
+        ));
+    }
+
+    public function studentImportAction(Request $request, $classId)
+    {
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
+            $formData['numbers'] = str_replace('，', ',', $formData['numbers']); 
+            $formData['numbers'] = str_replace("\n", ',', $formData['numbers']); 
+            $formData['numbers'] = str_replace("\r", ',', $formData['numbers']); 
+            $formData['numbers'] = str_replace(' ', ',', $formData['numbers']); 
+            $numbers = explode(',', $formData['numbers']);
+            $userIds=array();
+            foreach ($numbers as $number) {
+                $number=trim($number);
+                if($number==''){
+                    continue;
+                }
+                $user=$this->getUserService()->getUserByNumber($number);
+                if(empty($user) || in_array('ROLE_TEACHER', $user['roles'])){
+                    return $this->createJsonResponse('学号'.$number.'对应的用户不存在！');
+                }
+                $studentMember=$this->getClassesService()->getStudentMemberByUserIdAndClassId($user['id'],$classId);
+                
+                if(!empty($studentMember) && $studentMember['classId']!=$classId){
+                    return $this->createJsonResponse($user['truename'].'('.'学号'.$number.')'.'对应的用户已经属于其他班级！');
+                }
+                if(!empty($studentMember) && $studentMember['classId']==$classId){
+                    continue;
+                }
+
+                $userIds[]=$user['id'];
+            }
+            $this->getClassesService()->importStudents($classId,$userIds);
+            return $this->createJsonResponse(true);
+        }
+        return $this->render('TopxiaAdminBundle:Student:student-import-modal.html.twig', array(
+            'classId' => $classId
+        ));
+    }
+    
+    public function studentRemoveAction(Request $request, $userId ,$classId)
+    {
+        $this->getClassesService()->deleteClassMemberByUserId($userId);
+        $this->getClassesService()->updateClassStudentNum(-1,$classId);
+        return $this->createJsonResponse(true);
+    }
+
     private function savePicture(Request $request, $uploadFileName, $folder, $newFileName = '')
     {
         $result = array();
