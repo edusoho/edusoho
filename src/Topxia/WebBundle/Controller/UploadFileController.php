@@ -86,7 +86,6 @@ class UploadFileController extends BaseController
         }
 
         $fileInfo = $request->request->all();
-        var_dump($fileInfo);exit();
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
         $lazyConvert = $request->query->get('lazyConvert') ? true : false;
