@@ -31,10 +31,21 @@ class StudentController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
-            'users' => $users ,
+        $userMembers=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($users, 'id'));
+        $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($userMembers, 'classId'));
+        $userMembers=ArrayToolkit::index($userMembers, 'userId');
+        $classes=ArrayToolkit::index($classes, 'id');
+        return $this->render('TopxiaAdminBundle:Student:index.html.twig', array(
+            'users' => $users,
+            'userMembers' =>$userMembers,
+            'classes' =>$classes,
             'paginator' => $paginator
         ));
+    }
+
+    protected function getClassesService()
+    {
+        return $this->getServiceKernel()->createService('Classes.ClassesService');
     }
     
 }
