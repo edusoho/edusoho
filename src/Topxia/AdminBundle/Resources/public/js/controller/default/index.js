@@ -18,7 +18,7 @@ define(function(require, exports, module) {
             });
         }).trigger('change');
 
-        var $alert = $("#app-upgrade-alert");
+/*        var $alert = $("#app-upgrade-alert");
         $.post($alert.data('url'), function(result) {
             var count = parseInt(result);
             if (count == 0) {
@@ -27,10 +27,18 @@ define(function(require, exports, module) {
             var html = "<a href='" + $alert.data('upgradeUrl') + "'>亲爱的用户，系统现在有 <span class='badge'>" + count + " </span> 个更新,请及时去应用中心检查查看，体验最新的功能和改进。</a>";
             $alert.append(html);
             $alert.removeClass('hide');
-        });
+        });*/
 
         $.post($('#operation-analysis-title').data('url'),function(html){
             $('#operation-analysis-table').html(html);
+        });
+
+/*        $.post($('#open-message-title').data('url'),function(html){
+            $('#edusoho-open-message').html(html);
+        });*/
+
+        $.post($('#system-status-title').data('url'),function(html){
+            $('#system-status').html(html);
         });
 
         $.post($('#onlineNum').data('url'),function(res){

@@ -403,6 +403,10 @@ admin_setting_default:
     pattern:  /setting/default
     defaults: { _controller: TopxiaAdminBundle:Setting:default }
 
+admin_setting_share:
+    pattern:  /setting/share
+    defaults: { _controller: TopxiaAdminBundle:Setting:share }
+
 admin_setting_default_avatar:
     pattern:  /setting/default/avatar
     defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultAvatar }
@@ -920,3 +924,12 @@ admin_user_fields_edit:
 admin_user_fields_delete:
     pattern:  /user_fields/delete/{id}
     defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }
+
+admin_system_status:
+    pattern:  /system/status
+    defaults: { _controller: TopxiaAdminBundle:Default:systemStatus }
+
+admin_official_messages:
+    pattern:  /official/messages
+    defaults: { _controller: TopxiaAdminBundle:Default:officialMessages }
+

@@ -40,7 +40,10 @@
     <a href="{{ url('admin_setting_default') }}">系统默认设置
     </a>
   </li>
-
+  <li class="{% if submenu == 'share' %}active{% endif %}">
+    <a href="{{ url('admin_setting_share') }}">分享设置
+    </a>
+  </li>
   <li class="{% if submenu == 'customer_service' %}active{% endif %}" style="display:none;">
     <a href="{{ url('admin_customer_service') }}">在线客户服务
     </a>

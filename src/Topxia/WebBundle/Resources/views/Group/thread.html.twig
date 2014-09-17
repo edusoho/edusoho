@@ -18,7 +18,7 @@
       <div class="metas">
         发表于 {{ threadMain.createdTime|smart_time }}
         <span class="divider">•</span>
-        <span>{{ threadMain.hitNum }} 次查看</span>
+        <span>{{ threadMain.hitNum }} 次查看</span><div class="share pull-right" data-bdText="{{groupShareContent}}"></div>
       </div>
     </div>
     <div class="panel-body" id="post-action">
@@ -60,6 +60,7 @@
             <a id="stick"  title="置顶" class="btn btn-link"
             href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-circle-arrow-up"></span>  置顶</a>
           {% endif %}
+          
 {# 
           <a id="closeThread"  title="一但关闭话题将删除！确定关闭话题" class="btn btn-link"
           href="javascript:" data-url="{{path('group_thread_closeThread',{threadId:threadMain.id,memberId:user.id})}}">
