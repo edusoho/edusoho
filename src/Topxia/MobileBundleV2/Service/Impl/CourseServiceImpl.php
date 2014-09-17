@@ -126,7 +126,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
 		}
 
-		$posts = $this->controller->getThreadService()->findThreadElitePosts($courseId, $threadId, 'default', 0, 100);
+		$posts = $this->controller->getThreadService()->findThreadElitePosts($courseId, $threadId, 0, 100);
 		$users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 		
 		return $this->filterPosts($posts, $this->controller->filterUsers($users));
