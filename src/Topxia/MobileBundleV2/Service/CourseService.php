@@ -19,7 +19,7 @@ interface CourseService
 	public function getCourseNotice();
 	public function unLearnCourse();
 
-	public function getCourseTheads();
+	public function getCourseThreads();
 
 	/**
 	 *	courseId 课程id

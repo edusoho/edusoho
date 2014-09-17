@@ -13,7 +13,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->formData;
 	}
 
-	public function getCourseTheads()
+	public function getCourseThreads()
 	{
 		$user = $this->controller->getUserByToken($this->request);
 		$conditions = array(
@@ -53,7 +53,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				unset($threads[$i]);
 				continue;
 			}
-			$course = $courses[$threads['courseId']];
+			$course = $courses[$thread['courseId']];
         			$threads[$i] = $this->filterThread($thread, $course, null);
         		}
         		return $threads;
