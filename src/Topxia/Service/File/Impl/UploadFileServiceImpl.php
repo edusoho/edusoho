@@ -220,7 +220,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (empty($file)) {
             throw $this->createServiceException('file not exist.');
         }
-
+var_dump($file);exit();
         $convertHash = $this->getFileImplementorByFile($file)->reconvertFile($file, $convertCallback);
 
         $this->setFileConverting($file['id'], $convertHash);
