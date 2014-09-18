@@ -37,6 +37,11 @@ define(function(require, exports, module) {
         _createUpload: function($btn, progressbar) {
             var self = this;
 
+            function getFileExt(str) { 
+                var d=/\.[^\.]+$/.exec(str); 
+                return d; 
+            }
+
             var settings = $.extend({}, {
                 file_types : "*.*",
                 file_size_limit : "10 MB",
@@ -88,6 +93,9 @@ define(function(require, exports, module) {
                     progressbar.setComplete().hide();
                     serverData = $.parseJSON(serverData);
 
+                    if ('*.ppt;*.pptx'.indexOf(getFileExt(file.name)[0])>-1) {
+                        serverData.mimeType='application/vnd.ms-powerpoint';
+                    }
                     if ($btn.data('callback')) {
                         $.post($btn.data('callback'), serverData, function(response) {
                             var media = self._convertFileToMedia(response);
@@ -130,7 +138,7 @@ define(function(require, exports, module) {
         },
         
         _supportChunkUpload: function(){
-            if(this.get("uploaderSettings").file_types.indexOf("ppt")>-1 || typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
+            if(typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
                 return false;
             }
             return true;

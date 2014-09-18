@@ -125,7 +125,10 @@ define(function(require, exports, module) {
         chunkUpload.on("upload_progress_handler", function(file, bytesLoaded, bytesTotal, fileIndex) {
         	var percentage = Math.ceil((bytesLoaded / bytesTotal) * 100);
         	$("div[role='progressbar']","#fileProgressBar"+fileIndex).text("上传中");
-            $("#fileProgressBar"+fileIndex).data("progressbar").setProgress(percentage);
+            var progressbar = $("#fileProgressBar"+fileIndex).data("progressbar");
+            if(percentage > progressbar.get("percentage")){
+                progressbar.setProgress(percentage);
+            }
         });
 
         chunkUpload.on("upload_success_handler", function(file, serverData, fileIndex) {
