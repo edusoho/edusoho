@@ -56,3 +56,6 @@ parameters:
     cloud.video_player_watermark_plugin: "http://cdn.staticfile.org/GrindPlayerCN/1.0.2/Watermake-1.0.3.swf"
     cloud.video_player_fingerprint_plugin: "http://cdn.staticfile.org/GrindPlayerCN/1.0.2/Fingerprint-1.0.1.swf"
 
+    service_event_subscribers:
+        point: Topxia\Event\PointEventSubscriber
+

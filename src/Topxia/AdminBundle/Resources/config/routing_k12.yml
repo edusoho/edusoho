@@ -83,6 +83,10 @@ admin_student:
     pattern:  /student
     defaults: { _controller: TopxiaAdminBundle:Student:index }
 
+admin_student:
+    pattern:  /student/import
+    defaults: { _controller: TopxiaAdminBundle:Importer:validateStudents }
+
 admin_parent:
     pattern:  /parent
     defaults: { _controller: TopxiaAdminBundle:Parent:index }
