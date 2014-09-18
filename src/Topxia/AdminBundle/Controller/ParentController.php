@@ -48,22 +48,24 @@ class ParentController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
-            $userData['number'] = $formData['number'];
+            $userData['mobile'] = $formData['mobile'];
             $userData['email'] = $formData['email'];
-            $userData['nickname'] = $formData['number'];
             $userData['truename'] = $formData['truename'];
             $userData['password'] = $formData['password'];
             $userData['createdIp'] = $request->getClientIp();
+            $userData['number'] = 'p'.$formData['mobile'];
+            $userData['nickname'] = 'p'.$formData['mobile'];
+
+            
             $user = $this->getAuthService()->register($userData);
             $this->get('session')->set('registed_email', $user['email']);
+                
+            $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER','ROLE_PARENT'));
 
-            if(isset($formData['roles'])){
-                $roles[] = 'ROLE_TEACHER';
-                array_push($roles, 'ROLE_USER');
-                $this->getUserService()->changeUserRoles($user['id'], $roles);
+            foreach ($formData['numbers'] as $number) {
             }
-
-            $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['nickname']} ({$user['id']})");
+            
+            $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['truename']} ({$user['id']})");
 
             return $this->redirect($this->generateUrl('admin_user'));
         }

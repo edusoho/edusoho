@@ -19,9 +19,9 @@ define(function(require, exports, module) {
                 $('#user-create-btn').button('submiting').addClass('disabled');
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
-                    $modal.modal('hide');
+                    //$modal.modal('hide');
                     Notify.success('新用户添加成功');
-                    window.location.reload();
+                    //window.location.reload();
                 }).error(function(){
                     Notify.danger('新用户添加失败');
                 });
@@ -30,7 +30,7 @@ define(function(require, exports, module) {
         });
 
         $form.on('click', '#addNumberBtn', function() {
-            var $numberInputNum=$modal.find("#numberInputNum");
+            var $numberInputNum=$form.find("#numberInputNum");
             console.log($numberInputNum.val());
             $(this).before("<input type='text' id='number' name='numbers["+$numberInputNum.val()+"]' class='form-control' >");
             $numberInputNum.val(parseInt($numberInputNum.val())+1);
