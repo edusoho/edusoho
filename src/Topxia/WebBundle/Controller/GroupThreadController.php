@@ -184,7 +184,6 @@ class GroupThreadController extends BaseController
         }
 
         $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
-
         $postMember=$this->getUserService()->findUsersByIds($postMemberIds);
 
         $activeMembers=$this->getGroupService()->searchMembers(array('groupId'=>$id),
@@ -260,7 +259,13 @@ class GroupThreadController extends BaseController
             $this->getGroupService()->joinGroup($user,$groupId);
             }
 
+            $thread = $this->getThreadService()->getThread($threadId);
+
             $postContent=$request->request->all();
+            $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+            $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$groupId,'threadId'=>$thread['id']), true);
+            $this->getNotifiactionService()->notify($thread['userId'], 'postThread', "您的帖子 《<a href='{$threadUrl}' target='_blank'>{$thread['title']} </a>》有了  <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a>  的回复:".$postContent['content']);
+
             $content=array(
             'content'=>$postContent['content'],);
 
@@ -471,6 +476,11 @@ class GroupThreadController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function getNotifiactionService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
      private function filterSort($sort)
