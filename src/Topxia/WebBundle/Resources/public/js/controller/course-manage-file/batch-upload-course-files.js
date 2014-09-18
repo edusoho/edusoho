@@ -154,12 +154,8 @@ define(function(require, exports, module) {
                         serverData.length = data;
                     }
                 });
-            } else if ('*.ppt;*.pptx'.indexOf(getFileExt(file.name)[0])>-1) {
-                serverData.mimeType='application/vnd.ms-powerpoint';
-            } else if ('*.pdf'.indexOf(getFileExt(file.name)[0])>-1) {
-                serverData.mimeType='application/pdf';
-            } else if ("*.doc;*.docx;".indexOf(getFileExt(file.name)[0])>-1){
-                serverData.mimeType='application/vnd.openxmlformats-officedocument';
+            } else {
+                serverData.mimeType=file.type;
             }
             if (this.element.data('callback')) {
                 $.post(this.element.data('callback'), serverData, function(response) {
