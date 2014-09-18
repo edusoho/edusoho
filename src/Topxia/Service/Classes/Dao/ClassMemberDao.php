@@ -15,6 +15,8 @@ interface ClassMemberDao
     public function getStudentMemberByUserIdAndClassId($userId, $classId);
 
     public function findMembersByClassIdAndRole($classId, $role);
+
+    public function findClassMembersByUserIds(array $userIds);
 	
 	public function searchClassMembers($conditions, $orderBy, $start, $limit);
 
