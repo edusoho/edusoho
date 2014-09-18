@@ -20,4 +20,6 @@ interface LessonService
 	*	token
 	*/
 	public function unLearnLesson();
+
+	public function getLearnStatus();
 }
