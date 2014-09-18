@@ -36,7 +36,7 @@ define(function(require, exports, module) {
             } else {
                 url = $(this).data("html5Url");
             }
-            
+            $("#modal").html('');
             $("#modal").modal('show');
             $.get(url, function(html){
                 $("#modal").html(html);
