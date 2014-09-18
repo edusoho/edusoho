@@ -1,12 +1,6 @@
 <li class="item-chapter {% if chapter.type == 'unit' %}item-chapter-unit{% endif %} clearfix" id="chapter-{{ chapter.id }}" style="word-break: break-all;" >
 	<div class="item-content">第 <span class="number">{{ chapter.number }}</span> {% if chapter.type == 'unit' %}节{% else %}章{% endif %}： {{ chapter.title }}</div>
 	<div class="item-actions prs">
-
-		<button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="{{ path('course_manage_chapter_edit', {courseId:course.id, chapterId:chapter.id}) }}"><i class="glyphicon glyphicon-edit"></i></button>
-
-		<button class="btn btn-link delete-chapter-btn" title="删除" data-url="{{ path('course_manage_chapter_delete', {courseId:course.id, chapterId:chapter.id}) }}"><i class="glyphicon glyphicon-trash"></i></button>
-
-
 		<div class="btn-group">
 		<button class="btn btn-link dropdown-toggle" title="添加"  data-toggle="dropdown"><i class="glyphicon glyphicon-plus-sign"></i></button>
 		{% if chapter.type == 'unit' %}
@@ -35,5 +29,11 @@
 			    {% endif %}
 			</ul>
 		{% endif %}	
-			  </div>
+		</div>
+
+		<button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="{{ path('course_manage_chapter_edit', {courseId:course.id, chapterId:chapter.id}) }}"><i class="glyphicon glyphicon-edit"></i></button>
+
+		<button class="btn btn-link delete-chapter-btn" title="删除" data-url="{{ path('course_manage_chapter_delete', {courseId:course.id, chapterId:chapter.id}) }}"><i class="glyphicon glyphicon-trash"></i></button>
+
+		</div>
 </li>

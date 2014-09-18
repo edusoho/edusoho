@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var BaseChooser = require('./base-chooser-4');
+    var BaseChooser = require('./base-chooser-5');
     var Notify = require('common/bootstrap-notify');
     require('jquery.perfect-scrollbar');
 

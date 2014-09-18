@@ -2,8 +2,8 @@ define(function(require, exports, module) {
 
     require('swfupload');
     var Widget = require('widget');
-    var ChunkUpload = require('./chunk-upload');
-    var UploadProgressBar = require('./upload-progress-bar');
+    var ChunkUpload = require('edusoho.chunkupload');
+    var UploadProgressBar = require('edusoho.uploadProgressBar');
     var Notify = require('common/bootstrap-notify');
 
     var UploadPanel = Widget.extend({
