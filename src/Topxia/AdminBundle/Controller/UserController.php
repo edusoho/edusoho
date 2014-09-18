@@ -86,6 +86,19 @@ class UserController extends BaseController
         }
         return $this->createJsonResponse($response);
     }
+
+    public function mobileCheckAction(Request $request)
+    {
+        $mobile = $request->query->get('value');
+        $user=$this->getUserService()->getUserByMobile($mobile);
+        if(empty($user)){
+            $response = array('success' => true, 'message' => '该手机号可以使用');
+        }else{
+            $response = array('success' => false, 'message' => '手机号已存在!');
+        }
+        return $this->createJsonResponse($response);
+    }
+
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
@@ -115,7 +128,6 @@ class UserController extends BaseController
     public function editAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);
-
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
 
@@ -133,6 +145,7 @@ class UserController extends BaseController
             'user' => $user,
             'profile'=>$profile,
             'fields'=>$fields,
+            'type'=>$request->query->get('type')
         ));
     }
 

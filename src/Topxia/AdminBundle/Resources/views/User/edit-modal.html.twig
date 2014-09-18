@@ -2,7 +2,7 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}编辑用户信息{% endblock %}
+{% block title %}编辑{% if type=='student' %}学生{% elseif type=='teacher' %}教师{% endif %}信息{% endblock %}
 {% block body %}
 
 <form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_edit', {id:user.id}) }}">
@@ -61,7 +61,7 @@
      </div>
     </div>
 
-    <div class="row form-group">
+    {# <div class="row form-group">
         <div class="col-md-2 control-label"> 
           <label for="company">公司</label>
         </div>
@@ -77,7 +77,7 @@
       <div class="col-md-7 controls">
         <input type="text" id="job" name="job" class="form-control" value="{{profile.job}}">
      </div>
-    </div>
+    </div> #}
 
     <p></p>
     <div class="row form-group">

@@ -12,6 +12,8 @@ interface UserDao
 
 	public function findUserByNickname($nickname);
 
+	public function findUserByMobile($mobile);
+
 	public function findUsersByIds(array $ids);
 
 	public function searchUsers($conditions, $orderBy, $start, $limit);

@@ -14,6 +14,8 @@ interface UserService
 
     public function getUserByNumber($number);
 
+    public function getUserByMobile($mobile);
+
     public function findUsersByIds(array $ids);
 
     public function findUserProfilesByIds(array $ids);
