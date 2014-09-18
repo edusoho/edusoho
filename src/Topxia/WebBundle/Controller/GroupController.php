@@ -386,72 +386,94 @@ class GroupController extends BaseController
         ));
     }
 
+    private function checkPowerAll($id)
+    {   
+        $user=$this->getCurrentUser();
+
+        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true) return true;
+        if($this->getGroupService()->isOwner($id, $user['id'])) return true;
+        if($this->getGroupService()->isAdmin($id, $user['id'])) return true;
+        return false;
+    }
+
+    private function checkPower($id)
+    {   
+        $user=$this->getCurrentUser();
+
+        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true) return true;
+        if($this->getGroupService()->isOwner($id, $user['id'])) return true;
+        return false;
+    }
+
     public function deleteMembersAction(Request $request,$id)
     {
         $user=$this->getCurrentUser();
 
-        if ($this->getGroupService()->isOwner($id, $user['id']) || $this->getGroupService()->isAdmin($id, $user['id'])  || $this->get('security.context')->isGranted('ROLE_ADMIN')==true) {
-            $deleteMemberIds=$request->request->all();
-
-            if(isset($deleteMemberIds['memberId'])){
-
-                $deleteMemberIds=$deleteMemberIds['memberId'];
-
-                foreach ($deleteMemberIds as $memberId) {
-              
-                    $this->getGroupService()->deleteMemberByGroupIdAndUserId($id,$memberId);
-
-                }
-            }
-            return new Response('success');
+        if(!$this->checkPowerAll($id)){
+            return $this->createMessageResponse('info', '您没有权限!');
         }
-        return $this->createMessageResponse('info', '您没有权限!');
         
+        $deleteMemberIds=$request->request->all();
+
+        if(isset($deleteMemberIds['memberId'])){
+
+            $deleteMemberIds=$deleteMemberIds['memberId'];
+
+            foreach ($deleteMemberIds as $memberId) {
+          
+                $this->getGroupService()->deleteMemberByGroupIdAndUserId($id,$memberId);
+
+            }
+        }
+        return new Response('success');
     }
 
     public function setAdminAction(Request $request,$id)
     {
         $user=$this->getCurrentUser();
 
-        if ($this->getGroupService()->isOwner($id, $user['id']) || $this->get('security.context')->isGranted('ROLE_ADMIN')==true) {
-            $memberIds=$request->request->all();
-
-            if(isset($memberIds['memberId'])){
-
-                $memberIds=$memberIds['memberId'];
-
-                foreach ($memberIds as $memberId) {
-                    $member=$this->getGroupService()->getMemberByGroupIdAndUserId($id,$memberId);
-                    $this->getGroupService()->updateMember($member['id'],array('role'=>'admin'));
-
-                }
-            }
-            return new Response('success');
+        if (!$this->checkPower($id)) {
+            return $this->createMessageResponse('info', '您没有权限!');
         }
-        return $this->createMessageResponse('info', '您没有权限!');
+        
+        $memberIds=$request->request->all();
+
+        if(isset($memberIds['memberId'])){
+
+            $memberIds=$memberIds['memberId'];
+
+            foreach ($memberIds as $memberId) {
+                $member=$this->getGroupService()->getMemberByGroupIdAndUserId($id,$memberId);
+                $this->getGroupService()->updateMember($member['id'],array('role'=>'admin'));
+
+            }
+        }
+        return new Response('success');
 
     }
 
     public function removeAdminAction(Request $request,$id)
     {
         $user=$this->getCurrentUser();
-        if ($this->getGroupService()->isOwner($id, $user['id']) || $this->get('security.context')->isGranted('ROLE_ADMIN')==true) {
-            $memberIds=$request->request->all();
 
-            if(isset($memberIds['adminId'])){
-
-                $memberIds=$memberIds['adminId'];
-
-                foreach ($memberIds as $memberId) {
-                    $member=$this->getGroupService()->getMemberByGroupIdAndUserId($id,$memberId);
-                    $this->getGroupService()->updateMember($member['id'],array('role'=>'member'));
-
-                }
-            }
-
-            return new Response('success'); 
+        if (!$this->checkPower($id)) {
+            return $this->createMessageResponse('info', '您没有权限!');
         }
-        return $this->createMessageResponse('info', '您没有权限!');
+
+        $memberIds=$request->request->all();
+
+        if(isset($memberIds['adminId'])){
+
+            $memberIds=$memberIds['adminId'];
+
+            foreach ($memberIds as $memberId) {
+                $member=$this->getGroupService()->getMemberByGroupIdAndUserId($id,$memberId);
+                $this->getGroupService()->updateMember($member['id'],array('role'=>'member'));
+
+            }
+        }
+
+        return new Response('success');
 
     }
 
@@ -461,17 +483,17 @@ class GroupController extends BaseController
 
         $group = $this->getGroupService()->getGroup($id);
 
-        if ($this->getGroupService()->isOwner($id, $user['id']) || $this->getGroupService()->isAdmin($id, $user['id']) || $this->get('security.context')->isGranted('ROLE_ADMIN')==true) {
-            return $this->render("TopxiaWebBundle:Group:setting-info.html.twig", array(
+        if (!$this->checkPowerAll($id)) {
+            return $this->createMessageResponse('info', '您没有权限!');
+        }
+
+        return $this->render("TopxiaWebBundle:Group:setting-info.html.twig", array(
                     'groupinfo' => $group,
                     'is_groupmember' => $this->getGroupMemberRole($id),
                     'id'=>$id,
                     'logo'=>$group['logo'],
                     'backgroundLogo'=>$group['backgroundLogo'],)
-            );   
-        }
-        return $this->createMessageResponse('info', '您没有权限!');
-       
+        );
 
     }
 
@@ -481,55 +503,53 @@ class GroupController extends BaseController
         $group = $this->getGroupService()->getGroup($id);
         $currentUser = $this->getCurrentUser();
 
-        if ($this->getGroupService()->isOwner($id, $currentUser['id']) || $this->getGroupService()->isAdmin($id, $currentUser['id'])  || $this->get('security.context')->isGranted('ROLE_ADMIN')==true) {
-            $filename = $file;
-            $filename = str_replace('!', '.', $filename);
-            $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-
-            $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-            
-            if($request->getMethod() == 'POST') {
-
-                $options = $request->request->all();
-                if($request->query->get('page')=="backGroundLogoCrop"){
-                   $this->getGroupService()->changeGroupBackgroundLogo($id, $pictureFilePath, $options);
-                }else{
-                   $this->getGroupService()->changeGroupLogo($id, $pictureFilePath, $options);
-                }
-              
-            return $this->redirect($this->generateUrl('group_show', array(
-                        'id'=>$id,
-                        )));
-            }
-            try {
-
-                $imagine = new Imagine(); 
-                $image = $imagine->open($pictureFilePath);
-            } catch (\Exception $e) {          
-                @unlink($pictureFilePath);
-                return $this->createMessageResponse('info', '该文件为非图片格式文件，请重新上传。');
-            }
-
-            $naturalSize = $image->getSize();
-            if($request->query->get('page')=="backGroundLogoCrop"){
-                  $scaledSize = $naturalSize->widen(1070)->heighten(240);
-            }else{
-                  $scaledSize = $naturalSize->widen(270)->heighten(270);
-            }
-          
-            $pictureUrl = 'tmp/' . $filename;
-
-            return $this->render('TopxiaWebBundle:Group:setting-logo-crop.html.twig',array(
-                'groupinfo' => $group,
-                'is_groupmember' => $this->getGroupMemberRole($id),
-                'pictureUrl' => $pictureUrl,
-                'naturalSize' => $naturalSize,
-                'scaledSize' => $scaledSize,));    
+        if (!$this->checkPowerAll($id)) {
+            return $this->createMessageResponse('info', '您没有权限!');
         }
 
-        return $this->createMessageResponse('info', '您没有权限!');
+        $filename = $file;
+        $filename = str_replace('!', '.', $filename);
+        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
 
+        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
         
+        if($request->getMethod() == 'POST') {
+
+            $options = $request->request->all();
+            if($request->query->get('page')=="backGroundLogoCrop"){
+               $this->getGroupService()->changeGroupBackgroundLogo($id, $pictureFilePath, $options);
+            }else{
+               $this->getGroupService()->changeGroupLogo($id, $pictureFilePath, $options);
+            }
+          
+        return $this->redirect($this->generateUrl('group_show', array(
+                    'id'=>$id,
+                    )));
+        }
+        try {
+
+            $imagine = new Imagine(); 
+            $image = $imagine->open($pictureFilePath);
+        } catch (\Exception $e) {          
+            @unlink($pictureFilePath);
+            return $this->createMessageResponse('info', '该文件为非图片格式文件，请重新上传。');
+        }
+
+        $naturalSize = $image->getSize();
+        if($request->query->get('page')=="backGroundLogoCrop"){
+              $scaledSize = $naturalSize->widen(1070)->heighten(240);
+        }else{
+              $scaledSize = $naturalSize->widen(270)->heighten(270);
+        }
+      
+        $pictureUrl = 'tmp/' . $filename;
+
+        return $this->render('TopxiaWebBundle:Group:setting-logo-crop.html.twig',array(
+            'groupinfo' => $group,
+            'is_groupmember' => $this->getGroupMemberRole($id),
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,));
 
     }
     
@@ -564,8 +584,11 @@ class GroupController extends BaseController
         $user=$this->getCurrentUser();
 
         $group = $this->getGroupService()->getGroup($id);
-        if ($this->getGroupService()->isOwner($id, $user['id']) || $this->getGroupService()->isAdmin($id, $user['id']) || $this->get('security.context')->isGranted('ROLE_ADMIN')==true) {
-            if ($request->getMethod() == 'POST') {
+        if (!$this->checkPowerAll($id)) {
+            return $this->createMessageResponse('info', '您没有权限!');
+        }
+
+        if ($request->getMethod() == 'POST') {
 
             $fileName=$this->setLogo($request,$user);
             
@@ -574,19 +597,17 @@ class GroupController extends BaseController
                 'id'=>$id,
                 'page'=>'logoCrop',
                 'type'=>'logo'
-                    )
-                ));
-            }
-
-            return $this->render("TopxiaWebBundle:Group:setting-logo.html.twig", array(
-                    'groupinfo' => $group,
-                    'is_groupmember' => $this->getGroupMemberRole($id),
-                    'id'=>$id,
-                    'logo'=>$group['logo'],
-                    'backgroundLogo'=>$group['backgroundLogo'],)
-            );
+                )
+            ));
         }
-        return $this->createMessageResponse('info', '您没有权限!');
+
+        return $this->render("TopxiaWebBundle:Group:setting-logo.html.twig", array(
+                'groupinfo' => $group,
+                'is_groupmember' => $this->getGroupMemberRole($id),
+                'id'=>$id,
+                'logo'=>$group['logo'],
+                'backgroundLogo'=>$group['backgroundLogo'],)
+        );
 
     }
      public function setGroupBackgroundLogoAction(Request $request,$id)
@@ -594,8 +615,10 @@ class GroupController extends BaseController
         $user=$this->getCurrentUser();
         
         $group = $this->getGroupService()->getGroup($id);
-        if ($this->getGroupService()->isOwner($id, $user['id']) || $this->getGroupService()->isAdmin($id, $user['id'])  || $this->get('security.context')->isGranted('ROLE_ADMIN')==true) {
-            if ($request->getMethod() == 'POST') {
+        if (!$this->checkPowerAll($id)) {
+            return $this->createMessageResponse('info', '您没有权限!');
+        }
+        if ($request->getMethod() == 'POST') {
 
             $fileName=$this->setLogo($request,$user);
 
@@ -604,19 +627,16 @@ class GroupController extends BaseController
                 'id'=>$id,
                 'page'=>'backGroundLogoCrop',
                 'type'=>'background',
-                    )
-                ));       
-            }
-
-            return $this->render("TopxiaWebBundle:Group:setting-background.html.twig", array(
-                    'groupinfo' => $group,
-                    'is_groupmember' => $this->getGroupMemberRole($id),
-                    'id'=>$id,
-                    'logo'=>$group['backgroundLogo'],)
-            ); 
+                )
+            ));       
         }
 
-        return $this->createMessageResponse('info', '您没有权限!');
+        return $this->render("TopxiaWebBundle:Group:setting-background.html.twig", array(
+                'groupinfo' => $group,
+                'is_groupmember' => $this->getGroupMemberRole($id),
+                'id'=>$id,
+                'logo'=>$group['backgroundLogo'],)
+        );
 
     }
     
@@ -691,21 +711,22 @@ class GroupController extends BaseController
     public function groupEditAction(Request $request,$id)
     {
         $currentUser = $this->getCurrentUser();
-        if ($this->getGroupService()->isOwner($id, $currentUser['id']) || $this->getGroupService()->isAdmin($id, $currentUser['id']) || $this->get('security.context')->isGranted('ROLE_ADMIN')==true) {
-            $groupinfo=$request->request->all();
-            $group=array();
-            if($groupinfo){
-                $group=array(
-                'title'=>$groupinfo['group']['grouptitle'],
-                'about'=>$groupinfo['group']['about']); 
-            }        
-            $this->getGroupService()->updateGroup($id,$group);
-      
-            return $this->redirect($this->generateUrl('group_show', array(
-                'id'=>$id,
-            )));
+        if (!$this->checkPowerAll($id)) {
+            return $this->createMessageResponse('info', '您没有权限!');
         }
-        return $this->createMessageResponse('info', '您没有权限!');
+
+        $groupinfo=$request->request->all();
+        $group=array();
+        if($groupinfo){
+            $group=array(
+            'title'=>$groupinfo['group']['grouptitle'],
+            'about'=>$groupinfo['group']['about']); 
+        }        
+        $this->getGroupService()->updateGroup($id,$group);
+  
+        return $this->redirect($this->generateUrl('group_show', array(
+            'id'=>$id,
+        )));
     }
    
     private function getThreadService()

@@ -65,31 +65,32 @@ class GroupThreadController extends BaseController
         }
 
         $thread=$this->getThreadService()->getThread($threadId);
-        if($thread['userId']==$user['id'] || $this->getGroupMemberRole($id)==3 || $this->getGroupMemberRole($id)==2 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true){
-            $thread=$this->getThreadService()->getThread($threadId);
 
-            if($request->getMethod()=="POST"){
-            $thread = $request->request->all();
-            $fields=array(
-                    'title'=>$thread['thread']['title'],
-                    'content'=>$thread['thread']['content'],);
-            $thread=$this->getThreadService()->updateThread($threadId,$fields);
-                
-            return $this->redirect($this->generateUrl('group_thread_show', array(
-                'id'=>$id,
-                'threadId'=>$threadId,
-                )));
-                
-            }
-
-            return $this->render('TopxiaWebBundle:Group:add-thread.html.twig',array(
-                'id'=>$id,
-                'groupinfo'=>$groupinfo,
-                'thread'=>$thread,
-                'is_groupmember' => $this->getGroupMemberRole($id)));
+        if(!$this->checkPower($id,$thread)){
+            return $this->createMessageResponse('info','您没有权限编辑');
         }
-        return $this->createMessageResponse('info','您没有权限编辑');
-       
+
+        $thread=$this->getThreadService()->getThread($threadId);
+
+        if($request->getMethod()=="POST"){
+        $thread = $request->request->all();
+        $fields=array(
+                'title'=>$thread['thread']['title'],
+                'content'=>$thread['thread']['content'],);
+        $thread=$this->getThreadService()->updateThread($threadId,$fields);
+            
+        return $this->redirect($this->generateUrl('group_thread_show', array(
+            'id'=>$id,
+            'threadId'=>$threadId,
+            )));
+            
+        }
+
+        return $this->render('TopxiaWebBundle:Group:add-thread.html.twig',array(
+            'id'=>$id,
+            'groupinfo'=>$groupinfo,
+            'thread'=>$thread,
+            'is_groupmember' => $this->getGroupMemberRole($id)));  
     }
 
     public function checkUserAction(Request $request)
@@ -518,6 +519,16 @@ class GroupThreadController extends BaseController
 
        return 0;
     }
-    
+
+    private function checkPower($id,$thread)
+    {   
+        $user=$this->getCurrentUser();
+
+        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true) return true;
+        if($this->getGroupService()->isOwner($id, $user['id'])) return true;
+        if($this->getGroupService()->isAdmin($id, $user['id'])) return true;
+        if($thread['userId']==$user['id']) return true;
+        return false;
+    }
 
 }
