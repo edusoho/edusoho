@@ -31,7 +31,7 @@ define(function(require, exports, module) {
 
         $("button", ".panel-heading").on('click',function(){
             var url="";
-            if(typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
+            if($(this).data("storage")!='cloud' || typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
                 url = $(this).data("normalUrl");
             } else {
                 url = $(this).data("html5Url");

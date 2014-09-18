@@ -44,6 +44,8 @@ class CourseFileManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
+        $storageSetting = $this->getSettingService()->get("storage");
+
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
             'type' => $type,
             'course' => $course,
@@ -51,6 +53,7 @@ class CourseFileManageController extends BaseController
             'users' => ArrayToolkit::index($users, 'id'),
             'paginator' => $paginator,
             'now' => time(),
+            'storageSetting' => $storageSetting
         ));
     }
 

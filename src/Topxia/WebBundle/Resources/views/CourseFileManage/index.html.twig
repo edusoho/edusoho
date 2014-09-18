@@ -15,7 +15,9 @@
       {% if type == 'courselesson' %}    
       <button class="btn btn-info btn-sm pull-right"
       data-html5-url="{{ path('course_manage_batch_upload_course_files', {id:course.id, targetType:'courselesson'}) }}"
-      data-normal-url="{{ path('course_manage_upload_course_files', {id:course.id, targetType:'courselesson'}) }}">
+      data-normal-url="{{ path('course_manage_upload_course_files', {id:course.id, targetType:'courselesson'}) }}"
+      data-storage="{{storageSetting.upload_mode}}"
+      >
         <i class="glyphicon glyphicon-cloud-upload"></i>上传课时文件
       </button>
 
@@ -23,6 +25,7 @@
       <button class="btn btn-info btn-sm pull-right" 
         data-html5-url="{{ path('course_manage_batch_upload_course_files', {id:course.id, targetType:'coursematerial'}) }}"
         data-normal-url="{{ path('course_manage_upload_course_files', {id:course.id, targetType:'coursematerial'}) }}"
+        data-storage="{{storageSetting.upload_mode}}"
         >
         <i class="glyphicon glyphicon-cloud-upload"></i>上传备用资料文件
       </button>
