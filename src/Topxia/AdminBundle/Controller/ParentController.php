@@ -63,8 +63,9 @@ class ParentController extends BaseController
             $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER','ROLE_PARENT'));
 
             foreach ($formData['numbers'] as $number) {
+                $this->getUserService()->getUserByNumber($number);
             }
-            
+
             $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['truename']} ({$user['id']})");
 
             return $this->redirect($this->generateUrl('admin_user'));

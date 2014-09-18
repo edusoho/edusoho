@@ -17,7 +17,7 @@ class Version20140918153845 extends AbstractMigration
 				  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 				  `fromId` int(10) unsigned NOT NULL ,
 				  `toId` int(10) unsigned NOT NULL ,
-				  `type` enum('familyRelation') NOT NULL,
+				  `type` enum('family') NOT NULL,
 				  `relation` varchar(255) NOT NULL,
 				  `createdTime` int(10) unsigned NOT NULL,
 				  PRIMARY KEY (`id`)
