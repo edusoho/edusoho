@@ -65,6 +65,7 @@
         {% if storageSetting.upload_mode == 'cloud' %}
           <li>支持<strong>mp3, mp4, avi, flv, wmv, mov, ppt, pptx</strong>格式的文件上传，文件大小不能超过<strong>1 GB</strong>。</li>
           <li>视频将上传到<strong>云服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
+          <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
         {% else %}
           <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
           <li>视频将上传到<strong>网站服务器</strong>，如需使用云视频，请联系EduSoho官方购买。</li>
@@ -101,6 +102,7 @@
         <li>支持常见文档、图片、音视频、压缩包文件格式。{% if storageSetting.upload_mode == 'local' %}且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。{% endif %}</li>
         {% if storageSetting.upload_mode == 'cloud' %}
           <li>文件将上传到<strong>云服务器</strong>。</li>
+          <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
         {% else %}
           <li>文件将上传到<strong>网站服务器</strong>，如需使用云视频，请联系EduSoho官方购买。</li>
         {% endif %}
