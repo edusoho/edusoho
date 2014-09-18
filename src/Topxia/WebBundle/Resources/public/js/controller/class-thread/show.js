@@ -7,7 +7,7 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var userSign = new UserSign({
-            element: '#sign',
+            element: '#class-sign',
         });
 
         var editor = EditorFactory.create('#post-content-field', 'simple', {extraFileUploadParams:{group:'course'}});

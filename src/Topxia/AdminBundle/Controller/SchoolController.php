@@ -67,6 +67,35 @@ class SchoolController extends BaseController
         ));
     }
 
+    public function pointSettingAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $point = $request->request->all();
+            $this->getSettingService()->set('point', $point);
+            $this->getLogService()->info('point', 'update_settings', "更新学分设置", $point);
+            $this->setFlashMessage('success', '学分设置已保存！');
+        }
+
+        $point = $this->getSettingService()->get('point', array());
+
+        $default = array(
+            'accomplishLesson' => 2,
+            'shareNote' => 3,
+            'NoteByliked' => 2,
+            'accomplishTest' => 3,
+            'accomplishHomework' => 3,
+            'accomplishPractice' => 3,
+            'accomplishSign' => 1,
+        );
+
+        $point = array_merge($default, $point);
+
+      
+        return $this->render('TopxiaAdminBundle:School:point-setting.html.twig', array(
+            'point' => $point
+        ));
+    }
+
     public function classEditorAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {

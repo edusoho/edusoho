@@ -1,0 +1,113 @@
+{% extends 'TopxiaAdminBundle:School:layout.html.twig' %}
+
+{% block title %}学分设置 - {{ parent() }}{% endblock %}
+
+{% set menu = 'pointSetting' %}
+{% set script_controller = 'school/school-setting' %}
+
+{% block main %}
+
+
+
+<div class="page-header"><h1>学分设置</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" id="point-form" method="post">
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="accomplishLesson">学习完一个课时得</label>
+    </div>
+    <div class="col-md-4 controls">
+      <input type="text" id="accomplishLesson" name="accomplishLesson" class="form-control" value="{{ point.accomplishLesson }}">
+    </div>
+    <div class="col-md-1 radios" style="margin-left: -20px;">
+      <span class="">分</span>
+    </div>
+    
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="shareNote">分享笔记得</label>
+    </div>
+    <div class="col-md-4 controls">
+      <input type="text" id="shareNote" name="shareNote" class="form-control" value="{{ point.shareNote }}">
+    </div>
+    <div class="col-md-1 radios" style="margin-left: -20px;">
+      <span class="">分</span>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="NoteByliked">笔记被赞得</label>
+    </div>
+    <div class="col-md-4 controls">
+      <input type="text" id="NoteByliked" name="NoteByliked" class="form-control" value="{{ point.NoteByliked }}">
+    </div>
+    <div class="col-md-1 radios" style="margin-left: -20px;">
+      <span class="">分</span>
+    </div>
+  </div>
+  
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="accomplishTest">完成考试得</label>
+    </div>
+    <div class="col-md-4 controls">
+      <input type="text" id="accomplishTest" name="accomplishTest" class="form-control" value="{{ point.accomplishTest }}">
+    </div>
+    <div class="col-md-1 radios" style="margin-left: -20px;">
+      <span class="">分</span>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="accomplishHomework">完成作业得</label>
+    </div>
+    <div class="col-md-4 controls">
+      <input type="text" id="accomplishHomework" name="accomplishHomework" class="form-control" value="{{ point.accomplishHomework }}">
+    </div>
+    <div class="col-md-1 radios" style="margin-left: -20px;">
+      <span class="">分</span>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="accomplishPractice">完成练习得</label>
+    </div>
+    <div class="col-md-4 controls">
+      <input type="text" id="accomplishPractice" name="accomplishPractice" class="form-control" value="{{ point.accomplishPractice }}">
+    </div>
+    <div class="col-md-1 radios" style="margin-left: -20px;">
+      <span class="" >分</span>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="accomplishSign">每日签到得</label>
+    </div>
+    <div class="col-md-4 controls">
+      <input type="text" id="accomplishSign" name="accomplishSign" class="form-control" value="{{ point.accomplishSign }}">
+    </div>
+    <div class="col-md-1 radios" style="margin-left: -20px;">
+      <span class="">分</span>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="controls col-md-offset-2 col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}

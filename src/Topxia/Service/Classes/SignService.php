@@ -8,7 +8,11 @@ interface SignService
 {
     public function classMemberSign($userId, $classId);
 
-    public function isSignedToday($userId);
+    public function isSignedToday($userId, $classId);
 
-    public function getSignsRecordsByMonth($userId, $startDay, $endDay);
+    public function getSignsRecordsByMonth($userId, $classId, $startDay, $endDay);
+
+    public function getClassMemberSignStatistics($userId, $classId);
+
+    public function getClassSignStatistics($classId);
 }
