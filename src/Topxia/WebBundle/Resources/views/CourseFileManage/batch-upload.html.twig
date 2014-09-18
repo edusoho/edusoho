@@ -23,6 +23,7 @@
   <div id="selectFiles" 
       data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
       data-target-type="{{targetType}}" 
+      data-target-id="{{targetId}}"
       data-upload-mode="{{ storageSetting.upload_mode }}"
       data-hls-encrypted="{{ setting('developer.hls_encrypted', 1) }}"
       data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}"

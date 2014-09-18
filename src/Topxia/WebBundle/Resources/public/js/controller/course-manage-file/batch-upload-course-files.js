@@ -60,6 +60,13 @@ define(function(require, exports, module) {
             data: data, 
             cache: false,
             success: function(response, status, jqXHR) {
+                var paramsKey = {};
+                paramsKey.data=data;
+                paramsKey.targetType=targetType;
+                paramsKey.targetId=self.element.data('targetId');
+
+                response.postParams.paramsKey = JSON.stringify(paramsKey);
+
                 self.setUploadURL(response.url);
                 self.setPostParams(response.postParams);
             },

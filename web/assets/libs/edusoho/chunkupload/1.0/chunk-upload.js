@@ -69,7 +69,7 @@ define(function(require, exports, module) {
 	            	var savedFileInfo = FileScopStorage.get();
 	            	if(savedFileInfo){
 	            		var savedFileInfoArray = JSON.parse(savedFileInfo);
-	            		if(savedFileInfoArray.key == fileScop.key){
+	            		if(savedFileInfoArray.key == fileScop.key && savedFileInfoArray.postParams.paramsKey==fileScop.postParams.paramsKey){
 	            			fileScop = $.extend(fileScop, savedFileInfoArray);
 	            			self.uploadAfterGetCrc(fileScop, fileScop.blkRet);
 	            			return;

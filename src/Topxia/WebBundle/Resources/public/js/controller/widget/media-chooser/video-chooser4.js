@@ -27,6 +27,7 @@ define(function(require, exports, module) {
                         data.convertor = 'HLSVideo';
                     }
                 }
+                var self = this;
                 $.ajax({
                     url: this.element.data('paramsUrl'),
                     async: false,
@@ -34,6 +35,13 @@ define(function(require, exports, module) {
                     data: data, 
                     cache: false,
                     success: function(response, status, jqXHR) {
+                        var paramsKey = {};
+                        paramsKey.data=data;
+                        paramsKey.targetType=self.element.data('targetType');
+                        paramsKey.targetId=self.element.data('targetId');
+
+                        response.postParams.paramsKey = JSON.stringify(paramsKey);
+
                         uploader.setUploadURL(response.url);
                         uploader.setPostParams(response.postParams);
                     },
