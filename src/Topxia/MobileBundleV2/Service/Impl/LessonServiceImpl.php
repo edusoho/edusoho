@@ -95,6 +95,34 @@ class LessonServiceImpl extends BaseService implements LessonService
         		return $response;
     	}	
 
+    	public function learnLesson()
+    	{
+    		$courseId = $this->getParam("courseId");
+		$lessonId = $this->getParam("lessonId");
+    		$user = $this->controller->getuserByToken($this->request);
+        		if (!$user->isLogin()) {
+            		return $this->createErrorResponse('not_login', "您尚未登录！");
+        		}
+
+        		$this->controller->getCourseService()->finishLearnLesson($courseId, $lessonId);
+
+        		return $this->createJson($request, true);
+    	}
+
+    	public function unLearnLesson()
+    	{
+    		$courseId = $this->getParam("courseId");
+		$lessonId = $this->getParam("lessonId");
+    		$user = $this->controller->getuserByToken($this->request);
+        		if (!$user->isLogin()) {
+            		return $this->createErrorResponse('not_login', "您尚未登录！");
+        		}
+
+        		$this->controller->getCourseService()->cancelLearnLesson($courseId, $lessonId);
+
+        		return $this->createJson($request, true);
+    	}
+
 	public function getCourseLessons()
 	{
 		$token = $this->controller->getUserToken($this->request);
