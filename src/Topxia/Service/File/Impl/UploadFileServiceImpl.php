@@ -203,7 +203,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'convertHash' => $convertHash,
             'updatedTime' => time(),
         );
-var_dump($fields);exit();
         $this->getUploadFileDao()->updateFile($id, $fields);
 
         return $this->getFile($id);

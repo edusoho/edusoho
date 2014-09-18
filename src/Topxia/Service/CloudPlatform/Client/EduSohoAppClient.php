@@ -121,7 +121,6 @@ class EduSohoAppClient implements AppClient
 
     private function download($url)
     {
-        // var_dump($url);
         $filename = md5($url) . '_' . time();
         $filepath = $this->tmpDir . DIRECTORY_SEPARATOR . $filename;
 
