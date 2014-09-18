@@ -11,12 +11,12 @@ class SignServiceImpl extends BaseService implements SignService
     {
     	$member = $this->getClassMemberDao()->getMemberByUserIdAndClassId($userId, $classId);
     	if(empty($member)) {
-    		throw $this->createServiceException(sprintf('%s 非 %s 班成员，不能签到.', $userId, $classId));
+    		throw $this->createNotFoundException(sprintf('%s 非 %s 班成员，不能签到.', $userId, $classId), 404);
     	}
 
     	$isSignedToday = $this->isSignedToday($userId, $classId); 
     	if($isSignedToday) {
-    		throw $this->createServiceException('今日已签到!');
+    		throw $this->createServiceException('今日已签到!', 403);
     	}
 
     	$ClassMemberSign = array();

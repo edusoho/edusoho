@@ -28,6 +28,7 @@ class SignController extends BaseController
 
 		$userSigns = $this->getSignService()->getSignsRecordsByMonth($userId, $classId, $startDay, $endDay);
 		$result = array();
+		$result['records'] = array();
 		if($userSigns) {
 			foreach ($userSigns as $userSign) {
 			$result['records'][] = date('d',$userSign['createdTime']);

@@ -68,8 +68,24 @@ define(function(require, exports, module) {
             return new Date(year + '/' + month + '/' + day).getDay();
         },
         sign: function() {
-            this.showSignTable();
-            this.initTable(true);
+            var self = this;
+            var today = new Date().getDate();
+            $.ajax({
+                url:this.get('signUrl'),
+                dataType: 'json',
+                success: function(data){
+                    self.showSignTable();
+                    self.initTable(true);
+                    self.element.find("td:contains("+  today +")").addClass('signed_anime_day');
+                },
+                error: function(xhr){
+                    if(xhr.status == 404) {
+                        alert('非该班成员不能签到');
+                    }else{
+                        alert('签到异常');
+                    }
+                }
+            });
         },
         signedIn: function() {
             if(!this.get('inited')) {
@@ -122,15 +138,7 @@ define(function(require, exports, module) {
                         $tbody.find(".t-" + row + '-' + week).addClass('signed_day');
                     }
                 }
-                if(signedToday && day == today) {
-                    $.ajax({
-                        url:this.get('signUrl'),
-                        dataType: 'json',
-                        async:false,//(默认: true) 默认设置下，所有请求均为异步请求。如果需要发送同步请求，请将此选项设置为 false。注意，同步请求将锁住浏览器，用户其它操作必须等待请求完成才可以执行。
-                        success: function(data){
-                            $tbody.find(".t-" + row + '-' + week).addClass('signed_anime_day');
-                    }});
-                }
+              
                 if(week == 6 && day != days) {
                     row++;
                     newtr = '<tr><td class="t-' + row + '-0"></td><td class="t-' + row + '-1"></td><td class="t-' + row + '-2"></td><td class="t-' + row + '-3"></td><td class="t-' + row + '-4"></td><td class="t-' + row + '-5"></td><td class="t-' + row + '-6"></td></tr>';
