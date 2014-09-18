@@ -66,7 +66,7 @@ class GroupThreadController extends BaseController
 
         $thread=$this->getThreadService()->getThread($threadId);
 
-        if(!$this->checkPower($id,$thread)){
+        if(!$this->checkManagePermission($id,$thread)){
             return $this->createMessageResponse('info','您没有权限编辑');
         }
 
@@ -358,7 +358,7 @@ class GroupThreadController extends BaseController
 
         $user=$this->getCurrentUser();
  
-        if($user['id']==$post['userId'] || $user['id']==$threadOwnerId || $groupMemberRole==2 || $groupMemberRole==3 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true){
+        if($user['id']==$post['userId'] || $groupMemberRole==2 || $groupMemberRole==3 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true){
 
         $this->getThreadService()->deletePost($postId);    
 
@@ -520,7 +520,7 @@ class GroupThreadController extends BaseController
        return 0;
     }
 
-    private function checkPower($id,$thread)
+    private function checkManagePermission($id,$thread)
     {   
         $user=$this->getCurrentUser();
 

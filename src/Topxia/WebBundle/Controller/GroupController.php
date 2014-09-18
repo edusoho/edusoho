@@ -386,7 +386,7 @@ class GroupController extends BaseController
         ));
     }
 
-    private function checkPowerAll($id)
+    private function checkManagePermission($id)
     {   
         $user=$this->getCurrentUser();
 
@@ -396,7 +396,7 @@ class GroupController extends BaseController
         return false;
     }
 
-    private function checkPower($id)
+    private function checkOwnerPermission($id)
     {   
         $user=$this->getCurrentUser();
 
@@ -409,7 +409,7 @@ class GroupController extends BaseController
     {
         $user=$this->getCurrentUser();
 
-        if(!$this->checkPowerAll($id)){
+        if(!$this->checkManagePermission($id)){
             return $this->createMessageResponse('info', '您没有权限!');
         }
         
@@ -432,7 +432,7 @@ class GroupController extends BaseController
     {
         $user=$this->getCurrentUser();
 
-        if (!$this->checkPower($id)) {
+        if (!$this->checkOwnerPermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
         
@@ -456,7 +456,7 @@ class GroupController extends BaseController
     {
         $user=$this->getCurrentUser();
 
-        if (!$this->checkPower($id)) {
+        if (!$this->checkOwnerPermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
@@ -483,7 +483,7 @@ class GroupController extends BaseController
 
         $group = $this->getGroupService()->getGroup($id);
 
-        if (!$this->checkPowerAll($id)) {
+        if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
@@ -503,7 +503,7 @@ class GroupController extends BaseController
         $group = $this->getGroupService()->getGroup($id);
         $currentUser = $this->getCurrentUser();
 
-        if (!$this->checkPowerAll($id)) {
+        if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
@@ -584,7 +584,7 @@ class GroupController extends BaseController
         $user=$this->getCurrentUser();
 
         $group = $this->getGroupService()->getGroup($id);
-        if (!$this->checkPowerAll($id)) {
+        if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
@@ -615,7 +615,7 @@ class GroupController extends BaseController
         $user=$this->getCurrentUser();
         
         $group = $this->getGroupService()->getGroup($id);
-        if (!$this->checkPowerAll($id)) {
+        if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
         if ($request->getMethod() == 'POST') {
@@ -711,7 +711,7 @@ class GroupController extends BaseController
     public function groupEditAction(Request $request,$id)
     {
         $currentUser = $this->getCurrentUser();
-        if (!$this->checkPowerAll($id)) {
+        if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
