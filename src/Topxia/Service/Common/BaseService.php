@@ -32,7 +32,7 @@ abstract class BaseService
 
     public function getDispatcher()
     {
-        return ServiceKernel::dispatcher();
+        return ServiceKernel::instance()->getDispatcher();
     }
 
     protected function purifyHtml($html, $trusted = false)

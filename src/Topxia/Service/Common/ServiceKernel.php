@@ -8,7 +8,7 @@ class ServiceKernel
 
     private static $_instance;
 
-    private static $_dispatcher;
+    private $_dispatcher;
 
     protected $environment;
     protected $debug;
@@ -44,15 +44,22 @@ class ServiceKernel
         return self::$_instance;
     }
 
-    public static function dispatcher()
+    public function getDispatcher()
     {
-        if (self::$_dispatcher) {
-            return self::$_dispatcher;
+        if (isset($this->_dispatcher)) {
+            return $this->_dispatcher;
         }
 
-        self::$_dispatcher = new EventDispatcher();
+        $this->_dispatcher = new EventDispatcher();
 
-        return self::$_dispatcher;
+        $subscribers = $this->getParameter('service_event_subscribers') ? : array();
+
+        foreach ($subscribers as $name => $subscriber) {
+            $subscriber = new $subscriber();
+            $this->_dispatcher->addSubscriber($subscriber);
+        }
+
+        return $this->_dispatcher;
     }
 
     public function boot()
