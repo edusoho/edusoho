@@ -14,120 +14,132 @@ class SignServiceImpl extends BaseService implements SignService
     		throw $this->createServiceException(sprintf('%s 非 %s 班成员，不能签到.', $userId, $classId));
     	}
 
-    	$isSignedToday = $this->isSignedToday($userId); 
+    	$isSignedToday = $this->isSignedToday($userId, $classId); 
     	if($isSignedToday) {
     		throw $this->createServiceException('今日已签到!');
     	}
 
-    	$userSign = array();
-    	$userSign['userId'] = $userId;
-    	$userSign['createdTime'] = time();
-    	$userSignDao = $this->getUserSignDao();
+    	$ClassMemberSign = array();
+        $ClassMemberSign['classId'] = $classId;
+    	$ClassMemberSign['userId'] = $userId;
+    	$ClassMemberSign['createdTime'] = time();
+    	$ClassMemberSignDao = $this->getClassMemberSignDao();
 
-    	$userSignDao->getConnection()->beginTransaction();
+    	$ClassMemberSignDao->getConnection()->beginTransaction();
     	try {
-			$userSign = $userSignDao->addUserSign($userSign);
-			$classSignRelated = $this->classSignedNumIncrease($classId);
-			$this->refreshUserSignRelated($userId, $classSignRelated['signedNum']);
+			$ClassMemberSign = $ClassMemberSignDao->addClassMemberSign($ClassMemberSign);
+			$classSignStatistics = $this->classSignedNumIncrease($classId);
+			$this->refreshClassMemberSignStatistics($userId, $classId, $classSignStatistics['signedNum']);
 			//commit if no error
-			$userSignDao->getConnection()->commit();
+			$ClassMemberSignDao->getConnection()->commit();
 
 		} catch(\Exception $e) {
 			//roll back if has error
-			$userSignDao->getConnection()->rollback();
+			$ClassMemberSignDao->getConnection()->rollback();
 			throw $e; 
 		}
 
-		return $userSign;
+		return $ClassMemberSign;
     }
 
-    public function isSignedToday($userId)
+    public function isSignedToday($userId, $classId)
     {
     	$startTimeToday = mktime(0, 0, 0, date('m', time()), date('d', time()), date('Y', time()) );
     	$endTimeToday = mktime(23, 59, 59, date('m', time()), date('d', time()), date('Y', time()) );
 
-    	$userSigns = $this->getUserSignDao()->
-    		findUserSignByUserIdAndPeriod($userId, $startTimeToday, $endTimeToday);
-    	if(!empty($userSigns)) {
+    	$ClassMemberSigns = $this->getClassMemberSignDao()->
+    		findClassMemberSignByPeriod($userId, $classId, $startTimeToday, $endTimeToday);
+    	if(!empty($ClassMemberSigns)) {
     		return true;
     	} else {
     		return false;
     	}	
     }
 
-    public function getSignsRecordsByMonth($userId, $startDay, $endDay)
+    public function getSignsRecordsByMonth($userId, $classId, $startDay, $endDay)
     {
         $startTime = mktime(0, 0, 0, $startDay[0], $startDay[1], $startDay[2]);
         $endTime = mktime(23, 59, 59, $endDay[0], $endDay[1], $endDay[2]);
-        $userSigns = $this->getUserSignDao()->
-            findUserSignByUserIdAndPeriod($userId, $startTime, $endTime);
+        $ClassMemberSigns = $this->getClassMemberSignDao()->
+            findClassMemberSignByPeriod($userId, $classId, $startTime, $endTime);
 
-        return $userSigns;
+        return $ClassMemberSigns;
     }
 
-    public function refreshUserSignRelated($userId, $todayRank)
+    public function getClassMemberSignStatistics($userId, $classId)
     {
-    	$userSignRelatedDao = $this->getUserSignRelatedDao();
-    	$userSignRelated = $userSignRelatedDao->getUserSignRelatedByUserId($userId);
-    	if(empty($userSignRelated)) {
-    		$userSignRelated = array();
-    		$userSignRelated['userId'] = $userId;
-    		$userSignRelated['todayRank'] = $todayRank;
-    		$userSignRelated['keepDays'] = 0;
-    		$userSignRelated = $userSignRelatedDao->addUserSignRelated($userSignRelated);
+        return $this->getClassMemberSignStatisticsDao()->getClassMemberSignStatistics($userId, $classId);
+    }
+
+    public function getClassSignStatistics($classId)
+    {
+        return $this->getClassSignStatisticsDao()->getClassSignStatisticsByClassId($classId);
+    }
+
+    public function refreshClassMemberSignStatistics($userId, $classId, $todayRank)
+    {
+    	$ClassMemberSignStatisticsDao = $this->getClassMemberSignStatisticsDao();
+    	$ClassMemberSignStatistics = $ClassMemberSignStatisticsDao->getClassMemberSignStatistics($userId, $classId);
+    	if(empty($ClassMemberSignStatistics)) {
+    		$ClassMemberSignStatistics = array();
+    		$ClassMemberSignStatistics['userId'] = $userId;
+            $ClassMemberSignStatistics['classId'] = $classId;
+    		$ClassMemberSignStatistics['todayRank'] = $todayRank;
+    		$ClassMemberSignStatistics['keepDays'] = 0;
+    		$ClassMemberSignStatistics = $ClassMemberSignStatisticsDao->addClassMemberSignStatistics($ClassMemberSignStatistics);
     	}
 
     	$fields = array();
-    	$fields['keepDays'] = $userSignRelated['keepDays'] + 1;
+    	$fields['keepDays'] = $ClassMemberSignStatistics['keepDays'] + 1;
     	$fields['todayRank'] = $todayRank;
-    	return $userSignRelatedDao->updateUserSignRelated($userId, $fields);
+    	return $ClassMemberSignStatisticsDao->updateClassMemberSignStatistics($userId, $classId, $fields);
     }
 
     public function classSignedNumIncrease($classId)
     {
-    	$classSignRelated = $this->refreshClassSignRelated($classId);
+    	$classSignStatistics = $this->refreshClassSignStatistics($classId);
     	$fields = array();
-    	$fields['signedNum'] = $classSignRelated['signedNum'] + 1;
-    	return $this->getClassSignRelatedDao()->updateClassSignRelated($classId, $fields);
+    	$fields['signedNum'] = $classSignStatistics['signedNum'] + 1;
+    	return $this->getClassSignStatisticsDao()->updateClassSignStatistics($classId, $fields);
     }
 
-    public function refreshClassSignRelated($classId)
+    public function refreshClassSignStatistics($classId)
     {
-    	$classSignRelatedDao = $this->getClassSignRelatedDao();
-    	$classSignRelated = $classSignRelatedDao->getUserClassSignRelated($classId);
-    	if(empty($classSignRelated)) {
-    		$classSignRelated = array();
-    		$classSignRelated['classId'] = $classId;
-    		$classSignRelated['date'] = time();
-    		$classSignRelated['signedNum'] = 0;
-    		$classSignRelatedDao->addClassSignRelated($classSignRelated);
+    	$classSignStatisticsDao = $this->getClassSignStatisticsDao();
+    	$classSignStatistics = $classSignStatisticsDao->getClassSignStatisticsByClassId($classId);
+    	if(empty($classSignStatistics)) {
+    		$classSignStatistics = array();
+    		$classSignStatistics['classId'] = $classId;
+    		$classSignStatistics['date'] = time();
+    		$classSignStatistics['signedNum'] = 0;
+    		$classSignStatisticsDao->addClassSignStatistics($classSignStatistics);
     	}
-    	$firstSignedDate = $classSignRelated['date'];
+    	$firstSignedDate = $classSignStatistics['date'];
     	if(date('Y', time()) > date('Y', $firstSignedDate) 
     		|| date('m', time()) > date('m', $firstSignedDate)
     		|| date('d', time()) > date('d', $firstSignedDate)) {
     		$fields = array();
     		$fields['date'] = time();
     		$fields['signedNum'] = 0;
-    		$classSignRelated = $classSignRelatedDao->updateClassSignRelated($classId, $fields);
+    		$classSignStatistics = $classSignStatisticsDao->updateClassSignStatistics($classId, $fields);
     	}	
 
-    	return $classSignRelated;
+    	return $classSignStatistics;
     }
 
-    private function getUserSignDao()
+    private function getClassMemberSignDao()
     {
-        return $this->createDao('Classes.UserSignDao');
+        return $this->createDao('Classes.ClassMemberSignDao');
     }
 
-    private function getUserSignRelatedDao()
+    private function getClassMemberSignStatisticsDao()
     {
-        return $this->createDao('Classes.UserSignRelatedDao');
+        return $this->createDao('Classes.ClassMemberSignStatisticsDao');
     }
 
-    private function getClassSignRelatedDao()
+    private function getClassSignStatisticsDao()
     {
-        return $this->createDao('Classes.ClassSignRelatedDao');
+        return $this->createDao('Classes.ClassSignStatisticsDao');
     }
     
     private function getClassMemberDao()
@@ -136,23 +148,3 @@ class SignServiceImpl extends BaseService implements SignService
     }
 }
 
-/*class UserSignSerialize
-{
-    public static function serialize(array $lesson)
-    {
-        
-        return $lesson;
-    }
-
-    public static function unserialize(array $lesson = null)
-    {
-        return $lesson;
-    }
-
-    public static function unserializes(array $lessons)
-    {
-        return array_map(function($lesson) {
-            return UserSignSerialize::unserialize($lesson);
-        }, $lessons);
-    }
-}*/
