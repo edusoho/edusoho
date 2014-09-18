@@ -489,7 +489,7 @@ class UserServiceImpl extends BaseService implements UserService
         //     throw $this->createServiceException('用户角色必须包含ROLE_USER');
         // }
 
-        $allowedRoles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN','ROLE_TEACHER');
+        $allowedRoles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN','ROLE_TEACHER','ROLE_PARENT');
 
         $notAllowedRoles = array_diff($roles, $allowedRoles);
         if (!empty($notAllowedRoles)) {
@@ -916,6 +916,26 @@ class UserServiceImpl extends BaseService implements UserService
     public function analysisRegisterDataByTime($startTime,$endTime)
     {
         return $this->getUserDao()->analysisRegisterDataByTime($startTime,$endTime);
+    }
+
+    public function addUserRelation($userRelation)
+    {
+        return $this->getUserRelationDao()->addUserRelation($userRelation);
+    }
+
+    public function findUserRelationsByFromIdsAndType(array $fromIds,$type)
+    {
+        $userRelations=array();
+        foreach ($fromIds as $fromId) {
+            $userRelationArray=$this->getUserRelationDao()->findUserRelationsByFromIdAndType($fromId,$type);
+            $userRelations[$fromId]=$userRelationArray;
+        }
+        return $userRelations;
+    }
+
+    private function getUserRelationDao()
+    {
+        return $this->createDao('User.UserRelationDao');
     }
 
     private function getFriendDao()

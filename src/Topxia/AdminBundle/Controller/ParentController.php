@@ -32,13 +32,23 @@ class ParentController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $userMembers=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($users, 'id'));
-        $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($userMembers, 'classId'));
-        $userMembers=ArrayToolkit::index($userMembers, 'userId');
+        
+        $userRelations=$this->getUserService()->findUserRelationsByFromIdsAndType(ArrayToolkit::column($users, 'id'),'family');
+        
+        $relations=array();
+        foreach ($userRelations as $useRelation) {
+            $relations=array_merge($relations,$useRelation);
+        }
+        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
+        $classMembers=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($relations, 'toId'));
+        $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($classMembers, 'classId'));
+        $classMembers=ArrayToolkit::index($classMembers, 'userId');
         $classes=ArrayToolkit::index($classes, 'id');
         return $this->render('TopxiaAdminBundle:Parent:index.html.twig', array(
             'users' => $users,
-            'userMembers' =>$userMembers,
+            'userRelations'=> $userRelations,
+            'children' => $children,
+            'classMembers' =>$classMembers,
             'classes' =>$classes,
             'paginator' => $paginator
         ));
@@ -63,6 +73,16 @@ class ParentController extends BaseController
             $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER','ROLE_PARENT'));
 
             foreach ($formData['numbers'] as $number) {
+                $child=$this->getUserService()->getUserByNumber($number);
+                if(empty($child)){
+                    throw $this->createNotFoundException('学号为'.$number.'的学生不存在！');
+                }
+                $userRelation['fromId']=$user['id'];
+                $userRelation['toId']=$child['id'];
+                $userRelation['type']='family';
+                $userRelation['relation']=$formData['relation'];
+                $userRelation['createdTime']=time();
+                $this->getUserService()->addUserRelation($userRelation);
             }
 
             $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['truename']} ({$user['id']})");
@@ -75,6 +95,16 @@ class ParentController extends BaseController
     protected function getClassesService()
     {
         return $this->getServiceKernel()->createService('Classes.ClassesService');
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->getServiceKernel()->createService('System.LogService');
     }
     
 }

@@ -1,27 +1,32 @@
 {% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
 <tr id="user-table-tr-{{ user.id }}">
   <td>
-    {{ user.number }}
-  </td>
-  <td>
      <strong>{{ admin_macro.user_link(user) }}</strong>
     {% if user.locked %}
       <label class="label label-danger">禁</label>
     {% endif %}
   </td>
-
   <td>
-    {% if class %}
-      {{ class_name(class) }}
-    {% else %}
-      -- 
-    {% endif %}
+    {% for relation in relations %}
+      {{ children[relation.toId].truename }}<br/>
+    {% endfor %}
+  </td>
+  <td>
+    {% for relation in relations %}
+      {% set classMember=classMembers[relation.toId]|default(null) %}
+      {% if classMember %}
+        {{ class_name(classes[classMember.classId]) }}
+      {% else %}
+        --
+      {% endif %}
+      <br/>
+    {% endfor %}
   </td>
 
   <td>
     <span class="text-sm">
       {% if user.loginTime == 0 %}
-        --
+       --
       {% else %}
         {{ user.loginTime|date('Y-n-d H:i:s') }}
       {% endif %}
@@ -39,7 +44,7 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
-        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_edit', {id:user.id,type:'student'}) }}">编辑用户信息</a></li>
+        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_edit', {id:user.id}) }}">编辑用户信息</a></li>
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}
 
@@ -51,9 +56,9 @@
 
         {% endif %}
 
-        {# <li><a class="send-passwordreset-email" href="javascript:" data-url="{{ path('admin_user_send_passwordreset_email', {id:user.id}) }}">发送密码重置邮件</a></li>
+        <li><a class="send-passwordreset-email" href="javascript:" data-url="{{ path('admin_user_send_passwordreset_email', {id:user.id}) }}">发送密码重置邮件</a></li>
 
-        <li><a class="send-emailverify-email" href="javascript:" data-url="{{ path('admin_user_send_emailverify_email', {id:user.id}) }}">发送Email验证邮件</a></li> #}
+        <li><a class="send-emailverify-email" href="javascript:" data-url="{{ path('admin_user_send_emailverify_email', {id:user.id}) }}">发送Email验证邮件</a></li>
 
         {% if user.locked %}
           <li><a class="unlock-user" href="javascript:" title="解禁用户{{ user.nickname }}" data-url="{{ path('admin_user_unlock', {id:user.id }) }}">解禁用户</a></li>

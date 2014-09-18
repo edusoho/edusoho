@@ -38,18 +38,17 @@
 <table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
   <thead>
     <tr>
-      {# <th>用户名</th> #}
       <th>姓名</th>
-      <th>学号/工号</th>
-      <th>Email</th>
-      <th>注册时间</th>
+      <th>子女性名</th>
+      <th>所属班级</th>
       <th>最近登录</th>
       <th>操作</th>
     </tr>
   </thead>
   <tbody>
     {% for user in users %}
-      {% include 'TopxiaAdminBundle:User:user-table-tr.html.twig' with {user:user} %}
+      {% set relations = userRelations[user.id]|default(null) %}
+      {% include 'TopxiaAdminBundle:Parent:parent-table-tr.html.twig' with {user:user} %}
     {% endfor %}
   </tbody>
 </table>

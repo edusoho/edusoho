@@ -58,8 +58,8 @@
       <label for="familyRelation">家庭关系</label>
     </div>
     <div class="col-md-7">
-      <select id="familyRelation" name="familyRelation" class="form-control">
-        {{ select_options(dict('familyRelation'), app.request.query.get('familyRelation'), '--家庭关系--') }}
+      <select id="relation" name="relation" class="form-control">
+        {{ select_options(dict('relation'), app.request.query.get('relation'), '--家庭关系--') }}
       </select>
     </div>
   </div>

@@ -196,4 +196,8 @@ interface UserService
 
     public function dropFieldData($fieldName);
 
+    public function addUserRelation($userRelation);
+
+    public function findUserRelationsByFromIdsAndType(array $fromIds,$type);
+
 }
