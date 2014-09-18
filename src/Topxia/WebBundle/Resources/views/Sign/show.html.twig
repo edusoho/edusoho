@@ -1,9 +1,9 @@
 <div style="display:block;height:200px; width:auto;" class="well" id="class-sign" data-records="{{ path('signed_records', {'classId':class.id,'userId':app.user.id})}}" data-signurl="{{ path('user_sign', {'classId':class.id,'userId':app.user.id}) }}">
 	<div class="" style="display:block;height:50px;width:180px">
 		{% if not isSignedToday %}
-		<div class="btn btn-primary" data-role="sign">签到</div>
+		<a class="btn btn-primary" data-role="sign">签到</a>
 		{% else %}
-		<div class="btn btn-primary" data-role="signed">已签到<br><span class="">连续1天</span></div>
+		<a class="btn btn-primary" data-role="signed" onclick="return false;">已签到<br><span class="">连续1天</span></a>
 		{% endif %}
 	</div>
 	
@@ -36,8 +36,6 @@
 			</div>
 		</div>
 	</div>
-
-	
 </div>
 
 

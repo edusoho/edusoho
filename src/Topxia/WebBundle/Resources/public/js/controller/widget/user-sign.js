@@ -15,6 +15,8 @@ define(function(require, exports, module) {
             "click [data-role=sign]": "sign",
             "mouseenter [data-role=signed]": "signedIn",
             "mouseleave [data-role=signed]": "signedOut",
+            "mouseenter .class_sign_main": "keep",
+            "mouseleave .class_sign_main": "remove",
             "click [data-role=previous]": "previousMonth",
             "click [data-role=next]": "nextMonth"
         },
@@ -28,34 +30,12 @@ define(function(require, exports, module) {
 
            // this.blindPopover();
         },
-        blindPopover: function() {
-            var self = this;
-            this.initTable();
-            var $signedBtn = this.element.find('[data-role=signed]');
-            $signedBtn.popover({
-                trigger: 'hover',
-                placement: 'bottom',
-                html: true,
-                delay: 200,
-                content: function() {
-                return self.element.find('.content').html();
-                },
-            });
-            this.element.on('mouseenter', '.popover', function(){
-                $(this).addClass('keep-hovering');
-            });
-
-            this.element.on('mouseleave', '.popover', function() {
-                $(this).removeClass('keep-hovering');
-                $(this).prev().popover('hide');
-            });
-
-            this.element.on('hide.bs.popover', function () {
-                if ($(this).find('.popover').hasClass('keep-hovering')) {
-                    return false;
-                }
-                return true;
-            });
+        keep: function() {
+            this.element.find('.class_sign_main').addClass('keepShow');
+        },
+        remove: function() {
+            this.element.find('.class_sign_main').removeClass('keepShow');
+            this.hiddenSignTable();
         },
         getDaysInMonth: function(month,year) {
             if ((month==1)&&(year%4==0)&&((year%100!=0)||(year%400==0))){
@@ -94,7 +74,14 @@ define(function(require, exports, module) {
             this.showSignTable();
         },
         signedOut: function() {
-            this.hiddenSignTable();
+            var self = this;
+            setTimeout(function(){
+                if(self.element.find('.class_sign_main').hasClass('keepShow')) {
+                    return;
+                }else{
+                    self.hiddenSignTable();
+                }
+            }, 1000);
         },
         showSignTable: function() {
             this.element.find('.class_sign_main').attr('style','display:block');
@@ -159,7 +146,7 @@ define(function(require, exports, module) {
                 $signbtn.on('mouseleave',function(){
                     self.signedOut();
                 });
-
+                $signbtn.on('click',false);
                 $signbtn.html('已签到<br><span class="">连续1天</span>');
             }
           
@@ -189,7 +176,7 @@ define(function(require, exports, module) {
             var currentMonth =  parseInt(currentDate[1]);
             var nextMonth = 0;
             var nextYear = currentYear;
-            if(currentMonth == (new Date().getMonth() + 1 )) {
+            if(currentMonth == (new Date().getMonth() + 1 ) && currentYear == (new Date().getFullYear())) {
                 return;
             } else if(currentMonth == 12 ) {
                 nextMonth = 1;
