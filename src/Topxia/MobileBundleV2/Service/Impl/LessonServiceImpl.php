@@ -106,7 +106,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 
         		$this->controller->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
-        		return $this->createJson($request, true);
+        		return "finished";
     	}
 
     	public function unLearnLesson()
@@ -120,7 +120,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 
         		$this->controller->getCourseService()->cancelLearnLesson($courseId, $lessonId);
 
-        		return $this->createJson($request, true);
+        		return "learning";
     	}
 
 	public function getCourseLessons()
