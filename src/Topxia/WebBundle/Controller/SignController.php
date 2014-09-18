@@ -34,11 +34,13 @@ class SignController extends BaseController
 			$result['records'][] = date('d',$userSign['createdTime']);
 			}
 		}
-		$todayRank = $this->getSignService()->getClassMemberSignStatistics($userId, $classId)['todayRank'];
-		$signedNum = $this->getSignService()->getClassSignStatistics($classId)['signedNum'];
+		$ClassMemberSignStatistics = $this->getSignService()->getClassMemberSignStatistics($userId, $classId);
+		$ClassSignStatistics = $this->getSignService()->getClassSignStatistics($classId);
 
-		$result['todayRank'] = $todayRank;
-		$result['signedNum'] =$signedNum;
+		$result['todayRank'] = $ClassMemberSignStatistics['todayRank'];
+		$result['signedNum'] = $ClassSignStatistics['signedNum'];
+		$result['keepDays'] = $ClassMemberSignStatistics['keepDays'];
+		
 		return $this->createJsonResponse($result);
 	}
 

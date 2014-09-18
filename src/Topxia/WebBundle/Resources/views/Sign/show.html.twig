@@ -1,10 +1,13 @@
 <div style="display:block;height:200px; width:auto;" class="well" id="class-sign" data-records="{{ path('signed_records', {'classId':class.id,'userId':app.user.id})}}" data-signurl="{{ path('user_sign', {'classId':class.id,'userId':app.user.id}) }}">
-	<div class="" style="display:block;height:50px;width:180px">
+	<div class="sign_wapper">
 		{% if not isSignedToday %}
 		<a class="btn btn-primary" data-role="sign">签到</a>
 		{% else %}
-		<a class="btn btn-primary" data-role="signed" onclick="return false;">已签到<br><span class="">连续1天</span></a>
+		<a class="btn btn-primary" data-role="signed" onclick="return false;">已签到</a>
 		{% endif %}
+		<span class="pull-right">
+			{{ "now"|date('m月d日')}}<br>
+		</span>
 	</div>
 	
 		<div class="class_sign_main">
@@ -29,10 +32,13 @@
 		</div>
 		<div class="sign_tip_boards">
 			<div class="sign_tip_board sign_tip_board_urank j_sign_ad_mobi">
-				<p>签到排名：今日本吧第<span class="" id="todayRank">109</span>个签到</p>
+				<p>签到排名：今日本班第<span class="" id="todayRank"></span>个签到</p>
 			</div>
 			<div class="sign_tip_board sign_tip_board_barrank">
-				<p>本吧签到人数：<span class="" id="signedNUm">109</span></p>
+				<p>本班签到人数：<span class="" id="signedNum"></span></p>
+			</div>
+			<div class="sign_tip_board sign_tip_board_barrank">
+				<p>连续签到：<span class="" id="keepDays"></span>天</p>
 			</div>
 		</div>
 	</div>

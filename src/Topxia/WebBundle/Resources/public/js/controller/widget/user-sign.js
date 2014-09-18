@@ -108,6 +108,7 @@ define(function(require, exports, module) {
                     self.set('signedRecords',data.records);
                     self.set('todayRank', data.todayRank);
                     self.set('signedNum', data.signedNum);
+                    self.set('keepDays', data.keepDays);
                 }
             });
           
@@ -133,8 +134,9 @@ define(function(require, exports, module) {
                 }
             }
             this.element.find('#todayRank').html(this.get('todayRank'));
-            this.element.find('#signedNUm').html(this.get('signedNum'));
-
+            this.element.find('#signedNum').html(this.get('signedNum'));
+            this.element.find('#keepDays').html(this.get('keepDays'));
+            
             this.set('inited',true);
             if(signedToday) {
                 var $signbtn = this.element.find('[data-role=sign]');
@@ -147,7 +149,7 @@ define(function(require, exports, module) {
                     self.signedOut();
                 });
                 $signbtn.on('click',false);
-                $signbtn.html('已签到<br><span class="">连续1天</span>');
+                $signbtn.html('已签到');
             }
           
         },

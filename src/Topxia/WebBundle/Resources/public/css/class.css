@@ -219,6 +219,16 @@
 }
 
 /*sign css*/
+
+.sign_wapper {
+    display:block;
+    height:50px;
+    width:180px;
+    background-color:#fff;
+}
+.sign_wapper .btn {
+    margin: 5px; 
+}
 .class_sign_main {
     position: absolute;
     top:80px;
