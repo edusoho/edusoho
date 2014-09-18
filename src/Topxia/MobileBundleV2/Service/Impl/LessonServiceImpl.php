@@ -4,6 +4,7 @@ namespace Topxia\MobileBundleV2\Service\Impl;
 use Topxia\MobileBundleV2\Service\BaseService;
 use Topxia\MobileBundleV2\Service\LessonService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\CloudClientFactory;
 
 class LessonServiceImpl extends BaseService implements LessonService
 {
@@ -173,9 +174,8 @@ class LessonServiceImpl extends BaseService implements LessonService
 			return $this->createErrorResponse('not_courseId', '课时信息不存在！');
 		}
 
-		$lesson = $this->coverLesson($lesson);
 		if ($lesson['free'] == 1) {
-			return $lesson;
+			return $this->coverLesson($lesson);
 		}
 
 		if (!$user->isLogin()) {
@@ -185,7 +185,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 		$member = $this->controller->getCourseService()->getCourseMember($courseId, $user['id']);
 		$member = $this->previewAsMember($member, $courseId, $user);
 		if ($member && in_array($member['role'], array("teacher", "student"))) {
-			return $lesson;
+			return $this->coverLesson($lesson);;
 		}
 		return $this->createErrorResponse('not_student', '你不是该课程学员，请加入学习!');
 	}
@@ -194,8 +194,42 @@ class LessonServiceImpl extends BaseService implements LessonService
 	{
 		$lesson['createdTime'] = date('c', $lesson['createdTime']);
 		$lesson['content'] = $this->wrapContent($lesson['content']);
+
+		switch ($lesson['type']) {
+			case 'ppt':
+				return $this->getPPTLesson($lesson);
+			default:
+				break;
+		}
+		
 		return $lesson;
 	}
+
+	private function getPPTLesson($lesson)
+	{
+		$file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
+        		if (empty($file)) {
+            		$this->createErrorResponse('not_ppt', '获取ppt课时失败!');
+        		}
+
+        		if ($file['convertStatus'] != 'success') {
+            		if ($file['convertStatus'] == 'error') {
+                			$url = $this->controller->generateUrl('course_manage_files', array('id' => $courseId));
+                			return $this->createErrorResponse('not_ppt', 'PPT文档转换失败，请到课程文件管理中，重新转换!');
+            		} else {
+            			return $this->createErrorResponse('not_ppt', 'PPT文档还在转换中，还不能查看，请稍等。!');
+            		}
+        		}
+
+        		$factory = new CloudClientFactory();
+        		$client = $factory->createClient();
+
+        		$ppt = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length']. '');
+        		$lesson['content'] = $ppt;
+
+        		return $lesson;
+	}
+
 
 	private function wrapContent($content)
 	{
