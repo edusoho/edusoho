@@ -259,6 +259,15 @@ class DataDict
     		'open'=>'开启',
     		'close'=>'关闭',
     	),
+
+    	'familyRelation' =>array(
+    		'mother' =>'爸爸',
+    		'father' =>'妈妈',
+    		'fgrandfather'=>'爷爷',
+    		'fgrandmother'=>'奶奶',
+    		'mgrandfather'=>'外公',
+    		'mgrandmother'=>'外婆'
+    	),
 	);
 
 	public static function dict($type)

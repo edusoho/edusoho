@@ -79,6 +79,15 @@ admin_student:
     pattern:  /student
     defaults: { _controller: TopxiaAdminBundle:Student:index }
 
+admin_parent:
+    pattern:  /parent
+    defaults: { _controller: TopxiaAdminBundle:Parent:index }
+
+admin_parent_create:
+    pattern:  /parent/create
+    defaults: { _controller: TopxiaAdminBundle:Parent:create }
+
+
 
 
 
@@ -101,6 +110,10 @@ admin_user_create_email_check:
 admin_user_create_nickname_check:
     pattern:  /user/create/nickname/check
     defaults: { _controller: TopxiaAdminBundle:User:nicknameCheck }
+
+admin_user_create_mobile_check:
+    pattern:  /user/create/mobile/check
+    defaults: { _controller: TopxiaAdminBundle:User:mobileCheck }
 
 admin_user_show:
     pattern:  /user/{id}

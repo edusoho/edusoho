@@ -33,7 +33,8 @@ class UserServiceImpl extends BaseService implements UserService
        return $this->getProfileDao()->getProfile($id);
     }
 
-    public function getUserByNickname($nickname){
+    public function getUserByNickname($nickname)
+    {
         $user = $this->getUserDao()->findUserByNickname($nickname);
         if(!$user){
             return null;
@@ -42,6 +43,15 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
+    public function getUserByMobile($mobile)
+    {
+        $user = $this->getUserDao()->findUserByMobile($mobile);
+        if(!$user){
+            return null;
+        } else {
+            return UserSerialize::unserialize($user);
+        }
+    }
     public function getUserByEmail($email)
     {
         if (empty($email)) {
