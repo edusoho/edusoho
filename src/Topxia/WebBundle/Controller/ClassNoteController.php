@@ -68,8 +68,13 @@ class ClassNoteController extends ClassBaseController
     public function praiseAction(Request $request,$noteId)
     {
         $note=$this->getNoteService()->getNote($noteId);
+        $user=$this->getCurrentUser();
         if(empty($note)){
             throw $this->createNotFoundException("笔记不存在，或已删除。");
+        }
+        $praise=$this->getNoteService()->getNotePraiseByNoteIdAndUserId($noteId,$user['id']);
+        if(!empty($praise)){
+            throw $this->createAccessDeniedException('不可重复对一条笔记点赞！');
         }
         $this->getNoteService()->praise($noteId);
         return $this->createJsonResponse($this->getNoteService()->findNotePraisesByNoteId($noteId));

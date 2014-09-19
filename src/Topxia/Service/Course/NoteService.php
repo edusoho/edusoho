@@ -27,9 +27,12 @@ interface NoteService
 
     public function canclePraise($noteId);
 
+    public function getNotePraiseByNoteIdAndUserId($noteId,$userId);
+    
     public function findNotePraisesByUserId($userId);
 
     public function findNotePraisesByNoteId($noteId);
-    
+
     public function findNotePraisesByNoteIds(array $noteIds);
+
 }

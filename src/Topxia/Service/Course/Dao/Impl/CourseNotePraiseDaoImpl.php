@@ -15,6 +15,12 @@ class CourseNotePraiseDaoImpl extends BaseDao implements CourseNotePraiseDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
+	public function getNotePraiseByNoteIdAndUserId($noteId,$userId)
+	{
+		$sql = "SELECT * FROM {$this->table} WHERE noteId = ? AND userId=? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($noteId,$userId)) ? : null;
+	}
+
 	public function addNotePraise($notePraise)
 	{
 		$affected = $this->getConnection()->insert($this->table, $notePraise);

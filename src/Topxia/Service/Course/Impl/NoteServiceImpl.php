@@ -191,6 +191,11 @@ class NoteServiceImpl extends BaseService implements NoteService
         $this->getDispatcher()->dispatch('user.noteByLiked', new ServiceEvent($param));
     }
 
+    public function getNotePraiseByNoteIdAndUserId($noteId,$userId)
+    {
+        return $this->getNotePraiseDao()->getNotePraiseByNoteIdAndUserId($noteId,$userId);
+    }
+    
     public function findNotePraisesByUserId($userId)
     {
         return $this->getNotePraiseDao()->findNotePraisesByUserId($userId);

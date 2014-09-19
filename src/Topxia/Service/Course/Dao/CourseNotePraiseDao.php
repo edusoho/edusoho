@@ -5,6 +5,8 @@ interface CourseNotePraiseDao
 {
 	public function getNotePraise($id);
 
+	public function getNotePraiseByNoteIdAndUserId($noteId,$userId);
+
 	public function addNotePraise($notePraise);
 
 	public function deleteNotePraiseByNoteIdAndUserId($noteId,$userId);
