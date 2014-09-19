@@ -63,7 +63,9 @@ define(function(require, exports, module) {
 
 			var _reader = new FileReader();
 	        _reader.onloadend = function(evt) {
+
 	            if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+
 	            	var crc = self.crc32(evt.target.result);
 	            	fileScop.key = crc;
 	            	var savedFileInfo = FileScopStorage.get();
@@ -81,7 +83,7 @@ define(function(require, exports, module) {
 	        _reader.onerror = function(evt) {
 	            alert("Error: " + evt.target.error.code);
 	        };
-	        _reader.readAsBinaryString(keyChunk);
+	        _reader.readAsArrayBuffer(keyChunk);
 			
 		},
 		getChunkSize: function(offset, blkSize) {
@@ -346,6 +348,7 @@ define(function(require, exports, module) {
 	    		this.set("destroy",false);
 	    		return;
 	    	}
+
 	    	var self = this;
 
 	    	fileScop.currentChunkIndex ++;
@@ -386,7 +389,7 @@ define(function(require, exports, module) {
 	        _reader.onerror = function(evt) {
 	            alert("Error: " + evt.target.error.code);
 	        };
-	        _reader.readAsBinaryString(chunk);
+	        _reader.readAsArrayBuffer(chunk);
 	    },
 		startUpload: function(fileIndex){
 			this.set("currentFileIndex",fileIndex);
@@ -423,7 +426,6 @@ define(function(require, exports, module) {
 		},
 		
 		onSelectFileChange: function(){
-
 			var files = this.element.find("input[data-role='fileSelected']")[0].files;
 
 			if(files.length == 0) {
