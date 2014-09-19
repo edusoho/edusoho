@@ -201,4 +201,9 @@ interface UserService
 
     public function decreasePoint($userId, $number, $action, $description = '');
 
+    public function addUserRelation($userRelation);
+
+    public function findUserRelationsByFromIdsAndType(array $fromIds,$type);
+
+
 }

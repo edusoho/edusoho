@@ -58,29 +58,29 @@
       <label for="familyRelation">家庭关系</label>
     </div>
     <div class="col-md-7">
-      <select id="familyRelation" name="familyRelation" class="form-control">
-        {{ select_options(dict('familyRelation'), app.request.query.get('familyRelation'), '--家庭关系--') }}
+      <select id="relation" name="relation" class="form-control">
+        {{ select_options(dict('relation'), app.request.query.get('relation'), '--家庭关系--') }}
       </select>
     </div>
   </div>
 
+  <input type="hidden" id="numberInputNum" value="1" />
+  
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="number">子女学号</label>
+      <label for="number_1">子女学号</label>
     </div>
     <div class="col-md-7 controls">
-      <input type="hidden" id="numberInputNum" value="1" />
-      <input type="text" id="number" name="numbers[0]" class="form-control">
-      <button id="addNumberBtn" type="button" class="btn btn-primary btn-block">+</button>
+      <input type="text" id="number_1" name="numbers[]" class="form-control childNumber" data-url="{{path('admin_parent_create_childNumber_check')}}">
+    </div>
+    <div class="col-md-1 controls">
+      <button type="button" class="btn btn-default deleteNumberBtn">-</button>
     </div>
   </div>
 
   <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="roles">用户权限</label>
-    </div>
-    <div class="col-md-7 controls">
-      <input type="checkbox" value="ROLE_TEACHER" name="roles[]"> 教师  
+    <div class="col-md-7 col-md-offset-2 control-label">
+      <button id="addNumberBtn" type="button" class="btn btn-primary btn-block pull-left">+</button>
     </div>
   </div>
 
