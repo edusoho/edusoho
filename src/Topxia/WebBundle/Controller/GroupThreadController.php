@@ -285,11 +285,13 @@ class GroupThreadController extends BaseController
             }       
             $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
             $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$groupId,'threadId'=>$thread['id']), true);
-
             $url=$this->getPost($post['id'],$threadId,$groupId);
-            $this->getNotifiactionService()->notify($thread['userId'], 'postThread', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
+
+            if ($user->id != $thread['userId']) {
+                $this->getNotifiactionService()->notify($thread['userId'], 'postThread', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
+            }
             
-            if (!empty($fromUserId)) {
+            if (!empty($fromUserId) && $fromUserId != $user->id) {
                 $this->getNotifiactionService()->notify($postContent['fromUserId'], 'postThread', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
             }
 
