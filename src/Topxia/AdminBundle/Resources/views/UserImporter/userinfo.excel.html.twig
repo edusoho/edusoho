@@ -1,17 +1,26 @@
 {% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
 
-{% block title %}用户导入 - {{ parent() }}{% endblock %}
+{% block title %}学生导入 - {{ parent() }}{% endblock %}
 
-{% set menu = 'user-lead' %}
+{% set menu = 'student' %}
 {% set script_controller = 'user/lead-excel' %}
 
 {% block main %}
 {{ web_macro.flash_messages() }}
 <div class="page-header clearfix">
-  <h1 class="pull-left">用户导入-步骤1</h1>
+  <h1 class="pull-left">学生导入-步骤1</h1>
 </div>
     <div class="row">
           <form method="post" enctype="multipart/form-data">
+            <div class="row form-group">
+              <div class="col-md-2 control-label col-md-offset-2">
+                <label>选择班级</label>
+              </div>
+              <div class="col-md-3 controls">
+             <input class="form-control" name="classId" type="input" placeholder="班级ＩＤ"/>
+
+              </div>
+            </div>
           <div class="col-md-3 col-md-offset-1">
             <br>
           <b>选择要导入的文件</b>
@@ -38,6 +47,7 @@
                   <label class="required" >覆盖更新</label>
                 </div>
                 <br>
+                <a class="btn btn-link" href="{{ path('admin_student') }}">返回</a>
                 <button type="submit" class="btn btn-primary" id="start-import-btn">开始校验数据</button>
               </div>
           </div>

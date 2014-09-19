@@ -1,9 +1,9 @@
 <?php
-namespace UserImporter\Service\UserImporter;
+namespace Topxia\Service\UserImporter;
 
 use Topxia\Service\Common\BaseService;
 
-abstract BaseImporterService extends BaseService
+class BaseImporterService extends BaseService
 {
 	protected $necessaryFields = array('password' => '密码', 'truename' => '姓名', 'gender' => '性别');
 
@@ -15,10 +15,10 @@ abstract BaseImporterService extends BaseService
 	protected function checkNecessaryFields($excelTitle, $otherFields = array())
 	{
 		$errorInfo = array();
-		var $checkFields = array_merge($this->necessaryFields, $otherFields);
+		$checkFields = array_merge($this->necessaryFields, $otherFields);
 		foreach ($checkFields as $key => $value) {
-			if(!array_key_exists($key, $excelTitle)) {
-				$errorInfo[] = $value . '是必要的字段'; 
+			if(!in_array($value, $excelTitle)) {
+				$errorInfo[] = $value; 
 			}
 		}
 		return $errorInfo;
@@ -87,7 +87,7 @@ abstract BaseImporterService extends BaseService
 
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         $fieldArray=array(
-                "nickname"=>'用户名',
+                "number"=>'学号/工号',
                 "email"=>'邮箱',
                 "password"=>'密码',
                 "truename"=>'姓名',
@@ -111,20 +111,29 @@ abstract BaseImporterService extends BaseService
         return $fieldArray;
 	}
 
-   protected function trim($data)
-    {       
-        $data=trim($data);
-        $data=str_replace(" ","",$data);
-        $date=str_replace("　","",$data);
-        $data=str_replace('\n','',$data);
-        $data=str_replace('\r','',$data);
-        $data=str_replace('\t','',$data);
+	protected function matchExcelTitle($excelTitle, $fieldArray)
+	{
+		$matchResult = array();
+		foreach ($excelTitle as $key => $value) {
+			$matchResult[array_search($value, $fieldArray)] = $key + 1;
+		}
+		return $matchResult;
+	}
 
-        return $data;
-    }
+	protected function trim($data)
+	{       
+	    $data=trim($data);
+	    $data=str_replace(" ","",$data);
+	    $date=str_replace("　","",$data);
+	    $data=str_replace('\n','',$data);
+	    $data=str_replace('\r','',$data);
+	    $data=str_replace('\t','',$data);
+
+	    return $data;
+	}
 
 	protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
+        return $this->createService('User.UserFieldService');
     }
 }

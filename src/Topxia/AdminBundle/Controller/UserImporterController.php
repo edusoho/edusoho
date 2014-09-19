@@ -13,6 +13,44 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class UserImporterController extends BaseController
 {   
 
+    public function checkStudentAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $file=$request->files->get('excel');
+
+            if(!is_object($file)){
+                $this->setFlashMessage('danger', '请选择上传的文件');
+                return $this->render('TopxiaAdminBundle:UserImporter:userinfo.excel.html.twig', array(
+                ));
+            }
+            if (FileToolkit::validateFileExtension($file,'xls xlsx')) {
+                $this->setFlashMessage('danger', 'Excel格式不正确！');
+                return $this->render('TopxiaAdminBundle:UserImporter:userinfo.excel.html.twig', array(
+                ));
+            }
+
+            $studentImporterService = $this->getStudentImporterService();
+            $result = $studentImporterService->checkStudentData($file);
+            if($result['status'] == 'failed') {
+                if($result['type'] == 'lack_fields') {
+                    $this->setFlashMessage('danger', '缺少必要的字段:' . implode(",",$result['message']));
+                    return $this->render('TopxiaAdminBundle:UserImporter:userinfo.excel.html.twig', array(
+                    ));
+                } else if($result['type'] == 'over_line_limit') {
+                    $this->setFlashMessage('danger', $result['message']);
+                    return $this->render('TopxiaAdminBundle:UserImporter:userinfo.excel.html.twig', array(
+                    ));
+                }
+
+            }
+
+
+        }
+
+        return $this->render('TopxiaAdminBundle:UserImporter:userinfo.excel.html.twig', array(
+        ));
+    }
+
     public function importUserDataToBaseAction(Request $request)
     {   
         
@@ -426,5 +464,10 @@ class UserImporterController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getStudentImporterService()
+    {
+        return $this->getServiceKernel()->createService('UserImporter.StudentImporterService');
     }
 }
