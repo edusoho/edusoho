@@ -8,7 +8,7 @@
 <form id="user-create-form" class="form-horizontal" method="post" action="{{ path('admin_user_create')}}">
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="number">学号/工号</label>
+      <label for="number">{% if type=='student' %}学号{% else %}工号{% endif %}</label>
     </div>
     <div class="col-md-7 controls">
       <input type="text" id="number" data-url="{{path('admin_user_create_number_check')}}" name="number" class="form-control" >
@@ -62,14 +62,14 @@
       </div>
     </div>
 
-<div class="row form-group">
+{# <div class="row form-group">
     <div class="col-md-2 control-label">
       <label for="roles">用户权限</label>
     </div>
     <div class="col-md-7 controls">
       <input type="checkbox" value="ROLE_TEACHER" name="roles[]"> 教师  
     </div>
-  </div>
+  </div> #}
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 

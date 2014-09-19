@@ -2,7 +2,7 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}编辑{% if type=='student' %}学生{% elseif type=='teacher' %}教师{% endif %}信息{% endblock %}
+{% block title %}编辑{% if type=='student' %}学生{% else %}教师{% endif %}信息{% endblock %}
 {% block body %}
 
 <form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_edit', {id:user.id}) }}">
@@ -17,7 +17,7 @@
   </div>
 
   <div class="form-group">
-    <label class="col-md-2 control-label" >学号</label>
+    <label class="col-md-2 control-label" >{% if type=='student' %}学号{% else %}工号{% endif %}</label>
     <div class="col-md-7 controls">
       <div class="control-text">
         {{user.number|default('')}}
@@ -57,7 +57,7 @@
         <label for="mobile">手机号码</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="mobile" name="mobile" class="form-control" value="{{profile.mobile}}">
+        <input type="text" id="mobile" data-url="{{path('admin_user_create_mobile_check',{id:user.id})}}"name="mobile" class="form-control" value="{{user.mobile}}">
      </div>
     </div>
 

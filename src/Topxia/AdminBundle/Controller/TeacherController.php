@@ -12,8 +12,14 @@ class TeacherController extends BaseController {
         $fields = $request->query->all();
         $conditions = array(
             'roles'=>'ROLE_TEACHER',
+            'truename'=>'',
+            'number'=>''
         );
 
+        if(!empty($fields)){
+            $conditions['truename']=$fields['search_truename'];
+            $conditions['number']=$fields['search_number'];
+        }
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->searchUserCount($conditions),
@@ -22,7 +28,7 @@ class TeacherController extends BaseController {
 
         $users = $this->getUserService()->searchUsers(
             $conditions,
-            array('promotedTime', 'DESC'),
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -33,17 +39,18 @@ class TeacherController extends BaseController {
         ));
     }
 
-    public function promoteAction(Request $request, $id)
-    {
-        $this->getUserService()->promoteUser($id);
-        return $this->createJsonResponse(true);
-    }
 
-    public function promoteCancelAction(Request $request, $id)
-    {
-        $this->getUserService()->cancelPromoteUser($id);
-        return $this->createJsonResponse(true);
-    }
+    // public function promoteAction(Request $request, $id)
+    // {
+    //     $this->getUserService()->promoteUser($id);
+    //     return $this->createJsonResponse(true);
+    // }
+
+    // public function promoteCancelAction(Request $request, $id)
+    // {
+    //     $this->getUserService()->cancelPromoteUser($id);
+    //     return $this->createJsonResponse(true);
+    // }
 
 
 }
