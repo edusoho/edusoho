@@ -32,6 +32,12 @@ class BaseService {
     }
     public function before() {
     }
+
+    protected function getContainer()
+    {
+        return $this->controller->getContainer();
+    }
+
     public function createErrorResponse($name, $message) {
         $error = array(
             'error' => array(

@@ -169,7 +169,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 
 		$user = $this->controller->getuserByToken($this->request);
 		$lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
-
+		$this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
 		if (empty($lesson)) {
 			return $this->createErrorResponse('not_courseId', '课时信息不存在！');
 		}
@@ -193,16 +193,92 @@ class LessonServiceImpl extends BaseService implements LessonService
 	private function coverLesson($lesson)
 	{
 		$lesson['createdTime'] = date('c', $lesson['createdTime']);
-		$lesson['content'] = $this->wrapContent($lesson['content']);
 
 		switch ($lesson['type']) {
 			case 'ppt':
 				return $this->getPPTLesson($lesson);
-			default:
+			case 'video':
+                                                return $this->getVideoLesson($lesson);
 				break;
+			default:
+				$lesson['content'] = $this->wrapContent($lesson['content']);
 		}
 		
 		return $lesson;
+	}
+
+	private function getVideoLesson($lesson)
+	{
+                        $mediaId = $lesson['mediaId'];
+                        $mediaSource= $lesson['mediaSource'];
+                        if ($lesson['length'] > 0) {
+                                $lesson['length'] =  $this->getContainer()->get('topxia.twig.web_extension')->durationFilter($lesson['length']);
+                        } else {
+                                $lesson['length'] = '';
+                        }
+
+		if ($mediaSource == 'self') {
+			$file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
+			if (!empty($file)) {
+                                        if ($file['storage'] == 'cloud') {
+                                            $factory = new CloudClientFactory();
+                                            $client = $factory->createClient();
+
+                                            $lesson['mediaConvertStatus'] = $file['convertStatus'];
+
+                                            if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
+
+                                                if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                                                    $token = $this->controller->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
+                                                    $hlsKeyUrl = $this->controller->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
+                                                    $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
+                                                } else {
+                                                    $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                                                }
+                                                $lesson['mediaUri'] = $url['url'];
+                                            } else {
+                                                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                                                    $key = $file['metas']['hd']['key'];
+                                                } else {
+                                                    if ($file['type'] == 'video') {
+                                                        $key = null;
+                                                    } else {
+                                                        $key = $file['hashId'];
+                                                    }
+                                                }
+
+                                                if ($key) {
+                                                    $url = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                                                    $lesson['mediaUri'] = $url['url'];
+                                                } else {
+                                                    $lesson['mediaUri'] = '';
+                                                }
+
+                                            }
+                                        } else {
+                                            $lesson['mediaUri'] = $this->controller->generateUrl('mapi_course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id'], 'token' => empty($token) ? '' : $token['token']), true);
+                                        }
+                                    } else {
+                                        $lesson['mediaUri'] = '';
+                                    }
+                                } else if ($mediaSource== 'youku') {
+                                    $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+                                    if ($matched) {
+                                        $lesson['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
+                                    } else {
+                                        $lesson['mediaUri'] = '';
+                                    }
+                                } else if ($mediaSource == 'tudou') {
+                                    $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+                                    if ($matched) {
+                                        $lesson['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                                    } else {
+                                        $lesson['mediaUri'] = '';
+                                    }
+                                } else {
+                                    $lesson['mediaUri'] = $mediaUri;
+                                }
+                        return $lesson;
 	}
 
 	private function getPPTLesson($lesson)
