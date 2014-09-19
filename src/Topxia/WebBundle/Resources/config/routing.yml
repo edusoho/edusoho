@@ -478,11 +478,11 @@ course_manage_students:
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }
 
 course_manage_students_show:
-    pattern:  /course/{id}/manage/students/show
+    pattern:  /course/{courseId}/manage/students/{userId}/show
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:show }
 
 course_manage_students_defined_show:
-    pattern:  /course/{id}/manage/students/defined/show
+    pattern:  /course/{courseId}/manage/students/{userId}/defined_show
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:definedShow }
 
 course_manage_student_create:

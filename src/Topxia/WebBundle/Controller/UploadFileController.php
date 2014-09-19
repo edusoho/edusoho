@@ -36,10 +36,12 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($file);
     }
 
-    // @todo 权限验证
     public function browserAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权查看此页面！');
+        }
 
         $conditions = $request->query->all();
 
