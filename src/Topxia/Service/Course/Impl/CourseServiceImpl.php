@@ -1911,6 +1911,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	
 	public function generateLessonReplay($courseId,$lessonId)
 	{
+		$course = $this->tryManageCourse($courseId);
 		$lesson = $this->getLessonDao()->getLesson($lessonId);
 		$mediaId = $lesson["mediaId"];
 		$client = LiveClientFactory::createClient();
