@@ -180,6 +180,7 @@
                 } else {
                     fromUserIdVal = $('#fromUserIdNosub').val();
                 }   
+
                     var validator_threadPost = new Validator({
                     element: '.thread-post-reply-form',
                     failSilently: true,
@@ -201,7 +202,7 @@
                                     window.location.href=url;
                                     return;
                                 }
-                                // window.location.reload();                
+                                window.location.reload();                
                             }
                             });
                         }

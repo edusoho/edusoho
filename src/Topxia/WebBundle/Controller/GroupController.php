@@ -396,6 +396,8 @@ class GroupController extends BaseController
         
         $deleteMemberIds=$request->request->all();
 
+        $group = $this->getGroupService()->getGroup($id);
+        $groupUrl = $this->generateUrl('group_show', array('id'=>$id), true);
         if(isset($deleteMemberIds['memberId'])){
 
             $deleteMemberIds=$deleteMemberIds['memberId'];
@@ -404,8 +406,11 @@ class GroupController extends BaseController
           
                 $this->getGroupService()->deleteMemberByGroupIdAndUserId($id,$memberId);
 
+                $this->getNotifiactionService()->notify($memberId,'deleteMembers',"您已经被移除<a href='{$groupUrl}' target='_blank'><strong>“{$group['title']}”</strong></a>。");
             }
         }
+
+        
         return new Response('success');
     }
 
@@ -418,6 +423,8 @@ class GroupController extends BaseController
         }
         
         $memberIds=$request->request->all();
+        $group = $this->getGroupService()->getGroup($id);
+        $groupUrl = $this->generateUrl('group_show', array('id'=>$id), true);
 
         if(isset($memberIds['memberId'])){
 
@@ -426,6 +433,7 @@ class GroupController extends BaseController
             foreach ($memberIds as $memberId) {
                 $member=$this->getGroupService()->getMemberByGroupIdAndUserId($id,$memberId);
                 $this->getGroupService()->updateMember($member['id'],array('role'=>'admin'));
+                $this->getNotifiactionService()->notify($memberId,'setAdmin',"您在<a href='{$groupUrl}' target='_blank'><strong>“{$group['title']}”</strong></a>被组长任命为副组长。");
 
             }
         }
@@ -442,6 +450,9 @@ class GroupController extends BaseController
         
         $memberIds=$request->request->all();
 
+        $group = $this->getGroupService()->getGroup($id);
+        $groupUrl = $this->generateUrl('group_show', array('id'=>$id), true);
+
         if(isset($memberIds['adminId'])){
 
             $memberIds=$memberIds['adminId'];
@@ -449,6 +460,7 @@ class GroupController extends BaseController
             foreach ($memberIds as $memberId) {
                 $member=$this->getGroupService()->getMemberByGroupIdAndUserId($id,$memberId);
                 $this->getGroupService()->updateMember($member['id'],array('role'=>'member'));
+                $this->getNotifiactionService()->notify($memberId,'removeAdmin',"您在<a href='{$groupUrl}' target='_blank'><strong>“{$group['title']}”</strong></a>被组长取消副组长。");
 
             }
         }
@@ -532,7 +544,7 @@ class GroupController extends BaseController
             'scaledSize' => $scaledSize,));
 
     }
-    
+
     private function setLogo($request,$user)
     {
         $data = $request->files->get('form');
@@ -722,7 +734,12 @@ class GroupController extends BaseController
         return $this->getServiceKernel()->createService('Group.GroupService');
     }
 
-     private function filterSort($sort)
+    private function getNotifiactionService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    private function filterSort($sort)
     {
         switch ($sort) {
             case 'byPostNum':
