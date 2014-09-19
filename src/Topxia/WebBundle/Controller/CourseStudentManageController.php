@@ -302,8 +302,10 @@ class CourseStudentManageController extends BaseController
 		}
 
 		$course = $this->getSettingService()->get('course',array());
-		$userinfoFields = isset($course['userinfoFields']) ? : array();
 
+		$userinfoFields = array();
+		if(isset($course['userinfoFields'])) $userinfoFields=$course['userinfoFields'];
+		
 		return $this->render('TopxiaWebBundle:CourseStudentManage:defined-show-modal.html.twig', array(
 			'profile' => $profile,
 			'userFields' => $userFields,
