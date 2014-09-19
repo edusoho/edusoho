@@ -166,6 +166,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		return array_map(function($post) use ($users){
 			$post['user'] = $users[$post['userId']];
+			$post['createdTime'] = date('c', $post['createdTime']);
 			return $post;
 		}, $posts);
 	}
