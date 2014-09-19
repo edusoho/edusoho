@@ -87,7 +87,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$total = $this->controller->getThreadService()->getThreadPostCount($courseId, $threadId);
-		$posts = $this->controller->getThreadService()->findThreadPosts($courseId, $threadId, 'default', $start, $limit);
+		$posts = $this->controller->getThreadService()->findThreadPosts($courseId, $threadId, 'elite', $start, $limit);
 		$users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 		return array(
 			"start"=>$start,
