@@ -1939,8 +1939,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function entryReplay($lessonId, $courseLessonReplayId)
 	{
-		list($course, $member) = $this->tryTakeCourse($courseId);
 		$lesson = $this->getLessonDao()->getLesson($lessonId);
+		list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
 		$mediaId = $lesson["mediaId"];
 		$client = LiveClientFactory::createClient();
 		$email = $this->getCurrentUser()->email;
