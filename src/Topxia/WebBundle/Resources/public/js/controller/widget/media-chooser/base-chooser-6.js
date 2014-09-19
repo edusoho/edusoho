@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     require('swfupload');
     var Widget = require('widget');
     var FileBrowser = require('../file/file-browser');
-    var ChunkUpload = require('./chunk-upload2');
+    var ChunkUpload = require('./chunk-upload3');
     var Notify = require('common/bootstrap-notify');
 
     var BaseChooser = Widget.extend({
