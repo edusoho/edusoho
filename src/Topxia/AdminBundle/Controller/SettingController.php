@@ -466,7 +466,6 @@ class SettingController extends BaseController
     public function storageAction(Request $request)
     {
         $storageSetting = $this->getSettingService()->get('storage', array());
-
         $default = array(
             'upload_mode' => 'local',
             'cloud_access_key' => '',
@@ -531,6 +530,25 @@ class SettingController extends BaseController
         $file = $file->move($directory, $filename);
         $path = "system/{$filename}";
 
+        $originFileInfo = getimagesize($file);
+        $filePath = $this->container->getParameter('topxia.upload.public_directory')."/".$path;
+        $imagine = new Imagine();
+        $rawImage = $imagine->open($filePath);
+
+        $pathinfo = pathinfo($filePath);
+        $specification['240'] = 20;
+        $specification['360'] = 30;
+        $specification['480'] = 40;
+        $specification['720'] = 60;
+        $specification['1080'] = 90;
+
+        foreach ($specification as $key => $value) {
+            $width= ($originFileInfo[0]*$value/$originFileInfo[1]);
+            $rawImage->resize(new Box($width, $value));
+            $filePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}-$value-{$key}.{$pathinfo['extension']}";
+            $rawImage->save($filePath, array('quality' => 90));
+        }
+
         $response = array(
             'path' => $path,
             'url' =>  $this->get('topxia.twig.web_extension')->getFileUrl($path),
@@ -538,6 +556,7 @@ class SettingController extends BaseController
 
         return new Response(json_encode($response));
     }
+
 
     public function cloudVideoWatermarkRemoveAction(Request $request)
     {
