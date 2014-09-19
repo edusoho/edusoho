@@ -1,30 +1,35 @@
 define(function(require, exports, module) {
+
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
+    var EditorFactory = require('common/kindeditor-factory');
 
     exports.run = function() {
 
-        var $form = $('#user-create-form');
-        var $modal= $('#user-create-form').parent('.modal');
+        var editor = EditorFactory.create('#about', 'simple', {extraFileUploadParams:{group:'course'}});
+
+        var $form = $('#user-edit-form');
+        var $modal = $('#user-edit-form').parents('.modal');
+
         var validator = new Validator({
-            element: '#user-create-form',
+            element: '#user-edit-form',
             autoSubmit: false,
+            failSilently: true,
             onFormValidated: function(error, results, $form) {
                 if (error) {
                     return false;
                 }
-
-                $('#user-create-btn').button('submiting').addClass('disabled');
+                $('#edit-user-btn').button('submiting').addClass('disabled');
+                editor.sync();
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
-                    Notify.success('新用户添加成功');
+                    Notify.success('用户信息保存成功');
                     window.location.reload();
                 }).error(function(){
-                    Notify.danger('新用户添加失败');
+                    Notify.danger('操作失败');
                 });
-
             }
         });
 
@@ -73,10 +78,34 @@ define(function(require, exports, module) {
             }
         });
 
+        for(var i=0;i<$form.find('.childNumber').length;i++){
+            validator.addItem({
+                element: $form.find('.childNumber').eq(i),
+                required: true,
+                rule: 'remote numberUnique'
+            });
+        }
+        
         validator.addItem({
-            element: $form.find('#number_1'),
-            required: true,
-            rule: 'remote numberUnique'
+            element: '[name="truename"]',
+            rule: 'chinese minlength{min:2} maxlength{max:5}'
+        });
+
+        validator.addItem({
+            element: '[name="qq"]',
+            rule: 'qq'
+        });
+
+        validator.addItem({
+            element: '[name="weibo"]',
+            rule: 'url',
+            errormessageUrl: '网站地址不正确，须以http://weibo.com开头。'
+        });
+
+        validator.addItem({
+            element: '[name="site"]',
+            rule: 'url',
+            errormessageUrl: '网站地址不正确，须以http://开头。'
         });
 
         validator.addItem({
@@ -86,28 +115,27 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="truename"]',
-            required: true,
-            rule: 'chinese minlength{min:2} maxlength{max:5}'
+            element: '[name="idcard"]',
+            rule: 'idcard'
         });
 
-        validator.addItem({
-            element: '[name="email"]',
-            required: true,
-            rule: 'email email_remote'
-        });
+        for(var i=1;i<=5;i++){
+             validator.addItem({
+             element: '[name="intField'+i+'"]',
+             rule: 'int'
+             });
 
-        validator.addItem({
-            element: '[name="password"]',
-            required: true,
-            rule: 'minlength{min:5} maxlength{max:20}'
-        });
+             validator.addItem({
+            element: '[name="floatField'+i+'"]',
+            rule: 'float'
+            });
 
-        validator.addItem({
-            element: '[name="confirmPassword"]',
-            required: true,
-            rule: 'confirmation{target:#password}'
-        });
-    };
+             validator.addItem({
+            element: '[name="dateField'+i+'"]',
+            rule: 'date'
+             });
+        }
+
+        };
 
 });

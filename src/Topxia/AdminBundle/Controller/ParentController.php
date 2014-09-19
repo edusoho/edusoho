@@ -93,6 +93,50 @@ class ParentController extends BaseController
     }
 
 
+    public function editAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $profile['title'] = $user['title'];
+        $relations=$this->getUserService()->findUserRelationsByFromIdAndType($id,'family');
+        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
+
+        if ($request->getMethod() == 'POST') {
+            $fields=$request->request->all();
+            $profile = $this->getUserService()->updateUserProfile($user['id'], $fields);
+            $this->getUserService()->changeTrueName($user['id'],$fields['truename']);
+            $this->getUserService()->changeMobile($user['id'],$fields['mobile']);
+
+            $this->getUserService()->deleteUserRelationsByFromIdAndType($id,'family');
+            foreach ($fields['numbers'] as $number) {
+                $child=$this->getUserService()->getUserByNumber($number);
+                if(empty($child)){
+                    throw $this->createNotFoundException('学号为'.$number.'的学生不存在！');
+                }
+                $userRelation['fromId']=$user['id'];
+                $userRelation['toId']=$child['id'];
+                $userRelation['type']='family';
+                $userRelation['relation']=$fields['relation'];
+                $userRelation['createdTime']=time();
+                $this->getUserService()->addUserRelation($userRelation);
+            }
+
+
+            $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
+            return $this->redirect($this->generateUrl('settings'));
+        }
+
+        $fields=$this->getFields();
+        return $this->render('TopxiaAdminBundle:Parent:edit-modal.html.twig', array(
+            'user' => $user,
+            'profile'=>$profile,
+            'fields'=>$fields,
+            'relation'=>$relations[0]['relation'],
+            'children'=>$children
+        ));
+    }
+
+
     public function childNumberCheckAction(Request $request)
     {
         $childNumber = $request->query->get('value');
@@ -103,6 +147,20 @@ class ParentController extends BaseController
             $response = array('success' => true, 'message' => '该学号可以使用');
         }
         return $this->createJsonResponse($response);
+    }
+
+    private function getFields()
+    {
+        $fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        for($i=0;$i<count($fields);$i++){
+            if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['type']="text";
+            if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['type']="varchar";
+            if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['type']="int";
+            if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['type']="float";
+            if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
+        }
+
+        return $fields;
     }
 
     protected function getClassesService()
@@ -118,6 +176,11 @@ class ParentController extends BaseController
     protected function getLogService()
     {
         return $this->getServiceKernel()->createService('System.LogService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
     }
     
 }

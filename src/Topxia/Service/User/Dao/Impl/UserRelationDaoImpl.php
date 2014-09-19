@@ -32,5 +32,9 @@ class UserRelationDaoImpl extends BaseDao implements UserRelationDao
         return $this->getUserRelation($this->getConnection()->lastInsertId());
     }
 
+    public function deleteUserRelationsByFromIdAndType($fromId,$type)
+    {
+        return $this->getConnection()->delete($this->table, array('fromId' => $fromId,'type' => $type));
+    }
 
 }

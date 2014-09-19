@@ -2,10 +2,10 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}编辑{% if type=='student' %}学生{% else %}教师{% endif %}信息{% endblock %}
+{% block title %}编辑家长信息{% endblock %}
 {% block body %}
 
-<form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_edit', {id:user.id}) }}">
+<form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_parent_edit', {id:user.id}) }}">
 
   <div class="row form-group">
     <div class="col-md-2 control-label">
@@ -13,15 +13,6 @@
     </div>
     <div class="col-md-7 controls">
       <input type="text" id="truename" name="truename" class="form-control" value="{{user.truename}}" >
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label class="col-md-2 control-label" >{% if type=='student' %}学号{% else %}工号{% endif %}</label>
-    <div class="col-md-7 controls">
-      <div class="control-text">
-        {{user.number|default('')}}
-      </div>
     </div>
   </div>
 
@@ -43,21 +34,59 @@
     </div>
   </div>
 
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="familyRelation">家庭关系</label>
+    </div>
+    <div class="col-md-7">
+      <select id="relation" name="relation" class="form-control" >
+        {{ select_options(dict('relation'), relation|default(''), '--家庭关系--') }}
+      </select>
+    </div>
+  </div>
+
+  <input type="hidden" id="numberInputNum" value="{{children|length-1}}" />
+  
+  {% for child in children %}
+    {% set index=loop.index-1 %}
     <div class="row form-group">
-      <div class="col-md-2 control-label"> 
-        <label for="idcard">身份证号</label>
+      <div class="col-md-2 control-label">
+        {% if index==0 %}
+          <label for="number_{{index}}">子女学号</label>
+        {% else %}
+          <label style="display:none" for="number_{{index}}">子女学号</label>
+        {% endif %}
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="idcard" name="idcard" class="form-control" value="{{profile.idcard}}">
-     </div>
+        <input type="text" id="number_{{index}}" name="numbers[]" class="form-control childNumber" data-url="{{path('admin_parent_create_childNumber_check')}}" value="{{child.number}}" >
+      </div>
+      <div class="col-md-1 controls">
+        <button type="button" class="btn btn-default deleteNumberBtn">-</button>
+      </div>
     </div>
+  {% endfor %}
+
+  <div class="row form-group">
+    <div class="col-md-7 col-md-offset-2 control-label">
+      <button id="addNumberBtn" type="button" class="btn btn-primary btn-block pull-left">+</button>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label"> 
+      <label for="idcard">身份证号</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="idcard" name="idcard" class="form-control" value="{{profile.idcard}}">
+   </div>
+  </div>
 
     <div class="row form-group">
       <div class="col-md-2 control-label"> 
         <label for="mobile">手机号码</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="mobile" data-url="{{path('admin_user_create_mobile_check',{id:user.id})}}"name="mobile" class="form-control" value="{{user.mobile}}">
+        <input type="text" id="mobile" data-url="{{path('admin_user_create_mobile_check',{id:user.id})}}" name="mobile" class="form-control" value="{{user.mobile}}">
      </div>
     </div>
 
@@ -198,5 +227,5 @@
 {% block footer %}
   <button id="edit-user-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">保存</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-  <script>app.load('user/edit-modal')</script>
+  <script>app.load('parent/edit-modal')</script>
 {% endblock %}

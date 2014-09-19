@@ -10,4 +10,6 @@ interface UserRelationDao
 
 	public function findUserRelationsByFromIdAndType($fromId,$type);
 
+	public function deleteUserRelationsByFromIdAndType($fromId,$type);
+
 }

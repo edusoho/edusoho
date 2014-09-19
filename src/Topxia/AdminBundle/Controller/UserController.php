@@ -90,10 +90,11 @@ class UserController extends BaseController
     public function mobileCheckAction(Request $request)
     {
         $mobile = $request->query->get('value');
+        $userId = $request->query->get('id');
         $user=$this->getUserService()->getUserByMobile($mobile);
-        if(empty($user)){
+        if(empty($user) || (!empty($userId) && $userId==$user['id'])){
             $response = array('success' => true, 'message' => '该手机号可以使用');
-        }else{
+        }else {
             $response = array('success' => false, 'message' => '手机号已存在!');
         }
         return $this->createJsonResponse($response);
@@ -112,17 +113,18 @@ class UserController extends BaseController
             $user = $this->getAuthService()->register($userData);
             $this->get('session')->set('registed_email', $user['email']);
 
-            if(isset($formData['roles'])){
-                $roles[] = 'ROLE_TEACHER';
-                array_push($roles, 'ROLE_USER');
-                $this->getUserService()->changeUserRoles($user['id'], $roles);
+            $roles[] = 'ROLE_USER';
+            if($formData['type']=='teacher'){
+                array_push($roles, 'ROLE_TEACHER');
             }
-
+            $this->getUserService()->changeUserRoles($user['id'], $roles);
             $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['nickname']} ({$user['id']})");
 
             return $this->redirect($this->generateUrl('admin_user'));
         }
-        return $this->render('TopxiaAdminBundle:User:create-modal.html.twig');
+        return $this->render('TopxiaAdminBundle:User:create-modal.html.twig',array(
+            'type'=>$request->query->get('type')
+        ));
     }
 
     public function editAction(Request $request, $id)
@@ -135,6 +137,7 @@ class UserController extends BaseController
             $fields=$request->request->all();
             $profile = $this->getUserService()->updateUserProfile($user['id'], $fields);
             $this->getUserService()->changeTrueName($user['id'],$fields['truename']);
+            $this->getUserService()->changeMobile($user['id'],$fields['mobile']);
             $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
             return $this->redirect($this->generateUrl('settings'));
         }
