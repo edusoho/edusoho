@@ -21,6 +21,8 @@ interface CourseService
 
 	public function getCourseThreads();
 
+	public function commitCourse();
+
 	/**
 	 *	courseId 课程id
 	 *	threadId 问答id

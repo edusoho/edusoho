@@ -13,6 +13,36 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->formData;
 	}
 
+	public function commitCourse()
+	{
+		$courseId = $this->getParam("courseId", 0);
+		$user = $this->controller->getUserByToken($this->request);
+
+        		if (!$user->isLogin()) {
+            		return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能评价课程！");
+        		}
+
+        		$course = $this->controller->getCourseService()->getCourse($courseId);
+        		if (empty($course)) {
+            		return $this->createErrorResponse('not_found', "课程#{$courseId}不存在，不能评价！");
+        		}
+
+        		if (!$this->controller->getCourseService()->canTakeCourse($course)) {
+            		return $this->createErrorResponse('access_denied', "您不是课程《{$course['title']}》学员，不能评价课程！");
+        		}
+
+        		$review = array();
+        		$review['courseId'] = $course['id'];
+        		$review['userId'] = $user['id'];
+        		$review['rating'] = (float)$this->getParam("rating", 0);
+        		$review['content'] = $this->getParam("content", '');
+
+        		$review = $this->controller->getReviewService()->saveReview($review);
+        		$review = $this->controller->filterReview($review);
+
+        		return $review;
+	}
+
 	public function getCourseThreads()
 	{
 		$user = $this->controller->getUserByToken($this->request);
