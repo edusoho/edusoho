@@ -92,6 +92,19 @@ class ParentController extends BaseController
         return $this->render('TopxiaAdminBundle:Parent:create-modal.html.twig');
     }
 
+
+    public function childNumberCheckAction(Request $request)
+    {
+        $childNumber = $request->query->get('value');
+        $user=$this->getUserService()->getUserByNumber($childNumber);
+        if(empty($user)){
+            $response = array('success' => false, 'message' => '该学号学生并不存在!');
+        }else{
+            $response = array('success' => true, 'message' => '该学号可以使用');
+        }
+        return $this->createJsonResponse($response);
+    }
+
     protected function getClassesService()
     {
         return $this->getServiceKernel()->createService('Classes.ClassesService');
