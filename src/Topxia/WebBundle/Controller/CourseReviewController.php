@@ -42,7 +42,7 @@ class CourseReviewController extends BaseController
     public function createAction(Request $request, $id)
     {
         $currentUser = $this->getCurrentUser();
-        $course = $this->getCourseService()->getCourse($id);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         $review = $this->getReviewService()->getUserCourseReview($currentUser['id'], $course['id']);
         $form = $this->createForm(new ReviewType(), $review ? : array());
 
