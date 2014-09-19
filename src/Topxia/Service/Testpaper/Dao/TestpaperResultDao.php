@@ -12,6 +12,8 @@ interface TestpaperResultDao
 
     public function findTestPaperResultsByTestIdAndStatusAndUserId($testpaperId, array $status, $userId);
 
+     public function findAllTestPaperResultsByTestIdAndStatusAndUserId($testpaperId, array $status, $userId);
+
     public function findTestPaperResultsByStatusAndTestIds ($ids, $status, $start, $limit);
 
     public function findTestPaperResultCountByStatusAndTestIds ($ids, $status);

@@ -196,4 +196,9 @@ interface UserService
 
     public function dropFieldData($fieldName);
 
+    /** 用户积分 **/
+    public function increasePoint($userId, $number, $action, $description = '');
+
+    public function decreasePoint($userId, $number, $action, $description = '');
+
 }

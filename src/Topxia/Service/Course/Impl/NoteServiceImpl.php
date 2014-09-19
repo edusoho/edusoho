@@ -4,6 +4,7 @@ namespace Topxia\Service\Course\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\NoteService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceEvent;
 
 class NoteServiceImpl extends BaseService implements NoteService
 {
@@ -158,6 +159,12 @@ class NoteServiceImpl extends BaseService implements NoteService
             'truename'=>$user['truename'],
             'createdTime'=>time()
         );
+
+        $note = $this->getNoteDao()->getNote($noteId);
+        $param['userId'] = $note['userId'];
+        $param['type'] = 'add';
+        $this->getDispatcher()->dispatch('user.noteByLiked', new ServiceEvent($param));
+        
         return $this->getNotePraiseDao()->addNotePraise($notePraise);
     }
 
@@ -165,6 +172,11 @@ class NoteServiceImpl extends BaseService implements NoteService
     {
         $user = $this->getCurrentUser();
         $this->getNotePraiseDao()->deleteNotePraiseByNoteIdAndUserId($noteId,$user['id']);
+
+        $note = $this->getNoteDao()->getNote($noteId);
+        $param['userId'] = $note['userId'];
+        $param['type'] = 'decrease';
+        $this->getDispatcher()->dispatch('user.noteByLiked', new ServiceEvent($param));
     }
 
     public function findNotePraisesByUserId($userId)

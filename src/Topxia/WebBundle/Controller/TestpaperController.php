@@ -338,7 +338,7 @@ class TestpaperController extends BaseController
                     $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
                 }
             }
-
+            
             return $this->createJsonResponse(true);
         }
     }

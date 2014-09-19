@@ -81,7 +81,7 @@ class SchoolController extends BaseController
         $default = array(
             'accomplishLesson' => 2,
             'shareNote' => 3,
-            'NoteByliked' => 2,
+            'NoteByLiked' => 2,
             'accomplishTest' => 3,
             'accomplishHomework' => 3,
             'accomplishPractice' => 3,

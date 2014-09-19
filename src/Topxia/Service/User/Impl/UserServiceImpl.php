@@ -338,7 +338,8 @@ class UserServiceImpl extends BaseService implements UserService
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
 
-        $this->getDispatcher()->dispatch('user.registered', new ServiceEvent($user));
+        $this->getDispatcher()->dispatch('user.registered', new ServiceEvent
+            ($user));
 
         return $user;
     }
@@ -918,6 +919,50 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->analysisRegisterDataByTime($startTime,$endTime);
     }
 
+    public function increasePoint($userId, $number, $action, $description = '')
+    {
+        $creditLog = array();
+        $creditLog['userId'] = $userId;
+        $creditLog['type'] = 'point';
+        $creditLog['description'] = $description;
+        $creditLog['number'] = abs($number);
+        $creditLog['action'] = $action;
+        $creditLog['createdTime'] = time();
+        $this->getCreditLogDao()->addCreditLog($creditLog);
+
+        $user = $this->getUserDao()->getUser($userId);
+
+        $user = $this->getUserDao()->updateUser($userId, array('point' => $user['point'] + abs($number)));
+        return $user;
+    }
+
+    public function decreasePoint($userId, $number, $action, $description = '')
+    {
+        $creditLog = array();
+        $creditLog['userId'] = $userId;
+        $creditLog['type'] = 'point';
+        $creditLog['description'] = $description;
+        $creditLog['number'] = - abs($number);
+        $creditLog['action'] = $action;
+        $creditLog['createdTime'] = time();
+        $this->getCreditLogDao()->addCreditLog($creditLog);
+
+        $user = $this->getUserDao()->getUser($userId);
+        $finalPoint = $user['point'] - abs($number);
+        if($finalPoint >= 0) {
+            $user = $this->getUserDao()->updateUser($userId, array('point' => $finalPoint));
+        } else {
+            $user = $this->getUserDao()->updateUser($userId, array('point' => 0));
+        }
+        
+        return $user;
+    }
+
+    private function getCreditLogDao()
+    {
+        return $this->createDao('User.CreditLogDao');    
+    }
+
     private function getFriendDao()
     {
         return $this->createDao("User.FriendDao");
@@ -972,7 +1017,6 @@ class UserServiceImpl extends BaseService implements UserService
     {
         return new MessageDigestPasswordEncoder('sha256');
     }
-
 
 }
 

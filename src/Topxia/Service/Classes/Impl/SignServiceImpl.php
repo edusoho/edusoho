@@ -3,6 +3,7 @@ namespace Topxia\Service\Classes\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Classes\SignService;
+use Topxia\Service\Common\ServiceEvent;
 
 class SignServiceImpl extends BaseService implements SignService
 {
@@ -30,6 +31,8 @@ class SignServiceImpl extends BaseService implements SignService
 			$ClassMemberSign = $ClassMemberSignDao->addClassMemberSign($ClassMemberSign);
 			$classSignStatistics = $this->classSignedNumIncrease($classId);
 			$this->refreshClassMemberSignStatistics($userId, $classId, $classSignStatistics['signedNum']);
+
+            $this->getDispatcher()->dispatch('user.signed', new ServiceEvent());
 			//commit if no error
 			$ClassMemberSignDao->getConnection()->commit();
 

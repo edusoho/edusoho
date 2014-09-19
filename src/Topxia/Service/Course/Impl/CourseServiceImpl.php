@@ -3,6 +3,7 @@ namespace Topxia\Service\Course\Impl;
 
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
@@ -1091,6 +1092,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			)
 		));
 
+		$param['userId'] = $member['userId'];
+		$param['type'] = 'add';
+		$param['lessonType'] = $lesson['type'];
+		$this->getDispatcher()->dispatch('user.learnedLesson', new ServiceEvent($param));
+		
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
 
@@ -1134,6 +1140,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$memberFields['learnedNum'] = count($learns);
 		$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
 		$memberFields['credit'] = $totalCredits;
+
+		$param['userId'] = $member['userId'];
+		$param['type'] = 'decrease';
+		$this->getDispatcher()->dispatch('user.learnedLesson', new ServiceEvent($param));
 
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}

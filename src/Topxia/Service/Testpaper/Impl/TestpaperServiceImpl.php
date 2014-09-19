@@ -6,6 +6,7 @@ use Topxia\Service\Testpaper\TestpaperService;
 use Topxia\Service\Testpaper\Builder\TestpaperBuilderFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Question\Type\QuestionTypeFactory;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
@@ -210,6 +211,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function findTestpaperResultsByTestIdAndStatusAndUserId($testpaperId, $userId, array $status)
     {
     	return $this->getTestpaperResultDao()->findTestpaperResultsByTestIdAndStatusAndUserId($testpaperId, $status, $userId);
+    }
+
+    public function findAllTestpaperResultsByTestIdAndStatusAndUserId($testpaperId, $userId, array $status)
+    {
+        return $this->getTestpaperResultDao()->findAllTestpaperResultsByTestIdAndStatusAndUserId($testpaperId, $status, $userId);
     }
 
     public function findTestpaperResultsByStatusAndTestIds ($ids, $status, $start, $limit)
@@ -552,7 +558,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 'result' => $this->simplifyTestpaperResult($testpaperResult),
             )
         ));
-
+        $param['userId'] = $userId;
+        $param['testPaperId'] = $testpaper['id'];
+        $this->getDispatcher()->dispatch('user.accomplishTest', new ServiceEvent($param));
+        
         return $testpaperResult;
     }
 
