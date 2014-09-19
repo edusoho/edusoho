@@ -90,10 +90,11 @@ class UserController extends BaseController
     public function mobileCheckAction(Request $request)
     {
         $mobile = $request->query->get('value');
+        $userId = $request->query->get('id');
         $user=$this->getUserService()->getUserByMobile($mobile);
-        if(empty($user)){
+        if(empty($user) || (!empty($userId) && $userId==$user['id'])){
             $response = array('success' => true, 'message' => '该手机号可以使用');
-        }else{
+        }else {
             $response = array('success' => false, 'message' => '手机号已存在!');
         }
         return $this->createJsonResponse($response);

@@ -32,6 +32,8 @@ interface UserService
 
     public function changeTrueName($userId,$truename);
 
+    public function changeMobile($userId,$mobile);
+
     public function changeAvatar($userId, $filePath, array $options);
 
     public function isNicknameAvaliable($nickname);
@@ -196,14 +198,20 @@ interface UserService
 
     public function dropFieldData($fieldName);
 
+    /**用户关联关系*/
+    public function addUserRelation($userRelation);
+
+    public function findUserRelationsByFromIdsAndType(array $fromIds,$type);
+
+    public function findUserRelationsByFromIdAndType($fromId,$type);
+
+    public function deleteUserRelationsByFromIdAndType($fromId,$type);
+
     /** 用户积分 **/
     public function increasePoint($userId, $number, $action, $description = '');
 
     public function decreasePoint($userId, $number, $action, $description = '');
 
-    public function addUserRelation($userRelation);
-
-    public function findUserRelationsByFromIdsAndType(array $fromIds,$type);
 
 
 }

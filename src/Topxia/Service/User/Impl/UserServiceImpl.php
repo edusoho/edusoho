@@ -135,10 +135,18 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changeTrueName($userId,$truename)
     {
-         if (!SimpleValidator::truename($truename)) {
+        if (!SimpleValidator::truename($truename)) {
             throw $this->createServiceException('姓名格式不正确，变更姓名失败。');
         }
         $this->getUserDao()->updateUser($userId, array('truename' => $truename));
+    }
+
+    public function changeMobile($userId,$mobile)
+    {
+        if (!SimpleValidator::mobile($mobile)) {
+            throw $this->createServiceException('手机号码格式不正确，变更手机号码失败。');
+        }
+        $this->getUserDao()->updateUser($userId, array('mobile' => $mobile));
     }
 
     public function changeAvatar($userId, $filePath, array $options)
@@ -275,6 +283,13 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('Email已存在');
         }
 
+        if (isset($registration['mobile']) && $registration['mobile']!="") {
+            if(!SimpleValidator::mobile($registration['mobile'])){
+                throw $this->createServiceException('mobile error!');
+            }else if(!empty($this->getUserByMobile($registration['mobile']))){
+                throw $this->createServiceException('手机号已存在');
+            }
+        }
         // if (!$this->isNicknameAvaliable($registration['nickname'])) {
         //     throw $this->createServiceException('昵称已存在');
         // }
@@ -284,6 +299,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user['email'] = $registration['email'];
         $user['nickname'] = $registration['nickname'];
         $user['truename'] = $registration['truename'];
+        $user['mobile'] =$registration['mobile'];
         $user['roles'] =  array('ROLE_USER');
         $user['type'] = $type;
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
@@ -302,10 +318,6 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
         );
 
-        if (isset($registration['mobile']) &&$registration['mobile']!=""&& !SimpleValidator::mobile($registration['mobile'])) {
-            throw $this->createServiceException('mobile error!');
-        }
-
         if (isset($registration['idcard']) &&$registration['idcard']!=""&& !SimpleValidator::idcard($registration['idcard'])) {
             throw $this->createServiceException('idcard error!');
         }
@@ -313,9 +325,9 @@ class UserServiceImpl extends BaseService implements UserService
 
         $profile = array();
         $profile['id'] = $user['id'];
-        $profile['mobile'] = empty($registration['mobile']) ? '' : $registration['mobile'];
-        $profile['idcard'] = empty($registration['idcard']) ? '' : $registration['idcard'];
+        //$profile['mobile'] = empty($registration['mobile']) ? '' : $registration['mobile'];
         //$profile['truename'] = empty($registration['truename']) ? '' : $registration['truename'];
+        $profile['idcard'] = empty($registration['idcard']) ? '' : $registration['idcard'];
         $profile['company'] = empty($registration['company']) ? '' : $registration['company'];
         $profile['job'] = empty($registration['job']) ? '' : $registration['job'];
         $profile['weixin'] = empty($registration['weixin']) ? '' : $registration['weixin'];
@@ -976,6 +988,16 @@ class UserServiceImpl extends BaseService implements UserService
             $userRelations[$fromId]=$userRelationArray;
         }
         return $userRelations;
+    }
+
+    public function findUserRelationsByFromIdAndType($fromId,$type)
+    {
+        return $this->getUserRelationDao()->findUserRelationsByFromIdAndType($fromId,$type);
+    }
+    
+    public function deleteUserRelationsByFromIdAndType($fromId,$type)
+    {
+        $this->getUserRelationDao()->deleteUserRelationsByFromIdAndType($fromId,$type);
     }
 
     private function getUserRelationDao()
