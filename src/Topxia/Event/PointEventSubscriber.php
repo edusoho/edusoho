@@ -57,20 +57,33 @@ class PointEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    public function shareNote(ServiceEvent $event)
+    {
+        $param = $event->getSubject();
+        $pointSetting = $this->getSettingService()->get('point', array());
+
+        $number = $pointSetting['shareNote'];
+        if($param['type'] == 'add') {
+            $this->getUserService()->increasePoint($param['userId'], $number, 'share_note', '分享笔记');
+        } else if($param['type'] == 'decrease') {
+             $this->getUserService()->decreasePoint($param['userId'], $number, 'cancel_share_note', '取消分享笔记');
+        }
+       
+    }
+    
     public function noteByLiked(ServiceEvent $event)
     {
         $param = $event->getSubject();
         $pointSetting = $this->getSettingService()->get('point', array());
 
-        $number = $pointSetting['NoteByLiked'];
+        $number = $pointSetting['noteByLiked'];
         if($param['type'] == 'add') {
             $this->getUserService()->increasePoint($param['userId'], $number, 'note_by_liked', '笔记被赞');
         } else if($param['type'] == 'decrease') {
              $this->getUserService()->decreasePoint($param['userId'], $number, 'note_cancel_liked', '笔记被取消赞');
         }
-       
     }
-    
+
     public function getCurrentUser()
     {
     	return $this->getUserService()->getCurrentUser();

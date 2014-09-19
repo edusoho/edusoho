@@ -100,6 +100,8 @@ class NoteServiceImpl extends BaseService implements NoteService
         $note['length'] = $this->calculateContnentLength($note['content']);
 
         $existNote = $this->getUserLessonNote($user['id'], $note['lessonId']);
+        $newStatus = $note['status'];
+        $oldStatus = $existNote ? $existNote['status'] : 0;
         if (!$existNote) {
             $note['userId'] = $user['id'];
             $note['createdTime'] = time();
@@ -114,6 +116,16 @@ class NoteServiceImpl extends BaseService implements NoteService
             $note['userId'], 
             $this->getNoteDao()->getNoteCountByUserIdAndCourseId($note['userId'], $note['courseId'])
         );
+
+        $param['userId'] = $user['id'];
+        if($newStatus == 1 && $oldStatus == 0 && !empty($note['content'])) {
+            $param['type'] = 'add';
+        } else if ($newStatus == 0 && $oldStatus ==1 && !empty($note['content'])) {
+            $param['type'] = 'decrease';
+        } else {
+            $param['type'] = 'noChange';
+        }
+        $this->getDispatcher()->dispatch('user.shareNote', new ServiceEvent($param));
 
         return $note;
 	}
