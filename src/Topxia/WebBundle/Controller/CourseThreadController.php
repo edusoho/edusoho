@@ -317,6 +317,7 @@ class CourseThreadController extends BaseController
                 if ($thread['userId'] != $user->id) {
                     $userUrl = $this->generateUrl('user_show', array('id'=>$userId), true);
                     $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
+                    $threadUrl .= "#post-". $post['id'];
                     $this->getNotifiactionService()->notify($thread['userId'], 'postThread', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
                 }
                 return $this->render('TopxiaWebBundle:CourseThread:post-list-item.html.twig', array(
