@@ -29,9 +29,9 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function logout()
     {
-        $token = $this->controller->getToken($request);
+        $token = $this->controller->getToken($this->request);
         if (! empty($token)) {
-            $user = $this->controller->getUserByToken($request);
+            $user = $this->controller->getUserByToken($this->request);
             $this->getLogService()->info(MobileController::MOBILE_MODULE, "user_logout", "用户退出",  array(
                 "userToken" => $user)
             );
