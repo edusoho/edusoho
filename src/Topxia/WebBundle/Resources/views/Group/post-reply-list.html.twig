@@ -18,8 +18,6 @@
           </div>
         </li>
       {% endfor %}
-    </ul>
-
     <div class="actions">
       <a class="replyToo btn btn-default btn-xs pull-right" data-status="hidden" postId="{{post.id}}" href="javascript:;">我也要说</a>
       {% if posts|length > 5 %}
@@ -29,6 +27,8 @@
       {% endif %}
       <span class="text-muted">&nbsp;</sapn>
     </div>
+    </ul>
+
     <div class="clearfix">
     {% if postReplyPaginator[postMain.id].lastPage > 1 %}
       <ul  class="paginator-{{postMain.id}} pagination pagination-sm pull-left " style="display:none;">

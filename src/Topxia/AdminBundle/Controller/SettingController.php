@@ -529,7 +529,6 @@ class SettingController extends BaseController
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
         $path = "system/{$filename}";
-
         $originFileInfo = getimagesize($file);
         $filePath = $this->container->getParameter('topxia.upload.public_directory')."/".$path;
         $imagine = new Imagine();
