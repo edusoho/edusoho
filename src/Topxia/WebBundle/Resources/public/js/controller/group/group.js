@@ -106,7 +106,7 @@
             $('.group-post-list').on('click','.li-reply',function(){
                 var postId=$(this).attr('postId');
                 var fromUserId = $(this).data('fromUserId');
-                $('#fromUserIdDiv').html('<input type="hidden" id="fromUserId" value="'+fromUserId+'">')
+                $('#fromUserIdDiv').html('<input type="hidden" id="fromUserId" value="'+fromUserId+'">');
                 $('#li-'+postId).show();
                 $('#reply-content-'+postId).focus();
                 $('#reply-content-'+postId).val("回复 "+$(this).attr("postName")+":");
@@ -143,6 +143,7 @@
                    $('#li-'+postId).show();
                    $('#reply-content-'+postId).focus();
                    $('#reply-content-'+postId).val("");
+
                }else{
                    $('#li-'+postId).hide();
                    $(this).attr('data-status',"hidden");
@@ -178,9 +179,14 @@
                 if ($('#fromUserId').length > 0) {
                     fromUserIdVal = $('#fromUserId').val();
                 } else {
-                    fromUserIdVal = $('#fromUserIdNosub').val();
-                }   
-                    var validator_threadPost = new Validator({
+                    if ($('#fromUserIdNosub').length > 0) {
+                        fromUserIdVal = $('#fromUserIdNosub').val();
+                    } else {
+                        fromUserIdVal = "";
+                    }
+                }
+
+                var validator_threadPost = new Validator({
                     element: '.thread-post-reply-form',
                     failSilently: true,
                     autoSubmit: false,
@@ -201,7 +207,7 @@
                                     window.location.href=url;
                                     return;
                                 }
-                                // window.location.reload();                
+                                window.location.reload();                
                             }
                             });
                         }
