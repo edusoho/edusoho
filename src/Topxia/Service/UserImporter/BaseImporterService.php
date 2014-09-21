@@ -3,6 +3,7 @@ namespace Topxia\Service\UserImporter;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Common\SimpleValidator;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class BaseImporterService extends BaseService
 {
@@ -139,6 +140,31 @@ class BaseImporterService extends BaseService
 	    return $data;
 	}
 
+   	protected function arrayRepeat($array, $type)
+    {   
+        $repeatArray = array();
+        $repeatArrayCount = array_count_values($array);
+        $repeatError = array();
+
+        foreach ($repeatArrayCount as $key => $value) {
+            if($value > 1) {
+            	$repeatRow = "";
+	        	for($i=1;$i<=$value;$i++){
+		            $row=array_search($key, $array);
+		            if($i < $value ) {
+		            	$repeatRow .= "第" . $row . "行" . $type . $key . "与";
+		            } else {
+		            	$repeatRow .= "第" . $row . "行" . $type . $key . "重复";
+		            }
+		            unset($array[$row]);
+	            }
+               $repeatError[] = $repeatRow;
+            }
+        }
+
+        return $repeatError;
+    }  
+
 	protected function getUserFieldService()
     {
         return $this->createService('User.UserFieldService');
@@ -162,5 +188,10 @@ class BaseImporterService extends BaseService
     protected function getProfileDao()
     {
         return $this->createDao('User.UserProfileDao');
+    }
+
+    protected function getPasswordEncoder()
+    {
+        return new MessageDigestPasswordEncoder('sha256');
     }
 }

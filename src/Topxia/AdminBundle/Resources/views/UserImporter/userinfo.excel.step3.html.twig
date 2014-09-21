@@ -2,7 +2,7 @@
 
 {% block title %}用户导入 - {{ parent() }}{% endblock %}
 
-{% set menu = 'user-lead' %}
+{% set menu = 'student' %}
 {% set script_controller = 'user/lead-excel' %}
 
 {% block main %}
@@ -12,7 +12,7 @@
 </div>
 
     <div class="row">
-        <div class="col-md-offset-2"><b>导入成功！<a type="button" class="btn btn-primary" href="{{ url('admin_user_import') }}">继续导入</a></b></div>
+        <div class="col-md-offset-2"><b>导入成功！<a type="button" class="btn btn-primary" href="{{ url('admin_student_import_check') }}">继续导入</a></b></div>
     </div>
 
 {% endblock %}

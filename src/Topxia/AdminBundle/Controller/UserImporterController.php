@@ -51,6 +51,7 @@ class UserImporterController extends BaseController
                     'checkInfo'=> $result['checkInfo'],
                     'allUserData'=> serialize($result['allStuentData']),
                     'checkType' => $rule,
+                    "classId" => $classId,
                 ));
 
             }
@@ -65,6 +66,7 @@ class UserImporterController extends BaseController
     public function importStudentsAction(Request $request)
     {
         $students=$request->request->get("data");
+        $classId=$request->request->get("classId");
         $students=unserialize($students);
         $checkType=$request->request->get("checkType");
 
@@ -72,7 +74,7 @@ class UserImporterController extends BaseController
             $this->getStudentImporterService()->importStudentByIgnore($students, $classId);
         }
         if($checkType=="update"){
-            $this->getStudentImporterService()->importStudentByUpdate($students); 
+            $this->getStudentImporterService()->importStudentByUpdate($students, $classId); 
         }
         return $this->render('TopxiaAdminBundle:UserImporter:userinfo.excel.step3.html.twig', array(
         ));

@@ -11,19 +11,23 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
 {
     private $otherNecessaryFields = array('number' => '学号');
 
-    public function importStudentByUpdate($students)
+    public function importStudentByUpdate($students, $classId)
     {
         $this->getUserDao()->getConnection()->beginTransaction();
         try{
-
             for($i=0;$i<count($students);$i++){
                 $student = $this->getUserDao()->getUserByNumber($students[$i]["number"]);
-                $student=UserSerialize::unserialize($student);
-                $this->getUserService()->changePassword($student["id"],$students[$i]["password"]);
-                $this->getUserService()->changeNickname($student["id"],$students[$i]["truename"]);
-                $this->getUserService()->changeEmail($student["id"],$students[$i]["email"]);
-                $this->getUserService()->changeTrueName($student["id"],$students[$i]["truename"]);
-                $this->getUserService()->updateUserProfile($student["id"],$students[$i]);              
+                if($student) {
+                    $student=UserSerialize::unserialize($student);
+                    $this->getUserService()->changePassword($student["id"],$students[$i]["password"]);
+                    $this->getUserService()->changeNickname($student["id"],$students[$i]["truename"]);
+                    $this->getUserService()->changeEmail($student["id"],$students[$i]["email"]);
+                    $this->getUserService()->changeTrueName($student["id"],$students[$i]["truename"]);
+                    $this->getUserService()->updateUserProfile($student["id"],$students[$i]); 
+                } else {
+                    $this->importStudentByIgnore($students, $classId);
+                }
+                             
             }
 
             $this->getUserDao()->getConnection()->commit();
@@ -42,15 +46,15 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
             for($i=0;$i<count($students);$i++){
                 $student = array();
                 $student['email'] = $students[$i]['email'];
-                $student['number'] = $student[$i]['number'];
-                $student['truename'] = $student[$i]['truename'];
+                $student['number'] = $students[$i]['number'];
+                $student['truename'] = $students[$i]['truename'];
                 $student['nickname'] = $students[$i]['truename'];
                 $student["roles"]=array('ROLE_USER');
                 $student['type'] = "default";
                 $student['createdIp'] = "";
                 $student['createdTime'] = time();
                 $student['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-                $student['password'] = $this->getPasswordEncoder()->encodePassword($users[$i]['password'], $student['salt']);
+                $student['password'] = $this->getPasswordEncoder()->encodePassword($students[$i]['password'], $student['salt']);
                 $student['setup'] = 1;
 
                 $student = UserSerialize::unserialize(
@@ -212,39 +216,20 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
         }
 
    
-        $numberRepeatInfo = $this->arrayRepeat($numberAarry);
+        $numberRepeatInfo = $this->arrayRepeat($numberAarry, "学号");
         if($checkEmail) {
-            $emailRepeatInfo = $this->arrayRepeat($emailAarry);
+            $emailRepeatInfo = $this->arrayRepeat($emailAarry, "邮箱");
         }
 
+        $errorInfos = array_merge($checkInfo, $numberRepeatInfo, $emailRepeatInfo);
         $result['status'] ='success';
         $result['errorInfos'] = $errorInfos;
         $result['checkInfo'] = $checkInfo;
         $result['allStuentData'] = $allStuentData;
-        $result['numberRepeatInfo'] = $numberRepeatInfo;
-        $result['emailRepeatInfo'] = $emailRepeatInfo; 
-        
         return $result;
     }
 
-    private function arrayRepeat($array)
-    {   
-        $repeatArray=array();
-        $repeatArrayCount=array_count_values($array);
-        $repeatRow="";
-
-        foreach ($repeatArrayCount as $key => $value) {
-            if($value>1) {$repeatRow.="重复:<br>";
-               for($i=1;$i<=$value;$i++){
-                $row=array_search($key, $array);
-                $repeatRow.="第".$row."行"."    ".$key."<br>";
-                unset($array[$row]);
-               }
-            }
-        }
-
-        return $repeatRow;
-    }  
+ 
 
 }
 
