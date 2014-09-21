@@ -85,6 +85,10 @@ admin_student:
 
 admin_student_import:
     pattern:  /student/import
+    defaults: { _controller: TopxiaAdminBundle:UserImporter:importStudents }
+
+admin_student_import_check:
+    pattern:  /student/import/check
     defaults: { _controller: TopxiaAdminBundle:UserImporter:checkStudent }
 
 admin_parent:
