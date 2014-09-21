@@ -286,11 +286,6 @@ file_put_contents("/tmp/xxx", serialize($result));
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
     private function createFilesJsonResponse($files)
     {
         foreach ($files as &$file) {
