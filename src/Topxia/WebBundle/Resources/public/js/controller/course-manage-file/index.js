@@ -32,10 +32,10 @@ define(function(require, exports, module) {
         $("button", ".panel-heading").on('click',function(){
             var url="";
             if($(this).data("storage")!='cloud' || typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
+                url = $(this).data("normalUrl");
             } else {
                 url = $(this).data("html5Url");
             }
-                url = $(this).data("normalUrl");
             $("#modal").html('');
             $("#modal").modal('show');
             $.get(url, function(html){
