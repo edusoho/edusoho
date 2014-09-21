@@ -386,11 +386,30 @@ class GroupController extends BaseController
         ));
     }
 
+    private function checkManagePermission($id)
+    {   
+        $user=$this->getCurrentUser();
+
+        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true) return true;
+        if($this->getGroupService()->isOwner($id, $user['id'])) return true;
+        if($this->getGroupService()->isAdmin($id, $user['id'])) return true;
+        return false;
+    }
+
+    private function checkOwnerPermission($id)
+    {   
+        $user=$this->getCurrentUser();
+
+        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true) return true;
+        if($this->getGroupService()->isOwner($id, $user['id'])) return true;
+        return false;
+    }
+
     public function deleteMembersAction(Request $request,$id)
     {
         $user=$this->getCurrentUser();
 
-        if (!$this->getGroupService()->isOwner($id, $user['id'])&& !$this->getGroupService()->isAdmin($id, $user['id'])  && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true) {
+        if(!$this->checkManagePermission($id)){
             return $this->createMessageResponse('info', '您没有权限!');
         }
         
@@ -418,7 +437,7 @@ class GroupController extends BaseController
     {
         $user=$this->getCurrentUser();
 
-        if (!$this->getGroupService()->isOwner($id, $user['id']) && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true) {
+        if (!$this->checkOwnerPermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
         
@@ -444,10 +463,11 @@ class GroupController extends BaseController
     public function removeAdminAction(Request $request,$id)
     {
         $user=$this->getCurrentUser();
-        if (!$this->getGroupService()->isOwner($id, $user['id']) && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true) {
+
+        if (!$this->checkOwnerPermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
-        
+
         $memberIds=$request->request->all();
 
         $group = $this->getGroupService()->getGroup($id);
@@ -475,8 +495,8 @@ class GroupController extends BaseController
 
         $group = $this->getGroupService()->getGroup($id);
 
-        if (!$this->getGroupService()->isOwner($id, $user['id'])&& !$this->getGroupService()->isAdmin($id, $user['id']) && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true) {
-                return $this->createMessageResponse('info', '您没有权限!');
+        if (!$this->checkManagePermission($id)) {
+            return $this->createMessageResponse('info', '您没有权限!');
         }
 
         return $this->render("TopxiaWebBundle:Group:setting-info.html.twig", array(
@@ -495,8 +515,8 @@ class GroupController extends BaseController
         $group = $this->getGroupService()->getGroup($id);
         $currentUser = $this->getCurrentUser();
 
-        if (!$this->getGroupService()->isOwner($id, $currentUser['id'])&& !$this->getGroupService()->isAdmin($id, $currentUser['id'])  && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true) {
-                return $this->createMessageResponse('info', '您没有权限!');
+        if (!$this->checkManagePermission($id)) {
+            return $this->createMessageResponse('info', '您没有权限!');
         }
 
         $filename = $file;
@@ -576,8 +596,8 @@ class GroupController extends BaseController
         $user=$this->getCurrentUser();
 
         $group = $this->getGroupService()->getGroup($id);
-        if (!$this->getGroupService()->isOwner($id, $user['id']) && !$this->getGroupService()->isAdmin($id, $user['id']) && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true) {
-        return $this->createMessageResponse('info', '您没有权限!');
+        if (!$this->checkManagePermission($id)) {
+            return $this->createMessageResponse('info', '您没有权限!');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -607,7 +627,7 @@ class GroupController extends BaseController
         $user=$this->getCurrentUser();
         
         $group = $this->getGroupService()->getGroup($id);
-        if (!$this->getGroupService()->isOwner($id, $user['id'])&& !$this->getGroupService()->isAdmin($id, $user['id'])  && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true) {
+        if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
         if ($request->getMethod() == 'POST') {
@@ -703,7 +723,7 @@ class GroupController extends BaseController
     public function groupEditAction(Request $request,$id)
     {
         $currentUser = $this->getCurrentUser();
-        if (!$this->getGroupService()->isOwner($id, $currentUser['id']) && !$this->getGroupService()->isAdmin($id, $currentUser['id']) && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true) {
+        if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
 

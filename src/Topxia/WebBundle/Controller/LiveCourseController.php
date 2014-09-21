@@ -181,7 +181,7 @@ class LiveCourseController extends BaseController
     public function replayAction(Request $request,$courseId,$lessonId)
     {
         return $this->forward('TopxiaWebBundle:LiveCourse:play', 
-        array(
+            array(
                 'courseId'=>$courseId,
                 'lessonId'=>$lessonId
             )
