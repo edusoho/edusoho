@@ -47,8 +47,10 @@ define(function(require, exports, module) {
 					data.audioQuality = switcher.get('audioQuality');
 					if (hlsEncrypted) {
 						data.convertor = 'HLSEncryptedVideo';
+                        data.lazyConvert = 1;
 					} else {
 						data.convertor = 'HLSVideo';
+                        data.lazyConvert = 1;
 					}
 				}
 			}
@@ -150,6 +152,7 @@ define(function(require, exports, module) {
                     async: false,
                     success: function(data){
                         serverData.length = data;
+                        serverData.lazyConvert = 1;
                     }
                 });
             } else if(audioInfoUrl && '*.mp3'.indexOf(getFileExt(file.name)[0])>-1){
@@ -165,7 +168,11 @@ define(function(require, exports, module) {
                 serverData.mimeType=file.type;
             }
             if (this.element.data('callback')) {
-                $.post(this.element.data('callback'), serverData, function(response) {
+                var url = this.element.data('callback');
+                if(serverData.lazyConvert == 1){
+                    url = url+'&lazyConvert=1';
+                }
+                $.post(url, serverData, function(response) {
         			$("div[role='progressbar']", "#fileProgressBar"+fileIndex).text("完成");
                 }, 'json');
             }
