@@ -294,7 +294,7 @@ class GroupThreadController extends BaseController
             
             if (empty($fromUserId) && !empty($postContent['postId'])) {
                 $post = $this->getThreadService()->getPost($postContent['postId']);
-                if ($post['userId'] != $user->id) {
+                if ($post['userId'] != $user->id && $post['userId'] != $thread['userId']) {
                     $this->getNotifiactionService()->notify($post['userId'], 'postThread', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
                 }
             }
