@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Common\StringToolkit;
 use Topxia\Common\FileToolkit;
@@ -78,7 +78,7 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($params);
     }
 
-    public function cloudCallbackAction(Request $request)
+    private function cloudCallBack(Request $request)
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -90,17 +90,44 @@ class UploadFileController extends BaseController
         $targetId = $request->query->get('targetId');
         $lazyConvert = $request->query->get('lazyConvert') ? true : false;
         $fileInfo['lazyConvert'] = $lazyConvert;
+
+        if($targetType == 'headLeader'){
+            $storage = $this->getSettingService()->get('storage');
+            unset($storage['headLeader']);
+            $this->getSettingService()->set('storage', $storage);
+
+            $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            if(!empty($file) && array_key_exists('id', $file)){
+                $this->getUploadFileService()->deleteFile($file['id']);
+            }
+        }
+
         $file = $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, 'cloud');
+
         if ($lazyConvert) {
             $convertHash = $this->getUploadFileService()->reconvertFile(
                 $file['id'],
                 $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
             );
         }
+
+        return $file;
+    }
+
+    public function cloudCallbackAction(Request $request)
+    {
+        $file = $this->cloudCallBack($request);
         return $this->createJsonResponse($file);
     }
 
     public function cloudConvertCallback2Action(Request $request)
+    {
+        $file = $this->cloudConvertCallback2($request);    
+
+        return $this->createJsonResponse($file['metas2']);
+    }
+
+    private function cloudConvertCallback2(Request $request)
     {
         $result = $request->getContent();
         $result = preg_replace_callback(
@@ -135,8 +162,7 @@ file_put_contents("/tmp/xxx", serialize($result));
                 'file' => $file,
             ));
         }
-
-        return $this->createJsonResponse($file['metas2']);
+        return $file;
     }
 
     public function cloudConvertCallback3Action(Request $request)
@@ -226,11 +252,23 @@ file_put_contents("/tmp/xxx", serialize($result));
         return $this->createJsonResponse($file['metas2']);
     }
 
+    public function getHeadLeaderHlsKeyAction(Request $request)
+    {
+        $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
+        $convertParams = json_decode($file['convertParams'], true);
+        return new Response($convertParams['hlsKey']);
+    }
+
     public function getMediaInfoAction(Request $request, $type)
     {
         $key = $request->query->get('key');
         $info = $this->getUploadFileService()->getMediaInfo($key, $type);
         return $this->createJsonResponse($info['format']['duration']);
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     private function getUploadFileService()

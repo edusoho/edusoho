@@ -153,7 +153,7 @@
 
   <hr>
 
-  <div class="row form-group">
+  <div class="row form-group" >
     <div class="col-md-3 control-label">
       <label>云视频指纹</label>
     </div>  
@@ -162,6 +162,65 @@
       <div class="help-block">开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的昵称。</div>
     </div>
   </div>
+  {% if storageSetting.upload_mode == 'cloud' %}
+
+  <hr>
+
+  <div class="row form-group" id="upload-panel"
+  data-params-url="{{ path('admin_uploadfile_head_leader_params', {storage:storageSetting.upload_mode}) }}"
+  data-hls-encrypted="1"
+  >
+
+    <div class="col-md-3 control-label" >
+      <label>云视频片头</label>
+    </div>
+
+    <div class="controls col-md-8 radios">
+      {{ radios('video_header', {'0':'关闭', '1':'开启'}, storageSetting.video_header|default(0)) }}
+    </div>
+
+    <div class="controls col-md-8 radios">
+      <div class="file-chooser-bar" style="display:none;">
+        <span data-role="placeholder"></span>
+        <div class="alert alert-warning" data-role="waiting-tip" style="display:none;">正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br />转换完成后将以站内消息通知您。</div>
+      </div>
+
+      <div class="file-chooser-main">
+        <div class="file-chooser-uploader-control">
+          <span id="video-choose-uploader-btn"
+            data-role="uploader-btn"
+            data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv;*.mov{% else %}*.mp4{% endif %}"
+            data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
+            data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:'headLeader', targetId:0}) }}{% endif %}" 
+            data-progressbar="#video-chooser-progress"
+            data-storage-type="{{storageSetting.upload_mode}}"
+            data-get-media-info="{{path('uploadfile_cloud_get_media_info',{type:'video'})}}"
+            >
+            <a class="uploadBtn btn btn-default btn-lg" >
+              上传
+            </a>
+            </p>
+            <div style="display:none">
+              <input data-role="fileSelected" class="filePrew" type="file" />
+            </div>
+          </span>
+        </div>
+        <div class="progress" id="video-chooser-progress" style="display:none;">
+          <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          <ul>
+            <li>支持<strong>mp4, avi, flv, wmv, mov</strong>格式的视频文件上传，文件大小不能超过<strong>10 MB</strong>。</li>
+            <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+            <li>视频将上传到<strong>云视频服务器</strong>，上传后会对视频进行格式转换，转换过程需要一定的时间。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 
   <div class="row form-group">
     <div class="col-md-3 control-label"></div>

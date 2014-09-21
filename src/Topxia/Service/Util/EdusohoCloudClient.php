@@ -123,13 +123,14 @@ class EdusohoCloudClient implements CloudClient
         return json_decode($content, true);
     }
 
-    public function generateHLSEncryptedListUrl($convertParams, $videos, $hlsKeyUrl, $duration = 3600)
+    public function generateHLSEncryptedListUrl($convertParams, $videos, $hlsKeyUrl, $headLeaders, $headLeaderHlsKeyUrl, $duration = 3600)
     {
 
         $types = array('sd', 'hd', 'shd');
         $names = array('sd' => '标清', 'hd' => '高清', 'shd' => '超清');
 
         $bandwidths = array();
+
         foreach ($convertParams['video'] as $index => $videoBandwidth) {
             $type = $types[$index];
             $bandwidths[$type] = (intval($videoBandwidth) + intval($convertParams['audio'][$index])) * 1024; 
@@ -141,11 +142,16 @@ class EdusohoCloudClient implements CloudClient
                 continue;
             }
 
-            $items[] = array(
+            $programe = array(
                 'name' => $names[$type],
                 'bandwidth' => $bandwidths[$type],
-                'key' => $videos[$type]['key'],
+                'key' => $videos[$type]['key']
             );
+            
+            if(!empty($headLeaders) && array_key_exists($type, $headLeaders)){
+                $programe['headLeader'] = $headLeaders[$type];
+            }
+            $items[] = $programe;
         }
 
         $onceToken = $this->makeToken('hlslist.view', array('once' => false, 'duration' => 3600));
@@ -154,6 +160,7 @@ class EdusohoCloudClient implements CloudClient
             'items' => $items,
             'hlsKeyUrl' => $hlsKeyUrl,
             '_once' => $onceToken['token'],
+            'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl
         );
 
         $httpParams = array();
@@ -422,12 +429,6 @@ class EdusohoCloudClient implements CloudClient
     {
         $args = array();
         $args['key'] = $key;
-        if($mediaType == "video"){
-            $args["storageType"]="public";
-        }
-        if($mediaType == "audio"){
-            $args["storageType"]="private";
-        }
         $args['duration'] = "3600";
         return $this->callRemoteApi('GET', 'GetMediaInfo', $args);
     }

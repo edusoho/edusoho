@@ -933,3 +933,8 @@ admin_official_messages:
     pattern:  /official/messages
     defaults: { _controller: TopxiaAdminBundle:Default:officialMessages }
 
+admin_uploadfile_head_leader_params:
+    pattern: /uploadfile/video/head/leader/params
+    defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
+
+

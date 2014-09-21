@@ -23,4 +23,6 @@ interface UploadFileDao
     public function deleteFile($id);
 
     public function updateFile($id, array $fields);
+
+    public function getFileByTargetType($targetType);
 }

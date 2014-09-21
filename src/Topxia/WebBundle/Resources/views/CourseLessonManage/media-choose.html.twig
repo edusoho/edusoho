@@ -3,7 +3,8 @@
   <div class="file-chooser" id="video-chooser" style="display:none;"
     data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
     data-hls-encrypted="{{ setting('developer.hls_encrypted', 1) }}"
-
+    data-targetType="{{targetType}}"
+    data-targetId="{{targetId}}"
   >
     <div class="file-chooser-bar" style="display:none;">
       <span data-role="placeholder"></span>
@@ -138,7 +139,8 @@
 
   <div class="file-chooser" id="audio-chooser" style="display:none;"
       data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
-
+      data-targetType="{{targetType}}"
+      data-targetId="{{targetId}}"
   >
     <div class="file-chooser-bar"  style="display:none;">
       <span data-role="placeholder"></span>
@@ -205,7 +207,8 @@
 
   <div class="file-chooser" id="ppt-chooser" style="display:none;"
     data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId, convertor:'ppt'}) }}"
-
+    data-targetType="{{targetType}}"
+    data-targetId="{{targetId}}"
   >
     <div class="file-chooser-bar"  style="display:none;">
       <span data-role="placeholder"></span>

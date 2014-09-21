@@ -40,4 +40,6 @@ interface UploadFileService
 
     public function getMediaInfo($key, $type);
 
+    public function getFileByTargetType($targetType);
+
 }
