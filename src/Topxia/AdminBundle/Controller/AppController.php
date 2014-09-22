@@ -23,6 +23,7 @@ class AppController extends BaseController
     {
         $apps = $this->getAppService()->getCenterApps();
 
+        if(isset($apps['error'])) return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status'=>'error',));
         $codes = ArrayToolkit::column($apps, 'code');
 
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
@@ -52,6 +53,7 @@ class AppController extends BaseController
     {
         $apps = $this->getAppService()->checkAppUpgrades();
 
+        if(isset($apps['error'])) return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array('status'=>'error',));
         $version=$this->getAppService()->getMainVersion();
 
         return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
