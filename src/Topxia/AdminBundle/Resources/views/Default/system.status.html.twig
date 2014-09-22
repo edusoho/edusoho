@@ -1,6 +1,6 @@
 <table class="table table-condensed table-bordered table-striped table-hover" >
       {% set status = 0  %}
-      {% if status != "error" %}
+      {% if error != "error" %}
         {% if systemVersion == "old" %}
         {% for app in apps %}
         {% if app.code=="MAIN" %}
@@ -13,7 +13,7 @@
             <img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已是最新版本</td></tr>
         {% endif %}
       {% endif %}
-      {% if status == "error" %}
+      {% if error == "error" %}
         <tr><td>主系统</td><td rowspan="4"><div class="empty"><span  style="color:#cc0000;float:left;">AccessKey或者SecretKey设置不正确，<a href="{{path('admin_setting_storage')}}">请修改设置。</a></sapn></div></td></tr>
         <tr><td>应用更新</td></tr>
 
