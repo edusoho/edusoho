@@ -13,7 +13,7 @@
   <h1 class="pull-left">学生管理</h1>
 </div>
 <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
-  {# modal #}
+  {# {# modal 
   <div class="modal" id="class-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -30,13 +30,13 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> #}
 
 
 
 
   <div class="form-group">
-    <input type="text" id="class" data-url="{{path('class',{type:'student'})}}" name="class" class="form-control" value="{{ app.request.query.get('class') }}" placeholder="按班级">
+    <input type="text" id="class" {# data-url="{{path('class',{type:'student'})}}"  #}name="class" class="form-control" value="{{ app.request.query.get('class') }}" placeholder="按班级">
   </div>
 
   <div class="form-group">
