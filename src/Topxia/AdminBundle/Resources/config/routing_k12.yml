@@ -79,17 +79,21 @@ admin_school_class_student_remove:
     pattern:  /school/class/{classId}/student/{userId}/remove
     defaults: { _controller: TopxiaAdminBundle:School:studentRemove }
 
+admin_user_import_check:
+    pattern:  /{type}/import/check
+    defaults: { _controller: TopxiaAdminBundle:UserImporter:checkUser }
+
+admin_user_import:
+    pattern:  /{type}/import
+    defaults: { _controller: TopxiaAdminBundle:UserImporter:importUser }
+
+admin_teacher:
+    pattern:  /teacher
+    defaults: { _controller: TopxiaAdminBundle:Teacher:index }
+
 admin_student:
     pattern:  /student
     defaults: { _controller: TopxiaAdminBundle:Student:index }
-
-admin_student_import:
-    pattern:  /student/import
-    defaults: { _controller: TopxiaAdminBundle:UserImporter:importStudents }
-
-admin_student_import_check:
-    pattern:  /student/import/check
-    defaults: { _controller: TopxiaAdminBundle:UserImporter:checkStudent }
 
 admin_parent:
     pattern:  /parent

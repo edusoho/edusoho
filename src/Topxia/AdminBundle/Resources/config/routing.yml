@@ -162,10 +162,6 @@ admin_tag_delete:
 #     pattern:  /user/{id}/avatar/crop
 #     defaults: { _controller: TopxiaAdminBundle:User:avatarCrop }
 
-admin_teacher:
-    pattern:  /teacher
-    defaults: { _controller: TopxiaAdminBundle:Teacher:index }
-
 admin_teacher_promote:
     pattern:  /teacher/{id}/promote
     defaults: { _controller: TopxiaAdminBundle:Teacher:promote }
