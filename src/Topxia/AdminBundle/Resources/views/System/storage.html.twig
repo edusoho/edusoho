@@ -182,12 +182,28 @@
     <div class="col-md-3" >
     </div>
     <div class="controls col-md-8">
-      <div class="file-chooser-bar" style="display:none;">
-        <span data-role="placeholder"></span>
-        <div class="alert alert-warning" data-role="waiting-tip" style="display:none;">正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br />转换完成后将以站内消息通知您。</div>
+
+
+      <div class="file-chooser-bar" 
+        {% if not storageSetting.video_header %}
+        style="display:none;"
+        {% endif %}
+        >
+        <span data-role="placeholder">{{headLeader.filename}}</span>
+        <button class="btn btn-link btn-sm edit-btn" type="button"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+        {% if headLeader.convertStatus != 'success' %}
+        <div class="alert alert-warning" data-role="waiting-tip">
+        正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br />转换完成后将以站内消息通知您。
+        </div>
+        {% endif %}
+
       </div>
 
-      <div class="file-chooser-main">
+      <div class="file-chooser-main" 
+        {% if storageSetting.video_header %}
+        style="display:none;"
+        {% endif %}
+      >
         <div class="file-chooser-uploader-control">
           <span id="video-choose-uploader-btn"
             data-role="uploader-btn"
