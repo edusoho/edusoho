@@ -24,10 +24,10 @@ define(function(require, exports, module) {
         config.itemsByqq=itemsByqq;
 
         if(type=="dropdown"){
-            var html='<div class="dropdown pull-right" style="padding:6px 12px;"><a class="dropdown-toggle text-muted "  href="#" id="dropdownMenu1" data-toggle="dropdown" >分享到<span class="caret"></span></a><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"><div class="bdsharebuttonbox" style="padding:10px;">';
+            var html='<div class="dropdown pull-right" style="padding:1px"><a class="dropdown-toggle text-muted "  href="#" id="dropdownMenu1" data-toggle="dropdown" >分享到<span class="caret"></span></a><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"><div class="bdsharebuttonbox" style="padding:1px;">';
         }
         else{
-            var html='<ul style="padding:20px;"><div class="bdsharebuttonbox " style="padding:10px;">';
+            var html='<ul style="padding:1px;"><div class="bdsharebuttonbox" >';
         }
 
         if(contains(config[name],'qq')){
@@ -66,7 +66,7 @@ define(function(require, exports, module) {
                        "bdSign":"normal"
                         },
                 "share":{
-                        "bdSize":"24"
+                        "bdSize":24
                 }
         };
 
