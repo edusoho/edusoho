@@ -2,7 +2,7 @@
 namespace Topxia\Service\UserImporter;
 
 
-interface StudentImporterService
+interface TeacherImporterService
 {
 
 }

@@ -5,14 +5,24 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
-class BaseImporterService extends BaseService
+abstract class BaseImporterService extends BaseService
 {
 	protected $necessaryFields = array('password' => '密码', 'truename' => '姓名', 'gender' => '性别');
 
-	protected function loadRawDataFromExcel()
-	{
-		
-	}
+	protected function importUserByIgnore($users, $classId)
+    {
+
+    }
+
+    protected function importUserByUpdate($users, $classId)
+    {
+
+    }
+
+    protected function checkUserData($file, $rule, $classId)
+    {
+        
+    }
 
 	protected function checkNecessaryFields($excelTitle, $otherFields = array())
 	{
@@ -86,13 +96,12 @@ class BaseImporterService extends BaseService
         return $errorInfo;
 	}
 
-	protected function getFieldArray()
+	protected function getFieldArray($otherNecessaryFields)
 	{
 		$userFieldArray=array();
 
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-        $fieldArray=array(
-                "number"=>'学号',
+        $fieldArray=array_merge(array(
                 "email"=>'邮箱',
                 "password"=>'密码',
                 "truename"=>'姓名',
@@ -105,7 +114,7 @@ class BaseImporterService extends BaseService
                 "weibo"=>'微博',
                 "weixin"=>'微信',
                 "qq"=>'QQ',
-                );
+                ), $otherNecessaryFields);
         
         foreach ($userFields as $userField) {
             $title=$userField['title'];

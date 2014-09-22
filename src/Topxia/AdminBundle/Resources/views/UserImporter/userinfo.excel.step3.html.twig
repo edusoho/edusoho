@@ -1,18 +1,18 @@
 {% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
 
-{% block title %}用户导入 - {{ parent() }}{% endblock %}
+{% block title %}{{ type == 'student' ? '学生' : type == 'teacher' ? '教师' : '家长' }}导入 - {{ parent() }}{% endblock %}
 
-{% set menu = 'student' %}
+{% set menu = type == 'student' ? 'student' : type == 'teacher' ? 'teacher' : 'parent' %}
 {% set script_controller = 'user/lead-excel' %}
 
 {% block main %}
 {{ web_macro.flash_messages() }}
 <div class="page-header clearfix">
-  <h1 class="pull-left">用户导入-步骤3</h1>
+  <h1 class="pull-left">{{ type == 'student' ? '学生' : type == 'teacher' ? '教师' : '家长' }}导入-步骤3</h1>
 </div>
 
     <div class="row">
-        <div class="col-md-offset-2"><b>导入成功！<a type="button" class="btn btn-primary" href="{{ url('admin_student_import_check') }}">继续导入</a></b></div>
+        <div class="col-md-offset-2"><b>导入成功！<a type="button" class="btn btn-primary" href="{{ path('admin_user_import_check',{type:type}) }}">继续导入</a></b></div>
     </div>
 
 {% endblock %}

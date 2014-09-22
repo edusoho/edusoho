@@ -11,7 +11,7 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
 {
     private $otherNecessaryFields = array('number' => '学号');
 
-    public function importStudentByUpdate($students, $classId)
+    public function importUserByUpdate($students, $classId)
     {
         $this->getUserDao()->getConnection()->beginTransaction();
         try{
@@ -38,7 +38,7 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
         }
     }
 
-    public function importStudentByIgnore($students, $classId)
+    public function importUserByIgnore($students, $classId)
     {
         $this->getUserDao()->getConnection()->beginTransaction();
         try{
@@ -101,7 +101,7 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
         }
     }
 
-    public function checkStudentData($file, $rule, $classId)
+    public function checkUserData($file, $rule, $classId)
     {
         $result = array();
         $errorInfos = array();
@@ -129,7 +129,7 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
             return $result;
         }
 
-        $fieldArray = $this->getFieldArray();
+        $fieldArray = $this->getFieldArray($this->otherNecessaryFields);
         $execelTitle = array();
         for ($col = 0;$col < $highestColumnIndex;$col++)
         {
@@ -188,7 +188,7 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
             $numberAarry[$row] = $student['number'];
             $emailAarry[$row] = $student['email']; 
             
-            if($classService->findClassMemberByUserNumber($student['number'], $classId)) {
+            if($rule == "ignore" && $classService->findClassMemberByUserNumber($student['number'], $classId)) {
                 $errorInfos[] = '学号为' . $student['number'] . '已存在其他班级，请检查';     
                 continue;
             }
@@ -221,7 +221,7 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
             $emailRepeatInfo = $this->arrayRepeat($emailAarry, "邮箱");
         }
 
-        $errorInfos = array_merge($checkInfo, $numberRepeatInfo, $emailRepeatInfo);
+        $errorInfos = array_merge($errorInfos, $numberRepeatInfo, $emailRepeatInfo);
         $result['status'] ='success';
         $result['errorInfos'] = $errorInfos;
         $result['checkInfo'] = $checkInfo;

@@ -1,23 +1,23 @@
 {% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
 
-{% block title %}用户导入 - {{ parent() }}{% endblock %}
+{% block title %}{{ type == 'student' ? '学生' : type == 'teacher' ? '教师' : '家长' }}导入 - {{ parent() }}{% endblock %}
 
-{% set menu = 'student' %}
+{% set menu = type == 'student' ? 'student' : type == 'teacher' ? 'teacher' : 'parent' %}
 {% set script_controller = 'user/lead-excel' %}
 
 {% block main %}
 {{ web_macro.flash_messages() }}
 <div class="page-header clearfix">
-  <h1 class="pull-left">用户导入-步骤2</h1>
+  <h1 class="pull-left">{{ type == 'student' ? '学生' : type == 'teacher' ? '教师' : '家长' }}导入-步骤2</h1>
 </div>
 
     <div class="row">
-          <form method="post" enctype="multipart/form-data" action="{{url("admin_student_import")}}">
+          <form method="post" enctype="multipart/form-data" action="{{ path('admin_user_import', {type:type})}}">
               {% if errorInfo %}
                 {% for errorInfo in errorInfo%}
                  <div class="col-md-offset-2">{{errorInfo|raw}}</div><br>
                 {% endfor %}
-                <div class="col-md-offset-2"><a type="button" class="btn btn-primary" href="{{ url('admin_student_import_check') }}">重新导入</a></div> 
+                <div class="col-md-offset-2"><a type="button" class="btn btn-primary" href="{{ path('admin_user_import_check',{type:type}) }}">重新导入</a></div> 
               {% else %}
                  {% if checkInfo %}
                   {% for checkInfo in checkInfo%}
@@ -28,10 +28,10 @@
                 <input type="hidden" value="{{allUserData}}" name="data">
                 <input type="hidden" value="{{ classId }}" name="classId">
                  <input type="hidden" value="{{checkType}}" name="checkType">
-                  <div class="col-md-offset-2">校验成功！一共包含 <b>{{userCount}}</b>个学生信息</div><br>
+                  <div class="col-md-offset-2">校验成功！一共包含 <b>{{userCount}}</b>个{{ type == 'student' ? '学生' : type == 'teacher' ? '教师' : '家长' }}信息</div><br>
                   <div class="col-md-offset-2">
                     <button type="submit" class="btn btn-primary" id="start-import-btn" >确定导入</button> 
-                    <a type="button" class="btn btn-primary" href="{{ url('admin_student_import_check') }}">返回</a>
+                    <a type="button" class="btn btn-primary" href="{{ path('admin_user_import_check',{type:type}) }}">返回</a>
                   </div> 
               {% endif %}      
              

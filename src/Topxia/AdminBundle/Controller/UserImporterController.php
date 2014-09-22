@@ -12,8 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class UserImporterController extends BaseController
 {   
-
-    public function checkStudentAction(Request $request)
+    public function checkUserAction(Request $request, $type)
     {
         if ($request->getMethod() == 'POST') {
             $file = $request->files->get('excel');
@@ -23,24 +22,27 @@ class UserImporterController extends BaseController
             if(!is_object($file)){
                 $this->setFlashMessage('danger', '请选择上传的文件');
                 return $this->render('TopxiaAdminBundle:UserImporter:userinfo.excel.html.twig', array(
+                    'type' => $type, 
                 ));
             }
             if (FileToolkit::validateFileExtension($file,'xls xlsx')) {
                 $this->setFlashMessage('danger', 'Excel格式不正确！');
                 return $this->render('TopxiaAdminBundle:UserImporter:userinfo.excel.html.twig', array(
+                    'type' => $type, 
                 ));
             }
 
-            $studentImporterService = $this->getStudentImporterService();
-            $result = $studentImporterService->checkStudentData($file, $rule, $classId);
+            $result = $this->getUserImportServiceByType($type)->checkUserData($file, $rule, $classId);
             if($result['status'] == 'failed') {
                 if($result['type'] == 'lack_fields') {
                     $this->setFlashMessage('danger', '缺少必要的字段:' . implode(",",$result['message']));
                     return $this->render('TopxiaAdminBundle:UserImporter:userinfo.excel.html.twig', array(
+                        'type' => $type, 
                     ));
                 } else if($result['type'] == 'over_line_limit') {
                     $this->setFlashMessage('danger', $result['message']);
                     return $this->render('TopxiaAdminBundle:UserImporter:userinfo.excel.html.twig', array(
+                        'type' => $type, 
                     ));
                 }
 
@@ -51,37 +53,44 @@ class UserImporterController extends BaseController
                     'checkInfo'=> $result['checkInfo'],
                     'allUserData'=> serialize($result['allStuentData']),
                     'checkType' => $rule,
-                    "classId" => $classId,
+                    'classId' => $classId,
+                    'type' => $type, 
                 ));
-
             }
-
 
         }
 
         return $this->render('TopxiaAdminBundle:UserImporter:userinfo.excel.html.twig', array(
+            'type' => $type, 
         ));
     }
 
-    public function importStudentsAction(Request $request)
+    public function importUserAction(Request $request, $type)
     {
-        $students=$request->request->get("data");
+        $users=$request->request->get("data");
         $classId=$request->request->get("classId");
-        $students=unserialize($students);
+        $users=unserialize($users);
         $checkType=$request->request->get("checkType");
 
         if($checkType=="ignore"){
-            $this->getStudentImporterService()->importStudentByIgnore($students, $classId);
+            $this->getUserImportServiceByType($type)->importUserByIgnore($users, $classId);
         }
         if($checkType=="update"){
-            $this->getStudentImporterService()->importStudentByUpdate($students, $classId); 
+            $this->getUserImportServiceByType($type)->importUserByUpdate($users, $classId); 
         }
         return $this->render('TopxiaAdminBundle:UserImporter:userinfo.excel.step3.html.twig', array(
+            'type' => $type,            
         ));
     }
 
-    protected function getStudentImporterService()
+    protected function getUserImportServiceByType($type)
     {
-        return $this->getServiceKernel()->createService('UserImporter.StudentImporterService');
+        if($type == 'student') {
+            return $this->getServiceKernel()->createService('UserImporter.StudentImporterService'); 
+        } elseif ($type == 'teacher') {
+            return $this->getServiceKernel()->createService('UserImporter.TeacherImporterService');
+        } else if($type == 'parent') {
+            return $this->getServiceKernel()->createService('UserImporter.ParentImporterService');
+        }
     }
 }

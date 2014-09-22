@@ -9,7 +9,7 @@
 {% block main %}
 <div class="page-header clearfix">
   <button class="btn btn-info btn-sm pull-right mll" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_create',{type:'student'})}}" >添加</button>
-  <a class="btn btn-info btn-sm pull-right" href="{{path('admin_student_import_check')}}">导入</a>
+  <a class="btn btn-info btn-sm pull-right" href="{{ path('admin_user_import_check',{type:'student'}) }}">导入</a>
   <h1 class="pull-left">学生管理</h1>
 </div>
 <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
