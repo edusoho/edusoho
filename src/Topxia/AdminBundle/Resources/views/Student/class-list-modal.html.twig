@@ -1,0 +1,24 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}班级选择{% endblock %}
+{% block body %}
+	{% for school in schools %}
+		{{school.name}}
+		{% set grades = school.grades|default(null) %}
+
+		{% for key, value in grades %}
+		  {{ value }}
+		  
+		{% endfor %}
+
+	{% else %}
+	{% endfor %}
+	{% for class in classes %}
+		{{class_name(class)}}
+	{% else %}
+	{% endfor %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

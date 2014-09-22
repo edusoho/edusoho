@@ -111,7 +111,9 @@ admin_parent_create_childNumber_check:
     pattern:  /parent/create/childNumber/check
     defaults: { _controller: TopxiaAdminBundle:Parent:childNumberCheck }
 
-
+admin_class_list:
+    pattern:  /class/list
+    defaults: { _controller: TopxiaAdminBundle:Student:classList }
 
 admin_user:
     pattern:  /user

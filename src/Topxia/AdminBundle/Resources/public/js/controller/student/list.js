@@ -25,7 +25,11 @@ define(function(require, exports, module) {
 
 
         $form.on('click','#class',function(){
-            
+            $.get($(this).data('url'), function(html){
+                $("#modal").modal('show');
+                $("#modal").html(html);
+            }).error(function(){
+            });
         });
 		// $table.on('click', '.send-passwordreset-email', function(){
   //           Notify.info('正在发送密码重置验证邮件，请稍等。', 60);

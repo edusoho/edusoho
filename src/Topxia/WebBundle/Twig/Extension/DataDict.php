@@ -260,7 +260,7 @@ class DataDict
     		'close'=>'关闭',
     	),
 
-    	'relation' =>array(
+    	'family' =>array(
     		'mother' =>'爸爸',
     		'father' =>'妈妈',
     		'fgrandfather'=>'爷爷',
