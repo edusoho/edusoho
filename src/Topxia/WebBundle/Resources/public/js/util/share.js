@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-
     exports.create = function(object) {
 
     function contains(arr, str) {
@@ -43,7 +42,7 @@ define(function(require, exports, module) {
          html+='<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>';
     }
     if(contains(config[name],'renren')){
-         html+='<a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a> ';
+         html+='<a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>';
     }
     if(contains(config[name],'more')){
          html+='<a href="#" class="bds_more" data-cmd="more"></a>'; 
@@ -60,11 +59,11 @@ define(function(require, exports, module) {
                    "bdMiniList":false,       
                    "bdPic":"",       
                    "bdStyle":"0",      
-                   "bdSign":"normal"       
+                   "bdSign":"normal",       
                     },       
             "share":{
                     "bdSize":"24"
-            },
+            }
         };       
     with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)]; 
     

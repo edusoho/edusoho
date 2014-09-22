@@ -8,13 +8,13 @@ define(function(require, exports, module) {
 	        fx:"scrollHorz",
 	        slides: "> a, > img",
 	        log: "false",
-	        pauseOnHover: "true",
+	        pauseOnHover: "true"
     	});
 
     Share.create({
         selector: '.share',
         icons: 'itemsAll',
-        display: '',
+        display: ''
     });
     };
 
