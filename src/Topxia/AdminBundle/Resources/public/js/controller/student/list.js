@@ -38,7 +38,7 @@ define(function(require, exports, module) {
   //           }).error(function(){
   //               Notify.danger('Email验证邮件，发送失败');
   //           });
-		});
+		// });
 
 
 	};

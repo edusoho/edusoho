@@ -17,7 +17,9 @@ class StudentController extends BaseController
         );
 
         if(!empty($fields)){
-            $conditions =array_merge($conditions,$fields);
+            $conditions['truename']=$fields['search_truename'];
+            $conditions['number']=$fields['search_number'];
+            //$conditions =array_merge($conditions,$fields);
         }
         $paginator = new Paginator(
             $this->get('request'),
