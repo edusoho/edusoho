@@ -1,4 +1,4 @@
-<div style="display:block;height:200px; width:auto;"  class="well">
+<div style="display:block;height:200px; width:auto;background-color: #fff;"  class="well">
   <div>亲爱的&nbsp;&nbsp;&nbsp;<span style="color:red;font-size:16px">张三三</span>&nbsp;&nbsp;&nbsp;同学
   </div>
   <div style="margin:10px 0 10px 0">
@@ -9,10 +9,11 @@
     </div>
   </div>
 
+  <div style="margin:10px 0 10px 0">上次正在学习《课程名称》 第x课时</div>
   <div id="class-sign" data-records="{{ path('signed_records', {'classId':class.id,'userId':app.user.id})}}" data-signurl="{{ path('user_sign', {'classId':class.id,'userId':app.user.id}) }}">
     <div class="sign_wapper">
       {% if not isSignedToday %}
-      <a class="btn btn-primary" data-role="sign">签到</a>
+      <a class="btn btn-primary" data-role="sign">每日签到</a>
       {% else %}
       <a class="btn btn-primary" data-role="signed" onclick="return false;">已签到</a>
       {% endif %}
