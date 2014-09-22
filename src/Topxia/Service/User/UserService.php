@@ -40,6 +40,8 @@ interface UserService
 
     public function isNumberAvaliable($number);
 
+    public function isMobileAvaliable($mobile);
+
     public function isEmailAvaliable($email);
 
     public function hasAdminRoles($userId);

@@ -220,6 +220,15 @@ class UserServiceImpl extends BaseService implements UserService
         return empty($user) ? true : false;
     }
 
+    public function isMobileAvaliable($mobile)
+    {
+        if (empty($mobile)) {
+            throw $this->createServiceException('参数不正确。');
+        }
+        $user = $this->getUserByMobile($mobile);
+        return empty($user) ? true : false;
+    }
+
     public function isEmailAvaliable($email)
     {
         if (empty($email)) {

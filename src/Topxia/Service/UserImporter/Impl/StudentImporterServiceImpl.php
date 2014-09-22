@@ -20,7 +20,6 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
                 if($student) {
                     $student=UserSerialize::unserialize($student);
                     $this->getUserService()->changePassword($student["id"],$students[$i]["password"]);
-                    $this->getUserService()->changeNickname($student["id"],$students[$i]["truename"]);
                     $this->getUserService()->changeEmail($student["id"],$students[$i]["email"]);
                     $this->getUserService()->changeTrueName($student["id"],$students[$i]["truename"]);
                     $this->getUserService()->updateUserProfile($student["id"],$students[$i]); 
@@ -48,7 +47,7 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
                 $student['email'] = $students[$i]['email'];
                 $student['number'] = $students[$i]['number'];
                 $student['truename'] = $students[$i]['truename'];
-                $student['nickname'] = $students[$i]['truename'];
+                $student['nickname'] = $students[$i]['number'];
                 $student["roles"]=array('ROLE_USER');
                 $student['type'] = "default";
                 $student['createdIp'] = "";
@@ -193,6 +192,10 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
                 continue;
             }
             
+            if($checkEmail && $rule=="ignore" && !$userService->isEmailAvaliable($student['email'])) {          
+                $errorInfos[] = "第".$row."行的邮箱已存在，请检查数据．";
+                continue;
+            }
             if(!$userService->isNumberAvaliable($student['number'])) { 
 
                 if($rule=="ignore") {
@@ -205,11 +208,6 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
                 $allStuentData[]= $student;            
                 continue;
             }
-            if($checkEmail && !$userService->isEmailAvaliable($student['email'])) {          
-                $errorInfos[] = "第".$row."行的邮箱已存在，请检查数据．";
-                continue;
-            }
-
 
             $allStuentData[]= $student;
             unset($student);

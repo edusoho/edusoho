@@ -4,6 +4,7 @@ namespace Topxia\Service\UserImporter;
 use Topxia\Service\Common\BaseService;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\WebBundle\Twig\Extension\DataDict;
 
 abstract class BaseImporterService extends BaseService
 {
@@ -46,12 +47,16 @@ abstract class BaseImporterService extends BaseService
             }
         }
 
-        if (!SimpleValidator::number($userData['number'])) {
+        if (isset($userData['number']) && !SimpleValidator::number($userData['number'])) {
             $errorInfo[]="第 ".$row."行".$fieldCol["number"]." 列 的数据存在问题，请检查。";
         }
 
         if (!SimpleValidator::password($userData['password'])) {
             $errorInfo[]="第 ".$row."行".$fieldCol["password"]." 列 的数据存在问题，请检查。";
+        }
+
+        if (isset($userData['childNumber']) && !SimpleValidator::number($userData['childNumber'])) {
+            $errorInfo[]="第 ".$row."行".$fieldCol["childNumber"]." 列 的数据存在问题，请检查。";
         }
 
         if (isset($userData['truename'])&&$userData['truename']!=""&& !SimpleValidator::truename($userData['truename'])) {
@@ -65,7 +70,12 @@ abstract class BaseImporterService extends BaseService
         if (isset($userData['mobile'])&&$userData['mobile']!=""&& !SimpleValidator::mobile($userData['mobile'])) {
             $errorInfo[]="第 ".$row."行".$fieldCol["mobile"]." 列 的数据存在问题，请检查。";
         }
+
         if (isset($userData['gender']) && !in_array($userData['gender'], array("男","女"))){
+            $errorInfo[]="第 ".$row."行".$fieldCol["gender"]." 列 的数据存在问题，请检查。";
+        }
+        
+        if (isset($userData['relation']) && !in_array($userData['relation'], array_values(DataDict::dict('family')))){
             $errorInfo[]="第 ".$row."行".$fieldCol["gender"]." 列 的数据存在问题，请检查。";
         }
 
@@ -170,7 +180,6 @@ abstract class BaseImporterService extends BaseService
                $repeatError[] = $repeatRow;
             }
         }
-
         return $repeatError;
     }  
 

@@ -39,6 +39,8 @@ interface ClassesService
 
     public function findClassMemberByUserNumber($number, $classId);
 
+    public function findClassByUserNumber($number);
+
     public function findClassMembersByUserIds(array $userIds);
 
     public function searchClassMembers(array $conditions, array $orderBy, $start, $limit);
