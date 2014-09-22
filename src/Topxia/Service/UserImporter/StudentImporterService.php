@@ -4,9 +4,9 @@ namespace Topxia\Service\UserImporter;
 
 interface StudentImporterService
 {
-	public function importStudentByOverwrite();
+	public function importStudentByUpdate($students, $classId);
 
-	public function importStudentByIgnoreError();
+	public function importStudentByIgnore($students, $classId);
 
-	public function checkStudentData($file);
+	public function checkStudentData($file, $rule, $classId);
 }

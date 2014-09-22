@@ -236,6 +236,16 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return $this->getClassMemberDao()->findMembersByClassIdAndRole($classId, 'STUDENT');
     }
 
+    public function findClassMemberByUserNumber($number, $classId)
+    {
+        $user = $this->getUserService()->getUserByNumber($number);
+        if(empty($user)) {
+            return null;
+        } else {
+            return $this->getClassMemberDao()->getStudentMemberByUserIdAndClassId($user['id'], $classId);
+        }
+    }
+
     public function findClassMembersByUserIds(array $userIds)
     {
         return $this->getClassMemberDao()->findClassMembersByUserIds($userIds);

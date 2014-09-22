@@ -2,7 +2,7 @@
 
 {% block title %}用户导入 - {{ parent() }}{% endblock %}
 
-{% set menu = 'user-lead' %}
+{% set menu = 'student' %}
 {% set script_controller = 'user/lead-excel' %}
 
 {% block main %}
@@ -12,12 +12,12 @@
 </div>
 
     <div class="row">
-          <form method="post" enctype="multipart/form-data" action="{{url("admin_user_import_to_base")}}">
+          <form method="post" enctype="multipart/form-data" action="{{url("admin_student_import")}}">
               {% if errorInfo %}
                 {% for errorInfo in errorInfo%}
                  <div class="col-md-offset-2">{{errorInfo|raw}}</div><br>
                 {% endfor %}
-                <div class="col-md-offset-2"><a type="button" class="btn btn-primary" href="{{ url('admin_user_import') }}">重新导入</a></div> 
+                <div class="col-md-offset-2"><a type="button" class="btn btn-primary" href="{{ url('admin_student_import_check') }}">重新导入</a></div> 
               {% else %}
                  {% if checkInfo %}
                   {% for checkInfo in checkInfo%}
@@ -26,9 +26,13 @@
                 {% endif %}
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
                 <input type="hidden" value="{{allUserData}}" name="data">
+                <input type="hidden" value="{{ classId }}" name="classId">
                  <input type="hidden" value="{{checkType}}" name="checkType">
-                  <div class="col-md-offset-2">校验成功！一共包含 <b>{{userCount}}</b>个用户信息</div><br>
-                  <div class="col-md-offset-2"><button type="submit" class="btn btn-primary" id="start-import-btn" >确定导入</button> <a type="button" class="btn btn-primary" href="{{ url('admin_user_import') }}">返回</a></div> 
+                  <div class="col-md-offset-2">校验成功！一共包含 <b>{{userCount}}</b>个学生信息</div><br>
+                  <div class="col-md-offset-2">
+                    <button type="submit" class="btn btn-primary" id="start-import-btn" >确定导入</button> 
+                    <a type="button" class="btn btn-primary" href="{{ url('admin_student_import_check') }}">返回</a>
+                  </div> 
               {% endif %}      
              
              
