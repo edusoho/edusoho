@@ -22,4 +22,6 @@ interface LessonService
 	public function unLearnLesson();
 
 	public function getLearnStatus();
+
+	public function getLessonStatus();
 }

@@ -110,6 +110,24 @@ class LessonServiceImpl extends BaseService implements LessonService
         		return "finished";
     	}
 
+            public function getLessonStatus()
+            {
+                        $user = $this->controller->getuserByToken($this->request);
+                        $courseId = $this->getParam("courseId");
+                        $lessonId = $this->getParam("lessonId");
+
+                        if ($user->isLogin()) {
+                            $learnStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);
+                            $lessonMaterials = $this->controller->getMaterialService()->findLessonMaterials($lessonId, 0, 1);
+                                                return array(
+                                                    "learnStatus"=>$learnStatus,
+                                                    "hasMaterial"=> empty($lessonMaterials) ? false : true
+                                                    );
+                        } 
+
+                        return array();
+            }
+
     	public function getLearnStatus()
     	{
     		$user = $this->controller->getuserByToken($this->request);
