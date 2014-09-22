@@ -5,6 +5,7 @@ define(function(require, exports, module) {
 	exports.run = function() {
 
 		var $table = $('#user-table');
+        var $form = $('#user-search-form');
 
 		$table.on('click', '.lock-user, .unlock-user', function() {
 			var $trigger = $(this);
@@ -22,6 +23,10 @@ define(function(require, exports, module) {
             });
 		});
 
+
+        $form.on('click','#class',function(){
+            
+        });
 		// $table.on('click', '.send-passwordreset-email', function(){
   //           Notify.info('正在发送密码重置验证邮件，请稍等。', 60);
   //           $.post($(this).data('url'),function(response){
