@@ -13,6 +13,23 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->formData;
 	}
 
+	public function postThread()
+	{
+		$courseId = $this->getParam("courseId", 0);
+		$threadId = $this->getParam("threadId", 0);
+
+		$user = $this->controller->getUserByToken($this->request);
+		if (!$user->isLogin()) {
+            		return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能评价课程！");
+        		}
+        		$thread = $this->controller->getThreadService()->getThread($threadId);
+        		if (empty($thread)) {
+        			return $this->createErrorResponse($request, 'not_thread', "问答不存在或已删除");
+        		}
+		$post = $this->controller->getThreadService()->createPost($this->formData);
+		return $post;
+	}
+
 	public function commitCourse()
 	{
 		$courseId = $this->getParam("courseId", 0);

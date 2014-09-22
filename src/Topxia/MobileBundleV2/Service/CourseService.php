@@ -39,4 +39,11 @@ interface CourseService
 	 *	limit 分页
 	*/
 	public function getThreadPost();
+
+	/**
+	 *	courseId
+	 *	threadId
+	 *	content
+	*/
+	public function postThread();
 }
