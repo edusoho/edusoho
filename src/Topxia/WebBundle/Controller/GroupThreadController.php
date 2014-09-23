@@ -80,7 +80,7 @@ class GroupThreadController extends BaseController
             $thread=$this->getThreadService()->updateThread($threadId,$fields);
             if ($user->isAdmin()) {
                 $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$id,'threadId'=>$thread['id']), true);
-                $this->getNotifiactionService()->notify($thread['userId'], 'updateThread', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员编辑。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
+                $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员编辑。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
             }
             
             return $this->redirect($this->generateUrl('group_thread_show', array(
@@ -289,18 +289,18 @@ class GroupThreadController extends BaseController
             $url=$this->getPost($post['id'],$threadId,$groupId);
 
             if ($user->id != $thread['userId']) {
-                $this->getNotifiactionService()->notify($thread['userId'], 'postThread', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
+                $this->getNotifiactionService()->notify($thread['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
             }
             
             if (empty($fromUserId) && !empty($postContent['postId'])) {
                 $post = $this->getThreadService()->getPost($postContent['postId']);
                 if ($post['userId'] != $user->id && $post['userId'] != $thread['userId']) {
-                    $this->getNotifiactionService()->notify($post['userId'], 'postThread', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
+                    $this->getNotifiactionService()->notify($post['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
                 }
             }
 
             if (!empty($fromUserId) && $fromUserId != $user->id && $fromUserId != $thread['userId']) {
-                $this->getNotifiactionService()->notify($postContent['fromUserId'], 'postThread', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
+                $this->getNotifiactionService()->notify($postContent['fromUserId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
             }
 
             return new Response($url);
@@ -401,7 +401,7 @@ class GroupThreadController extends BaseController
         $thread = $this->getThreadService()->getThread($post['threadId']);
         $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$thread['groupId'],'threadId'=>$thread['id']), true);
 
-        $this->getNotifiactionService()->notify($thread['userId'],'setElite',"您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>的回复被删除。"); 
+        $this->getNotifiactionService()->notify($thread['userId'],'default',"您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>的回复被删除。"); 
 
         return new Response($this->generateUrl('group_thread_show', array(
             'id'=>$groupId,'threadId'=>$post['threadId'],
@@ -424,19 +424,19 @@ class GroupThreadController extends BaseController
         $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$thread['groupId'],'threadId'=>$thread['id']), true);
         if($action=='setElite'){
            $this->getThreadService()->setElite($threadId);
-           $this->getNotifiactionService()->notify($thread['userId'],'setElite',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被设为精华。"); 
+           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被设为精华。"); 
         }
         if($action=='removeElite'){
            $this->getThreadService()->removeElite($threadId); 
-           $this->getNotifiactionService()->notify($thread['userId'],'removeElite',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被取消精华。"); 
+           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被取消精华。"); 
         }
         if($action=='setStick'){
            $this->getThreadService()->setStick($threadId); 
-           $this->getNotifiactionService()->notify($thread['userId'],'setStick',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被置顶。"); 
+           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被置顶。"); 
         }
         if($action=='removeStick'){
            $this->getThreadService()->removeStick($threadId); 
-           $this->getNotifiactionService()->notify($thread['userId'],'removeStick',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被取消置顶。"); 
+           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被取消置顶。"); 
         }
 
         return new Response($this->generateUrl('group_thread_show', array(

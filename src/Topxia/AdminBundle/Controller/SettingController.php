@@ -402,7 +402,6 @@ class SettingController extends BaseController
     public function shareAction (Request $request)
     {   
         $defaultSetting = $this->getSettingService()->get('default', array());
-
         $default = $this->getDefaultSet();
 
         $defaultSetting = array_merge($default, $defaultSetting);
