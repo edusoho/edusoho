@@ -549,9 +549,10 @@ class SettingController extends BaseController
 
         foreach ($specification as $key => $value) {
             $width= ($originFileInfo[0]*$value/$originFileInfo[1]);
-            $rawImage->resize(new Box($width, $value));
+            $specialImage = $rawImage->copy();
+            $specialImage->resize(new Box($width, $value));
             $filePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}-{$key}.{$pathinfo['extension']}";
-            $rawImage->save($filePath, array('quality' => 90));
+            $specialImage->save($filePath);
         }
 
         $response = array(
