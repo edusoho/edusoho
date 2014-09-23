@@ -38,6 +38,11 @@ class BaseService {
         return $this->controller->getContainer();
     }
 
+    protected function getTestpaperService()
+    {
+        return $this->controller->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
+
     public function createErrorResponse($name, $message) {
         $error = array(
             'error' => array(

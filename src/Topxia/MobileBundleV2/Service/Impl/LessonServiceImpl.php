@@ -299,11 +299,28 @@ class LessonServiceImpl extends BaseService implements LessonService
                         return $lesson;
 	}
 
+            private function getTestPagerLesson($lesson)
+            {
+                        $id = $lesson['mediaId'];
+                        $testpaper = $this->getTestpaperService()->getTestpaper($id);
+                        if (empty($testpaper)) {
+                            return $this->createErrorResponse('error', '试卷已删除，请联系管理员。!');
+                        }
+
+                        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($id, $user);
+
+                        if (empty($testResult)) {
+                            return array('status' => 'nodo');
+                        }
+
+                        return array('status' => $testResult['status'], 'resultId' => $testResult['id'])
+            }
+
 	private function getPPTLesson($lesson)
 	{
 		$file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
         		if (empty($file)) {
-            		$this->createErrorResponse('not_ppt', '获取ppt课时失败!');
+            		return $this->createErrorResponse('not_ppt', '获取ppt课时失败!');
         		}
 
         		if ($file['convertStatus'] != 'success') {
