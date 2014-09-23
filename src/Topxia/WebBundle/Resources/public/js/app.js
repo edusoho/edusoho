@@ -18,6 +18,12 @@ define(function(require, exports, module) {
 
 	};
 
+	exports.inject = function(injections) {
+		for(var injection in injections) {
+			exports.load(injections[injection]);
+		}
+		
+	}
 	window.app.load = exports.load;
 
 	if (app.themeGlobalScript) {
@@ -26,6 +32,10 @@ define(function(require, exports, module) {
 
 	if (app.controller) {
 		exports.load(app.controller);
+	}
+
+	if (app.injection) {
+		exports.inject(app.injection);
 	}
 
 
