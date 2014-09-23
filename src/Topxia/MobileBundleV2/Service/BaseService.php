@@ -40,7 +40,12 @@ class BaseService {
 
     protected function getTestpaperService()
     {
-        return $this->controller->getServiceKernel()->createService('Testpaper.TestpaperService');
+        return $this->controller->getService('Testpaper.TestpaperService');
+    }
+
+    protected function getQuestionService()
+    {
+        return $this->controller->getService('Question.QuestionService');
     }
 
     public function createErrorResponse($name, $message) {

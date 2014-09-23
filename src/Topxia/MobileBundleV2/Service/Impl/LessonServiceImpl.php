@@ -217,10 +217,8 @@ class LessonServiceImpl extends BaseService implements LessonService
 				return $this->getPPTLesson($lesson);
 			case 'video':
                                                 return $this->getVideoLesson($lesson);
-				break;
-                                    case 'testpager':
+                                    case 'testpaper':
                                                 return $this->getTestPagerLesson($lesson);
-                                                break;
 			default:
 				$lesson['content'] = $this->wrapContent($lesson['content']);
 		}
@@ -305,18 +303,24 @@ class LessonServiceImpl extends BaseService implements LessonService
             private function getTestPagerLesson($lesson)
             {
                         $id = $lesson['mediaId'];
+                        $user = $this->controller->getUser();
                         $testpaper = $this->getTestpaperService()->getTestpaper($id);
                         if (empty($testpaper)) {
                             return $this->createErrorResponse('error', '试卷已删除，请联系管理员。!');
                         }
 
-                        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($id, $user);
+                        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($id, $user['id']);
 
-                        if (empty($testResult)) {
-                            return array('status' => 'nodo');
-                        }
+                        $result = $this->getTestpaperService()->showTestpaper($id);
+                        $items = $result['formatItems'];
 
-                        return array('status' => $testResult['status'], 'resultId' => $testResult['id']);
+                        $lesson['content'] = array(
+                            'status'=>empty($testResult) ? 'nodo' : $testResult['status'],
+                            'resultId'=>empty($testResult) ? 0 : $testResult['id'],
+                            'testpaper'=>$testpaper,
+                            'items'=>$items
+                            );
+                        return $lesson;
             }
 
 	private function getPPTLesson($lesson)
