@@ -1186,6 +1186,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getLessonDao()->getLesson($nextLearnLessonId);
 	}
 
+	public function getNextLearnLessonByUserId($userId)
+	{
+		return $this->getLessonLearnDao()->getNextLearnLessonByUserId($userId);
+	}
+
 	public function getChapter($courseId, $chapterId)
 	{
 		$chapter = $this->getChapterDao()->getChapter($chapterId);

@@ -16,10 +16,20 @@ class SignController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 		$classMember = $this->getClassesService()->refreashStudentRank($user['id'], $class['id']);
+		$nextLearnLesson = $this->getCourseService()->getNextLearnLessonByUserId($user['id']);
+		$nextCourse = array();
+		$nextLesson = array();
+		if($nextLearnLesson) {
+			$nextCourse = $this->getCourseService()->getCourse($nextLearnLesson['courseId']);
+			$nextLesson = $this->getCourseService()->getCourseLesson($nextLearnLesson['courseId'], $nextLearnLesson['lessonId']);
+		}
+		
 		$isSignedToday = $this->getSignService()->isSignedToday($user['id'], $class['id']);
 		return $this->render('TopxiaWebBundle:Sign:show.html.twig',array(
 			'class' => $class,
 			'user' => $user,
+			'nextCourse' => $nextCourse,
+			'nextLesson' => $nextLesson,
 			'classMember' => $classMember,
 			'isSignedToday' => $isSignedToday));
 	}
@@ -54,8 +64,13 @@ class SignController extends BaseController
 		return $this->getServiceKernel()->createService('Classes.SignService');
 	}
 
-		public function getClassesService()
+	public function getClassesService()
 	{
 		return $this->getServiceKernel()->createService('Classes.ClassesService');
+	}
+
+		public function getCourseService()
+	{
+		return $this->getServiceKernel()->createService('Course.CourseService');
 	}
 }

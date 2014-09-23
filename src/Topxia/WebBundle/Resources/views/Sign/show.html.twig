@@ -16,7 +16,11 @@
     </div>
   </div>
 
-  <div style="margin:10px 0 10px 0">上次正在学习《课程名称》 第x课时</div>
+  {% if nextCourse %}
+    <a style="margin:10px 0 10px 0" href="{{ path('course_learn', {id:nextCourse.id}) ~ '#lesson/' ~ nextLesson.id }}">上次正在学习《{{nextCourse.title}}》 课时 {{ nextLesson.title}}</a>
+  {% else %}
+    <a style="margin:10px 0 10px 0" href="{{ path('class_courses', {classId:class.id})}}">还开始学习课程，快去学习吧!</a>
+  {% endif %}
   <div id="class-sign" data-records="{{ path('signed_records', {'classId':class.id,'userId':app.user.id})}}" data-signurl="{{ path('user_sign', {'classId':class.id,'userId':app.user.id}) }}">
     <div class="sign_wapper">
       {% if not isSignedToday %}
