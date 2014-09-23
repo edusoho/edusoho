@@ -240,11 +240,8 @@ class LessonServiceImpl extends BaseService implements LessonService
                             return $this->createErrorResponse('error', '试卷已删除，请联系管理员。!');
                         }
 
-                        $result = $this->getTestpaperService()->showTestpaper($id);
-                        $items = $result['formatItems'];
-
+                        $items = $this->getTestpaperService()->getTestpaperItems($id);
                         return array(
-                            "result"=>$result,
                             'testpaper'=>$testpaper,
                             'items'=>$this->filterTestpaperItems($items)
                             );
@@ -252,11 +249,18 @@ class LessonServiceImpl extends BaseService implements LessonService
 
             private function filterTestpaperItems($items)
             {
-                return array_map(function($item){
-                    $count = count($item);
-                    $item = $count;
-                    return $item;
-                }, $items);
+                $itemArray = array();
+                foreach ($items as $key => $item) {
+                    $type = $item['questionType'];
+                    if (isset($itemArray[$type])) {
+                        $count = $itemArray[$type];
+                        $itemArray[$type] = $count + 1;
+                    } else {
+                        $itemArray[$type] = 1;
+                    }
+                }
+
+                return $itemArray;
             }
 
 	private function coverLesson($lesson)
