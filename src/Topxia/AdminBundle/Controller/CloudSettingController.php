@@ -161,4 +161,9 @@ class CloudSettingController extends BaseController
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
 }
