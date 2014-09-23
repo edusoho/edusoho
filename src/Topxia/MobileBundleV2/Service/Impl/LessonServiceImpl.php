@@ -208,6 +208,25 @@ class LessonServiceImpl extends BaseService implements LessonService
 		return $this->createErrorResponse('not_student', '你不是该课程学员，请加入学习!');
 	}
 
+            private function getTestpaperLesson($lesson)
+            {
+                        $user = $this->controller->getUser();
+                        $id = $lesson['mediaId'];
+
+                        $testpaper = $this->getTestpaperService()->getTestpaper($id);
+                        if (empty($testpaper)) {
+                            return $this->createErrorResponse('error', '试卷不存在!');
+                        }
+
+                        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive( $id, $user['id']);
+                        $lesson['content'] = array(
+                            'status'=>empty($testResult) ? 'nodo' : $testResult['status'],
+                            'resultId'=>empty($testResult) ? 0 : $testResult['id']
+                            );
+
+                        return $lesson;
+            }
+
             public function getTestpaperInfo()
             {
                         $id = $this->getParam("testId");
@@ -229,14 +248,10 @@ class LessonServiceImpl extends BaseService implements LessonService
                             return $this->createErrorResponse('error', '试卷已删除，请联系管理员。!');
                         }
 
-                        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($id, $user['id']);
-
                         $result = $this->getTestpaperService()->showTestpaper($id);
                         $items = $result['formatItems'];
 
                         return array(
-                            'status'=>empty($testResult) ? 'nodo' : $testResult['status'],
-                            'resultId'=>empty($testResult) ? 0 : $testResult['id'],
                             'testpaper'=>$testpaper,
                             'items'=>$this->filterTestpaperItems($items)
                             );
@@ -261,8 +276,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 			case 'video':
                                                 return $this->getVideoLesson($lesson);
                                     case 'testpaper':
-                                                $lesson['content'] = "";
-                                                break;
+                                                return $this->getTestpaperLesson($lesson);
 			default:
 				$lesson['content'] = $this->wrapContent($lesson['content']);
 		}
