@@ -12,6 +12,13 @@ define(function(require, exports, module) {
             return false;
         }
 
+        function changeWeixinQrcodeHeight(){
+            setTimeout(changeWeixinQrcodeHeight,0);
+            if ($('#bdshare_weixin_qrcode_dialog').length > 0 ) {
+                $('#bdshare_weixin_qrcode_dialog').css('height','310px')
+            };
+        }
+        
         var select=object.selector;
         var name=object.icons;
         var type=object.display;
@@ -74,6 +81,8 @@ define(function(require, exports, module) {
         html+='</ul>';
 
         $(select).html(html);
+
+        changeWeixinQrcodeHeight();
     }
 
 });
