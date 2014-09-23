@@ -218,6 +218,9 @@ class LessonServiceImpl extends BaseService implements LessonService
 			case 'video':
                                                 return $this->getVideoLesson($lesson);
 				break;
+                                    case 'testpager':
+                                                return $this->getTestPagerLesson($lesson);
+                                                break;
 			default:
 				$lesson['content'] = $this->wrapContent($lesson['content']);
 		}
