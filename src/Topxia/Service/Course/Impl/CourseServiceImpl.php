@@ -854,6 +854,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		// $this->autosetCourseFields($courseId);
 	}
 
+	public function findLearnsCountByLessonId($lessonId)
+	{
+		return  $this->getLessonLearnDao()->findLearnsCountByLessonId($lessonId);
+	}
+
 	public function analysisLessonFinishedDataByTime($startTime,$endTime)
 	{
 		return $this->getLessonLearnDao()->analysisLessonFinishedDataByTime($startTime,$endTime);

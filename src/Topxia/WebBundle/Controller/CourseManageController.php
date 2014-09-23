@@ -214,13 +214,27 @@ class CourseManageController extends BaseController
         $isLearnedNum=$this->getCourseService()->searchMemberCount(array('isLearned'=>1,'courseId'=>$id));
 
         $learnTime=$this->getCourseService()->searchLearnTime(array('courseId'=>$id));
+        $learnTime=$course['studentNum']==0 ? 0 : intval($learnTime/$course['studentNum']);
 
         $noteCount=$this->getNoteService()->searchNoteCount(array('courseId'=>$id));
 
         $questionCount=$this->getThreadService()->searchThreadCount(array('courseId'=>$id,'type'=>'question'));
 
         $lessons=$this->getCourseService()->searchLessons(array('courseId'=>$id),array('createdTime', 'ASC'),0,1000);
-        print_r($lessons);
+
+        foreach ($lessons as $key => $value) {
+            $lessonLearnedNum=$this->getCourseService()->findLearnsCountByLessonId($value['id']);
+
+            $finishedNum=$this->getCourseService()->searchLearnCount(array('status'=>'finished','lessonId'=>$value['id']));
+            
+            $lessonLearnTime=$this->getCourseService()->searchLearnTime(array('lessonId'=>$value['id']));
+            $lessonLearnTime=$lessonLearnedNum==0 ? 0 : intval($lessonLearnTime/$lessonLearnedNum);
+
+            $lessons[$key]['LearnedNum']=$lessonLearnedNum;
+            $lessons[$key]['finishedNum']=$finishedNum;
+            $lessons[$key]['learnTime']=$lessonLearnTime;
+        }
+   
         return $this->render('TopxiaWebBundle:CourseManage:learning-data.html.twig', array(
             'course' => $course,
             'isLearnedNum'=>$isLearnedNum,

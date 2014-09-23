@@ -10,7 +10,7 @@
     <div class="panel-heading">基本信息</div>
     <div class="panel-body">
       <div class="table-responsive">
-        <table class="table table-bordered" style="word-break:break-all;">
+        <table class="table table-bordered" style="word-break:break-all;text-align:center;">
           <tr class="active">
             <td>课程名</td>
             <td>课程学习人数</td>
@@ -38,15 +38,19 @@
             <td>视频平均观看时长(分)</td>
             <td>测试平均得分</td>
           </tr>
-          <tr>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-            <td>aaa</td>
-          </tr>
+          {% if lessons %}
+            {% for lesson in lessons %}
+              <tr>
+                <td>{{lesson.title}}</td>
+                <td>{{lesson.LearnedNum}}</td>
+                <td>{{lesson.finishedNum}}</td>
+                <td>{{lesson.learnTime}}</td>
+                <td>aaa</td>
+                <td>aaa</td>
+                <td>aaa</td>
+              </tr>
+            {% endfor %}
+          {% endif %}
         </table>
       </div>
     </div>
