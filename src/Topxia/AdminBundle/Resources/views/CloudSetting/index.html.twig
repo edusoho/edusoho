@@ -129,7 +129,7 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label>设置水印图片</label>
+      <label>设置播放器水印图片</label>
     </div>
     <div class="controls col-md-8 radios">
 
@@ -137,17 +137,23 @@
       <button class="btn btn-default" id="cloud-video-watermark-upload" type="button" data-url="{{ path('admin_setting_cloud_video_watermark_upload') }}">上传</button>
       <button class="btn btn-default" id="cloud-video-watermark-remove" type="button" data-url="{{ path('admin_setting_cloud_video_watermark_remove') }}" {% if not storageSetting.video_watermark_image %}style="display:none;"{% endif %}>删除</button>
 
-      <div class="help-block">支持png/jpg格式图片，建议使用半透明的png图片（建议不要小于270×90）。</div>
+      <div class="help-block">支持png/gif/jpg格式图片，建议使用半透明的png图片。</div>
       <input type="hidden" name="video_watermark_image" value="{{ storageSetting.video_watermark_image }}">
     </div>
   </div>
 
-  <div class="row form-group" style="display:none;">
+  <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label>水印位置</label>
+      <label>设置内嵌水印图片</label>
     </div>
     <div class="controls col-md-8 radios">
-      {{ radios('video_watermark_position', {'topright':'右上', 'bottomright':'右下', 'topleft': '左上', 'bottomleft': '左下'}, storageSetting.video_watermark_position) }}
+
+      <div id="cloud-video-embed-watermark-container">{% if storageSetting.video_embed_watermark_image %}<img src="{{ file_url(storageSetting.video_embed_watermark_image) }}">{% endif %}</div>
+      <button class="btn btn-default" id="cloud-video-embed-watermark-upload" type="button" data-url="{{ path('admin_setting_cloud_video_embed_watermark_upload') }}">上传</button>
+      <button class="btn btn-default" id="cloud-video-embed-watermark-remove" type="button" data-url="{{ path('admin_setting_cloud_video_embed_watermark_remove') }}" {% if not storageSetting.video_embed_watermark_image %}style="display:none;"{% endif %}>删除</button>
+
+      <div class="help-block">支持png/gif/jpg格式图片，建议使用半透明的png图片（推荐图片大小为270×90）。</div>
+      <input type="hidden" name="video_embed_watermark_image" value="{{ storageSetting.video_embed_watermark_image }}">
     </div>
   </div>
 

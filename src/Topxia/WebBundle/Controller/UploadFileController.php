@@ -67,13 +67,6 @@ class UploadFileController extends BaseController
         } else {
             $params['convertCallback'] = null;
         }
-
-        $setting = $this->getSettingService()->get('storage', array());
-        $params['hasVideoWatermark'] = 0;
-        
-        if ($setting['video_watermark'] == 2 && !empty($setting['video_watermark_image'])) {
-            $params['hasVideoWatermark'] = 1;
-        }
         
         $params = $this->getUploadFileService()->makeUploadParams($params);
 

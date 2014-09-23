@@ -14,7 +14,7 @@
         {% endif %}
       {% endif %}
       {% if error == "error" %}
-        <tr><td>主系统</td><td rowspan="4"><div class="empty"><span  style="color:#cc0000;float:left;text-align:left;">云平台参数设置不正确，会影响到系统正常的运行，<a href="{{path('admin_setting_storage')}}">请修改设置。</a></sapn></div></td></tr>
+        <tr><td>主系统</td><td rowspan="4"><div class="empty"><span  style="color:#cc0000;float:left;text-align:left;">云平台参数设置不正确，会影响到系统正常的运行，<a href="{{path('admin_setting_cloud')}}">请修改设置。</a></sapn></div></td></tr>
         <tr><td>应用更新</td></tr>
 
         <tr ><td>新应用</td></tr>
@@ -36,7 +36,7 @@
         <tr><td>新应用</td><td>{% if unInstallAppCount>0 %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还有 <span class="badge" style="background-color:#cc0000;">{{unInstallAppCount}}</span> 个应用没有安装<a class="pull-right" href="{{path("admin_app_center")}}">查看</a>{% else %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已安装了全部应用
       {% endif %}</td></tr>
 
-        <tr><td>云视频</td><td>{% if setting("storage").cloud_bucket!="" %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已开通{% if setting("storage").upload_mode != 'cloud' %}(尚未启用)<a class="pull-right" href="{{path("admin_setting_storage")}}">查看</a>{% endif %}{% else %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还未开通<a class="pull-right" href="{{path("admin_setting_storage")}}">查看</a>
+        <tr><td>云视频</td><td>{% if setting("storage").cloud_bucket!="" %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已开通{% if setting("storage").upload_mode != 'cloud' %}(尚未启用)<a class="pull-right" href="{{path("admin_setting_cloud")}}">查看</a>{% endif %}{% else %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还未开通<a class="pull-right" href="{{path("admin_setting_cloud")}}">查看</a>
       {% endif %}</td></tr>
       {% endif %}
         <tr><td>直播</td><td>{% if setting("course").live_student_capacity>0 %}<img src="{{asset("assets/img/default/yes.png")}}" style="width:16px;height:16px;"/> 已开通{% if setting("course").live_course_enabled==0 %}(尚未启用)<a class="pull-right" href="{{path("admin_setting_course_setting")}}#live-course-set">查看</a>{% endif %}{% else %}<img src="{{asset("assets/img/default/info.png")}}" style="width:16px;height:16px;"/> 还未开通<a class="pull-right" href="{{path("admin_setting_course_setting")}}#live-course-set">查看</a>

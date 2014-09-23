@@ -11,7 +11,7 @@
     <h1>检查应用更新</h1>
   </div>
 {% if status|default(null) %}
-  <div class="alert alert-danger">AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="{{path('admin_setting_storage')}}">请修改设置。</a></div>
+  <div class="alert alert-danger">AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="{{path('admin_setting_cloud')}}">请修改设置。</a></div>
 {% else %}
 {% if apps %}
   <table class="table table-striped table-hover">

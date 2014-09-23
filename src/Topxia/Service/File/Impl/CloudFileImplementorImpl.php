@@ -298,11 +298,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     private function getVideoWatermarkImages()
     {
         $setting = $this->getSettingService()->get('storage',array());
-        if (empty($setting['video_watermark_image']) or ($setting['video_watermark'] != 2)) {
+        if (empty($setting['video_embed_watermark_image']) or ($setting['video_watermark'] != 2)) {
             return array();
         }
 
-        $videoWatermarkImage = $this->getEnvVariable('baseUrl').$this->getKernel()->getParameter('topxia.upload.public_url_path')."/".$setting['video_watermark_image'];
+        $videoWatermarkImage = $this->getEnvVariable('baseUrl').$this->getKernel()->getParameter('topxia.upload.public_url_path')."/".$setting['video_embed_watermark_image'];
         $pathinfo = pathinfo($videoWatermarkImage);
 
         $images = array();
