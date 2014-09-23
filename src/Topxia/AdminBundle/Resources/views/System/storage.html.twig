@@ -137,7 +137,7 @@
       <button class="btn btn-default" id="cloud-video-watermark-upload" type="button" data-url="{{ path('admin_setting_cloud_video_watermark_upload') }}">上传</button>
       <button class="btn btn-default" id="cloud-video-watermark-remove" type="button" data-url="{{ path('admin_setting_cloud_video_watermark_remove') }}" {% if not storageSetting.video_watermark_image %}style="display:none;"{% endif %}>删除</button>
 
-      <div class="help-block">支持png/jpg格式图片，建议使用半透明的png图片。</div>
+      <div class="help-block">支持png/jpg格式图片，建议使用半透明的png图片（建议不要小于270×90）。</div>
       <input type="hidden" name="video_watermark_image" value="{{ storageSetting.video_watermark_image }}">
     </div>
   </div>
