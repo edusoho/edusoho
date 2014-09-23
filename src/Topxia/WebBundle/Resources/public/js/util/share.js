@@ -58,7 +58,7 @@ define(function(require, exports, module) {
                        "bdSnsKey":{},
                        "bdText":bdText,
                        "bdDesc":"  ",
-                       "bdMini":"2",
+                       "bdMini":1,
                        "bdComment":" ",
                        "bdMiniList":false,
                        "bdPic":"",
