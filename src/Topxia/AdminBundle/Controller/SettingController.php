@@ -512,8 +512,14 @@ class SettingController extends BaseController
             }
         }
 
+        $headLeader = array();
+        if(!empty($storageSetting) && array_key_exists("video_header", $storageSetting) && $storageSetting["video_header"]){
+            $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
+        }
+
         return $this->render('TopxiaAdminBundle:System:storage.html.twig', array(
             'storageSetting'=>$storageSetting,
+            'headLeader'=>$headLeader
         ));
     }
 
@@ -979,6 +985,11 @@ class SettingController extends BaseController
 
         return new Response(json_encode($response));
 
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
     
     protected function getAppService()

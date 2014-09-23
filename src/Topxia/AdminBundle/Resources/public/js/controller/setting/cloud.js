@@ -88,6 +88,12 @@ define(function(require, exports, module) {
                 this.element.find(".file-chooser-bar").show();
                 this.get('uploaderProgressbar').reset().hide();
             }
+        });
+
+        $(".edit-btn", "#upload-panel").on('click', function(){
+            var uploadPanel = $("#upload-panel");
+            uploadPanel.find(".file-chooser-main").show();
+            uploadPanel.find(".file-chooser-bar").hide();
         })
     }
 

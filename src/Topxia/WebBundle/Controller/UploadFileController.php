@@ -98,7 +98,7 @@ class UploadFileController extends BaseController
             unset($storage['headLeader']);
             $this->getSettingService()->set('storage', $storage);
 
-            $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            $file = $this->getUploadFileService()->getFileByTargetType($targetType);
             if(!empty($file) && array_key_exists('id', $file)){
                 $this->getUploadFileService()->deleteFile($file['id']);
             }
@@ -144,7 +144,7 @@ class UploadFileController extends BaseController
         if (empty($result['id'])) {
             throw new \RuntimeException('数据中id不能为空');
         }
-file_put_contents("/tmp/xxx", serialize($result));
+
         if (!empty($result['convertHash'])) {
             $file = $this->getUploadFileService()->getFileByConvertHash($result['convertHash']);
         } else {
