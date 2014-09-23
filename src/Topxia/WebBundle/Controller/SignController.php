@@ -16,7 +16,10 @@ class SignController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 		$isSignedToday = $this->getSignService()->isSignedToday($user['id'], $class['id']);
-		return $this->render('TopxiaWebBundle:Sign:show.html.twig',array('class' => $class, 'isSignedToday' => $isSignedToday));
+		return $this->render('TopxiaWebBundle:Sign:show.html.twig',array(
+			'class' => $class,
+			'user' => $user,
+			'isSignedToday' => $isSignedToday));
 	}
 
 	public function getSignedRecordsByMonthAction(Request $request, $classId, $userId)

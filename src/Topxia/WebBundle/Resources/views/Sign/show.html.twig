@@ -1,9 +1,9 @@
 {{ set_js_injection({'sign' : 'sign/sign'}) }}
 <div style="display:block;height:200px; width:auto;background-color: #fff;"  class="well">
-  <div>亲爱的&nbsp;&nbsp;&nbsp;<span style="color:red;font-size:16px">张三三</span>&nbsp;&nbsp;&nbsp;同学
+  <div>亲爱的&nbsp;&nbsp;&nbsp;<span style="color:red;font-size:16px">{{user.truename}}</span>&nbsp;&nbsp;&nbsp;同学
   </div>
   <div style="margin:10px 0 10px 0">
-    我的学分 <span style="color:red">45</span> 
+    我的学分 <span style="color:red">{{user.point}}</span> 
     <div class="pull-right">
       学分排名<span style="color:red"> 23 <span>
       <span class="glyphicon glyphicon-arrow-up" style="color:green" />

@@ -292,10 +292,11 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('Email已存在');
         }
 
+        $user = $this->getUserByMobile($registration['mobile']);
         if (isset($registration['mobile']) && $registration['mobile']!="") {
             if(!SimpleValidator::mobile($registration['mobile'])){
                 throw $this->createServiceException('mobile error!');
-            }else if(!empty($this->getUserByMobile($registration['mobile']))){
+            }else if(!empty($user)){
                 throw $this->createServiceException('手机号已存在');
             }
         }
