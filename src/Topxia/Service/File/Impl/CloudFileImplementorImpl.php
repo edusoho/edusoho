@@ -308,7 +308,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $images = array();
         $heighs = array('240', '360', '480', '720', '1080');
         foreach ($heighs as $height) {
-            $images[$height] = "{$pathinfo['dirname']}/{$pathinfo['filename']}-{$heigh}.{$pathinfo['extension']}";
+            $images[$height] = "{$pathinfo['dirname']}/{$pathinfo['filename']}-{$height}.{$pathinfo['extension']}";
         }
         return $images;
     }
