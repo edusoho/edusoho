@@ -24,4 +24,6 @@ interface LessonService
 	public function getLearnStatus();
 
 	public function getLessonStatus();
+
+	public function getTestpaperInfo();
 }

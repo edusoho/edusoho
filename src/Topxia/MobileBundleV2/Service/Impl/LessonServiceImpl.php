@@ -208,6 +208,49 @@ class LessonServiceImpl extends BaseService implements LessonService
 		return $this->createErrorResponse('not_student', '你不是该课程学员，请加入学习!');
 	}
 
+            public function getTestpaperInfo()
+            {
+                        $id = $this->getParam("testId");
+                        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
+                        if (!$testpaperResult) {
+                            return $this->createErrorResponse('error', '试卷不存在!');
+                        }
+
+                        $user = $this->controller->getuserByToken($this->request);
+                        if (!$user->isLogin()) {
+                            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+                        }
+                        if ($testpaperResult['userId'] != $user['id']) {
+                            return $this->createErrorResponse('error', '不可以访问其他学生的试卷哦!');
+                        }
+
+                        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+                        if (empty($testpaper)) {
+                            return $this->createErrorResponse('error', '试卷已删除，请联系管理员。!');
+                        }
+
+                        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($id, $user['id']);
+
+                        $result = $this->getTestpaperService()->showTestpaper($id);
+                        $items = $result['formatItems'];
+
+                        return array(
+                            'status'=>empty($testResult) ? 'nodo' : $testResult['status'],
+                            'resultId'=>empty($testResult) ? 0 : $testResult['id'],
+                            'testpaper'=>$testpaper,
+                            'items'=>$this->filterTestpaperItems($items)
+                            );
+            }
+
+            private function filterTestpaperItems($items)
+            {
+                return array_map(function($item){
+                    $count = count($item);
+                    $item = $count;
+                    return $item;
+                }, $items);
+            }
+
 	private function coverLesson($lesson)
 	{
 		$lesson['createdTime'] = date('c', $lesson['createdTime']);
@@ -218,7 +261,8 @@ class LessonServiceImpl extends BaseService implements LessonService
 			case 'video':
                                                 return $this->getVideoLesson($lesson);
                                     case 'testpaper':
-                                                return $this->getTestPagerLesson($lesson);
+                                                $lesson['content'] = "";
+                                                break;
 			default:
 				$lesson['content'] = $this->wrapContent($lesson['content']);
 		}
@@ -299,29 +343,6 @@ class LessonServiceImpl extends BaseService implements LessonService
                                 }
                         return $lesson;
 	}
-
-            private function getTestPagerLesson($lesson)
-            {
-                        $id = $lesson['mediaId'];
-                        $user = $this->controller->getUser();
-                        $testpaper = $this->getTestpaperService()->getTestpaper($id);
-                        if (empty($testpaper)) {
-                            return $this->createErrorResponse('error', '试卷已删除，请联系管理员。!');
-                        }
-
-                        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($id, $user['id']);
-
-                        $result = $this->getTestpaperService()->showTestpaper($id);
-                        $items = $result['formatItems'];
-
-                        $lesson['content'] = array(
-                            'status'=>empty($testResult) ? 'nodo' : $testResult['status'],
-                            'resultId'=>empty($testResult) ? 0 : $testResult['id'],
-                            'testpaper'=>$testpaper,
-                            'items'=>$items
-                            );
-                        return $lesson;
-            }
 
 	private function getPPTLesson($lesson)
 	{
