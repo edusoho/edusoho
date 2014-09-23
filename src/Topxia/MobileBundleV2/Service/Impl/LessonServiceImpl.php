@@ -316,7 +316,7 @@ class LessonServiceImpl extends BaseService implements LessonService
                             return array('status' => 'nodo');
                         }
 
-                        return array('status' => $testResult['status'], 'resultId' => $testResult['id'])
+                        return array('status' => $testResult['status'], 'resultId' => $testResult['id']);
             }
 
 	private function getPPTLesson($lesson)

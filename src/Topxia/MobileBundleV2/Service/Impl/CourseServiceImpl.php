@@ -26,10 +26,32 @@ class CourseServiceImpl extends BaseService implements CourseService
         		if (empty($thread)) {
         			return $this->createErrorResponse($request, 'not_thread', "问答不存在或已删除");
         		}
+
+        		$url = "none";
+        		try {
+			$group = $this->getParam("group", 'course');
+			$file = $this->request->files->get('file');
+			$record = $this->getFileService()->uploadFile($group, $file);
+			$url = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+		} catch (\Exception $e) {
+			$url = "error";
+		}
+
+		if ($url == "error") {
+        			return $this->createErrorResponse($request, 'not_file', "文件上传错误");
+		}
+
+		$content = $this->getParam("content", '');
+
 		$post = $this->controller->getThreadService()->createPost($this->formData);
 		return $post;
 	}
 
+	private function uploadFile()
+	{
+
+	}
+	
 	public function commitCourse()
 	{
 		$courseId = $this->getParam("courseId", 0);
