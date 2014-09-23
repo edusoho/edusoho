@@ -477,6 +477,7 @@ class SettingController extends BaseController
             'video_watermark_image' => '',
             'video_watermark_position' => 'topright',
             'video_fingerprint' => 0,
+            'video_header' => null,
         );
 
         $storageSetting = array_merge($default, $storageSetting);

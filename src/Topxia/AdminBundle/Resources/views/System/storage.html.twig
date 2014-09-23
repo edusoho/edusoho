@@ -185,13 +185,13 @@
 
 
       <div class="file-chooser-bar" 
-        {% if not storageSetting.video_header|default(null) %}
+        {% if not storageSetting.video_header %}
         style="display:none;"
         {% endif %}
         >
-        <span data-role="placeholder">{{headLeader.filename}}</span>
+        <span data-role="placeholder">{{headLeader.filename|default('')}}</span>
         <button class="btn btn-link btn-sm edit-btn" type="button"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
-        {% if headLeader.convertStatus != 'success' %}
+        {% if headLeader.convertStatus|default(null) != 'success' %}
         <div class="alert alert-warning" data-role="waiting-tip">
         正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br />转换完成后将以站内消息通知您。
         </div>
