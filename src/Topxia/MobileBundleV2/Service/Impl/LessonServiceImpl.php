@@ -239,11 +239,12 @@ class LessonServiceImpl extends BaseService implements LessonService
                         if (empty($testpaper)) {
                             return $this->createErrorResponse('error', '试卷已删除，请联系管理员。!');
                         }
-                        
+
                         $result = $this->getTestpaperService()->showTestpaper($id);
                         $items = $result['formatItems'];
 
                         return array(
+                            "result"=>$result,
                             'testpaper'=>$testpaper,
                             'items'=>$this->filterTestpaperItems($items)
                             );
