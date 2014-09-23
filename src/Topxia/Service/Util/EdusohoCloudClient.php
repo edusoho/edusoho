@@ -430,7 +430,7 @@ class EdusohoCloudClient implements CloudClient
         $args = array();
         $args['key'] = $key;
         $args['duration'] = "3600";
-        return $this->callRemoteApi('GET', 'GetMediaInfo', $args);
+        return json_decode($this->callRemoteApi('GET', 'GetMediaInfo', $args),true);
     }
 
     private function generateViewToken($bucket, $key)
