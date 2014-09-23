@@ -230,20 +230,12 @@ class LessonServiceImpl extends BaseService implements LessonService
             public function getTestpaperInfo()
             {
                         $id = $this->getParam("testId");
-                        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
-                        if (!$testpaperResult) {
-                            return $this->createErrorResponse('error', '试卷不存在!');
-                        }
-
-                        $user = $this->controller->getuserByToken($this->request);
+                        $user = $this->controller->getUserByToken($this->request);
                         if (!$user->isLogin()) {
                             return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
                         }
-                        if ($testpaperResult['userId'] != $user['id']) {
-                            return $this->createErrorResponse('error', '不可以访问其他学生的试卷哦!');
-                        }
 
-                        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+                        $testpaper = $this->getTestpaperService()->getTestpaper($id);
                         if (empty($testpaper)) {
                             return $this->createErrorResponse('error', '试卷已删除，请联系管理员。!');
                         }
