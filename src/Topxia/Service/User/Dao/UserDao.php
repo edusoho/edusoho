@@ -16,6 +16,8 @@ interface UserDao
 
 	public function findUsersByIds(array $ids);
 
+	public function findUsersByIdsAndOrder(array $ids, array $orderBy);
+
 	public function searchUsers($conditions, $orderBy, $start, $limit);
 
 	public function searchUserCount($conditions);

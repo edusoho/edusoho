@@ -18,6 +18,8 @@ interface UserService
 
     public function findUsersByIds(array $ids);
 
+    public function findUsersByIdsAndOrder(array $ids, array $orderBy);    
+
     public function findUserProfilesByIds(array $ids);
 
     public function searchUsers(array $conditions, array $orderBy, $start, $limit);
@@ -213,7 +215,5 @@ interface UserService
     public function increasePoint($userId, $number, $action, $description = '');
 
     public function decreasePoint($userId, $number, $action, $description = '');
-
-
 
 }

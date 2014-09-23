@@ -15,10 +15,12 @@ class SignController extends BaseController
 	public function userInfoAction($class)
 	{
 		$user = $this->getCurrentUser();
+		$classMember = $this->getClassesService()->refreashStudentRank($user['id'], $class['id']);
 		$isSignedToday = $this->getSignService()->isSignedToday($user['id'], $class['id']);
 		return $this->render('TopxiaWebBundle:Sign:show.html.twig',array(
 			'class' => $class,
 			'user' => $user,
+			'classMember' => $classMember,
 			'isSignedToday' => $isSignedToday));
 	}
 
@@ -52,4 +54,8 @@ class SignController extends BaseController
 		return $this->getServiceKernel()->createService('Classes.SignService');
 	}
 
+		public function getClassesService()
+	{
+		return $this->getServiceKernel()->createService('Classes.ClassesService');
+	}
 }

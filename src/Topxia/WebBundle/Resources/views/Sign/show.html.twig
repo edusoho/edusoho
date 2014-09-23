@@ -5,8 +5,14 @@
   <div style="margin:10px 0 10px 0">
     我的学分 <span style="color:red">{{user.point}}</span> 
     <div class="pull-right">
-      学分排名<span style="color:red"> 23 <span>
-      <span class="glyphicon glyphicon-arrow-up" style="color:green" />
+      学分排名<span style="color:red"> {{ classMember.currentRank }}</span>
+      {% if classMember.lastRank - classMember.currentRank > 0 %}
+        <span class="glyphicon glyphicon-arrow-up" style="color:green" title="比昨日上升了{{ classMember.lastRank - classMember.currentRank }}名,击败了{{classMember.rate}}的同学" />
+      {% elseif classMember.lastRank - classMember.currentRank < 0 %}
+        <span class="glyphicon glyphicon-arrow-down" style="color:red" title="比昨日下降了{{ classMember.lastRank - classMember.currentRank }}名, 击败了{{classMember.rate}}的同学"/>
+      {% else %}
+        <span class="glyphicon glyphicon-minus text-muted" title="击败了{{classMember.rate}}的同学"/>
+      {% endif %}
     </div>
   </div>
 

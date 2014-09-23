@@ -11,6 +11,8 @@ class UserDaoImpl extends BaseDao implements UserDao
 {
     protected $table = 'user';
 
+    protected $allowedOrderByFields = array('point');
+
     public function getUser($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
@@ -44,6 +46,15 @@ class UserDaoImpl extends BaseDao implements UserDao
         if(empty($ids)){ return array(); }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
+    public function findUsersByIdsAndOrder(array $ids, array $orderBy)
+    {
+        if(empty($ids)){ return array(); }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $orderBy = $this->checkOrderBy($orderBy, $this->allowedOrderByFields);
+        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks}) ORDER BY " . $orderBy[0] . " " . $orderBy[1] . ";";
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
