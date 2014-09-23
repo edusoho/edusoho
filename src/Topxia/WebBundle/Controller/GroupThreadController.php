@@ -383,25 +383,18 @@ class GroupThreadController extends BaseController
 
         $groupMemberRole=$this->getGroupMemberRole($groupId);
 
-        if($post['userId']!==$memberId && $memberId!==$threadOwnerId && $groupMemberRole!==2 && $groupMemberRole!==3 && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true){
-            
-            return new Response($this->generateUrl('group_thread_show', array(
-                'id'=>$groupId,'threadId'=>$post['threadId'],
-            ))); 
-        }
-
         $user=$this->getCurrentUser();
  
         if($user['id']==$post['userId'] || $groupMemberRole==2 || $groupMemberRole==3 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true){
 
             $this->getThreadService()->deletePost($postId);    
 
+            $thread = $this->getThreadService()->getThread($post['threadId']);
+            $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$thread['groupId'],'threadId'=>$thread['id']), true);
+
+            $this->getNotifiactionService()->notify($thread['userId'],'default',"您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>的回复被删除。"); 
+
         }
-
-        $thread = $this->getThreadService()->getThread($post['threadId']);
-        $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$thread['groupId'],'threadId'=>$thread['id']), true);
-
-        $this->getNotifiactionService()->notify($thread['userId'],'default',"您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>的回复被删除。"); 
 
         return new Response($this->generateUrl('group_thread_show', array(
             'id'=>$groupId,'threadId'=>$post['threadId'],
