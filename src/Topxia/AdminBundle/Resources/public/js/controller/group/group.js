@@ -37,7 +37,6 @@ define(function(require, exports, module) {
                     return false;
                 }
                 $.post($("#transfer-group-form").attr('action'),$("#transfer-group-form").serialize(), function(){
-        
                     window.location.reload();
                 })
             }

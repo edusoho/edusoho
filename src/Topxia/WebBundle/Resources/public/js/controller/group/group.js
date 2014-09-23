@@ -242,11 +242,9 @@
             $('#post-action').on('click','#elite,#stick',function(){
            
                 var $trigger = $(this);
-               
-                $.post($trigger.data('url'), function(data){
                 
+                $.post($trigger.data('url'), function(data){
                     window.location.href=data;
-              
                 });
             })
 

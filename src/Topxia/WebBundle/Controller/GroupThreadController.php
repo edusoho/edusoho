@@ -415,30 +415,25 @@ class GroupThreadController extends BaseController
         $groupMemberRole=$this->getGroupMemberRole($thread['groupId']);
 
         if($groupMemberRole==2 || $groupMemberRole==3 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true ){
-            return new Response($this->generateUrl('group_thread_show', array(
-                'id'=>$thread['groupId'],
-                'threadId'=>$threadId,
-            )));        
-        }
+            $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$thread['groupId'],'threadId'=>$thread['id']), true);
+            if($action=='setElite'){
+               $this->getThreadService()->setElite($threadId);
+               $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被设为精华。"); 
+            }
+            if($action=='removeElite'){
+               $this->getThreadService()->removeElite($threadId);
+               $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被取消精华。"); 
+            }
+            if($action=='setStick'){
+               $this->getThreadService()->setStick($threadId);
+               $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被置顶。"); 
+            }
+            if($action=='removeStick'){
+               $this->getThreadService()->removeStick($threadId);
+               $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被取消置顶。"); 
+            }
 
-        $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$thread['groupId'],'threadId'=>$thread['id']), true);
-        if($action=='setElite'){
-           $this->getThreadService()->setElite($threadId);
-           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被设为精华。"); 
         }
-        if($action=='removeElite'){
-           $this->getThreadService()->removeElite($threadId); 
-           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被取消精华。"); 
-        }
-        if($action=='setStick'){
-           $this->getThreadService()->setStick($threadId); 
-           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被置顶。"); 
-        }
-        if($action=='removeStick'){
-           $this->getThreadService()->removeStick($threadId); 
-           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被取消置顶。"); 
-        }
-
         return new Response($this->generateUrl('group_thread_show', array(
             'id'=>$thread['groupId'],
             'threadId'=>$threadId,
