@@ -209,12 +209,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
             );
 
-            $setting = $this->getSettingService()->get('storage',array());
-            if ($setting['video_watermark'] == 2 && !empty($setting['video_watermark_image'])) {
-                $videoWatermarkImage = $this->getEnvVariable('baseUrl').$this->getKernel()->getParameter('topxia.upload.public_url_path')."/".$setting['video_watermark_image'];
-                $params['convertParams']['videoWatermarkImage'] = $videoWatermarkImage;
-            }
-
         } else {
             $rawUploadParams = array(
                 'convertor' => null,
@@ -265,22 +259,22 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'convertParams' => $file['convertParams'],
         );
 
-        $setting = $this->getSettingService()->get('storage',array());
+        if ($file['type'] == 'video') {
+            $watermarks = $this->getVideoWatermarkImages();
 
-        if ($setting['video_watermark'] == 2 && !empty($setting['video_watermark_image'])) {
-            $videoWatermarkImage = $this->getEnvVariable('baseUrl').$this->getKernel()->getParameter('topxia.upload.public_url_path')."/".$setting['video_watermark_image'];
-            $params['convertParams']['videoWatermarkImage'] = $videoWatermarkImage;
-            $file['convertParams']['hasVideoWatermark'] = 1;
-        } else {
-            $file['convertParams']['hasVideoWatermark'] = 0;
+            $file['convertParams']['hasVideoWatermark'] = empty($watermarks) ? 0 : 1;
+            $file['convertParams'] = $this->encodeMetas($file['convertParams']);
+
+            $this->getUploadFileDao()->updateFile($file['id'], array('convertParams'=>$file['convertParams']));
         }
-        
-        $file['convertParams'] = $this->encodeMetas($file['convertParams']);
 
-        $this->getUploadFileDao()->updateFile($file['id'],array('convertParams'=>$file['convertParams']));
 
         if ($pipeline) {
             $params['pipeline'] = $pipeline;
+        }
+
+        if (($file['type'] == 'video') && $watermarks) {
+            $params['convertParams']['videoWatermarkImages'] = $watermarks;
         }
         $result = $this->getCloudClient()->reconvertFile($file['hashId'], $params);
 
@@ -300,6 +294,28 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $filename .= "{$file['hashId']}.{$file['ext']}";
         return $diskDirectory.$filename; 
     }
+
+    private function getVideoWatermarkImages()
+    {
+        $setting = $this->getSettingService()->get('storage',array());
+        if (empty($setting['video_watermark_image']) or ($setting['video_watermark'] != 2)) {
+            return array();
+        }
+
+        $videoWatermarkImage = $this->getEnvVariable('baseUrl').$this->getKernel()->getParameter('topxia.upload.public_url_path')."/".$setting['video_watermark_image'];
+        $pathinfo = pathinfo($videoWatermarkImage);
+
+        $images = array();
+        $heighs = array('240', '360', '480', '720', '1080');
+        foreach ($heighs as $height) {
+            $images[$height] = "{$pathinfo['dirname']}/{$pathinfo['filename']}-{$heigh}.{$pathinfo['extension']}";
+        }
+        return $images;
+    }
+
+
+
+
 
     private function getFilePath($targetType,$targetId)
     {
