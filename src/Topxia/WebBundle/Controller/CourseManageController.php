@@ -231,10 +231,11 @@ class CourseManageController extends BaseController
             $lessonLearnTime=$lessonLearnedNum==0 ? 0 : intval($lessonLearnTime/$lessonLearnedNum);
 
             $lessons[$key]['LearnedNum']=$lessonLearnedNum;
+            $lessons[$key]['length']=intval($lessons[$key]['length']/60);
             $lessons[$key]['finishedNum']=$finishedNum;
             $lessons[$key]['learnTime']=$lessonLearnTime;
         }
-   
+
         return $this->render('TopxiaWebBundle:CourseManage:learning-data.html.twig', array(
             'course' => $course,
             'isLearnedNum'=>$isLearnedNum,
