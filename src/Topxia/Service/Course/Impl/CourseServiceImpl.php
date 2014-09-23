@@ -568,7 +568,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		if($learn['status']!="finished")
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
-				'learnTime' => $learn['learnTime']+1,
+				'learnTime' => $learn['learnTime']+2,
 		));
 	}
 
@@ -1074,15 +1074,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
 
-    	public function searchLearnCount($conditions)
-    	{
-    		return $this->getLessonLearnDao()->searchLearnCount($conditions);
-    	}
+	public function searchLearnCount($conditions)
+	{
+		return $this->getLessonLearnDao()->searchLearnCount($conditions);
+	}
 
-    	public function searchLearns($conditions,$orderBy,$start,$limit)
-    	{
-    		return $this->getLessonLearnDao()->searchLearns($conditions,$orderBy,$start,$limit);
-    	}
+	public function searchLearns($conditions,$orderBy,$start,$limit)
+	{
+		return $this->getLessonLearnDao()->searchLearns($conditions,$orderBy,$start,$limit);
+	}
+
+	public function searchLearnTime($conditions)
+	{
+		return $this->getLessonLearnDao()->searchLearnTime($conditions);
+	}
 
 	public function findLatestFinishedLearns($start, $limit)
 	{

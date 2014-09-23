@@ -213,9 +213,21 @@ class CourseManageController extends BaseController
 
         $isLearnedNum=$this->getCourseService()->searchMemberCount(array('isLearned'=>1,'courseId'=>$id));
 
+        $learnTime=$this->getCourseService()->searchLearnTime(array('courseId'=>$id));
+
+        $noteCount=$this->getNoteService()->searchNoteCount(array('courseId'=>$id));
+
+        $questionCount=$this->getThreadService()->searchThreadCount(array('courseId'=>$id,'type'=>'question'));
+
+        $lessons=$this->getCourseService()->searchLessons(array('courseId'=>$id),array('createdTime', 'ASC'),0,1000);
+        print_r($lessons);
         return $this->render('TopxiaWebBundle:CourseManage:learning-data.html.twig', array(
             'course' => $course,
             'isLearnedNum'=>$isLearnedNum,
+            'learnTime'=>$learnTime,
+            'noteCount'=>$noteCount,
+            'questionCount'=>$questionCount,
+            'lessons'=>$lessons,
         ));
     }
 
@@ -358,6 +370,16 @@ class CourseManageController extends BaseController
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    private function getNoteService()
+    {
+        return $this->getServiceKernel()->createService('Course.NoteService');
+    }
+
+    private function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
     private function getSettingService()

@@ -1,12 +1,4 @@
 define(function(require, exports, module) {
-    function recordLearningTime(){
-        $.post(url);
-        if(true)
-        {
-        setTimeout(recordLearningTime, 60000);
-        }; 
-    }
-    setTimeout(recordLearningTime, 60000);
     var Widget = require('widget'),
         Backbone = require('backbone'),
         VideoJS = require('video-js'),
@@ -551,6 +543,12 @@ define(function(require, exports, module) {
             element: '#lesson-dashboard'
         }).render();
 
+        function recordLearningTime(){
+            url="../../course/"+dashboard.attrs.lessonId.value+'/learn/time';
+            $.post(url);
+            setTimeout(recordLearningTime, 120000);
+        }
+        setTimeout(recordLearningTime, 120000);
     };
 
 });
