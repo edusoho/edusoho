@@ -219,7 +219,12 @@ define(function(require, exports, module) {
                 } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
                     $("#lesson-video-content").show();
-                    
+
+                    function recordWatchTime(){
+                            url="../../course/"+lesson.id+'/watch/time';
+                            console.log(url);
+                    }
+
                     var mediaPlayer = new MediaPlayer({
                         element: '#lesson-video-content',
                         playerId: 'lesson-video-player'
@@ -230,7 +235,7 @@ define(function(require, exports, module) {
                         that._onFinishLearnLesson();
                     });
                     mediaPlayer.on('ready', function() {
-                       setTimeout(recordWatchTime(1), 120000);
+                       setInterval(recordWatchTime(), 5000);
                     });
                     mediaPlayer.on('paused', function() {
                     
@@ -542,12 +547,6 @@ define(function(require, exports, module) {
         }
 
     });
-
-    function recordWatchTime(lessonId){
-            url="../../course/"+lessonId+'/watch/time';
-            console.log(url);
-            setTimeout(recordWatchTime(lessonId), 120000);
-    }
 
     exports.run = function() {
         
