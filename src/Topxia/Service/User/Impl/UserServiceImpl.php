@@ -82,6 +82,14 @@ class UserServiceImpl extends BaseService implements UserService
         return ArrayToolkit::index($users, 'id');
     }
 
+    public function findUsersByIdsAndOrder(array $ids, array $orderBy)
+    {
+        $users = UserSerialize::unserializes(
+            $this->getUserDao()->findUsersByIdsAndOrder($ids, $orderBy)
+        );
+        return ArrayToolkit::index($users, 'id');
+    }
+
     public function findUserProfilesByIds(array $ids)
     {
         $userProfiles = $this->getProfileDao()->findProfilesByIds($ids);
@@ -220,6 +228,15 @@ class UserServiceImpl extends BaseService implements UserService
         return empty($user) ? true : false;
     }
 
+    public function isMobileAvaliable($mobile)
+    {
+        if (empty($mobile)) {
+            throw $this->createServiceException('参数不正确。');
+        }
+        $user = $this->getUserByMobile($mobile);
+        return empty($user) ? true : false;
+    }
+
     public function isEmailAvaliable($email)
     {
         if (empty($email)) {
@@ -283,10 +300,11 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('Email已存在');
         }
 
+        $user = $this->getUserByMobile($registration['mobile']);
         if (isset($registration['mobile']) && $registration['mobile']!="") {
             if(!SimpleValidator::mobile($registration['mobile'])){
                 throw $this->createServiceException('mobile error!');
-            }else if(!empty($this->getUserByMobile($registration['mobile']))){
+            }else if(!empty($user)){
                 throw $this->createServiceException('手机号已存在');
             }
         }

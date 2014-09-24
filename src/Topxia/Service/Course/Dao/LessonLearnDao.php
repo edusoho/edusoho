@@ -8,6 +8,8 @@ interface LessonLearnDao
 
     public function getLearnByUserIdAndLessonId($userId, $lessonId);
 
+    public function getNextLearnLessonByUserId($userId);
+
     public function findLearnsByUserIdAndCourseId($userId, $courseId);
 
     public function findLearnsByUserIdAndCourseIdAndStatus($userId, $courseId, $status);

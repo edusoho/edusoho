@@ -11,6 +11,8 @@ class WebExtension extends \Twig_Extension
 {
     protected $container;
 
+    protected static $jsInjection;
+
     public function __construct ($container)
     {
         $this->container = $container;
@@ -67,6 +69,8 @@ class WebExtension extends \Twig_Extension
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
             'class_name' => new \Twig_Function_Method($this, 'getClassName') ,
+            'set_js_injection' => new \Twig_Function_Method($this, 'setJsInjection'),
+            'get_js_injection' => new \Twig_Function_Method($this, 'getJsInjection'), 
         );
     }
 
@@ -498,7 +502,19 @@ class WebExtension extends \Twig_Extension
 
         return $url;
     }
+    public static function setJsInjection(array $js)
+    {
+        if(self::$jsInjection) {
+            self::$jsInjection = array_merge(self::$jsInjection, $js);
+        } else {
+            self::$jsInjection = $js;
+        }
+    }
 
+    public static function getJsInjection()
+    {
+        return self::$jsInjection;
+    }
     public function getFileUrl($uri, $default = '', $absolute = false)
     {
         $assets = $this->container->get('templating.helper.assets');

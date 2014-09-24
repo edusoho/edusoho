@@ -246,6 +246,16 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         }
     }
 
+    public function findClassByUserNumber($number)
+    {
+        $user = $this->getUserService()->getUserByNumber($number);
+        if(empty($user)) {
+            return null;
+        } else {
+            return $this->getStudentClass($user['id']);
+        }
+    }
+
     public function findClassMembersByUserIds(array $userIds)
     {
         return $this->getClassMemberDao()->findClassMembersByUserIds($userIds);
@@ -287,6 +297,34 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         $this->updateClassStudentNum(count($userIds),$classId);
     }
 
+    public function refreashStudentRank($userId, $classId)
+    {
+        $studentMembers = $this->findClassStudentMembers($classId);
+        $studentIds = ArrayToolkit::column($studentMembers, 'userId');
+        $students = $this->getUserService()->findUsersByIdsAndOrder($studentIds, array('point', 'DESC'));
+        $student = array();
+        $currentRank = 0;
+        $index = 1;
+        foreach ($students as $item) {
+            if($item['id'] == $userId) {
+                $student = $item;
+                $currentRank = $index;
+                break;
+            }
+            $index++;
+        }
+
+        $studentMember = $this->getMemberByUserIdAndClassId($userId, $classId);
+        $newMember = array();
+        $newMember['currentRank'] = $currentRank;
+        $newMember['rate'] = $currentRank == 1 ? '100%' : round( (count($students) - $currentRank)/count($students) * 100) . "％";
+        if(time() > $studentMember['lastRankChangeTime'] + 86400 ) {
+            $newMember['lastRank'] = $studentMember['currentRank'];
+            $newMember['lastRankChangeTime'] = time();
+        }
+
+        return $this->updateClassMember($newMember, $studentMember['id']); 
+    }
     private function getClassesDao()
     {
         return $this->createDao('Classes.ClassesDao');

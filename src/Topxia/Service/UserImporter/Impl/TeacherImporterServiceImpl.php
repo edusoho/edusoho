@@ -20,7 +20,6 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
                 if($teacher) {
                     $teacher=UserSerialize::unserialize($teacher);
                     $this->getUserService()->changePassword($teacher["id"],$teachers[$i]["password"]);
-                    $this->getUserService()->changeNickname($teacher["id"],$teachers[$i]["truename"]);
                     $this->getUserService()->changeEmail($teacher["id"],$teachers[$i]["email"]);
                     $this->getUserService()->changeTrueName($teacher["id"],$teachers[$i]["truename"]);
                     $this->getUserService()->updateUserProfile($teacher["id"],$teachers[$i]); 
@@ -48,8 +47,8 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
                 $teacher['email'] = $teachers[$i]['email'];
                 $teacher['number'] = $teachers[$i]['number'];
                 $teacher['truename'] = $teachers[$i]['truename'];
-                $teacher['nickname'] = $teachers[$i]['truename'];
-                $teacher["roles"]=array('ROLE_TEACHER');
+                $teacher['nickname'] = $teachers[$i]['number'];
+                $teacher["roles"]=array('ROLE_USER','ROLE_TEACHER');
                 $teacher['type'] = "default";
                 $teacher['createdIp'] = "";
                 $teacher['createdTime'] = time();
@@ -181,7 +180,7 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
             $numberAarry[$row] = $teacher['number'];
             $emailAarry[$row] = $teacher['email']; 
             
-            if($checkEmail && !$userService->isEmailAvaliable($teacher['email']))
+            if($checkEmail && $rule=="ignore" && !$userService->isEmailAvaliable($teacher['email']))
             {     
                 $errorInfos[] = "第".$row."行的邮箱已存在，请检查数据．";
                 continue;
@@ -200,7 +199,6 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
                 continue;
             }
            
-
             $allStuentData[]= $teacher;
             unset($teacher);
         }
@@ -211,7 +209,7 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
             $emailRepeatInfo = $this->arrayRepeat($emailAarry, "邮箱");
         }
 
-        $errorInfos = array_merge($checkInfo, $numberRepeatInfo, $emailRepeatInfo);
+        $errorInfos = array_merge($errorInfos, $numberRepeatInfo, $emailRepeatInfo);
         $result['status'] ='success';
         $result['errorInfos'] = $errorInfos;
         $result['checkInfo'] = $checkInfo;

@@ -127,6 +127,8 @@ interface CourseService
 
 	public function getUserNextLearnLesson($userId, $courseId);
 
+	public function getNextLearnLessonByUserId($userId);
+
 	public function searchLearnCount($conditions);
 
 	public function searchLearns($conditions,$orderBy,$start,$limit);
