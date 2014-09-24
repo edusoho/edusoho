@@ -34,7 +34,7 @@ class SignServiceImpl extends BaseService implements SignService
             $classSignStatistics = $this->classSignedNumIncrease($classId);
             $this->refreshClassMemberSignStatistics($userId, $classId, $classSignStatistics['signedNum']);
 
-            $this->getDispatcher()->dispatch('user.signed', new ServiceEvent());
+            $this->getDispatcher()->dispatch('class.signed', new ServiceEvent());
             //commit if no error
             $ClassMemberSignDao->getConnection()->commit();
 

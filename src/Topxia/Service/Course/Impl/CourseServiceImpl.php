@@ -1095,7 +1095,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$param['userId'] = $member['userId'];
 		$param['type'] = 'add';
 		$param['lessonType'] = $lesson['type'];
-		$this->getDispatcher()->dispatch('user.learnedLesson', new ServiceEvent($param));
+		$this->getDispatcher()->dispatch('lesson.learned', new ServiceEvent($param));
 		
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
@@ -1143,7 +1143,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$param['userId'] = $member['userId'];
 		$param['type'] = 'decrease';
-		$this->getDispatcher()->dispatch('user.learnedLesson', new ServiceEvent($param));
+		$this->getDispatcher()->dispatch('lesson.learned', new ServiceEvent($param));
 
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
