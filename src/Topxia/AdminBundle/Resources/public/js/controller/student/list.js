@@ -29,14 +29,14 @@ define(function(require, exports, module) {
 
         //调用
         var classChooser = new ClassChooser({
-            element:'#class_show',
+            element:'#class_name',
             modalTarget:$('#modal'),
             url:'/admin/class/list'
         });
         
         classChooser.on('choosed',function(id,name){
-            $form.find('#class_hidden').val(id);
-            $form.find('#class_show').val(name);
+            $form.find('#class_id').val(id);
+            $form.find('#class_name').val(name);
         });	       
 
     };
