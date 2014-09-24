@@ -111,12 +111,7 @@ define(function(require, exports, module) {
             this.set('courseUri', this.element.data('courseUri'));
             this.set('dashboardUri', this.element.data('dashboardUri'));
         },
-        recordWatchTime: function(){
-            console.log(this)
-            url="../../course/"+dashboard.attrs.lessonId.value+'/watch/time';
-            console.log(url);
-            setTimeout(recordWatchTime, 120000);
-        },
+
         _initToolbar: function() {
             this._toolbar = new Toolbar({
                 element: '#lesson-dashboard-toolbar',
@@ -235,7 +230,7 @@ define(function(require, exports, module) {
                         that._onFinishLearnLesson();
                     });
                     mediaPlayer.on('ready', function() {
-                       setTimeout(recordWatchTime, 120000);
+                       setTimeout(recordWatchTime(lesson.id), 120000);
                     });
                     mediaPlayer.on('paused', function() {
                     
@@ -547,6 +542,12 @@ define(function(require, exports, module) {
         }
 
     });
+
+    function recordWatchTime(lessonId){
+            url="../../course/"+lessonId+'/watch/time';
+            console.log(url);
+            setTimeout(recordWatchTime(lessonId), 120000);
+    }
 
     exports.run = function() {
         
