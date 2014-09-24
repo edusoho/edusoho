@@ -15,6 +15,7 @@ abstract class BaseImporterService extends BaseService
 
     }
 
+    // importUserWithUpdateRule ?
     protected function importUserByUpdate($users, $classId)
     {
 

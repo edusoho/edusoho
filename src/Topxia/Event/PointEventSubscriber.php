@@ -10,10 +10,15 @@ class PointEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
+            // 'lesson.learned'
             'user.learnedLesson' => 'learnedLesson',
+            // 'class.signed'
             'user.signed' => 'signed',
+            // 'note.saved'
             'user.shareNote' => 'shareNote',
+            // 'testpaper.complete'
             'user.accomplishTest' => 'accomplishTest',
+            // 'note.liked'
             'user.noteByLiked' => 'noteByLiked'
         );
     }

@@ -65,6 +65,7 @@ class ClassNoteController extends ClassBaseController
         ));
     }
 
+    // like
     public function praiseAction(Request $request,$noteId)
     {
         $note=$this->getNoteService()->getNote($noteId);

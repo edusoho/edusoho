@@ -51,6 +51,7 @@ define(function(require, exports, module) {
         var $praiseUserText="";
         if($praiseArray.length>4){
             for (var i = 0;i<4;i++) {
+                // @todo url必须从服务器端生成
                 $praiseUserText+=("<a href='/user/"+$praiseArray[i].userId+"'>"+$praiseArray[i].truename+"</a>、");
             }
             $praiseUserText=$praiseUserText.substring(0,$praiseUserText.length-1)+' 等'+$praiseArray.length+'人赞过';
