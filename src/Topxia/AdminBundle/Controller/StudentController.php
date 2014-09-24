@@ -19,7 +19,6 @@ class StudentController extends BaseController
         if(!empty($fields)){
             $conditions['truename']=$fields['search_truename'];
             $conditions['number']=$fields['search_number'];
-            //$conditions =array_merge($conditions,$fields);
         }
         $paginator = new Paginator(
             $this->get('request'),
@@ -97,17 +96,17 @@ class StudentController extends BaseController
                 )
             );
         }
-        $classes = $this->getClassesService()->searchClasses(
+        $classList = $this->getClassesService()->searchClasses(
             array(),
             array(),
             0,
             PHP_INT_MAX
         );
 
-        
+        $classList = ArrayToolkit::group($classList,'gradeId');
         return $this->render('TopxiaAdminBundle:Student:class-list-modal.html.twig',array(
             'schools'=>$schools,
-            'classes'=>$classes
+            'classList'=>$classList
         ));
     }
 

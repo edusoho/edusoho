@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
 	var Notify = require('common/bootstrap-notify');
+    var ClassChooser = require('../class/class-chooser');
 
 	exports.run = function() {
 
@@ -24,32 +25,20 @@ define(function(require, exports, module) {
 		});
 
 
-        $form.on('click','#class',function(){
-            $.get($(this).data('url'), function(html){
-                $("#modal").modal('show');
-                $("#modal").html(html);
-            }).error(function(){
-            });
+
+
+        //调用
+        var classChooser = new ClassChooser({
+            element:'#class_show',
+            modalTarget:$('#modal'),
+            url:'/admin/class/list'
         });
-		// $table.on('click', '.send-passwordreset-email', function(){
-  //           Notify.info('正在发送密码重置验证邮件，请稍等。', 60);
-  //           $.post($(this).data('url'),function(response){
-  //               Notify.success('密码重置验证邮件，发送成功！');
-  //           }).error(function(){
-  //               Notify.danger('密码重置验证邮件，发送失败');
-  //           });
-		// });
+        
+        classChooser.on('choosed',function(id,name){
+            $form.find('#class_hidden').val(id);
+            $form.find('#class_show').val(name);
+        });	       
 
-		// $table.on('click', '.send-emailverify-email', function(){
-  //           Notify.info('正在发送Email验证邮件，请稍等。', 60);
-  //           $.post($(this).data('url'),function(response){
-  //               Notify.success('Email验证邮件，发送成功！');
-  //           }).error(function(){
-  //               Notify.danger('Email验证邮件，发送失败');
-  //           });
-		// });
-
-
-	};
+    };
 
 });
