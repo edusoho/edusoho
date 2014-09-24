@@ -222,7 +222,7 @@ define(function(require, exports, module) {
 
                     function recordWatchTime(){
                             url="../../course/"+lesson.id+'/watch/time';
-                            console.log(url);
+                            $.post(url);
                     }
 
                     var mediaPlayer = new MediaPlayer({
@@ -236,7 +236,7 @@ define(function(require, exports, module) {
                     });
                     mediaPlayer.on('ready', function() {
                        recordWatchTime();
-                       setInterval(recordWatchTime, 5000);
+                       setInterval(recordWatchTime, 120000);
                     });
                     mediaPlayer.on('paused', function() {
                     
