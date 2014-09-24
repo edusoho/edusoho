@@ -279,3 +279,37 @@
 .class_sign_main .signed_anime_day{
     background: url(http://tb2.bdstatic.com/tb/static-frs/img/balv/sign_have_anime.gif?v=3.0) center no-repeat;
 }
+
+.class-sign {
+    cursor: pointer;
+    display: inline-block;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.class-sign .date-col {
+    float: left;
+    width: 60px;
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+.class-sign .dayofweek {
+    font-size: 16px;
+}
+
+.class-sign .action-col {
+    float: left;
+    padding: 9px 8px;
+    width: 80px;
+}
+
+
+
+
+.class-sign-finished .sign-btn {
+    background-color: #428bca;
+    filter: alpha(opacity=65);
+    box-shadow: none;
+    opacity: .65;
+}

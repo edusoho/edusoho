@@ -93,6 +93,7 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
         }
     }
 
+    // @todo refactor.
     public function checkUserData($file, $rule, $classId)
     {
         $result = array();

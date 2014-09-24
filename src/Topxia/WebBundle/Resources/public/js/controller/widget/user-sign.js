@@ -138,8 +138,12 @@ define(function(require, exports, module) {
                 var $signbtn = this.element.find('[data-role=sign]');
                 $signbtn.data('role', 'signed');
                 var self = this;
-                $signbtn.on('mouseenter',self.signedIn);
-                $signbtn.on('mouseleave',self.signedOut);
+                $signbtn.on('mouseenter',function(){
+                    self.signedIn();
+                });
+                $signbtn.on('mouseleave',function(){
+                    self.signedOut();
+                });
                 $signbtn.on('click',false);
                 $signbtn.html('已签到');
             }

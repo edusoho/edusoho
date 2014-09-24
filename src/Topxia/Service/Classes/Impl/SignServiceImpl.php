@@ -26,8 +26,10 @@ class SignServiceImpl extends BaseService implements SignService
         $ClassMemberSign['createdTime'] = time();
         $ClassMemberSignDao = $this->getClassMemberSignDao();
 
+        // @todo 去除事务
         $ClassMemberSignDao->getConnection()->beginTransaction();
         try {
+            // @todo ?
             $ClassMemberSign = $ClassMemberSignDao->addClassMemberSign($ClassMemberSign);
             $classSignStatistics = $this->classSignedNumIncrease($classId);
             $this->refreshClassMemberSignStatistics($userId, $classId, $classSignStatistics['signedNum']);
@@ -47,11 +49,14 @@ class SignServiceImpl extends BaseService implements SignService
 
     public function isSignedToday($userId, $classId)
     {
+        // strtotime(date('y-n-d 0:0:0'));
         $startTimeToday = mktime(0, 0, 0, date('m', time()), date('d', time()), date('Y', time()) );
         $endTimeToday = mktime(23, 59, 59, date('m', time()), date('d', time()), date('Y', time()) );
 
         $ClassMemberSigns = $this->getClassMemberSignDao()->
             findClassMemberSignByPeriod($userId, $classId, $startTimeToday, $endTimeToday);
+
+        // return  empty($ClassMemberSigns) ? true : false;
         if(!empty($ClassMemberSigns)) {
             return true;
         } else {
@@ -116,6 +121,7 @@ class SignServiceImpl extends BaseService implements SignService
         return $ClassMemberSignStatisticsDao->updateClassMemberSignStatistics($userId, $classId, $fields);
     }
 
+    // @todo private function
     public function classSignedNumIncrease($classId)
     {
         $classSignStatistics = $this->refreshClassSignStatistics($classId);
@@ -136,6 +142,8 @@ class SignServiceImpl extends BaseService implements SignService
             $classSignStatisticsDao->addClassSignStatistics($classSignStatistics);
         }
         $firstSignedDate = $classSignStatistics['date'];
+
+        // @refactor isInSameDay
         if(date('Y', time()) > date('Y', $firstSignedDate) 
             || date('m', time()) > date('m', $firstSignedDate)
             || date('d', time()) > date('d', $firstSignedDate)) {
