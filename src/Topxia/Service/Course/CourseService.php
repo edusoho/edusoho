@@ -149,6 +149,10 @@ interface CourseService
 
 	public function waveWatchingTime($userId,$lessonId);
 
+	public function watchPlay($userId,$lessonId);
+
+	public function watchPaused($userId,$lessonId);
+
 	/**
 	 * Chapter API
 	 */

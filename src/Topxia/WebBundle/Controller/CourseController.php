@@ -528,6 +528,24 @@ class CourseController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
+	public function watchPlayAction(Request $request,$lessonId)
+	{	
+		$user = $this->getCurrentUser();
+
+		$this->getCourseService()->watchPlay($lessonId,$user['id']);
+
+		return $this->createJsonResponse(true);
+	}
+
+	public function watchPausedAction(Request $request,$lessonId)
+	{	
+		$user = $this->getCurrentUser();
+
+		$this->getCourseService()->watchPaused($lessonId,$user['id']);
+
+		return $this->createJsonResponse(true);
+	}
+
 	public function addMemberExpiryDaysAction(Request $request, $courseId, $userId)
 	{
 		$user = $this->getUserService()->getUser($userId);

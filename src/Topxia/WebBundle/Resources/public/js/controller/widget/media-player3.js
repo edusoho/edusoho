@@ -122,6 +122,9 @@ define(function(require, exports, module) {
                 case "complete":
                     window.__MediaPlayer.trigger('ended');
                     break;
+                case "playing":
+                    window.__MediaPlayer.trigger('playing');
+                    break;
                 case "paused":
                     window.__MediaPlayer.trigger('paused');
                     break;

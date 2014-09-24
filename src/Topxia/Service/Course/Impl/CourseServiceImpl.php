@@ -582,6 +582,24 @@ class CourseServiceImpl extends BaseService implements CourseService
 		));
 	}
 
+	public function watchPlay($userId,$lessonId)
+	{
+		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
+
+		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+				'videoStatus' => 'playing',
+		));
+	}
+
+	public function watchPaused($userId,$lessonId)
+	{
+		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
+
+		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+				'videoStatus' => 'paused',
+		));
+	}
+
 	private function autosetCourseFields($courseId)
 	{
 		$fields = array('type' => 'text', 'lessonNum' => 0);
