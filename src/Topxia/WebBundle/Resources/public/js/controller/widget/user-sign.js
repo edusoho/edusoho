@@ -27,8 +27,6 @@ define(function(require, exports, module) {
             this.set('signedRecordsUrl', signedRecordsUrl);
             this.set('signUrl', signUrl);
             this.set('selectedDate', selectedDate);
-
-           // this.blindPopover();
         },
         keep: function() {
             this.element.find('.class_sign_main').addClass('keepShow');
@@ -100,32 +98,15 @@ define(function(require, exports, module) {
 
             var self = this;
             var url = this.get('signedRecordsUrl') + '?startDay=' + month+'-1-'+year + '&endDay='+ month+'-'+days+'-'+year;
-            $.ajax({
-                url:url,
-                dataType: 'json',
-                async:false,//(默认: true) 默认设置下，所有请求均为异步请求。如果需要发送同步请求，请将此选项设置为 false。注意，同步请求将锁住浏览器，用户其它操作必须等待请求完成才可以执行。
-                success: function(data){
-                    self.set('signedRecords',data.records);
-                    self.set('todayRank', data.todayRank);
-                    self.set('signedNum', data.signedNum);
-                    self.set('keepDays', data.keepDays);
-                }
-            });
           
             $tbody.append(newtr);
             var row = 1;
-            var signedRecords = this.get('signedRecords');
             var today = new Date().getDate();
             for(var day = 1; day <= days; day++)
             {
                 var week = this.getWeekByDate(year, month, day);
                 $tbody.find(".t-" + row + '-' + week).html(day);
-
-                for(var i=0;i<signedRecords.length;i++){
-                    if(signedRecords[i] == day) {  
-                        $tbody.find(".t-" + row + '-' + week).addClass('signed_day');
-                    }
-                }
+                $tbody.find(".t-" + row + '-' + week).addClass('d-' + day);
               
                 if(week == 6 && day != days) {
                     row++;
@@ -133,21 +114,32 @@ define(function(require, exports, module) {
                     $tbody.append(newtr);
                 }
             }
-            this.element.find('#todayRank').html(this.get('todayRank'));
-            this.element.find('#signedNum').html(this.get('signedNum'));
-            this.element.find('#keepDays').html(this.get('keepDays'));
-            
+
+            $.ajax({
+                url:url,
+                dataType: 'json',
+                async:true,//(默认: true) 默认设置下，所有请求均为异步请求。如果需要发送同步请求，请将此选项设置为 false。注意，同步请求将锁住浏览器，用户其它操作必须等待请求完成才可以执行。
+                success: function(data){
+                    self.set('signedRecords',data.records);
+                    self.set('todayRank', data.todayRank);
+                    self.set('signedNum', data.signedNum);
+                    self.set('keepDays', data.keepDays);
+                    for(var i=0;i<data.records.length;i++){ 
+                        $tbody.find(".d-" + data.records[i]).addClass('signed_day');
+                    }
+                    self.element.find('#todayRank').html(data.todayRank);
+                    self.element.find('#signedNum').html(data.signedNum);
+                    self.element.find('#keepDays').html(data.keepDays);
+                }
+            });
+
             this.set('inited',true);
             if(signedToday) {
                 var $signbtn = this.element.find('[data-role=sign]');
                 $signbtn.data('role', 'signed');
                 var self = this;
-                $signbtn.on('mouseenter',function(){
-                    self.signedIn();
-                });
-                $signbtn.on('mouseleave',function(){
-                    self.signedOut();
-                });
+                $signbtn.on('mouseenter',self.signedIn);
+                $signbtn.on('mouseleave',self.signedOut);
                 $signbtn.on('click',false);
                 $signbtn.html('已签到');
             }
