@@ -519,6 +519,15 @@ class CourseController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
+	public function recordWatchingTimeAction(Request $request,$lessonId)
+	{	
+		$user = $this->getCurrentUser();
+
+		$this->getCourseService()->waveWatchingTime($lessonId,$user['id']);
+
+		return $this->createJsonResponse(true);
+	}
+
 	public function addMemberExpiryDaysAction(Request $request, $courseId, $userId)
 	{
 		$user = $this->getUserService()->getUser($userId);

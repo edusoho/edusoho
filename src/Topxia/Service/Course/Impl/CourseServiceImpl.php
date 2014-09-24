@@ -572,6 +572,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		));
 	}
 
+	public function waveWatchingTime($userId,$lessonId)
+	{
+		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
+
+		if($learn['status']!="finished" && $learn['videoStatus']=="playing")
+		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+				'watchTime' => $learn['watchTime']+2,
+		));
+	}
+
 	private function autosetCourseFields($courseId)
 	{
 		$fields = array('type' => 'text', 'lessonNum' => 0);

@@ -147,6 +147,8 @@ interface CourseService
 
 	public function findLearnsCountByLessonId($lessonId);
 
+	public function waveWatchingTime($userId,$lessonId);
+
 	/**
 	 * Chapter API
 	 */

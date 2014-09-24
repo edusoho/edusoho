@@ -230,7 +230,7 @@ define(function(require, exports, module) {
                         that._onFinishLearnLesson();
                     });
                     mediaPlayer.on('ready', function() {
-                       setTimeout(recordWatchTime, 10000);
+                       setTimeout(recordWatchTime, 120000);
                     });
                     mediaPlayer.on('paused', function() {
                     
@@ -542,17 +542,20 @@ define(function(require, exports, module) {
         }
 
     });
-    
-    function recordWatchTime(){
-        console.log(1)
-        setTimeout(recordWatchTime, 2000);
-    }
+
     exports.run = function() {
         
         var dashboard = new LessonDashboard({
             element: '#lesson-dashboard'
         }).render();
 
+
+        function recordWatchTime(){
+            url="../../course/"+dashboard.attrs.lessonId.value+'/watch/time';
+            console.log(url);
+            setTimeout(recordWatchTime, 120000);
+        }
+    
         function recordLearningTime(){
             url="../../course/"+dashboard.attrs.lessonId.value+'/learn/time';
             $.post(url);
