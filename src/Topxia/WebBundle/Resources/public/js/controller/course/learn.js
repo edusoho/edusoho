@@ -232,11 +232,12 @@ define(function(require, exports, module) {
 
                     mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
                     mediaPlayer.on('ended', function() {
+                        $.post("../../course/"+lesson.id+'/watch/paused');
                         that._onFinishLearnLesson();
                     });
                     mediaPlayer.on('ready', function() {
                        recordWatchTime();
-                       setInterval(recordWatchTime, 50000);
+                       setInterval(recordWatchTime, 120000);
                     });
                     mediaPlayer.on('paused', function() {
                         $.post("../../course/"+lesson.id+'/watch/paused');
