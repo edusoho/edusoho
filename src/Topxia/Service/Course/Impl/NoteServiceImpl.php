@@ -162,10 +162,10 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
     }
 
-    public function praise($noteId)
+    public function like($noteId)
     {
         $user = $this->getCurrentUser();
-        $notePraise=array(
+        $noteLike=array(
             'noteId'=>$noteId,
             'userId'=>$user['id'],
             'truename'=>$user['truename'],
@@ -177,13 +177,13 @@ class NoteServiceImpl extends BaseService implements NoteService
         $param['type'] = 'add';
         $this->getDispatcher()->dispatch('note.liked', new ServiceEvent($param));
         
-        return $this->getNotePraiseDao()->addNotePraise($notePraise);
+        return $this->getNoteLikeDao()->addNoteLike($noteLike);
     }
 
-    public function canclePraise($noteId)
+    public function cancleLike($noteId)
     {
         $user = $this->getCurrentUser();
-        $this->getNotePraiseDao()->deleteNotePraiseByNoteIdAndUserId($noteId,$user['id']);
+        $this->getNoteLikeDao()->deleteNoteLikeByNoteIdAndUserId($noteId,$user['id']);
 
         $note = $this->getNoteDao()->getNote($noteId);
         $param['userId'] = $note['userId'];
@@ -191,29 +191,29 @@ class NoteServiceImpl extends BaseService implements NoteService
         $this->getDispatcher()->dispatch('note.liked', new ServiceEvent($param));
     }
 
-    public function getNotePraiseByNoteIdAndUserId($noteId,$userId)
+    public function getNoteLikeByNoteIdAndUserId($noteId,$userId)
     {
-        return $this->getNotePraiseDao()->getNotePraiseByNoteIdAndUserId($noteId,$userId);
+        return $this->getNoteLikeDao()->getNoteLikeByNoteIdAndUserId($noteId,$userId);
     }
     
-    public function findNotePraisesByUserId($userId)
+    public function findNoteLikesByUserId($userId)
     {
-        return $this->getNotePraiseDao()->findNotePraisesByUserId($userId);
+        return $this->getNoteLikeDao()->findNoteLikesByUserId($userId);
     }
 
-    public function findNotePraisesByNoteId($noteId)
+    public function findNoteLikesByNoteId($noteId)
     {
-        return $this->getNotePraiseDao()->findNotePraisesByNoteId($noteId);
+        return $this->getNoteLikeDao()->findNoteLikesByNoteId($noteId);
     }
 
-    public function findNotePraisesByNoteIds(array $noteIds)
+    public function findNoteLikesByNoteIds(array $noteIds)
     {
-        $notePraises=array();
+        $noteLikes=array();
         foreach ($noteIds as $noteId) {
-            $notePraiseArray=$this->getNotePraiseDao()->findNotePraisesByNoteId($noteId);
-            $notePraises[$noteId]=$notePraiseArray;
+            $noteLikeArray=$this->getNoteLikeDao()->findNoteLikesByNoteId($noteId);
+            $noteLikes[$noteId]=$noteLikeArray;
         }
-        return $notePraises;
+        return $noteLikes;
     }
 
     // @todo HTML Purifier
@@ -228,9 +228,9 @@ class NoteServiceImpl extends BaseService implements NoteService
     	return $this->createDao('Course.CourseNoteDao');
     }
 
-    private function getNotePraiseDao()
+    private function getNoteLikeDao()
     {
-        return $this->createDao('Course.CourseNotePraiseDao');
+        return $this->createDao('Course.CourseNoteLikeDao');
     }
 
    private function getCourseService()

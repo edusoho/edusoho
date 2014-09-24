@@ -84,13 +84,13 @@ class_notes:
     pattern:  /class/{classId}/note
     defaults: { _controller: TopxiaWebBundle:ClassNote:list }
 
-class_notes_praise:
-    pattern:  /class/note/{noteId}/praise
-    defaults: { _controller: TopxiaWebBundle:ClassNote:praise }
+class_notes_like:
+    pattern:  /class/note/{noteId}/like
+    defaults: { _controller: TopxiaWebBundle:ClassNote:like }
 
-class_notes_cancle_praise:
-    pattern:  /class/note/{noteId}/canclePraise
-    defaults: { _controller: TopxiaWebBundle:ClassNote:canclePraise }
+class_notes_cancle_like:
+    pattern:  /class/note/{noteId}/cancleLike
+    defaults: { _controller: TopxiaWebBundle:ClassNote:cancleLike }
 
 class_members:
     pattern:  /class/{classId}/member
