@@ -236,7 +236,7 @@ define(function(require, exports, module) {
                     });
                     mediaPlayer.on('ready', function() {
                        recordWatchTime();
-                       setInterval(recordWatchTime, 120000);
+                       setInterval(recordWatchTime, 50000);
                     });
                     mediaPlayer.on('paused', function() {
                         $.post("../../course/"+lesson.id+'/watch/paused');
