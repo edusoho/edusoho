@@ -236,6 +236,12 @@
     background: #fbfefe;
     display: none;
 }
+
+.class_sign_main .disabled-next {
+    cursor: not-allowed;
+    color: #999;
+}
+
 .class_sign_main table {
     width: 278px;
     border: 1px solid #e3e3e3;

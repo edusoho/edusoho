@@ -560,7 +560,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         ));
         $param['userId'] = $userId;
         $param['testPaperId'] = $testpaper['id'];
-        $this->getDispatcher()->dispatch('user.accomplishTest', new ServiceEvent($param));
+        $this->getDispatcher()->dispatch('testpaper.finished', new ServiceEvent($param));
         
         return $testpaperResult;
     }

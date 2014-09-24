@@ -20,71 +20,50 @@ class SignServiceImpl extends BaseService implements SignService
             throw $this->createServiceException('今日已签到!', 403);
         }
 
-        $ClassMemberSign = array();
-        $ClassMemberSign['classId'] = $classId;
-        $ClassMemberSign['userId'] = $userId;
-        $ClassMemberSign['createdTime'] = time();
-        $ClassMemberSignDao = $this->getClassMemberSignDao();
+        $sign = array();
+        $sign['classId'] = $classId;
+        $sign['userId'] = $userId;
+        $sign['createdTime'] = time();
 
-        // @todo 去除事务
-        $ClassMemberSignDao->getConnection()->beginTransaction();
-        try {
-            // @todo ?
-            $ClassMemberSign = $ClassMemberSignDao->addClassMemberSign($ClassMemberSign);
-            $classSignStatistics = $this->classSignedNumIncrease($classId);
-            $this->refreshClassMemberSignStatistics($userId, $classId, $classSignStatistics['signedNum']);
+        $sign = $this->getClassMemberSignDao()->addClassMemberSign($sign);
+        $classSignStatistics = $this->classSignedNumIncrease($classId);
+        $this->refreshClassMemberSignStatistics($userId, $classId, $classSignStatistics['signedNum']);
 
-            $this->getDispatcher()->dispatch('user.signed', new ServiceEvent());
-            //commit if no error
-            $ClassMemberSignDao->getConnection()->commit();
+        $this->getDispatcher()->dispatch('class.signed', new ServiceEvent());
 
-        } catch(\Exception $e) {
-            //roll back if has error
-            $ClassMemberSignDao->getConnection()->rollback();
-            throw $e; 
-        }
-
-        return $ClassMemberSign;
+        return $sign;
     }
 
     public function isSignedToday($userId, $classId)
     {
-        // strtotime(date('y-n-d 0:0:0'));
-        $startTimeToday = mktime(0, 0, 0, date('m', time()), date('d', time()), date('Y', time()) );
-        $endTimeToday = mktime(23, 59, 59, date('m', time()), date('d', time()), date('Y', time()) );
+        
+        $startTimeToday = strtotime(date('y-n-d 0:0:0'));
+        $endTimeToday = strtotime(date('y-n-d 23:59:59'));
 
-        $ClassMemberSigns = $this->getClassMemberSignDao()->
+        $signs = $this->getClassMemberSignDao()->
             findClassMemberSignByPeriod($userId, $classId, $startTimeToday, $endTimeToday);
 
-        // return  empty($ClassMemberSigns) ? true : false;
-        if(!empty($ClassMemberSigns)) {
-            return true;
-        } else {
-            return false;
-        }   
+        return  empty($signs) ? false : true;
     }
 
     public function isYestodaySigned($userId, $classId)
     {
-        $startTimeToday = mktime(0, 0, 0, date('m', strtotime('-1 days')), date('d', strtotime('-1 days')), date('Y', strtotime('-1 days')) );
-        $endTimeToday = mktime(23, 59, 59, date('m', strtotime('-1 days')), date('d', strtotime('-1 days')), date('Y', strtotime('-1 days')) );
+        $startTimeToday = strtotime(date('y-n-d 0:0:0', strtotime('-1 days')));
+        $endTimeToday = strtotime(date('y-n-d 23:59:59', strtotime('-1 days')));
 
-        $ClassMemberSigns = $this->getClassMemberSignDao()->
+        $signs = $this->getClassMemberSignDao()->
             findClassMemberSignByPeriod($userId, $classId, $startTimeToday, $endTimeToday);
-        if(!empty($ClassMemberSigns)) {
-            return true;
-        } else {
-            return false;
-        }
+        
+        return  empty($signs) ? false : true;
     }
-    public function getSignsRecordsByMonth($userId, $classId, $startDay, $endDay)
+    public function getSignRecordsByPeriod($userId, $classId, $startDay, $endDay)
     {
-        $startTime = mktime(0, 0, 0, $startDay[0], $startDay[1], $startDay[2]);
-        $endTime = mktime(23, 59, 59, $endDay[0], $endDay[1], $endDay[2]);
-        $ClassMemberSigns = $this->getClassMemberSignDao()->
+        $startTime = strtotime(date('y-n-d 0:0:0', strtotime($startDay)));
+        $endTime = strtotime(date('y-n-d 23:59:59', strtotime($endDay)));
+        $signs = $this->getClassMemberSignDao()->
             findClassMemberSignByPeriod($userId, $classId, $startTime, $endTime);
 
-        return $ClassMemberSigns;
+        return $signs;
     }
 
     public function getClassMemberSignStatistics($userId, $classId)
@@ -99,61 +78,62 @@ class SignServiceImpl extends BaseService implements SignService
 
     public function refreshClassMemberSignStatistics($userId, $classId, $todayRank)
     {
-        $ClassMemberSignStatisticsDao = $this->getClassMemberSignStatisticsDao();
-        $ClassMemberSignStatistics = $ClassMemberSignStatisticsDao->getClassMemberSignStatistics($userId, $classId);
-        if(empty($ClassMemberSignStatistics)) {
-            $ClassMemberSignStatistics = array();
-            $ClassMemberSignStatistics['userId'] = $userId;
-            $ClassMemberSignStatistics['classId'] = $classId;
-            $ClassMemberSignStatistics['todayRank'] = $todayRank;
-            $ClassMemberSignStatistics['keepDays'] = 0;
-            $ClassMemberSignStatistics = $ClassMemberSignStatisticsDao->addClassMemberSignStatistics($ClassMemberSignStatistics);
+        $statistics = $this->getClassMemberSignStatisticsDao()->getClassMemberSignStatistics($userId, $classId);
+        if(empty($statistics)) {
+            $statistics = array();
+            $statistics['userId'] = $userId;
+            $statistics['classId'] = $classId;
+            $statistics['todayRank'] = $todayRank;
+            $statistics['keepDays'] = 0;
+            $statistics = $this->getClassMemberSignStatisticsDao()->addClassMemberSignStatistics($statistics);
         }
 
         $fields = array();
         if($this->isYestodaySigned($userId, $classId)) {
-            $fields['keepDays'] = $ClassMemberSignStatistics['keepDays'] + 1;
+            $fields['keepDays'] = $statistics['keepDays'] + 1;
         } else {
             $fields['keepDays'] = 1;
         }
         
         $fields['todayRank'] = $todayRank;
-        return $ClassMemberSignStatisticsDao->updateClassMemberSignStatistics($userId, $classId, $fields);
-    }
-
-    // @todo private function
-    public function classSignedNumIncrease($classId)
-    {
-        $classSignStatistics = $this->refreshClassSignStatistics($classId);
-        $fields = array();
-        $fields['signedNum'] = $classSignStatistics['signedNum'] + 1;
-        return $this->getClassSignStatisticsDao()->updateClassSignStatistics($classId, $fields);
+        return $this->getClassMemberSignStatisticsDao()->updateClassMemberSignStatistics($userId, $classId, $fields);
     }
 
     public function refreshClassSignStatistics($classId)
     {
-        $classSignStatisticsDao = $this->getClassSignStatisticsDao();
-        $classSignStatistics = $classSignStatisticsDao->getClassSignStatisticsByClassId($classId);
-        if(empty($classSignStatistics)) {
-            $classSignStatistics = array();
-            $classSignStatistics['classId'] = $classId;
-            $classSignStatistics['date'] = time();
-            $classSignStatistics['signedNum'] = 0;
-            $classSignStatisticsDao->addClassSignStatistics($classSignStatistics);
+        $statistics = $this->getClassSignStatisticsDao()->getClassSignStatisticsByClassId($classId);
+        if(empty($statistics)) {
+            $statistics = array();
+            $statistics['classId'] = $classId;
+            $statistics['date'] = time();
+            $statistics['signedNum'] = 0;
+            $this->getClassSignStatisticsDao()->addClassSignStatistics($statistics);
         }
-        $firstSignedDate = $classSignStatistics['date'];
+        $firstSignedDate = $statistics['date'];
 
-        // @refactor isInSameDay
-        if(date('Y', time()) > date('Y', $firstSignedDate) 
-            || date('m', time()) > date('m', $firstSignedDate)
-            || date('d', time()) > date('d', $firstSignedDate)) {
+        if(!$this->isSameDay($firstSignedDate)) {
             $fields = array();
             $fields['date'] = time();
             $fields['signedNum'] = 0;
-            $classSignStatistics = $classSignStatisticsDao->updateClassSignStatistics($classId, $fields);
+            $statistics = $this->getClassSignStatisticsDao()->updateClassSignStatistics($classId, $fields);
         }   
 
-        return $classSignStatistics;
+        return $statistics;
+    }
+
+    private function classSignedNumIncrease($classId)
+    {
+        $statistics = $this->refreshClassSignStatistics($classId);
+        $fields = array();
+        $fields['signedNum'] = $statistics['signedNum'] + 1;
+        return $this->getClassSignStatisticsDao()->updateClassSignStatistics($classId, $fields);
+    }
+
+    private function isSameDay($timestamp)
+    {
+        return date('Y', time()) > date('Y', $timestamp) 
+            || date('m', time()) > date('m', $timestamp)
+            || date('d', time()) > date('d', $timestamp) ? false : true;
     }
 
     private function getClassMemberSignDao()

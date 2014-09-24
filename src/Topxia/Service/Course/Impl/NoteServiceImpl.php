@@ -125,7 +125,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         } else {
             $param['type'] = 'noChange';
         }
-        $this->getDispatcher()->dispatch('user.shareNote', new ServiceEvent($param));
+        $this->getDispatcher()->dispatch('note.saved', new ServiceEvent($param));
 
         return $note;
 	}
@@ -175,7 +175,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         $note = $this->getNoteDao()->getNote($noteId);
         $param['userId'] = $note['userId'];
         $param['type'] = 'add';
-        $this->getDispatcher()->dispatch('user.noteByLiked', new ServiceEvent($param));
+        $this->getDispatcher()->dispatch('note.liked', new ServiceEvent($param));
         
         return $this->getNoteLikeDao()->addNoteLike($noteLike);
     }
@@ -188,7 +188,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         $note = $this->getNoteDao()->getNote($noteId);
         $param['userId'] = $note['userId'];
         $param['type'] = 'decrease';
-        $this->getDispatcher()->dispatch('user.noteByLiked', new ServiceEvent($param));
+        $this->getDispatcher()->dispatch('note.liked', new ServiceEvent($param));
     }
 
     public function getNoteLikeByNoteIdAndUserId($noteId,$userId)

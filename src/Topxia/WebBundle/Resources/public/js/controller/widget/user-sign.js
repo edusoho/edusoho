@@ -3,11 +3,10 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     var UserSign = Widget.extend({
+        selectedDate: null,
+        inited: false,
     	attrs: {
     		daysInMonth: [31,28,31,30,31,30,31,31,30,31,30,31],
-            selectedDate: null,
-            inited: false,
-            signedRecords: [],
             signedRecordsUrl:null,
             signUrl:null
     	},
@@ -26,7 +25,7 @@ define(function(require, exports, module) {
             var signUrl = this.element.data('signurl');
             this.set('signedRecordsUrl', signedRecordsUrl);
             this.set('signUrl', signUrl);
-            this.set('selectedDate', selectedDate);
+            this.selectedDate = selectedDate;
         },
         keep: function() {
             this.element.find('.class_sign_main').addClass('keepShow');
@@ -66,7 +65,7 @@ define(function(require, exports, module) {
             });
         },
         signedIn: function() {
-            if(!this.get('inited')) {
+            if(!this.inited) {
                 this.initTable();
             }
             this.showSignTable();
@@ -88,7 +87,7 @@ define(function(require, exports, module) {
             this.element.find('.class_sign_main').attr('style','display:none');
         },
         initTable: function(signedToday) {
-            var selectedDate = this.get('selectedDate');
+            var selectedDate = this.selectedDate;
             selectedDate = selectedDate.split('/');
             var year = parseInt(selectedDate[0]);
             var month =  parseInt(selectedDate[1]);
@@ -97,7 +96,7 @@ define(function(require, exports, module) {
             var newtr = "<tr><td class='t-1-0'></td><td class='t-1-1'></td><td class='t-1-2'></td><td class='t-1-3'></td><td class='t-1-4'></td><td class='t-1-5'></td><td class='t-1-6'></td></tr>";
 
             var self = this;
-            var url = this.get('signedRecordsUrl') + '?startDay=' + month+'-1-'+year + '&endDay='+ month+'-'+days+'-'+year;
+            var url = this.get('signedRecordsUrl') + '?startDay=' + year + '-' + month + '-1' + '&endDay='+ year + '-' + month+'-'+days;
           
             $tbody.append(newtr);
             var row = 1;
@@ -120,10 +119,6 @@ define(function(require, exports, module) {
                 dataType: 'json',
                 async:true,//(默认: true) 默认设置下，所有请求均为异步请求。如果需要发送同步请求，请将此选项设置为 false。注意，同步请求将锁住浏览器，用户其它操作必须等待请求完成才可以执行。
                 success: function(data){
-                    self.set('signedRecords',data.records);
-                    self.set('todayRank', data.todayRank);
-                    self.set('signedNum', data.signedNum);
-                    self.set('keepDays', data.keepDays);
                     for(var i=0;i<data.records.length;i++){ 
                         $tbody.find(".d-" + data.records[i]).addClass('signed_day');
                     }
@@ -133,7 +128,7 @@ define(function(require, exports, module) {
                 }
             });
 
-            this.set('inited',true);
+            this.inited = true;
             if(signedToday) {
                 var $signbtn = this.element.find('[data-role=sign]');
                 $signbtn.data('role', 'signed');
@@ -150,7 +145,7 @@ define(function(require, exports, module) {
           
         },
         previousMonth: function() {
-            var currentDate = this.get('selectedDate');
+            var currentDate = this.selectedDate;
             currentDate = currentDate.split('/');
             var currentYear = parseInt(currentDate[0]);
             var currentMonth =  parseInt(currentDate[1]);
@@ -162,13 +157,15 @@ define(function(require, exports, module) {
             } else {
                 nextMonth = currentMonth - 1;
             }
-            this.set('selectedDate', nextYear + '/' + nextMonth);
+            nextMonth = nextMonth < 10 ? '0' + nextMonth : nextMonth;
+            this.selectedDate = nextYear + '/' + nextMonth;
             this.element.find('tbody').html('');
+            this.element.find('[data-role=next]').removeClass('disabled-next');
             this.element.find('#title-month').html(nextYear + '年' + nextMonth + '月');
             this.initTable();
         },
         nextMonth: function(){
-            var currentDate = this.get('selectedDate');
+            var currentDate = this.selectedDate;
             currentDate = currentDate.split('/');
             var currentYear = parseInt(currentDate[0]);
             var currentMonth =  parseInt(currentDate[1]);
@@ -182,7 +179,11 @@ define(function(require, exports, module) {
             } else {
                 nextMonth = currentMonth + 1;
             }
-            this.set('selectedDate', nextYear + '/' + nextMonth);
+            if(nextMonth == (new Date().getMonth() + 1 ) && currentYear == (new Date().getFullYear())) {
+                this.element.find('[data-role=next]').addClass('disabled-next');
+            }
+            nextMonth = nextMonth < 10 ? '0' + nextMonth : nextMonth;
+            this.selectedDate = nextYear + '/' + nextMonth;
             this.element.find('tbody').html('');
             this.element.find('#title-month').html(nextYear + '年' + nextMonth + '月');
             this.initTable();

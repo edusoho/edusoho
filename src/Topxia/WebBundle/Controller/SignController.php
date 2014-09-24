@@ -34,14 +34,12 @@ class SignController extends BaseController
 			'isSignedToday' => $isSignedToday));
 	}
 
-	public function getSignedRecordsByMonthAction(Request $request, $classId, $userId)
+	public function getSignedRecordsByPeriodAction(Request $request, $classId, $userId)
 	{
 		$startDay = $request->query->get('startDay');
 		$endDay = $request->query->get('endDay');
-		$startDay = explode('-', $startDay);
-		$endDay = explode('-', $endDay);
-
-		$userSigns = $this->getSignService()->getSignsRecordsByMonth($userId, $classId, $startDay, $endDay);
+	
+		$userSigns = $this->getSignService()->getSignRecordsByPeriod($userId, $classId, $startDay, $endDay);
 		$result = array();
 		$result['records'] = array();
 		if($userSigns) {

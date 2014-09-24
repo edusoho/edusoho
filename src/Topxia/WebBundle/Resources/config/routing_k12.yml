@@ -16,7 +16,7 @@ user_sign:
 
 signed_records:
     pattern:  /sign/{classId}/{userId}/records
-    defaults: { _controller: TopxiaWebBundle:Sign:getSignedRecordsByMonth }
+    defaults: { _controller: TopxiaWebBundle:Sign:getSignedRecordsByPeriod }
 
 class_show:
     pattern: /class/{classId}
