@@ -111,7 +111,12 @@ define(function(require, exports, module) {
             this.set('courseUri', this.element.data('courseUri'));
             this.set('dashboardUri', this.element.data('dashboardUri'));
         },
-
+        recordWatchTime: function(){
+            console.log(this)
+            url="../../course/"+dashboard.attrs.lessonId.value+'/watch/time';
+            console.log(url);
+            setTimeout(recordWatchTime, 120000);
+        },
         _initToolbar: function() {
             this._toolbar = new Toolbar({
                 element: '#lesson-dashboard-toolbar',
@@ -549,13 +554,6 @@ define(function(require, exports, module) {
             element: '#lesson-dashboard'
         }).render();
 
-
-        function recordWatchTime(){
-            url="../../course/"+dashboard.attrs.lessonId.value+'/watch/time';
-            console.log(url);
-            setTimeout(recordWatchTime, 120000);
-        }
-    
         function recordLearningTime(){
             url="../../course/"+dashboard.attrs.lessonId.value+'/learn/time';
             $.post(url);
