@@ -38,6 +38,47 @@ abstract class BaseImporterService extends BaseService
 		return $errorInfo;
 	}
 
+    protected function createUserProfile($id, $user)
+    {
+        $profile = array();
+        $profile['id'] = $id;
+        $profile['mobile'] = empty($user['mobile']) ? '' : $user['mobile'];
+        $profile['idcard'] = empty($user['idcard']) ? '' : $user['idcard'];
+        $profile['company'] = empty($user['company']) ? '' : $user['company'];
+        $profile['job'] = empty($user['job']) ? '' : $user['job'];
+        $profile['weixin'] = empty($user['weixin']) ? '' : $user['weixin'];
+        $profile['weibo'] = empty($user['weibo']) ? '' : $user['weibo'];
+        $profile['qq'] = empty($user['qq']) ? '' : $user['qq'];
+        $profile['site'] = empty($user['site']) ? '' : $user['site'];
+        $profile['gender'] = empty($user['gender']) ? 'secret' : $user['gender'];
+        for($j=1;$j<=5;$j++){
+            $profile['intField'.$j] = empty($user['intField'.$j]) ? null : $user['intField'.$j];
+            $profile['dateField'.$j] = empty($user['dateField'.$j]) ? null : $user['dateField'.$j];
+            $profile['floatField'.$j] = empty($user['floatField'.$j]) ? null : $user['floatField'.$j];
+        }
+        for($j=1;$j<=10;$j++){
+            $profile['varcharField'.$j] = empty($user['varcharField'.$j]) ? "" : $user['varcharField'.$j];
+            $profile['textField'.$j] = empty($user['textField'.$j]) ? "" : $user['textField'.$j];
+        }
+
+        return $profile;
+    }
+
+    protected function createUser($data)
+    {
+        $user = array();
+        $user['email'] = $data['email'];
+        $user['truename'] = $data['truename'];
+        $user['type'] = "default";
+        $user['createdIp'] = "";
+        $user['createdTime'] = time();
+        $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $user['password'] = $this->getPasswordEncoder()->encodePassword($data['password'], $user['salt']);
+        $user['setup'] = 1;
+
+        return $user;
+    }
+
 	protected function validFields($userData,$row,$fieldCol,$checkEmail)
 	{    
 	    $errorInfo=array();

@@ -43,46 +43,16 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
         try{
 
             for($i=0;$i<count($teachers);$i++){
-                $teacher = array();
-                $teacher['email'] = $teachers[$i]['email'];
+                $teacher = $this->createUser($teachers[$i]);
                 $teacher['number'] = $teachers[$i]['number'];
-                $teacher['truename'] = $teachers[$i]['truename'];
                 $teacher['nickname'] = $teachers[$i]['number'];
                 $teacher["roles"]=array('ROLE_USER','ROLE_TEACHER');
-                $teacher['type'] = "default";
-                $teacher['createdIp'] = "";
-                $teacher['createdTime'] = time();
-                $teacher['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-                $teacher['password'] = $this->getPasswordEncoder()->encodePassword($teachers[$i]['password'], $teacher['salt']);
-                $teacher['setup'] = 1;
-
                 $teacher = UserSerialize::unserialize(
                     $this->getUserDao()->addUser(UserSerialize::serialize($teacher))
                 );
 
-                $profile = array();
-                $profile['id'] = $teacher['id'];
-                $profile['mobile'] = empty($teachers[$i]['mobile']) ? '' : $teachers[$i]['mobile'];
-                $profile['idcard'] = empty($teachers[$i]['idcard']) ? '' : $teachers[$i]['idcard'];
-                $profile['company'] = empty($teachers[$i]['company']) ? '' : $teachers[$i]['company'];
-                $profile['job'] = empty($teachers[$i]['job']) ? '' : $teachers[$i]['job'];
-                $profile['weixin'] = empty($teachers[$i]['weixin']) ? '' : $teachers[$i]['weixin'];
-                $profile['weibo'] = empty($teachers[$i]['weibo']) ? '' : $teachers[$i]['weibo'];
-                $profile['qq'] = empty($teachers[$i]['qq']) ? '' : $teachers[$i]['qq'];
-                $profile['site'] = empty($teachers[$i]['site']) ? '' : $teachers[$i]['site'];
-                $profile['gender'] = empty($teachers[$i]['gender']) ? 'secret' : $teachers[$i]['gender'];
-                for($j=1;$j<=5;$j++){
-                    $profile['intField'.$j] = empty($teachers[$i]['intField'.$j]) ? null : $teachers[$i]['intField'.$j];
-                    $profile['dateField'.$j] = empty($teachers[$i]['dateField'.$j]) ? null : $teachers[$i]['dateField'.$j];
-                    $profile['floatField'.$j] = empty($teachers[$i]['floatField'.$j]) ? null : $teachers[$i]['floatField'.$j];
-                }
-                for($j=1;$j<=10;$j++){
-                    $profile['varcharField'.$j] = empty($teachers[$i]['varcharField'.$j]) ? "" : $teachers[$i]['varcharField'.$j];
-                    $profile['textField'.$j] = empty($teachers[$i]['textField'.$j]) ? "" : $teachers[$i]['textField'.$j];
-                }
-
+                $profile = $this->createUserProfile($teacher['id'], $teachers[$i]);
                 $this->getProfileDao()->addProfile($profile);
-            
             }
 
              $this->getUserDao()->getConnection()->commit();

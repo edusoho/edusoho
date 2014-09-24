@@ -44,45 +44,15 @@ class ParentImporterServiceImpl extends BaseImporterService implements ParentImp
         try{
 
             for($i=0;$i<count($parents);$i++){
-                $parent = array();
-                $parent['email'] = $parents[$i]['email'];
-                $parent['mobile'] = $parents[$i]['mobile'];
-                $parent['truename'] = $parents[$i]['truename'];
+                $parent = $this->createUser($parents[$i]);
                 $parent['number'] = 'p'.$parents[$i]['mobile'];
                 $parent['nickname'] = $parents[$i]['mobile'];
                 $parent["roles"]=array('ROLE_USER', 'ROLE_PARENT');
-                $parent['type'] = "default";
-                $parent['createdIp'] = "";
-                $parent['createdTime'] = time();
-                $parent['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-                $parent['password'] = $this->getPasswordEncoder()->encodePassword($parents[$i]['password'], $parent['salt']);
-                $parent['setup'] = 1;
-
                 $parent = UserSerialize::unserialize(
                     $this->getUserDao()->addUser(UserSerialize::serialize($parent))
                 );
 
-                $profile = array();
-                $profile['id'] = $parent['id'];
-                $profile['mobile'] = empty($parents[$i]['mobile']) ? '' : $parents[$i]['mobile'];
-                $profile['idcard'] = empty($parents[$i]['idcard']) ? '' : $parents[$i]['idcard'];
-                $profile['company'] = empty($parents[$i]['company']) ? '' : $parents[$i]['company'];
-                $profile['job'] = empty($parents[$i]['job']) ? '' : $parents[$i]['job'];
-                $profile['weixin'] = empty($parents[$i]['weixin']) ? '' : $parents[$i]['weixin'];
-                $profile['weibo'] = empty($parents[$i]['weibo']) ? '' : $parents[$i]['weibo'];
-                $profile['qq'] = empty($parents[$i]['qq']) ? '' : $parents[$i]['qq'];
-                $profile['site'] = empty($parents[$i]['site']) ? '' : $parents[$i]['site'];
-                $profile['gender'] = empty($parents[$i]['gender']) ? 'secret' : $parents[$i]['gender'];
-                for($j=1;$j<=5;$j++){
-                    $profile['intField'.$j] = empty($parents[$i]['intField'.$j]) ? null : $parents[$i]['intField'.$j];
-                    $profile['dateField'.$j] = empty($parents[$i]['dateField'.$j]) ? null : $parents[$i]['dateField'.$j];
-                    $profile['floatField'.$j] = empty($parents[$i]['floatField'.$j]) ? null : $parents[$i]['floatField'.$j];
-                }
-                for($j=1;$j<=10;$j++){
-                    $profile['varcharField'.$j] = empty($parents[$i]['varcharField'.$j]) ? "" : $parents[$i]['varcharField'.$j];
-                    $profile['textField'.$j] = empty($parents[$i]['textField'.$j]) ? "" : $parents[$i]['textField'.$j];
-                }
-
+                $profile = $this->createUserProfile($parent['id'], $parents[$i]);
                 $this->getProfileDao()->addProfile($profile);
 
                 $class = $this->getClassesService()->findClassByUserNumber($parents[$i]['childNumber']);

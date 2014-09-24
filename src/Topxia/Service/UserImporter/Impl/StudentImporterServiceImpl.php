@@ -43,44 +43,15 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
         try{
 
             for($i=0;$i<count($students);$i++){
-                $student = array();
-                $student['email'] = $students[$i]['email'];
+                $student = $this->createUser($students[$i]);
                 $student['number'] = $students[$i]['number'];
-                $student['truename'] = $students[$i]['truename'];
                 $student['nickname'] = $students[$i]['number'];
-                $student["roles"]=array('ROLE_USER');
-                $student['type'] = "default";
-                $student['createdIp'] = "";
-                $student['createdTime'] = time();
-                $student['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-                $student['password'] = $this->getPasswordEncoder()->encodePassword($students[$i]['password'], $student['salt']);
-                $student['setup'] = 1;
-
+                $student['roles'] = array('ROLE_USER');
                 $student = UserSerialize::unserialize(
                     $this->getUserDao()->addUser(UserSerialize::serialize($student))
                 );
 
-                $profile = array();
-                $profile['id'] = $student['id'];
-                $profile['mobile'] = empty($students[$i]['mobile']) ? '' : $students[$i]['mobile'];
-                $profile['idcard'] = empty($students[$i]['idcard']) ? '' : $students[$i]['idcard'];
-                $profile['company'] = empty($students[$i]['company']) ? '' : $students[$i]['company'];
-                $profile['job'] = empty($students[$i]['job']) ? '' : $students[$i]['job'];
-                $profile['weixin'] = empty($students[$i]['weixin']) ? '' : $students[$i]['weixin'];
-                $profile['weibo'] = empty($students[$i]['weibo']) ? '' : $students[$i]['weibo'];
-                $profile['qq'] = empty($students[$i]['qq']) ? '' : $students[$i]['qq'];
-                $profile['site'] = empty($students[$i]['site']) ? '' : $students[$i]['site'];
-                $profile['gender'] = empty($students[$i]['gender']) ? 'secret' : $students[$i]['gender'];
-                for($j=1;$j<=5;$j++){
-                    $profile['intField'.$j] = empty($students[$i]['intField'.$j]) ? null : $students[$i]['intField'.$j];
-                    $profile['dateField'.$j] = empty($students[$i]['dateField'.$j]) ? null : $students[$i]['dateField'.$j];
-                    $profile['floatField'.$j] = empty($students[$i]['floatField'.$j]) ? null : $students[$i]['floatField'.$j];
-                }
-                for($j=1;$j<=10;$j++){
-                    $profile['varcharField'.$j] = empty($students[$i]['varcharField'.$j]) ? "" : $students[$i]['varcharField'.$j];
-                    $profile['textField'.$j] = empty($students[$i]['textField'.$j]) ? "" : $students[$i]['textField'.$j];
-                }
-
+                $profile = $this->createUserProfile($student['id'], $students[$i]);
                 $this->getProfileDao()->addProfile($profile);
 
                 $classMember = array();
@@ -89,7 +60,6 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
                 $classMember['role'] = 'STUDENT';
                 $classMember['createdTime'] = time();
                 $this->getClassesService()->addClassMember($classMember);
-            
             }
 
              $this->getUserDao()->getConnection()->commit();
