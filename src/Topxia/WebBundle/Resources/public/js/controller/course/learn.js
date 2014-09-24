@@ -542,7 +542,11 @@ define(function(require, exports, module) {
         }
 
     });
-
+    
+    function recordWatchTime(){
+        console.log(1)
+        setTimeout(recordLearningTime, 2000);
+    }
     exports.run = function() {
         
         var dashboard = new LessonDashboard({
