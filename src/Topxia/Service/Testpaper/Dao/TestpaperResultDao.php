@@ -28,6 +28,8 @@ interface TestpaperResultDao
 
     public function searchTestpaperResultsCount($conditions);
 
+    public function searchTestpapersScore($conditions);
+
     public function addTestpaperResult($fields);
 
     public function updateTestpaperResult($id, $fields);

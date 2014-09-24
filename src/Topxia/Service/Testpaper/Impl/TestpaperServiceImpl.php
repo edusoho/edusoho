@@ -35,6 +35,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->searchTestpapersCount($conditions);
 	}
 
+    public function searchTestpapersScore($conditions)
+    {
+        return $this->getTestpaperResultDao()->searchTestpapersScore($conditions);
+    }
+
     public function createTestpaper($fields)
     {
         $testpaper = $this->getTestpaperDao()->addTestpaper($this->filterTestpaperFields($fields, 'create'));

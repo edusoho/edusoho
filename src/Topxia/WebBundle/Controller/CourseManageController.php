@@ -234,6 +234,13 @@ class CourseManageController extends BaseController
             $lessons[$key]['length']=intval($lessons[$key]['length']/60);
             $lessons[$key]['finishedNum']=$finishedNum;
             $lessons[$key]['learnTime']=$lessonLearnTime;
+
+            if($value['type']=='testpaper'){
+                $paperId=$value['mediaId'];
+                $score=$this->getTestpaperService()->searchTestpapersScore(array('testId'=>$paperId));
+
+                $lessons[$key]['score']=$finishedNum==0 ? 0 : intval($score/$finishedNum);
+            }
         }
 
         return $this->render('TopxiaWebBundle:CourseManage:learning-data.html.twig', array(
@@ -395,6 +402,11 @@ class CourseManageController extends BaseController
     private function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    private function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
     private function getSettingService()
