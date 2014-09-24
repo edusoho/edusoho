@@ -22,6 +22,12 @@ class BaseService {
         $result = $this->request->request->get($name, $default);
         return $result;
     }
+
+    protected function setParam($name, $value)
+    {
+        $this->request->request->set($name, $value);
+    }
+
     public function setDelegator($serviceDelegator) {
         $this->delegator = $serviceDelegator;
     }

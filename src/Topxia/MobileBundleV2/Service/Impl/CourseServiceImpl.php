@@ -31,6 +31,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$content = $this->uploadImage($content);
 
 		$formData = $this->formData;
+		$formData['content'] = $content;
 		unset($formData['imageCount']);
 		$post = $this->controller->getThreadService()->createPost($formData);
 		return $post;
@@ -51,13 +52,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 			} catch (\Exception $e) {
 				$url = "error";
 			}
-			$urlArray[] = $url;
+			$urlArray[$i] = $url;
 		}
 
 		$baseUrl = $this->request->getSchemeAndHttpHost();
-		$content = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) use ($baseUrl) {
-			$imageUrl = $urlArray[$matches[1]];
-			return "src=\"{$baseUrl}/{$imageUrl}\"";
+		$content = preg_replace_callback('/src=[\'\"](.*?)[\'\"]/', function($matches) use ($baseUrl, $urlArray) {
+			return "src=\"{$baseUrl}/{$urlArray[$matches[1]]}\"";
 		}, $content);
         		return $content;
 	}
