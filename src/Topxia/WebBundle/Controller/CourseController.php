@@ -532,7 +532,7 @@ class CourseController extends BaseController
 	{	
 		$user = $this->getCurrentUser();
 
-		$this->getCourseService()->watchPlay($lessonId,$user['id']);
+		$this->getCourseService()->watchPlay($user['id'],$lessonId);
 
 		return $this->createJsonResponse(true);
 	}
@@ -541,7 +541,7 @@ class CourseController extends BaseController
 	{	
 		$user = $this->getCurrentUser();
 
-		$this->getCourseService()->watchPaused($lessonId,$user['id']);
+		$this->getCourseService()->watchPaused($user['id'],$lessonId);
 
 		return $this->createJsonResponse(true);
 	}
