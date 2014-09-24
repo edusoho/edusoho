@@ -112,7 +112,6 @@ define(function(require, exports, module) {
                 case "onJavaScriptBridgeCreated":
                     break;
                 case "ready":
-                console.log('ready');
                     if(window.__MediaPlayer.get('_firstPlay')) {
                         var player = document.getElementById(playerId);
                         player.play2();
@@ -121,12 +120,13 @@ define(function(require, exports, module) {
                     break;
                 case "complete":
                     window.__MediaPlayer.trigger('ended');
-                    console.log('complete');
                     break;
                 case "playing":
-                    console.log('playing');break;
+                    window.__MediaPlayer.trigger('playing');
+                    break;
                 case "paused":
-                    console.log('paused');break;
+                    window.__MediaPlayer.trigger('paused');
+                    break;
             }
         }
 

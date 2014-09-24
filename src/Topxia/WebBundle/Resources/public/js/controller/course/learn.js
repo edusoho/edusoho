@@ -229,6 +229,13 @@ define(function(require, exports, module) {
                     mediaPlayer.on('ended', function() {
                         that._onFinishLearnLesson();
                     });
+                    mediaPlayer.on('playing', function() {
+                        console.log('playing')
+                    });
+                    mediaPlayer.on('paused', function() {
+                        console.log('paused')
+                    });
+
                     mediaPlayer.play();
 
                     that.set('mediaPlayer', mediaPlayer);
