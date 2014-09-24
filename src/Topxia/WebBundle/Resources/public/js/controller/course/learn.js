@@ -240,11 +240,11 @@ define(function(require, exports, module) {
                        setInterval(recordWatchTime, 25000);
                     });
                     mediaPlayer.on('paused', function() {
-                        console.log('status id paused');
+                        console.log('status id paused'+"../../course/"+lesson.id+'/watch/paused');
                         $.post("../../course/"+lesson.id+'/watch/paused');
                     });
                     mediaPlayer.on('playing', function() {
-                        console.log('status id play');
+                        console.log('status id play'+"../../course/"+lesson.id+'/watch/play');
                         $.post("../../course/"+lesson.id+'/watch/play');
                     });
                     mediaPlayer.play();
