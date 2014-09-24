@@ -106,8 +106,8 @@ class ClassMemberDaoImpl extends BaseDao implements ClassMemberDao
             ->andWhere('role = :role')
             ->andWhere('userId = :userId');
             
-        $roles="('";
         if (isset($conditions['roles'])) {
+            $roles="('";
             foreach ($conditions['roles'] as $role) {
                 $roles.=($role."','");
             }
