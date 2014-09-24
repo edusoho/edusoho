@@ -38,6 +38,11 @@ class BaseService {
         return $this->controller->getContainer();
     }
 
+    protected function getFileService()
+    {
+        return $this->controller->getService('Content.FileService');
+    }
+
     protected function getTestpaperService()
     {
         return $this->controller->getService('Testpaper.TestpaperService');

@@ -22,36 +22,46 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (!$user->isLogin()) {
             		return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能评价课程！");
         		}
-        		$thread = $this->controller->getThreadService()->getThread($threadId);
+        		$thread = $this->controller->getThreadService()->getThread($courseId, $threadId);
         		if (empty($thread)) {
         			return $this->createErrorResponse($request, 'not_thread', "问答不存在或已删除");
         		}
 
-        		$url = "none";
-        		try {
-			$group = $this->getParam("group", 'course');
-			$file = $this->request->files->get('file');
-			$record = $this->getFileService()->uploadFile($group, $file);
-			$url = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
-		} catch (\Exception $e) {
-			$url = "error";
-		}
-
-		if ($url == "error") {
-        			return $this->createErrorResponse($request, 'not_file', "文件上传错误");
-		}
-
 		$content = $this->getParam("content", '');
+		$content = $this->uploadImage($content);
 
-		$post = $this->controller->getThreadService()->createPost($this->formData);
+		$formData = $this->formData;
+		unset($formData['imageCount']);
+		$post = $this->controller->getThreadService()->createPost($formData);
 		return $post;
 	}
 
-	private function uploadFile()
+	private function uploadImage($content)
 	{
+		$url = "none";
+		$urlArray = array();
+		$imageCoust = $this->getParam("imageCount", '0');
+		for ($i=1; $i <= $imageCoust; $i++) { 
+			try {
+				$group = $this->getParam("group", 'course');
+				$file = $this->request->files->get('image' . $i);
+				$record = $this->getFileService()->uploadFile($group, $file);
+				$url = $this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+				
+			} catch (\Exception $e) {
+				$url = "error";
+			}
+			$urlArray[] = $url;
+		}
 
+		$baseUrl = $this->request->getSchemeAndHttpHost();
+		$content = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) use ($baseUrl) {
+			$imageUrl = $urlArray[$matches[1]];
+			return "src=\"{$baseUrl}/{$imageUrl}\"";
+		}, $content);
+        		return $content;
 	}
-	
+
 	public function commitCourse()
 	{
 		$courseId = $this->getParam("courseId", 0);

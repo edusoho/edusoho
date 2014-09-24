@@ -43,7 +43,9 @@ interface CourseService
 	/**
 	 *	courseId
 	 *	threadId
-	 *	content
+	 *	content 内容
+	 *	imageCount 图片数量
+	 *	image1， image2...
 	*/
 	public function postThread();
 }
