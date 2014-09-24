@@ -53,6 +53,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
             	$result = $this->getTestpaperService()->showTestpaper($testId);
         		$items = $result['formatItems'];
+        		unset($testpaper['metas']);
                         return array(
                             'testpaper'=>$testpaper,
                             'items'=>$this->coverTestpaperItems($items)

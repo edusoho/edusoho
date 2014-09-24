@@ -20,11 +20,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$user = $this->controller->getUserByToken($this->request);
 		if (!$user->isLogin()) {
-            		return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能评价课程！");
+            		return $this->createErrorResponse($this->request, 'not_login', "您尚未登录，不能评价课程！");
         		}
         		$thread = $this->controller->getThreadService()->getThread($courseId, $threadId);
         		if (empty($thread)) {
-        			return $this->createErrorResponse($request, 'not_thread', "问答不存在或已删除");
+        			return $this->createErrorResponse($this->request, 'not_thread', "问答不存在或已删除");
         		}
 
 		$content = $this->getParam("content", '');
