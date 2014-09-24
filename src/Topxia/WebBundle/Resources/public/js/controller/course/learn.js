@@ -229,11 +229,11 @@ define(function(require, exports, module) {
                     mediaPlayer.on('ended', function() {
                         that._onFinishLearnLesson();
                     });
-                    mediaPlayer.on('playing', function() {
-                        console.log('playing')
+                    mediaPlayer.on('ready', function() {
+                       
                     });
                     mediaPlayer.on('paused', function() {
-                        console.log('paused')
+                    
                     });
 
                     mediaPlayer.play();
@@ -544,7 +544,7 @@ define(function(require, exports, module) {
     });
     
     function recordWatchTime(){
-        console.log(1)
+        
         setTimeout(recordLearningTime, 2000);
     }
     exports.run = function() {

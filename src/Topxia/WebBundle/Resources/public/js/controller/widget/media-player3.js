@@ -114,15 +114,13 @@ define(function(require, exports, module) {
                 case "ready":
                     if(window.__MediaPlayer.get('_firstPlay')) {
                         var player = document.getElementById(playerId);
-                        player.play2();console.log('reading')
+                        player.play2();
+                        window.__MediaPlayer.trigger('ready');
                         window.__MediaPlayer.set('_firstPlay', false);
                     }
                     break;
                 case "complete":
                     window.__MediaPlayer.trigger('ended');
-                    break;
-                case "playing":
-                    window.__MediaPlayer.trigger('playing');
                     break;
                 case "paused":
                     window.__MediaPlayer.trigger('paused');
