@@ -234,8 +234,8 @@ define(function(require, exports, module) {
                     mediaPlayer.on('ended', function() {
                         that._onFinishLearnLesson();
                     });
-                    mediaPlayer.on('ready', function() {recordWatchTime()
-                       /*setInterval(recordWatchTime(), 5000);*/
+                    mediaPlayer.on('ready', function() {
+                       setInterval(recordWatchTime(), 5000);
                     });
                     mediaPlayer.on('paused', function() {
                     
