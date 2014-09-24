@@ -97,7 +97,7 @@ define(function(require, exports, module) {
             var newtr = "<tr><td class='t-1-0'></td><td class='t-1-1'></td><td class='t-1-2'></td><td class='t-1-3'></td><td class='t-1-4'></td><td class='t-1-5'></td><td class='t-1-6'></td></tr>";
 
             var self = this;
-            var url = this.get('signedRecordsUrl') + '?startDay=' + month+'-1-'+year + '&endDay='+ month+'-'+days+'-'+year;
+            var url = this.get('signedRecordsUrl') + '?startDay=' + year + '-' + month + '-1' + '&endDay='+ year + '-' + month+'-'+days;
           
             $tbody.append(newtr);
             var row = 1;
