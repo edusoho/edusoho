@@ -27,6 +27,7 @@ class InitCommand extends BaseCommand
 
 		$this->initSiteSetting($output);
 		$this->initConsultSetting($output);
+		$this->initPointSetting($output);
 		$this->initRegisterSetting($user, $output);
 		$this->initMailerSetting($output);
 		$this->initPaymentSetting($output);
@@ -105,6 +106,23 @@ class InitCommand extends BaseCommand
         $site = $this->getSettingService()->set('contact', $default);
 
 
+	}
+
+	private function initPointSetting($output)
+	{
+		$output->write('  初始化学分设置');
+
+        $default = array(
+            'accomplishLesson' => 2,
+            'shareNote' => 3,
+            'noteByLiked' => 2,
+            'accomplishTest' => 3,
+            'accomplishHomework' => 3,
+            'accomplishPractice' => 3,
+            'accomplishSign' => 1,
+        );
+         
+        $site = $this->getSettingService()->set('point', $default);
 	}
 
 	private function initAdminUser($output)

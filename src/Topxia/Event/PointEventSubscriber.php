@@ -23,7 +23,7 @@ class PointEventSubscriber implements EventSubscriberInterface
     	$param = $event->getSubject();
     	$pointSetting = $this->getSettingService()->get('point', array());
     	
-    	$param['number'] = $pointSetting['accomplishLesson'];
+    	$param['number'] = $pointSetting['accomplishLesson'] ? : 0;
         if($param['lessonType'] = 'testpaper') {
             return true;
         }
@@ -42,7 +42,7 @@ class PointEventSubscriber implements EventSubscriberInterface
     {
     	$user = $this->getCurrentUser();
     	$pointSetting = $this->getSettingService()->get('point', array());
-    	$this->getUserService()->increasePoint($user['id'], $pointSetting['accomplishSign'], 'finish_sign', '完成签到');
+    	$this->getUserService()->increasePoint($user['id'], $pointSetting['accomplishSign'] ? : 0, 'finish_sign', '完成签到');
     }
 
     public function accomplishTest(ServiceEvent $event)
@@ -53,7 +53,7 @@ class PointEventSubscriber implements EventSubscriberInterface
             findAllTestpaperResultsByTestIdAndStatusAndUserId($param['testPaperId'], $param['userId'], array('finished'));
 
         if(count($testResults) < 2) {
-            $this->getUserService()->increasePoint($param['userId'], $pointSetting['accomplishTest'], 'finish_test', '完成测试');
+            $this->getUserService()->increasePoint($param['userId'], $pointSetting['accomplishTest'] ? : 0, 'finish_test', '完成测试');
         }
     }
 
@@ -62,7 +62,7 @@ class PointEventSubscriber implements EventSubscriberInterface
         $param = $event->getSubject();
         $pointSetting = $this->getSettingService()->get('point', array());
 
-        $number = $pointSetting['shareNote'];
+        $number = $pointSetting['shareNote'] ? : 0;
         if($param['type'] == 'add') {
             $this->getUserService()->increasePoint($param['userId'], $number, 'share_note', '分享笔记');
         } else if($param['type'] == 'decrease') {
@@ -76,7 +76,7 @@ class PointEventSubscriber implements EventSubscriberInterface
         $param = $event->getSubject();
         $pointSetting = $this->getSettingService()->get('point', array());
 
-        $number = $pointSetting['noteByLiked'];
+        $number = $pointSetting['noteByLiked'] ? : 0;
         if($param['type'] == 'add') {
             $this->getUserService()->increasePoint($param['userId'], $number, 'note_by_liked', '笔记被赞');
         } else if($param['type'] == 'decrease') {
