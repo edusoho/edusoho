@@ -55,7 +55,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         		$items = $result['formatItems'];
                         return array(
                             'testpaper'=>$testpaper,
-                            'items'=>$items
+                            'items'=>$this->coverTestpaperItems($items)
                             );
+	}
+
+	private function coverTestpaperItems($items)
+	{
+		return array_map(function($item){
+			return array_values($item);
+		}, $items);
 	}
 }
