@@ -523,7 +523,7 @@ class CourseController extends BaseController
 	{	
 		$user = $this->getCurrentUser();
 
-		$this->getCourseService()->waveWatchingTime($lessonId,$user['id']);
+		$this->getCourseService()->waveWatchingTime($user['id'],$lessonId);
 
 		return $this->createJsonResponse(true);
 	}
