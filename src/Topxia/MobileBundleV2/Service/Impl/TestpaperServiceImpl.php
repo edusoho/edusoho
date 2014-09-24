@@ -9,6 +9,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	public function doTestpaper()
 	{
 		$testId = $this->getParam("testId");
+		$targetType = $this->getParam("targetType");
+		$targetId= $this->getParam("targetId");
 		$user = $this->controller->getUserByToken($this->request);
                         if (!$user->isLogin()) {
                             return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
@@ -47,8 +49,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	            	}
 
 	            	$testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
-
-            		return $testpaperResult;
             	}
 
             	$result = $this->getTestpaperService()->showTestpaper($testId);
