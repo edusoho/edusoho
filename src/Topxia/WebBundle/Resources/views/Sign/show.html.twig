@@ -2,6 +2,7 @@
 <div style="display:block;height:200px; width:auto;background-color: #fff;"  class="well">
   <div>亲爱的&nbsp;&nbsp;&nbsp;<span style="color:red;font-size:16px">{{user.truename}}</span>&nbsp;&nbsp;&nbsp;同学
   </div>
+  {% if classMember %}
   <div style="margin:10px 0 10px 0">
     我的学分 <span style="color:red">{{user.point}}</span> 
     <div class="pull-right">
@@ -15,7 +16,7 @@
       {% endif %}
     </div>
   </div>
-
+  {% endif %}
   {% if nextCourse %}
     <a style="margin:10px 0 10px 0" href="{{ path('course_learn', {id:nextCourse.id}) ~ '#lesson/' ~ nextLesson.id }}">上次正在学习《{{nextCourse.title}}》 课时 {{ nextLesson.title}}</a>
   {% else %}
