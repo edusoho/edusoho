@@ -230,7 +230,7 @@ define(function(require, exports, module) {
                         that._onFinishLearnLesson();
                     });
                     mediaPlayer.on('ready', function() {
-                       setTimeout(recordWatchTime(lesson.id), 120000);
+                       setTimeout(recordWatchTime(1), 120000);
                     });
                     mediaPlayer.on('paused', function() {
                     
