@@ -14,26 +14,26 @@
       	{{ note.content|raw }} <span class="trigger">(收起)</span>
       </div>
     </div>
-    <div class="class-note-praise">
+    <div class="class-note-like">
       &nbsp;
-      <input type="hidden" value="{{userPraise.id|default(null)}}" class="praiseShowVar">
+      <input type="hidden" value="{{userLike.id|default(null)}}" class="likeShowVar">
       
-      <a class="praise" href="javascript:;" data-url="{{ path('class_notes_praise', {noteId:note.id}) }}"><span class="pull-right glyphicon glyphicon-thumbs-up"></span></a>
+      <a class="like" href="javascript:;" data-url="{{ path('class_notes_like', {noteId:note.id}) }}"><span class="pull-right glyphicon glyphicon-thumbs-up"></span></a>
       
-      <a class="canclePraise" href="javascript:;" data-url="{{ path('class_notes_cancle_praise', {noteId:note.id}) }}" style="color: green;"><span class="pull-right glyphicon glyphicon-thumbs-up"></span></a>
+      <a class="cancleLike" href="javascript:;" data-url="{{ path('class_notes_cancle_like', {noteId:note.id}) }}" style="color: green;"><span class="pull-right glyphicon glyphicon-thumbs-up"></span></a>
     </div>
 
-    <div class="class-note-praise-member">
+    <div class="class-note-like-member">
       &nbsp;  
       <span class="pull-right text-sm">
-        {% if notePraise|length >4 %}
+        {% if noteLike|length >4 %}
           {% for i in 0..3 %}
-            <a href="{{ path('user_show', {id:notePraise[i].userId}) }}">{{notePraise[i].truename}}</a>
-            {% if loop.last %}等{{notePraise|length}}人赞过{% else %}、{% endif %}
+            <a href="{{ path('user_show', {id:noteLike[i].userId}) }}">{{noteLike[i].truename}}</a>
+            {% if loop.last %}等{{noteLike|length}}人赞过{% else %}、{% endif %}
           {% endfor %}
         {% else %}
-          {% for praiseUser in notePraise %}
-            <a href="{{ path('user_show', {id:praiseUser.userId}) }}">{{praiseUser.truename}}</a>
+          {% for likeUser in noteLike %}
+            <a href="{{ path('user_show', {id:likeUser.userId}) }}">{{likeUser.truename}}</a>
             {% if loop.last %}赞过{% else %}、{% endif %}
           {% endfor %}
         {% endif %}

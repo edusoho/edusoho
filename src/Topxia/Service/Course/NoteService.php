@@ -23,16 +23,16 @@ interface NoteService
 
 	public function deleteNotes(array $ids);
 
-    public function praise($noteId);
+    public function like($noteId);
 
-    public function canclePraise($noteId);
+    public function cancleLike($noteId);
 
-    public function getNotePraiseByNoteIdAndUserId($noteId,$userId);
+    public function getNoteLikeByNoteIdAndUserId($noteId,$userId);
     
-    public function findNotePraisesByUserId($userId);
+    public function findNoteLikesByUserId($userId);
 
-    public function findNotePraisesByNoteId($noteId);
+    public function findNoteLikesByNoteId($noteId);
 
-    public function findNotePraisesByNoteIds(array $noteIds);
+    public function findNoteLikesByNoteIds(array $noteIds);
 
 }

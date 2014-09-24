@@ -7,8 +7,8 @@
 		{% set course = courses[note.courseId]|default(null) %}
     {% set lesson = lessons[note.lessonId]|default(null) %}
     {% set user = users[note.userId]|default(null) %}
-    {% set userPraise = userPraises[note.id]|default(null) %}
-    {% set notePraise = notePraises[note.id]|default(null) %}
+    {% set userLike = userLikes[note.id]|default(null) %}
+    {% set noteLike = noteLikes[note.id]|default(null) %}
     {% include 'TopxiaWebBundle:ClassNote:note-list-item.html.twig'%}
   {% else %}
     <div class="empty">暂无笔记记录</div>

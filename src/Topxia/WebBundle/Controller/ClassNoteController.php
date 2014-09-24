@@ -48,10 +48,11 @@ class ClassNoteController extends ClassBaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($notes, 'lessonId'));
         $courses=ArrayToolkit::index($courses, 'id');
-
-        $userPraises=$this->getNoteService()->findNotePraisesByUserId($user['id']);
-        $userPraises=ArrayToolkit::index($userPraises, 'noteId');
-        $notePraises=$this->getNoteService()->findNotePraisesByNoteIds(ArrayToolkit::column($notes, 'id'));    
+        //用户点赞的笔记(NoteLike对象)
+        $userLikes=$this->getNoteService()->findNoteLikesByUserId($user['id']);
+        $userLikes=ArrayToolkit::index($userLikes, 'noteId');
+        //每个笔记点赞的人列表(NoteLike对象)
+        $noteLikes=$this->getNoteService()->findNoteLikesByNoteIds(ArrayToolkit::column($notes, 'id'));    
         return $this->render("TopxiaWebBundle:ClassNote:note-list.html.twig", array(
             'class' => $class,
             'classNav'=>'notes',
@@ -60,34 +61,34 @@ class ClassNoteController extends ClassBaseController
             'users'=>$users,
             'lessons'=>$lessons,
             'courses'=>$courses,
-            'userPraises'=>$userPraises,
-            'notePraises'=>$notePraises
+            'userLikes'=>$userLikes,
+            'noteLikes'=>$noteLikes
         ));
     }
 
-    public function praiseAction(Request $request,$noteId)
+    public function likeAction(Request $request,$noteId)
     {
         $note=$this->getNoteService()->getNote($noteId);
         $user=$this->getCurrentUser();
         if(empty($note)){
             throw $this->createNotFoundException("笔记不存在，或已删除。");
         }
-        $praise=$this->getNoteService()->getNotePraiseByNoteIdAndUserId($noteId,$user['id']);
-        if(!empty($praise)){
+        $like=$this->getNoteService()->getNoteLikeByNoteIdAndUserId($noteId,$user['id']);
+        if(!empty($like)){
             throw $this->createAccessDeniedException('不可重复对一条笔记点赞！');
         }
-        $this->getNoteService()->praise($noteId);
-        return $this->createJsonResponse($this->getNoteService()->findNotePraisesByNoteId($noteId));
+        $this->getNoteService()->like($noteId);
+        return $this->createJsonResponse($this->getNoteService()->findNoteLikesByNoteId($noteId));
     }
 
-    public function canclePraiseAction(Request $request,$noteId)
+    public function cancleLikeAction(Request $request,$noteId)
     {
         $note=$this->getNoteService()->getNote($noteId);
         if(empty($note)){
             throw $this->createNotFoundException("笔记不存在，或已删除。");
         }
-        $this->getNoteService()->canclePraise($noteId);
-        return $this->createJsonResponse($this->getNoteService()->findNotePraisesByNoteId($noteId));
+        $this->getNoteService()->cancleLike($noteId);
+        return $this->createJsonResponse($this->getNoteService()->findNoteLikesByNoteId($noteId));
     }
 
 

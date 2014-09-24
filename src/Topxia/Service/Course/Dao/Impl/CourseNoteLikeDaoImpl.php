@@ -2,46 +2,46 @@
 namespace Topxia\Service\Course\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Course\Dao\CourseNotePraiseDao;
+use Topxia\Service\Course\Dao\CourseNoteLikeDao;
 use PDO;
 
-class CourseNotePraiseDaoImpl extends BaseDao implements CourseNotePraiseDao
+class CourseNoteLikeDaoImpl extends BaseDao implements CourseNoteLikeDao
 {
-    protected $table = 'course_note_praise';
+    protected $table = 'course_note_like';
 	
-	public function getNotePraise($id)
+	public function getNoteLike($id)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
-	public function getNotePraiseByNoteIdAndUserId($noteId,$userId)
+	public function getNoteLikeByNoteIdAndUserId($noteId,$userId)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE noteId = ? AND userId=? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($noteId,$userId)) ? : null;
 	}
 
-	public function addNotePraise($notePraise)
+	public function addNoteLike($noteLike)
 	{
-		$affected = $this->getConnection()->insert($this->table, $notePraise);
+		$affected = $this->getConnection()->insert($this->table, $noteLike);
         if ($affected <= 0) {
-            throw $this->createDaoException('Insert notePraise error.');
+            throw $this->createDaoException('Insert noteLike error.');
         }
-        return $this->getNotePraise($this->getConnection()->lastInsertId());
+        return $this->getNoteLike($this->getConnection()->lastInsertId());
 	}
 
-	public function deleteNotePraiseByNoteIdAndUserId($noteId,$userId)
+	public function deleteNoteLikeByNoteIdAndUserId($noteId,$userId)
 	{
 		return $this->getConnection()->delete($this->table, array('noteId' => $noteId,'userId' => $userId));
 	}
 
-	public function findNotePraisesByUserId($userId)
+	public function findNoteLikesByUserId($userId)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC";
         return $this->getConnection()->fetchAll($sql, array($userId));
 	}
 
-	public function findNotePraisesByNoteId($noteId)
+	public function findNoteLikesByNoteId($noteId)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE noteId = ? ORDER BY createdTime DESC";
         return $this->getConnection()->fetchAll($sql, array($noteId));
