@@ -31,7 +31,7 @@ define(function(require, exports, module) {
         var classChooser = new ClassChooser({
             element:'#class_name',
             modalTarget:$('#modal'),
-            url:'/admin/class/list'
+            url:$form.find('#class_name').data().url
         });
         
         classChooser.on('choosed',function(id,name){

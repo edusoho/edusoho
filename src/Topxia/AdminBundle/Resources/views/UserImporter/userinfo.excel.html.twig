@@ -11,14 +11,15 @@
   <h1 class="pull-left">{{ type == 'student' ? '学生' : type == 'teacher' ? '教师' : '家长' }}导入 - 步骤1</h1>
 </div>
     <div class="row">
-          <form method="post" enctype="multipart/form-data">
+          <form id="user-import-form" method="post" enctype="multipart/form-data">
             {% if type == 'student' %}
               <div class="row form-group">
                 <div class="col-md-2 control-label col-md-offset-2">
                   <label>选择班级</label>
                 </div>
                 <div class="col-md-3 controls">
-               <input class="form-control" name="classId" type="input" placeholder="班级ＩＤ"/>
+                <input class="form-control" id="className" data-url="{{path('admin_class_list')}}" name="className" type="input" placeholder="班级选择" />
+                <input class="form-control" id="classId" name="classId" type="hidden" />
 
                 </div>
               </div>

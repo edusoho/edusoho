@@ -15,7 +15,7 @@
 <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
 
   <div class="form-group">
-    <input type="text" id="class_name" name="class_name" class="form-control" value="{{ app.request.query.get('class_name') }}" placeholder="按班级">
+    <input type="text" id="class_name" name="class_name" data-url="{{path('admin_class_list')}}" class="form-control" value="{{ app.request.query.get('class_name') }}" placeholder="按班级">
 
     <input type="hidden" id="class_id" name="class_id" class="form-control" value="{{ app.request.query.get('class_id') }}" >
   </div>

@@ -68,7 +68,7 @@ class ClassController extends BaseController
         );
 
         $classList = ArrayToolkit::group($classList,'gradeId');
-        return $this->render('TopxiaAdminBundle:Student:class-list-modal.html.twig',array(
+        return $this->render('TopxiaAdminBundle:Class:class-list-modal.html.twig',array(
             'schools'=>$schools,
             'classList'=>$classList
         ));
