@@ -109,7 +109,8 @@ class UserDaoImpl extends BaseDao implements UserDao
         if (isset($conditions['truename'])) {
             $conditions['truename'] = "%{$conditions['truename']}%";
         }
-        return  $this->createDynamicQueryBuilder($conditions)
+
+        $builder=$this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'user')
             ->andWhere('promoted = :promoted')
             ->andWhere('roles LIKE :roles')
@@ -125,6 +126,16 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('createdTime <= :endTime')
             ->andWhere('locked = :locked')
             ->andWhere('level >= :greatLevel');
+
+        if (isset($conditions['ids'])) {
+            $ids="('";
+            foreach ($conditions['ids'] as $id) {
+                $ids.=($id."','");
+            }
+            $conditions['ids']=substr($ids, 0,-2).")";
+            $builder=$builder->andStaticWhere('id in '.$conditions['ids']);
+        }
+        return $builder;
     }
 
     public function addUser($user)

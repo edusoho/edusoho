@@ -43,9 +43,9 @@
   </thead>
   <tbody>
     {% for user in users %}
-      {% set userMember = userMembers[user.id]|default(null) %}
-      {% if userMember %}
-        {% set class = classes[userMember.classId]|default(null) %}
+      {% set classStudent = classStudents[user.id]|default(null) %}
+      {% if classStudent %}
+        {% set class = classes[classStudent.classId]|default(null) %}
       {% else %}
         {% set class = null %}
       {% endif %}

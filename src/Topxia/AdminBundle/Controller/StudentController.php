@@ -15,10 +15,16 @@ class StudentController extends BaseController
             'truename'=>'',
             'number'=>''
         );
-
+        $classStudents=array();
+        $classes=array();
         if(!empty($fields)){
             $conditions['truename']=$fields['search_truename'];
             $conditions['number']=$fields['search_number'];
+            if(!empty($fields['class_id'])){
+                $classStudents=$this->getClassesService()->findClassStudentMembers($fields['class_id']);
+                $ids=ArrayToolkit::column($classStudents, 'userId');
+                $conditions['ids']=empty($ids) ? array(0) : $ids;
+            }
         }
         $paginator = new Paginator(
             $this->get('request'),
@@ -32,13 +38,19 @@ class StudentController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $userMembers=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($users, 'id'));
-        $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($userMembers, 'classId'));
-        $userMembers=ArrayToolkit::index($userMembers, 'userId');
+
+        if(empty($fields['class_id'])){
+            $classStudents=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($users, 'id'));
+            $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($classStudents, 'classId'));
+        }else{
+            $classes=array($this->getClassesService()->getClass($fields['class_id']));
+        }
+
+        $classStudents=ArrayToolkit::index($classStudents, 'userId');
         $classes=ArrayToolkit::index($classes, 'id');
         return $this->render('TopxiaAdminBundle:Student:index.html.twig', array(
             'users' => $users,
-            'userMembers' =>$userMembers,
+            'classStudents' =>$classStudents,
             'classes' =>$classes,
             'paginator' => $paginator
         ));
