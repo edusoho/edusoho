@@ -223,7 +223,6 @@ define(function(require, exports, module) {
                     function recordWatchTime(){
                             url="../../course/"+lesson.id+'/watch/time';
                             $.post(url);
-                            console.log('time add');
                     }
 
                     var mediaPlayer = new MediaPlayer({
@@ -237,14 +236,12 @@ define(function(require, exports, module) {
                     });
                     mediaPlayer.on('ready', function() {
                        recordWatchTime();
-                       setInterval(recordWatchTime, 25000);
+                       setInterval(recordWatchTime, 120000);
                     });
                     mediaPlayer.on('paused', function() {
-                        console.log('status id paused'+"../../course/"+lesson.id+'/watch/paused');
                         $.post("../../course/"+lesson.id+'/watch/paused');
                     });
                     mediaPlayer.on('playing', function() {
-                        console.log('status id play'+"../../course/"+lesson.id+'/watch/play');
                         $.post("../../course/"+lesson.id+'/watch/play');
                     });
                     mediaPlayer.play();
