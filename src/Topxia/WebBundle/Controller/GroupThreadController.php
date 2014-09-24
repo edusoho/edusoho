@@ -65,7 +65,8 @@ class GroupThreadController extends BaseController
         }
 
         $thread=$this->getThreadService()->getThread($threadId);
-        if($thread['userId']!==$user['id'] && $this->getGroupMemberRole($id)!==3 && $this->getGroupMemberRole($id)!==2 && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true){
+
+        if(!$this->checkManagePermission($id,$thread)){
             return $this->createMessageResponse('info','您没有权限编辑');
         }
 
@@ -89,7 +90,7 @@ class GroupThreadController extends BaseController
             'id'=>$id,
             'groupinfo'=>$groupinfo,
             'thread'=>$thread,
-            'is_groupmember' => $this->getGroupMemberRole($id)));
+            'is_groupmember' => $this->getGroupMemberRole($id)));  
     }
 
     public function checkUserAction(Request $request)
@@ -339,15 +340,10 @@ class GroupThreadController extends BaseController
 
         $groupMemberRole=$this->getGroupMemberRole($thread['groupId']);
 
-        if($groupMemberRole!==2 && $thread['userId']!==$memberId ){
-
-        return new Response($this->generateUrl('group_show', array(
-            'id'=>$thread['groupId'],
-            )));
+        if($groupMemberRole==2 || $thread['userId']==$memberId ){
+            $this->getThreadService()->closeThread($threadId);
 
         }
-        $this->getThreadService()->closeThread($threadId);
-
         return new Response($this->generateUrl('group_show', array(
             'id'=>$thread['groupId'],
             )));     
@@ -360,13 +356,13 @@ class GroupThreadController extends BaseController
 
         $groupMemberRole=$this->getGroupMemberRole($groupId);
 
-        if($post['userId']!==$memberId && $memberId!==$threadOwnerId && $groupMemberRole!==2 && $groupMemberRole!==3 && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true){
-            
-        return new Response($this->generateUrl('group_thread_show', array(
-            'id'=>$groupId,'threadId'=>$post['threadId'],
-             ))); 
+        $user=$this->getCurrentUser();
+ 
+        if($user['id']==$post['userId'] || $groupMemberRole==2 || $groupMemberRole==3 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true){
+
+        $this->getThreadService()->deletePost($postId);    
+
         }
-        $this->getThreadService()->deletePost($postId);
 
         return new Response($this->generateUrl('group_thread_show', array(
             'id'=>$groupId,'threadId'=>$post['threadId'],
@@ -380,24 +376,20 @@ class GroupThreadController extends BaseController
 
         $groupMemberRole=$this->getGroupMemberRole($thread['groupId']);
 
-        if($groupMemberRole!==2 && $groupMemberRole!==3 && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true ){
+        if($groupMemberRole==2 || $groupMemberRole==3 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true ){
 
-        return new Response($this->generateUrl('group_thread_show', array(
-            'id'=>$thread['groupId'],
-            'threadId'=>$threadId,
-            )));        
-        }
-        if($action=='setElite'){
-           $this->getThreadService()->setElite($threadId); 
-        }
-        if($action=='removeElite'){
-           $this->getThreadService()->removeElite($threadId); 
-        }
-        if($action=='setStick'){
-           $this->getThreadService()->setStick($threadId); 
-        }
-        if($action=='removeStick'){
-           $this->getThreadService()->removeStick($threadId); 
+            if($action=='setElite'){
+               $this->getThreadService()->setElite($threadId); 
+            }
+            if($action=='removeElite'){
+               $this->getThreadService()->removeElite($threadId); 
+            }
+            if($action=='setStick'){
+               $this->getThreadService()->setStick($threadId); 
+            }
+            if($action=='removeStick'){
+               $this->getThreadService()->removeStick($threadId); 
+            }      
         }
 
         return new Response($this->generateUrl('group_thread_show', array(
@@ -527,6 +519,16 @@ class GroupThreadController extends BaseController
 
        return 0;
     }
-    
+
+    private function checkManagePermission($id,$thread)
+    {   
+        $user=$this->getCurrentUser();
+
+        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true) return true;
+        if($this->getGroupService()->isOwner($id, $user['id'])) return true;
+        if($this->getGroupService()->isAdmin($id, $user['id'])) return true;
+        if($thread['userId']==$user['id']) return true;
+        return false;
+    }
 
 }
