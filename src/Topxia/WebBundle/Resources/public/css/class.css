@@ -231,10 +231,11 @@
 }
 .class_sign_main {
     position: absolute;
-    left:-30px;
+    left: 1px;
     width: 278px;
     background: #fbfefe;
     display: none;
+    margin-top: 10px;
 }
 
 .class_sign_main .disabled-next {
