@@ -49,6 +49,11 @@ class BaseService {
         return $this->controller->getService('Content.FileService');
     }
 
+    protected function getCourseService()
+    {
+        return $this->controller->getService('Course.CourseService');
+    }
+
     protected function getTestpaperService()
     {
         return $this->controller->getService('Testpaper.TestpaperService');
