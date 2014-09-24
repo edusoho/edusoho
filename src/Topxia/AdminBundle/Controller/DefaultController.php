@@ -63,8 +63,9 @@ class DefaultController extends BaseController
     {   
         $apps=array();
         $systemVersion="";
+        $error="";
         $apps = $this->getAppService()->checkAppUpgrades();
-       
+
         $appsAll = $this->getAppService()->getCenterApps();
 
         $codes = ArrayToolkit::column($appsAll, 'code');
@@ -73,14 +74,21 @@ class DefaultController extends BaseController
 
         $unInstallAppCount=count($appsAll)-count($installedApps);
 
+        $app_count=count($apps);
+        if(isset($apps['error'])) $error="error";
+
+        $mainAppUpgrade = null;
         foreach ($apps as $key => $value) {
-           if(isset($value['code']) && $value['code']=="MAIN") $systemVersion="old";
+            if(isset($value['code']) && $value['code']=="MAIN") {
+                $mainAppUpgrade = $value;
+            }
         }
 
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig',array(
             "apps"=>$apps,
-            'systemVersion'=>$systemVersion,
-            "app_count"=>count($apps),
+            "error"=>$error,
+            "mainAppUpgrade"=>$mainAppUpgrade,
+            "app_count"=>$app_count,
             "unInstallAppCount"=>$unInstallAppCount,
         ));
     }

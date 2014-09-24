@@ -3,7 +3,8 @@
   <div class="file-chooser" id="video-chooser" style="display:none;"
     data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
     data-hls-encrypted="{{ setting('developer.hls_encrypted', 1) }}"
-
+    data-targetType="{{targetType}}"
+    data-targetId="{{targetId}}"
   >
     <div class="file-chooser-bar" style="display:none;">
       <span data-role="placeholder"></span>
@@ -82,7 +83,7 @@
                 data-role="uploader-btn"
                 data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv;*.mov{% else %}*.mp4{% endif %}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
-                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
+                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId, lazyConvert:1}) }}{% endif %}" 
                 data-progressbar="#video-chooser-progress"
                 data-storage-type="{{storageSetting.upload_mode}}"
                 data-get-media-info="{{path('uploadfile_cloud_get_media_info',{type:'video'})}}"
@@ -138,7 +139,8 @@
 
   <div class="file-chooser" id="audio-chooser" style="display:none;"
       data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
-
+      data-targetType="{{targetType}}"
+      data-targetId="{{targetId}}"
   >
     <div class="file-chooser-bar"  style="display:none;">
       <span data-role="placeholder"></span>
@@ -205,7 +207,8 @@
 
   <div class="file-chooser" id="ppt-chooser" style="display:none;"
     data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId, convertor:'ppt'}) }}"
-
+    data-targetType="{{targetType}}"
+    data-targetId="{{targetId}}"
   >
     <div class="file-chooser-bar"  style="display:none;">
       <span data-role="placeholder"></span>

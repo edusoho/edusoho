@@ -20,47 +20,56 @@
     <div class="row row-9-3">
       <div class="col-md-9">
         {# 推荐课程 #}
-        <div class="es-box">
-          <div class="es-box-heading"><h2>推荐课程</h2>
-            <a class="pull-right" href="{{ path('course_explore', {sort:'recommendedSeq'}) }}">更多&gt;</a>
-          </div>
-          <div class="es-box-body">
-            {{ _self.course_grids(data('RecommendCourses',{ count:3 })) }}            
-          </div>
-        </div>
-
-        {# 最新课程 #}
-        <div class="es-box">
-          <div class="es-box-heading"><h2>最新课程</h2>
-            <a class="pull-right" href="{{ path('course_explore') }}">更多&gt;</a>
-          </div>
-          <div class="es-box-body">
-            {{ _self.course_grids(data('LatestCourses',{ count:6 })) }}            
-          </div>
-        </div>
-
-        {# 最新直播 #}
-        {% if setting('course.live_course_enabled') %}
+        {% set recommendCourses = data('RecommendCourses', {count:3}) %}
+        {% if recommendCourses %}
           <div class="es-box">
-            <div class="es-box-heading">
-              <h2>最新直播</h2>
-              <a class="pull-right" href="{{ path('live_course_explore') }}">更多&gt;</a>
+            <div class="es-box-heading"><h2>推荐课程</h2>
+              <a class="pull-right" href="{{ path('course_explore', {sort:'recommendedSeq'}) }}">更多&gt;</a>
             </div>
             <div class="es-box-body">
-              {{ _self.course_grids(data('RecentLiveCourses',{ count:3 })) }}
+              {{ _self.course_grids(data('RecommendCourses',{ count:3 })) }}            
             </div>
           </div>
         {% endif %}
 
-        {# 最新资讯 #}
-        <div class="es-box news">
-          <div class="es-box-heading">
-            <h2>最新资讯</h2>
-            <a class="pull-right" href="{{ path('article_show') }}">更多&gt;</a>
+        {# 最新课程 #}
+        {% set latestCourses = data('LatestCourses', {count:6}) %}
+        {% if latestCourses %}
+          <div class="es-box">
+            <div class="es-box-heading"><h2>最新课程</h2>
+              <a class="pull-right" href="{{ path('course_explore') }}">更多&gt;</a>
+            </div>
+            <div class="es-box-body">
+              {{ _self.course_grids(data('LatestCourses',{ count:6 })) }}            
+            </div>
           </div>
-          <div class="es-box-body">
-            {% set articles = data('LatestArticles',{'count':4}) %}
-            {% if articles %}
+        {% endif %}
+
+        {# 最新直播 #}
+        {% if setting('course.live_course_enabled') %}
+          {% set recentLiveCourses = data('RecentLiveCourses', {count:3}) %}
+          {% if recentLiveCourses %}
+            <div class="es-box">
+              <div class="es-box-heading">
+                <h2>最新直播</h2>
+                <a class="pull-right" href="{{ path('live_course_explore') }}">更多&gt;</a>
+              </div>
+              <div class="es-box-body">
+                {{ _self.course_grids(data('RecentLiveCourses',{ count:3 })) }}
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+
+        {# 最新资讯 #}
+        {% set articles = data('LatestArticles',{'count':4}) %}
+        {% if articles %}
+          <div class="es-box news">
+            <div class="es-box-heading">
+              <h2>最新资讯</h2>
+              <a class="pull-right" href="{{ path('article_show') }}">更多&gt;</a>
+            </div>
+            <div class="es-box-body">
               <ul class="row">
               {% for article in articles %}
                 {% if article %}
@@ -71,20 +80,18 @@
                 {% endif %}
               {% endfor %}
               </ul>
-            {% else %}
-              <div class="empty">还没有资讯</div>
-            {% endif %}
+            </div>
           </div>
-        </div>
+        {% endif %}
 
         {# 推荐话题 #}
-        <div class="es-box topic">
-          <div class="es-box-heading">
-            <h2>课程讨论</h2>
-          </div>
-          <div class="es-box-body">
-            {% set threads = data('EliteCourseThreadsByType',{'count':4, 'type':'discussion'}) %}
-            {% if threads %}
+        {% set threads = data('EliteCourseThreadsByType',{'count':4, 'type':'discussion'}) %}
+        {% if threads %}
+          <div class="es-box topic">
+            <div class="es-box-heading">
+              <h2>课程讨论</h2>
+            </div>
+            <div class="es-box-body">
               <ul class="row">
                 {% for thread in threads %}
                   {% if thread %}
@@ -108,82 +115,119 @@
                         </p>
                       </div>
                     </li>
-                  {% else %}
-                    <div class="empty">还没有课程讨论</div>
+                  {% endif %} 
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        {% endif %}
+
+        {# 讲师团 #}
+        {% set teachers = data('RecommendTeachers',{'count':'3'}) %}
+        {% if teachers %}
+          <div class="es-box teachers">
+            <div class="es-box-heading">
+              <h2>讲师团</h2>
+              <a class="pull-right" href="{{ path('teacher') }}">更多&gt;</a>
+            </div>
+            <div class="es-box-body">
+              <ul class="row teacher-grids">
+                 {% for teacher in teachers %}
+                  {% if teacher %}
+                    <li class="col-sm-6 col-md-4">
+                      <div class="teachers-item">
+                        <a href="{{ path('user_show', {id:teacher.id}) }}">
+                         <img class="img-circle" src="{{ default_path('avatar',teacher.mediumAvatar, '') }}">
+                        </a>
+                 
+                          <span>{{ web_macro.user_link(teacher) }}</span>
+                            <i> {{ teacher.title }}</i>
+                            <p> {{ teacher.about|plain_text(50) }}</p>
+                         </div>
+                    </li>
                   {% endif %}
                 {% endfor %}
               </ul>
-            {% endif %}
+            </div>
           </div>
-        </div>
-
-        {# 讲师团 #}
-        <div class="es-box teachers">
-          <div class="es-box-heading">
-            <h2>讲师团</h2>
-            <a class="pull-right" href="{{ path('teacher') }}">更多&gt;</a>
-          </div>
-          <div class="es-box-body">
-            <ul class="row teacher-grids">
-               {% for teacher in data('RecommendTeachers',{'count':'3'}) %}
-                {% if teacher %}
-                  <li class="col-sm-6 col-md-4">
-                    <div class="teachers-item">
-                      <a href="{{ path('user_show', {id:teacher.id}) }}">
-                       <img class="img-circle" src="{{ default_path('avatar',teacher.mediumAvatar, '') }}">
-                      </a>
-               
-                        <span>{{ web_macro.user_link(teacher) }}</span>
-                          <i> {{ teacher.title }}</i>
-                          <p> {{ teacher.about|plain_text(50) }}</p>
-                       </div>
-                  </li>
-                  {% else %}
-                    <div class="empty">尚未设置推荐老师，请在管理后台设置。</div>
-                  {% endif %}
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
+        {% endif %}
 
         {# vip #}
         {% if setting('vip.enabled') %}
-          <div class="es-box vip">
-            <div class="es-box-heading">
-              <h2>会员专区</h2>
-              <a class="pull-right" href="{{ path('vip') }}">更多&gt;</a>
-            </div>
-            <div class="es-box-body">
-              <ul class="row vip-lists">
-                {% set levels = data('VipLevels',{'count':100}) %}
-                {% if levels %}
+          {% set levels = data('VipLevels',{'count':100}) %}
+          {% if levels %}
+            <div class="es-box vip">
+              <div class="es-box-heading">
+                <h2>会员专区</h2>
+                <a class="pull-right" href="{{ path('vip') }}">更多&gt;</a>
+              </div>
+              <div class="es-box-body">
+                <ul class="row vip-lists">
                   {% for level in levels %}
-                    <li class="col-sm-12">
-                      <div class="vip-item">
-                        <div class="row">
-                          <div class="col-sm-4 col-md-4">
-                            <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
-                            <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}">
+                    {% if level %}
+                      <li class="col-sm-12">
+                        <div class="vip-item">
+                          <div class="row">
+                            <div class="col-sm-4 col-md-4">
+                              <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
+                              <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}">
+                            </div>
+                            </a>
+                            <div class="col-sm-5 col-md-5">
+                              <h3>{{ level.name }}</h3>
+                              <p>{{ level.description|plain_text(40) }}</p>
+                            </div>
+                            <div class="vip-price col-sm-3 col-md-3">
+                              <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                              <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
+                            </div>
                           </div>
-                          </a>
-                          <div class="col-sm-5 col-md-5">
-                            <h3>{{ level.name }}</h3>
-                            <p>{{ level.description|plain_text(40) }}</p>
-                          </div>
-                          <div class="vip-price col-sm-3 col-md-3">
-                            <h4>¥&nbsp;{{ level.monthPrice }}</h4>
-                            <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
-                          </div>
-                        </div>
-                      </div>      
-                    </li>
+                        </div>      
+                      </li>
+                    {% endif %}
                   {% endfor %}
-                {% else %}
-                  <div class="empty">尚未设置会员等级</div>
-                {% endif %}
-              </ul>
+                </ul>
+              </div>
             </div>
-          </div>
+          {% endif %}
+        {% endif %}
+
+         {# 小组 #}
+        {% if setting('group').group_show|default(1) %}
+          {% set groups = data('HotGroup', {'count':15}) %}
+          {% if groups %}
+            <div class="es-box hot-group">
+              <div class="es-box-heading"><h2>最热小组</h2><a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a></div>
+              <div class="es-box-body">
+                 <ul class="list-unstyled">
+                  {% for group in groups %}
+                    {% if group.status=='open' %} 
+                      <li class="col-md-4"> 
+                        <div class="panel">
+                           <div class="media">
+                              <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
+                                {% if group.logo %}
+                                <img src="{{file_path(group.logo)}}" alt="{{group.title}}">
+                                {%else%}
+                                <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
+                                {%endif%}
+                              </a>
+                              <div class="media-body">
+                                <p><a  href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></p>
+                                <div class="text-muted text-normal">
+                                  {{group.memberNum}}个成员&nbsp;
+                                  {{group.threadNum}}个话题
+                                </div>
+                              </div> 
+                            </div>
+                          </div>
+                        </li>
+                      {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          {% endif %}
         {% endif %}
 
       </div>
@@ -193,55 +237,59 @@
         {% if app.user %}
           {{ render(controller('TopxiaWebBundle:Default:userlearning')) }}
         {% endif %}
-        {# 热门标签 #}
-        <div class="es-box teachers">
-          <div class="es-box-heading">
-            <h2>热门标签</h2>
-          </div>
-          <div class="es-box-body">
-            {% set tags = data('Tags',{'count':5}) %}
-            <div class="tag-list">
-              {% if tags %}
+
+        {# 热门标签 #}    
+        {% set tags = data('Tags',{'count':5}) %}
+        {% if tags %}
+          <div class="es-box teachers">
+            <div class="es-box-heading">
+              <h2>热门标签</h2>
+            </div>
+            <div class="es-box-body">
+              <div class="tag-list">
                 {% for tag in tags %}
                   {% if tag %} 
                     <a href="{{ path('tag_show', {name:tag.name}) }}"> {{ tag.name }}</a>
                   {% endif %}
                 {% endfor %}
-              {% else %}
-                  <div class="empty">还没有添加标签</div>
-              {% endif %}
+              </div>
             </div>
           </div>
-        </div>
+        {% endif %}
 
         {# 课程排行 #}
-        <div class="es-box courses-rank">
-          <div class="es-box-heading">
-            <h2>课程排行</h2>
+        {% set coursesRank = data('PopularCourses',{'count':'5', 'type':'studentNum'}) %}
+        {% if coursesRank %}
+          <div class="es-box courses-rank">
+            <div class="es-box-heading">
+              <h2>课程排行</h2>
+            </div>
+            <div class="es-box-body">
+              <ul class="media-list">
+                {% for course in coursesRank %}
+                  {% if course %}
+                    <li class="media">
+                      <a href="{{ path('course_show', {id:course.id}) }}">
+                        <div class="course-item">
+                          <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb pull-left">
+                          <div class="course-title">{{ course.title }}</div>
+                        </div>
+                      </a>
+                    </li>
+                  {% endif %}
+                {% endfor %}        
+              </ul>
+            </div>
           </div>
-          <div class="es-box-body">
-            <ul class="media-list">
-              {% for course in data('PopularCourses',{'count':'5', 'type':'studentNum'}) %}
-                <li class="media">
-                  <a href="{{ path('course_show', {id:course.id}) }}">
-                    <div class="course-item">
-                      <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb pull-left">
-                      <div class="course-title">{{ course.title }}</div>
-                    </div>
-                  </a>
-                </li>
-              {% endfor %}        
-          </ul>
-          </div>
-        </div>
+        {% endif %}
 
         {# 学员动态 #}
-        <div class="es-box status-side">
-          <div class="es-box-heading">
-            <h2>学员动态</h2>
-          </div>
-          {% set learns = data('LatestFinishedLearns', {'count':5}) %}
-          {% if learns %}
+        {% set learns = data('LatestFinishedLearns', {'count':5}) %}
+        {% if learns %}
+          <div class="es-box status-side">
+            <div class="es-box-heading">
+              <h2>学员动态</h2>
+            </div>
             <div class="es-box-body">
               <ul class="media-list">
                 {% for learn in learns %}
@@ -265,37 +313,33 @@
                 {% endfor %}
               </ul>
             </div>
-          {% else %}
-            <div class="empty">还没有动态</div>
-          {% endif %}
-        </div>
+          </div>
+        {% endif %}
 
         {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock', {number:5})) }}
+
+        {# 最热话题 #}
+        {% if setting('group').group_show|default(1) %}
+          {% set hotThreads = data('HotThreads', {'count':11}) %}
+          {% if hotThreads %}
+            <div class="es-box hot-threads">
+              <div class="es-box-heading"><h2>最热话题</h2></div>
+              <div class="es-box-body">
+                <ul class="text-list">
+                  {% for thread in hotThreads %}
+                    {% if thread %}
+                      <li style="border-bottom:none;background:url('{{asset('assets/img/default/triangle.png')}}') no-repeat 0 3px;padding-left:8px;padding-top:0px;margin-bottom:8px;"><a  href="{{path('group_thread_show',{id:thread.groupId,threadId:thread.id})}}">{{thread.title|sub_text(15)}}</a></li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+
       </div>
     </div>
-    {% if setting('group').group_show|default(1) %}
-    <div class="row row-9-3">
-
-      <div class="col-md-9">
-        <div class="es-box">
-          <div class="es-box-heading"><h2>最热小组</h2><a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a></div>
-          <div class="es-box-body">
-             {{ render(controller('TopxiaWebBundle:Group:hotGroup')) }}
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-          <div class="es-box">
-          <div class="es-box-heading"><h2>最热话题</h2></div>
-          <div class="es-box-body">
-            {{ render(controller('TopxiaWebBundle:Group:hotTHread')) }}
-          </div>
-        </div>
-      </div>
-
-    </div>
-    {% endif %}
+    
   </div>
 {% endblock %}
 

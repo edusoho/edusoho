@@ -31,7 +31,7 @@
       data-upload-url="{{ path('uploadfile_upload', {targetType:targetType, targetId:targetId}) }}"
       data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
       {% if storageSetting.upload_mode == 'cloud' %}
-        data-callback="{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}"
+        data-callback="{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId, lazyConvert:1}) }}"
       {% endif %}
      ></div>
 	

@@ -1525,6 +1525,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("用户(#{$userId})已加入该课程！");
 		}
 
+		$levelChecked = '';
 		if (!empty($info['becomeUseMember'])) {
 			$levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
 			if ($levelChecked != 'ok') {
@@ -1545,7 +1546,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		} else {
 			$deadline = 0;
 			//如果处在限免期，则deadline为限免结束时间 减 当前时间
-			if($course['freeStartTime'] <= time() && $course['freeEndTime'] > time()){
+			if($course['freeStartTime'] <= time() && $course['freeEndTime'] > time() && $levelChecked != 'ok'){
 				$deadline = $course['freeEndTime'];
 			}
 		}

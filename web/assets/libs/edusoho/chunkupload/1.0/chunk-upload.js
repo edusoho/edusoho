@@ -11,7 +11,9 @@ define(function(require, exports, module) {
 			defaultChunkSize: 1024 * 1024,
 			tableArray: null,
 			currentFile: null,
-			destroy: false
+			currentFileIndex: 0,
+			destroy: false,
+			uploadOnSelected: true
 		},
 
 		events: {
@@ -61,13 +63,15 @@ define(function(require, exports, module) {
 
 			var _reader = new FileReader();
 	        _reader.onloadend = function(evt) {
+
 	            if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+
 	            	var crc = self.crc32(evt.target.result);
 	            	fileScop.key = crc;
 	            	var savedFileInfo = FileScopStorage.get();
 	            	if(savedFileInfo){
 	            		var savedFileInfoArray = JSON.parse(savedFileInfo);
-	            		if(savedFileInfoArray.key == fileScop.key){
+	            		if(savedFileInfoArray.key == fileScop.key && savedFileInfoArray.postParams.paramsKey==fileScop.postParams.paramsKey){
 	            			fileScop = $.extend(fileScop, savedFileInfoArray);
 	            			self.uploadAfterGetCrc(fileScop, fileScop.blkRet);
 	            			return;
@@ -118,7 +122,7 @@ define(function(require, exports, module) {
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
                     if(!self.get("destroy")) {
-                    	self.get("upload_progress_handler")(self.get("currentFile"), tmp, fileScop.file.size);
+                    	self.trigger("upload_progress_handler", self.get("currentFile"), tmp, fileScop.file.size, fileScop.fileIndex);
                     }
                 }
             }, false);
@@ -138,9 +142,9 @@ define(function(require, exports, module) {
 
 		tokenError: function(){
 			this.element.find("input[data-role='fileSelected']").val("");
-			this.get('progressbar').reset().hide();
 			this.set("currentFile", null);
 			FileScopStorage.del();
+			this.trigger("tokenError",this);
 			Notify.danger('授权信息已失效，请重新上传。');
 		},
 
@@ -218,7 +222,7 @@ define(function(require, exports, module) {
                 if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
                 	var response = JSON.parse(xhr.responseText);
 
-                	response.filename=self.get("currentFile").name;
+                	response.filename = self.get("currentFile").name;
 
                 	var mediaInfoUrl = self.$('[data-role=uploader-btn]').data("getMediaInfo");
                 	if(mediaInfoUrl){
@@ -231,8 +235,8 @@ define(function(require, exports, module) {
 	                		}
 	                	});
                 	}
-                	self.get("upload_success_handler")(self.get("currentFile"), JSON.stringify(response));
-                	fileScop.fileIndex--;
+                	self.trigger("upload_success_handler", self.get("currentFile"), JSON.stringify(response), fileScop.fileIndex);
+                	fileScop.fileIndex++;
                 	FileScopStorage.del();
                 	self.set("currentFile",null);
                 	self.element.find("input[data-role='fileSelected']").val("");
@@ -268,7 +272,7 @@ define(function(require, exports, module) {
                     }
                     var tmp = fileScop.uploadedBytes+evt.loaded;
                     if(!self.get("destroy")) {
-                    	self.get("upload_progress_handler")(self.get("currentFile"), tmp, fileScop.file.size);
+                    	self.trigger("upload_progress_handler", self.get("currentFile"), tmp, fileScop.file.size, fileScop.fileIndex);
                     }
                 }
             },false);
@@ -318,6 +322,7 @@ define(function(require, exports, module) {
 	    		key: fileScop.key,
 				uploadedBytes: fileScop.uploadedBytes,
 				blockCtxs: fileScop.blockCtxs,
+				postParams: fileScop.postParams,
 
 				blkRet: blkRet,
 
@@ -343,6 +348,7 @@ define(function(require, exports, module) {
 	    		this.set("destroy",false);
 	    		return;
 	    	}
+
 	    	var self = this;
 
 	    	fileScop.currentChunkIndex ++;
@@ -386,15 +392,17 @@ define(function(require, exports, module) {
 	        _reader.readAsArrayBuffer(chunk);
 	    },
 		startUpload: function(fileIndex){
+			this.set("currentFileIndex",fileIndex);
 			var file=this.get("currentFile");
 			if(!file){
-				file = this.get("fileQueue").pop();
-				this.set("currentFile",file);
+				file = this.get("fileQueue")[fileIndex];
 			}
-
 			if(file){
-				this.get("upload_start_handler").call(this,this,file);
+				this.set("currentFile",file);
+				this.trigger("upload_start_handler",file);
 				this.upload(file, fileIndex);
+			} else {
+				this.trigger("allComplete");
 			}
 			
 		},
@@ -408,7 +416,7 @@ define(function(require, exports, module) {
 			var globalFiles = this.get("fileQueue");
 
 			for (var i = 0; i < files.length; i++) {
-                globalFiles.push(files[i]);
+                globalFiles[globalFiles.length] = files[i];
             }
             this.set("fileQueue", globalFiles);
 		},
@@ -416,8 +424,8 @@ define(function(require, exports, module) {
 		onUploadButtonClick: function(){
 			this.element.find("input[data-role='fileSelected']").click();
 		},
+		
 		onSelectFileChange: function(){
-
 			var files = this.element.find("input[data-role='fileSelected']")[0].files;
 
 			if(files.length == 0) {
@@ -431,19 +439,27 @@ define(function(require, exports, module) {
 				maxSize = parseFloat(maxSize)*1024*1024;
 			}
 
-			if(files[0].size>maxSize){
-				Notify.info('选择的文件太大，只能选择小于'+this.get("file_size_limit")+'的文件。');
-				return;
+			for(var i=0; i<files.length; i++){
+				if(files[i].size>maxSize){
+					Notify.info('选择的文件太大，只能选择小于'+this.get("file_size_limit")+'的文件。');
+					return;
+				}
 			}
 
-			if(this.get("currentFile")){
+			if(this.get("currentFile") && this.get("uploadOnSelected")){
 				Notify.info('文件正在上传中，请等待本次上传完毕后，再上传。');
 				this.element.find("input[data-role='fileSelected']").val("");
 				return;
 			}
 
+			this.trigger("fileSelected", files);
+			
 			this._initFileQueue(files);
-			this.startUpload(files.length-1);
+
+			if(this.get("uploadOnSelected")){
+				files = this.get("fileQueue");
+				this.trigger("upload", this.get("currentFileIndex"));
+			}
 		},
 		_initFileTypes: function(){
 			var fileTypes=this.get("file_types").replace(/\*/g,"").replace(/;/g,",");
@@ -452,12 +468,20 @@ define(function(require, exports, module) {
 		setup: function() {
 			this._initTableArray();
 			this._initFileTypes();
+			this.on("upload", this.startUpload);
 		},
 		destroy: function() {
 			this.set("destroy", true);
-			this.get('progressbar').reset().hide();
 			this.element.find("input[data-role='fileSelected']").val("");
 			this.set("currentFile", null);
+			this.trigger("destroy",this);
+		},
+		stopUpload: function(){
+			this.set("destroy", true);
+		},
+		continueUpload: function(){
+			this.set("destroy", false);
+			this.startUpload(this.get("currentFileIndex"));
 		}
 
 	});

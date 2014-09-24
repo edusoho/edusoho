@@ -178,7 +178,7 @@ define(function(require, exports, module) {
             var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
-
+                $(".watermarkEmbedded").html('<input type="hidden" id="videoWatermarkEmbedded" value="'+lesson.videoWatermarkEmbedded+'" />');
                 $titleArray = document.title.split(' - ');
                 document.title = lesson.title + ' - ' + $titleArray[1] + ' - ' + $titleArray[2] + ' - ' +$titleArray[3]
 
@@ -217,7 +217,6 @@ define(function(require, exports, module) {
                     $("#lesson-iframe-content").show();
 
                 } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
-
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
                     $("#lesson-video-content").show();
                     
@@ -238,7 +237,7 @@ define(function(require, exports, module) {
                     if (lesson.type == 'video') {
                         if (lesson.mediaSource == 'self') {
                             $("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
-
+                            
                             if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
                                 Notify.warning('视频文件正在转换中，稍后完成后即可查看');
                                 return ;
