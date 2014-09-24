@@ -22,6 +22,22 @@
   {% else %}
     <a style="margin:10px 0 10px 0" href="{{ path('class_courses', {classId:class.id})}}">还开始学习课程，快去学习吧!</a>
   {% endif %}
+
+
+<div style="margin:20px 0; ">
+
+  <div class="class-sign class-sign-finished">
+    <div class="date-col">
+      <div class="dayofweek">周{{ 'now'|day_of_week }}</div>
+      <div class="date">{{ 'now'|date('m-d') }}</div>
+    </div>
+    <div class="action-col">
+      <button class="btn btn-primary btn-block sign-btn ">签到</button>
+    </div>
+  </div>
+
+</div>
+
   <div id="class-sign" data-records="{{ path('signed_records', {'classId':class.id,'userId':app.user.id})}}" data-signurl="{{ path('user_sign', {'classId':class.id,'userId':app.user.id}) }}">
     <div class="sign_wapper">
       {% if not isSignedToday %}

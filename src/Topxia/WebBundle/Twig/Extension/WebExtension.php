@@ -25,6 +25,7 @@ class WebExtension extends \Twig_Extension
             'data_format' => new \Twig_Filter_Method($this, 'dataformatFilter') ,
             'time_range' => new \Twig_Filter_Method($this, 'timeRangeFilter'),
             'remain_time' => new \Twig_Filter_Method($this, 'remainTimeFilter'),
+            'day_of_week' => new \Twig_Filter_Method($this, 'dayOfWeekFilter'),
             'location_text' => new \Twig_Filter_Method($this, 'locationTextFilter'),
             'tags_html' => new \Twig_Filter_Method($this, 'tagsHtmlFilter', array('is_safe' => array('html'))),
             'file_size'  => new \Twig_Filter_Method($this, 'fileSizeFilter'),
@@ -273,6 +274,20 @@ class WebExtension extends \Twig_Extension
         }
 
         return round($remain / 86400) . '天';
+    }
+
+    public function dayOfWeekFilter($value)
+    {
+        // 这里有个坑 字符串跟整形比较的时候，会转换成整形后再比较。
+        if ((string)intval($value) != $value) {
+            $value = strtotime($value);
+        }
+
+        $days = array('日', '一', '二', '三', '四', '五', '六');
+
+        $index = intval(date('w', $value));
+
+        return $days[$index];
     }
 
     public function getCountdownTime($value)
