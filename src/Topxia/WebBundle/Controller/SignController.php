@@ -44,7 +44,9 @@ class SignController extends BaseController
 		$result['records'] = array();
 		if($userSigns) {
 			foreach ($userSigns as $userSign) {
-			$result['records'][] = date('d',$userSign['createdTime']);
+			$result['records'][] = array(
+				'day' => date('d',$userSign['createdTime']),
+				'time' => date('G点m分',$userSign['createdTime']));
 			}
 		}
 		$ClassMemberSignStatistics = $this->getSignService()->getClassMemberSignStatistics($userId, $classId);
