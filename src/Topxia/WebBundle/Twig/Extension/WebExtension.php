@@ -70,8 +70,8 @@ class WebExtension extends \Twig_Extension
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
             'class_name' => new \Twig_Function_Method($this, 'getClassName') ,
-            'set_js_injection' => new \Twig_Function_Method($this, 'setJsInjection'),
-            'get_js_injection' => new \Twig_Function_Method($this, 'getJsInjection'), 
+            'import_javascript' => new \Twig_Function_Method($this, 'setJavascript'),
+            'get_javascript' => new \Twig_Function_Method($this, 'getJavascript'), 
         );
     }
 
@@ -517,7 +517,7 @@ class WebExtension extends \Twig_Extension
 
         return $url;
     }
-    public static function setJsInjection(array $js)
+    public static function setJavascript(array $js)
     {
         if(self::$jsInjection) {
             self::$jsInjection = array_merge(self::$jsInjection, $js);
@@ -526,7 +526,7 @@ class WebExtension extends \Twig_Extension
         }
     }
 
-    public static function getJsInjection()
+    public static function getJavascript()
     {
         return self::$jsInjection;
     }
