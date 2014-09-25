@@ -53,7 +53,7 @@ class SignController extends BaseController
 		$userSignStatistics = $this->getSignService()->getSignUserStatistics($userId, 'class_sign', $classId);
 		$classSignStatistics = $this->getSignService()->getSignTargetStatistics('class_sign', $classId, date('Ymd', time()));
 
-		$result['todayRank'] = $this->getSignService()->getTodayRank($userId, 'class_sign', $classId);
+		$result['todayRank'] = 1;
 		$result['signedNum'] = $classSignStatistics['signedNum'];
 		$result['keepDays'] = $userSignStatistics['keepDays'];
 		
