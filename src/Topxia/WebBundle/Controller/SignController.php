@@ -24,7 +24,7 @@ class SignController extends BaseController
 			$nextLesson = $this->getCourseService()->getCourseLesson($nextLearnLesson['courseId'], $nextLearnLesson['lessonId']);
 		}
 		
-		$isSignedToday = $this->getSignService()->isSignedToday($user['id'], $class['id']);
+		$isSignedToday = $this->getSignService()->isSignedToday($user['id'], 'class_sign', $class['id']);
 		return $this->render('TopxiaWebBundle:Sign:show.html.twig',array(
 			'class' => $class,
 			'user' => $user,
@@ -46,14 +46,14 @@ class SignController extends BaseController
 			foreach ($userSigns as $userSign) {
 			$result['records'][] = array(
 				'day' => date('d',$userSign['createdTime']),
-				'time' => date('G点m分',$userSign['createdTime'])
+				'time' => date('G点m分',$userSign['createdTime']),
 				'rank' => $userSign['rank']);
 			}
 		}
-		$userSignStatistics = $this->getSignService()->getUserSignStatistics($userId, 'class_sign', $classId);
-		$classSignStatistics = $this->getSignService()->getTargetSignStatistics('class_sign', $classId);
+		$userSignStatistics = $this->getSignService()->getSignUserStatistics($userId, 'class_sign', $classId);
+		$classSignStatistics = $this->getSignService()->getSignTargetStatistics('class_sign', $classId, date('Ymd', time()));
 
-		$result['todayRank'] = end($userSigns)['rank'];
+		$result['todayRank'] = $this->getSignService()->getTodayRank($userId, 'class_sign', $classId);
 		$result['signedNum'] = $classSignStatistics['signedNum'];
 		$result['keepDays'] = $userSignStatistics['keepDays'];
 		
@@ -62,7 +62,7 @@ class SignController extends BaseController
 
 	public function getSignService()
 	{
-		return $this->getServiceKernel()->createService('Classes.SignService');
+		return $this->getServiceKernel()->createService('Sign.SignService');
 	}
 
 	public function getClassesService()

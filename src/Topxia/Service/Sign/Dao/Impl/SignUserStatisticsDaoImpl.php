@@ -7,7 +7,7 @@ use Topxia\Service\Sign\Dao\SignUserStatisticsDao;
 
 class SignUserStatisticsDaoImpl extends BaseDao implements SignUserStatisticsDao
 {
-	protected $table = 'sign_user_signStatistics';
+	protected $table = 'sign_user_statistics';
 
 	public function addStatistics($statistics)
 	{
@@ -15,10 +15,10 @@ class SignUserStatisticsDaoImpl extends BaseDao implements SignUserStatisticsDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert class sign Statistics error.');
         }
-        return $this->getStatistics($this->getConnection()->lastInsertId());
+        return $this->getStatisticsById($this->getConnection()->lastInsertId());
 	}
 
-	public function getStatistics($id)
+	public function getStatisticsById($id)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
@@ -33,6 +33,6 @@ class SignUserStatisticsDaoImpl extends BaseDao implements SignUserStatisticsDao
 	public function updateStatistics($id, $fields)
 	{
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getStatistics($id);
+        return $this->getStatisticsById($id);
 	}
 }

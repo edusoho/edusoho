@@ -15,7 +15,7 @@ class SignUserLogDaoImpl extends BaseDao implements SignUserLogDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert user sign error.');
         }
-        return $this->getClassMemberSign($this->getConnection()->lastInsertId());
+        return $this->getSignLog($this->getConnection()->lastInsertId());
 	}
 
 	public function getSignLog($id)

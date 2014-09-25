@@ -11,7 +11,9 @@ interface SignService
 
     public function getSignRecordsByPeriod($userId, $targetType, $targetId, $startDay, $endDay);
 
-    public function getUserSignStatistics($userId, $targetType, $targetId);
+    public function getSignUserStatistics($userId, $targetType, $targetId);
 
-    public function getTargetSignStatistics($targetType, $targetId, $date);
+    public function getSignTargetStatistics($targetType, $targetId, $date);
+
+    public function getTodayRank($userId, $targetType, $targetId);
 }

@@ -57,7 +57,7 @@ define(function(require, exports, module) {
                 },
                 error: function(xhr){
                     if(xhr.status == 404) {
-                        alert('非该班成员不能签到');
+                        alert('还没有登录');
                     }else{
                         alert('签到异常');
                     }
@@ -120,8 +120,9 @@ define(function(require, exports, module) {
                 async:true,//(默认: true) 默认设置下，所有请求均为异步请求。如果需要发送同步请求，请将此选项设置为 false。注意，同步请求将锁住浏览器，用户其它操作必须等待请求完成才可以执行。
                 success: function(data){
                     for(var i=0;i<data.records.length;i++){ 
-                        $tbody.find(".d-" + data.records[i]['day']).addClass('signed_day').attr('title', '于'+ data.records[i]['time'] + '签到');
+                        $tbody.find(".d-" + data.records[i]['day']).addClass('signed_day').attr('title', '于'+ data.records[i]['time'] + '签到,第'+ data.records[i]['rank']+'个签到.');
                     }
+                    
                     self.element.find('#todayRank').html(data.todayRank);
                     self.element.find('#signedNum').html(data.signedNum);
                     self.element.find('#keepDays').html(data.keepDays);

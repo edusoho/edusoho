@@ -10,4 +10,5 @@ interface SignTargetStatisticsDao
 
 	public function getStatistics($targetType, $targetId, $date);
 
+	public function getStatisticsById($id);
 }	
