@@ -92,6 +92,7 @@ class BaseService {
         if (empty($member)) {
             return null;
         }
+
         if ($this->controller->get('security.context')->isGranted('ROLE_ADMIN')) {
             return array(
                 'id' => 0,
@@ -108,10 +109,16 @@ class BaseService {
                 'deadline' => 0
             );
         }
-        $userIsStudent = $this->controller->getCourseService()->isCourseStudent($courseId, $user['id']);
+    
         $userIsTeacher = $this->controller->getCourseService()->isCourseTeacher($courseId, $user['id']);
         $member['createdTime'] = date('c', $member['createdTime']);
-        $member['role'] = $userIsTeacher ? "teacher" : $userIsStudent ? "student" : null;
+        if ($userIsTeacher) {
+            $member['role'] = 'teacher';
+        } else {
+            $userIsStudent = $this->controller->getCourseService()->isCourseStudent($courseId, $user['id']);
+            $member['role'] = $userIsStudent ? "student" : null;
+        }
+        
         return $member;
     }
     public function array2Map($learnCourses) {
