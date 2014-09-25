@@ -8,6 +8,15 @@
     {% if uploadFile.storage == 'cloud' %}
       <span class="glyphicon glyphicon-cloud text-muted" title="云文件"></span>
     {% endif %}
+    {% if uploadFile.type == "video" %}
+      {% if uploadFile.convertParams.videoQuality == "low" %}
+      <span class="label label-info pull-right">流畅</span>
+      {% elseif uploadFile.convertParams.videoQuality == "normal" %}
+      <span class="label label-primary pull-right ">标准</span>
+      {% elseif uploadFile.convertParams.videoQuality == "high" %}
+      <span class="label label-warning pull-right ">精细</span>
+      {% endif %}
+    {% endif %}
     {% if uploadFile.convertStatus == 'waiting' %}
       {{uploadFile.filename}}<br><span class="text-warning text-sm">正在文件格式转换</span>
       {% if ( now - uploadFile.updatedTime ) > 28800 %}
