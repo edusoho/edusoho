@@ -72,13 +72,15 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 					}
 				}
 				$answer = $question['answer'];
-				$itemValue['question']['answer'] = array_map(function($answerValue){
-					if (is_array($answerValue)) {
-						return implode('|', $answerValue);
-					}
-					return $answerValue;
-				}, $answer);
-				return $itemValue;
+				if (is_array($answer)) {
+					$itemValue['question']['answer'] = array_map(function($answerValue){
+						if (is_array($answerValue)) {
+							return implode('|', $answerValue);
+						}
+						return $answerValue;
+					}, $answer);
+					return $itemValue;
+				}
 			}, $item);
 			return array_values($item);
 		}, $items);
