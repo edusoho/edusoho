@@ -48,4 +48,6 @@ interface CourseService
 	 *	image1， image2...
 	*/
 	public function postThread();
+
+	public function coupon();
 }

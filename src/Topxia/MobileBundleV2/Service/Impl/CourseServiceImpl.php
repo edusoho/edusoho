@@ -328,6 +328,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         		return true;
 	}
 
+	public function coupon()
+	{
+		$code = $this->getParam('code');
+		$type = $this->getParam('type');
+		$courseId = $this->getParam('courseId');
+            	//判断coupon是否合法，是否存在跟是否过期跟是否可用于当前课程
+            	$course = $this->controller->getCourseService()->getCourse($courseId);
+            	$couponInfo = $this->getCouponService()->checkCouponUseable($code, $type, $courseId, $course['price']);
+            
+            	return $couponInfo;
+	}
+
 	public function unLearnCourse()
 	{	
 		$courseId = $this->getParam("courseId");
@@ -357,13 +369,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$course = $this->controller->getCourseService()->getCourse($courseId);
 
 		if (empty($course)) {
-		            $error = array('error' => 'not_found', 'message' => "课程#{$courseId}不存在。");
-		            return $error;
+            		return $this->createErrorResponse('not_found', "课程不存在");
 		}
 
         		if ($course['status'] != 'published') {
-            		$error = array('error' => 'course_not_published', 'message' => "课程#{$courseId}未发布或已关闭。");
-            		return $error;
+            		return $this->createErrorResponse('course_not_published', "课程未发布或已关闭。");
         		}
 
         		$userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
