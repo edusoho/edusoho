@@ -93,7 +93,7 @@ define(function(require, exports, module) {
             var month =  parseInt(selectedDate[1]);
             var days = this.getDaysInMonth(month - 1, year);
             var $tbody = this.element.find('tbody');
-            var newtr = "<tr><td class='t-1-0'></td><td class='t-1-1'></td><td class='t-1-2'></td><td class='t-1-3'></td><td class='t-1-4'></td><td class='t-1-5'></td><td class='t-1-6'></td></tr>";
+            var newtr = "<tr><td class='t-1-0 '></td><td class='t-1-1 '></td><td class='t-1-2 '></td><td class='t-1-3 '></td><td class='t-1-4 '></td><td class='t-1-5 '></td><td class='t-1-6 '></td></tr>";
 
             var self = this;
             var url = this.get('signedRecordsUrl') + '?startDay=' + year + '-' + month + '-1' + '&endDay='+ year + '-' + month+'-'+days;
@@ -109,7 +109,7 @@ define(function(require, exports, module) {
               
                 if(week == 6 && day != days) {
                     row++;
-                    newtr = '<tr><td class="t-' + row + '-0"></td><td class="t-' + row + '-1"></td><td class="t-' + row + '-2"></td><td class="t-' + row + '-3"></td><td class="t-' + row + '-4"></td><td class="t-' + row + '-5"></td><td class="t-' + row + '-6"></td></tr>';
+                    newtr = '<tr><td class="t-' + row + '-0 "></td><td class="t-' + row + '-1 "></td><td class="t-' + row + '-2 "></td><td class="t-' + row + '-3 "></td><td class="t-' + row + '-4 "></td><td class="t-' + row + '-5 "></td><td class="t-' + row + '-6 "></td></tr>';
                     $tbody.append(newtr);
                 }
             }
@@ -120,7 +120,7 @@ define(function(require, exports, module) {
                 async:true,//(默认: true) 默认设置下，所有请求均为异步请求。如果需要发送同步请求，请将此选项设置为 false。注意，同步请求将锁住浏览器，用户其它操作必须等待请求完成才可以执行。
                 success: function(data){
                     for(var i=0;i<data.records.length;i++){ 
-                        $tbody.find(".d-" + data.records[i]).addClass('signed_day');
+                        $tbody.find(".d-" + data.records[i]['day']).addClass('signed_day').attr('title', '于'+ data.records[i]['time'] + '签到');
                     }
                     self.element.find('#todayRank').html(data.todayRank);
                     self.element.find('#signedNum').html(data.signedNum);
