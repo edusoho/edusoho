@@ -140,7 +140,8 @@ define(function(require, exports, module) {
                     self.signedOut();
                 });
                 $signbtn.on('click',false);
-                $signbtn.html('已签到');
+                $signbtn.addClass('sign-btn');
+                $signbtn.html('已签');
             }
           
         },
