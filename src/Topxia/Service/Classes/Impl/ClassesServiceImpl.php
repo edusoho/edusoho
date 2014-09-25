@@ -319,7 +319,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         $newMember['currentRank'] = $currentRank;
         $newMember['rate'] = empty($students) ? '0%' : ($currentRank == 1 ? '100%' : round( (count($students) - $currentRank)/count($students) * 100) . "％");
         if(time() > $studentMember['lastRankChangeTime'] + 86400 ) {
-            $newMember['lastRank'] = $studentMember['currentRank'];
+            $newMember['lastRank'] = $studentMember['currentRank'] == 1 ? 1 : $studentMember['currentRank'];
             $newMember['lastRankChangeTime'] = time();
         }
 
