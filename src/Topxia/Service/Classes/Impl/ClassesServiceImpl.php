@@ -317,7 +317,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         $studentMember = $this->getMemberByUserIdAndClassId($userId, $classId);
         $newMember = array();
         $newMember['currentRank'] = $currentRank;
-        $newMember['rate'] = $currentRank == 1 ? '100%' : round( (count($students) - $currentRank)/count($students) * 100) . "％";
+        $newMember['rate'] = empty($students) ? '0%' : ($currentRank == 1 ? '100%' : round( (count($students) - $currentRank)/count($students) * 100) . "％");
         if(time() > $studentMember['lastRankChangeTime'] + 86400 ) {
             $newMember['lastRank'] = $studentMember['currentRank'];
             $newMember['lastRankChangeTime'] = time();
