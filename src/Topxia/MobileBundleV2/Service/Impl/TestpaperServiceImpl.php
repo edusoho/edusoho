@@ -19,7 +19,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
 	        	$targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaper['target']));
-
 	        	if ($targets[$testpaper['target']]['type'] != 'course') {
                         	return $this->createErrorResponse('error', '试卷只能属于课程');
 	        	}
@@ -63,6 +62,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	private function coverTestpaperItems($items)
 	{
 		return array_map(function($item){
+			$item = array_map(function($itemValue){
+				$question = $itemValue['question'];
+				$metas= $question['metas'];
+				$metas= array_values($metas);
+				$itemValue['question']['metas'] = $metas;
+				return $itemValue;
+			}, $item);
 			return array_values($item);
 		}, $items);
 	}
