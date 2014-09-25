@@ -1,21 +1,21 @@
 <?php
-namespace Topxia\Service\Classes\Impl;
+namespace Topxia\Service\Sign\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Classes\SignService;
+use Topxia\Service\Sign\SignService;
 use Topxia\Service\Common\ServiceEvent;
 
 class SignServiceImpl extends BaseService implements SignService
 {
 
-    public function userSign($userId, $targetType, $targetId)
+    public function classMemberSign($userId, $classId)
     {
-        $user = $this->getUserService()->getUser($userId);
-        if(empty($user)) {
-            throw $this->createNotFoundException(sprintf('用户不存在.'), 404);
+        $member = $this->getClassMemberDao()->getMemberByUserIdAndClassId($userId, $classId);
+        if(empty($member)) {
+            throw $this->createNotFoundException(sprintf('%s 非 %s 班成员，不能签到.', $userId, $classId), 404);
         }
 
-        $isSignedToday = $this->isSignedToday($userId, $targetType, $targetId); 
+        $isSignedToday = $this->isSignedToday($userId, $classId); 
         if($isSignedToday) {
             throw $this->createServiceException('今日已签到!', 403);
         }
