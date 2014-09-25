@@ -328,6 +328,21 @@ class CourseServiceImpl extends BaseService implements CourseService
         		return true;
 	}
 
+	public function vipLearn()
+	{	
+		if (!$this->controller->setting('vip.enabled')) {
+            		return $this->createErrorResponse('error', "网校没有开启vip功能");
+        		}
+        		
+        		$courseId = $this->getParam('courseId');
+        		$user = $this->controller->getUserByToken($this->request);
+        		if (!$user->isLogin()) {
+            		return $this->createErrorResponse('not_login', "您尚未登录，不能收藏课程！");
+        		}
+        		$this->controller->getCourseService()->becomeStudent($courseId, $user['id'], array('becomeUseMember' => true));
+        		return true;
+	}
+
 	public function coupon()
 	{
 		$code = $this->getParam('code');

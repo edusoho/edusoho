@@ -50,4 +50,6 @@ interface CourseService
 	public function postThread();
 
 	public function coupon();
+
+	public function vipLearn();
 }

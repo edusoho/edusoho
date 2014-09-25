@@ -53,6 +53,11 @@ class MobileBaseController extends BaseController
         return $this->getCurrentUser();
     }
 
+    public function setting($name, $default = null)
+    {
+        return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
+    }
+
     public function getContainer()
     {
         return $this->container;
