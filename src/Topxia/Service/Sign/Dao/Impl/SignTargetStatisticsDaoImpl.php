@@ -24,15 +24,16 @@ class SignTargetStatisticsDaoImpl extends BaseDao implements SignTargetStatistic
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
-	public function getStatistics($targetType, $targetId)
+	public function getStatistics($targetType, $targetId, $date)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ?LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($targetType, $targetId)) ? : null;
+		$sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ? AND date = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($targetType, $targetId, $date)) ? : null;
 	}
 
-	public function updateStatistics($targetType, $targetId, $fields)
+	public function updateStatistics($id, $fields)
 	{
-        $this->getConnection()->update($this->table, $fields, array('targetType' => $targetType, 'targetId' => $targetId));
-        return $this->getStatistics($targetType, $targetId);
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getStatistics($id);
 	}
+
 }

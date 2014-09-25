@@ -13,5 +13,5 @@ interface SignService
 
     public function getUserSignStatistics($userId, $targetType, $targetId);
 
-    public function getTargetSignStatistics($targetType, $targetId);
+    public function getTargetSignStatistics($targetType, $targetId, $date);
 }

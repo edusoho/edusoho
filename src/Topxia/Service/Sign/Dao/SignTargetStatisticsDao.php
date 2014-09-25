@@ -6,8 +6,8 @@ interface SignTargetStatisticsDao
 {
 	public function addStatistics($statistics);
 
-	public function updateStatistics($targetType, $targetId, $fields);
+	public function updateStatistics($id, $fields);
 
-	public function getStatistics($targetType, $targetId);
+	public function getStatistics($targetType, $targetId, $date);
 
-}
+}	

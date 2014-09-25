@@ -8,7 +8,7 @@ class SignController extends BaseController
 {
 	public function signAction(Request $request, $classId, $userId)
 	{
-		$this->getSignService()->classMemberSign($userId, $classId, $classId);
+		$this->getSignService()->userSign($userId, 'class_sign', $classId);
 		return $this->createJsonResponse('success');
 	}
 
@@ -39,22 +39,23 @@ class SignController extends BaseController
 		$startDay = $request->query->get('startDay');
 		$endDay = $request->query->get('endDay');
 	
-		$userSigns = $this->getSignService()->getSignRecordsByPeriod($userId, $classId, $startDay, $endDay);
+		$userSigns = $this->getSignService()->getSignRecordsByPeriod($userId, 'class_sign', $classId, $startDay, $endDay);
 		$result = array();
 		$result['records'] = array();
 		if($userSigns) {
 			foreach ($userSigns as $userSign) {
 			$result['records'][] = array(
 				'day' => date('d',$userSign['createdTime']),
-				'time' => date('G点m分',$userSign['createdTime']));
+				'time' => date('G点m分',$userSign['createdTime'])
+				'rank' => $userSign['rank']);
 			}
 		}
-		$ClassMemberSignStatistics = $this->getSignService()->getClassMemberSignStatistics($userId, $classId);
-		$ClassSignStatistics = $this->getSignService()->getClassSignStatistics($classId);
+		$userSignStatistics = $this->getSignService()->getUserSignStatistics($userId, 'class_sign', $classId);
+		$classSignStatistics = $this->getSignService()->getTargetSignStatistics('class_sign', $classId);
 
-		$result['todayRank'] = $ClassMemberSignStatistics['todayRank'];
-		$result['signedNum'] = $ClassSignStatistics['signedNum'];
-		$result['keepDays'] = $ClassMemberSignStatistics['keepDays'];
+		$result['todayRank'] = end($userSigns)['rank'];
+		$result['signedNum'] = $classSignStatistics['signedNum'];
+		$result['keepDays'] = $userSignStatistics['keepDays'];
 		
 		return $this->createJsonResponse($result);
 	}

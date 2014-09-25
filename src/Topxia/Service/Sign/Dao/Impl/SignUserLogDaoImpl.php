@@ -18,7 +18,7 @@ class SignUserLogDaoImpl extends BaseDao implements SignUserLogDao
         return $this->getClassMemberSign($this->getConnection()->lastInsertId());
 	}
 
-	public function getSignLOg($id)
+	public function getSignLog($id)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
@@ -26,7 +26,13 @@ class SignUserLogDaoImpl extends BaseDao implements SignUserLogDao
 
 	public function findSignLogByPeriod($userId, $targetType, $targetId, $startTime, $EndTime)
 	{
-		$sql ="SELECT * FROM {$this->table} WHERE userId = ? AND targetType = ? AND targetId = ? AND createdTime > ? AND createdTime < ?;";
+		$sql ="SELECT * FROM {$this->table} WHERE userId = ? AND targetType = ? AND targetId = ? AND createdTime > ? AND createdTime < ? ORDER BY createdTime ASC;";
         return $this->getConnection()->fetchAll($sql, array($userId, $targetType, $targetId, $startTime, $EndTime)) ? : null;
+	}
+
+	public function updateSignLog($id, $fields)
+	{
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getSignLog($id);
 	}
 }

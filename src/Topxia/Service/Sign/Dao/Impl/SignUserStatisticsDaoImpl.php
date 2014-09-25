@@ -30,9 +30,9 @@ class SignUserStatisticsDaoImpl extends BaseDao implements SignUserStatisticsDao
         return $this->getConnection()->fetchAssoc($sql, array($userId, $targetType, $targetId)) ? : null;
 	}
 
-	public function updateStatistics($userId, $targetType, $targetId, $fields)
+	public function updateStatistics($id, $fields)
 	{
-        $this->getConnection()->update($this->table, $fields, array('userId' => $userId, 'targetType' => $targetType, 'targetId' => $targetId));
-        return $this->getStatistics($userId, $targetType, $targetId);
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getStatistics($id);
 	}
 }
