@@ -44,6 +44,16 @@ class BaseService {
         return $this->controller->getContainer();
     }
 
+    protected function getCourseOrderService()
+    {
+        return $this->controller->getService('Course.CourseOrderService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->controller->getService('Order.OrderService');
+    }
+
     protected function getFileService()
     {
         return $this->controller->getService('Content.FileService');

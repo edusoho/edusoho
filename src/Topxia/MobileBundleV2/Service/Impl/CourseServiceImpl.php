@@ -338,7 +338,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             		return $this->createErrorResponse('not_member', '您不是课程的学员或尚未购买该课程，不能退学。');
         		}
 
-        		$order = $this->controller->getOrderService()->getOrder($member['orderId']);
+        		$order = $this->getOrderService()->getOrder($member['orderId']);
         		if (empty($order)) {
             		return $this->createErrorResponse( 'order_error', '订单不存在，不能退学。');
             	}
@@ -346,7 +346,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         		$reason = $this->getParam("reason", "");
         		$amount = $this->getParam("amount", 0);
 
-        		$refund = $this->getCourseOrderService()->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
+        		$refund = $this->getCourseOrderService()->applyRefundOrder($member['orderId'], $amount, $reason, $this->getContainer());
 		return $refund;
 	}
 
