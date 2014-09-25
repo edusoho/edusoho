@@ -30,7 +30,7 @@ define(function(require, exports, module) {
                         });
                         self.multiSelect($modal);
                     }else{
-                        $modal.find('#chooser-footer').hide();
+                        $modal.find('.chooser-footer').hide();
                         self.singleSelect($modal);
                     }
                 }
@@ -51,7 +51,7 @@ define(function(require, exports, module) {
 
         multiSelect:function(modal){
             var self=this;
-            modal.on('click','#class-select-btn',function(){
+            modal.on('click','.class-select-btn',function(){
                 var classItems=modal.find('.active');
                 var classNames="";
                 var classIds="";
