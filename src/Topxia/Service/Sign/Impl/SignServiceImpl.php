@@ -83,7 +83,7 @@ class SignServiceImpl extends BaseService implements SignService
     public function getTodayRank($userId, $targetType, $targetId)
     {
         $todaySign =$this->getSignRecordsByPeriod($userId, $targetType, $targetId, date('y-n-d'), date('y-n-d'));
-        return 0;
+        return $todaySign ?  : null;
     }
 
     private function refreshKeepDays($userId, $targetType, $targetId)
