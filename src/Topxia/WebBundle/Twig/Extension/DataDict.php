@@ -156,6 +156,14 @@ class DataDict
 			'email' => '邮件地址',
 			'loginIp' => '登录IP'
 		),
+
+		'parentKeyWordType' => array(
+			'truename' => '姓名',
+			'mobile' => '手机号码',
+			'childName' => '学生姓名',
+			'childNumber' => '学生学号'
+		),
+
 		'logLevel' => array(
 			'info' => '提示',
 			'warning' => '警告',

@@ -207,9 +207,12 @@ interface UserService
 
     public function findUserRelationsByFromIdsAndType(array $fromIds,$type);
 
+    public function findUserRelationsByToIdsAndType(array $toIds,$type);
+    
     public function findUserRelationsByFromIdAndType($fromId,$type);
 
     public function deleteUserRelationsByFromIdAndType($fromId,$type);
+
 
     /** 用户积分 **/
     public function increasePoint($userId, $number, $action, $description = '');

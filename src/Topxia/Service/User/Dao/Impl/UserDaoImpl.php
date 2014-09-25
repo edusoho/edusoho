@@ -121,6 +121,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('loginIp = :loginIp')
             ->andWhere('approvalStatus = :approvalStatus')
             ->andWhere('email = :email')
+            ->andWhere('mobile = :mobile')
             ->andWhere('level = :level')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')

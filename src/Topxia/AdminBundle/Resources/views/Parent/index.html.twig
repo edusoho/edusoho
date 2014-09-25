@@ -4,7 +4,7 @@
 
 {% set menu = 'parent' %}
 
-{% set script_controller = 'user/list' %}
+{% set script_controller = 'parent/list' %}
 
 {% block main %}
 <div class="page-header clearfix">
@@ -15,17 +15,14 @@
 <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     
   <div class="form-group">
-    <input type="text" id="class" name="class" class="form-control" value="{{ app.request.query.get('class') }}" placeholder="按班级">
+    <input type="text" id="class_name" name="class_name" data-url="{{path('admin_class_list')}}" class="form-control" value="{{ app.request.query.get('class_name') }}" placeholder="按班级">
+
+    <input type="hidden" id="class_id" name="class_id" class="form-control" value="{{ app.request.query.get('class_id') }}" >
   </div>
 
   <div class="form-group">
     <select id="keywordType" name="keywordType" class="form-control">
-      {# {{ select_options(dict('userKeyWordType'), app.request.query.get('keywordType'), '--关键词类型--') }} #}
-      <option value="">--关键词类型--</option>
-      <option value="truename">姓名</option>
-      <option value="number">学生姓名</option>
-      <option value="email">学生学号</option>
-      <option value="loginIp">手机号</option>
+      {{ select_options(dict('parentKeyWordType'), app.request.query.get('keywordType'), '--关键词类型--') }}
     </select>
   </div>
 

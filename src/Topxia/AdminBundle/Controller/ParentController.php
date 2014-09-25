@@ -11,15 +11,12 @@ class ParentController extends BaseController
     {
         $fields = $request->query->all();
         $conditions = array(
-            'roles'=>'ROLE_PARENT',
-            'truename'=>'',
-            'number'=>''
+            'roles'=>'ROLE_PARENT'
         );
 
         if(!empty($fields)){
-            $conditions =array_merge($conditions,$fields);
+            $conditions=$this->getConditionsByFields($conditions,$fields);
         }
-        
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->searchUserCount($conditions),
@@ -163,6 +160,43 @@ class ParentController extends BaseController
         return $fields;
     }
 
+
+    private function getConditionsByFields($conditions,$fields)
+    {
+        if(!empty($fields['class_id'])){
+            $classStudents=$this->getClassesService()->findClassStudentMembers($fields['class_id']);
+            $childIds=ArrayToolkit::column($classStudents, 'userId');
+            if($fields['keywordType']=='childName'){
+                $children=$this->getUserService()->searchUsers(array('truename'=>$fields['keyword']),array('createdTime', 'DESC'),0,PHP_INT_MAX);
+                $childIds=array_intersect($childIds,ArrayToolkit::column($children, 'id'));
+                $childIds=array_values($childIds);
+            }else if($fields['keywordType']=='childNumber'){
+                $child=$this->getUserService()->getUserByNumber($fields['keyword']);
+                $childIds=in_array($child['id'], $childIds)?array($child['id']):array();
+            }
+            $relations=$this->getUserService()->findUserRelationsByToIdsAndType($childIds,'family');
+            $ids=ArrayToolkit::column($relations, 'fromId');
+            $conditions['ids']=empty($ids) ? array(0) : $ids;
+        }else{
+            $childIds=array();
+            if($fields['keywordType']=='childName'){
+                $children=$this->getUserService()->searchUsers(array('truename'=>$fields['keyword']),array('createdTime', 'DESC'),0,PHP_INT_MAX);
+                $childIds=ArrayToolkit::column($children, 'id');
+            }else if($fields['keywordType']=='childNumber'){
+                $child=$this->getUserService()->getUserByNumber($fields['keyword']);
+                $childIds=empty($child)?array():array($child['id']);
+            }
+            $relations=$this->getUserService()->findUserRelationsByToIdsAndType($childIds,'family');
+            $ids=ArrayToolkit::column($relations, 'fromId');
+            $conditions['ids']=empty($ids) ? array(0) : $ids;
+        }
+        if($fields['keywordType']=='truename' || $fields['keywordType']=='mobile'){
+            $conditions['keywordType']=$fields['keywordType'];
+            $conditions['keyword']=$fields['keyword'];
+        }
+
+        return $conditions;
+    }
     protected function getClassesService()
     {
         return $this->getServiceKernel()->createService('Classes.ClassesService');
