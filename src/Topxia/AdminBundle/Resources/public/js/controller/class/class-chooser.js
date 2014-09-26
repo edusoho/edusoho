@@ -13,6 +13,8 @@ define(function(require, exports, module) {
         },
 
         setup:function(){
+            this.element.attr('readonly','readonly');
+            this.element.attr('style',"cursor: pointer;opacity: 1;background-color:white");
         },
 
         openModal:function(){
