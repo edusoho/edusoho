@@ -30,17 +30,39 @@
     <th>用户组</th>
     <td>
       {% for role in user.roles %}
-        {{ dict_text('userRole', role) }}
+        {% if user.roles|length>1 and role=='ROLE_USER' %}
+        {% else %}
+          {{ dict_text('userRole', role) }}
+        {% endif %}
       {% endfor %}
     </td>
   </tr>
+  {% if 'ROLE_PARENT' in user.roles%}
+    <tr>
+      <th>家庭关系</th>
+      <td>
+        {{ dict_text('family', relation) }}
+      </td>
+    </tr>
 
-  <tr>
-    <th>学号/工号</th>
-    <td>
-      {{ user.number }}
-    </td>
-  </tr>
+    <tr>
+      <th>子女姓名</th>
+      <td>
+        {% for child in children %}
+          {{ child.truename }}&nbsp;&nbsp;&nbsp;
+        {% else %}
+          --
+        {% endfor %}
+      </td>
+    </tr>
+  {% else %}
+    <tr>
+      <th>{% if 'ROLE_TEACHER' in user.roles %}工号{% else %}学号{% endif %}</th>
+      <td>
+        {{ user.number }}
+      </td>
+    </tr>
+  {% endif %}
 
   <tr>
     <th>注册时间/IP</th>

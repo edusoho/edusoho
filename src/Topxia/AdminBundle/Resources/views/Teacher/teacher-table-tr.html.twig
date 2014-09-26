@@ -48,7 +48,7 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
-        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_edit', {id:user.id,type:'teacher'}) }}">编辑用户信息</a></li>
+        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_edit', {id:user.id}) }}">编辑用户信息</a></li>
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}
 
