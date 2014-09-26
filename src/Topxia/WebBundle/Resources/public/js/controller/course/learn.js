@@ -320,7 +320,8 @@ define(function(require, exports, module) {
                                     $.post("../../course/"+lesson.id+'/watch/play');
                                 });
                                 media.addEventListener("loadeddata", function() {
-                                    console.log('loadeddata')
+                                    recordWatchTime();
+                                    setInterval(recordWatchTime, 120000);
                                 });
                                 media.play();
                             }
