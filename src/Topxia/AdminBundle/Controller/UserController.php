@@ -186,9 +186,7 @@ class UserController extends BaseController
 
             $user = $this->getUserService()->getUser($id);
 
-            return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
-            'user' => $user
-            ));
+            return $this->renderPage($id);
         }
            
         return $this->render('TopxiaAdminBundle:User:roles-modal.html.twig', array(
@@ -321,18 +319,43 @@ class UserController extends BaseController
     public function lockAction($id)
     {
         $this->getUserService()->lockUser($id);
-        return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
-            'user' => $this->getUserService()->getUser($id),
-        ));
+        return $this->renderPage($id);
     }
 
     public function unlockAction($id)
     {
         $this->getUserService()->unlockUser($id);
+        return $this->renderPage($id);
+    }
 
-        return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
-            'user' => $this->getUserService()->getUser($id),
-        ));
+    private function renderPage($id){
+        $user=$this->getUserService()->getUser($id);
+        if(in_array('ROLE_PARENT', $user['roles'])){
+            $relations=$this->getUserService()->findUserRelationsByFromIdAndType($id,'family');
+            $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
+            $classMembers=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($relations, 'toId'));
+            $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($classMembers, 'classId'));
+            $classMembers=ArrayToolkit::index($classMembers, 'userId');
+            $classes=ArrayToolkit::index($classes, 'id');
+            return $this->render('TopxiaAdminBundle:Parent:parent-table-tr.html.twig', array(
+                'user' => $user,
+                'relations'=>$relations,
+                'children'=>$children,
+                'classMembers' =>$classMembers,
+                'classes' =>$classes,
+            ));
+        }else if(in_array('ROLE_TEACHER', $user['roles'])){
+            return $this->render('TopxiaAdminBundle:Teacher:teacher-table-tr.html.twig', array(
+                'user' => $user,
+            ));
+        }else{
+            $class=$this->getClassesService()->findClassByUserNumber($user['number']);
+            return $this->render('TopxiaAdminBundle:Student:student-table-tr.html.twig', array(
+                'user' => $user,
+                'class'=>$class
+            ));
+                
+        }
     }
 
     public function sendPasswordResetEmailAction(Request $request, $id)
@@ -438,5 +461,10 @@ class UserController extends BaseController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getClassesService()
+    {
+        return $this->getServiceKernel()->createService('Classes.ClassesService');
     }
 }
