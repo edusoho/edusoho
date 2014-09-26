@@ -157,6 +157,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 			unset($conditions['categoryId']);
 		}
 
+		if(isset($conditions['nickname'])){
+			$user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+			$conditions['userId'] = $user ? $user['id'] : -1;
+			unset($conditions['nickname']);
+		}
+		
 		return $conditions;
 	}
 
@@ -1329,7 +1335,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 	 * Member API
 	 */
 	public function searchMemberCount($conditions)
-	{
+	{	
+		$conditions = $this->_prepareCourseConditions($conditions);
 		return $this->getMemberDao()->searchMemberCount($conditions);
 	}
 

@@ -13,14 +13,21 @@ class CourseStudentManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
 
+		$fields = $request->query->all();
+		$nickname="";
+		if(isset($fields['nickName'])){
+            $nickname =$fields['nickName'];
+        } 
+
 		$paginator = new Paginator(
 			$request,
-			$this->getCourseService()->getCourseStudentCount($course['id']),
+			$this->getCourseService()->searchMemberCount(array('courseId'=>$course['id'],'role'=>'student','nickname'=>$nickname)),
 			20
 		);
 
-		$students = $this->getCourseService()->findCourseStudents(
-			$course['id'],
+		$students = $this->getCourseService()->searchMembers(
+			array('courseId'=>$course['id'],'role'=>'student','nickname'=>$nickname),
+			array('createdTime','DESC'),
 			$paginator->getOffsetCount(),
 			$paginator->getPerPageCount()
 		);
