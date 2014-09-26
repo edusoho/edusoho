@@ -361,7 +361,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         		$user = $this->controller->getUserByToken($this->request);
         		list($course, $member) = $this->controller->getCourseService()->tryTakeCourse($courseId);
         		
-        		if (empty($member) or empty($member['orderId'])) {
+        		if (empty($member)) {
             		return $this->createErrorResponse('not_member', '您不是课程的学员或尚未购买该课程，不能退学。');
         		}
         		if (!empty($member['orderId'])) {
