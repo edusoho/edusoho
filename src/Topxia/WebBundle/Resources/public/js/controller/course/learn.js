@@ -312,6 +312,15 @@ define(function(require, exports, module) {
                                 media.addEventListener("ended", function() {
                                     that._onFinishLearnLesson();
                                 });
+                                media.addEventListener("pause", function() {
+                                    console.log('pause')
+                                });
+                                media.addEventListener("playing", function() {
+                                    console.log('playing')
+                                });
+                                media.addEventListener("play", function() {
+                                    console.log('play')
+                                });
                                 media.play();
                             }
                         });
