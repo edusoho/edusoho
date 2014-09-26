@@ -20,7 +20,7 @@
   {% if nextCourse %}
     <a style="margin:10px 0 10px 0" href="{{ path('course_learn', {id:nextCourse.id}) ~ '#lesson/' ~ nextLesson.id }}">上次正在学习《{{nextCourse.title}}》 课时 {{ nextLesson.title}}</a>
   {% else %}
-    <a style="margin:10px 0 10px 0" href="{{ path('class_courses', {classId:class.id})}}">还开始学习课程，快去学习吧!</a>
+    <a style="margin:10px 0 10px 0" href="{{ path('class_courses', {classId:class.id})}}">还没有开始学习课程，快去学习吧!</a>
   {% endif %}
 
 

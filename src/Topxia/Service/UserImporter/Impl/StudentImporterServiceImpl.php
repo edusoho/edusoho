@@ -42,6 +42,7 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
         $this->getUserDao()->getConnection()->beginTransaction();
         try{
 
+            $studentIds = array();
             for($i=0;$i<count($students);$i++){
                 $student = $this->createUser($students[$i]);
                 $student['number'] = $students[$i]['number'];
@@ -53,16 +54,11 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
 
                 $profile = $this->createUserProfile($student['id'], $students[$i]);
                 $this->getProfileDao()->addProfile($profile);
-
-                $classMember = array();
-                $classMember['userId'] = $student['id'];
-                $classMember['classId'] = $classId;
-                $classMember['role'] = 'STUDENT';
-                $classMember['createdTime'] = time();
-                $this->getClassesService()->addClassMember($classMember);
+                $studentIds[] = $student['id'];
             }
 
-             $this->getUserDao()->getConnection()->commit();
+            $this->getClassesService()->importStudents($classId, $studentIds);
+            $this->getUserDao()->getConnection()->commit();
 
         }catch(\Exception $e){
             $this->getUserDao()->getConnection()->rollback();
