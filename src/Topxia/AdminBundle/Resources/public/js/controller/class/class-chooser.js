@@ -17,13 +17,11 @@ define(function(require, exports, module) {
             element.attr('readonly','readonly');
             element.attr('style',"cursor: pointer;opacity: 1;background-color:white");
             
-
-            //element.wrap("<div class='input-group'></div>");
-            // element.parent().addClass('input-group');
-            // element.before(" <span class='input-group-addon'>&times</span>");
-            // element.parent().find('.input-group-addon').click(function(){
-            //      element.val('');
-            // });
+            element.parent().addClass('has-feedback');
+            element.before("<span style='cursor: pointer;' class='glyphicon glyphicon-remove form-control-feedback'></span>");
+            element.parent().find('.form-control-feedback').click(function(){
+                element.val('');
+            });
         },
 
         openModal:function(){

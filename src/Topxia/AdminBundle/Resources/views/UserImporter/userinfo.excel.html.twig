@@ -10,54 +10,66 @@
 <div class="page-header clearfix">
   <h1 class="pull-left">{{ type == 'student' ? '学生' : type == 'teacher' ? '教师' : '家长' }}导入 - 步骤1</h1>
 </div>
-    <div class="row">
-          <form id="user-import-form" method="post" enctype="multipart/form-data">
-            {% if type == 'student' %}
-              <div class="row form-group">
-                <div class="col-md-2 control-label col-md-offset-2">
-                  <label>选择班级</label>
-                </div>
-                <div class="col-md-3 controls">
-                  <input class="form-control" id="className" data-url="{{path('admin_class_list')}}" name="className" type="input" placeholder="班级选择" />
-                  <input class="form-control" id="classId" name="classId" type="hidden" />
-                </div>
-              </div>
-            {% endif %}
-          <div class="col-md-3 col-md-offset-1">
-            <br>
-          <b>选择要导入的文件</b>
+  {# <div class="row"> #}
+    <form id="user-import-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+      {% if type == 'student' %}
+        {# <div class="row form-group">
+          <div class="col-md-2 control-label col-md-offset-2">
+            <label>选择班级</label>
           </div>
-          <div class="col-md-8">            <br>
-                <div class="uploader blue">
-                  <input type="text" class="filename" readonly="readonly"/>
-                  <input type="button" name="excel" class=" button" value="浏览..."/>
-                  <input type="file" size="30" name="excel"/>
-                </div>&nbsp;&nbsp;<a href="{{ asset(type == 'student' ? 'bundles/topxiaweb/example/students.xls' : type == 'bundles/topxiaweb/example/teachers.xls' ? 'teacher' : 'bundles/topxiaweb/example/parents.xls') }}">点击下载示例说明文件</a>
-                <br>
-                支持从Excel文件导入
+          <div class="col-md-3 controls has-feedback">
+            <input class="form-control" id="className" data-url="{{path('admin_class_list')}}" name="className" type="input" placeholder="班级选择" />
+            <input class="form-control" id="classId" name="classId" type="hidden" />
+            <span style="cursor: pointer;" class="glyphicon glyphicon-remove form-control-feedback deleteNumberBtn"></span>
           </div>
-          <div class="col-md-12"><br></div>
-          <div class="col-md-3 col-md-offset-1">
-          <b>用户已存在时的导入规则</b>
-          </div>
-          <div class="col-md-8">
-                <div class="form-group">        
-                <div class="controls">
-                  <input type="radio"  required="required" value="ignore" checked=true name="rule">
-                  <label class="required" style="padding: 0 20px 0 0px;">忽略跳过</label>
-                  <input type="radio"  required="required" value="update" name="rule" >
-                  <label class="required" >覆盖更新</label>
-                </div>
-                <br>
-                <a class="btn btn-link" href="{{ path(type == 'student' ? 'admin_student' : type == 'teacher' ? 'admin_teacher' : 'admin_parent') }}">返回</a>
-                <button type="submit" class="btn btn-primary" id="start-import-btn">开始校验数据</button>
-              </div>
-          </div>
-          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </div> #}
 
+        <div class="row form-group">
+          <div class="col-md-2 col-md-offset-1 control-label">
+              <label for="className">选择班级</label>
+          </div>
+          <div class="col-md-3 col-md-offset-1 controls">
+            <input class="form-control" id="className" data-url="{{path('admin_class_list')}}" name="className" type="input" placeholder="班级选择" />
+            <input class="form-control" id="classId" name="classId" type="hidden" />
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="col-md-3 col-md-offset-1">
+        <br>
+        <b>选择要导入的文件</b>
+      </div>
+      <div class="col-md-8">
+        <br>
+        <div class="uploader blue">
+          <input type="text" class="filename" readonly="readonly"/>
+          <input type="button" name="excel" class=" button" value="浏览..."/>
+          <input type="file" size="30" name="excel"/>
+        </div>&nbsp;&nbsp;<a href="{{ asset(type == 'student' ? 'bundles/topxiaweb/example/students.xls' : type == 'bundles/topxiaweb/example/teachers.xls' ? 'teacher' : 'bundles/topxiaweb/example/parents.xls') }}">点击下载示例说明文件</a>
+        <br>
+        支持从Excel文件导入
+      </div>
+      <div class="col-md-12"><br></div>
+      <div class="col-md-3 col-md-offset-1">
+        <b>用户已存在时的导入规则</b>
+      </div>
+      <div class="col-md-8">
+        <div class="form-group">        
+          <div class="controls">
+            <input type="radio"  required="required" value="ignore" checked=true name="rule">
+            <label class="required" style="padding: 0 20px 0 0px;">忽略跳过</label>
+            <input type="radio"  required="required" value="update" name="rule" >
+            <label class="required" >覆盖更新</label>
+          </div>
           <br>
-          </form>
-    </div>
+          <a class="btn btn-link" href="{{ path(type == 'student' ? 'admin_student' : type == 'teacher' ? 'admin_teacher' : 'admin_parent') }}">返回</a>
+          <button type="submit" class="btn btn-primary" id="start-import-btn">开始校验数据</button>
+        </div>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <br>
+    </form>
+  {# </div> #}
 
 <style>.uploader{
 position:relative;
