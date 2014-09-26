@@ -123,9 +123,9 @@ define(function(require, exports, module) {
                         $tbody.find(".d-" + data.records[i]['day']).addClass('signed_day').attr('title', '于'+ data.records[i]['time'] + '签到,第'+ data.records[i]['rank']+'个签到.');
                     }
                     
-                    self.element.find('#todayRank').html(data.todayRank);
-                    self.element.find('#signedNum').html(data.signedNum);
-                    self.element.find('#keepDays').html(data.keepDays);
+                    self.element.find('.today-rank').html(data.todayRank);
+                    self.element.find('.signed-number').html(data.signedNum);
+                    self.element.find('.keep-days').html(data.keepDays);
                 }
             });
 

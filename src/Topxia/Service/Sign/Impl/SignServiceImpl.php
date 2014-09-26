@@ -91,7 +91,7 @@ class SignServiceImpl extends BaseService implements SignService
         $statistics = $this->getSignUserStatisticsDao()
             ->getStatistics($userId, $targetType, $targetId);
         if($statistics) {
-            $statistics = isYestodaySigned($userId, $targetType, $targetId) ?
+            $statistics = $this->isYestodaySigned($userId, $targetType, $targetId) ?
                 $this->getSignUserStatisticsDao()
                     ->updateStatistics($statistics['id'], array('keepDays' => $statistics['keepDays'] + 1)) :
                 $this->getSignUserStatisticsDao()
