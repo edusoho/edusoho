@@ -24,7 +24,8 @@ class PointEventSubscriber implements EventSubscriberInterface
     	$pointSetting = $this->getSettingService()->get('point', array());
     	
     	$param['number'] = $pointSetting['accomplishLesson'] ? : 0;
-        if($param['lessonType'] = 'testpaper') {
+
+        if($param['lessonType'] == 'testpaper') {
             return true;
         }
     	if($param['type'] == 'add') {
