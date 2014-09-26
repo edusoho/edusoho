@@ -19,6 +19,7 @@ class K12Extension extends \Twig_Extension
     {
         return array(
             'check_class_permission' => new \Twig_Function_Method($this, 'checkClassPermission') ,
+            'user_in_class_role' => new \Twig_Function_Method($this, 'getClassRole'),
         );
     }
 
@@ -26,6 +27,12 @@ class K12Extension extends \Twig_Extension
     {
         $classId = (is_array($classId) && isset($classId['id'])) ? $classId['id'] : $classId;
         return $this->getClassesService()->checkPermission($name, $classId);
+    }
+
+    public function getClassRole($userId, $classId)
+    {
+        $member = $this ->getClassesService()->getMemberByUserIdAndClassId($userId, $classId);
+        return empty($member) ? 'none': $member['role'];
     }
 
     protected function getClassesService()

@@ -23,6 +23,53 @@ class ClassController extends ClassBaseController
         ));
     }
 
+    public function userInfoAction($class, $userId)
+    {   
+        $member = $this ->getClassesService()->getMemberByUserIdAndClassId($userId, $class['id']);
+        $role = strstr($member['role'],'TEACHER') ? 'teacher' : strtolower($member['role']); 
+        return $this->forward('TopxiaWebBundle:Class:' . $role, array('class' => $class, 'userId' => $userId));
+    }
+
+    public function teacherAction($class, $userId)
+    {
+        $isSignedToday = $this->getSignService()->isSignedToday($userId, 'class_sign', $class['id']);
+        return $this->render('TopxiaWebBundle:Class:teacher-block.html.twig',array(
+            'class' => $class,
+            'isSignedToday' => $isSignedToday));
+    }
+
+    public function parentAction($class, $userId)
+    {
+        $isSignedToday = $this->getSignService()->isSignedToday($userId, 'class_sign', $class['id']);
+        return $this->render('TopxiaWebBundle:Class:parent-block.html.twig', array(
+            'class' => $class,
+            'isSignedToday' => $isSignedToday
+            ));
+    }
+
+    public function studentAction($class, $userId)
+    {
+
+        $user = $this->getCurrentUser();
+        $classMember = $this->getClassesService()->refreashStudentRank($user['id'], $class['id']);
+        $nextLearnLesson = $this->getCourseService()->getNextLearnLessonByUserId($user['id']);
+        $nextCourse = array();
+        $nextLesson = array();
+        if($nextLearnLesson) {
+            $nextCourse = $this->getCourseService()->getCourse($nextLearnLesson['courseId']);
+            $nextLesson = $this->getCourseService()->getCourseLesson($nextLearnLesson['courseId'], $nextLearnLesson['lessonId']);
+        }
+        
+        $isSignedToday = $this->getSignService()->isSignedToday($user['id'], 'class_sign', $class['id']);
+        return $this->render('TopxiaWebBundle:Class:student-block.html.twig',array(
+            'class' => $class,
+            'user' => $user,
+            'nextCourse' => $nextCourse,
+            'nextLesson' => $nextLesson,
+            'classMember' => $classMember,
+            'isSignedToday' => $isSignedToday));
+    }
+
     public function statusBlockAction($class)
     {
         $members = $this->getClassesService()->findClassStudentMembers($class['id']);
@@ -44,4 +91,15 @@ class ClassController extends ClassBaseController
     {
         return $this->getServiceKernel()->createService('User.StatusService');
     }
+
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getSignService()
+    {
+        return $this->getServiceKernel()->createService('Sign.SignService');
+    }
+
 }
