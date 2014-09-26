@@ -46,7 +46,7 @@
                 <td>{{lesson.finishedNum}}</td>
                 <td>{{lesson.learnTime}}</td>
                 <td>{% if lesson.type =='audio' or lesson.type =='video' %}{{lesson.length}}{% else %}----{% endif %}</td>
-                <td>{% if lesson.type =='audio' or lesson.type =='video' %}{{lesson.watchTime}}{% else %}----{% endif %}</td>
+                <td>{% if lesson.mediaSource != 'self' and lesson.type == 'video' %}无{% elseif lesson.type =='audio' or lesson.type =='video'%}{{lesson.watchTime}}{% else %}----{% endif %}</td>
                 <td>{% if lesson.type =='testpaper' %}{{lesson.score}}{% else %}----{% endif %}</td>
               </tr>
             {% endfor %}

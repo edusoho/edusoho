@@ -176,7 +176,14 @@ define(function(require, exports, module) {
             this.element.find('[data-role=lesson-content]').hide();
 
             var that = this;
+
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
+
+                function recordWatchTime(){
+                    url="../../course/"+lesson.id+'/watch/time';
+                    $.post(url);
+                }
+
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
                 $(".watermarkEmbedded").html('<input type="hidden" id="videoWatermarkEmbedded" value="'+lesson.videoWatermarkEmbedded+'" />');
                 $titleArray = document.title.split(' - ');
@@ -220,11 +227,6 @@ define(function(require, exports, module) {
                     $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
                     $("#lesson-video-content").show();
 
-                    function recordWatchTime(){
-                            url="../../course/"+lesson.id+'/watch/time';
-                            $.post(url);
-                    }
-
                     var mediaPlayer = new MediaPlayer({
                         element: '#lesson-video-content',
                         playerId: 'lesson-video-player'
@@ -236,7 +238,6 @@ define(function(require, exports, module) {
                         that._onFinishLearnLesson();
                     });
                     mediaPlayer.on('ready', function() {
-                       recordWatchTime();
                        setInterval(recordWatchTime, 120000);
                     });
                     mediaPlayer.on('paused', function() {
@@ -267,6 +268,7 @@ define(function(require, exports, module) {
                             player.dimensions('100%', '100%');
                             player.src(lesson.mediaUri);
                             player.on('ended', function() {
+                                $.post("../../course/"+lesson.id+'/watch/paused');
                                 if (hasPlayerError) {
                                     return ;
                                 }
@@ -274,7 +276,16 @@ define(function(require, exports, module) {
                                 player.currentTime(0);
                                 player.pause();
                             });
-                       
+                            
+                            player.on('play',function(){
+                                $.post("../../course/"+lesson.id+'/watch/play');
+                            });
+                            player.on('pause',function(){
+                                $.post("../../course/"+lesson.id+'/watch/paused');
+                            });
+                            player.on('loadeddata',function(){
+                                setInterval(recordWatchTime, 120000);
+                            });
                             player.on('error', function(error){
                                 hasPlayerError = true;
                                 var message = '您的浏览器不能播放当前视频，请<a href="' + 'http://get.adobe.com/flashplayer/' + '" target="_blank">点击此处安装Flash播放器</a>。';
@@ -303,7 +314,7 @@ define(function(require, exports, module) {
                         html += '</audio>';
 
                         $("#lesson-audio-content").html(html);
-
+         
                         var audioPlayer = new MediaElementPlayer('#lesson-audio-player', {
                             mode:'auto_plugin',
                             enablePluginDebug: false,
@@ -320,7 +331,6 @@ define(function(require, exports, module) {
                                     $.post("../../course/"+lesson.id+'/watch/play');
                                 });
                                 media.addEventListener("loadeddata", function() {
-                                    recordWatchTime();
                                     setInterval(recordWatchTime, 120000);
                                 });
                                 media.play();
