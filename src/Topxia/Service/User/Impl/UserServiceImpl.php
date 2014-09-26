@@ -316,9 +316,6 @@ class UserServiceImpl extends BaseService implements UserService
                 throw $this->createServiceException('手机号已存在');
             }
         }
-        // if (!$this->isNicknameAvaliable($registration['nickname'])) {
-        //     throw $this->createServiceException('昵称已存在');
-        // }
 
         $user = array();
         $user['number'] =$registration['number'];

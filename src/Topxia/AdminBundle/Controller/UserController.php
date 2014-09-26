@@ -147,8 +147,7 @@ class UserController extends BaseController
         return $this->render('TopxiaAdminBundle:User:edit-modal.html.twig', array(
             'user' => $user,
             'profile'=>$profile,
-            'fields'=>$fields,
-            'type'=>$request->query->get('type')
+            'fields'=>$fields
         ));
     }
 

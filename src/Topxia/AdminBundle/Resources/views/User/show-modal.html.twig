@@ -35,12 +35,14 @@
     </td>
   </tr>
 
-  <tr>
-    <th>学号/工号</th>
-    <td>
-      {{ user.number }}
-    </td>
-  </tr>
+  {% if 'ROLE_PARENT' not in user.roles%}
+    <tr>
+      <th>{% if 'ROLE_TEACHER' in user.roles %}工号{% else %}学号{% endif %}</th>
+      <td>
+        {{ user.number }}
+      </td>
+    </tr>
+  {% endif %}
 
   <tr>
     <th>注册时间/IP</th>
