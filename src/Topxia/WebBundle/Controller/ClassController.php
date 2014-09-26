@@ -32,12 +32,19 @@ class ClassController extends ClassBaseController
 
     public function teacherAction($class, $userId)
     {
-        return $this->render('TopxiaWebBundle:Class:teacher-block.html.twig');
+        $isSignedToday = $this->getSignService()->isSignedToday($userId, 'class_sign', $class['id']);
+        return $this->render('TopxiaWebBundle:Class:teacher-block.html.twig',array(
+            'class' => $class,
+            'isSignedToday' => $isSignedToday));
     }
 
-    public function parentAction()
+    public function parentAction($class, $userId)
     {
-        return $this->render('TopxiaWebBundle:Class:parent-block.html.twig');
+        $isSignedToday = $this->getSignService()->isSignedToday($userId, 'class_sign', $class['id']);
+        return $this->render('TopxiaWebBundle:Class:parent-block.html.twig', array(
+            'class' => $class,
+            'isSignedToday' => $isSignedToday
+            ));
     }
 
     public function studentAction($class, $userId)
