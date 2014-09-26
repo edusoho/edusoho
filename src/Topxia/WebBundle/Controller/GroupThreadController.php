@@ -377,7 +377,7 @@ class GroupThreadController extends BaseController
     }
 
 
-    public function deletePostAction($postId,$memberId,$threadOwnerId,$groupOwnerId,$groupId)
+    public function deletePostAction($postId)
     {
         $post=$this->getThreadService()->getPost($postId);
 
@@ -399,7 +399,7 @@ class GroupThreadController extends BaseController
         }
 
         return new Response($this->generateUrl('group_thread_show', array(
-            'id'=>$groupId,'threadId'=>$post['threadId'],
+            'id'=>$thread['groupId'],'threadId'=>$post['threadId'],
         ))); 
 
     }
