@@ -30,7 +30,6 @@ define(function(require, exports, module) {
         $table.on('click', '.like', function() {
         	var $self=$(this);
         	$.get($self.data().url, function(html){
-                console.log(html);
                 var $likeUser=$self.parent().next('.class-note-like-member').find('span');
                 $likeUser.html(html);
                 $self.hide();
@@ -41,7 +40,6 @@ define(function(require, exports, module) {
         $table.on('click', '.cancleLike', function() {
         	var $self=$(this);
         	$.get($self.data().url, function(html){
-                console.log(html);
                 var $likeUser=$self.parent().next('.class-note-like-member').find('span');
                 $likeUser.html(html);
         		$self.hide();

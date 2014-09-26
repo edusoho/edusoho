@@ -151,10 +151,17 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changeMobile($userId,$mobile)
     {
-        if (!SimpleValidator::mobile($mobile)) {
-            throw $this->createServiceException('手机号码格式不正确，变更手机号码失败。');
+        $mobile=empty($mobile)?null:$mobile;
+        $user=$this->getUserByMobile($mobile);
+        if(empty($user) || (!empty($userId) && $userId==$user['id'])){
+            if (!empty($mobile) && !SimpleValidator::mobile($mobile)) {
+                throw $this->createServiceException('手机号码格式不正确，变更手机号码失败。');
+            }
+            $this->getUserDao()->updateUser($userId, array('mobile' => $mobile));
+        }else {
+            throw $this->createServiceException('手机号已存在，变更手机号码失败。');
         }
-        $this->getUserDao()->updateUser($userId, array('mobile' => $mobile));
+
     }
 
     public function changeAvatar($userId, $filePath, array $options)
@@ -300,11 +307,10 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('Email已存在');
         }
 
-        $user = $this->getUserByMobile($registration['mobile']);
         if (isset($registration['mobile']) && $registration['mobile']!="") {
             if(!SimpleValidator::mobile($registration['mobile'])){
                 throw $this->createServiceException('mobile error!');
-            }else if(!empty($user)){
+            }else if(!empty($this->getUserByMobile($registration['mobile']))){
                 throw $this->createServiceException('手机号已存在');
             }
         }
@@ -317,7 +323,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user['email'] = $registration['email'];
         $user['nickname'] = $registration['nickname'];
         $user['truename'] = $registration['truename'];
-        $user['mobile'] =$registration['mobile'];
+        $user['mobile'] =isset($registration['mobile'])?$registration['mobile']:null;
         $user['roles'] =  array('ROLE_USER');
         $user['type'] = $type;
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];

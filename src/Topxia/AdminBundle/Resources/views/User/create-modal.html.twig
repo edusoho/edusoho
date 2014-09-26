@@ -6,6 +6,7 @@
 {% block body %}
 
 <form id="user-create-form" class="form-horizontal" method="post" action="{{ path('admin_user_create')}}">
+  <input type="hidden" name="type" value="{{type}}">
   <div class="row form-group">
     <div class="col-md-2 control-label">
       <label for="number">{% if type=='student' %}学号{% else %}工号{% endif %}</label>

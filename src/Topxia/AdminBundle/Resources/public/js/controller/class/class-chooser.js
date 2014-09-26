@@ -13,8 +13,17 @@ define(function(require, exports, module) {
         },
 
         setup:function(){
-            this.element.attr('readonly','readonly');
-            this.element.attr('style',"cursor: pointer;opacity: 1;background-color:white");
+            var element=this.element;
+            element.attr('readonly','readonly');
+            element.attr('style',"cursor: pointer;opacity: 1;background-color:white");
+            
+
+            //element.wrap("<div class='input-group'></div>");
+            // element.parent().addClass('input-group');
+            // element.before(" <span class='input-group-addon'>&times</span>");
+            // element.parent().find('.input-group-addon').click(function(){
+            //      element.val('');
+            // });
         },
 
         openModal:function(){

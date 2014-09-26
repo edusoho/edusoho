@@ -70,12 +70,13 @@
     <div class="col-md-2 control-label">
       <label for="number_1">子女学号</label>
     </div>
-    <div class="col-md-7 controls">
+    <div class="col-md-7 controls has-feedback">
       <input type="text" id="number_1" name="numbers[]" class="form-control childNumber" data-url="{{path('admin_parent_create_childNumber_check')}}">
+      <span style="cursor: pointer;" class="glyphicon glyphicon-remove form-control-feedback deleteNumberBtn"></span>
     </div>
-    <div class="col-md-1 controls">
+    {# <div class="col-md-1 controls">
       <button type="button" class="btn btn-default deleteNumberBtn">-</button>
-    </div>
+    </div> #}
   </div>
 
   <div class="row form-group">
