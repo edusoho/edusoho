@@ -14,8 +14,8 @@ define(function(require, exports, module) {
             "click [data-role=sign]": "sign",
             "mouseenter [data-role=signed]": "signedIn",
             "mouseleave [data-role=signed]": "signedOut",
-            "mouseenter .class_sign_main": "keep",
-            "mouseleave .class_sign_main": "remove",
+            "mouseenter .sign_main": "keep",
+            "mouseleave .sign_main": "remove",
             "click [data-role=previous]": "previousMonth",
             "click [data-role=next]": "nextMonth"
         },
@@ -28,10 +28,10 @@ define(function(require, exports, module) {
             this.selectedDate = selectedDate;
         },
         keep: function() {
-            this.element.find('.class_sign_main').addClass('keepShow');
+            this.element.find('.sign_main').addClass('keepShow');
         },
         remove: function() {
-            this.element.find('.class_sign_main').removeClass('keepShow');
+            this.element.find('.sign_main').removeClass('keepShow');
             this.hiddenSignTable();
         },
         getDaysInMonth: function(month,year) {
@@ -73,7 +73,7 @@ define(function(require, exports, module) {
         signedOut: function() {
             var self = this;
             setTimeout(function(){
-                if(self.element.find('.class_sign_main').hasClass('keepShow')) {
+                if(self.element.find('.sign_main').hasClass('keepShow')) {
                     return;
                 }else{
                     self.hiddenSignTable();
@@ -81,10 +81,10 @@ define(function(require, exports, module) {
             }, 1000);
         },
         showSignTable: function() {
-            this.element.find('.class_sign_main').attr('style','display:block');
+            this.element.find('.sign_main').attr('style','display:block');
         },
         hiddenSignTable: function() {
-            this.element.find('.class_sign_main').attr('style','display:none');
+            this.element.find('.sign_main').attr('style','display:none');
         },
         initTable: function(signedToday) {
             var selectedDate = this.selectedDate;

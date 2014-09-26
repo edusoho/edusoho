@@ -229,7 +229,7 @@
 .sign_wapper .btn {
     margin: 5px; 
 }
-.class_sign_main {
+.sign_main {
     position: absolute;
     left: 1px;
     width: 278px;
@@ -238,12 +238,12 @@
     margin-top: 10px;
 }
 
-.class_sign_main .disabled-next {
+.sign_main .disabled-next {
     cursor: not-allowed;
     color: #999;
 }
 
-.class_sign_main table {
+.sign_main table {
     width: 278px;
     border: 1px solid #e3e3e3;
     border-width: 1px 0;
@@ -251,41 +251,46 @@
     color: #666;
 }
 
-.class_sign_main thead {
+.sign_main thead {
     color: #999;
 }
 
-.class_sign_main table tr td{
+.sign_main table tr td{
     border-bottom: 1px solid #e3e3e3;
 }
 
 
-.class_sign_main table tbody td {
+.sign_main table tbody td {
     border-right: 1px solid #e3e3e3;
     border-left: 1px solid #e3e3e3;
 }
 
-.class_sign_main .calendar_title_month {
+.sign_main .calendar_title_month {
     height: 40px;
 }
 
-.class_sign_main .calendar_title_month span:hover {
+.sign_main .today-rank,
+.sign_main .signed-number,
+.sign_main .keep-days{
+    color: #ff7f3e;
+}
+.sign_main .calendar_title_month span:hover {
     cursor: pointer;
 }
-.class_sign_main .title-month {
+.sign_main .title-month {
     font-size: 14px;
     color: #656565;
 }
 
-.class_sign_main .title-margin {
+.sign_main .title-margin {
     margin: 10px;
 }
 
-.class_sign_main .signed_day{
+.sign_main .signed_day{
     background: url(http://tb2.bdstatic.com/tb/static-frs/img/balv/sign_have.gif?v=1.0) center no-repeat;
 }
 
-.class_sign_main .signed_anime_day{
+.sign_main .signed_anime_day{
     background: url(http://tb2.bdstatic.com/tb/static-frs/img/balv/sign_have_anime.gif?v=3.0) center no-repeat;
 }
 
