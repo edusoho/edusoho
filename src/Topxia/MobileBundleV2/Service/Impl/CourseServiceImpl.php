@@ -41,18 +41,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$url = "none";
 		$urlArray = array();
-		$imageCoust = $this->getParam("imageCount", '0');
-		for ($i=1; $i <= $imageCoust; $i++) { 
+		$files = $file = $this->request->files;
+		foreach ($files as $key => $value) {
 			try {
 				$group = $this->getParam("group", 'course');
-				$file = $this->request->files->get('image' . $i);
-				$record = $this->getFileService()->uploadFile($group, $file);
+				$record = $this->getFileService()->uploadFile($group, $value);
 				$url = $this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
 				
 			} catch (\Exception $e) {
 				$url = "error";
 			}
-			$urlArray[$i] = $url;
+			$urlArray[$key] = $url;
 		}
 
 		$baseUrl = $this->request->getSchemeAndHttpHost();
