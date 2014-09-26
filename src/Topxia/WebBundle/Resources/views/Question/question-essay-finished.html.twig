@@ -5,18 +5,18 @@
 {% endblock %}
 
 {% block body %}
-{#   <textarea name="answer[{{ question.id }}]" rows="1" class="form-control question-essay-input-short"></textarea>
 
-	<textarea class="form-control question-essay-input-long"  data-type="essay" style=""></textarea>
+<div style="margin-bottom:18px">
+	<div style="margin-bottom:5px">学员回答:</div>
+	<strong class="">{{ itemResult.answer }}</strong>
 
-	<a class="btn btn-link btn-muted btn-sm essay-textarea-pack-up" style="display:none"><span class="glyphicon glyphicon-chevron-up text-muted"></span> 收起</a> #}
-学员回答：
-<strong style = 'color:red'>{{ itemResult.answer }}</strong>
-参考答案：
+</div>
+<div>
  {% for rightAnswer in question.answer %}
-	   正确答案 <strong class="text-success">{{ rightAnswer|join(' 或 ') }}</strong>
+	   <div style="margin-bottom:5px">正确答案</div> <strong class="homework-text-success">{{ rightAnswer|join(' 或 ') }}</strong>
 	{% endfor %}
 
+</div>
 {% endblock %}
 
 {% block footer %}

@@ -36,4 +36,10 @@ class HomeworkItemResultDaoImpl extends BaseDao implements HomeworkItemResultDao
         return $this->getConnection()->fetchAll($sql,array($homeworkId)) ? : array();
 	}
 
+	public function findHomeworkItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId)
+	{
+		$sql = "SELECT * FROM {$this->table} WHERE homeworkId = ? AND userId = ?";
+        return $this->getConnection()->fetchAll($sql,array($homeworkId,$userId)) ? : array();
+	}
+
 }

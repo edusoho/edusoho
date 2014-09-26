@@ -62,7 +62,9 @@ interface HomeworkService
      */
     public function getItemSetByHomeworkId($homeworkId);
     
-    public function getItemSetResultByHomeworkId($homeworkId);
+    // public function getItemSetResultByHomeworkIdAndResultId($homeworkId,$resultId);
+
+    public function getItemSetResultByHomeworkIdAndUserId($homeworkId,$userId);
 
     public function updateHomeworkItems($homeworkId, $items);
 

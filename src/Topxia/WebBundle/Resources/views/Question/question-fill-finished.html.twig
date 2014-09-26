@@ -6,9 +6,11 @@
 
 {% block body %}
 
+{% set fileItemResultAnswer = itemResult.answer|split(',') %}
+
 {% if itemResult.status == 'right' %}
   
-  {% set itemResultStatus = '回答正确' %}
+  {% set itemResultStatus = '你答对了' %}
   
 {% elseif itemResult.status == 'wrong' %}
 
@@ -24,20 +26,28 @@
 
 {% endif %}
 
-  <div class="question-fill-inputs">
-
-  <div class="">
-      <div class="">
+  <div class="question-fill-inputs ">
+    <div class="">
+      <div class="homework-question-fill">
          <ul>
-                {% for index,rightAnswer in question.answer %}
-                <li>
-                  填空({{index+1}})： 正确答案 <strong class="text-success">{{ rightAnswer|join(' 或 ') }}</strong>
-                  </li>
-                {% endfor %}
-            你的答案是 <strong class="text-danger">{{ itemResult.answer }}</strong>。{{ itemResultStatus }}
+          {% for index,rightAnswer in question.answer %}
+
+            <li>
+              填空({{index+1}})： 正确答案 <strong class="homework-text-success">{{ rightAnswer|join(' 或 ') }}</strong> 你的答案是 
+
+              <strong class="homework-text-danger">{{ fileItemResultAnswer[index] }}</strong>。
+
+              {% if itemResult.status == 'right' %}
+                  <span class="glyphicon glyphicon-ok homework-text-success">
+              {% else %}
+                  <span class="glyphicon glyphicon-remove homework-text-danger">\
+              {% endif %}
+            </li>
+
+          {% endfor %}
          </ul>
       </div>
-      </div>
+    </div>
   </div>
 {% endblock %}
 

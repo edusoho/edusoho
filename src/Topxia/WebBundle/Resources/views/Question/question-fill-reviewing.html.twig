@@ -1,17 +1,1 @@
-{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
-
-{% block heading %}
-  {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
-{% endblock %}
-
-{% block body %}
-  <div class="question-fill-inputs">
-    {% for answer in question.answer %}
-      <input class="form-control " type="text" data-type="fill" name="answer[{{ question.id }}][]" placeholder="填空({{ loop.index }})答案，请填在这里"/>
-    {% endfor %}
-  </div>
-{% endblock %}
-
-{% block footer %}
-
-{% endblock %}
+{% extends 'TopxiaWebBundle:Question:question-fill-finished.html.twig' %}

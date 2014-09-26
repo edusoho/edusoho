@@ -27,10 +27,10 @@ define(function(require, exports, module) {
             element: '#homework-set'
         });
 
-       $('.question-set-card').affix({
+        // $('.question-set-card').css('width','265px'};
+        $('.question-set-card').affix({
             offset: {
-              top: 100, 
-              // bottom: 200
+              // top: 100 
             }
         });
     };
@@ -39,7 +39,7 @@ define(function(require, exports, module) {
 
         attrs: {
             list: null,
-            card: null,
+            card: null
         },
 
         setup: function() {
@@ -90,7 +90,7 @@ define(function(require, exports, module) {
                 $btn.attr('disabled', 'disabled');
 
             $.post($btn.data('url'),{data:changeAnswers},function(res){
-                // location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/learn#lesson/"+res.lessonId;
+                location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/learn#lesson/"+res.lessonId;
             });
         },
 
@@ -136,29 +136,23 @@ define(function(require, exports, module) {
   
         _setFillQuestionAnswer: function($answer) {
             var $question = $answer.parents('.question');
-            // console.log($answer.val());
             var answer = [];
-            if ($answer.val() != "") { answer.push($answer.val());};
-            // console.log(answer)
+            $question.find('.form-control ').each(function(index,item){
+                var $item = $(item);
+                if ($item.val() != "") {
+                answer.push($item.val());
+                };
+            });
             this.get('questionSet').trigger('answer_change', {questionId:$question.data('questionId'), answer:answer});
         },
 
         onClickInputChoiceInput: function(event) {
-            // console.log('input click');
-            // event.preventDefault();
-            // event.stopPropagation();
+            event.stopPropagation();
         },
 
         onClickInputChoiceLabel: function(event) {
-            // console.log('label click');
-            event.preventDefault();
-            // event.stopPropagation();
-            // event.stopImmediatePropagation();
-            // console.log(event);
-            // console.log($(event.target).is('input'));
-            // event.preventDefault();
             var $answer = $(event.currentTarget).find('input');
-            // console.log($answer[0]);
+            $(event.currentTarget).find('input').prop("checked") ? $(event.currentTarget).addClass('active') : $(event.currentTarget).removeClass('active');
             this._setChoiceQuestionAnswer($answer);
         },
 
@@ -168,8 +162,6 @@ define(function(require, exports, module) {
         },
 
         _setChoiceQuestionAnswer: function($answer)  {
-            // console.log('is :checked:', $answer.is(":checked"));
-            // console.log('prop checked', $answer.prop('checked'));
             if ($answer.is(":checked") == true){
                 $answer.prop('checked', false);
             } else {

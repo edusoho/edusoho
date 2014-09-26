@@ -42,20 +42,6 @@
         </div>
       </div>
 
-{#       <div class="col-md-3 question-set-side">
-        <div class="panel panel-default question-set-card">
-          <div class="panel-heading">答题卡 <button class="btn btn-default btn-sm pull-right">下次再做</button></div>
-          <div class="panel-body">
-            {%- for questionId in itemSetResult.questionIds -%}
-              <a href="javascript:;" class="question-index for-question-{{ questionId }} " data-anchor="{{questionId}}">{{ loop.index }}</a>
-            {%- endfor -%}
-          </div>
-          <div class="panel-footer">
-            <button class="btn btn-success btn-block " id="homework-finish-btn" data-url="{{ path('course_homework_submit',{courseId:course.id,homeworkId:homework.id}) }}" data-saving-text="正在保存...">提交作业</button>
-          </div>
-        </div>
-      </div> #}
-
     </div>
   </div>
 {% endblock %}

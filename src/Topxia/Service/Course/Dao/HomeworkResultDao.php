@@ -12,7 +12,9 @@ interface HomeworkResultDao
 
     public function getHomeworkResultByHomeworkId($homeworkId);
     
-	public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId);
+    public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId);
+
+	public function getHomeworkResultByHomeworkIdAndStatusAndUserId($homeworkId, $status, $userId);
 
 	public function getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId);
 

@@ -20,7 +20,6 @@ class CourseLessonManageController extends BaseController
 		foreach ($homeworks as &$homework) {
 			$homework['results'] = $this->getHomeworkService()->searchHomeworkResultsCount(array( 'courseId' => $homework['courseId'], 'lessonId' => $homework['lessonId'], 'status' => 'reviewing' ));
 		}
-		
 		$mediaMap = array();
 		foreach ($courseItems as $item) {
 			if ($item['itemType'] != 'lesson') {

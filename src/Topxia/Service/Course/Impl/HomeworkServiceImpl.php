@@ -21,8 +21,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
 	public function findHomeworksByCreatedUserId($userId)
 	{
-		$homeworks = $this->getHomeworkDao()->findHomeworksByCreatedUserId($userId);
-		return $homeworks;
+		return $this->getHomeworkDao()->findHomeworksByCreatedUserId($userId);
 	}
 
 	public function getHomeworkByCourseIdAndLessonId($courseId, $lessonId)
@@ -67,13 +66,12 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 		unset($fields['excludeIds']);
 
 		$fields = $this->filterHomeworkFields($fields,$mode = 'add');
-		$fields['courseId'] = $courseId;
-		$fields['lessonId'] = $lessonId;
-		$excludeIds = explode(',',$excludeIds);
-		$fields['itemCount'] = count($excludeIds);
+        $fields['courseId'] = $courseId;
+        $fields['lessonId'] = $lessonId;
+        $excludeIds = explode(',',$excludeIds);
+        $fields['itemCount'] = count($excludeIds);
 
-		$homework = $this->getHomeworkDao()->addHomework($fields);
-
+        $homework = $this->getHomeworkDao()->addHomework($fields);
 		$this->addHomeworkItems($homework['id'],$excludeIds);
 		
 		$this->getLogService()->info('homework','create','创建课程{$courseId}课时{$lessonId}的作业');
@@ -204,9 +202,8 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             throw $this->createServiceException('您已经做过该作业了！');
         }
 
-        $results = $this->getHomeworkResultDao()->findHomeworkResultsByStatusAndUserId($user->id, 'doing');
-
-        if (empty($results)){
+        $result = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndStatusAndUserId($id,$user->id, 'doing');
+        if (empty($result)){
             $homeworkResult = array(
                 'homeworkId' => $homework['id'],
                 'courseId' => $homework['courseId'],
@@ -218,7 +215,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
             return $this->getHomeworkResultDao()->addHomeworkResult($homeworkResult);
         } else {
-            return $results[0];
+            return $result;
         }
 
 
@@ -273,16 +270,10 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             }
         }
 
-        $homeworkItemResult = $this->getHomeworkItemResultDao()->getHomeworkItemResultByHomeworkIdAndStatus($id,$status="none1");
         $homeworkitemResult['commitStatus'] = 'committed';
         $homeworkitemResult['rightItemCount'] = $rightItemCount;
-
-        if ($homeworkItemResult) {
-            $homeworkitemResult['status'] = 'reviewing';
-        } else {
-            $homeworkitemResult['checkedTime'] = time();
-            $homeworkitemResult['status'] = 'finished';
-        }
+        $homeworkitemResult['status'] = 'reviewing';
+ 
         $result = $this->getHomeworkResultDao()->updateHomeworkResult($homeworkResult['id'],$homeworkitemResult);
 
         return $result;
@@ -396,11 +387,10 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return $set;
     }
 
-    public function getItemSetResultByHomeworkId($homeworkId)
+    public function getItemSetResultByHomeworkIdAndUserId($homeworkId,$userId)
     {
         $items = $this->getHomeworkItemDao()->findItemsByHomeworkId($homeworkId);
-        $itemsResults = $this->getHomeworkItemResultDao()->findHomeworkItemsResultsbyHomeworkId($homeworkId);
-
+        $itemsResults = $this->getHomeworkItemResultDao()->findHomeworkItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId);
         $indexdItems = ArrayToolkit::index($items, 'questionId');
         $indexdItemsResults = ArrayToolkit::index($itemsResults, 'questionId');
 
@@ -430,6 +420,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
             unset($indexdItems[$item['questionId']]);
         }
+
         $set = array(
             'items' => array_values($indexdItems),
             'questionIds' => array(),

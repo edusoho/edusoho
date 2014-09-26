@@ -236,7 +236,7 @@ class CourseHomeworkManageController extends BaseController
 	}
 
 
-    public function reviewAction(Request $request,$id,$courseId)
+    public function previewAction(Request $request,$id,$courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -262,14 +262,14 @@ class CourseHomeworkManageController extends BaseController
 
         $user = $this->getUserService()->getUser($homeworkResult['userId']);
 
-        return $this->render('TopxiaWebBundle:CourseHomeworkManage:review.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseHomeworkManage:preview.html.twig', array(
             'homework' => $homework,
             'homeworkResult' => $homeworkResult,
             'itemSet' => $itemSet,
             'course' => $course,
             'lesson' => $lesson,
             'user' => $user,
-            'questionStatus' => 'reviewing'
+            'questionStatus' => 'previewing'
         ));    
     }
 
@@ -405,7 +405,6 @@ class CourseHomeworkManageController extends BaseController
         if (empty($homework)) {
             $uncommitCount = 0;
         }
-
         return $this->render('TopxiaWebBundle:CourseHomeworkManage:homework-list.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
@@ -429,11 +428,13 @@ class CourseHomeworkManageController extends BaseController
         if (empty($currentUser)) {
             throw $this->createServiceException('用户不存在或者尚未登录，请先登录');
         }
-        $homeworks = ArrayToolkit::index($this->getHomeworkService()->findHomeworksByCreatedUserId($currentUser['id']), 'courseId');
 
-        $homeworkCourseIds = ArrayToolkit::column($homeworks, 'courseId');
-        $homeworkLessonIds = ArrayToolkit::column($homeworks, 'lessonId');
+        $homeworks = $this->getHomeworkService()->findHomeworksByCreatedUserId($currentUser['id']);
+
         $homeworkIds = ArrayToolkit::column($homeworks, 'id');
+        $homeworkLessonIds = ArrayToolkit::column($homeworks, 'lessonId');
+        $homeworks = ArrayToolkit::index($homeworks, 'courseId');
+        $homeworkCourseIds = ArrayToolkit::column($homeworks, 'courseId');
 
         $courses = $this->getCourseService()->findCoursesByIds($homeworkCourseIds);
         $lessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
@@ -445,13 +446,13 @@ class CourseHomeworkManageController extends BaseController
             , 25
         );
 
+// var_dump($conditions);exit();
         $students = $this->getCourseService()->searchMembers(
             $conditions,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         $studentUserIds = ArrayToolkit::column($students, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
@@ -459,7 +460,7 @@ class CourseHomeworkManageController extends BaseController
 
         $committedCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
             'commitStatus' => 'committed',
-            'checkTeacherId' => $currentUser['id']
+            // 'checkTeacherId' => $currentUser['id']
         ));
         $uncommitCount = $this->getCourseService()->searchMemberCount($conditions) - $committedCount;
         $reviewingCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
@@ -470,7 +471,6 @@ class CourseHomeworkManageController extends BaseController
             'status' => 'finished',
             'checkTeacherId' => $currentUser['id']
         ));
-
         if (!empty($homeworkResults)) {
             $students = $this->getHomeworkStudents($status, $students, $homeworkResults);
         } else {
@@ -482,7 +482,6 @@ class CourseHomeworkManageController extends BaseController
         if (empty($homeworks)) {
             $uncommitCount = 0;
         }
-
         return $this->render('TopxiaWebBundle:CourseHomeworkManage:teaching-list.html.twig', array(
             'status' => $status,
             'homeworks' => empty($homeworks) ? array() : $homeworks,

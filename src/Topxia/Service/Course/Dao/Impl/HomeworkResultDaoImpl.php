@@ -53,6 +53,16 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchAssoc($sql, array($homeworkId, $userId)) ? : null;
     }
 
+    public function getHomeworkResultByHomeworkIdAndStatusAndUserId($homeworkId, $status, $userId)
+    {
+        if (empty($homeworkId)  or empty($status) or empty($userId)) {
+            return null;
+        }
+
+        $sql = "SELECT * FROM {$this->table} WHERE homeworkId = ? AND status = ? AND userId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($homeworkId, $status, $userId)) ? : null;
+    }
+
     public function getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId)
     {
         if (empty($courseId) or empty($lessonId) or empty($userId)) {
@@ -122,6 +132,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
             ->andWhere('lessonId = :lessonId')
             ->andWhere('homeworkId = :homeworkId')
             ->andWhere('status = :status')
+            ->andWhere('checkTeacherId = :checkTeacherId')
             ->andWhere('commitStatus = :commitStatus');
 
         return $builder;

@@ -11,5 +11,7 @@ interface HomeworkItemResultDao
 	public function addHomeworkItemResult($itemResult);
 
 	public function findHomeworkItemsResultsbyHomeworkId($homeworkId);
+
+	public function findHomeworkItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId);
 	
 }
