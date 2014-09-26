@@ -82,7 +82,8 @@ class SignServiceImpl extends BaseService implements SignService
 
     public function getTodayRank($userId, $targetType, $targetId)
     {
-        return $this->getSignRecordsByPeriod($userId, $targetType, $targetId, strtotime(date('y-n-d 0:0:0')),strtotime(date('y-n-d 23:59:59')))[0]['rank'];
+        $todaySign =$this->getSignRecordsByPeriod($userId, $targetType, $targetId, date('y-n-d'), date('y-n-d'));
+        return $todaySign ? $todaySign['0']['rank'] : -1;
     }
 
     private function refreshKeepDays($userId, $targetType, $targetId)
@@ -90,7 +91,7 @@ class SignServiceImpl extends BaseService implements SignService
         $statistics = $this->getSignUserStatisticsDao()
             ->getStatistics($userId, $targetType, $targetId);
         if($statistics) {
-            $statistics = isYestodaySigned($userId, $targetType, $targetId) ?
+            $statistics = $this->isYestodaySigned($userId, $targetType, $targetId) ?
                 $this->getSignUserStatisticsDao()
                     ->updateStatistics($statistics['id'], array('keepDays' => $statistics['keepDays'] + 1)) :
                 $this->getSignUserStatisticsDao()
