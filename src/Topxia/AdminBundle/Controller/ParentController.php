@@ -188,7 +188,7 @@ class ParentController extends BaseController
             }
             $relations=$this->getUserService()->findUserRelationsByToIdsAndType($childIds,'family');
             $ids=ArrayToolkit::column($relations, 'fromId');
-            $conditions['ids']=empty($ids) ? array(0) : $ids;
+            $conditions['ids']=empty($ids) ? array() : $ids;
         }
         if($fields['keywordType']=='truename' || $fields['keywordType']=='mobile'){
             $conditions['keywordType']=$fields['keywordType'];
