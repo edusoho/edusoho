@@ -1118,10 +1118,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 	}
 
 	public function searchLearnTime($conditions)
-	{
+	{	
 		return $this->getLessonLearnDao()->searchLearnTime($conditions);
 	}
 
+	public function searchWatchTime($conditions)
+	{
+		return $this->getLessonLearnDao()->searchWatchTime($conditions);
+	}
+	
 	public function findLatestFinishedLearns($start, $limit)
 	{
 		return $this->getLessonLearnDao()->findLatestFinishedLearns($start, $limit);

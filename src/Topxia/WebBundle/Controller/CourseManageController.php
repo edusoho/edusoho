@@ -230,10 +230,14 @@ class CourseManageController extends BaseController
             $lessonLearnTime=$this->getCourseService()->searchLearnTime(array('lessonId'=>$value['id']));
             $lessonLearnTime=$lessonLearnedNum==0 ? 0 : intval($lessonLearnTime/$lessonLearnedNum);
 
+            $lessonWatchTime=$this->getCourseService()->searchWatchTime(array('lessonId'=>$value['id']));
+            $lessonWatchTime=$lessonWatchTime==0 ? 0 : intval($lessonWatchTime/$lessonLearnedNum);
+
             $lessons[$key]['LearnedNum']=$lessonLearnedNum;
             $lessons[$key]['length']=intval($lessons[$key]['length']/60);
             $lessons[$key]['finishedNum']=$finishedNum;
             $lessons[$key]['learnTime']=$lessonLearnTime;
+            $lessons[$key]['watchTime']=$lessonWatchTime;
 
             if($value['type']=='testpaper'){
                 $paperId=$value['mediaId'];

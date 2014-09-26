@@ -29,6 +29,8 @@ interface LessonLearnDao
     public function searchLearnCount($conditions);
 
     public function searchLearnTime($conditions);
+    
+    public function searchWatchTime($conditions);
 
     public function searchLearns($conditions,$orderBy,$start,$limit);
 

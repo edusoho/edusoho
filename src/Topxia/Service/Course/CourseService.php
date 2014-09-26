@@ -153,6 +153,11 @@ interface CourseService
 
 	public function watchPaused($userId,$lessonId);
 
+	public function searchLearnTime($conditions);
+
+	public function searchWatchTime($conditions);
+
+
 	/**
 	 * Chapter API
 	 */
