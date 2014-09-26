@@ -181,7 +181,13 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。</li>
+                <li>支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过<strong>
+                {% if storageSetting.upload_mode == 'cloud' %}
+                  500M
+                {% else %}
+                  {{ upload_max_filesize() }}
+                {% endif %}
+                </strong>。</li>
                 {% if storageSetting.upload_mode == 'cloud' %}
                   <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
                   <li>音频将上传到<strong>云服务器</strong></li>
