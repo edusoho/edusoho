@@ -100,13 +100,13 @@ class ClassNoteController extends ClassBaseController
                 $showUrl = $this->generateUrl('user_show', array('id'=> $users[$i]['userId']), true);
                 $html.="、<a href='{$showUrl}'>".$users[$i]['truename']."</a>";
             }
-            $html=mb_substr($html,1,strlen($html),'utf-8').' 等'.count($users).'人赞过';
+            $html=mb_substr($html,1,strlen($html),'utf-8').'等'.count($users).'人赞过';
         }else if(!empty($users)){
             foreach ($users as $user) {
                 $showUrl = $this->generateUrl('user_show', array('id'=> $user['userId']), true);
                 $html.="、<a href='{$showUrl}'>".$user['truename']."</a>";
             }
-            $html=mb_substr($html,1,strlen($html),'utf-8').' 赞过';
+            $html=mb_substr($html,1,strlen($html),'utf-8').'赞过';
         }else{
             return $html;
         }

@@ -28,13 +28,11 @@
       <span class="pull-right text-sm">
         {% if noteLike|length >4 %}
           {% for i in 0..3 %}
-            <a href="{{ path('user_show', {id:noteLike[i].userId}) }}">{{noteLike[i].truename}}</a>
-            {% if loop.last %}等{{noteLike|length}}人赞过{% else %}、{% endif %}
+            <a href="{{ path('user_show', {id:noteLike[i].userId}) }}">{{noteLike[i].truename}}</a>{% if loop.last %}等{{noteLike|length}}人赞过{% else %}、{% endif %}
           {% endfor %}
         {% else %}
           {% for likeUser in noteLike %}
-            <a href="{{ path('user_show', {id:likeUser.userId}) }}">{{likeUser.truename}}</a>
-            {% if loop.last %}赞过{% else %}、{% endif %}
+            <a href="{{ path('user_show', {id:likeUser.userId}) }}">{{likeUser.truename}}</a>{% if loop.last %}赞过{% else %}、{% endif %}
           {% endfor %}
         {% endif %}
       </span>
