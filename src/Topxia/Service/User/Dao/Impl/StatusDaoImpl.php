@@ -32,8 +32,9 @@ class StatusDaoImpl extends BaseDao implements StatusDao
         if(empty($userIds)){
             return array();
         }
+        $this->filterStartLimit($start, $limit);
         $marks = str_repeat('?,', count($userIds) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE userId IN ({$marks});";
+        $sql ="SELECT * FROM {$this->table} WHERE userId IN ({$marks}) ORDER BY createdTime DESC LIMIT {$start},{$limit};";
         $statuses = $this->getConnection()->fetchAll($sql, $userIds);
         return $this->createSerializer()->unserializes($statuses, $this->serializeFields);
     }
