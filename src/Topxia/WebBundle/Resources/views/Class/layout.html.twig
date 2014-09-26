@@ -20,9 +20,11 @@
     </div>
 
     <div class="col-md-4">
+
           {% block user_info %}
-            {{ render(controller('TopxiaWebBundle:Sign:userInfo', {class:class})) }}
+            {{ render(controller('TopxiaWebBundle:Class:userInfo', {class:class, userId:app.user.id})) }}
           {% endblock %}
+
           {% block class_side %}
             {{ render(controller('TopxiaWebBundle:Class:statusBlock', {class:class})) }}
 
