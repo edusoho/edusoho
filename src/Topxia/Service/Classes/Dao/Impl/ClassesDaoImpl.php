@@ -72,8 +72,8 @@ class ClassesDaoImpl extends BaseDao implements ClassesDao
     }
     
     public function updateClassStudentNum($num,$id){
-        $sql ="UPDATE {$this->getTablename()} SET studentNum=studentNum+({$num}) WHERE id ={$id};";
-        return $this->getConnection()->exec($sql);
+        $sql ="UPDATE {$this->getTablename()} SET studentNum=studentNum+(?) WHERE id =?;";
+        return $this->getConnection()->executeQuery($sql,array($num,$id));
     }
 
     public function deleteClass($id)
