@@ -115,11 +115,13 @@
 						{% endif %}
 					{% endif %}
 				</div>
-				<div class="pull-right">
+				
+				<div class="pull-right ">
+
 					<a class="btn btn-link" href="#" style="display:none;"> <i class="glyphicon glyphicon-play-circle"></i>
 						免费体验
 					</a>
-					<a class="btn btn-link" id="favorite-btn" href="javascript:" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
+					<a class="btn btn-link " id="favorite-btn" href="javascript:" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
 						<i class="glyphicon glyphicon-bookmark"></i>
 						收藏课程
 					</a>
@@ -131,8 +133,9 @@
 						<i class="glyphicon glyphicon-gift"></i>
 						赠送
 					</a>
-				</div>
-			</div><div class="share pull-right" data-bdText="{{courseShareContent}}"></div>
+
+				</div><div class="share pull-right clearfix"  data-bdText="{{courseShareContent}}"></div>
+			</div>
 
 		</div>
 	</div>

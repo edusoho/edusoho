@@ -13,7 +13,7 @@ define(function(require, exports, module) {
         Share.create({
                 selector: '.share',
                 icons: 'itemsAll',
-                display: ''
+                display: 'dropdownWithIcon'
             });
 
         var reviewTabInited = false;
