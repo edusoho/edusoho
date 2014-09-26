@@ -48,19 +48,32 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	            	}
 
 	            	$testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
+            		return array(
+	                            'testpaper'=>$testpaper,
+	                            'items'=>$this->getTestpaperItem($testId)
+	                            );
             	}
+            	if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
+            		return array(
+	                            'testpaper'=>$testpaper,
+	                            'items'=>$this->getTestpaperItem($testId)
+	                            );
+	        	} else {
+	            	return "result";
+	        	}
+	}
 
-            	$result = $this->getTestpaperService()->showTestpaper($testId);
+	private function getTestpaperItem($testId)
+	{
+		$result = $this->getTestpaperService()->showTestpaper($testId);
         		$items = $result['formatItems'];
-        		unset($testpaper['metas']);
-                        return array(
-                            'testpaper'=>$testpaper,
-                            'items'=>$this->coverTestpaperItems($items)
-                            );
+
+        		return $this->coverTestpaperItems($items);
 	}
 
 	private function coverTestpaperItems($items)
 	{
+		return $items;
 		return array_map(function($item){
 			$item = array_map(function($itemValue){
 				$question = $itemValue['question'];

@@ -360,15 +360,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$courseId = $this->getParam("courseId");
         		$user = $this->controller->getUserByToken($this->request);
         		list($course, $member) = $this->controller->getCourseService()->tryTakeCourse($courseId);
-        
+        		
         		if (empty($member) or empty($member['orderId'])) {
             		return $this->createErrorResponse('not_member', '您不是课程的学员或尚未购买该课程，不能退学。');
         		}
-
-        		$order = $this->getOrderService()->getOrder($member['orderId']);
-        		if (empty($order)) {
-            		return $this->createErrorResponse( 'order_error', '订单不存在，不能退学。');
-            	}
+        		if (!empty($member['orderId'])) {
+        			$order = $this->getOrderService()->getOrder($member['orderId']);
+	        		if (empty($order)) {
+	            		return $this->createErrorResponse( 'order_error', '订单不存在，不能退学。');
+	            	}
+        		}
 
         		$reason = $this->getParam("reason", "");
         		$amount = $this->getParam("amount", 0);
