@@ -310,16 +310,17 @@ define(function(require, exports, module) {
                             enableAutosize:true,
                             success: function(media) {
                                 media.addEventListener("ended", function() {
+                                    $.post("../../course/"+lesson.id+'/watch/paused');
                                     that._onFinishLearnLesson();
                                 });
                                 media.addEventListener("pause", function() {
-                                    console.log('pause')
-                                });
-                                media.addEventListener("playing", function() {
-                                    console.log('playing')
+                                    $.post("../../course/"+lesson.id+'/watch/paused');
                                 });
                                 media.addEventListener("play", function() {
-                                    console.log('play')
+                                    $.post("../../course/"+lesson.id+'/watch/play');
+                                });
+                                media.addEventListener("loadeddata", function() {
+                                    console.log('loadeddata')
                                 });
                                 media.play();
                             }
