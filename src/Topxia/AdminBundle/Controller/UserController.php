@@ -156,13 +156,15 @@ class UserController extends BaseController
         $user = $this->getUserService()->getUser($id);
         $profile = $this->getUserService()->getUserProfile($id);
         $profile['title'] = $user['title'];
-
+        $relations=$this->getUserService()->findUserRelationsByFromIdAndType($id,'family');
+        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
         $fields=$this->getFields();
-            
         return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
             'user' => $user,
             'profile' => $profile,
             'fields'=>$fields,
+            'relation'=>empty($relations)?'--':$relations[0]['relation'],
+            'children'=>$children
         ));
     }
 
