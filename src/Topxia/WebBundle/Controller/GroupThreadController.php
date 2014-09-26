@@ -381,10 +381,12 @@ class GroupThreadController extends BaseController
     {
         $post=$this->getThreadService()->getPost($postId);
 
-        $groupMemberRole=$this->getGroupMemberRole($groupId);
+        $thread=$this->getThreadService()->getThread($post['threadId']);
+
+        $groupMemberRole=$this->getGroupMemberRole($thread['groupId']);
 
         $user=$this->getCurrentUser();
- 
+
         if($user['id']==$post['userId'] || $groupMemberRole==2 || $groupMemberRole==3 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true){
 
             $this->getThreadService()->deletePost($postId);    
