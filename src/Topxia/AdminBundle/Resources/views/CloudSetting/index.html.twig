@@ -191,7 +191,7 @@
 
 
       <div class="file-chooser-bar" 
-        {% if not storageSetting.video_header %}
+        {% if not storageSetting.video_header|default(null) %}
         style="display:none;"
         {% endif %}
         >
@@ -206,7 +206,7 @@
       </div>
 
       <div class="file-chooser-main" 
-        {% if storageSetting.video_header %}
+        {% if storageSetting.video_header|default(null) %}
         style="display:none;"
         {% endif %}
       >
