@@ -9,6 +9,7 @@
 
   <div class="panel-body">
     <h5>正在教学（{{courseCount}}）</h5>
+    <hr>
     <div class="row">
       {% set count =0 %}
       {% for class in classes %}
@@ -35,6 +36,7 @@
   <div class="panel-body">
     {% if manageClasses %}
       <h5>我的班级（{{manageClasses|length}}）</h5>
+      <hr>
       <div class="row">
         {% for manageClass in manageClasses %}
           <div class="col-sm-6 col-md-3">
@@ -47,6 +49,7 @@
 
   <div class="panel-body">
     <h5>等待解答（{{threadCount}}）</h5>
+    <hr>
     <div class="row">
       {% for thread in threads %}
         {% set threadUser = threadUsers[thread.userId] %}
@@ -66,6 +69,7 @@
 
   <div class="panel-body">
     <h5>等待批阅（{{testpaperCount}}）</h5>
+    <hr>
     <div class="row">
       {% for paperResult in paperResults %}
         {% set testpaper = testpapers[paperResult.testId] %}
@@ -83,8 +87,6 @@
       </div>
     {% endif %}
   </div>
-
-
 </div>
 
 {% endblock %}
