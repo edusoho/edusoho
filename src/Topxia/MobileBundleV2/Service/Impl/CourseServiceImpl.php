@@ -396,7 +396,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
      		$member = $this->previewAsMember($member, $courseId, $user);
         		if ($course['status'] != 'published') {
-        			if ($user->isLogin()){
+        			if (!$user->isLogin()){
             			return $this->createErrorResponse('course_not_published', "课程未发布或已关闭。");
         			}
         			if (empty($member)) {
