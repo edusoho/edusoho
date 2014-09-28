@@ -19,18 +19,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         if (empty($info)) {
             return $this->createErrorResponse('error', '反馈内容不能为空！');
         }
-        $url = "";
-        try {
-                $file = $this->request->files->get('file');
-                $record = $this->getFileService()->uploadFile('course', $file);
-                $url = $this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
-                
-        } catch (\Exception $e) {
-                $url = "error";
-        }
 
-        $url = "<br><img src=''{$url}/>";
-        $info = $info . $url;
         return $info;
     }
 
