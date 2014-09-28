@@ -82,10 +82,17 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     {
         $start = (int) $this->getParam("start", 0);
         $limit = (int) $this->getParam("limit", 10);
-        $courses = $this->controller->getCourseService()->searchCourses(array(), $sort, $start,  $limit);
+
+        $conditions = array(
+            'status' => 'published',
+            'type' => 'normal',
+        );
+        $total  = $this->getCourseService()->searchCourseCount($conditions);
+        $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start,  $limit);
         $result = array(
             "start"=>$start,
             "limit"=>$limit,
+            "total"=>$total
             "data"=>$this->controller->filterCourses($courses));
 
         return $result;
