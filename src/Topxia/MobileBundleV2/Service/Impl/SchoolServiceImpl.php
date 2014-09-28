@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SchoolServiceImpl extends BaseService implements SchoolService {
 
+    private $banner;
 
     public function sendSuggestion()
     {
@@ -109,7 +110,37 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public function getSchoolBanner()
     {
-        return $this->getSchoolBannerFromDb();
+        $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
+        $baseUrl = $this->request->getSchemeAndHttpHost();
+        //var_dump($blocks);
+        $this->banner = array();
+        if (empty($blocks)) {
+            return $banner;
+        }
+
+        $container = $this->getContainer();
+        //replace <a><img></a>
+        $blocks = preg_replace_callback('/<a href=[\'\"](.*?)[\'\"]><img src=[\'\"](.*?)[\'\"][^>]\/><\/a>/', function($matches) use ($baseUrl, $container) {
+            $url = "${baseUrl}/$matches[2]";
+            $this->banner[] = array(
+                "url"=>$url,
+                "action"=>"webview",
+                "params"=>$matches[1]
+                );
+            return '';
+        }, $blocks['home_top_banner']);
+
+        //replace img
+        $blocks = preg_replace_callback('/<img src=[\'\"](.*?)[\'\"]>/', function($matches) use ($baseUrl, $container) {
+            $url = "${baseUrl}/$matches[1]";
+            $this->banner[] = array(
+                "url"=>$url,
+                "action"=>"none",
+                "params"=>''
+                );
+            return '';
+        }, $blocks);
+        return $this->banner;
     }
 
     public function getSchoolSiteByQrCode()
