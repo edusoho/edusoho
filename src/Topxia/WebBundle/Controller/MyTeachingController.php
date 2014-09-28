@@ -46,24 +46,43 @@ class MyTeachingController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
         
-        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, 1000,false);
-        $results = array();
-
-        foreach ($courses as $course) {
-             $results[$course['classId']][] = $course;
-        }
-
-        $classes = array();
-        $classIds = array_keys($results);
+        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
+        $courseCount=count($courses);
+        $courseList =ArrayToolkit::group($courses,'classId');
+        $classIds = array_keys($courseList);
         $classes = $this->getClassesService()->findClassesByIds($classIds);
-        $classes = ArrayToolkit::index($classes, 'id');
 
         $manageClasses = $this->getClassesService()->getClassesByHeadTeacherId($user['id']);
+
+        $conditions = array(
+            'courseIds' => ArrayToolkit::column($courses, 'id'),
+            'type' => 'question'
+        );
+        $threadCount= $this->getThreadService()->searchThreadCountInCourseIds($conditions);
+        $threads = $this->getThreadService()->searchThreadInCourseIds($conditions,'createdNotStick',0,6);
+        $threadUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
         
+
+
+        $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($user['id']);
+        $testpaperIds = ArrayToolkit::column($teacherTests, 'id');
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+        $testpaperCount=$this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds,'reviewing');
+        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds($testpaperIds,'reviewing',0,6);
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds(ArrayToolkit::column($paperResults, 'testId'));
+        $testpaperUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($paperResults, 'userId'));
         return $this->render('TopxiaWebBundle:MyTeaching:teaching-k12.html.twig', array(
-            'manageClasses'=>$manageClasses,
             'classes' => $classes,
-            'results' => $results,
+            'courseList' => $courseList,
+            'courseCount'=>$courseCount,
+            'manageClasses'=>$manageClasses,
+            'threads'=>$threads,
+            'threadCount'=>$threadCount,
+            'threadUsers'=>$threadUsers,
+            'paperResults'=>$paperResults,
+            'testpapers'=>$testpapers,
+            'testpaperCount'=>$testpaperCount,
+            'testpaperUsers'=>$testpaperUsers
         ));
     }
 
@@ -140,6 +159,11 @@ class MyTeachingController extends BaseController
     protected function getClassesService()
     {
         return $this->getServiceKernel()->createService('Classes.ClassesService');
+    }
+
+    private function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
 }
