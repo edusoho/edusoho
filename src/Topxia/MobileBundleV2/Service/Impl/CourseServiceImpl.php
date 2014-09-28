@@ -374,9 +374,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         			$refund = $this->getCourseOrderService()->applyRefundOrder(
         				$member['orderId'], $amount, $reason, $this->getContainer());
         			if (empty($refund) || $refund['status'] != "success") {
-        				return true;
+        				return false;
         			}
-        			return false;
+        			return true;
         		}
         		
         		$this->getCourseService()->removeStudent($course['id'], $user['id']);
