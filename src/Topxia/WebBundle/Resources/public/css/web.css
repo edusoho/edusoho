@@ -2197,6 +2197,10 @@ body {
 	padding-bottom: 5px;
 }
 
+.shares-dropdown-menu {
+	width: 170px;
+}
+
 .text-list {
 	list-style: none;
 	padding: 0;
