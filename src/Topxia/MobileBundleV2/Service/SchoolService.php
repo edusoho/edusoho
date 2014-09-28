@@ -8,7 +8,10 @@ interface SchoolService
 	public function getSchoolBanner();
 	public function getSchoolAnnouncement();
 	public function getRecommendCourses();
+	public function getLatestCourses();
 	public function getWeekRecommendCourses();
 	public function getUserterms();
 	public function getSchoolInfo();
+
+	public function sendSuggestion();
 }

@@ -8,6 +8,31 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SchoolServiceImpl extends BaseService implements SchoolService {
 
+
+    public function sendSuggestion()
+    {
+        $info = $this->getParam("info");
+        $type = $this->getParam("type", 'bug');
+        $contact = $this->getParam("contact");
+
+        if (empty($info)) {
+            return $this->createErrorResponse('error', '反馈内容不能为空！');
+        }
+        $url = "";
+        try {
+                $file = $this->request->files->get('file');
+                $record = $this->getFileService()->uploadFile('course', $file);
+                $url = $this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+                
+        } catch (\Exception $e) {
+                $url = "error";
+        }
+
+        $url = "<br><img src=''{$url}/>";
+        $info = $info . $url;
+        return $info;
+    }
+
     public function getUserterms()
     {
         $setting = $this->controller->getSettingService()->get('auth', array());
@@ -45,7 +70,16 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public function getRecommendCourses()
     {
-        $sort = "latest";
+        return $this->getCourseByType("recommendedSeq");
+    }
+
+    public function getLatestCourses()
+    {
+        return $this->getCourseByType("latest");
+    }
+
+    private function getCourseByType($sort)
+    {
         $start = (int) $this->getParam("start", 0);
         $limit = (int) $this->getParam("limit", 10);
         $courses = $this->controller->getCourseService()->searchCourses(array(), $sort, $start,  $limit);
@@ -53,6 +87,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
             "start"=>$start,
             "limit"=>$limit,
             "data"=>$this->controller->filterCourses($courses));
+
         return $result;
     }
 
