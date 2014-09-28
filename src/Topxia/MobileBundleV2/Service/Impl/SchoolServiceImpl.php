@@ -121,7 +121,11 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         $content = $this;
         //replace <a><img></a>
         $blocks = preg_replace_callback('/<a href=[\'\"](.*?)[\'\"]><img src=[\'\"](.*?)[\'\"][^>]\/><\/a>/', function($matches) use ($baseUrl, $content) {
-            $url = "${baseUrl}/$matches[2]";
+            $matcheUrl = $matches[2];
+            if (stripos($matcheUrl, "../") == 0) {
+                $matcheUrl = substr($matcheUrl, 3);
+            }
+            $url = "${baseUrl}/$matcheUrl";
             $content->banner[] = array(
                 "url"=>$url,
                 "action"=>"webview",
@@ -132,7 +136,11 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
         //replace img
         $blocks = preg_replace_callback('/<img src=[\'\"](.*?)[\'\"]>/', function($matches) use ($baseUrl, $content) {
-            $url = "${baseUrl}/$matches[1]";
+            $matcheUrl = $matches[1];
+            if (stripos($matcheUrl, "../")) {
+                $matcheUrl = substr($matcheUrl, 3);
+            }
+            $url = "${baseUrl}/$matcheUrl";
             $content->banner[] = array(
                 "url"=>$url,
                 "action"=>"none",
