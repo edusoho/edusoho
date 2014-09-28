@@ -129,6 +129,7 @@ class CourseHomeworkController extends BaseController
             'itemSetResult' => $itemSetResult,
             'course' => $course,
             'lesson' => $lesson,
+            'userId' => $userId,
             'questionStatus' => 'reviewing'
         ));
     }

@@ -3555,11 +3555,14 @@ body {
 }
 
 #teacher-say{
-	width: 450px
+	width: 450px;
 }
 
 .teacher-say-text{
-	margin-bottom: 5px
+	margin-bottom: 5px;
+}
+.question-eassy-form-control{
+	margin-bottom: 18px;
 }
 
 .testpaper-status .label {

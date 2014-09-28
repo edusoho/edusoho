@@ -22,17 +22,6 @@
 　　　  <span class="glyphicon glyphicon-remove question-text-danger"></span>你未答题，你选择了<strong class="question-text-danger" >{{ choiceIndex }}</strong>
     {% endif %}
 </div>
-{#   <div class="question-choices-inputs">
-    {% for key, choice in question.metas.choices %}
-      {% set choiceIndex = (65+key)|chr %}
-      <label class="checkbox-inline">
-        <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" name="answer[{{ question.id }}][]" value="{{ key }}"> {{ choiceIndex }}
-      </label>
-
-
-    {% endfor %}
-
-  </div> #}
 
 {% endblock %}
 
