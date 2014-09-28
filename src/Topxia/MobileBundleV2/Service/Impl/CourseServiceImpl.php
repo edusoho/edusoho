@@ -393,16 +393,26 @@ class CourseServiceImpl extends BaseService implements CourseService
             		return $this->createErrorResponse('not_found', "课程不存在");
 		}
 
+		$member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+     		$member = $this->previewAsMember($member, $courseId, $user);
         		if ($course['status'] != 'published') {
-            		return $this->createErrorResponse('course_not_published', "课程未发布或已关闭。");
+        			if ($user->isLogin()){
+            			return $this->createErrorResponse('course_not_published', "课程未发布或已关闭。");
+        			}
+        			if (empty($member)) {
+            			return $this->createErrorResponse('course_not_published', "课程未发布或已关闭。");
+        			}
+        			$deadline = $member['deadline'] ;
+        			$createdTime = $member['createdTime'];
+
+        			if ($deadline !=0 && ($deadline - $createdTime) < 0) {
+            			return $this->createErrorResponse('course_not_published', "课程未发布或已关闭。");
+        			}
         		}
 
         		$userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
 
 		$vipLevels = $this->controller->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
-
-		$member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
-     		$member = $this->previewAsMember($member, $courseId, $user);
         		return array(
         			"course"=>$this->controller->filterCourse($course),
         			"userFavorited"=>$userFavorited,
