@@ -112,15 +112,14 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     {
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
         $baseUrl = $this->request->getSchemeAndHttpHost();
-        //var_dump($blocks);
+
         $this->banner = array();
         if (empty($blocks)) {
             return $banner;
         }
 
-        $container = $this->getContainer();
         //replace <a><img></a>
-        $blocks = preg_replace_callback('/<a href=[\'\"](.*?)[\'\"]><img src=[\'\"](.*?)[\'\"][^>]\/><\/a>/', function($matches) use ($baseUrl, $container) {
+        $blocks = preg_replace_callback('/<a href=[\'\"](.*?)[\'\"]><img src=[\'\"](.*?)[\'\"][^>]\/><\/a>/', function($matches) use ($baseUrl) {
             $url = "${baseUrl}/$matches[2]";
             $this->banner[] = array(
                 "url"=>$url,
@@ -131,7 +130,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         }, $blocks['home_top_banner']);
 
         //replace img
-        $blocks = preg_replace_callback('/<img src=[\'\"](.*?)[\'\"]>/', function($matches) use ($baseUrl, $container) {
+        $blocks = preg_replace_callback('/<img src=[\'\"](.*?)[\'\"]>/', function($matches) use ($baseUrl) {
             $url = "${baseUrl}/$matches[1]";
             $this->banner[] = array(
                 "url"=>$url,
