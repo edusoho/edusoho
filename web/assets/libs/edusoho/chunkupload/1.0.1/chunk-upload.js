@@ -83,7 +83,7 @@ define(function(require, exports, module) {
 	        _reader.onerror = function(evt) {
 	            alert("Error: " + evt.target.error.code);
 	        };
-	        _reader.readAsText(keyChunk);
+	        _reader.readAsBinaryString(keyChunk);
 			
 		},
 		getChunkSize: function(offset, blkSize) {
@@ -389,7 +389,7 @@ define(function(require, exports, module) {
 	        _reader.onerror = function(evt) {
 	            alert("Error: " + evt.target.error.code);
 	        };
-	        _reader.readAsText(chunk);
+	        _reader.readAsBinaryString(chunk);
 	    },
 		startUpload: function(fileIndex){
 			this.set("currentFileIndex",fileIndex);
