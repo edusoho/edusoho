@@ -25,9 +25,19 @@ class ClassController extends ClassBaseController
 
     public function userInfoAction($class, $userId)
     {   
+        $user = $this->getCurrentUser();
+        if($user->isAdmin()) {
+            return $this->forward('TopxiaWebBundle:Class:admin', array('class' => $class, 'userId' => $userId));
+        }
         $member = $this ->getClassesService()->getMemberByUserIdAndClassId($userId, $class['id']);
         $role = strstr($member['role'],'TEACHER') ? 'teacher' : strtolower($member['role']); 
         return $this->forward('TopxiaWebBundle:Class:' . $role, array('class' => $class, 'userId' => $userId));
+    }
+
+    public function adminAction($class, $userId)
+    {
+        return $this->render('TopxiaWebBundle:Class:admin-block.html.twig',array(
+            'class' => $class)); 
     }
 
     public function teacherAction($class, $userId)
