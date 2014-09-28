@@ -8,7 +8,7 @@
     {% if uploadFile.storage == 'cloud' %}
       <span class="glyphicon glyphicon-cloud text-muted" title="云文件"></span>
     {% endif %}
-    {% if uploadFile.type == "video" %}
+    {% if uploadFile.type == "video" and uploadFile.convertParams.videoQuality|default(null) %}
       {% if uploadFile.convertParams.videoQuality == "low" %}
       <span class="label label-info pull-right">流畅</span>
       {% elseif uploadFile.convertParams.videoQuality == "normal" %}
