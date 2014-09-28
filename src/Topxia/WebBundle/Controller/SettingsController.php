@@ -46,9 +46,12 @@ class SettingsController extends BaseController
 			$profile['idcard'] = "";
 		}
 
+		$fromCourse = $request->query->get('fromCourse');
+		
 		return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
 			'profile' => $profile,
 			'fields'=>$fields,
+			'fromCourse' => $fromCourse
 		));
 	}
 
