@@ -62,15 +62,15 @@ define(function(require, exports, module) {
 
         window._bd_share_config={
                 "common":{
-                       "bdSnsKey":{},
-                       "bdText":bdText,
-                       "bdDesc":"  ",
-                       "bdMini":1,
-                       "bdComment":" ",
-                       "bdMiniList":false,
-                       "bdPic":"",
-                       "bdStyle":"0",
-                       "bdSign":"normal"
+                        "bdSnsKey":{},
+                        "bdText":bdText,
+                        "bdDesc":"  ",
+                        "bdMini":1,
+                        "bdComment":" ",
+                        "bdMiniList" :  ['douban','tieba','tqq','tqf','sqq','mail','baidu','taobao'],
+                        "bdPic":"",
+                        "bdStyle":"0",
+                        "bdSign":"normal"
                         },
                 "share":{
                         "bdSize":24
