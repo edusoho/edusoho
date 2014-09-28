@@ -92,7 +92,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         $result = array(
             "start"=>$start,
             "limit"=>$limit,
-            "total"=>$total
+            "total"=>$total,
             "data"=>$this->controller->filterCourses($courses));
 
         return $result;
