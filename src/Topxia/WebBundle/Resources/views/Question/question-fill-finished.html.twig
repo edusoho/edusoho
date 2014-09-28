@@ -33,14 +33,14 @@
           {% for index,rightAnswer in question.answer %}
 
             <li>
-              填空({{index+1}})： 正确答案 <strong class="homework-text-success">{{ rightAnswer|join(' 或 ') }}</strong> 你的答案是 
+              填空({{index+1}})： 正确答案 <strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong> 你的答案是 
 
-              <strong class="homework-text-danger">{{ fileItemResultAnswer[index] }}</strong>。
+              <strong class="question-text-danger">{{ fileItemResultAnswer[index] }}</strong>。
 
               {% if itemResult.status == 'right' %}
-                  <span class="glyphicon glyphicon-ok homework-text-success">
+                  <span class="glyphicon glyphicon-ok question-text-success">
               {% else %}
-                  <span class="glyphicon glyphicon-remove homework-text-danger">\
+                  <span class="glyphicon glyphicon-remove question-text-danger">
               {% endif %}
             </li>
 

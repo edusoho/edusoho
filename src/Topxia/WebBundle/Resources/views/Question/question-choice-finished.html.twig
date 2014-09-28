@@ -13,13 +13,13 @@
   <div class="homework-question-result">
 
     {% if itemResult.status == 'right' %}
-     <span class="glyphicon glyphicon-ok homework-text-success"></span> 你答对了!
+     <span class="glyphicon glyphicon-ok question-text-success"></span> 你答对了!
     {% elseif itemResult.status == 'wrong' %}
-       <span class="glyphicon glyphicon-remove homework-text-danger"></span> 你答错了,你选择了<strong class="homework-text-danger">{{ choiceIndex }}</strong>
+       <span class="glyphicon glyphicon-remove question-text-danger"></span> 你答错了,你选择了<strong class="question-text-danger">{{ choiceIndex }}</strong>
   {% elseif itemResult.status == 'partRight' %}
-       <span class="glyphicon glyphicon-remove homework-text-danger"></span> 你部分答对,你选择了<strong class="homework-text-danger">{{ choiceIndex }}</strong>
+       <span class="glyphicon glyphicon-remove question-text-danger"></span> 你部分答对,你选择了<strong class="question-text-danger">{{ choiceIndex }}</strong>
     {% elseif itemResult.status == 'noAnswer' %}
-　　　  <span class="glyphicon glyphicon-remove homework-text-danger"></span>你未答题，你选择了<strong class="homework-text-danger" >{{ choiceIndex }}</strong>
+　　　  <span class="glyphicon glyphicon-remove question-text-danger"></span>你未答题，你选择了<strong class="question-text-danger" >{{ choiceIndex }}</strong>
     {% endif %}
 </div>
 {#   <div class="question-choices-inputs">

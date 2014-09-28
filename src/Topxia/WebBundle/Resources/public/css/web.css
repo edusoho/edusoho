@@ -3550,6 +3550,18 @@ body {
 	font-size: 100%;
 }
 
+.homework-student-answer .question-eassy-rightanswer{
+	margin-bottom: 5px
+}
+
+#teacher-say{
+	width: 450px
+}
+
+.teacher-say-text{
+	margin-bottom: 5px
+}
+
 .testpaper-status .label {
 	padding: 5px 25px;
 	border-radius: 3px;
@@ -3734,11 +3746,11 @@ body {
 	color: #3c763d;
 }
 
-.homework-text-success {
+.question-text-success {
 	color: #0B900D;
 }
 
-.homework-text-danger {
+.question-text-danger {
 	color: #EA1D19;
 }
 

@@ -6,21 +6,21 @@
 
 {% block body %}
 
-<div style="margin-bottom:18px">
-	<div style="margin-bottom:5px">学员回答:</div>
-	<strong class="">{{ itemResult.answer }}</strong>
+<div style="margin-bottom:35px">
+	<div class="question-eassy-answer">学员回答:</div>
+	<strong>{{ itemResult.answer|raw }}</strong>
 
 </div>
-<div>
+<div style="margin-bottom:18px">
  {% for rightAnswer in question.answer %}
-	   <div style="margin-bottom:5px">正确答案</div> <strong class="homework-text-success">{{ rightAnswer|join(' 或 ') }}</strong>
+	   <div class="question-eassy-rightanswer">正确答案</div> <strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong>
 	{% endfor %}
 
 </div>
 
-<div>
-	评语:
-	<textarea></textarea>
+<div  style="margin-bottom:18px">
+	<div class="teacher-say-text">评语:</div>
+	<textarea rows="5" id="teacher-say"></textarea>
 </div>
 {% endblock %}
 
