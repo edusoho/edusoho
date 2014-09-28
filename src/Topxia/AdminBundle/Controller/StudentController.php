@@ -10,6 +10,7 @@ class StudentController extends BaseController
     public function indexAction (Request $request)
     {
         $fields = $request->query->all();
+
         $conditions = array(
             'role'=>'ROLE_USER',
             'truename'=>'',
@@ -17,7 +18,7 @@ class StudentController extends BaseController
         );
         $classStudents=array();
         $classes=array();
-        if(!empty($fields)){
+        if(isset($fields['truename'])){
             $conditions['truename']=$fields['search_truename'];
             $conditions['number']=$fields['search_number'];
             if(!empty($fields['class_id'])){

@@ -14,7 +14,7 @@ class ParentController extends BaseController
             'roles'=>'ROLE_PARENT'
         );
 
-        if(!empty($fields)){
+        if(isset($fields['keywordType'])){
             $conditions=$this->getConditionsByFields($conditions,$fields);
         }
         $paginator = new Paginator(
