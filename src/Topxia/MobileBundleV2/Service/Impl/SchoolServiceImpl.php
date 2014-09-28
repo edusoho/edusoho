@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SchoolServiceImpl extends BaseService implements SchoolService {
 
-    private $banner;
+    public $banner;
 
     public function sendSuggestion()
     {
