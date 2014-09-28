@@ -118,10 +118,11 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
             return $banner;
         }
 
+        $content = $this;
         //replace <a><img></a>
-        $blocks = preg_replace_callback('/<a href=[\'\"](.*?)[\'\"]><img src=[\'\"](.*?)[\'\"][^>]\/><\/a>/', function($matches) use ($baseUrl) {
+        $blocks = preg_replace_callback('/<a href=[\'\"](.*?)[\'\"]><img src=[\'\"](.*?)[\'\"][^>]\/><\/a>/', function($matches) use ($baseUrl, $content) {
             $url = "${baseUrl}/$matches[2]";
-            $this->banner[] = array(
+            $content->banner[] = array(
                 "url"=>$url,
                 "action"=>"webview",
                 "params"=>$matches[1]
@@ -130,9 +131,9 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         }, $blocks['home_top_banner']);
 
         //replace img
-        $blocks = preg_replace_callback('/<img src=[\'\"](.*?)[\'\"]>/', function($matches) use ($baseUrl) {
+        $blocks = preg_replace_callback('/<img src=[\'\"](.*?)[\'\"]>/', function($matches) use ($baseUrl, $content) {
             $url = "${baseUrl}/$matches[1]";
-            $this->banner[] = array(
+            $content->banner[] = array(
                 "url"=>$url,
                 "action"=>"none",
                 "params"=>''
