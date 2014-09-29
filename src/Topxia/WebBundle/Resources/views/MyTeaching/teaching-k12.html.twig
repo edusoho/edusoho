@@ -8,7 +8,7 @@
 <div class="panel panel-default panel-col lesson-manage-panel class-table">
 
   <div class="panel-body">
-    <h5>正在教学（{{courseCount}}）</h5>
+    <h5>正在教学（{{courseCount|default(0)}}）</h5>
     <hr>
     <div class="row">
       {% set count =0 %}
@@ -48,7 +48,7 @@
   </div>
 
   <div class="panel-body">
-    <h5>等待解答（{{threadCount}}）</h5>
+    <h5>等待解答（{{threadCount|default(0)}}）</h5>
     <hr>
     <div class="row">
       {% for thread in threads %}
@@ -68,7 +68,7 @@
   </div>
 
   <div class="panel-body">
-    <h5>等待批阅（{{testpaperCount}}）</h5>
+    <h5>等待批阅（{{testpaperCount|default(0)}}）</h5>
     <hr>
     <div class="row">
       {% for paperResult in paperResults %}

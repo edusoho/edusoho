@@ -54,14 +54,21 @@ class MyTeachingController extends BaseController
 
         $manageClasses = $this->getClassesService()->getClassesByHeadTeacherId($user['id']);
 
-        $conditions = array(
-            'courseIds' => ArrayToolkit::column($courses, 'id'),
-            'type' => 'question'
-        );
-        $threadCount= $this->getThreadService()->searchThreadCountInCourseIds($conditions);
-        $threads = $this->getThreadService()->searchThreadInCourseIds($conditions,'createdNotStick',0,6);
-        $threadUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
-        
+        $courseIds=ArrayToolkit::column($courses, 'id');
+        if(empty($courseIds)){
+            $threadCount=0;
+            $threads=array();
+            $threadUsers=array();
+        }else{
+            $conditions = array(
+                'courseIds' => $courseIds,
+                'type' => 'question'
+            );
+            $threadCount= $this->getThreadService()->searchThreadCountInCourseIds($conditions);
+            $threads = $this->getThreadService()->searchThreadInCourseIds($conditions,'createdNotStick',0,6);
+            $threadUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
+        }
+
         $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($user['id']);
         $testpaperIds = ArrayToolkit::column($teacherTests, 'id');
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
