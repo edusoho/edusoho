@@ -3,7 +3,7 @@
  {{ render(controller('TopxiaWebBundle:ClassSchedule:courses', {class:class})) }}
  {% endblock %}
 {% block class_main %}
-<div class="schedule">
+<div class="schedule" data-url="{{ path('class_schedule_save', {classId:class.id}) }}">
   <div class="schedule-header row tal">
     <div class="view-type col-md-3">
       <select>

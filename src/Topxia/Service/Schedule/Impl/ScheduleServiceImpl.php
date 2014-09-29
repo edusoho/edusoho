@@ -13,6 +13,29 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
         return $this->getScheduleDao()->addSchedule($schedule);
     }
 
+    public function saveSchedules($schedules) 
+    {
+        if(empty($schedules)) {
+            return;
+        }
+        $this->getScheduleDao()->getConnection()->beginTransaction();
+        try{
+            $this->deleteOneDaySchedules($schedules[0]['classId'], $schedules[0]['date']);
+            foreach ($schedules as $schedule) {
+                $this->addSchedule($schedule);
+            }
+            $this->getScheduleDao()->getConnection()->commit();
+        }catch(\Exception $e){
+            $this->getScheduleDao()->getConnection()->rollback();
+            throw $e;
+        }
+    }
+
+    public function deleteOneDaySchedules($classId, $day)
+    {
+        return $this->getScheduleDao()->deleteOneDaySchedules($classId, $day);
+    }
+
     public function findScheduleLessonsByWeek($classId, $sunday)
     {
         $week = date('w');
@@ -37,7 +60,7 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
         $lessonIds = ArrayToolkit::column($schedules?:array(), 'lessonId');
         $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
         $lessons = ArrayToolkit::index($lessons, 'id');
-        $courseIds =  ArrayToolkit::column($schedules?:array(), 'courseId');
+        $courseIds =  ArrayToolkit::column($lessons?:array(), 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::index($courses, 'id');
         $scheduleGroup = ArrayToolkit::group($schedules?:array(), 'date');

@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\WebBundle\Controller;
+
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
@@ -48,10 +50,28 @@ class ClassScheduleController extends ClassBaseController
             $results = $this->getScheduleService()->findScheduleLessonsByMonth($classId, $yearMonth);            
         }
         return $this->render("TopxiaWebBundle:ClassSchedule:tr-{$previewAs}.html.twig", array(
-            'results' => $results,
+            'courses' => $results['courses'],
+            'lessons' => $results['lessons'],
+            'schedules' => $results['schedules'],
             ));
     }
 
+    public function saveAction(Request $request, $classId)
+    {
+        $lessons = $request->request->all();
+        $lessonIds = explode(',', $lessons['ids']);
+        $schedules = array();
+        foreach ($lessonIds as $index => $id) {
+            $schedule['classId'] = $classId;
+            $schedule['lessonId'] = $id;
+            $schedule['sequence'] = $index + 1;
+            $schedule['date'] = $lessons['day'];
+            $schedule['createdTime'] = time();
+            $schedules[] = $schedule;    
+        }
+        $this->getScheduleService()->saveSchedules($schedules);
+        return new Response("success");
+    }
     private function getScheduleService()
     {
         return $this->getServiceKernel()->createService('Schedule.ScheduleService');

@@ -1,0 +1,18 @@
+<tr class="day">
+  {% for day,items in schedules %}
+    <td>{{ day|slice(6,2) }}</td>
+  {% endfor %}
+</tr>
+<tr class="lesson">
+  {% for day,items in schedules %}
+    <td>
+      <ul class="lesson-ul" data-day="{{ day }}">
+        {% if items %}
+          {% for item in items %}
+            <li data-id="{{ item.lessonId }}"><img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ><br>{{ lessons[item.lessonId].title}}</li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </td>
+  {% endfor %}
+</tr>

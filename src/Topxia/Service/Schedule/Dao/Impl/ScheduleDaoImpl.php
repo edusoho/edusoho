@@ -18,6 +18,12 @@ class ScheduleDaoImpl extends BaseDao implements ScheduleDao
         return $this->getSchedule($this->getConnection()->lastInsertId());
 	}
 
+	public function deleteOneDaySchedules($classId, $day)
+	{
+		$sql = "DELETE FROM {$this->table} WHERE classId = ? AND date = ?";
+		return $this->getConnection()->executeUpdate($sql, array($classId, $day));
+	}
+
 	public function getSchedule($id)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";

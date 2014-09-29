@@ -100,6 +100,11 @@ class_schedule:
     pattern:  /class/{classId}/schedule
     defaults: { _controller: TopxiaWebBundle:ClassSchedule:show }
 
+class_schedule_save:
+    pattern:  /class/{classId}/schedule/save
+    defaults: { _controller: TopxiaWebBundle:ClassSchedule:save }
+
 class_course_items:
     pattern:  /class/course/{courseId}/items
     defaults: { _controller: TopxiaWebBundle:ClassSchedule:getItems }
+
