@@ -59,8 +59,45 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	                            'items'=>$this->getTestpaperItem($testId)
 	                            );
 	        	} else {
-	            	return "result";
+	            	return $this->createErrorResponse('error', '试卷正在批阅！不能重新考试!');
 	        	}
+	}
+
+	public function getTestpaperResult()
+	{
+	        $id = $this->getParam("id");
+	        $user = $this->controller->getUserByToken($this->request);
+	        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
+	        if (!$testpaperResult) {
+	            return $this->createErrorResponse('error', '不可以访问其他学生的试卷哦!');
+	        }
+	        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+
+	        $targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+	       
+	        if ($testpaperResult['userId'] != $user['id']){
+	            $course = $this->controller->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
+	        }
+
+	        if (empty($course) and $testpaperResult['userId'] != $user['id']){
+	                        return $this->createErrorResponse('error', '不可以访问其他学生的试卷哦!');
+	        }
+
+	        $result = $this->getTestpaperService()->showTestpaper($id, true);
+	        $items = $result['formatItems'];
+	        $accuracy = $result['accuracy'];
+
+	        //$total = $this->makeTestpaperTotal($testpaper, $items);
+
+	        //$favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
+
+	        $student = $this->controller->getUserService()->getUser($testpaperResult['userId']);
+
+	        return array(
+	        	"items"=>$items,
+	        	"accuracy"=>$accuracy,
+	        	"student"=>$student
+	        	);
 	}
 
 	private function getTestpaperItem($testId)
@@ -73,7 +110,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
 	private function coverTestpaperItems($items)
 	{
-		return $items;
 		return array_map(function($item){
 			$item = array_map(function($itemValue){
 				$question = $itemValue['question'];
