@@ -95,3 +95,7 @@ class_notes_cancle_like:
 class_members:
     pattern:  /class/{classId}/member
     defaults: { _controller: TopxiaWebBundle:ClassMember:list }
+
+parent_child_status:
+    pattern:  /parent/child/status
+    defaults: { _controller: TopxiaWebBundle:Parent:childStatus }

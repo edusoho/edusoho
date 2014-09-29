@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\LockedException;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
+use Topxia\Common\SimpleValidator;
 
 class UserProvider implements UserProviderInterface {
 
@@ -19,10 +20,11 @@ class UserProvider implements UserProviderInterface {
     public function loadUserByUsername ($username) {
         if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
             $user = $this->getUserService()->getUserByEmail($username);
-        } else {
+        } else if(SimpleValidator::mobile($username)){
+            $user = $this->getUserService()->getUserByMobile($username);
+        }else{
             $user = $this->getUserService()->getUserByNumber($username);
         }
-
         if (empty($user)) {
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         }
