@@ -1,5 +1,5 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-
+{% set quality = "" %}
 <tr id="upload-file-tr-{{uploadFile.id}}" data-role="item" data-convertHash="{{uploadFile.convertHash}}">
 
   <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
@@ -9,13 +9,19 @@
       <span class="glyphicon glyphicon-cloud text-muted" title="云文件"></span>
     {% endif %}
     {% if uploadFile.type == "video" and uploadFile.metas2|default(null) %}
-
+      {% if uploadFile.convertParams.videoQuality == "low" %}
+      {% set quality = "流畅画质" %}
+      {% elseif uploadFile.convertParams.videoQuality == "normal" %}
+      {% set quality = "标准画质" %}
+      {% elseif uploadFile.convertParams.videoQuality == "high" %}
+      {% set quality = "精细画质" %}
+      {% endif %}
       {% if uploadFile.metas2.shd|default(null) %}
-      <span class="label label-info pull-right">超清</span>
+      <span class="label label-info pull-right tip" data-toggle="tooltip" title="{{quality}}">超清</span>
       {% elseif uploadFile.metas2.hd|default(null) %}
-      <span class="label label-info pull-right">高清</span>
+      <span class="label label-info pull-right tip" data-toggle="tooltip" title="{{quality}}">高清</span>
       {% elseif uploadFile.metas2.sd|default(null) %}
-      <span class="label label-info pull-right">标清</span>
+      <span class="label label-info pull-right tip" data-toggle="tooltip" title="{{quality}}">标清</span>
       {% endif %}
       
     {% endif %}
