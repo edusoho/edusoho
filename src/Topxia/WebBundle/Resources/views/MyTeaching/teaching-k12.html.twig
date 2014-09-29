@@ -2,7 +2,7 @@
 
 {% block title %}我的教学 - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'my-teaching-courses' %}
+{% set side_nav = 'my-teaching' %}
 
 {% block main %}
 <div class="panel panel-default panel-col lesson-manage-panel class-table">
@@ -28,7 +28,7 @@
     </div>
     {% if courseCount>0 %}
       <div class="row">
-        <a class="col-md-1 col-md-offset-11 text-rigth" href="#">更多</a>
+        <a class="col-md-1 col-md-offset-11 text-rigth" href="{{path('my_teaching_courses') }}">更多</a>
       </div>
     {% endif %}
   </div>

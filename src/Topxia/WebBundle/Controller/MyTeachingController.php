@@ -38,7 +38,7 @@ class MyTeachingController extends BaseController
         ));
     }
 
-    public function coursesK12Action(Request $request)
+    public function teachingAction(Request $request)
     {
         $user = $this->getCurrentUser();
 
@@ -62,8 +62,6 @@ class MyTeachingController extends BaseController
         $threads = $this->getThreadService()->searchThreadInCourseIds($conditions,'createdNotStick',0,6);
         $threadUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
         
-
-
         $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($user['id']);
         $testpaperIds = ArrayToolkit::column($teacherTests, 'id');
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
@@ -83,6 +81,27 @@ class MyTeachingController extends BaseController
             'testpapers'=>$testpapers,
             'testpaperCount'=>$testpaperCount,
             'testpaperUsers'=>$testpaperUsers
+        ));
+    }
+
+    public function teachingCoursesAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
+        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
+        $courseCount=count($courses);
+        $courses =ArrayToolkit::group($courses,'classId');
+        
+        $classes = $this->getClassesService()->findClassesByIds(array_keys($courses));
+
+        return $this->render('TopxiaWebBundle:MyTeaching:teaching-courses.html.twig',array(
+            'courses'=>$courses,
+            'classes'=>$classes,
+            'courseCount'=>$courseCount
         ));
     }
 

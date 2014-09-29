@@ -1,0 +1,49 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}我的教学 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-courses' %}
+
+{% block main %}
+	<div class="panel-body">
+    <h5>在教课程（{{courseCount}}）</h5>
+		<table class="table table-condensed class-table">
+			{% for class in classes %}
+				<tr>
+					<td width="20%">
+						<a href="{{ path('class_show',{ classId: class.id })}}" class="btn-link pull-left">{{ class_name(class) }}</a>
+		 			</td>
+		 			
+		 			<td width="60%">
+		 				<ul class="media-list">
+						  {% for course in courses[class.id] %}
+							  <li class="media">
+							    <a class="pull-left" href="{{ path('course_show',{id:course.id}) }}">
+							      <img class="media-object" href="{{ path('course_show',{id:course.id}) }}"><img  width="203" height="114" alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}">
+							    </a>
+							    <div class="media-body">
+							      <a href="{{ path('course_show',{id:course.id}) }}"><h5>{{ course.title }}</h5></a>
+							      <div style="margin-top:60px">
+							      	课时：{{course.lessonNum}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							      	学生：<a data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看学员的学习进度, 还可以发私信进行联系!" data-placement="bottom" href="#modal">{{course.studentNum}}</a>
+							      </div>
+							    </div>
+							  </li>
+			        {% endfor %}
+						</ul>
+		 			</td>
+				</tr>
+			{% else %}
+				<div class="empty">尚无在教课程</div>
+			{% endfor %}
+		</table>
+	</div>
+{% endblock %}
+
+
+
+
+
+
+
+
