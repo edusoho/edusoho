@@ -95,3 +95,11 @@ class_notes_cancle_like:
 class_members:
     pattern:  /class/{classId}/member
     defaults: { _controller: TopxiaWebBundle:ClassMember:list }
+
+class_schedule:
+    pattern:  /class/{classId}/schedule
+    defaults: { _controller: TopxiaWebBundle:ClassSchedule:show }
+
+class_course_items:
+    pattern:  /class/course/{courseId}/items
+    defaults: { _controller: TopxiaWebBundle:ClassSchedule:getItems }

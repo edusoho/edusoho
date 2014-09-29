@@ -23,4 +23,10 @@ class ScheduleDaoImpl extends BaseDao implements ScheduleDao
 		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
+
+	public function findScheduleByPeriod($classId, $startDay, $endDay)
+	{
+		$sql = "SELECT * FROM {$this->table} WHERE classId = ? AND date >= ? AND date <= ?";
+		return $this->getConnection()->fetchAll($sql, array($classId, $startDay, $endDay)) ? : null;
+	}
 }

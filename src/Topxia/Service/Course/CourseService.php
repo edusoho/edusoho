@@ -314,4 +314,5 @@ interface CourseService
 	public function classHasCourse($classId, $parentId);
 
 	public function findCoursesByClassId($classId);
+
 }

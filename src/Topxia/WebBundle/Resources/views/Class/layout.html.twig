@@ -20,19 +20,15 @@
     </div>
 
     <div class="col-md-4">
-
+      {% block right_side %}
           {% block user_info %}
             {{ render(controller('TopxiaWebBundle:Class:userInfo', {class:class, userId:app.user.id})) }}
           {% endblock %}
 
           {% block class_side %}
             {{ render(controller('TopxiaWebBundle:Class:statusBlock', {class:class})) }}
-
-
-
-
-
           {% endblock %}
+      {% endblock %}  
     </div>
   </div>
 

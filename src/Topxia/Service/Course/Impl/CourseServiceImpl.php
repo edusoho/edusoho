@@ -33,6 +33,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		return $this->getCourseDao()->findCoursesByClassId($classId);
 	}
+
 	public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
 	{
 		$courses = CourseSerialize::unserializes(

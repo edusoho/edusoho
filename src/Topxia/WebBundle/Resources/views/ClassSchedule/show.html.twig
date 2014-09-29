@@ -1,0 +1,43 @@
+{% extends 'TopxiaWebBundle:Class:layout.html.twig' %}
+ {% block right_side %}
+ {{ render(controller('TopxiaWebBundle:ClassSchedule:courses', {class:class})) }}
+ {% endblock %}
+{% block class_main %}
+<div class="schedule">
+  <div class="schedule-header row tal">
+    <div class="view-type col-md-3">
+      <select>
+        <option>按周查看</option>
+        <option>按月查看</option>
+      </select> 
+    </div>
+    <div class="month  col-md-6 tac">
+      <span class="glyphicon glyphicon-chevron-left text-success"></span>
+      <span> {{ "now" | date(' Y 年 m 月')}}</span>
+      <span class="glyphicon glyphicon-chevron-right text-success"></span>
+    </div>
+    <div class="operation  col-md-3 tar">
+      <button class="btn btn-default btn-xs">编辑</button>
+      <button class="btn btn-default btn-xs">只看我的</button>
+    </div>
+  </div>
+
+
+  <div class="week row ptm">
+    <span class="glyphicon glyphicon-chevron-left text-success col-md-1 tac mtm"></span>
+    <table class="col-md-10 tac">
+      <thead>
+        <tr class="">
+          <td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td>
+        </tr>
+
+      </thead>
+      <tbody>
+        {{ render(controller('TopxiaWebBundle:ClassSchedule:schedule', {classId:class.id})) }}
+      </tbody>
+    </table>
+    <span class="glyphicon glyphicon-chevron-right text-success col-md-1 tac mtm"></span>
+  </div>
+</div>
+
+{% endblock %}
