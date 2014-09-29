@@ -25,7 +25,7 @@
 							      <a href="{{ path('course_show',{id:course.id}) }}"><h5>{{ course.title }}</h5></a>
 							      <div style="margin-top:60px">
 							      	课时：{{course.lessonNum}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							      	学生：<a data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看学员的学习进度, 还可以发私信进行联系!" data-placement="bottom" href="#modal">{{course.studentNum}}</a>
+							      	学生：<a data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" href="#modal">{{course.studentNum}}</a>
 							      </div>
 							    </div>
 							  </li>

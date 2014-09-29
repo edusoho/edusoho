@@ -208,12 +208,7 @@ class NoteServiceImpl extends BaseService implements NoteService
 
     public function findNoteLikesByNoteIds(array $noteIds)
     {
-        $noteLikes=array();
-        foreach ($noteIds as $noteId) {
-            $noteLikeArray=$this->getNoteLikeDao()->findNoteLikesByNoteId($noteId);
-            $noteLikes[$noteId]=$noteLikeArray;
-        }
-        return $noteLikes;
+        return $this->getNoteLikeDao()->findNoteLikesByNoteIds($noteIds);
     }
 
     // @todo HTML Purifier

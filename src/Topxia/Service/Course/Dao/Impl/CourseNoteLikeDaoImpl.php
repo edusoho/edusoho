@@ -47,4 +47,12 @@ class CourseNoteLikeDaoImpl extends BaseDao implements CourseNoteLikeDao
         return $this->getConnection()->fetchAll($sql, array($noteId));
 	}
 
+	public function findNoteLikesByNoteIds(array $noteIds)
+	{
+		if(empty($noteIds)){ return array(); }
+        $marks = str_repeat('?,', count($noteIds) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE noteId IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $noteIds);
+	}
+
 }
