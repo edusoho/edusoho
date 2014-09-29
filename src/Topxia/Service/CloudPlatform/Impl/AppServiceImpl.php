@@ -392,7 +392,7 @@ class AppServiceImpl extends BaseService implements AppService
         return $result['errors'];
     }
 
-    public function beginPackageUpdate($packageId)
+    public function beginPackageUpdate($packageId, $type)
     {
         $errors = array();
         $package = $packageDir = null;
@@ -424,7 +424,7 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         try {
-            $this->_execScriptForPackageUpdate($package, $packageDir);
+            $this->_execScriptForPackageUpdate($package, $packageDir, $type);
         } catch (\Exception $e) {
             $errors[] = "执行升级/安装脚本时发生了错误：{$e->getMessage()}";
             $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
@@ -493,7 +493,7 @@ class AppServiceImpl extends BaseService implements AppService
         ));
     }
 
-    private function _execScriptForPackageUpdate($package, $packageDir)
+    private function _execScriptForPackageUpdate($package, $packageDir, $type)
     {
         if (!file_exists($packageDir . '/Upgrade.php')) {
             return ;
@@ -501,6 +501,11 @@ class AppServiceImpl extends BaseService implements AppService
 
         include_once($packageDir . '/Upgrade.php');
         $upgrade = new \EduSohoUpgrade($this->getKernel());
+
+        if (method_exists($upgrade, 'setUpgradeType')) {
+            $upgrade->setUpgradeType($type, $package['toVersion']);
+        }
+
         if(method_exists($upgrade, 'update')){
             $upgrade->update();
         }

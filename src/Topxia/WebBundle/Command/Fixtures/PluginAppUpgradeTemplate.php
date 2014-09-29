@@ -18,7 +18,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
     public function update()
     {
-        if (empty($upgradeType)) {
+        if (empty($this->upgradeType)) {
             throw new \RuntimeException("Upgrade type is empty.");
         }
 
@@ -40,7 +40,7 @@ use Symfony\Component\Filesystem\Filesystem;
         $scriptFilePath = __DIR__ . '/Scripts/InstallScript.php';
         if (file_exists($scriptFilePath)) {
             include $scriptFilePath;
-            $updater = new \InstallScript($this->getKernel());
+            $updater = new \InstallScript($this->kernel);
             $updater->execute();
         }
 
@@ -53,7 +53,7 @@ use Symfony\Component\Filesystem\Filesystem;
         if (file_exists($scriptFilePath)) {
             include $scriptFilePath;
             $className = "\\{$className}";
-            $updater = new $className($this->getKernel(), $this->upgradeVersion);
+            $updater = new $className($this->kernel, $this->upgradeVersion);
             $updater->execute();
         }
 

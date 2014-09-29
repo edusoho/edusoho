@@ -34,9 +34,9 @@ class BuildPluginAppCommand extends BaseCommand
     private function _buildDistPackage($name)
     {
         $pluginDir = $this->getPluginDirectory($name);
-        $version = $this->getPluginVersion($name);
+        $version = $this->getPluginVersion($name, $pluginDir);
 
-        $distDir = $this->_makeDistDirectory($name);
+        $distDir = $this->_makeDistDirectory($name, $version);
         $sourceDistDir = $this->_copySource($name, $pluginDir, $distDir);
         $this->_copyScript($pluginDir, $distDir);
         $this->_cleanGit($sourceDistDir);
@@ -101,10 +101,8 @@ class BuildPluginAppCommand extends BaseCommand
         $this->output->writeln("<question>    * ZIP包大小：" . intval(filesize($zipPath)/1024) . ' Kb');
     }
 
-    private function _makeDistDirectory($name)
+    private function _makeDistDirectory($name, $version)
     {
-        $version = $this->getPluginVersion($name);
-
         $distDir = dirname("{$this->getContainer()->getParameter('kernel.root_dir')}") . "/build/{$name}-{$version}";
 
         if ($this->filesystem->exists($distDir)) {
@@ -117,11 +115,17 @@ class BuildPluginAppCommand extends BaseCommand
         return realpath($distDir);
     }
 
-    private function getPluginVersion($name)
+    private function getPluginVersion($name, $pluginDir)
     {
-        $metaClass = "\\{$name}\PluginSystem";
-        $metaObject = new $metaClass();
-        return $metaObject::VERSION;
+         $content = file_get_contents($pluginDir . '/PluginSystem.php');
+
+         $matched = preg_match('/VERSION\s*=\s*[\'\"](.*?)[\'\"]/', $content, $matches);
+
+         if (!$matched) {
+            throw new \RuntimeException('获取插件版本号失败！');
+         }
+
+         return $matches[1];
     }
 
     private function getPluginDirectory($name)

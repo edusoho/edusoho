@@ -66,7 +66,7 @@ interface AppService
     /**
      * 为安装升级应用，开始升级
      */
-    public function beginPackageUpdate($packageId);
+    public function beginPackageUpdate($packageId, $type);
 
     public function repairProblem($token);
 
