@@ -3,7 +3,7 @@
 	  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
   </div>
 
-	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
+	{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and questionsSetting.answers_show_all == 0) or (questionsSetting.answers_show_all == 1  and paperResult.status|default(null) == 'finished') or (teacherCheckFlag|default(0) == 1) %}
 
 		{% if role|default(null) == 'teacher' %}
 
@@ -102,7 +102,7 @@
 	  </div>
 
 
-	  {% if questionPreview|default(false) %}
+	  {% if (questionPreview|default(false) and questionsSetting.answers_show_all == 0)  or (questionsSetting.answers_show_all == 1  and paperResult.status|default(null) == 'finished') or (teacherCheckFlag|default(0) == 1) %}
 	  <div class="testpaper-preview-answer clearfix mtl mbl">
 	  	<div class="testpaper-question-result">
 		    <div class="testpaper-question-result-suggested">
