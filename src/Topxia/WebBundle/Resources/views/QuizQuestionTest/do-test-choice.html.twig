@@ -24,7 +24,7 @@
 			{% endfor %}
 		</ul>
 	</div>
-	{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and questionsSetting.answers_show_all == 0) or (questionsSetting.answers_show_all == 1  and paperResult.status|default(null) == 'finished') %}
+	{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and questionsSetting.answers_show_all == 0 and questionsSetting.answers_show_enabled == 1) or (questionsSetting.answers_show_all == 1  and paperResult.status|default(null) == 'finished' and questionsSetting.answers_show_enabled == 1 ) %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 				{% if item.question.testResult.status == 'right' %}
