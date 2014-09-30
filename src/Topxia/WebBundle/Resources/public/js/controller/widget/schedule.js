@@ -30,7 +30,10 @@ define(function(require, exports, module) {
         },
         bindSortableEvent: function() {
             var self = this;
-            var group = $("ul.lesson-ul").sortable({
+            $("ul.course-item-list").each(function(){
+                $(this).sortable("enable");
+            });
+            var lessonSort = $("ul.lesson-ul").sortable({
                 group:'schedule-sort',
                 drag:false,
                 onDragStart: function (item, container, _super) {
@@ -48,14 +51,16 @@ define(function(require, exports, module) {
                     self.save(result);
                 }
             });
-            $("ul.course-item-list").sortable({
+            var courseSort = $("ul.course-item-list").sortable({
                 distance:30,
                 group:'schedule-sort',
                 pullPlaceholder:false,
                 drop:false
             });
         },
-        //not work for sortable delegate
+        //not work for sortable delegate,
+        //find reason, beacause object is not only one.
+        //will use this method replace bindSortableEvent in future.
         refreshSortableEvent: function() {
             $("ul.lesson-ul").sortable('refresh');
             $("ul.course-item-list").sortable('refresh');
@@ -139,12 +144,18 @@ define(function(require, exports, module) {
                 $(this).addClass(date).html(day);
             });
 
+            this.disableSort();
             this.ajaxRenderTable(queryDate);
             this.popover();
         },
         save: function(data){
             $.post(this.get('saveUrl'), data, function(){
 
+            });
+        },
+        disableSort: function() {
+            $("ul.course-item-list").each(function(){
+                $(this).sortable("disable");
             });
         },
         ajaxRenderTable: function(queryDate) {
@@ -272,7 +283,7 @@ define(function(require, exports, module) {
         popover: function() {
             $('.schedule tbody').popover({
                 selector: 'td',
-                trigger: 'hiver',
+                trigger: 'hover',
                 placement: 'auto',
                 html: true,
                 delay: 200,
