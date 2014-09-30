@@ -42,7 +42,7 @@ class ClassScheduleController extends ClassBaseController
     public function scheduleAction(Request $request, $classId)
     {
         $previewAs = $request->query->get('previewAs') ? : 'week';
-        $sunDay = $request->query->get('sunDay');
+        $sunDay = $request->query->get('sunday');
         $yearMonth = $request->query->get('yearMonth');
         if($previewAs == 'week') {
             $results = $this->getScheduleService()->findScheduleLessonsByWeek($classId, $sunDay);
@@ -52,6 +52,7 @@ class ClassScheduleController extends ClassBaseController
         return $this->render("TopxiaWebBundle:ClassSchedule:tr-{$previewAs}.html.twig", array(
             'courses' => $results['courses'],
             'lessons' => $results['lessons'],
+            'changeMonth' => $results['changeMonth'],
             'schedules' => $results['schedules'],
             ));
     }

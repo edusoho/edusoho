@@ -41,7 +41,7 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
         $week = date('w');
         $day = date('Ymd', strtotime('- {$week} days'));
         $sunday = $sunday ? : date('Ymd', strtotime("- {$week} days"));
-        $staturday = date('Ymd', strtotime('+' . (6 - $week) . 'days'));
+        $staturday = date('Ymd', strtotime('+ 6 days', strtotime($sunday)));
         $schedules =  $this->getScheduleDao()->findScheduleByPeriod($classId, $sunday, $staturday);
         
         return $this->makeUpResult($schedules, $sunday);
@@ -73,9 +73,20 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
             $scheduleGroup = $scheduleGroup + $default;
         }
         ksort($scheduleGroup, SORT_NUMERIC);
+        $months = array_keys($scheduleGroup);
+        $i = 1;
+        $changeMonth = true;
+        while ($i <= 6) {
+            if(substr($months[$i-1],4,2) != substr($months[$i],4,2)) {
+                $changeMonth = false;
+                break;
+            }
+            $i++;
+        }
         $result['schedules'] = $scheduleGroup;
         $result['courses'] = $courses;
         $result['lessons'] = $lessons;
+        $result['changeMonth'] = $changeMonth;
         return $result;
     }
 

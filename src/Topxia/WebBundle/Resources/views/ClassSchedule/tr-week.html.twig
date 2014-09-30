@@ -1,8 +1,9 @@
 <tr class="day">
   {% for day,items in schedules %}
-    <td>{{ day|slice(6,2) }}</td>
+    <td data-day="{{ day }}" {% if day|slice(4,2) != 'now'|date('m')%}class="text-muted" {% endif %}>{{ day|slice(6,2) }}</td>
   {% endfor %}
 </tr>
+{% if changeMonth %} <tr class="hidden yearMonth"></tr>{% endif %}
 <tr class="lesson">
   {% for day,items in schedules %}
     <td>

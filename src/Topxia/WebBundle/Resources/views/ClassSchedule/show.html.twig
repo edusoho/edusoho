@@ -1,9 +1,13 @@
 {% extends 'TopxiaWebBundle:Class:layout.html.twig' %}
- {% block right_side %}
- {{ render(controller('TopxiaWebBundle:ClassSchedule:courses', {class:class})) }}
- {% endblock %}
+ 
+{% set classNav = 'schedule' %}
+
+{% block right_side %}
+  {{ render(controller('TopxiaWebBundle:ClassSchedule:courses', {class:class})) }}
+{% endblock %}
+
 {% block class_main %}
-<div class="schedule" data-url="{{ path('class_schedule_save', {classId:class.id}) }}">
+<div class="schedule" data-save="{{ path('class_schedule_save', {classId:class.id}) }}" data-reset="{{ path('class_schedule_reset', {classId:class.id}) }}">
   <div class="schedule-header row tal">
     <div class="view-type col-md-3">
       <select>
@@ -12,9 +16,9 @@
       </select> 
     </div>
     <div class="month  col-md-6 tac">
-      <span class="glyphicon glyphicon-chevron-left text-success"></span>
-      <span> {{ "now" | date(' Y 年 m 月')}}</span>
-      <span class="glyphicon glyphicon-chevron-right text-success"></span>
+      <span class="glyphicon glyphicon-chevron-left text-success previous-month"></span>
+      <span class="yearMonth"> {{ "now" | date(' Y 年 m 月')}}</span>
+      <span class="glyphicon glyphicon-chevron-right text-success next-month"></span>
     </div>
     <div class="operation  col-md-3 tar">
       <button class="btn btn-default btn-xs">编辑</button>
@@ -24,7 +28,7 @@
 
 
   <div class="week row ptm">
-    <span class="glyphicon glyphicon-chevron-left text-success col-md-1 tac mtm"></span>
+    <span class="glyphicon glyphicon-chevron-left text-success col-md-1 tac mtm previous-week"></span>
     <table class="col-md-10 tac">
       <thead>
         <tr class="">
@@ -36,7 +40,7 @@
         {{ render(controller('TopxiaWebBundle:ClassSchedule:schedule', {classId:class.id})) }}
       </tbody>
     </table>
-    <span class="glyphicon glyphicon-chevron-right text-success col-md-1 tac mtm"></span>
+    <span class="glyphicon glyphicon-chevron-right text-success col-md-1 tac mtm next-week"></span>
   </div>
 </div>
 
