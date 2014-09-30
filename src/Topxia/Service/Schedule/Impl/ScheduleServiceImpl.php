@@ -44,18 +44,42 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
         $staturday = date('Ymd', strtotime('+ 6 days', strtotime($sunday)));
         $schedules =  $this->getScheduleDao()->findScheduleByPeriod($classId, $sunday, $staturday);
         
-        return $this->makeUpResult($schedules, $sunday);
+        return $this->makeUpResultForWeek($schedules, $sunday);
     }
 
-    public function findScheduleLessonsByMonth($classId, $yearMonth)
+    public function findScheduleLessonsByMonth($classId, $period)
     {
-        $startDay = $yearMonth . '01';
-        $endDay = $yearMonth . date('t', strtotime($staturday));
+        asort($period,SORT_NUMERIC);
+        $startDay = current($period);
+        $endDay = end($period);
         $schedules = $this->getScheduleDao()->findScheduleByPeriod($classId, $startDay, $endDay);
-        return $this->makeUpResult($schedules);
+        return $this->makeUpResultForMonth($schedules);
     }
 
-    private function makeUpResult($schedules, $sunday)
+    private function makeUpResultForMonth($schedules)
+    {
+        $lessonIds = ArrayToolkit::column($schedules?:array(), 'lessonId');
+        $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
+        $lessons = ArrayToolkit::index($lessons, 'id');
+        $courseIds =  ArrayToolkit::column($lessons?:array(), 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = ArrayToolkit::index($courses, 'id');
+        $teacherIds = ArrayToolkit::column($courses, 'teacherIds');
+        $teacherIds_merged = array();
+        foreach ($teacherIds as $item) {
+            $teacherIds_merged = $teacherIds_merged + $item;
+        }
+        $teachers = $this->getUserSerivce()->findUsersByIds($teacherIds_merged);
+        $scheduleGroup = ArrayToolkit::group($schedules?:array(), 'date');
+     
+        $result['schedules'] = $scheduleGroup;
+        $result['courses'] = $courses;
+        $result['lessons'] = $lessons;
+        $result['teachers'] = $teachers;
+        return $result;
+    }
+
+    private function makeUpResultForWeek($schedules, $sunday)
     {
         $lessonIds = ArrayToolkit::column($schedules?:array(), 'lessonId');
         $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
@@ -98,5 +122,10 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
     private function getCourseService()
     {
         return $this->createService("Course.CourseService");
+    }
+
+    private function getUserSerivce()
+    {
+        return $this->createService('User.UserService');
     }
 }

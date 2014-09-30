@@ -330,6 +330,16 @@
 
 
 /** schedule css */
+.schedule .month tbody td {
+    border: 1px solid #e3e3e3;
+}
+.schedule .month .not-in-month {
+    background-color: rgb(247, 247, 247);
+}
+.schedule .popover-content img {
+    height: 48px;
+    width: 48px;
+}
 .course-list {
 
     margin: 0;

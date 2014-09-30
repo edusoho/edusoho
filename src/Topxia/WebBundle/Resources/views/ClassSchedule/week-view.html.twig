@@ -1,0 +1,33 @@
+<div class="row ptm">
+  <span class="glyphicon glyphicon-chevron-left text-success col-md-1 tac mtm previous-week"></span>
+  <table class="col-md-10 tac week">
+    <thead>
+      <tr class="">
+        <td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td>
+      </tr>
+
+    </thead>
+    <tbody>
+      <tr class="day">
+        {% for day,items in schedules %}
+          <td data-day="{{ day }}" {% if day|slice(4,2) != 'now'|date('m')%}class="text-muted" {% endif %}>{{ day|slice(6,2) }}</td>
+        {% endfor %}
+      </tr>
+      {% if changeMonth %} <tr class="hidden yearMonth"></tr>{% endif %}
+      <tr class="lesson">
+        {% for day,items in schedules %}
+          <td>
+            <ul class="lesson-ul" data-day="{{ day }}">
+              {% if items %}
+                {% for item in items %}
+                  <li data-id="{{ item.lessonId }}"><img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ><br>{{ lessons[item.lessonId].title}}</li>
+                {% endfor %}
+              {% endif %}
+            </ul>
+          </td>
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+  <span class="glyphicon glyphicon-chevron-right text-success col-md-1 tac mtm next-week"></span>
+</div>

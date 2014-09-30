@@ -10,9 +10,9 @@
 <div class="schedule" data-save="{{ path('class_schedule_save', {classId:class.id}) }}" data-reset="{{ path('class_schedule_reset', {classId:class.id}) }}">
   <div class="schedule-header row tal">
     <div class="view-type col-md-3">
-      <select>
-        <option>按周查看</option>
-        <option>按月查看</option>
+      <select class="viewType">
+        <option value="week">按周查看</option>
+        <option value="month">按月查看</option>
       </select> 
     </div>
     <div class="month  col-md-6 tac">
@@ -27,20 +27,8 @@
   </div>
 
 
-  <div class="week row ptm">
-    <span class="glyphicon glyphicon-chevron-left text-success col-md-1 tac mtm previous-week"></span>
-    <table class="col-md-10 tac">
-      <thead>
-        <tr class="">
-          <td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td>
-        </tr>
-
-      </thead>
-      <tbody>
-        {{ render(controller('TopxiaWebBundle:ClassSchedule:schedule', {classId:class.id})) }}
-      </tbody>
-    </table>
-    <span class="glyphicon glyphicon-chevron-right text-success col-md-1 tac mtm next-week"></span>
+ <div class="schedule-body">
+    {{ render(controller('TopxiaWebBundle:ClassSchedule:schedule', {classId:class.id})) }}
   </div>
 </div>
 

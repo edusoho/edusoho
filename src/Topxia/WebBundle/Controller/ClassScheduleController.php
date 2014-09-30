@@ -43,13 +43,21 @@ class ClassScheduleController extends ClassBaseController
     {
         $previewAs = $request->query->get('previewAs') ? : 'week';
         $sunDay = $request->query->get('sunday');
-        $yearMonth = $request->query->get('yearMonth');
+        $period = $request->query->get('date');
         if($previewAs == 'week') {
             $results = $this->getScheduleService()->findScheduleLessonsByWeek($classId, $sunDay);
         } else {
-            $results = $this->getScheduleService()->findScheduleLessonsByMonth($classId, $yearMonth);            
+            $results = $this->getScheduleService()->findScheduleLessonsByMonth($classId, $period);            
+            $courses = $results['courses'];
+            foreach ($courses as $key => $course) {
+                $middlePicture = $this->get('topxia.twig.web_extension')->getFilePath($course['middlePicture'], 'course-large.png', false);
+                $course['middlePicture'] = $middlePicture;
+                $courses[$key] = $course;
+            }
+            $results['courses'] = $courses;
+            return $this->createJsonResponse($results);
         }
-        return $this->render("TopxiaWebBundle:ClassSchedule:tr-{$previewAs}.html.twig", array(
+        return $this->render("TopxiaWebBundle:ClassSchedule:{$previewAs}-view.html.twig", array(
             'courses' => $results['courses'],
             'lessons' => $results['lessons'],
             'changeMonth' => $results['changeMonth'],
