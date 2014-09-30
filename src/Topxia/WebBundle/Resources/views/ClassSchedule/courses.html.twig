@@ -1,19 +1,33 @@
-{{ import_javascript({'lessonSelect':'schedule/lesson'}) }}
 <div class="panel panel-default">
   <div class="panel-heading">
-    课表备选课程
+    班级课程
   </div>
-  <div class="panel-body">
-    <span class="text-muted text-sm">把课时拖动到左侧相应的日期中以完成编辑</span>
-      <ul class="course-list">
-        {% for course in courses %}
-          <li>
-            <span class="glyphicon glyphicon-plus-sign text-success mrs"></span><<{{ course.title }}>>
-            {{ render(controller('TopxiaWebBundle:ClassSchedule:getItems', {courseId:course.id})) }}
+  <div class="panel-body schedule-course">
+   <ul class="media-list">
+      {% for course in courses %}
+      {% set teacher = users[course.teacherIds[0]|default(0)]|default(null) %}
+          <li class="media">
+            <a class="pull-left" href="#">
+              <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}">
+            </a>
+            <div class="media-body">
+              <h4 class="media-heading">
+                {% if course.compulsory %}
+                  <span class="label label-success compulsory mrs">必修</span>
+                {% else %}
+                  <span class="label label-warning compulsory mrs">选修</span>
+                {% endif %}
+                <<{{ course.title }}>></h4>
+                <div class="pvs">
+                   <span>{{ teacher.truename }}<span> <span class="mll">{{ course.lessonNum }}个课时</span>
+                </div>
+             
+            </div>
           </li>
         {% else %}
         <li class="empty">班级还没有课程！</li>
         {% endfor %}
-      </ul>
+     
+   </ul>
  </div>
 </div>

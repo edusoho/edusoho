@@ -18,15 +18,37 @@ class ClassScheduleController extends ClassBaseController
 
     public function coursesAction(Request $request, $class)
     {
-    	$user = $this->getCurrentUser();
-    	$courses = array();
-    	if($user->isAdmin()) {
-    		$courses = $this->getCourseService()->findCoursesByClassId($class['id']);
-    	}
-    	
-    	return $this->render('TopxiaWebBundle:ClassSchedule:courses.html.twig', array(
-    		'courses' => $courses,
-    		));
+        $user = $this->getCurrentUser();
+        $courses = array();
+        $conditions =array(
+            'classId' => $class['id'],
+            'status' => 'published',
+            'gradeId' => $class['gradeId'],
+            'term' => $class['term']
+        );
+
+        $total = $this->getCourseService()->searchCourseCount($conditions);
+
+        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, $total);
+
+        $userIds = array();
+        foreach ($courses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+        }
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        
+/*        if($user->isAdmin()) {
+            return $this->render('TopxiaWebBundle:ClassSchedule:courses-editable.html.twig', array(
+                'courses' => $courses,
+                'users' => $users,
+                ));
+        }*/
+        
+        return $this->render('TopxiaWebBundle:ClassSchedule:courses.html.twig', array(
+            'courses' => $courses,
+            'users' => $users,
+            ));
     }
 
     public function getItemsAction($courseId)

@@ -1,0 +1,19 @@
+{{ import_javascript({'lessonSelect':'schedule/lesson'}) }}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    课表备选课程
+  </div>
+  <div class="panel-body">
+    <span class="text-muted text-sm">把课时拖动到左侧相应的日期中以完成编辑</span>
+      <ul class="course-list">
+        {% for course in courses %}
+          <li>
+            <span class="glyphicon glyphicon-plus-sign text-success mrs"></span><<{{ course.title }}>>
+            {{ render(controller('TopxiaWebBundle:ClassSchedule:getItems', {courseId:course.id})) }}
+          </li>
+        {% else %}
+        <li class="empty">班级还没有课程！</li>
+        {% endfor %}
+      </ul>
+ </div>
+</div>
