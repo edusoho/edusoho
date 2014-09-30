@@ -18,7 +18,7 @@
       {% block testpaper_heading_content %}{% endblock %}
     </div>
 
-    {% if is_feature_enabled('hide_testpaper_result') and (paperResult|default(null) and paperResult.status in ['finished','reviewing'] ) and not app.user.isTeacher() %}
+    {% if (paperResult|default(null) and paperResult.status in ['finished','reviewing'] ) and not app.user.isTeacher() %}
 
     {% else %}
       {% if showTestpaperNavbar|default('on') == 'on' %}

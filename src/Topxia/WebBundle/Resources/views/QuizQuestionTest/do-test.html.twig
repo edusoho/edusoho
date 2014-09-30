@@ -1,4 +1,4 @@
-{% if is_feature_enabled('hide_testpaper_result') and (paperResult|default(null) and paperResult.status in ['finished','reviewing'] ) and not app.user.isTeacher() and questionsSetting.answers_show_enabled|default(1) == 0 %}
+{% if  (paperResult|default(null) and paperResult.status in ['finished','reviewing'] ) and not app.user.isTeacher() and questionsSetting.answers_show_enabled|default(1) == 0 %}
 {% else %}
 
 {# {% if showTestpaperNavbar|default('on') == 'off' %} #}
