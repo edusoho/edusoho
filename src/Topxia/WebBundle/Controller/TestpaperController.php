@@ -415,7 +415,6 @@ class TestpaperController extends BaseController
             'total' => $total,
             'types' => $types,
             'student' => $student,
-            'teacherCheckFlag' => 1,
             'questionsSetting' => $questionsSetting
         ));
     }
