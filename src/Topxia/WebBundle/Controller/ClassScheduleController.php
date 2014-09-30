@@ -38,12 +38,12 @@ class ClassScheduleController extends ClassBaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
         
-/*        if($user->isAdmin()) {
+        if($user->isAdmin()) {
             return $this->render('TopxiaWebBundle:ClassSchedule:courses-editable.html.twig', array(
                 'courses' => $courses,
                 'users' => $users,
                 ));
-        }*/
+        }
         
         return $this->render('TopxiaWebBundle:ClassSchedule:courses.html.twig', array(
             'courses' => $courses,

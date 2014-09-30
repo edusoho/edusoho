@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block class_main %}
+{{ import_javascript({'lessonSelect':'schedule/lesson'}) }}
 <div class="schedule" data-save="{{ path('class_schedule_save', {classId:class.id}) }}" data-reset="{{ path('class_schedule_reset', {classId:class.id}) }}">
   <div class="schedule-header row tal">
     <div class="view-type col-md-3">
