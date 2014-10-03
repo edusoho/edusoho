@@ -50,13 +50,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	            	$testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
             		return array(
 	                            'testpaper'=>$testpaper,
-	                            'items'=>$this->getTestpaperItem($testId)
+	                            'items'=>$this->getTestpaperItem($testpaperResult)
 	                            );
             	}
             	if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
             		return array(
 	                            'testpaper'=>$testpaper,
-	                            'items'=>$this->getTestpaperItem($testId)
+	                            'items'=>$this->getTestpaperItem($testpaperResult)
 	                            );
 	        	} else {
 	            	return $this->createErrorResponse('error', '试卷正在批阅！不能重新考试!');
@@ -100,9 +100,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	        	);
 	}
 
-	private function getTestpaperItem($testId)
+	private function getTestpaperItem($testpaperResult)
 	{
-		$result = $this->getTestpaperService()->showTestpaper($testId);
+		$result = $this->getTestpaperService()->showTestpaper($testpaperResult['id']);
         		$items = $result['formatItems'];
 
         		return $this->coverTestpaperItems($items);
