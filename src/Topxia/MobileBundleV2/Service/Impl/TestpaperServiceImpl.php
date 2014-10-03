@@ -128,7 +128,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 		}, $items);
 	}
 
-	private function filterMetas($itemValue)
+	public function filterMetas($itemValue)
 	{
 		$question = $itemValue['question'];
 		if (isset($question['metas'])) {
