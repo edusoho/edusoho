@@ -112,6 +112,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	{
 		return array_map(function($item){
 			$item = array_map(function($itemValue){
+				if (isset($itemValue['items'])) {
+					$itemValue['items'] = array_values($itemValue['items']);
+				}
 				$question = $itemValue['question'];
 				if (isset($question['metas'])) {
 					$metas= $question['metas'];
