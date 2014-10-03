@@ -110,16 +110,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
 	private function coverTestpaperItems($items)
 	{
-		return array_map(function($item){
-			$item = array_map(function($itemValue){
+		$controller = $this;
+		return array_map(function($item) use ($controller){
+			$item = array_map(function($itemValue) use ($controller){
 				if (isset($itemValue['items'])) {
 					$filterItems = array_values($itemValue['items']);
-					$itemValue['items'] = array_map(function($filterItem){
-						return $this->filterMetas($filterItem);
+					$itemValue['items'] = array_map(function($filterItem)use ($controller){
+						return $controller->filterMetas($filterItem);
 					}, $filterItems);
 				}
 
-				$itemValue = $this->filterMetas($itemValue);
+				$itemValue = $controller->filterMetas($itemValue);
 				return $itemValue;
 				
 			}, $item);
