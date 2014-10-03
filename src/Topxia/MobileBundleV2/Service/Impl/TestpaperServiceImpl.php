@@ -113,28 +113,42 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 		return array_map(function($item){
 			$item = array_map(function($itemValue){
 				if (isset($itemValue['items'])) {
-					$itemValue['items'] = array_values($itemValue['items']);
+					$filterItems = array_values($itemValue['items']);
+					$itemValue['items'] = array_map(function($filterItem){
+						return $this->filterMetas($filterItem);
+					}, $filterItems);
 				}
-				$question = $itemValue['question'];
-				if (isset($question['metas'])) {
-					$metas= $question['metas'];
-					if (isset($metas['choices'])) {
-						$metas= array_values($metas['choices']);
-						$itemValue['question']['metas'] = $metas;
-					}
-				}
-				$answer = $question['answer'];
-				if (is_array($answer)) {
-					$itemValue['question']['answer'] = array_map(function($answerValue){
-						if (is_array($answerValue)) {
-							return implode('|', $answerValue);
-						}
-						return $answerValue;
-					}, $answer);
-					return $itemValue;
-				}
+
+				$itemValue = $this->filterMetas($itemValue);
+				return $itemValue;
+				
 			}, $item);
 			return array_values($item);
 		}, $items);
+	}
+
+	private function filterMetas($itemValue)
+	{
+		$question = $itemValue['question'];
+		if (isset($question['metas'])) {
+			$metas= $question['metas'];
+			if (isset($metas['choices'])) {
+				$metas= array_values($metas['choices']);
+				$itemValue['question']['metas'] = $metas;
+			}
+		}
+
+		$answer = $question['answer'];
+		if (is_array($answer)) {
+			$itemValue['question']['answer'] = array_map(function($answerValue){
+				if (is_array($answerValue)) {
+					return implode('|', $answerValue);
+				}
+				return $answerValue;
+			}, $answer);
+			return $itemValue;
+		}
+
+		return $itemValue;
 	}
 }
