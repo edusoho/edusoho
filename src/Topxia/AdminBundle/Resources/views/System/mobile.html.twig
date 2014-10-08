@@ -8,8 +8,18 @@
 
 {% block main %}
 <style>
-#mobile-logo-container img ,#mobile-splash1-container img , #mobile-splash2-container img , #mobile-splash3-container img , #mobile-splash4-container img , #mobile-splash5-container
-img {max-width: 80%; margin-bottom: 10px;}
+#mobile-logo-container img ,
+#mobile-splash1-container img , 
+#mobile-splash2-container img , 
+#mobile-splash3-container img , 
+#mobile-splash4-container img , 
+#mobile-splash5-container img ,
+#mobile-banner1-container img , 
+#mobile-banner2-container img , 
+#mobile-banner3-container img , 
+#mobile-banner4-container img , 
+#mobile-banner5-container img 
+{max-width: 80%; margin-bottom: 10px;}
 </style>
 
 <div class="page-header"><h1>移动客户端设置</h1></div>
@@ -64,17 +74,16 @@ img {max-width: 80%; margin-bottom: 10px;}
         <button class="btn btn-default btn-sm" id="mobile-banner1-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'banner1'}) }}">上传</button>
         <button class="btn btn-default btn-sm" id="mobile-banner1-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'banner1'}) }}" {% if not mobile.banner1 %}style="display:none;"{% endif %}>删除</button>
 
-        <div role="banner1-setting" {% if not mobile.banner1 %}style="display:none;"{% endif %}>
+        <div class="banner-setting" role="banner1-setting" {% if not mobile.banner1 %}style="display:none;"{% endif %}>
           <input type="radio" role="bannerClick1" name="bannerClick1" {% if not mobile.bannerClick1 %}checked="checked"{% endif %} value="0"/>默认（无触发动作）
           <input type="radio" role="bannerClick1" name="bannerClick1" value="1" {% if mobile.bannerClick1 %}checked="checked"{% endif %}/>跳转到连接地址
-          <input type="text" id="bannerUrl1" name="bannerUrl1" class="form-control" value="{{mobile.bannerUrl1}}" {% if not mobile.bannerClick1 %}style="display:none"{% endif %}/>
+          <input type="text" id="bannerUrl1" name="bannerUrl1" class="form-control" value="{{mobile.bannerUrl1}}" placeholder="请填写连接地址" {% if not mobile.bannerClick1 %}style="display:none"{% endif %}/>
         </div>
 
         <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
         <input type="hidden" name="banner1" value="{{ mobile.banner1 }}">
       </div>
     </div>
-    
 
     <div class="form-group">
       <div class="col-md-2 control-label">
@@ -82,48 +91,84 @@ img {max-width: 80%; margin-bottom: 10px;}
       </div>
       <div class="col-md-8 controls">
         <div id="mobile-banner2-container">{% if mobile.banner2 %}<img src="{{ asset(mobile.banner2) }}">{% endif %}</div>
+
         <button class="btn btn-default btn-sm" id="mobile-banner2-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'banner2'}) }}">上传</button>
         <button class="btn btn-default btn-sm" id="mobile-banner2-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'banner2'}) }}" {% if not mobile.banner2 %}style="display:none;"{% endif %}>删除</button>
+
+        <div class="banner-setting" role="banner2-setting" {% if not mobile.banner2 %}style="display:none;"{% endif %}>
+          <input type="radio" role="bannerClick2" name="bannerClick2" {% if not mobile.bannerClick2 %}checked="checked"{% endif %} value="0"/>默认（无触发动作）
+          <input type="radio" role="bannerClick2" name="bannerClick2" value="1" {% if mobile.bannerClick2 %}checked="checked"{% endif %}/>跳转到连接地址
+          <input type="text" id="bannerUrl2" name="bannerUrl2" class="form-control" value="{{mobile.bannerUrl2}}" placeholder="请填写连接地址" {% if not mobile.bannerClick2 %}style="display:none"{% endif %}/>
+        </div>
+
         <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
         <input type="hidden" name="banner2" value="{{ mobile.banner2 }}">
       </div>
     </div>
+
     <div class="form-group">
       <div class="col-md-2 control-label">
         <label for="banner3">轮播图3</label>
       </div>
       <div class="col-md-8 controls">
         <div id="mobile-banner3-container">{% if mobile.banner3 %}<img src="{{ asset(mobile.banner3) }}">{% endif %}</div>
+
         <button class="btn btn-default btn-sm" id="mobile-banner3-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'banner3'}) }}">上传</button>
         <button class="btn btn-default btn-sm" id="mobile-banner3-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'banner3'}) }}" {% if not mobile.banner3 %}style="display:none;"{% endif %}>删除</button>
+
+        <div class="banner-setting" role="banner3-setting" {% if not mobile.banner3 %}style="display:none;"{% endif %}>
+          <input type="radio" role="bannerClick3" name="bannerClick3" {% if not mobile.bannerClick3 %}checked="checked"{% endif %} value="0"/>默认（无触发动作）
+          <input type="radio" role="bannerClick3" name="bannerClick3" value="1" {% if mobile.bannerClick3 %}checked="checked"{% endif %}/>跳转到连接地址
+          <input type="text" id="bannerUrl3" name="bannerUrl3" class="form-control" value="{{mobile.bannerUrl3}}" placeholder="请填写连接地址" {% if not mobile.bannerClick3 %}style="display:none"{% endif %}/>
+        </div>
+
         <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
         <input type="hidden" name="banner3" value="{{ mobile.banner3 }}">
       </div>
     </div>
+
     <div class="form-group">
       <div class="col-md-2 control-label">
         <label for="banner4">轮播图4</label>
       </div>
       <div class="col-md-8 controls">
         <div id="mobile-banner4-container">{% if mobile.banner4 %}<img src="{{ asset(mobile.banner4) }}">{% endif %}</div>
+
         <button class="btn btn-default btn-sm" id="mobile-banner4-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'banner4'}) }}">上传</button>
         <button class="btn btn-default btn-sm" id="mobile-banner4-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'banner4'}) }}" {% if not mobile.banner4 %}style="display:none;"{% endif %}>删除</button>
+
+        <div class="banner-setting" role="banner4-setting" {% if not mobile.banner4 %}style="display:none;"{% endif %}>
+          <input type="radio" role="bannerClick4" name="bannerClick4" {% if not mobile.bannerClick4 %}checked="checked"{% endif %} value="0"/>默认（无触发动作）
+          <input type="radio" role="bannerClick4" name="bannerClick4" value="1" {% if mobile.bannerClick4 %}checked="checked"{% endif %}/>跳转到连接地址
+          <input type="text" id="bannerUrl4" name="bannerUrl4" class="form-control" value="{{mobile.bannerUrl4}}" placeholder="请填写连接地址" {% if not mobile.bannerClick4 %}style="display:none"{% endif %}/>
+        </div>
+
         <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
         <input type="hidden" name="banner4" value="{{ mobile.banner4 }}">
       </div>
     </div>
+
     <div class="form-group">
       <div class="col-md-2 control-label">
         <label for="banner5">轮播图5</label>
       </div>
       <div class="col-md-8 controls">
         <div id="mobile-banner5-container">{% if mobile.banner5 %}<img src="{{ asset(mobile.banner5) }}">{% endif %}</div>
+
         <button class="btn btn-default btn-sm" id="mobile-banner5-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'banner5'}) }}">上传</button>
         <button class="btn btn-default btn-sm" id="mobile-banner5-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'banner5'}) }}" {% if not mobile.banner5 %}style="display:none;"{% endif %}>删除</button>
+
+        <div class="banner-setting" role="banner5-setting" {% if not mobile.banner5 %}style="display:none;"{% endif %}>
+          <input type="radio" role="bannerClick5" name="bannerClick5" {% if not mobile.bannerClick5 %}checked="checked"{% endif %} value="0"/>默认（无触发动作）
+          <input type="radio" role="bannerClick5" name="bannerClick5" value="1" {% if mobile.bannerClick5 %}checked="checked"{% endif %}/>跳转到连接地址
+          <input type="text" id="bannerUrl5" name="bannerUrl5" class="form-control" value="{{mobile.bannerUrl5}}" placeholder="请填写连接地址" {% if not mobile.bannerClick5 %}style="display:none"{% endif %}/>
+        </div>
+
         <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
         <input type="hidden" name="banner5" value="{{ mobile.banner5 }}">
       </div>
     </div>
+    
   </fieldset>
 
 
