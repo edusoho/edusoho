@@ -49,8 +49,9 @@ class ParentController extends BaseController
 		));
 	}
 
-	public function childTestpapersAction(Request $request)
-	{
+
+    public function childTestpapersAction(Request $request)
+    {
         $user=$this->getCurrentUser();
         if(!$user->isParent()) {
             return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
@@ -89,13 +90,92 @@ class ParentController extends BaseController
             'courses' => $courses,
             'paginator' => $paginator
         ));
-	}
+    }
 
-	public function childInfoAction(Request $request,$childId)
-	{
-		$user=$this->getCurrentUser();
+    public function childQuestionsAction(Request $request)
+    {
+        $user=$this->getCurrentUser();
+        if(!$user->isParent()) {
+            return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
+        }
+        $selectedChild=$this->getSelectedChild($request->query->get('childId'));
 
-		$cachedData=$this->getParentCached();
+        $conditions = array(
+            'userId' => $selectedChild['id'],
+            'type' => 'question',
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->searchThreadCount($conditions),
+            20
+        );
+
+        $threads = $this->getThreadService()->searchThreads(
+            $conditions,
+            'createdNotStick',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
+
+        return $this->render('TopxiaWebBundle:Parent:child-questions.html.twig',array(
+            'questionActive'=>'active',
+            'selectedChild'=>$selectedChild,
+            'courses'=>$courses,
+            'users'=>$users,
+            'threads'=>$threads,
+            'paginator' => $paginator
+        ));
+    }
+
+    public function childDiscussionsAction(Request $request)
+    {
+        $user=$this->getCurrentUser();
+        if(!$user->isParent()) {
+            return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
+        }
+        $selectedChild=$this->getSelectedChild($request->query->get('childId'));
+
+        $conditions = array(
+            'userId'=>$selectedChild['id'],
+            'type'=>'discussion'
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->searchThreadCount($conditions),
+            20
+        );
+
+        $threads = $this->getThreadService()->searchThreads(
+            $conditions,
+            'createdNotStick',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
+
+        return $this->render('TopxiaWebBundle:Parent:child-discussions.html.twig',array(
+            'discussionActive'=>'active',
+            'selectedChild'=>$selectedChild,
+            'courses'=>$courses,
+            'users'=>$users,
+            'threads'=>$threads,
+            'paginator' => $paginator
+        ));
+    
+    } 
+
+    public function childInfoAction(Request $request,$childId)
+    {
+        $user=$this->getCurrentUser();
+
+        $cachedData=$this->getParentCached();
         $children=$cachedData['children'];
         $classMembers=$cachedData['classMembers'];
         $classes=$cachedData['classes'];
@@ -162,5 +242,11 @@ class ParentController extends BaseController
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
+
+    protected function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
 
 }

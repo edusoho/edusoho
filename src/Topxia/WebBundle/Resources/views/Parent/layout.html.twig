@@ -20,16 +20,13 @@
 									<a class="list-group-item 
 									{% if side_nav == 'parent-child-courses' %} active {% endif %}" 
 									href="{{path('parent_child_courses',{childId:selectedChild.id|default(null)}) }}">在学课程</a>
-
-
-
-
+									
 									<a class="list-group-item 
 									{% if side_nav == 'parent-child-testpapers' %} active {% endif %}"
 									href="{{path('parent_child_testpapers', {childId:selectedChild.id|default(null)}) }}">考试成绩</a>
 
-									<a class="list-group-item {% if side_nav == 'my-teaching-check' %} active {% endif %}"
-									href="{{path('course_manage_list_teacher_test_reviewing') }}">问题与讨论</a>
+									<a class="list-group-item {% if side_nav == 'parent-child-questions' %} active {% endif %}"
+									href="{{path('parent_child_questions', {childId:selectedChild.id|default(null)}) }}">问题与讨论</a>
 	              </ul>
 	            </div>
 	          {% endif %}
