@@ -11,6 +11,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 	public function getThread($courseId, $threadId)
 	{
 		$thread = $this->getThreadDao()->getThread($threadId);
+		$this->createErrorResponse('test',$thread);
 		if (empty($thread)) {
 			return null;
 		}
