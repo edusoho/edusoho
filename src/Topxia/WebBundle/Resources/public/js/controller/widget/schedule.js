@@ -19,6 +19,7 @@ define(function(require, exports, module) {
             "click span.next-month": "nextMonth",
             "click span.previous-month": "previousMonth",
             "click button.lesson-remove": "removeLesson",
+            "click .lesson-ul li": "gotoLesson",
             "change select.viewType": "changeView"
         },
         setup: function() {
@@ -46,12 +47,11 @@ define(function(require, exports, module) {
                     _super(item);
                 },
                 onDrop: function ($item, container, _super, event) {
-                    var $li = $('<li></li>'),
+                    var $li = $('<li data-id="'+ $item.data('id') +'" data-url="'+ $item.find('a').attr('href') +'"></li>'),
                         img = '<img src="'+ $item.data('icon') +'"><br>'+ $item.data('title') +'</img>',
                         close = '<button type="button" class="close pull-right lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>';
 
-                    $li.data('id', $item.data('id')).append(close).append(img);
-
+                    $li.append(close).append(img);
                     $item.prop('outerHTML', $li.prop("outerHTML"));
                     _super($item);
 
@@ -169,6 +169,10 @@ define(function(require, exports, module) {
             var result = this.serializeContainer($ul);
             this.save(result);
         },
+        gotoLesson: function(e) {
+            $li = $(e.currentTarget);
+            window.open($li.data('url'));
+        },
         disableSort: function() {
             $("ul.course-item-list").each(function(){
                 $(this).sortable("disable");
@@ -202,7 +206,7 @@ define(function(require, exports, module) {
                             var $name = $('<span></span>');
                             $img.attr("src", courses[lessons[schedule[i].lessonId].courseId].middlePicture);
                             $title.html(lessons[schedule[i].lessonId].title);
-                            $name.html(teachers[courses[lessons[schedule[i].lessonId].courseId].teacherIds[0]].truename || '');
+                            $name.html(teachers[courses[lessons[schedule[i].lessonId].courseId].teacherIds[0]].truename);
                             
                             $a.append($img);
                             $div.append($title).append($name);

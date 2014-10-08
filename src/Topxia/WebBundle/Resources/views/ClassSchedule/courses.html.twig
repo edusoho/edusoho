@@ -7,7 +7,7 @@
       {% for course in courses %}
       {% set teacher = users[course.teacherIds[0]|default(0)]|default(null) %}
           <li class="media">
-            <a class="pull-left" href="#">
+            <a class="pull-left" href="{{ path('course_show',{id:course.id}) }}">
               <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}">
             </a>
             <div class="media-body">

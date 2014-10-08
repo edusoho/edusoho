@@ -21,7 +21,8 @@
               {% if items %}
                 {% for item in items %}
                 {% set lessonLearn = lessonLearns[item.lessonId] | default(null)%}
-                  <li data-id="{{ item.lessonId }}">
+                {% set lessonUrl = path('course_learn', {id:courses[lessons[item.lessonId].courseId].id}) ~ '#lesson/' ~ item.lessonId%}
+                  <li data-id="{{ item.lessonId }}" data-url="{{ lessonUrl }}">
                     {% if can_remove_schedule(app.user, courses, lessons, item) %}
                     <button type="button" class="close pull-right lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
                     {% endif %}
