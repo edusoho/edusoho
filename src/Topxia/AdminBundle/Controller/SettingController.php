@@ -68,6 +68,21 @@ class SettingController extends BaseController
             'splash3' => '', // 启动图3
             'splash4' => '', // 启动图4
             'splash5' => '', // 启动图5
+            'banner1' => '', // 轮播图1
+            'banner2' => '', // 轮播图2
+            'banner3' => '', // 轮播图3
+            'banner4' => '', // 轮播图4
+            'banner5' => '', // 轮播图5
+            'bannerUrl1' => '', // 轮播图1的触发地址
+            'bannerUrl2' => '', // 轮播图2的触发地址
+            'bannerUrl3' => '', // 轮播图3的触发地址
+            'bannerUrl4' => '', // 轮播图4的触发地址
+            'bannerUrl5' => '', // 轮播图5的触发地址
+            'bannerClick1' => '', // 轮播图1是否触发动作
+            'bannerClick2' => '', // 轮播图2是否触发动作
+            'bannerClick3' => '', // 轮播图3是否触发动作
+            'bannerClick4' => '', // 轮播图4是否触发动作
+            'bannerClick5' => '', // 轮播图5是否触发动作
         );
 
         $mobile = array_merge($default, $mobile);

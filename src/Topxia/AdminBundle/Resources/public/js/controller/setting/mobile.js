@@ -193,8 +193,51 @@ define(function(require, exports, module) {
             });
         });
 
+        var uploader = new Uploader({
+            trigger: '#mobile-banner1-upload',
+            name: 'banner1',
+            action: $('#mobile-banner1-upload').data('url'),
+            data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
+            accept: 'image/*',
+            error: function(file) {
+                Notify.danger('上传轮播图1失败，请重试！')
+            },
+            success: function(response) {
+                response = $.parseJSON(response);
+                $("#mobile-banner1-container").html('<img src="' + response.url + '">');
+                $form.find('[name=banner1]').val(response.path);
+                $("#mobile-banner1-remove").show();
+                $form.find('div[role="banner1-setting"]').show();
+                Notify.success('上传轮播图1成功！');
+            }
+        });
+
+        $("input[role='bannerClick1']").on('click', function(){
+            if($(this).val()==1) {
+                $("#bannerUrl1").show();
+            }else{
+                $("#bannerUrl1").hide();
+            }
+        })
+
+        $("#mobile-banner1-remove").on('click', function(){
+            if (!confirm('确认要删除吗？')) return false;
+            var $btn = $(this);
+            $.post($btn.data('url'), function(){
+                $("#mobile-banner1-container").html('');
+                $form.find('[name=banner1]').val('');
+                $btn.hide();
+                $form.find('div[role="banner1-setting"]').hide();
+                Notify.success('删除轮播图1成功！');
+            }).error(function(){
+                Notify.danger('删除轮播图1失败！');
+            });
+        });
+
         var editor = EditorFactory.create('#mobile_about', 'simple', {extraFileUploadParams:{group:'default'}});
         editor.sync();
+
+
     };
 
 });
