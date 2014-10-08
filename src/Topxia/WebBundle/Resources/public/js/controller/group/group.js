@@ -104,16 +104,24 @@
                 display: 'dropdown'
             });
             $('.group-post-list').on('click','.li-reply',function(){
-               var postId=$(this).attr('postId');
-
-               $('#li-'+postId).show();
-               $('#reply-content-'+postId).focus();
-               $('#reply-content-'+postId).val("回复 "+$(this).attr("postName")+":");
+                var postId=$(this).attr('postId');
+                var fromUserId = $(this).data('fromUserId');
+                $('#fromUserIdDiv').html('<input type="hidden" id="fromUserId" value="'+fromUserId+'">');
+                $('#li-'+postId).show();
+                $('#reply-content-'+postId).focus();
+                $('#reply-content-'+postId).val("回复 "+$(this).attr("postName")+":");
 
             });
 
             $('.group-post-list').on('click','.reply',function(){
                var postId=$(this).attr('postId');
+               if ($(this).data('fromUserIdNosub') != "") {
+
+                var fromUserIdNosubVal = $(this).data('fromUserIdNosub');
+                $('#fromUserIdNoSubDiv').html('<input type="hidden" id="fromUserIdNosub" value="'+fromUserIdNosubVal+'">')
+               $('#fromUserIdDiv').html("");
+
+               };
                $(this).hide();
                $('#unreply-'+postId).show();
                $('.reply-'+postId).css('display',"");
@@ -135,6 +143,7 @@
                    $('#li-'+postId).show();
                    $('#reply-content-'+postId).focus();
                    $('#reply-content-'+postId).val("");
+
                }else{
                    $('#li-'+postId).hide();
                    $(this).attr('data-status',"hidden");
@@ -165,8 +174,17 @@
             $('.group-post-list').on('click','.reply-btn',function(){
                 
                 var postId=$(this).attr('postId');
-
+                var fromUserIdVal = "";
                 var replyContent=$('#reply-content-'+postId+'').val();
+                if ($('#fromUserId').length > 0) {
+                    fromUserIdVal = $('#fromUserId').val();
+                } else {
+                    if ($('#fromUserIdNosub').length > 0) {
+                        fromUserIdVal = $('#fromUserIdNosub').val();
+                    } else {
+                        fromUserIdVal = "";
+                    }
+                }
 
                 var validator_threadPost = new Validator({
                     element: '.thread-post-reply-form',
@@ -179,7 +197,7 @@
                         $(this).button('submiting').addClass('disabled');
                             $.ajax({
                             url : $(".thread-post-reply-form").attr('post-url'),
-                            data:"content="+replyContent+'&'+'postId='+postId,
+                            data:"content="+replyContent+'&'+'postId='+postId+'&'+'fromUserId='+fromUserIdVal,
                             cache : false, 
                             async : false,
                             type : "POST",
@@ -224,11 +242,9 @@
             $('#post-action').on('click','#elite,#stick',function(){
            
                 var $trigger = $(this);
-               
-                $.post($trigger.data('url'), function(data){
                 
+                $.post($trigger.data('url'), function(data){
                     window.location.href=data;
-              
                 });
             })
 

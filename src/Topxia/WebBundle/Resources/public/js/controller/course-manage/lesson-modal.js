@@ -3,9 +3,9 @@ define(function(require, exports, module) {
     var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    var VideoChooser = require('../widget/media-chooser/video-chooser3');
-    var AudioChooser = require('../widget/media-chooser/audio-chooser3');
-    var PPTChooser = require('../widget/media-chooser/ppt-chooser3');
+    var VideoChooser = require('../widget/media-chooser/video-chooser6');
+    var AudioChooser = require('../widget/media-chooser/audio-chooser6');
+    var PPTChooser = require('../widget/media-chooser/ppt-chooser6');
     var Notify = require('common/bootstrap-notify');
         require('jquery.sortable');
         

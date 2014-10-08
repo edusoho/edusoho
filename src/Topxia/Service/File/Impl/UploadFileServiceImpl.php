@@ -203,7 +203,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'convertHash' => $convertHash,
             'updatedTime' => time(),
         );
-
         $this->getUploadFileDao()->updateFile($id, $fields);
 
         return $this->getFile($id);
@@ -220,7 +219,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (empty($file)) {
             throw $this->createServiceException('file not exist.');
         }
-
         $convertHash = $this->getFileImplementorByFile($file)->reconvertFile($file, $convertCallback);
 
         $this->setFileConverting($file['id'], $convertHash);
@@ -311,6 +309,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function getMediaInfo($key, $type)
     {
         return $this->getFileImplementor('cloud')->getMediaInfo($key, $type);
+    }
+
+    public function getFileByTargetType($targetType)
+    {
+        return $this->getUploadFileDao()->getFileByTargetType($targetType);
     }
 
     private function generateKey ($length = 0 )

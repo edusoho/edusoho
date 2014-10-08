@@ -1,5 +1,7 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
+
+
 <div class="row row-12">
   <div class="col-md-12">
     <div class="panel panel-default  course-header">
@@ -48,13 +50,10 @@
                 <i class="glyphicon glyphicon-share"></i>
               </button>
               <ul class="dropdown-menu pull-right shares-dropdown-menu js-social-shares">
-                <li class="disabled"><a href="javascript:">分享到：</a></li>
-                <li><a href="javascript:" data-share="weibo" data-params="#course-social-share-params"><span class="social-icon-weibo"></span> 新浪微博</a></li>
-                <li><a href="javascript:" data-share="qq" data-params="#course-social-share-params"><span class="social-icon-qq"></span> QQ空间</a></li>
-                <li><a href="javascript:" data-share="renren" data-params="#course-social-share-params"><span class="social-icon-renren"></span> 人人网</a></li>
-                <li><a href="javascript:" data-share="douban" data-params="#course-social-share-params"><span class="social-icon-douban"></span> 豆瓣</a></li>
+                
+                <li><div class="share" data-bdText="{{courseShareContent}}"></div></li>
               </ul>
-              <div id="course-social-share-params" style="display:none;"
+              <div id="course-social-share-params" 
                 data-title="课程 《{{ course.title }}》"
                 data-picture="{{ default_path('coursePicture',course.largePicture, 'large', true) }}"
                 data-url="{{ url('course_show', {id:course.id}) }}"
@@ -64,7 +63,7 @@
                   {% if member.orderId %}
                    <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
                   {% else %}
-                  <a class="btn btn-default btn-sm " title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
+                  <a class="btn btn-default btn-sm course-exit-btn" id="exit-course-learning" title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
                     {% endif %}
                 {% endif %}
             {% if canManage %}

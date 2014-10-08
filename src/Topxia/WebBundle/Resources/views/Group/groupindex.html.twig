@@ -1,7 +1,8 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% set script_controller = 'group/group' %}
 {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
-
+{% block keywords %}{{groupinfo.title}}小组 {{ setting('site.name') }}{% endblock %}
+{% block description %}{{groupinfo.about|plain_text(150)}}{% endblock %}
 {% set groupNav = 'index' %}
 
 {% block group_main %}

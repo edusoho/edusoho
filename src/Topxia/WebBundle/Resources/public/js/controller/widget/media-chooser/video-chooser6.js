@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var BaseChooser = require('./base-chooser-4');
+    var BaseChooser = require('./base-chooser-7');
     var Notify = require('common/bootstrap-notify');
     require('jquery.perfect-scrollbar');
 
@@ -18,7 +18,6 @@ define(function(require, exports, module) {
     		},
             preUpload: function(uploader, file) {
                 var data = {};
-
                 if (this.qualitySwitcher) {
                     data.videoQuality = this.qualitySwitcher.get('videoQuality');
                     data.audioQuality = this.qualitySwitcher.get('audioQuality');
@@ -27,8 +26,9 @@ define(function(require, exports, module) {
                     } else {
                         data.convertor = 'HLSVideo';
                     }
+                    data.lazyConvert = 1;
                 }
-
+                var self = this;
                 $.ajax({
                     url: this.element.data('paramsUrl'),
                     async: false,
@@ -36,6 +36,13 @@ define(function(require, exports, module) {
                     data: data, 
                     cache: false,
                     success: function(response, status, jqXHR) {
+                        var paramsKey = {};
+                        paramsKey.data=data;
+                        paramsKey.targetType=self.element.data('targetType');
+                        paramsKey.targetId=self.element.data('targetId');
+
+                        response.postParams.paramsKey = JSON.stringify(paramsKey);
+
                         uploader.setUploadURL(response.url);
                         uploader.setPostParams(response.postParams);
                     },

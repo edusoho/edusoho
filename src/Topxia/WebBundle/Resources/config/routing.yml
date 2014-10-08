@@ -122,6 +122,10 @@ uploadfile_cloud_get_media_info:
     pattern:  /uploadfile/get_media_info/{type}
     defaults: { _controller: TopxiaWebBundle:UploadFile:getMediaInfo }
 
+uploadfile_cloud_get_head_leader_hlskey:
+    pattern: /uploadfile/get_head_leader_hlsKey
+    defaults: { _controller: TopxiaWebBundle:UploadFile:getHeadLeaderHlsKey}
+
 kindeditor_upload:
     pattern:  /kindeditor/upload
     defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }
@@ -473,16 +477,20 @@ course_manage_upload_course_files:
     pattern:  /course/{id}/manage/upload/course/files/{targetType}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseFiles }
 
+course_manage_batch_upload_course_files:
+    pattern:  /course/{id}/manage/batch/upload/course/files/{targetType}
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:batchUploadCourseFiles }
+
 course_manage_students:
     pattern:  /course/{id}/manage/students
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }
 
 course_manage_students_show:
-    pattern:  /course/{id}/manage/students/show
+    pattern:  /course/{courseId}/manage/students/{userId}/show
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:show }
 
 course_manage_students_defined_show:
-    pattern:  /course/{id}/manage/students/defined/show
+    pattern:  /course/{courseId}/manage/students/{userId}/defined_show
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:definedShow }
 
 course_manage_student_create:
@@ -1295,6 +1303,8 @@ group_thread_deletePost:
 group_thread_post_reply:
     pattern:  /group/post/{postId}/reply
     defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
+
+
 
 #占位
 vip:

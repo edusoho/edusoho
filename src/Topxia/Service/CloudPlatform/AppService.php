@@ -9,6 +9,8 @@ interface AppService
 
     public function findAppsByCodes(array $codes);
 
+    public function getMainVersion();
+
     /**
      * 获得应用中心应用列表
      */

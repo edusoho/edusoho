@@ -1,7 +1,8 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% set script_controller = 'group/group' %}
-{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
-
+{% block title %}{{threadMain.title}} - {{ parent() }}{% endblock %}
+{% block keywords %}{{threadMain.title|plain_text(15)}} {{ setting('site.name') }} {% endblock %}
+{% block description %}{{threadMain.content|plain_text(150)}}{% endblock %}
 {% block group_main %}
   <div class="panel panel-default group-thread">
     <div class="panel-heading">
@@ -17,7 +18,7 @@
       <div class="metas">
         发表于 {{ threadMain.createdTime|smart_time }}
         <span class="divider">•</span>
-        <span>{{ threadMain.hitNum }} 次查看</span>
+        <span>{{ threadMain.hitNum }} 次查看</span><div class="share pull-right" data-bdText="{{groupShareContent}}"></div>
       </div>
     </div>
     <div class="panel-body" id="post-action">
@@ -59,6 +60,7 @@
             <a id="stick"  title="置顶" class="btn btn-link"
             href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-circle-arrow-up"></span>  置顶</a>
           {% endif %}
+          
 {# 
           <a id="closeThread"  title="一但关闭话题将删除！确定关闭话题" class="btn btn-link"
           href="javascript:" data-url="{{path('group_thread_closeThread',{threadId:threadMain.id,memberId:user.id})}}">
@@ -66,9 +68,6 @@
           </a> #}
 
         {% endif %}
-
-
-
       </div>
     </div>
   </div>
@@ -107,10 +106,10 @@
                 {% endif %}
    
                 {% if not subPosts %}
-                  <a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}">回复</a>
+                  <a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}">回复</a>
                   <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">收起</a>
                 {% else %}
-                  <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}">回复({{postReplyCount[post.id]}})</a>
+                  <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="">回复({{postReplyCount[post.id]}})</a>
                   <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >收起</a>
                 {% endif %}
               </div>
@@ -127,6 +126,7 @@
                       <textarea id="reply-content-{{post.id}}" class="form-control"></textarea>
                     </div>
                     </div>
+                    <div id="fromUserIdNoSubDiv"></div>
                     <div class="form-group">
                       <button type="submit" postId="{{post.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
                     </div>

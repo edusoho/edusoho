@@ -107,6 +107,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         }
         $threadContent['content']=$this->purifyHtml($threadContent['content']);
         $threadContent['userId']=$memberId;
+        $threadContent['fromUserId']=$threadContent['fromUserId'];
         $threadContent['createdTime']=time();
         $threadContent['threadId']=$threadId;
         $threadContent['postId']=$postId;

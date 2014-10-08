@@ -381,18 +381,28 @@ admin_setting_payment:
     pattern:  /setting/payment
     defaults: { _controller: TopxiaAdminBundle:Setting:payment }
 
-admin_setting_storage:
-    pattern:  /setting/storage
-    defaults: { _controller: TopxiaAdminBundle:Setting:storage }
+admin_setting_cloud:
+    pattern:  /setting/cloud
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:index }
 
 admin_setting_cloud_video_watermark_upload:
     pattern: /setting/cloud/video_watermark/upload
-    defaults: { _controller: TopxiaAdminBundle:Setting:cloudVideoWatermarkUpload }
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoWatermarkUpload }
     methods: [POST]
 
 admin_setting_cloud_video_watermark_remove:
     pattern: /setting/cloud/video_watermark/remove
-    defaults: { _controller: TopxiaAdminBundle:Setting:cloudVideoWatermarkRemove }
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoWatermarkRemove }
+    methods: [POST]
+
+admin_setting_cloud_video_embed_watermark_upload:
+    pattern: /setting/cloud/video_embed_watermark/upload
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoEmbedWatermarkUpload }
+    methods: [POST]
+
+admin_setting_cloud_video_embed_watermark_remove:
+    pattern: /setting/cloud/video_embed_watermark/remove
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoWatermarkRemove }
     methods: [POST]
 
 admin_setting_refund:
@@ -402,6 +412,10 @@ admin_setting_refund:
 admin_setting_default:
     pattern:  /setting/default
     defaults: { _controller: TopxiaAdminBundle:Setting:default }
+
+admin_setting_share:
+    pattern:  /setting/share
+    defaults: { _controller: TopxiaAdminBundle:Setting:share }
 
 admin_setting_default_avatar:
     pattern:  /setting/default/avatar
@@ -920,3 +934,17 @@ admin_user_fields_edit:
 admin_user_fields_delete:
     pattern:  /user_fields/delete/{id}
     defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }
+
+admin_system_status:
+    pattern:  /system/status
+    defaults: { _controller: TopxiaAdminBundle:Default:systemStatus }
+
+admin_official_messages:
+    pattern:  /official/messages
+    defaults: { _controller: TopxiaAdminBundle:Default:officialMessages }
+
+admin_uploadfile_head_leader_params:
+    pattern: /uploadfile/video/head/leader/params
+    defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
+
+
