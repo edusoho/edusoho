@@ -83,6 +83,8 @@ interface CourseService
 	 */
 	public function findLessonsByIds(array $ids);
 
+	public function findLessonLearnsByIds($userId, array $ids);
+
 	public function getCourseLesson($courseId, $lessonId);
 	
 	public function getCourseLessons($courseId);

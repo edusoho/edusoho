@@ -10,6 +10,9 @@
   {% set teacher = teachers[courses[lessons[schedule.lessonId].courseId].teacherIds[0]|default(0)]|default(null) %}
     <li class="media">
       <a class="pull-left" href="{{ lessonUrl }}">
+        {% if schedule.status == 'finished' %}
+          <span class="glyphicon glyphicon-ok pull-left text-success"></span>
+        {% endif %}
         <img class="media-object" src="{{ file_path(courses[lessons[schedule.lessonId].courseId].middlePicture, 'course-large.png') }}" alt="{{ courses[lessons[schedule.lessonId].courseId].title }}">
       </a>
       <div class="media-body">

@@ -33,6 +33,15 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $this->getConnection()->fetchAll($sql, array($userId)) ? : array();
     }
 
+    public function findLessonLearnsByIds($userId, array $lessonIds)
+    {
+        if(empty($lessonIds)){ return array(); }
+        $marks = str_repeat('?,', count($lessonIds) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE userId = ? AND lessonId IN ({$marks});";
+        
+        return $this->getConnection()->fetchAll($sql, array_merge(array($userId), $lessonIds));
+    }
+    
 	public function findLearnsByUserIdAndCourseId($userId, $courseId)
 	{
         $sql ="SELECT * FROM {$this->table} WHERE userId=? AND courseId=?";

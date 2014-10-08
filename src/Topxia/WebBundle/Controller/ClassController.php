@@ -62,11 +62,26 @@ class ClassController extends ClassBaseController
         $date = $viewType == 'today' ? date('Ymd') : date('Ymd', strtotime('+ 1 day'));
         $results = $this->getScheduleService()->findOneDaySchedules($classId, $date);
 
+        $lessonIds = array_keys($results['lessons']); 
+        $userLearns = $this->getCourseService()->findLessonLearnsByIds($userId, $lessonIds);
+        $lastSchedule = array();
+        $headSchedule = array();
+        foreach ($results['schedules'] as $key => $schedule) {
+            if(isset($userLearns[$schedule['lessonId']]) && $userLearns[$schedule['lessonId']]['status'] == 'finished') {
+                $schedule['status'] = 'finished';
+                $lastSchedule[] = $schedule;
+            } else {
+                $schedule['status'] = 'notFinished';
+                $headSchedule[] = $schedule;
+            }   
+        }
+        $newSchedules = array_merge($headSchedule, $lastSchedule);
+       
         return $this->render('TopxiaWebBundle:Class:schedule-list.html.twig', array(
             'courses' => $results['courses'],
             'lessons' => $results['lessons'],
             'teachers' => $results['teachers'],
-            'schedules' => $results['schedules'],
+            'schedules' => $newSchedules,
             'classId' => $classId,
             'viewType' => $viewType,
             )); 
