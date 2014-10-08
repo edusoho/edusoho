@@ -336,6 +336,11 @@
 .schedule .month .not-in-month {
     background-color: rgb(247, 247, 247);
 }
+
+.schedule .month td {
+    cursor: pointer;
+}
+
 .schedule .popover-content img {
     height: 48px;
     width: 48px;

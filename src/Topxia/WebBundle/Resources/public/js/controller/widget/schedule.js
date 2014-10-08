@@ -301,8 +301,9 @@ define(function(require, exports, module) {
             });  
         },
         popover: function() {
-            $('.schedule tbody').popover({
+            $('.schedule').popover({
                 selector: 'td',
+                container: '.popover-container',
                 trigger: 'hover',
                 placement: 'auto',
                 html: true,
