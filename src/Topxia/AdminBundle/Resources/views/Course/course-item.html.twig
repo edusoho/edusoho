@@ -1,0 +1,9 @@
+<div data-course-id="{{course.id}}" class="col-md-4" role="course-item" >
+	<div class="thumbnail" style="position:relative">
+	  	<img src="{{ default_path('coursePicture',course.largePicture|default(null), 'large') }}" />
+		<p>
+		{{course.title}}
+		</p>
+		<span class="label label-danger series-mode-label">删除</span>
+	</div>
+</div>

@@ -20,6 +20,13 @@
 #mobile-banner4-container img , 
 #mobile-banner5-container img 
 {max-width: 80%; margin-bottom: 10px;}
+
+.series-mode-label {
+position: absolute;
+top: 10px;
+right: 10px;
+font-size: 12px;
+}
 </style>
 
 <div class="page-header"><h1>移动客户端设置</h1></div>
@@ -267,17 +274,14 @@
       </div>
     </div>
     <div class="form-group">
-      <div class="col-md-2 control-label">
+      <div class="col-md-2">
       </div>
-      <div class="col-md-8 controls" role="course-item-container">
+      <div class="col-md-8" role="course-item-container">
+        <div class="row">
         {% for course in courses|default(null) %}
-        <div data-course-id="{{course.id}}" class="col-sm-6 col-md-4" role="course-item">
-          <a href="javascript:;" class="thumbnail">
-            <img src="{{ default_path('coursePicture',course.largePicture|default(null), 'large') }}" />
-          </a>
-          {{course.title}}
-        </div>
+        {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:course} %}
         {% endfor %}
+        </div>
       </div>
     </div>
   </fieldset>

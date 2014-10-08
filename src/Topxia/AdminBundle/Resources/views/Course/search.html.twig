@@ -13,12 +13,7 @@
 	</div>
 	<div class="row">
 		{% for course in courses|default(null) %}
-		<div data-course-id="{{course.id}}" class="col-sm-6 col-md-4" role="course-item">
-			<a href="javascript:;" class="thumbnail">
-			  <img src="{{ default_path('coursePicture',course.largePicture|default(null), 'large') }}" />
-			</a>
-			{{course.title}}
-		</div>
+		{% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:course} %}
 		{% endfor %}
 	</div>
 </div>
