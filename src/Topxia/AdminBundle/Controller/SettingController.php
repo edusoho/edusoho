@@ -83,7 +83,8 @@ class SettingController extends BaseController
             'bannerClick3' => '', // 轮播图3是否触发动作
             'bannerClick4' => '', // 轮播图4是否触发动作
             'bannerClick5' => '', // 轮播图5是否触发动作
-            'notice' => '' //公告
+            'notice' => '', //公告
+            'courseIds' => '' //每周精品课
         );
 
         $mobile = array_merge($default, $mobile);
@@ -95,8 +96,11 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
 
+        $courseIds = explode(",", $mobile['courseIds']);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
-            'mobile'=>$mobile
+            'mobile'=>$mobile,
+            'courses'=>$courses
         ));
     }
 
@@ -895,6 +899,11 @@ class SettingController extends BaseController
 
         return new Response(json_encode($response));
 
+    }
+
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
     protected function getUploadFileService()
