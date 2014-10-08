@@ -186,6 +186,10 @@ class LessonServiceImpl extends BaseService implements LessonService
 		}
 
 		$user = $this->controller->getuserByToken($this->request);
+        
+                        if (!$user->isLogin()) {
+                            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+                        }
 		$lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
 		$this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
 		if (empty($lesson)) {
@@ -194,10 +198,6 @@ class LessonServiceImpl extends BaseService implements LessonService
 
 		if ($lesson['free'] == 1) {
 			return $this->coverLesson($lesson);
-		}
-
-		if (!$user->isLogin()) {
-			return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
 		}
 
 		$member = $this->controller->getCourseService()->getCourseMember($courseId, $user['id']);
