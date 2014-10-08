@@ -67,7 +67,7 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
         $teacherIds = ArrayToolkit::column($courses, 'teacherIds');
         $teacherIds_merged = array();
         foreach ($teacherIds as $item) {
-            $teacherIds_merged = $teacherIds_merged + $item;
+            $teacherIds_merged = array_merge($teacherIds_merged, $item);
         }
         $teachers = $this->getUserSerivce()->findUsersByIds($teacherIds_merged);
         $scheduleGroup = ArrayToolkit::group($schedules?:array(), 'date');
@@ -107,6 +107,7 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
             }
             $i++;
         }
+
         $result['schedules'] = $scheduleGroup;
         $result['courses'] = $courses;
         $result['lessons'] = $lessons;

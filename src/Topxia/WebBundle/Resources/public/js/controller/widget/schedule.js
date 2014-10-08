@@ -202,7 +202,7 @@ define(function(require, exports, module) {
                             var $name = $('<span></span>');
                             $img.attr("src", courses[lessons[schedule[i].lessonId].courseId].middlePicture);
                             $title.html(lessons[schedule[i].lessonId].title);
-                            $name.html(teachers[courses[lessons[schedule[i].lessonId].courseId].teacherIds[0]].truename);
+                            $name.html(teachers[courses[lessons[schedule[i].lessonId].courseId].teacherIds[0]].truename || '');
                             
                             $a.append($img);
                             $div.append($title).append($name);

@@ -18,6 +18,7 @@ class ClassScheduleController extends ClassBaseController
 
     public function coursesAction(Request $request, $class)
     {
+        $this->tryViewClass($class['id']);
         $user = $this->getCurrentUser();
         $courses = array();
         $conditions =array(
@@ -44,6 +45,19 @@ class ClassScheduleController extends ClassBaseController
                 'users' => $users,
                 ));
         }
+
+        if($user->isTeacher()) {
+            $newCourses = array();
+            foreach ($courses as $course) {
+                if(in_array($user['id'], $course['teacherIds'])) {
+                    $newCourses[] = $course;
+                }
+            }
+            return $this->render('TopxiaWebBundle:ClassSchedule:courses-editable.html.twig', array(
+                'courses' => $newCourses,
+                'users' => $users,
+                ));
+        }
         
         return $this->render('TopxiaWebBundle:ClassSchedule:courses.html.twig', array(
             'courses' => $courses,
@@ -63,6 +77,7 @@ class ClassScheduleController extends ClassBaseController
 
     public function scheduleAction(Request $request, $classId)
     {
+        $user = $this->getCurrentUser();
         $previewAs = $request->query->get('previewAs') ? : 'week';
         $sunDay = $request->query->get('sunday');
         $period = $request->query->get('date');
@@ -79,16 +94,20 @@ class ClassScheduleController extends ClassBaseController
             $results['courses'] = $courses;
             return $this->createJsonResponse($results);
         }
+        $userLessonLearns = $this->getCourseService()->findUserLessonLearns($user['id']);
+        $userLessonLearns =ArrayToolkit::index($userLessonLearns, 'lessonId');
         return $this->render("TopxiaWebBundle:ClassSchedule:{$previewAs}-view.html.twig", array(
             'courses' => $results['courses'],
             'lessons' => $results['lessons'],
             'changeMonth' => $results['changeMonth'],
             'schedules' => $results['schedules'],
+            'lessonLearns' => $userLessonLearns,
             ));
     }
 
     public function saveAction(Request $request, $classId)
     {
+        $this->tryManageClass($classId);
         $lessons = $request->request->all();
         $lessonIds = explode(',', $lessons['ids']);
         $schedules = array();

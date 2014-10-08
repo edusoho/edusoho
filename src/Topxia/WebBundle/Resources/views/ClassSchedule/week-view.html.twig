@@ -20,8 +20,14 @@
             <ul class="lesson-ul" data-day="{{ day }}">
               {% if items %}
                 {% for item in items %}
+                {% set lessonLearn = lessonLearns[item.lessonId] | default(null)%}
                   <li data-id="{{ item.lessonId }}">
+                    {% if can_remove_schedule(app.user, courses, lessons, item) %}
                     <button type="button" class="close pull-right lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    {% endif %}
+                    {% if lessonLearn and lessonLearn.status == 'finished' %}
+                    <span class="glyphicon glyphicon-ok pull-left text-success"></span>
+                    {% endif %}
                     <img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ><br>{{ lessons[item.lessonId].title}}</li>
                 {% endfor %}
               {% endif %}

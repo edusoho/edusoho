@@ -20,6 +20,7 @@ class K12Extension extends \Twig_Extension
         return array(
             'check_class_permission' => new \Twig_Function_Method($this, 'checkClassPermission') ,
             'user_in_class_role' => new \Twig_Function_Method($this, 'getClassRole'),
+            'can_remove_schedule' => new \Twig_Function_Method($this, 'canRemoveSchedule'),
         );
     }
 
@@ -33,6 +34,22 @@ class K12Extension extends \Twig_Extension
     {
         $member = $this ->getClassesService()->getMemberByUserIdAndClassId($userId, $classId);
         return empty($member) ? 'none': $member['role'];
+    }
+
+    public function canRemoveSchedule($user, $courses, $lessons, $schedule)
+    {
+        if($user->isAdmin()) {
+            return true;
+        } else if ($user->isTeacher()) {
+            $course = $courses[$lessons[$schedule['lessonId']]['courseId']];
+            if(in_array($user['id'], $course['teacherIds'])) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     protected function getClassesService()

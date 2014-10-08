@@ -372,6 +372,7 @@
 .lesson .lesson-ul {
     margin: 0;
     padding: 0;
+    cursor: pointer;
 }
 .lesson .lesson-ul li img{
     width: 70px;
