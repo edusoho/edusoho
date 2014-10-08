@@ -103,3 +103,7 @@ parent_child_status:
 parent_child_courses:
     pattern:  /parent/child/courses
     defaults: { _controller: TopxiaWebBundle:Parent:childCourses }
+
+parent_child_testpapers:
+    pattern:  /parent/child/testpapers
+    defaults: { _controller: TopxiaWebBundle:Parent:childTestpapers }

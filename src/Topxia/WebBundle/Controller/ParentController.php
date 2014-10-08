@@ -36,7 +36,7 @@ class ParentController extends BaseController
 		if(!$user->isParent()) {
             return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
         }
-		$selectedChild=$this->getSelectedChild($request->query->get('childId'));
+        $selectedChild=$this->getSelectedChild($request->query->get('childId'));
 		
         $courses = $this->getCourseService()->findUserLeaningCourses(
             $selectedChild['id'],
@@ -47,6 +47,48 @@ class ParentController extends BaseController
 			'selectedChild'=>$selectedChild,
 			'courses'=>$courses
 		));
+	}
+
+	public function childTestpapersAction(Request $request)
+	{
+        $user=$this->getCurrentUser();
+        if(!$user->isParent()) {
+            return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
+        }
+        $selectedChild=$this->getSelectedChild($request->query->get('childId'));
+        
+        $paginator = new Paginator(
+            $request,
+            $this->getTestpaperService()->findTestpaperResultsCountByUserId($selectedChild['id']),
+            10
+        );
+
+        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByUserId(
+            $selectedChild['id'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $testpapersIds = ArrayToolkit::column($testpaperResults, 'testId');
+
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpapersIds);
+        $testpapers = ArrayToolkit::index($testpapers, 'id');
+
+        $targets = ArrayToolkit::column($testpapers, 'target');
+        $courseIds = array_map(function($target){
+            $course = explode('/', $target);
+            $course = explode('-', $course[0]);
+            return $course[1];
+        }, $targets);
+
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        return $this->render('TopxiaWebBundle:Parent:child-testpapers.html.twig',array(
+            'selectedChild'=>$selectedChild,
+            'myTestpaperResults' => $testpaperResults,
+            'myTestpapers' => $testpapers,
+            'courses' => $courses,
+            'paginator' => $paginator
+        ));
 	}
 
 	public function childInfoAction(Request $request,$childId)
@@ -114,6 +156,11 @@ class ParentController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
 }

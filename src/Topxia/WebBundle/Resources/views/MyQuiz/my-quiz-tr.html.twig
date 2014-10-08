@@ -19,11 +19,14 @@
 		{% endif %}
 	</td>
 	<td>
-		{% if myTestpaperResult.status in ['doing', 'paused'] %}
-			<a href="{{ path('course_manage_show_test', {id:myTestpaperResult.id}) }}" class="btn btn-default btn-sm">继续考试</a>
+		{% if app.user.isParent() %}
 		{% else %}
-			<a href="{{ path('course_manage_redo_test', {testId:myTestpaper.id}) }}" class="btn btn-default btn-sm">再做一次</a>
-			<a href="{{ path('course_manage_test_results', {id:myTestpaperResult.id}) }}" class="btn btn-link btn-sm">查看结果</a>
+			{% if myTestpaperResult.status in ['doing', 'paused'] %}
+				<a href="{{ path('course_manage_show_test', {id:myTestpaperResult.id}) }}" class="btn btn-default btn-sm">继续考试</a>
+			{% else %}
+				<a href="{{ path('course_manage_redo_test', {testId:myTestpaper.id}) }}" class="btn btn-default btn-sm">再做一次</a>
+				<a href="{{ path('course_manage_test_results', {id:myTestpaperResult.id}) }}" class="btn btn-link btn-sm">查看结果</a>
+			{% endif %}
 		{% endif %}
 	</td>
 </tr>
