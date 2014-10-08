@@ -25,8 +25,8 @@
 									{% if side_nav == 'parent-child-testpapers' %} active {% endif %}"
 									href="{{path('parent_child_testpapers', {childId:selectedChild.id|default(null)}) }}">考试成绩</a>
 
-									<a class="list-group-item {% if side_nav == 'parent-child-questions' %} active {% endif %}"
-									href="{{path('parent_child_questions', {childId:selectedChild.id|default(null)}) }}">问题与讨论</a>
+									<a class="list-group-item {% if side_nav == 'parent-child-threads' %} active {% endif %}"
+									href="{{path('parent_child_threads', {type:'question',childId:selectedChild.id|default(null)}) }}">问题与讨论</a>
 	              </ul>
 	            </div>
 	          {% endif %}

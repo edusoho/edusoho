@@ -12,7 +12,6 @@
 		<div class="panel-body">
 	  	{% if courses %}
 		    {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
-				{{ web_macro.paginator(paginator) }} 
 		  {% else %}
 		    <div class="empty">暂无学习中的课程</div>
 		  {% endif %}

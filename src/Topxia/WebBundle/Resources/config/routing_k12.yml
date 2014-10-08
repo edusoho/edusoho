@@ -108,10 +108,6 @@ parent_child_testpapers:
     pattern:  /parent/child/testpapers
     defaults: { _controller: TopxiaWebBundle:Parent:childTestpapers }
 
-parent_child_questions:    
-    pattern:  /parent/child/questions
-    defaults: { _controller: TopxiaWebBundle:Parent:childQuestions }
-
-parent_child_discussions:    
-    pattern:  /parent/child/discussions
-    defaults: { _controller: TopxiaWebBundle:Parent:childDiscussions }
+parent_child_threads:    
+    pattern:  /parent/child/threads/{type}
+    defaults: { _controller: TopxiaWebBundle:Parent:childThreads }

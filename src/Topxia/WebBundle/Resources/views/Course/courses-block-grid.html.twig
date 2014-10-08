@@ -84,6 +84,17 @@
 
         {% if mode in ['learn'] %}
           {% if app.user.isParent() %}
+            <div class="learn-status">
+              {% if course.memberIsLearned %}
+                <div class="progress">
+                  <div class="progress-bar progress-bar-success" style="width: 100%;"></div>
+                </div>
+              {% else %}
+                <div class="progress">
+                  <div class="progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.lessonNum) }};"></div>
+                </div>
+              {% endif %}
+            </div>
           {% else %}
             <div class="learn-status">
               {% if course.memberIsLearned %}
