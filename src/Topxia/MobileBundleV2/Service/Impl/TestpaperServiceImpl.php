@@ -50,22 +50,59 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	            	$testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
             		return array(
 	                            'testpaper'=>$testpaper,
-	                            'items'=>$this->getTestpaperItem($testId)
+	                            'items'=>$this->getTestpaperItem($testpaperResult)
 	                            );
             	}
             	if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
             		return array(
 	                            'testpaper'=>$testpaper,
-	                            'items'=>$this->getTestpaperItem($testId)
+	                            'items'=>$this->getTestpaperItem($testpaperResult)
 	                            );
 	        	} else {
-	            	return "result";
+	            	return $this->createErrorResponse('error', '试卷正在批阅！不能重新考试!');
 	        	}
 	}
 
-	private function getTestpaperItem($testId)
+	public function getTestpaperResult()
 	{
-		$result = $this->getTestpaperService()->showTestpaper($testId);
+	        $id = $this->getParam("id");
+	        $user = $this->controller->getUserByToken($this->request);
+	        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
+	        if (!$testpaperResult) {
+	            return $this->createErrorResponse('error', '不可以访问其他学生的试卷哦!');
+	        }
+	        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+
+	        $targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+	       
+	        if ($testpaperResult['userId'] != $user['id']){
+	            $course = $this->controller->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
+	        }
+
+	        if (empty($course) and $testpaperResult['userId'] != $user['id']){
+	                        return $this->createErrorResponse('error', '不可以访问其他学生的试卷哦!');
+	        }
+
+	        $result = $this->getTestpaperService()->showTestpaper($id, true);
+	        $items = $result['formatItems'];
+	        $accuracy = $result['accuracy'];
+
+	        //$total = $this->makeTestpaperTotal($testpaper, $items);
+
+	        //$favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
+
+	        $student = $this->controller->getUserService()->getUser($testpaperResult['userId']);
+
+	        return array(
+	        	"items"=>$items,
+	        	"accuracy"=>$accuracy,
+	        	"student"=>$student
+	        	);
+	}
+
+	private function getTestpaperItem($testpaperResult)
+	{
+		$result = $this->getTestpaperService()->showTestpaper($testpaperResult['id']);
         		$items = $result['formatItems'];
 
         		return $this->coverTestpaperItems($items);
@@ -73,29 +110,46 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
 	private function coverTestpaperItems($items)
 	{
-		return $items;
-		return array_map(function($item){
-			$item = array_map(function($itemValue){
-				$question = $itemValue['question'];
-				if (isset($question['metas'])) {
-					$metas= $question['metas'];
-					if (isset($metas['choices'])) {
-						$metas= array_values($metas['choices']);
-						$itemValue['question']['metas'] = $metas;
-					}
+		$controller = $this;
+		return array_map(function($item) use ($controller){
+			$item = array_map(function($itemValue) use ($controller){
+				if (isset($itemValue['items'])) {
+					$filterItems = array_values($itemValue['items']);
+					$itemValue['items'] = array_map(function($filterItem)use ($controller){
+						return $controller->filterMetas($filterItem);
+					}, $filterItems);
 				}
-				$answer = $question['answer'];
-				if (is_array($answer)) {
-					$itemValue['question']['answer'] = array_map(function($answerValue){
-						if (is_array($answerValue)) {
-							return implode('|', $answerValue);
-						}
-						return $answerValue;
-					}, $answer);
-					return $itemValue;
-				}
+
+				$itemValue = $controller->filterMetas($itemValue);
+				return $itemValue;
+				
 			}, $item);
 			return array_values($item);
 		}, $items);
+	}
+
+	public function filterMetas($itemValue)
+	{
+		$question = $itemValue['question'];
+		if (isset($question['metas'])) {
+			$metas= $question['metas'];
+			if (isset($metas['choices'])) {
+				$metas= array_values($metas['choices']);
+				$itemValue['question']['metas'] = $metas;
+			}
+		}
+
+		$answer = $question['answer'];
+		if (is_array($answer)) {
+			$itemValue['question']['answer'] = array_map(function($answerValue){
+				if (is_array($answerValue)) {
+					return implode('|', $answerValue);
+				}
+				return $answerValue;
+			}, $answer);
+			return $itemValue;
+		}
+
+		return $itemValue;
 	}
 }

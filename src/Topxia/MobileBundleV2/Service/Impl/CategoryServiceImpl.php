@@ -32,8 +32,20 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         if (empty($group)) {
             return array();
         } 
+
         $categories = $this->controller->getCategoryService()->getCategoryTree($group['id']);
 
+        array_unshift($categories, array(
+            "id"=>"0",
+            "code"=>"root",
+            "name"=>"默认分类",
+            "icon"=>"",
+            "path"=>"0",
+            "weight"=>"0",
+            "groupId"=>"0",
+            "description"=>"默认分类",
+            "depth"=>"0",
+            ));
         return $categories;
     }
 

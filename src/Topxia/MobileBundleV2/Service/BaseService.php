@@ -44,6 +44,11 @@ class BaseService {
         return $this->controller->getContainer();
     }
 
+    protected function getBlockService()
+    {
+        return $this->controller->getService('Content.BlockService');
+    }
+
     protected function getCouponService()
     {
         return $this->controller->getService('Coupon:Coupon.CouponService');
@@ -111,7 +116,6 @@ class BaseService {
         }
     
         $userIsTeacher = $this->controller->getCourseService()->isCourseTeacher($courseId, $user['id']);
-        $member['createdTime'] = date('c', $member['createdTime']);
         if ($userIsTeacher) {
             $member['role'] = 'teacher';
         } else {

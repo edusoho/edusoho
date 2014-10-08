@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SchoolServiceImpl extends BaseService implements SchoolService {
 
+    public $banner;
 
     public function sendSuggestion()
     {
@@ -18,19 +19,18 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         if (empty($info)) {
             return $this->createErrorResponse('error', '反馈内容不能为空！');
         }
-        $url = "";
-        try {
-                $file = $this->request->files->get('file');
-                $record = $this->getFileService()->uploadFile('course', $file);
-                $url = $this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
-                
-        } catch (\Exception $e) {
-                $url = "error";
+
+        return $info;
+    }
+
+    public function getShradCourseUrl()
+    {
+        $courseId = $this->request->get("courseId");
+        if (empty($courseId)) {
+            return new Response("课程不存在或已删除");
         }
 
-        $url = "<br><img src=''{$url}/>";
-        $info = $info . $url;
-        return $info;
+        return $this->controller->redirect($this->controller->generateUrl('course_show', array('id' => $courseId)));
     }
 
     public function getUserterms()
@@ -109,7 +109,45 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public function getSchoolBanner()
     {
-        return $this->getSchoolBannerFromDb();
+        $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
+        $baseUrl = $this->request->getSchemeAndHttpHost();
+
+        $this->banner = array();
+        if (empty($blocks)) {
+            return $banner;
+        }
+
+        $content = $this;
+        //replace <a><img></a>
+        $blocks = preg_replace_callback('/<a href=[\'\"](.*?)[\'\"]><img src=[\'\"](.*?)[\'\"][^>]\/><\/a>/', function($matches) use ($baseUrl, $content) {
+            $matcheUrl = $matches[2];
+            if (stripos($matcheUrl, "../") == 0) {
+                $matcheUrl = substr($matcheUrl, 3);
+            }
+            $url = "${baseUrl}/$matcheUrl";
+            $content->banner[] = array(
+                "url"=>$url,
+                "action"=>"webview",
+                "params"=>$matches[1]
+                );
+            return '';
+        }, $blocks['home_top_banner']);
+
+        //replace img
+        $blocks = preg_replace_callback('/<img src=[\'\"](.*?)[\'\"]>/', function($matches) use ($baseUrl, $content) {
+            $matcheUrl = $matches[1];
+            if (stripos($matcheUrl, "../")) {
+                $matcheUrl = substr($matcheUrl, 3);
+            }
+            $url = "${baseUrl}/$matcheUrl";
+            $content->banner[] = array(
+                "url"=>$url,
+                "action"=>"none",
+                "params"=>''
+                );
+            return '';
+        }, $blocks);
+        return $this->banner;
     }
 
     public function getSchoolSiteByQrCode()
