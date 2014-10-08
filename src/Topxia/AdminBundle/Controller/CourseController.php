@@ -34,18 +34,15 @@ class CourseController extends BaseController
         ));
     }
 
-    public function searchModalAction(Request $request)
-    {
-        return $this->render('TopxiaAdminBundle:Course:search.html.twig', array());
-    }
-
     public function searchAction(Request $request)
     {
-        $conditions = $request->query->all();
+        $key = $request->request->get("key");
+
+        $conditions = array( "title"=>$key );
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
 
-        $paginator = new Paginator($this->get('request'), $count, 20);
+        $paginator = new Paginator($this->get('request'), $count, 6);
 
         $courses = $this->getCourseService()->searchCourses($conditions, null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
 
@@ -53,7 +50,13 @@ class CourseController extends BaseController
   
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
-        return $this->createJsonResponse($courses);
+        return $this->render('TopxiaAdminBundle:Course:search.html.twig', array(
+            'key' => $key,
+            'courses' => $courses,
+            'users' => $users,
+            'categories' => $categories,
+            'paginator' => $paginator
+        ));
     }
 
     public function deleteAction(Request $request, $id)

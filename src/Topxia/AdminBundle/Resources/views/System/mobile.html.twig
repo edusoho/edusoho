@@ -254,27 +254,25 @@
 
 
   <fieldset>
-  <legend>每周精选课程</legend>
-  <div class="help-block">所选择的课程将会在客户端【每周精选】栏目中显示，最多选择三门。<br>
-客户端【每周精选】栏目中默认显示的是网站中学员数最多的课程，最多显示三门。</div>
-  <div class="form-group">
-    <div class="col-md-2 control-label">
+    <legend>每周精选课程</legend>
+    <div class="help-block">所选择的课程将会在客户端【每周精选】栏目中显示，最多选择三门。<br>
+    客户端【每周精选】栏目中默认显示的是网站中学员数最多的课程，最多显示三门。
     </div>
-    <div class="col-md-8 controls">
-      <a class="btn btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_modal')}}">选择课程</a>
-    </div>
-  </div>
-  <div class="form-group">
-    <div class="col-md-2 control-label">
-    </div>
-    <div class="col-md-8 controls">
-      <div class="col-sm-6 col-md-3">
-        <a href="#" class="thumbnail">
-          <img src="{{ default_path('coursePicture',course.largePicture|default(null), 'large') }}" />
-        </a>
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+      </div>
+      <div class="col-md-8 controls">
+        <a class="btn btn-default" data-backdrop="static" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search')}}">选择课程</a>
+        <input type='hidden' name="courseIds"/>
       </div>
     </div>
-  </div>
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+      </div>
+      <div class="col-md-8 controls" role="course-item-container">
+        
+      </div>
+    </div>
   </fieldset>
 
 

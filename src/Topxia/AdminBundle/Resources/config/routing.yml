@@ -306,12 +306,6 @@ admin_course_search:
     pattern: /course/search
     defaults: { _controller: TopxiaAdminBundle:Course:search }
 
-admin_course_search_modal:
-    pattern: /course/search/modal
-    defaults: { _controller: TopxiaAdminBundle:Course:searchModal }
-    
-
-
 admin_live_course:
     pattern: /livecourse/{status}
     defaults: { _controller: TopxiaAdminBundle:LiveCourse:index }

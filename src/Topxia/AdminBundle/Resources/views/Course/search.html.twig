@@ -2,5 +2,31 @@
 
 {% block title %}每周精品课程{% endblock %}
 {% block body %}
-aa
+<div class=".container">
+	<div class="row">
+		<form action="{{path('admin_course_search')}}" class="form-inline" role="search-form">
+			<div class="form-group col-md-offset-3">
+				<input type="text" class="form-control" name="key" value="{{ key|default('') }}"/>
+			</div>
+			<button type="button" class="btn btn-primary">搜索</button>
+		</form>
+	</div>
+	<div class="row">
+		{% for course in courses|default(null) %}
+		<div data-course-id="{{course.id}}" class="col-sm-6 col-md-4" role="course-item">
+			<a href="javascript:;" class="thumbnail">
+			  <img src="{{ default_path('coursePicture',course.largePicture|default(null), 'large') }}" />
+			</a>
+			{{course.title}}
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+{{ web_macro.paginator(paginator) }}
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">关闭</button>
+  <script>app.load('course/search')</script>
 {% endblock %}
