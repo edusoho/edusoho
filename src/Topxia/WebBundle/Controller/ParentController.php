@@ -38,14 +38,22 @@ class ParentController extends BaseController
         }
         $selectedChild=$this->getSelectedChild($request->query->get('childId'));
 		
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->findUserLeaningCourseCount($selectedChild['id']),
+            12
+        );
+
         $courses = $this->getCourseService()->findUserLeaningCourses(
             $selectedChild['id'],
-            0,
-            PHP_INT_MAX
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
         );
+
 		return $this->render('TopxiaWebBundle:Parent:child-courses.html.twig',array(
 			'selectedChild'=>$selectedChild,
-			'courses'=>$courses
+			'courses'=>$courses,
+            'paginator'=>$paginator
 		));
 	}
 
