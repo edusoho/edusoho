@@ -83,6 +83,7 @@ class SettingController extends BaseController
             'bannerClick3' => '', // 轮播图3是否触发动作
             'bannerClick4' => '', // 轮播图4是否触发动作
             'bannerClick5' => '', // 轮播图5是否触发动作
+            'notice' => '' //公告
         );
 
         $mobile = array_merge($default, $mobile);
