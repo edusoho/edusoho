@@ -412,3 +412,7 @@ ul.lesson-ul li.placeholder {
     border: 1px dashed #ccc;
     list-style: none;
 }
+
+.schedule-list .media-list img {
+    height:80px;
+}

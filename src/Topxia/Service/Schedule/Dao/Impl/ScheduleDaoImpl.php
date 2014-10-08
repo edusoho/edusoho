@@ -35,4 +35,6 @@ class ScheduleDaoImpl extends BaseDao implements ScheduleDao
 		$sql = "SELECT * FROM {$this->table} WHERE classId = ? AND date >= ? AND date <= ?";
 		return $this->getConnection()->fetchAll($sql, array($classId, $startDay, $endDay)) ? : null;
 	}
+
+	
 }

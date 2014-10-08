@@ -57,6 +57,21 @@ class ClassController extends ClassBaseController
             ));
     }
 
+    public function scheduleAction($classId, $userId, $viewType)
+    {
+        $date = $viewType == 'today' ? date('Ymd') : date('Ymd', strtotime('+ 1 day'));
+        $results = $this->getScheduleService()->findOneDaySchedules($classId, $date);
+
+        return $this->render('TopxiaWebBundle:Class:schedule-list.html.twig', array(
+            'courses' => $results['courses'],
+            'lessons' => $results['lessons'],
+            'teachers' => $results['teachers'],
+            'schedules' => $results['schedules'],
+            'classId' => $classId,
+            'viewType' => $viewType,
+            )); 
+    }
+
     public function studentAction($class, $userId)
     {
 
@@ -112,4 +127,8 @@ class ClassController extends ClassBaseController
         return $this->getServiceKernel()->createService('Sign.SignService');
     }
 
+    private function getScheduleService()
+    {
+        return $this->getServiceKernel()->createService('Schedule.ScheduleService');
+    }
 }

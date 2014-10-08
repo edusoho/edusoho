@@ -25,6 +25,12 @@
             {{ render(controller('TopxiaWebBundle:Class:userInfo', {class:class, userId:app.user.id})) }}
           {% endblock %}
 
+          {% block schedule %}
+            <div style="display:block;height:auto; width:auto;background-color: #fff;"  class="well schedule-list">
+              {{ render(controller('TopxiaWebBundle:Class:schedule', {classId:class.id, userId:app.user.id, viewType:'today'})) }}
+            </div>
+          {% endblock %}
+
           {% block class_side %}
             {{ render(controller('TopxiaWebBundle:Class:statusBlock', {class:class})) }}
           {% endblock %}

@@ -115,6 +115,35 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
         return $result;
     }
 
+    public function findOneDaySchedules($classId, $date)
+    {
+        $schedules = $this->getScheduleDao()->findScheduleByPeriod($classId, $date, $date);
+        return $this->makeUpResultOneDay($schedules);
+    }
+
+    private function makeUpResultOneDay($schedules)
+    {
+        $lessonIds = ArrayToolkit::column($schedules?:array(), 'lessonId');
+        $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
+        $lessons = ArrayToolkit::index($lessons, 'id');
+        $courseIds =  ArrayToolkit::column($lessons?:array(), 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = ArrayToolkit::index($courses, 'id');
+        $teacherIds = ArrayToolkit::column($courses, 'teacherIds');
+        $teacherIds_merged = array();
+        foreach ($teacherIds as $item) {
+            $teacherIds_merged = array_merge($teacherIds_merged, $item);
+        }
+        $teachers = $this->getUserSerivce()->findUsersByIds($teacherIds_merged);
+        $schedules = ArrayToolkit::index($schedules?:array(), 'lessonId');
+
+        $result['schedules'] = $schedules;
+        $result['courses'] = $courses;
+        $result['lessons'] = $lessons;
+        $result['teachers'] = $teachers;
+        return $result;
+    }
+
     private function getScheduleDao()
     {
         return $this->createDao('Schedule.ScheduleDao');

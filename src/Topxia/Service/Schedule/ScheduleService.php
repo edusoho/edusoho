@@ -13,4 +13,5 @@ interface ScheduleService
 
 	public function findScheduleLessonsByMonth($classId, $period);
 
+	public function findOneDaySchedules($classId, $date);
 }
