@@ -1,1 +1,34 @@
-asasasasa
+{% extends 'TopxiaWebBundle:Parent:layout.html.twig' %}
+
+{% block title %}学习动态 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'parent/child-status' %}
+{% set side_nav = 'parent-child-status' %}
+
+{% block main %}
+
+  <div class="panel panel-default">
+		<div class="panel-body">
+			{% if statuses %}
+				<ul class="timeline">
+		      {% set user = selectedChild %}
+		      {% for time,statusList in statuses %}
+		        <li class="timeline-span">
+				      <div class="timeline-time">{{time}}</div>
+				      <div class="timeline-dot"></div>
+				      <div class="timeline-content">
+				      	<ul class="media-list">
+						      {% for status in statusList %}
+					      		{% include 'TopxiaWebBundle:Parent:child-status-li.html.twig'%}
+						      {% endfor %}
+				        </ul>
+					    </div>
+					  </li>
+		      {% endfor %}
+	    	</ul>
+      {% else %}
+        <div class="empty">还没有动态！</div>
+      {% endif %}
+		</div>
+	</div>
+{% endblock %}

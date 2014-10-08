@@ -1,0 +1,16 @@
+<li class="row media">
+  <div class="col-md-9">
+  	{% if status.type=='learned_lesson' %}
+  		学习了课时 <a href="{{ path('course_show', {id: status.properties.course.id}) }}">{{ status.properties.lesson.title }}</a>
+  	{% elseif status.type=='finished_testpaper' %}
+  		完成了考试 {{ status.properties.testpaper.name }}
+  	{% else %}
+  		加入了课程 <a href="{{ path('course_show', {id: status.properties.course.id}) }}">{{ status.properties.course.title }}</a>
+  	{% endif %}
+  </div>
+  {% if status.time=='今天' %}
+    <div class="col-md-3 timeline-smart-time">
+    	{{status.createdTime|smart_time}}
+    </div>
+  {% endif %}
+</li>

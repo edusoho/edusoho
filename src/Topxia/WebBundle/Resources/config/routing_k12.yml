@@ -99,3 +99,7 @@ class_members:
 parent_child_status:
     pattern:  /parent/child/status
     defaults: { _controller: TopxiaWebBundle:Parent:childStatus }
+
+parent_child_courses:
+    pattern:  /parent/child/courses
+    defaults: { _controller: TopxiaWebBundle:Parent:childCourses }
