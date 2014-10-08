@@ -18,6 +18,7 @@ define(function(require, exports, module) {
             "click span.previous-week": "previousWeek",
             "click span.next-month": "nextMonth",
             "click span.previous-month": "previousMonth",
+            "click button.lesson-remove": "removeLesson",
             "change select.viewType": "changeView"
         },
         setup: function() {
@@ -36,6 +37,7 @@ define(function(require, exports, module) {
             var lessonSort = $("ul.lesson-ul").sortable({
                 group:'schedule-sort',
                 drag:false,
+                itemSelector:'.lesson-item',
                 onDragStart: function (item, container, _super) {
                     // Duplicate items of the no drop area
                     if(!container.options.drop){
@@ -44,7 +46,13 @@ define(function(require, exports, module) {
                     _super(item);
                 },
                 onDrop: function ($item, container, _super, event) {
-                    $item.html("<li data-id='" + $item.data('id') +"'><img src='"+$item.data('icon')+"'><br>"+ $item.data('title') +"</li>");
+                    var $li = $('<li></li>'),
+                        img = '<img src="'+ $item.data('icon') +'"><br>'+ $item.data('title') +'</img>',
+                        close = '<button type="button" class="close pull-right lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>';
+
+                    $li.data('id', $item.data('id')).append(close).append(img);
+
+                    $item.prop('outerHTML', $li.prop("outerHTML"));
                     _super($item);
 
                     var result = self.serializeContainer(container.el);
@@ -152,6 +160,14 @@ define(function(require, exports, module) {
             $.post(this.get('saveUrl'), data, function(){
 
             });
+        },
+        removeLesson: function(e) {
+            var $button = $(e.currentTarget),
+                $li = $button.parent(),
+                $ul = $li.parent();
+            $li.remove();
+            var result = this.serializeContainer($ul);
+            this.save(result);
         },
         disableSort: function() {
             $("ul.course-item-list").each(function(){

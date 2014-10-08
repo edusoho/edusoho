@@ -361,6 +361,14 @@
     padding: 5px;
 }
 
+.lesson-ul li .close {
+    visibility: hidden;
+}
+
+.lesson-ul li:hover .close {
+    visibility: visible;
+}
+
 .lesson .lesson-ul {
     margin: 0;
     padding: 0;

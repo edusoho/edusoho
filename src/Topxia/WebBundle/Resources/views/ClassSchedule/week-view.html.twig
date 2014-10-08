@@ -20,7 +20,9 @@
             <ul class="lesson-ul" data-day="{{ day }}">
               {% if items %}
                 {% for item in items %}
-                  <li data-id="{{ item.lessonId }}"><img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ><br>{{ lessons[item.lessonId].title}}</li>
+                  <li data-id="{{ item.lessonId }}">
+                    <button type="button" class="close pull-right lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ><br>{{ lessons[item.lessonId].title}}</li>
                 {% endfor %}
               {% endif %}
             </ul>
