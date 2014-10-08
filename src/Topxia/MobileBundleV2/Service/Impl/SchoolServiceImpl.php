@@ -27,7 +27,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     {
         $courseId = $this->request->get("courseId");
         if (empty($courseId)) {
-            return $this->createErrorResponse('error', '课程不存在，或已删除');
+            return new Response("课程不存在或已删除");
         }
 
         return $this->controller->redirect($this->controller->generateUrl('course_show', array('id' => $courseId)));
