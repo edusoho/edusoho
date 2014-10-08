@@ -284,7 +284,6 @@ class WebExtension extends \Twig_Extension
         }
 
         $days = array('日', '一', '二', '三', '四', '五', '六');
-
         $index = intval(date('w', $value));
 
         return $days[$index];

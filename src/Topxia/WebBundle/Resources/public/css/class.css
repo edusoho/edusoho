@@ -340,7 +340,15 @@
 .schedule .month td {
     cursor: pointer;
 }
+.schedule .week .today {
+    background-color: red;
+    color:yellow;
+}
 
+.schedule .month .today {
+    background-color: pink;
+    color:yellow;
+}
 .schedule .popover-content img {
     height: 48px;
     width: 48px;

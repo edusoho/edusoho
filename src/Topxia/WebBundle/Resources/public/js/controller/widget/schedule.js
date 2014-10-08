@@ -115,6 +115,8 @@ define(function(require, exports, module) {
             $tbody.append(newtr);
             var row = 1;
             var queryDate = [], i = 0;
+            var date = new Date();
+            var today = '' + date.getFullYear() + ((date.getMonth()+1) >9?(date.getMonth()+1):'0'+(date.getMonth()+1)) + (date.getDate()>9?date.getDate():'0'+date.getDate());
 
             for(var day = 1; day <= days; day++)
             {
@@ -123,6 +125,9 @@ define(function(require, exports, module) {
                 queryDate[i++] = date;
                 $tbody.find(".t-" + row + '-' + week).addClass(date).removeClass('not-in-month').html(day);
                 //$tbody.find(".t-" + row + '-' + week).addClass('d-' + day);
+                if(today == date) {
+                    $tbody.find(".t-" + row + '-' + week).addClass('today');
+                }
                 if(week == 6 && day != days) {
                     row++;
                     newtr = '<tr><td class="t-' + row + '-0 not-in-month"></td><td class="t-' + row + '-1 not-in-month"></td><td class="t-' + row + '-2 not-in-month"></td><td class="t-' + row + '-3 not-in-month"></td><td class="t-' + row + '-4 not-in-month"></td><td class="t-' + row + '-5 not-in-month"></td><td class="t-' + row + '-6 not-in-month"></td></tr>';
@@ -144,12 +149,18 @@ define(function(require, exports, module) {
                 var date = '' + pYear + (pMonth>=10?pMonth:'0'+pMonth) + (day>=10?day:'0'+day);
                 queryDate[i++] = date;
                 $(this).addClass(date).html(day);
+                if(today == date) {
+                    $(this).addClass('today');
+                }
             });
             $tbody.find('tr:last .not-in-month').each(function(index){
                 var day = index + 1;
                 var date = '' + nYear + (nMonth>=10?nMonth:'0'+nMonth) + (day>=10?day:'0'+day);
                 queryDate[i++] = date;
                 $(this).addClass(date).html(day);
+                if(today == date) {
+                    $(this).addClass('today');
+                }
             });
 
             this.disableSort();

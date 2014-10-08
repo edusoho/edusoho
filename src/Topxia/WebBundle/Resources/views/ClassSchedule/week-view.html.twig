@@ -1,16 +1,19 @@
+{% set week = ['日','一','二','三','四','五','六']%}
 <div class="row ptm">
   <span class="glyphicon glyphicon-chevron-left text-success col-md-1 tac mtm previous-week"></span>
   <table class="col-md-10 tac week">
     <thead>
       <tr class="">
-        <td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td>
+        {% for day,items in schedules %}
+        <td {% if day == 'now'|date('Ymd')%} class="today" {% endif %}>{{ week[loop.index0]}}</td>
+        {% endfor %}
       </tr>
 
     </thead>
     <tbody>
       <tr class="day">
         {% for day,items in schedules %}
-          <td data-day="{{ day }}" {% if day|slice(4,2) != 'now'|date('m')%}class="text-muted" {% endif %}>{{ day|slice(6,2) }}</td>
+          <td data-day="{{ day }}" {% if day == 'now'|date('Ymd')%} class="today" {% endif %} {% if day|slice(4,2) != 'now'|date('m')%}class="text-muted" {% endif %}>{{ day|slice(6,2) }}</td>
         {% endfor %}
       </tr>
       {% if changeMonth %} <tr class="hidden yearMonth"></tr>{% endif %}
