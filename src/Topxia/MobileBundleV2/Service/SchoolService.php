@@ -14,4 +14,6 @@ interface SchoolService
 	public function getSchoolInfo();
 
 	public function sendSuggestion();
+
+	public function getShradCourseUrl();
 }

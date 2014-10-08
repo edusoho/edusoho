@@ -23,6 +23,16 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         return $info;
     }
 
+    public function getShradCourseUrl()
+    {
+        $courseId = $this->getParam("courseId");
+        if (empty($courseId)) {
+            return $this->createErrorResponse('error', '课程不存在，或已删除');
+        }
+
+        return $this->controller->redirect($this->controller->generateUrl('course_show', array('id' => $courseId)));
+    }
+
     public function getUserterms()
     {
         $setting = $this->controller->getSettingService()->get('auth', array());
