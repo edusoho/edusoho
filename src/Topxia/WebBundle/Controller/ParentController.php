@@ -38,8 +38,14 @@ class ParentController extends BaseController
         }
 		$selectedChild=$this->getSelectedChild($request->query->get('childId'));
 		
+        $courses = $this->getCourseService()->findUserLeaningCourses(
+            $selectedChild['id'],
+            0,
+            PHP_INT_MAX
+        );
 		return $this->render('TopxiaWebBundle:Parent:child-courses.html.twig',array(
-			'selectedChild'=>$selectedChild
+			'selectedChild'=>$selectedChild,
+			'courses'=>$courses
 		));
 	}
 
@@ -103,6 +109,11 @@ class ParentController extends BaseController
     protected function getStatusService()
     {
         return $this->getServiceKernel()->createService('User.StatusService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
 }

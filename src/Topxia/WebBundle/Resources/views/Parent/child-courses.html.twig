@@ -7,7 +7,15 @@
 {% block main %}
 	<div class="panel panel-default">
 		<div class="panel-body">
-			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<div class="row">
+				{% for course in courses %}
+					<div class="col-md-4">
+						{% include 'TopxiaWebBundle:Parent:child-courses-item.html.twig'%}
+					</div>
+			  {% else %}
+			    <div class="empty">暂无学习中的课程</div>
+			  {% endfor %}
+			</div>
 		</div>
 	</div>
 
