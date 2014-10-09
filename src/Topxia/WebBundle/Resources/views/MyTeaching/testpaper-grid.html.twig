@@ -1,0 +1,15 @@
+<div style="margin-bottom:15px" class="">
+	<a class="pull-left" href="{{path('user_show',{id:testpaperUser.id})}}">
+	  <img class="media-object pull-left"  width="48" height="48" src="{{file_path(testpaperUser.smallAvatar, 'avatar.png')}}" alt="{{testpaperUser.truename}}">
+	</a>
+	<div class="media-body">
+  	<div style="margin-bottom:15px">
+	  	<a href="{{ path('course_manage_test_teacher_check', {id:paperResult.id}) }}">
+	  		<h5 class="media-heading">{{ testpaper.name|plain_text(60) }}</h5>
+	  	</a>
+	  </div>
+	  <a href="{{ path('user_show', {id:testpaperUser.id}) }}">
+	    <h5 class="media-heading">{{testpaperUser.truename}}</h5>
+	  </a>
+	</div>
+</div>

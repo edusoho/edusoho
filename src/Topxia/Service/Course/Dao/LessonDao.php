@@ -39,6 +39,8 @@ interface LessonDao
 
     public function findLessonsByIds(array $ids);
 
+    public function findLessonsByCourseIds(array $courseIds);
+
     public function sumLessonGiveCreditByCourseId($courseId);
 
     public function sumLessonGiveCreditByLessonIds(array $lesonIds);

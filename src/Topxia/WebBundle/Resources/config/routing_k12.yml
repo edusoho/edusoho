@@ -115,3 +115,20 @@ class_course_items:
 class_student_schedule:
     pattern:  /class/{classId}/{userId}/{viewType}
     defaults: { _controller: TopxiaWebBundle:Class:schedule }
+
+parent_child_status:
+    pattern:  /parent/child/status
+    defaults: { _controller: TopxiaWebBundle:Parent:childStatus }
+
+parent_child_courses:
+    pattern:  /parent/child/courses
+    defaults: { _controller: TopxiaWebBundle:Parent:childCourses }
+
+parent_child_testpapers:
+    pattern:  /parent/child/testpapers
+    defaults: { _controller: TopxiaWebBundle:Parent:childTestpapers }
+
+parent_child_threads:    
+    pattern:  /parent/child/threads/{type}
+    defaults: { _controller: TopxiaWebBundle:Parent:childThreads }
+

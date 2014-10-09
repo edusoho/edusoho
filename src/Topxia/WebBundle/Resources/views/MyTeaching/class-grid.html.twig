@@ -1,0 +1,9 @@
+<div class="">
+  <a href="{{ path('class_show',{ classId: manageClass.id })}}">
+  	<img src="{{ file_url(manageClass.icon, 'class.png') }}" alt="{{ manageClass.name }}" class="class-picture">
+  </a>
+  <div class="caption">
+    <a href="{{ path('class_show',{ classId: manageClass.id })}}" class="pull-left">{{ class_name(manageClass) }}</a>
+    <div class="clearfix"></div>
+  </div>
+</div>

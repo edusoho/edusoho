@@ -15,4 +15,6 @@ interface CourseNoteLikeDao
 
 	public function findNoteLikesByNoteId($noteId);
 
+	public function findNoteLikesByNoteIds(array $noteIds);
+
 }

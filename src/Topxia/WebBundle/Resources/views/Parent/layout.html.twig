@@ -1,0 +1,40 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}个人中心 - {{ parent() }}{% endblock %}
+{% block content %}
+	{{ render(controller('TopxiaWebBundle:My:avatarAlert')) }}
+	<div class="row row-3-9">
+	  <div class="col-md-3">
+	    <div class="panel panel-default">
+	      <div class="panel-body">
+          <p class="text-center"><b>欢迎回来，{{app.user.truename}}</b></p>
+          {{ render(controller('TopxiaWebBundle:Parent:childInfo',{childId:selectedChild.id|default(null)})) }}
+	        <div class="list-group-block">
+	          {% if app.user.isParent() %}
+	            <div class="list-group-panel">
+	              <ul class="list-group">
+									<a class="list-group-item
+									{% if side_nav == 'parent-child-status' %} active {% endif %}" 
+									href="{{path('parent_child_status',{childId:selectedChild.id|default(null)})}}">学习状态</a>
+
+									<a class="list-group-item 
+									{% if side_nav == 'parent-child-courses' %} active {% endif %}" 
+									href="{{path('parent_child_courses',{childId:selectedChild.id|default(null)}) }}">在学课程</a>
+									
+									<a class="list-group-item 
+									{% if side_nav == 'parent-child-testpapers' %} active {% endif %}"
+									href="{{path('parent_child_testpapers', {childId:selectedChild.id|default(null)}) }}">考试成绩</a>
+
+									<a class="list-group-item {% if side_nav == 'parent-child-threads' %} active {% endif %}"
+									href="{{path('parent_child_threads', {type:'question',childId:selectedChild.id|default(null)}) }}">问题与讨论</a>
+	              </ul>
+	            </div>
+	          {% endif %}
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="col-md-9">{% block main %}{% endblock %}</div>
+	</div>
+
+{% endblock %}

@@ -14,7 +14,7 @@ class ParentController extends BaseController
             'roles'=>'ROLE_PARENT'
         );
 
-        if(!empty($fields)){
+        if(isset($fields['keywordType'])){
             $conditions=$this->getConditionsByFields($conditions,$fields);
         }
         $paginator = new Paginator(
@@ -30,17 +30,13 @@ class ParentController extends BaseController
             $paginator->getPerPageCount()
         );
         
-        $userRelations=$this->getUserService()->findUserRelationsByFromIdsAndType(ArrayToolkit::column($users, 'id'),'family');
-        
-        $relations=array();
-        foreach ($userRelations as $useRelation) {
-            $relations=array_merge($relations,$useRelation);
-        }
+        $relations=$this->getUserService()->findUserRelationsByFromIdsAndType(ArrayToolkit::column($users, 'id'),'family');
+        $userRelations=ArrayToolkit::group($relations,'fromId');
+
         $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
         $classMembers=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($relations, 'toId'));
         $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($classMembers, 'classId'));
         $classMembers=ArrayToolkit::index($classMembers, 'userId');
-        $classes=ArrayToolkit::index($classes, 'id');
         return $this->render('TopxiaAdminBundle:Parent:index.html.twig', array(
             'users' => $users,
             'userRelations'=> $userRelations,
@@ -56,7 +52,7 @@ class ParentController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $userData['mobile'] = $formData['mobile'];
-            $userData['email'] = $formData['email'];
+            $userData['email'] = empty($formData['email'])?'p'.$formData['mobile'].'@exmple.com':$formData['email'];
             $userData['truename'] = $formData['truename'];
             $userData['password'] = $formData['password'];
             $userData['createdIp'] = $request->getClientIp();

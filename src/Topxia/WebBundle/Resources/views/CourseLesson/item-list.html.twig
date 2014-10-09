@@ -17,7 +17,11 @@
 		  	  </li>
 		    {% endif %}
 		  {% elseif 'lesson' in id %}
-	    	  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
+		  	{% if app.user.isParent() %}
+		  		{% set lessonUrl = path('course_lesson_preview', {courseId:course.id,lessonId:item.id}) %}
+		  	{% else %}
+	    		{% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
+		  	{% endif %}
 		    <li class="item lesson-item {% if learnStatuses[item.id]|default(null) %}lesson-item-{{ learnStatuses[item.id] }}{% endif %} lesson-item-{{item.id}} hover-item clearfix " data-id="{{ item.id }}">
 		    	{% if item.status == 'published' %}	    	
 			    	{% if item.type == 'video' %}
@@ -68,7 +72,11 @@
 
 		    	<span class="name ">课时{{ item.number }}</span>
 		    	<span class="pie ">&nbsp;</span>
-		    	<a class=" title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}" style="white-space:nowrap; overflow:hidden; text-overflow: ellipsis;">
+		    	{% if app.user.isParent() %}
+		    		<a class="title" href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}" style="white-space:nowrap; overflow:hidden; text-overflow: ellipsis;">
+		    	{% else %}
+		    		<a class=" title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}" style="white-space:nowrap; overflow:hidden; text-overflow: ellipsis;">
+		    	{% endif %}
 			    		{{ item.title }}
 				    {% if item.materialNum > 0 %}
 				      <span class="glyphicon  glyphicon-download" title="资料"></span>

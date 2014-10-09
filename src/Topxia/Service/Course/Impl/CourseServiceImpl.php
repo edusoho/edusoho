@@ -68,6 +68,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return ArrayToolkit::index($lessonLearns, 'lessonId');
 	}
 
+	public function findLessonsByCourseIds(array $courseIds)
+	{
+		$lessons = $this->getLessonDao()->findLessonsByCourseIds($courseIds);
+		$lessons = LessonSerialize::unserializes($lessons);
+        return ArrayToolkit::index($lessons, 'id');
+	}
+	
 	public function getCourse($id, $inChanging = false)
 	{
 		return CourseSerialize::unserialize($this->getCourseDao()->getCourse($id));
@@ -1768,7 +1775,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($course)) {
 			throw $this->createNotFoundException();
 		}
-
 		if (!$this->hasCourseManagerRole($courseId, $user['id'])) {
 			throw $this->createAccessDeniedException('您不是课程的教师或管理员，无权操作！');
 		}
@@ -1829,6 +1835,18 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (!$user->isLogin()) {
 			throw $this->createAccessDeniedException('您尚未登录用户，请登录后再查看！');
 		}
+		if($user->isParent()){
+			$relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
+	        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
+	        $childIds=ArrayToolkit::column($children,'id');
+			$members=$this->getMemberDao()->findMembersByCourseIdAndRole($courseId,'student',0,PHP_INT_MAX);
+			$memberIds=ArrayToolkit::column($members,'userId');	
+			if(count(array_intersect($childIds,$memberIds))>0){
+				return array($course, array());
+			}else{
+				throw $this->createAccessDeniedException('您的子女不是课程学员，不能查看课程内容！');
+			}
+		}
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
 		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
@@ -1836,7 +1854,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if (empty($member) or !in_array($member['role'], array('teacher', 'student'))) {
-			throw $this->createAccessDeniedException('您不是课程学员，不能查看课程内容，请先购买课程！');
+			throw $this->createAccessDeniedException('您不是课程学员，不能查看课程内容！');
 		}
 
 		return array($course, $member);
@@ -1875,6 +1893,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$user = $this->getCurrentUser();
 		if (!$user->isLogin()) {
 			return false;
+		}
+
+		if($user->isParent()){
+			$relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
+	        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
+	        $childIds=ArrayToolkit::column($children,'id');
+			$members=$this->getMemberDao()->findMembersByCourseIdAndRole($course['id'],'student',0,PHP_INT_MAX);
+			$memberIds=ArrayToolkit::column($members,'userId');	
+			if(count(array_intersect($childIds,$memberIds))>0){
+				return true;
+			}else{
+				throw false;
+			}
 		}
 
 		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {

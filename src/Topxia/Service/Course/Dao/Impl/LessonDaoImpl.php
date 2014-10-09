@@ -23,6 +23,14 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findLessonsByCourseIds(array $courseIds)
+    {
+        if(empty($courseIds)){ return array(); }
+        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE courseId IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $courseIds);
+    }
+
     public function findLessonsByTypeAndMediaId($type, $mediaId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE type = ? AND mediaId = ?";

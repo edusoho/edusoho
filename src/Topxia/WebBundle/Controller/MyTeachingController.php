@@ -38,7 +38,7 @@ class MyTeachingController extends BaseController
         ));
     }
 
-    public function coursesK12Action(Request $request)
+    public function teachingAction(Request $request)
     {
         $user = $this->getCurrentUser();
 
@@ -46,24 +46,69 @@ class MyTeachingController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
         
-        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, 1000,false);
-        $results = array();
-
-        foreach ($courses as $course) {
-             $results[$course['classId']][] = $course;
-        }
-
-        $classes = array();
-        $classIds = array_keys($results);
+        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
+        $courseCount=count($courses);
+        $courseList =ArrayToolkit::group($courses,'classId');
+        $classIds = array_keys($courseList);
         $classes = $this->getClassesService()->findClassesByIds($classIds);
-        $classes = ArrayToolkit::index($classes, 'id');
 
         $manageClasses = $this->getClassesService()->getClassesByHeadTeacherId($user['id']);
-        
+
+        $courseIds=ArrayToolkit::column($courses, 'id');
+        if(empty($courseIds)){
+            $threadCount=0;
+            $threads=array();
+            $threadUsers=array();
+        }else{
+            $conditions = array(
+                'courseIds' => $courseIds,
+                'type' => 'question'
+            );
+            $threadCount= $this->getThreadService()->searchThreadCountInCourseIds($conditions);
+            $threads = $this->getThreadService()->searchThreadInCourseIds($conditions,'createdNotStick',0,6);
+            $threadUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
+        }
+
+        $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($user['id']);
+        $testpaperIds = ArrayToolkit::column($teacherTests, 'id');
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+        $testpaperCount=$this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds,'reviewing');
+        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds($testpaperIds,'reviewing',0,6);
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds(ArrayToolkit::column($paperResults, 'testId'));
+        $testpaperUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($paperResults, 'userId'));
         return $this->render('TopxiaWebBundle:MyTeaching:teaching-k12.html.twig', array(
-            'manageClasses'=>$manageClasses,
             'classes' => $classes,
-            'results' => $results,
+            'courseList' => $courseList,
+            'courseCount'=>$courseCount,
+            'manageClasses'=>$manageClasses,
+            'threads'=>$threads,
+            'threadCount'=>$threadCount,
+            'threadUsers'=>$threadUsers,
+            'paperResults'=>$paperResults,
+            'testpapers'=>$testpapers,
+            'testpaperCount'=>$testpaperCount,
+            'testpaperUsers'=>$testpaperUsers
+        ));
+    }
+
+    public function teachingCoursesAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
+        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
+        $courseCount=count($courses);
+        $courses =ArrayToolkit::group($courses,'classId');
+        
+        $classes = $this->getClassesService()->findClassesByIds(array_keys($courses));
+
+        return $this->render('TopxiaWebBundle:MyTeaching:teaching-courses.html.twig',array(
+            'courses'=>$courses,
+            'classes'=>$classes,
+            'courseCount'=>$courseCount
         ));
     }
 
@@ -140,6 +185,11 @@ class MyTeachingController extends BaseController
     protected function getClassesService()
     {
         return $this->getServiceKernel()->createService('Classes.ClassesService');
+    }
+
+    private function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
 }
