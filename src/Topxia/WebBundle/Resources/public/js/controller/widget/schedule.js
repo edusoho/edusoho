@@ -108,6 +108,7 @@ define(function(require, exports, module) {
             var $tbody = this.element.find('.schedule tbody');
             var newtr = "<tr><td class='t-1-0 not-in-month'></td><td class='t-1-1 not-in-month'></td><td class='t-1-2 not-in-month'></td><td class='t-1-3 not-in-month'></td><td class='t-1-4 not-in-month'></td><td class='t-1-5 not-in-month'></td><td class='t-1-6 not-in-month'></td></tr>";
             
+            this.element.find('.viewType').val('month');
             this.element.find('.schedule thead .today').removeClass('today');
             this.element.find('.schedule-body span.glyphicon').addClass('hidden');
             this.element.find('table').addClass('col-md-12').removeClass('col-md-10').addClass('month').removeClass('week');
