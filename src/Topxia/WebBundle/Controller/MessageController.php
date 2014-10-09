@@ -164,12 +164,24 @@ class MessageController extends BaseController
 
     public function deleteConversationAction(Request $request, $conversationId)
     {
+        $user = $this->getCurrentUser();
+        $conversation = $this->getMessageService()->getConversation($conversationId);
+        if (empty($conversation) or $conversation['toId'] != $user['id']) {
+            throw $this->createAccessDeniedException('您无权删除此私信！');
+        }
+
         $this->getMessageService()->deleteConversation($conversationId);
         return $this->redirect($this->generateUrl('message'));
     }
 
     public function deleteConversationMessageAction(Request $request, $conversationId, $messageId)
     {
+        $user = $this->getCurrentUser();
+        $conversation = $this->getMessageService()->getConversation($conversationId);
+        if (empty($conversation) or $conversation['toId'] != $user['id']) {
+            throw $this->createAccessDeniedException('您无权删除此私信！');
+        }
+        
         $this->getMessageService()->deleteConversationMessage($conversationId, $messageId);
         $messagesCount = $this->getMessageService()->getConversationMessageCount($conversationId);
         if($messagesCount > 0){

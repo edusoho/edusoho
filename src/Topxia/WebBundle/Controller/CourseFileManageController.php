@@ -44,6 +44,8 @@ class CourseFileManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
+        $storageSetting = $this->getSettingService()->get("storage");
+
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
             'type' => $type,
             'course' => $course,
@@ -51,6 +53,7 @@ class CourseFileManageController extends BaseController
             'users' => ArrayToolkit::index($users, 'id'),
             'paginator' => $paginator,
             'now' => time(),
+            'storageSetting' => $storageSetting
         ));
     }
 
@@ -114,6 +117,23 @@ class CourseFileManageController extends BaseController
         ));
     }
 
+    public function batchUploadCourseFilesAction(Request $request, $id, $targetType)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        $fileExts = "";
+        if("courselesson" == $targetType){
+            $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.ppt;*.pptx";
+        }
+        return $this->render('TopxiaWebBundle:CourseFileManage:batch-upload.html.twig', array(
+            'course' => $course,
+            'storageSetting' => $storageSetting,
+            'targetType' => $targetType,
+            'targetId'=>$course['id'],
+            'fileExts'=>$fileExts
+        ));
+    }
+
     public function deleteCourseFilesAction(Request $request, $id, $type)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
@@ -148,6 +168,7 @@ class CourseFileManageController extends BaseController
         $response->trustXSendfileTypeHeader();
 
         $file['filename'] = urlencode($file['filename']);
+        $file['filename'] = str_replace('+', '%20', $file['filename']);
         if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
             $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
         } else {

@@ -1,0 +1,293 @@
+.course-grid:hover {
+	/*box-shadow: 0 2px 8px #bbb;*/
+	border-color: #e57259;
+}
+
+.homepage .news li em {
+	width: 85px;
+	float: right;
+	text-align: right;
+	font-style: normal;
+	color: #a9a9a9;
+}
+
+.homepage .news ul.row {
+	margin-right: -10px;
+	margin-left: -10px;
+	padding-left: 0px;
+	list-style: none;
+}
+
+.homepage .news li span {
+	color: #428bca;
+	margin-right: 5px;
+	text-decoration: none;
+}
+
+.homepage .news li a {
+	color: #222;
+	display: block;
+	height: 20px;
+	line-height: 20px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.homepage .teachers ul, 
+.homepage .vip ul {
+	margin-right: -10px;
+	margin-left: -10px;
+	padding-left: 0px;
+	list-style: none;
+}
+
+.homepage .topic ul {
+	margin-right: -15px;
+	margin-left: -15px;
+	padding-left: 0px;
+	list-style: none;
+}
+
+.teachers li, .vip li {
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+.teachers-item {
+	margin-bottom: 20px;
+	padding: 20px 10px;
+	border: 1px solid #e1e1e1;
+	text-align: center;
+}
+
+.teachers-item a, .promot-teacher a {
+	display: block;
+	line-height: 24px;
+	text-decoration: none;
+}
+
+.teachers-item img {
+	display: inline-block;
+	margin-bottom: 10px;
+	width: 80px;
+	height: 80px;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+}
+
+.teachers-item span {
+	line-height: 24px;
+	height: 24px;
+	display: block;
+	overflow: hidden;
+	color: #00b780;
+}
+
+.teachers-item i {
+	margin-bottom: 10px;
+	display: block;
+	font-style: normal;
+	height: 15px;
+	line-height: 15px;
+	overflow: hidden;
+}
+
+.teachers-item p {
+	margin-top: 20px;
+	font-size: 12px;
+	height: 40px;
+	text-align: left;
+}
+
+.vip-item {
+	border: 1px solid #e1e1e1;
+}
+
+.vip-item .row {
+	margin-left: -15px;
+	margin-right: -15;
+}
+
+.vip-lists li {
+	margin-bottom: 20px;
+}
+
+.vip-item h3, p {
+	color: #555;
+}
+
+.vip-item h4 {
+	color: #e57259;
+	text-decoration: none;
+	text-align: center;
+}
+
+.vip-item img {
+	width: 100%;
+}
+
+.vip-item a {
+	overflow: hidden;
+}
+
+.vip-price {
+	margin-top: 20px;
+}
+
+.topic-item {
+	display: block;
+	margin-bottom: 20px;
+	padding: 5px;
+	border: 1px solid #e1e1e1; 
+}
+
+.topic-item h4 {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.topic-item h4 > a {
+	color: #444;
+}
+
+
+.topic > ul > li {
+	overflow: hidden;
+	margin-bottom: 25px;
+	text-decoration: none;
+}
+
+.topic-body {
+	display: block;
+	overflow: hidden;
+}
+
+.topic-body img {
+	width: 42px;
+	height: 42px;
+	margin-right: 10px;
+}
+
+.topic-body h3 {
+	margin: 0;
+	padding: 0;
+}
+
+.topic-body p {
+	line-height: 20px;
+	margin-bottom: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.topic-bottom {
+	margin-top: 20px;
+}
+
+.tag-list a {
+	border-radius: 5px;
+	margin: 0 10px 10px 0;
+	padding: 0 15px;
+	display: inline-block;
+	font-weight: 800;
+	border: 1px solid #ddd;
+	height: 30px;
+	line-height: 30px;
+	color: #777;
+	text-decoration: none;
+	background: #ddd;
+}
+
+.tag-list a:hover {
+	border: 1px solid #096;
+	color: #fff;
+	background: #096;
+}
+
+.courses-rank li {
+	border-bottom: 1px solid #ddd;
+	overflow: hidden;
+	zoom: 1;
+}
+
+.courses-rank li img {
+	display: block;
+	width: 80px;
+	height: 45px;
+	margin: 0 15px 5px 0;
+}
+
+.courses-rank .course-title {
+	color: #444;
+	line-height: 45px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+} 
+
+.status-side ul {
+	padding-left: 0;
+	list-style: none;
+}
+
+.status-side li {
+	overflow: hidden;
+}
+
+.status-side li img {
+	width: 50px;
+	height: 50px;
+}
+
+.user-learn {
+	border: 1px solid #ddd;
+}
+
+.user-learn img {
+	width: 120px;
+	height: 67px;
+	margin-right: 5px;
+	margin-bottom: 10px;
+}
+
+.user-learn p {
+	line-height: 22px;
+	font-weight: 700;
+	margin-bottom: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.user-learn .teacher-name {
+	font-size: 12px;
+}
+
+.user-learn .progress {
+	height: 5px;
+	margin-left: 10px;
+	margin-bottom: 5px;
+	overflow: hidden;
+	background-color: #f5f5f5;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+	box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+}
+
+.user-learn .progress-bar {
+	background-color: #096;
+}
+
+.user-learn .percentage {
+	font-size: 12px;
+	color: #aaa;
+	margin-left: 10px;
+}
+
+.user-learn .continue {
+	overflow: hidden;
+	margin: 0 10px 10px;
+}

@@ -20,14 +20,39 @@
  <div class="col-md-6">
   <div class="panel panel-default">
   
-    <div class="panel-heading">
-      <h3 class="panel-title" id="operation-analysis-title" data-url="{{path('admin_operation_analysis')}}">数据统计</h3>
+    <div class="panel-heading clearfix">
+     <span class="pull-right" style="display:block">
+         <span id="onlineNum" data-url="{{path('admin_online_count')}}">正在载入在线人数...</span>（<span id="loginNum" data-url="{{path('admin_login_count')}}">正在载入登陆人数...</span>）
+     </span>
+     <h3 class="panel-title pull-left" id="operation-analysis-title" data-url="{{path('admin_operation_analysis')}}"> 数据统计
+
+     </h3>
     </div>
     <div id="operation-analysis-table" >
       <div class="empty">正在载入数据，请稍等。</div>
     </div>
   </div>
 </div>
+{#     <div class="col-md-6">
+       <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title" id="open-message-title" data-url="{{path('admin_official_messages')}}">EduSoho官方消息</h3>
+        </div>
+        <div id="edusoho-open-message" >
+          <div class="empty">正在载入数据，请稍等。</div>
+        </div>
+      </div>
+    </div> #}
+    <div class="col-md-6">
+       <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title" id="system-status-title" data-url="{{path('admin_system_status')}}">系统状态</h3>
+        </div>
+        <div id="system-status" >
+          <div class="empty">正在载入数据，请稍等。</div>
+        </div>
+      </div>
+    </div>
     <div id="popular-courses-panel" class="col-md-6">
        <div class="panel panel-default">
         <div class="panel-heading">

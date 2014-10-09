@@ -56,8 +56,6 @@ class PluginRefreshCommand extends BaseCommand
             $this->filesystem->remove($metaFilePath);
         }
 
-        // var_dump($pluginMetas);exit();
-
         $fileContent = "<?php \nreturn " . var_export($pluginMetas, true) . ";";
         file_put_contents($metaFilePath, $fileContent);
     }

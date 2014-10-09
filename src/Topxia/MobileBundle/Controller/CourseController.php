@@ -158,9 +158,10 @@ class CourseController extends MobileController
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
 
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
+                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
                             $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
-                            $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
+                            $headLeaderInfo = $this->getHeadLeaderInfo();
+                            $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, $headLeaderInfo['headLeaders'], $headLeaderInfo['headLeaderHlsKeyUrl'], 3600);
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         }
@@ -493,6 +494,35 @@ class CourseController extends MobileController
 
         return $html;
 
+    }
+
+    private function getHeadLeaderInfo()
+    {
+        $storage = $this->getSettingService()->get("storage");
+        if(!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]){
+
+            $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            $headLeaderArray = json_decode($headLeader['metas2'],true);
+            $headLeaders = array();
+            foreach ($headLeaderArray as $key => $value) {
+                $headLeaders[$key] = $value['key'];
+            }
+            $headLeaderHlsKeyUrl = $this->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
+            return array(
+                'headLeaders' => $headLeaders,
+                'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl
+            );
+        } else {
+            return array(
+                'headLeaders' => '',
+                'headLeaderHlsKeyUrl' => ''
+            );
+        }
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     protected function getCourseService()

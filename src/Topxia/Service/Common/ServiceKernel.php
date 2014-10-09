@@ -89,6 +89,25 @@ class ServiceKernel
         return $this->currentUser;
     }
 
+    public function setEnvVariable(array $env)
+    {
+        $this->env = $env;
+        return $this;
+    }
+
+    public function getEnvVariable($key = null)
+    {
+        if (empty($key)) {
+            return $this->env;
+        }
+
+        if (!isset($this->env[$key])) {
+            throw new \RuntimeException("Environment variable `{$key}` is not exist.");
+        }
+
+        return $this->env[$key];
+    }
+
     public function getConnection()
     {
         if (is_null($this->connection)) {

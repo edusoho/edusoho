@@ -1,0 +1,21 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% block title %}- {{ parent() }}{% endblock %}
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/group.css') }}" />
+{% endblock %}
+{% block content %}
+   {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {'groupinfo':groupinfo,'is_groupmember':is_groupmember|default('')} %}
+
+  {% block group_body %}
+    <div class="row">
+      <div class="col-md-8 group-main">
+        {% block group_main %}{% endblock %}
+      </div>
+
+      <div class="col-md-4 group-side">
+        {% block group_side %}{% endblock %}
+      </div>
+    </div>
+  {% endblock %}
+{% endblock %}

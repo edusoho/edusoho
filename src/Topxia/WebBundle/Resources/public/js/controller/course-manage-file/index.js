@@ -19,6 +19,30 @@ define(function(require, exports, module) {
             });
         });
 
+        $("#modal").modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: false
+        });
+
+        $("#modal").on("hidden.bs.modal", function(){
+            window.location.reload();
+        })
+
+        $("button", ".panel-heading").on('click',function(){
+            var url="";
+            if($(this).data("storage")!='cloud' || typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
+                url = $(this).data("normalUrl");
+            } else {
+                url = $(this).data("html5Url");
+            }
+            $("#modal").html('');
+            $("#modal").modal('show');
+            $.get(url, function(html){
+                $("#modal").html(html);
+            });
+        })
+
 
 
     };

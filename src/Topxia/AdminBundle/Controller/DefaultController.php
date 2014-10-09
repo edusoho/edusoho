@@ -8,7 +8,6 @@ use Topxia\Service\Util\CloudClientFactory;
 
 class DefaultController extends BaseController
 {
-
     public function popularCoursesAction(Request $request)
     {
         $dateType = $request->query->get('dateType');
@@ -47,8 +46,51 @@ class DefaultController extends BaseController
     }
 
     public function indexAction(Request $request)
-    {
+    {   
         return $this->render('TopxiaAdminBundle:Default:index.html.twig');
+    }
+
+    public function officialMessagesAction()
+    {
+        $message=$this->getAppService()->getMessages();
+        
+        return $this->render('TopxiaAdminBundle:Default:official.messages.html.twig',array(
+            "message"=>$message,
+        ));
+    }
+
+    public function systemStatusAction()
+    {   
+        $apps=array();
+        $systemVersion="";
+        $error="";
+        $apps = $this->getAppService()->checkAppUpgrades();
+
+        $appsAll = $this->getAppService()->getCenterApps();
+
+        $codes = ArrayToolkit::column($appsAll, 'code');
+
+        $installedApps = $this->getAppService()->findAppsByCodes($codes);
+
+        $unInstallAppCount=count($appsAll)-count($installedApps);
+
+        $app_count=count($apps);
+        if(isset($apps['error'])) $error="error";
+
+        $mainAppUpgrade = null;
+        foreach ($apps as $key => $value) {
+            if(isset($value['code']) && $value['code']=="MAIN") {
+                $mainAppUpgrade = $value;
+            }
+        }
+
+        return $this->render('TopxiaAdminBundle:Default:system.status.html.twig',array(
+            "apps"=>$apps,
+            "error"=>$error,
+            "mainAppUpgrade"=>$mainAppUpgrade,
+            "app_count"=>$app_count,
+            "unInstallAppCount"=>$unInstallAppCount,
+        ));
     }
 
     public function latestUsersBlockAction(Request $request)
@@ -171,6 +213,18 @@ class DefaultController extends BaseController
         ));        
     }
 
+    public function onlineCountAction(Request $request)
+    {
+        $onlineCount =  $this->getStatisticsService()->getOnlineCount(15*60);
+        return $this->createJsonResponse(array('onlineCount' => $onlineCount, 'message' => 'ok'));
+    }
+
+    public function loginCountAction(Request $request)
+    {
+        $loginCount = $this->getStatisticsService()->getloginCount(15*60);
+        return $this->createJsonResponse(array('loginCount' => $loginCount, 'message' => 'ok'));
+    }
+
     public function unsolvedQuestionsBlockAction(Request $request)
     {
         $questions = $this->getThreadService()->searchThreads(
@@ -226,6 +280,11 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
+    protected function getStatisticsService()
+    {
+        return $this->getServiceKernel()->createService('System.StatisticsService');
+    }
+
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
@@ -249,6 +308,11 @@ class DefaultController extends BaseController
     protected function getLogService()
     {
         return $this->getServiceKernel()->createService('System.LogService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
 }

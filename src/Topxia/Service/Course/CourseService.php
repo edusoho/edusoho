@@ -87,6 +87,8 @@ interface CourseService
 	
 	public function getCourseLessons($courseId);
 
+	public function findLessonsByTypeAndMediaId($type, $mediaId);
+
 	public function searchLessons($conditions, $orderBy, $start, $limit);
 
 	public function searchLessonCount($conditions);
@@ -291,5 +293,13 @@ interface CourseService
 	public function findAnnouncementsByCourseIds(array $ids, $start, $limit);
 
 	public function updateAnnouncement($courseId, $id, $fields);
+
+	public function generateLessonReplay($courseId,$lessonId);
+
+	public function entryReplay($lessonId, $courseLessonReplayId);
+
+	public function getCourseLessonReplayByLessonId($lessonId);
+
+	public function deleteCourseLessonReplayByLessonId($lessonId);
 
 }

@@ -3,7 +3,8 @@
   <div class="file-chooser" id="video-chooser" style="display:none;"
     data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
     data-hls-encrypted="{{ setting('developer.hls_encrypted', 1) }}"
-
+    data-targetType="{{targetType}}"
+    data-targetId="{{targetId}}"
   >
     <div class="file-chooser-bar" style="display:none;">
       <span data-role="placeholder"></span>
@@ -82,8 +83,18 @@
                 data-role="uploader-btn"
                 data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv;*.mov{% else %}*.mp4{% endif %}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
-                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
-                data-progressbar="#video-chooser-progress"></span>
+                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId, lazyConvert:1}) }}{% endif %}" 
+                data-progressbar="#video-chooser-progress"
+                data-storage-type="{{storageSetting.upload_mode}}"
+                data-get-media-info="{{path('uploadfile_cloud_get_media_info',{type:'video'})}}"
+                >
+                <a class="uploadBtn btn btn-default btn-lg">
+                  上传
+                </a>
+                <div style="display:none">
+                  <input data-role="fileSelected" class="filePrew" type="file" />
+                </div>
+              </span>
             </div>
             <div class="progress" id="video-chooser-progress" style="display:none;">
               <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
@@ -94,9 +105,10 @@
               <ul>
                 {% if storageSetting.upload_mode == 'cloud' %}
                   <li>支持<strong>mp4, avi, flv, wmv, mov</strong>格式的视频文件上传，文件大小不能超过<strong>1 GB</strong>。</li>
+                  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
                   <li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
                 {% else %}
-                  <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>300 MB</strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+                  <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>{{ upload_max_filesize() }} </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
                   <li>视频将上传到<strong>网站服务器</strong>，如需使用云视频，请联系EduSoho官方购买。使用云视频，将获得更好的播放体验。</li>
                 {% endif %}
               </ul>
@@ -127,7 +139,8 @@
 
   <div class="file-chooser" id="audio-chooser" style="display:none;"
       data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
-
+      data-targetType="{{targetType}}"
+      data-targetId="{{targetId}}"
   >
     <div class="file-chooser-bar"  style="display:none;">
       <span data-role="placeholder"></span>
@@ -149,7 +162,17 @@
                 data-role="uploader-btn"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
-                data-progressbar="#audio-chooser-progress"></span>
+                data-progressbar="#audio-chooser-progress"
+                data-storage-type="{{storageSetting.upload_mode}}"
+                data-get-media-info="{{path('uploadfile_cloud_get_media_info',{type:'audio'})}}"
+                >
+                <a class="uploadBtn btn btn-default btn-lg">
+                  上传
+                </a>
+                <div style="display:none">
+                  <input data-role="fileSelected" class="filePrew" type="file" />
+                </div>
+              </span>
             </div>
             <div class="progress" id="audio-chooser-progress" style="display:none;">
               <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
@@ -158,8 +181,15 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过<strong>100 MB</strong>。</li>
+                <li>支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过<strong>
                 {% if storageSetting.upload_mode == 'cloud' %}
+                  500M
+                {% else %}
+                  {{ upload_max_filesize() }}
+                {% endif %}
+                </strong>。</li>
+                {% if storageSetting.upload_mode == 'cloud' %}
+                  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
                   <li>音频将上传到<strong>云服务器</strong></li>
                 {% else %}
                   <li>音频将上传到<strong>网站服务器</strong></li>
@@ -183,7 +213,8 @@
 
   <div class="file-chooser" id="ppt-chooser" style="display:none;"
     data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId, convertor:'ppt'}) }}"
-
+    data-targetType="{{targetType}}"
+    data-targetId="{{targetId}}"
   >
     <div class="file-chooser-bar"  style="display:none;">
       <span data-role="placeholder"></span>
@@ -205,7 +236,15 @@
                 data-role="uploader-btn"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
-                data-progressbar="#ppt-chooser-progress"></span>
+                data-storage-type="{{storageSetting.upload_mode}}"
+                data-progressbar="#ppt-chooser-progress">
+                <a class="uploadBtn btn btn-default btn-lg">
+                  上传
+                </a>
+                <div style="display:none">
+                  <input data-role="fileSelected" class="filePrew" type="file" />
+                </div>
+              </span>
             </div>
             <div class="progress" id="ppt-chooser-progress" style="display:none;">
               <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">

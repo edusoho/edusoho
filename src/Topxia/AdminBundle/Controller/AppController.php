@@ -23,6 +23,7 @@ class AppController extends BaseController
     {
         $apps = $this->getAppService()->getCenterApps();
 
+        if(isset($apps['error'])) return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status'=>'error',));
         $codes = ArrayToolkit::column($apps, 'code');
 
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
@@ -52,8 +53,12 @@ class AppController extends BaseController
     {
         $apps = $this->getAppService()->checkAppUpgrades();
 
+        if(isset($apps['error'])) return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array('status'=>'error',));
+        $version=$this->getAppService()->getMainVersion();
+
         return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
             'apps' => $apps,
+            'version'=>$version,
         ));
     }
 
@@ -90,6 +95,18 @@ class AppController extends BaseController
         ));
     }
 
+    public function checkOwnCopyrightUserAction(Request $request,$userId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+
+        if (empty($user)) {
+            return $this->createMessageResponse('error','user exists error');
+        }
+
+        $res = $this->getAppService()->checkOwnCopyrightUser($userId);
+        return $this->createJsonResponse($res);
+    }
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
@@ -98,6 +115,11 @@ class AppController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
 }

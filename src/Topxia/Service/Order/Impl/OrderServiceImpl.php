@@ -100,7 +100,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                 $success = true;
 
             } else {
-                $this->_createLog($order['id'], 'pay_ignore', '订单已处理，付款被忽略', $payData);
+                $this->_createLog($order['id'], 'pay_ignore', '订单已处理', $payData);
             }
         } else {
             $this->_createLog($order['id'], 'pay_unknown', '', $payData);
@@ -194,6 +194,11 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function sumOrderPriceByTarget($targetType, $targetId)
     {
         return $this->getOrderDao()->sumOrderPriceByTargetAndStatuses($targetType, $targetId, array('paid', 'cancelled'));
+    }
+
+    public function sumCouponDiscountByOrderIds($orderIds)
+    {
+        return $this->getOrderDao()->sumCouponDiscountByOrderIds($orderIds);
     }
 
     public function findUserRefundCount($userId)

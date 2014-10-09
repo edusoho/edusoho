@@ -1,0 +1,146 @@
+{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+{% set script_controller = 'group/group' %}
+{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+{% block keywords %}{{groupinfo.title}}小组 {{ setting('site.name') }}{% endblock %}
+{% block description %}{{groupinfo.about|plain_text(150)}}{% endblock %}
+{% set groupNav = 'index' %}
+
+{% block group_main %}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      {% if paginator.currentPage == paginator.firstPage %}
+        <div class="alert alert-info clearfix">
+          {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} 暂无简介 {% endif %}
+          <hr>
+          <div class="">
+            {% if is_groupmember==0%}
+              <a class="btn btn-info btn-sm pull-right" href="{{path('group_join',{id:groupinfo.id})}}">加入小组</a>
+            {% endif %}
+
+            <span class="text-muted fsn mrm">创建时间：{{groupinfo.createdTime|date('Y-m-d')}}</span>
+            <span class="text-muted fsn mrm">组长：{{ web_macro.user_link(groupOwner, 'link-muted ') }}</span>
+
+            {% if is_groupmember==1 or is_groupmember==3 %}
+              <span class="text-muted fsn ">你已经是小组成员，
+              <a  id="exit-btn" class="text-muted" href="{{path('group_exit',{id:groupinfo.id})}}"> &raquo; 退出小组</a></span>
+            {% endif %}
+
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="clearfix mbl">
+
+      <ul class="nav nav-pills nav-mini  pull-left ">
+
+        <li{% if condition.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,num:condition.num,sort:condition.sort,isElite:0})}}">全部</a></li>
+            
+        <li{% if condition.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'elite',num:condition.num,sort:condition.sort})}}">精华</a></li>
+
+        <li><span class="mhm text-muted">|</span></li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            <span class="text-muted">排序：</span>
+            {% if condition.sort == 'byLastPostTime' %}
+              最后回复
+            {% elseif condition.sort == 'byCreatedTime' %}
+              最新发帖
+            {% elseif condition.sort == 'byPostNum' %}
+              回复数
+            {% endif %}
+            <span class="caret"></span>
+          </a>
+
+          <ul class="dropdown-menu">
+            <li class="{% if condition.sort == 'byCreatedTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byCreatedTime'})}}">最新发帖</a></li>
+            <li class="{% if condition.sort == 'byLastPostTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byLastPostTime'})}}">最后回复</a></li>
+            <li class="{% if condition.sort == 'byPostNum' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byPostNum'})}}">回复数</a></li>
+          </ul>
+
+        </li>
+
+      </ul>
+
+      {% if is_groupmember !=0 %}
+          <div class="pull-right"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-primary btn-sm " role="button">发话题</a>
+          </div>
+      {% endif %}
+
+      </div>
+
+      {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {users:owner} %}
+
+      {{ web_macro.paginator(paginator) }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block group_side %}
+
+  {% if is_groupmember in [1, 2, 3] %}
+    <div class="panel panel-default">
+      <div class="panel-heading">我在小组</div>
+      <div class="panel-body">
+        <div class="media">
+          {{ web_macro.user_avatar(user, ' pull-left media-object media-object-small') }}
+
+          <div class="media-body">
+            <p>{{ web_macro.user_link(user , 'link-muted') }}
+
+              {% if is_groupmember==1%}
+              <span class="label label-success">组员</span>
+              {% endif %} 
+
+              {% if is_groupmember==2%} 
+              <span class="label label-info">组长</span>  
+              {% endif %}
+
+              {% if is_groupmember==3%} 
+              <span class="label label-info">副组长</span>  
+              {% endif %}  
+            </p>
+
+            <p class="text-muted fsn">
+              <span class="mrm">我的话题: {{userIsGroupMember.threadNum}}</span>
+              <span>我的回复: {{userIsGroupMember.postNum}}</span>
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">最近加入</div>
+    <div class="panel-body">
+      {% if recentlyJoinMember %}
+        <ul class="user-grids">
+          {% for member in recentlyJoinMember %}
+            <li style="width:22%;">
+              {{ web_macro.user_avatar(members[member.userId] , 'pull-left media-object media-object-small') }}<p >{{ web_macro.user_link(members[member.userId] , 'link-muted') }}</p>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        还没有小组成员！
+      {% endif %}
+    </div>
+  </div>
+
+
+
+      <form action="{{path('group_search',{id:groupinfo.id})}}" method="get">
+        <div class="input-group">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          <input type="text" class="form-control" placeholder="组内搜索" name="keyWord">
+          <span class="input-group-btn">
+          <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+          </span>
+        </div>
+      </form>
+
+
+
+{% endblock %}

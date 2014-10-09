@@ -344,18 +344,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		);
 		$this->getThreadDao()->updateThread($thread['id'], $threadFields);
 
-		if ($thread['userId'] != $post['userId']) {
-			$this->getNotifiactionService()->notify($thread['userId'], 'thread-post', array(
-				'postId' => $post['id'],
-				'postUserId' => $post['userId'],
-				'postUserNickname' => $this->getCurrentUser()->nickname,
-				'threadId' => $thread['id'],
-				'threadTitle' => $thread['title'],
-				'threadType' => $thread['type'],
-				'courseId' => $thread['courseId']
-			));
-		}
-
 		return $post;
 	}
 

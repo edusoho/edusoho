@@ -9,7 +9,7 @@
 
 {% block body %}
 
-<form id="course-lesson-form" class="form-horizontal lesson-form" method="post"
+<form id="course-lesson-form" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   {% if lesson %}
     action="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
   {% else %}
@@ -99,7 +99,6 @@
 <script>app.load('course-manage/lesson-modal')</script>
 
 {% endblock %}
-
 {% block footer %}
     <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
     <button id="course-lesson-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">{% if lesson %}保存{% else %}添加{% endif %}</button>

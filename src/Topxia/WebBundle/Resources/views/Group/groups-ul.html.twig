@@ -1,0 +1,36 @@
+<ul class="list-unstyled">
+  {% if groups %}
+
+    {% for group in groups %}
+      {% if group.status=='open' %} 
+            <li class="col-md-{{colNum|default(4)}}"> 
+
+                  <div class="panel">
+              
+                        <div class="media">
+                            <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
+                              {% if group.logo %}
+                              <img src="{{file_path(group.logo)}}" alt="{{group.title}}" style="width:58px;height:58px;" >
+                              {%else%}
+                              <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}"  style="width:58px;height:58px;">
+                              {%endif%}
+                            </a>
+                            <div class="media-body">
+                              <p style="margin:0 0 10px;"><a  href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></p>
+                              <div class="text-muted text-normal">
+                                {{group.memberNum}}个成员&nbsp;
+                                {{group.threadNum}}个话题
+                              </div>
+                            </div> 
+                          </div>
+                    </div>
+
+              </li>
+        {% endif %}
+    {% endfor %}
+
+  {% else %}
+        <div class="empty">暂无小组信息！</div>
+  {% endif %}
+      
+</ul>

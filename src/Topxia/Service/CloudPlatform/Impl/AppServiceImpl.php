@@ -44,6 +44,13 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->createAppClient()->getPackage($id);
     }
 
+    public function getMainVersion()
+    {   
+        $app=$this->getAppDao()->getAppByCode('MAIN');
+
+        return  $app['version'];
+    }
+
     public function checkAppUpgrades()
     {
         $mainApp = $this->getAppDao()->getAppByCode('MAIN');
@@ -83,6 +90,11 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->createAppClient()->checkUpgradePackages($args, $extInfos);
     }
 
+    public function getMessages()
+    {
+        return $this->createAppClient()->getMessages();
+    }
+
     public function checkAppCop()
     {
         return $this->createAppClient()->checkAppCop();
@@ -91,6 +103,11 @@ class AppServiceImpl extends BaseService implements AppService
     public function findLogs($start, $limit)
     {
         return $this->getAppLogDao()->findLogs($start, $limit);
+    }
+
+    public function checkOwnCopyrightUser($id)
+    {
+        return $this->createAppClient()->checkOwnCopyrightUser($id);
     }
 
     public function findLogCount()
@@ -457,6 +474,14 @@ class AppServiceImpl extends BaseService implements AppService
 
         $this->getAppDao()->deleteApp($app['id']);
 
+    }
+
+    public function updateAppVersion($code,$fromVersion,$version)
+    {
+        $this->getAppDao()->updateAppVersion($code,$version);
+        $this->getAppDao()->updateAppFromVersion($code,$fromVersion);
+        
+        return true;
     }
 
     private function _replaceFileForPackageUpdate($package, $packageDir)

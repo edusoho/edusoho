@@ -57,7 +57,16 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     private function createUserQueryBuilder($conditions)
     {
-        $conditions = array_filter($conditions);
+        $conditions = array_filter($conditions,function($v){
+            if($v === 0){
+                return true;
+            }
+                
+            if(empty($v)){
+                return false;
+            }
+            return true;
+        });
         if (isset($conditions['roles'])) {
             $conditions['roles'] = "%{$conditions['roles']}%";
         }
@@ -88,6 +97,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('level = :level')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
+            ->andWhere('locked = :locked')
             ->andWhere('level >= :greatLevel');
     }
 

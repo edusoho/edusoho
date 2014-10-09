@@ -40,7 +40,9 @@
       <ul class="media-list media-list-rank">
         {% for course in liveCourses %}
         <li class="media">
-          <a href="{{ path('course_show', {id:course.id}) }}" class="pull-left"><img src="{{ file_path(course.smallPicture, 'course-large.png') }}" class="media-object" width="96" height="54"></a>
+          <a href="{{ path('course_show', {id:course.id}) }}" class="pull-left">
+            <img src="{{ default_path('coursePicture',course.smallPicture, 'large') }}" class="media-object" width="96" height="54">
+          </a>
           <div class="media-body">
             <h5 class="media-heading"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h5>
             {% set teacher = users[course.teacherIds|first]|default(null) %}

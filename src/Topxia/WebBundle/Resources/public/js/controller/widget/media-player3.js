@@ -38,8 +38,11 @@ define(function(require, exports, module) {
         },
 
         dispose: function() {
-            if (this.get('runtime') == 'flash') {
+            var runtime = this.get('runtime');
+            if (runtime == 'flash') {
                 swfobject.removeSWF(this.get('playerId'));
+            } else if (runtime == 'html5') {
+                $("#" + this.get('playerId')).remove();
             }
         },
 
@@ -49,6 +52,7 @@ define(function(require, exports, module) {
             html += this.get('src') + '" autoplay controls style="' + style + '">';
             html += '</video>';
             this.element.html(html);
+            this.set('runtime', 'html5');
         },
 
         _isSupportHtml5Video: function() {
@@ -69,8 +73,8 @@ define(function(require, exports, module) {
                 // flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayerCN/1.0.2/HLSProviderOSMF.swf";
                 flashvars.plugin_hls = app.httpHost + app.basePath + "/assets/libs/player/HLSProviderOSMF-1.0.2.swf";
             }
-
-            if (this.element.data('watermark')) {
+            
+            if (this.element.data('watermark') && $('#videoWatermarkEmbedded').val() !=1) {
                 flashvars.plugin_watermake = app.config.cloud.video_player_watermark_plugin;
                 flashvars.watermake_namespace = 'watermake';
                 flashvars.watermake_url = this.element.data('watermark');

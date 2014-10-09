@@ -60,8 +60,14 @@ define(function(require, exports, module) {
 			init: {
 				FileUploaded: function(up, file, info) {
 					response = $.parseJSON(info.response);
-					if (divData.callback) {
-						$.post(divData.callback, response, function(response) {
+					var url = divData.callback;
+					if (url) {
+						if (file.type != 'audio/mpeg' 
+							&& file.type != 'application/vnd.ms-powerpoint' 
+							&& file.type != 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
+							url = url+'&lazyConvert=1';
+						}
+						$.post(url, response, function(response) {
 	
 						}, 'json');
 					}
@@ -97,8 +103,10 @@ define(function(require, exports, module) {
 								data.audioQuality = switcher.get('audioQuality');
 								if (hlsEncrypted) {
 									data.convertor = 'HLSEncryptedVideo';
+									data.lazyConvert = 1;
 								} else {
 									data.convertor = 'HLSVideo';
+									data.lazyConvert = 1;
 								}
 							}
 						}

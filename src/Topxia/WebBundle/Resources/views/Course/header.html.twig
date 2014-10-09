@@ -1,10 +1,15 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
+
+
 <div class="row row-12">
   <div class="col-md-12">
     <div class="panel panel-default  course-header">
       <div class="panel-body clearfix">
-        <a href="{{ path('course_show', {id:course.id}) }}"><img class="picture" src="{{ file_path(course.largePicture, 'course-default-475x250.png') }}" /></a>
+        <a href="{{ path('course_show', {id:course.id}) }}">
+            <img class="picture" src="{{ default_path('coursePicture',course.largePicture, '') }}" />
+        </a>
+
         <h1 class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a> 
           {% if course.status=='closed' %}  
             <span class="label label-danger ">已关闭</span>
@@ -18,6 +23,7 @@
             {% endif %}
           {% endif %}
         </h1>
+
         <div class="teachers">
           {% if course.teacherIds|default(null) %}
             教师：
@@ -27,6 +33,7 @@
             {% endfor %}
           {% endif  %}
         </div>
+
         <div class="toolbar hidden-xs hidden-lt-ie8">
           {% if not manage %}
           <div class="btn-group">
@@ -43,39 +50,27 @@
                 <i class="glyphicon glyphicon-share"></i>
               </button>
               <ul class="dropdown-menu pull-right shares-dropdown-menu js-social-shares">
-                <li class="disabled"><a href="javascript:">分享到：</a></li>
-                <li><a href="javascript:" data-share="weibo" data-params="#course-social-share-params"><span class="social-icon-weibo"></span> 新浪微博</a></li>
-                <li><a href="javascript:" data-share="qq" data-params="#course-social-share-params"><span class="social-icon-qq"></span> QQ空间</a></li>
-                <li><a href="javascript:" data-share="renren" data-params="#course-social-share-params"><span class="social-icon-renren"></span> 人人网</a></li>
-                <li><a href="javascript:" data-share="douban" data-params="#course-social-share-params"><span class="social-icon-douban"></span> 豆瓣</a></li>
+                
+                <li><div class="share" data-bdText="{{courseShareContent}}"></div></li>
               </ul>
-              <div id="course-social-share-params" style="display:none;"
+              <div id="course-social-share-params" 
                 data-title="课程 《{{ course.title }}》"
-                data-picture="{{ file_path(course.largePicture, 'course-large.png', true) }}"
+                data-picture="{{ default_path('coursePicture',course.largePicture, 'large', true) }}"
                 data-url="{{ url('course_show', {id:course.id}) }}"
                 ></div>
             </div>
-
-            <div class="btn-group" data-role="tooltip" title="操作" >
-              <button class="btn btn-default btn-sm " data-toggle="dropdown">
-                <i class="glyphicon glyphicon-cog"></i>
-              </button>
-              <ul class="dropdown-menu pull-right">
-                {% if canManage %}
-                  <li><a href="{{ path('course_manage', {id:course.id}) }}">课程管理</a></li>
-                {% endif %}
-                {% if member.role|default(null) == 'student' %}
+            {% if member.role|default(null) == 'student' %}
                   {% if member.orderId %}
-                    <li><a class="course-refund-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}">退出学习</a></li>
+                   <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
                   {% else %}
-                    <li><a class="course-exit-btn" href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}">退出学习</a></li>
+                  <a class="btn btn-default btn-sm course-exit-btn" id="exit-course-learning" title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
                     {% endif %}
                 {% endif %}
-              </ul>
-            </div>
-
-
-
+            {% if canManage %}
+            <a class="btn btn-default btn-sm " type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="课程管理"  >
+            <i class="glyphicon glyphicon-cog"></i>
+            </a>
+            {% endif %}
           </div>
 
           {% else %}
@@ -124,10 +119,17 @@
     {% endif %}
 
     {% if not isNonExpired %}
-      <div class="alert alert-danger alert-dismissable">
+      {% if free_limit_type(course) == 'free_end' %}
+        <div class="alert alert-danger alert-dismissable">
+          <a class="btn btn-primary" href="{{path('course_rebuy',{courseId:course.id})}}" style="float:right;margin-top: -6px;margin-right:-20px" title="">购买</a>
+          您购买的课程限时免费活动已结束，无法继续学习课时、提问等。请重新购买该课程。
+        </div>
+      {% else %}
+       <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师。
+          您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师。
       </div>
+      {% endif %}
     {% endif %}
 
   </div>

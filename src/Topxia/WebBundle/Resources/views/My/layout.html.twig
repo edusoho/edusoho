@@ -37,7 +37,6 @@
                <a class="list-group-item
                {% if side_nav == 'my-learning' %} active {% endif %}" 
                href="{{path('my_courses_learning')}}">我的课程</a>
-
                {% if setting('course.live_course_enabled') %}
                <a class="list-group-item
                {% if side_nav == 'my-learning-live' %} active {% endif %}" 
@@ -55,6 +54,9 @@
                <a class="list-group-item
                {% if side_nav == 'my-quiz' %} active {% endif %}" 
                 href="{{path('my_quiz')}}">我的考试</a>
+               <a class="list-group-item
+               {% if side_nav == 'my-group' %} active {% endif %}" 
+               href="{{path('group_member_center')}}">我的小组</a>
             </ul>
           </div>
 

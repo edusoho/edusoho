@@ -21,6 +21,8 @@ interface OrderDao
 
     public function sumOrderPriceByTargetAndStatuses($targetType, $targetId, array $statuses);
 
+    public function sumCouponDiscountByOrderIds($orderIds);
+
     public function analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
 
     public function analysisPaidCourseOrderDataByTime($startTime,$endTime);

@@ -34,6 +34,31 @@ class CourseController extends BaseController
         ));
     }
 
+    public function searchAction(Request $request)
+    {
+        $key = $request->request->get("key");
+
+        $conditions = array( "title"=>$key );
+
+        $count = $this->getCourseService()->searchCourseCount($conditions);
+
+        $paginator = new Paginator($this->get('request'), $count, 6);
+
+        $courses = $this->getCourseService()->searchCourses($conditions, null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
+  
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
+
+        return $this->render('TopxiaAdminBundle:Course:search.html.twig', array(
+            'key' => $key,
+            'courses' => $courses,
+            'users' => $users,
+            'categories' => $categories,
+            'paginator' => $paginator
+        ));
+    }
+
     public function deleteAction(Request $request, $id)
     {
         $result = $this->getCourseService()->deleteCourse($id);
