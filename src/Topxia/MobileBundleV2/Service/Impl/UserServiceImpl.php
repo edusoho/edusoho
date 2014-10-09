@@ -14,6 +14,50 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->formData;
     }
     
+    public function getUserLastlearning()
+    {
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $courses = $this->getCourseService()->findUserLearnCourses($user['id'], 0, 1);
+
+        if (!empty($courses)) {
+            foreach ($courses as $course) {
+                $member = $this->controller->getCourseService()->getCourseMember($course['id'], $user->id);
+
+                $teachers = $this->controller->getUserService()->findUsersByIds($course['teacherIds']);
+            }
+
+            $progress = $this->calculateUserLearnProgress($course, $member);
+        } else {
+            $course = array();
+            $progress = array();
+            $teachers = array();
+        }
+
+        return array(
+            'course' => $this->controller->filterCourse($course),
+            'progress'  => $progress
+            );
+    }
+
+    private function calculateUserLearnProgress($course, $member)
+    {
+        if ($course['lessonNum'] == 0) {
+            return array('percent' => '0%', 'number' => 0, 'total' => 0);
+        }
+
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+
+        return array (
+            'percent' => $percent,
+            'number' => $member['learnedNum'],
+            'total' => $course['lessonNum']
+        );
+    }
+
     public function getUserNotification()
     {
         $user = $this->controller->getUserByToken($this->request);
