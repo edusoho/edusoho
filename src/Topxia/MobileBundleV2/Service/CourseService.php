@@ -49,6 +49,13 @@ interface CourseService
 	*/
 	public function postThread();
 
+	/** 更新一条回复
+	*
+	*
+	*
+	*/
+	public function updatePost()
+
 	public function coupon();
 
 	public function vipLearn();
