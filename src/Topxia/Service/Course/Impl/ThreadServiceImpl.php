@@ -11,11 +11,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 	public function getThread($courseId, $threadId)
 	{
 		$thread = $this->getThreadDao()->getThread($threadId);
-		var_dump($thread);
 		if (empty($thread)) {
 			return null;
 		}
+		var_dump($thread['courseId']);
 		return $thread['courseId'] == $courseId ? $thread : null;
+	}
+
+	public function getPost($postId){
+		$post = $this->getThreadDao()->getPost($postId);
+		if(empty($thread)){
+			return null;
+		}
+		return $post;
 	}
 
 	public function findThreadsByType($courseId, $type, $sort = 'latestCreated', $start, $limit)

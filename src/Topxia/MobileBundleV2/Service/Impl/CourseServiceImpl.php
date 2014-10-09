@@ -37,6 +37,31 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $post;
 	}
 
+	/*
+	 *更新回复
+	 *
+	 *
+	*/ 
+	public function updatePost(){
+		$courseId = $this->getParam("courseId", 0);
+		$threadId = $this->getParam("threadId", 0);
+		$postId = $this->getParam('postId', 0);
+
+		$user = $this->controller->getUserByToken($this->request);
+		if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录，不能评价课程！");
+        }
+
+        if (empty($thread)) {
+        	return $this->createErrorResponse('not_thread', "问答不存在或已删除");
+        }
+
+		if($postId! = 0){
+        	$post = $this->controller->getThreadService()->getPost($postId);
+        	var_dump($post);
+        }
+	}
+
 	private function uploadImage($content)
 	{
 		$url = "none";
