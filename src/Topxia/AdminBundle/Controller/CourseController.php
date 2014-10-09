@@ -127,6 +127,113 @@ class CourseController extends BaseController
         ));
     }
 
+    public function dataAction(Request $request)
+    {   
+        $cond=array('type'=>'normal');
+
+        $conditions = $request->query->all();
+
+        $conditions=array_merge($cond,$conditions);
+        $count = $this->getCourseService()->searchCourseCount($conditions);
+
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $courses = $this->getCourseService()->searchCourses($conditions, null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+
+        foreach ($courses as $key => $course) {
+            $isLearnedNum=$this->getCourseService()->searchMemberCount(array('isLearned'=>1,'courseId'=>$course['id']));
+
+
+            $learnTime=$this->getCourseService()->searchLearnTime(array('courseId'=>$course['id']));
+
+            $lessonCount=$this->getCourseService()->searchLessonCount(array('courseId'=>$course['id']));
+            
+            $courses[$key]['isLearnedNum']=$isLearnedNum;
+            $courses[$key]['learnTime']=$learnTime;
+            $courses[$key]['lessonCount']=$lessonCount;
+
+        }
+
+        return $this->render('TopxiaAdminBundle:Course:data.html.twig', array(
+            'courses'=>$courses,
+            'paginator'=>$paginator,
+        ));
+    }
+
+    public function detailDataAction($id)
+    {   
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $count = $this->getCourseService()->getCourseStudentCount($id);
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $students = $this->getCourseService()->findCourseStudents($id, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+
+        foreach ($students as $key => $student) {
+            
+            $user=$this->getUserService()->getUser($student['userId']);
+            $students[$key]['nickname']=$user['nickname'];
+
+            $questionCount=$this->getThreadService()->searchThreadCount(array('courseId'=>$id,'type'=>'question','userId'=>$user['id']));
+            $students[$key]['questionCount']=$questionCount;
+
+            if( $student['learnedNum']>=$course['lessonNum'] && $course['lessonNum']>0){
+                $finishLearn=$this->getCourseService()->searchLearns(array('courseId'=>$id,'userId'=>$user['id'],'sttaus'=>'finished'),array('finishedTime','DESC'),0,1);
+                $students[$key]['fininshTime']=$finishLearn[0]['finishedTime'];
+
+                $students[$key]['fininshDay']=intval(($finishLearn[0]['finishedTime']-$student['createdTime'])/(60*60*24));
+            }else{
+                $students[$key]['fininshDay']=intval((time()-$student['createdTime'])/(60*60*24));
+            }
+
+            $learnTime=$this->getCourseService()->searchLearnTime(array('userId'=>$user['id'],'courseId'=>$id));
+            $students[$key]['learnTime']=$learnTime;
+        }
+
+        return $this->render('TopxiaAdminBundle:Course:course-data-modal.html.twig', array(
+            'course'=>$course,
+            'paginator'=>$paginator,
+            'students'=>$students,
+            ));
+    }
+
+    public function lessonDataAction($id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        
+        $lessons=$this->getCourseService()->searchLessons(array('courseId'=>$id),array('createdTime', 'ASC'),0,1000);
+
+        foreach ($lessons as $key => $value) {
+            $lessonLearnedNum=$this->getCourseService()->findLearnsCountByLessonId($value['id']);
+
+            $finishedNum=$this->getCourseService()->searchLearnCount(array('status'=>'finished','lessonId'=>$value['id']));
+            
+            $lessonLearnTime=$this->getCourseService()->searchLearnTime(array('lessonId'=>$value['id']));
+            $lessonLearnTime=$lessonLearnedNum==0 ? 0 : intval($lessonLearnTime/$lessonLearnedNum);
+
+            $lessonWatchTime=$this->getCourseService()->searchWatchTime(array('lessonId'=>$value['id']));
+            $lessonWatchTime=$lessonWatchTime==0 ? 0 : intval($lessonWatchTime/$lessonLearnedNum);
+
+            $lessons[$key]['LearnedNum']=$lessonLearnedNum;
+            $lessons[$key]['length']=intval($lessons[$key]['length']/60);
+            $lessons[$key]['finishedNum']=$finishedNum;
+            $lessons[$key]['learnTime']=$lessonLearnTime;
+            $lessons[$key]['watchTime']=$lessonWatchTime;
+
+            if($value['type']=='testpaper'){
+                $paperId=$value['mediaId'];
+                $score=$this->getTestpaperService()->searchTestpapersScore(array('testId'=>$paperId));
+
+                $lessons[$key]['score']=$finishedNum==0 ? 0 : intval($score/$finishedNum);
+            }
+        }
+
+        return $this->render('TopxiaAdminBundle:Course:lesson-data.html.twig', array(
+            'course' => $course,
+            'lessons'=>$lessons,
+        ));
+    }
+
     public function chooserAction (Request $request)
     {   
         $conditions = $request->query->all();
@@ -179,5 +286,20 @@ class CourseController extends BaseController
     private function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    private function getNoteService()
+    {
+        return $this->getServiceKernel()->createService('Course.NoteService');
+    }
+
+    private function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    private function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 }

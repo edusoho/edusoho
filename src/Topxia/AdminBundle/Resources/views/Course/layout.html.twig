@@ -30,7 +30,7 @@
 
         <a href="{{ url('admin_course_disk') }}" class="list-group-item {% if menu == 'course-disk' %}active{% endif %}" style="display:none;">文件管理</a>
 
-        <a href="#" class="list-group-item {% if menu == 'course-data' %}active{% endif %}">数据管理</a>
+        <a href="{{path('admin_course_data')}}" class="list-group-item {% if menu == 'course-data' %}active{% endif %}">数据管理</a>
 
       </div>
     {% endblock %}
