@@ -35,7 +35,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         return array(
-            'course' => $this->controller->filterCourse($course),
+            'data' => $this->controller->filterCourse($course),
             'progress'  => $progress
             );
     }

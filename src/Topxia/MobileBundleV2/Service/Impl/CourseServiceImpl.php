@@ -589,7 +589,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lessonId = end($keys);
         $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
         return array(
-        	"lesson"=>$lesson,
+        	"data"=>$lesson,
             'progress'  => $progress
             );
     }
