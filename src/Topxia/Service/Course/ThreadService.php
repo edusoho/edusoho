@@ -73,9 +73,6 @@ interface ThreadService
 
 	public function findThreadElitePosts($courseId, $threadId, $start, $limit);
 
-	/**
-	 * 回复话题
-	 */
 	public function getPost($courseId, $id);
 
 	public function createPost($post);

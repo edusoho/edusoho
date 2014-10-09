@@ -58,7 +58,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		if($postId! = 0){
         	$post = $this->controller->getThreadService()->getPost($postId);
-        	var_dump($post);
+        	//var_dump($post);
         }
 	}
 
