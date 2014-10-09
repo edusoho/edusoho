@@ -251,7 +251,16 @@ class CourseController extends BaseController
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
 		
-		if(!$user->isParent()){
+		if($user->isParent()){
+			$relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
+	        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
+	        $childIds=ArrayToolkit::column($children,'id');
+			$members=$this->getCourseService()->findCourseStudents($course['id'],0,PHP_INT_MAX);
+			$memberIds=ArrayToolkit::column($members,'userId');	
+			if(count(array_intersect($childIds,$memberIds))==0){
+				throw $this->createAccessDeniedException('您的子女不是课程学员，不能查看课程内容！');
+			}
+		}else{
 			/**1.非本班非管理员的学生*/
 			if (!in_array('ROLE_TEACHER', $user['roles']) && !$user->isAdmin() && empty($classMember)){
 				throw $this->createAccessDeniedException('只能查看自己班级的课程');

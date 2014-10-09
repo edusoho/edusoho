@@ -1816,14 +1816,26 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (!$user->isLogin()) {
 			throw $this->createAccessDeniedException('您尚未登录用户，请登录后再查看！');
 		}
+		if($user->isParent()){
+			$relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
+	        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
+	        $childIds=ArrayToolkit::column($children,'id');
+			$members=$this->getMemberDao()->findMembersByCourseIdAndRole($courseId,'student',0,PHP_INT_MAX);
+			$memberIds=ArrayToolkit::column($members,'userId');	
+			if(count(array_intersect($childIds,$memberIds))>0){
+				return array($course, array());
+			}else{
+				throw $this->createAccessDeniedException('您的子女不是课程学员，不能查看课程内容！');
+			}
+		}
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
-		if (count(array_intersect($user['roles'], array('ROLE_PARENT','ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
 			return array($course, $member);
 		}
 
 		if (empty($member) or !in_array($member['role'], array('teacher', 'student'))) {
-			throw $this->createAccessDeniedException('您不是课程学员，不能查看课程内容，请先购买课程！');
+			throw $this->createAccessDeniedException('您不是课程学员，不能查看课程内容！');
 		}
 
 		return array($course, $member);
@@ -1863,7 +1875,21 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (!$user->isLogin()) {
 			return false;
 		}
-		if (count(array_intersect($user['roles'], array('ROLE_PARENT','ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+
+		if($user->isParent()){
+			$relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
+	        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
+	        $childIds=ArrayToolkit::column($children,'id');
+			$members=$this->getMemberDao()->findMembersByCourseIdAndRole($course['id'],'student',0,PHP_INT_MAX);
+			$memberIds=ArrayToolkit::column($members,'userId');	
+			if(count(array_intersect($childIds,$memberIds))>0){
+				return true;
+			}else{
+				throw false;
+			}
+		}
+
+		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
 			return true;
 		}
 
