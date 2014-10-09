@@ -166,7 +166,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	private function coverTestpaperItems($items)
 	{
 		$controller = $this;
-		return array_map(function($item) use ($controller){
+		$result = array_map(function($item) use ($controller){
 			$item = array_map(function($itemValue) use ($controller){
 				$question = $itemValue['question'];
 				if (isset($question['isDeleted']) && $question['isDeleted'] == true) {
@@ -183,8 +183,28 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 				return $itemValue;
 				
 			}, $item);
+			if ($this->arrayIsEmpty($item)) {
+				return;
+			}
 			return array_values($item);
 		}, $items);
+		foreach ($result as $key => $value) {
+			if (empty($value)) {
+				unset($result[$key]);
+			}
+		}
+		return $result;
+	}
+
+	private function arrayIsEmpty($array)
+	{
+		foreach ($array as $key => $value) {
+			if (!empty($value)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public function filterMetas($itemValue)
