@@ -141,16 +141,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	        $result = $this->getTestpaperService()->showTestpaper($id, true);
 	        $items = $result['formatItems'];
 	        $accuracy = $result['accuracy'];
-
-	        //$total = $this->makeTestpaperTotal($testpaper, $items);
-
-	        //$favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
-
 	        $student = $this->controller->getUserService()->getUser($testpaperResult['userId']);
 
 	        return array(
 	        	"items"=>$this->filterResultItems($items),
-	        	"accuracy"=>$accuracy
+	        	"accuracy"=>$accuracy,
+            	'paperResult' => $testpaperResult
 	        	);
 	}
 
