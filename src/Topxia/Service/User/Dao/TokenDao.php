@@ -4,7 +4,6 @@ namespace Topxia\Service\User\Dao;
 
 interface TokenDao
 {
-
 	public function getToken($id);
 
     public function getTokenByToken($token);
@@ -18,5 +17,4 @@ interface TokenDao
     public function waveRemainedTimes($id, $diff);
 
 	public function searchTokenCount($conditions);
-
 }

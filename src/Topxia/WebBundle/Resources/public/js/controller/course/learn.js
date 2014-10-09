@@ -180,9 +180,12 @@ define(function(require, exports, module) {
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
                 $(".watermarkEmbedded").html('<input type="hidden" id="videoWatermarkEmbedded" value="'+lesson.videoWatermarkEmbedded+'" />');
+                var $titleStr = "";
                 $titleArray = document.title.split(' - ');
-                document.title = lesson.title + ' - ' + $titleArray[1] + ' - ' + $titleArray[2] + ' - ' +$titleArray[3]
-
+                $.each($titleArray,function(key,val){
+                    $titleStr += val + ' - ';
+                })
+                document.title = lesson.title + ' - ' + $titleStr.substr(0,$titleStr.length-3);
                 that.element.find('[data-role=lesson-number]').html(lesson.number);
                 if (parseInt(lesson.chapterNumber) > 0) {
                     that.element.find('[data-role=chapter-number]').html(lesson.chapterNumber).parent().show().next().show();
