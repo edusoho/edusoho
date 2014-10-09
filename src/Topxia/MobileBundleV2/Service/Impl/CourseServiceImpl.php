@@ -42,8 +42,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	 *
 	 *
 	*/ 
-	public function updatePost()
-	{
+	public function updatePost(){
 		$courseId = $this->getParam("courseId", 0);
 		$threadId = $this->getParam("threadId", 0);
 		$postId = $this->getParam('postId', 0);
@@ -67,6 +66,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$content = $this->getParam("content", '');
+		if(empty($content)){
+			return $this->createErrorResponse('wrong_content_param', "回复内容不能为空！");
+		}
+
 		$content = $this->uploadImage($content);
 
 		$formData = $this->formData;
