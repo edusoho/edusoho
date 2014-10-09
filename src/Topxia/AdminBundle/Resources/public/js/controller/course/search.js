@@ -10,20 +10,20 @@ define(function(require, exports, module) {
             })
 		});
 
-		$("div[role='course-item']").on('click', function(){
+		$('[role="course-list"]').find("li[role='course-item']").on('click', function(){
 			var $courseIds = $('input[name="courseIds"]');
 			$courseIds.val($courseIds.val()+$(this).data("courseId")+",");
 			
 			var courseItem = $(this).clone();
-			courseItem.find('a').on('click',function(){
+			courseItem.find('[role="course-item-delete"]').on('click',function(){
 	            var courseId=$(this).data("courseId");
 	            var courseIds = $('input[name="courseIds"]');
 
-	            $(this).parents('div[role="course-item"]').remove();
+	            $(this).parents('li[role="course-item"]').remove();
 	            courseIds.val(courseIds.val().replace(courseId+',', ''));
 	        }).show();
 
-			$('div[role="course-item-container"] .row').append(courseItem);
+			$('[role="course-item-container"] ul').append(courseItem);
 			$modal.modal('hide');
 		})
 	}

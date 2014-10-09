@@ -21,12 +21,48 @@
 #mobile-banner5-container img 
 {max-width: 80%; margin-bottom: 10px;}
 
-.series-mode-label {
-position: absolute;
-top: 10px;
-right: 10px;
-font-size: 12px;
+.course-grids {
+  margin:0 -15px 0 0;
+  padding:0;
+  list-style: none;
 }
+
+.course-grid {
+  display: inline-block;
+  vertical-align: top;
+  margin: 15px 15px 15px 0;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+}
+
+.course-grid .series-mode-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 12px;
+}
+
+.course-grid .grid-body {
+  position: relative;
+  width: 170px;
+  display: block;
+  overflow: hidden;
+  border-radius: 4px;
+  color: #353535;
+}
+
+.grid-body a{
+  text-decoration: none;
+}
+
+.course-grid .title {
+  display: block;
+  padding: 10px;
+  min-height: 52px;
+  color: #555;
+  font-weight: bold;
+}
+
 </style>
 
 <div class="page-header"><h1>移动客户端设置</h1></div>
@@ -277,11 +313,11 @@ font-size: 12px;
       <div class="col-md-2">
       </div>
       <div class="col-md-8" role="course-item-container">
-        <div class="row">
+        <ul class="course-grids">
         {% for course in courses|default(null) %}
         {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:course, showDelBtn:true} %}
         {% endfor %}
-        </div>
+        </ul>
       </div>
     </div>
   </fieldset>
