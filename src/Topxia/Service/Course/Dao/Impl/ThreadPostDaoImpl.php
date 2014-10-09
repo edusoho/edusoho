@@ -49,6 +49,7 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 
 	public function updatePost($id, array $fields)
 	{
+		var_dump($fields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getPost($id);
 	}

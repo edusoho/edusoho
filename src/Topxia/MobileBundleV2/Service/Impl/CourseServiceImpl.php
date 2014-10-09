@@ -32,7 +32,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$formData = $this->formData;
 		$formData['content'] = $content;
-		var_dump($formData);
 		unset($formData['imageCount']);
 		$post = $this->controller->getThreadService()->createPost($formData);
 		return $post;
