@@ -7,5 +7,5 @@ interface TestpaperService
 
 	public function getTestpaperResult();
 
-	public function finishTestpaper();
+	public function finishTestpaper(); 
 }
