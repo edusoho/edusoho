@@ -17,7 +17,7 @@ class K12DefaultController extends BaseController
         }
 
         if ($user->isTeacher()) {
-            return $this->redirect($this->generateUrl('my_teaching_courses'));
+            return $this->redirect($this->generateUrl('my_teaching'));
         }
 
         if($user->isParent()){
