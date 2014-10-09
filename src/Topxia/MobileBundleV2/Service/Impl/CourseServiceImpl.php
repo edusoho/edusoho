@@ -31,6 +31,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$content = $this->uploadImage($content);
 
 		$formData = $this->formData;
+		var_dump($formData);
 		$formData['content'] = $content;
 		var_dump($formData);
 		unset($formData['imageCount']);
