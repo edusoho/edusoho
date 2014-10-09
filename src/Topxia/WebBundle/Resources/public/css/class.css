@@ -345,6 +345,11 @@
     color:yellow;
 }
 
+.schedule th, .schedule td {
+    width: 14.28%;
+    text-align: center;
+}
+
 .schedule .month .today {
     background-color: pink;
     color:yellow;
