@@ -1,13 +1,58 @@
-<div class="month row ptm">
-  <table class="col-md-12 tac">
-    <thead>
-      <tr class="">
-        <td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td>
-      </tr>
+{% set week = ['日','一','二','三','四','五','六']%}
+<div class="row">
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <table class="schedule-calendar schedule-calendar-month">
+        <thead>
+          <tr>
+            {% for day in period|slice(0, 7) %}
+              <th {% if day == 'now'|date('Ymd')%} class="today" {% endif %} data-day="{{ day }}" >
+                <div class="week-text">{{ week[loop.index0]}}</div>
+              </th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% set index = 0 %}
+          {% for i in 1..((period|length)//7) %}
+            <tr>
+              {% for day in period|slice(index,7)%}
+                <td class="{% if schedules[day] is defined %} has-lesson {% endif %} {% if day|slice(0,4) != year or day|slice(4,2) != month %} not-in-month {% endif %}{% if day == 'now'|date('Ymd')%} today {% endif %}">
+                  <div class="day-text">
+                    {{ day|slice(6,2)|number_format }}
+                  </div>
+                  
+                  {% if schedules[day] is defined %}
+                    <div class="count-text">
+                      ({{ schedules[day]|length }})
+                    </div> 
+                    <div class='hidden popover-content'>
+                    <ul class='media-list'>
+                      {% for schedule in schedules[day] %}
+                      {% set lesson = lessons[schedule.lessonId] %}
+                      {% set course = courses[lesson.courseId]%}
+                      {% set teacher = teachers[course.teacherIds[0]] %}
+                        <li class='media'>
+                          <a class="pull-left" href="#">
+                            <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="">
+                          </a>
+                          <div class="media-body">
+                            <h4 class="media-heading">{{ lesson.title }}</h4>
+                            <span class="teacher-name">{{ teacher.truename}}</span>
+                          </div>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+            {% set index = index + 7 %}    
+          {% endfor %}  
+        </tbody>
+      </table>
+    </div> <!-- /table-responsive -->
+  </div> <!-- /col-md-10 -->
 
-    </thead>
-    <tbody>
-     
-    </tbody>
-  </table>
 </div>

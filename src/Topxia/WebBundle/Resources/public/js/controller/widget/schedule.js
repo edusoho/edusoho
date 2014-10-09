@@ -14,8 +14,8 @@ define(function(require, exports, module) {
         events: {
             "click span.glyphicon-plus-sign": "expand",
             "click span.glyphicon-minus-sign": "collapse",
-            "click span.next-week": "nextWeek",
-            "click span.previous-week": "previousWeek",
+            "click .next-week": "nextWeek",
+            "click .previous-week": "previousWeek",
             "click span.next-month": "nextMonth",
             "click span.previous-month": "previousMonth",
             "click button.lesson-remove": "removeLesson",
@@ -23,10 +23,13 @@ define(function(require, exports, module) {
             "change select.viewType": "changeView"
         },
         setup: function() {
-            this.sunday = this.element.find('tr.day td:eq(0)').data('day');
+            this.sunday = this.element.find('.sunday').data('day');
             this.set('saveUrl', this.element.find('.schedule').data('save'));
             this.set('resetUrl', this.element.find('.schedule').data('reset'));
-            this.element.find('tr.yearMonth') && this.changeYearMonth();
+            var sunday = this.sunday + '';
+            this.year = sunday.substr(0,4);
+            this.month = sunday.substr(4,2);
+            this.element.find('.changeMonth') && this.changeYearMonth();
             this.bindSortableEvent();
             
         },
@@ -66,17 +69,10 @@ define(function(require, exports, module) {
                 drop:false
             });
         },
-        //not work for sortable delegate,
-        //find reason, beacause object is not only one.
-        //will use this method replace bindSortableEvent in future.
-        refreshSortableEvent: function() {
-            $("ul.lesson-ul").sortable('refresh');
-            $("ul.course-item-list").sortable('refresh');
-        },
         changeYearMonth: function() {
             var sunday = this.sunday + '';
             var newYearMonth = sunday.substr(0,4) + ' 年' + sunday.substr(4,2) + ' 月';
-            this.element.find('span.yearMonth').html(newYearMonth);
+            this.element.find('.yearMonth').html(newYearMonth);
             this.year = sunday.substr(0,4);
             this.month = sunday.substr(4,2);
         },
@@ -90,84 +86,6 @@ define(function(require, exports, module) {
             var target = e.currentTarget;
             $(target).removeClass('glyphicon-minus-sign').addClass('glyphicon-plus-sign');
             $(target).parent().find('.course-item-list-wrap').addClass('hidden').removeClass('show');
-        },
-        getDaysInMonth: function(month,year) {
-            if ((month==1)&&(year%4==0)&&((year%100!=0)||(year%400==0))){
-                return 29;
-            }else{
-                return this.daysInMonth[month];
-            }
-        },
-        getWeekByDate: function(year,month,day) {
-            return new Date(year + '/' + month + '/' + day).getDay();
-        },
-        renderTable: function() {
-            var year = parseInt(this.year);
-            var month =  parseInt(this.month);
-            var days = this.getDaysInMonth(month - 1, year);
-            var $tbody = this.element.find('.schedule tbody');
-            var newtr = "<tr><td class='t-1-0 not-in-month'></td><td class='t-1-1 not-in-month'></td><td class='t-1-2 not-in-month'></td><td class='t-1-3 not-in-month'></td><td class='t-1-4 not-in-month'></td><td class='t-1-5 not-in-month'></td><td class='t-1-6 not-in-month'></td></tr>";
-            
-            this.element.find('.viewType').val('month');
-            this.element.find('.schedule thead .today').removeClass('today');
-            this.element.find('.schedule-body span.glyphicon').addClass('hidden');
-            this.element.find('table').addClass('col-md-12').removeClass('col-md-10').addClass('month').removeClass('week');
-            this.element.find('span.yearMonth').html(this.year + ' 年' + this.month + ' 月');
-            $tbody.html('');
-            $tbody.append(newtr);
-            var row = 1;
-            var queryDate = [], i = 0;
-            var date = new Date();
-            var today = '' + date.getFullYear() + ((date.getMonth()+1) >9?(date.getMonth()+1):'0'+(date.getMonth()+1)) + (date.getDate()>9?date.getDate():'0'+date.getDate());
-
-            for(var day = 1; day <= days; day++)
-            {
-                var week = this.getWeekByDate(year, month, day);
-                var date = '' + year + (month >= 10 ? month : '0' + month) + (day >= 10 ? day : '0' + day);
-                queryDate[i++] = date;
-                $tbody.find(".t-" + row + '-' + week).addClass(date).removeClass('not-in-month').html(day);
-                //$tbody.find(".t-" + row + '-' + week).addClass('d-' + day);
-                if(today == date) {
-                    $tbody.find(".t-" + row + '-' + week).addClass('today');
-                }
-                if(week == 6 && day != days) {
-                    row++;
-                    newtr = '<tr><td class="t-' + row + '-0 not-in-month"></td><td class="t-' + row + '-1 not-in-month"></td><td class="t-' + row + '-2 not-in-month"></td><td class="t-' + row + '-3 not-in-month"></td><td class="t-' + row + '-4 not-in-month"></td><td class="t-' + row + '-5 not-in-month"></td><td class="t-' + row + '-6 not-in-month"></td></tr>';
-                    $tbody.append(newtr);
-                }
-            }
-
-            var pMonth = month - 1 == 0 ? 12 : month -1,
-            pYear = pMonth == 12 ? year -1 : year,
-            nMonth = month + 1 == 13 ? 1 : month + 1,
-            nYear = nMonth == 1 ? year + 1 : year,
-            pDays = this.getDaysInMonth(pMonth - 1, pYear),
-            nDays = this.getDaysInMonth(nMonth - 1, nYear),
-            plength = $tbody.find('tr:first .not-in-month').length,
-            nlength =$tbody.find('tr:first .not-in-month').length;
-
-            $tbody.find('tr:first .not-in-month').each(function(index){
-                var day = pDays - plength + index + 1;
-                var date = '' + pYear + (pMonth>=10?pMonth:'0'+pMonth) + (day>=10?day:'0'+day);
-                queryDate[i++] = date;
-                $(this).addClass(date).html(day);
-                if(today == date) {
-                    $(this).addClass('today');
-                }
-            });
-            $tbody.find('tr:last .not-in-month').each(function(index){
-                var day = index + 1;
-                var date = '' + nYear + (nMonth>=10?nMonth:'0'+nMonth) + (day>=10?day:'0'+day);
-                queryDate[i++] = date;
-                $(this).addClass(date).html(day);
-                if(today == date) {
-                    $(this).addClass('today');
-                }
-            });
-
-            this.disableSort();
-            this.ajaxRenderTable(queryDate);
-            this.popover();
         },
         save: function(data){
             $.post(this.get('saveUrl'), data, function(){
@@ -190,47 +108,6 @@ define(function(require, exports, module) {
             $("ul.course-item-list").each(function(){
                 $(this).sortable("disable");
             });
-        },
-        ajaxRenderTable: function(queryDate) {
-            var self = this;
-            $.ajax({
-                url: this.get('resetUrl'),
-                data: {'previewAs':'month', 'date':queryDate},
-                success: function(result) {
-                    var schedules = result.schedules,
-                        courses = result.courses,
-                        lessons = result.lessons,
-                        teachers = result.teachers;
-                    for(var date in schedules) {
-                        var count = schedules[date].length,
-                        countSpan = "<span class='count'>("+ count+")</span>";
-                        self.element.find('tr .'+date).append(countSpan);
-
-                        var $warpper = $("<div class='hidden popover-content'></div>");
-                        var $ul = $("<ul class='media-list'></ul>");
-                        $warpper.append($ul);
-                        var schedule = schedules[date];
-                        for (var i = schedule.length - 1; i >= 0; i--) {
-                            var $li = $("<li class='media'></li>");
-                            var $a = $("<a class='pull-left' href=''></a>");
-                            var $img = $('<img class="media-object" src="" alt="">');
-                            var $div = $('<div class="media-body"></div>');
-                            var $title = $('<h4 class="media-heading"></h4>');
-                            var $name = $('<span></span>');
-                            $img.attr("src", courses[lessons[schedule[i].lessonId].courseId].middlePicture);
-                            $title.html(lessons[schedule[i].lessonId].title);
-                            $name.html(teachers[courses[lessons[schedule[i].lessonId].courseId].teacherIds[0]].truename);
-                            
-                            $a.append($img);
-                            $div.append($title).append($name);
-                            $li.append($a).append($div);
-                            $ul.append($li);
-                        };
-                        self.element.find('tr .'+date).append($warpper);
-                        
-                    }
-                }
-            });  
         },
         serializeData: function(object) {
             var result = {};
@@ -257,7 +134,8 @@ define(function(require, exports, module) {
             return result;
         },
         changeView: function(e) {
-            $(e.currentTarget).val() == 'week' ? this.reset({'sunday': this.sunday,'previewAs':'week'}) : this.renderTable(); 
+            $(e.currentTarget).val() == 'week' ? this.reset({'sunday': this.sunday,'previewAs':'week'}) 
+                : this.reset({'year':this.year,'month':this.month,'previewAs':'month'}); 
         },
         nextWeek: function() {
             var sunday = this.nextSunday(true);
@@ -274,7 +152,9 @@ define(function(require, exports, module) {
             nextYear = nextMonth == 1 ? cYear + 1 : cYear;
             this.year = nextYear;
             this.month = nextMonth>=10 ? nextMonth:'0'+nextMonth;
-            this.renderTable();
+            this.element.find('span.yearMonth').html(this.year + ' 年' + this.month + ' 月');
+            this.element.find('.viewType').val('month');
+            this.reset({'year':this.year,'month':this.month,'previewAs':'month'});
         },
         previousMonth: function() {
             var cYear = parseInt(this.year),
@@ -283,7 +163,9 @@ define(function(require, exports, module) {
             previousYear = previousMonth == 12 ? cYear - 1 : cYear;
             this.year = previousYear;
             this.month = previousMonth>=10 ? previousMonth:'0'+previousMonth;
-            this.renderTable();
+            this.element.find('span.yearMonth').html(this.year + ' 年' + this.month + ' 月');
+            this.element.find('.viewType').val('month');
+            this.reset({'year':this.year,'month':this.month,'previewAs':'month'});
         },
         nextSunday: function(plus) {
             var sunday = this.sunday +'';
@@ -299,7 +181,6 @@ define(function(require, exports, module) {
             sunday = '' + year + month + day;
             this.sunday = sunday;
             return sunday;
-            
         },
         reset: function(data) {
             var self = this;
@@ -308,8 +189,13 @@ define(function(require, exports, module) {
                 data: data,
                 success: function(html) {
                     self.element.find('.schedule-body').html('').append(html);
-                    self.element.find('tr.yearMonth') && self.changeYearMonth();
-                    self.bindSortableEvent();
+                    //self.element.find('tr.yearMonth') && self.changeYearMonth();
+                    if(data.previewAs == 'month') {
+                        self.disableSort();
+                        self.popover();
+                    } else {
+                      self.bindSortableEvent();  
+                    }
                 }
             });  
         },

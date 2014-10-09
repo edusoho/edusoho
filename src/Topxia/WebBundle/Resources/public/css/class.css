@@ -334,13 +334,19 @@
 
 .schedule-header {
     height: 60px;
+    padding: 0 10px;
+    line-height: 60px;
+}
+
+.schedule-header .viewType {
+    display: inline;
 }
 
 .schedule-calendar {
     width: 100%;
 }
 
-.schedule-calendar-week > thead > tr > th {
+.schedule-calendar > thead > tr > th {
     background-color: #f3f3f3;
     height: 30px;
     width: 14.2857%;
@@ -349,7 +355,7 @@
     padding: 10px 0;
 }
 
-.schedule-calendar-week > thead > tr > th.today,
+.schedule-calendar > thead > tr > th.today,
 .schedule-calendar-week > thead > tr > th.today .day-text {
     color: #428bca;
 }
@@ -363,6 +369,39 @@
     vertical-align: top;
 }
 
+.schedule-calendar-month > tbody >tr > td {
+    position: relative;
+    height: 80px;
+    border: 1px solid #e3e3e3;
+    text-align: center;
+}
+.schedule-calendar-month > tbody >tr > td.today {
+    background-color: #ffffda;
+}
+
+.schedule-calendar-month > tbody >tr > td .count-text {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-weight: 800;
+    color: blue;
+}
+.schedule-calendar-month > tbody >tr > td.has-lesson {
+    cursor: pointer;
+}
+
+.schedule-calendar-month > tbody >tr > td.not-in-month {
+    background-color: #f7f7f7;
+}
+
+.schedule-calendar-month > tbody >tr > td.has-lesson:hover {
+    background-color: #e3e3e3;
+}
+
+.schedule-calendar-month > thead > tr {
+    border: 1px solid #e3e3e3;
+
+}
 .schedule-lesson-list {
     margin: 0;
     padding: 0;
@@ -391,9 +430,7 @@
 .schedule .month tbody td {
     border: 1px solid #e3e3e3;
 }
-.schedule .month .not-in-month {
-    background-color: rgb(247, 247, 247);
-}
+
 .schedule .glyphicon {
     cursor: pointer;
 }

@@ -2,11 +2,8 @@
  
 {% set classNav = 'schedule' %}
 
-
-
 {% block class_body %}
 {{ import_javascript({'lessonSelect':'schedule/lesson'}) }}
-
 
 <div class="row">
   <div class="col-md-9">
@@ -16,7 +13,7 @@
         <div class="schedule" data-save="{{ path('class_schedule_save', {classId:class.id}) }}" data-reset="{{ path('class_schedule_reset', {classId:class.id}) }}">
           <div class="schedule-header row tal">
             <div class="view-type col-md-3">
-              <select class="viewType">
+              <select class="viewType form-control">
                 <option value="week">按周查看</option>
                 <option value="month">按月查看</option>
               </select> 
@@ -25,6 +22,12 @@
               <span class="glyphicon glyphicon-chevron-left text-success previous-month"></span>
               <span class="yearMonth"> {{ "now" | date(' Y 年 m 月')}}</span>
               <span class="glyphicon glyphicon-chevron-right text-success next-month"></span>
+            </div>
+            <div class="week-operation">
+              <a class="btn btn-link next-week">
+                <span class="glyphicon glyphicon-chevron-left text-success"></span>上周</a>
+              <a class="btn btn-link previous-week">
+                下周<span class="glyphicon glyphicon-chevron-right text-success"></span></a>
             </div>
             <div class="operation  col-md-3 tar">
               {# <button class="btn btn-default btn-xs">只看我的</button> #}
