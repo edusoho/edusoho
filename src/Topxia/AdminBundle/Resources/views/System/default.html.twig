@@ -15,7 +15,7 @@
       <div class="col-md-3 control-label"></div>
       <div class="controls col-md-8 radios" id="default-avatar" >
         {{ radios('avatar', {1:'自定义默认头像', 0:'系统默认头像'}, defaultSetting.defaultAvatar) }}
-        <p>网校内未上传头像的用户，都会显示该默认头像</p>    
+        <p>网校内未上传头像的用户，都会显示该默认头像。推荐尺寸（120*120）</p>    
         {% include 'TopxiaAdminBundle:System:default-avatar.html.twig' %}
       </div>
     </div>
@@ -29,7 +29,7 @@
       <div class="col-md-3 control-label"></div>
       <div class="controls col-md-8 radios" id="defaultCoursePicture">
         {{ radios('coursePicture', {1:'自定义默认课程图片', 0:'系统默认课程图片'}, defaultSetting.defaultCoursePicture) }}
-        <p>网校内未上传图片的课程，都会显示该图片</p>
+        <p>网校内未上传图片的课程，都会显示该图片。推荐尺寸（360*180）</p>
         {% include 'TopxiaAdminBundle:System:default-course-picture.html.twig' %}
       </div>
     </div>
