@@ -1,45 +1,57 @@
 {% set week = ['日','一','二','三','四','五','六']%}
-<div class="row phm pvm table-responsive">
-  <span class="glyphicon glyphicon-chevron-left text-success col-md-1 tac mtm previous-week"></span>
-  <table class="col-md-10 tac week">
-    <thead>
-      <tr class="">
-        {% for day,items in schedules %}
-          <td {% if day == 'now'|date('Ymd')%} class="today" {% endif %}>{{ week[loop.index0]}}</td>
-        {% endfor %}
-      </tr>
+<div class="row">
+  <div class="col-md-1" style="display:none;">
+    <a href="javascript:;" class="btn btn-link btn-block previous-week"><span class="glyphicon glyphicon-chevron-left "></span></a>
+  </div>
 
-    </thead>
-    <tbody>
-      <tr class="day">
-        {% for day,items in schedules %}
-          <td data-day="{{ day }}" {% if day == 'now'|date('Ymd')%} class="today" {% endif %} {% if day|slice(4,2) != 'now'|date('m')%}class="text-muted" {% endif %}>{{ day|slice(6,2) }}</td>
-        {% endfor %}
-      </tr>
-      {% if changeMonth %} <tr class="hidden yearMonth"></tr>{% endif %}
-      <tr class="lesson">
-        {% for day,items in schedules %}
-          <td>
-            <ul class="lesson-ul" data-day="{{ day }}">
-              {% if items %}
-                {% for item in items %}
-                {% set lessonLearn = lessonLearns[item.lessonId] | default(null)%}
-                {% set lessonUrl = path('course_learn', {id:courses[lessons[item.lessonId].courseId].id}) ~ '#lesson/' ~ item.lessonId%}
-                  <li data-id="{{ item.lessonId }}" data-url="{{ lessonUrl }}">
-                    {% if can_remove_schedule(app.user, courses, lessons, item) %}
-                    <button type="button" class="close pull-right lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                    {% endif %}
-                    {% if lessonLearn and lessonLearn.status == 'finished' %}
-                    <span class="glyphicon glyphicon-ok pull-left text-success"></span>
-                    {% endif %}
-                    <img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ><br>{{ lessons[item.lessonId].title}}</li>
-                {% endfor %}
-              {% endif %}
-            </ul>
-          </td>
-        {% endfor %}
-      </tr>
-    </tbody>
-  </table>
-  <span class="glyphicon glyphicon-chevron-right text-success col-md-1 tac mtm next-week"></span>
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <table class="schedule-calendar schedule-calendar-week">
+        <thead>
+          <tr>
+            {% for day,items in schedules %}
+              <th {% if day == 'now'|date('Ymd')%} class="today" {% endif %} data-day="{{ day }}" >
+                <div class="week-text">{{ week[loop.index0]}}</div>
+                <div class="day-text">{{ day|slice(6,2) }}</div>
+              </th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% if changeMonth %} <tr class="hidden yearMonth"></tr>{% endif %}
+          <tr>
+            {% for day,items in schedules %}
+              <td>
+                <ul class="schedule-lesson-list">
+                  {% for item in items %}
+                    {% set lessonLearn = lessonLearns[item.lessonId] | default(null)%}
+                    {% set lessonUrl = path('course_learn', {id:courses[lessons[item.lessonId].courseId].id}) ~ '#lesson/' ~ item.lessonId%}
+                      <li data-id="{{ item.lessonId }}" data-url="{{ lessonUrl }}">
+                        <div class="thumbnail">
+                          {% if can_remove_schedule(app.user, courses, lessons, item) %}
+                            <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                          {% endif %}
+                          {% if lessonLearn and lessonLearn.status == 'finished' %}
+                            <span class="glyphicon glyphicon-ok pull-left text-success"></span>
+                          {% endif %}
+                          <img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" >
+                          <div class="caption">
+                            {{ lessons[item.lessonId].title}}
+                          </div>
+                        </div>
+                      </li>
+                  {% endfor %}
+                </ul>
+              </td>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div> <!-- /table-responsive -->
+  </div> <!-- /col-md-10 -->
+
+  <div class="col-md-1" style="display:none;">
+    <a href="javascript:;" class="btn btn-link btn-block next-week"><span class="glyphicon glyphicon-chevron-right"></span></a>
+  </div>
+
 </div>

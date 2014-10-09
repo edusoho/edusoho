@@ -10,34 +10,35 @@
 
   {{ render(controller('TopxiaWebBundle:Class:headerBlock', {class:class, classNav:classNav})) }}
 
-  <div class="row">
-    <div class="col-md-8">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          {% block class_main %}{% endblock %}
+  {% block class_body %}
+    <div class="row">
+      <div class="col-md-8">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            {% block class_main %}{% endblock %}
+          </div>
         </div>
       </div>
+
+      <div class="col-md-4">
+        {% block right_side %}
+            {% block user_info %}
+              {{ render(controller('TopxiaWebBundle:Class:userInfo', {class:class, userId:app.user.id})) }}
+            {% endblock %}
+
+            {% block schedule %}
+              <div style="display:block;height:auto; width:auto;background-color: #fff;"  class="well schedule-list">
+                {{ render(controller('TopxiaWebBundle:Class:schedule', {classId:class.id, userId:app.user.id, viewType:'today'})) }}
+              </div>
+            {% endblock %}
+
+            {% block class_side %}
+              {{ render(controller('TopxiaWebBundle:Class:statusBlock', {class:class})) }}
+            {% endblock %}
+        {% endblock %}  
+      </div>
     </div>
-
-    <div class="col-md-4">
-      {% block right_side %}
-          {% block user_info %}
-            {{ render(controller('TopxiaWebBundle:Class:userInfo', {class:class, userId:app.user.id})) }}
-          {% endblock %}
-
-          {% block schedule %}
-            <div style="display:block;height:auto; width:auto;background-color: #fff;"  class="well schedule-list">
-              {{ render(controller('TopxiaWebBundle:Class:schedule', {classId:class.id, userId:app.user.id, viewType:'today'})) }}
-            </div>
-          {% endblock %}
-
-          {% block class_side %}
-            {{ render(controller('TopxiaWebBundle:Class:statusBlock', {class:class})) }}
-          {% endblock %}
-      {% endblock %}  
-    </div>
-  </div>
-
+  {% endblock %}
 </div>
 
 {% endblock %}

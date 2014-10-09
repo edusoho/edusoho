@@ -330,6 +330,64 @@
 
 
 /** schedule css */
+
+
+.schedule-header {
+    height: 60px;
+}
+
+.schedule-calendar {
+    width: 100%;
+}
+
+.schedule-calendar-week > thead > tr > th {
+    background-color: #f3f3f3;
+    height: 30px;
+    width: 14.2857%;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px 0;
+}
+
+.schedule-calendar-week > thead > tr > th.today,
+.schedule-calendar-week > thead > tr > th.today .day-text {
+    color: #428bca;
+}
+
+.schedule-calendar-week > thead > tr > th .day-text {
+    color: #999;
+    font-weight: normal;
+}
+
+.schedule-calendar-week > tbody >tr > td {
+    vertical-align: top;
+}
+
+.schedule-lesson-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.schedule-lesson-list .thumbnail {
+    position: relative;
+    margin: 10px 3px;
+}
+
+.schedule-lesson-list .thumbnail .caption {
+    padding: 3px 0px;
+    font-size: 12px;
+    color: #666;
+    overflow: hidden;
+    height: 36px;
+}
+
+.schedule-lesson-list .thumbnail .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
 .schedule .month tbody td {
     border: 1px solid #e3e3e3;
 }
@@ -341,13 +399,8 @@
     cursor: pointer;
 }
 .schedule .week .today {
-    background-color: red;
-    color:yellow;
-}
-
-.schedule th, .schedule td {
-    width: 14.28%;
-    text-align: center;
+/*    background-color: red;
+    color:yellow;*/
 }
 
 .schedule .month .today {

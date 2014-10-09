@@ -68,6 +68,7 @@ class ClassScheduleController extends ClassBaseController
     public function getItemsAction($courseId)
     {
         $items = $this->getCourseService()->getCourseItems($courseId);
+
         $course = $this->getCourseService()->getCourse($courseId);
         return $this->render('TopxiaWebBundle:ClassSchedule:item-list.html.twig', array(
             'items' => $items,

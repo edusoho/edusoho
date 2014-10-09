@@ -2,35 +2,51 @@
  
 {% set classNav = 'schedule' %}
 
-{% block right_side %}
-  {{ render(controller('TopxiaWebBundle:ClassSchedule:courses', {class:class})) }}
-{% endblock %}
 
-{% block class_main %}
+
+{% block class_body %}
 {{ import_javascript({'lessonSelect':'schedule/lesson'}) }}
-<div class="schedule" data-save="{{ path('class_schedule_save', {classId:class.id}) }}" data-reset="{{ path('class_schedule_reset', {classId:class.id}) }}">
-  <div class="schedule-header row tal">
-    <div class="view-type col-md-3">
-      <select class="viewType">
-        <option value="week">按周查看</option>
-        <option value="month">按月查看</option>
-      </select> 
-    </div>
-    <div class="month  col-md-6 tac">
-      <span class="glyphicon glyphicon-chevron-left text-success previous-month"></span>
-      <span class="yearMonth"> {{ "now" | date(' Y 年 m 月')}}</span>
-      <span class="glyphicon glyphicon-chevron-right text-success next-month"></span>
-    </div>
-    <div class="operation  col-md-3 tar">
-      {# <button class="btn btn-default btn-xs">只看我的</button> #}
-    </div>
-  </div>
 
 
-  <div class="schedule-body">
-    {{ render(controller('TopxiaWebBundle:ClassSchedule:schedule', {classId:class.id})) }}
+<div class="row">
+  <div class="col-md-9">
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="schedule" data-save="{{ path('class_schedule_save', {classId:class.id}) }}" data-reset="{{ path('class_schedule_reset', {classId:class.id}) }}">
+          <div class="schedule-header row tal">
+            <div class="view-type col-md-3">
+              <select class="viewType">
+                <option value="week">按周查看</option>
+                <option value="month">按月查看</option>
+              </select> 
+            </div>
+            <div class="month  col-md-6 tac">
+              <span class="glyphicon glyphicon-chevron-left text-success previous-month"></span>
+              <span class="yearMonth"> {{ "now" | date(' Y 年 m 月')}}</span>
+              <span class="glyphicon glyphicon-chevron-right text-success next-month"></span>
+            </div>
+            <div class="operation  col-md-3 tar">
+              {# <button class="btn btn-default btn-xs">只看我的</button> #}
+            </div>
+          </div>
+
+
+          <div class="schedule-body">
+            {{ render(controller('TopxiaWebBundle:ClassSchedule:schedule', {classId:class.id})) }}
+          </div>
+          <div class="popover-container"></div>
+        </div>
+
+      </div>
+    </div>
+
+    
   </div>
-  <div class="popover-container"></div>
+  <div class="col-md-3">
+    {{ render(controller('TopxiaWebBundle:ClassSchedule:courses', {class:class})) }}
+  </div>
+
 </div>
 
 {% endblock %}
