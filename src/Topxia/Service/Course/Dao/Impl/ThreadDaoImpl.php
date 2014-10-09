@@ -10,10 +10,18 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	protected $table = 'course_thread';
 
+	protected $post_table = 'course_thread_post';
+
 	public function getThread($id)
 	{
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+	}
+
+	//获取某一条回复内容
+	public function getPost($id){
+		$sql = "SELECT * FROM {$this->post_table} WHERE id = ? LIMIT 1";
+		return $this->getConnection()->fetchAssoc($sql,array($id)) ? : null;
 	}
 
 	public function findLatestThreadsByType($type, $start, $limit)
