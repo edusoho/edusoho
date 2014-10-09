@@ -1,4 +1,6 @@
 define(function(require, exports, module) {
+	var Notify = require('common/bootstrap-notify');
+
 	exports.run = function() {
 		
 		var $form = $('form[role="search-form"]');
@@ -12,6 +14,14 @@ define(function(require, exports, module) {
 
 		$('[role="course-list"]').find("li[role='course-item']").on('click', function(){
 			var $courseIds = $('input[name="courseIds"]');
+			if($courseIds.val().split(",").length>3){
+				Notify.danger('每周精品栏目只能设置三门课程！')
+				return;
+			}
+			if($courseIds.val().indexOf($(this).data("courseId"))>-1){
+				Notify.danger('每周精品栏目中已经存在此门课程！');
+				return;
+			}
 			$courseIds.val($courseIds.val()+$(this).data("courseId")+",");
 			
 			var courseItem = $(this).clone();
