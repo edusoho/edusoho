@@ -156,9 +156,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
 	private function filterResultItems($items)
 	{
+		$controller = $this;
 		return array_map(function($item){
 			$mapItem = array_map(function($type){
-				return $this->filterMetas($type);
+				return $controller->filterMetas($type);
 			}, $item);
 			return array_values($mapItem);
 		}, $items);
