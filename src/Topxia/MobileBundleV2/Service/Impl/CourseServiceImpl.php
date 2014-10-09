@@ -41,7 +41,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	 *更新回复
 	 *
 	 *
-	*/ 
+	 */ 
 	public function updatePost(){
 		$courseId = $this->getParam("courseId", 0);
 		$threadId = $this->getParam("threadId", 0);
@@ -235,6 +235,21 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$course = $this->controller->getCourseService()->getCourse($thread['courseId']);
             	$user = $this->controller->getUserService()->getUser($thread['userId']);
 		return $this->filterThread($thread, $course, $user);
+	}
+
+	public function updateThread(){
+		$courseId = $this->getParam("courseId", 0);
+		$threadId = $this->getParam("threadId", 0);
+		$title = $this->getParam("title", 0);
+		$content = $this->getParam("content","");
+		if (!$user->isLogin()) {
+			return $this->createErrorResponse('not_login', '您尚未登录，修改该课时');
+		}		
+
+		$fields = array("title" => $title, "content" => $content );
+		var_dump($fields);
+
+		return 1;
 	}
 
 	public function getThreadTeacherPost()
