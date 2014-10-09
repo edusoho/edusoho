@@ -32,6 +32,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$formData = $this->formData;
 		$formData['content'] = $content;
+		var_dump($formData);
 		unset($formData['imageCount']);
 		$post = $this->controller->getThreadService()->createPost($formData);
 		return $post;
@@ -39,6 +40,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	/*
 	 *更新回复
+
 	 *
 	 *
 	*/ 
@@ -46,25 +48,33 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$courseId = $this->getParam("courseId", 0);
 		$threadId = $this->getParam("threadId", 0);
-		$postId =  $this->getParam('postId', 0);
+		$postId = $this->getParam('postId', 0);
 
 		$user = $this->controller->getUserByToken($this->request);
 		if (!$user->isLogin()) {
-	            	return $this->createErrorResponse('not_login', "您尚未登录，不能评价课程！");
-	        	}
+	        return $this->createErrorResponse('not_login', "您尚未登录，不能评价课程！");
+	    }
 
-	        if (empty($thread)) {
-	        	return $this->createErrorResponse('not_thread', "问答不存在或已删除");
-	        }
+	    // if (empty($thread)) {
+	    //     return $this->createErrorResponse('not_thread', "问答不存在或已删除");
+	    // }
 
-	        if($postId !=0) {
-	    	$post = $this->controller->getThreadService()->getPost($postId);
-		var_dump($post);
+	    if($postId != 0) {
+	    	$post = $this->controller->getThreadService()->getPost($courseId, $postId);
+			var_dump($post);
 		}
-		if($postId!= 0){
-        	$post = $this->controller->getThreadService()->getPost($postId);
-        	//var_dump($post);
-        }
+
+		$content = $this->getParam("content", '');
+		$content = $this->uploadImage($content);
+
+		$formData = $this->formData;
+		$formData['content'] = $content;
+		unset($formData['imageCount']);
+
+		$post = $this->controller->getThreadService()->updatePost($courseId,$postId,);
+		return $post;
+
+
 	}
 
 	private function uploadImage($content)

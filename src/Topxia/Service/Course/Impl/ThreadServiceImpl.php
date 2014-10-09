@@ -377,7 +377,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$user = $this->getCurrentUser();
 		($user->isLogin() and $user->id == $post['userId']) or $this->getCourseService()->tryManageCourse($courseId);
 
-
 		$fields  = ArrayToolkit::parts($fields, array('content'));
 		if (empty($fields)) {
 			throw $this->createServiceException('参数缺失。');
