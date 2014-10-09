@@ -618,7 +618,7 @@ class SettingController extends BaseController
         $questionsSetting = $this->getSettingService()->get('questions', array());
         if (empty($questionsSetting)) {
             $default = array(
-                'testpaper_answers_show_enabled' => '1',
+                'testpaper_answers_show_mode' => 'submitted',
             );
             $questionsSetting = $default;
         }

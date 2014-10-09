@@ -17,7 +17,7 @@
         <label>交卷后答案以及解析的显示</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('testpaper_answers_show_enabled', {0:'不显示', 1:'全部批阅完成后一起显示' , 2:'客观题自动批阅完后先显示答案解析'}, setting('questions.testpaper_answers_show_enabled',2)) }}
+        {{ radios('testpaper_answers_show_mode', {'hide':'不显示', 'reviewed':'全部批阅完成后一起显示' , 'submitted':'客观题自动批阅完后先显示答案解析'}, setting('questions.testpaper_answers_show_mode','submitted')) }}
       </div>
     </div>
 </fieldset>
