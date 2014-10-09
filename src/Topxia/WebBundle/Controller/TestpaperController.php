@@ -216,11 +216,11 @@ class TestpaperController extends BaseController
 
         $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
        
-        if ($testpaperResult['userId'] != $this->getCurrentUser()->id){
+        if ($testpaperResult['userId'] != $this->getCurrentUser()->id && !$this->getCurrentUser()->isParent()){
             $course = $this->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
         }
 
-        if (empty($course) and $testpaperResult['userId'] != $this->getCurrentUser()->id) {
+        if (empty($course) and $testpaperResult['userId'] != $this->getCurrentUser()->id && !$this->getCurrentUser()->isParent()) {
             throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
         }
 

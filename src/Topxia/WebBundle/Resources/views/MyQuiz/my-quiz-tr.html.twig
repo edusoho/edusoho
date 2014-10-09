@@ -20,6 +20,7 @@
 	</td>
 	<td>
 		{% if app.user.isParent() %}
+			<a href="{{ path('course_manage_test_results', {id:myTestpaperResult.id}) }}" class="btn btn-link btn-sm">查看结果</a>
 		{% else %}
 			{% if myTestpaperResult.status in ['doing', 'paused'] %}
 				<a href="{{ path('course_manage_show_test', {id:myTestpaperResult.id}) }}" class="btn btn-default btn-sm">继续考试</a>

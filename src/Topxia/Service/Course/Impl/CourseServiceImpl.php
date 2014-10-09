@@ -1756,7 +1756,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($course)) {
 			throw $this->createNotFoundException();
 		}
-
 		if (!$this->hasCourseManagerRole($courseId, $user['id'])) {
 			throw $this->createAccessDeniedException('您不是课程的教师或管理员，无权操作！');
 		}
@@ -1819,7 +1818,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
-		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+		if (count(array_intersect($user['roles'], array('ROLE_PARENT','ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
 			return array($course, $member);
 		}
 
@@ -1864,8 +1863,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (!$user->isLogin()) {
 			return false;
 		}
-
-		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+		if (count(array_intersect($user['roles'], array('ROLE_PARENT','ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
 			return true;
 		}
 
