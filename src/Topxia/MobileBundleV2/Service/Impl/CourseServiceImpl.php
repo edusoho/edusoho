@@ -560,4 +560,52 @@ class CourseServiceImpl extends BaseService implements CourseService
 			);
 		return $result;
 	}
+
+
+    public function getLearnStatus()
+    {
+        $courseId = $this->getParam("courseId");
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $course = $this->controller->getCourseService()->getCourse($courseId);
+        $learnStatus = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
+        if (!empty($course)) {
+            $member = $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']);
+            $progress = $this->calculateUserLearnProgress($course, $member);
+        } else {
+            $course = array();
+            $progress = array();
+        }
+
+        foreach ($learnStatus as $key => $value) {
+        		if ($value == "finished") {
+        			unset($learnStatus[$key]);
+        		}
+        }
+        $keys = array_keys($learnStatus);
+        $lessonId = end($keys);
+        $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+        return array(
+        	"lesson"=>$lesson,
+            'progress'  => $progress
+            );
+    }
+
+    private function calculateUserLearnProgress($course, $member)
+    {
+        if ($course['lessonNum'] == 0) {
+            return array('percent' => '0%', 'number' => 0, 'total' => 0);
+        }
+
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+
+        return array (
+            'percent' => $percent,
+            'number' => $member['learnedNum'],
+            'total' => $course['lessonNum']
+        );
+    }
 }

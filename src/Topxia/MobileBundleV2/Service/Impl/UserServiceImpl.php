@@ -25,16 +25,13 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (!empty($courses)) {
             foreach ($courses as $course) {
-                $member = $this->controller->getCourseService()->getCourseMember($course['id'], $user->id);
-
-                $teachers = $this->controller->getUserService()->findUsersByIds($course['teacherIds']);
+                $member = $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']);
             }
 
             $progress = $this->calculateUserLearnProgress($course, $member);
         } else {
             $course = array();
             $progress = array();
-            $teachers = array();
         }
 
         return array(
