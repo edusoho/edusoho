@@ -15,8 +15,6 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 	public function getThread($id)
 	{
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        var_dump($sql);
-        var_dump($this->getConnection()->fetchAssoc($sql, array($id)));
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
