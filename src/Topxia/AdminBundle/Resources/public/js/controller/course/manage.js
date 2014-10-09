@@ -1,9 +1,11 @@
 define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
-
+	var ClassChooser = require('../class/class-chooser');
+	
 	exports.run = function(options) {
-		var $table = $('#course-table');
 
+		var $table = $('#course-table');
+		var $form = $('#message-search-form');
 		$table.on('click', '.cancel-recommend-course', function(){
 			$.post($(this).data('url'), function(html){
 				var $tr = $(html);
@@ -42,7 +44,17 @@ define(function(require, exports, module) {
 
 		});
 
-
+		//调用
+        var classChooser = new ClassChooser({
+            element:'#class_name',
+            modalTarget:$('#modal'),
+            url:$form.find('#class_name').data().url
+        });
+        
+        classChooser.on('choosed',function(id,name){
+            $form.find('#class_id').val(id);
+            $form.find('#class_name').val(name);
+        });
 
 	};
 
