@@ -156,10 +156,13 @@ class SettingsController extends BaseController
 			$partnerAvatar = null;
 		}
 
+		$fromCourse = $request->query->get('fromCourse');
+
 		return $this->render('TopxiaWebBundle:Settings:avatar.html.twig', array(
 			'form' => $form->createView(),
 			'user' => $this->getUserService()->getUser($user['id']),
 			'partnerAvatar' => $partnerAvatar,
+			'fromCourse' => $fromCourse,
 		));
 	}
 
