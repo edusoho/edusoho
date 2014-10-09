@@ -56,10 +56,11 @@
             errormessageUrl: '个人主页地址不正确，须以http://开头。'
         });
 
-        validator.addItem({
-            element: '[name="profile[mobile]"]',
-            rule: 'mobile'
-        });
+        // validator.addItem({
+        //     element: '[name="profile[mobile]"]',
+        //     required: true,
+        //     rule: 'phone'
+        // });
 
         validator.addItem({
             element: '[name="profile[idcard]"]',

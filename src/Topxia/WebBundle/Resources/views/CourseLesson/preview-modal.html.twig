@@ -30,7 +30,8 @@
             </audio>
         {% elseif lesson.type == 'ppt' %}
             <div id="lesson-preview-ppt-player" data-url="{{ path('course_lesson_ppt', {courseId:lesson.courseId, lessonId:lesson.id}) }}"></div>
-
+        {% elseif lesson.type =='testpaper' %}
+          该课时为考试，无相应课程内容
         {% else %}
             {{ lesson.content|raw }}
         {% endif %}
@@ -41,7 +42,7 @@
 {% endblock %}
 
 {% block footer %}
-    {% if lesson.status == 'published' %}
+    {# {% if lesson.status == 'published' %}
         {% if course.price=='0.00'  %}
                 <button id="buy-btn" type="button" class="btn btn-primary" data-url="{{ path('course_buy', {id:course.id}) }}">
                     {% if user.id %}免费加入学习
@@ -55,7 +56,7 @@
                     {% endif %}
                 </button>
         {% endif %}
-    {% else %}
+    {% else %} #}
         <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
-    {% endif %}
+    {# {% endif %} #}
 {% endblock %}

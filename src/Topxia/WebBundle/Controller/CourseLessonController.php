@@ -26,18 +26,17 @@ class CourseLessonController extends BaseController
         if (!empty($course['status']) && $course['status'] == 'closed') {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig',array('course' => $course));
         }
-
-        if (empty($lesson['free'])) {
-            if (!$user->isLogin()) {
-                throw $this->createAccessDeniedException();
-            }
-            return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
-        }else{
-            $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
-            if (empty($allowAnonymousPreview) && !$user->isLogin()) {
-                throw $this->createAccessDeniedException();
-            }
+        // if (empty($lesson['free'])) {
+        //     if (!$user->isLogin()) {
+        //         throw $this->createAccessDeniedException();
+        //     }
+        //     return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
+        // }else{
+        $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
+        if (empty($allowAnonymousPreview) && !$user->isLogin()) {
+            throw $this->createAccessDeniedException();
         }
+        // }
 
         if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);

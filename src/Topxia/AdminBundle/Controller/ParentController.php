@@ -30,17 +30,13 @@ class ParentController extends BaseController
             $paginator->getPerPageCount()
         );
         
-        $userRelations=$this->getUserService()->findUserRelationsByFromIdsAndType(ArrayToolkit::column($users, 'id'),'family');
-        
-        $relations=array();
-        foreach ($userRelations as $useRelation) {
-            $relations=array_merge($relations,$useRelation);
-        }
+        $relations=$this->getUserService()->findUserRelationsByFromIdsAndType(ArrayToolkit::column($users, 'id'),'family');
+        $userRelations=ArrayToolkit::group($relations,'fromId');
+
         $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
         $classMembers=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($relations, 'toId'));
         $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($classMembers, 'classId'));
         $classMembers=ArrayToolkit::index($classMembers, 'userId');
-        $classes=ArrayToolkit::index($classes, 'id');
         return $this->render('TopxiaAdminBundle:Parent:index.html.twig', array(
             'users' => $users,
             'userRelations'=> $userRelations,

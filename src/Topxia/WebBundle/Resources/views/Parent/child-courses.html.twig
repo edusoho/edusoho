@@ -1,0 +1,21 @@
+{% extends 'TopxiaWebBundle:Parent:layout.html.twig' %}
+
+{% block title %}在学课程 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'parent-child-courses' %}
+
+{% block main %}
+	<div class="panel panel-default panel-col">
+		<div class="panel-heading">
+      在学课程
+    </div>
+		<div class="panel-body">
+	  	{% if courses %}
+		    {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
+		  {% else %}
+		    <div class="empty">暂无学习中的课程</div>
+		  {% endif %}
+		</div>
+	</div>
+
+{% endblock %}

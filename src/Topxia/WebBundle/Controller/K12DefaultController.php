@@ -20,6 +20,10 @@ class K12DefaultController extends BaseController
             return $this->redirect($this->generateUrl('my_teaching_courses'));
         }
 
+        if($user->isParent()){
+            return $this->redirect($this->generateUrl('parent_child_status'));
+        }
+
         $class = $this->getClassesService()->getStudentClass($user['id']);
         if (empty($class)) {
             return $this->createMessageResponse('info', '您还没有加入班级，请联系管理员！');

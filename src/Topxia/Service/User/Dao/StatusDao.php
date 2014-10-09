@@ -10,6 +10,8 @@ interface StatusDao
 
     public function findStatusesByUserIdsCount($userIds);
 
+    public function findStatusesByUserId($userId);
+
     public function searchStatusesCount($conditions);
 
     public function searchStatuses($conditions, $sort, $start, $limit);

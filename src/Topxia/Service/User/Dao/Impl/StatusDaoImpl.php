@@ -50,6 +50,16 @@ class StatusDaoImpl extends BaseDao implements StatusDao
         $this->getConnection()->fetchColumn($sql, $userIds);
     }
 
+    public function findStatusesByUserId($userId)
+    {
+        if(empty($userId)){
+            return array();
+        }
+        $sql="SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC;";
+        $statuses = $this->getConnection()->fetchAll($sql, array($userId));
+        return $this->createSerializer()->unserializes($statuses, $this->serializeFields);
+    }
+
     public function searchStatuses($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

@@ -12,7 +12,7 @@
 		{% block body %}
 			<form id="user-profile-form" class="form-horizontal" method="post">
 				{{ web_macro.flash_messages() }}
-					{% if 'ROLE_TEACHER' not in app.user.roles %}
+					{% if 'ROLE_TEACHER' not in app.user.roles and 'ROLE_PARENT' not in app.user.roles %}
 						<div class="form-group">
 							<label class="col-md-2 control-label" >学号</label>
 							<div class="col-md-7 controls">
@@ -30,8 +30,17 @@
 							<div class="help-block" style="display:none;"></div>
 						</div>
 					</div>
+					{# {% if app.user.isParent() %}
+						<div class="form-group">
+							<label class="col-md-2 control-label" for="profile_mobile">手机号码</label>
+							<div class="col-md-7 controls">
+								<input type="text" id="profile_mobile" name="profile[mobile]" data-url="{{path('admin_user_create_mobile_check')}}" class="form-control" value="{{ app.user.mobile|default('') }}" >
+								<div class="help-block" style="display:none;"></div>
+							</div>
+						</div>
+					{% endif %} #}
 
-					{% if 'ROLE_TEACHER' not in app.user.roles %}
+					{% if 'ROLE_TEACHER' not in app.user.roles and 'ROLE_PARENT' not in app.user.roles %}
 						<div class="form-group">
 							<label class="col-md-2 control-label" >所在班级</label>
 							<div class="col-md-7 controls">

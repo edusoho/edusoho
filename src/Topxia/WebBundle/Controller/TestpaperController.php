@@ -216,12 +216,22 @@ class TestpaperController extends BaseController
 
         $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
        
-        if ($testpaperResult['userId'] != $this->getCurrentUser()->id){
-            $course = $this->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
-        }
+        $user=$this->getCurrentUser();
+        if($user->isParent()){
+            $relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
+            $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
+            $childIds=ArrayToolkit::column($children,'id');
+            if(!in_array($testpaperResult['userId'], $childIds)){
+                throw $this->createAccessDeniedException('不是您子女的试卷，不能查看');
+            }
+        }else{
+            if ($testpaperResult['userId'] != $user->id){
+                $course = $this->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
+            }
 
-        if (empty($course) and $testpaperResult['userId'] != $this->getCurrentUser()->id) {
-            throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
+            if (empty($course) and $testpaperResult['userId'] != $user->id) {
+                throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
+            }
         }
 
         $result = $this->getTestpaperService()->showTestpaper($id, true);
