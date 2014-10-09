@@ -22,7 +22,7 @@ use Symfony\Component\Filesystem\Filesystem;
         $connection = $this->getConnection();
 
         $connection->exec("
-            CREATE TABLE `status` (
+            CREATE TABLE IF NOT EXISTS `status` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `userId` int(10) unsigned NOT NULL COMMENT '动态发布的人',
               `type` varchar(64) NOT NULL COMMENT '动态类型',
