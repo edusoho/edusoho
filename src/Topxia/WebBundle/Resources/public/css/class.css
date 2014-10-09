@@ -477,19 +477,7 @@
     visibility: visible;
 }
 
-.lesson .lesson-ul {
-    margin: 0;
-    padding: 0;
-    cursor: pointer;
-}
-.lesson .lesson-ul li img{
-    width: 70px;
-}
-.lesson .lesson-ul li {
-    list-style-type:none;
-
-}
-ul.course-item-list li.placeholder {
+.course-item-list li.placeholder {
   position: relative;
     margin-bottom: 10px 0;
     width: 100%;
@@ -498,7 +486,7 @@ ul.course-item-list li.placeholder {
     border: 1px dashed #ccc;
     list-style: none;
 }
-ul.lesson-ul li.placeholder {
+ul.schedule-lesson-list li.placeholder {
   position: relative;
     margin-bottom: 10px 0;
     width: 100%;

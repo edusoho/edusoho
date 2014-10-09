@@ -19,7 +19,7 @@ define(function(require, exports, module) {
             "click span.next-month": "nextMonth",
             "click span.previous-month": "previousMonth",
             "click button.lesson-remove": "removeLesson",
-            "click .lesson-ul li img": "gotoLesson",
+            "click .schedule-lesson-list li img": "gotoLesson",
             "change select.viewType": "changeView"
         },
         setup: function() {
@@ -38,7 +38,7 @@ define(function(require, exports, module) {
             $("ul.course-item-list").each(function(){
                 $(this).sortable("enable");
             });
-            var lessonSort = $("ul.lesson-ul").sortable({
+            var lessonSort = $("ul.schedule-lesson-list").sortable({
                 group:'schedule-sort',
                 drag:false,
                 itemSelector:'.lesson-item',
@@ -50,12 +50,10 @@ define(function(require, exports, module) {
                     _super(item);
                 },
                 onDrop: function ($item, container, _super, event) {
-                    var $li = $('<li data-id="'+ $item.data('id') +'" data-url="'+ $item.find('a').attr('href') +'"></li>'),
-                        img = '<img src="'+ $item.data('icon') +'"><br>'+ $item.data('title') +'</img>',
-                        close = '<button type="button" class="close pull-right lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>';
-
-                    $li.append(close).append(img);
-                    $item.prop('outerHTML', $li.prop("outerHTML"));
+                    var $template = $('<li data-id="39" data-url="/course/89/learn#lesson/39"><div class="thumbnail"><button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><img src="/assets/img/default/course-large.png?k12v1"><div class="caption">sssssss</div></div></li>');
+                    $template.data('id', $item.data('id')).data('url',$item.find('a').attr('href'));
+                    $template.find('img').attr('src', $item.data('icon')).find('caption').html($item.data('title'));
+                    $item.prop('outerHTML', $template.prop("outerHTML"));
                     _super($item);
 
                     var result = self.serializeContainer(container.el);
@@ -189,12 +187,13 @@ define(function(require, exports, module) {
                 data: data,
                 success: function(html) {
                     self.element.find('.schedule-body').html('').append(html);
-                    //self.element.find('tr.yearMonth') && self.changeYearMonth();
+                    
                     if(data.previewAs == 'month') {
                         self.disableSort();
                         self.popover();
                     } else {
-                      self.bindSortableEvent();  
+                        self.element.find('changeMonth') && self.changeYearMonth();
+                        self.bindSortableEvent();  
                     }
                 }
             });  
