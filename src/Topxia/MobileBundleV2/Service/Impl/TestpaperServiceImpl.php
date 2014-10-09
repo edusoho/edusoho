@@ -16,7 +16,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	        	}
 
 	        	$data = $this->request->request->all();
-	        	var_dump($data);exit();
 	            $answers = array_key_exists('data', $data) ? $data['data'] : array();
 	            $usedTime = $data['usedTime'];
 	            $user = $this->controller->getUserByToken($this->request);
