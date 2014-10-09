@@ -8,8 +8,7 @@ style="cursor:pointer"
 		{{course.title}}
 		</span>
 		
-		<a href="javascript:;" role="course-item-delete" data-course-id="{{course.id}}" {% if not showDelBtn|default(false) %}style="display:none"{% endif %}>
-		<span class="label label-danger series-mode-label">删除</span></a>
+		<button role="course-item-delete" data-course-id="{{course.id}}" {% if not showDelBtn|default(false) %}style="display:none"{% endif %} class="btn btn-xs btn-danger series-mode-label">删除</button>
 		
 	</div>
 </li>
