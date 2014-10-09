@@ -24,11 +24,19 @@ interface CourseService
 	public function commitCourse();
 
 	/**
+	 *  获取问题详情（包括提问的用户信息）
 	 *	courseId 课程id
 	 *	threadId 问答id
 	 *	token userToken
 	*/
 	public function getThread();
+
+	/**
+	 *	问题编辑更新
+	 *	courseId 课程id
+	 *	threadId 问答id
+	 */
+	public function updateThread();
 
 	public function getThreadTeacherPost();
 
