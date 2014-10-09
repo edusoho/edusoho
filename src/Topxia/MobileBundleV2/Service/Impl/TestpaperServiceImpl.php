@@ -102,12 +102,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
 	            	$testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
             		return array(
+            			'testpaperResult'=>$testpaperResult,
 	                            'testpaper'=>$testpaper,
 	                            'items'=>$this->getTestpaperItem($testpaperResult)
 	                            );
             	}
             	if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
             		return array(
+            			'testpaperResult'=>$testpaperResult,
 	                            'testpaper'=>$testpaper,
 	                            'items'=>$this->getTestpaperItem($testpaperResult)
 	                            );
