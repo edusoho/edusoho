@@ -618,8 +618,7 @@ class SettingController extends BaseController
         $questionsSetting = $this->getSettingService()->get('questions', array());
         if (empty($questionsSetting)) {
             $default = array(
-                'answers_show_enabled' => '1',
-                'answers_show_all' => '0',
+                'testpaper_answers_show_enabled' => '1',
             );
             $questionsSetting = $default;
         }
@@ -631,9 +630,7 @@ class SettingController extends BaseController
             $this->setFlashMessage('success','题库设置已保存！');
         }
 
-        return $this->render('TopxiaAdminBundle:System:questions-setting.html.twig', array(
-           'questionsSetting' => $questionsSetting
-        ));
+        return $this->render('TopxiaAdminBundle:System:questions-setting.html.twig');
     }
 
     public function adminSyncAction(Request $request)

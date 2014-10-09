@@ -5,7 +5,7 @@
 	  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
   </div>
 
-	{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and questionsSetting.answers_show_all == 0 and questionsSetting.answers_show_enabled == 1) or (questionsSetting.answers_show_all == 1  and paperResult.status|default(null) == 'finished' and questionsSetting.answers_show_enabled == 1 ) %}
+	{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_enabled',2) == 2) or (setting('questions.testpaper_answers_show_enabled',2) == 1  and paperResult.status|default(null) == 'finished') %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 				{% if item.question.testResult.status == 'right' %}

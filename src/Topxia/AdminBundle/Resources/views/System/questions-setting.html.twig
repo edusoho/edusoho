@@ -3,10 +3,9 @@
 {% block title %}题库设置 - {{ parent() }}{% endblock %}
 
 {% set submenu = 'questions_setting' %}
-{% set script_controller = 'setting/questions' %}
 
 {% block maincontent %}
-	<div class="page-header"><h1>题库设置</h1></div>
+	<div class="page-header"><h1>考试设置</h1></div>
 
 {{ web_macro.flash_messages() }}
 
@@ -15,25 +14,12 @@
 <fieldset>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label>考试答案以及解析</label>
+        <label>交卷后答案以及解析的显示</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('answers_show_enabled', {1:'开启', 0:'关闭'}, questionsSetting.answers_show_enabled) }}
-      <p class="help-block">在此设置学员交卷后,是否显示考试答案以及解析</p>
+        {{ radios('testpaper_answers_show_enabled', {0:'不显示', 1:'全部批阅完成后一起显示' , 2:'客观题自动批阅完后先显示答案解析'}, setting('questions.testpaper_answers_show_enabled',2)) }}
       </div>
     </div>
-
-	<div id="answers-show-all" {% if questionsSetting.answers_show_enabled == 0 %}style="display:none" {% endif %}>
-	    <div class="form-group">
-	      <div class="col-md-3 control-label">
-	        <label>解析显示内容</label>
-	      </div>
-	      <div class="controls col-md-8 radios">
-	        {{ radios('answers_show_all', {0:'客观题', 1:'全部（需试卷批阅完成）'}, questionsSetting.answers_show_all) }}
-	      <p class="help-block">显示考试答案以及解析内容</p>
-	      </div>
-	    </div>
-	</div>
 </fieldset>
 
   <div class="form-group">

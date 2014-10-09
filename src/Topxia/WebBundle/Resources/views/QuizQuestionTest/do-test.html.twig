@@ -1,4 +1,4 @@
-{% if  ((paperResult|default(null) and paperResult.status in ['finished','reviewing'] ) and not app.user.isTeacher() and questionsSetting.answers_show_enabled|default(1) == 0) or (questionsSetting.answers_show_enabled|default(1) == 1 and questionsSetting.answers_show_all|default(0) == 1 and paperResult.status == 'reviewing' and not app.user.isTeacher() )  %}
+{% if  ((paperResult|default(null) and paperResult.status in ['finished','reviewing'] ) and not app.user.isTeacher() and setting('questions.testpaper_answers_show_enabled',2) == 0) or (setting('questions.testpaper_answers_show_enabled',2) == 1 and paperResult.status == 'reviewing' and not app.user.isTeacher() )  %}
 {% else %}
 
 {# {% if showTestpaperNavbar|default('on') == 'off' %} #}

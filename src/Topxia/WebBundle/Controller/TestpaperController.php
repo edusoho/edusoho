@@ -189,7 +189,6 @@ class TestpaperController extends BaseController
         $total = $this->makeTestpaperTotal($testpaper, $items);
 
         $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
-        $questionsSetting = $this->getSettingService()->get('questions', array());
 
         return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
             'items' => $items,
@@ -199,7 +198,6 @@ class TestpaperController extends BaseController
             'favorites' => ArrayToolkit::column($favorites, 'questionId'),
             'id' => $id,
             'total' => $total,
-            'questionsSetting' => $questionsSetting
         ));
     }
 
@@ -236,8 +234,6 @@ class TestpaperController extends BaseController
 
         $student = $this->getUserService()->getUser($testpaperResult['userId']);
 
-        $questionsSetting = $this->getSettingService()->get('questions', array());
-
         return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-result.html.twig', array(
             'items' => $items,
             'accuracy' => $accuracy,
@@ -247,7 +243,6 @@ class TestpaperController extends BaseController
             'id' => $id,
             'total' => $total,
             'student' => $student,
-            'questionsSetting' => $questionsSetting
         ));
     }
 
