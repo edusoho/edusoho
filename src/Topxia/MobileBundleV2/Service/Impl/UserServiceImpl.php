@@ -14,6 +14,46 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->formData;
     }
     
+    public function getUserNotification()
+    {
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $start = (int) $this->getParam("start", 0);
+        $limit = (int) $this->getParam("limit", 10);
+
+        $total = $this->getNotificationService()->getUserNotificationCount($user['id']);
+        $this->getNotificationService()->clearUserNewNotificationCounter($user['id']);
+        $notifications = $this->getNotificationService()->findUserNotifications(
+            $user['id'],
+            $start,
+            $limit
+        );
+
+        foreach ($notifications as &$notification) {
+            $notification['createdTime'] = date('c', $notification['createdTime']);
+            $notification["message"] = $this->coverNotifyContent($notification);
+            unset($notification);
+        }
+        return array(
+            "start"=>$start,
+            "total"=>$total,
+            "limit"=>$limit,
+            "data"=>$notifications);
+    }
+
+    private function coverNotifyContent($notification)
+    {
+        $message = "";
+        $type = $notification['type'];
+
+        $message = $this->controller->render("TopxiaWebBundle:Notification:item-" .$type. ".html.twig", array(
+            "notification"=>$notification
+            ));
+        return $message->getContent();
+    }
     public function getUserInfo()
     {
         $userId = $this->getParam('userId');

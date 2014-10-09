@@ -54,6 +54,11 @@ class BaseService {
         return $this->controller->getService('Coupon:Coupon.CouponService');
     }
 
+    protected function getNotificationService()
+    {
+        return $this->controller->getService('User.NotificationService');
+    }
+
     protected function getCourseOrderService()
     {
         return $this->controller->getService('Course.CourseOrderService');
