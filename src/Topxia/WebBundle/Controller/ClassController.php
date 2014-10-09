@@ -76,7 +76,6 @@ class ClassController extends ClassBaseController
             }   
         }
         $newSchedules = array_merge($headSchedule, $lastSchedule);
-       
         return $this->render('TopxiaWebBundle:Class:schedule-list.html.twig', array(
             'courses' => $results['courses'],
             'lessons' => $results['lessons'],

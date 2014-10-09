@@ -19,7 +19,7 @@ define(function(require, exports, module) {
             "click span.next-month": "nextMonth",
             "click span.previous-month": "previousMonth",
             "click button.lesson-remove": "removeLesson",
-            "click .lesson-ul li": "gotoLesson",
+            "click .lesson-ul li img": "gotoLesson",
             "change select.viewType": "changeView"
         },
         setup: function() {
@@ -183,7 +183,7 @@ define(function(require, exports, module) {
             this.save(result);
         },
         gotoLesson: function(e) {
-            $li = $(e.currentTarget);
+            $li = $(e.currentTarget).parent();
             window.open($li.data('url'));
         },
         disableSort: function() {
