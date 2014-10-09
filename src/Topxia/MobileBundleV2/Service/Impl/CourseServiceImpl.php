@@ -39,7 +39,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	/*
 	 *更新回复
-
 	 *
 	 *
 	*/ 
@@ -58,9 +57,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    //     return $this->createErrorResponse('not_thread', "问答不存在或已删除");
 	    // }
 
-	    if($postId != 0) {
+	    if(!empty($postId)) {
 	    	$post = $this->controller->getThreadService()->getPost($courseId, $postId);
-			//var_dump($post);
+	    	if(empty($post)){
+				return $this->createErrorResponse('postId_not_exist', "postId不存在！");
+	    	}
+		}else{
+			return $this->createErrorResponse('wrong_postId_param', "postId参数错误！");
 		}
 
 		$content = $this->getParam("content", '');
