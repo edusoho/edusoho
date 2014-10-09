@@ -14,7 +14,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		if (empty($thread)) {
 			return null;
 		}
-		var_dump($thread['courseId']);
 		return $thread['courseId'] == $courseId ? $thread : null;
 	}
 
