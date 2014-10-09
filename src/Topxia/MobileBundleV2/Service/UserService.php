@@ -9,4 +9,6 @@ interface UserService
 	public function loginWithToken();
 	public function getUserInfo();
 	public function logout();
+
+	public function getUserNotification();
 }
