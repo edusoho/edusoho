@@ -70,10 +70,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$formData['content'] = $content;
 		unset($formData['imageCount']);
 
-		$post = $this->controller->getThreadService()->updatePost($courseId,$postId,);
+		//$post = $this->controller->getThreadService()->updatePost($courseId,$postId,);
 		return $post;
-
-
 	}
 
 	private function uploadImage($content)
