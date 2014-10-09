@@ -53,6 +53,7 @@ class ClassNoteController extends ClassBaseController
         $userLikes=ArrayToolkit::index($userLikes, 'noteId');
         //每个笔记点赞的人列表(NoteLike对象)
         $noteLikes=$this->getNoteService()->findNoteLikesByNoteIds(ArrayToolkit::column($notes, 'id'));    
+        $noteLikes=ArrayToolkit::group($noteLikes,'noteId');
         return $this->render("TopxiaWebBundle:ClassNote:note-list.html.twig", array(
             'class' => $class,
             'classNav'=>'notes',

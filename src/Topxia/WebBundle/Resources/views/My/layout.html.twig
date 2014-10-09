@@ -6,12 +6,19 @@
 
 {{ render(controller('TopxiaWebBundle:My:avatarAlert')) }}
 
+
 <div class="row row-3-9">
   <div class="col-md-3">
 
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="list-group-block">
+          <div style="margin:10px" align="center">
+            <a href="{{path('user_show',{id:app.user.id})}}">
+              <img  alt="{{ app.user.truename }}" src="{{ file_path(app.user.mediumAvatar, 'avatar.png') }}">
+            </a><br/><br/>
+            <b>欢迎回来，{{app.user.truename}}</b>
+          </div>
 
           {% if app.user.isTeacher() %}
             <div class="list-group-panel">
@@ -22,8 +29,12 @@
                href="{{path('my_teaching_courses')}}">在教课程</a> #}
 
                <a class="list-group-item
+               {% if side_nav == 'my-teaching' %} active {% endif %}" 
+               href="{{path('my_teaching')}}">我的教学</a>
+
+               <a class="list-group-item
                {% if side_nav == 'my-teaching-courses' %} active {% endif %}" 
-               href="{{path('my_teaching_courses')}}">我的教学</a>
+               href="{{path('my_teaching_courses')}}">在教课程</a>
 
                <a class="list-group-item 
                {% if side_nav == 'my-teaching-questions' %} active {% endif %}" 

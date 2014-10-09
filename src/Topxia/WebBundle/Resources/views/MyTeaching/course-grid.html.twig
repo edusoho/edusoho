@@ -1,0 +1,14 @@
+<div class="thumbnail class-course-grid">
+  {% if course.compulsory %}
+    <span class="label label-success compulsory">必修</span>
+  {% else %}
+    <span class="label label-warning compulsory">选修</span>
+  {% endif %}
+  <a href="{{ path('course_show',{id:course.id}) }}"><img  alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}"></a>
+  <div class="caption">
+    <a href="{{ path('course_show',{id:course.id}) }}"><h3 class="title">{{ course.title }}</h3></a>
+    <div class="metas clearfix">
+    	<a href="{{ path('class_show',{ classId: class.id })}}" class="pull-left">{{ class_name(class) }}</a>
+    </div>
+  </div>
+</div>

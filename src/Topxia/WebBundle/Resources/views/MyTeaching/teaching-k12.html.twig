@@ -1,94 +1,91 @@
 {% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}在教课程 - {{ parent() }}{% endblock %}
+{% block title %}我的教学 - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'my-teaching-courses' %}
+{% set side_nav = 'my-teaching' %}
 
 {% block main %}
 <div class="panel panel-default panel-col lesson-manage-panel class-table">
-  <div class="panel-heading">我的教学</div>
+
+  <div class="panel-body">
+    <h5>正在教学（{{courseCount|default(0)}}）</h5>
+    <hr>
+    <div class="row">
+      {% set count =0 %}
+      {% for class in classes %}
+        {% set courses = courseList[class.id]|default(null) %}
+        {% for course in courses %}
+          {% if count <4 %}
+            <div class="col-sm-6 col-md-3">
+              {% include 'TopxiaWebBundle:MyTeaching:course-grid.html.twig' %}
+            </div>
+            {% set count=count+1 %}
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <div class="empty">暂无在教课程</div>
+      {% endfor %}
+    </div>
+    {% if courseCount>0 %}
+      <div class="row">
+        <a class="col-md-1 col-md-offset-11 text-rigth" href="{{path('my_teaching_courses') }}">更多</a>
+      </div>
+    {% endif %}
+  </div>
 
   <div class="panel-body">
     {% if manageClasses %}
-      <h5>管理的班级</h5>
-      <table class="table table-hover table-condensed">
-        <tbody>
-          {% for manageClass in manageClasses %}
-        <tr>
-          <td width="40%">
-            <a class="pull-left" href="{{ path('class_show',{ classId: manageClass.id })}}">
-              <img src="{{ file_url(manageClass.icon, 'class.png') }}" alt="{{ manageClass.name }}" class="class-picture">
-            </a>
-            <a href="{{ path('class_show',{ classId: manageClass.id })}}" class="btn-link pull-left">{{ class_name(manageClass) }}</a>
-          </td>
-          <td width="10%">
-            <span class="text-danger">班主任</span>
-          </td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>  
-          {% endfor %}
-        </tbody>
-      </table>
-{#     <div class="row">
-      {% for manageClass in manageClasses %}
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail course-thumbnail">
-            <a href="{{ path('class_show',{ classId: manageClass.id })}}"><img  alt="{{ manageClass.name }}" src="{{ file_url(manageClass.icon, 'class.png') }}"></a>
-            <div class="caption mycaption">
-              <a href="{{ path('class_show',{ classId: manageClass.id }) }}"><h3 class="title text-center">{{ class_name(manageClass) }}</h3></a>
-            </div>
+      <h5>我的班级（{{manageClasses|length}}）</h5>
+      <hr>
+      <div class="row">
+        {% for manageClass in manageClasses %}
+          <div class="col-sm-6 col-md-3">
+            {% include 'TopxiaWebBundle:MyTeaching:class-grid.html.twig' %}
           </div>
-        </div>
-      {% endfor %}
-    </div>  #} 
-    {% endif %}
-    <div class="" id="myTeaching">
-    <h5>我的任课</h5>
-    <table class="table table-hover table-condensed class-table">
-      <tbody>
-        {% if classes %}
-        {% for class in classes %}
-        <tr>
-          <td width="40%">
-            <a class="pull-left" href="{{ path('class_show',{ classId: class.id })}}">
-              <img src="{{ file_url(class.icon, 'class.png') }}" alt="{{ class.name }}" class="pull-left class-picture" >
-            </a>
-            <a href="{{ path('class_show',{ classId: class.id })}}" class="btn-link pull-left">{{ class_name(class) }}</a>
-          </td>
-          <td width="10%">
-            <span>任课</span>
-          </td>
-          <td width="40%">
-        
-            {% for course in results[class.id] %}
-            <div class="mbs">
-              <a href="{{ path('course_show',{id:course.id}) }}"><span>{{ course.title }}</span></a>
-              <div class="btn-group">
-                <a class="btn btn-default btn-xs" href="{{ path('course_manage', {id:course.id}) }}">管理</a>
-                <a href="#" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu pull-right">
-                  <li><a href="{{ path('course_manage_lesson', {id:course.id}) }}">课时管理</a></li>
-                  <li><a href="{{ path('course_manage_files', {id:course.id}) }}">文件管理</a></li>
-                </ul>
-              </div>
-            </div>
-            {% endfor %}
-         
-        </td>
-        <td>
-      
-        </td>
-        </tr>
         {% endfor %}
-        {% else %}
-        <div  class="empty">暂无在教的课程</div>
-        {% endif %}
-      </tbody>
-    </table>
+      </div>
+    {% endif %}
+  </div>
 
+  <div class="panel-body">
+    <h5>等待解答（{{threadCount|default(0)}}）</h5>
+    <hr>
+    <div class="row">
+      {% for thread in threads %}
+        {% set threadUser = threadUsers[thread.userId] %}
+        <div class="col-md-6">
+          {% include 'TopxiaWebBundle:MyTeaching:thread-grid.html.twig' %}
+        </div>
+      {% else %}
+        <div class="empty">暂无等待解答的问题</div>
+      {% endfor %}
+    </div>
+    {% if threadCount>0 %}
+      <div class="row">
+        <a class="col-md-1 col-md-offset-11 text-rigth" href="{{path('my_teaching_threads', {type:'question'}) }}">更多</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="panel-body">
+    <h5>等待批阅（{{testpaperCount|default(0)}}）</h5>
+    <hr>
+    <div class="row">
+      {% for paperResult in paperResults %}
+        {% set testpaper = testpapers[paperResult.testId] %}
+        {% set testpaperUser = testpaperUsers[paperResult.userId] %}
+        <div class="col-md-6">
+          {% include 'TopxiaWebBundle:MyTeaching:testpaper-grid.html.twig' %}
+        </div>
+      {% else %}
+        <div class="empty">暂无等待批阅的试卷</div>
+      {% endfor %}
+    </div>
+    {% if testpaperCount>0 %}
+      <div class="row">
+        <a class="col-md-1 col-md-offset-11 text-rigth" href="{{path('course_manage_list_teacher_test_reviewing') }}">更多</a>
+      </div>
+    {% endif %}
   </div>
 </div>
 

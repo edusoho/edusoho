@@ -486,7 +486,6 @@ class TestpaperController extends BaseController
         }, $targets);
 
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
         return $this->render('TopxiaWebBundle:MyQuiz:teacher-test-layout.html.twig', array(
             'status' => 'reviewing',
             'users' => ArrayToolkit::index($users, 'id'),
