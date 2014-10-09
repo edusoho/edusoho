@@ -31,9 +31,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$content = $this->uploadImage($content);
 
 		$formData = $this->formData;
-		var_dump($formData);
 		$formData['content'] = $content;
-		var_dump($formData);
 		unset($formData['imageCount']);
 		$post = $this->controller->getThreadService()->createPost($formData);
 		return $post;
@@ -72,7 +70,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$formData['content'] = $content;
 		unset($formData['imageCount']);
 
-		//$post = $this->controller->getThreadService()->updatePost($courseId,$postId,);
+		$post = $this->controller->getThreadService()->updatePost($courseId, $postId, $formData);
 		return $post;
 	}
 
