@@ -14,7 +14,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		if (empty($thread)) {
 			return null;
 		}
-		var_dump($thread['courseId']);
 		return $thread['courseId'] == $courseId ? $thread : null;
 	}
 
@@ -377,7 +376,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 		$user = $this->getCurrentUser();
 		($user->isLogin() and $user->id == $post['userId']) or $this->getCourseService()->tryManageCourse($courseId);
-
 
 		$fields  = ArrayToolkit::parts($fields, array('content'));
 		if (empty($fields)) {
