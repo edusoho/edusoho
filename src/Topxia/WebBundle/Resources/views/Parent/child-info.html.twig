@@ -27,7 +27,7 @@
 </div>
 
 <div style="margin:10px" align="center">
-  <a href="{{path('user_show',{id:app.user.id})}}">
-    <img  alt="{{ app.user.truename }}" src="{{ file_path(app.user.mediumAvatar, 'avatar.png') }}">
+  <a href="{{path('user_show',{id:selectedChild.id})}}">
+    <img  alt="{{ selectedChild.truename }}" src="{{ file_path(selectedChild.mediumAvatar, 'avatar.png') }}">
   </a><br/><br/>
 </div>
