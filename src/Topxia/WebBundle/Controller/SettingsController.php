@@ -21,7 +21,7 @@ class SettingsController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 		$class=array();
-		if(!in_array('ROLE_TEACHER', $user['roles'])){
+		if(!$user->isTeacher() && !$user->isParent()){
 			$conditions=array(
 	            'userId'=>$user['id'],
 	            'roles'=>array('STUDENT')
