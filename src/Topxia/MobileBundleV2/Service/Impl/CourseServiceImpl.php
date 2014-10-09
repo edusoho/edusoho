@@ -250,7 +250,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$fields = array("title" => $title, "content" => $content );
 
-		return $this->getThreadService()->updateThread($courseId, $threadId, $fields);
+		return $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
 	}
 
 	public function getThreadTeacherPost()
