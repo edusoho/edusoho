@@ -52,7 +52,7 @@ class ParentController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $userData['mobile'] = $formData['mobile'];
-            $userData['email'] = $formData['email'];
+            $userData['email'] = empty($formData['email'])?'p'.$formData['mobile'].'@exmple.com':$formData['email'];
             $userData['truename'] = $formData['truename'];
             $userData['password'] = $formData['password'];
             $userData['createdIp'] = $request->getClientIp();
