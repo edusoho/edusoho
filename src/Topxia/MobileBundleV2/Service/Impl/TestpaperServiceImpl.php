@@ -37,8 +37,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	            $course = $this->controller->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
 
 	            if ($this->getTestpaperService()->isExistsEssay($testResults)) {
-	            	$userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-                		$teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testpaperResult['id']), true);
+	            	$userUrl = $this->controller->generateUrl('user_show', array('id'=>$user['id']), true);
+                		$teacherCheckUrl = $this->controller->generateUrl('course_manage_test_teacher_check', array('id'=>$testpaperResult['id']), true);
 
 		            foreach ($course['teacherIds'] as $receiverId) {
 		                $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testpaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
