@@ -270,8 +270,8 @@ class DataDict
     	),
 
     	'family' =>array(
-    		'mother' =>'爸爸',
-    		'father' =>'妈妈',
+    		'mother' =>'妈妈',
+    		'father' =>'爸爸',
     		'fgrandfather'=>'爷爷',
     		'fgrandmother'=>'奶奶',
     		'mgrandfather'=>'外公',

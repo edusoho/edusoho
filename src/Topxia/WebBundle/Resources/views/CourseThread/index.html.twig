@@ -5,8 +5,7 @@
 {% block dashboard_main %}
 
 {% include 'TopxiaWebBundle:Course:dashboard-nav.html.twig' with {nav:'thread'} %}
-  {% if app.user.isParent() %}
-  {% else %}
+  {% if not app.user.isParent() %}
     <div class="pull-right">
       <a class="btn btn-sm btn-info" href="{{ path('course_thread_create', {id:course.id, type:'discussion'}) }}">发话题</a>
       <a class="btn btn-sm btn-info" href="{{ path('course_thread_create', {id:course.id, type:'question'}) }}">提问题</a> 
