@@ -398,7 +398,7 @@ define(function(require, exports, module) {
             });
         });
 
-        $('li[role="course-item"]').find("a[role='course-item-delete']").on('click',function(){
+        $('li[role="course-item"]').find("[role='course-item-delete']").on('click',function(){
             var courseId=$(this).data("courseId");
             var courseIds = $('input[name="courseIds"]');
 
