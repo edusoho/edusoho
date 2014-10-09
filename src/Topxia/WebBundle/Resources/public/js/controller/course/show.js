@@ -9,7 +9,7 @@ define(function(require, exports, module) {
             $('#teacher-detail').find('.teacher-item').removeClass('teacher-item-active');
             $('#teacher-detail').find('.teacher-item-' + teacherId).addClass('teacher-item-active');
         });
-        var Share=require('../../util/share.js');
+        var Share=require('../../util/share.js?2');
         Share.create({
                 selector: '.share',
                 icons: 'itemsAll',
