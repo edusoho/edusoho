@@ -57,17 +57,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 	        	return $this->createErrorResponse('not_thread', "问答不存在或已删除");
 	        }
 
-<<<<<<< HEAD
 	        if($postId !=0) {
 	    	$post = $this->controller->getThreadService()->getPost($postId);
 		var_dump($post);
 		}
-=======
-		if($postId! = 0){
+		if($postId!= 0){
         	$post = $this->controller->getThreadService()->getPost($postId);
         	//var_dump($post);
         }
->>>>>>> 6f9735fdee8a8586e1ce881758a9da2d54d95b0f
 	}
 
 	private function uploadImage($content)
