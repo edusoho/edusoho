@@ -336,6 +336,9 @@
 .schedule .month .not-in-month {
     background-color: rgb(247, 247, 247);
 }
+.schedule .glyphicon {
+    cursor: pointer;
+}
 
 .schedule .month td {
     cursor: pointer;
