@@ -279,13 +279,12 @@ font-size: 12px;
       <div class="col-md-8" role="course-item-container">
         <div class="row">
         {% for course in courses|default(null) %}
-        {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:course} %}
+        {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:course, showDelBtn:true} %}
         {% endfor %}
         </div>
       </div>
     </div>
   </fieldset>
-
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   

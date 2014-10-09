@@ -13,7 +13,17 @@ define(function(require, exports, module) {
 		$("div[role='course-item']").on('click', function(){
 			var $courseIds = $('input[name="courseIds"]');
 			$courseIds.val($courseIds.val()+$(this).data("courseId")+",");
-			$('div[role="course-item-container"]').append($(this).clone());
+			
+			var courseItem = $(this).clone();
+			courseItem.find('a').on('click',function(){
+	            var courseId=$(this).data("courseId");
+	            var courseIds = $('input[name="courseIds"]');
+
+	            $(this).parents('div[role="course-item"]').remove();
+	            courseIds.val(courseIds.val().replace(courseId+',', ''));
+	        }).show();
+
+			$('div[role="course-item-container"] .row').append(courseItem);
 			$modal.modal('hide');
 		})
 	}

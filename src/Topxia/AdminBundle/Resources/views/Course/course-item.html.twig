@@ -1,9 +1,12 @@
-<div data-course-id="{{course.id}}" class="col-md-4" role="course-item" >
+<div data-course-id="{{course.id}}" class="col-md-4" role="course-item" {% if not showDelBtn|default(false) %}style=""{% endif %}>
 	<div class="thumbnail" style="position:relative">
 	  	<img src="{{ default_path('coursePicture',course.largePicture|default(null), 'large') }}" />
 		<p>
 		{{course.title}}
 		</p>
-		<span class="label label-danger series-mode-label">删除</span>
+		
+		<a href="javascript:;" role="course-item-delete" data-course-id="{{course.id}}" {% if not showDelBtn|default(false) %}style="display:none"{% endif %}>
+		<span class="label label-danger series-mode-label">删除</span></a>
+		
 	</div>
 </div>

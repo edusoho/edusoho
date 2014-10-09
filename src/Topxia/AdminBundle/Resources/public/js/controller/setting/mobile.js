@@ -398,6 +398,14 @@ define(function(require, exports, module) {
             });
         });
 
+        $('div[role="course-item"]').find("a[role='course-item-delete']").on('click',function(){
+            var courseId=$(this).data("courseId");
+            var courseIds = $('input[name="courseIds"]');
+
+            $(this).parents('div[role="course-item"]').remove();
+            courseIds.val(courseIds.val().replace(courseId+',', ''));
+        });
+
         var editor = EditorFactory.create('#mobile_about', 'simple', {extraFileUploadParams:{group:'default'}});
         editor.sync();
 
