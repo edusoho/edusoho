@@ -183,7 +183,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 				return $itemValue;
 				
 			}, $item);
-			if ($this->arrayIsEmpty($item)) {
+			if ($controller->arrayIsEmpty($item)) {
 				return;
 			}
 			return array_values($item);
@@ -196,7 +196,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 		return $result;
 	}
 
-	private function arrayIsEmpty($array)
+	public function arrayIsEmpty($array)
 	{
 		foreach ($array as $key => $value) {
 			if (!empty($value)) {
