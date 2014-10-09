@@ -249,7 +249,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields = array("title" => $title, "content" => $content );
 		var_dump($fields);
 
-		return $this->getThreadService()->updateThread($courseId, $threadId, $fields);
+		return 1;
 	}
 
 	public function getThreadTeacherPost()
