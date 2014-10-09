@@ -39,6 +39,8 @@ class CourseController extends BaseController
         $key = $request->request->get("key");
 
         $conditions = array( "title"=>$key );
+        $conditions['status'] = 'published';
+        $conditions['type'] = 'normal';
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
 
