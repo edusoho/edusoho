@@ -54,7 +54,7 @@ interface CourseService
 	*
 	*
 	*/
-	public function updatePost()
+	public function updatePost();
 
 	public function coupon();
 
