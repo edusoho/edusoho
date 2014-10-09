@@ -45,7 +45,7 @@ seajs.config({
 		'webuploader': 'gallery2/webuploader/0.1.2/webuploader',
 		'screenfull': 'gallery2/screenfull/1.1.1/screenfull',
 		'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js',
-		'edusoho.chunkupload': 'edusoho/chunkupload/1.0/chunk-upload.js',
+		'edusoho.chunkupload': 'edusoho/chunkupload/1.0.1/chunk-upload.js',
 		'edusoho.uploadpanel': 'edusoho/uploadpanel/1.0/upload-panel.js',
 		'edusoho.uploadProgressBar': 'edusoho/uploadprogressbar/1.0/upload-progress-bar.js'
 	},

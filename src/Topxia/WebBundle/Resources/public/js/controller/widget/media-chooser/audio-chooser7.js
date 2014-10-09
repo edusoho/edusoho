@@ -8,7 +8,7 @@ define(function(require, exports, module) {
     	attrs: {
     		uploaderSettings: {
                 file_types : "*.mp3",
-                file_size_limit : "100 MB",
+                file_size_limit : "500 MB",
                 file_types_description: "音频文件"
     		},
             preUpload: function(uploader, file) {
