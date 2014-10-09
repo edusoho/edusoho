@@ -240,12 +240,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function updateThread(){
 		$courseId = $this->getParam("courseId", 0);
 		$threadId = $this->getParam("threadId", 0);
+		$title = $this->getParam("title", 0);
 		$content = $this->getParam("content","");
 		if (!$user->isLogin()) {
 			return $this->createErrorResponse('not_login', '您尚未登录，修改该课时');
 		}		
 
-		return $this->getThreadService()->updateThread($courseId, $threadId, $content);
+		$fields = array("title" => $title, "content" => $content );
+
+		return $this->getThreadService()->updateThread($courseId, $threadId, $fields);
 	}
 
 	public function getThreadTeacherPost()
