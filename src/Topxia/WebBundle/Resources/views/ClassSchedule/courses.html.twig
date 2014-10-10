@@ -1,9 +1,11 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">班级课程</h3>
+    {% if app.user.isAdmin or app.user.isTeacher %}
     <span class="mode" data-url="{{ path('class_schedule_mode',{classId:classId, editable:true}) }}">
       <button class="btn btn-link">编辑模式</button>
     </span>
+    {% endif %}
   </div>
   <div class="panel-body schedule-course">
    <ul class="media-list">
