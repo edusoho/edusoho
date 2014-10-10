@@ -74,10 +74,33 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$formData = $this->formData;
 		$formData['content'] = $content;
+		var_dump($formData);
 		unset($formData['imageCount']);
 
 		$post = $this->controller->getThreadService()->updatePost($courseId, $postId, $formData);
 		return $post;
+	}
+
+	public function updateThread(){
+		$courseId = $this->getParam("courseId", 0);
+		$threadId = $this->getParam("threadId", 0);
+		$title = $this->getParam("title", 0);
+		$content = $this->getParam("content","");
+
+		$user = $this->controller->getUserByToken($this->request);
+		if (!$user->isLogin()) {
+			return $this->createErrorResponse('not_login', '您尚未登录，修改该课时');
+		}
+
+		$content = $this->uploadImage($content);
+
+		$formData = $this->formData;
+		$formData['content'] = $content;
+		unset($formData['imageCount']);
+
+		$fields = array("title" => $title, "content" => $content);
+		
+		return $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
 	}
 
 	private function uploadImage($content)
@@ -235,22 +258,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$course = $this->controller->getCourseService()->getCourse($thread['courseId']);
             	$user = $this->controller->getUserService()->getUser($thread['userId']);
 		return $this->filterThread($thread, $course, $user);
-	}
-
-	public function updateThread(){
-		$courseId = $this->getParam("courseId", 0);
-		$threadId = $this->getParam("threadId", 0);
-		$title = $this->getParam("title", 0);
-		$content = $this->getParam("content","");
-
-		$user = $this->controller->getUserByToken($this->request);
-		if (!$user->isLogin()) {
-			return $this->createErrorResponse('not_login', '您尚未登录，修改该课时');
-		}		
-
-		$fields = array("title" => $title, "content" => $content );
-
-		return $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
 	}
 
 	public function getThreadTeacherPost()
@@ -560,4 +567,52 @@ class CourseServiceImpl extends BaseService implements CourseService
 			);
 		return $result;
 	}
+
+
+    public function getLearnStatus()
+    {
+        $courseId = $this->getParam("courseId");
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $course = $this->controller->getCourseService()->getCourse($courseId);
+        $learnStatus = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
+        if (!empty($course)) {
+            $member = $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']);
+            $progress = $this->calculateUserLearnProgress($course, $member);
+        } else {
+            $course = array();
+            $progress = array();
+        }
+
+        foreach ($learnStatus as $key => $value) {
+        		if ($value == "finished") {
+        			unset($learnStatus[$key]);
+        		}
+        }
+        $keys = array_keys($learnStatus);
+        $lessonId = end($keys);
+        $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+        return array(
+        	"data"=>$lesson,
+            'progress'  => $progress
+            );
+    }
+
+    private function calculateUserLearnProgress($course, $member)
+    {
+        if ($course['lessonNum'] == 0) {
+            return array('percent' => '0%', 'number' => 0, 'total' => 0);
+        }
+
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+
+        return array (
+            'percent' => $percent,
+            'number' => $member['learnedNum'],
+            'total' => $course['lessonNum']
+        );
+    }
 }
