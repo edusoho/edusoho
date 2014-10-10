@@ -173,7 +173,8 @@ class ParentController extends BaseController
 		        $this->cached['children']=$children;
 		        $this->cached['classMembers']=$classMembers;
 		        $this->cached['classes']=$classes;
-                $this->cached['relation']=current($relations)['relation'];
+                $relation = current($relations);
+                $this->cached['relation']=$relation['relation'];
 		        $this->getCacheService()->set(self::CACHE_NAME.$this->getCurrentUser()->id, $this->cached);
             }
         }
