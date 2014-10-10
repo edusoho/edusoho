@@ -10,7 +10,8 @@
       <ul class="course-list">
         {% for course in courses %}
           <li>
-            <span class="glyphicon glyphicon-plus-sign text-info mrs"></span>《{{ course.title }}》
+            <span class="glyphicon glyphicon-plus-sign text-info mrs"></span>
+            <span class="title" title="{{ course.title }}">{{ course.title }}</span>
             {{ render(controller('TopxiaWebBundle:ClassSchedule:getItems', {courseId:course.id})) }}
           </li>
         {% else %}

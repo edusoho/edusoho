@@ -11,16 +11,17 @@
       {% set teacher = users[course.teacherIds[0]|default(0)]|default(null) %}
           <li class="media">
             <a class="pull-left" href="{{ path('course_show',{id:course.id}) }}">
+              {% if course.compulsory %}
+                <span class="label label-success compulsory">必修</span>
+              {% else %}
+                <span class="label label-warning compulsory">选修</span>
+              {% endif %}
               <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}">
             </a>
             <div class="media-body">
               <h4 class="media-heading">
-                {% if course.compulsory %}
-                  <span class="label label-success compulsory mrs">必修</span>
-                {% else %}
-                  <span class="label label-warning compulsory mrs">选修</span>
-                {% endif %}
-                <<{{ course.title }}>></h4>
+                <span class="title" title="{{ course.title }}">{{ course.title }}</span>
+              </h4>
                 <div class="pvs">
                    <span>{{ teacher.truename }}<span> <span class="mll">{{ course.lessonNum }}个课时</span>
                 </div>

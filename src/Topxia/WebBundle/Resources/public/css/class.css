@@ -481,10 +481,15 @@
     color:yellow;*/
 }
 
-.schedule-course img {
-    height: 48px;
-    width: 80px;
+.schedule-course .media img {
+    height: 60px;
+    width: 100px;
 }
+.schedule-course .media-heading {
+    height: 28px;
+    overflow: hidden;
+}
+
 .schedule-course h4 {
     font-size: 14px;
 }
@@ -614,6 +619,20 @@ ul.schedule-lesson-list a .finished-icon {
     top: 2px;
 }
 
+.course-display .media a {
+    position: relative;
+} 
+
+.course-display .compulsory {
+    position: absolute;
+    font-size: 10px;
+    top: 0px;
+    left: 0px
+}
+
+.course-display .course-list .title {
+ 
+}
 .week-operation a {
     text-decoration: none;
 }
