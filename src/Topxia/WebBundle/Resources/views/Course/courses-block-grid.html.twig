@@ -25,6 +25,15 @@
           {% endif %}
 
         <span class="title">{{ course.title }}</span>
+        {% set user = users[course.teacherIds|first]|default(null) %}
+        {% if user %}
+          <a href="{{path('user_show',{id:user.id})}}">
+            <span class="teacher clearfix">
+              <img src="{{ default_path('avatar',user.smallAvatar, '') }}" class="thumb">
+              <span class="nickname ellipsis">{{ user.truename }}</span>
+            </span>
+          </a>
+        {% endif %}
         {% if mode in ['default', 'teach'] %}
 
           {% if course.type == 'live' %}
