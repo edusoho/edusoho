@@ -22,10 +22,11 @@
 
       <div class="col-md-4">
         {% block right_side %}
+          {% if not app.user.isAdmin %}
             {% block user_info %}
               {{ render(controller('TopxiaWebBundle:Class:userInfo', {class:class, userId:app.user.id})) }}
             {% endblock %}
-
+          {% endif %}  
             {% block schedule %}
               <div class="panel panel-default schedule-panel">
                 <div class="panel-body">
