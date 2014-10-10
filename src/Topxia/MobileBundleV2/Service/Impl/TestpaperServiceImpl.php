@@ -6,6 +6,27 @@ use Topxia\MobileBundleV2\Service\TestpaperService;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
 {
+	public function uploadQuestionImage()
+	{
+		$user = $this->controller->getUserByToken($this->request);
+                        if (!$user->isLogin()) {
+                            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+                        }
+		$url = "";
+		try {
+			$file = $this->request->files->get('file');
+			$group = $this->getParam("group", 'course');
+			$record = $this->getFileService()->uploadFile($group, $file);
+			$url = $this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+		} catch (\Exception $e) {
+			$url = "";
+		}
+
+		$baseUrl = $this->request->getSchemeAndHttpHost();
+		$url = empty($url) ? "" : $baseUrl . '/' .$url;
+        		return $url;
+	}
+
 	public function finishTestpaper()
 	{
 		$id = $this->getParam("id");
@@ -144,6 +165,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	        $student = $this->controller->getUserService()->getUser($testpaperResult['userId']);
 
 	        return array(
+	        	"testpaper"=>$testpaper,
 	        	"items"=>$this->filterResultItems($items),
 	        	"accuracy"=>$accuracy,
             	'paperResult' => $testpaperResult

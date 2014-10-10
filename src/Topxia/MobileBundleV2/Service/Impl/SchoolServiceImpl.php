@@ -57,13 +57,16 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public function getWeekRecommendCourses()
     {
-        $sort = "recommend";
-        $start = (int) $this->getParam("start", 0);
-        $limit = (int) $this->getParam("limit", 10);
-        $courses = $this->controller->getCourseService()->searchCourses(array(), $sort, $start,  $limit);
+        $mobile = $this->controller->getSettingService()->get('mobile', array());
+        $courseIds = array();
+        foreach (explode(",", $mobile['courseIds']) as $key => $value) {
+            $courseIds[] = (int) $value;
+        }
+        $courses = $this->controller->getCourseService()->findCoursesByIds($courseIds);
+        $courses = array_values($courses);
         $result = array(
-            "start"=>$start,
-            "limit"=>$limit,
+            "start"=>0,
+            "limit"=>3,
             "data"=>$this->controller->filterCourses($courses));
         return $result;
     }
@@ -100,8 +103,9 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public function getSchoolAnnouncement()
     {
+        $mobile = $this->getSettingService()->get('mobile', array());
         return array(
-            "info"=>"这是网校简介",
+            "info"=>$mobile['notice'],
             "action"=>"none",
             "params"=>array()
             );

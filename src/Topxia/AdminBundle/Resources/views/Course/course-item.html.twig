@@ -8,7 +8,7 @@ style="cursor:pointer"
 		{{course.title}}
 		</span>
 		
-		<button type="button" role="course-item-delete" data-course-id="{{course.id}}" {% if not showDelBtn|default(false) %}style="display:none"{% endif %} class="btn btn-xs btn-danger series-mode-label">删除</button>
+		<button type="button" role="course-item-delete" data-course-id="{{course.id}}" {% if not showDelBtn|default(false) %}style="display:none"{% endif %} class="series-mode-label close">X</button>
 		
 	</div>
 </li>
