@@ -16,7 +16,7 @@ class MobileOrderController extends MobileBaseController
         $formData = $request->query->all();
         $formData['courseId'] = $courseId;
 
-        $token = $this->getUserByToken($request);
+        $user = $this->getUserByToken($request);
 
         if (!$user->isLogin()) {
             return $this->createErrorResponse($request, 'not_login', '用户未登录，创建课程订单失败。');
@@ -53,8 +53,7 @@ class MobileOrderController extends MobileBaseController
 
     public function submitPayRequestAction(Request $request, $id)
     {
-        $this->getUserToken($request);
-        $user = $this->getCurrentUser();
+        $user = $this->getUserByToken($request);
 
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order)) {
