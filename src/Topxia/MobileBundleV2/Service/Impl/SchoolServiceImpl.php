@@ -103,8 +103,9 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public function getSchoolAnnouncement()
     {
+        $mobile = $this->getSettingService()->get('mobile', array());
         return array(
-            "info"=>"这是网校简介",
+            "info"=>$mobile['notice'],
             "action"=>"none",
             "params"=>array()
             );
