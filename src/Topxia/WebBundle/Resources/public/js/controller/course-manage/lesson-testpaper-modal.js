@@ -96,8 +96,9 @@ define(function(require, exports, module) {
                              }
                           });
                         }
-                     if(add != 1 )
-                        $parent.after(html);  
+                         if(add != 1 ){
+                              $("#course-item-list").append(html);
+                         }   
                         var $list = $("#course-item-list");
                         sortList($list);
                      }else{

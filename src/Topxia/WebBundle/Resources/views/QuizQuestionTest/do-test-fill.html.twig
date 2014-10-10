@@ -5,7 +5,7 @@
 	  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
   </div>
 
-	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
+	{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted' ) or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished' ) %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 		    <ul>
