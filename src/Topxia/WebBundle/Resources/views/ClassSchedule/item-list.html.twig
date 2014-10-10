@@ -1,5 +1,5 @@
-<div class="course-item-list-wrap hidden schedule-item-list">
-	<ul class="course-item-list" >
+<div class="schedule-course-item-list-wrap schedule-item-list">
+	<ul class="schedule-course-item-list" >
 		{% for id, item in items %}
 		  {% if 'chapter' in id %}
 		    {% if item.type == 'unit' %}
@@ -16,26 +16,12 @@
 		  {% elseif 'lesson' in id %}
 	    	  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
 		    <li class="item lesson-item hover-item clearfix " data-id="{{ item.id }}" data-icon="{{ file_path(course.middlePicture, 'course-large.png') }}" data-title="{{ item.title }}">
-		    	{% if item.status == 'published' %}	    	
-			    	{% if item.type == 'video' %}
-			    	  <span class="glyphicon glyphicon-play-circle"></span>
-				    {% elseif item.type == 'audio' %}
-				      <span class="glyphicon glyphicon-volume-up"></span>
-				    {% elseif item.type == 'text' %}
-				      <span class="glyphicon glyphicon-picture"></span>
-				    {% elseif item.type == 'testpaper' %}
-				      <span class="glyphicon glyphicon-check"></span>
-				    {% elseif item.type == 'ppt' %}
-				      <span class="glyphicon glyphicon-picture"></span>
-						{% endif %}
-			    {% else %}
-			      	<span class="status">未发布</span>
-			    {% endif %}
 
 		    	<span class="name ">课时{{ item.number }}</span>
-		    	<a class=" title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" style="white-space:nowrap; overflow:hidden; text-overflow: ellipsis;">
+		    	<a class=" title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}">
 			    		{{ item.title }}
 		    	</a>
+
 		    </li>
 		  {% endif  %}
 		{% endfor %}

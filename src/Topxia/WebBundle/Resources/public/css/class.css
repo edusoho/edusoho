@@ -434,6 +434,13 @@
     margin: 10px 3px;
 }
 
+.schedule-lesson-list .thumbnail img {
+    display: block;
+    width: 100%;
+
+}
+
+
 .schedule-lesson-list .thumbnail .caption {
     padding: 3px 0px;
     font-size: 12px;
@@ -481,6 +488,48 @@
 .schedule-course h4 {
     font-size: 14px;
 }
+
+
+.schedule-course-item-list {
+    padding: 0;
+    margin: 0;
+}
+
+
+.schedule-course-item-list .chapter-item {
+    background-color: #eee;
+    border-bottom: 1px solid #d3d3d3;
+    font-weight: bold;
+    color: #666;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.schedule-course-item-list .chapter-item-unit {
+    padding-left: 16px;
+    font-weight: normal;
+    margin-top: 0px;
+}
+
+.schedule-course-item-list .lesson-item {
+    padding-left: 16px;
+    font-size: 13px;
+    height: 25px;
+    overflow: hidden;
+    margin-bottom: 3px;
+}
+
+.schedule-course-item-list .lesson-item .name {
+    color: #666;
+    margin-right: 8px;
+}
+
+.schedule-course-item-list .lesson-item .title {
+    text-decoration: none;
+    /*color: #444;*/
+
+}
+
 .course-list {
 
     margin: 0;
