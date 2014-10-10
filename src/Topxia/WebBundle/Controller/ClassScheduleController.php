@@ -125,7 +125,7 @@ class ClassScheduleController extends ClassBaseController
             $schedule['date'] = $lessons['day'];
             $schedule['createdTime'] = time();
             $schedules[] = $schedule;    
-        }
+        }var_dump($schedule);
         $this->getScheduleService()->saveSchedules($schedules);
         return new Response("success");
     }

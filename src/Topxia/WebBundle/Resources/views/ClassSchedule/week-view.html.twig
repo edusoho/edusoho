@@ -22,7 +22,7 @@
           <tr>
             {% for day,items in schedules %}
               <td>
-                <ul class="schedule-lesson-list" data-day="day">
+                <ul class="schedule-lesson-list" data-day="{{ day }}">
                   {% for item in items %}
                     {% set lessonLearn = lessonLearns[item.lessonId] | default(null)%}
                     {% set lessonUrl = path('course_learn', {id:courses[lessons[item.lessonId].courseId].id}) ~ '#lesson/' ~ item.lessonId%}
@@ -34,7 +34,7 @@
                           {% if lessonLearn and lessonLearn.status == 'finished' %}
                             <span class="glyphicon glyphicon-ok pull-left text-success"></span>
                           {% endif %}
-                          <img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" >
+                          <a href="{{ lessonUrl }}" target="_blank"><img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ></a>
                           <div class="caption">
                             {{ lessons[item.lessonId].title}}
                           </div>

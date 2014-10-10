@@ -19,7 +19,6 @@ define(function(require, exports, module) {
             "click span.next-month": "nextMonth",
             "click span.previous-month": "previousMonth",
             "click button.lesson-remove": "removeLesson",
-            "click .schedule-lesson-list li img": "gotoLesson",
             "change select.viewType": "changeView"
         },
         setup: function() {
@@ -97,10 +96,6 @@ define(function(require, exports, module) {
             $li.remove();
             var result = this.serializeContainer($ul);
             this.save(result);
-        },
-        gotoLesson: function(e) {
-            $li = $(e.currentTarget).parent();
-            window.open($li.data('url'));
         },
         disableSort: function() {
             $("ul.course-item-list").each(function(){
