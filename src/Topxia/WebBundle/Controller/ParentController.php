@@ -8,36 +8,45 @@ use Topxia\Common\ArrayToolkit;
 
 class ParentController extends BaseController
 {
-	const CACHE_NAME = 'parent';
+    const CACHE_NAME = 'parent';
 
     private $cached;
 
-	function childStatusAction(Request $request)
-	{
-		$user=$this->getCurrentUser();
-		if(!$user->isParent()) {
+    function childStatusAction(Request $request)
+    {
+        $user=$this->getCurrentUser();
+        if(!$user->isParent()) {
             return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
         }
-		$selectedChild=$this->getSelectedChild($request->query->get('childId'));
-		$statuses=$this->getStatusService()->findStatusesByUserId($selectedChild['id']);
-		foreach ($statuses as &$status) {
-			$status['time']=date('Y年m月d日',$status['createdTime'])==date('Y年m月d日',time())?'今天':date('Y年m月d日',$status['createdTime']);
-		}
-		$statuses=ArrayToolkit::group($statuses,'time');
-		return $this->render('TopxiaWebBundle:Parent:child-status.html.twig',array(
-			'selectedChild'=>$selectedChild,
-			'statuses'=>$statuses
-		));
-	}
+        $weekCount=$request->query->get('weekCount');
+        $weekCount=empty($weekCount)?1:$weekCount;
+        $startTime=time() - (7 * 24 * 60 * 60)*$weekCount;
+        $endTime=time();
 
-	function childCoursesAction(Request $request)
-	{
-		$user=$this->getCurrentUser();
-		if(!$user->isParent()) {
+        $selectedChild=$this->getSelectedChild($request->query->get('childId'));
+        $statuses=$this->getStatusService()->findStatusesByUserId($selectedChild['id'],$startTime,$endTime);
+        $statusCount=$this->getStatusService()->findStatusesByUserIdCount($selectedChild['id'],0,time());
+        $moreBtnShow=$statusCount>count($statuses)?true:false;
+
+        foreach ($statuses as &$status) {
+            $status['time']=date('Y年m月d日',$status['createdTime'])==date('Y年m月d日',time())?'今天':date('Y年m月d日',$status['createdTime']);
+        }
+        $statuses=ArrayToolkit::group($statuses,'time');
+        return $this->render('TopxiaWebBundle:Parent:child-status.html.twig',array(
+            'selectedChild'=>$selectedChild,
+            'statuses'=>$statuses,
+            'moreBtnShow'=>$moreBtnShow,
+            'weekCount'=>$weekCount+1
+        ));
+    }
+
+    function childCoursesAction(Request $request)
+    {
+        $user=$this->getCurrentUser();
+        if(!$user->isParent()) {
             return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
         }
         $selectedChild=$this->getSelectedChild($request->query->get('childId'));
-		
 
         $leaningCourses = $this->getCourseService()->findUserLeaningCourses(
             $selectedChild['id'],
@@ -51,11 +60,11 @@ class ParentController extends BaseController
             PHP_INT_MAX
         );
 
-		return $this->render('TopxiaWebBundle:Parent:child-courses.html.twig',array(
-			'selectedChild'=>$selectedChild,
-			'courses'=>array_merge($leaningCourses,$leanedCourses)
-		));
-	}
+        return $this->render('TopxiaWebBundle:Parent:child-courses.html.twig',array(
+            'selectedChild'=>$selectedChild,
+            'courses'=>array_merge($leaningCourses,$leanedCourses)
+        ));
+    }
 
 
     public function childTestpapersAction(Request $request)
@@ -150,46 +159,46 @@ class ParentController extends BaseController
         $selectedChild=empty($childId)?current($children):$children[$childId];
         
         return $this->render('TopxiaWebBundle:Parent:child-info.html.twig',array(
-        	'children'=>$children,
-			'classMembers'=>$classMembers,
-			'classes'=>$classes,
-			'selectedChild'=>$selectedChild
+            'children'=>$children,
+            'classMembers'=>$classMembers,
+            'classes'=>$classes,
+            'selectedChild'=>$selectedChild
         ));
-	}
+    }
 
-	private function getParentCached()
-	{
-		if (is_null($this->cached)) {
+    private function getParentCached()
+    {
+        if (is_null($this->cached)) {
             $this->cached = $this->getCacheService()->get(self::CACHE_NAME.$this->getCurrentUser()->id);
             if (is_null($this->cached)) {
                 $user=$this->getCurrentUser();
-				$relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
-		        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
-		        
-		        $classMembers=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($relations, 'toId'));
-		        $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($classMembers, 'classId'));
-	            $classMembers=ArrayToolkit::index($classMembers, 'userId');
+                $relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
+                $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
+                
+                $classMembers=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($relations, 'toId'));
+                $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($classMembers, 'classId'));
+                $classMembers=ArrayToolkit::index($classMembers, 'userId');
 
-		        $this->cached['children']=$children;
-		        $this->cached['classMembers']=$classMembers;
-		        $this->cached['classes']=$classes;
+                $this->cached['children']=$children;
+                $this->cached['classMembers']=$classMembers;
+                $this->cached['classes']=$classes;
                 $relation = current($relations);
                 $this->cached['relation']=$relation['relation'];
-		        $this->getCacheService()->set(self::CACHE_NAME.$this->getCurrentUser()->id, $this->cached);
+                $this->getCacheService()->set(self::CACHE_NAME.$this->getCurrentUser()->id, $this->cached);
             }
         }
         return $this->cached;
-	}
+    }
 
-	private function getSelectedChild($childId){
-		$cachedData=$this->getParentCached();
-		$children=$cachedData['children'];
-		$selectedChild=empty($childId)?current($children):$children[$childId];
-		$selectedChild['relation']=$cachedData['relation'];
+    private function getSelectedChild($childId){
+        $cachedData=$this->getParentCached();
+        $children=$cachedData['children'];
+        $selectedChild=empty($childId)?current($children):$children[$childId];
+        $selectedChild['relation']=$cachedData['relation'];
         return $selectedChild;
-	}
+    }
 
-	protected function getClassesService()
+    protected function getClassesService()
     {
         return $this->getServiceKernel()->createService('Classes.ClassesService');
     }
