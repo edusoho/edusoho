@@ -85,13 +85,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$threadId = $this->getParam("threadId", 0);
 		$title = $this->getParam("title", 0);
 		$content = $this->getParam("content","");
+		$imageCount = $this->getParam("imageCount", 0);
 
 		$user = $this->controller->getUserByToken($this->request);
 		if (!$user->isLogin()) {
 			return $this->createErrorResponse('not_login', '您尚未登录，修改该课时');
 		}
 
-		$content = $this->uploadImage($content);
+		if($imageCount > 0){
+			$content = $this->uploadImage($content);
+		}
 
 		$formData = $this->formData;
 		$formData['content'] = $content;
@@ -121,7 +124,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$baseUrl = $this->request->getSchemeAndHttpHost();
 		$content = preg_replace_callback('/src=[\'\"](.*?)[\'\"]/', function($matches) use ($baseUrl, $urlArray) {
-			var_dump($urlArray);
+			var_dump($baseUrl);
 			return "src=\"{$baseUrl}/{$urlArray[$matches[1]]}\"";
 		}, $content);
         return $content;
