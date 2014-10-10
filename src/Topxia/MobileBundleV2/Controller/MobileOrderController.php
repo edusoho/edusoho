@@ -41,7 +41,7 @@ class MobileOrderController extends MobileBaseController
             }
 
             if (empty($payment['alipay_type']) or $payment['alipay_type'] != 'direct') {
-                $result = array('status' => 'ok', 'paid' => false, 'payUrl' => $this->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token['token']), true));
+                $result = array('status' => 'ok', 'paid' => false, 'payUrl' => $this->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token), true));
             } else {
                 $result = array('status' => 'ok', 'paid' => false, 'payUrl' => MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order));
             }
