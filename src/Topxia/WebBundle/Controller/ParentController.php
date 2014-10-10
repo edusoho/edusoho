@@ -173,6 +173,7 @@ class ParentController extends BaseController
 		        $this->cached['children']=$children;
 		        $this->cached['classMembers']=$classMembers;
 		        $this->cached['classes']=$classes;
+                $this->cached['relation']=current($relations)['relation'];
 		        $this->getCacheService()->set(self::CACHE_NAME.$this->getCurrentUser()->id, $this->cached);
             }
         }
@@ -183,7 +184,8 @@ class ParentController extends BaseController
 		$cachedData=$this->getParentCached();
 		$children=$cachedData['children'];
 		$selectedChild=empty($childId)?current($children):$children[$childId];
-		return $selectedChild;
+		$selectedChild['relation']=$cachedData['relation'];
+        return $selectedChild;
 	}
 
 	protected function getClassesService()

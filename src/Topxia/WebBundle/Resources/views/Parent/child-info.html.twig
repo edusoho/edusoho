@@ -1,33 +1,72 @@
-<div class="row">
-	<div class="col-md-6">
-  	<ul class="nav nav-tabs" role="tablist">
-		  <li role="presentation" class="dropdown">
-		    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-		      {{selectedChild.truename}}<span class="caret"></span>
-		    </a>
-		    <ul class="dropdown-menu" role="menu">
-		      {% for child in children %}
-		      	<li><a href="{{path('parent_child_status',{childId:child.id})}}">{{child.truename}}</a></li>
-		      {% endfor %}
-		    </ul>
-		  </li>
-		</ul>
-	</div>
+<div class="row" style="margin-bottom:10px">
+  <div class="col-md-6">
+    <a href="{{path('user_show',{id:selectedChild.id})}}">
+      <img  alt="{{ selectedChild.truename }}" src="{{ file_path(selectedChild.mediumAvatar, 'avatar.png') }}">
+    </a>
+  </div>
 
-	<div style="padding:15px" class="col-md-6">
-		{% set classMember = classMembers[selectedChild.id]|default(null) %}
-		{{class_name(classes[classMember.classId]|default(null))}}
-	</div>
+  <div class="col-md-6">
+    {% if children|length < 2 %}
+      <div style="padding:10px;">
+        {{selectedChild.truename}}
+      </div>
+    {% else %}
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            {{selectedChild.truename}}<span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            {% for child in children %}
+              <li><a href="{{path('parent_child_status',{childId:child.id})}}">{{child.truename}}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+      </ul>
+    {% endif %}
+    <div style="padding:10px;">
+      {% set classMember = classMembers[selectedChild.id]|default(null) %}
+      {{class_name(classes[classMember.classId]|default(null))}}
+    </div>
+    <div style="padding:10px;">
+      学分：{{selectedChild.point}}分
+    </div>
+  </div>
+</div>
+
+
+
+
+{# <div class="row">
+  <div class="col-md-6">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          {{selectedChild.truename}}<span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+          {% for child in children %}
+          	<li><a href="{{path('parent_child_status',{childId:child.id})}}">{{child.truename}}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div style="padding:15px" class="col-md-6">
+    {% set classMember = classMembers[selectedChild.id]|default(null) %}
+    {{class_name(classes[classMember.classId]|default(null))}}
+  </div>
 </div>
 
 <div style="padding-left:15px;margin-top:10px" class="row">
-	<div class="col-md-12">
-		当前学分：{{selectedChild.point}}分
-	</div>
+  <div class="col-md-12">
+    当前学分：{{selectedChild.point}}分
+  </div>
 </div>
 
 <div style="margin:10px" align="center">
   <a href="{{path('user_show',{id:selectedChild.id})}}">
     <img  alt="{{ selectedChild.truename }}" src="{{ file_path(selectedChild.mediumAvatar, 'avatar.png') }}">
   </a><br/><br/>
-</div>
+</div> #}
