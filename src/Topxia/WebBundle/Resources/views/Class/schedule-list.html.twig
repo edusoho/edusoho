@@ -11,8 +11,8 @@
     <li class="media">
       <a class="pull-left img-a" href="{{ lessonUrl }}" target="_blank">
         {% if schedule.status == 'finished' %}
-          <span class="glyphicon glyphicon-ok pull-left text-success"></span>
-        {% endif %}
+            <span class="finished-icon"><span class="glyphicon glyphicon-ok text-success"></span></span>
+          {% endif %}
         <img class="media-object" src="{{ file_path(courses[lessons[schedule.lessonId].courseId].middlePicture, 'course-large.png') }}" alt="{{ courses[lessons[schedule.lessonId].courseId].title }}">
       </a>
       <div class="media-body" title="{{lessons[schedule.lessonId].title}}">

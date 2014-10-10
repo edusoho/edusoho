@@ -236,6 +236,7 @@
     background: #fbfefe;
     display: none;
     margin-top: 10px;
+    z-index: 9999;
 }
 
 .sign_main .disabled-next {
@@ -444,7 +445,17 @@
     position: absolute;
     top: 5px;
     right: 5px;
+    z-index: 1;
 }
+
+.schedule-lesson-list .thumbnail .close {
+    visibility: hidden;
+}
+
+.schedule-lesson-list li:hover .close{
+    visibility: visible;
+}
+
 
 .schedule .month tbody td {
     border: 1px solid #e3e3e3;
@@ -483,14 +494,6 @@
     padding: 5px;
 }
 
-.lesson-ul li .close {
-    visibility: hidden;
-}
-
-.lesson-ul li:hover .close {
-    visibility: visible;
-}
-
 .course-item-list li.placeholder {
     position: relative;
     margin-bottom: 10px 0;
@@ -525,15 +528,25 @@ ul.schedule-lesson-list li.placeholder {
 
 .schedule-panel .media-list .media .img-a {
     position: relative;
+    
 }
 
-.schedule-panel .media-list .media .img-a .glyphicon {
+.schedule-panel .media-list .media .img-a .finished-icon {
     position: absolute;
-    bottom: 0;
-    right: 5px
+    right: 5px;
+    bottom: 0px;
 }
 
+ul.schedule-lesson-list a {
+    position: relative;
+    display: block;
+}
 
+ul.schedule-lesson-list a .finished-icon {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
 
 
 

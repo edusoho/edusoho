@@ -93,7 +93,7 @@ define(function(require, exports, module) {
         },
         removeLesson: function(e) {
             var $button = $(e.currentTarget),
-                $li = $button.parent(),
+                $li = $button.parent().parent(),
                 $ul = $li.parent();
             $li.remove();
             var result = this.serializeContainer($ul);
