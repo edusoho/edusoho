@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
     exports.run = function() {
-    	$('.schedule-list').on('click','li',function(){
-    		$.get($(this).data('url'),function(html){
-    			$('.schedule-list').html('');
-    			$('.schedule-list').append(html);
-    		});
-    	});
+        $('.schedule-panel .nav-tabs').on('click','li',function(){
+            $.get($(this).data('url'),function(html){
+                $('.schedule-panel .panel-body').html('');
+                $('.schedule-panel .panel-body').append(html);
+            });
+        });
     }
 });

@@ -27,8 +27,10 @@
             {% endblock %}
 
             {% block schedule %}
-              <div style="display:block;height:auto; width:auto;background-color: #fff;"  class="well schedule-list">
-                {{ render(controller('TopxiaWebBundle:Class:schedule', {classId:class.id, userId:app.user.id, viewType:'today'})) }}
+              <div class="panel panel-default schedule-panel">
+                <div class="panel-body">
+                  {{ render(controller('TopxiaWebBundle:Class:schedule', {classId:class.id, userId:app.user.id, viewType:'today'})) }}
+                </div>
               </div>
             {% endblock %}
 

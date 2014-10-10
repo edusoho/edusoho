@@ -327,7 +327,6 @@
 
 
 /** schedule css */
-
 .schedule .popover-container .popover {
     width: 290px;
 }
@@ -463,11 +462,6 @@
     color:yellow;*/
 }
 
-.schedule .month .today {
-    background-color: pink;
-    color:yellow;
-}
-
 .schedule-course img {
     height: 48px;
     width: 80px;
@@ -498,7 +492,7 @@
 }
 
 .course-item-list li.placeholder {
-  position: relative;
+    position: relative;
     margin-bottom: 10px 0;
     width: 100%;
     height: 40px;
@@ -507,7 +501,7 @@
     list-style: none;
 }
 ul.schedule-lesson-list li.placeholder {
-  position: relative;
+    position: relative;
     margin-bottom: 10px 0;
     width: 100%;
     height: 40px;
@@ -516,8 +510,27 @@ ul.schedule-lesson-list li.placeholder {
     list-style: none;
 }
 
-.schedule-list .media-list img {
+.schedule-panel .media-list {
+    margin-top: 10px;
+}
+.schedule-panel .media-list .media img {
     height:80px;
+}
+
+.schedule-panel .media-list .media h4 {
+    font-size: 16px;
+    height: 32px;
+    overflow: hidden;
+}
+
+.schedule-panel .media-list .media .img-a {
+    position: relative;
+}
+
+.schedule-panel .media-list .media .img-a .glyphicon {
+    position: absolute;
+    bottom: 0;
+    right: 5px
 }
 
 
