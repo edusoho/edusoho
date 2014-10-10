@@ -548,7 +548,11 @@ ul.schedule-lesson-list a .finished-icon {
     bottom: 0px;
 }
 
-
+.schedule-item-list {
+  /*  height: 500px;
+    overflow: scroll;*/
+    border-left: none;
+}
 
 
 
