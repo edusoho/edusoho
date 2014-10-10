@@ -318,6 +318,9 @@
       <input type='hidden' name="courseIds" value="{{mobile.courseIds}}"/>
       <div class="col-md-12" role="course-item-container">
         <ul class="course-grids">
+          {% for course in courses|default(null) %}
+          {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:course, showDelBtn:true} %}
+          {% endfor %}
           <li class="course-grid related-course-grid" role="add-course" 
           style="cursor:pointer"
           data-backdrop="static" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search')}}">
@@ -325,9 +328,6 @@
               
             </div>
           </li>
-          {% for course in courses|default(null) %}
-          {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:course, showDelBtn:true} %}
-          {% endfor %}
         </ul>
       </div>
     </div>
