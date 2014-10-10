@@ -10,7 +10,7 @@
         <thead>
           <tr>
             {% for day,items in schedules %}
-              <th {% if day == 'now'|date('Ymd')%} class="today" {% endif %} data-day="{{ day }}" >
+              <th class=" {% if day == 'now'|date('Ymd')%} today {% endif %} {% if loop.index0 == 0 %} sunday {% endif %}"  data-day="{{ day }}" >
                 <div class="week-text">{{ week[loop.index0]}}</div>
                 <div class="day-text">{{ day|slice(6,2) }}</div>
               </th>
@@ -18,11 +18,11 @@
           </tr>
         </thead>
         <tbody>
-          {% if changeMonth %} <tr class="hidden yearMonth"></tr>{% endif %}
+          {% if changeMonth %} <tr class="hidden changeMonth"></tr>{% endif %}
           <tr>
             {% for day,items in schedules %}
               <td>
-                <ul class="schedule-lesson-list">
+                <ul class="schedule-lesson-list" data-day="{{ day }}">
                   {% for item in items %}
                     {% set lessonLearn = lessonLearns[item.lessonId] | default(null)%}
                     {% set lessonUrl = path('course_learn', {id:courses[lessons[item.lessonId].courseId].id}) ~ '#lesson/' ~ item.lessonId%}
@@ -34,8 +34,8 @@
                           {% if lessonLearn and lessonLearn.status == 'finished' %}
                             <span class="glyphicon glyphicon-ok pull-left text-success"></span>
                           {% endif %}
-                          <img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" >
-                          <div class="caption">
+                          <a href="{{ lessonUrl }}" target="_blank"><img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ></a>
+                          <div class="caption" title="{{ lessons[item.lessonId].title}}">
                             {{ lessons[item.lessonId].title}}
                           </div>
                         </div>
