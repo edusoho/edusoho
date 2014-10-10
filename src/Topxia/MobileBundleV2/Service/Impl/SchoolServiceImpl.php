@@ -5,6 +5,7 @@ namespace Topxia\MobileBundleV2\Service\Impl;
 use Topxia\MobileBundleV2\Service\BaseService;
 use Topxia\MobileBundleV2\Service\SchoolService;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Common\ArrayToolkit;
 
 class SchoolServiceImpl extends BaseService implements SchoolService {
 
@@ -58,16 +59,20 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     public function getWeekRecommendCourses()
     {
         $mobile = $this->controller->getSettingService()->get('mobile', array());
-        $courseIds = array();
-        foreach (explode(",", $mobile['courseIds']) as $key => $value) {
-            $courseIds[] = (int) $value;
-        }
+
+        $courseIds = explode(",", $mobile['courseIds']);
         $courses = $this->controller->getCourseService()->findCoursesByIds($courseIds);
-        $courses = array_values($courses);
+        $courses = ArrayToolkit::index($courses,'id');
+        $sortedCourses = array();
+        foreach ( $courseIds as $value){
+            if(!empty($value))
+                $sortedCourses[] = $courses[$value];
+        }
+
         $result = array(
             "start"=>0,
             "limit"=>3,
-            "data"=>$this->controller->filterCourses($courses));
+            "data"=>$this->controller->filterCourses($sortedCourses));
         return $result;
     }
 
