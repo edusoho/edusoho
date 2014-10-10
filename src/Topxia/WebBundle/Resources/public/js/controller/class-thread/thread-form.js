@@ -13,12 +13,14 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '#thread-title-field',
-            required: true
+            required: true,
+            errormessage: "请输入标题"
         });
 
         validator.addItem({
             element: '#thread-content-field',
-            required: true
+            required: true,
+            errormessage: "请输入内容"
         });
 
         validator.on('formValidate', function(elemetn, event) {

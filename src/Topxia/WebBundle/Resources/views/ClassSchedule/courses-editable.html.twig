@@ -11,7 +11,7 @@
             {{ render(controller('TopxiaWebBundle:ClassSchedule:getItems', {courseId:course.id})) }}
           </li>
         {% else %}
-        <li class="empty">班级还没有课程！</li>
+        <li class="empty">班级暂无课程，请先设置本班的课程</li>
         {% endfor %}
       </ul>
  </div>
