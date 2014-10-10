@@ -3,6 +3,8 @@ namespace Topxia\MobileBundleV2\Service\Impl;
 
 use Topxia\MobileBundleV2\Service\BaseService;
 use Topxia\MobileBundleV2\Service\TestpaperService;
+use Topxia\Common\ArrayToolkit;
+
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
 {
