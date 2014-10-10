@@ -18,6 +18,7 @@ define(function(require, exports, module) {
             "click .previous-week": "previousWeek",
             "click .next-month": "nextMonth",
             "click .previous-month": "previousMonth",
+            'click .course-display .mode': 'changeMode',
             "click button.lesson-remove": "removeLesson",
             "change select.viewType": "changeView"
         },
@@ -161,6 +162,18 @@ define(function(require, exports, module) {
             this.element.find('span.yearMonth').html(this.year + ' 年' + this.month + ' 月');
             this.element.find('.viewType').val('month');
             this.reset({'year':this.year,'month':this.month,'previewAs':'month'});
+        },
+        changeMode: function(e) {
+            var $span = $(e.currentTarget),
+                self = this;
+            $.get($span.data('url'),function(html){
+                $('.course-display').html('');
+                $('.course-display').append(html);
+                self.disableSort();
+                self.element.find('table.schedule-calendar-week') && self.bindSortableEvent();
+                
+            });
+            
         },
         nextSunday: function(plus) {
             var sunday = this.sunday +'';

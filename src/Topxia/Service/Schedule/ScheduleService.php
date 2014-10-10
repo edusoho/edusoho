@@ -5,7 +5,7 @@ interface ScheduleService
 {
 	public function addSchedule($schedule);
 
-	public function saveSchedules($schedules);
+	public function saveSchedules($classId, $schedules, $date);
 
 	public function deleteOneDaySchedules($classId, $day);
 

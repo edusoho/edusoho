@@ -11,16 +11,19 @@ define(function(require, exports, module) {
         });
 
         //调用
-        var classChooser = new ClassChooser({
-            element:'#className',
-            modalTarget:$('#modal'),
-            url:$form.find('#className').data().url
-        });
-        
-        classChooser.on('choosed',function(id,name){
-            $form.find('#classId').val(id);
-            $form.find('#className').val(name);
-        });
+        if($form.find('#className').length > 0) {
+            var classChooser = new ClassChooser({
+                element:'#className',
+                modalTarget:$('#modal'),
+                url:$form.find('#className').data().url
+            });
+            
+            classChooser.on('choosed',function(id,name){
+                $form.find('#classId').val(id);
+                $form.find('#className').val(name);
+            });
+        }
+     
     };
 
 });

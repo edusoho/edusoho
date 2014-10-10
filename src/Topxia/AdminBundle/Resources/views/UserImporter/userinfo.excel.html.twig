@@ -45,7 +45,7 @@
           <input type="text" class="filename" readonly="readonly"/>
           <input type="button" name="excel" class=" button" value="浏览..."/>
           <input type="file" size="30" name="excel"/>
-        </div>&nbsp;&nbsp;<a href="{{ asset(type == 'student' ? 'bundles/topxiaweb/example/students.xls' : type == 'bundles/topxiaweb/example/teachers.xls' ? 'teacher' : 'bundles/topxiaweb/example/parents.xls') }}">点击下载示例说明文件</a>
+        </div>&nbsp;&nbsp;<a href="{{ asset(type == 'student' ? 'bundles/topxiaweb/example/students.xls' : type == 'teacher' ? 'bundles/topxiaweb/example/teachers.xls' : 'bundles/topxiaweb/example/parents.xls') }}">点击下载示例说明文件</a>
         <br>
         支持从Excel文件导入
       </div>

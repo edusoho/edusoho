@@ -25,9 +25,9 @@
             </div>
             <div class="week-operation pull-right">
               <a class="btn btn-link previous-week">
-                <span class="glyphicon glyphicon-chevron-left"></span>上周</a>
+                <span class="glyphicon glyphicon-circle-arrow-left"></span>上周</a>
               <a class="btn btn-link next-week">
-                下周<span class="glyphicon glyphicon-chevron-right"></span></a>
+                下周<span class="glyphicon glyphicon-circle-arrow-right"></span></a>
             </div>
             <div class="operation  col-md-3 tar">
               {# <button class="btn btn-default btn-xs">只看我的</button> #}
@@ -46,8 +46,8 @@
 
     
   </div>
-  <div class="col-md-3">
-    {{ render(controller('TopxiaWebBundle:ClassSchedule:courses', {class:class})) }}
+  <div class="col-md-3 course-display">
+    {{ render(controller('TopxiaWebBundle:ClassSchedule:courses', {classId:class.id})) }}
   </div>
 
 </div>
