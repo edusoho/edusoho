@@ -33,7 +33,7 @@ define(function(require, exports, module) {
 	            courseIds.val(courseIds.val().replace(courseId+',', ''));
 	        }).show();
 
-			$('[role="course-item-container"] ul').append(courseItem);
+			$('[role="add-course"]').before(courseItem);
 			$modal.modal('hide');
 		})
 	}
