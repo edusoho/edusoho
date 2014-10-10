@@ -160,7 +160,7 @@ class ParentController extends BaseController
 	private function getParentCached()
 	{
 		if (is_null($this->cached)) {
-            $this->cached = $this->getCacheService()->get(self::CACHE_NAME);
+            $this->cached = $this->getCacheService()->get(self::CACHE_NAME.$this->getCurrentUser()->id);
             if (is_null($this->cached)) {
                 $user=$this->getCurrentUser();
 				$relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
@@ -168,12 +168,12 @@ class ParentController extends BaseController
 		        
 		        $classMembers=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($relations, 'toId'));
 		        $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($classMembers, 'classId'));
-		        $classMembers=ArrayToolkit::index($classMembers, 'userId');
+	            $classMembers=ArrayToolkit::index($classMembers, 'userId');
 
 		        $this->cached['children']=$children;
 		        $this->cached['classMembers']=$classMembers;
 		        $this->cached['classes']=$classes;
-		        $this->getCacheService()->set(self::CACHE_NAME, $this->cached);
+		        $this->getCacheService()->set(self::CACHE_NAME.$this->getCurrentUser()->id, $this->cached);
             }
         }
         return $this->cached;

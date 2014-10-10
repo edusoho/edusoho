@@ -7,6 +7,8 @@ use Topxia\Common\Paginator;
 
 class ParentController extends BaseController 
 {
+    const CACHE_NAME = 'parent';
+
     public function indexAction (Request $request)
     {
         $fields = $request->query->all();
@@ -114,7 +116,7 @@ class ParentController extends BaseController
                 $this->getUserService()->addUserRelation($userRelation);
             }
 
-
+            $this->getCacheService()->clear(self::CACHE_NAME.$user['id']);
             $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
             return $this->redirect($this->generateUrl('settings'));
         }
@@ -211,6 +213,11 @@ class ParentController extends BaseController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getCacheService()
+    {
+        return $this->getServiceKernel()->createService('System.CacheService');
     }
     
 }
