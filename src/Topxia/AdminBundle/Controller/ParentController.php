@@ -75,7 +75,7 @@ class ParentController extends BaseController
                 $userRelation['fromId']=$user['id'];
                 $userRelation['toId']=$child['id'];
                 $userRelation['type']='family';
-                $userRelation['relation']=$formData['relation'];
+                $userRelation['relation']=empty($formData['relation'])?'other':$formData['relation'];
                 $userRelation['createdTime']=time();
                 $this->getUserService()->addUserRelation($userRelation);
             }
