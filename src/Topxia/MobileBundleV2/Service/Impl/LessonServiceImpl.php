@@ -193,7 +193,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 
 		if ($lesson['free'] == 1) {
                                     if ($user->isLogin()) {
-                                        if ($this->controller->getCourseService()->canLearnLesson($courseId, $lessonId)) {
+                                        if ($this->controller->getCourseService()->isCourseStudent($courseId, $user['id'])) {
                                             $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
                                         }
                                         
