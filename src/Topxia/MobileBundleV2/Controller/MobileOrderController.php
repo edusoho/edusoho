@@ -105,18 +105,9 @@ class MobileOrderController extends MobileBaseController
         return $this->createJson($request, $refund);
     }
 
-    protected function getCourseOrderService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseOrderService');
-    }
-
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
-     protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
 }
