@@ -16,8 +16,8 @@ define(function(require, exports, module) {
             "click span.glyphicon-minus-sign": "collapse",
             "click .next-week": "nextWeek",
             "click .previous-week": "previousWeek",
-            "click span.next-month": "nextMonth",
-            "click span.previous-month": "previousMonth",
+            "click .next-month": "nextMonth",
+            "click .previous-month": "previousMonth",
             "click button.lesson-remove": "removeLesson",
             "change select.viewType": "changeView"
         },

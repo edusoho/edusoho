@@ -19,15 +19,15 @@
               </select> 
             </div>
             <div class="month  col-md-6 tac">
-              <span class="glyphicon glyphicon-chevron-left text-success previous-month"></span>
+              <a href="javascript:;" class="previous-month"><span class="glyphicon glyphicon-chevron-left"></span></a>
               <span class="yearMonth"> {{ "now" | date(' Y 年 m 月')}}</span>
-              <span class="glyphicon glyphicon-chevron-right text-success next-month"></span>
+              <a href="javascript:;" class="next-month"><span class="glyphicon glyphicon-chevron-right"></span></a>
             </div>
             <div class="week-operation pull-right">
               <a class="btn btn-link previous-week">
-                <span class="glyphicon glyphicon-chevron-left text-success"></span>上周</a>
+                <span class="glyphicon glyphicon-chevron-left"></span>上周</a>
               <a class="btn btn-link next-week">
-                下周<span class="glyphicon glyphicon-chevron-right text-success"></span></a>
+                下周<span class="glyphicon glyphicon-chevron-right"></span></a>
             </div>
             <div class="operation  col-md-3 tar">
               {# <button class="btn btn-default btn-xs">只看我的</button> #}

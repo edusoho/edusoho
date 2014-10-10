@@ -16,7 +16,7 @@
       <ul class="nav nav-pills">
         <li {% if classNav == 'threads' %}class="active"{% endif %}><a href="{{ path('class_threads', {classId:class.id}) }}">班级讨论区</a></li>
         <li {% if classNav == 'schedule' %}class="active"{% endif %}><a href="{{ path('class_schedule', { classId:class.id })}}">班级课表</a></li>
-        <li {% if classNav == 'courses' %}class="active"{% endif %}><a href="{{ path('class_courses', { classId:class.id })}}">班级课程</a></li>
+       {#  <li {% if classNav == 'courses' %}class="active"{% endif %}><a href="{{ path('class_courses', { classId:class.id })}}">班级课程</a></li> #}
         <li {% if classNav == 'notes' %}class="active"{% endif %}><a href="{{ path('class_notes', {classId:class.id}) }}">同学笔记</a></li>
         <li {% if classNav == 'members' %}class="active"{% endif %}><a href="{{ path('class_members', {classId:class.id}) }}">班级成员</a></li>
       </ul>
