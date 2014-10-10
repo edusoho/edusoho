@@ -5,17 +5,17 @@ mapi_mobile_api:
 
 mapi_order_submit_pay_request:
     pattern:  /order/{id}/submit_pay_request
-    defaults: { _controller: TopxiaMobileBundle:MobileOrder:submitPayRequest }
+    defaults: { _controller: TopxiaMobileBundleV2:MobileOrder:submitPayRequest }
 
 
 topxia_mobile_alipay_notify:
     pattern:  /{name}/alipay_notify
-    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payNotify }
+    defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:payNotify }
 
 topxia_mobile_alipay_pay:
     pattern:  /alipay_pay
-    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:pay }
+    defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:pay }
 
 topxia_mobile_alipay_callback:
     pattern:  /{name}/alipay_callback
-    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payCallBack }
+    defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:payCallBack }
