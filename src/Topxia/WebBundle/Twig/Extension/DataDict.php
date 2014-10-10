@@ -275,7 +275,8 @@ class DataDict
     		'fgrandfather'=>'爷爷',
     		'fgrandmother'=>'奶奶',
     		'mgrandfather'=>'外公',
-    		'mgrandmother'=>'外婆'
+    		'mgrandmother'=>'外婆',
+    		'other'=>'其他'
     	),
 	);
 
