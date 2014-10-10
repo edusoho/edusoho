@@ -22,11 +22,16 @@ class StatusServiceImpl extends BaseService implements StatusService
         return $this->getStatusDao()->findStatusesByUserIds($userIds, $start, $limit);
     }
 
-    public function findStatusesByUserId($userId)
+    public function findStatusesByUserId($userId,$startTime=null,$endTime=null)
     {
-        return $this->getStatusDao()->findStatusesByUserId($userId);
+        return $this->getStatusDao()->findStatusesByUserId($userId,$startTime,$endTime);
     }
 
+    public function findStatusesByUserIdCount($userId,$startTime=null,$endTime=null)
+    {
+        return $this->getStatusDao()->findStatusesByUserIdCount($userId,$startTime,$endTime);
+    }
+    
     private function getStatusDao()
     {
         return $this->createDao('User.StatusDao');

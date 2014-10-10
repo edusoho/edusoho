@@ -6,32 +6,34 @@
 {% set side_nav = 'parent-child-status' %}
 
 {% block main %}
-
   <div class="panel panel-default">
-		<div class="panel-body">
-			{% if statuses %}
-				<ul class="timeline">
-		      {% set user = selectedChild %}
-		      {% for time,statusList in statuses %}
-		        <li class="timeline-span">
-				      <div class="timeline-time">{{time}}</div>
-				      <div class="timeline-dot"></div>
-				      <div class="timeline-content">
-				      	<ul class="media-list">
-						      {% for status in statusList %}
-						      	{% if status.type=='learned_lesson' and status.properties.lesson.type=='testpaper' %}
-						      	{% else %}
-					      			{% include 'TopxiaWebBundle:Parent:child-status-li.html.twig'%}
-						      	{% endif %}
-						      {% endfor %}
-				        </ul>
-					    </div>
-					  </li>
-		      {% endfor %}
-	    	</ul>
+    <div class="panel-body">
+      {% if statuses %}
+        <ul class="timeline">
+          {% set user = selectedChild %}
+          {% for time,statusList in statuses %}
+            <li class="timeline-span">
+              <div class="timeline-time">{{time}}</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <ul class="media-list">
+                  {% for status in statusList %}
+                    {% if status.type=='learned_lesson' and status.properties.lesson.type=='testpaper' %}
+                    {% else %}
+                      {% include 'TopxiaWebBundle:Parent:child-status-li.html.twig'%}
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
       {% else %}
         <div class="empty">还没有动态！</div>
       {% endif %}
-		</div>
-	</div>
+      {% if moreBtnShow %}
+        <a href="{{path('parent_child_status',{childId:selectedChild.id|default(null),weekCount:weekCount|default(1)})}}" type="button" class="btn btn-primary btn-block">+</a>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}
