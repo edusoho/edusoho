@@ -121,9 +121,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$baseUrl = $this->request->getSchemeAndHttpHost();
 		$content = preg_replace_callback('/src=[\'\"](.*?)[\'\"]/', function($matches) use ($baseUrl, $urlArray) {
+			var_dump($urlArray);
 			return "src=\"{$baseUrl}/{$urlArray[$matches[1]]}\"";
 		}, $content);
-        		return $content;
+        return $content;
 	}
 
 	public function commitCourse()
