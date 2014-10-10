@@ -16,7 +16,9 @@
   <tr>
     <th width="25%">姓名</th>
     <td width="75%">
-      <a class="pull-right" href="{{ path('user_show', {id:user.id}) }}" target="_blank">个人主页</a>
+      {% if 'ROLE_PARENT' not in user.roles %}
+        <a class="pull-right" href="{{ path('user_show', {id:user.id}) }}" target="_blank">个人主页</a>
+      {% endif %}
       {{ user.truename }}
     </td>
   </tr>

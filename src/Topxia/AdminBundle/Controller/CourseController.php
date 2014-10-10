@@ -24,13 +24,16 @@ class CourseController extends BaseController
 
         $courseSetting = $this->getSettingService()->get('course', array());
         if(!isset($courseSetting['live_course_enabled']))$courseSetting['live_course_enabled']="";
+        
+        $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($courses,'classId'));
         return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
             'conditions' => $conditions,
             'courses' => $courses ,
             'users' => $users,
             'categories' => $categories,
             'paginator' => $paginator,
-            'liveSetEnabled' => $courseSetting['live_course_enabled']
+            'liveSetEnabled' => $courseSetting['live_course_enabled'],
+            'classes'=>$classes
         ));
     }
 
@@ -179,5 +182,10 @@ class CourseController extends BaseController
     private function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    protected function getClassesService()
+    {
+        return $this->getServiceKernel()->createService('Classes.ClassesService');
     }
 }

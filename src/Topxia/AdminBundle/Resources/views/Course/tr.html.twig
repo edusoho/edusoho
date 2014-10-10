@@ -9,6 +9,13 @@
       <span class="label label-default">荐:{{ course.recommendedTime|date('Y-m-d') }} / 序号:{{ course.recommendedSeq }}</span>
     {% endif %}
   </td>
+  <td>
+    {% if class %}
+      {{class_name(class)}}
+    {% else %}
+      --
+    {% endif %}
+  </td>
   <td class="text-center">{{ course.studentNum }}</td>
   {# <td><span class="money-text">{{ course.income }}</span></td> hidden by wenqin #}
   <td class="text-center">{{ dict_text('courseStatus:html', course.status) }}</td>
