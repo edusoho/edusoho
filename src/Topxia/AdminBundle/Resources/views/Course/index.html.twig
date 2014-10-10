@@ -18,6 +18,12 @@
 
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
+      <input type="text" id="class_name" name="class_name" data-url="{{path('admin_class_list')}}" class="form-control" value="{{ app.request.query.get('class_name') }}" placeholder="按班级">
+      
+      <input type="hidden" id="class_id" name="classId" class="form-control" value="{{ app.request.query.get('classId') }}" >
+    </div>
+
+    <div class="form-group">
       <select style="max-width:150px;" class="form-control" name="categoryId">
         {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}
       </select>
@@ -40,7 +46,8 @@
     <thead>
     <tr>
       <th>编号</th>
-      <th width="50%">名称</th>
+      <th>名称</th>
+      <th>所属班级</th>
       <th  class="text-center">学生数</th>
 {#       <th>收入(元)</th> hidden by wenqin #}
       <th  class="text-center">状态</th>
@@ -52,6 +59,7 @@
       {% for course in courses %}
         {% set user = users[course.userId]|default(null) %}
         {% set category = categories[course.categoryId]|default(null) %}
+        {% set class=classes[course.classId]|default('') %}
         {% include 'TopxiaAdminBundle:Course:tr.html.twig' %}
       {% else %}
         <tr><td colspan="20"><div class="empty">暂无课程记录</div></td></tr>
