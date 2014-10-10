@@ -236,6 +236,7 @@
     background: #fbfefe;
     display: none;
     margin-top: 10px;
+    z-index: 9999;
 }
 
 .sign_main .disabled-next {
@@ -327,7 +328,6 @@
 
 
 /** schedule css */
-
 .schedule .popover-container .popover {
     width: 290px;
 }
@@ -445,7 +445,17 @@
     position: absolute;
     top: 5px;
     right: 5px;
+    z-index: 1;
 }
+
+.schedule-lesson-list .thumbnail .close {
+    visibility: hidden;
+}
+
+.schedule-lesson-list li:hover .close{
+    visibility: visible;
+}
+
 
 .schedule .month tbody td {
     border: 1px solid #e3e3e3;
@@ -461,11 +471,6 @@
 .schedule .week .today {
 /*    background-color: red;
     color:yellow;*/
-}
-
-.schedule .month .today {
-    background-color: pink;
-    color:yellow;
 }
 
 .schedule-course img {
@@ -489,16 +494,8 @@
     padding: 5px;
 }
 
-.lesson-ul li .close {
-    visibility: hidden;
-}
-
-.lesson-ul li:hover .close {
-    visibility: visible;
-}
-
 .course-item-list li.placeholder {
-  position: relative;
+    position: relative;
     margin-bottom: 10px 0;
     width: 100%;
     height: 40px;
@@ -507,7 +504,7 @@
     list-style: none;
 }
 ul.schedule-lesson-list li.placeholder {
-  position: relative;
+    position: relative;
     margin-bottom: 10px 0;
     width: 100%;
     height: 40px;
@@ -516,11 +513,40 @@ ul.schedule-lesson-list li.placeholder {
     list-style: none;
 }
 
-.schedule-list .media-list img {
+.schedule-panel .media-list {
+    margin-top: 10px;
+}
+.schedule-panel .media-list .media img {
     height:80px;
 }
 
+.schedule-panel .media-list .media h4 {
+    font-size: 16px;
+    height: 32px;
+    overflow: hidden;
+}
 
+.schedule-panel .media-list .media .img-a {
+    position: relative;
+    
+}
+
+.schedule-panel .media-list .media .img-a .finished-icon {
+    position: absolute;
+    right: 5px;
+    bottom: 0px;
+}
+
+ul.schedule-lesson-list a {
+    position: relative;
+    display: block;
+}
+
+ul.schedule-lesson-list a .finished-icon {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
 
 
 

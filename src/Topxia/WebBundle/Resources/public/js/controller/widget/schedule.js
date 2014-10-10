@@ -49,10 +49,12 @@ define(function(require, exports, module) {
                     _super(item);
                 },
                 onDrop: function ($item, container, _super, event) {
-                    var $template = $('<li data-id="39" data-url="/course/89/learn#lesson/39"><div class="thumbnail"><button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><img src="/assets/img/default/course-large.png?k12v1"><div class="caption">sssssss</div></div></li>');
-                    $template.data('id', $item.data('id')).data('url',$item.find('a').attr('href'));
-                    $template.find('img').attr('src', $item.data('icon')).find('caption').html($item.data('title'));
+                    var $template = $('<li data-id="'+$item.data('id')+'" data-url="'+$item.find('a').attr('href')+'"><div class="thumbnail"><button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><a href="/course/89/learn#lesson/39" target="_blank"><img src="/assets/img/default/course-large.png?k12v1"></a><div class="caption" title="sssssss">sssssss</div></div></li>');
+                    $template.find('img').attr('src', $item.data('icon'));
+                    $template.find('.caption').html($item.data('title')).attr('title', $item.data('title'));
+                    $template.find('a').attr('href', $item.find('a').attr('href'));
                     $item.prop('outerHTML', $template.prop("outerHTML"));
+
                     _super($item);
 
                     var result = self.serializeContainer(container.el);
@@ -91,7 +93,7 @@ define(function(require, exports, module) {
         },
         removeLesson: function(e) {
             var $button = $(e.currentTarget),
-                $li = $button.parent(),
+                $li = $button.parent().parent(),
                 $ul = $li.parent();
             $li.remove();
             var result = this.serializeContainer($ul);

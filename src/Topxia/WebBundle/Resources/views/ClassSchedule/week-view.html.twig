@@ -31,10 +31,11 @@
                           {% if can_remove_schedule(app.user, courses, lessons, item) %}
                             <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
                           {% endif %}
-                          {% if lessonLearn and lessonLearn.status == 'finished' %}
-                            <span class="glyphicon glyphicon-ok pull-left text-success"></span>
-                          {% endif %}
-                          <a href="{{ lessonUrl }}" target="_blank"><img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ></a>
+                          <a href="{{ lessonUrl }}" target="_blank">
+                            {% if lessonLearn and lessonLearn.status == 'finished' %}
+                              <span class="finished-icon"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                            {% endif %}
+                            <img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ></a>
                           <div class="caption" title="{{ lessons[item.lessonId].title}}">
                             {{ lessons[item.lessonId].title}}
                           </div>
