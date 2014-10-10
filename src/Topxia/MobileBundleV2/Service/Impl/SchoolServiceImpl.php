@@ -63,6 +63,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
             $courseIds[] = (int) $value;
         }
         $courses = $this->controller->getCourseService()->findCoursesByIds($courseIds);
+        $courses = array_values($courses);
         $result = array(
             "start"=>0,
             "limit"=>3,
