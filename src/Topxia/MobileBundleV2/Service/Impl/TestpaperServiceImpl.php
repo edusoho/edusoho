@@ -165,6 +165,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	        $student = $this->controller->getUserService()->getUser($testpaperResult['userId']);
 
 	        return array(
+	        	"testpaper"=>$testpaper
 	        	"items"=>$this->filterResultItems($items),
 	        	"accuracy"=>$accuracy,
             	'paperResult' => $testpaperResult
