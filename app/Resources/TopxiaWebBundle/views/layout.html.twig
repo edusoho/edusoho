@@ -87,7 +87,11 @@
                   {{ app.user.truename }} <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
+                  {% if app.user.isParent() %}
+                    <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
+                  {% else %}
+                    <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
+                  {% endif %}
                   <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 帐号设置</a></li>
                   <li class="divider"></li>
                   {% if is_granted('ROLE_BACKEND') %}
