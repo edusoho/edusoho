@@ -479,8 +479,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         		}
 
         		$userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
-
-		$vipLevels = $this->controller->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
+        		$vipLevels = array();
+        		if ($this->controller->setting('vip.enabled')) {
+	                $vipLevels = $this->controller->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
+	            }
         		return array(
         			"course"=>$this->controller->filterCourse($course),
         			"userFavorited"=>$userFavorited,
