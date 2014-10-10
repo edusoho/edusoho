@@ -35,7 +35,7 @@
                             <span class="glyphicon glyphicon-ok pull-left text-success"></span>
                           {% endif %}
                           <a href="{{ lessonUrl }}" target="_blank"><img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ></a>
-                          <div class="caption">
+                          <div class="caption" title="{{ lessons[item.lessonId].title}}">
                             {{ lessons[item.lessonId].title}}
                           </div>
                         </div>

@@ -328,6 +328,20 @@
 
 /** schedule css */
 
+.schedule .popover-container .popover {
+    width: 290px;
+}
+
+.schedule .popover-container .popover img {
+    height: 60px;
+    width: 100px;
+}
+
+.schedule .popover-container .popover .media-body h4 {
+    font-size: 16px;
+    height: 32px;
+    overflow: hidden;
+} 
 
 .schedule-header {
     height: 60px;
@@ -337,6 +351,14 @@
 
 .schedule-header .viewType {
     display: inline;
+}
+
+.schedule-header .month {
+    font-size: 16px;
+}
+
+.schedule .glyphicon {
+    padding: 0 5px;
 }
 
 .schedule-calendar {
@@ -399,6 +421,7 @@
     border: 1px solid #e3e3e3;
 
 }
+
 .schedule-lesson-list {
     margin: 0;
     padding: 0;
@@ -444,10 +467,7 @@
     background-color: pink;
     color:yellow;
 }
-.schedule .popover-content img {
-    height: 48px;
-    width: 48px;
-}
+
 .schedule-course img {
     height: 48px;
     width: 80px;

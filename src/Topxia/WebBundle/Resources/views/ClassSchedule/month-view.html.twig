@@ -32,11 +32,12 @@
                       {% set lesson = lessons[schedule.lessonId] %}
                       {% set course = courses[lesson.courseId]%}
                       {% set teacher = teachers[course.teacherIds[0]] %}
+                      {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id%}
                         <li class='media'>
-                          <a class="pull-left" href="#">
+                          <a class="pull-left" href="{{ lessonUrl }}" target="_blank">
                             <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="">
                           </a>
-                          <div class="media-body">
+                          <div class="media-body" title="{{ lesson.title }}">
                             <h4 class="media-heading">{{ lesson.title }}</h4>
                             <span class="teacher-name">{{ teacher.truename}}</span>
                           </div>
