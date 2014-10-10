@@ -34,7 +34,7 @@ define(function(require, exports, module) {
         },
         bindSortableEvent: function() {
             var self = this;
-            $("ul.course-item-list").each(function(){
+            $(".schedule-course-item-list").each(function(){
                 $(this).sortable("enable");
             });
             var lessonSort = $("ul.schedule-lesson-list").sortable({
@@ -61,7 +61,7 @@ define(function(require, exports, module) {
                     self.save(result);
                 }
             });
-            var courseSort = $("ul.course-item-list").sortable({
+            var courseSort = $(".schedule-course-item-list").sortable({
                 distance:30,
                 group:'schedule-sort',
                 pullPlaceholder:false,
@@ -78,13 +78,13 @@ define(function(require, exports, module) {
         expand: function(e) {
             var target = e.currentTarget;
             $(target).removeClass('glyphicon-plus-sign').addClass('glyphicon-minus-sign');
-            $(target).parent().find('.course-item-list-wrap').addClass('show').removeClass('hidden');
+            $(target).parent().find('.schedule-course-item-list-wrap').addClass('show').removeClass('hidden');
             
         },
         collapse: function(e) {
             var target = e.currentTarget;
             $(target).removeClass('glyphicon-minus-sign').addClass('glyphicon-plus-sign');
-            $(target).parent().find('.course-item-list-wrap').addClass('hidden').removeClass('show');
+            $(target).parent().find('.schedule-course-item-list-wrap').addClass('hidden').removeClass('show');
         },
         save: function(data){
             $.post(this.get('saveUrl'), data, function(){
@@ -100,7 +100,7 @@ define(function(require, exports, module) {
             this.save(result);
         },
         disableSort: function() {
-            $("ul.course-item-list").each(function(){
+            $(".schedule-course-item-list").each(function(){
                 $(this).sortable("disable");
             });
         },
