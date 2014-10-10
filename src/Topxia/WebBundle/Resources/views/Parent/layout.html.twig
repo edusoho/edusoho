@@ -3,11 +3,11 @@
 {% block title %}个人中心 - {{ parent() }}{% endblock %}
 {% block content %}
 	{{ render(controller('TopxiaWebBundle:My:avatarAlert')) }}
-	<div class="row row-3-9">
+	<div class="row">
 	  <div class="col-md-3">
 	    <div class="panel panel-default">
 	      <div class="panel-body">
-          <p class="text-center"><b>欢迎回来，{{app.user.truename}}</b></p>
+          <p class="text-center"><b>欢迎回来，{{selectedChild.truename}}的{{dict_text('family',selectedChild.relation)}}</b></p>
           {{ render(controller('TopxiaWebBundle:Parent:childInfo',{childId:selectedChild.id|default(null)})) }}
 	        <div class="list-group-block">
 	          {% if app.user.isParent() %}
