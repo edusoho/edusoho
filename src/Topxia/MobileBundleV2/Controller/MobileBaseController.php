@@ -286,8 +286,12 @@ class MobileBaseController extends BaseController
             $user['createdTime']  = date('c', $user['createdTime']);
             
             $user['email'] = '';
-            $vip = $controller->getVipService()->getMemberByUserId($user['id']);
-            $user["vip"] = $vip;
+            
+            if ($controller->setting('vip.enabled')) {
+                $vip = $controller->getVipService()->getMemberByUserId($user['id']);
+                $user["vip"] = $vip;
+            }
+            
             unset($user['password']);
             unset($user['salt']);
             unset($user['createdIp']);

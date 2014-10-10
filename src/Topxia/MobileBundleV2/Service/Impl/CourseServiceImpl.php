@@ -74,7 +74,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$formData = $this->formData;
 		$formData['content'] = $content;
-		var_dump($formData);
 		unset($formData['imageCount']);
 
 		$post = $this->controller->getThreadService()->updatePost($courseId, $postId, $formData);
@@ -122,9 +121,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$baseUrl = $this->request->getSchemeAndHttpHost();
 		$content = preg_replace_callback('/src=[\'\"](.*?)[\'\"]/', function($matches) use ($baseUrl, $urlArray) {
+			var_dump($urlArray);
 			return "src=\"{$baseUrl}/{$urlArray[$matches[1]]}\"";
 		}, $content);
-        		return $content;
+        return $content;
 	}
 
 	public function commitCourse()
@@ -480,8 +480,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         		}
 
         		$userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
-
-		$vipLevels = $this->controller->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
+        		$vipLevels = array();
+        		if ($this->controller->setting('vip.enabled')) {
+	                $vipLevels = $this->controller->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
+	            }
         		return array(
         			"course"=>$this->controller->filterCourse($course),
         			"userFavorited"=>$userFavorited,
