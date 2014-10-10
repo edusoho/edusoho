@@ -55,7 +55,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                 }
 
                 if (empty($payment['alipay_type']) or $payment['alipay_type'] != 'direct') {
-                    $payUrl = $this->generateUrl('mapi_order_submit_pay_request', array('id' => $orderId, 'token' => $token), true);
+                    $payUrl = $this->controller->generateUrl('mapi_order_submit_pay_request', array('id' => $orderId, 'token' => $token), true);
                     $result["payUrl"] = $payUrl;
                 } else {
                     $result["payUrl"] = MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order);
