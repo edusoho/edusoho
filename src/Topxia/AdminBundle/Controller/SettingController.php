@@ -98,9 +98,16 @@ class SettingController extends BaseController
 
         $courseIds = explode(",", $mobile['courseIds']);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = ArrayToolkit::index($courses,'id');
+        $sortedCourses = array();
+        foreach ( $courseIds as $value){
+            if(!empty($value))
+                $sortedCourses[] = $courses[$value];
+        }
+
         return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
             'mobile'=>$mobile,
-            'courses'=>$courses
+            'courses'=>$sortedCourses
         ));
     }
 
