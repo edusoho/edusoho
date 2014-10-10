@@ -322,7 +322,11 @@
           {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:course, showDelBtn:true} %}
           {% endfor %}
           <li class="course-grid related-course-grid" role="add-course" 
-          style="cursor:pointer"
+          style="cursor:pointer
+          {% if courses|length >= 3 %}
+          ;display:none
+          {% endif %}
+          "
           data-backdrop="static" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search')}}">
             <div class="add-course grid-body glyphicon glyphicon-plus">
               

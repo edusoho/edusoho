@@ -404,6 +404,9 @@ define(function(require, exports, module) {
 
             $(this).parents('li[role="course-item"]').remove();
             courseIds.val(courseIds.val().replace(courseId+',', ''));
+            if(courseIds.val().split(",").length<=3){
+                $('[role="add-course"]').show();
+            }
         });
 
         var editor = EditorFactory.create('#mobile_about', 'simple', {extraFileUploadParams:{group:'default'}});

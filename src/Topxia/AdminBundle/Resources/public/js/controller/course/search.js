@@ -24,6 +24,10 @@ define(function(require, exports, module) {
 			}
 			$courseIds.val($courseIds.val()+$(this).data("courseId")+",");
 			
+			if($courseIds.val().split(",").length>3){
+				$('[role="add-course"]').hide();
+			}
+
 			var courseItem = $(this).clone();
 			courseItem.find('[role="course-item-delete"]').on('click',function(){
 	            var courseId=$(this).data("courseId");
@@ -31,6 +35,10 @@ define(function(require, exports, module) {
 
 	            $(this).parents('li[role="course-item"]').remove();
 	            courseIds.val(courseIds.val().replace(courseId+',', ''));
+
+	            if($courseIds.val().split(",").length<=3){
+					$('[role="add-course"]').show();
+				}
 	        }).show();
 
 			$('[role="add-course"]').before(courseItem);
