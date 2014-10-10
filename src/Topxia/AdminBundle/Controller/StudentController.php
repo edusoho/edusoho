@@ -40,12 +40,8 @@ class StudentController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        if(empty($fields['class_id'])){
-            $classStudents=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($users, 'id'));
-            $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($classStudents, 'classId'));
-        }else{
-            $classes=array($this->getClassesService()->getClass($fields['class_id']));
-        }
+        $classStudents=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($users, 'id'));
+        $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($classStudents, 'classId'));
 
         $classStudents=ArrayToolkit::index($classStudents, 'userId');
         $classes=ArrayToolkit::index($classes, 'id');

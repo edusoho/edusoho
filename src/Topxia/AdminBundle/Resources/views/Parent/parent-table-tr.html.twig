@@ -9,6 +9,7 @@
   <td>
     {% for relation in relations %}
       {{ children[relation.toId].truename }}<br/>
+      <span class="text-muted text-sm">{{ children[relation.toId].number }}</span><br/>
     {% endfor %}
   </td>
   <td>
@@ -19,10 +20,16 @@
       {% else %}
         --
       {% endif %}
-      <br/>
+      <br/><br/>
     {% endfor %}
   </td>
 
+  <td>
+    {{ dict_text('family', relations[0].relation) }}
+  </td>
+  <td>
+    {{user.mobile}}
+  </td>
   <td>
     <span class="text-sm">
       {% if user.loginTime == 0 %}
@@ -48,7 +55,7 @@
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}
 
-        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_roles', {id:user.id}) }}">设置用户组</a></li>
+        {# <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_roles', {id:user.id}) }}">设置用户组</a></li> #}
 
         <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_avatar', {id:user.id}) }}">修改用户头像</a></li>
 
@@ -65,4 +72,3 @@
     </div>
   </td>
 </tr>
-

@@ -23,14 +23,13 @@
         {% block dashboard_relatedCoursesBlock %}{% endblock %}
       </div>
     </div>
-    {% if app.user.isParent() %}
-    {% else %}
-      <div class="col-md-4 course-dashboard-side">
+    <div class="col-md-4 course-dashboard-side">
+      {% if not app.user.isParent() %}
         {{ render(controller('TopxiaWebBundle:Course:progressBlock',{course:course})) }}
+      {% endif %}
         {{ render(controller('TopxiaWebBundle:CourseAnnouncement:block',{course:course})) }}
         {{ render(controller('TopxiaWebBundle:CourseThread:questionBlock',{course:course})) }}
       </div>
-    {% endif %}
   </div>
 
 </div>
