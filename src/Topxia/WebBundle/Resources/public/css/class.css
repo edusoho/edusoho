@@ -604,9 +604,23 @@ ul.schedule-lesson-list a .finished-icon {
     border-left: none;
 }
 
+.course-display .panel-heading {
+    position: relative;
+}
 
+.course-display .mode {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+}
 
+.week-operation a {
+    text-decoration: none;
+}
 
+.week-operation a:hover {
+    text-decoration: none;
+}
 
 
 

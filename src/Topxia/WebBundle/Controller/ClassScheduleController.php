@@ -16,9 +16,9 @@ class ClassScheduleController extends ClassBaseController
         ));
     }
 
-    public function coursesAction(Request $request, $class)
+    public function coursesAction(Request $request, $classId)
     {
-        $this->tryViewClass($class['id']);
+        $class = $this->tryViewClass($classId);
         $user = $this->getCurrentUser();
         $courses = array();
         $conditions =array(
@@ -38,30 +38,35 @@ class ClassScheduleController extends ClassBaseController
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
-        
-        if($user->isAdmin()) {
-            return $this->render('TopxiaWebBundle:ClassSchedule:courses-editable.html.twig', array(
-                'courses' => $courses,
-                'users' => $users,
-                ));
-        }
+        $editable = $request->query->get('editable');
+        if($editable) {
+           if($user->isAdmin()) {
+               return $this->render('TopxiaWebBundle:ClassSchedule:courses-editable.html.twig', array(
+                   'courses' => $courses,
+                   'users' => $users,
+                   'classId' => $class['id'],
+                   ));
+           }
 
-        if($user->isTeacher()) {
-            $newCourses = array();
-            foreach ($courses as $course) {
-                if(in_array($user['id'], $course['teacherIds'])) {
-                    $newCourses[] = $course;
-                }
-            }
-            return $this->render('TopxiaWebBundle:ClassSchedule:courses-editable.html.twig', array(
-                'courses' => $newCourses,
-                'users' => $users,
-                ));
+           if($user->isTeacher()) {
+               $newCourses = array();
+               foreach ($courses as $course) {
+                   if(in_array($user['id'], $course['teacherIds'])) {
+                       $newCourses[] = $course;
+                   }
+               }
+               return $this->render('TopxiaWebBundle:ClassSchedule:courses-editable.html.twig', array(
+                   'courses' => $newCourses,
+                   'users' => $users,
+                   'classId' => $class['id'],
+                   ));
+           } 
         }
         
         return $this->render('TopxiaWebBundle:ClassSchedule:courses.html.twig', array(
             'courses' => $courses,
             'users' => $users,
+            'classId' => $class['id'],
             ));
     }
 
