@@ -74,10 +74,33 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$formData = $this->formData;
 		$formData['content'] = $content;
+		var_dump($formData);
 		unset($formData['imageCount']);
 
 		$post = $this->controller->getThreadService()->updatePost($courseId, $postId, $formData);
 		return $post;
+	}
+
+	public function updateThread(){
+		$courseId = $this->getParam("courseId", 0);
+		$threadId = $this->getParam("threadId", 0);
+		$title = $this->getParam("title", 0);
+		$content = $this->getParam("content","");
+
+		$user = $this->controller->getUserByToken($this->request);
+		if (!$user->isLogin()) {
+			return $this->createErrorResponse('not_login', '您尚未登录，修改该课时');
+		}
+
+		$content = $this->uploadImage($content);
+
+		$formData = $this->formData;
+		$formData['content'] = $content;
+		unset($formData['imageCount']);
+
+		$fields = array("title" => $title, "content" => $content);
+		
+		return $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
 	}
 
 	private function uploadImage($content)
@@ -235,22 +258,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$course = $this->controller->getCourseService()->getCourse($thread['courseId']);
             	$user = $this->controller->getUserService()->getUser($thread['userId']);
 		return $this->filterThread($thread, $course, $user);
-	}
-
-	public function updateThread(){
-		$courseId = $this->getParam("courseId", 0);
-		$threadId = $this->getParam("threadId", 0);
-		$title = $this->getParam("title", 0);
-		$content = $this->getParam("content","");
-
-		$user = $this->controller->getUserByToken($this->request);
-		if (!$user->isLogin()) {
-			return $this->createErrorResponse('not_login', '您尚未登录，修改该课时');
-		}		
-
-		$fields = array("title" => $title, "content" => $content );
-
-		return $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
 	}
 
 	public function getThreadTeacherPost()
