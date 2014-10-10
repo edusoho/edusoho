@@ -124,6 +124,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$baseUrl = $this->request->getSchemeAndHttpHost();
 		$content = preg_replace_callback('/src=[\'\"](.*?)[\'\"]/', function($matches) use ($baseUrl, $urlArray) {
+			var_dump($matches);
 			if(strpos($matches[1], "http") !== false){
 				return $matches[1];
 			}
