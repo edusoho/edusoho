@@ -201,7 +201,8 @@ class LessonServiceImpl extends BaseService implements LessonService
 		if (!$user->isLogin()) {
 			return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
 		}
-
+        
+                        $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
 		$member = $this->controller->getCourseService()->getCourseMember($courseId, $user['id']);
 		$member = $this->previewAsMember($member, $courseId, $user);
 		if ($member && in_array($member['role'], array("teacher", "student"))) {

@@ -11,6 +11,11 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public $banner;
 
+    public function getClientVersion()
+    {
+
+    }
+    
     public function sendSuggestion()
     {
         $info = $this->getParam("info");
