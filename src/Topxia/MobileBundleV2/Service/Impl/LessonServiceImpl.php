@@ -192,6 +192,9 @@ class LessonServiceImpl extends BaseService implements LessonService
 		}
 
 		if ($lesson['free'] == 1) {
+                                    if ($user->isLogin()) {
+                                        $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
+                                    }
 			return $this->coverLesson($lesson);
 		}
 
@@ -199,7 +202,6 @@ class LessonServiceImpl extends BaseService implements LessonService
 			return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
 		}
 
-                        $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
 		$member = $this->controller->getCourseService()->getCourseMember($courseId, $user['id']);
 		$member = $this->previewAsMember($member, $courseId, $user);
 		if ($member && in_array($member['role'], array("teacher", "student"))) {

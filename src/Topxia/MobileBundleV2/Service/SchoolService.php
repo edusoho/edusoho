@@ -16,4 +16,6 @@ interface SchoolService
 	public function sendSuggestion();
 
 	public function getShradCourseUrl();
+
+	public function getClientVersion();
 }
