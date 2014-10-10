@@ -38,7 +38,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                      'paid' => false,
                      'payUrl' => ""
                 );
-                $payment = $this->setting('payment', array());
+                $payment = $this->controller->setting('payment', array());
                 if (empty($payment['enabled'])) {
                     $result["message"] = "支付功能未开启！";
                     return $result;
