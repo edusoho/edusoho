@@ -109,6 +109,30 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public function getSchoolBanner()
     {
+        $banner = array();
+        $mobile = $this->getSettingService()->get('mobile', array());
+        $baseUrl = $this->request->getSchemeAndHttpHost();
+        $keys = array_keys($mobile);
+        for ($i=0; $i < count($keys); $i++) {
+            $result = stripos($keys[$i], 'banner');
+            if (is_numeric($result)) {
+                $bannerClick = $mobile[$keys[$i]];
+                $i = $i +1;
+                $bannerParams = $mobile[$keys[$i]];
+                $i = $i +1;
+                $bannerUrl = $mobile[$keys[$i]];
+                $banner[] = array(
+                "url"=>empty($bannerUrl) ? "" : $baseUrl . '/' . $bannerUrl,
+                "action"=>$bannerClick == 0 ? "none" : "webview",
+                "params"=>$bannerParams
+                );
+            }
+        }
+        return $banner;
+    }
+
+    private function getBannerFromWeb()
+    {
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
         $baseUrl = $this->request->getSchemeAndHttpHost();
 
