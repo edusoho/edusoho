@@ -132,6 +132,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				return "src=\"{$baseUrl}/{$urlArray[$matches[1]]}\"";
 			}
 		}, $content);
+		var_dump($content);
         return $content;
 	}
 
