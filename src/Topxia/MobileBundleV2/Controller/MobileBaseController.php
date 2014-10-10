@@ -110,7 +110,7 @@ class MobileBaseController extends BaseController
             $this->setCurrentUser($token['userId'], $request);
         }
 
-        return $this->getUser();;
+        return $this->getUser();
     }
 
     public function createToken($user, $request)

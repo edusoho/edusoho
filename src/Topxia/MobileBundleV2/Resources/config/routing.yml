@@ -6,6 +6,7 @@ mapi_mobile_api:
 mapi_order_submit_pay_request:
     pattern:  /order/{id}/submit_pay_request
     defaults: { _controller: TopxiaMobileBundleV2:MobileOrder:submitPayRequest }
+    methods: [GET, POST]
 
 
 topxia_mobile_alipay_notify:
