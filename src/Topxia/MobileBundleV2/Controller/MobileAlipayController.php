@@ -197,23 +197,9 @@ class MobileAlipayController extends MobileBaseController
         return $options;
     }
 
-    public function getLogService()
-    {
-        return $this->getServiceKernel()->createService('System.LogService');
-    }
-
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
-    public function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getCourseOrderService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseOrderService');
-    }
 }
