@@ -75,14 +75,15 @@
         {% set author = users[post.userId] %}
         {% include 'TopxiaWebBundle:CourseThread:post-list-item.html.twig' %}
       {% else %}
-        <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
+        {% if not app.user.isParent() %}
+          <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
+        {% endif %}
       {% endfor %}
     </ul>
 
     {{ web_macro.paginator(paginator) }}
 
-    {% if app.user.isParent() %}
-    {% else %}
+    {% if not app.user.isParent() %}
 	    {% if isMemberNonExpired %}
 	    
 	    <h3 class="thread-posts-heading"><span class="glyphicon glyphicon-plus"></span> 添加{% if thread.type == 'question' %}答案{% else %}回复{% endif %}</h3>
