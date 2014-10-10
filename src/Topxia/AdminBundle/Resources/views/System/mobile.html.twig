@@ -63,6 +63,13 @@
   font-weight: bold;
 }
 
+.course-grid .add-course {
+  font-size: 80px;
+  height: 148px;
+  text-align: center;
+  padding-top: 30px;
+}
+
 </style>
 
 <div class="page-header"><h1>移动客户端设置</h1></div>
@@ -302,21 +309,19 @@
     客户端【每周精选】栏目中默认显示的是网站中学员数最多的课程，最多显示三门。
     </div>
     <div class="form-group">
-      <div class="col-md-2 control-label">
-      </div>
-      <div class="col-md-8 controls">
-        <a class="btn btn-default" data-backdrop="static" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search')}}">选择课程</a>
-        <input type='hidden' name="courseIds" value="{{mobile.courseIds}}"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-2">
-      </div>
-      <div class="col-md-8" role="course-item-container">
+      <input type='hidden' name="courseIds" value="{{mobile.courseIds}}"/>
+      <div class="col-md-12" role="course-item-container">
         <ul class="course-grids">
-        {% for course in courses|default(null) %}
-        {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:course, showDelBtn:true} %}
-        {% endfor %}
+          <li class="course-grid related-course-grid" role="course-item" 
+          style="cursor:pointer"
+          data-backdrop="static" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search')}}">
+            <div class="add-course grid-body glyphicon glyphicon-plus">
+              
+            </div>
+          </li>
+          {% for course in courses|default(null) %}
+          {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:course, showDelBtn:true} %}
+          {% endfor %}
         </ul>
       </div>
     </div>
