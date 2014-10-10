@@ -121,11 +121,13 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
                 $bannerParams = $mobile[$keys[$i]];
                 $i = $i +1;
                 $bannerUrl = $mobile[$keys[$i]];
-                $banner[] = array(
-                "url"=>empty($bannerUrl) ? "" : $baseUrl . '/' . $bannerUrl,
-                "action"=>$bannerClick == 0 ? "none" : "webview",
-                "params"=>$bannerParams
-                );
+                if (!empty($bannerUrl)) {   
+                    $banner[] = array(
+                        "url"=>$baseUrl . '/' . $bannerUrl,
+                        "action"=>$bannerClick == 0 ? "none" : "webview",
+                        "params"=>$bannerParams
+                    );
+                }
             }
         }
         return $banner;
