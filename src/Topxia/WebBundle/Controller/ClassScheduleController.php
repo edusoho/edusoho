@@ -116,7 +116,7 @@ class ClassScheduleController extends ClassBaseController
     {
         $this->tryManageClass($classId);
         $lessons = $request->request->all();
-        $lessonIds = explode(',', $lessons['ids']);
+        $lessonIds = $lessons['ids'] == '' ? array() : explode(',', $lessons['ids']);
         $schedules = array();
         foreach ($lessonIds as $index => $id) {
             $schedule['classId'] = $classId;
@@ -126,7 +126,7 @@ class ClassScheduleController extends ClassBaseController
             $schedule['createdTime'] = time();
             $schedules[] = $schedule;    
         }
-        $this->getScheduleService()->saveSchedules($schedules);
+        $this->getScheduleService()->saveSchedules($classId, $schedules, $lessons['day']);
         return new Response("success");
     }
 

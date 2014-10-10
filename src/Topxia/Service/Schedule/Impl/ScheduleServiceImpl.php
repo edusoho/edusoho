@@ -13,17 +13,17 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
         return $this->getScheduleDao()->addSchedule($schedule);
     }
 
-    public function saveSchedules($schedules) 
+    public function saveSchedules($classId, $schedules, $date) 
     {
-        if(empty($schedules)) {
-            return;
-        }
         $this->getScheduleDao()->getConnection()->beginTransaction();
         try{
-            $this->deleteOneDaySchedules($schedules[0]['classId'], $schedules[0]['date']);
-            foreach ($schedules as $schedule) {
-                $this->addSchedule($schedule);
+            $this->deleteOneDaySchedules($classId, $date);
+            if(!empty($schedules)) {
+                foreach ($schedules as $schedule) {
+                    $this->addSchedule($schedule);
+                }
             }
+            
             $this->getScheduleDao()->getConnection()->commit();
         }catch(\Exception $e){
             $this->getScheduleDao()->getConnection()->rollback();
