@@ -53,7 +53,7 @@ class BaseService {
     {
         return $this->controller->getService('Coupon:Coupon.CouponService');
     }
-
+    
     protected function getNotificationService()
     {
         return $this->controller->getService('User.NotificationService');
@@ -72,6 +72,11 @@ class BaseService {
     protected function getFileService()
     {
         return $this->controller->getService('Content.FileService');
+    }  
+
+    protected function getSettingService()
+    {
+        return $this->controller->getService('System.SettingService');
     }
 
     protected function getCourseService()

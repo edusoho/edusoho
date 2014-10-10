@@ -11,4 +11,6 @@ interface UserService
 	public function logout();
 
 	public function getUserNotification();
+
+	public function getUserLastlearning();
 }
