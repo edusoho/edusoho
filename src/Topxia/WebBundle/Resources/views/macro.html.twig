@@ -6,7 +6,11 @@
 
 {% macro user_link(user, class) %}
   {% if user %}
-    <a {% if class %}class="{{ class }}"{% endif %} href="{{ path('user_show', {id:user.id}) }}">{{ user.truename }}</a>
+    {% if 'ROLE_PARENT' in user.roles %}
+      {{ user.truename }}
+    {% else %}
+      <a {% if class %}class="{{ class }}"{% endif %} href="{{ path('user_show', {id:user.id}) }}">{{ user.truename }}</a>
+    {% endif %}
   {% else %}
     <span class="text-muted">用户已删除</span>
   {% endif %}
