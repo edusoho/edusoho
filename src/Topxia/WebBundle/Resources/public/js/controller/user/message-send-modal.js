@@ -27,13 +27,13 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="message[receiver]"]',
+            element: '[name="message_receiver"]',
             required: true,
             rule: 'chinese_alphanumeric'
         });
 
         validator.addItem({
-            element: '[name="message[content]"]',
+            element: '[name="message_content"]',
             required: true,
             rule: 'maxlength{max:500}'
         });

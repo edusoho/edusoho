@@ -98,18 +98,16 @@ class MessageController extends BaseController
         $user = $this->getCurrentUser();
 
         $receiver = $this->getUserService()->getUser($toId);
-        $form = $this->createForm(new MessageType(), array('receiver'=>$receiver['truename']));
         if($request->getMethod() == 'POST'){
-            $form->bind($request);
-            if($form->isValid()){
-                $message = $form->getData();
-                $this->getMessageService()->sendMessage($user['id'], $toId, $message['content']);
-                return $this->redirect($this->generateUrl('message'));
-            }
+            $fields=$request->request->all();
+            $message = $fields['message_content'];
+            $this->getMessageService()->sendMessage($user['id'], $toId, $message);
+            return $this->redirect($this->generateUrl('message'));
         }
         return $this->render('TopxiaWebBundle:Message:send-message-modal.html.twig', array(
-                'form' => $form->createView(),
-                'userId'=>$toId));
+            'userId'=>$toId,
+            'receiver'=>$receiver
+        ));
     }
 
     public function sendAction(Request $request) 
