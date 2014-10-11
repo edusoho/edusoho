@@ -15,8 +15,10 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     {
         $result = array(
             "code"=>2,
-            "version"=>"2.0.0",
-            "updateInfo"=>"更新功能!"
+            "androidVersion"=>"2.0.0",
+            "iPhoneVersion"=>"2.0.0",
+            "updateInfo"=>"更新功能!",
+            "updateUrl"=>"http://open.edusoho.com/mobile/download.php"
             );
         return $result;
     }

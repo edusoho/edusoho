@@ -42,8 +42,8 @@ class LessonServiceImpl extends BaseService implements LessonService
 
 	public function downMaterial()
 	{
-		$courseId = $this->getParam("courseId");
-		$materialId = $this->getParam("materialId");
+		$courseId = $this->request->get("courseId");
+		$materialId = $this->request->get("materialId");
 		list($course, $member) = $this->controller->getCourseService()->tryTakeCourse($courseId);
 
         		if ($member && !$this->controller->getCourseService()->isMemberNonExpired($course, $member)) {
@@ -412,7 +412,7 @@ class LessonServiceImpl extends BaseService implements LessonService
                     );
                 }
             }
-    
+
 	private function wrapContent($content)
 	{
 		$content= $this->controller->convertAbsoluteUrl($this->request, $content);
