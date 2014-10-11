@@ -1,5 +1,5 @@
 {%- macro user_avatar(user, class) -%}
-  <a class="user-link user-avatar-link {{ class }}" href="{{ path('user_show', {id:user.id}) }}">
+  <a class="user-link user-avatar-link {{ class }}" href="{% if 'ROLE_PARENT' in user.roles %}javascript:;{% else %}{{ path('user_show', {id:user.id}) }}{% endif %}">
     <img src="{{ default_path('avatar',user.smallAvatar, '') }}">
   </a>
 {%- endmacro -%}
