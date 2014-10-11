@@ -176,20 +176,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$limit = (int) $this->getParam("limit", 10);
 		$total = $this->controller->getThreadService()->searchThreadCount($conditions);
 
-        		$threads = $this->controller->getThreadService()->searchThreads(
-            		$conditions,
-            		'createdNotStick',
-            		$start,
-            		$limit
-        		);
+		$threads = $this->controller->getThreadService()->searchThreads(
+    		$conditions,
+    		'createdNotStick',
+    		$start,
+    		$limit
+		);
 
-        		$courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
-        		return array(
-			"start"=>$start,
-			"limit"=>$limit,
-			"total"=>$total,
-			'threads'=>$this->filterThreads($threads, $courses),
-			);
+		$courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+		return array(
+		"start"=>$start,
+		"limit"=>$limit,
+		"total"=>$total,
+		'threads'=>$this->filterThreads($threads, $courses),
+		);
 	}
 
 	private function filterThreads($threads, $courses)
@@ -214,15 +214,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$thread["courseTitle"] = $course["title"];
 
-        		$thread['coursePicture'] = $this->controller->coverPath($course["largePicture"], 'course-large.png');
+		$thread['coursePicture'] = $this->controller->coverPath($course["largePicture"], 'course-large.png');
 
-        		$isTeacherPost = $this->controller->getThreadService()->findThreadElitePosts($course['id'], $thread['id'], 0, 100);
-        		$thread['isTeacherPost'] = empty($isTeacherPost) ? false : true;
-        		$thread['user'] = $user;
-        		$thread['createdTime'] = date('c', $thread['createdTime']);
-        		$thread['latestPostTime'] = date('c', $thread['latestPostTime']);
+		$isTeacherPost = $this->controller->getThreadService()->findThreadElitePosts($course['id'], $thread['id'], 0, 100);
+		$thread['isTeacherPost'] = empty($isTeacherPost) ? false : true;
+		$thread['user'] = $user;
+		$thread['createdTime'] = date('c', $thread['createdTime']);
+		$thread['latestPostTime'] = date('c', $thread['latestPostTime']);
 
-        		return $thread;
+		return $thread;
 	}
 
 	public function getThreadPost()
@@ -625,13 +625,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
     }
 
-    public function getNodeListByUserId(){
+    public function getNoteListByUserId(){
     	$user = $this->controller->getUserByToken($this->request);
     	if(!$user->isLogin()){
     		return $this->createErrorResponse('not_login', "您尚未登录，不能评价课程！");
     	}
-    	var_dump($user["id"]);
-    	return $user;
 
+    	$nodeList = $this->controller->getNoteService()->findNotesByUserIdAndStatus($user["id"], "1");
+
+
+    	//$array=array("1"=>"a","2"=>"b");
+    	return $nodeList;
     }
 }

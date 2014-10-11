@@ -67,4 +67,10 @@ interface CourseService
 	public function coupon();
 
 	public function vipLearn();
+
+	/**
+	 *
+	 *根据用户ID获取笔记信息	
+	 */
+	public function getNoteListByUserId();
 }

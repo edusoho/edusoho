@@ -406,4 +406,8 @@ class MobileBaseController extends BaseController
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
+    public function getNoteService(){
+        return $this->getServiceKernel()->createService('Course.NoteService');
+    }
+
 }
