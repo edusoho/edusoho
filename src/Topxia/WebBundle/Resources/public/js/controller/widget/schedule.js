@@ -210,6 +210,7 @@ define(function(require, exports, module) {
                         self.disableSort();
                         self.popover();
                     } else {
+                        self.element.find('.viewType').val('week');
                         self.element.find('changeMonth') && self.changeYearMonth();
                         self.bindSortableEvent();  
                     }
