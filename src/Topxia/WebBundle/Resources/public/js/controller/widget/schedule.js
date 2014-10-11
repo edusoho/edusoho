@@ -39,20 +39,18 @@ define(function(require, exports, module) {
             $(".schedule-course-item-list").each(function(){
                 $(this).sortable("enable");
             });
-            var lessonSort = $("ul.schedule-lesson-list").sortable({
+            var lessonSort = $(".schedule-lesson-list").sortable({
                 group:'schedule-sort',
                 drag:false,
                 itemSelector:'.lesson-item',
                 onDragStart: function ($item, container, _super) {
                     // Duplicate $items of the no drop area
-                    
                     $item.addClass('draging');
                     if(!container.options.drop){
                         var $placeholder = $item.clone();
                         self.placeholder = $placeholder;
                         $placeholder.insertAfter($item);
                     }
-                    
                     _super($item);
                 },
                 onDrop: function ($item, container, _super, event) {
