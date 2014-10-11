@@ -70,7 +70,7 @@ interface CourseService
 
 	/**
 	 *
-	 *根据用户ID获取笔记信息	
+	 *根据用户ID获取笔记信息(全部)
 	 */
-	public function getNoteListByUserId();
+	public function getNoteList();
 }

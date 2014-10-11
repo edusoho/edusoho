@@ -192,10 +192,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		);
 	}
 
-	public function getNoteListByUserId(){
+	public function getNoteList(){
     	$user = $this->controller->getUserByToken($this->request);
     	if(!$user->isLogin()){
-    		return $this->createErrorResponse('not_login', "您尚未登录，不能评价课程！");
+    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
     	}
 
     	$nodeList = $this->controller->getNoteService()->findNotesByUserIdAndStatus($user["id"], "1");
@@ -204,7 +204,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     		$nodeList[$i]["largePicture"] = $this->controller->coverPath($nodeList[$i]["largePicture"], 'course-large.png');
     	}
 
-    	//$array=array("1"=>"a","2"=>"b");
     	return $nodeList;
     }
 
