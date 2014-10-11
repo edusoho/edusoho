@@ -40,15 +40,15 @@ class MobileAlipayRequest
         //**req_data详细信息**
 
         //服务器异步通知页面路径
-        $notify_url = $this->request->getSchemeAndHttpHost(). "/mapi_v1/alipay/alipay_notify";
+        $notify_url = $this->request->getSchemeAndHttpHost(). "/mapi_v2/alipay/alipay_notify";
         //需http://格式的完整路径，不允许加?id=123这类自定义参数
 
         //页面跳转同步通知页面路径
-        $call_back_url = $this->request->getSchemeAndHttpHost() . "/mapi_v1/alipay/alipay_callback";
+        $call_back_url = $this->request->getSchemeAndHttpHost() . "/mapi_v2/alipay/alipay_callback";
         //需http://格式的完整路径，不允许加?id=123这类自定义参数
 
         //操作中断返回地址
-        $merchant_url = $this->request->getSchemeAndHttpHost() . "/mapi_v1/alipay/alipay_merchant";
+        $merchant_url = $this->request->getSchemeAndHttpHost() . "/mapi_v2/alipay/alipay_merchant";
         //用户付款中途退出返回商户的地址。需http://格式的完整路径，不允许加?id=123这类自定义参数
 
         //卖家支付宝帐户
