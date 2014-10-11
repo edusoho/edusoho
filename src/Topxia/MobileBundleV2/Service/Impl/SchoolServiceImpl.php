@@ -22,8 +22,8 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         $baseUrl = $this->request->getSchemeAndHttpHost();
         $result = array(
             "code"=>2,
-            "androidVersion"=>"2.0.0",
-            "iPhoneVersion"=>"2.0.0",
+            "androidVersion"=>"2.0.1",
+            "iPhoneVersion"=>"2.0.1",
             "updateInfo"=>"更新功能!",
             "updateUrl"=>$baseUrl . '/mapi_v2/School/getDownloadUrl'
             );
