@@ -131,6 +131,18 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 			}
 		}
 
+		if (isset($conditions['userIds'])) {
+            $userIds = array();
+            foreach ($conditions['userIds'] as $userId) {
+                if (ctype_digit((string)abs($userId))) {
+                    $userIds[] = $userId;
+                }
+            }
+            if ($userIds) {
+                $userIds = join(',', $userIds);
+                $builder->andStaticWhere("userId IN ($userIds)");
+            }
+        }
 		return $builder;
 	}
 

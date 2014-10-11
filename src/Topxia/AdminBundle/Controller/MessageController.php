@@ -57,14 +57,22 @@ class MessageController extends BaseController
     private function convertConditions($conditions)
     {
         if (!empty($conditions['nickname'])) {
-            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
-            if (empty($user)) {
-                throw $this->createNotFoundException(sprintf("昵称为%s的用户不存在", $conditions['nickname']));
-            }
-            $conditions['fromId'] = $user['id'];
+            $users = $this->getUserService()->searchUsers(
+                array('truename'=>$conditions['nickname']),
+                array('createdTime', 'ASC'),
+                0,
+                PHP_INT_MAX);
+            $conditions['fromIds'] = empty($users) ? array(-1):ArrayToolkit::column($users,'id');
+            unset($conditions['nickname']);
+
+            // $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            // if (empty($user)) {
+            //     throw $this->createNotFoundException(sprintf("昵称为%s的用户不存在", $conditions['nickname']));
+            // }
+            // $conditions['fromId'] = $user['id'];
         }
         
-        unset($conditions['nickname']);
+        //unset($conditions['nickname']);
 
         if (empty($conditions['content'])) {
             unset($conditions['content']);

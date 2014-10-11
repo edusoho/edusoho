@@ -40,13 +40,27 @@ class LogDaoImpl extends BaseDao implements LogDao
 	protected function createLogQueryBuilder($conditions)
 	{
 		$conditions = array_filter($conditions);
-		return $this->createDynamicQueryBuilder($conditions)
+		$builder=$this->createDynamicQueryBuilder($conditions)
 			->andWhere('module = :module')
 			->andWhere('action = :action')
 			->andWhere('level = :level')
 			->andWhere('userId = :userId')
 			->andWhere('createdTime > :startDateTime')
 			->andWhere('createdTime < :endDateTime');
+
+		if (isset($conditions['userIds'])) {
+            $userIds = array();
+            foreach ($conditions['userIds'] as $userId) {
+                if (ctype_digit((string)abs($userId))) {
+                    $userIds[] = $userId;
+                }
+            }
+            if ($userIds) {
+                $userIds = join(',', $userIds);
+                $builder->andStaticWhere("userId IN ($userIds)");
+            }
+        }
+		return $builder;
 	}
 
 	public function analysisLoginNumByTime($startTime,$endTime)
