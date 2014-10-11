@@ -1,12 +1,16 @@
 {%- macro user_avatar(user, class) -%}
-  <a class="user-link user-avatar-link {{ class }}" href="{{ path('user_show', {id:user.id}) }}">
+  <a class="user-link user-avatar-link {{ class }}" href="{% if 'ROLE_PARENT' in user.roles %}javascript:;{% else %}{{ path('user_show', {id:user.id}) }}{% endif %}">
     <img src="{{ default_path('avatar',user.smallAvatar, '') }}">
   </a>
 {%- endmacro -%}
 
 {% macro user_link(user, class) %}
   {% if user %}
-    <a {% if class %}class="{{ class }}"{% endif %} href="{{ path('user_show', {id:user.id}) }}">{{ user.truename }}</a>
+    {% if 'ROLE_PARENT' in user.roles %}
+      {{ user.truename }}
+    {% else %}
+      <a {% if class %}class="{{ class }}"{% endif %} href="{{ path('user_show', {id:user.id}) }}">{{ user.truename }}</a>
+    {% endif %}
   {% else %}
     <span class="text-muted">用户已删除</span>
   {% endif %}

@@ -4,25 +4,28 @@
 
 {% block body %}
   <form id="message-create-form" class="form-horizontal" method="post" action="{{ path('message_create', {toId:userId}) }}">
-    {# {{ form_errors(form) }} #}
 
     <div class="form-group">
-      <div class="col-md-2 control-label">{{ form_label(form.receiver, '收件人') }}</div>
+      <div class="col-md-2 control-label">
+        <label for="message_receiver">收件人</label>
+      </div>
       <div class="col-md-10 controls">
-        {{ form_widget(form.receiver, {attr:{class:'form-control', rows:1,'readonly':'true' }})  }}
-      </div> 
+        <input type="text" id="message_receiver" name="message_receiver" value={{receiver.truename}} class="form-control" readonly="readonly">
+      </div>
     </div>
 
+
     <div class="form-group">
-      <div class="col-md-2 control-label">{{ form_label(form.content, '内容') }}</div>
+      <div class="col-md-2 control-label">
+        <label for="message_content" class="required">内容</label>
+      </div>
       <div class="col-md-10 controls">
-        {{ form_widget(form.content, {attr:{class:'form-control',rows:5}}) }}
+        <textarea id="message_content" name="message_content" class="form-control" rows="5"></textarea>
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-md-offset-2 col-md-10 controls">
-        {{ form_rest(form) }}
         <button class="btn btn-primary" type="submit" data-submiting-text="正在发送" id="message-submit">发送</button>
       </div>
     </div>
