@@ -29,16 +29,16 @@
   <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type{% endif %}" >
     <div class="col-md-2 control-label"><label for="lesson-title-field">标题</label></div>
     <div class="col-md-9 controls">
-      <div class="row">
-        <div class="col-md-10">
+        {# <div class="col-md-10"> #}
           <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ field_value(lesson, 'title') }}">
-        </div>
-        <div class="col-md-2">
+        {# </div> #}
+      {#<div class="row">
+         <div class="col-md-2">
           <div class="checkbox">
             <label><input type="checkbox" name="free" value="1" {% if field_value(lesson, 'free') %} checked="checked" {% endif %}> 免费课时</label>
           </div>
-        </div>
-      </div>
+        </div> 
+      </div>#}
     </div>
   </div>
 
