@@ -192,22 +192,37 @@ class CourseServiceImpl extends BaseService implements CourseService
 		);
 	}
 
+	public function getNoteListByUserId(){
+    	$user = $this->controller->getUserByToken($this->request);
+    	if(!$user->isLogin()){
+    		return $this->createErrorResponse('not_login', "您尚未登录，不能评价课程！");
+    	}
+
+    	$nodeList = $this->controller->getNoteService()->findNotesByUserIdAndStatus($user["id"], "1");
+    	foreach ($nodeList as $value) {
+    		$value["largePicture"] = $this->controller->coverPath($value["largePicture"], 'course-large.png');
+    	}
+
+    	//$array=array("1"=>"a","2"=>"b");
+    	return $nodeList;
+    }
+
 	private function filterThreads($threads, $courses)
 	{
 		if (empty($threads)) {
-            		return array();
-        		}
+            return array();
+        }
 
-        		for ($i=0; $i < count($threads); $i++) { 
+        for ($i=0; $i < count($threads); $i++) { 
         			$thread = $threads[$i];
-        			if (!isset($courses[$thread["courseId"]])) {
+        	if (!isset($courses[$thread["courseId"]])) {
 				unset($threads[$i]);
 				continue;
 			}
 			$course = $courses[$thread['courseId']];
-        			$threads[$i] = $this->filterThread($thread, $course, null);
-        		}
-        		return $threads;
+        	$threads[$i] = $this->filterThread($thread, $course, null);
+        }
+        return $threads;
 	}
 
 	private function filterThread($thread, $course, $user)
@@ -623,18 +638,5 @@ class CourseServiceImpl extends BaseService implements CourseService
             'number' => $member['learnedNum'],
             'total' => $course['lessonNum']
         );
-    }
-
-    public function getNoteListByUserId(){
-    	$user = $this->controller->getUserByToken($this->request);
-    	if(!$user->isLogin()){
-    		return $this->createErrorResponse('not_login', "您尚未登录，不能评价课程！");
-    	}
-
-    	$nodeList = $this->controller->getNoteService()->findNotesByUserIdAndStatus($user["id"], "1");
-
-
-    	//$array=array("1"=>"a","2"=>"b");
-    	return $nodeList;
     }
 }
