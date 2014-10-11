@@ -21,9 +21,10 @@ define(function(require, exports, module) {
 
         $('#message_to_teacher').on('click',function(){
             var $this = $(this);
+            
             $.get($this.data('url'),function(res){
                 $('#modal').html(res);
-            })
+            });
         });
 
     }
