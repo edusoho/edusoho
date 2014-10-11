@@ -88,12 +88,15 @@ class TestpaperItemResultDaoImpl extends BaseDao implements TestpaperItemResultD
 
         $sql ='';
         $answersForSQL = array();
-        foreach ($answers as $key => $value) {
-        	$sql .= "UPDATE {$this->table} set `answer` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
-        	array_push($answersForSQL, $value, (int)$key, (int)$testPaperResultId); 
-        }
 
-        return $this->getConnection()->executeQuery($sql, $answersForSQL);
+        $this->getConnection()->beginTransaction();
+        foreach ($answers as $key => $value) {
+        	$sql = "UPDATE {$this->table} set `answer` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
+        	$answersForSQL = array($value, (int)$key, (int)$testPaperResultId); 
+            $this->getConnection()->executeQuery($sql, $answersForSQL);
+        }
+        $this->getConnection()->commit();
+
 	}
 
     public function updateItemResults ($answers, $testPaperResultId)
@@ -104,12 +107,15 @@ class TestpaperItemResultDaoImpl extends BaseDao implements TestpaperItemResultD
         }
         $sql ='';
         $answersForSQL = array();
-        foreach ($answers as $key => $value) {
-            $sql .= "UPDATE {$this->table} set `status` = ?, `score` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
-            array_push($answersForSQL, $value['status'], $value['score'], (int)$key, (int)$testPaperResultId); 
-        }
 
-        return $this->getConnection()->executeQuery($sql, $answersForSQL);
+        $this->getConnection()->beginTransaction();
+        foreach ($answers as $key => $value) {
+            $sql = "UPDATE {$this->table} set `status` = ?, `score` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
+            $answersForSQL = array($value['status'], $value['score'], (int)$key, (int)$testPaperResultId); 
+            $this->getConnection()->executeQuery($sql, $answersForSQL);
+        }
+        $this->getConnection()->commit();
+        
     }
 
     public function updateItemEssays ($answers, $testPaperResultId)
@@ -120,12 +126,15 @@ class TestpaperItemResultDaoImpl extends BaseDao implements TestpaperItemResultD
         }
         $sql ='';
         $answersForSQL = array();
-        foreach ($answers as $key => $value) {
-            $sql .= "UPDATE {$this->table} set `score` = ?, `teacherSay` = ?, `status` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
-            array_push($answersForSQL, $value['score'], $value['teacherSay'], $value['status'], (int)$key, (int)$testPaperResultId); 
-        }
 
-        return $this->getConnection()->executeQuery($sql, $answersForSQL);
+        $this->getConnection()->beginTransaction();
+        foreach ($answers as $key => $value) {
+            $sql = "UPDATE {$this->table} set `score` = ?, `teacherSay` = ?, `status` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
+            $answersForSQL = array($value['score'], $value['teacherSay'], $value['status'], (int)$key, (int)$testPaperResultId); 
+            $this->getConnection()->executeQuery($sql, $answersForSQL);
+        }
+        $this->getConnection()->commit();
+
     }
 
 	public function findTestResultsByItemIdAndTestId ($questionIds, $testPaperResultId)
