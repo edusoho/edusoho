@@ -7,6 +7,7 @@ define(function(require, exports, module) {
         year: null,
         month: null,
         daysInMonth: [31,28,31,30,31,30,31,31,30,31,30,31],
+        placeholder: null,
         attrs: {
             saveUrl: null,
             resetUrl: null
@@ -42,12 +43,17 @@ define(function(require, exports, module) {
                 group:'schedule-sort',
                 drag:false,
                 itemSelector:'.lesson-item',
-                onDragStart: function (item, container, _super) {
-                    // Duplicate items of the no drop area
+                onDragStart: function ($item, container, _super) {
+                    // Duplicate $items of the no drop area
+                    
+                    $item.addClass('draging');
                     if(!container.options.drop){
-                        item.clone().insertAfter(item);
+                        var $placeholder = $item.clone();
+                        self.placeholder = $placeholder;
+                        $placeholder.insertAfter($item);
                     }
-                    _super(item);
+                    
+                    _super($item);
                 },
                 onDrop: function ($item, container, _super, event) {
                     var $template = $('<li data-id="'+$item.data('id')+'" data-url="'+$item.find('a').attr('href')+'"><div class="thumbnail"><button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><a href="/course/89/learn#lesson/39" target="_blank"><img src="/assets/img/default/course-large.png?k12v1"></a><div class="caption" title="sssssss">sssssss</div></div></li>');
@@ -58,6 +64,8 @@ define(function(require, exports, module) {
 
                     _super($item);
 
+                    var $placeholder = self.placeholder;
+                        $placeholder.removeClass('draging');
                     var result = self.serializeContainer(container.el);
                     self.save(result);
                 }
