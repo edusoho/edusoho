@@ -8,9 +8,8 @@ mapi_order_submit_pay_request:
     defaults: { _controller: TopxiaMobileBundleV2:MobileOrder:submitPayRequest }
     methods: [GET, POST]
 
-
 topxia_mobile_alipay_notify:
-    pattern:  /{name}/alipay_notify
+    pattern:  /pay/{name}/alipay_notify
     defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:payNotify }
 
 topxia_mobile_alipay_pay:
@@ -18,5 +17,5 @@ topxia_mobile_alipay_pay:
     defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:pay }
 
 topxia_mobile_alipay_callback:
-    pattern:  /{name}/alipay_callback
+    pattern:  /pay/{name}/alipay_callback
     defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:payCallBack }
