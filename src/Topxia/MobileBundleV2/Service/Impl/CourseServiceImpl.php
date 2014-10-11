@@ -199,8 +199,9 @@ class CourseServiceImpl extends BaseService implements CourseService
     	}
 
     	$nodeList = $this->controller->getNoteService()->findNotesByUserIdAndStatus($user["id"], "1");
-    	foreach ($nodeList as $value) {
-    		$value["largePicture"] = $this->controller->coverPath($value["largePicture"], 'course-large.png');
+
+    	for($i = 0;$i < count($nodeList);$i++){
+    		$nodeList[$i]["largePicture"] = $this->controller->coverPath($nodeList[$i]["largePicture"], 'course-large.png');
     	}
 
     	//$array=array("1"=>"a","2"=>"b");
