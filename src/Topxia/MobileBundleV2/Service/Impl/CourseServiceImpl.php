@@ -207,6 +207,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     	return $nodeList;
     }
 
+    public function AddNoteList(){
+    	$courseId = $this->getParam("courseId","");
+    	$lessonId = $this->getParam("lessonId","");
+    }
+
 	private function filterThreads($threads, $courses)
 	{
 		if (empty($threads)) {
