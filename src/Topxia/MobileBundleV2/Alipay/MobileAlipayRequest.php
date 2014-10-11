@@ -1,8 +1,8 @@
 <?php
 
-namespace Topxia\MobileBundle\Alipay;
-use Topxia\MobileBundle\Alipay\MobileAlipayConfig;
-use Topxia\MobileBundle\Controller\MobileController;
+namespace Topxia\MobileBundleV2\Alipay;
+use Topxia\MobileBundleV2\Alipay\MobileAlipayConfig;
+use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class MobileAlipayRequest
 {

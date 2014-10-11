@@ -27,10 +27,10 @@ class OrderServiceImpl extends BaseService implements OrderService
             		return array('status' => 'ok', 'paid' => true, "message"=>"", "payUrl"=>"");
                         }
 
-                        return $this->payCourseByAlipay($order["id"], $token);
+                        return $this->payCourseByAlipay($order, $token);
 	}
 
-            private function payCourseByAlipay($orderId, $token)
+            private function payCourseByAlipay($order, $token)
             {
                 $result = array(
                     'status' => 'error',
@@ -55,10 +55,10 @@ class OrderServiceImpl extends BaseService implements OrderService
                 }
 
                 if (empty($payment['alipay_type']) or $payment['alipay_type'] != 'direct') {
-                    $payUrl = $this->controller->generateUrl('mapi_order_submit_pay_request', array('id' => $orderId, 'token' => $token), true);
-                    $result["payUrl"] = $payUrl;
+                    $payUrl = $this->controller->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token), true);
+                    $result["payUrl"] = $payUrl . '?token=' . $token;
                 } else {
-                    $result["payUrl"] = MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order);
+                    $result["payUrl"] = MobileAlipayConfig::createAlipayOrderUrl($this->request, "edusoho", $order);
                 }
 
                 $result["status"] = "ok";

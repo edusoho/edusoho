@@ -11,46 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 class MobileOrderController extends MobileBaseController
 {
 
-    public function payCourseAction(Request $request, $courseId)
-    {
-        $formData = $request->query->all();
-        $formData['courseId'] = $courseId;
-
-        $user = $this->getUserByToken($request);
-
-        if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', '用户未登录，创建课程订单失败。');
-        }
-
-        $order = $this->getCourseOrderService()->createOrder($formData);
-
-        if ($order['status'] == 'paid') {
-            $result = array('status' => 'ok', 'paid' => true);
-        } else {
-            $payment = $this->setting('payment', array());
-            if (empty($payment['enabled'])) {
-                return $this->createJson($request, array('status' => 'error', 'message' => '支付功能未开启！'));
-            }
-
-            if (empty($payment['alipay_enabled'])) {
-                return $this->createJson($request, array('status' => 'error', 'message' => '支付宝支付未开启！'));
-            }
-
-            if (empty($payment['alipay_key']) or empty($payment['alipay_secret']) or empty($payment['alipay_account'])) {
-                return $this->createJson($request, array('status' => 'error', 'message' => '支付宝参数不正确！'));
-            }
-
-            if (empty($payment['alipay_type']) or $payment['alipay_type'] != 'direct') {
-                $result = array('status' => 'ok', 'paid' => false, 'payUrl' => $this->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token), true));
-            } else {
-                $result = array('status' => 'ok', 'paid' => false, 'payUrl' => MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order));
-            }
-
-        }
-
-        return $this->createJson($request, $result);
-    }
-
     public function submitPayRequestAction(Request $request, $id)
     {
         $user = $this->getUserByToken($request);

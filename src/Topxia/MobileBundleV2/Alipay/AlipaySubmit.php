@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\MobileBundle\Alipay;
+namespace Topxia\MobileBundleV2\Alipay;
 require_once("lib/alipay_core.function.php");
 require_once("lib/alipay_rsa.function.php");
 require_once("lib/alipay_md5.function.php");

@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\MobileBundle\Alipay;
+namespace Topxia\MobileBundleV2\Alipay;
 
 use Topxia\Component\Payment\Response;
 
