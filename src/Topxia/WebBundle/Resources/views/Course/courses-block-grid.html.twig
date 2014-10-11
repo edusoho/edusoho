@@ -24,7 +24,8 @@
             {% endif %}
           {% endif %}
 
-        <span class="title">{{ course.title }}</span>
+        <span class="title" style="overflow:hidden;height:52px">{{ course.title }}</span>
+
         {% set user = users[course.teacherIds|first]|default(null) %}
         {% if user %}
           <a href="{{path('user_show',{id:user.id})}}">
