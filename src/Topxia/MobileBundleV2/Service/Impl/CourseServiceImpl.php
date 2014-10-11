@@ -630,7 +630,8 @@ class CourseServiceImpl extends BaseService implements CourseService
     	if(!$user->isLogin()){
     		return $this->createErrorResponse('not_login', "您尚未登录，不能评价课程！");
     	}
-    	var_dump($user);
+    	var_dump($user["id"]);
+    	return $user;
 
     }
 }
