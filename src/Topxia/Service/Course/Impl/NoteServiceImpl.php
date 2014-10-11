@@ -82,6 +82,7 @@ class NoteServiceImpl extends BaseService implements NoteService
      */
 	public function saveNote(array $note)
 	{
+        var_dump($note);
         if (!ArrayToolkit::requireds($note, array('lessonId', 'courseId', 'content'))) {
             throw $this->createServiceException('缺少必要的字段，保存笔记失败');
         }

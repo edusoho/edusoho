@@ -73,4 +73,10 @@ interface CourseService
 	 *根据用户ID获取笔记信息(全部)
 	 */
 	public function getNoteList();
+
+	/**
+	 *
+	 *添加一条笔记
+	 */
+	public function AddNoteList();
 }
