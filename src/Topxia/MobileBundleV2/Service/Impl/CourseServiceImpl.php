@@ -624,4 +624,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             'total' => $course['lessonNum']
         );
     }
+
+    public function getNodeListByUserId(){
+    	$user = $this->controller->getUserByToken($this->request);
+    	if(!$user->isLogin()){
+    		return $this->createErrorResponse('not_login', "您尚未登录，不能评价课程！");
+    	}
+    	var_dump($user["id"]);
+    	return $user;
+
+    }
 }
