@@ -44,6 +44,10 @@ class LessonServiceImpl extends BaseService implements LessonService
 	{
 		$courseId = $this->request->get("courseId");
 		$materialId = $this->request->get("materialId");
+                        $user = $this->controller->getUserByToken($this->request);
+                        if (!$user->isLogin()) {
+                            return $this->createErrorResponse('not_login', "您尚未登录！");
+                        }
 		list($course, $member) = $this->controller->getCourseService()->tryTakeCourse($courseId);
 
         		if ($member && !$this->controller->getCourseService()->isMemberNonExpired($course, $member)) {

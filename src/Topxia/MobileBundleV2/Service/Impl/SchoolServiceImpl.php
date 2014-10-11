@@ -11,17 +11,26 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public $banner;
 
+    public function getDownloadUrl()
+    {
+        return $this->controller->render('TopxiaMobileBundleV2:Content:download.html.twig', array(
+        ));
+    }
+
     public function getClientVersion()
     {
+        $baseUrl = $this->request->getSchemeAndHttpHost();
         $result = array(
             "code"=>2,
             "androidVersion"=>"2.0.0",
             "iPhoneVersion"=>"2.0.0",
             "updateInfo"=>"更新功能!",
-            "updateUrl"=>"http://open.edusoho.com/mobile/download.php"
+            "updateUrl"=>$baseUrl . '/mapi_v2/School/getDownloadUrl';
             );
         return $result;
     }
+
+
     
     public function sendSuggestion()
     {

@@ -18,4 +18,6 @@ interface SchoolService
 	public function getShradCourseUrl();
 
 	public function getClientVersion();
+
+	public function getDownloadUrl();
 }
