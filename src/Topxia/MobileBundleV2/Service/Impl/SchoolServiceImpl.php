@@ -13,7 +13,12 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public function getClientVersion()
     {
-
+        $result = array(
+            "code"=>2,
+            "version"=>"2.0.0",
+            "updateInfo"=>"更新功能!"
+            );
+        return $result;
     }
     
     public function sendSuggestion()

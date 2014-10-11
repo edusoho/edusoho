@@ -59,6 +59,11 @@ class BaseService {
         return $this->controller->getService('User.NotificationService');
     }
 
+    protected function getTokenService()
+    {
+        return $this->controller->getService('User.TokenService');
+    }
+
     protected function getCourseOrderService()
     {
         return $this->controller->getService('Course.CourseOrderService');
