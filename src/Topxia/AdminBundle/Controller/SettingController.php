@@ -613,6 +613,26 @@ class SettingController extends BaseController
         ));
     }
 
+    public function questionsSettingAction(Request $request)
+    {
+        $questionsSetting = $this->getSettingService()->get('questions', array());
+        if (empty($questionsSetting)) {
+            $default = array(
+                'testpaper_answers_show_mode' => 'submitted',
+            );
+            $questionsSetting = $default;
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $questionsSetting = $request->request->all();
+            $this->getSettingService()->set('questions', $questionsSetting);
+            $this->getLogService()->info('system', 'questions_settings', "更新题库设置", $questionsSetting);
+            $this->setFlashMessage('success','题库设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:questions-setting.html.twig');
+    }
+
     public function adminSyncAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();

@@ -740,6 +740,24 @@ CREATE TABLE `setting` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+
+DROP TABLE IF EXISTS `status`;
+CREATE TABLE `status` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` int(10) unsigned NOT NULL COMMENT '动态发布的人',
+  `type` varchar(64) NOT NULL COMMENT '动态类型',
+  `objectType` varchar(64) NOT NULL DEFAULT '' COMMENT '动态对象的类型',
+  `objectId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '动态对象ID',
+  `message` text NOT NULL COMMENT '动态的消息体',
+  `properties` text NOT NULL COMMENT '动态的属性',
+  `commentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
+  `likeNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '被赞的数量',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '动态发布时间',
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`),
+  KEY `createdTime` (`createdTime`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `tag`;
 CREATE TABLE `tag` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '标签ID',
