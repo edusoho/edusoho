@@ -25,7 +25,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
             "androidVersion"=>"2.0.0",
             "iPhoneVersion"=>"2.0.0",
             "updateInfo"=>"更新功能!",
-            "updateUrl"=>$baseUrl . '/mapi_v2/School/getDownloadUrl';
+            "updateUrl"=>$baseUrl . '/mapi_v2/School/getDownloadUrl'
             );
         return $result;
     }
