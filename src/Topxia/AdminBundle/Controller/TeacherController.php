@@ -16,7 +16,7 @@ class TeacherController extends BaseController {
             'number'=>''
         );
 
-        if(isset($fields['truename'])){
+        if(isset($fields['search_truename'])){
             $conditions['truename']=$fields['search_truename'];
             $conditions['number']=$fields['search_number'];
         }

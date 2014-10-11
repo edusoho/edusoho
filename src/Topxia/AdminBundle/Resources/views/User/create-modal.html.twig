@@ -30,7 +30,7 @@
       <label for="email">邮箱地址</label>
     </div>
     <div class="col-md-7 controls">
-      <input type="text" id="email" data-url="{{path('admin_user_create_email_check')}}" name="email" class="form-control" >
+      <input type="text" id="email" data-required={% if type=='student' %}'false'{% else %}'true'{% endif %} data-url="{{path('admin_user_create_email_check')}}" name="email" class="form-control" >
     </div>
   </div>
 

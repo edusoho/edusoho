@@ -26,7 +26,11 @@
     {% endif %}
     <div style="padding:10px;">
       {% set classMember = classMembers[selectedChild.id]|default(null) %}
-      {{class_name(classes[classMember.classId]|default(null))}}
+      {% if classMember %}
+        {{class_name(classes[classMember.classId]|default(null))}}
+      {% else %}
+        未加入班级
+      {% endif %}
     </div>
     <div style="padding:10px;">
       学分：{{selectedChild.point}}分

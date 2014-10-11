@@ -18,7 +18,7 @@ class StudentController extends BaseController
         );
         $classStudents=array();
         $classes=array();
-        if(isset($fields['truename'])){
+        if(isset($fields['search_truename'])){
             $conditions['truename']=$fields['search_truename'];
             $conditions['number']=$fields['search_number'];
             if(!empty($fields['class_id'])){

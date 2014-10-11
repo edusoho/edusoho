@@ -105,7 +105,7 @@ class UserController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $userData['number'] = $formData['number'];
-            $userData['email'] = $formData['email'];
+            $userData['email'] = empty($formData['email'])?$formData['number'].'@example.com':$formData['email'];
             $userData['nickname'] = $formData['number'];
             $userData['truename'] = $formData['truename'];
             $userData['password'] = $formData['password'];

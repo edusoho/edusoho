@@ -41,7 +41,7 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="email"]',
-            required: true,
+            required: $("input[name='email']").data('required'),
             rule: 'email email_remote'
         });
 
