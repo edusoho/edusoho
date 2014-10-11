@@ -311,7 +311,7 @@ class LessonServiceImpl extends BaseService implements LessonService
                                             if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
 
                                                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                                                    $token = $this->controller->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
+                                                    $token = $this->getTokenService()->makeToken('hlsvideo.view', array('times' => 1, 'duration' => 3600));
                                                     $hlsKeyUrl = $this->controller->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                                                     $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, 3600);
                                                 } else {
