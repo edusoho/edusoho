@@ -64,9 +64,9 @@
         {% endif %}
 
         {% if user.locked %}
-          <li><a class="unlock-user" href="javascript:" title="解禁用户{{ user.nickname }}" data-url="{{ path('admin_user_unlock', {id:user.id }) }}">解禁用户</a></li>
+          <li><a class="unlock-user" href="javascript:" title="解禁用户{{ user.truename }}" data-url="{{ path('admin_user_unlock', {id:user.id }) }}">解禁用户</a></li>
         {% else %}
-          <li><a class="lock-user" href="javascript:" title="封禁用户{{ user.nickname }}" data-url="{{ path('admin_user_lock', {id:user.id}) }}">封禁用户</a></li>
+          <li><a class="lock-user" href="javascript:" title="封禁用户{{ user.truename }}" data-url="{{ path('admin_user_lock', {id:user.id}) }}">封禁用户</a></li>
         {% endif %}
       </ul>
     </div>
