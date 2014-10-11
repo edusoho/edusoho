@@ -83,6 +83,7 @@ class ClassScheduleController extends ClassBaseController
 
     public function scheduleAction(Request $request, $classId)
     {
+        $this->tryViewClass($classId);
         $user = $this->getCurrentUser();
         $previewAs = $request->query->get('previewAs') ? : 'week';
         $sunDay = $request->query->get('sunday');
@@ -119,7 +120,7 @@ class ClassScheduleController extends ClassBaseController
 
     public function saveAction(Request $request, $classId)
     {
-        $this->tryManageClass($classId);
+        $this->tryManageSchedule($classId);
         $lessons = $request->request->all();
         $lessonIds = $lessons['ids'] == '' ? array() : explode(',', $lessons['ids']);
         $schedules = array();
