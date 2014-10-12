@@ -19,6 +19,7 @@ $functionName();
 
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
+use Topxia\Service\CloudPlatform\KeyApplier;
 
 function check_installed()
 {
@@ -296,44 +297,28 @@ class SystemInit
 
     public function initKey()
     {
-        $url = 'http://apidev-api.edusoho.net/v1/keys';
+        $applier = new KeyApplier();
 
         $users = $this->getUserService()->searchUsers(array('roles' => 'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);
 
         if (empty($users) or empty($users[0])) {
             return array('error' => '管理员帐号不存在，创建Key失败');
         }
+        $keys = $applier->applyKey($users[0]);
 
-        $user = $users[0];
-        $profile = $this->getUserService()->getUserProfile($user['id']);
-
-        $params = array();
-
-        $params['siteName'] = $this->getSettingService()->get('site.name', 'EduSoho网络课程');
-        $params['contact'] = $profile['truename'];
-        $params['email'] = $user['email'];
-        $params['qq'] = $profile['qq'];
-        $params['mobile'] = $profile['mobile'];
-        $params['siteUrl'] = 'http://' . $_SERVER['HTTP_HOST'];
-        $params['createdIp'] = $_SERVER['SERVER_ADDR'];
-        ksort($params);
-        $params['sign'] = md5(json_encode($params));
-
-        if (isset($_SESSION["key_{$params['sign']}"])) {
-            return $_SESSION["key_{$params['sign']}"];
+        if (empty($keys['accessKey']) or empty($keys['secretKey'])) {
+            return array('error' => 'Key生成失败，请检查服务器网络后，重试！');
         }
 
-        $response = $this->postRequest($url, $params);
-        $key = json_decode($response, true);
-        if (empty($key)) {
-            return array('error' => '生成Key失败，请检查服务器的网络设置！');
-        }
+        $settings = $this->getSettingService()->get('storage', array());
 
-        if (isset($key['accessKey']) and isset($key['secretKey'])) {
-            $_SESSION["key_{$params['sign']}"] = $key;
-        }
+        $settings['cloud_access_key'] = $keys['accessKey'];
+        $settings['cloud_secret_key'] = $keys['secretKey'];
+        $settings['cloud_key_applied'] = 1;
 
-        return $key;
+        $this->getSettingService()->set('storage', $settings);
+
+        return $keys;
     }
 
 	public function initRefundSetting()
