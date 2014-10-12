@@ -62,10 +62,20 @@ class MyTeachingController extends BaseController
         }else{
             $conditions = array(
                 'courseIds' => $courseIds,
-                'type' => 'question'
+                'type' => 'question',
+                ''
             );
-            $threadCount= $this->getThreadService()->searchThreadCountInCourseIds($conditions);
+            // $threadCount= $this->getThreadService()->searchThreadCountInCourseIds($conditions);
             $threads = $this->getThreadService()->searchThreadInCourseIds($conditions,'createdNotStick',0,6);
+            $threadList=array();
+            foreach ($threads as $thread) {
+                $elitePosts=$this->getThreadService()->findThreadElitePosts($thread['courseId'], $thread['id'], 0, PHP_INT_MAX);
+                if(count($elitePosts)==0){
+                    $threadList[]=$thread;
+                }
+            }
+            $threads=$threadList;
+            $threadCount=count($threads);
             $threadUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
         }
 
