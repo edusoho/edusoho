@@ -616,14 +616,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $progress = array();
         }
 
-        foreach ($learnStatus as $key => $value) {
-        		if ($value == "finished") {
-        			unset($learnStatus[$key]);
-        		}
-        }
-        $keys = array_keys($learnStatus);
-        $lessonId = end($keys);
-        $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $lesson = $this->controller->getCourseService()->getUserNextLearnLesson($courseId, $lessonId);
         return array(
         	"data"=>$lesson,
             'progress'  => $progress
