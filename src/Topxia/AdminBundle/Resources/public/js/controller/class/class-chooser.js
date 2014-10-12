@@ -21,6 +21,7 @@ define(function(require, exports, module) {
             element.before("<span style='cursor: pointer;' class='glyphicon glyphicon-remove form-control-feedback'></span>");
             element.parent().find('.form-control-feedback').click(function(){
                 element.val('');
+                element.next().eq(0).val('');
             });
         },
 
