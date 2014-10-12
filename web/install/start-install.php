@@ -428,8 +428,9 @@ EOD;
 	    $default = array(
 	        'upload_mode'=>'local',
 	        'cloud_access_key'=>'',
-	        'cloud_bucket'=>'',
-	        'cloud_secret_key'=>''
+            'cloud_secret_key'=>'',
+	        'cloud_api_server'=>'http://api.edusoho.net',
+            'cloud_bucket'=>'',
 	    );
 
 	    $this->getSettingService()->set('storage', $default);
