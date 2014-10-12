@@ -177,12 +177,13 @@ class CloudSettingController extends BaseController
             'video_header' => null,
         );
 
-        $storageSetting = array_merge($default, $storageSetting);
         if ($request->getMethod() == 'POST') {
             $storageSetting = $request->request->all();
             $this->getSettingService()->set('storage', $storageSetting);
             $this->setFlashMessage('success', '云视频设置已保存！');
         }
+        
+        $storageSetting = array_merge($default, $storageSetting);
 
         $headLeader = array();
         if(!empty($storageSetting) && array_key_exists("video_header", $storageSetting) && $storageSetting["video_header"]){
