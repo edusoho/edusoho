@@ -1,0 +1,56 @@
+{% if info.error|default(null) %}
+
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="alert alert-danger key-error-alert">
+        授权码不正确，请重新设置！如您是商业用户，请联系EduSoho官方。
+      </div>
+    </div>
+  </div>
+
+{% else %}
+
+  {% if not info.licenseDomains|default(null) %}
+
+  <div class="form-group">
+    <label class="col-md-3 control-label">授权域名</label>
+    <div class="col-md-6">
+      <p class="form-control-static">{{ app.request.server.get('HTTP_HOST') }} <span class="text-warning">(尚未授权)</span></p>
+      <p class="help-block">域名绑定后，才能在应用中心购买应用；域名一旦绑定后，就不可更改！</p>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-3">
+      <button type="button" class="btn btn-sm btn-warning key-bind-btn" data-url="{{ path('admin_setting_cloud_key_bind') }}" data-loading-text="正在绑定域名，请稍等...">绑定授权域名</button>
+    </div>
+  </div>
+
+  {% else %}
+
+    <div class="form-group">
+      <label class="col-md-3 control-label">授权域名</label>
+      <div class="col-md-6">
+        <p class="form-control-static text-success">{{ info.licenseDomains }} <span class="text-success">(已绑定)</span></p>
+        {% if currentHost not in info.licenseDomains|split(';') %}
+          <div class="alert alert-danger">
+            当前域名{{ currentHost }} 与授权域名不符，将会影响EduSoho系统功能的使用；请使用授权域名访问此系统。
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label">套餐信息</label>
+      <div class="col-md-6">
+        <p class="form-control-static">{{ info.levelName }}</p>
+        {% if info.startDate|default(null) and info.endDate|default(null) %}
+          <p class="help-block">服务期 info.startDate 至 info.endDate</p>
+        {% endif %}
+      </div>
+    </div>
+
+  {% endif %}
+
+{% endif %}
+

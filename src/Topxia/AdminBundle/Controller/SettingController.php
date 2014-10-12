@@ -391,11 +391,9 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', '系统默认设置已保存！');
         }
 
-        $hasOwnCopyright = $this->getAppService()->checkOwnCopyrightUser($this->getCurrentUser()->id);
-        
         return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
             'defaultSetting' => $defaultSetting,
-            'hasOwnCopyright' => $hasOwnCopyright,
+            'hasOwnCopyright' => false,
         ));
     }
 

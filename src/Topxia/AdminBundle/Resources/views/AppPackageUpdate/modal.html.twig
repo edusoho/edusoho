@@ -51,7 +51,7 @@
     data-backup-db-url="{{ path('admin_app_package_update_backup_db', {id:package.id}) }}"
     data-check-download-extract-url="{{ path('admin_app_package_update_check_download_and_extract', {id:package.id}) }}"
     data-download-extract-url="{{ path('admin_app_package_update_download_and_extract', {id:package.id}) }}"
-    data-begin-upgrade-url="{{ path('admin_app_package_update_begin_upgrade', {id:package.id}) }}"
+    data-begin-upgrade-url="{{ path('admin_app_package_update_begin_upgrade', {id:package.id, type:app.request.get('type')}) }}"
   >开始{{ updateName }}</button>
 
   <strong class="text text-danger" id="updating-hint" style="display:none;">正在安装，请不要关闭当前窗口...</strong>
