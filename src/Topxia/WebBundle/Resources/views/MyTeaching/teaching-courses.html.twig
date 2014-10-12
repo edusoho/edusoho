@@ -19,7 +19,12 @@
                <ul class="media-list">
                 {% for course in courses[class.id] %}
                   <li class="media">
-                    <a class="pull-left" href="{{ path('course_show',{id:course.id}) }}">
+                    <a class="pull-left class-course-grid" href="{{ path('course_show',{id:course.id}) }}">
+                      {% if course.compulsory %}
+                        <span class="label label-success compulsory">必修</span>
+                      {% else %}
+                        <span class="label label-warning compulsory">选修</span>
+                      {% endif %}
                       <img class="media-object" href="{{ path('course_show',{id:course.id}) }}"><img  width="203" height="114" alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}">
                     </a>
                     <div class="media-body">
