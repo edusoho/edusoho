@@ -63,9 +63,10 @@ define(function(require, exports, module) {
             trigger: '#school-class-icon-upload',
             name: 'icon',
             action: $('#school-class-icon-upload').data('url'),
+            data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
             accept: 'image/*',
             error: function(file) {
-                Notify.danger('上传图片失败，请重试！')
+                Notify.danger('上传图片失败，请重试！');
             },
             success: function(response) {
                 response = $.parseJSON(response);
@@ -80,9 +81,10 @@ define(function(require, exports, module) {
             trigger: '#school-class-backgroundImg-upload',
             name: 'backgroundImg',
             action: $('#school-class-backgroundImg-upload').data('url'),
+            data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
             accept: 'image/*',
             error: function(file) {
-                Notify.danger('上传图片失败，请重试！')
+                Notify.danger('上传图片失败，请重试！');
             },
             success: function(response) {
                 response = $.parseJSON(response);
