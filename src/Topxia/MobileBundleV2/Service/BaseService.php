@@ -99,11 +99,6 @@ class BaseService {
         return $this->controller->getService('Testpaper.TestpaperService');
     }
 
-    protected function getQuestionService()
-    {
-        return $this->controller->getService('Question.QuestionService');
-    }
-
     public function createErrorResponse($name, $message) {
         $error = array(
             'error' => array(
