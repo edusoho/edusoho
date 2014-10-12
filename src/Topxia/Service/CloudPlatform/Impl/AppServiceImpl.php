@@ -95,19 +95,9 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->createAppClient()->getMessages();
     }
 
-    public function checkAppCop()
-    {
-        return $this->createAppClient()->checkAppCop();
-    }
-
     public function findLogs($start, $limit)
     {
         return $this->getAppLogDao()->findLogs($start, $limit);
-    }
-
-    public function checkOwnCopyrightUser($id)
-    {
-        return $this->createAppClient()->checkOwnCopyrightUser($id);
     }
 
     public function findLogCount()

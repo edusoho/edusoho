@@ -14,6 +14,9 @@ use Topxia\Common\Paginator;
 use Topxia\Service\Util\PluginUtil;
 use Topxia\Service\Util\CloudClientFactory;
 
+use Topxia\Service\CloudPlatform\KeyApplier;
+use Topxia\Service\CloudPlatform\Client\CloudAPI;
+
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
@@ -21,16 +24,149 @@ use Imagine\Image\ImageInterface;
 
 class CloudSettingController extends BaseController
 {
+    public function keyAction(Request $request)
+    {
+        $settings = $this->getSettingService()->get('storage', array());
 
-    public function indexAction(Request $request)
+        if (empty($settings['cloud_access_key']) or empty($settings['cloud_secret_key'])) {
+            return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
+        }
+        return $this->render('TopxiaAdminBundle:CloudSetting:key.html.twig', array(
+        ));
+    }
+
+    public function keyInfoAction(Request $request)
+    {
+        $api = $this->createAPIClient();
+        $info = $api->get('/me');
+
+        if (!empty($info['accessKey'])) {
+            $settings = $this->getSettingService()->get('storage', array());
+            if (empty($settings['cloud_key_applied'])) {
+                $settings['cloud_key_applied'] = 1;
+                $this->getSettingService()->set('storage', $settings);
+            }
+        } else {
+            $settings = $this->getSettingService()->get('storage', array());
+            $settings['cloud_key_applied'] = 0;
+            $this->getSettingService()->set('storage', $settings);
+        }
+
+        $currentHost = $request->server->get('HTTP_HOST');
+
+        return $this->render('TopxiaAdminBundle:CloudSetting:key-license-info.html.twig', array(
+            'info' => $info,
+            'currentHost' => $currentHost,
+            'isLocalAddress' => $this->isLocalAddress($currentHost),
+        ));
+    }
+
+    public function keyResetAction(Request $request)
+    {
+        $api = $this->createAPIClient();
+        $currentHost = $request->server->get('HTTP_HOST');
+        $result = $api->put('/me/secret-key');
+        if (!empty($result['secretKey'])) {
+            $settings = $this->getSettingService()->get('storage', array());
+            $settings['cloud_secret_key'] = $result['secretKey'];
+            $settings['cloud_key_applied'] = 1;
+            $this->getSettingService()->set('storage', $settings);
+            $this->setFlashMessage('success', 'SecretKey重置成功！');
+        } else {
+            $this->setFlashMessage('danger', 'SecretKey重置失败，请重试！');
+        }
+
+        return $this->createJsonResponse($result);
+    }
+
+    public function keyBindAction(Request $request)
+    {
+        $api = $this->createAPIClient();
+        $currentHost = $request->server->get('HTTP_HOST');
+        $result = $api->post('/me/license-domain', array('domain' => $currentHost));
+
+        if (!empty($result['licenseDomains'])) {
+            $this->setFlashMessage('success', '授权域名绑定成功！');
+        } else {
+            $this->setFlashMessage('danger', '授权域名绑定失败，请重试！');
+        }
+
+        return $this->createJsonResponse($result);
+    }
+
+
+    
+    public function keyUpdateAction(Request $request)
+    {
+        $settings = $this->getSettingService()->get('storage', array());
+
+        if ($request->getMethod() == 'POST') {
+            $options = $request->request->all();
+
+            if (!empty($settings['cloud_api_server'])) {
+                $options['apiUrl'] = $settings['cloud_api_server'];
+            }
+
+            $api = new CloudAPI($options);
+
+            $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
+
+            if (isset($result['error'])) {
+                $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！');
+                goto render;
+            }
+
+            $settings['cloud_access_key'] = $options['accessKey'];
+            $settings['cloud_secret_key'] = $options['secretKey'];
+            $settings['cloud_key_applied'] = 1;
+
+            $this->getSettingService()->set('storage', $settings);
+
+            $this->setFlashMessage('success', '授权码保存成功！');
+            return $this->redirect($this->generateUrl('admin_setting_cloud_key'));
+        }
+
+        render:
+        return $this->render('TopxiaAdminBundle:CloudSetting:key-update.html.twig', array(
+        ));
+    }
+
+    public function keyApplyAction(Request $request)
+    {
+        $applier = new KeyApplier();
+        $keys = $applier->applyKey($this->getCurrentUser());
+
+        if (empty($keys['accessKey']) or empty($keys['secretKey'])) {
+            return $this->createJsonResponse(array('error' => 'Key生成失败，请检查服务器网络后，重试！'));
+        }
+
+        $settings = $this->getSettingService()->get('storage', array());
+
+        $settings['cloud_access_key'] = $keys['accessKey'];
+        $settings['cloud_secret_key'] = $keys['secretKey'];
+        $settings['cloud_key_applied'] = 1;
+
+        $this->getSettingService()->set('storage', $settings);
+
+        return $this->createJsonResponse(array('status' => 'ok'));
+    }
+
+    private function createAPIClient()
+    {
+        $settings = $this->getSettingService()->get('storage', array());
+        return new CloudAPI(array(
+            'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
+            'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
+            'apiUrl' => empty($settings['cloud_api_server']) ? '' : $settings['cloud_api_server'],
+        ));
+    }
+
+    public function videoAction(Request $request)
     {
         $storageSetting = $this->getSettingService()->get('storage', array());
         $default = array(
             'upload_mode' => 'local',
-            'cloud_access_key' => '',
-            'cloud_secret_key' => '',
             'cloud_bucket' => '',
-            'cloud_api_server' => '',
             'video_quality' => 'low',
             'video_audio_quality' => 'low',
             'video_watermark' => 0,
@@ -45,32 +181,7 @@ class CloudSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $storageSetting = $request->request->all();
             $this->getSettingService()->set('storage', $storageSetting);
-
-            if (!empty($storageSetting['cloud_access_key']) or !empty($storageSetting['cloud_secret_key'])) {
-                if (!empty($storageSetting['cloud_access_key']) and !empty($storageSetting['cloud_secret_key'])) {
-                    $factory = new CloudClientFactory();
-                    $client = $factory->createClient($storageSetting);
-                    $keyCheckResult = $client->checkKey();
-                } else {
-                    $keyCheckResult = array('error' => 'error');
-                }
-            } else {
-                $keyCheckResult = array('status' => 'ok');
-            }
-
-            $cop = $this->getAppService()->checkAppCop();
-            if ($cop && isset($cop['cop']) && ($cop['cop'] == 1)) {
-                $this->getSettingService()->set('_app_cop', 1);
-            } else {
-                $this->getSettingService()->set('_app_cop', 0);
-            }
-            PluginUtil::refresh();
-            $this->getLogService()->info('system', 'update_settings', "更新云平台设置", $storageSetting);
-            if (!empty($keyCheckResult['status']) && $keyCheckResult['status'] == 'ok') {
-                $this->setFlashMessage('success', '云平台设置已保存！');
-            } else {
-                $this->setFlashMessage('danger', 'AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，请修改设置。');
-            }
+            $this->setFlashMessage('success', '云视频设置已保存！');
         }
 
         $headLeader = array();
@@ -78,7 +189,7 @@ class CloudSettingController extends BaseController
             $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
         }
 
-        return $this->render('TopxiaAdminBundle:CloudSetting:index.html.twig', array(
+        return $this->render('TopxiaAdminBundle:CloudSetting:video.html.twig', array(
             'storageSetting'=>$storageSetting,
             'headLeader'=>$headLeader
         ));
@@ -150,6 +261,23 @@ class CloudSettingController extends BaseController
     public function videoWatermarkRemoveAction(Request $request)
     {
         return $this->createJsonResponse(true);
+    }
+
+    private function isLocalAddress($address)
+    {
+        if (in_array($address, array('localhost', '127.0.0.1'))) {
+            return true;
+        }
+
+        if (strpos($address, '192.168.') === 0) {
+            return true;
+        }
+
+        if (strpos($address, '10.') === 0) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getSettingService()
