@@ -116,7 +116,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         return $this->getCourseByType("latest", $conditions);
     }
 
-    private function getCourseByType($sort,  $conditions))
+    private function getCourseByType($sort,  $conditions)
     {
         $start = (int) $this->getParam("start", 0);
         $limit = (int) $this->getParam("limit", 10);
