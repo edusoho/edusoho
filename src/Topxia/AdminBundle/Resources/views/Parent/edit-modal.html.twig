@@ -18,6 +18,15 @@
 
   <div class="row form-group">
     <div class="col-md-2 control-label">
+      <label for="email">邮箱地址</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="email" data-url="{{path('admin_user_create_email_check',{id:user.id})}}" value="{{user.email}}" name="email" class="form-control" >
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
       <label for="gender">性别</label>
     </div>
     <div class="col-md-7 controls radios">

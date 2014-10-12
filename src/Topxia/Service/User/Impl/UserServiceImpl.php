@@ -131,6 +131,11 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changeEmail($userId, $email)
     {
+        $user=$this->getUser($userId);
+        if(empty($user)){
+            throw $this->createServiceException('修改的用户不存在。');
+        }
+        $email=empty($email)?$user['number'].'@exmple.com':$email;
         if (!SimpleValidator::email($email)) {
             throw $this->createServiceException('Email格式不正确，变更Email失败。');
         }
@@ -154,6 +159,7 @@ class UserServiceImpl extends BaseService implements UserService
         $mobile=empty($mobile)?null:$mobile;
         $user=$this->getUserByMobile($mobile);
         if(empty($user) || (!empty($userId) && $userId==$user['id'])){
+            var_dump(!empty($mobile));
             if (!empty($mobile) && !SimpleValidator::mobile($mobile)) {
                 throw $this->createServiceException('手机号码格式不正确，变更手机号码失败。');
             }

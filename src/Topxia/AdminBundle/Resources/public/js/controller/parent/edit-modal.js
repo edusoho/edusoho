@@ -87,6 +87,11 @@ define(function(require, exports, module) {
         }
         
         validator.addItem({
+            element: '[name="email"]',
+            rule: 'email email_remote'
+        });
+
+        validator.addItem({
             element: '[name="truename"]',
             rule: 'chinese minlength{min:2} maxlength{max:5}'
         });

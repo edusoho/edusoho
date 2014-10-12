@@ -101,7 +101,8 @@ class ParentController extends BaseController
             $profile = $this->getUserService()->updateUserProfile($user['id'], $fields);
             $this->getUserService()->changeTrueName($user['id'],$fields['truename']);
             $this->getUserService()->changeMobile($user['id'],$fields['mobile']);
-
+            $this->getUserService()->changeEmail($user['id'],$fields['email']);
+            
             $this->getUserService()->deleteUserRelationsByFromIdAndType($id,'family');
             foreach ($fields['numbers'] as $number) {
                 $child=$this->getUserService()->getUserByNumber($number);

@@ -53,13 +53,27 @@ class UserController extends BaseController
     {
         $email = $request->query->get('value');
         $email = str_replace('!', '.', $email);
-        list($result, $message) = $this->getAuthService()->checkEmail($email);
-        if ($result == 'success') {
+        //list($result, $message) = $this->getAuthService()->checkEmail($email);
+        $user=$this->getUserService()->getUserByEmail($email);
+        $userId = $request->query->get('id');
+        if (empty($user) || (!empty($userId) && $userId==$user['id'])) {
             $response = array('success' => true, 'message' => '该Email地址可以使用');
         } else {
-            $response = array('success' => false, 'message' => $message);
+            $response = array('success' => false, 'message' => 'email已存在!');
         }
         return $this->createJsonResponse($response);
+
+
+
+        // $mobile = $request->query->get('value');
+        // $userId = $request->query->get('id');
+        // $user=$this->getUserService()->getUserByMobile($mobile);
+        // if(empty($user) || (!empty($userId) && $userId==$user['id'])){
+        //     $response = array('success' => true, 'message' => '该手机号可以使用');
+        // }else {
+        //     $response = array('success' => false, 'message' => '手机号已存在!');
+        // }
+        // return $this->createJsonResponse($response);
     }
 
     /**已废弃*/
@@ -138,6 +152,7 @@ class UserController extends BaseController
             $profile = $this->getUserService()->updateUserProfile($user['id'], $fields);
             $this->getUserService()->changeTrueName($user['id'],$fields['truename']);
             $this->getUserService()->changeMobile($user['id'],$fields['mobile']);
+            $this->getUserService()->changeEmail($user['id'],$fields['email']);
             $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
             return $this->redirect($this->generateUrl('settings'));
         }
