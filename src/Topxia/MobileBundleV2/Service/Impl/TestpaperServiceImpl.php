@@ -128,7 +128,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	private function filterMyTestpaperResults($testpaperResults)
 	{
 		return array_map(function($testpaperResult){
-			$testpaperResult['beginTime'] = date('c', $testpaperResult['beginTime']);
+			$testpaperResult['beginTime'] = date('Y-m-d H:i:s', $testpaperResult['beginTime']);
 			return $testpaperResult;
 		}, $testpaperResults);
 	}
