@@ -231,6 +231,31 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 	            return true;
 	}
 
+	public function showTestpaper()
+	{
+		$id = $this->getParam("id");
+		$user = $this->controller->getUserByToken($this->request);
+                        if (!$user->isLogin()) {
+                            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+                        }
+
+                        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
+                        if (!$testpaperResult) {
+                            return $this->createErrorResponse('error', '试卷不存在');
+                        }
+
+                        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+
+        		$result = $this->getTestpaperService()->showTestpaper($id);
+        		$items = $result['formatItems'];
+
+        		return array(
+            		    'testpaperResult'=>$testpaperResult,
+	                            'testpaper'=>$testpaper,
+	                            'items'=>$this->getTestpaperItem($testpaperResult)
+	                            );
+	}
+
 	public function doTestpaper()
 	{
 		$testId = $this->getParam("testId");
