@@ -1,13 +1,36 @@
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">班级课程</h3>
-    {% if app.user.isAdmin or app.user.isTeacher %}
-    <span class="mode" data-url="{{ path('class_schedule_mode',{classId:classId, editable:true}) }}">
-      <button class="btn btn-link">编辑模式</button>
+  <div class="panel-heading hidden editable-heading">
+    <h3 class="panel-title">课表备选课程</h3>
+    <span class="mode editable">
+      <button class="btn btn-link">返回</button>
     </span>
-    {% endif %}
   </div>
-  <div class="panel-body schedule-course">
+  
+  <div class="panel-heading normal-heading">  
+      <h3 class="panel-title">班级课程</h3>
+      <span class="mode normal">
+      {% if app.user.isAdmin or app.user.isTeacher %}
+        <button class="btn btn-link">编辑模式</button> 
+      {% endif %}  
+      </span>
+  </div>
+  <div class="panel-body hidden editable-body">
+     <span class="text-muted text-sm">把课时拖动到左侧相应的日期中以完成编辑</span>
+       <ul class="course-list">
+        {% set Editablecourses = teachCourses == null ? courses : teachCourses%}
+          {% for course in Editablecourses %}
+           <li>
+             <span class="glyphicon glyphicon-plus-sign text-info mrs"></span>
+             <span class="title" title="{{ course.title }}">{{ course.title }}</span>
+             {{ render(controller('TopxiaWebBundle:ClassSchedule:getItems', {courseId:course.id})) }}
+           </li>
+         {% else %}
+         <li class="empty">班级暂无课程，请先设置本班的课程</li>
+         {% endfor %}
+       </ul>
+  </div>
+
+  <div class="panel-body schedule-course normal-body">
     <ul class="media-list">
       {% for course in courses %}
       {% set teacher = users[course.teacherIds[0]|default(0)]|default(null) %}
@@ -37,4 +60,6 @@
         {% endfor %}
     </ul>
   </div>
+
 </div>
+

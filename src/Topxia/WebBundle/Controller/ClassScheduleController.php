@@ -38,33 +38,20 @@ class ClassScheduleController extends ClassBaseController
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
-        $editable = $request->query->get('editable');
-        if($editable) {
-           if($user->isAdmin()) {
-               return $this->render('TopxiaWebBundle:ClassSchedule:courses-editable.html.twig', array(
-                   'courses' => $courses,
-                   'users' => $users,
-                   'classId' => $class['id'],
-                   ));
+        
+        $teachCourses = array();
+        if($user->isTeacher()) {
+           foreach ($courses as $course) {
+               if(in_array($user['id'], $course['teacherIds'])) {
+                   $teachCourses[] = $course;
+               }
            }
 
-           if($user->isTeacher()) {
-               $newCourses = array();
-               foreach ($courses as $course) {
-                   if(in_array($user['id'], $course['teacherIds'])) {
-                       $newCourses[] = $course;
-                   }
-               }
-               return $this->render('TopxiaWebBundle:ClassSchedule:courses-editable.html.twig', array(
-                   'courses' => $newCourses,
-                   'users' => $users,
-                   'classId' => $class['id'],
-                   ));
-           } 
-        }
+        } 
         
         return $this->render('TopxiaWebBundle:ClassSchedule:courses.html.twig', array(
             'courses' => $courses,
+            'teachCourses' => $teachCourses,
             'users' => $users,
             'classId' => $class['id'],
             ));
