@@ -198,7 +198,7 @@ define(function(require, exports, module) {
         reset: function(data) {
             var self = this;
             $.ajax({
-                url: this.get('resetUrl'),
+                url: self.get('resetUrl'),
                 data: data,
                 success: function(html) {
                     self.element.find('.schedule-body').html('').append(html);
