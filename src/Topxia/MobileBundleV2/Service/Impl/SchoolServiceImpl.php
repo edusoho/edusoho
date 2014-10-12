@@ -99,23 +99,28 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public function getRecommendCourses()
     {
-        return $this->getCourseByType("recommendedSeq");
+        $conditions = array(
+            'status' => 'published',
+            'type' => 'normal',
+            "recommendedSeq"=>1
+        );
+        return $this->getCourseByType("recommendedSeq", $conditions);
     }
 
     public function getLatestCourses()
     {
-        return $this->getCourseByType("latest");
+        $conditions = array(
+            'status' => 'published',
+            'type' => 'normal'
+        );
+        return $this->getCourseByType("latest", $conditions));
     }
 
-    private function getCourseByType($sort)
+    private function getCourseByType($sort,  $conditions))
     {
         $start = (int) $this->getParam("start", 0);
         $limit = (int) $this->getParam("limit", 10);
 
-        $conditions = array(
-            'status' => 'published',
-            'type' => 'normal',
-        );
         $total  = $this->getCourseService()->searchCourseCount($conditions);
         $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start,  $limit);
         $result = array(
