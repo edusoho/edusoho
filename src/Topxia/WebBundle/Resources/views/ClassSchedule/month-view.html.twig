@@ -29,19 +29,30 @@
                     <div class='hidden popover-content'>
                     <ul class='media-list'>
                       {% for schedule in schedules[day] %}
-                      {% set lesson = lessons[schedule.lessonId] %}
-                      {% set course = courses[lesson.courseId]%}
-                      {% set teacher = teachers[course.teacherIds[0]] %}
-                      {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id%}
-                        <li class='media'>
-                          <a class="pull-left" href="{{ lessonUrl }}" target="_blank">
-                            <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="">
-                          </a>
-                          <div class="media-body" title="{{ lesson.title }}">
-                            <h4 class="media-heading">{{ lesson.title }}</h4>
-                            <span class="teacher-name">{{ teacher.truename}}</span>
-                          </div>
-                        </li>
+                        {% if lessons[schedule.lessonId]|default(null) %}
+                          {% set lesson = lessons[schedule.lessonId] %}
+                          {% set course = courses[lesson.courseId]%}
+                          {% set teacher = teachers[course.teacherIds[0]] %}
+                          {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id%}
+                            <li class='media'>
+                              <a class="pull-left" href="{{ lessonUrl }}" target="_blank">
+                                <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="">
+                              </a>
+                              <div class="media-body" title="{{ lesson.title }}">
+                                <h4 class="media-heading">{{ lesson.title }}</h4>
+                                <span class="teacher-name">{{ teacher.truename}}</span>
+                              </div>
+                            </li>
+                        {% else %}
+                          <li class='media'>
+                              <a class="pull-left" href="#" target="_blank">
+                                <img class="media-object" src="{{ file_path('', 'course-large.png') }}" alt="">
+                              </a>
+                              <div class="media-body" title="课时已删除!">
+                                <h4 class="media-heading text-danger">课时已删除!</h4>
+                              </div>
+                            </li>
+                        {% endif %}  
                       {% endfor %}
                     </ul>
                   </div>

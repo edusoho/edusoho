@@ -24,23 +24,38 @@
               <td>
                 <ul class="schedule-lesson-list" data-day="{{ day }}">
                   {% for item in items %}
-                    {% set lessonLearn = lessonLearns[item.lessonId] | default(null)%}
-                    {% set lessonUrl = path('course_learn', {id:courses[lessons[item.lessonId].courseId].id}) ~ '#lesson/' ~ item.lessonId%}
-                      <li data-id="{{ item.lessonId }}" data-url="{{ lessonUrl }}">
-                        <div class="thumbnail">
-                          {% if can_remove_schedule(app.user, courses, lessons, item) %}
-                            <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                          {% endif %}
-                          <a href="{{ lessonUrl }}" target="_blank">
-                            {% if lessonLearn and lessonLearn.status == 'finished' %}
-                              <span class="finished-icon"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                    {% if lessons[item.lessonId]|default(null) %}
+                      {% set lessonLearn = lessonLearns[item.lessonId] | default(null) %}
+                      {% set lessonUrl = path('course_learn', {id:courses[lessons[item.lessonId].courseId].id}) ~ '#lesson/' ~ item.lessonId %}
+
+                        <li data-id="{{ item.lessonId }}" data-url="{{ lessonUrl }}">
+                          <div class="thumbnail">
+                            {% if can_remove_schedule(app.user, courses, lessons, item) %}
+                              <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
                             {% endif %}
-                            <img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ></a>
-                          <div class="caption" title="{{ lessons[item.lessonId].title}}">
-                            {{ lessons[item.lessonId].title}}
+                            <a href="{{ lessonUrl }}" target="_blank">
+                              {% if lessonLearn and lessonLearn.status == 'finished' %}
+                                <span class="finished-icon"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                              {% endif %}
+                              <img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ></a>
+                            <div class="caption" title="{{ lessons[item.lessonId].title}}">
+                              {{ lessons[item.lessonId].title}}
+                            </div>
                           </div>
-                        </div>
-                      </li>
+                        </li>
+
+                      {% else %}
+                        <li>
+                          <div class="thumbnail">
+                            <a href="#">
+                              <img src="{{ file_path('', 'course-large.png') }}">
+                            </a>
+                            <div class="caption" title="课时已删除!">
+                              <span class="text-danger">课时已删除!</span>
+                            </div>
+                          </div>
+                        </li>
+                    {% endif %}
                   {% endfor %}
                 </ul>
               </td>
