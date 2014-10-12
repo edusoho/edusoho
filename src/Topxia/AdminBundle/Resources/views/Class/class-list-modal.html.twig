@@ -5,36 +5,36 @@
 {% block body %}
 
 
-	{% for school in schools %}
-		<div class="row">
-			<p class="text-left">{{school.name}}</p>
-		</div>
-		{% set grades = school.grades|default(null) %}
-		{% for key, value in grades %}
-			<div class="row" style="margin-top:10px">
-			  <div class="col-md-1">
-			  	<p class="text-right">{{ value }}</p>
-			  </div>
-			  {% set classes = classList[key]|default(null) %}
-				{% for class in classes %}
-					<div class="col-md-2 {% if loop.index%6==0 %}col-md-offset-1{% endif %}" style="margin-bottom:5px">
-						<button type="button" class="btn btn-sm btn-default btn-block class-item" data-id="{{class.id}}" data-name="{{class.name}}" autocomplete="off" >
-							{{class.name}}
-						</button>
-					</div>
-				{% else %}
-				{% endfor %}
-			</div>
-		{% endfor %}
-	{% else %}
-	{% endfor %}
+  {% for school in schools %}
+    <div class="row">
+      <p class="text-left">{{school.name}}</p>
+    </div>
+    {% set grades = school.grades|default(null) %}
+    {% for key, value in grades %}
+      <div class="row" style="margin-top:10px">
+        <div class="col-md-1">
+          <p class="text-right">{{ value }}</p>
+        </div>
+        {% set classes = classList[key]|default(null) %}
+        {% for class in classes %}
+          <div class="col-md-2 {% if loop.index%6==0 %}col-md-offset-1{% endif %}" style="margin-bottom:5px">
+            <button type="button" class="btn btn-sm btn-default btn-block class-item" data-id="{{class.id}}" data-name="{{class.name}}" autocomplete="off" >
+              {{class.name}}
+            </button>
+          </div>
+        {% else %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  {% else %}
+  {% endfor %}
 
 
 
 {% endblock %}
 {% block footer %}
-	<div class="chooser-footer">
-		<button id="class-select-btn" type="submit" class="btn btn-primary pull-right class-select-btn">确认</button>
-	  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-	</div>
+  <div class="chooser-footer">
+    <button id="class-select-btn" type="submit" class="btn btn-primary pull-right class-select-btn">确认</button>
+    <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  </div>
 {% endblock %}
