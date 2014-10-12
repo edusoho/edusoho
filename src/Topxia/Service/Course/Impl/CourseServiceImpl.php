@@ -188,6 +188,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 			unset($conditions['categoryId']);
 		}
 
+		if(isset($conditions['nickname'])){
+			$user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+			$conditions['userId'] = $user ? $user['id'] : -1;
+			unset($conditions['nickname']);
+		}
+		
 		return $conditions;
 	}
 
@@ -1397,7 +1403,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 	 * Member API
 	 */
 	public function searchMemberCount($conditions)
-	{
+	{	
+		$conditions = $this->_prepareCourseConditions($conditions);
 		return $this->getMemberDao()->searchMemberCount($conditions);
 	}
 
@@ -1580,6 +1587,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("用户(#{$userId})已加入该课程！");
 		}
 
+		$levelChecked = '';
 		if (!empty($info['becomeUseMember'])) {
 			$levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
 			if ($levelChecked != 'ok') {
@@ -1600,7 +1608,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		} else {
 			$deadline = 0;
 			//如果处在限免期，则deadline为限免结束时间 减 当前时间
-			if($course['freeStartTime'] <= time() && $course['freeEndTime'] > time()){
+			if($course['freeStartTime'] <= time() && $course['freeEndTime'] > time() && $levelChecked != 'ok'){
 				$deadline = $course['freeEndTime'];
 			}
 		}
@@ -2019,6 +2027,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	
 	public function generateLessonReplay($courseId,$lessonId)
 	{
+		$course = $this->tryManageCourse($courseId);
 		$lesson = $this->getLessonDao()->getLesson($lessonId);
 		$mediaId = $lesson["mediaId"];
 		$client = LiveClientFactory::createClient();
@@ -2047,6 +2056,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function entryReplay($lessonId, $courseLessonReplayId)
 	{
 		$lesson = $this->getLessonDao()->getLesson($lessonId);
+		list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
 		$mediaId = $lesson["mediaId"];
 		$client = LiveClientFactory::createClient();
 		$email = $this->getCurrentUser()->email;

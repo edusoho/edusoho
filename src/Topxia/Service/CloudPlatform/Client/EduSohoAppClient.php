@@ -35,22 +35,16 @@ class EduSohoAppClient implements AppClient
         return $this->callRemoteApi('GET', 'GetApps', $args);
     }
 
+    public function getMessages()
+    {
+        $args = array();
+        return $this->callRemoteApi('GET', 'GetMessages', $args);
+    }
+
     public function checkUpgradePackages($apps, $extInfos)
     {
         $args = array('apps' => $apps, 'extInfo' => $extInfos);
         return $this->callRemoteApi('POST', 'CheckUpgradePackages', $args);
-    }
-
-    public function checkAppCop()
-    {
-        $args = array('cop' => '1');
-        return $this->callRemoteApi('POST', 'CheckAppCop', $args);
-    }
-
-    public function checkOwnCopyrightUser($id)
-    {
-        $args = array('id' => $id);
-        return $this->callRemoteApi('POST', 'CheckOwnCopyrightUser', $args);
     }
 
     public function submitRunLog($log)
@@ -115,7 +109,6 @@ class EduSohoAppClient implements AppClient
 
     private function download($url)
     {
-        // var_dump($url);
         $filename = md5($url) . '_' . time();
         $filepath = $this->tmpDir . DIRECTORY_SEPARATOR . $filename;
 

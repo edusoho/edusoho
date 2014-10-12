@@ -9,7 +9,7 @@
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading">学员管理
-    {% if app.user.isAdmin() or setting('course').teacher_export_student=='1' %}
+    {% if app.user.isAdmin() or setting('course.teacher_export_student', false) %}
       <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('course_manage_student_export_csv', {id:course.id}) }}"><i class="glyphicon glyphicon-export"></i> 导出学员</a>
     {% endif %}
     {% if app.user.isAdmin() or isTeacherAuthManageStudent == 1 %}
@@ -19,6 +19,17 @@
   </div>
   
   <div class="panel-body">  
+      <form class="form-inline well well-sm " action="" method="get" novalidate>
+
+        <div class="form-group">
+          <input class="form-control " type="text" placeholder="请输入用户名" name="nickName" value="{{ app.request.get('nickName') }}">
+
+          <button class="btn btn-primary">搜索</button>
+        </div>
+        <div class="clearfix"></div>
+        
+
+    </form>
     <table class="table table-striped" id="course-student-list">
       <thead>
         <tr>

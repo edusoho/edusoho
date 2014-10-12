@@ -6,9 +6,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class KindeditorController extends BaseController
 {
-
 	public function uploadAction(Request $request)
 	{
+        if (!$this->getCurrentUser()->isLogin()) {
+            throw $this->createAccessDeniedException('你尚未登录，不能上传图片');
+        }
 
 		try {
 			$group = $request->request->get('group');

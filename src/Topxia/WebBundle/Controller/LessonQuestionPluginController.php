@@ -10,8 +10,8 @@ class LessonQuestionPluginController extends BaseController
 
     public function initAction (Request $request)
     {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($request->query->get('courseId'));
 
-        $course = $this->getCourseService()->getCourse($request->query->get('courseId'));
         $lesson = array(
             'id' => $request->query->get('lessonId'),
             'courseId' => $course['id'],
@@ -44,7 +44,8 @@ class LessonQuestionPluginController extends BaseController
 
     public function listAction(Request $request)
     {
-        $course = $this->getCourseService()->getCourse($request->query->get('courseId'));
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($request->query->get('courseId'));
+
         $lesson = array(
             'id' => $request->query->get('lessonId'),
             'courseId' => $course['id'],
@@ -67,8 +68,7 @@ class LessonQuestionPluginController extends BaseController
 
     public function showAction(Request $request)
     {
-
-        $course = $this->getCourseService()->getCourse($request->query->get('courseId'));
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($request->query->get('courseId'));
 
         $thread = $this->getThreadService()->getThread(
             $course['id'],

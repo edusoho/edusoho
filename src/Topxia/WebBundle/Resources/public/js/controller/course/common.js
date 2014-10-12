@@ -1,13 +1,12 @@
 define(function(require, exports, module) {
 
-    var SocialShare = require('common/social-share');
-
+    var Share=require('../../util/share.js');
     exports.run = function() {
-        var social = new SocialShare(app.config.api);
 
-        $('.js-social-shares').on('click', '[data-share]', function() {
-            var $this = $(this);
-            social.share($this.data('share'), $($this.data('params')).data());
+        Share.create({
+                selector: '.share',
+                icons: 'itemsAll',
+                display: ''
         });
 
         $('.course-exit-btn').on('click', function(){

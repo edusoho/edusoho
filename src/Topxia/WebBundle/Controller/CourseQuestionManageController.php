@@ -181,7 +181,7 @@ class CourseQuestionManageController extends BaseController
 
     public function uploadFileAction (Request $request, $courseId, $type)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
 
         if ($request->getMethod() == 'POST') {
             $originalFile = $this->get('request')->files->get('file');

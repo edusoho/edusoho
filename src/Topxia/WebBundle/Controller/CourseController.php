@@ -207,8 +207,24 @@ class CourseController extends BaseController
 	 * 如果用户未购买该课程，那么显示课程的营销界面。
 	 */
 	public function showAction(Request $request, $id)
-	{
+	{	
+
 		$course = $this->getCourseService()->getCourse($id);
+
+        $defaultSetting = $this->getSettingService()->get('default', array());
+
+        if (isset($defaultSetting['courseShareContent'])){
+            $courseShareContent = $defaultSetting['courseShareContent'];
+        } else {
+        	$courseShareContent = "";
+        }
+
+        $valuesToBeReplace = array('{{course}}');
+        $valuesToReplace = array($course['title']);
+        $courseShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $courseShareContent);
+
+
+
 		$nextLiveLesson = null;
 
 		$weeks = array("日","一","二","三","四","五","六");
@@ -315,6 +331,7 @@ class CourseController extends BaseController
 			'currentTime' => $currentTime,
 			'courseReviews' => $courseReviews,
 			'weeks' => $weeks,
+			'courseShareContent'=>$courseShareContent,
 			'consultDisplay' => true,
 		));
 

@@ -8,13 +8,14 @@
             <span class="label  label-warning course-status">未发布</span>
           {% elseif course.status == 'closed' %}
             <span class="label label-danger course-status">已关闭</span>
-          {% endif %} 
-          {% if course.serializeMode=='serialize' %}
-            <span class="label label-success series-mode-label">更新中</span>
-          {% elseif course.serializeMode=='finished' %}
-            <span class="label label-warning series-mode-label">已完结</span>
           {% endif %}
-
+          {% if course.status != 'closed' %} 
+            {% if course.serializeMode=='serialize' %}
+              <span class="label label-success series-mode-label">更新中</span>
+            {% elseif course.serializeMode=='finished' %}
+              <span class="label label-warning series-mode-label">已完结</span>
+            {% endif %}
+          {% endif %}
           {% if course.type == 'live' %}
             {% set lesson = course['lesson']|default(null) %}
             {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}

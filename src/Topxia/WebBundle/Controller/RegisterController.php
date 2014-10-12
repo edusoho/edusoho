@@ -35,6 +35,10 @@ class RegisterController extends BaseController
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
             }
 
+            $mailerSetting=$this->getSettingService()->get('mailer');
+            if(!$mailerSetting['enabled']){
+                return $this->redirect($this->generateUrl('homepage'));
+            }
             return $this->redirect($goto);
             
         }

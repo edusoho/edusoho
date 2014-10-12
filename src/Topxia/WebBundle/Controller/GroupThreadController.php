@@ -65,22 +65,27 @@ class GroupThreadController extends BaseController
         }
 
         $thread=$this->getThreadService()->getThread($threadId);
-        if($thread['userId']!==$user['id'] && $this->getGroupMemberRole($id)!==3 && $this->getGroupMemberRole($id)!==2 && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true){
+
+        if(!$this->checkManagePermission($id,$thread)){
             return $this->createMessageResponse('info','您没有权限编辑');
         }
 
         $thread=$this->getThreadService()->getThread($threadId);
 
         if($request->getMethod()=="POST"){
-        $thread = $request->request->all();
-        $fields=array(
+            $thread = $request->request->all();
+            $fields=array(
                 'title'=>$thread['thread']['title'],
                 'content'=>$thread['thread']['content'],);
-        $thread=$this->getThreadService()->updateThread($threadId,$fields);
+            $thread=$this->getThreadService()->updateThread($threadId,$fields);
+            if ($user->isAdmin()) {
+                $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$id,'threadId'=>$thread['id']), true);
+                $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员编辑。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
+            }
             
-        return $this->redirect($this->generateUrl('group_thread_show', array(
-            'id'=>$id,
-            'threadId'=>$threadId,
+            return $this->redirect($this->generateUrl('group_thread_show', array(
+                'id'=>$id,
+                'threadId'=>$threadId,
             )));
             
         }
@@ -89,7 +94,7 @@ class GroupThreadController extends BaseController
             'id'=>$id,
             'groupinfo'=>$groupinfo,
             'thread'=>$thread,
-            'is_groupmember' => $this->getGroupMemberRole($id)));
+            'is_groupmember' => $this->getGroupMemberRole($id)));  
     }
 
     public function checkUserAction(Request $request)
@@ -111,7 +116,6 @@ class GroupThreadController extends BaseController
     public function groupThreadIndexAction(Request $request,$id,$threadId)
     {  
         $group = $this->getGroupService()->getGroup($id);
-
         if($group['status']=="close"){
             return $this->createMessageResponse('info','该小组已被关闭');
         }
@@ -119,6 +123,10 @@ class GroupThreadController extends BaseController
         $user=$this->getCurrentUser();
 
         $threadMain=$this->getThreadService()->getThread($threadId);
+
+        if (empty($threadMain)) {
+            return $this->createMessageResponse('info','该话题已被管理员删除');
+        }
 
         if($threadMain['status']=="close"){
             return $this->createMessageResponse('info','该话题已被关闭');
@@ -184,7 +192,6 @@ class GroupThreadController extends BaseController
         }
 
         $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
-
         $postMember=$this->getUserService()->findUsersByIds($postMemberIds);
 
         $activeMembers=$this->getGroupService()->searchMembers(array('groupId'=>$id),
@@ -260,9 +267,13 @@ class GroupThreadController extends BaseController
             $this->getGroupService()->joinGroup($user,$groupId);
             }
 
+            $thread = $this->getThreadService()->getThread($threadId);
+
             $postContent=$request->request->all();
+
+            $fromUserId = empty($postContent['fromUserId']) ? 0 : $postContent['fromUserId'];
             $content=array(
-            'content'=>$postContent['content'],);
+            'content'=>$postContent['content'],'fromUserId'=>$fromUserId);
 
             if(isset($postContent['postId'])){
 
@@ -273,8 +284,25 @@ class GroupThreadController extends BaseController
                  $post=$this->getThreadService()->postThread($content,$groupId,$user['id'],$threadId);
 
             }       
-
+            $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+            $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$groupId,'threadId'=>$thread['id']), true);
             $url=$this->getPost($post['id'],$threadId,$groupId);
+
+            if ($user->id != $thread['userId']) {
+                $this->getNotifiactionService()->notify($thread['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
+            }
+            
+            if (empty($fromUserId) && !empty($postContent['postId'])) {
+                $post = $this->getThreadService()->getPost($postContent['postId']);
+                if ($post['userId'] != $user->id && $post['userId'] != $thread['userId']) {
+                    $this->getNotifiactionService()->notify($post['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
+                }
+            }
+
+            if (!empty($fromUserId) && $fromUserId != $user->id && $fromUserId != $thread['userId']) {
+                $this->getNotifiactionService()->notify($postContent['fromUserId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
+            }
+
             return new Response($url);
 
     }
@@ -339,71 +367,72 @@ class GroupThreadController extends BaseController
 
         $groupMemberRole=$this->getGroupMemberRole($thread['groupId']);
 
-        if($groupMemberRole!==2 && $thread['userId']!==$memberId ){
-
-        return new Response($this->generateUrl('group_show', array(
-            'id'=>$thread['groupId'],
-            )));
+        if($groupMemberRole==2 || $thread['userId']==$memberId ){
+            $this->getThreadService()->closeThread($threadId);
 
         }
-        $this->getThreadService()->closeThread($threadId);
-
         return new Response($this->generateUrl('group_show', array(
             'id'=>$thread['groupId'],
             )));     
     }
 
 
-    public function deletePostAction($postId,$memberId,$threadOwnerId,$groupOwnerId,$groupId)
+    public function deletePostAction($postId)
     {
         $post=$this->getThreadService()->getPost($postId);
 
-        $groupMemberRole=$this->getGroupMemberRole($groupId);
+        $thread=$this->getThreadService()->getThread($post['threadId']);
 
-        if($post['userId']!==$memberId && $memberId!==$threadOwnerId && $groupMemberRole!==2 && $groupMemberRole!==3 && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true){
-            
-        return new Response($this->generateUrl('group_thread_show', array(
-            'id'=>$groupId,'threadId'=>$post['threadId'],
-             ))); 
+        $groupMemberRole=$this->getGroupMemberRole($thread['groupId']);
+
+        $user=$this->getCurrentUser();
+
+        if($user['id']==$post['userId'] || $groupMemberRole==2 || $groupMemberRole==3 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true){
+
+            $this->getThreadService()->deletePost($postId);    
+
+            $thread = $this->getThreadService()->getThread($post['threadId']);
+            $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$thread['groupId'],'threadId'=>$thread['id']), true);
+
+            $this->getNotifiactionService()->notify($thread['userId'],'default',"您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>的回复被删除。"); 
+
         }
-        $this->getThreadService()->deletePost($postId);
 
         return new Response($this->generateUrl('group_thread_show', array(
-            'id'=>$groupId,'threadId'=>$post['threadId'],
-            ))); 
+            'id'=>$thread['groupId'],'threadId'=>$post['threadId'],
+        ))); 
 
     }
     
     private function postAction($threadId,$action)
     {
         $thread=$this->getThreadService()->getThread($threadId);
-
         $groupMemberRole=$this->getGroupMemberRole($thread['groupId']);
 
-        if($groupMemberRole!==2 && $groupMemberRole!==3 && $this->get('security.context')->isGranted('ROLE_ADMIN')!==true ){
+        if($groupMemberRole==2 || $groupMemberRole==3 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true ){
+            $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$thread['groupId'],'threadId'=>$thread['id']), true);
+            if($action=='setElite'){
+               $this->getThreadService()->setElite($threadId);
+               $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被设为精华。"); 
+            }
+            if($action=='removeElite'){
+               $this->getThreadService()->removeElite($threadId);
+               $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被取消精华。"); 
+            }
+            if($action=='setStick'){
+               $this->getThreadService()->setStick($threadId);
+               $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被置顶。"); 
+            }
+            if($action=='removeStick'){
+               $this->getThreadService()->removeStick($threadId);
+               $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被取消置顶。"); 
+            }
 
+        }
         return new Response($this->generateUrl('group_thread_show', array(
             'id'=>$thread['groupId'],
             'threadId'=>$threadId,
-            )));        
-        }
-        if($action=='setElite'){
-           $this->getThreadService()->setElite($threadId); 
-        }
-        if($action=='removeElite'){
-           $this->getThreadService()->removeElite($threadId); 
-        }
-        if($action=='setStick'){
-           $this->getThreadService()->setStick($threadId); 
-        }
-        if($action=='removeStick'){
-           $this->getThreadService()->removeStick($threadId); 
-        }
-
-        return new Response($this->generateUrl('group_thread_show', array(
-            'id'=>$thread['groupId'],
-            'threadId'=>$threadId,
-            )));
+        )));
     }
     private function getPost($postId,$threadId,$id)
     {   
@@ -473,6 +502,11 @@ class GroupThreadController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
+    private function getNotifiactionService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
      private function filterSort($sort)
     {
         switch ($sort) {
@@ -527,6 +561,16 @@ class GroupThreadController extends BaseController
 
        return 0;
     }
-    
+
+    private function checkManagePermission($id,$thread)
+    {   
+        $user=$this->getCurrentUser();
+
+        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true) return true;
+        if($this->getGroupService()->isOwner($id, $user['id'])) return true;
+        if($this->getGroupService()->isAdmin($id, $user['id'])) return true;
+        if($thread['userId']==$user['id']) return true;
+        return false;
+    }
 
 }
