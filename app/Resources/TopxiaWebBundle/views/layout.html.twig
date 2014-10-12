@@ -66,7 +66,7 @@
           <ul class="nav navbar-nav navbar-right">
             {% if app.user %}
               {% if app.user.isTeacher() %}
-                <li><a href="{{ path('my_teaching_courses') }}"> 我的教学 </a></li>
+                <li><a href="{{ path('my_teaching') }}"> 我的教学 </a></li>
               {% endif %}
               <li><a href="{{ path('notification') }}" class="badge-container notification-badge-container">
                 <span class="glyphicon glyphicon-bullhorn hidden-lt-ie8"></span>
