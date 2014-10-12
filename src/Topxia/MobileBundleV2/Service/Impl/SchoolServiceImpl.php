@@ -243,7 +243,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     public function getSchoolSite() {
         $mobile = $this->controller->getSettingService()->get('mobile', array());
         if (empty($mobile['enabled'])) {
-            return $this->createErrorResponse('client_closed', '没有搜索到该网校！');
+            return $this->createErrorResponse('client_closed', '网校客户端未开启');
         }
 
         $site = $this->controller->getSettingService()->get('site', array());

@@ -82,7 +82,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             	return true;
 	}
 
-	public function myTestpaper()
+	public function myTestpaper()	
 	{
 		$user = $this->controller->getUserByToken($this->request);
                         if (!$user->isLogin()) {
