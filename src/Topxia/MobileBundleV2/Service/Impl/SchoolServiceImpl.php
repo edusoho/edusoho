@@ -113,7 +113,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
             'status' => 'published',
             'type' => 'normal'
         );
-        return $this->getCourseByType("latest", $conditions));
+        return $this->getCourseByType("latest", $conditions);
     }
 
     private function getCourseByType($sort,  $conditions))
