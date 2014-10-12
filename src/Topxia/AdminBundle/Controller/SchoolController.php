@@ -240,8 +240,8 @@ class SchoolController extends BaseController
     public function homePageUploadAction(Request $request)
     {
         $school = $this->getSettingService()->get('school', array());
-
-        $fileLocation = $this->savePicture($request, 'homepagePicture', 'school', 'school-homepage');
+        $newFileName='school-homepage'.time();
+        $fileLocation = $this->savePicture($request, 'homepagePicture', 'school', $newFileName);
         
         $school['homepagePicture'] = $fileLocation['path'];
 
