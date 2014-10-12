@@ -1,0 +1,22 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% block title %}支付设置 - {{ parent() }}{% endblock %}
+
+{% set menu = 'paymentGlobal' %}
+
+{% block main %}
+<ul class="nav nav-tabs mbl">
+  <li class="{% if submenu == 'payment' %}active{% endif %}">
+  	<a href="{{ url('admin_setting_payment') }}">支付方式
+  	</a>
+  </li>
+  <li class="{% if submenu == 'refund' %}active{% endif %}">
+    <a href="{{ url('admin_setting_refund') }}">退款设置
+    </a>
+  </li>
+
+</ul>
+
+
+  {% block maincontent %}{% endblock %}
+{% endblock %}

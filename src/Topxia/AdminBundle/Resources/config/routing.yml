@@ -462,6 +462,10 @@ admin_setting_course_setting:
     pattern:  /setting/course-setting
     defaults: { _controller: TopxiaAdminBundle:Setting:courseSetting }
 
+admin_setting_questions_setting:
+    pattern: /setting/questions-setting
+    defaults: { _controller: TopxiaAdminBundle:Setting:questionsSetting }
+
 admin_setting_consult_setting:
     pattern:  /setting/consult-setting
     defaults: { _controller: TopxiaAdminBundle:Setting:consultSetting }

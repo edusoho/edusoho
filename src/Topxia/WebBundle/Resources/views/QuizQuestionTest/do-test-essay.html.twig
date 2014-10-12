@@ -2,7 +2,6 @@
 	<div class="testpaper-question-body">
 	  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
   </div>
-
 	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
 
 		{% if role|default(null) == 'teacher' %}
@@ -102,7 +101,7 @@
 	  </div>
 
 
-	  {% if questionPreview|default(false) %}
+	  {% if (questionPreview|default(false) and setting('questions.testpaper_answers_show_mode') == 'hide')  or (setting('questions.testpaper_answers_show_mode') == 'reviewed'  and paperResult.status|default(null) == 'finished') or (app.user.isTeacher()) %}
 	  <div class="testpaper-preview-answer clearfix mtl mbl">
 	  	<div class="testpaper-question-result">
 		    <div class="testpaper-question-result-suggested">

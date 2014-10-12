@@ -207,9 +207,33 @@ class CourseServiceImpl extends BaseService implements CourseService
     	return $nodeList;
     }
 
-    public function AddNoteList(){
-    	$courseId = $this->getParam("courseId","");
-    	$lessonId = $this->getParam("lessonId","");
+    public function AddNote(){
+    	$courseId = $this->getParam("courseId", 0);
+    	$lessonId = $this->getParam("lessonId", 0);
+    	$content = $this->getParam("content", "");
+
+		$user = $this->controller->getUserByToken($this->request);
+    	if(!$user->isLogin()){
+    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
+    	}
+
+    	$noteInfo = array(
+            'content' => $content,
+            'lessonId' => $lessonId,
+            'courseId' => $courseId,
+        );
+    	$result = $this->controller->getNoteService()->saveNote($noteInfo);
+
+    	return $result;
+    }
+
+    public function DeleteNote(){
+    	$id = $this->getParam("id", 0);
+    	$user = $this->controller->getUserByToken($this->request);
+    	if(!$user->isLogin()){
+    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
+    	}
+    	return $this->controller->getNoteService()->deleteNote($id);
     }
 
 	private function filterThreads($threads, $courses)
@@ -616,7 +640,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             $progress = array();
         }
 
-        $lesson = $this->controller->getCourseService()->getUserNextLearnLesson($user['id'],$courseId);
+        foreach ($learnStatus as $key => $value) {
+        		if ($value == "finished") {
+        			unset($learnStatus[$key]);
+        		}
+        }
+        $keys = array_keys($learnStatus);
+        $lessonId = end($keys);
+        $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
         return array(
         	"data"=>$lesson,
             'progress'  => $progress
