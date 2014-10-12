@@ -102,7 +102,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         $conditions = array(
             'status' => 'published',
             'type' => 'normal',
-            "recommendedSeq"=>1
+            "recommended"=>1
         );
         return $this->getCourseByType("recommendedSeq", $conditions);
     }
