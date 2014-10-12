@@ -85,5 +85,5 @@ interface CourseService
 	 *
 	 *删除一条笔记
 	 */
-	public function DeleteNode();
+	public function DeleteNote();
 }

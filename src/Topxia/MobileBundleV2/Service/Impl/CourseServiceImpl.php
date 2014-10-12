@@ -226,8 +226,9 @@ class CourseServiceImpl extends BaseService implements CourseService
     	return $result;
     }
 
-    public function DeleteNode(){
+    public function DeleteNote(){
     	$id = $this->getParam("id", 0);
+    	$user = $this->controller->getUserByToken($this->request);
     	if(!$user->isLogin()){
     		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
     	}
