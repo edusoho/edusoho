@@ -26,6 +26,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
     public function isAllowedConfig()
     {
         $currentTheme = $this->getSettingService()->get('theme');
+
         if(empty($this->themeName) && empty($this->defaultConfig)){
             return false;
         }

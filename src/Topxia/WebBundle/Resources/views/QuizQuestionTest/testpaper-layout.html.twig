@@ -18,7 +18,7 @@
       {% block testpaper_heading_content %}{% endblock %}
     </div>
 
-    {% if is_feature_enabled('hide_testpaper_result') and (paperResult|default(null) and paperResult.status == 'finished') and not app.user.isTeacher() %}
+    {% if (paperResult|default(null) and paperResult.status in ['finished','reviewing'] ) and not app.user.isTeacher() %}
 
     {% else %}
       {% if showTestpaperNavbar|default('on') == 'on' %}
@@ -37,7 +37,7 @@
 
 <div class="row">
   <div class="col-md-9">
-    <div class="testpaper-body">
+    <div class="testpaper-body" oncopy="return false;" oncut="return false;" onselectstart="return false">
       {% include 'TopxiaWebBundle:QuizQuestionTest:do-test.html.twig' %}
     </div>
   </div>

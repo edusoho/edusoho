@@ -1,0 +1,34 @@
+{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+
+{% block title %}题库设置 - {{ parent() }}{% endblock %}
+
+{% set submenu = 'questions_setting' %}
+
+{% block maincontent %}
+	<div class="page-header"><h1>考试设置</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" id="course-form" novalidate>
+
+<fieldset>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>交卷后答案以及解析的显示</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('testpaper_answers_show_mode', {'hide':'不显示', 'reviewed':'全部批阅完成后一起显示' , 'submitted':'客观题自动批阅完后先显示答案解析'}, setting('questions.testpaper_answers_show_mode','submitted')) }}
+      </div>
+    </div>
+</fieldset>
+
+  <div class="form-group">
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}

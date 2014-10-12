@@ -30,6 +30,11 @@ abstract class BaseService
         return $this->getKernel()->getCurrentUser();
     }
 
+    public function getEnvVariable($key = null)
+    {
+        return $this->getKernel()->getEnvVariable($key);
+    }
+
     public function getDispatcher()
     {
         return ServiceKernel::instance()->getDispatcher();

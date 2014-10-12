@@ -9,14 +9,14 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Topxia\System;
 
-class BuildPluginPackageCommand extends BaseCommand
+class BuildPluginAppCommand extends BaseCommand
 {
 
     protected $output;
 
     protected function configure()
     {
-        $this->setName ( 'topxia:build-plugin' )
+        $this->setName ( 'build:plugin-app' )
             ->addArgument('name', InputArgument::REQUIRED, 'plugin name');
     }
 
@@ -24,29 +24,21 @@ class BuildPluginPackageCommand extends BaseCommand
     {
         $this->output = $output;
         $this->filesystem = new Filesystem();
-        $name = ucfirst($input->getArgument('name'));
+        $name = $input->getArgument('name');
 
-        $this->output->writeln("<info>开始编制应用安装/升级包 {$name}</info>");
+        $this->output->writeln("<info>开始制作插件应用包 {$name}</info>");
 
-        $this->_buildDistPackage($name, 'install');
-        $this->_buildDistPackage($name, 'upgrade');
+        $this->_buildDistPackage($name);
     }
 
-    private function _buildDistPackage($name, $type)
+    private function _buildDistPackage($name)
     {
-        if (!in_array($type, array('install', 'upgrade'))) {
-            throw new \RuntimeException('package type error');
-        }
-
-        $typeNames = array('install' => '安装包', 'upgrade' => '升级包');
-        $this->output->writeln("<info>  编制应用{$typeNames[$type]}</info>");
-
         $pluginDir = $this->getPluginDirectory($name);
-        $version = $this->getPluginVersion($name);
+        $version = $this->getPluginVersion($name, $pluginDir);
 
-        $distDir = $this->_makeDistDirectory($name, $type);
+        $distDir = $this->_makeDistDirectory($name, $version);
         $sourceDistDir = $this->_copySource($name, $pluginDir, $distDir);
-        $this->_copyScript($pluginDir, $distDir, $type, $version);
+        $this->_copyScript($pluginDir, $distDir);
         $this->_cleanGit($sourceDistDir);
         $this->_zipPackage($distDir);
     }
@@ -74,16 +66,20 @@ class BuildPluginPackageCommand extends BaseCommand
         }
     }
 
-    private function _copyScript($pluginDir, $distDir, $type, $version)
+    private function _copyScript($pluginDir, $distDir)
     {
-        $scriptNames = array('install' => 'install.php', 'upgrade' => "upgrade-{$version}.php");
-        $script = "{$pluginDir}/Scripts/$scriptNames[$type]";
-        if ($this->filesystem->exists($script)) {
-            $this->output->writeln("<info>    * 拷贝脚本：{$script} -> {$distDir}/Upgrade.php</info>");
-            $this->filesystem->copy($script, "{$distDir}/Upgrade.php");
+        $scriptDir = "{$pluginDir}/Scripts";
+        $distScriptDir = "{$distDir}/Scripts";
+        if ($this->filesystem->exists($scriptDir)) {
+            $this->filesystem->mirror($scriptDir, $distScriptDir);
+            $this->output->writeln("<info>    * 拷贝脚本：{$scriptDir} -> {$distScriptDir}</info>");
         } else {
             $this->output->writeln("<comment>    * 拷贝脚本：无</comment>");
         }
+
+        $this->output->writeln("<info>    * 生成安装引导脚本：Upgrade.php</info>");
+
+        $this->filesystem->copy(__DIR__ . '/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
     }
 
     private function _zipPackage($distDir)
@@ -105,11 +101,9 @@ class BuildPluginPackageCommand extends BaseCommand
         $this->output->writeln("<question>    * ZIP包大小：" . intval(filesize($zipPath)/1024) . ' Kb');
     }
 
-    private function _makeDistDirectory($name, $type)
+    private function _makeDistDirectory($name, $version)
     {
-        $version = $this->getPluginVersion($name);
-
-        $distDir = dirname("{$this->getContainer()->getParameter('kernel.root_dir')}") . "/build/{$name}/{$name}-{$version}-{$type}";
+        $distDir = dirname("{$this->getContainer()->getParameter('kernel.root_dir')}") . "/build/{$name}-{$version}";
 
         if ($this->filesystem->exists($distDir)) {
             $this->output->writeln("<info>    清理目录：{$distDir}</info>");
@@ -121,11 +115,17 @@ class BuildPluginPackageCommand extends BaseCommand
         return realpath($distDir);
     }
 
-    private function getPluginVersion($name)
+    private function getPluginVersion($name, $pluginDir)
     {
-        $metaClass = "\\{$name}\PluginSystem";
-        $metaObject = new $metaClass();
-        return $metaObject::VERSION;
+         $content = file_get_contents($pluginDir . '/PluginSystem.php');
+
+         $matched = preg_match('/VERSION\s*=\s*[\'\"](.*?)[\'\"]/', $content, $matches);
+
+         if (!$matched) {
+            throw new \RuntimeException('获取插件版本号失败！');
+         }
+
+         return $matches[1];
     }
 
     private function getPluginDirectory($name)

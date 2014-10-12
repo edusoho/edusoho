@@ -35,44 +35,36 @@
 
 {% block testpaper_body_sidebar %}
 
-{% if is_feature_enabled('hide_testpaper_result') and (paperResult|default(null) and paperResult.status == 'finished') and not app.user.isTeacher() %}
-
-{% else %}
+{% if ( paperResult.status in ['finished','reviewing'] and not app.user.isTeacher() and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted' ) or ( setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' ) and paperResult.status|default(null) == 'finished' %}
 
   <div class="testpaper-card" data-spy="affix" data-offset-top="200">
     <div class="panel panel-default">
         <div class="panel-body">
-
           <div class="clearfix mbl">
+            {% for type in paper.metas.question_type_seq %}
 
-          {% for type in paper.metas.question_type_seq %}
-
-            {% for item in items[type] %}
-              {% if item.questionType != 'material' %}
-                <a href="javascript:;" data-anchor="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% elseif item.question.testResult.status|default(null) == 'partRight' %}wrong{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
-              {% else %}
-                {% for item in item.items|default([]) %}
+              {% for item in items[type] %}
+                {% if item.questionType != 'material' %}
                   <a href="javascript:;" data-anchor="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% elseif item.question.testResult.status|default(null) == 'partRight' %}wrong{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
-                {% endfor %}
+                {% else %}
+                  {% for item in item.items|default([]) %}
+                    <a href="javascript:;" data-anchor="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% elseif item.question.testResult.status|default(null) == 'partRight' %}wrong{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
+                  {% endfor %}
               {% endif %}
-              
             {% endfor %}
 
-
-            
-
-          <div class="clearfix mtm mbm"></div>
+            <div class="clearfix mtm mbm"></div>
 
           {% endfor %}
 
           <div class="testpaper-card-explain clearfix">
-            <a href="javascript:;" class="btn btn-success btn-index"></a><small class="text-muted">正确</small>
-            <a href="javascript:;" class="btn btn-danger btn-index"></a><small class="text-muted">错误</small>
-            <a href="javascript:;" class="btn btn-warning btn-index"></a><small class="text-muted">待批阅</small>
-            <a href="javascript:;" class="btn btn-default btn-index"></a><small class="text-muted">未做</small>
+              <a href="javascript:;" class="btn btn-success btn-index"></a><small class="text-muted">正确</small>
+              <a href="javascript:;" class="btn btn-danger btn-index"></a><small class="text-muted">错误</small>
+              <a href="javascript:;" class="btn btn-warning btn-index"></a><small class="text-muted">待批阅</small>
+              <a href="javascript:;" class="btn btn-default btn-index"></a><small class="text-muted">未做</small>
           </div>
-
         </div>
+
         <div class="panel-footer">
           <div class="btn-group btn-group-justified btn-group-sm">
             <label class="checkbox">
@@ -83,6 +75,7 @@
         </div>
     </div>
   </div>
+</div>
 {% endif %}
 
 

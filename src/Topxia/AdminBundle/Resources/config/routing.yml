@@ -382,18 +382,58 @@ admin_setting_payment:
     pattern:  /setting/payment
     defaults: { _controller: TopxiaAdminBundle:Setting:payment }
 
-admin_setting_storage:
-    pattern:  /setting/storage
-    defaults: { _controller: TopxiaAdminBundle:Setting:storage }
+admin_setting_cloud_video:
+    pattern:  /setting/cloud/video
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:video }
+
+admin_setting_cloud:
+    pattern:  /setting/cloud
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:key }
+
+admin_setting_cloud_key:
+    pattern:  /setting/cloud/key
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:key }
+
+admin_setting_cloud_key_info:
+    pattern:  /setting/cloud/key/info
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyInfo }
+
+admin_setting_cloud_key_reset:
+    pattern:  /setting/cloud/key/reset
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyReset }
+    methods: [POST]
+
+admin_setting_cloud_key_bind:
+    pattern:  /setting/cloud/key/bind
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyBind }
+
+admin_setting_cloud_key_update:
+    pattern:  /setting/cloud/key/update
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyUpdate }
+
+admin_setting_cloud_key_apply:
+    pattern:  /setting/cloud/key/apply
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyApply }
+    methods: [POST]
 
 admin_setting_cloud_video_watermark_upload:
     pattern: /setting/cloud/video_watermark/upload
-    defaults: { _controller: TopxiaAdminBundle:Setting:cloudVideoWatermarkUpload }
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoWatermarkUpload }
     methods: [POST]
 
 admin_setting_cloud_video_watermark_remove:
     pattern: /setting/cloud/video_watermark/remove
-    defaults: { _controller: TopxiaAdminBundle:Setting:cloudVideoWatermarkRemove }
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoWatermarkRemove }
+    methods: [POST]
+
+admin_setting_cloud_video_embed_watermark_upload:
+    pattern: /setting/cloud/video_embed_watermark/upload
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoEmbedWatermarkUpload }
+    methods: [POST]
+
+admin_setting_cloud_video_embed_watermark_remove:
+    pattern: /setting/cloud/video_embed_watermark/remove
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoWatermarkRemove }
     methods: [POST]
 
 admin_setting_refund:
@@ -403,6 +443,10 @@ admin_setting_refund:
 admin_setting_default:
     pattern:  /setting/default
     defaults: { _controller: TopxiaAdminBundle:Setting:default }
+
+admin_setting_share:
+    pattern:  /setting/share
+    defaults: { _controller: TopxiaAdminBundle:Setting:share }
 
 admin_setting_default_avatar:
     pattern:  /setting/default/avatar
@@ -444,6 +488,10 @@ admin_setting_user_fields:
 admin_setting_course_setting:
     pattern:  /setting/course-setting
     defaults: { _controller: TopxiaAdminBundle:Setting:courseSetting }
+
+admin_setting_questions_setting:
+    pattern: /setting/questions-setting
+    defaults: { _controller: TopxiaAdminBundle:Setting:questionsSetting }
 
 admin_setting_consult_setting:
     pattern:  /setting/consult-setting
@@ -534,10 +582,6 @@ admin_oldUpgradeCheck:
 admin_app_logs:
     pattern:  /app/logs
     defaults: { _controller: TopxiaAdminBundle:App:logs }
-
-admin_app_check_ownCopyrightUser:
-    pattern:  /app/check/{userId}/ownCopyrightUser
-    defaults: { _controller: TopxiaAdminBundle:App:checkOwnCopyrightUser }
 
 admin_app_package_update_modal:
     pattern:  /app/package_update/{id}/modal
@@ -922,5 +966,16 @@ admin_user_fields_delete:
     pattern:  /user_fields/delete/{id}
     defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }
 
+admin_system_status:
+    pattern:  /system/status
+    defaults: { _controller: TopxiaAdminBundle:Default:systemStatus }
+
+admin_official_messages:
+    pattern:  /official/messages
+    defaults: { _controller: TopxiaAdminBundle:Default:officialMessages }
+
+admin_uploadfile_head_leader_params:
+    pattern: /uploadfile/video/head/leader/params
+    defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
 
 

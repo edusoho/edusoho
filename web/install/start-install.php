@@ -19,6 +19,7 @@ $functionName();
 
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
+use Topxia\Service\CloudPlatform\KeyApplier;
 
 function check_installed()
 {
@@ -146,7 +147,7 @@ function install_step3()
 	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 
         $init = new SystemInit();
-        $admin = $init->initAdmin($_POST['admin']);
+        $admin = $init->initAdmin($_POST);
         $init->initSiteSettings($_POST);
         $init->initRegisterSetting($admin);
         $init->initMailerSetting($_POST['sitename']);
@@ -162,16 +163,6 @@ function install_step3()
         $init->initLockFile();
         $init->initRefundSetting();
         $init->initArticleSetting();
-        
-        $web=$_POST['web'];
-        $userData = array();
-		$userData['server_addr']=$_SERVER['SERVER_ADDR'];
-		$userData['server_name']=$_SERVER['SERVER_NAME'];
-		$userData['mobile']=$web['mobile'];
-		$userData['qq']=$web['qq'];
-		$userData['name']=$web['name'];
-
-		_postRequest("http://open.edusoho.com/track/install", $userData);
 
         header("Location: start-install.php?step=4");
 		exit();
@@ -191,6 +182,24 @@ function install_step4()
 	echo $twig->render('step-4.html.twig', array(
 		'step' => 4,
 	));
+}
+
+/**
+ * 生产Key
+ */
+function install_step999()
+{
+    session_start();
+
+    $connection = _create_connection();
+    $serviceKernel = ServiceKernel::create('prod', true);
+    $serviceKernel->setConnection($connection);
+
+    $init = new SystemInit();
+
+    $key = $init->initKey();
+
+    echo json_encode($key);
 }
 
 function _create_database($config, $replace)
@@ -269,35 +278,6 @@ function _create_connection()
     return $connection;
 }
 
-function _postRequest($url, $params)
-{
-    $userAgent = 'EduSoho Install Client 1.0';
-
-    $connectTimeout = 30;
-
-    $timeout = 30;
-
-    $curl = curl_init();
-
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
-    curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
-    curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($curl, CURLOPT_HEADER, 0);
-    curl_setopt($curl, CURLOPT_POST, 1);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
-    curl_setopt($curl, CURLOPT_URL, $url );
-
-    // curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
-
-    $response = curl_exec($curl);
-
-    curl_close($curl);
-
-    return $response;
-}
-
 class SystemInit
 {
 
@@ -314,6 +294,32 @@ class SystemInit
 	    $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN'));
 	    return $this->getUserService()->getUser($user['id']);
 	}
+
+    public function initKey()
+    {
+        $applier = new KeyApplier();
+
+        $users = $this->getUserService()->searchUsers(array('roles' => 'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);
+
+        if (empty($users) or empty($users[0])) {
+            return array('error' => '管理员帐号不存在，创建Key失败');
+        }
+        $keys = $applier->applyKey($users[0]);
+
+        if (empty($keys['accessKey']) or empty($keys['secretKey'])) {
+            return array('error' => 'Key生成失败，请检查服务器网络后，重试！');
+        }
+
+        $settings = $this->getSettingService()->get('storage', array());
+
+        $settings['cloud_access_key'] = $keys['accessKey'];
+        $settings['cloud_secret_key'] = $keys['secretKey'];
+        $settings['cloud_key_applied'] = 1;
+
+        $this->getSettingService()->set('storage', $settings);
+
+        return $keys;
+    }
 
 	public function initRefundSetting()
 	{
@@ -639,4 +645,34 @@ EOD;
     {
         return ServiceKernel::instance()->createService('Content.NavigationService');
     }
+
+    protected function postRequest($url, $params)
+    {
+        $userAgent = 'EduSoho Install Client 1.0';
+
+        $connectTimeout = 10;
+
+        $timeout = 10;
+
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($curl, CURLOPT_URL, $url );
+
+        // curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        return $response;
+    }
+
 }
