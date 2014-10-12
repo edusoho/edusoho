@@ -113,7 +113,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         		$courses = $this->getCourseService()->findCoursesByIds($courseIds);
         		$data = array(
-        			'myTestpaperResults' => $testpaperResults,
+        			'myTestpaperResults' => $this->filterMyTestpaperResults($testpaperResults),
             		'myTestpapers' => $this->filterMyTestpaper($testpapers),
             		'courses' => $this->filterMyTestpaperCourses($courses),
         		);
@@ -123,6 +123,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         			"limit"=>$limit,
         			"data"=>$data
         			);
+	}
+
+	private function filterMyTestpaperResults($testpaperResults)
+	{
+		return array_map(function($testpaperResult){
+			$testpaperResult['beginTime'] = date('c', $testpaperResult['beginTime']);
+			return $testpaperResult;
+		}, $testpaperResults);
 	}
 
 	private function filterMyTestpaper($testpapers)
