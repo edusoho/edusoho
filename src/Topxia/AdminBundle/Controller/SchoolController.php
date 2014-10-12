@@ -359,7 +359,7 @@ class SchoolController extends BaseController
                 if(empty($user) || in_array('ROLE_TEACHER', $user['roles'])){
                     return $this->createJsonResponse('学号'.$number.'对应的用户不存在！');
                 }
-                $studentMember=$this->getClassesService()->getStudentMemberByUserIdAndClassId($user['id'],$classId);
+                $studentMember=$this->getClassesService()->getStudentMemberByUserIdAndClassId($user['id'],null);
                 
                 if(!empty($studentMember) && $studentMember['classId']!=$classId){
                     return $this->createJsonResponse($user['truename'].'('.'学号'.$number.')'.'对应的用户已经属于其他班级！');
