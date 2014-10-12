@@ -10,4 +10,8 @@ interface TestpaperService
 	public function finishTestpaper(); 
 
 	public function uploadQuestionImage();
+
+	public function myTestpaper();
+
+	public function favoriteQuestion();
 }

@@ -8,6 +8,79 @@ use Topxia\Common\ArrayToolkit;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
 {
+	public function favoriteQuestion()
+	{
+		$user = $this->controller->getUserByToken($this->request);
+                        if (!$user->isLogin()) {
+                            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+                        }
+
+                        $id = $this->getParam("id");
+                        $action = $this->getParam("action");
+                        $targetType = $this->getParam("targetType");
+                        $targetId = $this->getParam("targetId");
+            	$target = $targetType."-".$targetId;
+
+            	if ($action == "favorite") {
+            		$this->getQuestionService()->favoriteQuestion($id, $target, $user['id']);
+            	} else {
+            		$this->getQuestionService()->unFavoriteQuestion($id, $target, $user['id']);
+            	}
+        
+            	return true;
+	}
+
+	public function myTestpaper()
+	{
+		$user = $this->controller->getUserByToken($this->request);
+                        if (!$user->isLogin()) {
+                            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+                        }
+
+                       	$start = (int) $this->getParam("start", 0);
+		$limit = (int) $this->getParam("limit", 10);
+                        $total = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
+
+                        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByUserId(
+		            $user['id'],
+		            $start,
+		            $limit
+		);
+
+                        $testpapersIds = ArrayToolkit::column($testpaperResults, 'testId');
+
+        		$testpapers = $this->getTestpaperService()->findTestpapersByIds($testpapersIds);
+        		$testpapers = ArrayToolkit::index($testpapers, 'id');
+
+        		$targets = ArrayToolkit::column($testpapers, 'target');
+        		$courseIds = array_map(function($target){
+            		$course = explode('/', $target);
+            		$course = explode('-', $course[0]);
+            		return $course[1];
+        		}, $targets);
+
+        		$courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        		$data = array(
+        			'myTestpaperResults' => $testpaperResults,
+            		'myTestpapers' => $testpapers,
+            		'courses' => $this->filterMyTestpaperCourses($courses),
+        		);
+        		return array(
+        			"start"=>$start,
+        			"total"=>$total,
+        			"limit"=>$limit,
+        			"data"=>$data
+        			);
+	}
+
+	private function filterMyTestpaperCourses($courses)
+	{
+		return array_map(function($course){
+			unset($course['about']);
+			return $course;
+		}, $courses);
+	}
+
 	public function uploadQuestionImage()
 	{
 		$user = $this->controller->getUserByToken($this->request);
