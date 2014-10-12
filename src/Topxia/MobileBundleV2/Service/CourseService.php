@@ -78,5 +78,12 @@ interface CourseService
 	 *
 	 *添加一条笔记
 	 */
-	public function AddNoteList();
+	public function AddNote();
+
+
+	/**
+	 *
+	 *删除一条笔记
+	 */
+	public function DeleteNode();
 }
