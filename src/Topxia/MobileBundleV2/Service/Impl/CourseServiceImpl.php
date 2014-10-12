@@ -212,6 +212,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     	$lessonId = $this->getParam("lessonId", 0);
     	$content = $this->getParam("content", "");
 
+		$user = $this->controller->getUserByToken($this->request);
     	if(!$user->isLogin()){
     		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
     	}
@@ -219,7 +220,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     	$noteInfo = array(
             'content' => $content,
             'lessonId' => $lessonId,
-            'courseId' => $content,
+            'courseId' => $courseId,
         );
     	$result = $this->controller->getNoteService()->saveNote($noteInfo);
 
