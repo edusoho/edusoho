@@ -46,10 +46,10 @@ define(function(require, exports, module) {
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
-                    Notify.success('新建班级成功');
+                    Notify.success('保存班级成功');
                     window.location.href=$('#backto').attr('href');
                 }).error(function(){
-                    Notify.danger('新建班级失败');
+                    Notify.danger('保存班级失败');
                 });
 
             }
