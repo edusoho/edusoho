@@ -244,7 +244,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     
     public function findCoursesByClassId($classId)
     {
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE classId = ? AND status = 'published'";
+        $sql = "SELECT * FROM {$this->getTablename()} WHERE classId = ?";
         return $this->getConnection()->fetchAll($sql, array($classId)) ? : null;
     }
 

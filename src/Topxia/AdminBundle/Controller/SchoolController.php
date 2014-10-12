@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\WebBundle\Twig\Extension\DataDict;
 
 class SchoolController extends BaseController
 {
@@ -357,12 +358,14 @@ class SchoolController extends BaseController
                 }
                 $user=$this->getUserService()->getUserByNumber($number);
                 if(empty($user) || in_array('ROLE_TEACHER', $user['roles'])){
-                    return $this->createJsonResponse('学号'.$number.'对应的用户不存在！');
+                    return $this->createJsonResponse('学号'.$number.'的学生，账号还未建立！');
                 }
                 $studentMember=$this->getClassesService()->getStudentMemberByUserIdAndClassId($user['id'],null);
                 
                 if(!empty($studentMember) && $studentMember['classId']!=$classId){
-                    return $this->createJsonResponse($user['truename'].'('.'学号'.$number.')'.'对应的用户已经属于其他班级！');
+                    $existClass = $this->getClassesService()->getClass($studentMember['classId']);
+                    $gradeName = DataDict::text('gradeName', $existClass['gradeId']);
+                    return $this->createJsonResponse($user['truename'].'('.'学号'.$number.')'.'已被分配到'.$gradeName.$existClass['name'].'，请先到该班级中把他移除！');
                 }
                 if(!empty($studentMember) && $studentMember['classId']==$classId){
                     continue;

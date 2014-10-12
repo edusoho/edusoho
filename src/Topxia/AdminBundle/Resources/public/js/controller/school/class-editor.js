@@ -17,6 +17,22 @@ define(function(require, exports, module) {
             $container.html('');
             $(this).parent().find('input').val('');
             $(this).hide();
+            var u = uploader._uploaders[0];
+            var u2 = uploader2._uploaders[0];
+            
+            u.form.css({
+                top: $(u.settings.trigger).offset().top,
+                left: $(u.settings.trigger).offset().left,
+                width: $(u.settings.trigger).outerWidth(),
+                height: $(u.settings.trigger).outerHeight()
+            });
+
+            u2.form.css({
+                top: $(u2.settings.trigger).offset().top,
+                left: $(u2.settings.trigger).offset().left,
+                width: $(u2.settings.trigger).outerWidth(),
+                height: $(u2.settings.trigger).outerHeight()
+            });
         });
         var validator = new Validator({
             element: '#class-editor-form',
@@ -30,10 +46,10 @@ define(function(require, exports, module) {
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
-                    Notify.success('新建班级成功');
+                    Notify.success('保存班级成功');
                     window.location.href=$('#backto').attr('href');
                 }).error(function(){
-                    Notify.danger('新建班级失败');
+                    Notify.danger('保存班级失败');
                 });
 
             }
@@ -76,7 +92,6 @@ define(function(require, exports, module) {
                 Notify.success('上传班级图标成功！');
             }
         }); 
-       
        var uploader2 = new Uploader({
             trigger: '#school-class-backgroundImg-upload',
             name: 'backgroundImg',

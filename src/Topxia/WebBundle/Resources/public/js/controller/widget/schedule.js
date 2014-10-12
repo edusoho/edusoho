@@ -148,8 +148,8 @@ define(function(require, exports, module) {
             this.reset({'sunday': sunday,'previewAs':'week'});
         },
         nextMonth: function() {
-            var cYear = parseInt(this.year),
-            cMonth =  parseInt(this.month),
+            var cYear = parseInt(this.year, 10),
+            cMonth =  parseInt(this.month, 10),
             nextMonth = cMonth + 1 == 13 ? 1: cMonth + 1,
             nextYear = nextMonth == 1 ? cYear + 1 : cYear;
             this.year = nextYear;
@@ -159,8 +159,8 @@ define(function(require, exports, module) {
             this.reset({'year':this.year,'month':this.month,'previewAs':'month'});
         },
         previousMonth: function() {
-            var cYear = parseInt(this.year),
-            cMonth =  parseInt(this.month),
+            var cYear = parseInt(this.year, 10),
+            cMonth =  parseInt(this.month, 10),
             previousMonth = cMonth - 1 == 0 ? 12 : cMonth - 1,
             previousYear = previousMonth == 12 ? cYear - 1 : cYear;
             this.year = previousYear;
