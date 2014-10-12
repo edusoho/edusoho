@@ -25,7 +25,7 @@
                       {% else %}
                         <span class="label label-warning compulsory">选修</span>
                       {% endif %}
-                      <img class="media-object" href="{{ path('course_show',{id:course.id}) }}"><img  width="203" height="114" alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}">
+                      <img  width="203" height="114" alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}">
                     </a>
                     <div class="media-body">
                       <a href="{{ path('course_show',{id:course.id}) }}"><h5>{{ course.title }}</h5></a>
