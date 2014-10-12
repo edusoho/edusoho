@@ -4,6 +4,7 @@ namespace Topxia\Service\System\Impl;
 
 use Topxia\Service\System\LogService;
 use Topxia\Service\Common\BaseService;
+use Topxia\Common\ArrayToolkit;
 
 class LogServiceImpl extends BaseService implements  LogService
 {	
@@ -83,10 +84,18 @@ class LogServiceImpl extends BaseService implements  LogService
 	private function prepareSearchConditions($conditions)
 	{
         if (!empty($conditions['nickname'])) {
-            $existsUser = $this->getUserService()->getUserByNickname($conditions['nickname']);
-            $userId = $existsUser ? $existsUser['id'] : -1;
-            $conditions['userId'] = $userId;
-            unset($conditions['nickname']);
+            $users = $this->getUserService()->searchUsers(
+				array('truename'=>$conditions['nickname']),
+				array('createdTime', 'ASC'),
+				0,
+				PHP_INT_MAX);
+			$conditions['userIds'] = empty($users) ? array(-1):ArrayToolkit::column($users,'id');
+			unset($conditions['nickname']);
+
+            // $existsUser = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            // $userId = $existsUser ? $existsUser['id'] : -1;
+            // $conditions['userId'] = $userId;
+            // unset($conditions['nickname']);
         }
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {

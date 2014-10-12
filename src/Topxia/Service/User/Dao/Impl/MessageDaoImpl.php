@@ -33,7 +33,7 @@ class MessageDaoImpl extends BaseDao implements MessageDao
 
     private function _createSearchQueryBuilder($conditions)
     {
-        return $this->createDynamicQueryBuilder($conditions)
+        $builder=$this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'message')
             ->andWhere('fromId = :fromId')
             ->andWhere('toId = :toId')
@@ -41,6 +41,20 @@ class MessageDaoImpl extends BaseDao implements MessageDao
             ->andWhere('createdTime >= :startDate')
             ->andWhere('createdTime < :endDate')
             ->andWhere('content LIKE :content');
+            
+        if (isset($conditions['fromIds'])) {
+            $fromIds = array();
+            foreach ($conditions['fromIds'] as $userId) {
+                if (ctype_digit((string)abs($userId))) {
+                    $fromIds[] = $userId;
+                }
+            }
+            if ($fromIds) {
+                $fromIds = join(',', $fromIds);
+                $builder->andStaticWhere("fromId IN ($fromIds)");
+            }
+        }
+        return $builder;
     }
 
     public function searchMessagesCount($conditions)

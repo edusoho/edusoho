@@ -60,8 +60,12 @@ class NoteServiceImpl extends BaseService implements NoteService
         unset($conditions['keyword']);
 
         if (isset($conditions['author'])) {
-            $author = $this->getUserService()->getUserByNickname($conditions['author']);
-            $conditions['userId'] = $author ? $author['id'] : -1;
+            $users = $this->getUserService()->searchUsers(
+                array('truename'=>$conditions['author']),
+                array('createdTime', 'ASC'),
+                0,
+                PHP_INT_MAX);
+            $conditions['userIds'] = empty($users) ? array(-1):ArrayToolkit::column($users,'id');
             unset($conditions['author']);
         }
 

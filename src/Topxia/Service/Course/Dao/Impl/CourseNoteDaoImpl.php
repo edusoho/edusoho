@@ -99,6 +99,18 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
             $conditions['courseIds']=substr($courseIds, 0,-2).")";
             $builder=$builder->andStaticWhere('courseId in '.$conditions['courseIds']);
         }
+        if (isset($conditions['userIds'])) {
+            $userIds = array();
+            foreach ($conditions['userIds'] as $userId) {
+                if (ctype_digit((string)abs($userId))) {
+                    $userIds[] = $userId;
+                }
+            }
+            if ($userIds) {
+                $userIds = join(',', $userIds);
+                $builder->andStaticWhere("userId IN ($userIds)");
+            }
+        }
 		return $builder;
 	}
 

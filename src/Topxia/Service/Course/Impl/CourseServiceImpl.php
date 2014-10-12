@@ -173,8 +173,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if (isset($conditions['creator'])) {
-			$user = $this->getUserService()->getUserByNickname($conditions['creator']);
-			$conditions['userId'] = $user ? $user['id'] : -1;
+			$users = $this->getUserService()->searchUsers(
+				array('truename'=>$conditions['creator']),
+				array('createdTime', 'ASC'),
+				0,
+				PHP_INT_MAX);
+			$conditions['userIds'] = empty($users) ? array(-1):ArrayToolkit::column($users,'id');
 			unset($conditions['creator']);
 		}
 

@@ -188,6 +188,18 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 $builder->andStaticWhere("categoryId IN ($categoryIds)");
             }
         }
+        if (isset($conditions['userIds'])) {
+            $userIds = array();
+            foreach ($conditions['userIds'] as $userId) {
+                if (ctype_digit((string)abs($userId))) {
+                    $userIds[] = $userId;
+                }
+            }
+            if ($userIds) {
+                $userIds = join(',', $userIds);
+                $builder->andStaticWhere("userId IN ($userIds)");
+            }
+        }
 
         if (isset($conditions['vipLevelIds'])) {
             $vipLevelIds = array();
