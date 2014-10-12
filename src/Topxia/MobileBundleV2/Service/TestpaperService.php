@@ -5,6 +5,8 @@ interface TestpaperService
 {
 	public function doTestpaper();
 
+	public function reDoTestpaper();
+
 	public function getTestpaperResult();
 
 	public function finishTestpaper(); 
