@@ -110,9 +110,10 @@ class InitCommand extends BaseCommand
 
 	private function initPointSetting($output)
 	{
-		$output->write('  初始化学分设置');
+		$output->write('  初始化学习积分设置');
 
         $default = array(
+        	'name' => '学分',
             'accomplishLesson' => 2,
             'shareNote' => 3,
             'noteByLiked' => 2,
