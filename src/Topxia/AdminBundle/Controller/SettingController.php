@@ -418,11 +418,9 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', '系统默认设置已保存！');
         }
 
-        $hasOwnCopyright = $this->getAppService()->checkOwnCopyrightUser($this->getCurrentUser()->id);
-        
         return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
             'defaultSetting' => $defaultSetting,
-            'hasOwnCopyright' => $hasOwnCopyright,
+            'hasOwnCopyright' => false,
         ));
     }
 
@@ -705,10 +703,12 @@ class SettingController extends BaseController
     public function developerAction(Request $request)
     {
         $developerSetting = $this->getSettingService()->get('developer', array());
+        $storageSetting = $this->getSettingService()->get('storage', array());
 
         $default = array(
             'debug' => '0',
             'app_api_url' => '',
+            'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
             'hls_encrypted' => '1'
         );
 
@@ -716,7 +716,10 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $developerSetting = $request->request->all();
+            $storageSetting['cloud_api_server'] = $developerSetting['cloud_api_server'];
+            $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
+
             $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
             $this->setFlashMessage('success','开发者已保存！');
         }

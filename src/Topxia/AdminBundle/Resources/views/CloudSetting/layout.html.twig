@@ -1,0 +1,23 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% block title %}云平台设置 - {{ parent() }}{% endblock %}
+
+{% set menu = 'cloud' %}
+
+{% block main %}
+<ul class="nav nav-tabs mbl">
+
+  <li class="{% if submenu == 'key' %}active{% endif %}">
+    <a href="{{ url('admin_setting_cloud_key') }}">授权码设置
+    </a>
+  </li>
+
+  <li class="{% if submenu == 'video' %}active{% endif %}">
+    <a href="{{ url('admin_setting_cloud_video') }}">云视频设置
+    </a>
+  </li>
+
+</ul>
+
+  {% block maincontent %}{% endblock %}
+{% endblock %}
