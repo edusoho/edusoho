@@ -636,44 +636,116 @@ ul.schedule-lesson-list a .finished-icon {
     text-decoration: none;
 }
 
-
-
 .timeline {
-  list-style-type: none;
-  background: url(../img/time_line.png) repeat-y scroll 120px 0 transparent;
-  margin: 50px 0;
-  padding: 0;
+    margin-left: 90px;
+    border-left: 2px solid #ddd;
 }
 
-.timeline .timeline-span {
-  position: relative;
-  margin-bottom: 20px;
+.timeline-day {
+    margin-left: -90px;
+    margin-top: 10px;
+    margin-bottom: 40px;
+    position: relative;
 }
-.timeline .timeline-span .timeline-time {
-  position: absolute;
-  width: 90px;
-  text-align: right;
-  left: 0;
-  top: 15px;
-  font-size: 15px;
-  color: #3594cb;
+
+.timeline-day-date {
+    width: 80px;
+    text-align: center;
+    float: left;
 }
-.timeline .timeline-span .timeline-dot {
-  position: absolute;
-  background: url(../img/time_dot.png) no-repeat scroll 0 0 transparent;
-  width: 56px;
-  height: 56px;
-  left: 97px;
-  line-height: 56px;
-  color: #fff;
-  /*text-align: center;
-  font-size: 18px;*/
+
+.timeline-day-date h5 {
+    font-size: 18px;
 }
-.timeline .timeline-span .timeline-content {
-  margin-left: 180px;
-  border-radius: 10px;
-  background-color: #eef0f3;
-  padding: 20px;
-  font-size: 13px;
-  line-height: 20px;
+
+.timeline-day-date h6 {
+    font-size: 12px;
+    color: #999;
+}
+
+.timeline-day-today .timeline-day-date h5 {
+    font-size: 20px;
+
+}
+
+.timeline-day-point {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 7px;
+    background-color: #428bca;
+    border: 2px solid #fff;
+    top: 20px;
+    left: 82px;
+}
+
+.timeline-day-content {
+    position: absolute;
+    left: 120px;
+    top:0;
+    right: 0;
+}
+
+.timeline-day .media-body {
+    padding-left: 30px;
+}
+
+.timeline-day .popover {
+    display: block;
+    margin-left: 0px;
+    position: relative;
+    box-shadow: none;
+    width: 100%;
+    max-width: 100%;
+    background: #f3f3f3;
+    border-color: #f3f3f3;
+}
+
+.timeline-day .popover.right > .arrow {
+    top: 25px;
+    border-right-color: #f3f3f3;
+}
+
+.timeline-day .popover.right > .arrow:after {
+    border-right-color: #f3f3f3;
+}
+
+.timeline-day-today .popover {
+    background-color: transparent;
+    border-color: #428bca;
+}
+
+.timeline-day-today .popover.right > .arrow {
+    border-right-color: #428bca;
+}
+
+.timeline-day-today .popover.right > .arrow:after {
+    border-right-color: #fff;
+}
+
+.timeline-items {
+    margin:0;
+    padding: 0;
+    list-style: none;
+    margin-left: 10px;
+
+}
+
+.timeline-items > li {
+    line-height: 40px;
+    position: relative;
+}
+
+.timeline-items > li > .message {
+    display: block;
+    margin-right: 100px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.timeline-items > li > .time {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #999;
 }
