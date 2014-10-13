@@ -31,7 +31,8 @@ define(function(require, exports, module) {
             this.year = sunday.substr(0,4);
             this.month = sunday.substr(4,2);
             this.element.find('.changeMonth') && this.changeYearMonth();
-            this.bindSortableEvent();
+            this.bindTableSortable();
+            this.bindCourseItemSortable();
             
         },
         bindSortableEvent: function() {
@@ -106,9 +107,49 @@ define(function(require, exports, module) {
             var result = this.serializeContainer($ul);
             this.save(result);
         },
-        disableSort: function() {
-            $(".schedule-course-item-list").each(function(){
-                $(this).sortable("disable");
+        sortableAPI: function(selector, API) {
+            $(selector).each(function(){
+                $(this).sortable(API);
+            });
+        },
+        bindTableSortable: function() {
+            var self = this;
+            $(".schedule-lesson-list").sortable({
+                group:'schedule-sort',
+                drag:false,
+                itemSelector:'.lesson-item',
+                onDragStart: function ($item, container, _super) {
+                    // Duplicate $items of the no drop area
+                    $item.addClass('draging');
+                    if(!container.options.drop){
+                        var $placeholder = $item.clone();
+                        self.placeholder = $placeholder;
+                        $placeholder.insertAfter($item);
+                    }
+                    _super($item);
+                },
+                onDrop: function ($item, container, _super, event) {
+                    var $template = $('<li data-id="'+$item.data('id')+'" data-url="'+$item.find('a').attr('href')+'"><div class="thumbnail"><button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><a href="/course/89/learn#lesson/39" target="_blank"><img src="/assets/img/default/course-large.png?k12v1"></a><div class="caption" title="sssssss">sssssss</div></div></li>');
+                    $template.find('img').attr('src', $item.data('icon'));
+                    $template.find('.caption').html($item.data('title')).attr('title', $item.data('title'));
+                    $template.find('a').attr('href', $item.find('a').attr('href'));
+                    $item.prop('outerHTML', $template.prop("outerHTML"));
+
+                    _super($item);
+
+                    var $placeholder = self.placeholder;
+                        $placeholder.removeClass('draging');
+                    var result = self.serializeContainer(container.el);
+                    self.save(result);
+                }
+            });
+        },
+        bindCourseItemSortable: function() {
+            $(".schedule-course-item-list").sortable({
+                            distance:30,
+                            group:'schedule-sort',
+                            pullPlaceholder:false,
+                            drop:false
             });
         },
         serializeData: function(object) {
@@ -201,15 +242,17 @@ define(function(require, exports, module) {
                 url: self.get('resetUrl'),
                 data: data,
                 success: function(html) {
-                    self.element.find('.schedule-body').html('').append(html);
+                    self.sortableAPI('.schedule-lesson-list', 'disable');
+                    self.element.find('.schedule-body').html(html);
                     
                     if(data.previewAs == 'month') {
-                        self.disableSort();
+                        self.sortableAPI('.schedule-course-item-list', 'disable');
                         self.popover();
                     } else {
                         self.element.find('.viewType').val('week');
                         self.element.find('changeMonth') && self.changeYearMonth();
-                        self.bindSortableEvent();  
+                        self.bindSortableEvent();
+                        self.sortableAPI('.schedule-course-item-list', 'enable');  
                     }
                 }
             });  
