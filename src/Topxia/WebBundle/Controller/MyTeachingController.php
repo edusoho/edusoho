@@ -62,8 +62,7 @@ class MyTeachingController extends BaseController
         }else{
             $conditions = array(
                 'courseIds' => $courseIds,
-                'type' => 'question',
-                ''
+                'type' => 'question'
             );
             // $threadCount= $this->getThreadService()->searchThreadCountInCourseIds($conditions);
             $threads = $this->getThreadService()->searchThreadInCourseIds($conditions,'createdNotStick',0,6);
