@@ -216,13 +216,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	public function uneliteThread($threadId)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
-
 		$thread = $this->getThread($threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
 		}
-
 		$this->getThreadDao()->updateThread($thread['id'], array('isElite' => 0));
 	}
 
@@ -332,7 +329,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	private function getCourseService()
 	{
-		return $this->createService('Classes.CourseService');
+		return $this->createService('CourseService.CourseService');
 	}
 
 	private function getUserService()
