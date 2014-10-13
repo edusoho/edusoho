@@ -92,7 +92,7 @@ class EduSohoAppClient implements AppClient
     {
         $url = "{$this->apiUrl}?action={$action}";
         $edusoho = array(
-            'edition' => 'opensource', 
+            'edition' => 'k12', 
             'host' => $_SERVER['HTTP_HOST'],
             'version' => System::VERSION, 
             'debug' => $this->debug ? '1' : '0',
