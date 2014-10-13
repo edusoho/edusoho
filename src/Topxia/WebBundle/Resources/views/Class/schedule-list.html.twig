@@ -1,7 +1,7 @@
 {{ import_javascript({'list':'schedule/schedule-list'}) }}
 <ul class="nav nav-tabs" role="tablist">
-  <li role="presentation" {% if viewType == 'today' %} class="active" {% endif %} data-url="{{ path('class_student_schedule',{classId:classId,userId:app.user.id,viewType:'today'}) }}"><a href="#">今日课表</a></li>
-  <li role="presentation" {% if viewType == 'tomorrow' %} class="active" {% endif %} data-url="{{ path('class_student_schedule',{classId:classId,userId:app.user.id,viewType:'tomorrow'}) }}"><a href="#">明日课表</a></li>
+  <li role="presentation" {% if viewType == 'today' %} class="active" {% endif %} data-url="{{ path('class_student_schedule',{classId:classId,userId:app.user.id,viewType:'today'}) }}"><a href="javascript:">今日课表</a></li>
+  <li role="presentation" {% if viewType == 'tomorrow' %} class="active" {% endif %} data-url="{{ path('class_student_schedule',{classId:classId,userId:app.user.id,viewType:'tomorrow'}) }}"><a href="javascript:">明日课表</a></li>
   <a href="{{ path('class_schedule', {classId:classId}) }}" class="pull-right">全部课表</a>
 </ul>
 <ul class="media-list">
@@ -17,7 +17,10 @@
             <img class="media-object" src="{{ file_path(courses[lessons[schedule.lessonId].courseId].middlePicture, 'course-large.png') }}" alt="{{ courses[lessons[schedule.lessonId].courseId].title }}">
           </a>
           <div class="media-body" title="{{lessons[schedule.lessonId].title}}">
-            <h4 class="media-heading">{{lessons[schedule.lessonId].title}}</h4>
+            <h4 class="media-heading">
+              <a class="pull-left img-a" href="{{ lessonUrl }}" target="_blank">{{lessons[schedule.lessonId].title}}
+              </a>  
+            </h4>
             <span class="name-text">{{ teacher.truename }}</span>
           </div>
         </li>
