@@ -25,7 +25,7 @@ class ParentImporterServiceImpl extends BaseImporterService implements ParentImp
                     $this->getUserService()->changeTrueName($parent["id"],$parents[$i]["truename"]);
                     $this->getUserService()->updateUserProfile($parent["id"],$parents[$i]); 
                 } else {
-                    $this->importparentByIgnore($parents, $classId);
+                    $this->importUserByIgnore($parents, $classId);
                 }
                              
             }

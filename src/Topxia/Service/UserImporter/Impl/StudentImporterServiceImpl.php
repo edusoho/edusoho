@@ -22,9 +22,10 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
                     $this->getUserService()->changePassword($student["id"],$students[$i]["password"]);
                     $this->getUserService()->changeEmail($student["id"],$students[$i]["email"]);
                     $this->getUserService()->changeTrueName($student["id"],$students[$i]["truename"]);
+                    empty($students[$i]['mobile']) ? : $this->getUserService()->changeMobile($student["id"],$students[$i]['mobile']);
                     $this->getUserService()->updateUserProfile($student["id"],$students[$i]); 
                 } else {
-                    $this->importStudentByIgnore($students, $classId);
+                    $this->importUserByIgnore($students, $classId);
                 }
                              
             }
@@ -157,7 +158,11 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
                 $errorInfos[] = '学号为' . $student['number'] . '已存在其他班级，请检查';     
                 continue;
             }
-            
+            $existSeacher = $userService->getUserByNumber($student['number']);
+            $existMobile = $existSeacher ? $existSeacher['mobile'] : null;
+            if($student['mobile'] && $existMobile != $student['mobile'] && !$userService->isMobileAvaliable($student['mobile'])) {
+                $errorInfos[] = '第' . $row . '行手机号码为' . $student['mobile'] . '已存在，请检查数据．';
+            }
             if($checkEmail && $rule=="ignore" && !$userService->isEmailAvaliable($student['email'])) {          
                 $errorInfos[] = "第".$row."行的邮箱已存在，请检查数据．";
                 continue;

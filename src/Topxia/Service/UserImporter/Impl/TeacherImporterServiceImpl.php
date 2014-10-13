@@ -22,9 +22,10 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
                     $this->getUserService()->changePassword($teacher["id"],$teachers[$i]["password"]);
                     $this->getUserService()->changeEmail($teacher["id"],$teachers[$i]["email"]);
                     $this->getUserService()->changeTrueName($teacher["id"],$teachers[$i]["truename"]);
+                    empty($teachers[$i]['mobile']) ? : $this->getUserService()->changeMobile($teacher["id"],$teachers[$i]['mobile']);
                     $this->getUserService()->updateUserProfile($teacher["id"],$teachers[$i]); 
                 } else {
-                    $this->importTeacherByIgnore($teachers, $classId);
+                    $this->importUserByIgnore($teachers, $classId);
                 }
                              
             }
@@ -155,6 +156,12 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
             {     
                 $errorInfos[] = "第".$row."行的邮箱已存在，请检查数据．";
                 continue;
+            }
+
+            $existTeacher = $userService->getUserByNumber($teacher['number']);
+            $existMobile = $existTeacher ? $existTeacher['mobile'] : null;
+            if($teacher['mobile'] && $existMobile != $teacher['mobile'] && !$userService->isMobileAvaliable($teacher['mobile'])) {
+                $errorInfos[] = '第' . $row . '行手机号码为' . $teacher['mobile'] . '已存在，请检查数据．';
             }
 
             if(!$userService->isNumberAvaliable($teacher['number'])) { 

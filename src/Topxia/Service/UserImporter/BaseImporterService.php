@@ -42,7 +42,6 @@ abstract class BaseImporterService extends BaseService
     {
         $profile = array();
         $profile['id'] = $id;
-        $profile['mobile'] = empty($user['mobile']) ? '' : $user['mobile'];
         $profile['idcard'] = empty($user['idcard']) ? '' : $user['idcard'];
         $profile['company'] = empty($user['company']) ? '' : $user['company'];
         $profile['job'] = empty($user['job']) ? '' : $user['job'];
@@ -69,6 +68,7 @@ abstract class BaseImporterService extends BaseService
         $user = array();
         $user['email'] = $data['email'];
         $user['truename'] = $data['truename'];
+        $user['mobile'] = empty($data['mobile']) ? null : $data['mobile'];
         $user['type'] = "default";
         $user['createdIp'] = "";
         $user['createdTime'] = time();
