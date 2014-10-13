@@ -228,7 +228,15 @@ define(function(require, exports, module) {
                         element: '#lesson-video-content',
                         playerId: 'lesson-video-player'
                     });
-
+                    mediaPlayer.on("timeChange", function(data){
+                        var userId = $('#lesson-video-content').data("userId");
+                        localStorage.setItem(userId+':'+lesson.id, data.currentTime);
+                    });
+                    mediaPlayer.on("ready", function(playerId, data){
+                        var player = document.getElementById(playerId);
+                        var userId = $('#lesson-video-content').data("userId");
+                        player.seek(localStorage.getItem(userId+':'+lesson.id));
+                    });
                     mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
                     mediaPlayer.on('ended', function() {
                         that._onFinishLearnLesson();

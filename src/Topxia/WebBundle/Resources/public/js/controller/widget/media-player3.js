@@ -102,7 +102,6 @@ define(function(require, exports, module) {
                 this.get('playerId'),
                 this.get('width'),  this.get('height') , "10.2", null, flashvars, params, attrs
             );
-
             this.set('runtime', 'flash');
         },
 
@@ -115,13 +114,17 @@ define(function(require, exports, module) {
                     if(window.__MediaPlayer.get('_firstPlay')) {
                         var player = document.getElementById(playerId);
                         player.play2();
+                        window.__MediaPlayer.trigger('ready',playerId, data);
                         window.__MediaPlayer.set('_firstPlay', false);
                     }
                     break;
                 case "complete":
                     window.__MediaPlayer.trigger('ended');
                     break;
-            }
+                case "timeChange":
+                    window.__MediaPlayer.trigger('timeChange',data);
+                    break;
+            }    
         }
 
     });
