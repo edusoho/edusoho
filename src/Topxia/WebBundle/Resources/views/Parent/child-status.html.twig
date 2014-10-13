@@ -32,7 +32,7 @@
         <div class="empty">还没有动态！</div>
       {% endif %}
       {% if moreBtnShow %}
-        <a href="{{path('parent_child_status',{childId:selectedChild.id|default(null),weekCount:weekCount|default(1)})}}" type="button" class="btn btn-primary btn-block">+</a>
+        <a href="javascript:;" data-url="{{path('parent_child_more_status',{childId:selectedChild.id,count:count+1})}}" id="moreStatusesBtn" type="button" class="btn btn-primary btn-block">+</a>
       {% endif %}
     </div>
   </div>

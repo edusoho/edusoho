@@ -161,7 +161,6 @@ class ParentImporterServiceImpl extends BaseImporterService implements ParentImp
             }
 
             $errorInfo = $this->validFields($parent, $row, $matchFields, $checkEmail);
-            
             if($errorInfo) {
                 $errorInfos = array_merge($errorInfos, $errorInfo);
             }
