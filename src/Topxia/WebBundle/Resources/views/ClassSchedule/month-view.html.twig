@@ -39,7 +39,7 @@
                                 <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="">
                               </a>
                               <div class="media-body" title="{{ lesson.title }}">
-                                <h4 class="media-heading">{{ lesson.title }}</h4>
+                                <a href="{{ lessonUrl }}" target="_blank"><h4 class="media-heading">{{ lesson.title }}</h4></a>
                                 <span class="teacher-name">{{ teacher.truename}}</span>
                               </div>
                             </li>
