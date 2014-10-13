@@ -3,7 +3,7 @@
 		<img src="{{ default_path('avatar',user.smallAvatar, '') }}" class="avatar">
 		<div class="infos">
 			<div class="nickname">
-				<a href="{{ path('user_show', {id:user.id}) }}" class="nickname">{{ user.nickname }}</a>
+				<a href="{{ path('user_show', {id:user.id}) }}" class="nickname">{{ user.truename }}</a>
 				{% if user.id in course.teacherIds %}
 					<span class="teacher-flag">老师</span>
 				{% endif %}
