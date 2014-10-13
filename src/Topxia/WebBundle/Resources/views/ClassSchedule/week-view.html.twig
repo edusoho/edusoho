@@ -47,6 +47,9 @@
                       {% else %}
                         <li>
                           <div class="thumbnail">
+                            {% if can_remove_schedule(app.user, courses, lessons, item) %}
+                              <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                            {% endif %}
                             <a href="javascript:;">
                               <img src="{{ file_path('', 'course-large.png') }}">
                             </a>

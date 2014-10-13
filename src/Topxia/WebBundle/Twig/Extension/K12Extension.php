@@ -41,11 +41,15 @@ class K12Extension extends \Twig_Extension
         if($user->isAdmin()) {
             return true;
         } else if ($user->isTeacher()) {
-            $course = $courses[$lessons[$schedule['lessonId']]['courseId']];
-            if(in_array($user['id'], $course['teacherIds'])) {
-                return true;
-            } else {
+            if(empty($lessons[$schedule['lessonId']])) {
                 return false;
+            } else {
+               $course = $courses[$lessons[$schedule['lessonId']]['courseId']];
+               if(in_array($user['id'], $course['teacherIds'])) {
+                   return true;
+               } else {
+                   return false;
+               } 
             }
         } else {
             return false;
