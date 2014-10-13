@@ -15,11 +15,11 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     {
         $version  = (int) $this->request->query->get("version", 9);
         if ($version > 5 && $version < 14) {
-            return "http://mobcdn.qiniudn.com/flash_2.x_3.x.apk";
+            return $this->controller->redirect("http://mobcdn.qiniudn.com/flash_2.x_3.x.apk");
         }
 
         if ($version > 13 && $version < 16) {
-            return "http://mobcdn.qiniudn.com/flash_4.x.apk";
+            return $this->controller->redirect("http://mobcdn.qiniudn.com/flash_4.x.apk");
         }
 
         return "";
