@@ -214,12 +214,21 @@ define(function(require, exports, module) {
             var $span = $(e.currentTarget),
                 self = this;
 
-            $span.hasClass('normal') && 
-                $('.course-display .editable-heading').removeClass('hidden').addClass('show') && $('.course-display .normal-heading').removeClass('show').addClass('hidden') 
-                &&  $('.course-display .editable-body').removeClass('hidden').addClass('show') && $('.course-display .normal-body').removeClass('show').addClass('hidden'); 
-            $span.hasClass('editable') && 
-                $('.course-display .normal-heading').removeClass('hidden').addClass('show') && $('.course-display .editable-heading').removeClass('show').addClass('hidden')
-                &&  $('.course-display .normal-body').removeClass('hidden').addClass('show') && $('.course-display .editable-body').removeClass('show').addClass('hidden');  
+            if($span.hasClass('normal')) {
+                $('.course-display .editable-heading').removeClass('hidden').addClass('show');
+                $('.course-display .normal-heading').removeClass('show').addClass('hidden');
+                $('.course-display .editable-body').removeClass('hidden').addClass('show');
+                $('.course-display .normal-body').removeClass('show').addClass('hidden'); 
+            } 
+            
+            if($span.hasClass('editable')) {
+                $('.course-display .normal-heading').removeClass('hidden').addClass('show');
+                $('.course-display .editable-heading').removeClass('show').addClass('hidden');
+                $('.course-display .normal-body').removeClass('hidden').addClass('show');
+                $('.course-display .editable-body').removeClass('show').addClass('hidden');  
+            }                
+               
+               
         },
         nextSunday: function(plus) {
             var sunday = this.sunday +'';
