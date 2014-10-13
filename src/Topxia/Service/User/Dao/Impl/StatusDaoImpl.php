@@ -50,24 +50,21 @@ class StatusDaoImpl extends BaseDao implements StatusDao
         $this->getConnection()->fetchColumn($sql, $userIds);
     }
 
-    public function findStatusesByUserId($userId,$startTime=null,$endTime=null)
+    public function findStatusesByUserId($userId, $start, $limit)
     {
         if(empty($userId)){
             return array();
         }
-        $startTime=empty($startTime)?0:$startTime;
-        $endTime=empty($endTime)?time():$endTime;
-        $sql="SELECT * FROM {$this->table} WHERE userId = ? and createdTime between ? and ? ORDER BY createdTime DESC;";
-        $statuses = $this->getConnection()->fetchAll($sql, array($userId,$startTime,$endTime));
+        $this->filterStartLimit($start, $limit);
+        $sql="SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC LIMIT {$start},{$limit};";
+        $statuses = $this->getConnection()->fetchAll($sql, array($userId));
         return $this->createSerializer()->unserializes($statuses, $this->serializeFields);
     }
 
-    public function findStatusesByUserIdCount($userId,$startTime=null,$endTime=null)
+    public function findStatusesByUserIdCount($userId)
     {
-        $startTime=empty($startTime)?0:$startTime;
-        $endTime=empty($endTime)?time():$endTime;
-        $sql ="SELECT COUNT(*) FROM {$this->table} WHERE userId = ? and createdTime between ? and ? ORDER BY createdTime DESC;";
-        return $this->getConnection()->fetchColumn($sql, array($userId,$startTime,$endTime));
+        $sql ="SELECT COUNT(*) FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC;";
+        return $this->getConnection()->fetchColumn($sql, array($userId));
     }
 
     public function searchStatuses($conditions, $orderBy, $start, $limit)

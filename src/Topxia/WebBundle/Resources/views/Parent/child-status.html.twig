@@ -6,6 +6,40 @@
 {% set side_nav = 'parent-child-status' %}
 
 {% block main %}
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="timeline">
+        {% for i in 1..3 %}
+        <div class="timeline-day timeline-day-today media">
+          <div class="media-object">
+            <div class="timeline-day-date">
+              <h5>今天</h5>
+              <h6>9月18</h6>
+            </div>
+            <div class="timeline-day-point"></div>
+          </div>
+          <div class="media-body">
+            <div class="popover right clearfix">
+              <div class="arrow"></div>
+              <div class="popover-content">
+                <ul class="timeline-items">
+                  <li>
+                    <span class="time">3小时前</span>
+                    <span class="message">完成了《xxxxxx》的学习。完成了《xxxxxx》的学习。完成了《xxxxxx》的学习。完成了《xxxxxx》的学习。</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+
+
   <div class="panel panel-default">
     <div class="panel-body">
       {% if statuses %}
@@ -32,7 +66,7 @@
         <div class="empty">还没有动态！</div>
       {% endif %}
       {% if moreBtnShow %}
-        <a href="{{path('parent_child_status',{childId:selectedChild.id|default(null),weekCount:weekCount|default(1)})}}" type="button" class="btn btn-primary btn-block">+</a>
+        <a href="javascript:;" data-url="{{path('parent_child_more_status',{childId:selectedChild.id,count:count+1})}}" id="moreStatusesBtn" type="button" class="btn btn-primary btn-block">+</a>
       {% endif %}
     </div>
   </div>

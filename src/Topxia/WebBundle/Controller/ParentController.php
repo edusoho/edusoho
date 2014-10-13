@@ -18,14 +18,12 @@ class ParentController extends BaseController
         if(!$user->isParent()) {
             return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
         }
-        $weekCount=$request->query->get('weekCount');
-        $weekCount=empty($weekCount)?1:$weekCount;
-        $startTime=time() - (7 * 24 * 60 * 60)*$weekCount;
-        $endTime=time();
+        // $weekCount=$request->query->get('weekCount');
+        // $weekCount=empty($weekCount)?1:$weekCount;
 
         $selectedChild=$this->getSelectedChild($request->query->get('childId'));
-        $statuses=$this->getStatusService()->findStatusesByUserId($selectedChild['id'],$startTime,$endTime);
-        $statusCount=$this->getStatusService()->findStatusesByUserIdCount($selectedChild['id'],0,time());
+        $statuses=$this->getStatusService()->findStatusesByUserId($selectedChild['id'],0,3);
+        $statusCount=$this->getStatusService()->findStatusesByUserIdCount($selectedChild['id']);
         $moreBtnShow=$statusCount>count($statuses)?true:false;
 
         foreach ($statuses as &$status) {
@@ -36,8 +34,24 @@ class ParentController extends BaseController
             'selectedChild'=>$selectedChild,
             'statuses'=>$statuses,
             'moreBtnShow'=>$moreBtnShow,
-            'weekCount'=>$weekCount+1
+            'count'=>0
         ));
+    }
+
+    function moreStatusesAction(Request $request)
+    {
+        $fields=$request->query->all();
+        $selectedChild=$this->getSelectedChild($fields['childId']);
+        $statuses=$this->getStatusService()->findStatusesByUserId($selectedChild['id'],$fields['count']*3,3);
+        $statusCount=$this->getStatusService()->findStatusesByUserIdCount($selectedChild['id']);
+        $moreBtnShow=$statusCount>($fields['count']*3+count($statuses))?true:false;
+
+        foreach ($statuses as &$status) {
+            $status['time']=date('Y年m月d日',$status['createdTime'])==date('Y年m月d日',time())?'今天':date('Y年m月d日',$status['createdTime']);
+        }
+        $statuses=ArrayToolkit::group($statuses,'time');
+        
+        return $this->createJsonResponse($statuses);
     }
 
     function childCoursesAction(Request $request)
