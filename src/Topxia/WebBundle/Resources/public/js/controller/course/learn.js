@@ -230,15 +230,19 @@ define(function(require, exports, module) {
                     });
                     mediaPlayer.on("timeChange", function(data){
                         var userId = $('#lesson-video-content').data("userId");
-                        localStorage.setItem(userId+':'+lesson.id, data.currentTime);
+                        if(parseInt(data.currentTime) != parseInt(data.duration)){
+                            DurationStorage.set(userId, lesson.mediaId, data.currentTime);
+                        }
                     });
                     mediaPlayer.on("ready", function(playerId, data){
                         var player = document.getElementById(playerId);
                         var userId = $('#lesson-video-content').data("userId");
-                        player.seek(localStorage.getItem(userId+':'+lesson.id));
+                        player.seek(DurationStorage.get(userId, lesson.mediaId));
                     });
                     mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
                     mediaPlayer.on('ended', function() {
+                        var userId = $('#lesson-video-content').data("userId");
+                        DurationStorage.del(userId, lesson.mediaId);
                         that._onFinishLearnLesson();
                     });
                     mediaPlayer.play();
@@ -547,6 +551,40 @@ define(function(require, exports, module) {
         }
 
     });
+
+    var DurationStorage = {
+        set: function(userId,mediaId,duration) {
+            var durations = localStorage.getItem("durations");
+            if(durations){
+                durations = $.parseJSON(durations);
+            } else {
+                durations = {};
+            }
+            durations["duration-"+userId+"-"+mediaId]=duration;
+            localStorage["durations"] = JSON.stringify(durations);
+        },
+        get: function(userId,mediaId) {
+            var key = "duration-"+userId+"-"+mediaId;
+            var durations = $.parseJSON(localStorage.getItem("durations"));
+            if(key in durations){
+                return durations[key];
+            }else {
+                return 0;
+            }
+        },
+        del: function(userId,mediaId) {
+            var key = "duration-"+userId+"-"+mediaId;
+            var durations = localStorage.getItem("durations");
+            if(durations){
+                durations = $.parseJSON(durations);
+            } else {
+                durations = {};
+            }
+            delete durations[key];
+            localStorage.setItem("durations", JSON.stringify(durations));
+        }
+    };
+
 
     exports.run = function() {
         
