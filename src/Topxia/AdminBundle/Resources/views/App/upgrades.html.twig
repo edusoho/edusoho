@@ -39,7 +39,7 @@
           </td>
 
           <td>
-            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.package.id}) }}" class="btn btn-primary {% if app.package.edusohoMinVersion > version %}disabled{% endif %}" data-keyboard="false" data-backdrop="static">更新</a>
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.package.id, type:'upgrade'}) }}" class="btn btn-primary {% if app.package.edusohoMinVersion > version %}disabled{% endif %}" data-keyboard="false" data-backdrop="static">更新</a>
           </td>
         </tr>
       {% endfor %}
