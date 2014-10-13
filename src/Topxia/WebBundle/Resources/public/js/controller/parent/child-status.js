@@ -3,10 +3,13 @@ define(function(require, exports, module) {
 	exports.run = function() {
 		$("#moreStatusesBtn").click(function(){
 			var self=$(this);
-
-			$.get(self.data('url'),function(html){
-				console.log(html);
+			$("#count").val(parseInt($("#count").val())+1);
+			$.get(self.data('url')+"&count="+$("#count").val(),function(html){
+				$('.timeline').html($('.timeline').html()+html);
 			});
+			if(parseInt($("#count").val())*3+3>parseInt($("#statusCount").val())){
+				self.hide();
+			}
 		});
 	}
 });
