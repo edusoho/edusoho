@@ -1,0 +1,34 @@
+{% if statuses %} 
+  {% set user = selectedChild %}
+  {% for time,statusList in statuses %}
+    <div class="timeline-day timeline-day-today media">
+      <div class="media-object">
+        <div class="timeline-day-date">
+          {% if time=='今天' %}
+            <h5>今天</h5>
+            <h6>{{ statusList[0].createdTime|date("m") }}月{{ statusList[0].createdTime|date("d") }}</h6>
+          {% else %}
+            <h5>{{ statusList[0].createdTime|date("m") }}月{{ statusList[0].createdTime|date("d") }}</h5>
+            <h6>{{ statusList[0].createdTime|date("Y") }}年</h6>
+          {% endif %}
+        </div>
+        <div class="timeline-day-point"></div>
+      </div>
+      <div class="media-body">
+        <div class="popover right clearfix">
+          <div class="arrow"></div>
+          <div class="popover-content">
+            <ul class="timeline-items">
+              {% for status in statusList %}
+                {% include 'TopxiaWebBundle:Parent:child-status-item-li.html.twig'%}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="empty">还没有动态！</div>
+{% endif %}
+

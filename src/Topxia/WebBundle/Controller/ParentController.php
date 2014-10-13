@@ -22,7 +22,7 @@ class ParentController extends BaseController
         // $weekCount=empty($weekCount)?1:$weekCount;
 
         $selectedChild=$this->getSelectedChild($request->query->get('childId'));
-        $statuses=$this->getStatusService()->findStatusesByUserId($selectedChild['id'],0,3);
+        $statuses=$this->getStatusService()->findStatusesByUserId($selectedChild['id'],0,30);
         $statusCount=$this->getStatusService()->findStatusesByUserIdCount($selectedChild['id']);
         $moreBtnShow=$statusCount>count($statuses)?true:false;
 
@@ -34,6 +34,7 @@ class ParentController extends BaseController
             'selectedChild'=>$selectedChild,
             'statuses'=>$statuses,
             'moreBtnShow'=>$moreBtnShow,
+            'statusCount'=>$statusCount,
             'count'=>0
         ));
     }
@@ -42,16 +43,16 @@ class ParentController extends BaseController
     {
         $fields=$request->query->all();
         $selectedChild=$this->getSelectedChild($fields['childId']);
-        $statuses=$this->getStatusService()->findStatusesByUserId($selectedChild['id'],$fields['count']*3,3);
-        $statusCount=$this->getStatusService()->findStatusesByUserIdCount($selectedChild['id']);
-        $moreBtnShow=$statusCount>($fields['count']*3+count($statuses))?true:false;
-
+        $statuses=$this->getStatusService()->findStatusesByUserId($selectedChild['id'],$fields['count']*30,30);
         foreach ($statuses as &$status) {
             $status['time']=date('Y年m月d日',$status['createdTime'])==date('Y年m月d日',time())?'今天':date('Y年m月d日',$status['createdTime']);
+            
         }
         $statuses=ArrayToolkit::group($statuses,'time');
-        
-        return $this->createJsonResponse($statuses);
+        return $this->render('TopxiaWebBundle:Parent:child-status-item.html.twig',array(
+            'selectedChild'=>$selectedChild,
+            'statuses'=>$statuses
+        ));
     }
 
     function childCoursesAction(Request $request)
