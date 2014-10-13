@@ -6,17 +6,17 @@
 {% block main %}
 <div class="panel panel-default panel-col">
 
-	<div class="panel-heading">
-		问题与讨论
-	</div>
-	<div class="panel-body">
-		<ul class="nav nav-tabs" role="tablist">
-			<li class={{questionActive|default('')}}><a href="{{path('parent_child_threads', {type:'question',childId:selectedChild.id|default(null)}) }}">参与问答</a></li>
-			<li class={{discussionActive|default('')}}><a href="{{path('parent_child_threads', {type:'discussion',childId:selectedChild.id|default(null)}) }}">发表话题</a></li>
-		</ul>
-		<br>
-		{% block list %}{% endblock %}
-		
-	</div>
+  <div class="panel-heading">
+    问题与讨论
+  </div>
+  <div class="panel-body">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class={{questionActive|default('')}}><a href="{{path('parent_child_threads', {type:'question',childId:selectedChild.id|default(null)}) }}">参与问答</a></li>
+      <li class={{discussionActive|default('')}}><a href="{{path('parent_child_threads', {type:'discussion',childId:selectedChild.id|default(null)}) }}">发表话题</a></li>
+    </ul>
+    <br>
+    {% block list %}{% endblock %}
+    
+  </div>
 </div>
 {% endblock %}

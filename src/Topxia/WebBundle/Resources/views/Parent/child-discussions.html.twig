@@ -3,7 +3,7 @@
 {% block title %}发表话题 - {{ parent() }}{% endblock %}
 
 {% block list %}
-	{% if threads %}
+  {% if threads %}
     {% include 'TopxiaWebBundle:MyThread:thread-list.html.twig'  with {type: 'question'} %}
   {% else %}
     <div class="empty">暂无发表的话题</div>

@@ -50,7 +50,7 @@
         </a>
         <ul class="dropdown-menu" role="menu">
           {% for child in children %}
-          	<li><a href="{{path('parent_child_status',{childId:child.id})}}">{{child.truename}}</a></li>
+            <li><a href="{{path('parent_child_status',{childId:child.id})}}">{{child.truename}}</a></li>
           {% endfor %}
         </ul>
       </li>
