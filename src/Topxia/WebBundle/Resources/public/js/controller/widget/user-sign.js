@@ -70,8 +70,9 @@ define(function(require, exports, module) {
             }
             this.showSignTable();
         },
-        signedOut: function() {
+        signedOut: function(e) {
             var self = this;
+            this.element.find('.sign_main').removeClass('keepShow');
             setTimeout(function(){
                 if(self.element.find('.sign_main').hasClass('keepShow')) {
                     return;
@@ -81,9 +82,11 @@ define(function(require, exports, module) {
             }, 1000);
         },
         showSignTable: function() {
+            this.element.find('.sign_main').addClass('keepShow');
             this.element.find('.sign_main').attr('style','display:block');
         },
         hiddenSignTable: function() {
+            this.element.find('.sign_main').removeClass('keepShow');
             this.element.find('.sign_main').attr('style','display:none');
         },
         initTable: function(signedToday) {
