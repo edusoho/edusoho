@@ -3,7 +3,7 @@
   </div>
   {% if classMember %}
   <div style="margin:10px 0 10px 0">
-    我的{{ setting('point', '学分').name }} <span style="color:red">{{user.point}}</span> 
+    我的{{ setting('point', '学分').name|default('学分') }} <span style="color:red">{{user.point}}</span> 
     <div class="pull-right">
       排名<span style="color:red"> {{ classMember.currentRank }}</span>
       {% if classMember.lastRank - classMember.currentRank > 0 %}
