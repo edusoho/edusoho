@@ -20,4 +20,6 @@ interface SchoolService
 	public function getClientVersion();
 
 	public function getDownloadUrl();
+
+	public function getFlashApk();
 }

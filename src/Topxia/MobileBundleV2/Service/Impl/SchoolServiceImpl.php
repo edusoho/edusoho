@@ -11,6 +11,20 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public $banner;
 
+    public function getFlashApk()
+    {
+        $version  = (int) $this->request->query->get("version", 9);
+        if ($version > 5 && $version < 14) {
+            return "http://mobcdn.qiniudn.com/flash_2.x_3.x.apk";
+        }
+
+        if ($version > 13 && $version < 16) {
+            return "http://mobcdn.qiniudn.com/flash_4.x.apk";
+        }
+
+        return "";
+    }
+
     public function getDownloadUrl()
     {
         return $this->controller->render('TopxiaMobileBundleV2:Content:download.html.twig', array(
