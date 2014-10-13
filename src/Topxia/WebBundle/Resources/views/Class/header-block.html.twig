@@ -8,7 +8,7 @@
         <div class="media-body">
           <h1 class="media-heading">{{ class_name(class) }}</h1>
           {% if headTeacher %}
-          <div class="media-metas">班主任： {{ headTeacher.truename }}</div>
+          <div class="media-metas">班主任： <a href="{{path('user_show',{id:headTeacher.id})}}">{{ headTeacher.truename }}</a></div>
           {% endif %}
         </div>
       </div>

@@ -284,7 +284,7 @@ class CourseController extends BaseController
 
 			/**2.非班主任非该课程任课老师非超级管理员的老师*/
 			if(in_array('ROLE_TEACHER', $user['roles']) && !$user->isAdmin() && $class['headTeacherId']!=$user['id'] && !in_array($user['id'], $course['teacherIds'])){
-				throw $this->createAccessDeniedException('只能查看自己班级的课程');
+				throw $this->createAccessDeniedException('只能查看自己所教的课程');
 			}
 		}
 		/**3.符合查看条件,但用户被封禁*/
