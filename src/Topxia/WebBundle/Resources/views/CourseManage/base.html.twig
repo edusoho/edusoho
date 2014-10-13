@@ -75,7 +75,7 @@
 			{% if course.type == 'live' %}
 
 			<div class="form-group">
-			  <label class="col-md-2 control-label" for="maxStudentNum-field">直播最大学员数</label>
+			  <label class="col-md-2 control-label" for="maxStudentNum-field">直播最大学生数</label>
 			 <div class="col-md-8 controls">
 					<input type="text" id="maxStudentNum-field" name="maxStudentNum" class="form-control width-input width-input-large" value="{{ course.maxStudentNum|default(20) }}" data-live-capacity="{{ liveCapacity }}"> 人
 					<div class="help-block" style="display:none;"></div>
@@ -85,10 +85,10 @@
 			{% endif %}
 
 			<div class="form-group">
-			  <label class="col-md-2 control-label" for="course_expiryDay">学员有效期</label>
+			  <label class="col-md-2 control-label" for="course_expiryDay">学生有效期</label>
 			  <div class="col-md-8 controls">
-				<input type="text" id="course_expiryDay" name="expiryDay" required="required" class="form-control width-input width-input-large" value="{{ course.expiryDay }}" data-widget-cid="widget-3" data-explain="设置该值后，学员只能在有效期内学习课程、发表话题、提问、笔记等，超过有效期后学员只能浏览课时目录及讨论区。该值为0，则不做此限制。"> 天
-				<div class="help-block">设置该值后，学员只能在有效期内学习课程、发表话题、提问、笔记等，超过有效期后学员只能浏览课时目录及讨论区。该值为0，则不做此限制。</div>
+				<input type="text" id="course_expiryDay" name="expiryDay" required="required" class="form-control width-input width-input-large" value="{{ course.expiryDay }}" data-widget-cid="widget-3" data-explain="设置该值后，学生只能在有效期内学习课程、发表话题、提问、笔记等，超过有效期后学生只能浏览课时目录及讨论区。该值为0，则不做此限制。"> 天
+				<div class="help-block">设置该值后，学生只能在有效期内学习课程、发表话题、提问、笔记等，超过有效期后学生只能浏览课时目录及讨论区。该值为0，则不做此限制。</div>
 			  </div>
 			</div>
 
@@ -102,7 +102,7 @@
 			{% endif %}
 
 			<div class="form-group">
-				<label class="col-md-2 control-label">显示学员人数</label>
+				<label class="col-md-2 control-label">显示学生人数</label>
 				<div class="col-md-8 controls radios">
 					{{ radios('showStudentNumType', {'opened':'开启', 'closed':'关闭'}, course.showStudentNumType ) }}
 				</div>

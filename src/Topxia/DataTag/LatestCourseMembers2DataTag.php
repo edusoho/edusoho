@@ -13,7 +13,7 @@ class LatestCourseMembers2DataTag extends CourseBaseDataTag implements DataTag
      *
      * 可传入的参数：
      *   categoryId 选填 分类ID
-     *   count    必需 学员数量，取值不能超过100
+     *   count    必需 学生数量，取值不能超过100
      * 
      * @param  array $arguments 参数
      * @return array 课程成员列表

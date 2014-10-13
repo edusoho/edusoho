@@ -284,7 +284,7 @@ class CourseController extends MobileController
         }
 
         if (!$this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
-            $result = array('status' => 'fail', 'message' => '您不是课程学员，不能学习');
+            $result = array('status' => 'fail', 'message' => '您不是课程学生，不能学习');
             goto response;
         }
 

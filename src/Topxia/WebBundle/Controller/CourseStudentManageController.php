@@ -76,7 +76,7 @@ class CourseStudentManageController extends BaseController
 			}
 
 			if ($this->getCourseService()->isCourseStudent($course['id'], $user['id'])) {
-				throw $this->createNotFoundException("用户已经是学员，不能添加！");
+				throw $this->createNotFoundException("用户已经是学生，不能添加！");
 			}
 
 			$order = $this->getOrderService()->createOrder(array(
@@ -112,7 +112,7 @@ class CourseStudentManageController extends BaseController
 
 
 
-			$this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
+			$this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学生{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
 
 			return $this->createStudentTrResponse($course, $member);
 		}
@@ -256,7 +256,7 @@ class CourseStudentManageController extends BaseController
 			$user = $this->getUserService()->getUserByNickname($nickname);
 			$isCourseStudent = $this->getCourseService()->isCourseStudent($id, $user['id']);
 			if($isCourseStudent){
-				$response = array('success' => false, 'message' => '该用户已是本课程的学员了');
+				$response = array('success' => false, 'message' => '该用户已是本课程的学生了');
 			} else {
 				$response = array('success' => true, 'message' => '');
 			}
@@ -272,7 +272,7 @@ class CourseStudentManageController extends BaseController
 	public function showAction(Request $request, $courseId, $userId)
 	{
 		if (!$this->getCurrentUser()->isAdmin()) {
-			throw $this->createAccessDeniedException('您无权查看学员详细信息！');
+			throw $this->createAccessDeniedException('您无权查看学生详细信息！');
 		}
 
 		$user = $this->getUserService()->getUser($userId);

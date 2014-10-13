@@ -168,7 +168,7 @@ class LiveCourseController extends BaseController
 
         }
 
-        return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
+        return $this->createMessageResponse('info', '您不是课程学生，不能参加直播！');
     }
 
 

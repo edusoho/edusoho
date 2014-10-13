@@ -101,7 +101,7 @@ define(function(require, exports, module) {
                 var current = parseInt($(elem).val());
                 var capacity = parseInt($(elem).data('liveCapacity'));
                 if (current > capacity) {
-                    message = '网校可支持最多' + capacity +'人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。';
+                    message = '网校可支持最多' + capacity +'人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学生无法进入直播。';
                     if ($(elem).parent().find('.alert-warning').length > 0) {
                         $(elem).parent().find('.alert-warning').html(message).show();
                     } else {

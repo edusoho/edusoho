@@ -853,7 +853,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("课时(#{$lessonId})不存在！");
 		}
 
-		// 更新已学该课时学员的计数器
+		// 更新已学该课时学生的计数器
 		$learnCount = $this->getLessonLearnDao()->findLearnsCountByLessonId($lessonId);
 		if ($learnCount > 0) {
 			$learns = $this->getLessonLearnDao()->findLearnsByLessonId($lessonId, 0, $learnCount);
@@ -1501,17 +1501,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 				'createdTime' => time(),
 			);
 		}
-		// 先清除所有的已存在的教师学员
+		// 先清除所有的已存在的教师学生
 		$existTeacherMembers = $this->findCourseTeachers($courseId);
 		foreach ($existTeacherMembers as $member) {
 			$this->getMemberDao()->deleteMember($member['id']);
 		}
 		$course = $this->getCourse($courseId);
 
-		// 逐个插入新的教师的学员数据
+		// 逐个插入新的教师的学生数据
 		$visibleTeacherIds = array();
 		foreach ($teacherMembers as $member) {
-			// 存在学员信息，说明该用户先前是学生学员，则删除该学员信息。
+			// 存在学生信息，说明该用户先前是学生学生，则删除该学生信息。
 			$existMember = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $member['userId']);
 			if ($existMember) {
 				$this->getMemberDao()->deleteMember($existMember['id']);
@@ -1559,7 +1559,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$member = $this->getCourseMember($courseId, $userId);
 		if (empty($member)) {
-			throw $this->createServiceException('课程学员不存在，备注失败!');
+			throw $this->createServiceException('课程学生不存在，备注失败!');
 		}
 		$fields = array('remark' => empty($remark) ? '' : (string) $remark);
 		return $this->getMemberDao()->updateMember($member['id'], $fields);
@@ -1683,7 +1683,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 		if (empty($member) or ($member['role'] != 'student')) {
-			throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，退出课程失败。");
+			throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学生，退出课程失败。");
 		}
 
 		$this->getMemberDao()->deleteMember($member['id']);
@@ -1692,19 +1692,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'studentNum' => $this->getCourseStudentCount($courseId),
 		));
 
-		$this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员#{$member['id']}");
+		$this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学生#{$member['id']}");
 	}
 
 	public function lockStudent($courseId, $userId)
 	{
 		$course = $this->getCourse($courseId);
 		if (empty($course)) {
-			throw $this->createNotFoundException("课程(#${$courseId})不存在，封锁学员失败。");
+			throw $this->createNotFoundException("课程(#${$courseId})不存在，封锁学生失败。");
 		}
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 		if (empty($member) or ($member['role'] != 'student')) {
-			throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，封锁学员失败。");
+			throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学生，封锁学生失败。");
 		}
 
 		if ($member['locked']) {
@@ -1718,12 +1718,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$course = $this->getCourse($courseId);
 		if (empty($course)) {
-			throw $this->createNotFoundException("课程(#${$courseId})不存在，封锁学员失败。");
+			throw $this->createNotFoundException("课程(#${$courseId})不存在，封锁学生失败。");
 		}
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 		if (empty($member) or ($member['role'] != 'student')) {
-			throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，解封学员失败。");
+			throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学生，解封学生失败。");
 		}
 
 		if (empty($member['locked'])) {
@@ -1856,7 +1856,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			if(count(array_intersect($childIds,$memberIds))>0){
 				return array($course, array());
 			}else{
-				throw $this->createAccessDeniedException('您的子女不是课程学员，不能查看课程内容！');
+				throw $this->createAccessDeniedException('您的子女不是课程学生，不能查看课程内容！');
 			}
 		}
 
@@ -1866,7 +1866,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if (empty($member) or !in_array($member['role'], array('teacher', 'student'))) {
-			throw $this->createAccessDeniedException('您不是课程学员，不能查看课程内容！');
+			throw $this->createAccessDeniedException('您不是课程学生，不能查看课程内容！');
 		}
 
 		return array($course, $member);
@@ -1879,7 +1879,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		/*
-		如果课程设置了限免时间，那么即使expiryDay为0，学员到了deadline也不能参加学习
+		如果课程设置了限免时间，那么即使expiryDay为0，学生到了deadline也不能参加学习
 		if ($course['expiryDay'] == 0) {
 			return true;
 		}
@@ -1946,7 +1946,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
 		if (empty($member) or !in_array($member['role'], array('admin', 'teacher', 'student'))) {
-			throw $this->createAccessDeniedException('您不是课程学员，不能学习！');
+			throw $this->createAccessDeniedException('您不是课程学生，不能学习！');
 		}
 
 		return array($course, $member);

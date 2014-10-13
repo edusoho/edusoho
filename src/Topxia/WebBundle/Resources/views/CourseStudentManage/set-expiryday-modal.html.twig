@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}增加学员课程有效期{% endblock %}
+{% block title %}增加学生课程有效期{% endblock %}
 {% block body %}
 
 <form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('course_set_expiryday', { courseId:course.id, userId:user.id }) }}">
@@ -18,7 +18,7 @@
 
   	<div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="student-nickname">学员昵称</label>
+        <label for="student-nickname">学生昵称</label>
       </div>
       <div class="col-md-7 controls">
         <div style="margin-top: 7px;">
@@ -36,7 +36,7 @@
       </div>
     </div>
   {% else %}
-    <div class="empty">{{dict_text('courseStatus', course.status)}}课程不能增加学员有效期，请课程发布后再增加。</div>
+    <div class="empty">{{dict_text('courseStatus', course.status)}}课程不能增加学生有效期，请课程发布后再增加。</div>
   {% endif %}
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

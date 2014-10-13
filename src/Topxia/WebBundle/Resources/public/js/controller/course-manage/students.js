@@ -10,15 +10,15 @@ define(function(require, exports, module) {
 
         $list.on('click', '.student-remove', function(){
             var $tr = $(this).parents('tr');
-            if (!confirm('您真的要移除该学员吗？')) {
+            if (!confirm('您真的要移除该学生吗？')) {
                 return ;
             }
 
             $.post($(this).data('url'), function(){
-                Notify.success('移除学员成功！');
+                Notify.success('移除学生成功！');
                 $tr.remove();
             }).error(function(){
-                Notify.danger('移除学员失败，请重试！');
+                Notify.danger('移除学生失败，请重试！');
             });
         });
 

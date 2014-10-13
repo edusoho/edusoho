@@ -14,11 +14,11 @@
   <fieldset>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >给新学员发送欢迎私信</label>
+        <label >给新学生发送欢迎私信</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('welcome_message_enabled', {1:'开启', 0:'关闭'}, courseSetting.welcome_message_enabled) }}
-      <p class="help-block">开启后，新学员加入课程后，会收到教师的欢迎私信</p>
+      <p class="help-block">开启后，新学生加入课程后，会收到教师的欢迎私信</p>
       </div>
     </div>
 
@@ -46,7 +46,7 @@
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('buy_fill_userinfo', {1:'开启', 0:'关闭'}, courseSetting.buy_fill_userinfo) }}
-      <p class="help-block">开启后，学员购买课程时，需填写个人资料</p>
+      <p class="help-block">开启后，学生购买课程时，需填写个人资料</p>
       </div>
       <div class="controls col-md-8 col-md-offset-3"  id="show-list">
         {% for sort in courseSetting.userinfoFields%}
@@ -220,7 +220,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >允许教师添加/移除学员</label>
+        <label >允许教师添加/移除学生</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('teacher_manage_student', {1:'是', 0:'否'}, courseSetting.teacher_manage_student) }}
@@ -229,7 +229,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >允许教师导出学员资料</label>
+        <label >允许教师导出学生资料</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('teacher_export_student', {1:'是', 0:'否'}, courseSetting.teacher_export_student) }}
@@ -238,11 +238,11 @@ glyphicon glyphicon-chevron-up"></span></a></div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >允许学员下载课时的音视频</label>
+        <label >允许学生下载课时的音视频</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('student_download_media', {0:'不允许', 1:'允许'}, courseSetting.student_download_media) }}
-        <div class="help-block">开启此项设置后，学员可在课时学习界面侧栏的"资料"面板中下载。</div>
+        <div class="help-block">开启此项设置后，学生可在课时学习界面侧栏的"资料"面板中下载。</div>
       </div>
     </div>
 

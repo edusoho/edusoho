@@ -23,14 +23,14 @@
         </li>
     {% else %}
       <li class="media">
-        <a class="pull-left img-a" href="#" target="_blank">
+        <a class="pull-left img-a" href="#">
           {% if schedule.status == 'finished' %}
               <span class="finished-icon"><span class="glyphicon glyphicon-ok text-success"></span></span>
             {% endif %}
           <img class="media-object" src="{{ file_path('', 'course-large.png') }}" alt="课时已删除!">
         </a>
         <div class="media-body" title="课时已删除!">
-          <h4 class="media-heading">课时已删除!</h4>
+          <h4 class="media-heading text-danger">课时已删除!</h4>
         </div>
       </li>
     {% endif %}  
