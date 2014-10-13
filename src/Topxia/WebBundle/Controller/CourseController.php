@@ -527,7 +527,7 @@ class CourseController extends BaseController
 		}
 
 		if (!$this->getCourseService()->canTakeCourse($id)) {
-			return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学生，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+			return $this->createMessageResponse('info', "您还不是该课程《{$course['title']}》的学生或者老师，不能进行学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
 		}
 		
 		try{
