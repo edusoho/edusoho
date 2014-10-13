@@ -41,7 +41,7 @@
               <i class="glyphicon glyphicon-thumbs-up"></i> {{ course.ratingNum }}</a>
 
             {% if course.showStudentNumType == 'opened' or member.role|default('student') == 'teacher' or isAdmin %}
-              <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看学员的学习进度, 还可以发私信进行联系!" data-placement="bottom"
+              <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看学生的学习进度, 还可以发私信进行联系!" data-placement="bottom"
               href="#modal"><i class="glyphicon glyphicon-user"></i> {{course.studentNum}}</a>
             {% endif %}
 

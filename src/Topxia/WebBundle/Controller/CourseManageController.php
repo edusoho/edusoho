@@ -61,7 +61,7 @@ class CourseManageController extends BaseController
             $user = $this->getUserService()->getUserByNickname($nickname);
             $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
             if($isCourseStudent){
-                $response = array('success' => false, 'message' => '该用户已是本课程的学员了！');
+                $response = array('success' => false, 'message' => '该用户已是本课程的学生了！');
             } else {
                 $response = array('success' => true, 'message' => '');
             }

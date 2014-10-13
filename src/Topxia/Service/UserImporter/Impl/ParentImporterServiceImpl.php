@@ -10,7 +10,7 @@ use Topxia\WebBundle\Twig\Extension\DataDict;
 
 class ParentImporterServiceImpl extends BaseImporterService implements ParentImporterService
 {
-    private $otherNecessaryFields = array('mobile' => '手机号码', 'childNumber' => '子女学号', 'relation' => '称谓');
+    private $otherNecessaryFields = array('mobile' => '手机号码', 'childNumber' => '子女学号', 'relation' => '家庭关系');
 
     public function importUserByUpdate($parents, $classId)
     {
@@ -25,7 +25,7 @@ class ParentImporterServiceImpl extends BaseImporterService implements ParentImp
                     $this->getUserService()->changeTrueName($parent["id"],$parents[$i]["truename"]);
                     $this->getUserService()->updateUserProfile($parent["id"],$parents[$i]); 
                 } else {
-                    $this->importparentByIgnore($parents, $classId);
+                    $this->importUserByIgnore($parents, $classId);
                 }
                              
             }

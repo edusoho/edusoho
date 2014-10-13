@@ -159,7 +159,7 @@ class UserServiceImpl extends BaseService implements UserService
         $mobile=empty($mobile)?null:$mobile;
         $user=$this->getUserByMobile($mobile);
         if(empty($user) || (!empty($userId) && $userId==$user['id'])){
-            var_dump(!empty($mobile));
+            
             if (!empty($mobile) && !SimpleValidator::mobile($mobile)) {
                 throw $this->createServiceException('手机号码格式不正确，变更手机号码失败。');
             }

@@ -17,9 +17,9 @@ define(function(require, exports, module) {
                 
                 $.post($form.attr('action'), $form.serialize(), function(response) {
                     $modal.modal('hide');
-                    Notify.success('添加学员操作成功!');
+                    Notify.success('添加学生操作成功!');
                 },'json').error(function(){
-                    Notify.danger('添加学员操作失败!');
+                    Notify.danger('添加学生操作失败!');
                 });
             }
 

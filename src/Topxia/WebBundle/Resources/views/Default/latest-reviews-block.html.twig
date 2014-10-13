@@ -1,6 +1,6 @@
 {% if reviews %}
 	<div class="es-box">
-		<div class="es-box-heading"><h2>学员评价</h2></div>
+		<div class="es-box-heading"><h2>学生评价</h2></div>
 	<ul class="media-list latest-review-list">
 		{% for review in reviews %}
 		  {% set author = users[review.userId]|default(null) %}

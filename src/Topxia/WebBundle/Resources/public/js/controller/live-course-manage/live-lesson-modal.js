@@ -182,7 +182,7 @@ define(function(require, exports, module) {
                     var maxStudentNum = parseInt($(elem).data('maxStudentNum'));
                     var leftCapacity = parseInt(response);
                     if ( maxStudentNum > leftCapacity) {
-                       var message = '在此时间段内开课，将会超出教室容量<strong>' + (maxStudentNum - leftCapacity) + '</strong>人，届时有可能会导致满额后部分学员无法进入直播。';
+                       var message = '在此时间段内开课，将会超出教室容量<strong>' + (maxStudentNum - leftCapacity) + '</strong>人，届时有可能会导致满额后部分学生无法进入直播。';
                         $(elem).parent().find('.help-block').html('<div class="alert alert-warning">' + message + '</div>');
                     }
                 }, 'json');

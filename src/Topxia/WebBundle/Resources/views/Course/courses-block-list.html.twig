@@ -46,7 +46,7 @@
           <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
           <span class="divider"></span>
           {% if course.showStudentNumType == 'opened' %}
-          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学员</span>
+          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学生</span>
           {% endif %}
           {# {% if course.price > 0 and free_limit_type(course) == 'free_now' %}
             <span class="free-money-text"><del>{{ course.price }}</del></span>

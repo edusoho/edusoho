@@ -19,9 +19,9 @@ define(function(require, exports, module) {
                     var $html = $(html);
                     $('#'+$html.attr('id')).replaceWith($html);
                     $modal.modal('hide');
-                    Notify.success('备注学员成功');
+                    Notify.success('备注学生成功');
                 }).error(function(){
-                    Notify.danger('备注学员失败，请重试！');
+                    Notify.danger('备注学生失败，请重试！');
                 });
             }
 

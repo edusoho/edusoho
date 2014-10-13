@@ -274,7 +274,7 @@ class CourseController extends BaseController
 			$members=$this->getCourseService()->findCourseStudents($course['id'],0,PHP_INT_MAX);
 			$memberIds=ArrayToolkit::column($members,'userId');	
 			if(count(array_intersect($childIds,$memberIds))==0){
-				throw $this->createAccessDeniedException('您的子女不是课程学员，不能查看课程内容！');
+				throw $this->createAccessDeniedException('您的子女不是课程学生，不能查看课程内容！');
 			}
 		}else{
 			/**1.非本班非管理员的学生*/
@@ -485,7 +485,7 @@ class CourseController extends BaseController
 		$user = $this->getCurrentUser();
 
 		if (empty($member)) {
-			throw $this->createAccessDeniedException('您不是课程的学员。');
+			throw $this->createAccessDeniedException('您不是课程的学生。');
 		}
 
 		if (!empty($member['orderId'])) {
@@ -527,7 +527,7 @@ class CourseController extends BaseController
 		}
 
 		if (!$this->getCourseService()->canTakeCourse($id)) {
-			return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+			return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学生，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
 		}
 		
 		try{

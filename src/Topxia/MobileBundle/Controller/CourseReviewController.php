@@ -36,7 +36,7 @@ class CourseReviewController extends MobileController
         }
 
         if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createErrorResponse($request, 'access_denied', "您不是课程《{$course['title']}》学员，不能评价课程！");
+            return $this->createErrorResponse($request, 'access_denied', "您不是课程《{$course['title']}》学生，不能评价课程！");
         }
 
         $review = array();

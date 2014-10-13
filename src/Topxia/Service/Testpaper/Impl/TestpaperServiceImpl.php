@@ -444,7 +444,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaperResult = $this->getTestpaperResultDao()->getTestpaperResult($id);
 
         if ($testpaperResult['userId'] != $userId) {
-            throw $this->createAccessDeniedException('无权修改其他学员的试卷！');
+            throw $this->createAccessDeniedException('无权修改其他学生的试卷！');
         }
 
         if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
@@ -662,7 +662,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaperResult = $this->getTestpaperResultDao()->getTestpaperResult($id);
 
         if ($testpaperResult['userId'] != $user['id']) {
-            throw $this->createAccessDeniedException('无权修改其他学员的试卷！');
+            throw $this->createAccessDeniedException('无权修改其他学生的试卷！');
         }
 
         if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {

@@ -73,13 +73,14 @@ class SchoolController extends BaseController
         if ($request->getMethod() == 'POST') {
             $point = $request->request->all();
             $this->getSettingService()->set('point', $point);
-            $this->getLogService()->info('point', 'update_settings', "更新学分设置", $point);
-            $this->setFlashMessage('success', '学分设置已保存！');
+            $this->getLogService()->info('point', 'update_settings', "更新学习积分设置", $point);
+            $this->setFlashMessage('success', '学习积分设置已保存！');
         }
 
         $point = $this->getSettingService()->get('point', array());
 
         $default = array(
+            'name' => '学分',
             'accomplishLesson' => 2,
             'shareNote' => 3,
             'noteByLiked' => 2,

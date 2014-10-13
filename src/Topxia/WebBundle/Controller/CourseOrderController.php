@@ -142,7 +142,7 @@ class CourseOrderController extends OrderController
         $user = $this->getCurrentUser();
 
         if (empty($member) or empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('您不是课程的学员或尚未购买该课程，不能退学。');
+            throw $this->createAccessDeniedException('您不是课程的学生或尚未购买该课程，不能退学。');
         }
 
         $order = $this->getOrderService()->getOrder($member['orderId']);
@@ -185,7 +185,7 @@ class CourseOrderController extends OrderController
 
         $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
         if (empty($member) or empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('您不是课程的学员或尚未购买该课程，不能取消退款。');
+            throw $this->createAccessDeniedException('您不是课程的学生或尚未购买该课程，不能取消退款。');
         }
 
         $this->getCourseOrderService()->cancelRefundOrder($member['orderId']);

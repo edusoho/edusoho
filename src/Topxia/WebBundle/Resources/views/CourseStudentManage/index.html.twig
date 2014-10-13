@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 
-{% block title %}学员管理 - {{ parent() }}{% endblock %}
+{% block title %}学生管理 - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'students' %}
 {% set script_controller = 'course-manage/students' %}
@@ -8,12 +8,12 @@
 {% block main %}
 
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">学员管理
+  <div class="panel-heading">学生管理
     {% if app.user.isAdmin() or setting('course.teacher_export_student', false) %}
-      <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('course_manage_student_export_csv', {id:course.id}) }}"><i class="glyphicon glyphicon-export"></i> 导出学员</a>
+      <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('course_manage_student_export_csv', {id:course.id}) }}"><i class="glyphicon glyphicon-export"></i> 导出学生</a>
     {% endif %}
     {% if app.user.isAdmin() or isTeacherAuthManageStudent == 1 %}
-      <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 添加学员</button>
+      <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 添加学生</button>
     {% endif %}
 
   </div>
@@ -33,7 +33,7 @@
     <table class="table table-striped" id="course-student-list">
       <thead>
         <tr>
-          <th width="40%">学员</th>
+          <th width="40%">学生</th>
           <th width="30%">学习进度</th>
           <th width="30%">操作</th>
         </tr>
@@ -45,7 +45,7 @@
           {% set isFollowing = user.id in followingIds %}
           {% include 'TopxiaWebBundle:CourseStudentManage:tr.html.twig' %}
         {% else %}
-          <tr class="empty"><td colspan="20">无学员记录</td></tr>
+          <tr class="empty"><td colspan="20">无学生记录</td></tr>
         {% endfor %}
       </tbody>
     </table>

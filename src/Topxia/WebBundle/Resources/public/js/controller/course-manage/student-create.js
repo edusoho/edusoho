@@ -23,9 +23,9 @@ define(function(require, exports, module) {
                     $table.find('tr.empty').remove();
                     $(html).prependTo($table.find('tbody'));
                     $modal.modal('hide');
-                    Notify.success('添加学员操作成功!');
+                    Notify.success('添加学生操作成功!');
                 }).error(function(){
-                    Notify.danger('添加学员操作失败!');
+                    Notify.danger('添加学生操作失败!');
                     $btn.button('reset').removeClass('disabled');
                 });
 

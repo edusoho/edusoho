@@ -33,7 +33,7 @@
       {% endif %}
     </div>
     <div style="padding:10px;">
-      学分：{{selectedChild.point}}分
+      {{ setting('point', '学分').name|default('学分') }}：{{selectedChild.point}}分
     </div>
   </div>
 </div>

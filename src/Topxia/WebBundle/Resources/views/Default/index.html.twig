@@ -149,12 +149,12 @@
     <div class="col-md-3">
       {{ render(controller('TopxiaWebBundle:Default:promotedTeacherBlock')) }}
 
-      {# 学员动态 #}
+      {# 学生动态 #}
       {% set learns = data('LatestFinishedLearns', {'count':5}) %}
       {% if learns %}
         <div class="es-box status-side">
           <div class="es-box-heading">
-            <h2>学员动态</h2>
+            <h2>学生动态</h2>
           </div>
             <div class="es-box-body">
               <ul class="media-list">
@@ -260,7 +260,7 @@
             <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
             <span class="divider"></span>
             {% if course.showStudentNumType == 'opened' %}
-            <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学员</span>
+            <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学生</span>
             {% endif %}
             <span class="course-price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
           </div>

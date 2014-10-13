@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 		});
 
 		$table.on('click', '.close-course', function(){
-			if (!confirm('您确认要关闭此课程吗？课程关闭后，仍然还在有效期内的学员，将可以继续学习。')) return false;
+			if (!confirm('您确认要关闭此课程吗？课程关闭后，仍然还在有效期内的学生，将可以继续学习。')) return false;
 			$.post($(this).data('url'), function(html){
 				var $tr = $(html);
 				$table.find('#' + $tr.attr('id')).replaceWith(html);
@@ -33,7 +33,7 @@ define(function(require, exports, module) {
 		});
 
 		$table.on('click', '.delete-course', function() {
-			if (!confirm('删除课程，将删除课程的章节、课时、学员信息。真的要删除该课程吗？')) {
+			if (!confirm('删除课程，将删除课程的章节、课时、学生信息。真的要删除该课程吗？')) {
 				return ;
 			}
 
