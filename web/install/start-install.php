@@ -311,7 +311,7 @@ class SystemInit
         if (empty($users) or empty($users[0])) {
             return array('error' => '管理员帐号不存在，创建Key失败');
         }
-        $keys = $applier->applyKey($users[0]);
+        $keys = $applier->applyKey($users[0], 'opensource', 'install');
 
         if (empty($keys['accessKey']) or empty($keys['secretKey'])) {
             return array('error' => 'Key生成失败，请检查服务器网络后，重试！');
