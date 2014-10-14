@@ -39,7 +39,7 @@ class PluginRefreshCommand extends BaseCommand
         );
 
         foreach ($apps as $app) {
-            if ($app['code'] == 'MAIN') {
+            if ($app['code'] == 'K12MAIN') {
                 continue;
             }
 
@@ -67,7 +67,7 @@ class PluginRefreshCommand extends BaseCommand
         $config = '';
 
         foreach ($apps as $app) {
-            if ($app['code'] == 'MAIN') {
+            if ($app['code'] == 'K12MAIN') {
                 continue;
             }
             $code = $app['code'];

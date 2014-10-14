@@ -79,7 +79,7 @@ class DefaultController extends BaseController
 
         $mainAppUpgrade = null;
         foreach ($apps as $key => $value) {
-            if(isset($value['code']) && $value['code']=="MAIN") {
+            if(isset($value['code']) && $value['code']=="K12MAIN") {
                 $mainAppUpgrade = $value;
             }
         }

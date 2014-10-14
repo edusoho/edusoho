@@ -275,9 +275,28 @@ define(function(require, exports, module) {
                 html: true,
                 delay: 200,
                 content: function() {
+                    $(this).addClass('currentPopover');
                     return $(this).find('.popover-content').html();
                 },
             });
+
+            
+            $('.schedule').on('mouseenter', '.popover', function(){
+
+                $(this).addClass('keep-hovering');
+            });
+
+            $('.schedule').on('mouseleave', '.popover', function() {
+                $(this).removeClass('keep-hovering');
+                $('.schedule').find('.currentPopover').removeClass('currentPopover').popover('hide');
+            });
+
+            $('.schedule').on('hide.bs.popover', function () {
+                if ($(this).find('.popover').hasClass('keep-hovering')) {
+                    return false;
+                }
+                return true;
+            });    
         }
 
     });

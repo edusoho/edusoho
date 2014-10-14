@@ -20,6 +20,8 @@ $functionName();
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\CloudPlatform\KeyApplier;
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 function check_installed()
 {
@@ -139,9 +141,13 @@ function install_step3()
 
 	$connection = _create_connection();
 
+	$yaml = new Yaml();
+	$parameters = $yaml->parse('../../app/config/parameters_default.yml'); 
+
+	$parameterBag = new ParameterBag($parameters);
 	$serviceKernel = ServiceKernel::create('prod', true);
 	$serviceKernel->setConnection($connection);
-	// $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
+	$serviceKernel->setParameterBag($parameterBag);
 
 	$error = null;
 	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
@@ -283,6 +289,7 @@ class SystemInit
 
 	public function initAdmin($user)
 	{
+		$user['number'] = 't001';
 	    $user = $user = $this->getUserService()->register($user);
 	    $user['roles'] =  array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
 	    $user['currentIp'] = '127.0.0.1';

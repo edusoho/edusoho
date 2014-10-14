@@ -46,14 +46,14 @@ class AppServiceImpl extends BaseService implements AppService
 
     public function getMainVersion()
     {   
-        $app=$this->getAppDao()->getAppByCode('MAIN');
+        $app=$this->getAppDao()->getAppByCode('K12MAIN');
 
         return  $app['version'];
     }
 
     public function checkAppUpgrades()
     {
-        $mainApp = $this->getAppDao()->getAppByCode('MAIN');
+        $mainApp = $this->getAppDao()->getAppByCode('K12MAIN');
         if (empty($mainApp)) {
             $this->addEduSohoMainApp();
         }
@@ -559,7 +559,7 @@ class AppServiceImpl extends BaseService implements AppService
 
     private function getPackageRootDirectory($package) 
     {
-        if ($package['product']['code'] == 'MAIN') {
+        if ($package['product']['code'] == 'K12MAIN') {
             return $this->getSystemRootDirectory();
         } else {
             return realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../' . 'plugins');
@@ -596,7 +596,7 @@ class AppServiceImpl extends BaseService implements AppService
     private function hasEduSohoMainApp($apps)
     {
         foreach ($apps as $app) {
-            if($app['code'] === 'MAIN') {
+            if($app['code'] === 'K12MAIN') {
                 return true;
             }
         }
@@ -606,7 +606,7 @@ class AppServiceImpl extends BaseService implements AppService
     private function addEduSohoMainApp()
     {
         $app = array(
-            'code' => 'MAIN',
+            'code' => 'K12MAIN',
             'name' => 'EduSoho主系统',
             'description' => 'EduSoho主系统',
             'icon' => '',
