@@ -29,7 +29,7 @@ class KeyApplier
 
         $sign = md5(json_encode($params));
 
-        $url = empty($setting['cloud_api_server']) ? 'http://api.edusoho.net' : $setting['cloud_api_server'];
+        $url = empty($setting['cloud_api_server']) ? 'http://api.edusoho.net' : rtrim($setting['cloud_api_server'], '/');
         $url = $url . '/v1/keys';
 
         $response = $this->postRequest($url, $params);
