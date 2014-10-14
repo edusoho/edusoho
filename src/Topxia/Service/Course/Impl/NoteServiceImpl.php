@@ -22,11 +22,6 @@ class NoteServiceImpl extends BaseService implements NoteService
         return $this->getNoteDao()->findNotesByUserIdAndCourseId($userId, $courseId);
     }
 
-    public function findNotesByUserIdAndStatus($userId, $status)
-    {
-        return $this->getNoteDao()->findNotesByUserIdAndStatus($userId, $status);
-    }
-
     public function searchNotes($conditions, $sort, $start, $limit)
     {
         switch ($sort) {
