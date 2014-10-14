@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 			$.get(self.data('url')+"&count="+$("#count").val(),function(html){
 				$('.timeline').html($('.timeline').html()+html);
 			});
-			if(parseInt($("#count").val())*3+3>parseInt($("#statusCount").val())){
+			if(parseInt($("#count").val())*30+30>parseInt($("#statusCount").val())){
 				self.hide();
 			}
 		});
