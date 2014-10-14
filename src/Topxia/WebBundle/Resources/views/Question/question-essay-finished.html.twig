@@ -11,12 +11,19 @@
 	<strong class="">{{ itemResult.answer }}</strong>
 
 </div>
-<div>
+<div style="margin-bottom:18px">
  {% for rightAnswer in question.answer %}
 	   <div style="margin-bottom:5px">正确答案</div> <strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong>
 	{% endfor %}
-
 </div>
+
+{% if itemResult.teacherSay|default(null) %}
+	<div  class="question-eassy-form-control question-teacher-say-input">
+		<div class="teacher-say-text">老师评语:</div>
+		{{ itemResult.teacherSay }}
+	</div> 
+{% endif %}
+
 {% endblock %}
 
 {% block footer %}

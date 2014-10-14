@@ -6,7 +6,7 @@
 
 {% set itemResultAnswer = itemResult.answer|default(null)  %}
 
-{% if itemResultAnswer in [0,1] %}
+{% if itemResultAnswer >= 0 %}
  {% set choiceIndex = (65+itemResult.answer)|chr %}
 
   <div class="homework-question-result">

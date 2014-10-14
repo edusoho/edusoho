@@ -55,11 +55,11 @@
     					<td>
     					    <div class="btn-group">
     					    	{% if status == 'uncommitted' %}
-    					    		<button class="btn btn-default btn-sm homework-urge-btn" data-url="{{ path('homework_urge', { homeworkId:homework.id, userId:user.id } )}}">私信催缴</button>
+    					    		<a class="btn btn-default btn-sm homework-urge-btn" href="{{ path('homework_urge', { homeworkId:homework.id, userId:user.id } )}}">私信催缴</a>
     					    	{% elseif status == 'unchecked' or status == null %}
-    					        	<button class="btn btn-default btn-sm" data-url="/user/4/follow">批改</button>
+    					        	<a class="btn btn-default btn-sm" href="{{ path('course_homework_check',{courseId:course.id,homeworkId:homework.id,userId:user.id}) }}">批改</a>
     					        {% else %}
-    					        	<button class="btn btn-default btn-sm" data-url="/user/4/follow">查看</button>
+    					        	<a class="btn btn-default btn-sm" href="{{ path('course_homework_result',{courseId:course.id,homeworkId:homework.id,resultId:homeworkResult.id,userId:user.id}) }}">查看</a>
     					        {% endif %}
     					    </div>
     					</td>

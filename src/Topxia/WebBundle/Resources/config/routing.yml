@@ -566,7 +566,7 @@ course_homework_do:
     defaults: { _controller: TopxiaWebBundle:CourseHomework:do }
 
 course_homework_result:
-    pattern: /course/{courseId}/homework/{homeworkId}/result/{resultId}
+    pattern: /course/{courseId}/homework/{homeworkId}/result/{resultId}/{userId}
     defaults: { _controller: TopxiaWebBundle:CourseHomework:result }
 
 course_homework_check:
@@ -581,6 +581,13 @@ course_homework_submit:
     pattern: /course/{courseId}/homework/{homeworkId}/submit
     defaults: { _controller: TopxiaWebBundle:CourseHomework:submit }
 
+course_homework_save:
+    pattern: /course/{courseId}/homework/{homeworkId}/save
+    defaults: { _controller: TopxiaWebBundle:CourseHomework:save }
+
+course_homework_continue:
+    pattern: /course/{courseId}/homework/{homeworkId}/continue/{resultId}
+    defaults: { _controller: TopxiaWebBundle:CourseHomework:continue }
 
 course_manage_lesson_homework_preview:
     pattern: /course/{courseId}/manage/homework/{id}/review

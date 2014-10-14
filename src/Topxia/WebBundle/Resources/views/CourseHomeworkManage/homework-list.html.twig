@@ -50,9 +50,9 @@
 					    	{% if status == 'uncommitted' %}
 					    		<button class="btn btn-default btn-sm homework-urge-btn" data-url="{{ path('homework_urge', { homeworkId:homework.id, userId:user.id } )}}">私信催缴</button>
 					    	{% elseif status == 'unchecked' or status == null %}
-					        	<a class="btn btn-default btn-sm" data-url="/user/4/follow" href="{{ path('course_homework_check',{courseId:course.id,homeworkId:homework.id, userId:user.id }) }}" target="_blank">批改</a>
+					        	<a class="btn btn-default btn-sm"  href="{{ path('course_homework_check',{courseId:course.id,homeworkId:homework.id, userId:user.id }) }}" target="_blank">批改</a>
 					        {% else %}
-					        	<a class="btn btn-default btn-sm" data-url="/user/4/follow">查看</a>
+					        	<a class="btn btn-default btn-sm"  href="{{ path('course_homework_result',{courseId:course.id,homeworkId:homework.id,resultId:homeworkResult.id, userId:user.id }) }}" target="_blank" >查看</a>
 					        {% endif %}
 					    </div>
 					</td>

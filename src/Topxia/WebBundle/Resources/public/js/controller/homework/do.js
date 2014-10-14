@@ -3,24 +3,7 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var EditorFactory = require('common/kindeditor-factory');
     var changeAnswers = {};
-
-    var editor = EditorFactory.create(".question-essay-input-long", 'simple',{
-        extraFileUploadParams:{group:'default'},
-        afterChange:function(){
-            this.sync();
-            var essayInput = $('.question-essay-input-long').parents('.question');
-            var essayQuestionId = essayInput.data('questionId');
-            $answerArr = {}
-            if (this.html() != "") {
-                $answerArr[0] = this.html();
-                changeAnswers[essayQuestionId] = {answer:$answerArr,questionId:essayQuestionId};
-                $('.question-set-card').find('.for-question-' + essayQuestionId).addClass('question-index-active');
-            } else {
-                $('.question-set-card').find('.for-question-' + essayQuestionId).removeClass('question-index-active');
-                
-            }
-        }
-    });
+    var changeTeacherSay = {};
 
     exports.run = function() {
         var questionSet = new QuestionSet({
@@ -30,7 +13,7 @@ define(function(require, exports, module) {
         // $('.question-set-card').css('width','265px'};
         $('.question-set-card').affix({
             offset: {
-              // top: 100 
+              top: 100
             }
         });
     };
@@ -80,15 +63,36 @@ define(function(require, exports, module) {
 
         events: {
             'click #homework-finish-btn': 'onClickFinishBtn',
+            'click #homework-check-btn': 'onClickCheckBtn',
+            'click #homework-save-btn': 'onClickSaveBtn',
             'click .question-index': 'onClickSetCard',
         },
 
         onClickFinishBtn: function(event) {
-             if (!confirm('确认要提交作业吗？')) return false;
+            if (!confirm('确认要提交作业吗？')) return false;
             var $btn = $(event.currentTarget);
                 $btn.button('saving');
                 $btn.attr('disabled', 'disabled');
 
+            $.post($btn.data('url'),{data:changeAnswers},function(res){
+                location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/learn#lesson/"+res.lessonId;
+            });
+        },
+
+        onClickCheckBtn: function(event) {
+            if (!confirm('确认要提交作业批改吗？')) return false;
+            var $btn = $(event.currentTarget);
+                $btn.button('saving');
+                $btn.attr('disabled', 'disabled');
+
+            $.post($btn.data('url'),{data:changeTeacherSay},function(res){
+                location.href= window.location.protocol+"//"+window.location.host+"/my/teaching/homework/list";
+            });
+        },
+
+        onClickSaveBtn: function(event) {
+            if (!confirm('确认要下次再做吗？')) return false;
+            var $btn = $(event.currentTarget);
             $.post($btn.data('url'),{data:changeAnswers},function(res){
                 location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/learn#lesson/"+res.lessonId;
             });
@@ -121,13 +125,27 @@ define(function(require, exports, module) {
             'click .question-essay-input-short': 'onClickEssay',
             'click .essay-textarea-pack-up': 'onClickEssayPackup',
             'change .question-fill-inputs input': 'onChangeFillInput',
+            'change .question-teacher-say-input': 'onChangeTeacherSayInput',
         },
 
         setup: function() {
              $(".ke-container-default").hide();
         },
 
-      
+        onChangeTeacherSayInput: function(event) {
+            var teacherSay = [];
+            var questionIds = [];
+
+            $teacherCheck = $(event.currentTarget);
+
+            $teacherCheck.parents().find('.teacher-say').each(function(index,item){
+                var $item = $(item);
+                teacherSay.push($item.val());
+                questionIds.push($item.data('questionId'));
+            });
+
+            changeTeacherSay = {teacherSay:teacherSay,questionIds:questionIds};
+        },
 
         onChangeFillInput: function(event) {
             $answer = $(event.currentTarget);
@@ -177,26 +195,54 @@ define(function(require, exports, module) {
             this.get('questionSet').trigger('answer_change', {questionId:$question.data('questionId'), answer:answer});
         },
 
-            
+        _setEssayQuestionAnswer: function($questionId,$answer) {
+            this.get('questionSet').trigger('answer_change', {questionId:$questionId, answer:$answer});
+        },
+
         onClickEssay: function(event){
+            var $shortTextarea = $(event.currentTarget);
+            var $longTextarea = $shortTextarea.parent().find('.question-essay-input-long');
+            var $shortTextarea = $shortTextarea.parent().find('.question-essay-input-short');
+            var $textareaBtn = $shortTextarea.parent().find('.essay-textarea-pack-up');
 
-            $(".essay-textarea-pack-up").show();
-            // editor.sync();
-            $(".question-essay-input-short").hide();
-            $(".ke-container-default").show();
-            // console.log(editor.html())
+            $shortTextarea.parent().find(".ke-container-default").show();
+            $textareaBtn.show();
+            $shortTextarea.hide();
 
+            var essayQuestionId = $shortTextarea.data('questionId');
+            var editor = EditorFactory.create($longTextarea, 'simple', {
+
+                extraFileUploadParams:{group:'default'},
+
+                afterBlur: function() {
+                    editor.sync();
+                },
+
+                afterCreate: function() {
+                    this.focus();
+                },
+
+                afterChange: function(){
+                    this.sync();
+
+                    var answer = [];
+                    if ($longTextarea.val() != '') {
+                        answer.push($longTextarea.val());
+                        changeAnswers[essayQuestionId] = {answer:answer,questionId:essayQuestionId};
+                        $('.question-set-card').find('.for-question-' + essayQuestionId).addClass('question-index-active');
+                    } else {
+                        $('.question-set-card').find('.for-question-' + essayQuestionId).removeClass('question-index-active');
+                    }
+                }
+            });   
         },
 
         onClickEssayPackup: function(event){
-            
-            $(this).hide();
-            $(".ke-container-default").hide();
-            $(".question-essay-input-short").show();
-            $(".essay-textarea-pack-up").hide();
-            
+            var $this = $(event.currentTarget);
+            $this.parent().find(".ke-container-default").hide();
+            $this.parent().find(".question-essay-input-short").show();
+            $this.parent().find(".essay-textarea-pack-up").hide();
         }
-
     });
 
 });

@@ -15,6 +15,8 @@
 	  <span class="glyphicon glyphicon-ok question-text-success"></span> 你答对了!
     {% elseif itemResult.status == 'wrong' %}
      <span class="glyphicon glyphicon-remove question-text-danger"></span> 你答错了,你选择了<strong class="question-text-danger">{{ choiceIndex }}</strong>
+	 {% elseif itemResult.status == 'noAnswer' %}
+　　　  <span class="glyphicon glyphicon-remove question-text-danger"></span>你未答题
     {% endif %}
 </div>
 {% endif %}

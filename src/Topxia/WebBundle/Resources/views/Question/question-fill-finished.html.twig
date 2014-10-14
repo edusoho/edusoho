@@ -33,9 +33,15 @@
           {% for index,rightAnswer in question.answer %}
 
             <li>
-              填空({{index+1}})： 正确答案 <strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong> 你的答案是 
+              填空({{index+1}})： 正确答案 
+              <strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong>
+              {% if fileItemResultAnswer[index]|default("") %}
+             回答是
 
-              <strong class="question-text-danger">{{ fileItemResultAnswer[index] }}</strong>。
+              <strong class="question-text-danger">{{ fileItemResultAnswer[index]|default("") }}</strong>。
+              {% else %}
+              未回答
+              {% endif %}
 
               {% if itemResult.status == 'right' %}
                   <span class="glyphicon glyphicon-ok question-text-success">
