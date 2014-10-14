@@ -77,7 +77,48 @@ class CourseHomeworkController extends BaseController
         }
     }
     
-    public function resultAction(Request $request, $courseId, $homeworkId, $resultId)
+    public function saveAction(Request $request ,$courseId,$homeworkId)
+    {
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $homework = !empty($data['data']) ? $data['data'] : array();
+            $res = $this->getHomeworkService()->saveHomework($homeworkId,$homework);
+            if ($res && !empty($res['lessonId'])) {
+               return $this->createJsonResponse(array('courseId' => $courseId,'lessonId' => $res['lessonId']));
+            }
+        }
+    }
+
+    public function continueAction(Request $request ,$courseId,$homeworkId, $resultId)
+    {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        $homework = $this->getHomeworkService()->getHomework($homeworkId);
+        if (empty($homework)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($homework['courseId'] != $course['id']) {
+            throw $this->createNotFoundException();
+        }
+
+        $lesson = $this->getCourseService()->getCourseLesson($homework['courseId'], $homework['lessonId']);
+
+        if (empty($lesson)) {
+            return $this->createMessageResponse('info','作业所属课时不存在！');
+        }
+
+        $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'],$this->getCurrentuser()->id);
+
+        return $this->render('TopxiaWebBundle:CourseHomework:continue.html.twig', array(
+            'homework' => $homework,
+            'itemSetResult' => $itemSetResult,
+            'course' => $course,
+            'lesson' => $lesson,
+            'questionStatus' => 'continue'
+        ));
+    }
+
+    public function resultAction(Request $request, $courseId, $homeworkId, $resultId ,$userId)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         $homework = $this->getHomeworkService()->getHomework($homeworkId);
@@ -95,7 +136,8 @@ class CourseHomeworkController extends BaseController
             return $this->createMessageResponse('info','作业所属课时不存在！');
         }
 
-        $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkId($homework['id']);
+        $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'],$userId);
+
         return $this->render('TopxiaWebBundle:CourseHomework:result.html.twig', array(
             'homework' => $homework,
             'itemSetResult' => $itemSetResult,
@@ -123,6 +165,14 @@ class CourseHomeworkController extends BaseController
             return $this->createMessageResponse('info','作业所属课时不存在！');
         }
 
+        if ($request->getMethod() == 'POST') {
+
+             $checkHomeworkData = $request->request->all();
+             $this->getHomeworkService()->checkHomework($homeworkId,$userId,$checkHomeworkData['data']);
+
+             return $this->createJsonResponse(array('status' => 'success'));
+        }
+
         $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'],$userId);
         return $this->render('TopxiaWebBundle:CourseHomework:check.html.twig', array(
             'homework' => $homework,
@@ -138,6 +188,7 @@ class CourseHomeworkController extends BaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         $homework = $this->getHomeworkService()->getHomework($homeworkId);
+
         if (empty($homework)) {
             throw $this->createNotFoundException();
         }
