@@ -110,8 +110,14 @@ function install_step2()
 	check_installed();
 	global $twig;
 
+	$yaml = new Yaml();
+	$parameters = $yaml->parse('../../app/config/parameters.yml');
+	$database_name = $parameters['parameters']['database_name'];
+	$database_user = $parameters['parameters']['database_user'];
+	$database_password = $parameters['parameters']['database_password'];
+
 	$error = null;
-    $post = array();
+    $post = array('database_name' => $database_name, 'database_user' => $database_user, 'database_password' => $database_password);
 	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
         $post = $_POST;
 
