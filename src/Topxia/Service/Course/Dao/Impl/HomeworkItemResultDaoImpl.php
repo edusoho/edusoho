@@ -21,6 +21,12 @@ class HomeworkItemResultDaoImpl extends BaseDao implements HomeworkItemResultDao
         return $this->getConnection()->fetchAssoc($sql, array($homeworkId,$status)) ? : null;
 	}
 
+	public function getHomeworkItemResultByHomeworkIdAndHomeworkResultIdAndQuestionId($homeworkId,$homeworkResultId,$questionId)
+	{
+		$sql = "SELECT * FROM {$this->table} WHERE homeworkId = ?  AND HomeworkResultId = ? AND questionId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($homeworkId,$homeworkResultId,$questionId)) ? : null;
+	}
+
 	public function addHomeworkItemResult($itemResult)
 	{
         $affected = $this->getConnection()->insert($this->table, $itemResult);
@@ -28,6 +34,14 @@ class HomeworkItemResultDaoImpl extends BaseDao implements HomeworkItemResultDao
             throw $this->createDaoException('Insert HomeworkItemResult error.');
         }
         return $this->getHomeworkItemResult($this->getConnection()->lastInsertId());
+	}
+
+	public function updateHomeworkItemResult($homeworkId,$homeworkResultId,$questionId,$fields)
+	{
+		$homeworkItemResult = $this->getHomeworkItemResultByHomeworkIdAndHomeworkResultIdAndQuestionId($homeworkId,$homeworkResultId,$questionId);
+
+        $this->getConnection()->update($this->table, $fields, array('id' => $homeworkItemResult['id']));
+        return true;
 	}
 
 	public function findHomeworkItemsResultsbyHomeworkId($homeworkId)
