@@ -26,7 +26,11 @@ interface HomeworkService
 
     public function startHomework($id);
 
+    public function checkHomework($id,$userId,$checkHomeworkData);
+
     public function submitHomework($id,$homework);
+
+    public function saveHomework($id,$homework);
 
     public function deleteHomeworksByCourseId($courseId);
 
