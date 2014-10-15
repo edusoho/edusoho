@@ -93,10 +93,10 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
             return $this->createErrorResponse('error', '反馈内容不能为空！');
         }
 
-        $this->sendRequest("POST", "http://try3.edusoho.cn/mapi_v2/School/suggestionLog", array(
+        $this->sendRequest("POST", "http://demo.edusoho.com/mapi_v2/School/suggestionLog", array(
             "info"=>$info,
             "type"=>$type,
-            "$contact"=>$contact
+            "contact"=>$contact
             ));
         return true;
     }
