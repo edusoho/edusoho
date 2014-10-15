@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
 	var ClassChooser = require('../class/class-chooser');
+    var Notify = require('common/bootstrap-notify');
     exports.run = function() {
     	var $form=$('#user-import-form');
         $("input[type=file]").change(function(){$(this).parents(".uploader").find(".filename").val($(this).val());});
@@ -7,6 +8,10 @@ define(function(require, exports, module) {
             if($(this).val()==""){$(this).parents(".uploader").find(".filename").val("");}
         });
         $('#start-import-btn').on("click",function(){
+            if($form.find('#className').length > 0 && ($form.find('#className').val()=="" || $form.find('#className').val()==null)){
+                Notify.danger('请选择导入班级');
+                return false;
+            }
             $('#start-import-btn').button('submiting').addClass('disabled');
         });
 
@@ -22,6 +27,7 @@ define(function(require, exports, module) {
                 $form.find('#classId').val(id);
                 $form.find('#className').val(name);
             });
+
         }
      
     };

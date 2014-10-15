@@ -51,7 +51,7 @@ class ClassController extends BaseController
         }
 
         if(isset($schoolSetting['highSchool'])) {
-            $schools['middleSchool']=array(
+            $schools['highSchool']=array(
                 'name'=>'高中',
                 'grades'=>array(
                     '10'=>'一年级',

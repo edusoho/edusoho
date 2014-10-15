@@ -2,19 +2,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        $("#key-rest-btn").click(function(){
-            if (!confirm('您真的要重置SecretKey吗？')) {
-                return ;
-            }
-            $(this).button('loading');
-            $.post($(this).data('url'), function(response) {
-
-            }, 'json').done(function() {
-                window.location.reload();
-            });
-        });
-
-
         var $info = $("#key-license-info")
         $.get($info.data('url'), function(html) {
             $("#loading-text").hide();
