@@ -6,7 +6,7 @@ use Topxia\Service\Common\ServiceKernel;
 class KeyApplier 
 {
 
-    public function applyKey($user)
+    public function applyKey($user, $edition = 'opensource', $source = 'apply')
     {
         $setting = $this->getSettingService()->get('storage', array());
 
@@ -20,12 +20,16 @@ class KeyApplier
         $profile = $this->getUserService()->getUserProfile($user['id']);
 
         $params = array();
-        $params['siteName'] = $this->getSettingService()->get('site.name', 'EduSoho网络课程');
+        $site = $this->getSettingService()->get('site');
+
+        $params['siteName'] = empty($site['name']) ? 'EduSoho网络课程' : $site['name'];
         $params['siteUrl'] = 'http://' . $_SERVER['HTTP_HOST'];
         $params['email'] = empty($user['email']) ? '' : $user['email'];
         $params['contact'] = empty($profile['truename']) ? '' : $profile['truename'];
         $params['qq'] = empty($profile['qq']) ? '' : $profile['qq'];
         $params['mobile'] = empty($profile['mobile']) ? '' : $profile['mobile'];
+        $params['edition'] = empty($params['edition']) ? 'opensource' : $params['edition'];
+        $params['source'] = empty($params['source']) ? 'apply' : $params['source'];
 
         $sign = md5(json_encode($params));
 
