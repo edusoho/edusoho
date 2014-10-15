@@ -47,9 +47,9 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
         return $this->getConnection()->fetchAssoc($sql, array($userId, $lessonId));
 	}
 
-    public function findNotesByUserIdAndStatus($userId, $status)
+	public function findNotesByUserIdAndStatus($userId, $status)
     {
-    	$sql = "SELECT t1.*, t2.title,t2.largePicture FROM {$this->table} t1,course t2 WHERE t1.userId = ? AND t1.status = ? AND t2.id = t1.courseId";
+    	$sql = "SELECT * FROM {$this->table} WHERE userId = ? AND status = ?";
         return $this->getConnection()->fetchAll($sql, array($userId, $status));
     }
     	

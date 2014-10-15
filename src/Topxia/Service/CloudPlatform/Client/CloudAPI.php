@@ -21,7 +21,7 @@ class CloudAPI
         $this->secretKey = $options['secretKey'];
 
         if (!empty($options['apiUrl'])) {
-            $this->apiUrl = $options['apiUrl'];
+            $this->apiUrl = rtrim($options['apiUrl'], '/');
         }
         $this->debug = empty($options['debug']) ? false : true;
     }

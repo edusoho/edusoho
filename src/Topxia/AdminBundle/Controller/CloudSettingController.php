@@ -61,24 +61,6 @@ class CloudSettingController extends BaseController
         ));
     }
 
-    public function keyResetAction(Request $request)
-    {
-        $api = $this->createAPIClient();
-        $currentHost = $request->server->get('HTTP_HOST');
-        $result = $api->put('/me/secret-key');
-        if (!empty($result['secretKey'])) {
-            $settings = $this->getSettingService()->get('storage', array());
-            $settings['cloud_secret_key'] = $result['secretKey'];
-            $settings['cloud_key_applied'] = 1;
-            $this->getSettingService()->set('storage', $settings);
-            $this->setFlashMessage('success', 'SecretKey重置成功！');
-        } else {
-            $this->setFlashMessage('danger', 'SecretKey重置失败，请重试！');
-        }
-
-        return $this->createJsonResponse($result);
-    }
-
     public function keyBindAction(Request $request)
     {
         $api = $this->createAPIClient();
