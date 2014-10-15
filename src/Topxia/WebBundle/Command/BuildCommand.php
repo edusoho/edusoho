@@ -52,7 +52,7 @@ class BuildCommand extends BaseCommand
 		if ($this->filesystem->exists($this->buildDirectory)) {
 			$this->filesystem->remove($this->buildDirectory);
 		}
-		$this->distDirectory = $this->buildDirectory . '/edusoho';
+		$this->distDirectory = $this->buildDirectory . '/edusoho-k12';
 		$this->filesystem->mkdir($this->distDirectory);
 	}
 
@@ -62,7 +62,7 @@ class BuildCommand extends BaseCommand
 
 		chdir($this->buildDirectory);
 
-		$command = "tar czvf edusoho-" . System::VERSION . ".tar.gz edusoho/";
+		$command = "tar czvf edusoho-k12-" . System::VERSION . ".tar.gz edusoho-k12/";
 		exec($command);
 	}
 
