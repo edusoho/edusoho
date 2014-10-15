@@ -543,7 +543,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         		return array(
         			"course"=>$this->controller->filterCourse($course),
         			"userFavorited"=>$userFavorited,
-        			"member"=>$this->remainTimeFilter($member),
+        			"member"=>$this->checkMemberStatus($member),
         			"vipLevels"=>$vipLevels
         			);
 	}
@@ -674,21 +674,20 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
     }
 
-    private function remainTimeFilter($value)	 
+    private function checkMemberStatus($member)	 
     {	 
-        $remain = $value - time();	 	 
-        if ($remain <= 0) {	 
-           return '0';	 
-       }	 
-       if ($remain <= 3600) {
-	            return round($remain / 60) . '分钟';	 
-       }	 
-       if ($remain < 86400) {
-	 
-            return round($remain / 3600) . '小时';
-	 
-        }
-	 	 
-       return round($remain / 86400) . '天'; 
-   }
+	if ($member) {
+		$deadline = $member['deadline'];	 
+		if ($deadline == 0) {	 
+			return $member;
+		}	 
+		$remain = $deadline - time();	 
+		if ($remain <= 0) {	 
+			$member['deadline'] = -1;
+		} 
+	} else { 
+		$member['deadline'] = $remain;	 
+	} 
+	return $member;
+    }
 }
