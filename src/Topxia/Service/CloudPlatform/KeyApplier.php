@@ -28,8 +28,8 @@ class KeyApplier
         $params['contact'] = empty($profile['truename']) ? '' : $profile['truename'];
         $params['qq'] = empty($profile['qq']) ? '' : $profile['qq'];
         $params['mobile'] = empty($profile['mobile']) ? '' : $profile['mobile'];
-        $params['edition'] = empty($params['edition']) ? 'opensource' : $params['edition'];
-        $params['source'] = empty($params['source']) ? 'apply' : $params['source'];
+        $params['edition'] = empty($edition) ? 'opensource' : $edition;
+        $params['source'] = empty($source) ? 'apply' : $source;
 
         $sign = md5(json_encode($params));
 
