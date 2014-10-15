@@ -577,12 +577,14 @@ define(function(require, exports, module) {
         },
         get: function(userId,mediaId, headLength) {
             var durationTmps = localStorage.getItem("durations");
-            var durationTmpArray = durationTmps.split(",");
-            for(var i = 0; i<durationTmpArray.length; i++){
-                var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
-                if(index>-1){
-                    var key = durationTmpArray[i];
-                    return parseFloat(key.split(":")[1])+parseFloat(headLength)-5;
+            if(durationTmps){
+                var durationTmpArray = durationTmps.split(",");
+                for(var i = 0; i<durationTmpArray.length; i++){
+                    var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
+                    if(index>-1){
+                        var key = durationTmpArray[i];
+                        return parseFloat(key.split(":")[1])+parseFloat(headLength)-5;
+                    }
                 }
             }
             return 0;
