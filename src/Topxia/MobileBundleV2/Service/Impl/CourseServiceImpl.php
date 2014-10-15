@@ -39,8 +39,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	/*
 	 *更新回复
-	 *
-	 *
 	 */ 
 	public function updatePost(){
 		$courseId = $this->getParam("courseId", 0);
@@ -194,18 +192,30 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function getNoteList(){
     	$user = $this->controller->getUserByToken($this->request);
+
     	if(!$user->isLogin()){
     		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
     	}
 
-    	$nodeList = $this->controller->getNoteService()->findNotesByUserIdAndStatus($user["id"], "1");
 
+    	$nodeList = $this->controller->getNoteService()->searchNotes(array('userId'=>'55'),'created',0,30);
     	for($i = 0;$i < count($nodeList);$i++){
-    		$nodeList[$i]["largePicture"] = $this->controller->coverPath($nodeList[$i]["largePicture"], 'course-large.png');
-    		$lessonInfo = $this->controller->getCourseService()->getCourseLesson($nodeList[$i]["courseId"], $nodeList[$i]["lessonId"]);
-    		$nodeList[$i]["lessonName"] = $lessonInfo["title"];
+    		$courseId = $nodeList[$i]['courseId'];
+    		$lessonId = $nodeList[$i]['lessonId'];
+    		$courseInfo = $this->controller->getCourseService()->getCourse($courseId);
+    		$lessonInfo = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+    		$nodeList[$i]["title"] = $courseInfo["title"];
+    		$nodeList[$i]["largePicture"] = $this->controller->coverPath($courseInfo["largePicture"], 'course-large.png');
+    		$nodeList[$i]["lessonName"] = $courseInfo["title"];
     		$nodeList[$i]["number"] = $lessonInfo["number"];
     	}
+
+    	// for($i = 0;$i < count($nodeList);$i++){
+    	// 	$nodeList[$i]["largePicture"] = $this->controller->coverPath($nodeList[$i]["largePicture"], 'course-large.png');
+    	// 	$lessonInfo = $this->controller->getCourseService()->getCourseLesson($nodeList[$i]["courseId"], $nodeList[$i]["lessonId"]);
+    	// 	$nodeList[$i]["lessonName"] = $lessonInfo["title"];
+    	// 	$nodeList[$i]["number"] = $lessonInfo["number"];
+    	// }
 
     	return $nodeList;
     }
