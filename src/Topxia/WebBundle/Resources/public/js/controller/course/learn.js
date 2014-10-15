@@ -568,10 +568,11 @@ define(function(require, exports, module) {
             var value = userId+"-"+mediaId+":"+(duration-parseFloat(headLength));
             if(durations.length>0 && durations.slice(durations.length-1,durations.length)[0].indexOf(userId+"-"+mediaId)>-1){
                 durations.splice(durations.length-1, durations.length);
-                durations.push(value);
-            } else {
-                durations.push(value);
             }
+            if(durations.length>=20){
+                durations.shift();
+            }
+            durations.push(value);
             localStorage["durations"] = durations;
         },
         get: function(userId,mediaId, headLength) {
@@ -581,15 +582,14 @@ define(function(require, exports, module) {
                 var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
                 if(index>-1){
                     var key = durationTmpArray[i];
-                    console.log(key.split[":"])
-                    return parseFloat(key.split["\:"][1])+parseFloat(headLength)-5;
+                    return parseFloat(key.split(":")[1])+parseFloat(headLength)-5;
                 }
             }
             return 0;
         },
         del: function(userId,mediaId) {
             var key = userId+"-"+mediaId;
-            var durations = localStorage.getItem("durations");
+            var durationTmps = localStorage.getItem("durations");
             var durationTmpArray = durationTmps.split(",");
             for(var i = 0; i<durationTmpArray.length; i++){
                 var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
