@@ -1,0 +1,35 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}每周精品课程{% endblock %}
+{% block body %}
+<div>
+	<div>
+		<form action="{{path('admin_course_search')}}" class="form-inline" role="search-form">
+			<div class="form-group ">
+				<input type="text" class="form-control" name="key" value="{{ key|default('') }}"
+				placeholder="课程名称"
+				/>
+			</div>
+			<button type="button" class="btn btn-primary">搜索</button>
+		</form>
+	</div>
+	<div role="course-list">
+		<ul class="course-grids">
+		{% if courses %}
+			{% for course in courses %}
+			{% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:course} %}
+			{% endfor %}
+		{% else %}
+			<div class="empty">无课程记录</div>
+		{% endif %}
+		</ul>
+	</div>
+</div>
+
+{{ web_macro.paginator(paginator) }}
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">关闭</button>
+  <script>app.load('course/search')</script>
+{% endblock %}
