@@ -11,6 +11,27 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public $banner;
 
+    public function registDevice()
+    {
+        $result = false;
+        $parames = array();
+        $parames["imei"] = $this->getParam("imei",  "");
+        $parames["platform"] = $this->getParam( "platform",  "");
+        $parames["version"] = $this->getParam("version",  "");
+        $parames["screenresolution"] = $this->getParam("screenresolution",  "");
+        $parames["kernel"] = $this->getParam("kernel",  "");
+
+        if (empty($parames["imei"]) || empty($parames["platform"])) {
+            return $this->createErrorResponse("info_error", "串号或平台版本不能为空!");
+        }
+        if ($this->getMobileDeviceService()->addMobileDevice($parames)) {
+            $result = true;
+        }
+        
+        $this->log("regist_device", "注册客户端",  $parames);
+        return true;
+    }
+
     public function getFlashApk()
     {
         $version  = (int) $this->request->query->get("version", 9);

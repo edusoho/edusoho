@@ -113,8 +113,8 @@ class UserServiceImpl extends BaseService implements UserService
         $token = $this->controller->getToken($this->request);
         if (! empty($token)) {
             $user = $this->controller->getUserByToken($this->request);
-            $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_logout", "用户退出",  array(
-                "userToken" => $user)
+            $this->log("user_logout", "用户退出",  array(
+                "userToken" => $user));
             );
         }
         $this->controller->getUserService()->deleteToken(MobileBaseController::TOKEN_TYPE, $token);
@@ -173,7 +173,9 @@ class UserServiceImpl extends BaseService implements UserService
         ));
 
         $token = $this->controller->createToken($user, $this->request);
-
+        $this->log("user_regist", "用户注册",  array(
+                "user" => $user)
+            );
         return array (
             'user' => $this->controller->filterUser($user),
             'token' => $token
@@ -205,10 +207,9 @@ class UserServiceImpl extends BaseService implements UserService
             'user' => empty($user) ? null : $this->controller->filterUser($user),
             'site' => $this->getSiteInfo($this->request)
         );
-        
-        $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_login", "用户二维码登录",  array(
-            "userToken" => $token)
-        );
+        $this->log("user_login", "用户二维码登录",  array(
+                "userToken" => $token)
+            );
 
         return $result;
     }

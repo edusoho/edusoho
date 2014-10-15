@@ -2,6 +2,8 @@
 
 namespace Topxia\MobileBundleV2\Service;
 
+use Topxia\MobileBundleV2\Controller\MobileBaseController;
+
 class BaseService {
     public $formData;
     public $controller;
@@ -21,6 +23,13 @@ class BaseService {
     protected function getParam($name, $default = null) {
         $result = $this->request->request->get($name, $default);
         return $result;
+    }
+
+    protected function log($action, $message, $data)
+    {
+        $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, $action, $message,  
+                $data
+        );
     }
 
     protected function setParam($name, $value)
@@ -72,6 +81,11 @@ class BaseService {
     protected function getCourseOrderService()
     {
         return $this->controller->getService('Course.CourseOrderService');
+    }
+
+    protected function getMobileDeviceService()
+    {
+        return $this->controller->getService('Util.MobileDeviceService');
     }
 
     protected function getOrderService()

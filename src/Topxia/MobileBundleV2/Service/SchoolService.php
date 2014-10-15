@@ -22,4 +22,6 @@ interface SchoolService
 	public function getDownloadUrl();
 
 	public function getFlashApk();
+
+	public function registDevice();
 }
