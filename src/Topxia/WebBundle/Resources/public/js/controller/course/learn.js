@@ -231,13 +231,13 @@ define(function(require, exports, module) {
                     mediaPlayer.on("timeChange", function(data){
                         var userId = $('#lesson-video-content').data("userId");
                         if(parseInt(data.currentTime) != parseInt(data.duration)){
-                            DurationStorage.set(userId, lesson.mediaId, data.currentTime);
+                            DurationStorage.set(userId, lesson.mediaId, data.currentTime, lesson.headLength);
                         }
                     });
                     mediaPlayer.on("ready", function(playerId, data){
                         var player = document.getElementById(playerId);
                         var userId = $('#lesson-video-content').data("userId");
-                        player.seek(DurationStorage.get(userId, lesson.mediaId));
+                        player.seek(DurationStorage.get(userId, lesson.mediaId, lesson.headLength));
                     });
                     mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
                     mediaPlayer.on('ended', function() {
@@ -553,21 +553,21 @@ define(function(require, exports, module) {
     });
 
     var DurationStorage = {
-        set: function(userId,mediaId,duration) {
+        set: function(userId,mediaId,duration, headLength) {
             var durations = localStorage.getItem("durations");
             if(durations){
                 durations = $.parseJSON(durations);
             } else {
                 durations = {};
             }
-            durations["duration-"+userId+"-"+mediaId]=duration;
+            durations["duration-"+userId+"-"+mediaId]=duration+headLength;
             localStorage["durations"] = JSON.stringify(durations);
         },
-        get: function(userId,mediaId) {
+        get: function(userId,mediaId, headLength) {
             var key = "duration-"+userId+"-"+mediaId;
             var durations = $.parseJSON(localStorage.getItem("durations"));
             if(key in durations){
-                return durations[key];
+                return durations[key]+headLength;
             }else {
                 return 0;
             }
