@@ -21,7 +21,7 @@
     <div class="login-main">
       <div class="login-avatar"></div>
       <form id="login-form" class="login-form" method="post" action="{{ path('login_check') }}">
-        <a id="view-accounts" href="javascript:;" style="position: absolute;top:5px;right:30px;">
+        {# <a id="view-accounts" href="javascript:;" style="position: absolute;top:5px;right:30px;">
           <strong><small>查看体验帐号</small></strong>
         </a>
 
@@ -35,7 +35,7 @@
               &raquo; <a href="http://demo.edusoho.com" target="_blank">EduSoho通用版演示站</a>
             </p>
           </div>
-        </div>
+        </div> #}
 
         <div class="form-group">
             <input class="form-control" id="login_username" type="text" name="_username" value="{{ last_username }}" placeholder="学号/工号/Email" />
