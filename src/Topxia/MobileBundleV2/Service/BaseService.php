@@ -185,7 +185,7 @@ class BaseService {
             'logo' => $logo,
             'splashs' => $splashs,
             'apiVersionRange' => array(
-                "min" => "2.0.0",
+                "min" => "1.0.0",
                 "max" => "2.0.0"
             ) ,
         );
