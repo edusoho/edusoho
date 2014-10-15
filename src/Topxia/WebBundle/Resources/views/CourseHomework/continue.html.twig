@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% set script_controller = 'homework/do' %}
+{% set script_controller = 'homework/continue' %}
 
 {% if itemSetResult|default(null) %}{% set itemSet = itemSetResult %}{% endif %}
 
@@ -43,15 +43,11 @@
         </div>
       </div>
 
-      {% if questionStatus in ['doing','reviewing'] %}
-
           <div class="col-md-3 question-set-side">
             <div class="panel panel-default question-set-card">
-            {% if questionStatus == 'doing' %}
                 <div class="panel-heading">
                 答题卡 <button class="btn btn-default btn-sm pull-right" id="homework-save-btn" data-url="{{ path('course_homework_save',{courseId:course.id,homeworkId:homework.id}) }}">下次再做</button>
                 </div>
-            {% endif %}
 
                 <div class="panel-body">
                   {%- for questionId in itemSet.questionIds -%}
@@ -63,7 +59,6 @@
                 </div>
             </div>
         </div>
-      {% endif %}
 
     </div>
 

@@ -1,0 +1,20 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+ {% set answerIndex = itemResult.answer|default('3') %}
+
+  <div class="question-choices-inputs">
+    <label class="radio-inline"><input type="radio" data-type="determine" name="answer[{{ question.id }}]" value="1" {% if answerIndex == 1 %}checked{% endif %}> 正确</label>
+    <label class="radio-inline"><input type="radio" data-type="determine" name="answer[{{ question.id }}]" value="0" {% if answerIndex == 0 %}checked{% endif %}>错误</label>
+  </div>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
