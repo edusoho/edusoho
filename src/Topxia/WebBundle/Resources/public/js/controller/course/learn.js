@@ -554,34 +554,50 @@ define(function(require, exports, module) {
 
     var DurationStorage = {
         set: function(userId,mediaId,duration, headLength) {
-            var durations = localStorage.getItem("durations");
-            if(durations){
-                durations = $.parseJSON(durations);
+            var durationTmps = localStorage.getItem("durations");
+            if(durationTmps){
+                durations = new Array();
+                var durationTmpArray = durationTmps.split(",");
+                for(var i = 0; i<durationTmpArray.length; i++){
+                    durations.push(durationTmpArray[i]);
+                }
             } else {
-                durations = {};
+                durations = new Array();
             }
-            durations["duration-"+userId+"-"+mediaId]=duration-parseFloat(headLength);
-            localStorage["durations"] = JSON.stringify(durations);
+
+            var value = userId+"-"+mediaId+":"+(duration-parseFloat(headLength));
+            if(durations.length>0 && durations.slice(durations.length-1,durations.length)[0].indexOf(userId+"-"+mediaId)>-1){
+                durations.splice(durations.length-1, durations.length);
+                durations.push(value);
+            } else {
+                durations.push(value);
+            }
+            localStorage["durations"] = durations;
         },
         get: function(userId,mediaId, headLength) {
-            var key = "duration-"+userId+"-"+mediaId;
-            var durations = $.parseJSON(localStorage.getItem("durations"));
-            if(key in durations){
-                return durations[key]+parseFloat(headLength)-5;
-            }else {
-                return 0;
+            var durationTmps = localStorage.getItem("durations");
+            var durationTmpArray = durationTmps.split(",");
+            for(var i = 0; i<durationTmpArray.length; i++){
+                var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
+                if(index>-1){
+                    var key = durationTmpArray[i];
+                    console.log(key.split[":"])
+                    return parseFloat(key.split["\:"][1])+parseFloat(headLength)-5;
+                }
             }
+            return 0;
         },
         del: function(userId,mediaId) {
-            var key = "duration-"+userId+"-"+mediaId;
+            var key = userId+"-"+mediaId;
             var durations = localStorage.getItem("durations");
-            if(durations){
-                durations = $.parseJSON(durations);
-            } else {
-                durations = {};
+            var durationTmpArray = durationTmps.split(",");
+            for(var i = 0; i<durationTmpArray.length; i++){
+                var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
+                if(index>-1){
+                    durationTmpArray.splice(i,1);
+                }
             }
-            delete durations[key];
-            localStorage.setItem("durations", JSON.stringify(durations));
+            localStorage.setItem("durations", durationTmpArray);
         }
     };
 
