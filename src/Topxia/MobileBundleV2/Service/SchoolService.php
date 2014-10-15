@@ -26,4 +26,6 @@ interface SchoolService
 	public function registDevice();
 
 	public function suggestionLog();
+
+	public function loginSchoolWithSite();
 }

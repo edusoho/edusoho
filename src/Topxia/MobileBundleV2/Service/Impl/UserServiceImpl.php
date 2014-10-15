@@ -184,6 +184,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function loginWithToken()
     {
+        $version = $this->request->query->get('version', 1);
         $mobile = $this->controller->getSettingService()->get('mobile', array());
         if (empty($mobile['enabled'])) {
             return $this->createErrorResponse('client_closed', '没有搜索到该网校！');
@@ -205,7 +206,7 @@ class UserServiceImpl extends BaseService implements UserService
         $result = array(
             'token' => empty($token) ? '' : $token['token'],
             'user' => empty($user) ? null : $this->controller->filterUser($user),
-            'site' => $this->getSiteInfo($this->request)
+            'site' => $this->getSiteInfo($this->request, $version)
         );
         $this->log("user_login", "用户二维码登录",  array(
                 "userToken" => $token)

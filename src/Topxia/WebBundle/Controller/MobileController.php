@@ -40,7 +40,8 @@ class MobileController extends BaseController
     public function downloadAction(Request $request)
     {
         $params = $request->query->all();
-        return $this->redirect('http://open.edusoho.com/mobile/download.php?' . http_build_query($params));
+        $baseUrl = $request->getSchemeAndHttpHost();
+        return $this->redirect($baseUrl . '/School/getDownloadUrl' . http_build_query($params));
     }
 
 }

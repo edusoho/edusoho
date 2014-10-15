@@ -164,7 +164,7 @@ class BaseService {
         }
         return $mapCourses;
     }
-    protected function getSiteInfo($request) {
+    protected function getSiteInfo($request, $version) {
         $site = $this->controller->getSettingService()->get('site', array());
         $mobile = $this->controller->getSettingService()->get('mobile', array());
         if (!empty($mobile['logo'])) {
@@ -180,12 +180,12 @@ class BaseService {
         }
         return array(
             'name' => $site['name'],
-            'url' => $request->getSchemeAndHttpHost() . '/mapi_v2',
+            'url' => $request->getSchemeAndHttpHost() . '/mapi_v' . $version,
             'host' => $request->getSchemeAndHttpHost() ,
             'logo' => $logo,
             'splashs' => $splashs,
             'apiVersionRange' => array(
-                "min" => "2.0.0",
+                "min" => "1.0.0",
                 "max" => "2.0.0"
             ) ,
         );
