@@ -560,14 +560,14 @@ define(function(require, exports, module) {
             } else {
                 durations = {};
             }
-            durations["duration-"+userId+"-"+mediaId]=duration+headLength;
+            durations["duration-"+userId+"-"+mediaId]=duration-parseFloat(headLength);
             localStorage["durations"] = JSON.stringify(durations);
         },
         get: function(userId,mediaId, headLength) {
             var key = "duration-"+userId+"-"+mediaId;
             var durations = $.parseJSON(localStorage.getItem("durations"));
             if(key in durations){
-                return durations[key]+headLength;
+                return durations[key]+parseFloat(headLength);
             }else {
                 return 0;
             }
