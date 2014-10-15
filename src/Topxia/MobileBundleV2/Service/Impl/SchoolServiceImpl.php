@@ -11,6 +11,22 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public $banner;
 
+    public function loginSchoolWithSite()
+    {
+        $version = $this->request->query->get('version', 1);
+        $mobile = $this->controller->getSettingService()->get('mobile', array());
+        if (empty($mobile['enabled'])) {
+            return $this->createErrorResponse('client_closed', '网校客户端未开启');
+        }
+
+        $site = $this->controller->getSettingService()->get('site', array());
+        $result = array(
+            'site' => $this->getSiteInfo($this->controller->request, $version)
+        );
+        
+        return $result;
+    }
+
     public function registDevice()
     {
         $result = false;
@@ -297,7 +313,6 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     }
 
     public function getSchoolSite() {
-        $version = $this->request->query->get('version', 1);
         $mobile = $this->controller->getSettingService()->get('mobile', array());
         if (empty($mobile['enabled'])) {
             return $this->createErrorResponse('client_closed', '网校客户端未开启');
@@ -305,7 +320,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
         $site = $this->controller->getSettingService()->get('site', array());
         $result = array(
-            'site' => $this->getSiteInfo($this->controller->request, $version)
+            'site' => $this->getSiteInfo($this->controller->request, 2)
         );
         
         return $result;

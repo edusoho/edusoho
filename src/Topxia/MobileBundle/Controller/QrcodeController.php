@@ -18,7 +18,7 @@ class QrcodeController extends MobileController
             //$url = $this->generateUrl('mapi_user_login_with_token', array('token' => $token), true);
         } else {
             //$url = $this->generateUrl('mapi_user_login_with_site', array(), true);      
-            $url = $request->getSchemeAndHttpHost() . '/mapi_v2/School/getSchoolSite';
+            $url = $request->getSchemeAndHttpHost() . '/mapi_v2/School/loginSchoolWithSite?v=1';
         }
 
         $qrCode = new QrCode();
