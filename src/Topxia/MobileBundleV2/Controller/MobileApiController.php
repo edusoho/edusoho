@@ -87,7 +87,27 @@ class MobileApiController extends MobileBaseController
 
 	    	$instance = call_user_func(array($class, "getInstance"), $class, $this);
 	    	$result = call_user_func(array($instance, $method));
+	    	$this->logFilter($service, $method);
 	    	return $this->createResponse($request, $result);
+	    }
+
+	    private function logFilter($service, $method)
+	    {
+	    	$serviceFilter = array(
+	    		"School"
+	    		);
+	    	$methodFilter = array(
+	    		"uploadQuestionImage"
+	    		);
+	    	if (in_array($service, $serviceFilter)) {
+	    		return;
+	    	}
+	    	if (in_array($method, $methodFilter)) {
+	    		return;
+	    	}
+	    	$this->getLogService()->info(MobileBaseController::MOBILE_MODULE, $service, $method,  
+	    		$this->formData
+		);
 	    }
 
 	    private function createResponse($request, $result)
