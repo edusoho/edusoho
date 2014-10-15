@@ -398,11 +398,6 @@ admin_setting_cloud_key_info:
     pattern:  /setting/cloud/key/info
     defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyInfo }
 
-admin_setting_cloud_key_reset:
-    pattern:  /setting/cloud/key/reset
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyReset }
-    methods: [POST]
-
 admin_setting_cloud_key_bind:
     pattern:  /setting/cloud/key/bind
     defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyBind }

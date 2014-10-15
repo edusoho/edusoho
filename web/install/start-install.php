@@ -110,8 +110,14 @@ function install_step2()
 	check_installed();
 	global $twig;
 
+	$yaml = new Yaml();
+	$parameters = $yaml->parse('../../app/config/parameters.yml');
+	$database_name = $parameters['parameters']['database_name'];
+	$database_user = $parameters['parameters']['database_user'];
+	$database_password = $parameters['parameters']['database_password'];
+
 	$error = null;
-    $post = array();
+    $post = array('database_name' => $database_name, 'database_user' => $database_user, 'database_password' => $database_password);
 	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
         $post = $_POST;
 
@@ -311,7 +317,7 @@ class SystemInit
         if (empty($users) or empty($users[0])) {
             return array('error' => '管理员帐号不存在，创建Key失败');
         }
-        $keys = $applier->applyKey($users[0]);
+        $keys = $applier->applyKey($users[0], 'k12', 'install');
 
         if (empty($keys['accessKey']) or empty($keys['secretKey'])) {
             return array('error' => 'Key生成失败，请检查服务器网络后，重试！');
