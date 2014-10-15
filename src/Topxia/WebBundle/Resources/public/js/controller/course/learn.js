@@ -567,7 +567,7 @@ define(function(require, exports, module) {
             var key = "duration-"+userId+"-"+mediaId;
             var durations = $.parseJSON(localStorage.getItem("durations"));
             if(key in durations){
-                return durations[key]+parseFloat(headLength);
+                return durations[key]+parseFloat(headLength)-5;
             }else {
                 return 0;
             }
