@@ -65,8 +65,24 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
         return $result;
     }
 
+    public function suggestionLog()
+    {
+        $info = $this->getParam("info");
+        $type = $this->getParam("type", 'bug');
+        $contact = $this->getParam("contact");
 
-    
+        if (empty($info)) {
+            return false;
+        }
+
+        $this->log("suggestion", "反馈内容", array(
+            "info"=>$info,
+            "type"=>$type,
+            "$contact"=>$contact
+            ));
+        return true;
+    }
+
     public function sendSuggestion()
     {
         $info = $this->getParam("info");
@@ -77,7 +93,12 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
             return $this->createErrorResponse('error', '反馈内容不能为空！');
         }
 
-        return $info;
+        $this->sendRequest("POST", "http://demo.edusoho.com/mapi_v2/School/suggestionLog", array(
+            "info"=>$info,
+            "type"=>$type,
+            "contact"=>$contact
+            ));
+        return true;
     }
 
     public function getShradCourseUrl()
@@ -314,6 +335,35 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
                 )
         );
         return $banner;
+    }
+
+    private function sendRequest($method, $url, $params = array())
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_USERAGENT, "Suggestion Request");
+
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 20);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+
+        if (strtoupper($method) == 'POST') {
+            curl_setopt($curl, CURLOPT_POST, 1);
+            $params = http_build_query($params);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+        } else {
+            if (!empty($params)) {
+                $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
+            }
+        }
+
+        curl_setopt($curl, CURLOPT_URL, $url );
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        return $response;
     }
 }
 
