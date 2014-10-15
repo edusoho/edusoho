@@ -43,9 +43,9 @@
             <a href="javascript:;" class="btn btn-default disabled">已安装</a>
           {% else %}
             {% if app.userAccess == 'ok' %}
-              <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId}) }}" class="btn btn-primary" data-keyboard="false" data-backdrop="static">安装</a>
+              <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}" class="btn btn-primary" data-keyboard="false" data-backdrop="static">安装</a>
             {% else %}
-              <a href="http://www.edusoho.com/service" class="btn btn-warning" target="_blank">购买</a>
+              <a href="http://open.edusoho.com/app/{{ app.code }}" class="btn btn-warning" target="_blank">购买</a>
             {% endif %}
           {% endif %}
         </td>

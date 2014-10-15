@@ -391,11 +391,9 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', '系统默认设置已保存！');
         }
 
-        $hasOwnCopyright = $this->getAppService()->checkOwnCopyrightUser($this->getCurrentUser()->id);
-        
         return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
             'defaultSetting' => $defaultSetting,
-            'hasOwnCopyright' => $hasOwnCopyright,
+            'hasOwnCopyright' => false,
         ));
     }
 
@@ -613,6 +611,26 @@ class SettingController extends BaseController
         ));
     }
 
+    public function questionsSettingAction(Request $request)
+    {
+        $questionsSetting = $this->getSettingService()->get('questions', array());
+        if (empty($questionsSetting)) {
+            $default = array(
+                'testpaper_answers_show_mode' => 'submitted',
+            );
+            $questionsSetting = $default;
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $questionsSetting = $request->request->all();
+            $this->getSettingService()->set('questions', $questionsSetting);
+            $this->getLogService()->info('system', 'questions_settings', "更新题库设置", $questionsSetting);
+            $this->setFlashMessage('success','题库设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:questions-setting.html.twig');
+    }
+
     public function adminSyncAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
@@ -658,10 +676,12 @@ class SettingController extends BaseController
     public function developerAction(Request $request)
     {
         $developerSetting = $this->getSettingService()->get('developer', array());
+        $storageSetting = $this->getSettingService()->get('storage', array());
 
         $default = array(
             'debug' => '0',
             'app_api_url' => '',
+            'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
             'hls_encrypted' => '1'
         );
 
@@ -669,7 +689,10 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $developerSetting = $request->request->all();
+            $storageSetting['cloud_api_server'] = $developerSetting['cloud_api_server'];
+            $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
+
             $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
             $this->setFlashMessage('success','开发者已保存！');
         }

@@ -1318,7 +1318,7 @@ group_thread_closeThread:
     pattern:  /group/thread/{threadId}/closeThread/{memberId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:closeThread }
 group_thread_deletePost:
-    pattern:  /group/{groupId}/thread/deletePost/{postId}/{memberId}/{threadOwnerId}/{groupOwnerId}
+    pattern:  /group/thread/deletePost/{postId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:deletePost }
 group_thread_post_reply:
     pattern:  /group/post/{postId}/reply

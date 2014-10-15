@@ -1,57 +1,17 @@
-  {% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+  {% extends 'TopxiaAdminBundle:CloudSetting:layout.html.twig' %}
 
-{% block title %}云平台设置 - {{ parent() }}{% endblock %}
+{% block title %}云视频设置 - {{ parent() }}{% endblock %}
 
-{% set submenu = 'storage' %}
+{% set submenu = 'video' %}
 {% set script_controller = 'setting/cloud' %}
 
 {% block maincontent %}
 
-<div class="page-header"><h1>云平台设置</h1></div>
+<div class="page-header"><h1>云视频设置</h1></div>
 
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
-
-  <fieldset>
-    <legend>Edusoho云平台参数</legend>
-
-    <div class="row form-group">
-      <div class="col-md-3 control-label">
-        <label for="cloud_access_key" >AccessKey</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        <input type="text" id="cloud_access_key" class="form-control" name="cloud_access_key" value="{{storageSetting.cloud_access_key}}">
-      </div>
-    </div>
-
-    <div class="row form-group">
-      <div class="col-md-3 control-label">
-        <label for="cloud_secret_key" >SecretKey</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        <input type="text" id="cloud_secret_key" class="form-control" name="cloud_secret_key" value="{{storageSetting.cloud_secret_key}}">
-      </div>
-    </div>
-
-    <div class="row form-group">
-      <div class="col-md-3 control-label">
-        <label for="cloud_api_server" >API地址</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        <input type="text" id="cloud_api_server" class="form-control" name="cloud_api_server" value="{{storageSetting.cloud_api_server}}">
-      </div>
-    </div>
-
-  </fieldset>
-
-
-  <fieldset>
-    <legend>云视频设置</legend>
-
-
-  </fieldset>
-
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
@@ -137,7 +97,7 @@
       <button class="btn btn-default" id="cloud-video-watermark-upload" type="button" data-url="{{ path('admin_setting_cloud_video_watermark_upload') }}">上传</button>
       <button class="btn btn-default" id="cloud-video-watermark-remove" type="button" data-url="{{ path('admin_setting_cloud_video_watermark_remove') }}" {% if not storageSetting.video_watermark_image %}style="display:none;"{% endif %}>删除</button>
 
-      <div class="help-block">支持png/gif/jpg格式图片，建议使用半透明的png图片。</div>
+      <div class="help-block">支持png/gif/jpg格式图片，建议使用半透明的png图片。（推荐图片大小为150×50）</div>
       <input type="hidden" name="video_watermark_image" value="{{ storageSetting.video_watermark_image }}">
     </div>
   </div>

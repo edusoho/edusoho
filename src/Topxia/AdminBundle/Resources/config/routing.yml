@@ -393,9 +393,34 @@ admin_setting_payment:
     pattern:  /setting/payment
     defaults: { _controller: TopxiaAdminBundle:Setting:payment }
 
+admin_setting_cloud_video:
+    pattern:  /setting/cloud/video
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:video }
+
 admin_setting_cloud:
     pattern:  /setting/cloud
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:index }
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:key }
+
+admin_setting_cloud_key:
+    pattern:  /setting/cloud/key
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:key }
+
+admin_setting_cloud_key_info:
+    pattern:  /setting/cloud/key/info
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyInfo }
+
+admin_setting_cloud_key_bind:
+    pattern:  /setting/cloud/key/bind
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyBind }
+
+admin_setting_cloud_key_update:
+    pattern:  /setting/cloud/key/update
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyUpdate }
+
+admin_setting_cloud_key_apply:
+    pattern:  /setting/cloud/key/apply
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyApply }
+    methods: [POST]
 
 admin_setting_cloud_video_watermark_upload:
     pattern: /setting/cloud/video_watermark/upload
@@ -469,6 +494,10 @@ admin_setting_user_fields:
 admin_setting_course_setting:
     pattern:  /setting/course-setting
     defaults: { _controller: TopxiaAdminBundle:Setting:courseSetting }
+
+admin_setting_questions_setting:
+    pattern: /setting/questions-setting
+    defaults: { _controller: TopxiaAdminBundle:Setting:questionsSetting }
 
 admin_setting_consult_setting:
     pattern:  /setting/consult-setting
@@ -559,10 +588,6 @@ admin_oldUpgradeCheck:
 admin_app_logs:
     pattern:  /app/logs
     defaults: { _controller: TopxiaAdminBundle:App:logs }
-
-admin_app_check_ownCopyrightUser:
-    pattern:  /app/check/{userId}/ownCopyrightUser
-    defaults: { _controller: TopxiaAdminBundle:App:checkOwnCopyrightUser }
 
 admin_app_package_update_modal:
     pattern:  /app/package_update/{id}/modal

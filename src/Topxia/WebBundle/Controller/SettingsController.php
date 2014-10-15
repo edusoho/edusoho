@@ -46,9 +46,12 @@ class SettingsController extends BaseController
 			$profile['idcard'] = "";
 		}
 
+		$fromCourse = $request->query->get('fromCourse');
+		
 		return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
 			'profile' => $profile,
 			'fields'=>$fields,
+			'fromCourse' => $fromCourse
 		));
 	}
 
@@ -153,10 +156,13 @@ class SettingsController extends BaseController
 			$partnerAvatar = null;
 		}
 
+		$fromCourse = $request->query->get('fromCourse');
+
 		return $this->render('TopxiaWebBundle:Settings:avatar.html.twig', array(
 			'form' => $form->createView(),
 			'user' => $this->getUserService()->getUser($user['id']),
 			'partnerAvatar' => $partnerAvatar,
+			'fromCourse' => $fromCourse,
 		));
 	}
 

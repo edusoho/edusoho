@@ -56,7 +56,7 @@
         <div id="site-logo-container">{% if site.logo %}<img src="{{ asset(site.logo) }}">{% endif %}</div>
         <button class="btn btn-default btn-sm" id="site-logo-upload" type="button" data-url="{{ path('admin_setting_logo_upload') }}">上传</button>
         <button class="btn btn-default btn-sm" id="site-logo-remove" type="button" data-url="{{ path('admin_setting_logo_remove') }}" {% if not site.logo %}style="display:none;"{% endif %}>删除</button>
-        <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。</p>
+        <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过50*250。</p>
         <input type="hidden" name="logo" value="{{ site.logo }}">
       </div>
     </div>
