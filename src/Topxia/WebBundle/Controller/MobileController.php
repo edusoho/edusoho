@@ -40,7 +40,7 @@ class MobileController extends BaseController
     public function downloadAction(Request $request)
     {
         $params = $request->query->all();
-        $baseUrl = $this->request->getSchemeAndHttpHost();
+        $baseUrl = $request->getSchemeAndHttpHost();
         return $this->redirect($baseUrl . '/School/getDownloadUrl' . http_build_query($params));
     }
 
