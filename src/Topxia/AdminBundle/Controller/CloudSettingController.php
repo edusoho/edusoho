@@ -116,7 +116,7 @@ class CloudSettingController extends BaseController
     public function keyApplyAction(Request $request)
     {
         $applier = new KeyApplier();
-        $keys = $applier->applyKey($this->getCurrentUser());
+        $keys = $applier->applyKey($this->getCurrentUser(), 'k12');
 
         if (empty($keys['accessKey']) or empty($keys['secretKey'])) {
             return $this->createJsonResponse(array('error' => 'Key生成失败，请检查服务器网络后，重试！'));
