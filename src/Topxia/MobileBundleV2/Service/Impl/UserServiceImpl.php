@@ -114,7 +114,7 @@ class UserServiceImpl extends BaseService implements UserService
         if (! empty($token)) {
             $user = $this->controller->getUserByToken($this->request);
             $this->log("user_logout", "用户退出",  array(
-                "userToken" => $user));
+                "userToken" => $user)
             );
         }
         $this->controller->getUserService()->deleteToken(MobileBaseController::TOKEN_TYPE, $token);
