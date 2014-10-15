@@ -297,6 +297,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     }
 
     public function getSchoolSite() {
+        $version = $this->request->query->get('version', 1);
         $mobile = $this->controller->getSettingService()->get('mobile', array());
         if (empty($mobile['enabled'])) {
             return $this->createErrorResponse('client_closed', '网校客户端未开启');
@@ -304,7 +305,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
         $site = $this->controller->getSettingService()->get('site', array());
         $result = array(
-            'site' => $this->getSiteInfo($this->controller->request)
+            'site' => $this->getSiteInfo($this->controller->request, $version)
         );
         
         return $result;
