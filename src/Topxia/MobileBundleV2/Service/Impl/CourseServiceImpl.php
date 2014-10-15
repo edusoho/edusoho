@@ -566,6 +566,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$remain = $deadline - time();
 			if ($remain <= 0) {
 				$member['deadline'] = -1;
+			} else {
+				$member['deadline'] = $remain;
 			}
 		}
 		return $member;
