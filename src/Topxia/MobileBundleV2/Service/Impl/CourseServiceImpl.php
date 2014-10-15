@@ -197,8 +197,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
     	}
 
-
-    	$nodeList = $this->controller->getNoteService()->searchNotes(array('userId'=>'55'),'created',0,30);
+    	$nodeList = $this->controller->getNoteService()->searchNotes(array('userId'=>$user['id']),'created',0,30);
     	for($i = 0;$i < count($nodeList);$i++){
     		$courseId = $nodeList[$i]['courseId'];
     		$lessonId = $nodeList[$i]['lessonId'];
@@ -209,13 +208,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     		$nodeList[$i]["lessonName"] = $courseInfo["title"];
     		$nodeList[$i]["number"] = $lessonInfo["number"];
     	}
-
-    	// for($i = 0;$i < count($nodeList);$i++){
-    	// 	$nodeList[$i]["largePicture"] = $this->controller->coverPath($nodeList[$i]["largePicture"], 'course-large.png');
-    	// 	$lessonInfo = $this->controller->getCourseService()->getCourseLesson($nodeList[$i]["courseId"], $nodeList[$i]["lessonId"]);
-    	// 	$nodeList[$i]["lessonName"] = $lessonInfo["title"];
-    	// 	$nodeList[$i]["number"] = $lessonInfo["number"];
-    	// }
 
     	return $nodeList;
     }
@@ -551,26 +543,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         		return array(
         			"course"=>$this->controller->filterCourse($course),
         			"userFavorited"=>$userFavorited,
-        			"member"=>$this->checkMemberStatus($member),
+        			"member"=>$member,
         			"vipLevels"=>$vipLevels
         			);
-	}
-
-	private function checkMemberStatus($member)
-	{
-		if ($member) {
-			$deadline = $member['deadline'];
-			if ($deadline == 0) {
-				return $member;
-			}
-			$remain = $deadline - time();
-			if ($remain <= 0) {
-				$member['deadline'] = -1;
-			} else {
-				$member['deadline'] = $remain;
-			}
-		}
-		return $member;
 	}
 
 	public function searchCourse()
@@ -697,24 +672,5 @@ class CourseServiceImpl extends BaseService implements CourseService
             'number' => $member['learnedNum'],
             'total' => $course['lessonNum']
         );
-    }
-
-    private function remainTimeFilter($value)
-    {
-        $remain = $value - time();
-
-        if ($remain <= 0) {
-            return '0';
-        }
-
-        if ($remain <= 3600) {
-            return round($remain / 60) . '分钟';
-        }
-
-        if ($remain < 86400) {
-            return round($remain / 3600) . '小时';
-        }
-
-        return round($remain / 86400) . '天';
     }
 }
