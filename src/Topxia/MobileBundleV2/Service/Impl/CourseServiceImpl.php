@@ -197,7 +197,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
     	}
 
-    	$nodeList = $this->controller->getNoteService()->searchNotes(array('userId'=>$user['userId']),'created',0,30);
+    	$nodeList = $this->controller->getNoteService()->searchNotes(array('userId'=>$user['id']),'created',0,30);
     	for($i = 0;$i < count($nodeList);$i++){
     		$courseId = $nodeList[$i]['courseId'];
     		$lessonId = $nodeList[$i]['lessonId'];
