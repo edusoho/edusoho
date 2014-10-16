@@ -193,7 +193,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getNoteList(){
     	$user = $this->controller->getUserByToken($this->request);
     	$start = $this->getParam("start", 0);
-    	$limit = $this->getParam("limit", 20);
+    	$limit = $this->getParam("limit", 10);
 
     	if(!$user->isLogin()){
     		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
@@ -235,6 +235,15 @@ class CourseServiceImpl extends BaseService implements CourseService
             'lessonId' => $lessonId,
             'courseId' => $courseId,
         );
+
+		$content = $this->getParam("content", '');
+		if(empty($content)){
+			return $this->createErrorResponse('wrong_content_param', "笔记内容不能为空！");
+		}
+
+		$content = $this->uploadImage($content);
+		$noteInfo['content'] = $content;
+
     	$result = $this->controller->getNoteService()->saveNote($noteInfo);
 
     	return $result;
