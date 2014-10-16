@@ -205,7 +205,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     		$lessonInfo = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
     		$nodeList[$i]["title"] = $courseInfo["title"];
     		$nodeList[$i]["largePicture"] = $this->controller->coverPath($courseInfo["largePicture"], 'course-large.png');
-    		$nodeList[$i]["lessonName"] = $courseInfo["title"];
+    		$nodeList[$i]["lessonName"] = $lessonInfo["title"];
     		$nodeList[$i]["number"] = $lessonInfo["number"];
     	}
 
