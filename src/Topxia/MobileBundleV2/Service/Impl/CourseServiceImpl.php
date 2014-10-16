@@ -192,24 +192,32 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function getNoteList(){
     	$user = $this->controller->getUserByToken($this->request);
+    	$start = $this->getParam("start", 0);
+    	$limit = $this->getParam("limit", 20);
 
     	if(!$user->isLogin()){
     		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
     	}
 
-    	$nodeList = $this->controller->getNoteService()->searchNotes(array('userId'=>$user['id']),'created',0,30);
-    	for($i = 0;$i < count($nodeList);$i++){
-    		$courseId = $nodeList[$i]['courseId'];
-    		$lessonId = $nodeList[$i]['lessonId'];
+    	$noteList = $this->controller->getNoteService()->searchNotes(array('userId'=>$user['id']),'created',$start,$limit);
+    	for($i = 0;$i < count($noteList);$i++){
+    		$courseId = $noteList[$i]['courseId'];
+    		$lessonId = $noteList[$i]['lessonId'];
     		$courseInfo = $this->controller->getCourseService()->getCourse($courseId);
     		$lessonInfo = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
-    		$nodeList[$i]["title"] = $courseInfo["title"];
-    		$nodeList[$i]["largePicture"] = $this->controller->coverPath($courseInfo["largePicture"], 'course-large.png');
-    		$nodeList[$i]["lessonName"] = $lessonInfo["title"];
-    		$nodeList[$i]["number"] = $lessonInfo["number"];
+    		$noteList[$i]["title"] = $courseInfo["title"];
+    		$noteList[$i]["largePicture"] = $this->controller->coverPath($courseInfo["largePicture"], 'course-large.png');
+    		$noteList[$i]["lessonName"] = $lessonInfo["title"];
+    		$noteList[$i]["number"] = $lessonInfo["number"];
     	}
 
-    	return $nodeList;
+    	foreach ($noteList as $key => $value) {
+    		$sort_course[$key] = $value['courseId'];
+    		$sort_lesson[$key] = $value['lessonId'];
+    	}
+    	array_multisort($sort_course,SORT_ASC,$sort_lesson,SORT_ASC,$noteList);
+
+    	return $noteList;
     }
 
     public function AddNote(){
