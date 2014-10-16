@@ -295,6 +295,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 
 	private function getVideoLesson($lesson)
 	{
+        $token = $this->controller->getUserToken($this->request);
         $mediaId = $lesson['mediaId'];
         $mediaSource= $lesson['mediaSource'];
         if ($lesson['length'] > 0) {
