@@ -41,7 +41,7 @@ class MobileController extends BaseController
     {
         $params = $request->query->all();
         $baseUrl = $request->getSchemeAndHttpHost();
-        return $this->redirect($baseUrl . '/School/getDownloadUrl' . http_build_query($params));
+        return $this->redirect($baseUrl . '/mapi_v2/School/getDownloadUrl?' . http_build_query($params));
     }
 
 }

@@ -543,7 +543,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         		return array(
         			"course"=>$this->controller->filterCourse($course),
         			"userFavorited"=>$userFavorited,
-        			"member"=>$member,
+        			"member"=>$this->checkMemberStatus($member),
         			"vipLevels"=>$vipLevels
         			);
 	}
@@ -672,5 +672,22 @@ class CourseServiceImpl extends BaseService implements CourseService
             'number' => $member['learnedNum'],
             'total' => $course['lessonNum']
         );
+    }
+
+    private function checkMemberStatus($member)	 
+    {	 
+	if ($member) {
+		$deadline = $member['deadline'];	 
+		if ($deadline == 0) {	 
+			return $member;
+		}	 
+		$remain = $deadline - time();	 
+		if ($remain <= 0) {	 
+			$member['deadline'] = -1;
+		} else {
+			$member['deadline'] = $remain;
+		}
+	} 
+	return $member;
     }
 }
