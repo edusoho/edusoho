@@ -266,9 +266,17 @@ course_watch_play:
     pattern:  /course/{lessonId}/watch/play
     defaults: { _controller: TopxiaWebBundle:Course:watchPlay }
 
+course_detail_data:
+    pattern:  /course/detail/data/{id}
+    defaults: { _controller: TopxiaWebBundle:Course:detailData }
+
 course_watch_paused:
     pattern:  /course/{lessonId}/watch/paused
     defaults: { _controller: TopxiaWebBundle:Course:watchPaused }
+
+course_lesson_detail_data:
+    pattern:  /course/lesson/detail/data/{courseId}/{lessonId}
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:detailData }
 
 course_lesson_show:
     pattern:  /course/{courseId}/lesson/{lessonId}

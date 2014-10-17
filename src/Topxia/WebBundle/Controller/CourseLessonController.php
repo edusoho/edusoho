@@ -267,6 +267,42 @@ class CourseLessonController extends BaseController
         return $this->fileAction($request, $lesson['mediaId']);
     }
 
+
+    public function detailDataAction($courseId,$lessonId)
+    {   
+        $students=array();
+        $lesson = $this->getCourseService()->getCourseLesson($courseId,$lessonId);
+
+        $count = $this->getCourseService()->searchLearnCount(array('courseId'=>$courseId,'lessonId'=>$lessonId));
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $learns = $this->getCourseService()->searchLearns(array('courseId'=>$courseId,'lessonId'=>$lessonId),array('startTime','ASC'), $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+  
+        foreach ($learns as $key => $learn) {
+            
+            $user=$this->getUserService()->getUser($learn['userId']);
+            $students[$key]['nickname']=$user['nickname'];
+            $students[$key]['startTime']=$learn['startTime'];
+            $students[$key]['finishedTime']=$learn['finishedTime'];
+            $students[$key]['learnTime']=$learn['learnTime'];
+            $students[$key]['watchTime']=$learn['watchTime'];
+
+            if($lesson['type']=='testpaper'){
+                $paperId=$lesson['mediaId'];
+                $score=$this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($paperId,$user['id']);
+
+                $students[$key]['result']=$score['score'];
+            } 
+ 
+        }
+
+        return $this->render('TopxiaWebBundle:CourseLesson:lesson-data-modal.html.twig', array(
+            'lesson'=>$lesson,
+            'paginator'=>$paginator,
+            'students'=>$students,
+            ));
+    }
+
     public function mediaDownloadAction(Request $request, $courseId, $lessonId)
     {
         if (!$this->setting('course.student_download_media')) {
@@ -500,4 +536,8 @@ class CourseLessonController extends BaseController
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
+    private function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
 }

@@ -13,6 +13,8 @@ interface TestpaperService
 
     public function searchTestpapersCount($conditions);
 
+    public function searchTestpaperResultsCount($conditions);
+
     public function searchTestpapersScore($conditions);
 
     public function createTestpaper($fields);

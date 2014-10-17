@@ -107,7 +107,10 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
 
     public function searchTestpaperResultsCount($conditions)
     {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+             ->select('COUNT(id)');
 
+        return $builder->execute()->fetchColumn(0);
     }
 
     public function addTestpaperResult($fields)

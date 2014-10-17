@@ -535,6 +535,44 @@ class CourseController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
+
+    public function detailDataAction($id)
+    {   
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $count = $this->getCourseService()->getCourseStudentCount($id);
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $students = $this->getCourseService()->findCourseStudents($id, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+
+        foreach ($students as $key => $student) {
+            
+            $user=$this->getUserService()->getUser($student['userId']);
+            $students[$key]['nickname']=$user['nickname'];
+
+            $questionCount=$this->getThreadService()->searchThreadCount(array('courseId'=>$id,'type'=>'question','userId'=>$user['id']));
+            $students[$key]['questionCount']=$questionCount;
+
+            if( $student['learnedNum']>=$course['lessonNum'] && $course['lessonNum']>0){
+                $finishLearn=$this->getCourseService()->searchLearns(array('courseId'=>$id,'userId'=>$user['id'],'sttaus'=>'finished'),array('finishedTime','DESC'),0,1);
+                $students[$key]['fininshTime']=$finishLearn[0]['finishedTime'];
+
+                $students[$key]['fininshDay']=intval(($finishLearn[0]['finishedTime']-$student['createdTime'])/(60*60*24));
+            }else{
+                $students[$key]['fininshDay']=intval((time()-$student['createdTime'])/(60*60*24));
+            }
+
+            $learnTime=$this->getCourseService()->searchLearnTime(array('userId'=>$user['id'],'courseId'=>$id));
+            $students[$key]['learnTime']=$learnTime;
+        }
+
+        return $this->render('TopxiaWebBundle:Course:course-data-modal.html.twig', array(
+            'course'=>$course,
+            'paginator'=>$paginator,
+            'students'=>$students,
+            ));
+    }
+
 	public function recordWatchingTimeAction(Request $request,$lessonId)
 	{	
 		$user = $this->getCurrentUser();
@@ -756,4 +794,8 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
+    private function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
 }

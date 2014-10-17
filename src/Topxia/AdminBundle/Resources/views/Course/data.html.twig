@@ -36,7 +36,7 @@
           {% if courses %}
             {% for course in courses %}
             <tr>
-            <td><a data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_detail_data',{id:course.id})}}" href="javascript:">{{course.title}}</a></td>
+            <td><a data-toggle="modal" data-target="#modal" data-url="{{path('course_detail_data',{id:course.id})}}" href="javascript:">{{course.title}}</a></td>
             <td>{{course.lessonCount}}</td>
             <td>{{course.studentNum}}</td>
             <td>{{course.isLearnedNum}}</td>

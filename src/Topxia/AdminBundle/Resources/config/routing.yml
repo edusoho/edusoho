@@ -288,10 +288,6 @@ admin_course_data:
     pattern:  /course/data
     defaults: { _controller: TopxiaAdminBundle:Course:data }
 
-admin_course_detail_data:
-    pattern:  /course/detail/data/{id}
-    defaults: { _controller: TopxiaAdminBundle:Course:detailData }
-
 admin_course_lesson_data:
     pattern:  /course/lesson/data/{id}
     defaults: { _controller: TopxiaAdminBundle:Course:lessonData }
