@@ -41,6 +41,8 @@
                 href="{{path('my_teaching_threads', {type:'question'}) }}">学生问答</a>
                <a class="list-group-item {% if side_nav == 'my-teaching-discussions' %} active {% endif %}"
                 href="{{path('my_teaching_threads', {type:'discussion'}) }}">学生话题</a>
+                <a class="list-group-item {% if side_nav == 'my-task' %} active {% endif %}"
+                 href="{{path('my_teaching_task', {type:'discussion'}) }}">我的任务</a>
                <a class="list-group-item {% if side_nav == 'my-teaching-check' %} active {% endif %}"
                 href="{{path('course_manage_list_teacher_test_reviewing') }}">我的批阅</a>
               </ul>
