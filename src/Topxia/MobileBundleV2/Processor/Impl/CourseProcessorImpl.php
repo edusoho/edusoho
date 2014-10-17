@@ -1,15 +1,15 @@
 <?php
-namespace Topxia\MobileBundleV2\Service\Impl;
+namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Topxia\MobileBundleV2\Service\BaseService;
-use Topxia\MobileBundleV2\Service\CourseService;
+use Topxia\MobileBundleV2\Processor\BaseProcessor;
+use Topxia\MobileBundleV2\Processor\CourseProcessor;
 use Topxia\Common\ArrayToolkit;
 
-class CourseServiceImpl extends BaseService implements CourseService
+class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
 	public function getVersion()
 	{
-		var_dump("CourseServiceImpl->getVersion");
+		var_dump("CourseProcessorImpl->getVersion");
 		return $this->formData;
 	}
 

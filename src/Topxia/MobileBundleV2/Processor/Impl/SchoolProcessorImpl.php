@@ -1,16 +1,15 @@
 <?php
 
-
-namespace Topxia\MobileBundleV2\Service\Impl;
-use Topxia\MobileBundleV2\Service\BaseService;
-use Topxia\MobileBundleV2\Service\SchoolService;
+namespace Topxia\MobileBundleV2\Processor\Impl;
+use Topxia\MobileBundleV2\Processor\BaseProcessor;
+use Topxia\MobileBundleV2\Processor\SchoolProcessor;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 
-class SchoolServiceImpl extends BaseService implements SchoolService {
+class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public $banner;
-
+    
     public function loginSchoolWithSite()
     {
         $version = $this->request->query->get('version', 1);

@@ -1,10 +1,10 @@
 <?php
 
-namespace Topxia\MobileBundleV2\Service;
+namespace Topxia\MobileBundleV2\Processor;
 
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
-class BaseService {
+class BaseProcessor {
     public $formData;
     public $controller;
     public $request;
@@ -16,9 +16,9 @@ class BaseService {
     }
     public static function getInstance($class, $controller) {
         $instance = new $class($controller);
-        $serviceDelegator = new serviceDelegator($instance);
-        $instance->setDelegator($serviceDelegator);
-        return $serviceDelegator;
+        $processorDelegator = new ProcessorDelegator($instance);
+        $instance->setDelegator($processorDelegator);
+        return $processorDelegator;
     }
     protected function getParam($name, $default = null) {
         $result = $this->request->request->get($name, $default);
@@ -37,8 +37,8 @@ class BaseService {
         $this->request->request->set($name, $value);
     }
 
-    public function setDelegator($serviceDelegator) {
-        $this->delegator = $serviceDelegator;
+    public function setDelegator($processorDelegator) {
+        $this->delegator = $processorDelegator;
     }
     public function getDelegator() {
         return $this->delegator;

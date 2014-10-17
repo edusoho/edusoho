@@ -1,12 +1,12 @@
 <?php
-namespace Topxia\MobileBundleV2\Service\Impl;
+namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Topxia\MobileBundleV2\Service\BaseService;
-use Topxia\MobileBundleV2\Service\LessonService;
+use Topxia\MobileBundleV2\Processor\BaseProcessor;
+use Topxia\MobileBundleV2\Processor\LessonProcessor;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 
-class LessonServiceImpl extends BaseService implements LessonService
+class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 {
 
 	public function getLessonMaterial()
