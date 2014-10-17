@@ -22,8 +22,17 @@
       <div class="col-md-4 controls">
         <input type="text" id="name" name="name" class="form-control" value="{{ point.name }}" placeholder="学分">
       </div>
-      
     </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label>开关设置</label>
+      </div>
+      <div class="controls col-md-4 radios">
+        {{ radios('show', {'1':'开启', '0':'关闭'}, point.show) }}
+      </div>
+    </div>
+
   </fieldset>
   <fieldset>
     <legend>分数设置</legend>

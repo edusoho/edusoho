@@ -78,9 +78,9 @@ class SchoolController extends BaseController
         }
 
         $point = $this->getSettingService()->get('point', array());
-
         $default = array(
             'name' => '学分',
+            'show'=>1,
             'accomplishLesson' => 2,
             'shareNote' => 3,
             'noteByLiked' => 2,
@@ -91,7 +91,6 @@ class SchoolController extends BaseController
         );
 
         $point = array_merge($default, $point);
-
       
         return $this->render('TopxiaAdminBundle:School:point-setting.html.twig', array(
             'point' => $point

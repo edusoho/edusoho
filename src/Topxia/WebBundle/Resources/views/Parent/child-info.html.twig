@@ -32,9 +32,11 @@
         未加入班级
       {% endif %}
     </div>
-    <div style="padding:10px;">
-      {{ setting('point', '学分').name|default('学分') }}：{{selectedChild.point}}分
-    </div>
+    {% if setting('point').show|default(1)%}
+      <div style="padding:10px;">
+        {{ setting('point', '学分').name|default('学分') }}：{{selectedChild.point}}分
+      </div>
+    {% endif %}
   </div>
 </div>
 
