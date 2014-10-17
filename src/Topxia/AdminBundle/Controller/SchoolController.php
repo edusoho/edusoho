@@ -293,10 +293,12 @@ class SchoolController extends BaseController
         return new Response(json_encode($response));
     }
     
-    public function teacherNameAction()
+    public function teacherNameAction(Request $request)
     {
+        $teachername = $request->query->get('q');
         $conditions = array(
-            'roles' => 'ROLE_TEACHER' 
+            'roles' => 'ROLE_TEACHER',
+            'truename'=> $teachername 
             );
         $total = $this->getUserService()->searchUserCount($conditions);
         $teachers = $this->getUserService()->searchUsers(
