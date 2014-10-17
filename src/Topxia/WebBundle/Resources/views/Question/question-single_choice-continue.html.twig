@@ -6,15 +6,17 @@
 
 {% set itemResultAnswer = itemResult.answer  %}
 
-{# {% if itemResultAnswer in [0,1] %} #}
- {% set answerChoiceIndex = (65+itemResult.answer)|chr %}
-{# {% endif %} #}
+{% if itemResult.answer|default(null) %}
+ {% set answerChoiceIndex = itemResult.answer %}
+ {% else %}
+ {% set answerChoiceIndex = '-1' %}
+{% endif %}
 
-  <div class="question-choices-inputs">
+<div class="question-choices-inputs">
     {% for key, choice in question.metas.choices %}
       {% set choiceIndex = (65+key)|chr %}
       <label class="radio-inline">
-        <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="choice" name="answer[{{ question.id }}]" value="{{ key }}" {% if answerChoiceIndex|default('null') == choiceIndex %}checked{% endif %}> {{ choiceIndex }}
+        <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="choice" name="answer[{{ question.id }}]" value="{{ key }}" {% if key in  answerChoiceIndex|split(',') %}checked{% endif %}> {{ choiceIndex }}
       </label>
     {% endfor %}
   </div>

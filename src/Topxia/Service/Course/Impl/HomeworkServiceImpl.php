@@ -272,13 +272,10 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     {
         $userId = $this->getCurrentUser()->id;
         $homeworkItemResults = $this->getHomeworkItemResultDao()->findHomeworkItemsResultsbyHomeworkIdAndUserId($id,$userId);
-
         if (empty($homeworkItemResults)) {
            $this->addHomeworkItemResult($id,$homework);
         }
-
         $homeworkResult = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndUserId($id, $userId);
-
         foreach ($homework as $questionId => $value) {
             $answer = $value['answer'];
             if (count($answer) > 1) {
@@ -286,10 +283,8 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             } else {
                 $answer = $answer[0];
             }
-
             $this->getHomeworkItemResultDao()->updateHomeworkItemResult($id,$homeworkResult['id'],$questionId,array('answer'=>$answer));
         }
-
         return $homeworkResult;
     }
 

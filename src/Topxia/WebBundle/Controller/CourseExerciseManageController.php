@@ -10,10 +10,8 @@ class CourseExerciseManageController extends BaseController
 	public function createExerciseAction(Request $request, $courseId, $lessonId)
 	{   
 		list($course, $lesson) = $this->getExerciseCourseAndLesson($courseId, $lessonId);
-
         if($request->getMethod() == 'POST') {
         	$fields = $this->generateExerciseFields($request->request->all(), $course, $lesson);
-
         	$exercise = $this->getExerciseService()->createExercise($fields);
         	return $this->createJsonResponse($this->generateUrl('course_manage_lesson', array('id' => $course['id'])));
         }

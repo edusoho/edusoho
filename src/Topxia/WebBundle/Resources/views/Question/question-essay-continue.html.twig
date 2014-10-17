@@ -8,7 +8,7 @@
 
  {% set answer = itemResult.answer %}
  
-  <textarea name="answer[{{ question.id }}]" rows="1" class="form-control question-essay-input-short"  data-question-id={{ question.id }} >{{ answer }}</textarea>
+    <textarea name="answer[{{ question.id }}]" rows="1" class="form-control question-essay-input-short"  data-question-id={{ question.id }} >{{ answer }}</textarea>
 
 	<textarea class="form-control question-essay-input-long"  data-type="essay" style="display:none;"  name="essay-packup-{{ question.id }}">{{ answer }}</textarea>
 

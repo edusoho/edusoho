@@ -8,7 +8,6 @@
     </div>
 
     <div class="question-set-item-main">
-    
       {% set question = item.question %}
       {% set itemResult = item.itemResult|default(null) %}
       {% if questionStatus == 'previewing' %}{% set questionStatus = 'doing' %}{% endif %}

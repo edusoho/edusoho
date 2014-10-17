@@ -233,6 +233,7 @@ define(function(require, exports, module) {
                     } else {
                         $('.question-set-card').find('.for-question-' + essayQuestionId).removeClass('question-index-active');
                     }
+                    $shortTextarea.text($longTextarea.val());
                 }
             });   
         },

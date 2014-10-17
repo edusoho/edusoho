@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var EditorFactory = require('common/kindeditor-factory');
     var changeAnswers = {};
+    var saveAnswers = {};
     var changeTeacherSay = {};
 
     exports.run = function() {
@@ -62,6 +63,21 @@ define(function(require, exports, module) {
                     });
                 });
 
+                $essayInputs = $question.find('.question-essay-input-short');
+                if ($essayInputs.text()) {
+                     $questionId = $question.data('questionId');
+                        $('.question-set-card').find('.for-question-' + $questionId).addClass('question-index-active');
+                };
+
+                $fillInputs = $question.find('.question-fill-inputs');
+                $fillInputs.each(function(index1,item1){
+                    $(item1).find('input').each(function(index2,item2){
+                        if ($(item2).val()) {
+                            $questionId = $question.data('questionId');
+                            $('.question-set-card').find('.for-question-' + $questionId).addClass('question-index-active');
+                        };
+                    });
+                });
             });
 
             var card = this;
@@ -89,7 +105,6 @@ define(function(require, exports, module) {
             var $btn = $(event.currentTarget);
                 $btn.button('saving');
                 $btn.attr('disabled', 'disabled');
-
             $.post($btn.data('url'),{data:changeAnswers},function(res){
                 location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/learn#lesson/"+res.lessonId;
             });
@@ -109,7 +124,44 @@ define(function(require, exports, module) {
         onClickSaveBtn: function(event) {
             if (!confirm('确认要下次再做吗？')) return false;
             var $btn = $(event.currentTarget);
-            $.post($btn.data('url'),{data:changeAnswers},function(res){
+
+                $('.question-set-main').find('.question').each(function(index,item){
+
+                $question = $(item);
+                $choicesInputs = $question.find('.question-choices-inputs');
+                $choicesInputs.each(function(index1,item1){
+                            var answer = [];
+                    $(item1).find('label > input').each(function(index2,item2){
+                        if ($(item2).prop('checked')) {
+                            $questionId = $question.data('questionId');
+                            answer.push($(item2).val());
+                        } else {
+                            answer.push(-1);
+                            $questionId = $question.data('questionId');
+                        }
+                    });
+                    saveAnswers[$questionId] = {answer:answer,questionId:$questionId};
+                });
+
+                $essayInputs = $question.find('.question-essay-input-short');
+                        var answer = [];
+                $essayInputs.each(function(index1,item1){
+                        $questionId = $question.data('questionId');
+                         answer.push($(item1).text())
+                        saveAnswers[$questionId] = {answer:answer,questionId:$questionId};
+                });
+
+                $fillInputs = $question.find('.question-fill-inputs');
+                $fillInputs.each(function(index1,item1){
+                    var answer = [];
+                    $(item1).find('input').each(function(index2,item2){
+                        answer.push($(item2).val())
+                        $questionId = $question.data('questionId');
+                    });
+                    saveAnswers[$questionId] = {answer:answer,questionId:$questionId};
+                });
+            });
+            $.post($btn.data('url'),{data:saveAnswers},function(res){
                 location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/learn#lesson/"+res.lessonId;
             });
         },
@@ -249,6 +301,7 @@ define(function(require, exports, module) {
                     } else {
                         $('.question-set-card').find('.for-question-' + essayQuestionId).removeClass('question-index-active');
                     }
+                    $shortTextarea.text($longTextarea.val());
                 }
             });   
         },
