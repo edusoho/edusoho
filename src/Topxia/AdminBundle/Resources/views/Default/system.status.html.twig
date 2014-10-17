@@ -53,7 +53,7 @@
         <tr><td>直播</td><td>{% if setting("course.live_student_capacity", 0)>0 %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已开通{% if setting("course.live_course_enabled")==0 %}(尚未启用)<a class="pull-right" href="{{path("admin_setting_course_setting")}}#live-course-set">查看</a>{% endif %}{% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还未开通<a class="pull-right" href="{{path("admin_setting_course_setting")}}#live-course-set">查看</a>
       {% endif %}</td></tr>
 
-        <tr><td>移动客户端</td><td>{% if setting("mobile").enabled|default(null) %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已启用{% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还未启用<a class="pull-right" href="{{path("admin_setting_mobile")}}">查看</a>
-      {% endif %}</td></tr>
+     {#    <tr><td>移动客户端</td><td>{% if setting("mobile").enabled|default(null) %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已启用{% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还未启用<a class="pull-right" href="{{path("admin_setting_mobile")}}">查看</a>
+      {% endif %}</td></tr> #}
 
 </table>
