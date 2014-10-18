@@ -170,7 +170,7 @@
         </form>
       {% else %}
         <div class="empty">
-          你还没有登录，请先<a href="{{ path('login') }}">登录</a>或<a href="{{ path('register') }}">注册</a>！
+          你还没有登录，请先<a href="{{ path('login', {goto:app.request.server.get('REQUEST_URI')}) }}">登录</a>或<a href="{{ path('register', {goto:app.request.server.get('REQUEST_URI')}) }}">注册</a>！
         </div>
 
       {% endif %}
