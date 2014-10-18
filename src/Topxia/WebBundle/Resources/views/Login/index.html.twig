@@ -35,15 +35,10 @@
             <span class="checkbox mtm pull-right">
               <label> <input type="checkbox" name="_remember_me" checked="checked"> 记住密码 </label>
             </span>
-            {% if app.request.query.get('to') %}
-              <input type="hidden" name="_target_path" value="{{ app.request.query.get('to') }}" />
-            {% endif %}
             <button type="submit" class="btn btn-fat btn-primary btn-large">登录</button>
           </div>
         </div>
-        {% if targetPath|default(null) %}
-          <input type="hidden" name="_target_path" value="{{ targetPath }}">
-        {% endif %}
+        <input type="hidden" name="_target_path" value="{{ _target_path }}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
 
@@ -51,7 +46,7 @@
           <a href="{{ path('password_reset') }}">找回密码</a>
           <span class="text-muted mhs">|</span>
           <span class="text-muted">还没有注册帐号？</span>
-          <a href="{{ path('register') }}">立即注册</a>
+          <a href="{{ path('register', {goto:_target_path}) }}">立即注册</a>
       </div>
 
       {% include 'TopxiaWebBundle:Login:social-logins-block.html.twig' %}
