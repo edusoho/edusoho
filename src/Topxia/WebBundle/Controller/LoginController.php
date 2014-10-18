@@ -57,7 +57,7 @@ class LoginController extends BaseController
     public function ajaxAction(Request $request)
     {
         return $this->render('TopxiaWebBundle:Login:ajax.html.twig', array(
-            'targetPath' => $this->getTargetPath($request),
+            '_target_path' => $this->getTargetPath($request),
         ));
     }
 
