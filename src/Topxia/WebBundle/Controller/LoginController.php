@@ -23,13 +23,15 @@ class LoginController extends BaseController
         return $this->render('TopxiaWebBundle:Login:index.html.twig',array(
             'last_username' => $request->getSession()->get(SecurityContext::LAST_USERNAME),
             'error'         => $error,
-            'targetPath' => $this->getTargetPath($request),
+            '_target_path' => $this->getTargetPath($request),
         ));
     }
 
     private function getTargetPath($request)
     {
-        if ($request->getSession()->has('_target_path')) {
+        if ($request->query->get('goto')) {
+            $targetPath = $request->query->get('goto');
+        } else if ($request->getSession()->has('_target_path')) {
             $targetPath = $request->getSession()->get('_target_path');
         } else {
             $targetPath = $request->headers->get('Referer');
@@ -44,7 +46,6 @@ class LoginController extends BaseController
         if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
             return $this->generateUrl('homepage');
         }
-
         
         if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
             $targetPath = $this->generateUrl('homepage', array(), true);
