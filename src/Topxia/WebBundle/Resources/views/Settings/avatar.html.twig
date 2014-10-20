@@ -1,16 +1,16 @@
 {% extends 'TopxiaWebBundle:Settings:layout.html.twig' %}
 
-{% block title %}头像 - {{ parent() }}{% endblock %}
+{% block title %}{{ '头像'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'avatar' %}
 {% set script_controller = 'settings/avatar' %}
 
 {% block main %}
   {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
-    {% block heading %}头像{% endblock %}
+    {% block heading %}{{ '头像'|trans }}{% endblock %}
     {% block body %}
       
       {% if fromCourse %}
-      <div class="alert alert-info">请设置自定义头像。</div>
+      <div class="alert alert-info">{{ '请设置自定义头像。'|trans }}</div>
       {% endif %}
 
       <form id="settings-avatar-form" class="form-horizontal" method="post" enctype="multipart/form-data">
@@ -18,7 +18,7 @@
         {{ web_macro.flash_messages() }}
 
         <div class="form-group">
-          <div class="col-md-2 control-label"><b>当前头像</b></div>
+          <div class="col-md-2 control-label"><b>{{ '当前头像'|trans }}</b></div>
           <div class="controls col-md-8 controls">
           	<img src="{{ default_path('avatar',user.largeAvatar, '') }}">
           </div>
@@ -38,7 +38,7 @@
           <div class="col-md-2 control-label"></div>
           <div class="controls col-md-8 controls">
             {{ form_rest(form) }}
-            <button type="submit" class="btn btn-primary">上传</button>
+            <button type="submit" class="btn btn-primary">{{ '上传'|trans }}</button>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           </div>
         </div>
@@ -48,7 +48,7 @@
             <div class="col-md-2 control-label"><b>论坛头像</b></div>
             <div class="controls col-md-8 controls">
               <img src="{{ partnerAvatar }}" class="mrm">
-              <button class="btn btn-default use-partner-avatar" type="button" data-url="{{ path('settings_avatar_fetch_partner') }}" data-goto="{{ path('settings_avatar') }}">使用该头像</button>
+              <button class="btn btn-default use-partner-avatar" type="button" data-url="{{ path('settings_avatar_fetch_partner') }}" data-goto="{{ path('settings_avatar') }}">{{ '使用该头像'|trans }}</button>
             </div>
           </div>
         {% endif %}

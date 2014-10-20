@@ -236,29 +236,20 @@ class SettingsController extends BaseController
 			return $this->redirect($this->generateUrl('settings_setup'));
 		}
 
-		$form = $this->createFormBuilder()
-			->add('currentPassword', 'password')
-			->add('newPassword', 'password')
-			->add('confirmPassword', 'password')
-			->getForm();
-
 		if ($request->getMethod() == 'POST') {
-			$form->bind($request);
-			if ($form->isValid()) {
-				$passwords = $form->getData();
-				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword'])) {
-					$this->setFlashMessage('danger', '当前密码不正确，请重试！');
-				} else {
-					$this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
-					$this->setFlashMessage('success', '密码修改成功。');
-				}
 
-				return $this->redirect($this->generateUrl('settings_password'));
+			$passwords = $request->request->all();
+			if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword'])) {
+				$this->setFlashMessage('danger', '当前密码不正确，请重试！');
+			} else {
+				$this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
+				$this->setFlashMessage('success', '密码修改成功。');
 			}
+
+			return $this->redirect($this->generateUrl('settings_password'));
 		}
 
 		return $this->render('TopxiaWebBundle:Settings:password.html.twig', array(
-			'form' => $form->createView()
 		));
 	}
 

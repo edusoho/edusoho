@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}帐号设置 - {{ parent() }}{% endblock %}
+{% block title %}{{ '帐号设置'|trans }} - {{ parent() }}{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -10,20 +10,20 @@
         <div class="panel-body">
           <div class="list-group-block">
             <div class="list-group-panel">
-              <div class="list-group-heading">帐号设置</div>
+              <div class="list-group-heading">{{ '帐号设置'|trans }}</div>
             <ul class="list-group">
               {% set side_nav = side_nav|default(null) %}
               
-              <a class="list-group-item {% if side_nav == 'profile' %}active{% endif %}" href="{{ path('settings') }}"><i class="glyphicon glyphicon-user"></i> 基础信息</a>
+              <a class="list-group-item {% if side_nav == 'profile' %}active{% endif %}" href="{{ path('settings') }}"><i class="glyphicon glyphicon-user"></i> {{ '基础信息'|trans }}</a>
               
-              <a class="list-group-item {% if side_nav == 'avatar' %}active{% endif %}" href="{{ path('settings_avatar') }}"><i class="glyphicon glyphicon-picture"></i> 头像设置</a>
+              <a class="list-group-item {% if side_nav == 'avatar' %}active{% endif %}" href="{{ path('settings_avatar') }}"><i class="glyphicon glyphicon-picture"></i> {{ '头像设置'|trans }}</a>
               
-              <a class="list-group-item {% if side_nav == 'password' %}active{% endif %}" href="{{ path('settings_password') }}"><i class="glyphicon glyphicon-lock"></i> 密码修改</a>
+              <a class="list-group-item {% if side_nav == 'password' %}active{% endif %}" href="{{ path('settings_password') }}"><i class="glyphicon glyphicon-lock"></i> {{ '密码修改'|trans }}</a>
               
-              <a class="list-group-item {% if side_nav == 'email' %}active{% endif %}" href="{{ path('settings_email') }}"><i class="glyphicon glyphicon-envelope"></i> 邮箱设置</a>
+              <a class="list-group-item {% if side_nav == 'email' %}active{% endif %}" href="{{ path('settings_email') }}"><i class="glyphicon glyphicon-envelope"></i> {{ '邮箱设置'|trans }}</a>
 
               {% if setting('login_bind', []).enabled|default(false) %}
-                <a class="list-group-item {% if side_nav == 'binds' %}active{% endif %}" href="{{ path('settings_binds') }}"><i class="glyphicon glyphicon-circle-arrow-right"></i> 第三方登录</a>
+                <a class="list-group-item {% if side_nav == 'binds' %}active{% endif %}" href="{{ path('settings_binds') }}"><i class="glyphicon glyphicon-circle-arrow-right"></i> {{ '第三方登录'|trans }}</a>
               {% endif %}
 
             </ul>
