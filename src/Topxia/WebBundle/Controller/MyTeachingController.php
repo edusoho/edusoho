@@ -171,6 +171,10 @@ class MyTeachingController extends BaseController
     	));
 	}
 
+    public function myTasksAction()
+    {
+        return $this->render('TopxiaWebBundle:MyTeaching:mytasks.html.twig');
+    }
 	protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');

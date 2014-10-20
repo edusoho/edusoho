@@ -23,8 +23,8 @@ my_teaching_threads:
     defaults: { _controller: TopxiaWebBundle:MyTeaching:threads }
 
 my_teaching_task:
-    pattern: /my/teaching/tasks
-    defaults: { _controller: TopxiaWebBundle:MyTeaching:tasks }
+    pattern: /my/teaching/myTasks
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:myTasks }
 user_sign:
     pattern:  /sign/{classId}/{userId}
     defaults: { _controller: TopxiaWebBundle:Sign:sign }
