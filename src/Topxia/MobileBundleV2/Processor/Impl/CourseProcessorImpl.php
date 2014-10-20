@@ -228,8 +228,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     		}
     	}
 
-    	var_dump($noteList);
-
     	foreach ($noteList as $key => $value) {
     		$sort_course[$key] = $value['courseId'];
     		$sort_lesson[$key] = $value['lessonId'];
