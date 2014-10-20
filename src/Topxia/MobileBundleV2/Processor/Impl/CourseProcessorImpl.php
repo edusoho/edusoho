@@ -199,17 +199,36 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
     	}
 
-    	$noteList = $this->controller->getNoteService()->searchNotes(array('userId'=>$user['id']),'created',$start,$limit);
-    	for($i = 0;$i < count($noteList);$i++){
-    		$courseId = $noteList[$i]['courseId'];
-    		$lessonId = $noteList[$i]['lessonId'];
-    		$courseInfo = $this->controller->getCourseService()->getCourse($courseId);
-    		$lessonInfo = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
-    		$noteList[$i]["title"] = $courseInfo["title"];
-    		$noteList[$i]["largePicture"] = $this->controller->coverPath($courseInfo["largePicture"], 'course-large.png');
-    		$noteList[$i]["lessonName"] = $lessonInfo["title"];
-    		$noteList[$i]["number"] = $lessonInfo["number"];
+     	$conditions = array(
+            'userId' => $user['id'],
+            'noteNumGreaterThan' => 0
+        );
+
+        $courseMember = $this->controller->getCourseService()->searchMember($conditions,$start,$limit);
+        //var_dump($courseMember);
+        // $courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMember, 'courseId'));
+        // var_dump($courseMember);
+
+    	// $noteList = $this->controller->getNoteService()->searchNotes(array('userId'=>$user['id']),'created',$start,$limit);
+    	// var_dump($noteList);
+    	$noteList = array();
+    	$index = 0;
+    	for($i = 0;$i < count($courseMember);$i++){
+    		$noteListByOneCourse =  $this->controller->getNoteService()->findUserCourseNotes($user['id'],$courseMember[$i]['courseId']);
+    		foreach ($noteListByOneCourse as $key => $value) {
+	    		$courseId = $value['courseId'];
+	    		$lessonId = $value['lessonId'];
+	    		$courseInfo = $this->controller->getCourseService()->getCourse($courseId);
+	    		$lessonInfo = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+	    		$value["title"] = $courseInfo["title"];
+	    		$value["largePicture"] = $this->controller->coverPath($courseInfo["largePicture"], 'course-large.png');
+	    		$value["lessonName"] = $lessonInfo["title"];
+	    		$value["number"] = $lessonInfo["number"];
+	    		$noteList[$index++] = $value;
+    		}
     	}
+
+    	var_dump($noteList);
 
     	foreach ($noteList as $key => $value) {
     		$sort_course[$key] = $value['courseId'];
