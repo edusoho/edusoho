@@ -40,6 +40,7 @@ class LiveCourseLessonManageController extends BaseController
 			}
 
 			$liveLesson['mediaId'] = $live['id'];
+			$liveLesson['liveProvider'] = $live['provider'];
 
 
 			$liveLesson = $this->getCourseService()->createLesson($liveLesson);
