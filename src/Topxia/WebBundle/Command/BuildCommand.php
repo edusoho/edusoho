@@ -62,7 +62,7 @@ class BuildCommand extends BaseCommand
 
 		chdir($this->buildDirectory);
 
-		$command = "tar czvf edusoho-k12-" . System::VERSION . ".tar.gz edusoho-k12/";
+		$command = "tar czvf edusoho-k12-" . System::VERSION . "Beta.tar.gz edusoho-k12/";
 		exec($command);
 	}
 
