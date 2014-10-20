@@ -28,17 +28,17 @@ class EdusohoLiveClient
     public function startLive($liveId)
     {
         $args = array(
-            'liveId' => $liveId
+            "liveId" => $liveId, 
         );
-        return $this->cloudApi->post('LiveStart', $args);
+        return $this->cloudApi->post('/lives/'.$liveId.'/room_url', $args);
     }
 
     public function deleteLive($liveId)
-    {
+    {   
         $args = array(
-            'liveId' => $liveId
+            "liveId" => $liveId, 
         );
-        return $this->cloudApi->delete('LiveDelete', $args);
+        return $this->cloudApi->delete('/lives/'.$liveId, $args);
     }
 
     public function entryLive($liveId, $params)
@@ -67,11 +67,7 @@ class EdusohoLiveClient
             "liveId" => $liveId, 
             "title" => $title
         );
-        $replayList = $this->cloudApi->post('LiveReplayCreate', $args);
-        if(array_key_exists("error", $replayList)){
-            return $replayList;
-        }
-        return json_decode($replayList["data"], true);
+        return $this->cloudApi->post('/lives/'.$liveId.'/records', $args);
     }
 
 }
