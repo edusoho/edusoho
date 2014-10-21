@@ -15,12 +15,12 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="form[password]"]',
+            element: '#password-field',
             required: true
         });
 
         validator.addItem({
-            element: '[name="form[email]"]',
+            element: '#email-field',
             required: true,
             rule: 'email'
         });
