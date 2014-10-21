@@ -9,10 +9,6 @@ interface LessonDao
 
     public function findLessonsByCourseId($courseId);
 
-    public function findDraftsByCourseId($courseId,$userId);
-
-    // public function findDraftsByUserId($userId);
-
     public function findLessonsByTypeAndMediaId($type, $mediaId);
 
     public function findMinStartTimeByCourseId($courseId);
@@ -35,17 +31,7 @@ interface LessonDao
 
     public function addLesson($course);
 
-    public function getDraft($id);
-
-    public function getDrafts($courseId,$userId);
-
-    public function deleteDraft($courseId,$userId);
-
-    public function addDraft($lesson);
-
     public function updateLesson($id, $fields);
-
-    public function updateTextDraft($userId,$courseId, $fields);
 
     public function deleteLesson($id);
 
