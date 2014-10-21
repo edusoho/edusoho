@@ -3,13 +3,19 @@
 {% set modal_class = 'modal-lg' %}
 {% set lesson = lesson|default(null) %}
 
+{% set course_draft = false %}
+{% if drafts %}
+{% set course_draft = true %}
+{% endif %}
+
 {% block title %}
   {% if lesson %}编辑课时{{ lesson.number }}{% else %}添加课时{% endif %}
 {% endblock %}
 
 {% block body %}
+{# {{ dump(drafts)}} #}
 
-<form id="course-lesson-form" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
+<form id="course-lesson-form" data-course-id="{{course.id}}" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   {% if lesson %}
     action="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
   {% else %}
@@ -27,11 +33,11 @@
   </div>
 
   <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type{% endif %}" >
-    <div class="col-md-2 control-label"><label for="lesson-title-field">标题</label></div>
+    <div class="col-md-2 control-label"><label for="lesson-title-field" class="style1">标题</label></div>
     <div class="col-md-9 controls">
       <div class="row">
         <div class="col-md-10">
-          <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ field_value(lesson, 'title') }}">
+          <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ field_value(lesson, 'title') }}" >
         </div>
         <div class="col-md-2">
           <div class="checkbox">
@@ -43,13 +49,25 @@
   </div>
 
   <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type{% endif %}">
-    <div class="col-md-2 control-label"><label for="lesson-summary-field">摘要</label></div>
-    <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary">{{ field_value(lesson, 'summary') }}</textarea></div>
+    <div class="col-md-2 control-label"><label for="lesson-summary-field" class="style1">摘要</label></div>
+    <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary" >{{ field_value(lesson, 'summary') }}</textarea>
+
+    </div>
   </div>
 
   <div class="form-group for-text-type">
-    <div class="col-md-2 control-label"><label for="lesson-content-field">内容</label></div>
-    <div class="col-md-9 controls"><textarea class="form-control" id="lesson-content-field" name="content">{{ field_value(lesson, 'content') }}</textarea></div>
+
+  {% if course_draft  %}
+<div class="btn-group">
+ <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+ <button type="button" class="btn btn-link btn-sm" id ="see-draft-btn">
+ &nbsp;&nbsp;&nbsp;&nbsp;注意：您之前有一段自动保存内容，是否使用？如继续使用请点击!
+      </button>
+  </div>
+  {% endif %}
+
+    <div class="col-md-2 control-label"><label for="lesson-content-field" class="style1">内容</label></div>
+    <div class="col-md-9 controls"><textarea class="form-control" id="lesson-content-field" name="content"  >{{ field_value(lesson, 'content') }}</textarea></div>
   </div>
 
   <div class="form-group for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type{% endif %}">
@@ -94,9 +112,12 @@
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
+
 </form>
+ 
 
 <script>app.load('course-manage/lesson-modal')</script>
+
 
 {% endblock %}
 {% block footer %}

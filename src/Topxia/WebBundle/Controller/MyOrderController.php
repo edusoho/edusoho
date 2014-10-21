@@ -33,6 +33,7 @@ class MyOrderController extends BaseController
         	'orders' => $orders,
             'paginator' => $paginator
         ));
+    
     }
 
     public function refundsAction(Request $request)

@@ -612,10 +612,29 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserialize($lesson);
 	}
 
+	public function getCourseDraft($courseId, $userId)
+	{
+		$draft = $this->getLessonDao()->getDrafts($courseId,$userId);
+		if (empty($draft) or ($draft['userId'] != $userId)) {
+			return null;
+		}
+		return LessonSerialize::unserialize($draft);
+	}
+
 	public function getCourseLessons($courseId)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
 		return LessonSerialize::unserializes($lessons);
+	}
+	public function getCourseDrafts($courseId,$userId)
+	{
+		$lessons = $this->getLessonDao()->findDraftsByCourseId($courseId,$userId);
+		return LessonSerialize::unserializes($lessons);
+	}
+	public function deleteDraft($courseId,$userId)
+	{
+		 return   $this->getLessonDao()->deleteDraft($courseId,$userId);
+		// return LessonSerialize::unserializes($lessons);
 	}
 
 	public function findLessonsByTypeAndMediaId($type, $mediaId)
@@ -634,6 +653,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getLessonDao()->searchLessonCount($conditions);
 	}
 
+	public function getDraft($id)
+	    {
+	        return $this->getLessonDao()->getDraft($id);
+	    }
+
+	public function createDraft($lesson)
+	{
+		$lesson = ArrayToolkit::parts($lesson, array('userId', 'title', 'courseId', 'summary', 'content','createdTime'));
+		$lesson['userId'] = $this->getCurrentUser()->id;
+		$lesson['createdTime'] = time();
+		$lesson = $this->getLessonDao()->addDraft($lesson);
+		return $lesson;
+	}
 	public function createLesson($lesson)
 	{
 		$lesson = ArrayToolkit::filter($lesson, array(
@@ -757,6 +789,37 @@ class CourseServiceImpl extends BaseService implements CourseService
 		unset($lesson['media']);
 
 		return $lesson;
+	}
+	public function updateTextDraft($userId, $courseId,$fields)
+	{
+		$draft = $this->getCourseDraft($courseId, $userId);
+		 // var_dump($draft ['createdTime']); exit();
+		if (empty($draft)) {
+			throw $this->createServiceException('草稿不存在，更新失败！');
+		}
+		
+
+		$fields = $this->_filterDraftFields($fields);
+		
+		$this->getLogService()->info('draft', 'update', "更新草稿《{$draft['title']}》(#{$draft['id']})的信息", $fields);
+
+		$fields = LessonSerialize::serialize($fields);
+		
+		return LessonSerialize::unserialize(
+			$this->getLessonDao()->updateTextDraft($userId,$courseId, $fields)
+		);
+
+	}
+
+	private function _filterDraftFields($fields)
+	{
+		$fields = ArrayToolkit::filter($fields, array(
+			'title' => '',
+			'summary' => '',
+			'content' => '',
+			'createdTime' => 0
+		));
+		return $fields;
 	}
 
 	public function updateLesson($courseId, $lessonId, $fields)

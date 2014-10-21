@@ -7,6 +7,10 @@ interface OrderDao
 
     public function getOrder($id);
 
+    public function getOrderByTargetIdAndUserId($targetId,$userId);
+
+    public function changeOrderStatus($targetId,$userId);
+
     public function getOrderBySn($sn);
 
     public function findOrdersByIds(array $ids);

@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-
     var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
@@ -8,8 +7,72 @@ define(function(require, exports, module) {
     var PPTChooser = require('../widget/media-chooser/ppt-chooser6');
     var Notify = require('common/bootstrap-notify');
         require('jquery.sortable');
-        
-    var sortList = function($list) {
+
+            var tmpContents = {};
+            var editor;
+            var Local_content = {};
+            function getTmpContents(){
+                var date = new Date(); //日期对象
+                var now = "";
+                // now = date.getFullYear()+"年"; //读英文就行了
+                // now = now + (date.getMonth()+1)+"月"; //取月的时候取的是当前月-1如果想取当前月+1就可以了
+                // now = now + date.getDate()+"日";
+                now = now + date.getHours()+"时";
+                now = now + date.getMinutes()+"分";
+                now = now + date.getSeconds()+"秒";
+                tmpContents["title"] = $("#lesson-title-field").val();
+                tmpContents["summary"] = $("#lesson-summary-field").val();
+                tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
+                editor.sync();
+                var z = editor.html();
+                var x = editor.html().match(/<embed[\s\S]*?\/>/g);
+                if (x) {
+                        for (var i = x.length - 1; i >= 0; i--) {
+                           var y = x[i].replace(/\/>/g,"wmode='Opaque' \/>");
+                           var z =  z.replace(x[i],y);
+                        };
+                }
+                tmpContents["content"] = z;
+                tmpContents["createdTime"] = now;
+                function compare(tmp, local){
+                    if($.isEmptyObject(tmp)){
+                        return false;
+                    }
+                    for(var key in tmp){
+                        if(key!="courseId" && key!="createdTime" && tmp[key] != "" && tmp[key] != local[key]){
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                function objClone(jsonObj){
+                     var txt=JSON.stringify(jsonObj);
+                     return JSON.parse(txt);
+                }
+                // alert(compare(tmpContents, Local_content));
+                if(compare(tmpContents, Local_content)){
+                        $.post('/course/draft/create', tmpContents, function(data){
+                            Local_content = objClone(tmpContents);
+                            $(".modal-title").text('添加课时(草稿已于' + tmpContents['createdTime'] + '保存)');
+                        });
+                }
+                // console.log(tmpContents) ;
+            }
+
+             $("#see-draft-btn").on('click',function(e) {
+                tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
+                var courseId = tmpContents["courseId"];
+                $.get('/course/draft/'+courseId+'/see',function(response){  
+                    $("#lesson-title-field").val(response.title); 
+                    $("#lesson-summary-field").val(response.summary); 
+                    editor.sync();
+                    var z = editor.html(response.content);
+                    $("#lesson-content-field").val(z);        
+                }); 
+                $(".btn-group").fadeOut();
+            });
+
+            var sortList = function($list) {
             var data = $list.sortable("serialize").get();
             $.post($list.data('sortUrl'), {ids:data}, function(response){
                 var lessonNum = chapterNum = unitNum = 0;
@@ -69,6 +132,7 @@ define(function(require, exports, module) {
             }
 
             $('#course-lesson-btn').button('submiting').addClass('disabled');
+
 
             var $panel = $('.lesson-manage-panel');
             $.post($form.attr('action'), $form.serialize(), function(html) {
@@ -177,6 +241,7 @@ define(function(require, exports, module) {
                     element: '#lesson-content-field',
                     required: true
                 });
+
                 break;
             case 'ppt':
                 validator.addItem({
@@ -191,6 +256,7 @@ define(function(require, exports, module) {
     }
 
     exports.run = function() {
+         var sh;
         var updateDuration = function (length) {
             length = parseInt(length);
             if (isNaN(length) || length == 0) {
@@ -247,37 +313,55 @@ define(function(require, exports, module) {
             videoChooser.destroy();
             audioChooser.destroy();
             pptChooser.destroy();
+            // getTmpContents();
         });
 
         var validator = createValidator($form, [videoChooser,pptChooser,audioChooser]);
-
+       
         $form.on('change', '[name=type]', function(e) {
             var type = $(this).val();
 
             $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text").removeClass("lesson-form-ppt")
             $form.addClass("lesson-form-" + type);
+            if (type == 'text'){
+                sh = setInterval(getTmpContents,5000);//1000为1秒钟
+
+            }
 
             if (type == 'video') {
                 videoChooser.show();
                 audioChooser.hide();
                 pptChooser.hide();
-
+                clearInterval(sh);
             } else if (type == 'audio') {
                 audioChooser.show();
                 videoChooser.hide();
                 pptChooser.hide();
+                clearInterval(sh);
             } else if (type == 'ppt') {
                 pptChooser.show();
                 videoChooser.hide();
                 audioChooser.hide();
+                clearInterval(sh);
             }
 
+            $(".modal").on("hide.bs.modal", function(){
+            videoChooser.destroy();
+            audioChooser.destroy();
+            pptChooser.destroy();
+            // getTmpContents();
+        });
+            $(".modal").on('hidden.bs.modal', function (){
+            clearInterval(sh);
+       });
             switchValidator(validator, type);
         });
 
+
+
         $form.find('[name="type"]:checked').trigger('change');
 
-        var editor = EditorFactory.create('#lesson-content-field', 'standard', {extraFileUploadParams:{group:'course'}, height: '300px'});
+        editor = EditorFactory.create('#lesson-content-field', 'standard', {extraFileUploadParams:{group:'course'}, height: '300px'});
         
         validator.on('formValidate', function(elemetn, event) {
             editor.sync();
