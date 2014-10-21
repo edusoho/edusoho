@@ -324,8 +324,15 @@ define(function(require, exports, module) {
             $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text").removeClass("lesson-form-ppt")
             $form.addClass("lesson-form-" + type);
             if (type == 'text'){
-                sh = setInterval(getTmpContents,5000);//1000为1秒钟
+                 sh = setInterval(getTmpContents,5000);//1000为1秒钟
 
+                 $(".close").on('click',function(e){
+                        getTmpContents();
+                 });
+
+                 $("#cancel-btn").on('click',function(e){
+                        getTmpContents();
+                 });
             }
 
             if (type == 'video') {
