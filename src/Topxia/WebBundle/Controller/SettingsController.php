@@ -119,34 +119,27 @@ class SettingsController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 
-		$form = $this->createFormBuilder()
-			->add('avatar', 'file')
-			->getForm();
-
 		if ($request->getMethod() == 'POST') {
-			$form->bind($request);
-			if ($form->isValid()) {
-				$data = $form->getData();
-				$file = $data['avatar'];
 
-				if (!FileToolkit::isImageFile($file)) {
-					return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
-				}
+			$file = $request->files->get('avatar');
 
-				$filenamePrefix = "user_{$user['id']}_";
-				$hash = substr(md5($filenamePrefix . time()), -8);
-				$ext = $file->getClientOriginalExtension();
-				$filename = $filenamePrefix . $hash . '.' . $ext;
-
-				$directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-				$file = $file->move($directory, $filename);
-
-				$fileName = str_replace('.', '!', $file->getFilename());
-
-				return $this->redirect($this->generateUrl('settings_avatar_crop', array(
-					'file' => $fileName)
-				));
+			if (!FileToolkit::isImageFile($file)) {
+				return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
 			}
+
+			$filenamePrefix = "user_{$user['id']}_";
+			$hash = substr(md5($filenamePrefix . time()), -8);
+			$ext = $file->getClientOriginalExtension();
+			$filename = $filenamePrefix . $hash . '.' . $ext;
+
+			$directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
+			$file = $file->move($directory, $filename);
+
+			$fileName = str_replace('.', '!', $file->getFilename());
+
+			return $this->redirect($this->generateUrl('settings_avatar_crop', array(
+				'file' => $fileName)
+			));
 		}
 
 		$hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
@@ -156,13 +149,8 @@ class SettingsController extends BaseController
 			$partnerAvatar = null;
 		}
 
-		$fromCourse = $request->query->get('fromCourse');
-
 		return $this->render('TopxiaWebBundle:Settings:avatar.html.twig', array(
-			'form' => $form->createView(),
-			'user' => $this->getUserService()->getUser($user['id']),
 			'partnerAvatar' => $partnerAvatar,
-			'fromCourse' => $fromCourse,
 		));
 	}
 
