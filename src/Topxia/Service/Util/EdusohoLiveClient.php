@@ -25,10 +25,19 @@ class EdusohoLiveClient
         return $this->cloudApi->post('/lives', $args);
     }
 
+    public function getCapacity()
+    {
+        $args = array(
+            'timestamp' => time() . ''
+        );
+        return $this->cloudApi->get('/lives/capacity', $args);
+    }
+
     public function startLive($liveId)
     {
         $args = array(
             "liveId" => $liveId, 
+            "provider" => "vhall"
         );
         return $this->cloudApi->post('/lives/'.$liveId.'/room_url', $args);
     }
@@ -37,30 +46,27 @@ class EdusohoLiveClient
     {   
         $args = array(
             "liveId" => $liveId, 
+            "provider" => "vhall"
         );
         return $this->cloudApi->delete('/lives/'.$liveId, $args);
     }
 
     public function entryLive($liveId, $params)
     {
-        $params['liveId'] = $liveId;
-        $params['role'] = 'student';
-        return $this->cloudApi->post('/lives/'.$liveId.'/room_url', $params);
-    }
-
-    public function getCapacity()
-    {
-        $args = array(
-            'timestamp' => time() . '',
+        $params = array(
+            "liveId" => $liveId,
+            "role" => "student",
+            "provider" => "vhall"
         );
-        return $this->cloudApi->get('/lives/capacity', $args);
+        return $this->cloudApi->post('/lives/'.$liveId.'/room_url', $params);
     }
 
     public function entryReplay($liveId, $replayId)
     {
         $args = array(
             'liveId' => $liveId,
-            'replayId' => $replayId
+            'replayId' => $replayId,
+            "provider" => "vhall"
         );
         return $this->cloudApi->post('/lives/'.$liveId.'/record_url', $args);
     }
@@ -69,7 +75,8 @@ class EdusohoLiveClient
     {
         $args = array(
             "liveId" => $liveId, 
-            "title" => $title
+            "title" => $title,
+            "provider" => "vhall"
         );
         $replayList = $this->cloudApi->post('/lives/'.$liveId.'/records', $args);
         $replayList = json_decode($replayList['data'],true);
