@@ -2,7 +2,7 @@
 
 namespace Topxia\Service\Course\Dao;
 
-interface LessonDao
+interface DraftDao
 {
     public function findDraftsByCourseId($courseId,$userId);
 
