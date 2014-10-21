@@ -3,11 +3,6 @@
 {% set modal_class = 'modal-lg' %}
 {% set lesson = lesson|default(null) %}
 
-{% set course_draft = false %}
-{% if drafts %}
-{% set course_draft = true %}
-{% endif %}
-
 {% block title %}
   {% if lesson %}编辑课时{{ lesson.number }}{% else %}添加课时{% endif %}
 {% endblock %}
@@ -57,12 +52,12 @@
 
   <div class="form-group for-text-type">
 
-  {% if course_draft  %}
-  <div class="btn-group">
-  <a id ="see-draft-btn" class="btn btn-link btn-sm">
-  您有一段自动保存内容，继续编辑请点击
-  </a>
-  </div>
+  {% if drafts|default(false) %}
+    <div class="btn-group">
+    <a id ="see-draft-btn" class="btn btn-link btn-sm">
+    您有一段自动保存内容，继续编辑请点击
+    </a>
+    </div>
   {% endif %}
 
     <div class="col-md-2 control-label"><label for="lesson-content-field" class="style1">内容</label></div>
