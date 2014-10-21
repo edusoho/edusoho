@@ -43,8 +43,9 @@ class EdusohoLiveClient
 
     public function entryLive($liveId, $params)
     {
-        $url = "http://webinar.vhall.com/appaction.php?module=inituser&pid={$liveId}&email={$params['email']}&name={$params['nickname']}&k={$params['sign']}";
-        return array('url' => $url);
+        $params['liveId'] = $liveId;
+        $params['role'] = 'student';
+        return $this->cloudApi->post('/lives/'.$liveId.'/room_url', $params);
     }
 
     public function getCapacity()
@@ -57,8 +58,11 @@ class EdusohoLiveClient
 
     public function entryReplay($liveId, $replayId)
     {
-        $url = "http://webinar.vhall.com/record.php?module=viewrec&id={$liveId}&rsid={$replayId}";
-        return $url;
+        $args = array(
+            'liveId' => $liveId,
+            'replayId' => $replayId
+        );
+        return $this->cloudApi->post('/lives/'.$liveId.'/record_url', $args);
     }
 
     public function createReplayList($liveId, $title)

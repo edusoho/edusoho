@@ -1979,7 +1979,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$email = $this->getCurrentUser()->email;
 		$courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);
 		$url = $client->entryReplay($mediaId, $courseLessonReplay["replayId"]);
-		return $url;
+		return $url['url'];
 	}
 
 	public function getCourseLessonReplayByLessonId($lessonId)
