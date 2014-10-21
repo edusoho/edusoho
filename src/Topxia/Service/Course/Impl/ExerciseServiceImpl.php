@@ -65,13 +65,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
         $user = $this->getCurrentUser();
 
-        $homeworkResult = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndUserId($id,$user->id);
+        $exerciseResult = $this->getExerciseResultDao()->getExerciseResultByExerciseIdAndUserId($id,$user->id);
+        
+        if (!empty($homeworkResult)) {
+            // $this->getExerciseResultDao()->deleteExerciseResult($exerciseResult['id']);
+        }
 
-        // if (!empty($homeworkResult)) {
-        //     throw $this->createServiceException('您已经做过该作业了！');
-        // }
-
-        $result = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndStatusAndUserId($id,$user->id, 'doing');
+        $result = $this->getHomeworkResultDao()->getExerciseResultByExerciseIdAndStatusAndUserId($id,$user->id, 'doing');
         if (empty($result)){
             $homeworkResult = array(
                 'homeworkId' => $homework['id'],
@@ -190,6 +190,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         }
 
         return array('status' => 'no', 'missing' => $missing);
+    }
+
+    private function getExerciseResultDao()
+    {
+        return $this->createDao('Course.ExerciseResultDao');
     }
 
     protected function getExerciseDao()
