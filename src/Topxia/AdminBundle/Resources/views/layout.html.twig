@@ -71,6 +71,22 @@
   </div>
 
   <div class="container">
+    <div class="completed">
+      <div class="percent">0/5</div>
+    </div>
+    <div class="user-guide">
+      <div class="content">
+        <div class="pull-right">
+          <a href="javascript:;" data-url="{{path('admin_user_guide_show')}}" data-index="" class="btn btn-default btn-xs view-step">查看</a>
+          <a href="javascript:;" data-url="{{path('admin_user_guide_complete')}}" data-index="" class="btn btn-primary btn-xs complete-step">完成</a>
+        </div>
+        <div class="text"></div>
+      </div>
+    </div>
+    <div id="user-guide-path" data-url="{{ path('admin_user_guide_index') }}" ></div>
+
+
+
     <div class="row">{% block content %}{% endblock %}</div>
   </div>
 
@@ -80,5 +96,7 @@
   {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
 
   <div id="modal" class="modal" ></div>
+  <div id="step-modal" class="modal" ></div>
+
 </body>
 </html>
