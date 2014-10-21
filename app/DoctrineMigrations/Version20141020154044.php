@@ -39,6 +39,21 @@ class Version20141020154044 extends AbstractMigration
 			  PRIMARY KEY (`id`)
 			) ENGINE=InnoDB  DEFAULT CHARSET=utf8  ;"
         );
+
+        $this->addSql("
+        	CREATE TABLE IF NOT EXISTS `exercise_result` (
+				  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+				  `exerciseId` int(10) unsigned NOT NULL DEFAULT '0',
+				  `courseId` int(10) unsigned NOT NULL,
+				  `lessonId` int(10) unsigned NOT NULL,
+				  `userId` int(10) unsigned NOT NULL DEFAULT '0',
+				  `rightItemCount` int(10) unsigned NOT NULL DEFAULT '0',
+				  `status` enum('doing','finished') NOT NULL COMMENT '状态',
+				  `commitStatus` enum('committed','uncommitted') NOT NULL DEFAULT 'uncommitted',
+				  `usedTime` int(10) unsigned NOT NULL DEFAULT '0',
+				  PRIMARY KEY (`id`)
+				) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+    	");
     }
 
     public function down(Schema $schema)

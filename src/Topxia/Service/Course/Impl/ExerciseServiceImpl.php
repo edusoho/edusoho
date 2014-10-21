@@ -45,6 +45,50 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseDao()->addExercise($this->filterExerciseFields($fields));
     }
 
+    public function startExercise($id)
+    {
+        $exercise = $this->getExerciseDao()->getExercise($id);
+
+        if (empty($exercise)) {
+            throw $this->createServiceException('课时练习不存在！');
+        }
+
+        $course = $this->getCourseService()->getCourse($exercise['courseId']);
+        if (empty($course)) {
+            throw $this->createServiceException('练习所属课程不存在！');
+        }
+
+        $lesson = $this->getCourseService()->getCourseLesson($exercise['courseId'], $exercise['lessonId']);
+        if (empty($lesson)) {
+            throw $this->createServiceException('练习所属课时不存在！');
+        }
+
+        $user = $this->getCurrentUser();
+
+        $homeworkResult = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndUserId($id,$user->id);
+
+        // if (!empty($homeworkResult)) {
+        //     throw $this->createServiceException('您已经做过该作业了！');
+        // }
+
+        $result = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndStatusAndUserId($id,$user->id, 'doing');
+        if (empty($result)){
+            $homeworkResult = array(
+                'homeworkId' => $homework['id'],
+                'courseId' => $homework['courseId'],
+                'lessonId' =>  $homework['lessonId'],
+                'userId' => $this->getCurrentUser()->id,
+                'checkTeacherId' => $homework['createdUserId'],
+                'status' => 'doing',
+                'usedTime' => time(),
+            );
+
+            return $this->getHomeworkResultDao()->addHomeworkResult($homeworkResult);
+        } else {
+            return $result;
+        }
+    }
+
     public function updateExercise($id, $fields)
     {
         if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId', 'questionCount', 'difficulty', 'ranges', 'source'))) {

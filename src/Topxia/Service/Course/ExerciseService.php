@@ -9,6 +9,8 @@ interface ExerciseService
 
 	public function createExercise($fields);
 
+	public function startExercise($id);
+
 	public function updateExercise($id, $fields);
 
 	public function deleteExercise($id);

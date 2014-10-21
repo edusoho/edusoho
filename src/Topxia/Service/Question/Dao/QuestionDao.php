@@ -12,6 +12,8 @@ interface QuestionDao
 
     public function findQuestionsByParentIds(array $ids);
 
+    public function findQuestionsbyTypeRange($typeRange, $start, $limit);
+
     public function searchQuestions($conditions, $sort, $start, $limit);
 
     public function searchQuestionsCount($conditions);

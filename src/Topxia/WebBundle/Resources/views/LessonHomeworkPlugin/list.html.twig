@@ -25,7 +25,7 @@
 
 <div class="lesson-about">
 	{% if exercise %}
-	  	<a href="#" class="btn btn-primary btn-sm">来{{ exercise.itemCount }}题</a>
+	  	<a href="{{ path('course_exercise_start_do',{courseId:course.id,exerciseId:exercise.id}) }}" class="btn btn-primary btn-sm">来{{ exercise.itemCount }}题</a>
 	{% else %}
 		此课时暂无练习
 	{% endif %}

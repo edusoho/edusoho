@@ -555,7 +555,13 @@ course_manage_lesson_sort:
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:sort }
     methods: [POST]
 
+course_exercise_start_do:
+    pattern: /course/{courseId}/exercise/{exerciseId}/startDo
+    defaults: { _controller: TopxiaWebBundle:CourseExercise:startDo }
 
+course_exercise_do:
+    pattern: /course/{courseId}/lesson/{lessonId}/exercise/do
+    defaults: { _controller: TopxiaWebBundle:CourseExercise:do }
 
 course_homework_start_do:
     pattern: /course/{courseId}/homework/{homeworkId}/startDo
