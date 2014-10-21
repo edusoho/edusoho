@@ -1,9 +1,35 @@
 define(function(require, exports, module) {
 
 	var Validator = require('bootstrap.validator');
-  var Notify = require('common/bootstrap-notify');
+       var Notify = require('common/bootstrap-notify');
+       require('jquery.sortable');
 
 	exports.run = function() {
+        
+
+      var sortList = function($list) {
+            var data = $list.sortable("serialize").get();
+            $.post($list.data('sortUrl'), {ids:data}, function(response){
+                var lessonNum = chapterNum = unitNum = 0;
+
+                $list.find('.item-lesson, .item-chapter').each(function() {
+                    var $item = $(this);
+                    if ($item.hasClass('item-lesson')) {
+                        lessonNum ++;
+                        $item.find('.number').text(lessonNum);
+                    } else if ($item.hasClass('item-chapter-unit')) {
+                        unitNum ++;
+                        $item.find('.number').text(unitNum);
+                    } else if ($item.hasClass('item-chapter')) {
+                        chapterNum ++;
+                        unitNum = 0;
+                        $item.find('.number').text(chapterNum);
+                    }
+
+                });
+            });
+        };
+
         var validator = new Validator({
             element: '#course-chapter-form',
             autoSubmit: false
@@ -19,15 +45,35 @@ define(function(require, exports, module) {
               return ;
           }
           $('#course-chapter-btn').button('submiting').addClass('disabled');
-        
+
           $.post($form.attr('action'), $form.serialize(), function(html) {
               var id = '#' + $(html).attr('id'),
                   $item = $(id);
+              var $parent = $('#'+$form.data('parentid'));
               if ($item.length) {
                   $item.replaceWith(html);
                   Notify.success('章节信息已保存');
               } else {
-                  $("#course-item-list").append(html);
+                 if($parent.length){
+                  var add = 0;
+                   $parent.nextAll().each(function(){
+                     if($(this).hasClass('item-chapter  clearfix')){
+                        $(this).before(html);
+                        add = 1;
+                        return false;
+                      }
+                     
+                  });
+                     if(add != 1 )
+                        $("#course-item-list").append(html);
+                   
+                    var $list = $("#course-item-list");
+                    sortList($list);
+                   
+                 }else{
+                    $("#course-item-list").append(html);
+                 }
+                    
                   Notify.success('章节添加成功');
               }
               $(id).find('.btn-link').tooltip();
@@ -37,4 +83,7 @@ define(function(require, exports, module) {
         });
 
 	};
+
+
+
 });

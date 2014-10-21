@@ -8,6 +8,7 @@ use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
+use Topxia\Service\Util\LiveClientFactory;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -24,6 +25,7 @@ class CourseManageController extends BaseController
 	public function baseAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
+        $courseSetting = $this->getSettingService()->get('course', array());
 
 	    if($request->getMethod() == 'POST'){
             $data = $request->request->all();
@@ -35,9 +37,17 @@ class CourseManageController extends BaseController
 
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
 
+        if ($course['type'] == 'live') {
+            $client = LiveClientFactory::createClient();
+            $liveCapacity = $client->getCapacity();
+        } else {
+            $liveCapacity = null;
+        }
+
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
-            'tags' => ArrayToolkit::column($tags, 'name')
+            'tags' => ArrayToolkit::column($tags, 'name'),
+            'liveCapacity' => empty($liveCapacity['capacity']) ? 0 : $liveCapacity['capacity'],
 		));
 	}
 
@@ -164,6 +174,11 @@ class CourseManageController extends BaseController
 
         $canModifyPrice = true;
         $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
+        if ($this->setting('vip.enabled')) {
+            $levels = $this->getLevelService()->findEnabledLevels();
+        } else {
+            $levels = array();
+        }
         if (empty($teacherModifyPrice)) {
             if (!$this->getCurrentUser()->isAdmin()) {
                 $canModifyPrice = false;
@@ -172,15 +187,16 @@ class CourseManageController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $course = $this->getCourseService()->updateCourse($id, $request->request->all());
+            $fields = $request->request->all();
+            if(isset($fields['freeStartTime'])){
+                $fields['freeStartTime'] = strtotime($fields['freeStartTime']);
+                $fields['freeEndTime'] = strtotime($fields['freeEndTime']);
+            }
+            
+            $course = $this->getCourseService()->updateCourse($id, $fields);
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
-        if ($this->setting('vip.enabled')) {
-            $levels = $this->getLevelService()->findEnabledLevels();
-        } else {
-            $levels = array();
-        }
 
 
         response:
@@ -327,13 +343,13 @@ class CourseManageController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    private function getOrderService()
-    {
-        return $this->getServiceKernel()->createService('Course.OrderService');
-    }
-
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

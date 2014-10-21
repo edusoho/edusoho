@@ -53,30 +53,65 @@ class BlockController extends BaseController
             $this->getBlockService()->findBlockHistoryCountByBlockId($block['id']),
             5
         );
+        
+        $templateData = array();
+        $templateItems = array();
+        if ($block['mode'] == 'template') {
+            $templateItems = $this->getBlockService()->generateBlockTemplateItems($block);
+            $templateData = json_decode($block['templateData'],true);
+        } 
 
         $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
             $block['id'], 
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
+        foreach ($blockHistorys as &$blockHistory) {
+            $blockHistory['templateData'] = json_decode($blockHistory['templateData'],true);
+        }
+
         $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
 
         if ('POST' == $request->getMethod()) {
-            $block = $this->getBlockService()->updateBlock($block['id'], $request->request->all());
+            $fields = $request->request->all();
+
+            $templateData = array();
+            if ($block['mode'] == 'template') {
+                $template = $block['template'];
+                
+                $template = str_replace(array("(( "," ))","((  ","  )"),array("((","))","((","))"),$template); 
+                
+                $content = "";
+                
+                foreach ($fields as $key => $value) {   
+                    $content = str_replace('(('.$key.'))', $value, $template);
+                    break;
+                };
+                foreach ($fields as $key => $value) {   
+                    $content = str_replace('(('.$key.'))', $value, $content);
+                }
+                $templateData = $fields;
+                $fields = "";
+                $fields['content'] = $content;
+                $fields['templateData'] = json_encode($templateData);
+            }
+            
+            $block = $this->getBlockService()->updateBlock($block['id'], $fields);
             $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
             $latestUpdateUser = $this->getUserService()->getUser($latestBlockHistory['userId']);
             $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
                 'block' => $block, 'latestUpdateUser'=>$latestUpdateUser
             ));
-            return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
-                
+            return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));          
         }
 
         return $this->render('TopxiaAdminBundle:Block:block-update-modal.html.twig', array(
             'block' => $block,
-            'blockHistorys'=>$blockHistorys,
-            'historyUsers'=>$historyUsers,
-            'paginator'=>$paginator
+            'blockHistorys' => $blockHistorys,
+            'historyUsers' => $historyUsers,
+            'paginator' => $paginator,
+            'templateItems' => $templateItems,
+            'templateData' => $templateData
         ));
     }
 
@@ -86,10 +121,11 @@ class BlockController extends BaseController
 
         if ('POST' == $request->getMethod()) {
 
-            $block = $this->getBlockService()->updateBlock($block['id'], $request->request->all());
-            $users = $this->getUserService()->findUsersByIds(array($block['userId']));
+            $fields = $request->request->all();
+            $block = $this->getBlockService()->updateBlock($block['id'], $fields);
+            $user = $this->getCurrentUser();
             $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
-                'block' => $block, 'users'=>$users
+                'block' => $block, 'latestUpdateUser'=>$user
             ));
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
@@ -104,15 +140,17 @@ class BlockController extends BaseController
         
         if ('POST' == $request->getMethod()) {
             $block = $this->getBlockService()->createBlock($request->request->all());
-            $users = $this->getUserService()->findUsersByIds(array($block['userId']));
-            $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array('block' => $block,'users'=>$users));
+            $user = $this->getCurrentUser();
+            $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array('block' => $block,'latestUpdateUser'=>$user));
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
 
         $editBlock = array(
-            'id'=>0,
-            'title'=>'',
-            'code'=>''
+            'id' => 0,
+            'title' => '',
+            'code' => '',
+            'mode' => 'html',
+            'template' => ''
         );
 
         return $this->render('TopxiaAdminBundle:Block:block-modal.html.twig', array(

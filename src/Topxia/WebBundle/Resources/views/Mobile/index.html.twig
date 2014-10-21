@@ -1,0 +1,60 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/mobile.css') }}" />
+
+  <style>
+    .mobile-download-panel .btn-lg .mobile-iconfont {font-size:24px;}
+
+  </style>
+{% endblock %}
+
+{% set script_controller = 'mobile/index' %}
+
+{% block title %}客户端 - {{ parent() }}{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>手机客户端 <small>求知，随时随地</small></h1>
+</div>
+
+<div class="row">
+  <div class="col-sm-6">
+    <div class="mobile-download-panel panel panel-default">
+      <div class="panel-heading">下载客户端</div>
+      <div class="panel-body">
+
+        <p style="text-align:center;">
+          <img src="{{ path('mobile_download_qrcode') }}" width="150" height="150" />
+        </p>
+
+        <p style="text-align:center;">
+          <a href="{{ path('mobile_download', {client:'iphone'}) }}" id="iphone-download-btn" class="btn btn-default btn-lg"><span class="mobile-iconfont icon-pingguo"></span> iPhone 客户端</a>
+        </p>
+
+        <p style="text-align:center;">
+          <a href="{{ path('mobile_download', {client:'android'}) }}" class="btn btn-default btn-lg" target="_blank"><span class="mobile-iconfont icon-ux13996155768583524"></span> Android 客户端</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6">
+    <div class="mobile-login-panel panel panel-default">
+      <div class="panel-heading">登录客户端</div>
+      <div class="panel-body">
+        <p style="text-align:center;">启动客户端，扫一扫</p>
+        <p style="text-align:center;">
+          <img src="{{ path('topxia_mobile_qrcode') }}" width="215" height="215" />
+        </p>
+        <p style="text-align:center;">或者在客户端输入<strong>{{ host }}</strong>搜索并登录</p>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+{% endblock %}

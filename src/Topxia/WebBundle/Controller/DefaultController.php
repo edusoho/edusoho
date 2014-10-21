@@ -1,7 +1,9 @@
 <?php
 
 namespace Topxia\WebBundle\Controller;
+
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
 
@@ -10,18 +12,95 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
-        $conditions = array('status' => 'published');
+        $conditions = array('status' => 'published', 'type' => 'normal');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
+
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        if (!empty($courseSetting['live_course_enabled']) && $courseSetting['live_course_enabled']) {
+            $recentLiveCourses = $this->getRecentLiveCourses();
+        } else {
+            $recentLiveCourses = array();
+        }
 
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
 
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
-
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
-            'blocks' => $blocks
+            'blocks' => $blocks,
+            'recentLiveCourses' => $recentLiveCourses,
+            'consultDisplay' => true
         ));
+    }
+
+    public function userlearningAction()
+    {
+        $user = $this->getCurrentUser();
+
+        $courses = $this->getCourseService()->findUserLearnCourses($user->id, 0, 1);
+
+        if (!empty($courses)) {
+            foreach ($courses as $course) {
+                $member = $this->getCourseService()->getCourseMember($course['id'], $user->id);
+
+                $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
+            }
+
+            $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user->id, $course['id']);
+
+            $progress = $this->calculateUserLearnProgress($course, $member);
+        } else {
+            $course = array();
+            $nextLearnLesson = array();
+            $progress = array();
+            $teachers = array();
+        }
+
+        return $this->render('TopxiaWebBundle:Default:user-learning.html.twig', array(
+                'user' => $user,
+                'course' => $course,
+                'nextLearnLesson' => $nextLearnLesson,
+                'progress'  => $progress,
+                'teachers' => $teachers
+            ));
+    }
+
+    private function getRecentLiveCourses()
+    {
+
+        $recenntLessonsCondition = array(
+            'status' => 'published',
+            'endTimeGreaterThan' => time(),
+        );
+
+        $recentlessons = $this->getCourseService()->searchLessons(
+            $recenntLessonsCondition,  
+            array('startTime', 'ASC'),
+            0,
+            20
+        );
+
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentlessons, 'courseId'));
+
+        $recentCourses = array();
+        foreach ($recentlessons as $lesson) {
+            $course = $courses[$lesson['courseId']];
+            if ($course['status'] != 'published') {
+                continue;
+            }
+            $course['lesson'] = $lesson;
+            $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
+
+            if (count($recentCourses) >= 8) {
+                break;
+            }
+
+            $recentCourses[] = $course;
+        }
+
+        return $recentCourses;
     }
 
     public function promotedTeacherBlockAction()
@@ -34,6 +113,9 @@ class DefaultController extends BaseController
                 $this->getUserService()->getUserProfile($teacher['id'])
             );
         }
+
+        if(isset($teacher['locked']) && $teacher['locked'] !== '0')
+            $teacher = null;
 
         return $this->render('TopxiaWebBundle:Default:promoted-teacher-block.html.twig', array(
             'teacher' => $teacher,
@@ -54,7 +136,7 @@ class DefaultController extends BaseController
 
     public function topNavigationAction($siteNav = null)
     {
-    	$navigations = $this->getNavigationService()->findNavigationsByType('top', 0, 100);
+    	$navigations = $this->getNavigationService()->getNavigationsTreeByType('top');
 
     	return $this->render('TopxiaWebBundle:Default:top-navigation.html.twig', array(
     		'navigations' => $navigations,
@@ -82,13 +164,35 @@ class DefaultController extends BaseController
 
     }
 
-    public function systemInfoAction()
+    public function jumpAction(Request $request)
     {
-        $info = array(
-            'version' => System::VERSION,
-        );
+        $courseId = intval($request->query->get('id'));
+        if($this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id)){
+            $url = $this->generateUrl('live_course_manage_replay', array('id' => $courseId));
+        }else{
+            $url = $this->generateUrl('course_show', array('id' => $courseId));
+        }
+        echo "<script type=\"text/javascript\"> 
+        if (top.location !== self.location) {
+        top.location = \"{$url}\";
+        }
+        </script>";
+        exit();
+    }
 
-        return $this->createJsonResponse($info);
+    private function calculateUserLearnProgress($course, $member)
+    {
+        if ($course['lessonNum'] == 0) {
+            return array('percent' => '0%', 'number' => 0, 'total' => 0);
+        }
+
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+
+        return array (
+            'percent' => $percent,
+            'number' => $member['learnedNum'],
+            'total' => $course['lessonNum']
+        );
     }
 
     protected function getSettingService()

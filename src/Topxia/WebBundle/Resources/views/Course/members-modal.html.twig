@@ -1,5 +1,5 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-
+{% set modalSize = 'large' %}
 {% block title %}课程学员{% endblock %}
 {% set hide_footer = true %}
 {% block body %}
@@ -11,24 +11,27 @@
     {% set isFollowing = user.id in followingIds %}
     <li class="media">
       {{ web_macro.user_avatar(user, 'pull-left') }}
-      <div class="media-body">
-        <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+      <div>
 
+        {% if app.user.id != user.id %}
+          <div class="pull-right">
+            <button class="btn btn-primary btn-sm follow-student-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>
+            <button class="btn btn-success btn-sm unfollow-student-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</button>
+            <button class="btn btn-default btn-sm send-message-btn" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
+          </div>
+        {% endif %}
+
+        <p><a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a></p>
+        
+        {% if student.remark and canManage %}
+          <p class="text-muted text-sm" title="{{student.remark}}">({{ student.remark|plain_text(8) }})</p>
+        {% endif %}
         {% if canManage %}
           <div class="progress" title="已学{{ progress.number }}课时">
             <div class="progress-bar" style="width: {{ progress.percent }}">
             </div>
           </div>
         {% endif %}
-
-        {% if app.user.id != user.id %}
-          <div class="pull-right">
-            <button class="btn btn-primary btn-sm follow-student-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>
-            <button class="btn btn-success btn-sm unfollow-student-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</button>
-            <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
-          </div>
-        {% endif %}
-
       </div>
     </li>
   {% else  %}

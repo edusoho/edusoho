@@ -39,26 +39,39 @@
 			<div class="form-group">
 			  <label class="col-md-2 control-label">标签</label>
 			  <div class="col-md-8 controls">
-			  	<input type="text" id="course_tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ tags|join(',') }}">
-			  	<div class="help-block" style="display:none;"></div>
+			  	<input type="text" id="course_tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ tags|join(',') }}" data-explain="将会应用于按标签搜索课程、相关课程的提取等">
+			  	<div class="help-block">将会应用于按标签搜索课程、相关课程的提取等</div>
 			  </div>
 			</div>
 
+			{% if course.type == 'live' %}
+
 			<div class="form-group">
-			  <label class="col-md-2 control-label">学员有效期</label>
+			  <label class="col-md-2 control-label" for="maxStudentNum-field">直播最大学员数</label>
+			 <div class="col-md-8 controls">
+					<input type="text" id="maxStudentNum-field" name="maxStudentNum" class="form-control width-input width-input-large" value="{{ course.maxStudentNum|default(20) }}" data-live-capacity="{{ liveCapacity }}"> 人
+					<div class="help-block" style="display:none;"></div>
+				</div>
+			</div>
+
+			{% endif %}
+
+			<div class="form-group">
+			  <label class="col-md-2 control-label" for="course_expiryDay">学员有效期</label>
 			  <div class="col-md-8 controls">
 			    <input type="text" id="course_expiryDay" name="expiryDay" required="required" class="form-control width-input width-input-large" value="{{ course.expiryDay }}" data-widget-cid="widget-3" data-explain="设置该值后，学员只能在有效期内学习课程、发表话题、提问、笔记等，超过有效期后学员只能浏览课时目录及讨论区。该值为0，则不做此限制。"> 天
 			    <div class="help-block">设置该值后，学员只能在有效期内学习课程、发表话题、提问、笔记等，超过有效期后学员只能浏览课时目录及讨论区。该值为0，则不做此限制。</div>
 			  </div>
 			</div>
 
-			<div class="form-group">
-				<label class="col-md-2 control-label">连载状态</label>
-				<div class="col-md-8 controls radios">
-					{{ radios('serializeMode', {'none':'非连载课程', 'serialize':'更新中', 'finished':'已完结'}, course.serializeMode|default('none') ) }}
+			{% if course.type == 'normal' %}
+				<div class="form-group">
+					<label class="col-md-2 control-label">连载状态</label>
+					<div class="col-md-8 controls radios">
+						{{ radios('serializeMode', {'none':'非连载课程', 'serialize':'更新中', 'finished':'已完结'}, course.serializeMode|default('none') ) }}
+					</div>
 				</div>
-			</div>
-
+			{% endif %}
 
 			<div class="form-group">
 				<label class="col-md-2 control-label">显示学员人数</label>
@@ -77,6 +90,14 @@
 			  </div>
 			</div>
 
+		{% if liveCapacity != 0 %}
+			<div class="form-group">
+			    <div class="col-md-offset-2 col-md-8 controls">
+			    	<a href="http://www.edusoho.com/files/liveplugin/live_desktop.rar" target="_blank">直播“桌面分享”插件下载</a>
+			    </div>
+			</div>
+		{% endif %}
+		
 		  <div class="form-group">
 		    <div class="col-md-offset-2 col-md-8 controls">
 		    	<button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">保存</button>

@@ -5,6 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Util\PluginUtil;
 
 class AppController extends BaseController
 {
@@ -22,6 +23,7 @@ class AppController extends BaseController
     {
         $apps = $this->getAppService()->getCenterApps();
 
+        if(isset($apps['error'])) return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status'=>'error',));
         $codes = ArrayToolkit::column($apps, 'code');
 
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
@@ -51,14 +53,24 @@ class AppController extends BaseController
     {
         $apps = $this->getAppService()->checkAppUpgrades();
 
+        if(isset($apps['error'])) return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array('status'=>'error',));
+        $version=$this->getAppService()->getMainVersion();
+
         return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
             'apps' => $apps,
+            'version'=>$version,
         ));
     }
 
     public function upgradesCountAction(Request $request)
     {
         $apps = $this->getAppService()->checkAppUpgrades();
+        $cop = $this->getAppService()->checkAppCop();
+        if ($cop && isset($cop['cop']) && ($cop['cop'] == 1)) {
+            $this->getSettingService()->set('_app_cop', 1);
+            PluginUtil::refresh();
+        }
+
         return $this->createJsonResponse(count($apps));
     }
 
@@ -83,9 +95,31 @@ class AppController extends BaseController
         ));
     }
 
+    public function checkOwnCopyrightUserAction(Request $request,$userId)
+    {
+        $user = $this->getUserService()->getUser($userId);
+
+        if (empty($user)) {
+            return $this->createMessageResponse('error','user exists error');
+        }
+
+        $res = $this->getAppService()->checkOwnCopyrightUser($userId);
+        return $this->createJsonResponse($res);
+    }
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
 }

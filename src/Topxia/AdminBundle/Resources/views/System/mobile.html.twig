@@ -1,0 +1,134 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% block title %}移动客户端设置 - {{ parent() }}{% endblock %}
+
+{% set menu = 'client' %}
+{% set script_controller = 'setting/mobile' %}
+
+
+{% block main %}
+<style>
+#mobile-logo-container img ,#mobile-splash1-container img , #mobile-splash2-container img , #mobile-splash3-container img , #mobile-splash4-container img , #mobile-splash5-container
+img {max-width: 80%; margin-bottom: 10px;}
+</style>
+
+<div class="page-header"><h1>移动客户端设置</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" id="mobile-form" method="post">
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label >是否开启客户端</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('enabled', {1:'开启', 0:'关闭'}, mobile.enabled) }}
+      <div class="help-block">开启后，网站首页顶部导航会出现客户端入口</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label for="mobile_about">网校简介</label>
+    </div>
+    <div class="controls col-md-8">
+      <textarea class="form-control" id="mobile_about" rows="10" name="about">{{ mobile.about }}</textarea>
+      <div class="help-block">此简介将显示在移动客户端的"关于网校"</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label for="logo">网校LOGO</label>
+    </div>
+    <div class="col-md-8 controls">
+      <div id="mobile-logo-container">{% if mobile.logo %}<img src="{{ asset(mobile.logo) }}">{% endif %}</div>
+      <button class="btn btn-default btn-sm" id="mobile-logo-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'logo'}) }}">上传</button>
+      <button class="btn btn-default btn-sm" id="mobile-logo-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'logo'}) }}" {% if not mobile.logo %}style="display:none;"{% endif %}>删除</button>
+      <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。</p>
+      <input type="hidden" name="logo" value="{{ mobile.logo }}">
+    </div>
+  </div>
+
+  <fieldset>
+  <legend>设置启动图</legend>
+  <div class="help-block">最多允许设置5张启动图(尺寸为640*960)，用户首次登录网校时会显示启动图。</div>
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label for="splash1">启动图1</label>
+    </div>
+    <div class="col-md-8 controls">
+      <div id="mobile-splash1-container">{% if mobile.splash1 %}<img src="{{ asset(mobile.splash1) }}">{% endif %}</div>
+      <button class="btn btn-default btn-sm" id="mobile-splash1-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash1'}) }}">上传</button>
+      <button class="btn btn-default btn-sm" id="mobile-splash1-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash1'}) }}" {% if not mobile.splash1 %}style="display:none;"{% endif %}>删除</button>
+      <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
+      <input type="hidden" name="splash1" value="{{ mobile.splash1 }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label for="splash2">启动图2</label>
+    </div>
+    <div class="col-md-8 controls">
+      <div id="mobile-splash2-container">{% if mobile.splash2 %}<img src="{{ asset(mobile.splash2) }}">{% endif %}</div>
+      <button class="btn btn-default btn-sm" id="mobile-splash2-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash2'}) }}">上传</button>
+      <button class="btn btn-default btn-sm" id="mobile-splash2-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash2'}) }}" {% if not mobile.splash2 %}style="display:none;"{% endif %}>删除</button>
+      <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
+      <input type="hidden" name="splash2" value="{{ mobile.splash2 }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label for="splash3">启动图3</label>
+    </div>
+    <div class="col-md-8 controls">
+      <div id="mobile-splash3-container">{% if mobile.splash3 %}<img src="{{ asset(mobile.splash3) }}">{% endif %}</div>
+      <button class="btn btn-default btn-sm" id="mobile-splash3-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash3'}) }}">上传</button>
+      <button class="btn btn-default btn-sm" id="mobile-splash3-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash3'}) }}" {% if not mobile.splash3 %}style="display:none;"{% endif %}>删除</button>
+      <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
+      <input type="hidden" name="splash3" value="{{ mobile.splash3 }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label for="splash4">启动图4</label>
+    </div>
+    <div class="col-md-8 controls">
+      <div id="mobile-splash4-container">{% if mobile.splash4 %}<img src="{{ asset(mobile.splash4) }}">{% endif %}</div>
+      <button class="btn btn-default btn-sm" id="mobile-splash4-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash4'}) }}">上传</button>
+      <button class="btn btn-default btn-sm" id="mobile-splash4-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash4'}) }}" {% if not mobile.splash4 %}style="display:none;"{% endif %}>删除</button>
+      <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
+      <input type="hidden" name="splash4" value="{{ mobile.splash4 }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label for="splash5">启动图5</label>
+    </div>
+    <div class="col-md-8 controls">
+      <div id="mobile-splash5-container">{% if mobile.splash5 %}<img src="{{ asset(mobile.splash5) }}">{% endif %}</div>
+      <button class="btn btn-default btn-sm" id="mobile-splash5-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash5'}) }}">上传</button>
+      <button class="btn btn-default btn-sm" id="mobile-splash5-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash5'}) }}" {% if not mobile.splash5 %}style="display:none;"{% endif %}>删除</button>
+      <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
+      <input type="hidden" name="splash5" value="{{ mobile.splash5 }}">
+    </div>
+  </div>
+
+  </fieldset>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  
+  <div class="row form-group">
+    <div class="controls col-md-offset-2 col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+
+</form>
+
+{% endblock %}

@@ -14,6 +14,8 @@ interface CategoryDao
 
     public function findCategoriesByTarget($target, $start, $limit);
 
+    public function findCategoriesByIds($ids);
+
     public function getCategorysCountByTarget($target);
 
 }

@@ -1,0 +1,58 @@
+{% extends 'TopxiaWebBundle:Course:dashboard-layout.html.twig' %}
+
+{% set script_controller = 'course/dashboard' %}
+{% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}
+
+{% block dashboard_main %}
+  {% include 'TopxiaWebBundle:Course:dashboard-nav.html.twig' with {nav:'info'} %}
+
+  <dl class="course-infos" style="width:100%">
+    <dt>简介</dt>
+    <dd >{{ course.about|raw }}</dd>
+
+    {% if category %}
+    <dt>分类</dt>
+    <dd>
+      <a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a>
+    </dd>
+    {% endif %}
+
+    {% if course.tags %}
+      <dt>标签</dt>
+      <dd>
+        <ul class="list-inline">
+          {% for tag in tags %}
+            <li><a href="{{ path('tag_show', {name:tag.name}) }}">{{ tag.name }}</a></li>
+          {% else %}
+            <li>暂无标签</li>
+          {% endfor %}
+        </ul>
+      </dd>
+    {% endif %}
+
+    {% if course.goals %}
+      <dt>课程目标</dt>
+      <dd>
+        <ul>
+          {% for goal in course.goals %}
+            <li>{{ goal }}</li>
+          {% endfor %}
+        </ul>
+      </dd>
+    {% endif %}
+
+    {% if course.audiences %}
+      <dt>适合人群</dt>
+      <dd>
+        <ul>
+          {% for audience in course.audiences %}
+            <li>{{ audience }}</li>
+          {% endfor %}
+        </ul>
+      </dd>
+    {% endif %}
+  </dl>
+
+
+
+{% endblock %}

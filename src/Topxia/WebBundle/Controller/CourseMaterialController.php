@@ -126,6 +126,11 @@ class CourseMaterialController extends BaseController
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }
+
     private function createPrivateFileDownloadResponse(Request $request, $file)
     {
 

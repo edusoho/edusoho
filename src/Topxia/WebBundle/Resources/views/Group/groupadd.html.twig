@@ -1,0 +1,41 @@
+{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+{% block title %}创建小组 - {{ parent() }}{% endblock %}
+{% set script_controller = 'group/group' %}
+{% set side_nav = 'group' %}
+
+{% block content %}
+  <div class="panel panel-default panel-lg">
+    <div class="panel-heading"><h1>创建小组</h1></div>
+    <div class="panel-body">
+      <form id="user-group-form" class="form-horizontal" method="post" action="{{path ('group_add')}}">
+        {{ web_macro.flash_messages() }}
+
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="group_grouptitle">小组名称</label>
+          <div class="col-md-7 controls">
+            <input type="text" id="group_grouptitle" name="group[grouptitle]" class="form-control"
+            >
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="group_about">小组介绍</label>
+          <div class="col-md-7 controls">
+            <textarea name="group[about]" rows="10" id="group" class="form-control"></textarea>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-7 col-md-offset-2">
+            <button id="group-save-btn" data-submiting-text="正在创建" type="submit" class="btn btn-primary">创建</button>
+          </div>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    </div>
+  </div>
+
+
+  
+{% endblock %}

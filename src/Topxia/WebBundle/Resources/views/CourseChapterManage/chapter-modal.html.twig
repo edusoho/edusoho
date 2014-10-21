@@ -2,10 +2,12 @@
 
 {% set chapter = chapter|default(null) %}
 
-{% block title %}{% if chapter %}编辑{% else %}添加{% endif %}章节{% endblock %}
+{% block title %}
+  {% if chapter %}编辑{% else %}添加{% endif %}{% if type == 'unit' %}小节{% else %}章{% endif %}
+{% endblock %}
 {% block body %}
 
-<form id="course-chapter-form" class="form-horizontal" method="post"
+<form id="course-chapter-form" class="form-horizontal" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   {% if chapter %}
 	  action="{{ path('course_manage_chapter_edit', {courseId:course.id, chapterId:chapter.id}) }}"
 	{% else %}
@@ -13,11 +15,16 @@
   {% endif %}
   >
   <div class="row form-group">
-    <div class="col-md-3 control-label"><label for="chapter-title-field">章节标题</label></div>
+    <div class="col-md-3 control-label">
+      {% if type == 'unit' %}
+        <label for="chapter-title-field">小节标题</label>
+      {% else %}
+        <label for="chapter-title-field">章标题</label>
+        {% endif %}
+    </div>
     <div class="col-md-8 controls"><input id="chapter-title-field" type="text" name="title" value="{{ field_value(chapter, 'title') }}" class="form-control"></div>
   </div>
-
-  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input type="hidden" name="type" value="{{ type }}">
 </form>
 
 <script>app.load('course-manage/chapter-modal')</script>

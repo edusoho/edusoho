@@ -1,0 +1,142 @@
+
+<table class="table table-condensed table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th width="35%"></th>
+            <th width="20%">今日</th>
+            <th width="20%" >昨日</th>
+		{% if is_granted('ROLE_SUPER_ADMIN') %}
+            <th width="40%">历史</th>
+		{% endif %}
+          </tr>
+        </thead>
+        <tbody>
+			<tr>
+				<td>新注册用户数</td>
+				<td><span class="pull-right">{{todayRegisterNum}}</span></td>
+				<td><span class="pull-right">{{yesterdayRegisterNum}}</span></td>
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_register',{tab:"trend",analysisDateType:'register'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_register',{tab:"detail",analysisDateType:'register'})}}">详情</a></td>
+				{% endif %}
+			</tr>
+
+			<tr>
+				<td>用户登录数<small>（不含重复登录）</small></td>
+				<td><span class="pull-right">{{todayLoginNum}}</span></td>
+				<td><span class="pull-right">{{yesterdayLoginNum}}</span></td>
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_login',{tab:"trend",analysisDateType:'login'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_login',{tab:"detail",analysisDateType:'login'})}}">详情</a></td>
+			{% endif %}	
+			</tr>
+
+			<tr>
+				<td>新增课程数</td>
+				<td><span class="pull-right">{{todayCourseNum}}</span></td>
+				<td><span class="pull-right">{{yesterdayCourseNum}}</span></td>
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_course',{tab:"trend",analysisDateType:'course'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_course',{tab:"detail",analysisDateType:'course'})}}">详情</a></td>
+			{% endif %}	
+			</tr>
+
+			<tr>
+				<td>新增课时数</td>
+				<td><span class="pull-right">{{todayLessonNum}}</span></td>
+				<td><span class="pull-right">{{yesterdayLessonNum}}</span></td>
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_lesson',{tab:"trend",analysisDateType:'lesson'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_lesson',{tab:"detail",analysisDateType:'lesson'})}}">详情</a></td>
+			{% endif %}	
+			</tr>
+
+			<tr>
+				<td>加入学习数</td>
+				<td><span class="pull-right">{{todayJoinLessonNum}}</span></td>
+				<td><span class="pull-right">{{yesterdayJoinLessonNum}}</span></td>
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_lesson_join',{tab:"trend",analysisDateType:'joinLesson'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_lesson_join',{tab:"detail",analysisDateType:'joinLesson'})}}">详情</a></td>
+			{% endif %}	
+			</tr>
+
+			<tr>
+				<td>购买课程数</td>
+				<td><span class="pull-right">{{todayBuyLessonNum}}</span></td>
+				<td><span class="pull-right">{{yesterdayBuyLessonNum}}</span></td>
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_lesson_paid',{tab:"trend",analysisDateType:'paidLesson'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_lesson_paid',{tab:"detail",analysisDateType:'paidLesson'})}}">详情</a></td>
+			{% endif %}	
+			</tr>
+
+			<tr>
+				<td>完成课时学习数</td>
+				<td><span class="pull-right">{{todayFinishedLessonNum}}</span></td>
+				<td><span class="pull-right">{{yesterdayFinishedLessonNum}}</span></td>
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_lesson_finished',{tab:"trend",analysisDateType:'finishedLesson'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_lesson_finished',{tab:"detail",analysisDateType:'finishedLesson'})}}">详情</a></td>
+		{% endif %}	
+			</tr>
+
+			<tr>
+				<td>视频观看数<small>（含重复打开）</small></td>
+				<td><span class="pull-right">{{todayAllVideoViewedNum}}</span></td>
+				<td><span class="pull-right">{{yesterdayAllVideoViewedNum}}</span></td>
+		{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_video_viewed',{tab:"trend",analysisDateType:'videoViewed'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_video_viewed',{tab:"detail",analysisDateType:'videoViewed'})}}">详情</a></td>
+		{% endif %}	
+			</tr>
+
+			<tr>
+				<td>└─ 云视频观看数</td>
+				<td><span class="pull-right">{{todayCloudVideoViewedNum}}</span></td>
+				<td><span class="pull-right">{{yesterdayCloudVideoViewedNum}}</span></td>
+		{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td>
+				{% if keyCheckResult.error|default(null) == 'error' %}
+						未开通或未开启云视频!
+					{% else %}
+						<a href="{{path('admin_operation_analysis_video_cloud_viewed',{tab:"trend",analysisDateType:'cloudVideoViewed'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_video_cloud_viewed',{tab:"detail",analysisDateType:'cloudVideoViewed'})}}">详情</a>
+				{% endif %}
+				</td>
+		{% endif %}	
+			</tr>
+
+			<tr>
+				<td>└─ 本地视频观看数</td>
+				<td><span class="pull-right">{{todayLocalVideoViewedNum}}</span></td>
+				<td><span class="pull-right">{{yesterdayLocalVideoViewedNum}}</span></td>
+		{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_video_local_viewed',{tab:"trend",analysisDateType:'localVideoViewed'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_video_local_viewed',{tab:"detail",analysisDateType:'localVideoViewed'})}}">详情</a></td>
+		{% endif %}	
+			</tr>
+
+			<tr>
+				<td>└─ 网络视频观看数</td>
+				<td><span class="pull-right">{{todayNetVideoViewedNum}}</span></td>
+				<td><span class="pull-right">{{yesterdayNetVideoViewedNum}}</span></td>
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_video_net_viewed',{tab:"trend",analysisDateType:'netVideoViewed'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_video_net_viewed',{tab:"detail",analysisDateType:'netVideoViewed'})}}">详情</a></td>
+			{% endif %}	
+			</tr>
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+			<tr>
+				<td>营收额</td>
+				<td><span class="pull-right">{{todayIncome}}</span></td>
+				<td><span class="pull-right">{{yesterdayIncome}}</span></td>
+				<td><a href="{{path('admin_operation_analysis_income',{tab:"trend",analysisDateType:'income'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_income',{tab:"detail",analysisDateType:'income'})}}">详情</a></td>
+			</tr>
+
+			<tr>
+				<td>└─ 课程营收额</td>
+				<td><span class="pull-right">{{todayCourseIncome}}</span></td>
+				<td><span class="pull-right">{{yesterdayCourseIncome}}</span></td>
+				<td><a href="{{path('admin_operation_analysis_course_income',{tab:"trend",analysisDateType:'courseIncome'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_course_income',{tab:"detail",analysisDateType:'courseIncome'})}}">详情</a></td>
+			</tr>
+			{% endif %}
+{# 			<tr>
+				<td>退出学习数</td>
+				<td>{{todayExitLessonNum}}</td>
+				<td>{{yesterdayExitLessonNum}}</td>
+				<td><a href="{{path('admin_operation_analysis_lesson_exit',{tab:"trend",analysisDateType:'exitLesson'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_lesson_exit',{tab:"detail",analysisDateType:'exitLesson'})}}">详情</a></td>
+			</tr> #}
+
+
+        </tbody>
+</table>

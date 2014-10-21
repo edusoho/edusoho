@@ -20,23 +20,31 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 			throw $this->createServiceException('课程不存在，上传资料失败！');
 		}
 
-		$file = $this->getUploadFileService()->getFile($material['fileId']);
-		if (empty($file)) {
-			throw $this->createServiceException('文件不存在，上传资料失败！');
-		}
+        $fields = array(
+            'courseId' => $material['courseId'],
+            'lessonId' => empty($material['lessonId']) ? 0 : $material['lessonId'],
+            'description'  => empty($material['description']) ? '' : $material['description'],
+            'userId' => $this->getCurrentUser()->id,
+            'createdTime' => time(),
+        );
 
-		$fields = array(
-			'courseId' => $material['courseId'],
-			'lessonId' => empty($material['lessonId']) ? 0 : $material['lessonId'],
-			'fileId' => $material['fileId'],
-			'title' => $file['filename'],
-			'description'  => empty($material['description']) ? '' : $material['description'],
-			'fileUri' => '',
-			'fileMime' => '',
-			'fileSize' => $file['size'],
-			'userId' => $this->getCurrentUser()->id,
-			'createdTime' => time(),
-		);
+        if (empty($material['fileId'])) {
+            if (empty($material['link'])) {
+                throw $this->createServiceException('资料链接地址不能为空，添加资料失败！');
+            }
+            $fields['fileId'] = 0;
+            $fields['link'] = $material['link'];
+            $fields['title'] = empty($material['description']) ? $material['link'] : $material['description'];
+        } else {
+            $fields['fileId'] = (int) $material['fileId'];
+    		$file = $this->getUploadFileService()->getFile($material['fileId']);
+    		if (empty($file)) {
+    			throw $this->createServiceException('文件不存在，上传资料失败！');
+    		}
+            $fields['link'] = '';
+            $fields['title'] = $file['filename'];
+            $fields['fileSize'] = $file['size'];
+        }
 
 		$material =  $this->getMaterialDao()->addMaterial($fields);
 

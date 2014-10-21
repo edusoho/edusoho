@@ -57,12 +57,17 @@
           {% endif %}
         </div>
         <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+      </ul>
           {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
 
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="{{ path('search') }}"><span class="glyphicon glyphicon-search"></span> 搜索</a></li>
             {% if app.user %}
               <li><a href="{{ path('my') }}"> 我的课程 </a></li>
+              {% if setting('mobile.enabled') %}
+                <li><a href="{{ path('mobile') }}"><span class="glyphicon glyphicon-phone"></span></a></li>
+              {% endif %}
+              <li><a href="{{ path('search') }}"><span class="glyphicon glyphicon-search"></span></a></li>
               <li><a href="{{ path('notification') }}" class="badge-container notification-badge-container">
                 <span class="glyphicon glyphicon-bullhorn hidden-lt-ie8"></span>
                 <span class="visible-lt-ie8">通知</span>
@@ -73,15 +78,15 @@
                 <span class="visible-lt-ie8">私信</span>
                 {% if app.user.newMessageNum > 0 %}<span class="badge">{{ app.user.newMessageNum }}</span>{% endif %}
                 </a>
-                </li>
+              </li>
               <li class="visible-lt-ie8"><a href="{{ path('settings') }}">{{ app.user.nickname }}</a></li>
               <li class="dropdown hidden-lt-ie8">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
+                <a href="javascript:;" class="dropdown-toggle"  data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
                   <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 帐号设置</a></li>
                   <li class="divider"></li>
-                  {% if is_granted('ROLE_ADMIN') %}
+                  {% if is_granted('ROLE_BACKEND') %}
                     <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> 管理后台</a></li>
                     <li class="divider"></li>
                   {% endif %}
@@ -89,6 +94,10 @@
                 </ul>
               </li>
             {% else %}
+              {% if setting('mobile.enabled') %}
+                <li><a href="{{ path('mobile') }}"><span class="glyphicon glyphicon-phone"></span> 手机版</a></li>
+              {% endif %}
+              <li><a href="{{ path('search') }}"><span class="glyphicon glyphicon-search"></span> 搜索</a></li>
               <li><a href="{{ path('login') }}">登录</a></li>
               <li><a href="{{ path('register') }}">注册</a></li>
             {% endif %}
@@ -107,6 +116,7 @@
       </div>
     {% endif %}
     {% block content %}{% endblock %}
+    
   </div><!-- /container -->
 
   <div class="site-footer container clearfix">
@@ -118,13 +128,13 @@
       {{ setting('site.analytics')|raw }}
       <div class="pull-right">{% if setting('site.copyright') %}课程内容版权均归<a href="/">{{ setting('site.copyright') }}</a>所有{% endif %}&nbsp;{% if setting('site.icp') %}<a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a>{% endif %}</div>
 
+      <div class="pull-right mhs"><a href="{{ path('course_archive') }}">课程存档</a></div>
     </div>
   </div>
 
   {% block bottom %}{% endblock %}
-
-  <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
-  <div id="modal" class="modal"></div>
+  <div id="login-modal" class="modal" data-url="/login/ajax"></div>
+<div id="modal" class="modal"></div>
 {% endblock %}
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}

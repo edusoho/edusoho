@@ -29,7 +29,7 @@
 
   <div class="form-group">
     <div class="controls">
-      {% set placeholder = type == 'question' ? '标题，用一句话说请你的问题' : '标题' %}
+      {% set placeholder = type == 'question' ? '标题，用一句话说清你的问题' : '标题' %}
       {{ form_widget(form.title, {attr:{class:'form-control', placeholder:placeholder, 'data-display':'标题'}}) }}
     </div>
   </div>

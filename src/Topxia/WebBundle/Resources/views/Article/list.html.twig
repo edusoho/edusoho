@@ -47,7 +47,7 @@
 
 	<ul class="nav nav-pills nav-stacked article-sub">
 		{% for cat in subCategories %}
-      {% if cat.published == 1%}
+      {% if cat.published == 1 %}
   		  <li {% if category.id == cat.id %}class="active"{% endif %}>
   		    <a href="{{ path('article_category', {categoryCode:cat.code}) }}">
   		    {% if cat.depth > 1 %}

@@ -92,7 +92,6 @@ class CourseQuestionManageController extends BaseController
             }
         }
 
-
         $question = array(
             'id' => 0,
             'type' => $type,
@@ -110,12 +109,21 @@ class CourseQuestionManageController extends BaseController
             $parentQuestion = null;
         }
 
+        if ($this->container->hasParameter('enabled_features')) {
+            $features = $this->container->getParameter('enabled_features');
+        } else {
+            $features = array();
+        }
+
+        $enabledAudioQuestion = in_array('audio_question', $features);
+
         return $this->render("TopxiaWebBundle:CourseQuestionManage:question-form-{$type}.html.twig", array(
             'course' => $course,
             'question' => $question,
             'parentQuestion' => $parentQuestion,
             'targetsChoices' => $this->getQuestionTargetChoices($course),
             'categoryChoices' => $this->getQuestionCategoryChoices($course),
+            'enabledAudioQuestion' => $enabledAudioQuestion
         ));
     }
 
@@ -173,7 +181,7 @@ class CourseQuestionManageController extends BaseController
 
     public function uploadFileAction (Request $request, $courseId, $type)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
 
         if ($request->getMethod() == 'POST') {
             $originalFile = $this->get('request')->files->get('file');

@@ -3,14 +3,40 @@
   {% for course in courses %}
     <li class="course-grid">
       <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
-        <img src="{{ file_path(course.largePicture, 'course-large.png') }}"  class="img-responsive thumb">
+        <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb">
+          {% if course.status == 'draft' %}
+            <span class="label  label-warning course-status">未发布</span>
+          {% elseif course.status == 'closed' %}
+            <span class="label label-danger course-status">已关闭</span>
+          {% endif %} 
           {% if course.serializeMode=='serialize' %}
             <span class="label label-success series-mode-label">更新中</span>
           {% elseif course.serializeMode=='finished' %}
             <span class="label label-warning series-mode-label">已完结</span>
           {% endif %}
+
+          {% if course.type == 'live' %}
+            {% set lesson = course['lesson']|default(null) %}
+            {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+              <span class="label label-warning series-mode-label">正在直播中</span>
+            {% else %}
+              <span class="label label-success series-mode-label">直播</span>
+            {% endif %}
+          {% endif %}
+
         <span class="title">{{ course.title }}</span>
         {% if mode in ['default', 'teach'] %}
+
+          {% if course.type == 'live' %}
+            {% set lesson = course['lesson']|default(null) %}
+            {% if lesson %}
+              <span class="live-course-lesson metas">
+                <span class="text-success mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+                <span class="text-muted mrm">第{{ lesson.number }}课时</span>
+              </span>
+            {% endif %}
+          {% endif %}
+
           <span class="metas clearfix">
             <span class="price-col">
               <span class="meta-label">价格</span>
@@ -42,8 +68,6 @@
               {% endif %}
             </span>
 
-
-
           </span>
         {% endif %}
 
@@ -51,7 +75,7 @@
           {% set user = users[course.teacherIds|first]|default(null) %}
           {% if user %}
             <span class="teacher clearfix">
-              <img src="{{ file_path(user.smallAvatar, 'avatar.png') }}" class="thumb">
+              <img src="{{ default_path('avatar',user.smallAvatar, '') }}" class="thumb">
               <span class="nickname ellipsis">{{ user.nickname }}</span>
               <span class="user-title ellipsis">{{ user.title }}</span>
             </span>

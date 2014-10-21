@@ -41,6 +41,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadDao()->findLatestThreadsByType($type, $start, $limit);
 	}
 
+	public function findEliteThreadsByType($type, $status, $start, $limit)
+	{
+		return $this->getThreadDao()->findEliteThreadsByType($type, $status, $start, $limit);
+	}
+
 	public function searchThreads($conditions, $sort, $start, $limit)
 	{
 		
@@ -336,18 +341,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			'latestPostTime' => $post['createdTime'],
 		);
 		$this->getThreadDao()->updateThread($thread['id'], $threadFields);
-
-		if ($thread['userId'] != $post['userId']) {
-			$this->getNotifiactionService()->notify($thread['userId'], 'thread-post', array(
-				'postId' => $post['id'],
-				'postUserId' => $post['userId'],
-				'postUserNickname' => $this->getCurrentUser()->nickname,
-				'threadId' => $thread['id'],
-				'threadTitle' => $thread['title'],
-				'threadType' => $thread['type'],
-				'courseId' => $thread['courseId']
-			));
-		}
 
 		return $post;
 	}

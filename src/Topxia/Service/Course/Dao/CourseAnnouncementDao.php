@@ -7,6 +7,8 @@ interface CourseAnnouncementDao
 
 	public function findAnnouncementsByCourseId($courseId, $start, $limit);
 
+	public function findAnnouncementsByCourseIds($ids, $start, $limit);
+
 	public function addAnnouncement($fields);
 
 	public function deleteAnnouncement($id);

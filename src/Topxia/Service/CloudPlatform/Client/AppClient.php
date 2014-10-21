@@ -11,7 +11,7 @@ interface AppClient
     /**
      * 检查更新包
      */
-    public function checkUpgradePackages($apps);
+    public function checkUpgradePackages($apps, $extInfos);
 
     /**
      * 提交应用包升级／安装日志数据

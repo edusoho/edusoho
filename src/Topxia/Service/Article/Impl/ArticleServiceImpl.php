@@ -242,7 +242,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
 		$fileOriginalPath = str_replace(array('public://',"{$fileOriginalName}"),'', $uri);
 		$fileOriginalDirectory =$pathinfo['dirname'] . '/' . $fileOriginalPath;
-		$fileOriginalDirectory = str_replace("/tmp", "", $fileOriginalDirectory);
+		$fileOriginalDirectory = str_replace(array("/tmp", '\tmp'), "", $fileOriginalDirectory);
 		$fileOriginalDirectory = substr($fileOriginalDirectory, 0,-1);
 		
 		$new_file = new File($filePath);

@@ -1,0 +1,23 @@
+{% if courses %}
+<div class="panel panel-default hidden-xs">
+  <div class="panel-heading">
+    <h3 class="panel-title">相关课程</h3>
+  </div>
+  <div class="panel-body">
+    <ul class="course-grids">
+      {% set key = 0 %}
+      {% for course in courses %}
+        {% if key < 3 and currentCourse.id != course.id %}
+        {% set key = key + 1 %}
+          <li class="course-grid related-course-grid">
+            <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
+              <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}" class="img-responsive thumb">
+            <span class="title" style="max-height: 15px;overflow: hidden;line-height: 20px;">{{ course.title }}</span>  
+          </a>
+        </li>
+        {% endif %}
+      {% endfor %}
+    </ul>       
+  </div>
+</div>
+{% endif %}

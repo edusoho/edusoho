@@ -19,7 +19,7 @@ seajs.config({
 		"jquery.plupload-queue-css": "jquery-plugin/plupload-queue/2.0.0/css/queue.css",
 		"jquery.plupload-queue": "jquery-plugin/plupload-queue/2.0.0/queue",
 		"jquery.plupload-queue-zh-cn": "jquery-plugin/plupload-queue/2.0.0/i18n/zh-cn",
-		"mediaelementplayer": "jquery-plugin/mediaelement/2.13.1/mediaelement-and-player",
+		"mediaelementplayer": "gallery2/mediaelement/2.14.2/mediaelement-and-player",
 		'bootstrap': 'gallery2/bootstrap/3.1.1/bootstrap',
 		'kindeditor': 'gallery2/kindeditor/4.1.10/kindeditor',
 		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',
@@ -39,8 +39,15 @@ seajs.config({
 		"backbone": "gallery/backbone/1.0.0/backbone",
 		"swfobject": "gallery/swfobject/2.2.0/swfobject.js",
 		'moment' : 'gallery/moment/2.5.1/moment',
+		'morris': 'gallery/morris/0.5.0/morris',
 		'video-js': 'gallery2/video-js/4.2.1/video-js',
-		'swfupload': 'gallery2/swfupload/2.2.0/swfupload'
+		'swfupload': 'gallery2/swfupload/2.2.0/swfupload',
+		'webuploader': 'gallery2/webuploader/0.1.2/webuploader',
+		'screenfull': 'gallery2/screenfull/1.1.1/screenfull',
+		'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js',
+		'edusoho.chunkupload': 'edusoho/chunkupload/1.0/chunk-upload.js',
+		'edusoho.uploadpanel': 'edusoho/uploadpanel/1.0/upload-panel.js',
+		'edusoho.uploadProgressBar': 'edusoho/uploadprogressbar/1.0/upload-progress-bar.js'
 	},
 
 	// 预加载项

@@ -10,7 +10,7 @@
     </div>
   </div>
   <div class="form-group">
-    <div class="col-md-2 control-label"><label>不定向选择题</label></div>
+    <div class="col-md-2 control-label"><label>不定项选择题</label></div>
       <div class="col-md-8 controls radios">
         {{ radios('uncertain', {'0':'否', '1':'是'}, question.type|default('choice') == 'uncertain_choice' ? 1 : 0) }}
       </div>
@@ -33,7 +33,8 @@
           </div>
         </div>
         <div class="col-sm-2" style="padding-left:0;">
-          <button id="item-upload-{{ id }}" class="btn btn-default btn-sm" data-target="#item-input-{{ id }}"><i class="glyphicon glyphicon-picture"></i></button>
+          <div id="item-upload-{{ id }}" class="btn btn-default btn-sm webuploader-container" data-target="#item-input-{{ id }}"><i class="glyphicon glyphicon-picture"></i></div>
+          <div id="item-audio-upload-{{ id }}" class="btn btn-sm btn-default item-audio-upload webuploader-container hide" data-target="#item-input-{{ id }}"><i class="glyphicon glyphicon-volume-up"></i></div>
 
           <a class="btn btn-default btn-sm delete-choice mlm" data-role="delete-choice" href="javascript:void(null)"><i class="glyphicon glyphicon-trash"></i></a>
         </div>

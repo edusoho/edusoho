@@ -1,0 +1,59 @@
+<table class="table table-condensed table-bordered table-striped table-hover" >
+  {% set status = 0  %}
+  {% if error != "error" %}
+    {% if mainAppUpgrade %}
+      {% set status = 1 %}
+      <tr>
+        <td>主系统</td>
+        <td>
+          <a class="btn btn-xs btn-info pull-right" href="{{path("admin_app_upgrades")}}">立即更新</a>
+          <span class="glyphicon glyphicon-info-sign text-info"></span>
+          最新版本:{{ mainAppUpgrade.package.toVersion }}
+          当前版本: {{ constant('Topxia\\System::VERSION') }}
+        </td>
+      </tr>
+    {% else %}
+      <tr>
+        <td>主系统</td>
+        <td>
+          <span class="glyphicon glyphicon-ok-sign text-success"></span>
+          已是最新版本 {{ constant('Topxia\\System::VERSION') }}
+        </td>
+      </tr>
+    {% endif %}
+
+  {% endif %}
+
+      {% if error == "error" %}
+        <tr><td>主系统</td><td rowspan="4"><div class="empty"><span  style="color:#cc0000;float:left;text-align:left;">云平台参数设置不正确，会影响到系统正常的运行，<a href="{{path('admin_setting_cloud')}}">请修改设置。</a></sapn></div></td></tr>
+        <tr><td>应用更新</td></tr>
+
+        <tr ><td>新应用</td></tr>
+
+        <tr><td>云视频</td></tr>
+
+      {% else %}
+        <tr><td>应用更新</td><td>{% if app_count %}
+          {% if status|default(0) == 1 and app_count == 1 %}
+          <span class="glyphicon glyphicon-ok-sign text-success"></span> 所有应用都已是最新版本
+          {% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还有 <span class="badge" style="background-color:#cc0000;">
+          {% if status|default(0) == 1 %}{{app_count - 1}}{% else %}
+          {{app_count}}
+          {% endif %}</span> 个应用没有更新 <a class="btn btn-xs btn-info pull-right" href="{{path("admin_app_upgrades")}}">立即更新</a>
+          {% endif %}
+          {% else %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 所有应用都已是最新版本
+      {% endif %}</td></tr>
+
+        <tr><td>新应用</td><td>{% if unInstallAppCount>0 %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还有 <span class="badge">{{unInstallAppCount}}</span> 个应用没有安装<a class="pull-right" href="{{path("admin_app_center")}}">查看</a>{% else %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已安装了全部应用
+      {% endif %}</td></tr>
+
+        <tr><td>云视频</td><td>{% if setting("storage.cloud_bucket")!="" %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已开通{% if setting("storage.upload_mode") != 'cloud' %}(尚未启用)<a class="pull-right" href="{{path("admin_setting_cloud")}}">查看</a>{% endif %}{% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还未开通<a class="pull-right" href="{{path("admin_setting_cloud")}}">查看</a>
+      {% endif %}</td></tr>
+      {% endif %}
+        <tr><td>直播</td><td>{% if setting("course.live_student_capacity", 0)>0 %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已开通{% if setting("course.live_course_enabled")==0 %}(尚未启用)<a class="pull-right" href="{{path("admin_setting_course_setting")}}#live-course-set">查看</a>{% endif %}{% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还未开通<a class="pull-right" href="{{path("admin_setting_course_setting")}}#live-course-set">查看</a>
+      {% endif %}</td></tr>
+
+        <tr><td>移动客户端</td><td>{% if setting("mobile").enabled|default(null) %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已启用{% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还未启用<a class="pull-right" href="{{path("admin_setting_mobile")}}">查看</a>
+      {% endif %}</td></tr>
+
+</table>

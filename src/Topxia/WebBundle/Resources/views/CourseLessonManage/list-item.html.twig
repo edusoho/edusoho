@@ -1,9 +1,9 @@
-<li class="item-lesson clearfix" id="lesson-{{ lesson.id }}">
+<li class="item-lesson clearfix" id="lesson-{{ lesson.id }}"style="word-break: break-all;" >
 	<div class="item-line"></div>
 	<div class="item-content">
 	  {% set mediaStatus = lesson.mediaStatus|default(null) %}
 		
-		{% if lesson.type == 'video' %}
+		{% if lesson.type in ['video', 'live'] %}
 		  {% if mediaStatus == 'waiting' %}
 			<span class="glyphicon glyphicon-facetime-video text-warning"></span>
 		  {% elseif mediaStatus == 'doing' %}
@@ -27,6 +27,18 @@
 		  <span class="text-muted">{{ lesson.length|duration }}</span>
 		{% endif %}
 
+		{% if lesson.type in ['live'] %}
+		  <span class="text-muted">{{ lesson.startTime|data_format }}</span>
+		{% endif %}
+
+		{% if lesson.giveCredit > 0 %}
+		  <small class="text-muted">({{ lesson.giveCredit }}学分)</small>
+		{% endif %}
+
+    {% if lesson.requireCredit > 0 %}
+      <small class="text-muted">(需{{ lesson.requireCredit }}学分)</small>
+    {% endif %}
+
 		{% if lesson.type != 'testpaper' %}
 			{% set mediaTypeName = lesson.type == 'video' ? '视频' : (lesson.type == 'audio' ? '音频' : '文件') %}
 			{% if mediaStatus == 'waiting' %}
@@ -44,12 +56,11 @@
 
 	</div>
 
-	<div class="item-actions">
+	<div class="item-actions prs">
 	  {% if lesson.type != 'testpaper' %}
 		<button class="btn btn-link" title="添加资料" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip"></span>
 		</button>
 	  {% endif %}
-
 	  {% if lesson.type == 'testpaper' %}
 			<a class="btn btn-link" title="预览" href="{{ path('course_manage_preview_test', {testId:lesson.mediaId}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
 	  {% else %}
@@ -66,12 +77,14 @@
 		<button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
 		  {% if lesson.type == 'testpaper' %}
 			  data-url="{{ path('course_manage_lesson_edit_testpaper', {courseId:course.id, lessonId:lesson.id}) }}"
+			{% elseif lesson.type == 'live' %}
+			  data-url="{{ path('live_course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
 			{% else %}
 			  data-url="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
 			{% endif %}
 		  ><i class="glyphicon glyphicon-edit"></i></button>
 
 	  <button class="btn btn-link delete-lesson-btn" title="删除" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-trash"></span></button>
-
+	 
 	</div>
 </li>

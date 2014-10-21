@@ -10,6 +10,8 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\System;
 
+use Topxia\Service\Util\PluginUtil;
+
 class AppServiceImpl extends BaseService implements AppService
 {
     const MAX_APP_COUNT = 100;
@@ -42,6 +44,13 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->createAppClient()->getPackage($id);
     }
 
+    public function getMainVersion()
+    {   
+        $app=$this->getAppDao()->getAppByCode('MAIN');
+
+        return  $app['version'];
+    }
+
     public function checkAppUpgrades()
     {
         $mainApp = $this->getAppDao()->getAppByCode('MAIN');
@@ -55,12 +64,50 @@ class AppServiceImpl extends BaseService implements AppService
             $args[$app['code']] = $app['version'];
         }
 
-        return $this->createAppClient()->checkUpgradePackages($args);
+        $lastCheck = intval($this->getSettingService()->get('_app_last_check'));
+        if (empty($lastCheck) or ((time() - $lastCheck) > 86400) ) {
+            $coursePublishedCount = $this->getCourseService()->searchCourseCount(array('status'=>'published'));
+            $courseUnpublishedCount = $this->getCourseService()->searchCourseCount(array('status'=>'draft'));
+
+            $extInfos = array(
+                'host' => $_SERVER['HTTP_HOST'],
+                'userCount' => (string) $this->getUserService()->searchUserCount(array()),
+                'coursePublishedCount' => (string) $coursePublishedCount,
+                'courseUnpublishedCount' => (string) $courseUnpublishedCount,
+                'courseCount' => (string) ($coursePublishedCount + $courseUnpublishedCount),
+                'moneyCourseCount' => (string) $this->getCourseService()->searchCourseCount(array('status' => 'published', 'notFree' => true)),
+                'lessonCount' => (string) $this->getCourseService()->searchLessonCount(array()),
+                'courseMemberCount' => (string) $this->getCourseService()->searchMemberCount(array('role' => 'student')),
+                'mobileLoginCount' => (string) $this->getUserService()->searchTokenCount(array('type'=>'mobile_login')),
+                'teacherCount' => (string) $this->getUserService()->searchUserCount(array('roles'=>'ROLE_TEACHER')),
+            );
+
+            $this->getSettingService()->set('_app_last_check', time());
+        } else {
+            $extInfos = array('_t' => (string)time());
+        }
+
+        return $this->createAppClient()->checkUpgradePackages($args, $extInfos);
+    }
+
+    public function getMessages()
+    {
+        return $this->createAppClient()->getMessages();
+    }
+
+    public function checkAppCop()
+    {
+        return $this->createAppClient()->checkAppCop();
     }
 
     public function findLogs($start, $limit)
     {
         return $this->getAppLogDao()->findLogs($start, $limit);
+    }
+
+    public function checkOwnCopyrightUser($id)
+    {
+        return $this->createAppClient()->checkOwnCopyrightUser($id);
     }
 
     public function findLogCount()
@@ -397,6 +444,7 @@ class AppServiceImpl extends BaseService implements AppService
         if (empty($errors)) {
             $this->updateAppForPackageUpdate($package);
             $this->createPackageUpdateLog($package, 'SUCCESS');
+            PluginUtil::refresh();
         }
 
         last:
@@ -426,6 +474,14 @@ class AppServiceImpl extends BaseService implements AppService
 
         $this->getAppDao()->deleteApp($app['id']);
 
+    }
+
+    public function updateAppVersion($code,$fromVersion,$version)
+    {
+        $this->getAppDao()->updateAppVersion($code,$version);
+        $this->getAppDao()->updateAppFromVersion($code,$fromVersion);
+        
+        return true;
     }
 
     private function _replaceFileForPackageUpdate($package, $packageDir)
@@ -625,6 +681,16 @@ class AppServiceImpl extends BaseService implements AppService
     protected function getSettingService()
     {
         return $this->createService('System.SettingService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course.CourseService');
     }
 
 }

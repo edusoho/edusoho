@@ -17,17 +17,34 @@ define(function(require, exports, module) {
                     return ;
                 }
                 
+                $('#block-save-btn').button('submiting').addClass('disabled');
                 $.post($form.attr('action'), $form.serialize(), function(response){
                     if (response.status == 'ok') {
                         var $html = $(response.html);
-                            $table.find('tbody').prepend(response.html);
-                            Notify.success('创建编辑区成功!');
+                            if ($form.data('id') == 0 ) {
+                                $table.find('tbody').prepend(response.html);
+                                Notify.success('创建编辑区成功!');
+                            } else {
+                                $('#' + $html.attr('id')).replaceWith($html);
+                                Notify.success('更新编辑区成功!');
+                            };
                         $modal.modal('hide');
                     }
                 }, 'json');
             }
 
         });
+
+        $form.find('input[name="mode"]:radio').on('change', function() {
+
+            if ($(this).val() == 'template') {
+                $("#template").show();
+            } else {
+                $("#template").hide();
+            };
+        });
+
+        $form.find('input[name="mode"]:checked').trigger('change');
 
         validator.addItem({
             element: '[name="title"]',

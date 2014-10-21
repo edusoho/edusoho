@@ -19,6 +19,9 @@
               <a class="list-group-item {% if side_nav == 'detail' %}active{% endif %}" href="{{ path('course_manage_detail', {id:course.id}) }}">详细信息</a>
               <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('course_manage_picture', {id:course.id}) }}">课程图片</a>
               <a class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}" href="{{ path('course_manage_lesson', {id:course.id}) }}">课时管理</a>
+              {% if course.type == 'live' %}
+              <a class="list-group-item {% if side_nav == 'replay' %}active{% endif %}" href="{{ path('live_course_manage_replay', {id:course.id}) }}">录播管理</a>
+              {% endif %}
               <a class="list-group-item {% if side_nav == 'files' %}active{% endif %}" href="{{ path('course_manage_files', {id:course.id}) }}">文件管理</a>
             </div>
           </div><!-- /list-group-block -->
@@ -31,17 +34,22 @@
               <a class="list-group-item {% if side_nav == 'students' %}active{% endif %}" href="{{ path('course_manage_students', {id:course.id}) }}">学员管理</a>
             </div>
           </div>
-
+          {% if course.type == 'normal' %}
           <div class="list-group-panel">
             <div class="list-group-heading">题库</div>
             <div class="list-group">
               <a class="list-group-item {% if side_nav == 'question' %}active{% endif %}" href="{{ path('course_manage_question', {courseId:course.id}) }}">题目管理</a>
+
+              {% if setting('question_plus.enabled') %}
+                <a class="list-group-item {% if side_nav == 'question_plumber' %}active{% endif %}" href="{{ path('course_question_plumber', {courseId:course.id, type:'import'}) }}">题目导入/导出</a>
+              {% endif %}
+
               <a class="list-group-item {% if side_nav == 'question_category' %}active{% endif %}" href="{{ path('course_manage_question_category', {courseId:course.id}) }}">题目类别管理</a>
               <a class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}" href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">试卷管理</a>
               <a class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}" href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}">试卷批阅</a>
             </div>
           </div>
-
+          {% endif %}
         </div>
 
       </div>

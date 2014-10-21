@@ -39,7 +39,7 @@ class WindPop3 {
 	}
 
 	/**
-	 * 登陆pop3
+	 * 登录pop3
 	 * @param string $username 用户名
 	 * @param string $password 密码
 	 * @return string

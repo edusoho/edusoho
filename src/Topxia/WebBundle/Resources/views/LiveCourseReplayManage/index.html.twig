@@ -1,0 +1,36 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}录播管理 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'replay' %}
+{% set script_controller = 'course-manage/lesson' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col lesson-manage-panel">
+	<div class="panel-heading">
+		录播管理
+	</div>
+
+	{% if items is empty %}
+
+	 <div class="empty">暂无课时内容！</div>
+
+	 {% endif %}
+
+	<div class="panel-body">
+		<ul class="lesson-list sortable-list" id="course-item-list" data-sort-url="{{ path('course_manage_lesson_sort', {id:course.id}) }}">
+
+			{% for id, item in items %}
+			  {% if 'chapter' in id %}
+			    {% include 'TopxiaWebBundle:LiveCourseReplayManage:chapter-item.html.twig' with {chapter: item} %}
+			  {% elseif 'lesson' in id %}
+			    {% include 'TopxiaWebBundle:LiveCourseReplayManage:list-item.html.twig' with {lesson: item} %}
+			  {% endif %}
+			{% endfor %}
+			
+		</ul>
+	</div>
+</div>
+
+{% endblock %}

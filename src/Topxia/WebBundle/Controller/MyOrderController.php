@@ -73,7 +73,7 @@ class MyOrderController extends BaseController
 
     private function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.OrderService');
+        return $this->getServiceKernel()->createService('Course.CourseOrderService');
     }
 
     private function getCourseService()

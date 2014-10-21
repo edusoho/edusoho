@@ -32,9 +32,73 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $this->getNavigationDao()->findNavigationsByType($type, $start, $limit);
     }
 
+    public function getNavigationsTreeByType($type)
+    {
+        $count = $this->getNavigationsCountByType($type);
+        $navigations = $this->findNavigationsByType($type, 0, $count);
+
+        $navigations = ArrayToolkit::index($navigations, 'id');
+        foreach ($navigations as $index => $nav) {
+            if ($nav['parentId'] == 0) {
+                continue;
+            }
+
+            if (empty($navigations[$nav['parentId']]['children'])) {
+                $navigations[$nav['parentId']]['children'] = array();
+            }
+
+            $navigations[$nav['parentId']]['children'][] = $nav;
+
+            unset($navigations[$index]);
+        }
+
+        return $navigations;
+    }
+
+    public function getNavigationsListByType($type)
+    {
+        $count = $this->getNavigationsCountByType($type);
+        $navigations = $this->findNavigationsByType($type, 0, $count);
+
+        $prepare = function($navigations) {
+            $prepared = array();
+            foreach ($navigations as $nav) {
+                if (!isset($prepared[$nav['parentId']])) {
+                    $prepared[$nav['parentId']] = array();
+                }
+                $prepared[$nav['parentId']][] = $nav;
+            }
+            return $prepared;
+        };
+
+        $navigations = $prepare($navigations);
+
+        $tree = array();
+        $this->makeNavigationTreeList($tree, $navigations, 0);
+
+        return $tree;
+
+    }
+
+    private function makeNavigationTreeList(&$tree, &$navigations, $parentId)
+    {
+        static $depth = 0;
+        static $leaf = false;
+        if (isset($navigations[$parentId]) && is_array($navigations[$parentId])) {
+            foreach ($navigations[$parentId] as $nav) {
+                $depth++;
+                $nav['depth'] = $depth;
+                $tree[] = $nav;
+                $this->makeNavigationTreeList($tree, $navigations, $nav['id']);
+                $depth--;
+            }
+        }
+        return $tree;
+    }
+
     public function createNavigation($fields)
     {
-        $keysArray = array('name', 'url', 'isOpen', 'isNewWin', 'type', 'sequence');
+        $keysArray = array('name', 'url', 'isOpen', 'isNewWin', 'type', 'sequence', 'parentId');
         $keysOfFields = array_keys($fields);
         foreach ($keysOfFields as $key => $keyOfFields) {
             if(!in_array($keyOfFields, $keysArray)){

@@ -16,6 +16,7 @@ class LoginBindController extends BaseController
         $client = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $url = $client->getAuthorizeUrl($callbackUrl);
+
         return $this->redirect($url);
     }
 
@@ -49,7 +50,20 @@ class LoginBindController extends BaseController
     {
         $token = $request->getSession()->get('oauth_token');
         $client = $this->createOAuthClient($type);
-        $oauthUser = $client->getUserInfo($token);
+
+        try {
+            $oauthUser = $client->getUserInfo($token);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $clientInfo = $client->getClientInfo();
+            if ($message == 'unaudited') {
+                $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$clientInfo['name'].'登录连接的审核还未通过。';
+            } else {
+                $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$message;
+            }
+            $this->setFlashMessage('danger', $message);
+            return $this->redirect($this->generateUrl('login'));
+        }
 
         return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
             'oauthUser' => $oauthUser,
@@ -61,8 +75,6 @@ class LoginBindController extends BaseController
     public function newAction(Request $request, $type)
     {
         $token = $request->getSession()->get('oauth_token');
-
-
         if (empty($token)) {
             $response = array('success' => false, 'message' => '页面已过期，请重新登录。');
             goto response;
@@ -77,7 +89,7 @@ class LoginBindController extends BaseController
             goto response;
         }
 
-        $user = $this->generateUser($type, $token, $oauthUser);
+        $user = $this->generateUser($type, $token, $oauthUser,$setData=array());
         if (empty($user)) {
             $response = array('success' => false, 'message' => '登录失败，请重试！');
             goto response;
@@ -90,36 +102,80 @@ class LoginBindController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    private function generateUser($type, $token, $oauthUser)
+    public function newSetAction(Request $request, $type)
+    {
+        $setData = $request->request->all();
+
+        $token = $request->getSession()->get('oauth_token');
+        if (empty($token)) {
+            $response = array('success' => false, 'message' => '页面已过期，请重新登录。');
+            goto response;
+        }
+
+        $client = $this->createOAuthClient($type);
+        $oauthUser = $client->getUserInfo($token);
+        $oauthUser['createdIp'] = $request->getClientIp();
+        
+        if (empty($oauthUser['id'])) {
+            $response = array('success' => false, 'message' => '网络超时，获取用户信息失败，请重试。');
+            goto response;
+        }
+
+        $user = $this->generateUser($type, $token, $oauthUser,$setData);
+        if (empty($user)) {
+            $response = array('success' => false, 'message' => '登录失败，请重试！');
+            goto response;
+        }
+
+        $this->getUserService()->setupAccount($user['id']);
+        $this->authenticateUser($user);
+
+        $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
+
+        response:
+        return $this->createJsonResponse($response);
+    }
+
+    private function generateUser($type, $token, $oauthUser,$setData)
     {
         $registration = array();
 
         $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $oauthUser['name'] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $oauthUser['name']);
         $oauthUser['name'] = str_replace(array('-'), array('_'), $oauthUser['name']);
+
+        if (empty($oauthUser['name'])) {
+            $oauthUser['name'] = "{$type}" . substr($randString, 9, 3);
+        }
 
         $nameLength = mb_strlen($oauthUser['name'], 'utf-8');
         if ($nameLength > 10) {
             $oauthUser['name'] = mb_substr($oauthUser['name'], 0, 11, 'utf-8');
         }
 
-        $nicknames = array();
-        $nicknames[] = $oauthUser['name'];
-        $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . '_' . substr($randString, 0, 3);
-        $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . '_' . substr($randString, 3, 3);
-        $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . '_' . substr($randString, 6, 3);
+        if (!empty($setData['nickname']) && !empty($setData['email'])) {
+            $registration['nickname'] = $setData['nickname'];
+            $registration['email'] = $setData['email'];
+        } else {
+            $nicknames = array();
+            $nicknames[] = $oauthUser['name'];
+            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 0, 3);
+            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 3, 3);
+            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 6, 3);
 
-        foreach ($nicknames as $name) {
-            if ($this->getUserService()->isNicknameAvaliable($name)) {
-                $registration['nickname'] = $name;
-                break;
+            foreach ($nicknames as $name) {
+                if ($this->getUserService()->isNicknameAvaliable($name)) {
+                    $registration['nickname'] = $name;
+                    break;
+                }
             }
-        }
 
-        if (empty($registration['nickname'])) {
-            return null;
-        }
+            if (empty($registration['nickname'])) {
+                return null;
+            }
 
-        $registration['email'] = 'u_' . substr($randString, 0, 12) . '@edusoho.net';
+            $registration['email'] = 'u_' . substr($randString, 0, 12) . '@edusoho.net';
+        }
         $registration['password'] = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
         $registration['token'] = $token;
         $registration['createdIp'] = $oauthUser['createdIp'];

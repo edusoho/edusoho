@@ -16,13 +16,13 @@
 				<textarea class="form-control" id="announcement-content-field" name="content" data-display="公告内容">{{ announcement.content }}</textarea>
 			</div>
 		</div>
-
+		{% if not announcement.id %}
 		<div class="checkbox">
     		<label>
       			<input type="checkbox" name="notify" value="notify"> 发送系统通知给该课程的学员
     		</label>
 		</div>
-
+		{% endif %}
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
 	</form>

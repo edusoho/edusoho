@@ -18,21 +18,26 @@
       {% block testpaper_heading_content %}{% endblock %}
     </div>
 
-    {% if showTestpaperNavbar|default('on') == 'on' %}
-      <div id="testpaper-navbar" class="testpaper-navbar" data-spy="affix" data-offset-top="200">
-        <ul class="nav nav navbar-nav nav-pills">
-          {% for type in paper.metas.question_type_seq %}
-            <li><a href="#testpaper-questions-{{ type }}">{{dict('questionType')[type]}}</a></li>
-          {% endfor %}
-        </ul>
-      </div>
+    {% if is_feature_enabled('hide_testpaper_result') and (paperResult|default(null) and paperResult.status == 'finished') and not app.user.isTeacher() %}
+
+    {% else %}
+      {% if showTestpaperNavbar|default('on') == 'on' %}
+        <div id="testpaper-navbar" class="testpaper-navbar" data-spy="affix" data-offset-top="200">
+          <ul class="nav nav navbar-nav nav-pills">
+            {% for type in paper.metas.question_type_seq %}
+              <li><a href="#testpaper-questions-{{ type }}">{{dict('questionType')[type]}}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
     {% endif %}
+
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-9">
-    <div class="testpaper-body">
+    <div class="testpaper-body" oncopy="return false;" oncut="return false;" onselectstart="return false">
       {% include 'TopxiaWebBundle:QuizQuestionTest:do-test.html.twig' %}
     </div>
   </div>

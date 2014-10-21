@@ -5,7 +5,7 @@
 {% block title %}设置用户组{% endblock %}
 {% block body %}
 
-<form id="user-roles-form" class="form-horizontal" method="post" action="{{ url('admin_user_roles', {id:user.id}) }}">
+<form id="user-roles-form" class="form-horizontal" method="post" action="{{ url('admin_user_roles', {id:user.id}) }}" data-currentuser="{{ app.user.id }}" data-edituser="{{ user.id }}">
   <div class="checkboxs">
     {{ checkboxs('roles', dict('userRole'), user.roles) }}
   </div>
@@ -15,7 +15,7 @@
 
 
 {% block footer %}
-  <button class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-roles-form">保存</button>
+  <button id="change-user-roles-btn" data-submiting-text="正在提交" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-roles-form">保存</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
   <script>app.load('user/roles-modal')</script>
 {% endblock %}

@@ -1,36 +1,72 @@
 <div class="course-item-list-multi">
 {% for group in groupedItems %}
-  {% if group.type == 'chapter' %}
-    {% set chapter = group.data %}
-    <h3>章节{{ chapter.number }}: <strong>{{ chapter.title }}</strong></h3>
-  {% else  %}
-	  <ul class="row">
-	    {% for item in group.data %}
-	      <li class="col-md-4 clearfix item">
-	      	<a class="item-object item-object-{{ item.type }}" href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}" title="{{ item.title }}">
-	      		{% if item.free %}<span class="item-free"></span>{% endif %}
-		      	<span class="item-icon"></span>
-		      	{% if item.status == 'published' %}
-			      	<span class="item-length">
+	{% if group.type == 'chapter' %}
+		{% set chapter = group.data %}
+		{% if chapter.type == 'unit' %}
+			<h4>第 {{ chapter.number }} 节： <strong>{{ chapter.title }}</strong></h4>
+		{% else %}
+			<h3>第 {{ chapter.number }} 章：　<strong>{{ chapter.title }}</strong></h3>
+		{% endif %}
+	{% else  %}
+		<ul class="row">
+			{% for item in group.data %}
+				<li class="{% if item.type == 'live' %}col-md-6 live-item{% else %}col-md-4{% endif %} clearfix item">
+					<a class="item-object item-object-{{ item.type }}" href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}" title="{{ item.title }}">
+						{% if item.free %}<span class="item-free"></span>{% endif %}
+						<span class="item-icon"></span>
+						{% if item.status == 'published' %}
+							<span class="item-length">
 								{% if item.type == 'text' %}
-								  图文
+									图文
 								{% elseif item.type == 'testpaper' %}
-								  试卷
+									试卷
+								{% elseif item.type == 'live' %}
+									{{ item.length|duration }}
+								{% elseif item.type == 'ppt' %}
+									PPT
 								{% else %}
 									{{ item.length|duration }}
 								{% endif %}
-			      	</span>
-			      {% else %}
-			        <span class="item-length">未发布</span>
-			      {% endif %}
-	      	</a>
-	      	<div class="item-body">
-	      		<div class="item-seq-name">课时{{ item.number }}:</div>
-	      		<div class="item-title"><a href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}" title="{{ item.title }}">{{ item.title }}</a></div>
-	      	</div>
-	      </li>
-	    {% endfor %}
-    </ul>
-  {% endif %}
+							</span>
+						{% else %}
+							<span class="item-length">未发布</span>
+						{% endif %}
+					</a>
+					<div class="item-body">
+						<div class="item-seq-name">课时{{ item.number }}:</div>
+						<div class="item-title">
+							<a href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}" title="{{ item.title }}">{{ item.title }}</a>
+						</div>
+
+							<div class="text-muted" style="font-weight:normal;font-size:12px;color:#aaa;">
+
+								{% if item.type == 'live' %}
+
+									{% if item.startTime > currentTime %}
+										<span>{{ item.startTime|date('m月d日') }} 
+											{% for key,week in weeks %}
+												{% if key == item.startTime|date('w')  %}
+													星期{{ week }}
+												{% endif %}
+												{% endfor %}
+											{{ item.startTime|date('H：i') }}
+										</span>
+									{% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
+										<span class="text-warning">正在直播中</span>
+									{% elseif item.endTime < currentTime %}
+										<span>直播结束</span>
+									{% endif %}
+
+								{% endif  %}
+
+							</div>
+
+
+
+					</div>
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
 {% endfor %}
 </div>

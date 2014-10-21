@@ -144,25 +144,36 @@ function install_step3()
 
 	$error = null;
 	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
-		$init = new SystemInit();
-		$admin = $init->initAdmin($_POST['admin']);
-		$init->initSiteSettings($_POST);
-		$init->initRegisterSetting($admin);
-		$init->initMailerSetting($_POST['sitename']);
-		$init->initPaymentSetting();
-		$init->initStorageSetting();
-		$init->initTag();
-		$init->initCategory();
-		$init->initFile();
-		$init->initPages();
-		$init->initNavigations();
-		$init->initBlocks();
-        $init->initThemes();
-		$init->initLockFile();
-        $init->initRefundSetting();
-		$init->initArticleSetting();
 
-		header("Location: start-install.php?step=4");
+        $init = new SystemInit();
+        $admin = $init->initAdmin($_POST['admin']);
+        $init->initSiteSettings($_POST);
+        $init->initRegisterSetting($admin);
+        $init->initMailerSetting($_POST['sitename']);
+        $init->initPaymentSetting();
+        $init->initStorageSetting();
+        $init->initTag();
+        $init->initCategory();
+        $init->initFile();
+        $init->initPages();
+        $init->initNavigations();
+        $init->initBlocks();
+        $init->initThemes();
+        $init->initLockFile();
+        $init->initRefundSetting();
+        $init->initArticleSetting();
+        
+        $web=$_POST['web'];
+        $userData = array();
+		$userData['server_addr']=$_SERVER['SERVER_ADDR'];
+		$userData['server_name']=$_SERVER['SERVER_NAME'];
+		$userData['mobile']=$web['mobile'];
+		$userData['qq']=$web['qq'];
+		$userData['name']=$web['name'];
+
+		_postRequest("http://open.edusoho.com/track/install", $userData);
+
+        header("Location: start-install.php?step=4");
 		exit();
 	}
 
@@ -256,6 +267,35 @@ function _create_connection()
     $connection->exec("SET NAMES utf8");
 
     return $connection;
+}
+
+function _postRequest($url, $params)
+{
+    $userAgent = 'EduSoho Install Client 1.0';
+
+    $connectTimeout = 30;
+
+    $timeout = 30;
+
+    $curl = curl_init();
+
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
+    curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+    curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_HEADER, 0);
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+    curl_setopt($curl, CURLOPT_URL, $url );
+
+    // curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+
+    return $response;
 }
 
 class SystemInit
@@ -541,6 +581,17 @@ EOD;
 </div>
 EOD;
         $this->getBlockService()->updateContent($block['id'], $content);
+
+        $block = $this->getBlockService()->createBlock(array(
+            'code'=>'live_top_banner',
+            'title'=>'直播频道首页图片轮播'
+        ));
+
+        $content = <<<'EOD'
+<a href="#"><img src="../assets/img/placeholder/live-slide-1.jpg" /></a>
+<a href="#"><img src="../assets/img/placeholder/live-slide-2.jpg" /></a>
+EOD;
+		$this->getBlockService()->updateContent($block['id'], $content);
 
 	}
 

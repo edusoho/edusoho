@@ -1,0 +1,48 @@
+{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+
+{% block title %}第{{ currentLesson.number }}课时：{{ course.title }} -{{ parent() }}{% endblock %}
+{% block keywords %}{{ course.title }}{% endblock %}
+{% block description %}{{ course.about }}{% endblock %}
+
+{% block content %}
+
+<div class="es-row-wrap container-gap">
+	<div class="row">
+	    <div class="col-md-12">
+	      <div class="page-header"><h1>{{ course.title }}</h1></div>
+	    </div>
+	</div>
+
+  	<div class="row article-row">
+	  	<div class="col-md-8 mbl">
+	  		{% if currentLesson %}
+		  		<div class="text-success"><h4>第{{ currentLesson.number }}课时： {{ currentLesson.title }}</h4></div>
+		  		<div class="">{{ currentLesson.summary }}</div>
+	  		{% else %}
+	  			<div class="empty">课程暂无课时</div>
+	  		{% endif %}
+	  		<a class="btn btn-primary mtl nav-btn" href="{{ path('course_show',{id:course.id})}}"><span class="glyphicon glyphicon-play"></span> 查看课程</a>
+		</div>
+	  	<div class="col-md-4">
+	  		<div class="panel panel-default">
+			    <div class="panel-heading">
+			      <h3 class="panel-title">课时列表</h3>
+			    </div>
+		    <div class="panel-body">
+		    	{% if lessons %}
+		        <ul class="media-list">
+		    	{% for lesson in lessons %}
+		            <li class="media">
+		              <div class="media-body"><a href="{{ path('course_archive_lesson',{ id:course.id,lessonId:lesson.id })}}">第{{ lesson.number }}课时： {{ lesson.title }}</a></div>
+		            </li>
+		        {% endfor %}
+		        </ul>
+		        {% else %}
+		        <div class="empty">课程暂无相关课时</div>
+		        {% endif %}
+		    </div>
+		  </div>
+	  	</div>
+	</div>
+</div>
+{% endblock %}

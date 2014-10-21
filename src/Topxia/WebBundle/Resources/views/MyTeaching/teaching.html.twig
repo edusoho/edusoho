@@ -5,15 +5,21 @@
 {% set side_nav = 'my-teaching-courses' %}
 
 {% block main %}
-<div class="panel panel-default panel-col">
+{# <div class="panel panel-default panel-col"> #}
+<div class="panel panel-default panel-col lesson-manage-panel">
   <div class="panel-heading">
-    <a id="create-course" href="{{ path('course_create') }}" class="btn btn-info btn-sm pull-right"><span class="glyphicon glyphicon-plus"></span> 创建课程</a>
+    <span class="pull-right">
+      <a id="create-course" href="{{ path('course_create') }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 创建课程</a>
+      {% if live_course_enabled %}
+        <a id="create-course" href="{{ path('course_create',{flag:'isLive'}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 创建直播课程</a>
+      {% endif %}
+      
+    </span>
     在教课程
-
   </div>
   <div class="panel-body">
 
-  <table class="table table-striped table-hover" id="course-table">
+  <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
     <thead>
     <tr>
       <th width="50%">名称</th>
@@ -28,13 +34,16 @@
         <tr>
           <td>
 
-    <a class="pull-left" href="{{ path('course_show', {id:course.id}) }}">
-      <img class="course-picture" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="{{ course.title }}" width="100">
-    </a>
+            <a class="pull-left mrm" href="{{ path('course_show', {id:course.id}) }}">
+              <img class="course-picture" src="{{ default_path('coursePicture',course.middlePicture, 'large') }}" alt="{{ course.title }}" width="100">
+            </a>
 
-
-
-          <a href="{{ path('course_show', {id:course.id}) }}" class="mlm">{{ course.title }}</a>
+            <div class="mlm">
+              <a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
+              {% if course.type == 'live' %}
+                <div><span class="label label-success live-label">直播</span></div>
+              {% endif  %}
+            </div>
 
           </td>
           <td>{{ course.studentNum }}</td>

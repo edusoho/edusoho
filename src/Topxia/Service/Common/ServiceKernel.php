@@ -1,10 +1,14 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
 class ServiceKernel
 {
 
     private static $_instance;
+
+    private static $_dispatcher;
 
     protected $environment;
     protected $debug;
@@ -40,6 +44,17 @@ class ServiceKernel
         return self::$_instance;
     }
 
+    public static function dispatcher()
+    {
+        if (self::$_dispatcher) {
+            return self::$_dispatcher;
+        }
+
+        self::$_dispatcher = new EventDispatcher();
+
+        return self::$_dispatcher;
+    }
+
     public function boot()
     {
         if (true === $this->booted) {
@@ -72,6 +87,25 @@ class ServiceKernel
             throw new \RuntimeException('尚未初始化CurrentUser');
         }
         return $this->currentUser;
+    }
+
+    public function setEnvVariable(array $env)
+    {
+        $this->env = $env;
+        return $this;
+    }
+
+    public function getEnvVariable($key = null)
+    {
+        if (empty($key)) {
+            return $this->env;
+        }
+
+        if (!isset($this->env[$key])) {
+            throw new \RuntimeException("Environment variable `{$key}` is not exist.");
+        }
+
+        return $this->env[$key];
     }
 
     public function getConnection()

@@ -14,23 +14,30 @@
 	    	  {% if lesson and lesson.status != 'published' %}
 			    {{ material.title }} <span class="text-muted text-sm">(课时未发布，不能下载该资料)</span>
 			  {% else %}
-			    <a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" target="_blank">{{ material.title }}</a>
+			    {% if material.link %}
+            <a href="{{ material.link }}" target="_blank">{{ material.title }}</a>
+            <span class="glyphicon glyphicon-new-window text-muted text-sm" title="网络链接资料"></span>
+			    {% else %}
+				    <a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" target="_blank">{{ material.title }}</a>
+			    {% endif %}
 			  {% endif %}
 	    	</div>
 
-	    	{% if material.description%}
+	    	{% if material.description and not material.link %}
 			    <div class="text-muted text-sm mbs">
 			    	{{ material.description|plain_text(100) }} 
 			    </div>
-			   {% endif %}
+				{% endif %}
 
 	    	<div class="text-sm">
-	    		<span class="text-muted">{{ material.fileSize|file_size }}</span>
-	    		{% if lesson %}
+	    	  {% if material.fileId > 0  %}
+		    		<span class="text-muted">{{ material.fileSize|file_size }}</span>
 		    		<span class="bullet">•</span>
-	    		  <a class="link-muted" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{lesson.id}}" title="{{ lesson.title }}">课时{{ lesson.number }}</a>
 	    		{% endif %}
-	    		<span class="bullet">•</span>
+	    		{% if lesson %}
+	    		  <a class="link-muted" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{lesson.id}}" title="{{ lesson.title }}">课时{{ lesson.number }}</a>
+		    		<span class="bullet">•</span>
+	    		{% endif %}
 		    	<span class="text-muted">上传于{{ material.createdTime|smart_time }}</span>
 	    	</div>
 		    

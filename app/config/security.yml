@@ -37,18 +37,11 @@ security:
         custom_provider:
             id: topxia.user_provider
 
-    role_hierarchy:
-        ROLE_TEACHER:     ROLE_USER
-        ROLE_ADMIN:       ROLE_TEACHER
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+    role_hierarchy: %role_hierarchy%
 
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-
-        login:
-            pattern:  ^/login$
             security: false
 
         main:
@@ -74,10 +67,13 @@ security:
         - { path: ^/settings, role: ROLE_USER }
         # - { path: ^/note, role: ROLE_USER }
         - { path: ^/message, role: ROLE_USER }
+        - { path: ^/admin/course, role: ROLE_ADMIN }
+        - { path: ^/admin/user, role: ROLE_ADMIN }
+        - { path: ^/admin/app, role: ROLE_ADMIN }
         - { path: ^/admin/setting, role: ROLE_SUPER_ADMIN }
         - { path: ^/admin/logs, role: ROLE_SUPER_ADMIN }
         - { path: ^/admin/upgrade, role: ROLE_SUPER_ADMIN }
         - { path: ^/admin/optimize, role: ROLE_SUPER_ADMIN }
-        - { path: ^/admin, role: ROLE_ADMIN }
+        - { path: ^/admin, role: ROLE_BACKEND }
         - { path: /.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/_internal, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }

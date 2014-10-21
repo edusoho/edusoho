@@ -15,7 +15,7 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="course[title]"]',
+            element: '[name="title"]',
             required: true
         });
         

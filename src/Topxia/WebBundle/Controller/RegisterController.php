@@ -9,35 +9,68 @@ class RegisterController extends BaseController
 
     public function indexAction(Request $request)
     {
-        $form = $this->createForm(new RegisterType());
-
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-
-           
-            if ($form->isValid()) {
-                $registration = $form->getData();
-                $registration['createdIp'] = $request->getClientIp();
-
-                $user = $this->getAuthService()->register($registration);
-                $this->authenticateUser($user);
-                $this->sendRegisterMessage($user);
-
-                $goto = $this->generateUrl('register_submited', array(
-                    'id' => $user['id'], 'hash' => $this->makeHash($user)
-                ));
-
-                if ($this->getAuthService()->hasPartnerAuth()) {
-                    return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
-                }
-
-                return $this->redirect($goto);
-            }
+        $user = $this->getCurrentUser();
+        if ($user->isLogin()) {
+            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
         }
+
+        $form = $this->createForm(new RegisterType());
+        
+        if ($request->getMethod() == 'POST') {
+    
+            $registration = $request->request->all();
+   
+            $registration['createdIp'] = $request->getClientIp();
+
+            $user = $this->getAuthService()->register($registration);
+
+            $this->authenticateUser($user);
+            $this->sendRegisterMessage($user);
+
+            $goto = $this->generateUrl('register_submited', array(
+                'id' => $user['id'], 'hash' => $this->makeHash($user)
+            ));
+
+            if ($this->getAuthService()->hasPartnerAuth()) {
+                return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
+            }
+
+            $mailerSetting=$this->getSettingService()->get('mailer');
+            if(!$mailerSetting['enabled']){
+                return $this->redirect($this->generateUrl('homepage'));
+            }
+            return $this->redirect($goto);
+            
+        }
+
+        $auth=$this->getSettingService()->get('auth');
+
+        if(!isset($auth['registerSort']))$auth['registerSort']="";
+        
         $loginEnable  = $this->isLoginEnabled();
+
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        for($i=0;$i<count($userFields);$i++){
+           if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
+           if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
+           if(strstr($userFields[$i]['fieldName'], "intField")) $userFields[$i]['type']="int";
+           if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
+           if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
+        }
+        
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
-            'form' => $form->createView(),
-            'isLoginEnabled' => $loginEnable
+            'isLoginEnabled' => $loginEnable,
+            'registerSort'=>$auth['registerSort'],
+            'userFields'=>$userFields,
+        ));
+    }
+
+    public function userTermsAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get('auth', array());
+
+        return $this->render("TopxiaWebBundle:Register:user-terms.html.twig", array(
+            'userTerms' => $setting['user_terms_body']
         ));
     }
 
@@ -142,6 +175,11 @@ class RegisterController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
     public function getEmailLoginUrl ($email)
     {
         $host = substr($email, strpos($email, '@') + 1);
@@ -155,6 +193,12 @@ class RegisterController extends BaseController
         }
 
         return 'http://mail.' . $host;
+    }
+
+
+    public function analysisAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Register:analysis.html.twig',array());
     }
 
     protected function getSettingService()

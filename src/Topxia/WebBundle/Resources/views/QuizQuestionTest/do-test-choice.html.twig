@@ -14,7 +14,7 @@
 			  {% set itemClass =  ((paperResult.status|default(null) in ['reviewing', 'finished']) and (key in item.question.answer)) ? 'testpaper-question-choice-right' : '' %}
 			  {% set choiceIndex = (65+key)|chr %}
 
-				<li class="{{ itemClass }}"><span class="testpaper-question-choice-index">{{ choiceIndex }}.</span> {{ choice|bbCode2Html }}</li>
+				<li class="{{ itemClass }}"><span class="testpaper-question-choice-index">{{ choiceIndex }}.</span> {{ choice|bbCode2Html|raw }}</li>
 				{% if key in item.question.answer %}
 					{% set keys = keys|merge([choiceIndex]) %}
 				{% endif  %}

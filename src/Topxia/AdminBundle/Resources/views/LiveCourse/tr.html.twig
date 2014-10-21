@@ -1,0 +1,22 @@
+<tr id="tag-tr-{{ lesson.id }}">
+  {% set lessonUrl = path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id %}
+  <td>
+  	<a href="{{ lessonUrl }}">{{ lesson.title }}</a>
+  	<div class="mts">
+	    {% if course %}
+	      <a class="text-success text-sm" href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a>
+	    {% else %}
+	      <span class="text-muted text-sm">课程已删除</span>
+	    {% endif %}
+	  </div>
+  </td>
+  <td>{{ lesson.startTime|date('Y-m-d H:i') }}-{{ lesson.endTime|date('H:i') }}</td>
+  <td>
+  	{% if course %}
+  		{{ course.maxStudentNum }}
+  	{% else %}
+  		<span class="text-muted">课程已删除</div>
+  	{% endif %}
+  </td>
+  <td></td>
+</tr>

@@ -12,11 +12,15 @@ class OrderController extends BaseController
     public function submitPayRequestAction(Request $request , $order, $requestParams)
     {
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
-
         return $this->render('TopxiaWebBundle:Order:submit-pay-request.html.twig', array(
             'form' => $paymentRequest->form(),
             'order' => $order,
         ));
+    }
+
+    public function resultNoticeAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Order:resultNotice.html.twig');
     }
 
     public function couponCheckAction (Request $request, $type, $id)
@@ -39,6 +43,11 @@ class OrderController extends BaseController
         $response = $this->createPaymentResponse($name, $request->query->all());
 
         $payData = $response->getPayData();
+
+        if ($payData['status'] == "waitBuyerConfirmGoods") {
+            return $this->forward("TopxiaWebBundle:Order:resultNotice");
+        }
+
         list($success, $order) = $this->getOrderService()->payOrder($payData);
 
         if ($order['status'] == 'paid' and $successCallback) {
@@ -46,7 +55,6 @@ class OrderController extends BaseController
         }
 
         $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
-
         return $this->redirect($goto);
     }
 
@@ -79,7 +87,6 @@ class OrderController extends BaseController
             'summary' => '',
             'amount' => $order['amount'],
         ));
-
         return $request->setParams($requestParams);
     }
 

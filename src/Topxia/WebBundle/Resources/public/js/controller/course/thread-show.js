@@ -1,9 +1,11 @@
 define(function(require, exports, module) {
 
+
     var EditorFactory = require('common/kindeditor-factory');
-	var Validator = require('bootstrap.validator');
+    var Validator = require('bootstrap.validator');
 
     exports.run = function() {
+        require('./common').run();
 
         var editor = EditorFactory.create('#post_content', 'simple', {extraFileUploadParams:{group:'course'}});
 

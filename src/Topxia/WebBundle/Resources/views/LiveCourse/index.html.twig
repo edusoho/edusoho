@@ -1,0 +1,73 @@
+{% extends 'TopxiaWebBundle:LiveCourse:layout.html.twig' %}
+
+{% block title %} {{ parent() }}{% endblock %}
+
+{% set script_controller = 'live-course/index' %}
+
+{% block live_main %}
+
+  {% if paginator.currentPage == 1 %}
+  	{% set blocks = data('Blocks',{'codes':['live_top_banner'] }) %}
+  	{% if blocks.live_top_banner %}
+      <div class="homepage-feature homepage-feature-slides mbl">
+        <div class="cycle-pager"></div>
+        {{ blocks.live_top_banner|raw }}
+      </div>
+    {% endif %}
+  {% endif  %}
+
+	<div class="es-box">
+        <div class="es-box-heading">
+        	<h2>近期直播</h2>
+       	</div>
+        <div class="es-box-body">
+          {% if recentCourses %}
+            {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', {courses:recentCourses, view: 'list'})) }}
+          {% else %}
+            <div class="empty">近期还没有直播</div>
+          {% endif %}
+
+          {{ web_macro.paginator(paginator) }}
+        </div>
+  	</div>
+{% endblock %}
+
+{% block live_side %}
+
+  <div class="es-box">
+    <div class="es-box-heading"> <h2>最新上线</h2> </div>
+    <div class="es-box-body">
+      <ul class="media-list media-list-rank">
+        {% for course in liveCourses %}
+        <li class="media">
+          <a href="{{ path('course_show', {id:course.id}) }}" class="pull-left">
+            <img src="{{ default_path('coursePicture',course.smallPicture, 'large') }}" class="media-object" width="96" height="54">
+          </a>
+          <div class="media-body">
+            <h5 class="media-heading"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h5>
+            {% set teacher = users[course.teacherIds|first]|default(null) %}
+            {% if teacher %}
+              <p>
+              <span class="glyphicon glyphicon-user text-muted"></span>
+                <a class="text-muted" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+              </p>
+            {% endif %}
+          </div>
+        </li>
+        {% else %}
+          <li class="empty">还没有发布的直播课程</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+  	{{ render(controller('TopxiaWebBundle:LiveCourse:ratingCoursesBlock')) }}
+
+{% endblock %}

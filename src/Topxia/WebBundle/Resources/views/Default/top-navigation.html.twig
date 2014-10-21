@@ -1,7 +1,17 @@
 <ul class="nav navbar-nav">
 	{% for nav in navigations %}
 	  {% if nav.isOpen %}
-		  <li {% if siteNav == nav.url %}class="active"{% endif %}><a href="{{ nav.url|navigation_url }}" {% if nav.isNewWin %}target="_blank"{% endif %}>{{ nav.name }}</a></li>
+    {% set subNavs = nav.children|default([]) %}
+		  <li class="{% if subNavs %}dropdown {% endif %}{% if siteNav and siteNav == nav.url %}active {% endif %}">
+        <a href="{% if nav.url %}{{ nav.url|navigation_url }}{% else %}javascript:;{% endif %}" class="{% if subNavs %}dropdown-toggle {% endif %}" {% if nav.isNewWin %}target="_blank"{% endif %} {% if subNavs %} data-toggle="dropdown"{% endif %}>{{ nav.name }} {% if subNavs %}<b class="caret"></b>{% endif %}</a>
+        {% if subNavs %}
+          <ul class="dropdown-menu">
+            {% for subNav in subNavs %}
+              <li><a href="{{ subNav.url|navigation_url }}"  {% if subNav.isNewWin %}target="_blank"{% endif %}>{{ subNav.name }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </li>
 		{% endif %}
 	{% endfor %}
 </ul>

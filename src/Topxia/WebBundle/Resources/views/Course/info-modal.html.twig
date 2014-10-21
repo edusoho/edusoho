@@ -24,7 +24,7 @@
     <dd>
       <ul class="list-inline">
         {% for tag in tags %}
-          <li>{{ tag.name }}</li>
+          <li><a href="{{ path('tag_show', {name:tag.name}) }}">{{ tag.name }}</a></li>
         {% else %}
           <li>暂无标签</li>
         {% endfor %}

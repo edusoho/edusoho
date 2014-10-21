@@ -30,21 +30,30 @@ class CourseFileManageController extends BaseController
             20
         );
 
-        $courseLessons = $this->getUploadFileService()->searchFiles(
+        $files = $this->getUploadFileService()->searchFiles(
             $conditions,
             'latestCreated',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseLessons, 'updatedUserId'));
+        foreach ($files as $key => $file) {
+            $files[$key]['metas2'] = json_decode($file['metas2']) ? : array();
+            $files[$key]['convertParams'] = json_decode($file['convertParams']) ? : array();
+        }
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
+
+        $storageSetting = $this->getSettingService()->get("storage");
 
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
             'type' => $type,
             'course' => $course,
-            'courseLessons' => $courseLessons,
+            'courseLessons' => $files,
             'users' => ArrayToolkit::index($users, 'id'),
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'now' => time(),
+            'storageSetting' => $storageSetting
         ));
     }
 
@@ -83,28 +92,14 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($file['convertStatus'] != 'error') {
-            return $this->createJsonResponse(array('status' => 'error', 'message' => '只有转换失败的文件，才能重新转换！'));
-        }
+        $convertHash = $this->getUploadFileService()->reconvertFile(
+            $file['id'],
+            $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+        );
 
-        if ($file['type'] != 'video') {
-            return $this->createJsonResponse(array('status' => 'error', 'message' => '只有视频文件，才能转换！'));
-        }
-
-        $factory = new CloudClientFactory();
-        $client = $factory->createClient();
-
-        $commands = array_keys($client->getVideoConvertCommands());
-        $convertKey = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
-        $result = $client->convertVideo($client->getBucket(), $file['hashId'], implode(';', $commands), $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $convertKey), true));
-
-        if (empty($result['persistentId'])) {
+        if (empty($convertHash)) {
             return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
         }
-
-        $convertHash = "{$result['persistentId']}:{$convertKey}";
-
-        $this->getUploadFileService()->setFileConverting($file['id'], $convertHash);
 
         return $this->createJsonResponse(array('status' => 'ok'));
     }
@@ -119,6 +114,23 @@ class CourseFileManageController extends BaseController
             'storageSetting' => $storageSetting,
             'targetType' => $targetType,
             'targetId'=>$course['id'],
+        ));
+    }
+
+    public function batchUploadCourseFilesAction(Request $request, $id, $targetType)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        $fileExts = "";
+        if("courselesson" == $targetType){
+            $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.ppt;*.pptx";
+        }
+        return $this->render('TopxiaWebBundle:CourseFileManage:batch-upload.html.twig', array(
+            'course' => $course,
+            'storageSetting' => $storageSetting,
+            'targetType' => $targetType,
+            'targetId'=>$course['id'],
+            'fileExts'=>$fileExts
         ));
     }
 
@@ -156,6 +168,7 @@ class CourseFileManageController extends BaseController
         $response->trustXSendfileTypeHeader();
 
         $file['filename'] = urlencode($file['filename']);
+        $file['filename'] = str_replace('+', '%20', $file['filename']);
         if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
             $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
         } else {

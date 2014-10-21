@@ -9,6 +9,11 @@ class LoginController extends BaseController
 
     public function indexAction(Request $request)
     {
+        $user = $this->getCurrentUser();
+        if ($user->isLogin()) {
+            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
+        }
+
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {
@@ -35,6 +40,12 @@ class LoginController extends BaseController
         }
 
         $url = explode('?', $targetPath);
+
+        if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
+            return $this->generateUrl('homepage');
+        }
+
+        
         if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
             $targetPath = $this->generateUrl('homepage', array(), true);
         }

@@ -22,10 +22,11 @@ class CourseOrderController extends OrderController
             throw $this->createAccessDeniedException();
         }
 
+        $remainingStudentNum = $this->getRemainStudentNum($course);
+
         $previewAs = $request->query->get('previewAs');
 
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
-
         $member = $this->previewAsMember($previewAs, $member, $course);
 
         $courseSetting = $this->getSettingService()->get('course', array());
@@ -34,21 +35,37 @@ class CourseOrderController extends OrderController
         $userInfo['approvalStatus'] = $user['approvalStatus'];
 
         $course = $this->getCourseService()->getCourse($id);
+       
+       $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
-            'course' => $course,
-            'payments' => $this->getEnabledPayments(),
-            'user' => $userInfo,
-            'avatarAlert' => AvatarAlert::alertJoinCourse($user),
-            'courseSetting' => $courseSetting,
-            'member' => $member
-        ));
+        for($i=0;$i<count($userFields);$i++){
+           if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
+           if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
+           if(strstr($userFields[$i]['fieldName'], "intField")) $userFields[$i]['type']="int";
+           if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
+           if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
+        }
+
+        if ($remainingStudentNum == 0 && $course['type'] == 'live') {
+            return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
+                'course' => $course
+            ));
+        } else {
+            return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
+                'course' => $course,
+                'payments' => $this->getEnabledPayments(),
+                'user' => $userInfo,
+                'avatarAlert' => AvatarAlert::alertJoinCourse($user),
+                'courseSetting' => $courseSetting,
+                'member' => $member,
+                'userFields'=>$userFields,
+            ));
+        }
     }
 
     public function payAction(Request $request)
     {
         $formData = $request->request->all();
-
         $user = $this->getCurrentUser();
         if (empty($user)) {
             return $this->createMessageResponse('error', '用户未登录，创建课程订单失败。');
@@ -59,65 +76,35 @@ class CourseOrderController extends OrderController
             'mobile',
             'qq',
             'company',
-            'job'
+            'weixin',
+            'weibo',
+            'idcard',
+            'gender',
+            'job',
+            'intField1','intField2','intField3','intField4','intField5',
+            'floatField1','floatField2','floatField3','floatField4','floatField5',
+            'dateField1','dateField2','dateField3','dateField4','dateField5',
+            'varcharField1','varcharField2','varcharField3','varcharField4','varcharField5','varcharField10','varcharField6','varcharField7','varcharField8','varcharField9',
+            'textField1','textField2','textField3','textField4','textField5', 'textField6','textField7','textField8','textField9','textField10',
         ));
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
-        if (!ArrayToolkit::requireds($formData, array('courseId', 'payment'))) {
-            return $this->createMessageResponse('error', '订单数据缺失，创建课程订单失败。');
-        }
 
-        $course = $this->getCourseService()->getCourse($formData['courseId']);
-        if (empty($course)) {
-            return $this->createMessageResponse('error', '课程不存在，创建课程订单失败。');
-        }
+        $order = $this->getCourseOrderService()->createOrder($formData);
 
-        $order = array();
-
-        $order['userId'] = $user->id;
-        $order['title'] = "购买课程《{$course['title']}》";
-        $order['targetType'] = 'course';
-        $order['targetId'] = $course['id'];
-        $order['payment'] = $formData['payment'];
-        $order['amount'] = $course['price'];
-        $order['snPrefix'] = 'C';
-
-        if (!empty($formData['coupon'])) {
-            $order['couponCode'] = $formData['coupon'];
-        }
-
-        if (!empty($formData['note'])) {
-            $order['data'] = array('note' => $formData['note']);
-        }
-
-        $order = $this->getOrderService()->createOrder($order);
-
-        if (intval($order['amount']*100) > 0) {
+        if ($order['status'] == 'paid') {
+            return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
+        } else {
             $payRequestParams = array(
                 'returnUrl' => $this->generateUrl('course_order_pay_return', array('name' => $order['payment']), true),
                 'notifyUrl' => $this->generateUrl('course_order_pay_notify', array('name' => $order['payment']), true),
-                'showUrl' => $this->generateUrl('course_show', array('id' => $course['id']), true),
+                'showUrl' => $this->generateUrl('course_show', array('id' => $order['targetId']), true),
             );
 
             return $this->forward('TopxiaWebBundle:Order:submitPayRequest', array(
                 'order' => $order,
                 'requestParams' => $payRequestParams,
             ));
-        } else {
-            list($success, $order) = $this->getOrderService()->payOrder(array(
-                'sn' => $order['sn'],
-                'status' => 'success', 
-                'amount' => $order['amount'], 
-                'paidTime' => time()
-            ));
-
-            $info = array(
-                'orderId' => $order['id'],
-                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
-            );
-            $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-
-            return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
         }
     }
 
@@ -129,18 +116,7 @@ class CourseOrderController extends OrderController
                 $controller->generateUrl('course_show', array('id' => $order['targetId']));
             }
 
-            if ($order['targetType'] != 'course') {
-                throw \RuntimeException('非课程订单，加入课程失败。');
-            }
-
-            $info = array(
-                'orderId' => $order['id'],
-                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
-            );
-
-            if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
-                $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-            }
+            $controller->getCourseOrderService()->doSuccessPayOrder($order['id']);
 
             return $controller->generateUrl('course_show', array('id' => $order['targetId']));
         });
@@ -153,18 +129,8 @@ class CourseOrderController extends OrderController
             if (!$success) {
                 return ;
             }
-            if ($order['targetType'] != 'course') {
-                throw \RuntimeException('非课程订单，加入课程失败。');
-            }
 
-            $info = array(
-                'orderId' => $order['id'],
-                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
-            );
-
-            if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
-                $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-            }
+            $controller->getCourseOrderService()->doSuccessPayOrder($order['id']);
 
             return ;
         });
@@ -184,32 +150,18 @@ class CourseOrderController extends OrderController
             throw $this->createNotFoundException();
         }
 
-        $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
-        $refundOverdue = (time() - $order['createdTime']) > ($maxRefundDays * 86400);
-
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
             $reason = empty($data['reason']) ? array() : $data['reason'];
             $amount = empty($data['applyRefund']) ? 0 : null;
 
-            $refund = $this->getOrderService()->applyRefundOrder($member['orderId'], $amount, $reason);
-            if ($refund['status'] == 'created') {
-                $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
-                $message = $this->setting('refund.applyNotification', '');
-                if ($message) {
-                    $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']));
-                    $variables = array(
-                        'course' => "<a href='{$courseUrl}'>{$course['title']}</a>"
-                    );
-                    $message = StringToolkit::template($message, $variables);
-                    $this->getNotificationService()->notify($refund['userId'], 'default', $message);
-                }
-            } elseif ($refund['status'] == 'success') {
-                $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
-            }
+            $refund = $this->getCourseOrderService()->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
 
             return $this->createJsonResponse($refund);
         }
+
+        $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
+        $refundOverdue = (time() - $order['createdTime']) > ($maxRefundDays * 86400);
 
         return $this->render('TopxiaWebBundle:CourseOrder:refund-modal.html.twig', array(
             'course' => $course,
@@ -282,6 +234,27 @@ class CourseOrderController extends OrderController
         return $member;
     }
 
+    private function getRemainStudentNum($course)
+    {
+        $remainingStudentNum = $course['maxStudentNum'];
+
+        if ($course['type'] == 'live') {
+            if ($course['price'] <= 0) {
+                $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'];
+            } else {
+                $createdOrdersCount = $this->getOrderService()->searchOrderCount(array(
+                    'targetType' => 'course',
+                    'targetId' => $course['id'],
+                    'status' => 'created',
+                    'createdTimeGreaterThan' => strtotime("-30 minutes")
+                ));
+                $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'] - $createdOrdersCount;
+            }
+        }
+
+        return $remainingStudentNum;
+    }
+
     public function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -289,7 +262,7 @@ class CourseOrderController extends OrderController
 
     public function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.OrderService');
+        return $this->getServiceKernel()->createService('Course.CourseOrderService');
     }
 
     protected function getSettingService()
@@ -323,5 +296,8 @@ class CourseOrderController extends OrderController
 
         return $enableds;
     }
-
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
 }

@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
-    var FileChooser = require('../widget/file/file-chooser');
+    var FileChooser = require('../widget/file/file-chooser2');
 
     exports.run = function() {
 
@@ -30,18 +30,19 @@ define(function(require, exports, module) {
 
         $form.on('submit', function(){
             if ($form.find('[name="fileId"]').val().length == 0) {
-                Notify.danger('请先上传文件！');
+                Notify.danger('请先上传文件或添加资料网络链接！');
                 return false;
             }
             $.post($form.attr('action'), $form.serialize(), function(html){
-                Notify.success('资料上传成功！');
+                Notify.success('资料添加成功！');
                 $("#material-list").append(html).show();
                 $form.find('.text-warning').hide();
                 $form.find('[name="fileId"]').val('');
+                $form.find('[name="link"]').val('');
                 $form.find('[name="description"]').val('');
                 materialChooser.open();
             }).fail(function(){
-                Notify.success('资料上传失败，请重试！');
+                Notify.success('资料添加失败，请重试！');
             });
             return false;
         });

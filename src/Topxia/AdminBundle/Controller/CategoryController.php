@@ -3,6 +3,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends BaseController
 {
@@ -31,9 +32,11 @@ class CategoryController extends BaseController
             'id' => 0,
             'name' => '',
             'code' => '',
+            'description'=>'',
             'groupId' => (int) $request->query->get('groupId'),
             'parentId' => (int) $request->query->get('parentId', 0),
             'weight' => 0,
+            'icon' => ''
         );
 
         return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
@@ -86,6 +89,16 @@ class CategoryController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function uploadFileAction (Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $originalFile = $this->get('request')->files->get('file');
+            $file = $this->getUploadFileService()->addFile('category', 0, array('isPublic' => 1), 'local', $originalFile);
+            $file['hashId'] = "/files/".$file['hashId'];
+            return new Response(json_encode($file));
+        }
+    }
+
     private function renderTbody($groupId)
     {
         $group = $this->getCategoryService()->getGroup($groupId);
@@ -100,4 +113,10 @@ class CategoryController extends BaseController
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
+
+    private function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
 }

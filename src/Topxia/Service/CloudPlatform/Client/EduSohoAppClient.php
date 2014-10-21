@@ -25,7 +25,6 @@ class EduSohoAppClient implements AppClient
         if (!empty($options['apiUrl'])) {
             $this->apiUrl = $options['apiUrl'];
         }
-
         $this->debug = empty($options['debug']) ? false : true;
         $this->tmpDir = empty($options['tmpDir']) ? sys_get_temp_dir() : $options['tmpDir'];
     }
@@ -36,10 +35,28 @@ class EduSohoAppClient implements AppClient
         return $this->callRemoteApi('GET', 'GetApps', $args);
     }
 
-    public function checkUpgradePackages($apps)
+    public function getMessages()
     {
-        $args = array('apps' => $apps);
+        $args = array();
+        return $this->callRemoteApi('GET', 'GetMessages', $args);
+    }
+
+    public function checkUpgradePackages($apps, $extInfos)
+    {
+        $args = array('apps' => $apps, 'extInfo' => $extInfos);
         return $this->callRemoteApi('POST', 'CheckUpgradePackages', $args);
+    }
+
+    public function checkAppCop()
+    {
+        $args = array('cop' => '1');
+        return $this->callRemoteApi('POST', 'CheckAppCop', $args);
+    }
+
+    public function checkOwnCopyrightUser($id)
+    {
+        $args = array('id' => $id);
+        return $this->callRemoteApi('POST', 'CheckOwnCopyrightUser', $args);
     }
 
     public function submitRunLog($log)
@@ -78,7 +95,6 @@ class EduSohoAppClient implements AppClient
     private function callRemoteApi($httpMethod, $action, array $args)
     {
         list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams($action, $args);
-
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
 
         return json_decode($result, true);
@@ -87,7 +103,6 @@ class EduSohoAppClient implements AppClient
     private function assembleCallRemoteApiUrlAndParams($action, array $args)
     {
         $url = "{$this->apiUrl}?action={$action}";
-
         $edusoho = array(
             'edition' => 'opensource', 
             'host' => $_SERVER['HTTP_HOST'],
@@ -106,7 +121,6 @@ class EduSohoAppClient implements AppClient
 
     private function download($url)
     {
-        // var_dump($url);
         $filename = md5($url) . '_' . time();
         $filepath = $this->tmpDir . DIRECTORY_SEPARATOR . $filename;
 
@@ -142,7 +156,6 @@ class EduSohoAppClient implements AppClient
                 $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
             }
         }
-
         curl_setopt($curl, CURLOPT_URL, $url );
 
         $response = curl_exec($curl);

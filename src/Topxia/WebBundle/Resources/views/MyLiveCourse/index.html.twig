@@ -1,0 +1,47 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}我的直播课表 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-learning-live' %}
+
+{% block main %}
+
+  <div class="panel panel-default panel-col">
+      <div class="panel-heading">我的直播课表</span></div>
+      <div class="panel-body">
+        {% if courses %}
+          <ul class="course-wide-list live-course-list">
+          {% for course in courses %}
+          {% set lesson = course['lesson'] %}
+            <li class="course-item clearfix">
+              <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
+                <img class="course-picture" src="{{ default_path('coursePicture',course.middlePicture, 'large') }}" alt="{{ course.title }}">
+              </a>
+              <div class="course-body">
+                <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
+                  {% if course.serializeMode=='serialize' %}
+                    <span class="label label-success ">更新中</span>
+                  {% elseif course.serializeMode=='finished' %}
+                    <span class="label label-warning ">已完结</span>
+                  {% endif %}
+                </h4>
+                <div class="course-about ellipsis">{{ course.subtitle }}</div>
+                <div class="live-course-lesson mtm">
+                  <span class="text-success fsl mrl">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+                  <span class="text-muted fsl mrl">第{{ lesson.number }}课时</span>
+                </div>
+              </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {{ web_macro.paginator(paginator) }}        
+      {% else %}
+          <div class="empty">没有等待开始的直播课</div>
+      {% endif %}
+      </div>
+  </div>
+
+{% endblock %}
+
+
+

@@ -446,6 +446,10 @@ class TestpaperController extends BaseController
     public function listReviewingTestAction (Request $request)
     {
         $user = $this->getCurrentUser();
+        
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
 
         $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($user['id']);
 

@@ -4,7 +4,12 @@ define(function(require, exports, module){
 	require("$");
 
 	exports.run = function(){
-		$("#startDateTime, #endDateTime").datetimepicker();	
+		$("#startDateTime, #endDateTime").datetimepicker({
+			language: 'zh-CN',
+            // autoclose: true,
+            format: 'yyyy-mm-dd',
+            minView: 'month'
+		});	
 
 		$("#log-table").on('click', '.show-data', function(){
 			$(this).hide().parent().find('.hide-data').show().end().find('.data').show();

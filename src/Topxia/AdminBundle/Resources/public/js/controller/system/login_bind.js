@@ -15,7 +15,6 @@ define(function(require, exports, module) {
 
                 $('[name=weibo_enabled]').change(function(f){
                     var weibo_radio = f.target.value;
-                    console.log(weibo_radio);
                     if (weibo_radio == '1'){
                         validator.addItem({
                             element: '[name="weibo_key"]',
@@ -35,7 +34,6 @@ define(function(require, exports, module) {
 
                 $('[name=qq_enabled]').change(function(g){
                     var qq_radio = g.target.value;
-                    console.log(qq_radio);
                     if (qq_radio == '1'){
                         validator.addItem({
                             element: '[name="qq_key"]',
@@ -55,7 +53,6 @@ define(function(require, exports, module) {
 
                 $('[name=renren_enabled]').change(function(h){
                     var renren_radio = h.target.value;
-                    console.log(renren_radio);
                     if (renren_radio == '1'){
                         validator.addItem({
                             element: '[name="renren_key"]',

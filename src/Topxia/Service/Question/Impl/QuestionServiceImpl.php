@@ -27,6 +27,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsByParentId($id);
     }
 
+    public function findQuestionsByParentIds($ids)
+    {
+        return $this->getQuestionDao()->findQuestionsByParentIds($ids);
+    }
 
     public function searchQuestions($conditions, $orderBy, $start, $limit)
     {
@@ -146,6 +150,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function findCategoriesByTarget($target, $start, $limit)
     {
         return $this->getCategoryDao()->findCategoriesByTarget($target, $start, $limit);
+    }
+
+    public function findCategoriesByIds($ids)
+    {
+        $categories = $this->getCategoryDao()->findCategoriesByIds($ids);
+        return ArrayToolkit::index($categories, 'id');
     }
 
     public function createCategory($fields)

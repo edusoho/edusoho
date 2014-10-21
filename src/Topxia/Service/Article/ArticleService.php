@@ -37,9 +37,9 @@ interface ArticleService
 
 	public function deleteArticlesByIds($ids);
 	
-    public function publishArticle($id);
-    
-    public function unpublishArticle($id);
+	public function publishArticle($id);
+	
+	public function unpublishArticle($id);
 
 	public function changeIndexPicture($filePath, $options);
 }

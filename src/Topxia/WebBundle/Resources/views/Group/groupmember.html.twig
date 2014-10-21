@@ -1,0 +1,110 @@
+{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+{% set script_controller = 'group/group_member' %}
+{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+
+{% set groupNav = 'member' %}
+
+{% block group_body %}
+  {{ web_macro.flash_messages() }}
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default panel-lg">
+        <div class="panel-heading"><h1>成员列表</h1></div>
+        <div class="panel-body">
+
+        <h4>组长</h4>
+        <div class="clearfix">
+          <div class="grouplist" >  
+            <a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}"  >
+            <img src="{{ default_path('avatar',owner_info.largeAvatar, 'large') }}" alt="{{owner_info.nickname}}" >
+            </a> 
+            <p class="mvs"><a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}">{{owner_info.nickname}}</a>
+            </p>
+          </div>
+        </div>
+
+
+        <h4>副组长</h4>
+        <div class="clearfix">
+        <form action="{{path('group_remove_admin',{id:groupinfo.id})}}" method="post" id="admin-form"> 
+          {% if groupAdmin %}
+          {% if is_groupmember==2 or is_granted('ROLE_ADMIN')  %}
+          <button id="remove-admin-btn" type="button" class="btn btn-default btn-sm pull-right">撤消副组长</button> 
+          {% endif %}
+          {% for member in groupAdmin %}
+              <div class="grouplist" style="width: 96px;" >
+              {{ web_macro.user_avatar(usersLikeAdmin[member.userId] , 'clearfix  media-object media-object-small') }}
+              <p class="mvs">{{ web_macro.user_link(usersLikeAdmin[member.userId] , 'link-muted') }}</p>
+
+              {% if is_groupmember==2 or is_granted('ROLE_ADMIN') %}
+
+                <input type="checkbox" value="{{member.userId}}" name="adminId[]"class="checkboxs"> 
+
+              {% endif %}
+              <br>
+              </div>
+          
+          {% endfor %}
+          {% else %}
+            <p><sapn class="text-muted">还没有副组长！</span></p>
+          {% endif %}
+        </form>
+        </div>
+
+        <div class="btn-group pull-right">
+          {% if groupmember_info %}
+
+            {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
+              <button  id="delete-btn" type="button" class="btn btn-default btn-sm ">踢出成员</button> 
+            {% endif %} 
+
+            {% if is_groupmember==2 or is_granted('ROLE_ADMIN') %}
+              <button  id="set-admin-btn" type="button" class="btn btn-default btn-sm ">设置副组长</button>
+              <input id="set-admin-url" type="hidden" value="{{path('group_set_admin',{id:groupinfo.id})}}"> 
+            {% endif %} 
+
+          {% endif %}
+        </div>
+        <form action="{{path('group_member_delete',{id:groupinfo.id})}}" method="post" id="member-form"> 
+
+             <h4>组员</h4>
+
+          {% if groupmember_info %}
+             
+                  {% for member in groupmember_info %}
+                    <div class="grouplist" style="width: 96px;" >
+                      {{ web_macro.user_avatar(members[member.userId] , 'clearfix  media-object media-object-small') }}
+                      <p class="mvs">{{ web_macro.user_link(members[member.userId] , 'link-muted') }}</p>
+
+                      {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3%}
+                        <input type="checkbox" value="{{member.userId}}" name="memberId[]"class="checkboxs"> 
+                      {% endif %}<br>
+                    </div>
+                      
+                  {% endfor %}
+                  
+                  {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"> 
+                  {% endif %}
+            
+          {% else %}
+                   
+                      <p><sapn class="text-muted">还没有小组成员！</span></p>
+
+        
+
+          {% endif %}
+        </form>
+
+        <div class="pull-right">{{ web_macro.paginator(paginator) }}</div>
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

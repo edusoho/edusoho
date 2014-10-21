@@ -5,9 +5,19 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\File;
+
+use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Util\PluginUtil;
+use Topxia\Service\Util\CloudClientFactory;
+
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
 
 class SettingController extends BaseController
 {
@@ -43,6 +53,74 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:site.html.twig', array(
             'site'=>$site
         ));
+    }
+
+    public function mobileAction(Request $request)
+    {
+        $mobile = $this->getSettingService()->get('mobile', array());
+
+        $default = array(
+            'enabled'=> 0,   // 网校状态
+            'about'=>'',     // 网校简介
+            'logo' => '',    // 网校Logo
+            'splash1' => '', // 启动图1
+            'splash2' => '', // 启动图2
+            'splash3' => '', // 启动图3
+            'splash4' => '', // 启动图4
+            'splash5' => '', // 启动图5
+        );
+
+        $mobile = array_merge($default, $mobile);
+
+        if ($request->getMethod() == 'POST') {
+            $mobile = $request->request->all();
+            $this->getSettingService()->set('mobile', $mobile);
+            $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
+            $this->setFlashMessage('success', '移动客户端设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
+            'mobile'=>$mobile
+        ));
+    }
+
+    public function mobilePictureUploadAction(Request $request, $type)
+    {
+        $file = $request->files->get($type);
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+
+        $filename = 'mobile_picture' . time() . '.' . $file->getClientOriginalExtension();
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file = $file->move($directory, $filename);
+
+        $mobile = $this->getSettingService()->get('mobile', array()); 
+        $mobile[$type] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $mobile[$type] = ltrim($mobile[$type], '/');
+
+        $this->getSettingService()->set('mobile', $mobile);
+
+        $this->getLogService()->info('system', 'update_settings', "更新网校{$type}图片", array($type => $mobile[$type]));
+
+        $response = array(
+            'path' => $mobile[$type],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($mobile[$type]),
+        );
+
+        return new Response(json_encode($response));
+    }
+
+    public function mobilePictureRemoveAction(Request $request, $type)
+    {
+        $setting = $this->getSettingService()->get("mobile");
+        $setting[$type] = '';
+
+        $this->getSettingService()->set('mobile', $setting);
+
+        $this->getLogService()->info('system', 'update_settings', "移除网校{$type}图片");
+
+        return $this->createJsonResponse(true);
     }
 
     public function logoUploadAction(Request $request)
@@ -140,23 +218,40 @@ class SettingController extends BaseController
             'welcome_methods' => array(),
             'welcome_title' => '',
             'welcome_body' => '',
+            'user_terms' => 'closed',
+            'user_terms_body' => '',
+            'registerFieldNameArray'=>array(),
+            'registerSort'=>array(0=>"email",1=>"nickname",2=>"password"),
         );
 
         $auth = array_merge($default, $auth);
-
         if ($request->getMethod() == 'POST') {
             $auth = $request->request->all();
+       
             if (empty($auth['welcome_methods'])) {
                 $auth['welcome_methods'] = array();
             }
+
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
             $this->setFlashMessage('success','注册设置已保存！');
         }
 
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
+        if($auth['registerFieldNameArray']){
+            foreach ($userFields as $key => $fieldValue) {
+                if(!in_array($fieldValue['fieldName'], $auth['registerFieldNameArray'])){
+                    $auth['registerFieldNameArray'][]=$fieldValue['fieldName'];
+                }
+            }
+         
+        }
+
         return $this->render('TopxiaAdminBundle:System:auth.html.twig', array(
-            'auth' => $auth
+            'auth' => $auth,
+            'userFields'=>$userFields,
         ));
     }
 
@@ -195,12 +290,15 @@ class SettingController extends BaseController
             'weibo_enabled'=>0,
             'weibo_key'=>'',
             'weibo_secret'=>'',
+            'weibo_set_fill_account'=>0,
             'qq_enabled'=>0,
             'qq_key'=>'',
             'qq_secret'=>'',
+            'qq_set_fill_account'=>0,
             'renren_enabled'=>0,
             'renren_key'=>'',
             'renren_secret'=>'',
+            'renren_set_fill_account'=>0,
             'verify_code' => '',
         );
 
@@ -227,6 +325,7 @@ class SettingController extends BaseController
             'alipay_enabled'=>0,
             'alipay_key'=>'',
             'alipay_secret' => '',
+            'alipay_account' => '',
             'alipay_type' => 'direct',
             'tenpay_enabled'=>0,
             'tenpay_key'=>'',
@@ -273,6 +372,70 @@ class SettingController extends BaseController
         ));
     }
 
+    public function defaultAction(Request $request)
+    {
+        $defaultSetting = $this->getSettingService()->get('default', array());
+        $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
+
+        $default = $this->getDefaultSet();
+        
+        $defaultSetting = array_merge($default, $defaultSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $defaultSetting = $request->request->all();
+            $default = $this->getSettingService()->get('default', array());
+            $defaultSetting = array_merge($default, $defaultSetting);
+
+            $this->getSettingService()->set('default', $defaultSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新系统默认设置", $defaultSetting);
+            $this->setFlashMessage('success', '系统默认设置已保存！');
+        }
+
+        $hasOwnCopyright = $this->getAppService()->checkOwnCopyrightUser($this->getCurrentUser()->id);
+        
+        return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
+            'defaultSetting' => $defaultSetting,
+            'hasOwnCopyright' => $hasOwnCopyright,
+        ));
+    }
+
+    public function shareAction (Request $request)
+    {   
+        $defaultSetting = $this->getSettingService()->get('default', array());
+        $default = $this->getDefaultSet();
+
+        $defaultSetting = array_merge($default, $defaultSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $defaultSetting = $request->request->all();
+            $default = $this->getSettingService()->get('default', array());
+            $defaultSetting = array_merge($default, $defaultSetting);
+
+            $this->getSettingService()->set('default', $defaultSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新分享设置", $defaultSetting);
+            $this->setFlashMessage('success', '分享设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:share.html.twig', array(
+            'defaultSetting' => $defaultSetting,
+        ));
+    }
+
+    private function getDefaultSet()
+    {
+        $default = array(
+            'defaultAvatar' => 0,
+            'defaultCoursePicture' => 0,
+            'defaultAvatarFileName' => 'avatar',
+            'defaultCoursePictureFileName' => 'coursePicture',
+            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+            'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+        );
+
+        return $default;
+    }
+
     public function ipBlacklistAction(Request $request)
     {
         $ips = $this->getSettingService()->get('blacklist_ip', array());
@@ -297,61 +460,6 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:ip-blacklist.html.twig', array(
             'ips' => $ips
         ));
-    }
-
-    public function storageAction(Request $request)
-    {
-        $storageSetting = $this->getSettingService()->get('storage', array());
-
-        $default = array(
-            'upload_mode' => 'local',
-            'cloud_access_key' => '',
-            'cloud_secret_key' => '',
-            'cloud_bucket' => '',
-            'cloud_api_server' => '',
-            'video_watermark' => 0,
-            'video_watermark_image' => '',
-            'video_watermark_position' => 'topright',
-            'video_fingerprint' => 0,
-        );
-
-        $storageSetting = array_merge($default, $storageSetting);
-        if ($request->getMethod() == 'POST') {
-            $storageSetting = $request->request->all();
-            $this->getSettingService()->set('storage', $storageSetting);
-            $this->getLogService()->info('system', 'update_settings', "更新云平台设置", $storageSetting);
-            $this->setFlashMessage('success', '云平台设置已保存！');
-        }
-
-        return $this->render('TopxiaAdminBundle:System:storage.html.twig', array(
-            'storageSetting'=>$storageSetting
-        ));
-    }
-
-    public function cloudVideoWatermarkUploadAction(Request $request)
-    {
-        $file = $request->files->get('watermark');
-        if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
-        }
-
-        $filename = 'watermark_' . time() . '.' . $file->getClientOriginalExtension();
-        
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
-        $file = $file->move($directory, $filename);
-        $path = "system/{$filename}";
-
-        $response = array(
-            'path' => $path,
-            'url' =>  $this->get('topxia.twig.web_extension')->getFileUrl($path),
-        );
-
-        return new Response(json_encode($response));
-    }
-
-    public function cloudVideoWatermarkRemoveAction(Request $request)
-    {
-        return $this->createJsonResponse(true);
     }
 
     public function customerServiceAction(Request $request)
@@ -387,6 +495,7 @@ class SettingController extends BaseController
             'mode' => 'default',
             'nickname_enabled' => 0,
             'avatar_alert' => 'none',
+            'email_filter' => ''
         );
         
         $setting = array_merge($default, $setting);
@@ -397,9 +506,11 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
+            $data['email_filter'] = trim(str_replace(array("\n\r", "\r\n", "\r"), "\n", $data['email_filter']));
             $setting = array('mode' => $data['mode'],
                             'nickname_enabled' => $data['nickname_enabled'],
                             'avatar_alert' => $data['avatar_alert'],
+                            'email_filter' => $data['email_filter']
             );
             $this->getSettingService()->set('user_partner', $setting);
 
@@ -447,26 +558,58 @@ class SettingController extends BaseController
     public function courseSettingAction(Request $request)
     {
         $courseSetting = $this->getSettingService()->get('course', array());
+        
+        $client = LiveClientFactory::createClient();
+        $capacity = $client->getCapacity();
 
         $default = array(
             'welcome_message_enabled' => '0',
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
+            'teacher_manage_student' => '0',
+            'teacher_export_student'=>'0',
             'student_download_media' => '0',
+            'free_course_nologin_view' => '1',
+            'relatedCourses' => '0',
+            'allowAnonymousPreview' => '1',
+            'live_course_enabled' => '0',
+            'userinfoFields'=>array(),
+            "userinfoFieldNameArray"=>array(),
         );
 
+        $this->getSettingService()->set('course', $courseSetting);
         $courseSetting = array_merge($default, $courseSetting);
 
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
+
+            if(!isset($courseSetting['userinfoFields']))$courseSetting['userinfoFields']=array();
+            if(!isset($courseSetting['userinfoFieldNameArray']))$courseSetting['userinfoFieldNameArray']=array();
+
+            $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success','课程设置已保存！');
         }
 
+        $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+        
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
+        if($courseSetting['userinfoFieldNameArray']){
+            foreach ($userFields as $key => $fieldValue) {
+                if(!in_array($fieldValue['fieldName'], $courseSetting['userinfoFieldNameArray'])){
+                    $courseSetting['userinfoFieldNameArray'][]=$fieldValue['fieldName'];
+                }
+            }
+         
+        }
+
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
-            'courseSetting' => $courseSetting
+            'courseSetting' => $courseSetting,
+            'userFields'=>$userFields,
         ));
     }
 
@@ -519,6 +662,7 @@ class SettingController extends BaseController
         $default = array(
             'debug' => '0',
             'app_api_url' => '',
+            'hls_encrypted' => '1'
         );
 
         $developerSetting = array_merge($default, $developerSetting);
@@ -535,14 +679,230 @@ class SettingController extends BaseController
         ));
     }
 
+    public function modifyVersionAction(Request $request)
+    {
+        $fromVersion = $request->query->get('fromVersion');
+        $version = $request->query->get('version');
+        $code = $request->query->get('code');
+
+        if (empty($fromVersion) || empty($version) || empty($code)) {
+            exit('注意参数为:<br><br>code<br>fromVersion<br>version<br><br>全填，不能为空！');
+        }
+
+        $appCount = $this->getAppservice()->findAppCount();
+        $apps = $this->getAppservice()->findApps(0,$appCount);
+        $appsCodes = ArrayToolkit::column($apps,'code');
+
+        if (!in_array($code, $appsCodes)) {
+           exit('code 填写有问题！请检查!');
+        }
+
+        $fromVersionArray['fromVersion'] = $fromVersion;
+        $versionArray['version'] = $version;
+        $this->getAppservice()->updateAppVersion($code,$fromVersionArray,$versionArray);
+
+        return $this->redirect($this->generateUrl('admin_app_upgrades'));
+    }
+
+    public function userFieldsAction()
+    {   
+
+       $textCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'textField'));
+       $intCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'intField'));
+       $floatCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'floatField'));
+       $dateCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'dateField'));
+       $varcharCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'varcharField'));
+
+       $fields=$this->getUserFieldService()->getAllFieldsOrderBySeq();
+       for($i=0;$i<count($fields);$i++){
+           if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['fieldName']="多行文本";
+           if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['fieldName']="文本";
+           if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['fieldName']="整数";
+           if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['fieldName']="小数";
+           if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['fieldName']="日期";
+       }
+
+       return $this->render('TopxiaAdminBundle:System:user-fields.html.twig',array(
+            'textCount'=>$textCount,
+            'intCount'=>$intCount,
+            'floatCount'=>$floatCount,
+            'dateCount'=>$dateCount,
+            'varcharCount'=>$varcharCount,
+            'fields'=>$fields,
+        )); 
+    }
+
+    public function editUserFieldsAction(Request $request, $id)
+    {
+        $field = $this->getUserFieldService()->getField($id);
+
+        if (empty($field)) {
+            throw $this->createNotFoundException();
+        }
+
+        if(strstr($field['fieldName'], "textField")) $field['fieldName']="多行文本";
+        if(strstr($field['fieldName'], "varcharField")) $field['fieldName']="文本";
+        if(strstr($field['fieldName'], "intField")) $field['fieldName']="整数";
+        if(strstr($field['fieldName'], "floatField")) $field['fieldName']="小数";
+        if(strstr($field['fieldName'], "dateField")) $field['fieldName']="日期";
+
+        if ($request->getMethod() == 'POST') {
+            $fields=$request->request->all();
+
+            if(isset($fields['enabled'])){
+                $fields['enabled']=1;
+            }else{
+                $fields['enabled']=0;
+            }
+            
+            $field = $this->getUserFieldService()->updateField($id, $fields);
+            
+            return $this->redirect($this->generateUrl('admin_setting_user_fields'));
+        }
+
+        return $this->render('TopxiaAdminBundle:System:user-fields.modal.edit.html.twig', array(
+            'field' => $field,
+        ));
+    }
+
+    public function deleteUserFieldsAction(Request $request, $id)
+    {
+        $field = $this->getUserFieldService()->getField($id);
+
+        if (empty($field)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($request->getMethod() == 'POST') {
+
+            $auth = $this->getSettingService()->get('auth', array());
+
+            $courseSetting = $this->getSettingService()->get('course', array());
+
+            if(isset($auth['registerFieldNameArray'])){
+                foreach ($auth['registerFieldNameArray'] as $key => $value) {
+                if($value==$field['fieldName']) unset( $auth['registerFieldNameArray'][$key]);
+                }
+            }
+            if(isset($courseSetting['userinfoFieldNameArray'])){
+                foreach ($courseSetting['userinfoFieldNameArray'] as $key => $value) {
+                if($value==$field['fieldName']) unset( $courseSetting['userinfoFieldNameArray'][$key]);
+                }
+            }
+            $this->getSettingService()->set('auth', $auth);
+
+            $this->getSettingService()->set('course', $courseSetting);
+
+            $this->getUserFieldService()->dropField($id);
+
+            return $this->redirect($this->generateUrl('admin_setting_user_fields'));
+        }
+
+        return $this->render('TopxiaAdminBundle:System:user-fields.modal.delete.html.twig', array(
+            'field' => $field,
+        ));
+    }
+
+    public function addUserFieldsAction(Request $request)
+    {
+        $field=$request->request->all();
+
+        $field=$this->getUserFieldService()->addUserField($field);
+
+        if($field==false){
+           $this->setFlashMessage('danger', '已经没有可以添加的字段了!'); 
+        }
+
+        return $this->redirect($this->generateUrl('admin_setting_user_fields')); 
+    }
+
+    public function consultSettingAction(Request $request)
+    { 
+        $consult = $this->getSettingService()->get('consult', array());
+        $default = array(
+            'enabled' => 0,
+            'worktime' => '9:00 - 17:00',
+            'qq' => array(
+                array('name' => '','number' => ''),
+                ),
+            'qqgroup' => array(
+                array('name' => '','number' => ''),
+                ),
+            'phone' => array(
+                array('name' => '','number' => ''),
+                ),
+            'webchatURI' => '',
+            'email' => '',
+            'color' => 'default',
+            );
+
+        $consult = array_merge($default, $consult);
+        if ($request->getMethod() == 'POST') {
+            $consult = $request->request->all();
+            ksort($consult['qq']);
+            ksort($consult['qqgroup']);
+            ksort($consult['phone']);
+            $this->getSettingService()->set('consult', $consult);
+            $this->getLogService()->info('system', 'update_settings', "更新QQ客服设置", $consult);
+            $this->setFlashMessage('success', 'QQ客服设置已保存！');
+        }
+        return $this->render('TopxiaAdminBundle:System:consult-setting.html.twig', array(
+            'consult' => $consult,
+        ));
+    }
+
+    public function consultUploadAction(Request $request)
+    {
+        $file = $request->files->get('consult');
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+
+        $filename = 'webchat.' . $file->getClientOriginalExtension();
+        
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file = $file->move($directory, $filename);
+
+        $consult = $this->getSettingService()->get('consult', array());
+
+        $consult['webchatURI'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $consult['webchatURI'] = ltrim($consult['webchatURI'], '/');
+
+        $this->getSettingService()->set('consult', $consult);
+
+        $this->getLogService()->info('system', 'update_settings', "更新微信二维码", array('webchatURI' => $consult['webchatURI']));
+
+        $response = array(
+            'path' => $consult['webchatURI'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($consult['webchatURI']),
+        );
+
+        return new Response(json_encode($response));
+
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+    
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
     }
 
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }
-
 }

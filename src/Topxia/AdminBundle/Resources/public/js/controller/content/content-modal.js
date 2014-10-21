@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     Validator.addRule(
         'noNumberFirst',
         /^[a-zA-Z]+[a-zA-Z0-9]+?$/,
-        'URL路径不能以数字开头'
+        'URL路径只能包含字母和数字,请以字母开头!长度大于2位'
     );
 
     var Notify = require('common/bootstrap-notify');
@@ -70,7 +70,8 @@ define(function(require, exports, module) {
                     alert('正在上传附图，请等待附图上传成功后，再保存！');
                     return ;
                 }
-
+                
+                $('#content-save-btn').button('loading').addClass('disabled');
                 $form.ajaxSubmit({
                     clearForm: true,
                     success: function(data){

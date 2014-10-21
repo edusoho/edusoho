@@ -30,7 +30,7 @@
     </tbody>
 </table>
 
-{% if paginator.lastPage > 1 %} {{ pg.paginator(paginator) }} {% endif %}
+{{ web_macro.paginator(paginator) }}
 
 
 {% endblock %}

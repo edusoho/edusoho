@@ -6,6 +6,8 @@ use Topxia\Component\Payment\Response;
 class AlipayResponse extends Response
 {
 
+    protected $url = 'https://mapi.alipay.com/gateway.do';
+    
     public function getPayData()
     {
         $error = $this->hasError();
@@ -14,6 +16,20 @@ class AlipayResponse extends Response
         }
 
         $params = $this->params;
+
+        if ($params['trade_status'] == 'WAIT_SELLER_SEND_GOODS') {
+
+            $trade_no = $params['trade_no'];
+            $result = $this->confirmSellerSendGoods($trade_no);
+            
+            if ($result == "WAIT_BUYER_CONFIRM_GOODS") {
+                return array('sn' => $params['trade_no'], 'status' => 'waitBuyerConfirmGoods');
+            }
+        }
+
+        if($params['trade_status'] == "WAIT_BUYER_CONFIRM_GOODS") {
+           return array('sn' => $params['trade_no'], 'status' => 'waitBuyerConfirmGoods');
+        }
 
         $data = array();
         $data['payment'] = 'alipay';
@@ -55,6 +71,52 @@ class AlipayResponse extends Response
         }
 
         return false;
+    }
+
+    private function confirmSellerSendGoods($trade_no)
+    {
+        $params = array();
+        $params['service'] = "send_goods_confirm_by_platform";
+        $params['partner'] =  $this->options['key'];
+        $params['_input_charset'] = "utf-8";
+        $params['sign_type'] = "MD5";
+        $params['trade_no'] = $trade_no;
+        $params['transport_type'] = "DIRECT";
+        $params['sign'] = $this->signParams($params);
+
+        $html_text = $this->postRequest($this->url,$params);
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $doc->loadXML($html_text);
+
+        if( ! empty($doc->getElementsByTagName( "alipay" )->item(0)->nodeValue) ) {
+            $trade_status = $doc->getElementsByTagName( "trade_status" )->item(0)->nodeValue;
+            return $trade_status;
+        } else {
+            return null;
+        }
+    }
+
+    private function postRequest($url, $params)
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Topxia Payment Client 1.0');
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($curl, CURLOPT_URL, $url );
+
+        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        return $response;
     }
 
     private function signParams($params) {

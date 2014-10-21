@@ -30,7 +30,7 @@ class LoginSuccessHandler
 	public function __construct(SecurityContext $securityContext, Doctrine $doctrine)
 	{
 		$this->securityContext = $securityContext;
-		$this->em              = $doctrine->getEntityManager();
+		$this->em              = $doctrine->getManager();
 	}
 	
 	/**

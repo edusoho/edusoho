@@ -1,0 +1,26 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}直播频道 - {{ parent() }}{% endblock %}
+
+{% block content %}
+
+	<div class="es-row-wrap container-gap">
+
+	    <div class="row">
+	        <div class="col-md-12">
+	          <div class="page-header"><h1>直播频道</h1></div>
+	        </div>
+	    </div>
+
+	    <div class="row article-row">
+	      <div class="col-md-8">
+	        {% block live_main %}{% endblock %}
+	      </div>
+	      <div class="col-md-4">
+	        {% block live_side %}{% endblock %}
+	      </div>
+	    </div>
+
+	</div>
+
+{% endblock %}

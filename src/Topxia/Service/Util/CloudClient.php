@@ -13,6 +13,8 @@ interface CloudClient
     public function getVideoConvertCommands();
 
     public function getAudioConvertCommands();
+    
+    public function getPPTConvertCommands();
 
     public function getVideoInfo($bucket, $key);
 
@@ -27,5 +29,7 @@ interface CloudClient
     public function convertVideo($bucket, $key, $commands, $notifyUrl);
 
     public function deleteFiles(array $keys, array $prefixs = array());
+
+    public function getMediaInfo($key, $mediaType);
 
 }

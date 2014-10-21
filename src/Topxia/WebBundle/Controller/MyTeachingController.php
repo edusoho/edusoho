@@ -11,6 +11,11 @@ class MyTeachingController extends BaseController
     public function coursesAction(Request $request)
     {
         $user = $this->getCurrentUser();
+
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserTeachCourseCount($user['id'], false),
@@ -24,16 +29,23 @@ class MyTeachingController extends BaseController
             false
         );
 
+        $courseSetting = $this->getSettingService()->get('course', array());
+
         return $this->render('TopxiaWebBundle:MyTeaching:teaching.html.twig', array(
             'courses'=>$courses,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'live_course_enabled' => empty($courseSetting['live_course_enabled']) ? 0 : $courseSetting['live_course_enabled']
         ));
     }
 
 	public function threadsAction(Request $request, $type)
 	{
-
 		$user = $this->getCurrentUser();
+
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
 		$myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount($user['id'], true);
 
         if (empty($myTeachingCourseCount)) {
@@ -89,6 +101,11 @@ class MyTeachingController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

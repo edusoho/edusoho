@@ -12,7 +12,7 @@ class HTMLPurifierFactory
         $this->config = $config;
     }
 
-    public function create ()
+    public function create ($trusted = false)
     {
         $this->warmUp($this->config['cacheDir']);
         
@@ -20,8 +20,13 @@ class HTMLPurifierFactory
         
         $config->set('Cache.SerializerPath', $this->config['cacheDir']);
         $config->set('CSS.AllowTricky', true);
+        if ($trusted) {
+            $config->set('HTML.SafeIframe', true);
+            $config->set('URI.SafeIframeRegexp', '%^(https?:)?//(.*?)%'); 
+        }
         $def = $config->getHTMLDefinition(true);
         $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+
         
         return new \HTMLPurifier($config);
     }
