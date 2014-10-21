@@ -75,7 +75,7 @@ interface ThreadService
 
 	/**
 	 * 回复话题
-	 */
+	 **/
 	public function getPost($courseId, $id);
 
 	public function createPost($post);
