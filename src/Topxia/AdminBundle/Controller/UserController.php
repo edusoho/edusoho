@@ -130,6 +130,8 @@ class UserController extends BaseController
             $roles[] = 'ROLE_USER';
             if($formData['type']=='teacher'){
                 array_push($roles, 'ROLE_TEACHER');
+            }else if($formData['type']=='admin'){
+                $roles=array_merge($roles, array('ROLE_TEACHER','ROLE_SUPER_ADMIN'));
             }
             $this->getUserService()->changeUserRoles($user['id'], $roles);
             $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['nickname']} ({$user['id']})");

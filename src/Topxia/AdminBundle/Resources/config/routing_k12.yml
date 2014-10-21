@@ -95,6 +95,18 @@ admin_student:
     pattern:  /student
     defaults: { _controller: TopxiaAdminBundle:Student:index }
 
+admin_admin:
+    pattern:  /admin
+    defaults: { _controller: TopxiaAdminBundle:Admin:index }
+
+admin_admin_addAdminRole:
+    pattern:  /admin/{id}/addAdminRole
+    defaults: { _controller: TopxiaAdminBundle:Admin:addAdminRole }
+
+admin_admin_cancleAdminRole:
+    pattern:  /admin/{id}/cancleAdminRole
+    defaults: { _controller: TopxiaAdminBundle:Admin:cancleAdminRole }
+
 admin_parent:
     pattern:  /parent
     defaults: { _controller: TopxiaAdminBundle:Parent:index }

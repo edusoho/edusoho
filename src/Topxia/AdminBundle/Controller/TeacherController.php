@@ -38,19 +38,4 @@ class TeacherController extends BaseController {
             'paginator' => $paginator
         ));
     }
-
-
-    // public function promoteAction(Request $request, $id)
-    // {
-    //     $this->getUserService()->promoteUser($id);
-    //     return $this->createJsonResponse(true);
-    // }
-
-    // public function promoteCancelAction(Request $request, $id)
-    // {
-    //     $this->getUserService()->cancelPromoteUser($id);
-    //     return $this->createJsonResponse(true);
-    // }
-
-
 }
