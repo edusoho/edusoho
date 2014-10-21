@@ -25,6 +25,11 @@ my_teaching_threads:
 my_teaching_task:
     pattern: /my/teaching/myTasks
     defaults: { _controller: TopxiaWebBundle:MyTeaching:myTasks }
+
+my_teaching_finished_lesson_sdutdents:
+    pattern: /my/teaching/lesson/finished/students
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:getFinshedLessonStudents }
+
 user_sign:
     pattern:  /sign/{classId}/{userId}
     defaults: { _controller: TopxiaWebBundle:Sign:sign }

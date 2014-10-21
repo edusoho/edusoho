@@ -1,40 +1,16 @@
-{# <hr>
-<div>
-  <div class="row">
-    <div class="col-md-1">
-      <i class="glyphicon glyphicon-chevron-left"></i>
-    </div>
-    <div class="row col-md-10">
-      <div class="col-md-4">
-        <div class="thumbnail">
-          <img data-src="holder.js/300x300" alt="...">
-          <div class="caption">
-            <h3>Thumbnail label</h3>
-            <p>...</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-md-1">
-      <i class="glyphicon glyphicon-chevron-right"></i>
-    </div>
-  </div>
-</div>
-<hr> #}
 <hr>
 <div id="carousel-lesson" class="carousel slide row" data-ride="carousel" data-interval="false">
   <div class="carousel-inner col-md-10" role="listbox">
     {% set index = 0 %}
     {% set keys = lessons|keys %}
     {% for i in 0..((lessons|length)//4) if lessons|length > 0%}
-      <div class="item row {% if i == 0 %} {% set firstLessonId = lessons[keys[0]] %}active {% endif %}">
+      <div class="item row {% if i == 0 %} active {% endif %}">
         {% for j in 1..4 if keys[index] is defined %}
         {% set lesson = lessons[keys[index]] %}
         {% set course = courses[lesson.courseId] %}
         {% set schedule = schedules[lesson.id] %}
         {% set class = classes[schedule.classId]%}
-          <div class="col-md-3">
+          <div class="col-md-3" data-id="{{ lesson.id }}">
             <div class="thumbnail">
               <img src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="...">
               <div class="caption">
@@ -47,7 +23,7 @@
         {% endfor %}
       </div>
     {% else %}
-      <div class="item active">
+      <div class="item active tac">
         <span class="empty">今日无课时!</span>
     </div>
     {% endfor %}

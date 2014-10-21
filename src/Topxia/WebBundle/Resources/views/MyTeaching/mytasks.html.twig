@@ -16,16 +16,16 @@
 
   <div class="panel-body">
     <div class="select-area  container-fluid">
-      {% include 'TopxiaWebBundle:MyTeaching:mytasks-select.html.twig'%}
+      {% include 'TopxiaWebBundle:MyTeaching:mytasks-select.html.twig'  %}
     </div>
 
     <div class="carousel-area container-fluid">
-      {% render(controller('TopxiaWebBundle:MyTeaching:getLessons', {classId:0, date:null })) %}
+      {% render(controller('TopxiaWebBundle:MyTeaching:getLessons', { classId:classId, date:date })) %}
       
     </div>
     
     <div class="taks-body">
-      {% include 'TopxiaWebBundle:MyTeaching:mytasks-body.html.twig'%}
+      {% include 'TopxiaWebBundle:MyTeaching:mytasks-body.html.twig' with { lessonId:firstLessonId } %}
     </div>
   </div>
 </div>

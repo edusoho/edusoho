@@ -753,7 +753,7 @@ ul.schedule-lesson-list a .finished-icon {
 /*my teaching tasks*/
 #carousel-lesson .carousel-control {
     background-image:none;
-    visibility: hidden;
+    display: none;
 }
 .carousel-area .name {
     padding: 0;
@@ -768,7 +768,7 @@ ul.schedule-lesson-list a .finished-icon {
     margin: 0;
 }
 
-.taks-body .task-table {
+.taks-body .task-table-div {
     padding-top: 10px;
 }
 
@@ -782,4 +782,8 @@ ul.schedule-lesson-list a .finished-icon {
 
 .carousel-area {
     cursor: pointer;
+}
+
+.lesson-selected {
+    border: 1px solid red;
 }

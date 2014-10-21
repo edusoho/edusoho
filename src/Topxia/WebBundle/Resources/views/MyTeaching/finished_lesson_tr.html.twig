@@ -1,0 +1,14 @@
+{% for learn in learns %}
+{% set student = students[learn.userId] %}
+<tr>
+  <td>{{ start + loop.index }}</td>
+  <td>{{ student.truename }}</td>
+  <td>{% if questions[student.id] is defined %}{{ question.title }}{% endif %}</td>
+  <td>{{ learn.finishedTime |date('Y-m-d H:i:s') }}</td>
+</tr>
+
+{% else %}
+<tr>
+  <td class="empty">还没有学生完成课时</td>
+</tr>
+{% endfor %}

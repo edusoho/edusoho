@@ -177,6 +177,11 @@ class MyTeachingController extends BaseController
         if(!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
+
+        $classId = $request->query->get('classId');
+        $classId = empty($classId) ? 0 : $classId;
+        $date = $request->query->get('date');
+        $date = empty($date) ? date('Y-m-d') : $date;
         $teachCourses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
         $courseCount = count($teachCourses);
         $courseList = ArrayToolkit::group($teachCourses,'classId');
@@ -185,6 +190,8 @@ class MyTeachingController extends BaseController
 
         return $this->render('TopxiaWebBundle:MyTeaching:mytasks.html.twig', array(
             'teachClasses' => $teachClasses,
+            'classId' => $classId,
+            'date' => $date,
             ));
     }
 
@@ -206,17 +213,69 @@ class MyTeachingController extends BaseController
             ));
     }
 
-    public function getLessonLearns(Request $request, $classId, $date, $lessonId, $start, $limit, $status)
+    public function getFinshedLessonStudentsAction(Request $request)
     {
         $user = $this->getCurrentUser();
         if(!$user->isTeacher()) {
             return $this->createNotFoundException('您不是老师，不能查看此页面！');
         }
-        $date = empty($date) ? date('Ymd') : $date;
+        $lessonId = $request->query->get('lessonId');
+        $start = $request->query->get('start');
+        $limit = $request->query->get('limit');
+        $type = $request->query->get('type');
+        $lesson = $this->getCourseService()->getLesson($lessonId);
+        $course = $this->getCourseService()->getCourse($lesson['courseId']);
+        $classId = $course['classId'];
+        $studentMembers = $this->getClassesService()->findClassStudentMembers($classId);
+        $studentMembers = ArrayToolkit::index($studentMembers?:array(), 'userId');
+        $studentIds = array_keys($studentMembers);    
+        $students = $this->getUserService()->findUsersByIds($studentIds);
+        $students = ArrayToolkit::index($students?:array(), 'id');
+
         $conditions = array(
+            'lessonId' => $lessonId,
+            'status' => 'finished',
+            'userIds' => $studentIds
             );
+        $totalCount = $this->getCourseService()->searchLearnCount($conditions);
         $orderby = array('finishedTime', 'ASC');
-        $learns = $this->getCourseService()->searchLearns($conditions, $orderby, $start, $limit);
+        
+        if($type == 'finished') {
+            $learns = $this->getCourseService()->searchLearns($conditions, $orderby, $start, $limit);
+            $conditions = array(
+                'lessonId' => $lessonId,
+                'type' => 'question',
+                'userIds' => $studentIds
+                );
+            $courseThread = $this->getThreadService()->searchThreads($conditions, 'createdTimeASC', 0, 10000);
+            $questions = ArrayToolkit::index($courseThread, 'userId');
+            $more = $totalCount>$start+$limit ? true:false;
+            return $this->render('TopxiaWebBundle:MyTeaching:finished_lesson_tr.html.twig', array(
+                'students' => $students,
+                'learns' => $learns,
+                'questions' => $questions,
+                'start' => $start,
+                'more' => $more,
+                ));
+        } else {
+            $learns = $this->getCourseService()->searchLearns($conditions, $orderby, 0, $totalCount);
+            $finishedIds = array_keys($learns, 'userId');
+            $notFinishedIds = array_diff($studentIds, $finishedIds);
+            $limitIds = array_slice($notFinishedIds, $start, $limit, true);
+            $result = array();
+            foreach ($limitIds as $value) {
+                $result[] = $students[$value]; 
+            }
+            $more = (count($studentIds) - count($finishedIds) > $start+$limit) ? true:false;
+            return $this->render('TopxiaWebBundle:MyTeaching:not_finished_lesson_tr.html.twig', array(
+                'students' => $result,
+                'start' => $start,
+                'total' => $totalCount,
+                'more' => $more,
+                )); 
+        }
+        
+
     }
 
 	protected function getThreadService()
