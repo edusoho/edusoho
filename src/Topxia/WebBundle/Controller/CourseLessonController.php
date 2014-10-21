@@ -188,6 +188,7 @@ class CourseLessonController extends BaseController
                             $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
                             $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                             $headLeaderInfo = $this->getHeadLeaderInfo();
+                            $json['headLength'] = $headLeaderInfo['headLength'];
                             $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, $headLeaderInfo['headLeaders'], $headLeaderInfo['headLeaderHlsKeyUrl'], 3600);
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
@@ -408,12 +409,14 @@ class CourseLessonController extends BaseController
 
             return array(
                 'headLeaders' => $headLeaders,
-                'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl
+                'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl,
+                'headLength' => $headLeader['length']
             );
         } else {
             return array(
                 'headLeaders' => '',
-                'headLeaderHlsKeyUrl' => ''
+                'headLeaderHlsKeyUrl' => '',
+                'headLength' => 0
             );
         }
     }
