@@ -7,7 +7,16 @@
 
 <form id="user-roles-form" class="form-horizontal" method="post" action="{{ url('admin_user_roles', {id:user.id}) }}" data-currentuser="{{ app.user.id }}" data-edituser="{{ user.id }}">
   <div class="checkboxs">
+  	{% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
     {{ checkboxs('roles', dict('userRole'), user.roles) }}
+    {% else %}
+    <label>
+    	<input type="checkbox" name="roles[]" value="ROLE_USER" {% if 'ROLE_USER' in user.roles %}checked="checked"{% endif %}>学员
+    </label>
+    <label>
+    	<input type="checkbox" name="roles[]" value="ROLE_TEACHER" {% if 'ROLE_TEACHER' in user.roles %}checked="checked"{% endif %}>教师
+    </label>
+    {% endif %}
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>

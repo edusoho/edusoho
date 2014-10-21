@@ -141,7 +141,8 @@ class UserController extends BaseController
 
     public function rolesAction(Request $request, $id)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
+            and false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException();
         }
 
