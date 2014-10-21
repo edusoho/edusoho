@@ -171,13 +171,62 @@ class MyTeachingController extends BaseController
     	));
 	}
 
-    public function myTasksAction()
-    {
-        return $this->render('TopxiaWebBundle:MyTeaching:mytasks.html.twig');
+    public function myTasksAction(Request $request)
+    {   
+        $user = $this->getCurrentUser();
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+        $teachCourses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
+        $courseCount = count($teachCourses);
+        $courseList = ArrayToolkit::group($teachCourses,'classId');
+        $classIds = array_keys($courseList);
+        $teachClasses = $this->getClassesService()->findClassesByIds($classIds);
+
+        return $this->render('TopxiaWebBundle:MyTeaching:mytasks.html.twig', array(
+            'teachClasses' => $teachClasses,
+            ));
     }
+
+    public function getLessonsAction(Request $request, $classId, $date)
+    {
+        $user = $this->getCurrentUser();
+        if(!$user->isTeacher()) {
+            return $this->createNotFoundException('您不是老师，不能查看此页面！');
+        }
+        $date = empty($date) ? date('Ymd') : $date;
+
+        $result = $this->getScheduleService()->findOneDaySchedulesByUserId($classId, $user['id'], '20141020');
+        
+        return $this->render('TopxiaWebBundle:MyTeaching:mytasks-carousel.html.twig', array(
+            'courses' => $result['courses'],
+            'lessons' => $result['lessons'],
+            'schedules' => $result['schedules'],
+            'classes' => $result['classes'],
+            ));
+    }
+
+    public function getLessonLearns(Request $request, $classId, $date, $lessonId, $start, $limit, $status)
+    {
+        $user = $this->getCurrentUser();
+        if(!$user->isTeacher()) {
+            return $this->createNotFoundException('您不是老师，不能查看此页面！');
+        }
+        $date = empty($date) ? date('Ymd') : $date;
+        $conditions = array(
+            );
+        $orderby = array('finishedTime', 'ASC');
+        $learns = $this->getCourseService()->searchLearns($conditions, $orderby, $start, $limit);
+    }
+
 	protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    protected function getScheduleService()
+    {
+        return $this->getServiceKernel()->createService('Schedule.ScheduleService');
     }
 
     protected function getUserService()
