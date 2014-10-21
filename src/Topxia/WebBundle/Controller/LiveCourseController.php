@@ -191,6 +191,7 @@ class LiveCourseController extends BaseController
     public function replayCreateAction(Request $request, $courseId, $lessonId)
     {
         $resultList = $this->getCourseService()->generateLessonReplay($courseId,$lessonId);
+        
         if(array_key_exists("error", $resultList)) {
             return $this->createJsonResponse($resultList);
         }

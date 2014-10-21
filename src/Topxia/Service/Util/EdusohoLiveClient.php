@@ -71,7 +71,9 @@ class EdusohoLiveClient
             "liveId" => $liveId, 
             "title" => $title
         );
-        return $this->cloudApi->post('/lives/'.$liveId.'/records', $args);
+        $replayList = $this->cloudApi->post('/lives/'.$liveId.'/records', $args);
+        $replayList = json_decode($replayList['data'],true);
+        return $replayList;
     }
 
 }
