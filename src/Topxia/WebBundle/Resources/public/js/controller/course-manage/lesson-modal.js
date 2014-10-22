@@ -61,25 +61,26 @@ define(function(require, exports, module) {
                       } else {
                          $.post('/course/edit/draft/'+lessonId+'/create', tmpContents, function(data){
                             // alert(111);
-                            // Local_content = objClone(tmpContents);
+                            Local_content = objClone(tmpContents);
                             // $("#modal-title").text('(草稿已于' + tmpContents['createdTime'] + '保存)');
                         });
                      }
                 }
+                // var id = '#' + $(html).attr('modal-title');
+                // var as = $("#modal-title").html('modal-title');
                 console.log(tmpContents) ;
+                // console.log(as) ;
             }
 
              $("#see-draft-btn").on('click',function(e) {
                 tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
                 var courseId = tmpContents["courseId"];
-                tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
-                var lessonId = tmpContents["lessonId"];
-                $.get('/course/'+courseId+'/draft/'+lessonId+'/see',function(response){  
-                    // $("#lesson-title-field").val(response.title); 
-                    // $("#lesson-summary-field").val(response.summary); 
-                    // editor.sync();
-                    // var z = editor.html(response.content);
-                    // $("#lesson-content-field").val(z);        
+                $.get('/course/draft/'+courseId+'/see',function(response){  
+                    $("#lesson-title-field").val(response.title); 
+                    $("#lesson-summary-field").val(response.summary); 
+                    editor.sync();
+                    var z = editor.html(response.content);
+                    $("#lesson-content-field").val(z);        
                 }); 
                 $("#see-draft-btn").hide();
             });
@@ -87,7 +88,9 @@ define(function(require, exports, module) {
              $("#see-editdraft-btn").on('click',function(e) {
                 tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
                 var courseId = tmpContents["courseId"];
-                $.get('/course/draft/'+courseId+'/see',function(response){  
+                tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
+                var lessonId = tmpContents["lessonId"];
+                $.get('/course/'+courseId+'/draft/'+lessonId+'/see',function(response){  
                     $("#lesson-title-field").val(response.title); 
                     $("#lesson-summary-field").val(response.summary); 
                     editor.sync();
