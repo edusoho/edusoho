@@ -224,11 +224,14 @@ class MyTeachingController extends BaseController
         $limit = $request->query->get('limit');
         $type = $request->query->get('type');
         $classId = $request->query->get('classId');
-       /* $lesson = $this->getCourseService()->getLesson($lessonId);
-        $course = $this->getCourseService()->getCourse($lesson['courseId']);*/
+
+        if($classId == 0 && $lessonId) {
+            $lesson = $this->getCourseService()->getLesson($lessonId);
+            $course = $this->getCourseService()->getCourse($lesson['courseId']);
+            $classId = $course['classId'];
+        }
         
         $studentMembers = $this->getClassesService()->findClassStudentMembers($classId);
-
         $studentMembers = ArrayToolkit::index($studentMembers?:array(), 'userId');
         $studentIds = array_keys($studentMembers);    
         $students = $this->getUserService()->findUsersByIds($studentIds);
