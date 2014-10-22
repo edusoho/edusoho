@@ -298,6 +298,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $token = $this->controller->getUserToken($this->request);
         $mediaId = $lesson['mediaId'];
         $mediaSource= $lesson['mediaSource'];
+        $mediaUri = $lesson['mediaUri'];
         if ($lesson['length'] > 0) {
             $lesson['length'] =  $this->getContainer()->get('topxia.twig.web_extension')->durationFilter($lesson['length']);
         } else {
