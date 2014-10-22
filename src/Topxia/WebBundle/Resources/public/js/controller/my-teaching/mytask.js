@@ -40,12 +40,10 @@ define(function(require, exports, module) {
         }
 
         $('#not-finished-btn').on('click', function(){
-
             $table_div.addClass('fixed-height'); 
             getNotFinishedLessonStudents(0, default_limit);
             $(this).addClass('active');
             $('#finished-btn').removeClass('active');
-
         });
 
         $('#finished-btn').on('click', function(){
@@ -53,7 +51,6 @@ define(function(require, exports, module) {
             getFinishedLessonStudents(0, default_limit);
             $(this).addClass('active');
             $('#not-finished-btn').removeClass('active');
-
         }); 
 
         $('.carousel-inner').delegate('.thumbnail', 'click', function(){
