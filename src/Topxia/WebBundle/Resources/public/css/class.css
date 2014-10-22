@@ -749,3 +749,26 @@ ul.schedule-lesson-list a .finished-icon {
     right: 0;
     color: #999;
 }
+
+
+.teacher-status {
+    position:absolute;
+    left: 46px;
+    bottom: -2px;
+}
+
+.student-status-img {
+    position:relative;
+}
+
+.student-status {
+    position:absolute;
+    left: 55px;
+    bottom: -2px;
+}
+
+.student-status-popover {
+    position:absolute;
+    left: 46px;
+    bottom: 22px;
+}

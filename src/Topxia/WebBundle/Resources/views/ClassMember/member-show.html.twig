@@ -15,6 +15,13 @@
           <a href="{{ path('user_show', {id:headTeacher.id}) }}" class="pull-left">
             <img class="media-object" width="48" height="48" src="{{file_path(headTeacher.smallAvatar, 'avatar.png')}}" alt="{{headTeacher.truename}}">
           </a>
+          <div class="teacher-status">
+            {% if loginSessions[headTeacher.id]|default('') %}
+              <span style="color:green" class="glyphicon glyphicon-ok-sign"></span>
+            {% else %}
+              <span style="color:grey" class="glyphicon glyphicon-remove-sign"></span>
+            {% endif %}
+          </div>
           <div class="media-body">
             {% if app.user.id!=headTeacher.id %}
               <button class="btn btn-success btn-xs pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:headTeacher.id})}}">发私信</button>
@@ -29,9 +36,21 @@
         {% if teacher['id']!=headTeacher.id %}
           <div class="col-md-6">
             <div class="media">
+
               <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-left">
                 <img class="media-object" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
               </a>
+              
+              <div class="teacher-status">
+                {% if loginSessions[teacher.id]|default('') %}
+                  <span style="color:green" class="glyphicon glyphicon-ok-sign"></span>
+                {% else %}
+                  <span style="color:grey" class="glyphicon glyphicon-remove-sign"></span>
+                {% endif %}
+              </div>
+
+
+
               <div class="media-body">
                 {% if app.user.id!=teacher.id %}
                   <button class="btn btn-success btn-xs pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">发私信</button>
@@ -58,14 +77,37 @@
 
     <div class="row panel-block-body class-student-grids">
       {% for student in students %}
-        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 grid">
-          <a href="{{ path('user_show', {id:student.id}) }}">
-            <img class="avatar" width="48" height="48" src="{{ file_path(student.smallAvatar, 'avatar.png') }}" alt="{{student.truename}}">
-          </a>
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 grid ">
+          <div class="student-status-img">
+            <a href="{{ path('user_show', {id:student.id}) }}">
+              <img class="avatar" width="48" height="48" src="{{ file_path(student.smallAvatar, 'avatar.png') }}" alt="{{student.truename}}">
+              
+            </a>
+            <div class="student-status">
+              {% if loginSessions[student.id]|default('') %}
+                <span style="color:green" class="glyphicon glyphicon-ok-sign"></span>
+              {% else %}
+                <span style="color:grey" class="glyphicon glyphicon-remove-sign"></span>
+              {% endif %}
+            </div>
+          </div>
+
           <a href="{{ path('user_show', {id:student.id}) }}" class="truename">{{student.truename}}</a>
           <div class="student-card-content">
             <div class="media">
-              <img class="media-object pull-left" src="{{ file_path(student.smallAvatar, 'avatar.png') }}">
+              <a href="{{ path('user_show', {id:student.id}) }}" class="pull-left">
+                <img class="media-object pull-left" src="{{ file_path(student.smallAvatar, 'avatar.png') }}">
+              </a>
+
+              <div class="student-status-popover">
+                {% if loginSessions[student.id]|default('') %}
+                  <span style="color:green" class="glyphicon glyphicon-ok-sign"></span>
+                {% else %}
+                  <span style="color:grey" class="glyphicon glyphicon-remove-sign"></span>
+                {% endif %}
+              </div>
+
+
               <div class="media-body">
                 <spann class="text-success">{{student.truename}} </spann>
                 <span class="text-muted"> ({{ student.number }})</span></br>
