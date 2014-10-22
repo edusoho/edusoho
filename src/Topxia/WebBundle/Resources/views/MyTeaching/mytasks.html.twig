@@ -1,0 +1,32 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %} 
+我的任务 - {{ parent() }}
+{% endblock %}
+
+{% set side_nav = 'my-task' %}
+{% set firstLessonId = 0 %}
+{% block main %}
+{{ import_javascript({'mytasks':'my-teaching/mytask'}) }}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    我的任务
+  </div>
+
+  <div class="panel-body">
+    <div class="select-area  container-fluid">
+      {% include 'TopxiaWebBundle:MyTeaching:mytasks-select.html.twig'  %}
+    </div>
+
+    <div class="carousel-area container-fluid">
+      {% render(controller('TopxiaWebBundle:MyTeaching:getLessons', { classId:classId, date:date })) %}
+      
+    </div>
+    
+    <div class="taks-body">
+      {% include 'TopxiaWebBundle:MyTeaching:mytasks-body.html.twig' with { classId:classId } %}
+    </div>
+  </div>
+</div>
+{% endblock %}

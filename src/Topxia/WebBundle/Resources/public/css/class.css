@@ -749,3 +749,52 @@ ul.schedule-lesson-list a .finished-icon {
     right: 0;
     color: #999;
 }
+
+/*my teaching tasks*/
+#carousel-lesson .carousel-control {
+    background-image:none;
+    display: none;
+}
+#carousel-lesson .item{
+    height: 195px;
+}
+.carousel-area .name {
+    padding: 0;
+    margin: 0;
+    height: 34px;
+    font-size: 16px;
+    overflow: hidden;
+}
+
+.carousel-area .class-name {
+    padding: 0;
+    margin: 0;
+}
+
+.taks-body .task-table-div {
+    padding-top: 10px;
+}
+
+.task-body .task-button {
+    text-align: center;
+}
+
+.task-table-div > table > tbody.auto-height {
+    height: auto;
+}
+
+.task-table-div.fixed-height {
+    height: 370px;
+}
+
+.task-body .task-panel {
+    margin-left: -20px;
+}
+
+.carousel-area {
+    cursor: pointer;
+}
+
+.lesson-selected {
+    border: 2px solid #5bc0de;
+}

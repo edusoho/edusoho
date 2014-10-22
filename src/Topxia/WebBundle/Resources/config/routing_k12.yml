@@ -10,6 +10,26 @@ login:
     pattern:  /login
     defaults: { _controller: TopxiaWebBundle:K12Default:login }
 
+my_teaching:
+    pattern: /my/teaching
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:teaching }
+
+my_teaching_courses:
+    pattern: /my/teaching/courses
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:teachingCourses }
+
+my_teaching_threads:
+    pattern: /my/teaching/threads/{type}
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:threads }
+
+my_teaching_task:
+    pattern: /my/teaching/myTasks
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:myTasks }
+
+my_teaching_finished_lesson_sdutdents:
+    pattern: /my/teaching/lesson/finished/students
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:getFinshedLessonStudents }
+
 user_sign:
     pattern:  /sign/{classId}/{userId}
     defaults: { _controller: TopxiaWebBundle:Sign:sign }

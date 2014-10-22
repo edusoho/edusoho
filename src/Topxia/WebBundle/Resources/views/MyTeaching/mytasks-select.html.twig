@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-md-3">
+    <input class="form-control" id="timePicker" type="input" value="{{ date }}" placeholder="日期" data-reload="{{ path('my_teaching_task') }}"/>
+  </div>
+  <div class="col-md-3">
+    <select class="form-control" id="classSelecter" data-reload="{{ path('my_teaching_task') }}">
+      <option value="0">所有班级</option>
+      {% for class in teachClasses %}
+      <option value="{{ class.id }}" {% if classId == class.id %} selected {% endif %}>{{ class_name(class)}}</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>

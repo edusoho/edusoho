@@ -55,6 +55,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return  $this->getLessonDao()->findMinStartTimeByCourseId($courseId);
 	}
 
+	public function getLesson($id)
+	{
+		return $this->getLessonDao()->getLesson($id);
+	}
+
 	public function findLessonsByIds(array $ids)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByIds($ids);

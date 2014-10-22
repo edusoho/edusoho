@@ -103,7 +103,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 					array('hitNum', 'DESC'),
 				);
 				break;
-
+			case 'createdTimeASC':
+				$orderBys = array(
+					array('createdTime', 'ASC'),
+				);
+				break;
 			default:
 				throw $this->createServiceException('参数sort不正确。');
 		}

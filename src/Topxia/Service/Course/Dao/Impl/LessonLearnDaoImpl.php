@@ -124,9 +124,24 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
     {
         $builder=$this->createDynamicQueryBuilder($conditions)
             ->from($this->table,$this->table)
+            ->andWhere('lessonId = :lessonId')
             ->andWhere("status = :status")
             ->andWhere("finishedTime >= :startTime")
             ->andWhere("finishedTime <= :endTime");
+
+        if (isset($conditions['userIds'])) {
+            $userIds = array();
+            foreach ($conditions['userIds'] as $userId) {
+                if (ctype_digit((string)abs($userId))) {
+                    $userIds[] = $userId;
+                }
+            }
+            if ($userIds) {
+                $userIds = join(',', $userIds);
+                $builder->andStaticWhere("userId IN ($userIds)");
+            }
+        }
+
         return $builder;
     }
 

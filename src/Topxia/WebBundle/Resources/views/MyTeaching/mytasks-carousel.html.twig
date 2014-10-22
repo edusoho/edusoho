@@ -1,0 +1,40 @@
+<hr>
+<div id="carousel-lesson" class="carousel slide row" data-ride="carousel" data-interval="false">
+  <div class="carousel-inner col-md-10" role="listbox">
+    {% set index = 0 %}
+    {% set keys = lessons|keys %}
+    {% for i in 0..((lessons|length)//4) if lessons|length > 0%}
+      <div class="item row {% if i == 0 %} active {% endif %}">
+        {% for j in 1..4 if keys[index] is defined %}
+        {% set lesson = lessons[keys[index]] %}
+        {% set course = courses[lesson.courseId] %}
+        {% set schedule = schedules[lesson.id] %}
+        {% set class = classes[schedule.classId]%}
+          <div class="col-md-3" data-id="{{ lesson.id }}">
+            <div class="thumbnail">
+              <img src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="...">
+              <div class="caption">
+                <h3 class="name">课时{{ lesson.number }}-{{ lesson.title }}</h3>
+                <p class="class-name">{{ class_name(class) }}</p>
+              </div>
+            </div>
+          </div>
+          {% set index = index +1 %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="item active tac">
+        <div class="empty" style="margin-right: auto; margin-left: auto;">今日无课时!</div>
+    </div>
+    {% endfor %}
+  </div>
+  <a class="left carousel-control col-md-1" href="#carousel-lesson" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control col-md-1" href="#carousel-lesson" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+<hr>

@@ -1,0 +1,27 @@
+<div class="row">
+	<div class="col-md-2 task-button" style="text-align:center;">
+		<div class="btn-group btn-group-lg btn-group-vertical">
+	        <button type="button" class="btn btn-default">课时</button>
+	        <button type="button" class="btn btn-default" disabled><i class="glyphicon glyphicon-lock text-sm"></i>作业</button>
+      	</div>
+	</div>
+
+	<div class="col-md-10 task-panel" style="margin-left: -20px;">
+		<div class="panel panel-default">
+			<div class="panel-body">
+        <ul class="nav nav-pills" role="tablist">
+          <li role="presentation" class="active" id="finished-btn"><a href="javascript:;">已完成</a></li>
+          <li role="presentation" id="not-finished-btn"><a href="javascript:;">未完成</a></li>
+        </ul>
+        <div class="table-responsive task-table-div fixed-height ">
+          <table class="table table-hover task-table" data-url="{{ path('my_teaching_finished_lesson_sdutdents') }}">
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+			</div>
+		</div>
+	</div>
+	
+</div>
