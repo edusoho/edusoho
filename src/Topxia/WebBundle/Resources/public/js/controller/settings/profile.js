@@ -27,43 +27,43 @@
             }
         });
 
-        // validator.addItem({
-        //     element: '[name="profile[truename]"]',
-        //     rule: 'chinese minlength{min:2} maxlength{max:12}'
-        // });
+        validator.addItem({
+            element: '[name="profile[truename]"]',
+            rule: 'chinese minlength{min:2} maxlength{max:12}'
+        });
 
-        // validator.addItem({
-        //     element: '[name="profile[qq]"]',
-        //     rule: 'qq'
-        // });
+        validator.addItem({
+            element: '[name="profile[qq]"]',
+            rule: 'qq'
+        });
 
-        // validator.addItem({
-        //     element: '[name="profile[weibo]"]',
-        //     rule: 'url',
-        //     errormessageUrl: '微博地址不正确，须以http://开头。'
-        // });
+        validator.addItem({
+            element: '[name="profile[weibo]"]',
+            rule: 'url',
+            errormessageUrl: '微博地址不正确，须以http://开头。'
+        });
 
-        // validator.addItem({
-        //     element: '[name="profile[blog]"]',
-        //     rule: 'url',
-        //     errormessageUrl: '博客地址不正确，须以http://开头。'
-        // });
+        validator.addItem({
+            element: '[name="profile[blog]"]',
+            rule: 'url',
+            errormessageUrl: '博客地址不正确，须以http://开头。'
+        });
 
-        // validator.addItem({
-        //     element: '[name="profile[site]"]',
-        //     rule: 'url',
-        //     errormessageUrl: '个人主页地址不正确，须以http://开头。'
-        // });
+        validator.addItem({
+            element: '[name="profile[site]"]',
+            rule: 'url',
+            errormessageUrl: '个人主页地址不正确，须以http://开头。'
+        });
 
-        // validator.addItem({
-        //     element: '[name="profile[mobile]"]',
-        //     rule: 'mobile'
-        // });
+        validator.addItem({
+            element: '[name="profile[mobile]"]',
+            rule: 'mobile'
+        });
 
-        // validator.addItem({
-        //     element: '[name="profile[idcard]"]',
-        //     rule: 'idcard'
-        // });
+        validator.addItem({
+            element: '[name="profile[idcard]"]',
+            rule: 'idcard'
+        });
 
 
         for(var i=1;i<=5;i++){
