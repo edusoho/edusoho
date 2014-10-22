@@ -168,3 +168,15 @@ admin_user_avatar:
 admin_user_avatar_crop:
     pattern:  /user/{id}/avatar/crop
     defaults: { _controller: TopxiaAdminBundle:User:avatarCrop }
+
+admin_user_guide_index:
+    pattern:  /user/guide/index
+    defaults: { _controller: TopxiaAdminBundle:UserGuide:index }
+
+admin_user_guide_show:
+    pattern:  /user/guide/show
+    defaults: { _controller: TopxiaAdminBundle:UserGuide:show }
+
+admin_user_guide_complete:
+    pattern:  /user/guide/complete
+    defaults: { _controller: TopxiaAdminBundle:UserGuide:complete }

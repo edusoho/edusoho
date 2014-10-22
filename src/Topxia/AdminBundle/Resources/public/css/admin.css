@@ -235,3 +235,42 @@ input.LargeInput {width: 600px;}
 .class-course-grid:hover .close {
   visibility: visible;
 }
+
+
+
+
+
+
+.completed {
+  position: fixed;
+  bottom: 5%;
+  right: 395px;
+  z-index: 9999;
+  display: none;
+
+  border-radius: 5px 0 0 5px;
+  height: 40px;
+  width: 50px;
+  background-color: #5CB85C;
+}
+
+.completed .percent {
+  margin: 11px;
+}
+
+.user-guide {
+  position: fixed;
+  bottom: 5%;
+  right: 0%;
+  z-index: 9999;
+  display: none;
+
+  /*border-radius: 5px 0 0 5px;*/
+  width: 400px;
+  height: 40px;
+  background-color: #fea161;
+}
+
+.user-guide .content {
+  margin: 11px;
+}

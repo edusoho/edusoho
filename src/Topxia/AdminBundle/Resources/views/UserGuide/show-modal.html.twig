@@ -1,0 +1,23 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}用户引导{% endblock %}
+
+{% block body %}
+  <input type="hidden" id="guideIndex" value="{{index}}">
+  <input type="hidden" id="guideContent" value="{{step.content}}">
+  {% if index=='0' %}
+    {{step.content}}
+  {% elseif index=='1' %}
+    {{step.content}}
+  {% elseif index=='2' %}
+    {{step.content}}
+  {% elseif index=='3' %}
+    {{step.content}}
+  {% elseif index=='4' %}
+    {{step.content}}
+  {% endif %}
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+{% endblock %}
