@@ -4,23 +4,12 @@
 {% block title %}添加管理员{% endblock %}
 {% block body %}
   <form id="number-form" class="form-horizontal" method="post" action="{{ path('admin_admin_create')}}">
-    
-
-
-
     <div class="form-group">
       <label class="col-md-2 control-label">老师姓名</label>
       <div class="col-md-4 controls">
         <input type="text" id="teacherId" name="teacherId" required="required" class="width-full select2-offscreen" tabindex="-1" value="" data-id="" data-name="" data-url="{{path('admin_school_teacher_name')}}">
       </div>
     </div>
-
-
-
-
-
-
-
   </form>
 {% endblock %}
 
