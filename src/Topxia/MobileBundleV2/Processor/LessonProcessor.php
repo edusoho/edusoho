@@ -26,4 +26,6 @@ interface LessonProcessor
 	public function getLessonStatus();
 
 	public function getTestpaperInfo();
+
+	public function getVideoMediaUrl();
 }

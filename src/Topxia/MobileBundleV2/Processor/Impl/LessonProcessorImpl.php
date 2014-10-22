@@ -9,6 +9,46 @@ use Topxia\Service\Util\CloudClientFactory;
 class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 {
 
+            public function getVideoMediaUrl()
+            {
+                $courseId = $this->request->get("courseId");
+                $lessonId = $this->request->get("lessonId");
+                if (empty($courseId)) {
+                    return $this->createErrorResponse('not_courseId', '课程信息不存在！');
+                }
+
+                $user = $this->controller->getUserByToken($this->request);
+                $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+                if (empty($lesson)) {
+                    return $this->createErrorResponse('not_courseId', '课时信息不存在！');
+                }
+
+                if ($lesson['free'] == 1) {
+                        if ($user->isLogin()) {
+                                if ($this->controller->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+                                    $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
+                                }
+                                        
+                        }
+                        $lesson = $this->coverLesson($lesson);
+                        return $this->controller->redirect($lesson['mediaUri']);
+                }
+
+                if (!$user->isLogin()) {
+                    return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+                }
+
+                $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
+                $member = $this->controller->getCourseService()->getCourseMember($courseId, $user['id']);
+                $member = $this->previewAsMember($member, $courseId, $user);
+                if ($member && in_array($member['role'], array("teacher", "student"))) {
+                    $lesson = $this->coverLesson($lesson);
+                    return $this->controller->redirect($lesson['mediaUri']);
+                }
+
+                return $this->controller->redirect($lesson['mediaUri']);
+            }
+
 	public function getLessonMaterial()
 	{
 		$lessonId = $this->getParam("lessonId");
@@ -189,7 +229,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 			return $this->createErrorResponse('not_courseId', '课程信息不存在！');
 		}
 
-		$user = $this->controller->getuserByToken($this->request);
+		$user = $this->controller->getUserByToken($this->request);
 		$lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
 		if (empty($lesson)) {
 			return $this->createErrorResponse('not_courseId', '课时信息不存在！');
@@ -213,7 +253,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 		$member = $this->controller->getCourseService()->getCourseMember($courseId, $user['id']);
 		$member = $this->previewAsMember($member, $courseId, $user);
 		if ($member && in_array($member['role'], array("teacher", "student"))) {
-			return $this->coverLesson($lesson);;
+			return $this->coverLesson($lesson);
 		}
 		return $this->createErrorResponse('not_student', '你不是该课程学员，请加入学习!');
 	}
