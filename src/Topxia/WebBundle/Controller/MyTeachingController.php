@@ -230,18 +230,24 @@ class MyTeachingController extends BaseController
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
             $classId = $course['classId'];
         }
-        
-        $studentMembers = $this->getClassesService()->findClassStudentMembers($classId);
-        $studentMembers = ArrayToolkit::index($studentMembers?:array(), 'userId');
-        $studentIds = array_keys($studentMembers);    
-        $students = $this->getUserService()->findUsersByIds($studentIds);
-        $students = ArrayToolkit::index($students?:array(), 'id');
 
+        if(empty($lessonId)) {
+            $studentIds = array();
+            $students = array();
+            $lessonId  = -1;
+        } else {
+           $studentMembers = $this->getClassesService()->findClassStudentMembers($classId);
+           $studentMembers = ArrayToolkit::index($studentMembers?:array(), 'userId');
+           $studentIds = array_keys($studentMembers);
+           $students = $this->getUserService()->findUsersByIds($studentIds);
+           $students = ArrayToolkit::index($students?:array(), 'id'); 
+        }
+        
         $conditions = array(
             'lessonId' => $lessonId,
             'status' => 'finished',
             'userIds' => $studentIds
-            );
+        );
         $totalCount = $this->getCourseService()->searchLearnCount($conditions);
         $orderby = array('finishedTime', 'ASC');
         
@@ -251,17 +257,15 @@ class MyTeachingController extends BaseController
                 'lessonId' => $lessonId,
                 'type' => 'question',
                 'userIds' => $studentIds
-                );
+            );
             $courseThread = $this->getThreadService()->searchThreads($conditions, 'createdTimeASC', 0, 10000);
             $questions = ArrayToolkit::index($courseThread, 'userId');
-            $more = $totalCount>$start+$limit ? true:false;
             return $this->render('TopxiaWebBundle:MyTeaching:finished_lesson_tr.html.twig', array(
                 'students' => $students,
                 'learns' => $learns,
                 'questions' => $questions,
                 'start' => $start,
-                'more' => $more,
-                ));
+            ));
         } else {
             $learns = $this->getCourseService()->searchLearns($conditions, $orderby, 0, $totalCount);
             $finishedIds = array_keys(ArrayToolkit::index($learns?:array(), 'userId')) ;
@@ -272,13 +276,11 @@ class MyTeachingController extends BaseController
                 $result[] = $students[$value]; 
             }
       
-            $more = (count($studentIds) - count($finishedIds) > $start+$limit) ? true:false;
             return $this->render('TopxiaWebBundle:MyTeaching:not_finished_lesson_tr.html.twig', array(
                 'students' => $result,
                 'start' => $start,
                 'total' => $totalCount,
-                'more' => $more,
-                )); 
+            )); 
         }
         
 
