@@ -36,7 +36,7 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
         return $this->getScheduleDao()->deleteOneDaySchedules($classId, $day);
     }
 
-    public function findScheduleLessonsByWeek($classId, $sunday)
+    public function findScheduleLessonsByWeek($classId, $sunday, $mode)
     {
         $week = date('w');
         $day = date('Ymd', strtotime('- {$week} days'));
@@ -44,7 +44,7 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
         $staturday = date('Ymd', strtotime('+ 6 days', strtotime($sunday)));
         $schedules =  $this->getScheduleDao()->findSchedulesByClassIdAndPeriod($classId, $sunday, $staturday);
         
-        return $this->makeUpResultForWeek($schedules, $sunday);
+        return $this->makeUpResultForWeek($schedules, $sunday, $mode);
     }
 
     public function findScheduleLessonsByMonth($classId, $period)
@@ -79,7 +79,7 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
         return $result;
     }
 
-    private function makeUpResultForWeek($schedules, $sunday)
+    private function makeUpResultForWeek($schedules, $sunday, $mode)
     {
         $lessonIds = ArrayToolkit::column($schedules?:array(), 'lessonId');
         $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
@@ -106,6 +106,31 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
                 break;
             }
             $i++;
+        }
+
+        $user = $this->getCurrentUser();
+        if($mode == 'edit' && !$user->isAdmin()) {
+            foreach ($courses as $key => $course) {
+                if(!in_array($user['id'], $course['teacherIds'])) {
+                    unset($courses[$key]);
+                }
+            }
+            $coursesKey = array_keys($courses);
+            foreach ($lessons as $key => $lesson) {
+                if(!in_array($lesson['courseId'], $coursesKey)) {
+                    unset($lessons[$key]);
+                }
+            }
+            $lessonKeys = array_keys($lessons);
+            foreach ($scheduleGroup as $date => $schedules) {
+                $schedules = empty($schedules)? array():$schedules;
+                foreach ($schedules as $key => $schedule) {
+                   if(!in_array($schedule['lessonId'], $lessonKeys)) {
+                       unset($schedules[$key]);
+                   }
+                   $scheduleGroup[$date] = $schedules;
+                }
+            }
         }
 
         $result['schedules'] = $scheduleGroup;

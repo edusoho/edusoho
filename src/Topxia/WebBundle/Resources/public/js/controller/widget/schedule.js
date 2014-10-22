@@ -182,11 +182,11 @@ define(function(require, exports, module) {
         },
         nextWeek: function() {
             var sunday = this.nextSunday(true);
-            this.reset({'sunday': sunday,'previewAs':'week'});
+            this.reset({'sunday': sunday,'previewAs':'week',mode:this.mode});
         },
         previousWeek: function() {
             var sunday = this.nextSunday(false);
-            this.reset({'sunday': sunday,'previewAs':'week'});
+            this.reset({'sunday': sunday,'previewAs':'week',mode:this.mode});
         },
         nextMonth: function() {
             var cYear = parseInt(this.year, 10),
@@ -212,7 +212,9 @@ define(function(require, exports, module) {
         },
         changeMode: function(e) {
             var $span = $(e.currentTarget),
-                self = this;
+                self = this,
+                mode = $span.hasClass('editable') ? 'normal' : 'edit';
+                this.mode = mode;
 
             if($span.hasClass('normal')) {
                 $('.course-display .editable-heading').removeClass('hidden').addClass('show');
@@ -228,7 +230,7 @@ define(function(require, exports, module) {
                 $('.course-display .editable-body').removeClass('show').addClass('hidden');  
             }                
                
-               
+            this.reset({'sunday': self.sunday,'previewAs':'week', mode:mode});  
         },
         nextSunday: function(plus) {
             var sunday = this.sunday +'';

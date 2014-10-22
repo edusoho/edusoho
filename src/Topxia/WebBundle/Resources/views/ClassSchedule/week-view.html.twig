@@ -30,7 +30,7 @@
 
                         <li data-id="{{ item.lessonId }}" data-url="{{ lessonUrl }}">
                           <div class="thumbnail">
-                            {% if can_remove_schedule(app.user, courses, lessons, item) %}
+                            {% if mode == 'edit' %}
                               <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
                             {% endif %}
                             <a href="{{ lessonUrl }}" target="_blank">
@@ -47,7 +47,7 @@
                       {% else %}
                         <li>
                           <div class="thumbnail">
-                            {% if can_remove_schedule(app.user, courses, lessons, item) %}
+                            {% if mode == 'edit' %}
                               <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
                             {% endif %}
                             <a href="javascript:;">

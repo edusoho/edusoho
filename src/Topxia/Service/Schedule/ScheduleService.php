@@ -9,7 +9,7 @@ interface ScheduleService
 
 	public function deleteOneDaySchedules($classId, $day);
 
-	public function findScheduleLessonsByWeek($classId, $sunDay);
+	public function findScheduleLessonsByWeek($classId, $sunDay, $mode);
 
 	public function findScheduleLessonsByMonth($classId, $period);
 
