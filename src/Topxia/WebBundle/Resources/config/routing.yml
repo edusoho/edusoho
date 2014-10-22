@@ -530,9 +530,17 @@ course_manage_lesson_draft:
     pattern:  /course/draft/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:draft }
 
+course_manage_edit_draft:
+    pattern:  /course/edit/draft/{lessonId}/create
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editdraft }
+
 course_manage_lesson_draft_see:
     pattern:  /course/draft/{courseId}/see
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:see }
+
+course_manage_edit_draft_see:
+    pattern:  /course/{courseId}/draft/{lessonId}/see
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:seedraft }
 
 live_course_manage_lesson_create:
     pattern:  /course/{id}/manage/live/lesson/create

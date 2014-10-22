@@ -13,7 +13,7 @@
 
 <form id="course-lesson-form" data-course-id="{{course.id}}" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   {% if lesson %}
-    action="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
+    action="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" data-lesson-id="{{lesson.id}}"
   {% else %}
     action="{{ path('course_manage_lesson_create', {id:course.id}) }}"
   {% endif %}
@@ -55,11 +55,19 @@
 
 
   {% if drafts|default(false) %}
-    <div class="btn-group">
-    <a id ="see-draft-btn" class="btn btn-link btn-sm">
+
+    <a id ="see-draft-btn" style="cursor:pointer;" >
     您有一段自动保存内容，继续编辑请点击
     </a>
-    </div>
+
+  {% endif %}
+
+  {% if draft|default(false) %}
+
+    <a id ="see-editdraft-btn" style="cursor:pointer;" >
+    您有一段自动保存内容，继续编辑请点击
+    </a>
+
   {% endif %}
 
     <div class="col-md-2 control-label"><label for="lesson-content-field" class="style1">内容</label></div>

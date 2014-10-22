@@ -23,8 +23,6 @@ define(function(require, exports, module) {
                 tmpContents["title"] = $("#lesson-title-field").val();
                 tmpContents["summary"] = $("#lesson-summary-field").val();
                 tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
-                tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
-                var lessonId = tmpContents["lessonId"];
                 editor.sync();
                 var z = editor.html();
                 var x = editor.html().match(/<embed[\s\S]*?\/>/g);
@@ -53,38 +51,15 @@ define(function(require, exports, module) {
                 }
                 // alert(compare(tmpContents, Local_content));
                 if(compare(tmpContents, Local_content)){
-                    if(lessonId == undefined){
                         $.post('/course/draft/create', tmpContents, function(data){
                             Local_content = objClone(tmpContents);
-                            $("#modal-title").text('(草稿已于' + tmpContents['createdTime'] + '保存)');
+                            $(".modal-title").text('添加课时(草稿已于' + tmpContents['createdTime'] + '保存)');
                         });
-                      } else {
-                         $.post('/course/edit/draft/'+lessonId+'/create', tmpContents, function(data){
-                            // alert(111);
-                            // Local_content = objClone(tmpContents);
-                            // $("#modal-title").text('(草稿已于' + tmpContents['createdTime'] + '保存)');
-                        });
-                     }
                 }
-                console.log(tmpContents) ;
+                // console.log(tmpContents) ;
             }
 
              $("#see-draft-btn").on('click',function(e) {
-                tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
-                var courseId = tmpContents["courseId"];
-                tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
-                var lessonId = tmpContents["lessonId"];
-                $.get('/course/'+courseId+'/draft/'+lessonId+'/see',function(response){  
-                    // $("#lesson-title-field").val(response.title); 
-                    // $("#lesson-summary-field").val(response.summary); 
-                    // editor.sync();
-                    // var z = editor.html(response.content);
-                    // $("#lesson-content-field").val(z);        
-                }); 
-                $("#see-draft-btn").hide();
-            });
-
-             $("#see-editdraft-btn").on('click',function(e) {
                 tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
                 var courseId = tmpContents["courseId"];
                 $.get('/course/draft/'+courseId+'/see',function(response){  
@@ -94,7 +69,7 @@ define(function(require, exports, module) {
                     var z = editor.html(response.content);
                     $("#lesson-content-field").val(z);        
                 }); 
-                $("#see-editdraft-btn").hide();
+                $(".btn-group").fadeOut();
             });
 
             var sortList = function($list) {
