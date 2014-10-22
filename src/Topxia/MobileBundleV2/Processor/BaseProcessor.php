@@ -195,7 +195,7 @@ class BaseProcessor {
     {
         $curl = curl_init();
 
-        curl_setopt($curl, CURLOPT_USERAGENT, "Suggestion Request");
+        curl_setopt($curl, CURLOPT_USERAGENT, "video request");
 
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($curl, CURLOPT_TIMEOUT, 20);
