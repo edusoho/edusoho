@@ -42,7 +42,7 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
         $day = date('Ymd', strtotime('- {$week} days'));
         $sunday = $sunday ? : date('Ymd', strtotime("- {$week} days"));
         $staturday = date('Ymd', strtotime('+ 6 days', strtotime($sunday)));
-        $schedules =  $this->getScheduleDao()->findScheduleByPeriod($classId, $sunday, $staturday);
+        $schedules =  $this->getScheduleDao()->findSchedulesByClassIdAndPeriod($classId, $sunday, $staturday);
         
         return $this->makeUpResultForWeek($schedules, $sunday);
     }
@@ -52,7 +52,7 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
         asort($period,SORT_NUMERIC);
         $startDay = current($period);
         $endDay = end($period);
-        $schedules = $this->getScheduleDao()->findScheduleByPeriod($classId, $startDay, $endDay);
+        $schedules = $this->getScheduleDao()->findSchedulesByClassIdAndPeriod($classId, $startDay, $endDay);
         return $this->makeUpResultForMonth($schedules);
     }
 
@@ -117,7 +117,7 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
 
     public function findOneDaySchedules($classId, $date)
     {
-        $schedules = $this->getScheduleDao()->findScheduleByPeriod($classId, $date, $date);
+        $schedules = $this->getScheduleDao()->findSchedulesByClassIdAndPeriod($classId, $date, $date);
         return $this->makeUpResultOneDay($schedules);
     }
 
@@ -147,14 +147,14 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
     public function findOneDaySchedulesByUserId($classId, $userId, $date)
     {
         if($classId == 0) {
-            $schedules = $this->getScheduleDao()->findScheduleByPeriod2($date, $date);
+            $schedules = $this->getScheduleDao()->findSchedulesByPeriod($date, $date);
         } else {
-            $schedules = $this->getScheduleDao()->findScheduleByPeriod($classId, $date, $date);
+            $schedules = $this->getScheduleDao()->findSchedulesByClassIdAndPeriod($classId, $date, $date);
         }
-        return $this->makeUpResultOneDayByUserId($schedules, $userId);
+        return $this->makeUpResultOneDayByUserId($userId, $schedules);
     }
 
-    private function makeUpResultOneDayByUserId($schedules, $userId)
+    private function makeUpResultOneDayByUserId($userId, $schedules)
     {
         
         $lessonIds = ArrayToolkit::column($schedules?:array(), 'lessonId');

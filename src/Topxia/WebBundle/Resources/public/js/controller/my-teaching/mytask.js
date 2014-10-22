@@ -6,7 +6,7 @@ define(function(require, exports, module) {
             language: 'zh-CN',
             // autoclose: true,
             format: 'yyyy-mm-dd',
-            minView: 'month',
+            minView: 'month'
         });
         var lessonId = 0,
             btn_flag = 1,

@@ -8,7 +8,7 @@ interface ScheduleDao
 
 	public function deleteOneDaySchedules($classId, $day);
 
-	public function findScheduleByPeriod($classId, $startDay, $endDay);
+	public function findSchedulesByClassIdAndPeriod($classId, $startDay, $endDay);
 
-	public function findScheduleByPeriod2($startDay, $endDay);
+	public function findSchedulesByPeriod($startDay, $endDay);
 }
