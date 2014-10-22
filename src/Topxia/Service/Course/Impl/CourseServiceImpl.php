@@ -636,21 +636,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
 		return LessonSerialize::unserializes($lessons);
 	}
-	// public function getCourseDrafts($courseId,$userId)
-	// {
-	// 	$lessons = $this->getDraftDao()->findDraftsByCourseId($courseId,$userId);
-	// 	return LessonSerialize::unserializes($lessons);
-	// }
+
 	public function deleteDraftByCourseIdAndUserId($courseId,$userId)
 	{
 		 return   $this->getDraftDao()->deleteDraftByCourseIdAndUserId($courseId,$userId);
-		// return LessonSerialize::unserializes($lessons);
 	}
 
 	public function deleteDraftByCourseIdAndUserIdAndLessonId($courseId,$userId,$lessonId)
 	{
 		 return   $this->getDraftDao()->deleteDraftByCourseIdAndUserIdAndLessonId($courseId,$userId,$lessonId);
-		// return LessonSerialize::unserializes($lessons);
 	}
 
 	public function findLessonsByTypeAndMediaId($type, $mediaId)

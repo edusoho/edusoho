@@ -58,12 +58,7 @@ class CourseLessonManageController extends BaseController
         $user = $this->getCurrentUser();
         $userId = $user['id'];
         $drafts = $this->getCourseService()->getEditDraftByCourseIdAndUserIdAndLessonId($courseId, $userId,$lessonId);
-        // var_dump($drafts['title']);
-        // var_dump($drafts['summary']);
-        // var_dump($drafts['content']);
-        //  exit();
         $listdrafts=array("title"=>$drafts['title'],"summary"=>$drafts['summary'],"content"=>$drafts['content']);         
-        // var_dump($listdrafts); exit();
         return $this->createJsonResponse($listdrafts);
     }
 
@@ -87,7 +82,6 @@ class CourseLessonManageController extends BaseController
     public function editdraftAction(Request $request, $lessonId)
     {
         $formData = $request->request->all();
-        // var_dump($formData); exit();
         $user = $this->getCurrentUser();
         $userId = $user['id'];
         $courseId = $formData['courseId'];

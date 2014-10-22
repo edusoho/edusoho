@@ -91,8 +91,6 @@ interface CourseService
 	
 	public function getCourseLessons($courseId);
 
-	// public function getCourseDrafts($courseId,$userId);
-
 	public function deleteDraftByCourseIdAndUserId($courseId,$userId);
 
 	public function deleteDraftByCourseIdAndUserIdAndLessonId($courseId,$userId,$lessonId);
