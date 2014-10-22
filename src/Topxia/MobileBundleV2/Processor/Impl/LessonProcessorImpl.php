@@ -31,7 +31,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                                         
                         }
                         $lesson = $this->coverLesson($lesson);
-                        return $this->controller->redirect($lesson['mediaUri']);
+                        return $this->curlRequest("GET", $lesson['mediaUri'], null);
                 }
 
                 if (!$user->isLogin()) {
@@ -43,10 +43,10 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                 $member = $this->previewAsMember($member, $courseId, $user);
                 if ($member && in_array($member['role'], array("teacher", "student"))) {
                     $lesson = $this->coverLesson($lesson);
-                    return $this->controller->redirect($lesson['mediaUri']);
+                        return $this->curlRequest("GET", $lesson['mediaUri'], null);
                 }
 
-                return $this->controller->redirect($lesson['mediaUri']);
+                return $this->curlRequest("GET", $lesson['mediaUri'], null);
             }
 
 	public function getLessonMaterial()
