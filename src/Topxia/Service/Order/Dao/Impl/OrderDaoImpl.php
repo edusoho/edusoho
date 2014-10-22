@@ -31,9 +31,9 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
     }
 
-    public function changeOrderStatus($targetId,$userId)
+    public function updateOrderStatus($targetId,$userId,$status)
     {
-        $sql = "UPDATE {$this->table} SET status = 'cancelled' WHERE targetId = ? AND userId = ? ";
+        $sql = "UPDATE {$this->table} SET  status ='{$status}'  WHERE targetId = ? AND userId = ? ";
         return $order = $this->getConnection()->executeQuery($sql, array($targetId,$userId)) ;
     }
 

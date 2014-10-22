@@ -613,7 +613,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserialize($lesson);
 	}
 
-	public function getCourseDraft($courseId, $userId)
+	public function getCourseDraftByCourseIdAndUserId($courseId, $userId)
 	{
 		$draft = $this->getDraftDao()->getDrafts($courseId,$userId);
 		if (empty($draft) or ($draft['userId'] != $userId)) {
@@ -627,14 +627,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
 		return LessonSerialize::unserializes($lessons);
 	}
-	public function getCourseDrafts($courseId,$userId)
+	// public function getCourseDrafts($courseId,$userId)
+	// {
+	// 	$lessons = $this->getDraftDao()->findDraftsByCourseId($courseId,$userId);
+	// 	return LessonSerialize::unserializes($lessons);
+	// }
+	public function deleteDraftByCourseIdAndUserId($courseId,$userId)
 	{
-		$lessons = $this->getDraftDao()->findDraftsByCourseId($courseId,$userId);
-		return LessonSerialize::unserializes($lessons);
-	}
-	public function deleteDraft($courseId,$userId)
-	{
-		 return   $this->getDraftDao()->deleteDraft($courseId,$userId);
+		 return   $this->getDraftDao()->deleteDraftByCourseIdAndUserId($courseId,$userId);
 		// return LessonSerialize::unserializes($lessons);
 	}
 
@@ -659,13 +659,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 	        return $this->getDraftDao()->getDraft($id);
 	}
 
-	public function createDraft($lesson)
+	public function createDraft($draft)
 	{
-		$lesson = ArrayToolkit::parts($lesson, array('userId', 'title', 'courseId', 'summary', 'content','createdTime'));
-		$lesson['userId'] = $this->getCurrentUser()->id;
-		$lesson['createdTime'] = time();
-		$lesson = $this->getDraftDao()->addDraft($lesson);
-		return $lesson;
+		$draft = ArrayToolkit::parts($draft, array('userId', 'title', 'courseId', 'summary', 'content','createdTime'));
+		$draft['userId'] = $this->getCurrentUser()->id;
+		$draft['createdTime'] = time();
+		$draft = $this->getDraftDao()->addDraft($lesson);
+		return $draft;
 	}
 	public function createLesson($lesson)
 	{
@@ -791,10 +791,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		return $lesson;
 	}
-	public function updateTextDraft($userId, $courseId,$fields)
+	public function updateDraft($userId, $courseId,$fields)
 	{
-		$draft = $this->getCourseDraft($courseId, $userId);
-		 // var_dump($draft ['createdTime']); exit();
+		$draft = $this->getCourseDraftByCourseIdAndUserId($courseId, $userId);
+
 		if (empty($draft)) {
 			throw $this->createServiceException('草稿不存在，更新失败！');
 		}
@@ -807,7 +807,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields = LessonSerialize::serialize($fields);
 		
 		return LessonSerialize::unserialize(
-			$this->getDraftDao()->updateTextDraft($userId,$courseId, $fields)
+			$this->getDraftDao()->updateDraft($userId,$courseId, $fields)
 		);
 
 	}

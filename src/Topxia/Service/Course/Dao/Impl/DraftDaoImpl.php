@@ -27,11 +27,11 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$userId)) ? : null;
     }
 
-    public function findDraftsByCourseId($courseId,$userId)
-    {
-        $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND userId = ? ";
-        return $this->getConnection()->fetchAll($sql, array($courseId,$userId));
-    }
+    // public function findDraftsByCourseId($courseId,$userId)
+    // {
+    //     $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND userId = ? ";
+    //     return $this->getConnection()->fetchAll($sql, array($courseId,$userId));
+    // }
 
     public function addDraft($lesson)
     {
@@ -44,14 +44,14 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         return $this->getDraft($this->getConnection()->lastInsertId());
     }
 
-     public function updateTextDraft($userId,$courseId, $fields)
+     public function updateDraft($userId,$courseId, $fields)
      {
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->draftTable, $fields, array('courseId' => $courseId,'userId' => $userId));
         return $this->getDrafts($courseId,$userId);
     }
 
-    public function deleteDraft($courseId,$userId)
+    public function deleteDraftByCourseIdAndUserId($courseId,$userId)
     {
         $sql = "DELETE FROM {$this->draftTable} WHERE courseId = ? AND userId = ?";
         return $this->getConnection()->executeUpdate($sql, array($courseId,$userId));

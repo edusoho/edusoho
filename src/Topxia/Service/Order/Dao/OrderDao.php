@@ -9,7 +9,7 @@ interface OrderDao
 
     public function getOrderByTargetIdAndUserId($targetId,$userId);
 
-    public function changeOrderStatus($targetId,$userId);
+    public function updateOrderStatus($targetId,$userId,$status);
 
     public function getOrderBySn($sn);
 
