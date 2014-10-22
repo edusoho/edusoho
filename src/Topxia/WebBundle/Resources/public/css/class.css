@@ -412,6 +412,7 @@
 
 .schedule-calendar-month > tbody >tr > td.not-in-month {
     background-color: #f7f7f7;
+    background-clip: padding-box;
 }
 
 .schedule-calendar-month > tbody >tr > td.has-lesson:hover {
