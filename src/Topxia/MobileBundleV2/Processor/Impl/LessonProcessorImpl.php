@@ -4,6 +4,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\LessonProcessor;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Util\CloudClientFactory;
 
 class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
@@ -32,7 +33,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                         }
                         $lesson = $this->coverLesson($lesson);
                         if ($lesson['mediaSource'] == 'self') {
-                            return $this->curlRequest("GET", $lesson['mediaUri'], null);
+                            $response = $this->curlRequest("GET", $lesson['mediaUri'], null);
+                            return new Response($response);
                         }
                         return $lesson['mediaUri'];
                         
@@ -48,13 +50,15 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                 if ($member && in_array($member['role'], array("teacher", "student"))) {
                     $lesson = $this->coverLesson($lesson);
                     if ($lesson['mediaSource'] == 'self') {
-                        return $this->curlRequest("GET", $lesson['mediaUri'], null);
+                        $response = $this->curlRequest("GET", $lesson['mediaUri'], null);
+                        return new Response($response);
                     }
                     return $lesson['mediaUri'];
                 }
 
                 if ($lesson['mediaSource'] == 'self') {
-                        return $this->curlRequest("GET", $lesson['mediaUri'], null);
+                        $response = $this->curlRequest("GET", $lesson['mediaUri'], null);
+                        return new Response($response);
                 }
                 return $lesson['mediaUri'];
             }
