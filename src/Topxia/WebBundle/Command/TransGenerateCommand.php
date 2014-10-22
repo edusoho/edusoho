@@ -37,22 +37,22 @@ class TransGenerateCommand extends TransScanCommand
             $yaml = new Yaml();
             $existTrans = $yaml->parse($content);
 
-            $output->writeln("语言文件 <info>{$tranFile}</info> 已经存在，共有" . count($content) . "个语言串");
+            $output->writeln("语言文件 <info>{$tranFile}</info> 已经存在");
         }
 
         $addCount = 0;
+        $existCount = 0;
         foreach ($keywords as $keyword) {
             if (array_key_exists($keyword, $existTrans)) {
-                $output->writeln(" - {$keyword} ... <comment>已翻译</comment>");
-                continue;
+                $existCount ++;
+            } else {
+                $output->writeln(" - {$keyword} <info>... 新增</info>");
+                $addCount ++;
+                $existTrans[$keyword] = $keyword;
             }
-            $output->writeln(" - {$keyword} <info>... 新增</info>");
-            $addCount ++;
-
-            $existTrans[$keyword] = $keyword;
         }
 
-        $output->writeln('<info>共新增' . $addCount . '个语言串</info>');
+        $output->writeln("<info>已存在{$existCount}个语言串，本次新增{$addCount}个语言串</info>");
         $output->writeln('<question>END</question>');
 
         $yaml = new Yaml();
