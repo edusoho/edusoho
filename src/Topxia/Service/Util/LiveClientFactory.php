@@ -14,7 +14,7 @@ class LiveClientFactory
         $class = __NAMESPACE__ . '\\EdusohoLiveClient';
 
         $arguments = array(
-            'apiUrl' => empty($setting['cloud_api_server']) ? '' : $setting['cloud_api_server'],
+            'apiUrl' => empty($setting['cloud_api_server']) ? 'http://api.edusoho.net' : $setting['cloud_api_server'],
             'accessKey' => empty($setting['cloud_access_key']) ? '' : $setting['cloud_access_key'],
             'secretKey' => empty($setting['cloud_secret_key']) ? '' : $setting['cloud_secret_key'],
         );

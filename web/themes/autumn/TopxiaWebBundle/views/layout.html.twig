@@ -98,8 +98,8 @@
                 <li><a href="{{ path('mobile') }}"><span class="glyphicon glyphicon-phone"></span> 手机版</a></li>
               {% endif %}
               <li><a href="{{ path('search') }}"><span class="glyphicon glyphicon-search"></span> 搜索</a></li>
-              <li><a href="{{ path('login') }}">登录</a></li>
-              <li><a href="{{ path('register') }}">注册</a></li>
+              <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
+              <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
             {% endif %}
           </ul>
         </div><!--/.navbar-collapse -->

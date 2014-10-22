@@ -457,6 +457,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseDao()->updateCourse($id, array(
 			'recommended' => 0,
 			'recommendedTime' => 0,
+			'recommendedSeq' => 0,
 		));
 
 		$this->getLogService()->info('course', 'cancel_recommend', "取消推荐课程《{$course['title']}》(#{$course['id']})");
