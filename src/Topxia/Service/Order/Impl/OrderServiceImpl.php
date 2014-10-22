@@ -19,8 +19,9 @@ class OrderServiceImpl extends BaseService implements OrderService
        return $this->getOrderDao()->getOrderByTargetIdAndUserId($targetId,$userId);
     }
 
-    public function cancelOrders($targetId,$userId,$status)
+    public function cancelOrders($targetId,$userId)
     {
+        $status = 'cancelled';
         return $this->getOrderDao()->updateOrderStatus($targetId,$userId,$status);
     }
 

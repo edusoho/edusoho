@@ -114,8 +114,7 @@ class CourseOrderController extends OrderController
         if($order['targetId'] && $order['userId'] && $order['status'] == 'created' && $dif <3600) {
             $order = $this->getOrderService()->getOrderByTargetIdAndUserId($formData['courseId'],$user['id']);
         } else {
-            $status = 'cancelled';
-            $changeStatus = $this->getOrderService()->cancelOrders($formData['courseId'],$user['id'],$status);
+            $changeStatus = $this->getOrderService()->cancelOrders($formData['courseId'],$user['id']);
             $order = $this->getCourseOrderService()->createOrder($formData);
         }
 

@@ -8,6 +8,7 @@ use Topxia\Service\Course\Dao\LessonDao;
 class LessonDaoImpl extends BaseDao implements LessonDao
 {
     protected $table = 'course_lesson';
+
     public function getLesson($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
@@ -127,7 +128,6 @@ class LessonDaoImpl extends BaseDao implements LessonDao
     {
         $sql = "DELETE FROM {$this->table} WHERE courseId = ?";
         return $this->getConnection()->executeUpdate($sql, array($courseId));
-
     }
 
     public function deleteLesson($id)

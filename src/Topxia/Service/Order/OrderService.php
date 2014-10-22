@@ -8,7 +8,7 @@ interface OrderService
 
     public function getOrderByTargetIdAndUserId($targetId,$userId);
 
-    public function cancelOrders($targetId,$userId,$status);
+    public function cancelOrders($targetId,$userId);
 
     public function getOrderBySn($sn);
 

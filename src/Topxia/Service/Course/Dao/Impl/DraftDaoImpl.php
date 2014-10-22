@@ -43,44 +43,36 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$userId,$lessonId)) ? : null;
     }
 
-    // public function findDraftsByCourseId($courseId,$userId)
-    // {
-    //     $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND userId = ? ";
-    //     return $this->getConnection()->fetchAll($sql, array($courseId,$userId));
-    // }
+    public function addDraft($draft)
+    {
 
-        public function addDraft($draft)
-        {
-
-            $draft = $this->createSerializer()->serialize($draft, $this->serializeFields);
-            $affected = $this->getConnection()->insert($this->draftTable, $draft);
-            if ($affected <= 0) {
-                throw $this->createDaoException('Insert draft error.');
-            }
-            return $this->getDraft($this->getConnection()->lastInsertId());
+        $draft = $this->createSerializer()->serialize($draft, $this->serializeFields);
+        $affected = $this->getConnection()->insert($this->draftTable, $draft);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert draft error.');
         }
+        return $this->getDraft($this->getConnection()->lastInsertId());
+    }
 
-        public function addEditDraft($draft)
-        {
+    public function addEditDraft($draft)
+    {
 
-            $draft = $this->createSerializer()->serialize($draft, $this->serializeFields);
-            $affected = $this->getConnection()->insert($this->Table, $draft);
-            if ($affected <= 0) {
-                throw $this->createDaoException('Insert draft error.');
-            }
-            return $this->getEditDraft($this->getConnection()->lastInsertId());
+        $draft = $this->createSerializer()->serialize($draft, $this->serializeFields);
+        $affected = $this->getConnection()->insert($this->Table, $draft);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert draft error.');
         }
+        return $this->getEditDraft($this->getConnection()->lastInsertId());
+    }
 
      public function updateDraft($userId,$courseId, $fields)
      {
-        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->draftTable, $fields, array('courseId' => $courseId,'userId' => $userId));
         return $this->getDrafts($courseId,$userId);
     }
 
     public function updateEditDraft($userId,$courseId,$lessonId,$fields)
      {
-        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->Table, $fields, array('courseId' => $courseId,'userId' => $userId,'lessonId' => $lessonId));
         return $this->getEditDrafts($courseId,$userId,$lessonId);
     }

@@ -51,24 +51,23 @@ define(function(require, exports, module) {
                      var txt=JSON.stringify(jsonObj);
                      return JSON.parse(txt);
                 }
-                // alert(compare(tmpContents, Local_content));
                 if(compare(tmpContents, Local_content)){
                     if(lessonId == undefined){
                         $.post('/course/draft/create', tmpContents, function(data){
                             Local_content = objClone(tmpContents);
-                            $("#modal-title").text('(草稿已于' + tmpContents['createdTime'] + '保存)');
+                            $(".modal-title").text('(草稿已于' + tmpContents['createdTime'] + '保存)');
                         });
                       } else {
                          $.post('/course/edit/draft/'+lessonId+'/create', tmpContents, function(data){
-                            // alert(111);
                             Local_content = objClone(tmpContents);
-                            // $("#modal-title").text('(草稿已于' + tmpContents['createdTime'] + '保存)');
+                            $(".modal-title").text('(草稿已于' + tmpContents['createdTime'] + '保存)');
                         });
                      }
                 }
+                // var generate_date=document.getElementById("modal-header"); 
                 // var id = '#' + $(html).attr('modal-title');
                 // var as = $("#modal-title").html('modal-title');
-                console.log(tmpContents) ;
+                console.log(generate_date) ;
                 // console.log(as) ;
             }
 
@@ -284,7 +283,7 @@ define(function(require, exports, module) {
     }
 
     exports.run = function() {
-         var sh;
+         var Timer;
         var updateDuration = function (length) {
             length = parseInt(length);
             if (isNaN(length) || length == 0) {
@@ -341,7 +340,6 @@ define(function(require, exports, module) {
             videoChooser.destroy();
             audioChooser.destroy();
             pptChooser.destroy();
-            // getTmpContents();
         });
 
         var validator = createValidator($form, [videoChooser,pptChooser,audioChooser]);
@@ -352,7 +350,7 @@ define(function(require, exports, module) {
             $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text").removeClass("lesson-form-ppt")
             $form.addClass("lesson-form-" + type);
             if (type == 'text'){
-                 sh = setInterval(getTmpContents,5000);//1000为1秒钟
+                 Timer = setInterval(getTmpContents,5000);//1000为1秒钟
 
                  $(".close").on('click',function(e){
                         getTmpContents();
@@ -367,27 +365,26 @@ define(function(require, exports, module) {
                 videoChooser.show();
                 audioChooser.hide();
                 pptChooser.hide();
-                clearInterval(sh);
+                clearInterval(Timer);
             } else if (type == 'audio') {
                 audioChooser.show();
                 videoChooser.hide();
                 pptChooser.hide();
-                clearInterval(sh);
+                clearInterval(Timer);
             } else if (type == 'ppt') {
                 pptChooser.show();
                 videoChooser.hide();
                 audioChooser.hide();
-                clearInterval(sh);
+                clearInterval(Timer);
             }
 
             $(".modal").on("hide.bs.modal", function(){
             videoChooser.destroy();
             audioChooser.destroy();
             pptChooser.destroy();
-            // getTmpContents();
         });
             $(".modal").on('hidden.bs.modal', function (){
-            clearInterval(sh);
+            clearInterval(Timer);
        });
             switchValidator(validator, type);
         });
