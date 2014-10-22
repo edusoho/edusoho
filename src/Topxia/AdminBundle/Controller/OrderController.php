@@ -7,11 +7,11 @@ use Topxia\Common\Paginator;
 
 class OrderController extends BaseController
 {
-    public function indexAction(Request $request)
-    {
-        return $this->render('TopxiaAdminBundle:Order:index.html.twig', array(
-        ));
-    }
+            public function indexAction(Request $request)
+            {
+                return $this->render('TopxiaAdminBundle:Order:index.html.twig', array(
+                ));
+            }
 
     public function manageAction(Request $request, $type, $layout)
     {
