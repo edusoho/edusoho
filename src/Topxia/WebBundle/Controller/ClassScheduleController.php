@@ -77,9 +77,10 @@ class ClassScheduleController extends ClassBaseController
         $period = $request->query->get('date');
         $year = $request->query->get('year');
         $month = $request->query->get('month');
+        $mode = $request->query->get('mode');
         
         if($previewAs == 'week') {
-            $results = $this->getScheduleService()->findScheduleLessonsByWeek($classId, $sunDay);
+            $results = $this->getScheduleService()->findScheduleLessonsByWeek($classId, $sunDay, $mode);
         } else {
             $period = $this->getPeriod($year,$month);
             $results = $this->getScheduleService()->findScheduleLessonsByMonth($classId, $period);            
@@ -94,6 +95,7 @@ class ClassScheduleController extends ClassBaseController
             'period' => $period,
             ));
         }
+
         $userLessonLearns = $this->getCourseService()->findUserLessonLearns($user['id']);
         $userLessonLearns =ArrayToolkit::index($userLessonLearns, 'lessonId');
         return $this->render("TopxiaWebBundle:ClassSchedule:{$previewAs}-view.html.twig", array(
@@ -102,6 +104,7 @@ class ClassScheduleController extends ClassBaseController
             'changeMonth' => $results['changeMonth'],
             'schedules' => $results['schedules'],
             'lessonLearns' => $userLessonLearns,
+            'mode' => $mode,
             ));
     }
 
