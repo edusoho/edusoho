@@ -49,11 +49,16 @@
       </a>
       <ul class="dropdown-menu">
         <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_edit', {id:user.id}) }}">编辑用户信息</a></li>
-        {% if 'ROLE_SUPER_ADMIN' in user.roles %}
-          <li><a class="cancleAdminRole" href="javascript:;" title="取消用户{{ user.truename }}管理员权限" data-url="{{ path('admin_admin_cancleAdminRole', {id:user.id}) }}">取消管理员</a></li>
-        {% else %}
-          <li><a class="addAdminRole" href="javascript:;" title="将用户{{ user.truename }}设为管理员" data-url="{{ path('admin_admin_addAdminRole', {id:user.id}) }}">设为管理员</a></li>
+        
+        {% if app.user.id!=user.id %}
+          {% if 'ROLE_SUPER_ADMIN' in user.roles %}
+            <li><a class="cancleAdminRole" href="javascript:;" title="取消用户{{ user.truename }}管理员权限" data-url="{{ path('admin_admin_cancleAdminRole', {id:user.id}) }}">取消管理员</a></li>
+          {% else %}
+            <li><a class="addAdminRole" href="javascript:;" title="将用户{{ user.truename }}设为管理员" data-url="{{ path('admin_admin_addAdminRole', {id:user.id}) }}">设为管理员</a></li>
+          {% endif %}
         {% endif %}
+
+
         {% if is_granted('ROLE_SUPER_ADMIN') %}
 
         {# <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_roles', {id:user.id}) }}">设置用户组</a></li> #}
