@@ -66,6 +66,10 @@ class AdminController extends BaseController
         if(!in_array('ROLE_SUPER_ADMIN', $user['roles'])){
             throw $this->createAccessDeniedException("用户不是超级管理员");
         }
+        $currentUser=$this->getCurrentUser();
+        if($currentUser->id==$id){
+            throw $this->createAccessDeniedException("无法取消自己的管理员权限");
+        }
         $user['roles']=array_diff($user['roles'],array('ROLE_SUPER_ADMIN','ROLE_ADMIN')); 
         $this->getUserService()->changeUserRoles($user['id'], $user['roles']);
         return $this->render('TopxiaAdminBundle:Teacher:teacher-table-tr.html.twig', array(
