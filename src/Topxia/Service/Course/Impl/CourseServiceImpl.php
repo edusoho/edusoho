@@ -1143,6 +1143,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		list($course, $member) = $this->tryLearnCourse($courseId);
 
+		$lesson = $this->getCourseLesson($courseId, $lessonId);
 		$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($member['userId'], $lessonId);
 		if (empty($learn)) {
 			throw $this->createServiceException("课时#{$lessonId}尚未学习，取消学习失败。");
@@ -1167,6 +1168,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$param['userId'] = $member['userId'];
 		$param['type'] = 'decrease';
+		$param['lessonType'] = $lesson['type'];
 		$this->getDispatcher()->dispatch('lesson.learned', new ServiceEvent($param));
 
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
