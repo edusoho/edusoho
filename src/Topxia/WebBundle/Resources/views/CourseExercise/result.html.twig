@@ -1,0 +1,74 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{# {% if questionStatus != 'finished' %}{% set script_controller = 'exercise/do' %}{% endif %} #}
+
+{% if itemSetResult|default(null) %}{% set itemSet = itemSetResult %}{% endif %}
+
+{% block content %}
+  <div class="question-set exercise-set" id="exercise-set">
+
+    <div class="row question-set-heading">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="question-set-type">练习</div>
+            <div class="question-set-title">{{ lesson.title }}</div>
+            <div class="homwork-status">
+              <div class="pull-right label label-success">结果页</div>
+            </div>
+            <div class="question-set-description">
+              {# {{ exercise.description |raw }} #}
+              <p class="text-muted">所属课程 <a href="#">{{ course.title }}</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row question-set-body">
+      <div class="col-md-9 question-set-main">
+        <div class="panel panel-default">
+          <div class="panel-heading">练习题目 <small class="text-muted">共{{ itemSet.total }}题</small></div>
+          <div class="panel-body">
+            <div class="question-set-items">
+              {% for item in itemSet.items %}
+              {{dump(item)}}
+                {% if item.subItems|default(null) %}
+                  {% include 'TopxiaWebBundle:Question:question-set-item-have-sub.html.twig' %}
+                {% else %}
+                  {% include 'TopxiaWebBundle:Question:question-set-item.html.twig' %}
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+   {#  {% if not app.user.isTeacher() and questionStatus == 'reviewing' %}
+    {% else %}
+      {% if questionStatus in ['doing','reviewing'] %}
+
+          <div class="col-md-3 question-set-side">
+            <div class="panel panel-default question-set-card">
+            {% if questionStatus == 'doing' %}
+                <div class="panel-heading">
+                答题卡 <button class="btn btn-default btn-sm pull-right" id="exercise-save-btn" data-url="{{ path('course_homework_save',{courseId:course.id,homeworkId:homework.id}) }}">下次再做</button>
+                </div>
+            {% endif %}
+
+                <div class="panel-body">
+                  {%- for questionId in itemSet.questionIds -%}
+                    <a href="javascript:;" class="question-index for-question-{{ questionId }} " data-anchor="{{questionId}}">{{ loop.index }}</a>
+                  {%- endfor -%}
+                </div>
+                <div class="panel-footer">
+                  <button class="btn btn-success btn-block " id="{% if questionStatus == 'doing' %}homework-finish-btn{% else %}homework-check-btn{% endif %}" data-url="{% if questionStatus == 'doing' %}{{ path('course_homework_submit',{courseId:course.id,homeworkId:homework.id}) }} {% else %} {{ path('course_homework_check',{courseId:course.id,homeworkId:homework.id,userId:userId}) }} {% endif %}" data-saving-text="正在保存...">{% if questionStatus == 'doing' %}提交作业{% else %}完成批改{% endif %}</button>
+                </div>
+            </div>
+        </div>
+      {% endif %}
+
+    {% endif %} #}
+    </div>
+
+  </div>
+{% endblock %}
