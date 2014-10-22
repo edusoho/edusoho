@@ -39,6 +39,31 @@ class AdminController extends BaseController
         ));
     }
 
+    public function createAction(Request $request)
+    {
+        if($request->getMethod() == 'POST'){
+            $fields=$formData = $request->request->all();
+            $teacherId=$fields['teacherId'];
+            $user=$this->getUserService()->getUser($teacherId);
+            if(empty($user)){
+                return $this->createJsonResponse("用户不存在");
+            }
+
+            if(!in_array('ROLE_TEACHER', $user['roles'])){
+                return $this->createJsonResponse("用户不是教师，无法设为管理员");
+            }
+
+            if(in_array('ROLE_SUPER_ADMIN', $user['roles'])){
+                return $this->createJsonResponse("用户已是管理员，无法重复设为管理员");
+            }
+            $user['roles'][]='ROLE_SUPER_ADMIN';
+            $this->getUserService()->changeUserRoles($user['id'], $user['roles']);
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->render('TopxiaAdminBundle:Admin:create.html.twig');
+    }
+
     public function addAdminRoleAction(Request $request,$id)
     {
         $user=$this->getUserService()->getUser($id);

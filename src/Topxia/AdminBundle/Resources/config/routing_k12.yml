@@ -99,6 +99,10 @@ admin_admin:
     pattern:  /admin
     defaults: { _controller: TopxiaAdminBundle:Admin:index }
 
+admin_admin_create:
+    pattern:  /admin/create
+    defaults: { _controller: TopxiaAdminBundle:Admin:create }
+
 admin_admin_addAdminRole:
     pattern:  /admin/{id}/addAdminRole
     defaults: { _controller: TopxiaAdminBundle:Admin:addAdminRole }

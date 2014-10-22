@@ -110,7 +110,6 @@ define(function(require, exports, module) {
             }
         }); 
     };
-
      $('#headteacherid').select2({
             ajax: {
                 url: app.arguments.teacherUrl + '#',

@@ -1,0 +1,31 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}添加管理员{% endblock %}
+{% block body %}
+  <form id="number-form" class="form-horizontal" method="post" action="{{ path('admin_admin_create')}}">
+    
+
+
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">老师姓名</label>
+      <div class="col-md-4 controls">
+        <input type="text" id="teacherId" name="teacherId" required="required" class="width-full select2-offscreen" tabindex="-1" value="" data-id="" data-name="" data-url="{{path('admin_school_teacher_name')}}">
+      </div>
+    </div>
+
+
+
+
+
+
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button type="submit" id="student-import-btn" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#number-form">提交</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('admin/create-modal')</script>
+{% endblock %}
