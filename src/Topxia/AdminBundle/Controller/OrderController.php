@@ -7,11 +7,11 @@ use Topxia\Common\Paginator;
 
 class OrderController extends BaseController
 {
-	public function indexAction(Request $request)
-	{
-		return $this->render('TopxiaAdminBundle:Order:index.html.twig', array(
-		));
-	}
+    public function indexAction(Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Order:index.html.twig', array(
+        ));
+    }
 
     public function manageAction(Request $request, $type, $layout)
     {
@@ -30,8 +30,9 @@ class OrderController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
-            
+
         return $this->render('TopxiaAdminBundle:Order:manage.html.twig', array(
             'request' => $request,
             'type' => $type,
@@ -50,7 +51,7 @@ class OrderController extends BaseController
         $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
-
+        
         return $this->render('TopxiaAdminBundle:Order:detail-modal.html.twig', array(
             'order'=>$order,
             'user'=>$user,
