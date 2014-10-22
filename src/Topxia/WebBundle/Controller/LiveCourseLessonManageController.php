@@ -35,15 +35,15 @@ class LiveCourseLessonManageController extends BaseController
 				'authUrl' => $this->generateUrl('live_auth', array(), true),
 				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
 			));
-
+var_dump($live);exit();
 			if (empty($live) or isset($live['error'])) {
 				throw new \RuntimeException('创建直播教室失败，请重试！');
 			}
 			$liveLesson['mediaId'] = $live['id'];
 			$liveLesson['liveProvider'] = $live['provider'];
 
-
 			$liveLesson = $this->getCourseService()->createLesson($liveLesson);
+
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $liveCourse,
 				'lesson' => $liveLesson,
