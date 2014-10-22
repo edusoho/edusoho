@@ -9,12 +9,14 @@ define(function(require, exports, module) {
             minView: 'month',
         });
         var lessonId = 0,
-            btn_flag = 1;
+            btn_flag = 1,
+            default_limit = 10;
         $table = $('.task-table');
+        $table_div = $('.task-table-div');
         $loading = $('<tr><td class="empty">.......正在载入数据.......</td><tr>');
 
         selectLesson();
-        getFinishedLessonStudents(0, 10);
+        getFinishedLessonStudents(0, default_limit);
 
         function selectLesson() {
             $item = $('#carousel-lesson .carousel-inner').find('.active');
@@ -25,7 +27,7 @@ define(function(require, exports, module) {
             $table.find('tbody').fadeOut(function(){
                 $table.find('tbody').html('');
                 $table.find('tbody').append($loading).toggle();
-                $.get($table.data('url'),{lessonId:lessonId,start:start,limit:limit,type:'finished'},function(html){
+                $.get($table.data('url'),{lessonId:lessonId,start:start,limit:limit,type:'finished',classId:$('#classSelecter').val()},function(html){
                     var append = 0;
                     btn_flag = 1;
                     $loading.fadeOut(function(){
@@ -39,7 +41,7 @@ define(function(require, exports, module) {
             $table.find('tbody').fadeOut(function(){
                 $table.find('tbody').html('');
                 $table.find('tbody').append($loading).toggle();
-                $.get($table.data('url'),{lessonId:lessonId,start:start,limit:limit,type:'not-finished'},function(html){
+                $.get($table.data('url'),{lessonId:lessonId,start:start,limit:limit,type:'not-finished',classId:$('#classSelecter').val()},function(html){
                     var append = 0;
                     btn_flag = 0;
                     $loading.fadeOut(function(){
@@ -50,13 +52,15 @@ define(function(require, exports, module) {
         }
 
         $('#not-finished-btn').on('click', function(){
-            getNotFinishedLessonStudents(0, 10);
+            $table_div.addClass('fixed-height'); 
+            getNotFinishedLessonStudents(0, default_limit);
             $(this).toggleClass('active');
             $('#finished-btn').toggleClass('active');
         });
 
         $('#finished-btn').on('click', function(){
-            getFinishedLessonStudents(0, 10);
+            $table_div.addClass('fixed-height'); 
+            getFinishedLessonStudents(0, default_limit);
             $(this).toggleClass('active');
             $('#not-finished-btn').toggleClass('active');
         }); 
@@ -65,7 +69,7 @@ define(function(require, exports, module) {
             $('.carousel-inner').find('.lesson-selected').toggleClass('lesson-selected');
             $(this).toggleClass('lesson-selected');
             lessonId = $(this).parent().data('id');
-            btn_flag ? getFinishedLessonStudents(0, 10) : getNotFinishedLessonStudents(0, 10);
+            btn_flag ? getFinishedLessonStudents(0, default_limit) : getNotFinishedLessonStudents(0, default_limit);
         });
 
         $('#carousel-lesson').hover(function(){
@@ -78,6 +82,30 @@ define(function(require, exports, module) {
             var date = $('#timePicker').val();
             var classId = $('#classSelecter').val();
             window.location = $(this).data('reload') + '?classId=' + classId + '&date=' + date;
+        });
+
+        $(window).scroll(function()
+        {
+
+            if($(window).scrollTop() == $(document).height() - $(window).height())
+            {
+                var type = btn_flag ? 'finished' : 'not-finished',
+                    start = ($table.find('.has-item')).length;
+                
+                $.ajax({
+                url: $table.data('url'),
+                data:{lessonId:lessonId,start:start,limit:default_limit,type:type,classId:$('#classSelecter').val()},
+                success: function(html)
+                {
+                    if($(html).hasClass('has-item'))
+                    {
+                        $table_div.removeClass('fixed-height');  
+                        $table.find('tbody').append(html);
+                    }
+                }
+                });
+
+            }
         });
     }
 });

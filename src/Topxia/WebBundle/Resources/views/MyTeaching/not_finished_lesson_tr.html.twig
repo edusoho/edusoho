@@ -1,11 +1,11 @@
 {% for student in students %}
-<tr>
-  <td>{{ start + loop.index }}</td>
+<tr class="has-item">
+  <td><span class="label label-info">{{ start + loop.index }}</span></td>
   <td>{{ student.truename }}</td>
 </tr>
 
 {% else %}
-<tr>
+<tr class="end">
 	<td class="empty">没有学生未完成课时</td>
 </tr>
 {% endfor %}

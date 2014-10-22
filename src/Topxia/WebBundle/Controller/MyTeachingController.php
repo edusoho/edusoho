@@ -201,9 +201,9 @@ class MyTeachingController extends BaseController
         if(!$user->isTeacher()) {
             return $this->createNotFoundException('您不是老师，不能查看此页面！');
         }
-        $date = empty($date) ? date('Ymd') : $date;
+        $date = empty($date) ? date('Ymd') : str_replace(array('-','/'), '', $date);
 
-        $result = $this->getScheduleService()->findOneDaySchedulesByUserId($classId, $user['id'], '20141020');
+        $result = $this->getScheduleService()->findOneDaySchedulesByUserId($classId, $user['id'], $date);
         
         return $this->render('TopxiaWebBundle:MyTeaching:mytasks-carousel.html.twig', array(
             'courses' => $result['courses'],
@@ -223,10 +223,12 @@ class MyTeachingController extends BaseController
         $start = $request->query->get('start');
         $limit = $request->query->get('limit');
         $type = $request->query->get('type');
-        $lesson = $this->getCourseService()->getLesson($lessonId);
-        $course = $this->getCourseService()->getCourse($lesson['courseId']);
-        $classId = $course['classId'];
+        $classId = $request->query->get('classId');
+       /* $lesson = $this->getCourseService()->getLesson($lessonId);
+        $course = $this->getCourseService()->getCourse($lesson['courseId']);*/
+        
         $studentMembers = $this->getClassesService()->findClassStudentMembers($classId);
+
         $studentMembers = ArrayToolkit::index($studentMembers?:array(), 'userId');
         $studentIds = array_keys($studentMembers);    
         $students = $this->getUserService()->findUsersByIds($studentIds);
@@ -259,13 +261,14 @@ class MyTeachingController extends BaseController
                 ));
         } else {
             $learns = $this->getCourseService()->searchLearns($conditions, $orderby, 0, $totalCount);
-            $finishedIds = array_keys($learns, 'userId');
+            $finishedIds = array_keys(ArrayToolkit::index($learns?:array(), 'userId')) ;
             $notFinishedIds = array_diff($studentIds, $finishedIds);
             $limitIds = array_slice($notFinishedIds, $start, $limit, true);
             $result = array();
             foreach ($limitIds as $value) {
                 $result[] = $students[$value]; 
             }
+      
             $more = (count($studentIds) - count($finishedIds) > $start+$limit) ? true:false;
             return $this->render('TopxiaWebBundle:MyTeaching:not_finished_lesson_tr.html.twig', array(
                 'students' => $result,
