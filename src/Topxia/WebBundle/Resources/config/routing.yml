@@ -255,11 +255,11 @@ course_learn:
     defaults: { _controller: TopxiaWebBundle:Course:learn }
 
 course_learn_time:
-    pattern:  /course/{lessonId}/learn/time
+    pattern:  /course/{lessonId}/learn/time/{time}
     defaults: { _controller: TopxiaWebBundle:Course:recordLearningTime }
 
 course_watch_time:
-    pattern:  /course/{lessonId}/watch/time
+    pattern:  /course/{lessonId}/watch/time/{time}
     defaults: { _controller: TopxiaWebBundle:Course:recordWatchingTime }
 
 course_watch_play:

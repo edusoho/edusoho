@@ -526,11 +526,11 @@ class CourseController extends BaseController
 		));
 	}
 
-	public function recordLearningTimeAction(Request $request,$lessonId)
+	public function recordLearningTimeAction(Request $request,$lessonId,$time)
 	{	
 		$user = $this->getCurrentUser();
 
-		$this->getCourseService()->waveLearningTime($lessonId,$user['id']);
+		$this->getCourseService()->waveLearningTime($lessonId,$user['id'],$time);
 
 		return $this->createJsonResponse(true);
 	}
@@ -573,11 +573,11 @@ class CourseController extends BaseController
             ));
     }
 
-	public function recordWatchingTimeAction(Request $request,$lessonId)
+	public function recordWatchingTimeAction(Request $request,$lessonId,$time)
 	{	
 		$user = $this->getCurrentUser();
 
-		$this->getCourseService()->waveWatchingTime($user['id'],$lessonId);
+		$this->getCourseService()->waveWatchingTime($user['id'],$lessonId,$time);
 
 		return $this->createJsonResponse(true);
 	}

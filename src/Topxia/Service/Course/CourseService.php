@@ -143,11 +143,11 @@ interface CourseService
 
 	public function analysisLessonViewDataByTime($startTime,$endTime,$conditions);
 
-	public function waveLearningTime($lessonId,$userId);
+	public function waveLearningTime($lessonId,$userId,$time);
 
 	public function findLearnsCountByLessonId($lessonId);
 
-	public function waveWatchingTime($userId,$lessonId);
+	public function waveWatchingTime($userId,$lessonId,$time);
 
 	public function watchPlay($userId,$lessonId);
 

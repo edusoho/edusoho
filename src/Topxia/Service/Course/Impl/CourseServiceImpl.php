@@ -569,23 +569,23 @@ class CourseServiceImpl extends BaseService implements CourseService
     	return $this->getCourseDao()->analysisCourseDataByTime($startTime,$endTime);
 	}
 
-	public function waveLearningTime($lessonId,$userId)
+	public function waveLearningTime($lessonId,$userId,$time)
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
 		if($learn['status']!="finished")
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
-				'learnTime' => $learn['learnTime']+2,
+				'learnTime' => $learn['learnTime']+intval($time),
 		));
 	}
 
-	public function waveWatchingTime($userId,$lessonId)
+	public function waveWatchingTime($userId,$lessonId,$time)
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
 		if($learn['status']!="finished" && $learn['videoStatus']=="playing")
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
-				'watchTime' => $learn['watchTime']+2,
+				'watchTime' => $learn['watchTime']+intval($time),
 		));
 	}
 

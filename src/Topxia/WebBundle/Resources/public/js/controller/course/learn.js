@@ -180,7 +180,7 @@ define(function(require, exports, module) {
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
 
                 function recordWatchTime(){
-                    url="../../course/"+lesson.id+'/watch/time';
+                    url="../../course/"+lesson.id+'/watch/time/2';
                     $.post(url);
                 }
 
@@ -583,7 +583,7 @@ define(function(require, exports, module) {
         }).render();
 
         function recordLearningTime(){
-            url="../../course/"+dashboard.attrs.lessonId.value+'/learn/time';
+            url="../../course/"+dashboard.attrs.lessonId.value+'/learn/time/2';
             $.post(url);
             setTimeout(recordLearningTime, 120000);
         }
