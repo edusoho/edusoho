@@ -230,6 +230,7 @@ define(function(require, exports, module) {
         var editor;
         var tmpContents = {};
         var localContent = {};
+        var $form = $("#course-lesson-form");
 
         function getTmpContents(){
             var date = new Date(); //日期对象
@@ -252,7 +253,7 @@ define(function(require, exports, module) {
                     titleName = "编辑课时";
                     lessonId = tmpContents["lessonId"];
                 }
-                $.post('/course/draft/create', tmpContents, function(data){
+                $.post($form.data("createDraftUrl"), tmpContents, function(data){
                     localContent = objClone(tmpContents);
                     $(".modal-title").text(titleName + '(草稿已于' + tmpContents['createdTime'] + '保存)');
                 });
@@ -270,8 +271,6 @@ define(function(require, exports, module) {
             $("#lesson-minute-field").val(minute);
             $("#lesson-second-field").val(second);
         }
-
-        var $form = $("#course-lesson-form");
 
         var $content = $("#lesson-content-field");
 
@@ -380,7 +379,7 @@ define(function(require, exports, module) {
             } else{
                 lessonId = tmpContents["lessonId"];
             }
-            $.get('/course/draft/view', {courseId: courseId, lessonId:lessonId}, function(response){  
+            $.get($(this).data("url"), {courseId: courseId, lessonId:lessonId}, function(response){  
                 $("#lesson-title-field").val(response.title); 
                 $("#lesson-summary-field").val(response.summary); 
                 editor.sync();

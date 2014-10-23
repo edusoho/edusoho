@@ -105,11 +105,8 @@ class CourseOrderController extends OrderController
 
         $order = $this->getOrderService()->getOrderByTargetIdAndUserId($formData['courseId'],$user['id']);
 
-        $OrderCreatedTime = $order['createdTime'];
-        $OrderEndTime = date("Y-n-j h:i:s"); 
-        $OrderTimeEnd = strtotime($OrderEndTime);
-        $sec=$OrderTimeEnd-$OrderCreatedTime;       
-        $diff = round( ( $sec)/1 ) ;//将时间间隔转化为秒数
+        $orderCreatedTime = $order['createdTime'];
+        $diff = time()-$orderCreatedTime;       
 
         if($order['targetId'] && $order['userId'] && $order['status'] == 'created' && $diff <3600) {
             $order = $this->getOrderService()->getOrderByTargetIdAndUserId($formData['courseId'],$user['id']);

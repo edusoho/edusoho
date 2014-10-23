@@ -11,6 +11,7 @@
 {% block body %}
 
 <form id="course-lesson-form" data-course-id="{{course.id}}" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
+  data-create-draft-url="{{path('course_draft_create')}}"
   {% if lesson %}
     action="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" data-lesson-id="{{lesson.id}}"
   {% else %}
@@ -53,16 +54,20 @@
   <div class="form-group for-text-type">
 
 
-  {% if draft|default(false) %}
-
-    <a id ="see-draft-btn" style="cursor:pointer; text-decoration:none;" >
-    &nbsp;&nbsp;&nbsp;&nbsp;您有一段自动保存内容，继续编辑请点击
-    </a>
-
-  {% endif %}
 
     <div class="col-md-2 control-label"><label for="lesson-content-field" class="style1">内容</label></div>
-    <div class="col-md-9 controls"><textarea class="form-control" id="lesson-content-field" name="content"  >{{ field_value(lesson, 'content') }}</textarea></div>
+    <div class="col-md-9 controls">
+      
+      {% if draft|default(false) %}
+      <a id ="see-draft-btn" class="btn btn-link" data-url="{{path('course_draft_view')}}" >
+        <small>
+        您有一段自动保存内容，继续编辑请点击
+        </small>
+      </a>
+      {% endif %}
+
+      <textarea class="form-control" id="lesson-content-field" name="content"  >{{ field_value(lesson, 'content') }}</textarea>
+    </div>
   </div>
 
   <div class="form-group for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type{% endif %}">
