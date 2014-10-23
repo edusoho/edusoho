@@ -22,11 +22,11 @@ class UserGuideController extends BaseController
                     'completed'=>0
                 ),
                 array(
-                    'content'=>'步骤三：至少创建一个老师',
+                    'content'=>'步骤三：至少创建一个课程模板',
                     'completed'=>0
                 ),
                 array(
-                    'content'=>'步骤四：至少创建一个模板课程',
+                    'content'=>'步骤四：至少创建一个老师和一个学生账号',
                     'completed'=>0
                 ),
                 array(
@@ -94,7 +94,10 @@ class UserGuideController extends BaseController
                 ));
             }
         }
-        return $this->createJsonResponse('finished');
+        return $this->render('TopxiaAdminBundle:UserGuide:show-modal.html.twig',array(
+            'step'=>array('content'=>'恭喜，网站设置已完成'),
+            'index'=>99
+        ));
     }
 
     private function tryCompleteStep($index)
@@ -105,11 +108,13 @@ class UserGuideController extends BaseController
             $school=$this->getSettingService()->get('school');
             return empty($school)?false:true;
         }else if($index==2){
-            $teacherCount=$this->getUserService()->searchUserCount(array('roles'=>'ROLE_TEACHER'));
-            return $teacherCount>1?true:false;
-        }else if($index==3){
             $courseCount=$this->getCourseService()->searchCourseCount(array());
             return $courseCount>0?true:false;
+        }else if($index==3){
+            $teacherCount=$this->getUserService()->searchUserCount(array('roles'=>'ROLE_TEACHER'));
+            $studentCount=$this->getUserService()->searchUserCount(array('role'=>'ROLE_USER'));
+            
+            return ($teacherCount>1&&$studentCount>0)?true:false;
         }else if($index==4){
             $classCount=$this->getClassesService()->searchClassCount(array());
             return $classCount>0?true:false;

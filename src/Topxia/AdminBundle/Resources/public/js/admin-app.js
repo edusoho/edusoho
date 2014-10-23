@@ -57,13 +57,16 @@ define(function(require, exports, module) {
 
     //关闭modal框时显示右下快捷栏
     $('#step-modal').on('hidden.bs.modal', function (e) {
-        guideDiv.find(".text").html($(this).find("#guideContent").val());
-        guideDiv.find(".view-step").data().index=$(this).find("#guideIndex").val();
-        guideDiv.find(".complete-step").data().index=$(this).find("#guideIndex").val();
-         guideDiv.find(".complete-step").removeAttr('disabled');
-        guideDiv.slideDown('fast');
-        completedDiv.find(".percent").html($(this).find("#guideIndex").val()+"/5");
-        completedDiv.slideDown('fast');
+        var index=$(this).find("#guideIndex").val();
+        if(index<6){
+            guideDiv.find(".text").html($(this).find("#guideContent").val());
+            guideDiv.find(".view-step").data().index=index;
+            guideDiv.find(".complete-step").data().index=index;
+            guideDiv.find(".complete-step").removeAttr('disabled');
+            guideDiv.slideDown('fast');
+            completedDiv.find(".percent").html(index+"/5");
+            completedDiv.slideDown('fast');
+        }
     });
 
     guideDiv.unbind();
@@ -85,11 +88,7 @@ define(function(require, exports, module) {
      guideDiv.on('click',".complete-step",function(){
         $(".complete-step").attr('disabled',"disabled");
         $.get($(this).data('url')+'?index='+$(this).data('index'),function(html){
-            if(html=='finished'){
-                Notify.success('完成引导');
-                guideDiv.slideUp("fast");
-                completedDiv.slideUp('fast');
-            }else if(html){
+            if(html){
                 Notify.success('完成步骤');
                 $('#step-modal').html(html).modal('show');
                 guideDiv.slideUp("fast");
