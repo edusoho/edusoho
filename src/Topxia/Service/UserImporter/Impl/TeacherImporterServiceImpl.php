@@ -70,8 +70,9 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
         $result = array();
         $errorInfos = array();
         $checkInfo = array();
-        $numberAarry = array();
-        $emailAarry = array();
+        $numberArray = array();
+        $emailArray = array();
+        $mobileArray = array();
         $allStuentData = array();
         $numberRepeatInfo = "";
         $emailRepeatInfo = "";
@@ -103,6 +104,9 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
             }
             if($title == '邮箱') {
                 $checkEmail = true;
+            }
+            if($title == '手机号码') {
+                $checkMobile = true;
             }
         }
 
@@ -149,8 +153,11 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
             }
 
             $teacher['gender'] = $teacher['gender'] == '男' ? 'male' : 'female';
-            $numberAarry[$row] = $teacher['number'];
-            $emailAarry[$row] = $teacher['email']; 
+            $numberArray[$row] = $teacher['number'];
+            $emailArray[$row] = $teacher['email']; 
+            if($teacher['mobile'])  {
+                $mobileArray[$row] = $teacher['mobile']; 
+            }
             
             if($checkEmail && $rule=="ignore" && !$userService->isEmailAvaliable($teacher['email']))
             {     
@@ -182,12 +189,14 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
         }
 
    
-        $numberRepeatInfo = $this->arrayRepeat($numberAarry, "工号");
+        $numberRepeatInfo = $this->arrayRepeat($numberArray, "工号");
         if($checkEmail) {
-            $emailRepeatInfo = $this->arrayRepeat($emailAarry, "邮箱");
+            $emailRepeatInfo = $this->arrayRepeat($emailArray, "邮箱");
         }
-
-        $errorInfos = array_merge($errorInfos, $numberRepeatInfo, $emailRepeatInfo);
+        if($checkMobile) {
+            $mobileRepeatInfo = $this->arrayRepeat($mobileArray, '手机号码');
+        }
+        $errorInfos = array_merge($errorInfos, $numberRepeatInfo, $emailRepeatInfo, $mobileRepeatInfo);
         $result['status'] ='success';
         $result['errorInfos'] = $errorInfos;
         $result['checkInfo'] = $checkInfo;
