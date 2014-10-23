@@ -8,62 +8,38 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require('jquery.sortable');
 
-    var editor;
-    var tmpContents = {};
-    var LocalContent = {};
-    function getTmpContents(){
-        var date = new Date(); //日期对象
-        var now = "";
-        // now = date.getFullYear()+"年"; //读英文就行了
-        // now = now + (date.getMonth()+1)+"月"; //取月的时候取的是当前月-1如果想取当前月+1就可以了
-        // now = now + date.getDate()+"日";
-        now = now + date.getHours()+"时";
-        now = now + date.getMinutes()+"分";
-        now = now + date.getSeconds()+"秒";
-        tmpContents["title"] = $("#lesson-title-field").val();
-        tmpContents["summary"] = $("#lesson-summary-field").val();
-        tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
-        tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
-        var lessonId ;
+    function getEditorContent(editor){
         editor.sync();
         var z = editor.html();
         var x = editor.html().match(/<embed[\s\S]*?\/>/g);
         if (x) {
-                for (var i = x.length - 1; i >= 0; i--) {
-                   var y = x[i].replace(/\/>/g,"wmode='Opaque' \/>");
-                   var z =  z.replace(x[i],y);
-                };
+            for (var i = x.length - 1; i >= 0; i--) {
+               var y = x[i].replace(/\/>/g,"wmode='Opaque' \/>");
+               var z =  z.replace(x[i],y);
+            };
         }
-        tmpContents["content"] = z;
-        tmpContents["createdTime"] = now;
-        function compare(tmp, local){
-            if($.isEmptyObject(tmp)){
-                return false;
-            }
-            for(var key in tmp){
-                if(key!="courseId" && key!="createdTime" && tmp[key] != "" && tmp[key] != local[key]){
-                    return true;
-                }
-            }
+        return z;
+    }
+
+    function compare(tmp, local){
+        if($.isEmptyObject(tmp)){
             return false;
         }
-        function objClone(jsonObj){
-             var txt=JSON.stringify(jsonObj);
-             return JSON.parse(txt);
-        }
-        if(compare(tmpContents, LocalContent)){
-            var titleName = "添加课时";
-            if(tmpContents["lessonId"] == undefined){
-                lessonId = 0;
-            } else{
-                titleName = "编辑课时";
-                lessonId = tmpContents["lessonId"];
+        console.log(local);
+        for(var key in tmp){
+            if(key!="courseId" 
+                && key!="lessonId" 
+                && key!="createdTime" 
+                && tmp[key] != "" 
+                && tmp[key] != local[key]){
+                return true;
             }
-                $.post('/course/draft/create', tmpContents, function(data){
-                    LocalContent = objClone(tmpContents);
-                    $(".modal-title").text(titleName + '(草稿已于' + tmpContents['createdTime'] + '保存)');
-                });
         }
+        return false;
+    }
+    function objClone(jsonObj){
+         var txt=JSON.stringify(jsonObj);
+         return JSON.parse(txt);
     }
 
     var sortList = function($list) {
@@ -251,6 +227,38 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var Timer;
+        var editor;
+        var tmpContents = {};
+        var localContent = {};
+
+        function getTmpContents(){
+            var date = new Date(); //日期对象
+            var now = "";
+            now = now + date.getHours()+"时";
+            now = now + date.getMinutes()+"分";
+            now = now + date.getSeconds()+"秒";
+            tmpContents["title"] = $("#lesson-title-field").val();
+            tmpContents["summary"] = $("#lesson-summary-field").val();
+            tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
+            tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
+            tmpContents["content"] = getEditorContent(editor);
+            tmpContents["createdTime"] = now;
+
+
+            var lessonId = 0;
+            if(compare(tmpContents, localContent)){
+                var titleName = "添加课时";
+                if(tmpContents["lessonId"] != undefined){
+                    titleName = "编辑课时";
+                    lessonId = tmpContents["lessonId"];
+                }
+                $.post('/course/draft/create', tmpContents, function(data){
+                    localContent = objClone(tmpContents);
+                    $(".modal-title").text(titleName + '(草稿已于' + tmpContents['createdTime'] + '保存)');
+                });
+            }
+        }
+
         var updateDuration = function (length) {
             length = parseInt(length);
             if (isNaN(length) || length == 0) {
@@ -318,7 +326,7 @@ define(function(require, exports, module) {
             $form.addClass("lesson-form-" + type);
             
             if (type == 'text'){
-                Timer = setInterval(getTmpContents,5000);//1000为1秒钟
+                Timer = setInterval(getTmpContents, 5000);
             }
 
             if (type == 'video') {
@@ -352,16 +360,8 @@ define(function(require, exports, module) {
         editor = EditorFactory.create('#lesson-content-field', 'standard', {extraFileUploadParams:{group:'course'}, height: '300px'});
         
         validator.on('formValidate', function(elemetn, event) {
-            editor.sync();
-            var z = editor.html();
-            var x = editor.html().match(/<embed[\s\S]*?\/>/g);
-            if (x) {
-                for (var i = x.length - 1; i >= 0; i--) {
-                   var y = x[i].replace(/\/>/g,"wmode='Opaque' \/>");
-                   var z =  z.replace(x[i],y);
-                };
-            }
-            $content.val(z);
+            var content = getEditorContent(editor);
+            $content.val(content);
         });
 
         $(".close,#cancel-btn").on('click',function(e){
@@ -371,24 +371,24 @@ define(function(require, exports, module) {
         });
 
         $("#see-draft-btn").on('click',function(e) {
-        tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
-        var courseId = tmpContents["courseId"];
-        tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
-        var lessonId;
-        if(tmpContents["lessonId"] == undefined)  {
-            lessonId =0;
-        } else{
+            tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
+            var courseId = tmpContents["courseId"];
+            tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
+            var lessonId;
+            if(tmpContents["lessonId"] == undefined)  {
+                lessonId =0;
+            } else{
                 lessonId = tmpContents["lessonId"];
             }
-                $.get('/course/draft/view', {courseId: courseId, lessonId:lessonId}, function(response){  
-                    $("#lesson-title-field").val(response.title); 
-                    $("#lesson-summary-field").val(response.summary); 
-                    editor.sync();
-                    var z = editor.html(response.content);
-                    $("#lesson-content-field").val(z);        
-                }); 
-                $("#see-draft-btn").hide();
-    });
+            $.get('/course/draft/view', {courseId: courseId, lessonId:lessonId}, function(response){  
+                $("#lesson-title-field").val(response.title); 
+                $("#lesson-summary-field").val(response.summary); 
+                editor.sync();
+                var content = editor.html(response.content);
+                $("#lesson-content-field").val(content);        
+            });
+            $("#see-draft-btn").hide();
+        });
         
     };
 });
