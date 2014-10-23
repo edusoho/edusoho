@@ -47,7 +47,7 @@ define(function(require, exports, module) {
             completedDiv.find(".percent").html(data.index+"/5");
             completedDiv.show();
         }else if(data){//无index则为显示具体步骤提示modal框
-            $('#step-modal').html(data).modal('show');
+            $('#modal').html(data).modal('show');
         }else{
             guideDiv.hide();
             completedDiv.hide();

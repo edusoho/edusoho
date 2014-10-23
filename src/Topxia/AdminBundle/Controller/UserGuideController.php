@@ -35,9 +35,8 @@ class UserGuideController extends BaseController
                 )
             );
             $this->getSettingService()->set('guide_step',$guideSteps);
-            return $this->render('TopxiaAdminBundle:UserGuide:show-modal.html.twig',array(
-                'step'=>$guideSteps[0],
-                'index'=>0
+            return $this->render('TopxiaAdminBundle:UserGuide:main-modal.html.twig',array(
+                'steps'=>$guideSteps
             ));
         }
         foreach ($guideSteps as $index=>$step) {
