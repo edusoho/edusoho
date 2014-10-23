@@ -37,6 +37,7 @@ class InitCommand extends BaseCommand
 		$this->initRefundSetting($output);
 		$this->initThemes($output);
 		$this->initFile($output);
+        $this->initInstallLock($output);
 
 		$output->writeln('<info>初始化系统完毕</info>');
 	}
@@ -332,6 +333,14 @@ EOD;
     	$output->write('  初始化主题');
     	
         $this->getSettingService()->set('theme', array('uri' => 'default'));
+
+        $output->writeln(' ...<info>成功</info>');
+    }
+
+    public function initInstallLock($output)
+    {
+        $output->write('  初始化install.lock');
+        touch($this->getContainer()->getParameter('kernel.root_dir') . '/data/install.lock');
 
         $output->writeln(' ...<info>成功</info>');
     }
