@@ -284,6 +284,14 @@ admin_course_category:
     pattern: /course/category
     defaults: { _controller: TopxiaAdminBundle:Course:category }
 
+admin_course_data:
+    pattern:  /course/data
+    defaults: { _controller: TopxiaAdminBundle:Course:data }
+
+admin_course_lesson_data:
+    pattern:  /course/lesson/data/{id}
+    defaults: { _controller: TopxiaAdminBundle:Course:lessonData }
+
 admin_course_disk:
     pattern: /course/disk
     defaults: { _controller: TopxiaAdminBundle:CourseDisk:index }
@@ -975,5 +983,6 @@ admin_official_messages:
 admin_uploadfile_head_leader_params:
     pattern: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
+
 
 

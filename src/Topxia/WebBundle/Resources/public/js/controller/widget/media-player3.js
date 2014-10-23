@@ -124,7 +124,13 @@ define(function(require, exports, module) {
                 case "timeChange":
                     window.__MediaPlayer.trigger('timeChange',data);
                     break;
-            }    
+                case "playing":
+                    window.__MediaPlayer.trigger('playing');
+                    break;
+                case "paused":
+                    window.__MediaPlayer.trigger('paused');
+                    break;
+            }
         }
 
     });

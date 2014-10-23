@@ -8,8 +8,10 @@
   <div class="page-header">
     <h1>应用中心</h1>
   </div>
-  {% if status|default(null) %}
+  {% if status|default(null) == 'error' %}
     <div class="alert alert-danger">AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="{{path('admin_setting_cloud')}}">请修改设置。</a></div>
+  {% elseif  status|default(null) == 'unlink' %}
+    <div class="alert alert-danger">您的服务器无法连接到更新服务器，请检查网络连接状况。</div>
   {% else %}
   <table class="table table-striped table-hover">
     <thead>

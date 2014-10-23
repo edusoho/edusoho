@@ -89,7 +89,8 @@
               <div class="progress">
                 <div class="progress-bar progress-bar-success" style="width: 100%;"></div>
               </div>
-              <div class="action"><span class="btn btn-default btn-sm">查看课程</span></div>
+              学习总时长:{{course.learnTime}}
+              <div class="action clearfix"><span class="btn btn-default btn-sm pull-right">查看课程</span></div>
             {% else %}
               <div class="progress">
                 <div class="progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.lessonNum) }};"></div>

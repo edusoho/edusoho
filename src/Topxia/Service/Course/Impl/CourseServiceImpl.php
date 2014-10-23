@@ -567,7 +567,45 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function analysisCourseDataByTime($startTime,$endTime)
 	{
-	    	return $this->getCourseDao()->analysisCourseDataByTime($startTime,$endTime);
+    	return $this->getCourseDao()->analysisCourseDataByTime($startTime,$endTime);
+	}
+
+	public function waveLearningTime($lessonId,$userId,$time)
+	{
+		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
+
+		if($learn['status']!="finished")
+		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+				'learnTime' => $learn['learnTime']+intval($time),
+		));
+	}
+
+	public function waveWatchingTime($userId,$lessonId,$time)
+	{
+		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
+
+		if($learn['status']!="finished" && $learn['videoStatus']=="playing")
+		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+				'watchTime' => $learn['watchTime']+intval($time),
+		));
+	}
+
+	public function watchPlay($userId,$lessonId)
+	{
+		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
+
+		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+				'videoStatus' => 'playing',
+		));
+	}
+
+	public function watchPaused($userId,$lessonId)
+	{
+		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
+
+		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+				'videoStatus' => 'paused',
+		));
 	}
 
 	private function autosetCourseFields($courseId)
@@ -912,6 +950,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		// $this->autosetCourseFields($courseId);
 	}
 
+	public function findLearnsCountByLessonId($lessonId)
+	{
+		return  $this->getLessonLearnDao()->findLearnsCountByLessonId($lessonId);
+	}
+
 	public function analysisLessonFinishedDataByTime($startTime,$endTime)
 	{
 		return $this->getLessonLearnDao()->analysisLessonFinishedDataByTime($startTime,$endTime);
@@ -1147,16 +1190,26 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
 
-    	public function searchLearnCount($conditions)
-    	{
-    		return $this->getLessonLearnDao()->searchLearnCount($conditions);
-    	}
+	public function searchLearnCount($conditions)
+	{
+		return $this->getLessonLearnDao()->searchLearnCount($conditions);
+	}
 
-    	public function searchLearns($conditions,$orderBy,$start,$limit)
-    	{
-    		return $this->getLessonLearnDao()->searchLearns($conditions,$orderBy,$start,$limit);
-    	}
+	public function searchLearns($conditions,$orderBy,$start,$limit)
+	{
+		return $this->getLessonLearnDao()->searchLearns($conditions,$orderBy,$start,$limit);
+	}
 
+	public function searchLearnTime($conditions)
+	{	
+		return $this->getLessonLearnDao()->searchLearnTime($conditions);
+	}
+
+	public function searchWatchTime($conditions)
+	{
+		return $this->getLessonLearnDao()->searchWatchTime($conditions);
+	}
+	
 	public function findLatestFinishedLearns($start, $limit)
 	{
 		return $this->getLessonLearnDao()->findLatestFinishedLearns($start, $limit);
