@@ -79,7 +79,7 @@ define(function(require, exports, module) {
                 var type = ($('.taks-body .nav li.active').attr('id') == 'finished-btn') ? 'finished' : 'not-finished',
                     start = ($table.find('.has-item')).length;
                 
-                start >= 10 && $.ajax({
+                start%default_limit==0 && $.ajax({
                 url: $table.data('url'),
                 data:{lessonId:lessonId,start:start,limit:default_limit,type:type,classId:$('#classSelecter').val()},
                 success: function(html)
