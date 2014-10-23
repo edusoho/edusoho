@@ -69,10 +69,11 @@
         </div>
 
         <div class="dashboard-footer clearfix">
-
-          <div class="pull-right">
-            <button class="btn btn-primary finish-btn" data-role="finish-lesson" style="display:none;"><span class="glyphicon glyphicon-unchecked"></span> 学过了</button>
-          </div>
+          {% if not app.user.isAdmin %}
+            <div class="pull-right">
+              <button class="btn btn-primary finish-btn" data-role="finish-lesson" style="display:none;"><span class="glyphicon glyphicon-unchecked"></span> 学过了</button>
+            </div>
+          {% endif %}
 
         </div>
       </div>
