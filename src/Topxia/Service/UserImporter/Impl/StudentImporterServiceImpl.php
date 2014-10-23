@@ -72,8 +72,9 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
         $result = array();
         $errorInfos = array();
         $checkInfo = array();
-        $numberAarry = array();
-        $emailAarry = array();
+        $numberArray = array();
+        $emailArray = array();
+        $mobileArray = array();
         $allStuentData = array();
         $numberRepeatInfo = "";
         $emailRepeatInfo = "";
@@ -105,6 +106,9 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
             }
             if($title == '邮箱') {
                 $checkEmail = true;
+            }
+            if($title == '手机号码') {
+                $checkMobile = true;
             }
         }
 
@@ -151,9 +155,12 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
             }
 
             $student['gender'] = $student['gender'] == '男' ? 'male' : 'female';
-            $numberAarry[$row] = $student['number'];
-            $emailAarry[$row] = $student['email']; 
-            
+            $numberArray[$row] = $student['number'];
+            $emailArray[$row] = $student['email']; 
+            if($student['mobile'])  {
+                $mobileArray[$row] = $student['mobile']; 
+            }
+
             if($rule == "ignore" && $classService->findClassMemberByUserNumber($student['number'], $classId)) {
                 $errorInfos[] = '学号为' . $student['number'] . '已存在其他班级，请检查';     
                 continue;
@@ -185,12 +192,15 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
         }
 
    
-        $numberRepeatInfo = $this->arrayRepeat($numberAarry, "学号");
+        $numberRepeatInfo = $this->arrayRepeat($numberArray, "学号");
         if($checkEmail) {
-            $emailRepeatInfo = $this->arrayRepeat($emailAarry, "邮箱");
+            $emailRepeatInfo = $this->arrayRepeat($emailArray, "邮箱");
         }
 
-        $errorInfos = array_merge($errorInfos, $numberRepeatInfo, $emailRepeatInfo);
+        if($checkMobile) {
+            $mobileRepeatInfo = $this->arrayRepeat($mobileArray, '手机号码');
+        }
+        $errorInfos = array_merge($errorInfos, $numberRepeatInfo, $emailRepeatInfo, $mobileRepeatInfo);
         $result['status'] ='success';
         $result['errorInfos'] = $errorInfos;
         $result['checkInfo'] = $checkInfo;
