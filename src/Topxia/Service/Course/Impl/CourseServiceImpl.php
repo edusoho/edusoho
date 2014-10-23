@@ -615,7 +615,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function findCourseDraft($courseId, $userId,$lessonId)
 	{
-		$draft = $this->getDraftDao()->getEditDrafts($courseId,$userId,$lessonId);
+		$draft = $this->getDraftDao()->getCourseDrafts($courseId,$userId,$lessonId);
 		if (empty($draft) or ($draft['userId'] != $userId)) {
 			return null;
 		}
@@ -788,7 +788,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $lesson;
 	}
 
-	public function updateEditDraft($userId, $courseId,$lessonId,$fields)
+	public function updateCourseDraft($userId, $courseId,$lessonId,$fields)
 	{
 		$draft = $this->findCourseDraft($courseId, $userId,$lessonId);
 
@@ -804,7 +804,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields = LessonSerialize::serialize($fields);
 		
 		return LessonSerialize::unserialize(
-			$this->getDraftDao()->updateEditDraft($userId,$courseId,$lessonId,$fields)
+			$this->getDraftDao()->updateCourseDraft($userId,$courseId,$lessonId,$fields)
 		);
 
 	}

@@ -105,7 +105,7 @@ interface CourseService
 
 	public function updateLesson($courseId, $lessonId, $fields);
 
-	public function updateEditDraft($userId, $courseId,$lessonId,$fields);
+	public function updateCourseDraft($userId, $courseId,$lessonId,$fields);
 
 	public function deleteLesson($courseId, $lessonId);
 

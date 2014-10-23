@@ -73,7 +73,7 @@ class CourseLessonManageController extends BaseController
         $lessonId = 0;
         $drafts = $this->getCourseService()->findCourseDraft($courseId,$userId,$lessonId);
         if($drafts) {
-            $draft = $this->getCourseService()->updateEditDraft($userId, $courseId,$lessonId,$formData);
+            $draft = $this->getCourseService()->updateCourseDraft($userId, $courseId,$lessonId,$formData);
         } else {
             $draft = $this->getCourseService()->createEditDraft($formData);
         }
@@ -91,7 +91,7 @@ class CourseLessonManageController extends BaseController
 
         $drafts = $this->getCourseService()->findCourseDraft($courseId, $userId,$lessonId);
         if($drafts) {
-            $draft = $this->getCourseService()->updateEditDraft($userId, $courseId,$lessonId,$formData);
+            $draft = $this->getCourseService()->updateCourseDraft($userId, $courseId,$lessonId,$formData);
         } else {
             $draft = $this->getCourseService()->createEditDraft($formData);
         }

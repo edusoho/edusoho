@@ -15,7 +15,7 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         return  $draft = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function getEditDrafts($courseId,$userId,$lessonId)
+    public function getCourseDrafts($courseId,$userId,$lessonId)
     {
         $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND userId = ? AND lessonId = ?";
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$userId,$lessonId)) ? : null;
@@ -30,10 +30,10 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         return $this->getDraft($this->getConnection()->lastInsertId());
     }
 
-    public function updateEditDraft($userId,$courseId,$lessonId,$fields)
+    public function updateCourseDraft($userId,$courseId,$lessonId,$fields)
      {
         $this->getConnection()->update($this->draftTable, $fields, array('courseId' => $courseId,'userId' => $userId,'lessonId' => $lessonId));
-        return $this->getEditDrafts($courseId,$userId,$lessonId);
+        return $this->getCourseDrafts($courseId,$userId,$lessonId);
     }
 
     public function deleteDraftByCourse($courseId,$userId,$lessonId)

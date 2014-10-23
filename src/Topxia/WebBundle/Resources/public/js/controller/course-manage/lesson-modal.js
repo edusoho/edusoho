@@ -10,7 +10,7 @@ define(function(require, exports, module) {
 
             var tmpContents = {};
             var editor;
-            var Local_content = {};
+            var LocalContent = {};
             function getTmpContents(){
                 var date = new Date(); //日期对象
                 var now = "";
@@ -51,15 +51,15 @@ define(function(require, exports, module) {
                      var txt=JSON.stringify(jsonObj);
                      return JSON.parse(txt);
                 }
-                if(compare(tmpContents, Local_content)){
+                if(compare(tmpContents, LocalContent)){
                     if(lessonId == undefined){
                         $.post('/course/draft/create', tmpContents, function(data){
-                            Local_content = objClone(tmpContents);
+                            LocalContent = objClone(tmpContents);
                             $(".modal-title").text('添加课时(草稿已于' + tmpContents['createdTime'] + '保存)');
                         });
                       } else {
                          $.post('/course/edit/draft/'+lessonId+'/create', tmpContents, function(data){
-                            Local_content = objClone(tmpContents);
+                            LocalContent = objClone(tmpContents);
                             $(".modal-title").text('编辑课时(草稿已于' + tmpContents['createdTime'] + '保存)');
                         });
                      }
