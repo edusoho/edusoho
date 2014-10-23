@@ -296,6 +296,8 @@ class CourseLessonController extends BaseController
  
         }
 
+        $lesson['length']=intval($lesson['length']/60);
+        
         return $this->render('TopxiaWebBundle:CourseLesson:lesson-data-modal.html.twig', array(
             'lesson'=>$lesson,
             'paginator'=>$paginator,
