@@ -4161,6 +4161,10 @@ body {
 	color: #999;
 }
 
+.question-set-card {
+    width:261px;
+}
+
 .question-set-card  .question-index {
 	display: inline-block;
 	border: 1px solid #ccc;

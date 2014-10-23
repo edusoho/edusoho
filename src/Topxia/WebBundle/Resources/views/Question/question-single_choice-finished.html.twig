@@ -6,11 +6,9 @@
 
 {% set itemResultAnswer = itemResult.answer|default(null)  %}
 
-{% if itemResultAnswer in [0,1] %}
+{% if itemResultAnswer >= 0 %}
  {% set choiceIndex = (65+itemResult.answer)|chr %}
-
   <div class="homework-question-result">
-
     {% if itemResult.status == 'right' %}
 	  <span class="glyphicon glyphicon-ok question-text-success"></span> 你答对了!
     {% elseif itemResult.status == 'wrong' %}

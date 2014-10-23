@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% if questionStatus != 'finished' %}{% set script_controller = 'homework/do' %}{% endif %}
+{% if questionStatus != 'finished'  %}{% set script_controller = 'homework/do' %}{% endif %}
 
 {% if itemSetResult|default(null) %}{% set itemSet = itemSetResult %}{% endif %}
 
@@ -14,15 +14,23 @@
             <div class="question-set-type">作业</div>
             <div class="question-set-title">{{ lesson.title }}</div>
             <div class="homwork-status">
-              <div class="pull-right label label-success">{% if questionStatus == 'doing'%}答题中{% elseif questionStatus == 'reviewing' %}批阅中{% else %}批阅完成{% endif %}</div>
+              <div class="pull-right label label-success">{% if questionStatus == 'doing'%}答题中{% elseif questionStatus == 'reviewing' %}批阅中{% elseif questionStatus == 'previewing' %}预览中{% else %}批阅完成{% endif %}</div>
             </div>
             <div class="question-set-description">
               {{ homework.description |raw }}
               <p class="text-muted">所属课程 <a href="#">{{ course.title }}</a></p>
             </div>
+            <hr>
+            {% if teacherSay|default(null) %}
+                <div class="alert alert-success" style="margin-bottom:0px">
+                  <div><strong>评语：</strong></div>
+                      <div class="mtm">{{ teacherSay|default('') }}</div>
+                </div>
+            {% endif %}
           </div>
         </div>
       </div>
+
     </div>
 
     <div class="row question-set-body">
@@ -44,7 +52,7 @@
       </div>
     {% if not app.user.isTeacher() and questionStatus == 'reviewing' %}
     {% else %}
-      {% if questionStatus in ['doing','reviewing'] %}
+      {% if questionStatus in ['doing','reviewing','previewing'] %}
 
           <div class="col-md-3 question-set-side">
             <div class="panel panel-default question-set-card">
@@ -60,7 +68,19 @@
                   {%- endfor -%}
                 </div>
                 <div class="panel-footer">
-                  <button class="btn btn-success btn-block " id="{% if questionStatus == 'doing' %}homework-finish-btn{% else %}homework-check-btn{% endif %}" data-url="{% if questionStatus == 'doing' %}{{ path('course_homework_submit',{courseId:course.id,homeworkId:homework.id}) }} {% else %} {{ path('course_homework_check',{courseId:course.id,homeworkId:homework.id,userId:userId}) }} {% endif %}" data-saving-text="正在保存...">{% if questionStatus == 'doing' %}提交作业{% else %}完成批改{% endif %}</button>
+
+                {% if questionStatus == 'reviewing' %}
+                    <button class="btn btn-success btn-block" data-toggle="modal" data-target="#modal" data-url="{{ path('course_homework_check_show',{courseId:course.id,homeworkId:homework.id,userId:userId}) }}" id="homework-check-show-btn">完成批改</button>
+                {% endif %}
+
+                {% if questionStatus == 'doing' %}
+                    <button id="homework-finish-btn" class="btn btn-success btn-block"  data-url="{{ path('course_homework_submit',{courseId:course.id,homeworkId:homework.id}) }}"  data-saving-text="正在保存...">提交作业</button>
+                {% endif %}
+
+                {% if questionStatus == 'previewing' %}
+                      <button id="homework-finish-btn" class="btn btn-success btn-block"  data-saving-text="正在保存..." disabled>提交作业</button>
+                {% endif %}
+
                 </div>
             </div>
         </div>

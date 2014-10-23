@@ -10,7 +10,6 @@ define(function(require, exports, module) {
             element: '#exercise-set'
         });
 
-        // $('.question-set-card').css('width','265px'};
         $('.question-set-card').affix({
             offset: {
               top: 100

@@ -32,6 +32,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsbyTypeRange($typeRange, $start, $limit); 
     }
 
+    public function findQuestionsCountbyTypeRange($typeRange)
+    {
+        return $this->getQuestionDao()->findQuestionsCountbyTypeRange($typeRange);
+    }
+
     public function findQuestionsByParentIds($ids)
     {
         return $this->getQuestionDao()->findQuestionsByParentIds($ids);

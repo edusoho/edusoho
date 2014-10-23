@@ -136,13 +136,24 @@ class CourseHomeworkController extends BaseController
         }
 
         $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'],$userId);
-
+        $homeworkResult = $this->getHomeworkService()->getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $homework['lessonId'], $userId);
         return $this->render('TopxiaWebBundle:CourseHomework:result.html.twig', array(
             'homework' => $homework,
             'itemSetResult' => $itemSetResult,
             'course' => $course,
             'lesson' => $lesson,
+            'teacherSay' => $homeworkResult['teacherSay'],
+            'userId' => $homeworkResult['userId'],
             'questionStatus' => 'finished'
+        ));
+    }
+
+    public function checkShowAction(Request $request, $courseId, $homeworkId,$userId)
+    {
+        return $this->render('TopxiaWebBundle:CourseHomework:check-modal.html.twig',array(
+            'courseId' => $courseId,
+            'homeworkId' => $homeworkId,
+            'userId' => $userId
         ));
     }
 
@@ -166,10 +177,15 @@ class CourseHomeworkController extends BaseController
 
         if ($request->getMethod() == 'POST') {
 
-             $checkHomeworkData = $request->request->all();
-             $this->getHomeworkService()->checkHomework($homeworkId,$userId,$checkHomeworkData['data']);
+            $checkHomeworkData = $request->request->all();
+            $this->getHomeworkService()->checkHomework($homeworkId,$userId,$checkHomeworkData['data']);
 
-             return $this->createJsonResponse(array('status' => 'success'));
+            return $this->createJsonResponse(
+                array(
+                    'courseId' => $courseId,
+                    'lessonId' => $homework['lessonId']
+                )
+            );
         }
 
         $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'],$userId);

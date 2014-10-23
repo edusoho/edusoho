@@ -18,7 +18,7 @@
             </div>
             <div class="question-set-description">
               {# {{ exercise.description |raw }} #}
-              <p class="text-muted">所属课程 <a href="#">{{ course.title }}</a></p>
+              <p class="text-muted">所属课程 <a href="{{ path('course_show',{id:course.id}) }}">{{ course.title }}</a></p>
             </div>
           </div>
         </div>
@@ -32,7 +32,6 @@
           <div class="panel-body">
             <div class="question-set-items">
               {% for item in itemSet.items %}
-              {{dump(item)}}
                 {% if item.subItems|default(null) %}
                   {% include 'TopxiaWebBundle:Question:question-set-item-have-sub.html.twig' %}
                 {% else %}

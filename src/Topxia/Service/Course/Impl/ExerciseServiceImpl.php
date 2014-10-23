@@ -29,6 +29,101 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $exercise;
     }
 
+    public function getItemSetResultByExerciseIdAndUserId($exerciseId,$userId)
+    {
+        $items = $this->getExerciseItemDao()->findItemsByExerciseId($exerciseId);
+        $itemsResults = $this->getExerciseItemResultDao()->findExerciseItemsResultsbyExerciseIdAndUserId($exerciseId,$userId);
+        $indexdItems = ArrayToolkit::index($items, 'questionId');
+        $indexdItemsResults = ArrayToolkit::index($itemsResults, 'questionId');
+
+        $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
+        $i = 0;
+        $validQuestionIds = array();
+
+        foreach ($indexdItems as $index => $item) {
+
+            $item['question'] = empty($questions[$item['questionId']]) ? null : $questions[$item['questionId']];
+            if (empty($item['parentId'])) {
+                $indexdItems[$index] = $item;
+                $indexdItems[$index]['itemResult'] = $indexdItemsResults[$index];
+                $i = 0;
+                continue;
+            }
+
+            if (empty($indexdItems[$item['parentId']]['subItems'])) {
+                $indexdItems[$item['parentId']]['subItems'] = array();
+                $i = 0;
+            }
+
+            $indexdItems[$item['parentId']]['subItems'][] = $item;
+            $indexdItems[$item['parentId']]['subItems'][$i]['itemResult'] = $indexdItemsResults[$index];
+            $i++;
+
+            unset($indexdItems[$item['questionId']]);
+        }
+
+        $set = array(
+            'items' => array_values($indexdItems),
+            'questionIds' => array(),
+            'total' => 0,
+        );
+
+        foreach ($set['items'] as $item) {
+            if (!empty($item['subItems'])) {
+                $set['total'] += count($item['subItems']);
+                $set['questionIds'] = array_merge($set['questionIds'], ArrayToolkit::column($item['subItems'],'questionId'));
+            } else {
+                $set['total'] ++;
+                $set['questionIds'][] = $item['questionId'];
+            }
+        }
+
+        return $set;
+    }
+
+    public function getItemSetByExerciseId($exerciseId)
+    {
+        $items = $this->getExerciseItemDao()->findItemsByExerciseId($exerciseId);
+        $indexdItems = ArrayToolkit::index($items, 'questionId');
+        $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
+
+        $validQuestionIds = array();
+
+        foreach ($indexdItems as $index => $item) {
+
+            $item['question'] = empty($questions[$item['questionId']]) ? null : $questions[$item['questionId']];
+            if (empty($item['parentId'])) {
+                $indexdItems[$index] = $item;
+                continue;
+            }
+
+            if (empty($indexdItems[$item['parentId']]['subItems'])) {
+                $indexdItems[$item['parentId']]['subItems'] = array();
+            }
+
+            $indexdItems[$item['parentId']]['subItems'][] = $item;
+            unset($indexdItems[$item['questionId']]);
+        }
+
+        $set = array(
+            'items' => array_values($indexdItems),
+            'questionIds' => array(),
+            'total' => 0,
+        );
+
+        foreach ($set['items'] as $item) {
+            if (!empty($item['subItems'])) {
+                $set['total'] += count($item['subItems']);
+                $set['questionIds'] = array_merge($set['questionIds'], ArrayToolkit::column($item['subItems'],'questionId'));
+            } else {
+                $set['total'] ++;
+                $set['questionIds'][] = $item['questionId'];
+            }
+        }
+
+        return $set;
+    }
+
     public function createExercise($fields)
     {   
         if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId', 'questionCount', 'difficulty', 'ranges', 'source'))) {
@@ -45,7 +140,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseDao()->addExercise($this->filterExerciseFields($fields));
     }
 
-    public function startExercise($id)
+    public function startExercise($id,$excludeIds)
     {
         $exercise = $this->getExerciseDao()->getExercise($id);
 
@@ -67,25 +162,133 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
         $exerciseResult = $this->getExerciseResultDao()->getExerciseResultByExerciseIdAndUserId($id,$user->id);
         
-        if (!empty($homeworkResult)) {
-            // $this->getExerciseResultDao()->deleteExerciseResult($exerciseResult['id']);
+        if (!empty($exerciseResult)) {
+            $this->getExerciseResultDao()->deleteExerciseResult($exerciseResult['id']);
+            $this->getExerciseItemDao()->deleteItemByExerciseId($exercise['id']);
+            $this->getExerciseItemResultDao()->deleteItemResultByExerciseId($exercise['id']);
         }
 
-        $result = $this->getHomeworkResultDao()->getExerciseResultByExerciseIdAndStatusAndUserId($id,$user->id, 'doing');
+        $result = $this->getExerciseResultDao()->getExerciseResultByExerciseIdAndStatusAndUserId($id,$user->id, 'doing');
+
         if (empty($result)){
-            $homeworkResult = array(
-                'homeworkId' => $homework['id'],
-                'courseId' => $homework['courseId'],
-                'lessonId' =>  $homework['lessonId'],
+            //add questions
+            $this->addExerciseItems($exercise['id'],$excludeIds);
+
+            $exerciseFields = array(
+                'exerciseId' => $exercise['id'],
+                'courseId' => $exercise['courseId'],
+                'lessonId' =>  $exercise['lessonId'],
                 'userId' => $this->getCurrentUser()->id,
-                'checkTeacherId' => $homework['createdUserId'],
                 'status' => 'doing',
                 'usedTime' => time(),
             );
 
-            return $this->getHomeworkResultDao()->addHomeworkResult($homeworkResult);
+            return $this->getExerciseResultDao()->addExerciseResult($exerciseFields);
         } else {
             return $result;
+        }
+    }
+
+    public function submitExercise($id,$exercise)
+    {
+        $this->addExerciseItemResult($id,$exercise);
+        //finished
+        $rightItemCount = 0;
+
+        $exerciseItemsRusults = $this->getExerciseItemResultDao()->findExerciseItemsResultsbyExerciseId($id);
+
+        foreach ($exerciseItemsRusults as $key => $exerciseItemRusult) {
+            if ($exerciseItemRusult['status'] == 'right') {
+               $rightItemCount++;
+            }
+        }
+
+        $exerciseitemResult['commitStatus'] = 'committed';
+        $exerciseitemResult['rightItemCount'] = $rightItemCount;
+        $exerciseitemResult['status'] = 'finished';
+
+        $exerciseResult = $this->getExerciseResultDao()->getExerciseResultByexerciseIdAndUserId($id, $this->getCurrentUser()->id);
+
+        $result = $this->getExerciseResultDao()->updateExerciseResult($exerciseResult['id'],$exerciseitemResult);
+
+        return $result;
+    }
+
+    private function addExerciseItemResult($id,$exercise)
+    {
+        $exerciseResult = $this->getExerciseResultByExerciseIdAndUserId($id, $this->getCurrentUser()->id);
+        $exerciseItems = $this->findExerciseItemsByExerciseId($id);
+        $itemResult = array();
+        $exerciseitemResult = array();
+
+        foreach ($exerciseItems as $key => $exerciseItem) {
+            if (!empty($exercise[$exerciseItem['questionId']])) {
+
+                if (!empty($exercise[$exerciseItem['questionId']]['answer'])) {
+
+                    $answer = $exercise[$exerciseItem['questionId']]['answer'];
+
+                    if (count($answer)>1) {
+                        $answer = implode(",", $answer);
+                    } else {
+                        $answer = $answer[0];
+                    }
+
+                    $answerArray = array($answer);
+                    $result = $this->getQuestionService()->judgeQuestion($exerciseItem['questionId'], $answerArray);
+                    $status = $result['status'];
+                } else {
+                    $answer = null;
+                    $status = "noAnswer";
+                }
+
+            } else {
+                $answer = null;
+                $status = "noAnswer";
+
+            }
+
+            $itemResult['itemId'] = $exerciseItem['id'];
+            $itemResult['exerciseId'] = $exerciseItem['exerciseId'];
+            $itemResult['exerciseResultId'] = $exerciseResult['id'];
+            $itemResult['questionId'] = $exerciseItem['questionId'];
+            $itemResult['userId'] = $this->getCurrentUser()->id;
+            $itemResult['status'] = $status;
+            $itemResult['answer'] = $answer;
+
+            $this->getExerciseItemResultDao()->addExerciseItemResult($itemResult);
+        }
+    }
+
+    private function addExerciseItems($exerciseId,$excludeIds)
+    {
+        $exerciseItems = array();
+        // $exerciseItemsSub = array();
+        // $includeItemsSubIds = array();
+        $index = 1;
+
+        foreach ($excludeIds as $key => $excludeId) {
+
+            $questions = $this->getQuestionService()->findQuestionsByParentId($excludeId);
+
+            $items['seq'] = $index;
+            $items['questionId'] = $excludeId;
+            $items['exerciseId'] = $exerciseId;
+            $items['parentId'] = 0;
+            $exerciseItems[] = $this->getExerciseItemDao()->addItem($items);
+
+            if (!empty($questions)) {
+                foreach ($questions as $key => $question) {
+                    $items['seq'] = $index;
+                    $items['questionId'] = $question['id'];
+                    $items['exerciseId'] = $exerciseId;
+                    $items['parentId'] = $question['parentId'];
+                    $exerciseItems[] = $this->getExerciseItemDao()->addItem($items);
+                    $index++;
+                }
+                $index -= 1;
+            }
+             $index++;
         }
     }
 
@@ -121,6 +324,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         } else {
             return array('status' => 'yes');
         }
+    }
+
+    public function findExerciseItemsByExerciseId($exerciseId)
+    {
+        return $this->getExerciseItemDao()->findItemsByExerciseId($exerciseId);
     }
 
     public function findExerciseByCourseIdAndLessonIds($courseId, $lessonIds)
@@ -192,9 +400,24 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return array('status' => 'no', 'missing' => $missing);
     }
 
+    public function getExerciseResultByExerciseIdAndUserId($exerciseId, $userId)
+    {
+        return $this->getExerciseResultDao()->getExerciseResultByExerciseIdAndUserId($exerciseId, $userId);
+    }
+
     private function getExerciseResultDao()
     {
         return $this->createDao('Course.ExerciseResultDao');
+    }
+
+    private function getExerciseItemResultDao()
+    {
+        return $this->createDao('Course.ExerciseItemResultDao');
+    }
+
+    private function getExerciseItemDao()
+    {
+        return $this->createDao('Course.ExerciseItemDao');
     }
 
     protected function getExerciseDao()

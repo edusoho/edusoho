@@ -225,13 +225,12 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     public function checkHomework($id,$userId,$checkHomeworkData)
     {
         $homeworkResult = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndUserId($id,$userId);
-
         if (empty($homeworkResult)) {
             throw $this->createServiceException();
         }
-
         $fields['status'] = 'finished';
         $fields['checkedTime'] = time();
+        $fields['teacherSay'] = empty($checkHomeworkData['teacherFeedback']) ? "" : $checkHomeworkData['teacherFeedback'];
         $this->getHomeworkResultDao()->updateHomeworkResult($homeworkResult['id'],$fields);
 
         foreach ($checkHomeworkData['questionIds'] as $key => $questionId) {
@@ -468,7 +467,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     private function addHomeworkItemResult($id,$homework)
     {
         $homeworkResult = $this->getHomeworkResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
-        $homeworkItems = $this->getHomeworkService()->findHomeworkItemsByHomeworkId($id);
+        $homeworkItems = $this->findHomeworkItemsByHomeworkId($id);
         $itemResult = array();
         $homeworkitemResult = array();
 

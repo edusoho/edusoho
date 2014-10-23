@@ -45,6 +45,12 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    public function findQuestionsCountbyTypeRange($typeRange)
+    {
+        $sql ="SELECT count(*) FROM {$this->table} WHERE type in ({$typeRange})";
+        return $this->getConnection()->fetchColumn($sql, array($typeRange));
+    }
+
     public function findQuestionsByParentIds(array $ids)
     {
         if(empty($ids)){

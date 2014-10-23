@@ -1,7 +1,9 @@
 define(function(require, exports, module) {
 
     var Widget = require('widget');
+    var saveModule = require('./save.js');
     var EditorFactory = require('common/kindeditor-factory');
+    var Notify = require('common/bootstrap-notify');
     var changeAnswers = {};
     var changeTeacherSay = {};
 
@@ -10,12 +12,12 @@ define(function(require, exports, module) {
             element: '#homework-set'
         });
 
-        // $('.question-set-card').css('width','265px'};
         $('.question-set-card').affix({
             offset: {
-              top: 100
-            }
+                top: 100
+            },
         });
+
     };
 
     var QuestionSet = Widget.extend({
@@ -50,6 +52,17 @@ define(function(require, exports, module) {
         setup: function() {
             var card = this;
 
+            setInterval(
+                function(){
+                   saveModule.save($('#homework-save-btn'),0);
+                    var $homeworkFinishBtn = $('#homework-finish-btn');
+                    $homeworkFinishBtn.text('提交作业');
+                    $homeworkFinishBtn.attr('disabled',false);
+                    Notify.success('作业已被保存');
+                }
+                ,1000*600
+            );
+
             this.get('questionSet').on('answer_change', function(answerData) {
                 var questionId = answerData.questionId;
                 changeAnswers[questionId] = answerData;
@@ -63,7 +76,6 @@ define(function(require, exports, module) {
 
         events: {
             'click #homework-finish-btn': 'onClickFinishBtn',
-            'click #homework-check-btn': 'onClickCheckBtn',
             'click #homework-save-btn': 'onClickSaveBtn',
             'click .question-index': 'onClickSetCard',
         },
@@ -76,17 +88,6 @@ define(function(require, exports, module) {
 
             $.post($btn.data('url'),{data:changeAnswers},function(res){
                 location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/learn#lesson/"+res.lessonId;
-            });
-        },
-
-        onClickCheckBtn: function(event) {
-            if (!confirm('确认要提交作业批改吗？')) return false;
-            var $btn = $(event.currentTarget);
-                $btn.button('saving');
-                $btn.attr('disabled', 'disabled');
-
-            $.post($btn.data('url'),{data:changeTeacherSay},function(res){
-                location.href= window.location.protocol+"//"+window.location.host+"/my/teaching/homework/list";
             });
         },
 

@@ -21,21 +21,22 @@
 			        </tr>
 		      	</thead>
 				<tbody>
+						{% for homeworkResult in homeworkResults %}
+
 					<tr>
-						{% for homework in homeworkResults %}
 							<td>
-								{% set course = courses[homework.courseId] %}
-								{% set lesson = lessons[homework.lessonId] %}
+								{% set course = courses[homeworkResult.courseId] %}
+								{% set lesson = lessons[homeworkResult.lessonId] %}
 								{% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
 		      					{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-									<div><a class="text-success" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title }}》</a> <a class="text-success" href="{{ lessonUrl }}">第 {{ lesson.number }}课时</a><span class="mll text-muted">提交时间：{{ homework.usedTime|date('Y-n-d H:i') }}</span></div>
+									<div><a class="text-success" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title }}》</a> <a class="text-success" href="{{ lessonUrl }}">第 {{ lesson.number }}课时</a><span class="mll text-muted">提交时间：{{ homeworkResult.usedTime|date('Y-n-d H:i') }}</span></div>
 							</td>
 							<td>
 
-								<a class="btn btn-default btn-sm" href="{% if status == 'reviewing' %} {{ path('course_homework_check',{courseId:course.id,homeworkId:homework.homeworkId,userId:app.user.id}) }} {% else %} {{ path('course_homework_check',{courseId:course.id,homeworkId:homework.homeworkId,userId:app.user.id}) }} {% endif %}" target="_blank">查看</a>
+								<a class="btn btn-default btn-sm" href="{% if status == 'reviewing' %} {{ path('course_homework_check',{courseId:course.id,homeworkId:homeworkResult.homeworkId,userId:app.user.id}) }} {% else %} {{ path('course_homework_result',{courseId:course.id,homeworkId:homeworkResult.homeworkId,resultId:homeworkResult.id,userId:app.user.id}) }} {% endif %}" target="_blank">查看</a>
 							</td>
-						{% endfor %}
 					</tr>
+						{% endfor %}
 				</tbody>
 			</table>
 			{{ web_macro.paginator(paginator) }}

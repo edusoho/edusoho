@@ -560,8 +560,12 @@ course_exercise_start_do:
     defaults: { _controller: TopxiaWebBundle:CourseExercise:startDo }
 
 course_exercise_do:
-    pattern: /course/{courseId}/lesson/{lessonId}/exercise/do
+    pattern: /course/{courseId}/exercise/{exerciseId}/do/{resultId}
     defaults: { _controller: TopxiaWebBundle:CourseExercise:do }
+
+course_exercise_result:
+    pattern: /course/{courseId}/exercise/{exerciseId}/result/{resultId}/{userId}
+    defaults: { _controller: TopxiaWebBundle:CourseExercise:result }
 
 course_homework_start_do:
     pattern: /course/{courseId}/homework/{homeworkId}/startDo
@@ -579,6 +583,10 @@ course_homework_check:
     pattern: /course/{courseId}/homework/{homeworkId}/check/{userId}
     defaults: { _controller: TopxiaWebBundle:CourseHomework:check }
 
+course_homework_check_show:
+    pattern: /course/{courseId}/homework/{homeworkId}/check/show/{userId}
+    defaults: { _controller: TopxiaWebBundle:CourseHomework:checkShow }
+
 course_homework_preview:
     pattern: /course/{courseId}/homework/{homeworkId}/preview
     defaults: { _controller: TopxiaWebBundle:CourseHomework:preview }
@@ -586,6 +594,10 @@ course_homework_preview:
 course_homework_submit:
     pattern: /course/{courseId}/homework/{homeworkId}/submit
     defaults: { _controller: TopxiaWebBundle:CourseHomework:submit }
+
+course_exercise_submit:
+    pattern: /course/{courseId}/exercise/{exerciseId}/submit
+    defaults: { _controller: TopxiaWebBundle:CourseExercise:submit }
 
 course_homework_save:
     pattern: /course/{courseId}/homework/{homeworkId}/save
