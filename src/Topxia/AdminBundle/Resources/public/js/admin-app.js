@@ -60,6 +60,7 @@ define(function(require, exports, module) {
         guideDiv.find(".text").html($(this).find("#guideContent").val());
         guideDiv.find(".view-step").data().index=$(this).find("#guideIndex").val();
         guideDiv.find(".complete-step").data().index=$(this).find("#guideIndex").val();
+         guideDiv.find(".complete-step").removeAttr('disabled');
         guideDiv.slideDown('fast');
         completedDiv.find(".percent").html($(this).find("#guideIndex").val()+"/5");
         completedDiv.slideDown('fast');
@@ -82,6 +83,7 @@ define(function(require, exports, module) {
 
     //点击完成
      guideDiv.on('click',".complete-step",function(){
+        $(".complete-step").attr('disabled',"disabled");
         $.get($(this).data('url')+'?index='+$(this).data('index'),function(html){
             if(html=='finished'){
                 Notify.success('完成引导');
