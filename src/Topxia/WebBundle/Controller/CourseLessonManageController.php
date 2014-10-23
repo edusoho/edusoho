@@ -44,7 +44,7 @@ class CourseLessonManageController extends BaseController
         ));
     }
 
-    public function seeAction(Request $request, $courseId)
+    public function viewTextDraftAction(Request $request, $courseId)
     {
         $user = $this->getCurrentUser();
         $userId = $user['id'];
@@ -54,7 +54,7 @@ class CourseLessonManageController extends BaseController
         return $this->createJsonResponse($listdrafts);
     }
 
-    public function seedraftAction(Request $request, $courseId,$lessonId)
+    public function viewEditDraftAction(Request $request, $courseId,$lessonId)
     {
         $user = $this->getCurrentUser();
         $userId = $user['id'];
@@ -63,7 +63,7 @@ class CourseLessonManageController extends BaseController
         return $this->createJsonResponse($listdrafts);
     }
 
-    public function draftAction(Request $request)
+    public function draftCreateAction(Request $request)
     {
         $formData = $request->request->all();
         $user = $this->getCurrentUser();
@@ -80,7 +80,7 @@ class CourseLessonManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function editdraftAction(Request $request, $lessonId)
+    public function editDraftCreateAction(Request $request, $lessonId)
     {
         $formData = $request->request->all();
         $user = $this->getCurrentUser();
@@ -238,7 +238,7 @@ class CourseLessonManageController extends BaseController
 
         $targetType = 'courselesson';
         $targetId = $course['id'];
-        $draft = $this->getCourseService()->findCourseDraft($courseId,$lessonId, $userId);
+        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId, $userId);
         $setting = $this->setting('storage');
         if ($setting['upload_mode'] == 'local') {
             // $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
@@ -263,7 +263,7 @@ class CourseLessonManageController extends BaseController
             'convertKey' => $convertKey,
             'storageSetting' => $setting,
             'features' => $features,
-            'draft' => $draft
+            'drafts' => $drafts
         ));
     }
 

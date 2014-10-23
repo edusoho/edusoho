@@ -526,21 +526,21 @@ course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
 
-course_manage_lesson_draft:
-    pattern:  /course/draft/create
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:draft }
+course_manage_create_textdraft:
+    pattern:  /course/textdraft/create
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:draftCreate }
 
-course_manage_edit_draft:
-    pattern:  /course/edit/draft/{lessonId}/create
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editdraft }
+course_manage_create_editdraft:
+    pattern:  /course/editdraft/{lessonId}/create
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editDraftCreate }
 
-course_manage_lesson_draft_see:
-    pattern:  /course/draft/{courseId}/see
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:see }
+course_manage_view_textdraft:
+    pattern:  /course/textdraft/{courseId}/view
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:viewTextDraft }
 
-course_manage_edit_draft_see:
-    pattern:  /course/{courseId}/draft/{lessonId}/see
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:seedraft }
+course_manage_view_editdraft:
+    pattern:  /course/{courseId}/editdraft/{lessonId}/see
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:viewEditDraft }
 
 live_course_manage_lesson_create:
     pattern:  /course/{id}/manage/live/lesson/create

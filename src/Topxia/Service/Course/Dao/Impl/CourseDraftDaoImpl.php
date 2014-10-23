@@ -3,13 +3,13 @@
 namespace Topxia\Service\Course\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Course\Dao\DraftDao;
+use Topxia\Service\Course\Dao\CourseDraftDao;
 
-class DraftDaoImpl extends BaseDao implements DraftDao
+class CourseDraftDaoImpl extends BaseDao implements CourseDraftDao
 {
         protected $draftTable = 'course_draft';
 
-        public function getDraft($id)
+        public function getCourseDraft($id)
     {
         $sql = "SELECT * FROM {$this->draftTable} WHERE id = ? LIMIT 1";
         return  $draft = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
@@ -27,7 +27,7 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert draft error.');
         }
-        return $this->getDraft($this->getConnection()->lastInsertId());
+        return $this->getCourseDraft($this->getConnection()->lastInsertId());
     }
 
     public function updateCourseDraft($courseId,$lessonId, $userId,$fields)

@@ -53,12 +53,12 @@ define(function(require, exports, module) {
                 }
                 if(compare(tmpContents, LocalContent)){
                     if(lessonId == undefined){
-                        $.post('/course/draft/create', tmpContents, function(data){
+                        $.post('/course/textdraft/create', tmpContents, function(data){
                             LocalContent = objClone(tmpContents);
                             $(".modal-title").text('添加课时(草稿已于' + tmpContents['createdTime'] + '保存)');
                         });
                       } else {
-                         $.post('/course/edit/draft/'+lessonId+'/create', tmpContents, function(data){
+                         $.post('/course/editdraft/'+lessonId+'/create', tmpContents, function(data){
                             LocalContent = objClone(tmpContents);
                             $(".modal-title").text('编辑课时(草稿已于' + tmpContents['createdTime'] + '保存)');
                         });
@@ -68,29 +68,28 @@ define(function(require, exports, module) {
              $("#see-draft-btn").on('click',function(e) {
                 tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
                 var courseId = tmpContents["courseId"];
-                $.get('/course/draft/'+courseId+'/see',function(response){  
-                    $("#lesson-title-field").val(response.title); 
-                    $("#lesson-summary-field").val(response.summary); 
-                    editor.sync();
-                    var z = editor.html(response.content);
-                    $("#lesson-content-field").val(z);        
-                }); 
-                $("#see-draft-btn").hide();
-            });
-
-             $("#see-editdraft-btn").on('click',function(e) {
-                tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
-                var courseId = tmpContents["courseId"];
                 tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
                 var lessonId = tmpContents["lessonId"];
-                $.get('/course/'+courseId+'/draft/'+lessonId+'/see',function(response){  
-                    $("#lesson-title-field").val(response.title); 
-                    $("#lesson-summary-field").val(response.summary); 
-                    editor.sync();
-                    var z = editor.html(response.content);
-                    $("#lesson-content-field").val(z);        
-                }); 
-                $("#see-editdraft-btn").hide();
+                if(lessonId == undefined) 
+                    {
+                        $.get('/course/textdraft/'+courseId+'/view',function(response){  
+                            $("#lesson-title-field").val(response.title); 
+                            $("#lesson-summary-field").val(response.summary); 
+                            editor.sync();
+                            var z = editor.html(response.content);
+                            $("#lesson-content-field").val(z);        
+                        }); 
+                        $("#see-draft-btn").hide();
+                    } else {
+                            $.get('/course/'+courseId+'/editdraft/'+lessonId+'/see',function(response){  
+                            $("#lesson-title-field").val(response.title); 
+                            $("#lesson-summary-field").val(response.summary); 
+                            editor.sync();
+                            var z = editor.html(response.content);
+                            $("#lesson-content-field").val(z);        
+                        }); 
+                        $("#see-draft-btn").hide();
+                    }
             });
 
             var sortList = function($list) {
@@ -372,11 +371,6 @@ define(function(require, exports, module) {
                 clearInterval(Timer);
             }
 
-            $(".modal").on("hide.bs.modal", function(){
-            videoChooser.destroy();
-            audioChooser.destroy();
-            pptChooser.destroy();
-        });
             $(".modal").on('hidden.bs.modal', function (){
             clearInterval(Timer);
        });

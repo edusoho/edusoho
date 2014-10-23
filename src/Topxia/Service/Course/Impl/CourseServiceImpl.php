@@ -615,7 +615,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function findCourseDraft($courseId,$lessonId, $userId)
 	{
-		$draft = $this->getDraftDao()->getCourseDrafts($courseId,$lessonId, $userId);
+		$draft = $this->getCourseDraftDao()->getCourseDrafts($courseId,$lessonId, $userId);
 		if (empty($draft) or ($draft['userId'] != $userId)) {
 			return null;
 		}
@@ -630,7 +630,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function deleteCourseDrafts($courseId,$lessonId, $userId)
 	{
-		 return   $this->getDraftDao()->deleteCourseDrafts($courseId,$lessonId, $userId);
+		 return   $this->getCourseDraftDao()->deleteCourseDrafts($courseId,$lessonId, $userId);
 	}
 
 	public function findLessonsByTypeAndMediaId($type, $mediaId)
@@ -649,9 +649,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getLessonDao()->searchLessonCount($conditions);
 	}
 
-	public function getDraft($id)
+	public function getCourseDraft($id)
 	{
-	        return $this->getDraftDao()->getDraft($id);
+	        return $this->getCourseDraftDao()->getCourseDraft($id);
 	}
 
 	public function createCourseDraft($draft)
@@ -659,7 +659,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$draft = ArrayToolkit::parts($draft, array('userId', 'title', 'courseId', 'summary', 'content','lessonId','createdTime'));
 		$draft['userId'] = $this->getCurrentUser()->id;
 		$draft['createdTime'] = time();
-		$draft = $this->getDraftDao()->addDraft($draft);
+		$draft = $this->getCourseDraftDao()->addDraft($draft);
 		return $draft;
 	}
 
@@ -804,7 +804,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields = LessonSerialize::serialize($fields);
 		
 		return LessonSerialize::unserialize(
-			$this->getDraftDao()->updateCourseDraft($courseId,$lessonId, $userId,$fields)
+			$this->getCourseDraftDao()->updateCourseDraft($courseId,$lessonId, $userId,$fields)
 		);
 
 	}
@@ -2126,9 +2126,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course.LessonDao');
     }
 
-        private function getDraftDao ()
+        private function getCourseDraftDao ()
     {
-        return $this->createDao('Course.DraftDao');
+        return $this->createDao('Course.CourseDraftDao');
     }
 
     private function getLessonLearnDao ()

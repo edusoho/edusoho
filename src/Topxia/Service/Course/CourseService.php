@@ -99,7 +99,7 @@ interface CourseService
 
 	public function createLesson($lesson);
 
-	public function getDraft($id);
+	public function getCourseDraft($id);
 
 	public function createCourseDraft($draft);
 
