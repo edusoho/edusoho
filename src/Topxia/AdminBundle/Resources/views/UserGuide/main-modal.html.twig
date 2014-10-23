@@ -1,0 +1,37 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}用户引导{% endblock %}
+
+{% block body %}
+  <input type="hidden" id="guideIndex" value="0">
+  <input type="hidden" id="guideContent" value="{{steps[0].content}}">
+  <h4>欢迎安装使用 EduSoho 校园版</h4>
+  <div style="text-indent:2em;">
+    为了使您能更好的使用ES校园版，请按照以下步骤完成网站设置，创建第一个课程、第一个班级
+
+    {% for step in steps %}
+      <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <button type="button" class="btn btn-default btn-lg btn-block" disabled="disabled" style="font-size: 14px;color:#000">
+              {{step.content}}
+            </button>
+        </div>
+      </div>
+      <div class="row text-center">
+        <span class="glyphicon glyphicon-arrow-down"></span>
+      </div>
+    {% endfor %}
+    <div class="row">
+      <div class="col-md-offset-2 col-md-8">
+        <button type="button" class="btn btn-default btn-lg btn-block" disabled="disabled" style="font-size: 14px;color:#000">
+          开始使用
+        </button>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <button data-url="{{path('admin_user_guide_show')}}" data-index="0" type="button" class="btn btn-primary view-step" >开始设置</button>
+  <script>app.load('user-guide/main-modal')</script>
+{% endblock %}
