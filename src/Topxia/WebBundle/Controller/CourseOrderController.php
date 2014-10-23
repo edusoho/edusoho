@@ -106,11 +106,9 @@ class CourseOrderController extends OrderController
         $order = $this->getOrderService()->getOrderByTargetIdAndUserId($formData['courseId'],$user['id']);
 
         $orderCreatedTime = $order['createdTime'];
-        $diff = time()-$orderCreatedTime;       
+        $diff = time()-$orderCreatedTime;
 
-        if($order['targetId'] && $order['userId'] && $order['status'] == 'created' && $diff <3600) {
-            $order = $this->getOrderService()->getOrderByTargetIdAndUserId($formData['courseId'],$user['id']);
-        } else {
+        if(!($order['targetId'] && $order['userId'] && $order['status'] == 'created' && $diff<3600)) {
             $changeStatus = $this->getOrderService()->cancelOrders($formData['courseId'],$user['id']);
             $order = $this->getCourseOrderService()->createOrder($formData);
         }
