@@ -822,5 +822,5 @@ ul.schedule-lesson-list a .finished-icon {
 .student-status-popover {
     position:absolute;
     left: 46px;
-    bottom: 22px;
+    top: 40px;
 }
