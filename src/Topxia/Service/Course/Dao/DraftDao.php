@@ -6,17 +6,11 @@ interface DraftDao
 {
     public function getDraft($id);
 
-    public function getDrafts($courseId,$userId);
-
     public function getEditDrafts($courseId,$userId,$lessonId);
 
-    public function deleteDraftByCourseIdAndUserId($courseId,$userId);
-
-    public function deleteDraftByCourseIdAndUserIdAndLessonId($courseId,$userId,$lessonId);
+    public function deleteDraftByCourse($courseId,$userId,$lessonId);
 
     public function addDraft($draft);
-
-    public function updateDraft($userId,$courseId,$lessonId, $fields);
 
     public function updateEditDraft($userId,$courseId,$lessonId,$fields);
 }

@@ -65,7 +65,6 @@ define(function(require, exports, module) {
                      }
                 }
             }
-
              $("#see-draft-btn").on('click',function(e) {
                 tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
                 var courseId = tmpContents["courseId"];

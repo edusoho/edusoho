@@ -15,15 +15,9 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         return  $draft = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function getDrafts($courseId,$userId)
-    {
-        $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND userId = ? AND lessonId = 0";
-        return $this->getConnection()->fetchAssoc($sql, array($courseId,$userId)) ? : null;
-    }
-
     public function getEditDrafts($courseId,$userId,$lessonId)
     {
-        $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND userId = ? And lessonId = ?";
+        $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND userId = ? AND lessonId = ?";
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$userId,$lessonId)) ? : null;
     }
 
@@ -36,25 +30,13 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         return $this->getDraft($this->getConnection()->lastInsertId());
     }
 
-     public function updateDraft($userId,$courseId, $lessonId,$fields)
-     {
-        $this->getConnection()->update($this->draftTable, $fields, array('courseId' => $courseId,'userId' => $userId,'lessonId' => $lessonId));
-        return $this->getDrafts($courseId,$userId,$lessonId);
-    }
-
     public function updateEditDraft($userId,$courseId,$lessonId,$fields)
      {
         $this->getConnection()->update($this->draftTable, $fields, array('courseId' => $courseId,'userId' => $userId,'lessonId' => $lessonId));
         return $this->getEditDrafts($courseId,$userId,$lessonId);
     }
 
-    public function deleteDraftByCourseIdAndUserId($courseId,$userId)
-    {
-        $sql = "DELETE FROM {$this->draftTable} WHERE courseId = ? AND userId = ? AND lessonId = 0";
-        return $this->getConnection()->executeUpdate($sql, array($courseId,$userId));
-    }
-
-    public function deleteDraftByCourseIdAndUserIdAndLessonId($courseId,$userId,$lessonId)
+    public function deleteDraftByCourse($courseId,$userId,$lessonId)
     {
         $sql = "DELETE FROM {$this->draftTable} WHERE courseId = ? AND userId = ? AND lessonId = ?";
         return $this->getConnection()->executeUpdate($sql, array($courseId,$userId,$lessonId));
