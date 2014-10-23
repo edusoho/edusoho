@@ -15,13 +15,13 @@ class CourseDraftDaoImpl extends BaseDao implements CourseDraftDao
         return  $draft = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function getCourseDrafts($courseId,$lessonId, $userId)
+    public function findCourseDraft($courseId,$lessonId, $userId)
     {
         $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND lessonId = ? AND userId = ?";
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$lessonId, $userId)) ? : null;
     }
 
-    public function addDraft($draft)
+    public function addCourseDraft($draft)
     {
         $affected = $this->getConnection()->insert($this->draftTable, $draft);
         if ($affected <= 0) {
@@ -33,7 +33,7 @@ class CourseDraftDaoImpl extends BaseDao implements CourseDraftDao
     public function updateCourseDraft($courseId,$lessonId, $userId,$fields)
      {
         $this->getConnection()->update($this->draftTable, $fields, array('courseId' => $courseId,'lessonId' => $lessonId,'userId' => $userId));
-        return $this->getCourseDrafts($courseId,$lessonId, $userId);
+        return $this->findCourseDraft($courseId,$lessonId, $userId);
     }
 
     public function deleteCourseDrafts($courseId,$lessonId, $userId)

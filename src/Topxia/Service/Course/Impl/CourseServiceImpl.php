@@ -615,7 +615,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function findCourseDraft($courseId,$lessonId, $userId)
 	{
-		$draft = $this->getCourseDraftDao()->getCourseDrafts($courseId,$lessonId, $userId);
+		$draft = $this->getCourseDraftDao()->findCourseDraft($courseId,$lessonId, $userId);
 		if (empty($draft) or ($draft['userId'] != $userId)) {
 			return null;
 		}
@@ -659,7 +659,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$draft = ArrayToolkit::parts($draft, array('userId', 'title', 'courseId', 'summary', 'content','lessonId','createdTime'));
 		$draft['userId'] = $this->getCurrentUser()->id;
 		$draft['createdTime'] = time();
-		$draft = $this->getCourseDraftDao()->addDraft($draft);
+		$draft = $this->getCourseDraftDao()->addCourseDraft($draft);
 		return $draft;
 	}
 
