@@ -97,6 +97,7 @@ define(function(require, exports, module) {
                 guideDiv.slideUp("fast");
                 completedDiv.slideUp('fast');
             }else{
+                guideDiv.find(".complete-step").removeAttr('disabled');
                 Notify.danger('尚未完成该步骤');
             }
         });
