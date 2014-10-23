@@ -341,6 +341,7 @@ EOD;
     {
         $output->write('  初始化install.lock');
         touch($this->getContainer()->getParameter('kernel.root_dir') . '/data/install.lock');
+        touch($this->getContainer()->getParameter('kernel.root_dir') . '/config/routing_plugins.yml');
 
         $output->writeln(' ...<info>成功</info>');
     }
