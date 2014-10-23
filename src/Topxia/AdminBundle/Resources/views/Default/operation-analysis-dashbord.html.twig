@@ -11,14 +11,14 @@
           </tr>
         </thead>
         <tbody>
-			<tr>
+{# 			<tr>
 				<td>新注册用户数</td>
 				<td><span class="pull-right">{{todayRegisterNum}}</span></td>
 				<td><span class="pull-right">{{yesterdayRegisterNum}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
 				<td><a href="{{path('admin_operation_analysis_register',{tab:"trend",analysisDateType:'register'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_register',{tab:"detail",analysisDateType:'register'})}}">详情</a></td>
 				{% endif %}
-			</tr>
+			</tr> #}
 
 			<tr>
 				<td>用户登录数<small>（不含重复登录）</small></td>
@@ -47,14 +47,14 @@
 			{% endif %}	
 			</tr>
 
-			<tr>
+	{# 		<tr>
 				<td>加入学习数</td>
 				<td><span class="pull-right">{{todayJoinLessonNum}}</span></td>
 				<td><span class="pull-right">{{yesterdayJoinLessonNum}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
 				<td><a href="{{path('admin_operation_analysis_lesson_join',{tab:"trend",analysisDateType:'joinLesson'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_lesson_join',{tab:"detail",analysisDateType:'joinLesson'})}}">详情</a></td>
 			{% endif %}	
-			</tr>
+			</tr> #}
 
 			{# <tr>
 				<td>购买课程数</td>
