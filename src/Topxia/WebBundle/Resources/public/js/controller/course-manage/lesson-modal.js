@@ -66,26 +66,6 @@ define(function(require, exports, module) {
         }
     }
 
-     $("#see-draft-btn").on('click',function(e) {
-        tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
-        var courseId = tmpContents["courseId"];
-        tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
-        var lessonId;
-        if(tmpContents["lessonId"] == undefined)  {
-            lessonId =0;
-        } else{
-                lessonId = tmpContents["lessonId"];
-            }
-                $.get('/course/draft/view', {courseId: courseId, lessonId:lessonId}, function(response){  
-                    $("#lesson-title-field").val(response.title); 
-                    $("#lesson-summary-field").val(response.summary); 
-                    editor.sync();
-                    var z = editor.html(response.content);
-                    $("#lesson-content-field").val(z);        
-                }); 
-                $("#see-draft-btn").hide();
-    });
-
     var sortList = function($list) {
         var data = $list.sortable("serialize").get();
         $.post($list.data('sortUrl'), {ids:data}, function(response){
@@ -391,31 +371,24 @@ define(function(require, exports, module) {
         });
 
         $("#see-draft-btn").on('click',function(e) {
-            tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
-            var courseId = tmpContents["courseId"];
-            tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
-            var lessonId = tmpContents["lessonId"];
-            if(lessonId == undefined) 
-            {
-                $.get('/course/textdraft/'+courseId+'/view',function(response){  
-                    $("#lesson-title-field").val(response.title); 
-                    $("#lesson-summary-field").val(response.summary); 
-                    editor.sync();
-                    var z = editor.html(response.content);
-                    $("#lesson-content-field").val(z);        
-                }); 
-                $("#see-draft-btn").hide();
-            } else {
-                    $.get('/course/'+courseId+'/editdraft/'+lessonId+'/see',function(response){  
-                    $("#lesson-title-field").val(response.title); 
-                    $("#lesson-summary-field").val(response.summary); 
-                    editor.sync();
-                    var z = editor.html(response.content);
-                    $("#lesson-content-field").val(z);        
-                }); 
-                $("#see-draft-btn").hide();
+        tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
+        var courseId = tmpContents["courseId"];
+        tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
+        var lessonId;
+        if(tmpContents["lessonId"] == undefined)  {
+            lessonId =0;
+        } else{
+                lessonId = tmpContents["lessonId"];
             }
-        });
+                $.get('/course/draft/view', {courseId: courseId, lessonId:lessonId}, function(response){  
+                    $("#lesson-title-field").val(response.title); 
+                    $("#lesson-summary-field").val(response.summary); 
+                    editor.sync();
+                    var z = editor.html(response.content);
+                    $("#lesson-content-field").val(z);        
+                }); 
+                $("#see-draft-btn").hide();
+    });
         
     };
 });
