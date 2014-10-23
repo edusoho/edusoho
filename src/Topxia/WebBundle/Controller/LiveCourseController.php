@@ -186,7 +186,7 @@ class LiveCourseController extends BaseController
     {
         $condition = $request->query->all();
 
-        $token = $this->getTokenService()->verifyToken('live.view', $condition['token']);
+        $token = $this->getTokenService()->verifyToken('live.view', $condition['k']);
         if (empty($token)) {
             $result = array(
                 "code" => 500,
@@ -194,7 +194,7 @@ class LiveCourseController extends BaseController
             );
         }else{
             $result = array(
-                "code" => 0,
+                "code" => "0",
                 "msg" => "ok"
             );
         }
