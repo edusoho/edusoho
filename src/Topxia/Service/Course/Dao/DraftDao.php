@@ -16,9 +16,7 @@ interface DraftDao
 
     public function addDraft($draft);
 
-    public function addEditDraft($draft);
-
-    public function updateDraft($userId,$courseId, $fields);
+    public function updateDraft($userId,$courseId,$lessonId, $fields);
 
     public function updateEditDraft($userId,$courseId,$lessonId,$fields);
 }

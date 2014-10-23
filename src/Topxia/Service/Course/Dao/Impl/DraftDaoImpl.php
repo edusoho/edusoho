@@ -8,7 +8,6 @@ use Topxia\Service\Course\Dao\DraftDao;
 class DraftDaoImpl extends BaseDao implements DraftDao
 {
         protected $draftTable = 'course_draft';
-        protected $Table = 'edit_draft';
 
         public function getDraft($id)
     {
@@ -16,21 +15,15 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         return  $draft = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-     public function getEditDraft($id)
-    {
-        $sql = "SELECT * FROM {$this->Table} WHERE id = ? LIMIT 1";
-        return $draft = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
-    }
-
     public function getDrafts($courseId,$userId)
     {
-        $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND userId = ?";
+        $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND userId = ? AND lessonId = 0";
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$userId)) ? : null;
     }
 
     public function getEditDrafts($courseId,$userId,$lessonId)
     {
-        $sql = "SELECT * FROM {$this->Table} WHERE courseId = ? AND userId = ? And lessonId = ?";
+        $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND userId = ? And lessonId = ?";
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$userId,$lessonId)) ? : null;
     }
 
@@ -43,36 +36,27 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         return $this->getDraft($this->getConnection()->lastInsertId());
     }
 
-    public function addEditDraft($draft)
-    {
-        $affected = $this->getConnection()->insert($this->Table, $draft);
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert draft error.');
-        }
-        return $this->getEditDraft($this->getConnection()->lastInsertId());
-    }
-
-     public function updateDraft($userId,$courseId, $fields)
+     public function updateDraft($userId,$courseId, $lessonId,$fields)
      {
-        $this->getConnection()->update($this->draftTable, $fields, array('courseId' => $courseId,'userId' => $userId));
-        return $this->getDrafts($courseId,$userId);
+        $this->getConnection()->update($this->draftTable, $fields, array('courseId' => $courseId,'userId' => $userId,'lessonId' => $lessonId));
+        return $this->getDrafts($courseId,$userId,$lessonId);
     }
 
     public function updateEditDraft($userId,$courseId,$lessonId,$fields)
      {
-        $this->getConnection()->update($this->Table, $fields, array('courseId' => $courseId,'userId' => $userId,'lessonId' => $lessonId));
+        $this->getConnection()->update($this->draftTable, $fields, array('courseId' => $courseId,'userId' => $userId,'lessonId' => $lessonId));
         return $this->getEditDrafts($courseId,$userId,$lessonId);
     }
 
     public function deleteDraftByCourseIdAndUserId($courseId,$userId)
     {
-        $sql = "DELETE FROM {$this->draftTable} WHERE courseId = ? AND userId = ?";
+        $sql = "DELETE FROM {$this->draftTable} WHERE courseId = ? AND userId = ? AND lessonId = 0";
         return $this->getConnection()->executeUpdate($sql, array($courseId,$userId));
     }
 
     public function deleteDraftByCourseIdAndUserIdAndLessonId($courseId,$userId,$lessonId)
     {
-        $sql = "DELETE FROM {$this->Table} WHERE courseId = ? AND userId = ? AND lessonId = ?";
+        $sql = "DELETE FROM {$this->draftTable} WHERE courseId = ? AND userId = ? AND lessonId = ?";
         return $this->getConnection()->executeUpdate($sql, array($courseId,$userId,$lessonId));
     }
 

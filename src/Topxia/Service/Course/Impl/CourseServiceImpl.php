@@ -682,7 +682,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$draft = ArrayToolkit::parts($draft, array('userId', 'title', 'courseId', 'summary', 'content','lessonId','createdTime'));
 		$draft['userId'] = $this->getCurrentUser()->id;
 		$draft['createdTime'] = time();
-		$draft = $this->getDraftDao()->addEditDraft($draft);
+		$draft = $this->getDraftDao()->addDraft($draft);
 		return $draft;
 	}
 
@@ -814,7 +814,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function updateDraft($userId, $courseId,$fields)
 	{
 		$draft = $this->getCourseDraftByCourseIdAndUserId($courseId, $userId);
-
+		$lessonId = 0;
 		if (empty($draft)) {
 			throw $this->createServiceException('草稿不存在，更新失败！');
 		}
@@ -827,7 +827,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields = LessonSerialize::serialize($fields);
 		
 		return LessonSerialize::unserialize(
-			$this->getDraftDao()->updateDraft($userId,$courseId, $fields)
+			$this->getDraftDao()->updateDraft($userId,$courseId,$lessonId, $fields)
 		);
 
 	}
