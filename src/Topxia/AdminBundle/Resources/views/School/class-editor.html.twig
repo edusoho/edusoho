@@ -116,7 +116,11 @@
 
         <div class="controls col-md-4 col-md-offset-2">
           <button type="submit" class="btn btn-primary">提交</button>
-          <a class="btn btn-link" id="backto" href="{{ path('admin_school_classes_setting') }}">返回</a>
+          {% if search is defined %}
+            <a class="btn btn-link" id="backto" href="{{ path('admin_school_classes_setting', {gradeId:search.gradeId, enabled:search.gradeId, year:search.year}) }}">返回</a>
+          {% else %}
+            <a class="btn btn-link" id="backto" href="{{ path('admin_school_classes_setting') }}">返回</a>
+          {% endif %}
         </div>
       </div>
     </form>
