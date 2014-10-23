@@ -10,7 +10,7 @@ define(function(require, exports, module) {
 
     var Toolbar = require('../lesson/lesson-toolbar');
 
-    var MediaPlayer = require('../widget/media-player3');
+    var MediaPlayer = require('../widget/media-player4');
     var SlidePlayer = require('../widget/slider-player');
 
     var iID = null;
