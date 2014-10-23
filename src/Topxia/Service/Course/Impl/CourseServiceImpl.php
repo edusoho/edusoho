@@ -613,9 +613,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserialize($lesson);
 	}
 
-	public function findCourseDraft($courseId, $userId,$lessonId)
+	public function findCourseDraft($courseId,$lessonId, $userId)
 	{
-		$draft = $this->getDraftDao()->getCourseDrafts($courseId,$userId,$lessonId);
+		$draft = $this->getDraftDao()->getCourseDrafts($courseId,$lessonId, $userId);
 		if (empty($draft) or ($draft['userId'] != $userId)) {
 			return null;
 		}
@@ -628,9 +628,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserializes($lessons);
 	}
 
-	public function deleteDraftByCourse($courseId,$userId,$lessonId)
+	public function deleteCourseDrafts($courseId,$lessonId, $userId)
 	{
-		 return   $this->getDraftDao()->deleteDraftByCourse($courseId,$userId,$lessonId);
+		 return   $this->getDraftDao()->deleteCourseDrafts($courseId,$lessonId, $userId);
 	}
 
 	public function findLessonsByTypeAndMediaId($type, $mediaId)
@@ -654,7 +654,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	        return $this->getDraftDao()->getDraft($id);
 	}
 
-	public function createEditDraft($draft)
+	public function createCourseDraft($draft)
 	{
 		$draft = ArrayToolkit::parts($draft, array('userId', 'title', 'courseId', 'summary', 'content','lessonId','createdTime'));
 		$draft['userId'] = $this->getCurrentUser()->id;
@@ -788,9 +788,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $lesson;
 	}
 
-	public function updateCourseDraft($userId, $courseId,$lessonId,$fields)
+	public function updateCourseDraft($courseId,$lessonId, $userId,$fields)
 	{
-		$draft = $this->findCourseDraft($courseId, $userId,$lessonId);
+		$draft = $this->findCourseDraft($courseId,$lessonId, $userId);
 
 		if (empty($draft)) {
 			throw $this->createServiceException('草稿不存在，更新失败！');
@@ -804,7 +804,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields = LessonSerialize::serialize($fields);
 		
 		return LessonSerialize::unserialize(
-			$this->getDraftDao()->updateCourseDraft($userId,$courseId,$lessonId,$fields)
+			$this->getDraftDao()->updateCourseDraft($courseId,$lessonId, $userId,$fields)
 		);
 
 	}

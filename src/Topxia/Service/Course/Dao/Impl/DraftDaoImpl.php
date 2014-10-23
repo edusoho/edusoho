@@ -15,10 +15,10 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         return  $draft = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function getCourseDrafts($courseId,$userId,$lessonId)
+    public function getCourseDrafts($courseId,$lessonId, $userId)
     {
-        $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND userId = ? AND lessonId = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($courseId,$userId,$lessonId)) ? : null;
+        $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND lessonId = ? AND userId = ?";
+        return $this->getConnection()->fetchAssoc($sql, array($courseId,$lessonId, $userId)) ? : null;
     }
 
     public function addDraft($draft)
@@ -30,16 +30,16 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         return $this->getDraft($this->getConnection()->lastInsertId());
     }
 
-    public function updateCourseDraft($userId,$courseId,$lessonId,$fields)
+    public function updateCourseDraft($courseId,$lessonId, $userId,$fields)
      {
-        $this->getConnection()->update($this->draftTable, $fields, array('courseId' => $courseId,'userId' => $userId,'lessonId' => $lessonId));
-        return $this->getCourseDrafts($courseId,$userId,$lessonId);
+        $this->getConnection()->update($this->draftTable, $fields, array('courseId' => $courseId,'lessonId' => $lessonId,'userId' => $userId));
+        return $this->getCourseDrafts($courseId,$lessonId, $userId);
     }
 
-    public function deleteDraftByCourse($courseId,$userId,$lessonId)
+    public function deleteCourseDrafts($courseId,$lessonId, $userId)
     {
-        $sql = "DELETE FROM {$this->draftTable} WHERE courseId = ? AND userId = ? AND lessonId = ?";
-        return $this->getConnection()->executeUpdate($sql, array($courseId,$userId,$lessonId));
+        $sql = "DELETE FROM {$this->draftTable} WHERE courseId = ? AND lessonId = ? AND userId = ?";
+        return $this->getConnection()->executeUpdate($sql, array($courseId,$lessonId, $userId));
     }
 
 }

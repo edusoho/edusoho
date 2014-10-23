@@ -49,7 +49,7 @@ class CourseLessonManageController extends BaseController
         $user = $this->getCurrentUser();
         $userId = $user['id'];
         $lessonId = 0;
-        $drafts = $this->getCourseService()->findCourseDraft($courseId,$userId,$lessonId);
+        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
         $listdrafts=array("title"=>$drafts['title'],"summary"=>$drafts['summary'],"content"=>$drafts['content']);         
         return $this->createJsonResponse($listdrafts);
     }
@@ -58,7 +58,7 @@ class CourseLessonManageController extends BaseController
     {
         $user = $this->getCurrentUser();
         $userId = $user['id'];
-        $drafts = $this->getCourseService()->findCourseDraft($courseId, $userId,$lessonId);
+        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
         $listdrafts=array("title"=>$drafts['title'],"summary"=>$drafts['summary'],"content"=>$drafts['content']);         
         return $this->createJsonResponse($listdrafts);
     }
@@ -71,11 +71,11 @@ class CourseLessonManageController extends BaseController
         $courseId = $formData['courseId'];
         $content = $formData['content'];
         $lessonId = 0;
-        $drafts = $this->getCourseService()->findCourseDraft($courseId,$userId,$lessonId);
+        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
         if($drafts) {
-            $draft = $this->getCourseService()->updateCourseDraft($userId, $courseId,$lessonId,$formData);
+            $draft = $this->getCourseService()->updateCourseDraft($courseId,$lessonId,$userId,$formData);
         } else {
-            $draft = $this->getCourseService()->createEditDraft($formData);
+            $draft = $this->getCourseService()->createCourseDraft($formData);
         }
         return $this->createJsonResponse(true);
     }
@@ -89,11 +89,11 @@ class CourseLessonManageController extends BaseController
         $lessonId = $formData['lessonId'];
         $content = $formData['content'];
 
-        $drafts = $this->getCourseService()->findCourseDraft($courseId, $userId,$lessonId);
+        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
         if($drafts) {
-            $draft = $this->getCourseService()->updateCourseDraft($userId, $courseId,$lessonId,$formData);
+            $draft = $this->getCourseService()->updateCourseDraft($courseId,$lessonId,$userId,$formData);
         } else {
-            $draft = $this->getCourseService()->createEditDraft($formData);
+            $draft = $this->getCourseService()->createCourseDraft($formData);
         }
         return $this->createJsonResponse(true);
     }
@@ -124,7 +124,7 @@ class CourseLessonManageController extends BaseController
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
         $lessonId =0;
-        $this->getCourseService()->deleteDraftByCourse($id, $this->getCurrentUser()->id,$lessonId);
+        $this->getCourseService()->deleteCourseDrafts($id,$lessonId,$this->getCurrentUser()->id);
         //  if ($shortcut == 'true') 
         //  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array( 'course' => $course,'lesson' => $lesson))->getContent();                        
         //else
@@ -145,7 +145,7 @@ class CourseLessonManageController extends BaseController
     $targetType = 'courselesson';
     $targetId = $course['id'];
     $lessonId = 0;
-    $drafts = $this->getCourseService()->findCourseDraft($targetId,$userId,$lessonId);
+    $drafts = $this->getCourseService()->findCourseDraft($targetId,$lessonId,$userId);
     $setting = $this->setting('storage');
    //   if ($setting['upload_mode'] == 'local') {
    //   $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
@@ -196,7 +196,7 @@ class CourseLessonManageController extends BaseController
 
             $fields['free'] = empty($fields['free']) ? 0 : 1;
             $lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
-            $this->getCourseService()->deleteDraftByCourse($course['id'], $this->getCurrentUser()->id,$lesson['id']);
+            $this->getCourseService()->deleteCourseDrafts($course['id'],$lesson['id'], $this->getCurrentUser()->id);
             return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
                 'course' => $course,
                 'lesson' => $lesson,
@@ -238,7 +238,7 @@ class CourseLessonManageController extends BaseController
 
         $targetType = 'courselesson';
         $targetId = $course['id'];
-        $draft = $this->getCourseService()->findCourseDraft($courseId, $userId,$lessonId);
+        $draft = $this->getCourseService()->findCourseDraft($courseId,$lessonId, $userId);
         $setting = $this->setting('storage');
         if ($setting['upload_mode'] == 'local') {
             // $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
