@@ -38,11 +38,11 @@ class EdusohoLiveClient
         return $this->cloudApi->post('/lives/'.$params['liveId'].'/room_url', $params);
     }
 
-    public function deleteLive($liveId)
+    public function deleteLive($liveId, $provider)
     {   
         $args = array(
             "liveId" => $liveId, 
-            "provider" => "vhall"
+            "provider" => $provider
         );
         return $this->cloudApi->delete('/lives/'.$liveId, $args);
     }
@@ -52,27 +52,27 @@ class EdusohoLiveClient
         $params = array(
             "liveId" => $liveId,
             "role" => "student",
-            "provider" => "vhall"
+            "provider" => $params["provider"]
         );
         return $this->cloudApi->post('/lives/'.$liveId.'/room_url', $params);
     }
 
-    public function entryReplay($liveId, $replayId)
+    public function entryReplay($liveId, $replayId, $provider)
     {
         $args = array(
             'liveId' => $liveId,
             'replayId' => $replayId,
-            "provider" => "vhall"
+            "provider" => $provider
         );
         return $this->cloudApi->post('/lives/'.$liveId.'/record_url', $args);
     }
 
-    public function createReplayList($liveId, $title)
+    public function createReplayList($liveId, $title, $provider)
     {
         $args = array(
             "liveId" => $liveId, 
             "title" => $title,
-            "provider" => "vhall"
+            "provider" => $provider
         );
         $replayList = $this->cloudApi->post('/lives/'.$liveId.'/records', $args);
         $replayList = json_decode($replayList['data'],true);

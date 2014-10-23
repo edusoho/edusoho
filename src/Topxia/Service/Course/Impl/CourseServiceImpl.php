@@ -1949,7 +1949,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lesson = $this->getLessonDao()->getLesson($lessonId);
 		$mediaId = $lesson["mediaId"];
 		$client = LiveClientFactory::createClient();
-		$replayList = $client->createReplayList($mediaId, "录播回放");
+		$replayList = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
 		if(array_key_exists("error", $replayList)){
 			return $replayList;
 		}
@@ -1979,7 +1979,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$client = LiveClientFactory::createClient();
 		$email = $this->getCurrentUser()->email;
 		$courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);
-		$url = $client->entryReplay($mediaId, $courseLessonReplay["replayId"]);
+		$url = $client->entryReplay($mediaId, $courseLessonReplay["replayId"], $lesson["liveProvider"]);
 		return $url['url'];
 	}
 

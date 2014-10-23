@@ -167,6 +167,8 @@ class LiveCourseController extends BaseController
             $params['sign'] = "c{$lesson['courseId']}u{$user['id']}t{$now}";
             $params['sign'] .= 's' . $this->makeSign($params['sign']);
 
+            $params['provider'] = $lesson["liveProvider"];
+
             $client = LiveClientFactory::createClient();
 
 
