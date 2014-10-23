@@ -767,6 +767,9 @@ ul.schedule-lesson-list a .finished-icon {
     overflow: hidden;
 }
 
+.carousel-area .thumbnail {
+    height: 175px;
+}
 .carousel-area .class-name {
     padding: 0;
     margin: 0;
