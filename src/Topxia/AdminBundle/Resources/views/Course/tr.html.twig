@@ -33,7 +33,7 @@
       </a>
       <ul class="dropdown-menu pull-right">
 
-        <li><a class="recommend-course" href="#modal" data-toggle="modal" data-url="{{ path('admin_course_recommend', {id:course.id, ref:'courseList'}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐课程</a></li>
+       {#  <li><a class="recommend-course" href="#modal" data-toggle="modal" data-url="{{ path('admin_course_recommend', {id:course.id, ref:'courseList'}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐课程</a></li> #}
 
         {% if course.recommended %}
           <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_course_cancel_recommend', {id:course.id}) }}"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>

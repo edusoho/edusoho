@@ -10,7 +10,7 @@
         {% if setting('course.live_course_enabled') %}
         <a href="{{ path('admin_live_course', {status: 'underway'}) }}" class="list-group-item {% if menu == 'live-course' %}active{% endif %}">直播管理</a>
         {% endif %}
-        <a href="{{ path('admin_course_recommend_list') }}" class="list-group-item {% if menu == 'course-recommend-list' %}active{% endif %}">推荐课程列表</a>
+        {# <a href="{{ path('admin_course_recommend_list') }}" class="list-group-item {% if menu == 'course-recommend-list' %}active{% endif %}">推荐课程列表</a> #}
     {#     hidden this by wenqin
         <a href="{{ url('admin_course_order_manage') }}" class="list-group-item {% if menu == 'order' %}active{% endif %}">订单管理</a>
 
