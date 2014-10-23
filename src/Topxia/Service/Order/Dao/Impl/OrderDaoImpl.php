@@ -26,7 +26,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
         public function getOrderByTargetIdAndUserId($targetId,$userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE targetId = ? AND userId = ?";
+        $sql = "SELECT * FROM {$this->table} WHERE targetId = ? AND userId = ? AND status='created' LIMIT 1 ";
         $order = $this->getConnection()->fetchAssoc($sql, array($targetId,$userId)) ? : null;
         return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
     }
