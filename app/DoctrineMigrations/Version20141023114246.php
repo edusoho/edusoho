@@ -13,7 +13,7 @@ class Version20141023114246 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-    	$this->addSql("CREATE TABLE IF NOT EXISTS `edit_draft` (
+    	$this->addSql("CREATE TABLE IF NOT EXISTS `course_draft` (
 	  `id` int(10) unsigned NOT NULL auto_increment,
 	  `title` varchar(255) NOT NULL,
 	  `summary` text ,
