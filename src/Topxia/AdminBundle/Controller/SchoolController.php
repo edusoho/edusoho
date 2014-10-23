@@ -113,13 +113,9 @@ class SchoolController extends BaseController
         }
 
         $type = $request->query->get('type');
+        $search = $request->query->get('search');
         if($type == 'create') {
-            $search = $request->query->get('search');
-            if($search) {
                 return $this->render('TopxiaAdminBundle:School:class-editor.html.twig',array('search' => $search));
-            } else {
-                return $this->render('TopxiaAdminBundle:School:class-editor.html.twig',array());
-            }
         } else {
             $classId = $request->query->get('classId');
             $class = $this->getClassesService()->getClass($classId);
@@ -127,6 +123,7 @@ class SchoolController extends BaseController
             $class['headTeacherName'] = $headTheacher['truename'];
             return $this->render('TopxiaAdminBundle:School:class-editor.html.twig',array(
                 'class' => $class,
+                'search' => $search,
             ));
         }
 
