@@ -124,3 +124,11 @@ EduSoho开发需要安装Git, Nginx, PHP, Mysql，这些软件包的安装我就
         }
     }
 
+## /etc/hosts里添加
+
+    127.0.0.1 www.edusoho-dev.com
+
+## 浏览器打开www.eduosho-dev.com
+
+    默认帐号为：test@edusoho.com
+    密码为：kaifazhe
