@@ -9,44 +9,33 @@ class DraftDaoImpl extends BaseDao implements DraftDao
 {
         protected $draftTable = 'course_draft';
         protected $Table = 'edit_draft';
-        private $serializeFields = array(
-        'data' => 'json',
-    );
 
         public function getDraft($id)
     {
         $sql = "SELECT * FROM {$this->draftTable} WHERE id = ? LIMIT 1";
-
-        $draft = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
-        return $draft ? $this->createSerializer()->unserialize($draft, $this->serializeFields) : null;
+        return  $draft = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
      public function getEditDraft($id)
     {
         $sql = "SELECT * FROM {$this->Table} WHERE id = ? LIMIT 1";
-
-        $draft = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
-        return $draft ? $this->createSerializer()->unserialize($draft, $this->serializeFields) : null;
+        return $draft = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
     public function getDrafts($courseId,$userId)
     {
         $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ? AND userId = ?";
-
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$userId)) ? : null;
     }
 
     public function getEditDrafts($courseId,$userId,$lessonId)
     {
         $sql = "SELECT * FROM {$this->Table} WHERE courseId = ? AND userId = ? And lessonId = ?";
-
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$userId,$lessonId)) ? : null;
     }
 
     public function addDraft($draft)
     {
-
-        $draft = $this->createSerializer()->serialize($draft, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->draftTable, $draft);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert draft error.');
@@ -56,8 +45,6 @@ class DraftDaoImpl extends BaseDao implements DraftDao
 
     public function addEditDraft($draft)
     {
-
-        $draft = $this->createSerializer()->serialize($draft, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->Table, $draft);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert draft error.');

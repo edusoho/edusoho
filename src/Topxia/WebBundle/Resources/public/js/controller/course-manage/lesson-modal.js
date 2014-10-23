@@ -55,20 +55,15 @@ define(function(require, exports, module) {
                     if(lessonId == undefined){
                         $.post('/course/draft/create', tmpContents, function(data){
                             Local_content = objClone(tmpContents);
-                            $(".modal-title").text('(草稿已于' + tmpContents['createdTime'] + '保存)');
+                            $(".modal-title").text('添加课时(草稿已于' + tmpContents['createdTime'] + '保存)');
                         });
                       } else {
                          $.post('/course/edit/draft/'+lessonId+'/create', tmpContents, function(data){
                             Local_content = objClone(tmpContents);
-                            $(".modal-title").text('(草稿已于' + tmpContents['createdTime'] + '保存)');
+                            $(".modal-title").text('编辑课时(草稿已于' + tmpContents['createdTime'] + '保存)');
                         });
                      }
                 }
-                // var generate_date=document.getElementById("modal-header"); 
-                // var id = '#' + $(html).attr('modal-title');
-                // var as = $("#modal-title").html('modal-title');
-                console.log(generate_date) ;
-                // console.log(as) ;
             }
 
              $("#see-draft-btn").on('click',function(e) {
