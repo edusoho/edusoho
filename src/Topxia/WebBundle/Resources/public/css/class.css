@@ -798,4 +798,26 @@ ul.schedule-lesson-list a .finished-icon {
 
 .lesson-selected {
     border: 2px solid #5bc0de;
+
+}
+.teacher-status {
+    position:absolute;
+    left: 46px;
+    bottom: -2px;
+}
+
+.student-status-img {
+    position:relative;
+}
+
+.student-status {
+    position:absolute;
+    left: 55px;
+    bottom: -2px;
+}
+
+.student-status-popover {
+    position:absolute;
+    left: 46px;
+    bottom: 22px;
 }

@@ -14,4 +14,6 @@ interface SessionDao
 	public function getOnlineCount($retentionTime);
 	
 	public function getLoginCount($retentionTime);
+
+	public function findLoginsByUserIds(array $userIds);
 }

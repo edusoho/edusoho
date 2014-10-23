@@ -8,4 +8,6 @@ interface SessionService
     public function clear ($id);
 
     public function clearByUserId ($userId);
+
+    public function findLoginsByUserIds(array $userIds);
 }

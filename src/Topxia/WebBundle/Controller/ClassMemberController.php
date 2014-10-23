@@ -38,15 +38,22 @@ class ClassMemberController extends ClassBaseController
             0,
             PHP_INT_MAX
         );
-        $students=$this->getUserService()->findUsersByIds(ArrayToolkit::column($studentMembers, 'userId'));
+        $studentIds=ArrayToolkit::column($studentMembers, 'userId');
+        $students=$this->getUserService()->findUsersByIds($studentIds);
+
+        $userIds=array_merge($studentIds,$userIds);
+        $loginSessions=$this->getSessionService()->findLoginsByUserIds($userIds);
+        $loginSessions=ArrayToolkit::index($loginSessions,'user_id');
         //@todo member-list.html.twig
-		return $this->render("TopxiaWebBundle:ClassMember:member-show.html.twig",array(
+
+        return $this->render("TopxiaWebBundle:ClassMember:member-show.html.twig",array(
 			'class'=>$class,
 			'classNav'=>'members',
 			'courses'=>$courses,
             'headTeacher'=>$headTeacher,
 			'teachers'=>$teachers,
-			'students'=>$students
+			'students'=>$students,
+            'loginSessions'=>$loginSessions
 		));
 	}
 
@@ -63,6 +70,11 @@ class ClassMemberController extends ClassBaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getSessionService()
+    {
+        return $this->getServiceKernel()->createService('System.SessionService');
     }
 
 }
