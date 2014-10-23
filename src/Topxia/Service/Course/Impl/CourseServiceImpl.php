@@ -613,10 +613,24 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserialize($lesson);
 	}
 
+	public function findCourseDraft($courseId,$lessonId, $userId)
+	{
+		$draft = $this->getCourseDraftDao()->findCourseDraft($courseId,$lessonId, $userId);
+		if (empty($draft) or ($draft['userId'] != $userId)) {
+			return null;
+		}
+		return LessonSerialize::unserialize($draft);
+	}
+
 	public function getCourseLessons($courseId)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
 		return LessonSerialize::unserializes($lessons);
+	}
+
+	public function deleteCourseDrafts($courseId,$lessonId, $userId)
+	{
+		 return   $this->getCourseDraftDao()->deleteCourseDrafts($courseId,$lessonId, $userId);
 	}
 
 	public function findLessonsByTypeAndMediaId($type, $mediaId)
@@ -633,6 +647,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function searchLessonCount($conditions)
 	{
 		return $this->getLessonDao()->searchLessonCount($conditions);
+	}
+
+	public function getCourseDraft($id)
+	{
+	        return $this->getCourseDraftDao()->getCourseDraft($id);
+	}
+
+	public function createCourseDraft($draft)
+	{
+		$draft = ArrayToolkit::parts($draft, array('userId', 'title', 'courseId', 'summary', 'content','lessonId','createdTime'));
+		$draft['userId'] = $this->getCurrentUser()->id;
+		$draft['createdTime'] = time();
+		$draft = $this->getCourseDraftDao()->addCourseDraft($draft);
+		return $draft;
 	}
 
 	public function createLesson($lesson)
@@ -758,6 +786,38 @@ class CourseServiceImpl extends BaseService implements CourseService
 		unset($lesson['media']);
 
 		return $lesson;
+	}
+
+	public function updateCourseDraft($courseId,$lessonId, $userId,$fields)
+	{
+		$draft = $this->findCourseDraft($courseId,$lessonId, $userId);
+
+		if (empty($draft)) {
+			throw $this->createServiceException('草稿不存在，更新失败！');
+		}
+		
+
+		$fields = $this->_filterDraftFields($fields);
+		
+		$this->getLogService()->info('draft', 'update', "更新草稿《{$draft['title']}》(#{$draft['id']})的信息", $fields);
+
+		$fields = LessonSerialize::serialize($fields);
+		
+		return LessonSerialize::unserialize(
+			$this->getCourseDraftDao()->updateCourseDraft($courseId,$lessonId, $userId,$fields)
+		);
+
+	}
+
+	private function _filterDraftFields($fields)
+	{
+		$fields = ArrayToolkit::filter($fields, array(
+			'title' => '',
+			'summary' => '',
+			'content' => '',
+			'createdTime' => 0
+		));
+		return $fields;
 	}
 
 	public function updateLesson($courseId, $lessonId, $fields)
@@ -2064,6 +2124,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getLessonDao ()
     {
         return $this->createDao('Course.LessonDao');
+    }
+
+        private function getCourseDraftDao ()
+    {
+        return $this->createDao('Course.CourseDraftDao');
     }
 
     private function getLessonLearnDao ()

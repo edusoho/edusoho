@@ -84,8 +84,12 @@ interface CourseService
 	public function findLessonsByIds(array $ids);
 
 	public function getCourseLesson($courseId, $lessonId);
+
+	public function findCourseDraft($courseId,$lessonId, $userId);
 	
 	public function getCourseLessons($courseId);
+
+	public function deleteCourseDrafts($courseId,$lessonId, $userId);
 
 	public function findLessonsByTypeAndMediaId($type, $mediaId);
 
@@ -95,7 +99,13 @@ interface CourseService
 
 	public function createLesson($lesson);
 
+	public function getCourseDraft($id);
+
+	public function createCourseDraft($draft);
+
 	public function updateLesson($courseId, $lessonId, $fields);
+
+	public function updateCourseDraft($courseId,$lessonId, $userId,$fields);
 
 	public function deleteLesson($courseId, $lessonId);
 

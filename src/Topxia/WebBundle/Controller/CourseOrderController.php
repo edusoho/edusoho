@@ -18,6 +18,8 @@ class CourseOrderController extends OrderController
 
         $user = $this->getCurrentUser();
 
+        $order = $this->getOrderService()->getOrderByTargetIdAndUserId($course['id'],$user['id']);
+
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
@@ -36,7 +38,9 @@ class CourseOrderController extends OrderController
 
         $course = $this->getCourseService()->getCourse($id);
        
-       $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
+
 
         for($i=0;$i<count($userFields);$i++){
            if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
@@ -49,6 +53,16 @@ class CourseOrderController extends OrderController
         if ($remainingStudentNum == 0 && $course['type'] == 'live') {
             return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
                 'course' => $course
+            ));
+        } else if($order['targetId'] && $order['userId'] && $order['status'] == 'created' ) {
+             return $this->render('TopxiaWebBundle:CourseOrder:remaid.html.twig', array(
+                'course' => $course,
+                'payments' => $this->getEnabledPayments(),
+                'user' => $userInfo,
+                'avatarAlert' => AvatarAlert::alertJoinCourse($user),
+                'courseSetting' => $courseSetting,
+                'member' => $member,
+                'userFields'=>$userFields,
             ));
         } else {
             return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
@@ -89,8 +103,17 @@ class CourseOrderController extends OrderController
         ));
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
+        $order = $this->getOrderService()->getOrderByTargetIdAndUserId($formData['courseId'],$user['id']);
 
-        $order = $this->getCourseOrderService()->createOrder($formData);
+        $orderCreatedTime = $order['createdTime'];
+        $diff = time()-$orderCreatedTime;       
+
+        if($order['targetId'] && $order['userId'] && $order['status'] == 'created' && $diff <3600) {
+            $order = $this->getOrderService()->getOrderByTargetIdAndUserId($formData['courseId'],$user['id']);
+        } else {
+            $changeStatus = $this->getOrderService()->cancelOrders($formData['courseId'],$user['id']);
+            $order = $this->getCourseOrderService()->createOrder($formData);
+        }
 
         if ($order['status'] == 'paid') {
             return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
@@ -299,5 +322,9 @@ class CourseOrderController extends OrderController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 }
