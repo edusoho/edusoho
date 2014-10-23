@@ -526,21 +526,13 @@ course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
 
-course_manage_create_textdraft:
-    pattern:  /course/textdraft/create
+course_manage_course_draft_create:
+    pattern:  /course/draft/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:draftCreate }
 
-course_manage_create_editdraft:
-    pattern:  /course/editdraft/{lessonId}/create
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:editDraftCreate }
-
-course_manage_view_textdraft:
-    pattern:  /course/textdraft/{courseId}/view
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:viewTextDraft }
-
-course_manage_view_editdraft:
-    pattern:  /course/{courseId}/editdraft/{lessonId}/see
-    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:viewEditDraft }
+course_manage_course_draft_view:
+    pattern:  /course/draft/view
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:viewDraft }
 
 live_course_manage_lesson_create:
     pattern:  /course/{id}/manage/live/lesson/create

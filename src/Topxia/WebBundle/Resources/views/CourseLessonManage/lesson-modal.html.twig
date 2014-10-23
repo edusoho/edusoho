@@ -9,7 +9,6 @@
 {% endblock %}
 
 {% block body %}
-{# {{ dump(drafts)}} #}
 
 <form id="course-lesson-form" data-course-id="{{course.id}}" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   {% if lesson %}
@@ -54,7 +53,7 @@
   <div class="form-group for-text-type">
 
 
-  {% if drafts|default(false) %}
+  {% if draft|default(false) %}
 
     <a id ="see-draft-btn" style="cursor:pointer; text-decoration:none;" >
     &nbsp;&nbsp;&nbsp;&nbsp;您有一段自动保存内容，继续编辑请点击

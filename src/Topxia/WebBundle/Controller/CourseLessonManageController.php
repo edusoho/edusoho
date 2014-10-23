@@ -44,18 +44,17 @@ class CourseLessonManageController extends BaseController
         ));
     }
 
-    public function viewTextDraftAction(Request $request, $courseId)
+    public function viewDraftAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-        $userId = $user['id'];
-        $lessonId = 0;
-        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
-        $listdrafts=array("title"=>$drafts['title'],"summary"=>$drafts['summary'],"content"=>$drafts['content']);         
-        return $this->createJsonResponse($listdrafts);
-    }
+        $params =  $request->query->all();
 
-    public function viewEditDraftAction(Request $request, $courseId,$lessonId)
-    {
+        $courseId = $params['courseId'];
+        if(array_key_exists('lessonId', $params)){
+            $lessonId = $params['lessonId'];
+        } else {
+            $lessonId = 0;
+        }
+
         $user = $this->getCurrentUser();
         $userId = $user['id'];
         $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
@@ -69,24 +68,12 @@ class CourseLessonManageController extends BaseController
         $user = $this->getCurrentUser();
         $userId = $user['id'];
         $courseId = $formData['courseId'];
-        $content = $formData['content'];
-        $lessonId = 0;
-        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
-        if($drafts) {
-            $draft = $this->getCourseService()->updateCourseDraft($courseId,$lessonId,$userId,$formData);
+        if(array_key_exists('lessonId', $formData)){
+            $lessonId = $formData['lessonId'];
         } else {
-            $draft = $this->getCourseService()->createCourseDraft($formData);
+            $lessonId = 0;
         }
-        return $this->createJsonResponse(true);
-    }
 
-    public function editDraftCreateAction(Request $request, $lessonId)
-    {
-        $formData = $request->request->all();
-        $user = $this->getCurrentUser();
-        $userId = $user['id'];
-        $courseId = $formData['courseId'];
-        $lessonId = $formData['lessonId'];
         $content = $formData['content'];
 
         $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
@@ -145,7 +132,7 @@ class CourseLessonManageController extends BaseController
     $targetType = 'courselesson';
     $targetId = $course['id'];
     $lessonId = 0;
-    $drafts = $this->getCourseService()->findCourseDraft($targetId,$lessonId,$userId);
+    $draft = $this->getCourseService()->findCourseDraft($targetId,$lessonId,$userId);
     $setting = $this->setting('storage');
    //   if ($setting['upload_mode'] == 'local') {
    //   $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
@@ -168,7 +155,7 @@ class CourseLessonManageController extends BaseController
     'storageSetting' => $setting,
     'features' => $features,
     'parentId'=>$parentId,
-    'drafts' => $drafts
+    'draft' => $draft
     ));
 }
 
@@ -238,7 +225,7 @@ class CourseLessonManageController extends BaseController
 
         $targetType = 'courselesson';
         $targetId = $course['id'];
-        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId, $userId);
+        $draft = $this->getCourseService()->findCourseDraft($courseId,$lessonId, $userId);
         $setting = $this->setting('storage');
         if ($setting['upload_mode'] == 'local') {
             // $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
@@ -263,7 +250,7 @@ class CourseLessonManageController extends BaseController
             'convertKey' => $convertKey,
             'storageSetting' => $setting,
             'features' => $features,
-            'drafts' => $drafts
+            'draft' => $draft
         ));
     }
 
