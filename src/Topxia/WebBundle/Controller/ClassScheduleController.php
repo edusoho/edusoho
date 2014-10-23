@@ -105,6 +105,7 @@ class ClassScheduleController extends ClassBaseController
             'schedules' => $results['schedules'],
             'lessonLearns' => $userLessonLearns,
             'mode' => $mode,
+            'mySchedules' => $results['mySchedules'],
             ));
     }
 

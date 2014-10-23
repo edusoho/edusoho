@@ -108,7 +108,13 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
             $i++;
         }
 
+
+        $result['schedules'] = $scheduleGroup;
+        $result['courses'] = $courses;
+        $result['lessons'] = $lessons;
+        $result['changeMonth'] = $changeMonth;
         $user = $this->getCurrentUser();
+        $mySchedules = array();
         if($mode == 'edit' && !$user->isAdmin()) {
             foreach ($courses as $key => $course) {
                 if(!in_array($user['id'], $course['teacherIds'])) {
@@ -128,15 +134,12 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
                    if(!in_array($schedule['lessonId'], $lessonKeys)) {
                        unset($schedules[$key]);
                    }
-                   $scheduleGroup[$date] = $schedules;
+                   $mySchedules[$date] = ArrayToolkit::column($schedules?:array(), 'id');
                 }
             }
         }
 
-        $result['schedules'] = $scheduleGroup;
-        $result['courses'] = $courses;
-        $result['lessons'] = $lessons;
-        $result['changeMonth'] = $changeMonth;
+        $result['mySchedules'] = $mySchedules;
         return $result;
     }
 
