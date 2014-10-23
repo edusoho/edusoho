@@ -21,12 +21,13 @@ class ClassesServiceImpl extends BaseService implements ClassesService
 
     public function searchClasses($conditions, $sort = array(), $start, $limit) 
     {
-        $conditions = array_filter($conditions);   
+        $conditions = array_filter($conditions);
         return $this->getClassesDao()->searchClasses($conditions, $sort, $start, $limit);
     }
 
     public function searchClassCount($conditions)
     {
+        $conditions = array_filter($conditions);
         return $this->getClassesDao()->searchClassCount($conditions);
     }
 
@@ -326,6 +327,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
 
         return $this->updateClassMember($newMember, $studentMember['id']); 
     }
+
     private function getClassesDao()
     {
         return $this->createDao('Classes.ClassesDao');

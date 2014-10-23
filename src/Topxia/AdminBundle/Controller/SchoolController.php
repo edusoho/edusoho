@@ -62,6 +62,7 @@ class SchoolController extends BaseController
             $class['headTeacherName'] = $users[$class['headTeacherId']]['truename'];
             $classes[$key] = $class;
         }  
+        
         return $this->render('TopxiaAdminBundle:School:class-setting.html.twig',array(
             'classes' => $classes,
             'paginator' => $paginator,
