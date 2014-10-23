@@ -3,7 +3,7 @@
 namespace Topxia\Service\Util;
 
 use \RuntimeException;
-use Topxia\Service\CloudPlatform\Client\CloudApi;
+use Topxia\Service\CloudPlatform\Client\CloudAPI;
 
 class EdusohoLiveClient
 {
@@ -11,7 +11,7 @@ class EdusohoLiveClient
 
     public function __construct (array $options)
     {
-        $this->cloudApi = new CloudApi($options);
+        $this->cloudApi = new CloudAPI($options);
     }
 
     /**
