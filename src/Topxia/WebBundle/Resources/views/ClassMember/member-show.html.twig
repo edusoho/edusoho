@@ -13,15 +13,11 @@
       <div class="col-md-6">
         <div class="media">
           <a href="{{ path('user_show', {id:headTeacher.id}) }}" class="pull-left">
-            <img class="media-object" width="48" height="48" src="{{file_path(headTeacher.smallAvatar, 'avatar.png')}}" alt="{{headTeacher.truename}}">
+            <img class="media-object {% if not loginSessions[headTeacher.id]|default('') %}img-grey{% endif %}" width="48" height="48" src="{{file_path(headTeacher.smallAvatar, 'avatar.png')}}" alt="{{headTeacher.truename}}">
           </a>
-          <div class="teacher-status">
-            {% if loginSessions[headTeacher.id]|default('') %}
-              <span style="color:green" class="glyphicon glyphicon-ok-sign"></span>
-            {% else %}
-              <span style="color:grey" class="glyphicon glyphicon-remove-sign"></span>
-            {% endif %}
-          </div>
+        {#   <div class="teacher-status">
+            <span style={% if loginSessions[headTeacher.id]|default('') %}"color:green"{% else %}"color:grey"{% endif %} class="glyphicon glyphicon-user"></span>
+          </div> #}
           <div class="media-body">
             {% if app.user.id!=headTeacher.id %}
               <button class="btn btn-success btn-xs pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:headTeacher.id})}}">发私信</button>
@@ -38,16 +34,12 @@
             <div class="media">
 
               <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-left">
-                <img class="media-object" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
+                <img class="media-object {% if not loginSessions[teacher.id]|default('') %}img-grey{% endif %}" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
               </a>
               
-              <div class="teacher-status">
-                {% if loginSessions[teacher.id]|default('') %}
-                  <span style="color:green" class="glyphicon glyphicon-ok-sign"></span>
-                {% else %}
-                  <span style="color:grey" class="glyphicon glyphicon-remove-sign"></span>
-                {% endif %}
-              </div>
+              {# <div class="teacher-status">
+                <span style={% if loginSessions[teacher.id]|default('') %}"color:green"{% else %}"color:grey"{% endif %} class="glyphicon glyphicon-user"></span>
+              </div> #}
 
 
 
@@ -80,32 +72,24 @@
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 grid ">
           <div class="student-status-img">
             <a href="{{ path('user_show', {id:student.id}) }}">
-              <img class="avatar" width="48" height="48" src="{{ file_path(student.smallAvatar, 'avatar.png') }}" alt="{{student.truename}}">
+              <img class="avatar {% if not loginSessions[student.id]|default('') %}img-grey{% endif %}" width="48" height="48" src="{{ file_path(student.smallAvatar, 'avatar.png') }}" alt="{{student.truename}}">
               
             </a>
-            <div class="student-status">
-              {% if loginSessions[student.id]|default('') %}
-                <span style="color:green" class="glyphicon glyphicon-ok-sign"></span>
-              {% else %}
-                <span style="color:grey" class="glyphicon glyphicon-remove-sign"></span>
-              {% endif %}
-            </div>
+            {# <div class="student-status">
+              <span style={% if loginSessions[student.id]|default('') %}"color:green"{% else %}"color:grey"{% endif %} class="glyphicon glyphicon-user"></span>
+            </div> #}
           </div>
 
           <a href="{{ path('user_show', {id:student.id}) }}" class="truename">{{student.truename}}</a>
           <div class="student-card-content">
             <div class="media">
               <a href="{{ path('user_show', {id:student.id}) }}" class="pull-left">
-                <img class="media-object pull-left" src="{{ file_path(student.smallAvatar, 'avatar.png') }}">
+                <img class="media-object pull-left {% if not loginSessions[student.id]|default('') %}img-grey{% endif %}" src="{{ file_path(student.smallAvatar, 'avatar.png') }}">
               </a>
 
-              <div class="student-status-popover">
-                {% if loginSessions[student.id]|default('') %}
-                  <span style="color:green" class="glyphicon glyphicon-ok-sign"></span>
-                {% else %}
-                  <span style="color:grey" class="glyphicon glyphicon-remove-sign"></span>
-                {% endif %}
-              </div>
+              {# <div class="student-status-popover">
+                <span style={% if loginSessions[student.id]|default('') %}"color:green"{% else %}"color:grey"{% endif %} class="glyphicon glyphicon-user"></span>
+              </div> #}
 
 
               <div class="media-body">
