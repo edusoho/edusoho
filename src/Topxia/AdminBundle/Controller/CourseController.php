@@ -186,8 +186,9 @@ class CourseController extends BaseController
             if($value['type']=='testpaper'){
                 $paperId=$value['mediaId'];
                 $score=$this->getTestpaperService()->searchTestpapersScore(array('testId'=>$paperId));
-
-                $lessons[$key]['score']=$finishedNum==0 ? 0 : intval($score/$finishedNum);
+                $paperNum=$this->getTestpaperService()->searchTestpaperResultsCount(array('testId'=>$paperId));
+                
+                $lessons[$key]['score']=$finishedNum==0 ? 0 : intval($score/$paperNum);
             }
         }
 
