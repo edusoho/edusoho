@@ -28,6 +28,7 @@ class LiveCourseLessonManageController extends BaseController
 
 			$client = LiveClientFactory::createClient();
 			$live = $client->createLive(array(
+				'id' => '',
 				'title' => $liveLesson['title'],
 				'speaker' => $speaker,
 				'startTime' => $liveLesson['startTime'] . '',
@@ -35,7 +36,7 @@ class LiveCourseLessonManageController extends BaseController
 				'authUrl' => $this->generateUrl('live_auth', array(), true),
 				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
 			));
-var_dump($live);exit();
+
 			if (empty($live) or isset($live['error'])) {
 				throw new \RuntimeException('创建直播教室失败，请重试！');
 			}

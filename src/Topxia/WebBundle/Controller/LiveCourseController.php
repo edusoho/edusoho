@@ -130,7 +130,18 @@ class LiveCourseController extends BaseController
             // 老师登录
 
             $client = LiveClientFactory::createClient();
-            $result = $client->startLive($lesson['mediaId']);
+
+            $token = $this->getTokenService()->makeToken('live.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
+
+            $params = array(
+                'liveId' => $lesson['mediaId'], 
+                'provider' => $lesson['liveProvider'],
+                'token' => $token['token'],
+                'user' => $user['email'],
+                'nickname' => $user['nickname'],
+                'role' => 'teacher'
+            );
+            $result = $client->startLive($params);
 
             if (empty($result) or isset($result['error'])) {
                 return $this->createMessageResponse('info', '进入直播教室失败，请重试！');
@@ -171,6 +182,25 @@ class LiveCourseController extends BaseController
         return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
     }
 
+    public function verifyAction(Request $request)
+    {
+        $condition = $request->query->all();
+
+        $token = $this->getTokenService()->verifyToken('live.view', $condition['token']);
+        if (empty($token)) {
+            $result = array(
+                "code" => 500,
+                "msg" => "校验码错误"
+            );
+        }else{
+            $result = array(
+                "code" => 0,
+                "msg" => "ok"
+            );
+        }
+
+        return $this->createJsonResponse($result);
+    }
 
     protected function makeSign($string)
     {
@@ -270,6 +300,11 @@ class LiveCourseController extends BaseController
         }
 
         return $categories;
+    }
+
+    private function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     private function getCourseService()

@@ -33,13 +33,9 @@ class EdusohoLiveClient
         return $this->cloudApi->get('/lives/capacity', $args);
     }
 
-    public function startLive($liveId)
+    public function startLive($params)
     {
-        $args = array(
-            "liveId" => $liveId, 
-            "provider" => "vhall"
-        );
-        return $this->cloudApi->post('/lives/'.$liveId.'/room_url', $args);
+        return $this->cloudApi->post('/lives/'.$params['liveId'].'/room_url', $params);
     }
 
     public function deleteLive($liveId)
