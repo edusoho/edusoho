@@ -129,8 +129,7 @@ class CourseLessonManageController extends BaseController
 
 		$targetType = 'courselesson';
 		$targetId = $course['id'];
-		$lessonId = 0;
-		$draft = $this->getCourseService()->findCourseDraft($targetId,$lessonId,$userId);
+		$draft = $this->getCourseService()->findCourseDraft($targetId, 0, $userId);
 		$setting = $this->setting('storage');
    //  	if ($setting['upload_mode'] == 'local') {
    //  		$videoUploadToken = $audioUploadToken = $pptUploadToken = array(
