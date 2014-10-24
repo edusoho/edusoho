@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-
     var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
@@ -7,30 +6,64 @@ define(function(require, exports, module) {
     var AudioChooser = require('../widget/media-chooser/audio-chooser7');
     var PPTChooser = require('../widget/media-chooser/ppt-chooser6');
     var Notify = require('common/bootstrap-notify');
-        require('jquery.sortable');
-        
+    require('jquery.sortable');
+
+    function getEditorContent(editor){
+        editor.sync();
+        var z = editor.html();
+        var x = editor.html().match(/<embed[\s\S]*?\/>/g);
+        if (x) {
+            for (var i = x.length - 1; i >= 0; i--) {
+               var y = x[i].replace(/\/>/g,"wmode='Opaque' \/>");
+               var z =  z.replace(x[i],y);
+            };
+        }
+        return z;
+    }
+
+    function compare(tmp, local){
+        if($.isEmptyObject(tmp)){
+            return false;
+        }
+        console.log(local);
+        for(var key in tmp){
+            if(key!="courseId" 
+                && key!="lessonId" 
+                && key!="createdTime" 
+                && tmp[key] != "" 
+                && tmp[key] != local[key]){
+                return true;
+            }
+        }
+        return false;
+    }
+    function objClone(jsonObj){
+         var txt=JSON.stringify(jsonObj);
+         return JSON.parse(txt);
+    }
+
     var sortList = function($list) {
-            var data = $list.sortable("serialize").get();
-            $.post($list.data('sortUrl'), {ids:data}, function(response){
-                var lessonNum = chapterNum = unitNum = 0;
+        var data = $list.sortable("serialize").get();
+        $.post($list.data('sortUrl'), {ids:data}, function(response){
+            var lessonNum = chapterNum = unitNum = 0;
 
-                $list.find('.item-lesson, .item-chapter').each(function() {
-                    var $item = $(this);
-                    if ($item.hasClass('item-lesson')) {
-                        lessonNum ++;
-                        $item.find('.number').text(lessonNum);
-                    } else if ($item.hasClass('item-chapter-unit')) {
-                        unitNum ++;
-                        $item.find('.number').text(unitNum);
-                    } else if ($item.hasClass('item-chapter')) {
-                        chapterNum ++;
-                        unitNum = 0;
-                        $item.find('.number').text(chapterNum);
-                    }
+            $list.find('.item-lesson, .item-chapter').each(function() {
+                var $item = $(this);
+                if ($item.hasClass('item-lesson')) {
+                    lessonNum ++;
+                    $item.find('.number').text(lessonNum);
+                } else if ($item.hasClass('item-chapter-unit')) {
+                    unitNum ++;
+                    $item.find('.number').text(unitNum);
+                } else if ($item.hasClass('item-chapter')) {
+                    chapterNum ++;
+                    unitNum = 0;
+                    $item.find('.number').text(chapterNum);
+                }
 
-                });
             });
-        };
+        });
+    };
 
     function createValidator ($form, $choosers) {
 
@@ -69,6 +102,7 @@ define(function(require, exports, module) {
             }
 
             $('#course-lesson-btn').button('submiting').addClass('disabled');
+
 
             var $panel = $('.lesson-manage-panel');
             $.post($form.attr('action'), $form.serialize(), function(html) {
@@ -177,6 +211,7 @@ define(function(require, exports, module) {
                     element: '#lesson-content-field',
                     required: true
                 });
+
                 break;
             case 'ppt':
                 validator.addItem({
@@ -191,6 +226,40 @@ define(function(require, exports, module) {
     }
 
     exports.run = function() {
+        var Timer;
+        var editor;
+        var tmpContents = {};
+        var localContent = {};
+        var $form = $("#course-lesson-form");
+
+        function getTmpContents(){
+            var date = new Date(); //日期对象
+            var now = "";
+            now = now + date.getHours()+"时";
+            now = now + date.getMinutes()+"分";
+            now = now + date.getSeconds()+"秒";
+            tmpContents["title"] = $("#lesson-title-field").val();
+            tmpContents["summary"] = $("#lesson-summary-field").val();
+            tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
+            tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
+            tmpContents["content"] = getEditorContent(editor);
+            tmpContents["createdTime"] = now;
+
+
+            var lessonId = 0;
+            if(compare(tmpContents, localContent)){
+                var titleName = "添加课时";
+                if(tmpContents["lessonId"] != undefined){
+                    titleName = "编辑课时";
+                    lessonId = tmpContents["lessonId"];
+                }
+                $.post($form.data("createDraftUrl"), tmpContents, function(data){
+                    localContent = objClone(tmpContents);
+                    $(".modal-title").text(titleName + '(草稿已于' + tmpContents['createdTime'] + '保存)');
+                });
+            }
+        }
+
         var updateDuration = function (length) {
             length = parseInt(length);
             if (isNaN(length) || length == 0) {
@@ -202,8 +271,6 @@ define(function(require, exports, module) {
             $("#lesson-minute-field").val(minute);
             $("#lesson-second-field").val(second);
         }
-
-        var $form = $("#course-lesson-form");
 
         var $content = $("#lesson-content-field");
 
@@ -250,46 +317,76 @@ define(function(require, exports, module) {
         });
 
         var validator = createValidator($form, [videoChooser,pptChooser,audioChooser]);
-
+       
         $form.on('change', '[name=type]', function(e) {
             var type = $(this).val();
 
             $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text").removeClass("lesson-form-ppt")
             $form.addClass("lesson-form-" + type);
+            
+            if (type == 'text'){
+                Timer = setInterval(getTmpContents, 5000);
+            }
 
             if (type == 'video') {
                 videoChooser.show();
                 audioChooser.hide();
                 pptChooser.hide();
-
+                clearInterval(Timer);
             } else if (type == 'audio') {
                 audioChooser.show();
                 videoChooser.hide();
                 pptChooser.hide();
+                clearInterval(Timer);
             } else if (type == 'ppt') {
                 pptChooser.show();
                 videoChooser.hide();
                 audioChooser.hide();
+                clearInterval(Timer);
             }
+
+            $(".modal").on('hidden.bs.modal', function (){
+                clearInterval(Timer);
+            });
 
             switchValidator(validator, type);
         });
 
+
+
         $form.find('[name="type"]:checked').trigger('change');
 
-        var editor = EditorFactory.create('#lesson-content-field', 'standard', {extraFileUploadParams:{group:'course'}, height: '300px'});
+        editor = EditorFactory.create('#lesson-content-field', 'standard', {extraFileUploadParams:{group:'course'}, height: '300px'});
         
         validator.on('formValidate', function(elemetn, event) {
-            editor.sync();
-            var z = editor.html();
-            var x = editor.html().match(/<embed[\s\S]*?\/>/g);
-            if (x) {
-                for (var i = x.length - 1; i >= 0; i--) {
-                   var y = x[i].replace(/\/>/g,"wmode='Opaque' \/>");
-                   var z =  z.replace(x[i],y);
-                };
+            var content = getEditorContent(editor);
+            $content.val(content);
+        });
+
+        $(".close,#cancel-btn").on('click',function(e){
+            if($form.find('[name="type"]:checked').val()=='text'){
+                getTmpContents();
             }
-            $content.val(z);
+        });
+
+        $("#see-draft-btn").on('click',function(e) {
+            tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
+            var courseId = tmpContents["courseId"];
+            tmpContents["lessonId"]  = $("#course-lesson-form").data("lessonId");
+            var lessonId;
+            if(tmpContents["lessonId"] == undefined)  {
+                lessonId =0;
+            } else{
+                lessonId = tmpContents["lessonId"];
+            }
+            $.get($(this).data("url"), {courseId: courseId, lessonId:lessonId}, function(response){  
+                $("#lesson-title-field").val(response.title); 
+                $("#lesson-summary-field").val(response.summary); 
+                editor.sync();
+                var content = editor.html(response.content);
+                $("#lesson-content-field").val(content);        
+            });
+            $("#see-draft-btn").hide();
         });
         
     };

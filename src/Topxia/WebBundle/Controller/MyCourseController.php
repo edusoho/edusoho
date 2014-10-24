@@ -55,8 +55,11 @@ class MyCourseController extends BaseController
         );
 
         $userIds = array();
-        foreach ($courses as $course) {
+        foreach ($courses as $key => $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
+            $learnTime=$this->getCourseService()->searchLearnTime(array('courseId'=>$course['id'],'userId'=>$currentUser['id']));
+            
+            $courses[$key]['learnTime']=intval($learnTime/60)."小时".($learnTime%60)."分钟";
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 

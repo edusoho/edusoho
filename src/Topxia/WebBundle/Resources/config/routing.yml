@@ -254,6 +254,30 @@ course_learn:
     pattern:  /course/{id}/learn
     defaults: { _controller: TopxiaWebBundle:Course:learn }
 
+course_learn_time:
+    pattern:  /course/{lessonId}/learn/time/{time}
+    defaults: { _controller: TopxiaWebBundle:Course:recordLearningTime }
+
+course_watch_time:
+    pattern:  /course/{lessonId}/watch/time/{time}
+    defaults: { _controller: TopxiaWebBundle:Course:recordWatchingTime }
+
+course_watch_play:
+    pattern:  /course/{lessonId}/watch/play
+    defaults: { _controller: TopxiaWebBundle:Course:watchPlay }
+
+course_detail_data:
+    pattern:  /course/detail/data/{id}
+    defaults: { _controller: TopxiaWebBundle:Course:detailData }
+
+course_watch_paused:
+    pattern:  /course/{lessonId}/watch/paused
+    defaults: { _controller: TopxiaWebBundle:Course:watchPaused }
+
+course_lesson_detail_data:
+    pattern:  /course/lesson/detail/data/{courseId}/{lessonId}
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:detailData }
+
 course_lesson_show:
     pattern:  /course/{courseId}/lesson/{lessonId}
     defaults: { _controller: TopxiaWebBundle:CourseLesson:show }
@@ -455,6 +479,10 @@ course_manage_teachers:
     pattern:  /course/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachers }
 
+course_manage_data:
+    pattern:  /course/{id}/manage/data
+    defaults: { _controller: TopxiaWebBundle:CourseManage:data }
+
 course_manage_files:
     pattern:  /course/{id}/manage/files
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:index }
@@ -525,6 +553,14 @@ course_manage_lesson:
 course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
+
+course_draft_create:
+    pattern:  /course/draft/create
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:draftCreate }
+
+course_draft_view:
+    pattern:  /course/draft/view
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:viewDraft }
 
 live_course_manage_lesson_create:
     pattern:  /course/{id}/manage/live/lesson/create
