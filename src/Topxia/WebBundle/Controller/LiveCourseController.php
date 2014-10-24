@@ -178,7 +178,7 @@ class LiveCourseController extends BaseController
                 'nickname' => $user['nickname'],
                 'role' => 'student'
             );
-            $result = $client->entryLive($lesson['mediaId'], $params);
+            $result = $client->entryLive($params);
 
             return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
                 'lesson' => $lesson,
