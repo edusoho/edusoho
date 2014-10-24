@@ -47,14 +47,9 @@ class EdusohoLiveClient
         return $this->cloudApi->delete('/lives/'.$liveId, $args);
     }
 
-    public function entryLive($liveId, $params)
+    public function entryLive($params)
     {
-        $params = array(
-            "liveId" => $liveId,
-            "role" => "student",
-            "provider" => $params["provider"]
-        );
-        return $this->cloudApi->post('/lives/'.$liveId.'/room_url', $params);
+        return $this->cloudApi->post('/lives/'.$params['liveId'].'/room_url', $params);
     }
 
     public function entryReplay($liveId, $replayId, $provider)

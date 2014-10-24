@@ -171,7 +171,13 @@ class LiveCourseController extends BaseController
 
             $client = LiveClientFactory::createClient();
 
-
+            $params = array(
+                'liveId' => $lesson['mediaId'], 
+                'provider' => $lesson['liveProvider'],
+                'user' => $user['email'],
+                'nickname' => $user['nickname'],
+                'role' => 'student'
+            );
             $result = $client->entryLive($lesson['mediaId'], $params);
 
             return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
