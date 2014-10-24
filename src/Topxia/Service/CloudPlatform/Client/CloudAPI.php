@@ -41,6 +41,11 @@ class CloudAPI
         return $this->_request('GET', $uri, $params, $header);
     }
 
+    public function delete($uri, array $params = array(), array $header = array())
+    {
+        return $this->_request('DELETE', $uri, $params, $header);
+    }
+
     private function _request($method, $uri, $params, $headers)
     {
         $url = $this->apiUrl . '/' . self::VERSION . $uri;
