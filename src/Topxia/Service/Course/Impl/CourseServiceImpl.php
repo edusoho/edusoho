@@ -2065,10 +2065,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$mediaId = $lesson["mediaId"];
 		$client = LiveClientFactory::createClient();
 		$replayList = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
+
 		if(array_key_exists("error", $replayList)){
 			return $replayList;
 		}
+		
 		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
+
+		if(array_key_exists("data", $replayList)){
+			$replayList = json_decode($replayList["data"], true);
+		}
+
 		foreach ($replayList as $key => $replay) {
 			$fields = array();
 			$fields["courseId"] = $courseId;
