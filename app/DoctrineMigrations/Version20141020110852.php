@@ -14,7 +14,7 @@ class Version20141020110852 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
     	$this->addSql("
-    		ALTER TABLE `course_lesson` ADD `liveProvider` enum('none','vhall', 'upuday') NOT NULL DEFAULT 'none' AFTER `replayStatus`;
+    		ALTER TABLE `course_lesson` ADD `liveProvider` enum('none','vhall', 'soooner') NOT NULL DEFAULT 'none' AFTER `replayStatus`;
     		UPDATE `course_lesson` set `liveProvider` = 'vhall' where `type` = 'live';
     	");
     }
