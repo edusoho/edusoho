@@ -718,6 +718,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'startTime' => 0,
 			'giveCredit' => 0,
 			'requireCredit' => 0,
+			'liveProvider' => 'none',
 		));
 		if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
 			throw $this->createServiceException('参数缺失，创建课时失败！');
