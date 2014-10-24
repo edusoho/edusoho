@@ -8,6 +8,10 @@
   {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
     {% block heading %}头像{% endblock %}
     {% block body %}
+      
+      {% if fromCourse %}
+      <div class="alert alert-info">请设置自定义头像。</div>
+      {% endif %}
 
       <form id="settings-avatar-form" class="form-horizontal" method="post" enctype="multipart/form-data">
 

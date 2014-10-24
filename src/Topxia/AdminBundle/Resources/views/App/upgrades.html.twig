@@ -10,7 +10,9 @@
   <div class="page-header">
     <h1>检查应用更新</h1>
   </div>
-
+{% if status|default(null) %}
+  <div class="alert alert-danger">AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="{{path('admin_setting_cloud')}}">请修改设置。</a></div>
+{% else %}
 {% if apps %}
   <table class="table table-striped table-hover">
     <thead>
@@ -24,7 +26,7 @@
       {% for app in apps %}
         <tr>
           <td>
-            <div class=""><a href="#" class="">{{ app.name }}</a> </div>
+            <div class=""><a href="#" class="">{{ app.name }}</a> {% if app.package.edusohoMinVersion > version %}<div class="text-danger">需要主系统版本为{{app.package.edusohoMinVersion}}以上才能更新</div>{% endif %}</div>
             <div class="text-muted">更新日志： {{ app.package.description|plain_text(80) }} <a href="javascript:;" class="text-warning description-more" data-content="{{ app.package.description }}">查看详情  &raquo; </a>
             </div>
             <div class="text-muted"><small>开发者：{{ app.developerName }}</small></div>
@@ -37,7 +39,7 @@
           </td>
 
           <td>
-            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.package.id}) }}" class="btn btn-primary" data-keyboard="false" data-backdrop="static">更新</a>
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.package.id, type:'upgrade'}) }}" class="btn btn-primary {% if app.package.edusohoMinVersion > version %}disabled{% endif %}" data-keyboard="false" data-backdrop="static">更新</a>
           </td>
         </tr>
       {% endfor %}
@@ -45,5 +47,6 @@
   </table>
 {% else %}
 当前已是最新版本!
+{% endif %}
 {% endif %}
 {% endblock %}

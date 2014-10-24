@@ -54,6 +54,48 @@ class CourseLessonManageController extends BaseController
 		));
 	}
 
+	public function viewDraftAction(Request $request)
+	    {
+	        $params =  $request->query->all();
+
+	        $courseId = $params['courseId'];
+	        if(array_key_exists('lessonId', $params)){
+	            $lessonId = $params['lessonId'];
+	        } else {
+	            $lessonId = 0;
+	        }
+
+	        $user = $this->getCurrentUser();
+	        $userId = $user['id'];
+	        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
+	        $listdrafts=array("title"=>$drafts['title'],"summary"=>$drafts['summary'],"content"=>$drafts['content']);         
+	        return $this->createJsonResponse($listdrafts);
+	    }
+
+	    public function draftCreateAction(Request $request)
+	    {
+	        $formData = $request->request->all();
+	        $user = $this->getCurrentUser();
+	        $userId = $user['id'];
+	        $courseId = $formData['courseId'];
+	        if(array_key_exists('lessonId', $formData)){
+	            $lessonId = $formData['lessonId'];
+	        } else {
+	            $lessonId = 0;
+	        }
+
+	        $content = $formData['content'];
+
+	        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
+	        if($drafts) {
+	            $draft = $this->getCourseService()->updateCourseDraft($courseId,$lessonId,$userId,$formData);
+	        } else {
+	            $draft = $this->getCourseService()->createCourseDraft($formData);
+	        }
+	        return $this->createJsonResponse(true);
+	    }
+
+
 	// @todo refactor it.
 	public function createAction(Request $request, $id)
 	{
@@ -80,6 +122,8 @@ class CourseLessonManageController extends BaseController
 					  //  if ($shortcut == 'true') 
 							  //  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array( 'course' => $course,'lesson' => $lesson))->getContent();                        
 						//else
+			$lessonId =0;
+        			$this->getCourseService()->deleteCourseDrafts($id,$lessonId,$this->getCurrentUser()->id);
 			  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
@@ -87,7 +131,7 @@ class CourseLessonManageController extends BaseController
 		}
 
 		$user = $this->getCurrentUser();
-
+		$userId = $user['id'];
 		$randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
 		$filePath = "courselesson/{$course['id']}";
 		$fileKey = "{$filePath}/" . $randString;
@@ -95,7 +139,7 @@ class CourseLessonManageController extends BaseController
 
 		$targetType = 'courselesson';
 		$targetId = $course['id'];
-
+		$draft = $this->getCourseService()->findCourseDraft($targetId, 0, $userId);
 		$setting = $this->setting('storage');
    //  	if ($setting['upload_mode'] == 'local') {
    //  		$videoUploadToken = $audioUploadToken = $pptUploadToken = array(
@@ -118,7 +162,8 @@ class CourseLessonManageController extends BaseController
 			'convertKey' => $convertKey,
 			'storageSetting' => $setting,
 			'features' => $features,
-			'parentId'=>$parentId
+			'parentId'=>$parentId,
+			'draft' => $draft
 		));
 	}
 
@@ -145,6 +190,7 @@ class CourseLessonManageController extends BaseController
 
 			$fields['free'] = empty($fields['free']) ? 0 : 1;
 			$lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
+			$this->getCourseService()->deleteCourseDrafts($course['id'],$lesson['id'], $this->getCurrentUser()->id);
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
@@ -178,7 +224,7 @@ class CourseLessonManageController extends BaseController
 		list($lesson['minute'], $lesson['second']) = $this->secondsToText($lesson['length']);
 
 		$user = $this->getCurrentUser();
-
+		$userId = $user['id'];
 		$randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
 		$filePath = "courselesson/{$course['id']}";
 		$fileKey = "{$filePath}/" . $randString;
@@ -186,7 +232,7 @@ class CourseLessonManageController extends BaseController
 
 		$targetType = 'courselesson';
 		$targetId = $course['id'];
-
+		$draft = $this->getCourseService()->findCourseDraft($courseId,$lessonId, $userId);
 		$setting = $this->setting('storage');
 		if ($setting['upload_mode'] == 'local') {
 			// $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
@@ -211,6 +257,7 @@ class CourseLessonManageController extends BaseController
 			'convertKey' => $convertKey,
 			'storageSetting' => $setting,
 			'features' => $features,
+			'draft' => $draft
 		));
 	}
 

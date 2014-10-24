@@ -39,7 +39,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['length'] = empty($fileInfo['length']) ? 0 : intval($fileInfo['length']);
 
         $uploadFile['metas'] = $this->encodeMetas(empty($fileInfo['metas']) ? array() : $fileInfo['metas']);    
-        $uploadFile['metas2'] = $this->encodeMetas(empty($fileInfo['metas2']) ? array() : $fileInfo['metas2']);    
+        $uploadFile['metas2'] = $this->encodeMetas(empty($fileInfo['metas2']) ? array() : $fileInfo['metas2']);
+
+        if ($fileInfo['lazyConvert']) {
+            $fileInfo['convertHash'] = "lazy-{$uploadFile['hashId']}";
+        }
 
         if (empty($fileInfo['convertHash'])) {
             $uploadFile['convertHash'] = "ch-{$uploadFile['hashId']}";
@@ -50,6 +54,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $uploadFile['convertStatus'] = 'waiting';
             $uploadFile['convertParams'] = $fileInfo['convertParams'];
         }
+
 
         $uploadFile['type'] = FileToolkit::getFileTypeByMimeType($fileInfo['mimeType']);
         $uploadFile['canDownload'] = empty($uploadFile['canDownload']) ? 0 : 1;
@@ -203,6 +208,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 'duration' => empty($rawParams['duration']) ? 18000 : $rawParams['duration'],
                 'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
             );
+
         } else {
             $rawUploadParams = array(
                 'convertor' => null,
@@ -253,16 +259,28 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'convertParams' => $file['convertParams'],
         );
 
+        if ($file['type'] == 'video') {
+            $watermarks = $this->getVideoWatermarkImages();
+
+            $file['convertParams']['hasVideoWatermark'] = empty($watermarks) ? 0 : 1;
+            $file['convertParams'] = $this->encodeMetas($file['convertParams']);
+
+            $this->getUploadFileDao()->updateFile($file['id'], array('convertParams'=>$file['convertParams']));
+        }
+
+
         if ($pipeline) {
             $params['pipeline'] = $pipeline;
         }
 
+        if (($file['type'] == 'video') && $watermarks) {
+            $params['convertParams']['videoWatermarkImages'] = $watermarks;
+        }
         $result = $this->getCloudClient()->reconvertFile($file['hashId'], $params);
 
         if (empty($result['persistentId'])) {
             return null;
         }
-
         return $result['persistentId'];
     }
 
@@ -276,6 +294,28 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $filename .= "{$file['hashId']}.{$file['ext']}";
         return $diskDirectory.$filename; 
     }
+
+    private function getVideoWatermarkImages()
+    {
+        $setting = $this->getSettingService()->get('storage',array());
+        if (empty($setting['video_embed_watermark_image']) or ($setting['video_watermark'] != 2)) {
+            return array();
+        }
+
+        $videoWatermarkImage = $this->getEnvVariable('baseUrl').$this->getKernel()->getParameter('topxia.upload.public_url_path')."/".$setting['video_embed_watermark_image'];
+        $pathinfo = pathinfo($videoWatermarkImage);
+
+        $images = array();
+        $heighs = array('240', '360', '480', '720', '1080');
+        foreach ($heighs as $height) {
+            $images[$height] = "{$pathinfo['dirname']}/{$pathinfo['filename']}-{$height}.{$pathinfo['extension']}";
+        }
+        return $images;
+    }
+
+
+
+
 
     private function getFilePath($targetType,$targetId)
     {
@@ -314,6 +354,16 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     {
         $class = __NAMESPACE__ . '\\' .  ucfirst($name) . 'Convertor';
         return new $class($this->getCloudClient(), $this->getKernel()->getParameter('cloud_convertor'));
+    }
+
+    private function getUploadFileDao()
+    {
+        return $this->createDao('File.UploadFileDao');
+    }
+
+    private function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 }
 

@@ -23,6 +23,9 @@ class AppController extends BaseController
     {
         $apps = $this->getAppService()->getCenterApps();
 
+        if(isset($apps['error'])) return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status'=>'error',));
+        
+        if(!$apps) return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status'=>'unlink',));
         $codes = ArrayToolkit::column($apps, 'code');
 
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
@@ -52,20 +55,18 @@ class AppController extends BaseController
     {
         $apps = $this->getAppService()->checkAppUpgrades();
 
+        if(isset($apps['error'])) return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array('status'=>'error',));
+        $version=$this->getAppService()->getMainVersion();
+
         return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
             'apps' => $apps,
+            'version'=>$version,
         ));
     }
 
     public function upgradesCountAction(Request $request)
     {
         $apps = $this->getAppService()->checkAppUpgrades();
-        $cop = $this->getAppService()->checkAppCop();
-        if ($cop && isset($cop['cop']) && ($cop['cop'] == 1)) {
-            $this->getSettingService()->set('_app_cop', 1);
-            PluginUtil::refresh();
-        }
-
         return $this->createJsonResponse(count($apps));
     }
 
@@ -88,18 +89,6 @@ class AppController extends BaseController
             'logs' => $logs,
             'users' => $users,
         ));
-    }
-
-    public function checkOwnCopyrightUserAction(Request $request,$userId)
-    {
-        $user = $this->getUserService()->getUser($userId);
-
-        if (empty($user)) {
-            return $this->createMessageResponse('error','user exists error');
-        }
-
-        $res = $this->getAppService()->checkOwnCopyrightUser($userId);
-        return $this->createJsonResponse($res);
     }
 
     protected function getAppService()

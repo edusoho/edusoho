@@ -68,6 +68,23 @@ class SettingController extends BaseController
             'splash3' => '', // 启动图3
             'splash4' => '', // 启动图4
             'splash5' => '', // 启动图5
+            'banner1' => '', // 轮播图1
+            'banner2' => '', // 轮播图2
+            'banner3' => '', // 轮播图3
+            'banner4' => '', // 轮播图4
+            'banner5' => '', // 轮播图5
+            'bannerUrl1' => '', // 轮播图1的触发地址
+            'bannerUrl2' => '', // 轮播图2的触发地址
+            'bannerUrl3' => '', // 轮播图3的触发地址
+            'bannerUrl4' => '', // 轮播图4的触发地址
+            'bannerUrl5' => '', // 轮播图5的触发地址
+            'bannerClick1' => '', // 轮播图1是否触发动作
+            'bannerClick2' => '', // 轮播图2是否触发动作
+            'bannerClick3' => '', // 轮播图3是否触发动作
+            'bannerClick4' => '', // 轮播图4是否触发动作
+            'bannerClick5' => '', // 轮播图5是否触发动作
+            'notice' => '', //公告
+            'courseIds' => '' //每周精品课
         );
 
         $mobile = array_merge($default, $mobile);
@@ -79,8 +96,18 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
 
+        $courseIds = explode(",", $mobile['courseIds']);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = ArrayToolkit::index($courses,'id');
+        $sortedCourses = array();
+        foreach ( $courseIds as $value){
+            if(!empty($value))
+                $sortedCourses[] = $courses[$value];
+        }
+
         return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
-            'mobile'=>$mobile
+            'mobile'=>$mobile,
+            'courses'=>$sortedCourses
         ));
     }
 
@@ -377,16 +404,8 @@ class SettingController extends BaseController
         $defaultSetting = $this->getSettingService()->get('default', array());
         $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
-        $default = array(
-            'defaultAvatar' => 0,
-            'defaultCoursePicture' => 0,
-            'defaultAvatarFileName' => 'avatar',
-            'defaultCoursePictureFileName' => 'coursePicture',
-            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
-            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
-            'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
-        );
-
+        $default = $this->getDefaultSet();
+        
         $defaultSetting = array_merge($default, $defaultSetting);
 
         if ($request->getMethod() == 'POST') {
@@ -399,12 +418,47 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', '系统默认设置已保存！');
         }
 
-        $hasOwnCopyright = $this->getAppService()->checkOwnCopyrightUser($this->getCurrentUser()->id);
-        
         return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
             'defaultSetting' => $defaultSetting,
-            'hasOwnCopyright' => $hasOwnCopyright,
+            'hasOwnCopyright' => false,
         ));
+    }
+
+    public function shareAction (Request $request)
+    {   
+        $defaultSetting = $this->getSettingService()->get('default', array());
+        $default = $this->getDefaultSet();
+
+        $defaultSetting = array_merge($default, $defaultSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $defaultSetting = $request->request->all();
+            $default = $this->getSettingService()->get('default', array());
+            $defaultSetting = array_merge($default, $defaultSetting);
+
+            $this->getSettingService()->set('default', $defaultSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新分享设置", $defaultSetting);
+            $this->setFlashMessage('success', '分享设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:share.html.twig', array(
+            'defaultSetting' => $defaultSetting,
+        ));
+    }
+
+    private function getDefaultSet()
+    {
+        $default = array(
+            'defaultAvatar' => 0,
+            'defaultCoursePicture' => 0,
+            'defaultAvatarFileName' => 'avatar',
+            'defaultCoursePictureFileName' => 'coursePicture',
+            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+            'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+        );
+
+        return $default;
     }
 
     public function ipBlacklistAction(Request $request)
@@ -431,87 +485,6 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:ip-blacklist.html.twig', array(
             'ips' => $ips
         ));
-    }
-
-    public function storageAction(Request $request)
-    {
-        $storageSetting = $this->getSettingService()->get('storage', array());
-
-        $default = array(
-            'upload_mode' => 'local',
-            'cloud_access_key' => '',
-            'cloud_secret_key' => '',
-            'cloud_bucket' => '',
-            'cloud_api_server' => '',
-            'video_quality' => 'low',
-            'video_audio_quality' => 'low',
-            'video_watermark' => 0,
-            'video_watermark_image' => '',
-            'video_watermark_position' => 'topright',
-            'video_fingerprint' => 0,
-        );
-
-        $storageSetting = array_merge($default, $storageSetting);
-        if ($request->getMethod() == 'POST') {
-            $storageSetting = $request->request->all();
-            $this->getSettingService()->set('storage', $storageSetting);
-
-            if (!empty($storageSetting['cloud_access_key']) or !empty($storageSetting['cloud_secret_key'])) {
-                if (!empty($storageSetting['cloud_access_key']) and !empty($storageSetting['cloud_secret_key'])) {
-                    $factory = new CloudClientFactory();
-                    $client = $factory->createClient($storageSetting);
-                    $keyCheckResult = $client->checkKey();
-                } else {
-                    $keyCheckResult = array('error' => 'error');
-                }
-            } else {
-                $keyCheckResult = array('status' => 'ok');
-            }
-
-            $cop = $this->getAppService()->checkAppCop();
-            if ($cop && isset($cop['cop']) && ($cop['cop'] == 1)) {
-                $this->getSettingService()->set('_app_cop', 1);
-            } else {
-                $this->getSettingService()->set('_app_cop', 0);
-            }
-            PluginUtil::refresh();
-            $this->getLogService()->info('system', 'update_settings', "更新云平台设置", $storageSetting);
-            if (!empty($keyCheckResult['status']) && $keyCheckResult['status'] == 'ok') {
-                $this->setFlashMessage('success', '云平台设置已保存！');
-            } else {
-                $this->setFlashMessage('danger', 'AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，请修改设置。');
-            }
-        }
-
-        return $this->render('TopxiaAdminBundle:System:storage.html.twig', array(
-            'storageSetting'=>$storageSetting,
-        ));
-    }
-
-    public function cloudVideoWatermarkUploadAction(Request $request)
-    {
-        $file = $request->files->get('watermark');
-        if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
-        }
-
-        $filename = 'watermark_' . time() . '.' . $file->getClientOriginalExtension();
-        
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
-        $file = $file->move($directory, $filename);
-        $path = "system/{$filename}";
-
-        $response = array(
-            'path' => $path,
-            'url' =>  $this->get('topxia.twig.web_extension')->getFileUrl($path),
-        );
-
-        return new Response(json_encode($response));
-    }
-
-    public function cloudVideoWatermarkRemoveAction(Request $request)
-    {
-        return $this->createJsonResponse(true);
     }
 
     public function customerServiceAction(Request $request)
@@ -665,6 +638,26 @@ class SettingController extends BaseController
         ));
     }
 
+    public function questionsSettingAction(Request $request)
+    {
+        $questionsSetting = $this->getSettingService()->get('questions', array());
+        if (empty($questionsSetting)) {
+            $default = array(
+                'testpaper_answers_show_mode' => 'submitted',
+            );
+            $questionsSetting = $default;
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $questionsSetting = $request->request->all();
+            $this->getSettingService()->set('questions', $questionsSetting);
+            $this->getLogService()->info('system', 'questions_settings', "更新题库设置", $questionsSetting);
+            $this->setFlashMessage('success','题库设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:questions-setting.html.twig');
+    }
+
     public function adminSyncAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
@@ -710,10 +703,12 @@ class SettingController extends BaseController
     public function developerAction(Request $request)
     {
         $developerSetting = $this->getSettingService()->get('developer', array());
+        $storageSetting = $this->getSettingService()->get('storage', array());
 
         $default = array(
             'debug' => '0',
             'app_api_url' => '',
+            'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
             'hls_encrypted' => '1'
         );
 
@@ -721,7 +716,10 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $developerSetting = $request->request->all();
+            $storageSetting['cloud_api_server'] = $developerSetting['cloud_api_server'];
+            $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
+
             $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
             $this->setFlashMessage('success','开发者已保存！');
         }
@@ -931,6 +929,16 @@ class SettingController extends BaseController
 
         return new Response(json_encode($response));
 
+    }
+
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
     
     protected function getAppService()

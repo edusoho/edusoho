@@ -9,6 +9,8 @@ interface AppService
 
     public function findAppsByCodes(array $codes);
 
+    public function getMainVersion();
+
     /**
      * 获得应用中心应用列表
      */
@@ -18,16 +20,9 @@ interface AppService
 
     public function checkAppUpgrades();
 
-    public function checkAppCop();
-
     public function findLogs($start, $limit);
 
     public function findLogCount();
-
-    /**
-     * 是否是去版权用户
-     */
-    public function checkOwnCopyrightUser($id);
 
     /**
      * 是否存在需要回滚的升级
@@ -64,7 +59,7 @@ interface AppService
     /**
      * 为安装升级应用，开始升级
      */
-    public function beginPackageUpdate($packageId);
+    public function beginPackageUpdate($packageId, $type);
 
     public function repairProblem($token);
 

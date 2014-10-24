@@ -28,7 +28,6 @@ class NotificationController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
 
         return $this->render('TopxiaWebBundle:Notification:index.html.twig', array(

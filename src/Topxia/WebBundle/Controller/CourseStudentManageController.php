@@ -13,14 +13,21 @@ class CourseStudentManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
 
+		$fields = $request->query->all();
+		$nickname="";
+		if(isset($fields['nickName'])){
+            $nickname =$fields['nickName'];
+        } 
+
 		$paginator = new Paginator(
 			$request,
-			$this->getCourseService()->getCourseStudentCount($course['id']),
+			$this->getCourseService()->searchMemberCount(array('courseId'=>$course['id'],'role'=>'student','nickname'=>$nickname)),
 			20
 		);
 
-		$students = $this->getCourseService()->findCourseStudents(
-			$course['id'],
+		$students = $this->getCourseService()->searchMembers(
+			array('courseId'=>$course['id'],'role'=>'student','nickname'=>$nickname),
+			array('createdTime','DESC'),
 			$paginator->getOffsetCount(),
 			$paginator->getPerPageCount()
 		);
@@ -262,10 +269,14 @@ class CourseStudentManageController extends BaseController
 		return $this->createJsonResponse($response);
 	}
 
-	public function showAction(Request $request, $id)
+	public function showAction(Request $request, $courseId, $userId)
 	{
-		$user = $this->getUserService()->getUser($id);
-		$profile = $this->getUserService()->getUserProfile($id);
+		if (!$this->getCurrentUser()->isAdmin()) {
+			throw $this->createAccessDeniedException('您无权查看学员详细信息！');
+		}
+
+		$user = $this->getUserService()->getUser($userId);
+		$profile = $this->getUserService()->getUserProfile($userId);
 		$profile['title'] = $user['title'];
 
 		$userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
@@ -284,9 +295,9 @@ class CourseStudentManageController extends BaseController
 		));
 	}
 
-	public function definedShowAction(Request $request, $id)
+	public function definedShowAction(Request $request, $courseId, $userId)
 	{
-		$profile = $this->getUserService()->getUserProfile($id);
+		$profile = $this->getUserService()->getUserProfile($userId);
 
 		$userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 		for($i=0;$i<count($userFields);$i++){
@@ -298,8 +309,10 @@ class CourseStudentManageController extends BaseController
 		}
 
 		$course = $this->getSettingService()->get('course',array());
-		$userinfoFields = $course['userinfoFields'];
 
+		$userinfoFields = array();
+		if(isset($course['userinfoFields'])) $userinfoFields=$course['userinfoFields'];
+		
 		return $this->render('TopxiaWebBundle:CourseStudentManage:defined-show-modal.html.twig', array(
 			'profile' => $profile,
 			'userFields' => $userFields,

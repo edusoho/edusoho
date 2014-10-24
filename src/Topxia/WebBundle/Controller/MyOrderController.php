@@ -32,7 +32,7 @@ class MyOrderController extends BaseController
         return $this->render('TopxiaWebBundle:MyOrder:index.html.twig',array(
         	'orders' => $orders,
             'paginator' => $paginator
-        ));
+        ));   
     }
 
     public function refundsAction(Request $request)

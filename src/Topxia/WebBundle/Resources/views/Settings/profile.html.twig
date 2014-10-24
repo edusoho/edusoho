@@ -10,6 +10,11 @@
 	{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
 		{% block heading %}基础信息{% endblock %}
 		{% block body %}
+			
+			{% if fromCourse %}
+			<div class="alert alert-info">设置头衔、自我介绍并保存后，即可开始创建课程。</div>
+			{% endif %}
+
 			<form id="user-profile-form" class="form-horizontal" method="post">
 				{{ web_macro.flash_messages() }}
 

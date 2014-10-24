@@ -286,6 +286,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		}
 		if ($sort == 'best') {
 			$orderBy = array('score', 'DESC');
+		} else if($sort == 'elite') {
+			$orderBy = array('createdTime', 'DESC', ',isElite', 'ASC');
 		} else {
 			$orderBy = array('createdTime', 'ASC');
 		}
@@ -341,18 +343,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			'latestPostTime' => $post['createdTime'],
 		);
 		$this->getThreadDao()->updateThread($thread['id'], $threadFields);
-
-		if ($thread['userId'] != $post['userId']) {
-			$this->getNotifiactionService()->notify($thread['userId'], 'thread-post', array(
-				'postId' => $post['id'],
-				'postUserId' => $post['userId'],
-				'postUserNickname' => $this->getCurrentUser()->nickname,
-				'threadId' => $thread['id'],
-				'threadTitle' => $thread['title'],
-				'threadType' => $thread['type'],
-				'courseId' => $thread['courseId']
-			));
-		}
 
 		return $post;
 	}

@@ -51,6 +51,13 @@
             </div>
           </div>
           {% endif %}
+
+          <div class="list-group-panel">
+            <div class="list-group-heading">课程运营</div>
+            <div class="list-group">
+              <a class="list-group-item {% if side_nav == 'course_manage_data' %}active{% endif %}" href="{{path('course_manage_data',{id:course.id})}}">课程学习数据</a>
+            </div>
+          </div>
         </div>
 
       </div>

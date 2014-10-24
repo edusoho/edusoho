@@ -1,0 +1,13 @@
+{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+{% block title %}分享设置 - {{ parent() }}{% endblock %}
+{% set submenu = 'share' %}
+
+{% block maincontent %}
+<meta http-equiv="pragma" content="no-cache" />
+  {{ web_macro.flash_messages() }}
+
+  <div class="page-header"><h1>分享设置</h1></div>
+
+  {% include 'TopxiaAdminBundle:System:default-share-content.html.twig' %}
+
+{% endblock %}

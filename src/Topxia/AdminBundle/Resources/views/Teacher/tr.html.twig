@@ -16,7 +16,7 @@
     {% endif %}
   </td>
   <td>
-    <span class="text-sm">{{ user.loginTime|date('Y-n-d H:i:s') }}</span>
+    <span class="text-sm">{% if user.loginTime %}{{ user.loginTime|date('Y-n-d H:i:s') }}{% else %}--{% endif %}</span>
     <br>
     <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ user.loginIp }}" target="_blank">{{ user.loginIp }}</a>
   </td>

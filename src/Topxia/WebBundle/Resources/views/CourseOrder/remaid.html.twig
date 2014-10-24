@@ -1,0 +1,31 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set billable = false %}
+{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}
+  {% set billable = true %}
+{% endif %}
+
+{% set script_controller = 'course/show' %}
+
+{% block title %}{% if billable %}购买课程{% endif %}{% endblock %}
+{% block body %}
+
+<form id="course-buy-form" class="form-horizontal" method="post" action="{{ path('course_order_pay') }}">
+  <div class="row">
+        <div class="col-md-12">
+
+            <div class="alert alert-warning">提示：您已经有购买订单未支付，请您先去支付宝完成该订单！</div>
+
+             <button id="course-pay" class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">点击支付</button>
+
+        </div>
+      </div>
+    <input type="hidden" name="courseId" value="{{ course.id }}" />
+    {# <input type="hidden" name="createdTime" value="{{ order.createdTime }}" /> #}
+    <input type="hidden" name="payment" value="alipay" />
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+  <script>
+    app.load('course/buy-modal');
+  </script>
+{% endblock %}

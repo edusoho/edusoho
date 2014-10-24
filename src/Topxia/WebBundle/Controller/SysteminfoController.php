@@ -11,13 +11,26 @@ class SysteminfoController extends BaseController
 {
     public function indexAction (Request $request)
     {
+        $version = $this->getParam($request, "version", '1');
+
         $info = array(
             'version' => System::VERSION,
-            'mobileApiVersion' => '1',
-            'mobileApiUrl' => $request->getSchemeAndHttpHost() . '/mapi_v1',
+            'mobileApiVersion' => $version,
+            'mobileApiUrl' => $request->getSchemeAndHttpHost() . '/mapi_v' . $version,
         );
 
         return $this->createJson($request, $info);
+    }
+
+    protected function getParam($request, $name, $default = null)
+    {
+        if ($request->getMethod() == "POST") {
+            $result = $request->request->get($name);
+        } else {
+            $result = $request->query->get($name);
+        }
+
+        return $result ? $result : $default;
     }
 
     protected function createJson(Request $request, $data)

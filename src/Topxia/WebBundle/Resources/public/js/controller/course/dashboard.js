@@ -3,6 +3,22 @@ define(function(require, exports, module) {
     exports.run = function() {
         require('./common').run();
         
+        // if ($('#exit-course-learning').length > 0 ) {
+        //     var $btn = $('#exit-course-learning');
+        //     $btn.click(function(){
+
+        //         if (!confirm('确定要退出学习？')) {
+        //             return ;
+        //         }
+
+        //         var goto = $(this).data('goto');
+        //         $.post($(this).data('url'), function(res){
+        //             window.location.href = goto;
+        //         });
+
+        //     });
+        // };
+        
         $("#course-item-list").on('click', '.lesson-item', function(e) {
             window.location.href = $(this).find('.title').attr('href');
         });

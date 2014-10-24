@@ -13,13 +13,11 @@
             </div>
             <div class="content">{{post.content|raw}}</div>
             <div class="text-muted text-normal pull-right">
-              <a href="javascript:" class="li-reply" postId="{{postMain.id}}" postName="{{users[post.userId].nickname}}"> 回复</a>
+              <a href="javascript:" class="li-reply" postId="{{postMain.id}}" postName="{{users[post.userId].nickname}}" data-from-user-id= "{{ users[post.userId].id }}"> 回复</a>
             </div>
           </div>
         </li>
       {% endfor %}
-    </ul>
-
     <div class="actions">
       <a class="replyToo btn btn-default btn-xs pull-right" data-status="hidden" postId="{{post.id}}" href="javascript:;">我也要说</a>
       {% if posts|length > 5 %}
@@ -29,6 +27,8 @@
       {% endif %}
       <span class="text-muted">&nbsp;</sapn>
     </div>
+    </ul>
+
     <div class="clearfix">
     {% if postReplyPaginator[postMain.id].lastPage > 1 %}
       <ul  class="paginator-{{postMain.id}} pagination pagination-sm pull-left " style="display:none;">
@@ -57,9 +57,10 @@
       <div class="controls">
       <textarea id="reply-content-{{post.id}}" class="form-control"></textarea>
       </div>
+    <div id="fromUserIdDiv"></div>
     </div>
     <div class="form-group">
-      <button type="submit" postId="{{postMain.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
+      <button type="submit" postId="{{postMain.id}}" class="reply-btn btn btn-xs btn-primary pull-right"  style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
     </div>
   </form>
 </div>
