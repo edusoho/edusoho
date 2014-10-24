@@ -423,7 +423,7 @@ class CourseHomeworkManageController extends BaseController
     }
 
     public function teachingListAction(Request $request)
-    {   
+    {
         $status = $request->query->get('status', 'unchecked');
 
         $currentUser = $this->getCurrentUser();
@@ -441,9 +441,14 @@ class CourseHomeworkManageController extends BaseController
         $lessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
 
         $conditions = array('courseIds' => $homeworkCourseIds);
+
+        $memberCount = $this->getCourseService()->searchMemberCount($conditions);
+        if (empty($homeworkCourseIds)) {
+            $count = 0;
+        }
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->searchMemberCount($conditions)
+            $memberCount
             , 25
         );
 
@@ -453,14 +458,13 @@ class CourseHomeworkManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         $studentUserIds = ArrayToolkit::column($students, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
         $homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findHomeworkResultsByHomeworkIds(ArrayToolkit::column($homeworks, 'id')), 'userId');
         $committedCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
             'commitStatus' => 'committed',
-            // 'checkTeacherId' => $currentUser['id']
+            'checkTeacherId' => $currentUser['id']
         ));
 
         $uncommitCount = $this->getCourseService()->searchMemberCount($conditions) - $committedCount;
