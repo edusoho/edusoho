@@ -28,7 +28,7 @@ class LiveCourseLessonManageController extends BaseController
 
 			$client = LiveClientFactory::createClient();
 			$live = $client->createLive(array(
-				'id' => '',
+				'summary' => $liveLesson['summary'],
 				'title' => $liveLesson['title'],
 				'speaker' => $speaker,
 				'startTime' => $liveLesson['startTime'] . '',
@@ -40,6 +40,7 @@ class LiveCourseLessonManageController extends BaseController
 			if (empty($live) or isset($live['error'])) {
 				throw new \RuntimeException('创建直播教室失败，请重试！');
 			}
+
 			$liveLesson['mediaId'] = $live['id'];
 			$liveLesson['liveProvider'] = $live['provider'];
 
