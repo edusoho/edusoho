@@ -713,13 +713,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'type' => 'text',
 			'content' => '',
 			'media' => array(),
-			'mediaId' => 0,
+			'mediaId' => "0",
 			'length' => 0,
 			'startTime' => 0,
 			'giveCredit' => 0,
 			'requireCredit' => 0,
 			'liveProvider' => 'none',
 		));
+
 		if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
 			throw $this->createServiceException('参数缺失，创建课时失败！');
 		}
@@ -737,8 +738,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
-		$this->fillLessonMediaFields($lesson);
 
+		$this->fillLessonMediaFields($lesson);
 
 		//课程内容的过滤 @todo
 		// if(isset($lesson['content'])){
@@ -876,7 +877,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'summary' => '',
 			'content' => '',
 			'media' => array(),
-			'mediaId' => 0,
+			'mediaId' => "0",
 			'free' => 0,
 			'length' => 0,
 			'startTime' => 0,

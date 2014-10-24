@@ -33,9 +33,9 @@ class EdusohoLiveClient
         return $this->cloudApi->get('/lives/capacity', $args);
     }
 
-    public function startLive($params)
+    public function startLive($args)
     {
-        return $this->cloudApi->post('/lives/'.$params['liveId'].'/room_url', $params);
+        return $this->cloudApi->post('/lives/'.$args['liveId'].'/room_url', $args);
     }
 
     public function deleteLive($liveId, $provider)
@@ -47,9 +47,9 @@ class EdusohoLiveClient
         return $this->cloudApi->delete('/lives/'.$liveId, $args);
     }
 
-    public function entryLive($params)
+    public function entryLive($args)
     {
-        return $this->cloudApi->post('/lives/'.$params['liveId'].'/room_url', $params);
+        return $this->cloudApi->post('/lives/'.$args['liveId'].'/room_url', $args);
     }
 
     public function entryReplay($liveId, $replayId, $provider)
