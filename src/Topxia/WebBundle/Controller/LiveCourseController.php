@@ -167,20 +167,16 @@ class LiveCourseController extends BaseController
             $params['sign'] = "c{$lesson['courseId']}u{$user['id']}t{$now}";
             $params['sign'] .= 's' . $this->makeSign($params['sign']);
 
+            $params['liveId'] = $lesson['mediaId'];
             $params['provider'] = $lesson["liveProvider"];
+            $params['role'] = 'student';
 
             $client = LiveClientFactory::createClient();
 
             $token = $this->getTokenService()->makeToken('live.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
+            $params['token'] = $token['token'];
+            $params['user'] = $params['email'];
 
-            $params = array(
-                'liveId' => $lesson['mediaId'], 
-                'provider' => $lesson['liveProvider'],
-                'token' => $token['token'],
-                'user' => $user['email'],
-                'nickname' => $user['nickname'],
-                'role' => 'student'
-            );
             $result = $client->entryLive($params);
 
             return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
