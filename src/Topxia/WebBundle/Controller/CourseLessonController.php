@@ -188,6 +188,7 @@ class CourseLessonController extends BaseController
                             $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
                             $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                             $headLeaderInfo = $this->getHeadLeaderInfo();
+                            $json['headLength'] = $headLeaderInfo['headLength'];
                             $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, $headLeaderInfo['headLeaders'], $headLeaderInfo['headLeaderHlsKeyUrl'], 3600);
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
@@ -265,6 +266,44 @@ class CourseLessonController extends BaseController
         }
 
         return $this->fileAction($request, $lesson['mediaId']);
+    }
+
+
+    public function detailDataAction($courseId,$lessonId)
+    {   
+        $students=array();
+        $lesson = $this->getCourseService()->getCourseLesson($courseId,$lessonId);
+
+        $count = $this->getCourseService()->searchLearnCount(array('courseId'=>$courseId,'lessonId'=>$lessonId));
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $learns = $this->getCourseService()->searchLearns(array('courseId'=>$courseId,'lessonId'=>$lessonId),array('startTime','ASC'), $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+  
+        foreach ($learns as $key => $learn) {
+            
+            $user=$this->getUserService()->getUser($learn['userId']);
+            $students[$key]['nickname']=$user['nickname'];
+            $students[$key]['startTime']=$learn['startTime'];
+            $students[$key]['finishedTime']=$learn['finishedTime'];
+            $students[$key]['learnTime']=$learn['learnTime'];
+            $students[$key]['watchTime']=$learn['watchTime'];
+
+            if($lesson['type']=='testpaper'){
+                $paperId=$lesson['mediaId'];
+                $score=$this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($paperId,$user['id']);
+
+                $students[$key]['result']=$score['score'];
+            } 
+ 
+        }
+
+        $lesson['length']=intval($lesson['length']/60);
+        
+        return $this->render('TopxiaWebBundle:CourseLesson:lesson-data-modal.html.twig', array(
+            'lesson'=>$lesson,
+            'paginator'=>$paginator,
+            'students'=>$students,
+            ));
     }
 
     public function mediaDownloadAction(Request $request, $courseId, $lessonId)
@@ -408,12 +447,14 @@ class CourseLessonController extends BaseController
 
             return array(
                 'headLeaders' => $headLeaders,
-                'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl
+                'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl,
+                'headLength' => $headLeader['length']
             );
         } else {
             return array(
                 'headLeaders' => '',
-                'headLeaderHlsKeyUrl' => ''
+                'headLeaderHlsKeyUrl' => '',
+                'headLength' => 0
             );
         }
     }
@@ -500,4 +541,8 @@ class CourseLessonController extends BaseController
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
+    private function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
 }

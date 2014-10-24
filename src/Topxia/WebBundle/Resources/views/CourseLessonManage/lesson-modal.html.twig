@@ -3,15 +3,17 @@
 {% set modal_class = 'modal-lg' %}
 {% set lesson = lesson|default(null) %}
 
+
 {% block title %}
   {% if lesson %}编辑课时{{ lesson.number }}{% else %}添加课时{% endif %}
 {% endblock %}
 
 {% block body %}
 
-<form id="course-lesson-form" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
+<form id="course-lesson-form" data-course-id="{{course.id}}" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
+  data-create-draft-url="{{path('course_draft_create')}}"
   {% if lesson %}
-    action="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
+    action="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" data-lesson-id="{{lesson.id}}"
   {% else %}
     action="{{ path('course_manage_lesson_create', {id:course.id}) }}"
   {% endif %}
@@ -31,7 +33,7 @@
     <div class="col-md-9 controls">
       <div class="row">
         <div class="col-md-10">
-          <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ field_value(lesson, 'title') }}">
+          <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ field_value(lesson, 'title') }}" >
         </div>
         <div class="col-md-2">
           <div class="checkbox">
@@ -44,12 +46,28 @@
 
   <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type{% endif %}">
     <div class="col-md-2 control-label"><label for="lesson-summary-field">摘要</label></div>
-    <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary">{{ field_value(lesson, 'summary') }}</textarea></div>
+    <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary" >{{ field_value(lesson, 'summary') }}</textarea>
+
+    </div>
   </div>
 
   <div class="form-group for-text-type">
-    <div class="col-md-2 control-label"><label for="lesson-content-field">内容</label></div>
-    <div class="col-md-9 controls"><textarea class="form-control" id="lesson-content-field" name="content">{{ field_value(lesson, 'content') }}</textarea></div>
+
+
+
+    <div class="col-md-2 control-label"><label for="lesson-content-field" class="style1">内容</label></div>
+    <div class="col-md-9 controls">
+      
+      {% if draft|default(false) %}
+      <a id ="see-draft-btn" class="btn btn-link" data-url="{{path('course_draft_view')}}" >
+        <small>
+        您有一段自动保存内容，继续编辑请点击
+        </small>
+      </a>
+      {% endif %}
+
+      <textarea class="form-control" id="lesson-content-field" name="content"  >{{ field_value(lesson, 'content') }}</textarea>
+    </div>
   </div>
 
   <div class="form-group for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type{% endif %}">
@@ -94,13 +112,16 @@
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
+
 </form>
+ 
 
 <script>app.load('course-manage/lesson-modal')</script>
 
+
 {% endblock %}
 {% block footer %}
-    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+    <button type="button" class="btn btn-link" data-dismiss="modal" id="cancel-btn">取消</button>
     <button id="course-lesson-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">{% if lesson %}保存{% else %}添加{% endif %}</button>
 {% endblock %}
 

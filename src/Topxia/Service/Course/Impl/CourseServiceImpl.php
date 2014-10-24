@@ -567,7 +567,45 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function analysisCourseDataByTime($startTime,$endTime)
 	{
-	    	return $this->getCourseDao()->analysisCourseDataByTime($startTime,$endTime);
+    	return $this->getCourseDao()->analysisCourseDataByTime($startTime,$endTime);
+	}
+
+	public function waveLearningTime($lessonId,$userId,$time)
+	{
+		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
+
+		if($learn['status']!="finished")
+		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+				'learnTime' => $learn['learnTime']+intval($time),
+		));
+	}
+
+	public function waveWatchingTime($userId,$lessonId,$time)
+	{
+		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
+
+		if($learn['status']!="finished" && $learn['videoStatus']=="playing")
+		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+				'watchTime' => $learn['watchTime']+intval($time),
+		));
+	}
+
+	public function watchPlay($userId,$lessonId)
+	{
+		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
+
+		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+				'videoStatus' => 'playing',
+		));
+	}
+
+	public function watchPaused($userId,$lessonId)
+	{
+		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
+
+		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+				'videoStatus' => 'paused',
+		));
 	}
 
 	private function autosetCourseFields($courseId)
@@ -613,10 +651,24 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserialize($lesson);
 	}
 
+	public function findCourseDraft($courseId,$lessonId, $userId)
+	{
+		$draft = $this->getCourseDraftDao()->findCourseDraft($courseId,$lessonId, $userId);
+		if (empty($draft) or ($draft['userId'] != $userId)) {
+			return null;
+		}
+		return LessonSerialize::unserialize($draft);
+	}
+
 	public function getCourseLessons($courseId)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
 		return LessonSerialize::unserializes($lessons);
+	}
+
+	public function deleteCourseDrafts($courseId,$lessonId, $userId)
+	{
+		 return   $this->getCourseDraftDao()->deleteCourseDrafts($courseId,$lessonId, $userId);
 	}
 
 	public function findLessonsByTypeAndMediaId($type, $mediaId)
@@ -633,6 +685,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function searchLessonCount($conditions)
 	{
 		return $this->getLessonDao()->searchLessonCount($conditions);
+	}
+
+	public function getCourseDraft($id)
+	{
+	        return $this->getCourseDraftDao()->getCourseDraft($id);
+	}
+
+	public function createCourseDraft($draft)
+	{
+		$draft = ArrayToolkit::parts($draft, array('userId', 'title', 'courseId', 'summary', 'content','lessonId','createdTime'));
+		$draft['userId'] = $this->getCurrentUser()->id;
+		$draft['createdTime'] = time();
+		$draft = $this->getCourseDraftDao()->addCourseDraft($draft);
+		return $draft;
 	}
 
 	public function createLesson($lesson)
@@ -760,6 +826,38 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $lesson;
 	}
 
+	public function updateCourseDraft($courseId,$lessonId, $userId,$fields)
+	{
+		$draft = $this->findCourseDraft($courseId,$lessonId, $userId);
+
+		if (empty($draft)) {
+			throw $this->createServiceException('草稿不存在，更新失败！');
+		}
+		
+
+		$fields = $this->_filterDraftFields($fields);
+		
+		$this->getLogService()->info('draft', 'update', "更新草稿《{$draft['title']}》(#{$draft['id']})的信息", $fields);
+
+		$fields = LessonSerialize::serialize($fields);
+		
+		return LessonSerialize::unserialize(
+			$this->getCourseDraftDao()->updateCourseDraft($courseId,$lessonId, $userId,$fields)
+		);
+
+	}
+
+	private function _filterDraftFields($fields)
+	{
+		$fields = ArrayToolkit::filter($fields, array(
+			'title' => '',
+			'summary' => '',
+			'content' => '',
+			'createdTime' => 0
+		));
+		return $fields;
+	}
+
 	public function updateLesson($courseId, $lessonId, $fields)
 	{
 		$course = $this->getCourse($courseId);
@@ -850,6 +948,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getLogService()->info('lesson', 'delete', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
 
 		// $this->autosetCourseFields($courseId);
+	}
+
+	public function findLearnsCountByLessonId($lessonId)
+	{
+		return  $this->getLessonLearnDao()->findLearnsCountByLessonId($lessonId);
 	}
 
 	public function analysisLessonFinishedDataByTime($startTime,$endTime)
@@ -1087,16 +1190,26 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
 
-    	public function searchLearnCount($conditions)
-    	{
-    		return $this->getLessonLearnDao()->searchLearnCount($conditions);
-    	}
+	public function searchLearnCount($conditions)
+	{
+		return $this->getLessonLearnDao()->searchLearnCount($conditions);
+	}
 
-    	public function searchLearns($conditions,$orderBy,$start,$limit)
-    	{
-    		return $this->getLessonLearnDao()->searchLearns($conditions,$orderBy,$start,$limit);
-    	}
+	public function searchLearns($conditions,$orderBy,$start,$limit)
+	{
+		return $this->getLessonLearnDao()->searchLearns($conditions,$orderBy,$start,$limit);
+	}
 
+	public function searchLearnTime($conditions)
+	{	
+		return $this->getLessonLearnDao()->searchLearnTime($conditions);
+	}
+
+	public function searchWatchTime($conditions)
+	{
+		return $this->getLessonLearnDao()->searchWatchTime($conditions);
+	}
+	
 	public function findLatestFinishedLearns($start, $limit)
 	{
 		return $this->getLessonLearnDao()->findLatestFinishedLearns($start, $limit);
@@ -2064,6 +2177,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getLessonDao ()
     {
         return $this->createDao('Course.LessonDao');
+    }
+
+        private function getCourseDraftDao ()
+    {
+        return $this->createDao('Course.CourseDraftDao');
     }
 
     private function getLessonLearnDao ()
