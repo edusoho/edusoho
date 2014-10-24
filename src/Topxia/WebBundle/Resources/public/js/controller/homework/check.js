@@ -50,7 +50,6 @@ define(function(require, exports, module) {
                 $btn.button('saving');
                 $btn.attr('disabled', 'disabled');
             var data = $.extend(changeTeacherSay,teacherFeedback);
-
             $.post($btn.data('url'),{data:data},function(res){
                 location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/lesson/"+res.lessonId+"/homework/list";
             });

@@ -234,11 +234,10 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         $this->getHomeworkResultDao()->updateHomeworkResult($homeworkResult['id'],$fields);
 
         foreach ($checkHomeworkData['questionIds'] as $key => $questionId) {
-            if (!empty($checkHomeworkData['teacherSay'][$key])) {
+                if (!empty($checkHomeworkData['teacherSay'][$key])) {
                 $this->getHomeworkItemResultDao()->updateHomeworkItemResult($id,$homeworkResult['id'],$questionId,array('teacherSay'=>$checkHomeworkData['teacherSay'][$key]));
             }
         }
-
         return true;
     }
 
