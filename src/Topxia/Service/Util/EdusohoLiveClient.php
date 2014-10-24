@@ -52,14 +52,9 @@ class EdusohoLiveClient
         return $this->cloudApi->post('/lives/'.$args['liveId'].'/room_url', $args);
     }
 
-    public function entryReplay($liveId, $replayId, $provider)
+    public function entryReplay($args)
     {
-        $args = array(
-            'liveId' => $liveId,
-            'replayId' => $replayId,
-            "provider" => $provider
-        );
-        return $this->cloudApi->post('/lives/'.$liveId.'/record_url', $args);
+        return $this->cloudApi->post('/lives/'.$args['liveId'].'/record_url', $args);
     }
 
     public function createReplayList($liveId, $title, $provider)

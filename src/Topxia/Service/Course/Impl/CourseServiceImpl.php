@@ -2090,11 +2090,22 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$lesson = $this->getLessonDao()->getLesson($lessonId);
 		list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
-		$mediaId = $lesson["mediaId"];
-		$client = LiveClientFactory::createClient();
-		$email = $this->getCurrentUser()->email;
+
 		$courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);
-		$url = $client->entryReplay($mediaId, $courseLessonReplay["replayId"], $lesson["liveProvider"]);
+		$token = $this->getTokenService()->makeToken('live.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
+		$user = $this->getCurrentUser();
+
+		$args = array(
+			'liveId' => $lesson["mediaId"], 
+			'replayId' => $courseLessonReplay["replayId"], 
+			'provider' => $lesson["liveProvider"],
+			'token' => $token['token'],
+            'user' => $user['email'],
+            'nickname' => $user['nickname']
+		);
+
+		$client = LiveClientFactory::createClient();
+		$url = $client->entryReplay($args);
 		return $url['url'];
 	}
 
@@ -2260,6 +2271,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('System.SettingService');
     }
+
+    private function getTokenService()
+    {
+        return $this->createService('User.TokenService');
+    }
+
 
     private function getLevelService()
     {
