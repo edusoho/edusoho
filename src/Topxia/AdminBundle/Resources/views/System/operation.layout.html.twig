@@ -12,30 +12,24 @@
     </a>
   </li>
 
+  <li class="{% if submenu == 'questions_setting' %}active{% endif %}">
+    <a href="{{ url('admin_setting_questions_setting') }}">题库设置
+    </a>
+  </li>
+
   <li class="{% if submenu == 'consult_setting' %}active{% endif %}">
     <a href="{{ url('admin_setting_consult_setting') }}">客服设置
     </a>
   </li>
 
-  <li class="{% if submenu == 'payment' %}active{% endif %}">
-  	<a href="{{ url('admin_setting_payment') }}">支付方式
-  	</a>
-  </li>
   <li class="{% if submenu == 'mailer' %}active{% endif %}">
   	<a href="{{ url('admin_setting_mailer') }}">邮件服务器设置
   	</a>
-  </li>  
-  <li class="{% if submenu == 'storage' %}active{% endif %}">
-    <a href="{{ url('admin_setting_cloud') }}">云平台设置
-    </a>
   </li>
   <li class="{% if submenu == 'theme' %}active{% endif %}">
        <a href="{{ path('admin_setting_theme') }}">主题设置</a>
   </li>
-  <li class="{% if submenu == 'refund' %}active{% endif %}">
-  	<a href="{{ url('admin_setting_refund') }}">退款设置
-  	</a>
-  </li>
+
    <li class="{% if submenu == 'default' %}active{% endif %}">
     <a href="{{ url('admin_setting_default') }}">系统默认设置
     </a>

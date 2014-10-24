@@ -275,6 +275,16 @@ textarea {
 	border-radius: 12px;
 }
 
+.site-navbar .mobile-badge-container .badge {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	font-size: 11px;
+	background: #5bc0de;
+	padding: 2px 5px;
+	border-radius: 12px;
+}
+
 /**
  * </global>
  */
@@ -2195,6 +2205,14 @@ body {
 .shares-dropdown-menu > li > a {
 	padding-top: 5px;
 	padding-bottom: 5px;
+}
+
+.shares-dropdown-menu {
+	width: 170px;
+}
+
+.bdsharebuttonbox {
+	min-width: 170px;
 }
 
 .text-list {

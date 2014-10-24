@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var VideoChooser = require('../widget/media-chooser/video-chooser6');
-    var AudioChooser = require('../widget/media-chooser/audio-chooser6');
+    var AudioChooser = require('../widget/media-chooser/audio-chooser7');
     var PPTChooser = require('../widget/media-chooser/ppt-chooser6');
     var Notify = require('common/bootstrap-notify');
         require('jquery.sortable');

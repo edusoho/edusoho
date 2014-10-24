@@ -19,6 +19,7 @@ define(function(require, exports, module) {
             });
         });
 
+        $('.tip').tooltip();
         $("#modal").modal({
             backdrop: 'static',
             keyboard: false,

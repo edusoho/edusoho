@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\StringToolkit;
 use Topxia\Service\Util\LiveClientFactory;
 
 use Imagine\Gd\Imagine;
@@ -157,6 +158,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 			unset($conditions['categoryId']);
 		}
 
+		if(isset($conditions['nickname'])){
+			$user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+			$conditions['userId'] = $user ? $user['id'] : -1;
+			unset($conditions['nickname']);
+		}
+		
 		return $conditions;
 	}
 
@@ -450,6 +457,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseDao()->updateCourse($id, array(
 			'recommended' => 0,
 			'recommendedTime' => 0,
+			'recommendedSeq' => 0,
 		));
 
 		$this->getLogService()->info('course', 'cancel_recommend', "取消推荐课程《{$course['title']}》(#{$course['id']})");
@@ -1036,6 +1044,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		list($course, $member) = $this->tryLearnCourse($courseId);
 
+		$lesson = $this->getCourseLesson($courseId, $lessonId);
+		if (empty($lesson)) {
+			throw $this->createServiceException("课时#{$lessonId}不存在！");
+		}
+
 		$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($member['userId'], $lessonId);
 		if ($learn) {
 			$this->getLessonLearnDao()->updateLearn($learn['id'], array(
@@ -1060,6 +1073,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$memberFields['learnedNum'] = count($learns);
 		$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
 		$memberFields['credit'] = $totalCredits;
+
+		$this->getStatusService()->publishStatus(array(
+			'type' => 'learned_lesson',
+			'objectType' => 'lesson',
+			'objectId' => $lessonId,
+			'properties' => array(
+				'course' => $this->simplifyCousrse($course),
+				'lesson' => $this->simplifyLesson($lesson),
+			)
+		));
 
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
@@ -1329,7 +1352,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 	 * Member API
 	 */
 	public function searchMemberCount($conditions)
-	{
+	{	
+		$conditions = $this->_prepareCourseConditions($conditions);
 		return $this->getMemberDao()->searchMemberCount($conditions);
 	}
 
@@ -1570,6 +1594,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    	$fields['income'] = $this->getOrderService()->sumOrderPriceByTarget('course', $courseId);
 	    }
 		$this->getCourseDao()->updateCourse($courseId, $fields);
+
+		$this->getStatusService()->publishStatus(array(
+			'type' => 'become_student',
+			'objectType' => 'course',
+			'objectId' => $courseId,
+			'properties' => array(
+				'course' => $this->simplifyCousrse($course),
+			)
+		));
 
 		return $member;
 	}
@@ -1984,15 +2017,29 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return false;
 	}
 
-	private function isCurrentUser($userId){
-		$user = $this->getCurrentUser();
-		if($userId==$user->id){
-			return true;
-		}
-		return false;
+	private function simplifyCousrse($course)
+	{
+		return array(
+			'id' => $course['id'],
+			'title' => $course['title'],
+			'picture' => $course['middlePicture'],
+			'type' => $course['type'],
+			'rating' => $course['rating'],
+			'about' => StringToolkit::plain($course['about'], 100),
+			'price' => $course['price'],
+		);
 	}
 
-
+	private function simplifyLesson($lesson)
+	{
+		return array(
+			'id' => $lesson['id'],
+			'number' => $lesson['number'],
+			'type' => $lesson['type'],
+			'title' => $lesson['title'],
+			'summary' => StringToolkit::plain($lesson['summary'], 100),
+		);
+	}
 
     private function getCourseDao ()
     {
@@ -2102,6 +2149,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getTagService()
     {
         return $this->createService('Taxonomy.TagService');
+    }
+
+    private function getStatusService()
+    {
+        return $this->createService('User.StatusService');
     }
 
 }

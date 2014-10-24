@@ -197,7 +197,7 @@ class TestpaperController extends BaseController
             'paperResult' => $testpaperResult,
             'favorites' => ArrayToolkit::column($favorites, 'questionId'),
             'id' => $id,
-            'total' => $total
+            'total' => $total,
         ));
     }
 
@@ -242,7 +242,7 @@ class TestpaperController extends BaseController
             'favorites' => ArrayToolkit::column($favorites, 'questionId'),
             'id' => $id,
             'total' => $total,
-            'student' => $student
+            'student' => $student,
         ));
     }
 
@@ -399,6 +399,8 @@ class TestpaperController extends BaseController
 
         $student = $this->getUserService()->getUser($testpaperResult['userId']);
 
+        $questionsSetting = $this->getSettingService()->get('questions', array());
+
         return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-review.html.twig', array(
             'items' => $items,
             'accuracy' => $accuracy,
@@ -407,7 +409,8 @@ class TestpaperController extends BaseController
             'id' => $id,
             'total' => $total,
             'types' => $types,
-            'student' => $student
+            'student' => $student,
+            'questionsSetting' => $questionsSetting
         ));
     }
 
@@ -604,6 +607,11 @@ class TestpaperController extends BaseController
         }
 
         return $this->createJsonResponse(array('status' => $testResult['status'], 'resultId' => $testResult['id']));
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     private function getTestpaperService()
