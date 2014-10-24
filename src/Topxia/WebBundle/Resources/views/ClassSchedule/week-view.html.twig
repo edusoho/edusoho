@@ -28,7 +28,7 @@
                       {% set lessonLearn = lessonLearns[item.lessonId] | default(null) %}
                       {% set lessonUrl = path('course_learn', {id:courses[lessons[item.lessonId].courseId].id}) ~ '#lesson/' ~ item.lessonId %}
 
-                        <li class="{% if mode == 'edit' %}{% if item.id not in mySchedules[day] %} hidden {% endif %}{% endif %}" data-id="{{ item.lessonId }}" data-url="{{ lessonUrl }}">
+                        <li class="{% if mode == 'edit' %}{% if item.id not in mySchedules[day]|default(null) and not app.user.isAdmin() %} hidden {% endif %}{% endif %}" data-id="{{ item.lessonId }}" data-url="{{ lessonUrl }}">
                           <div class="thumbnail">
                             {% if mode == 'edit' %}
                               <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
