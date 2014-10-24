@@ -375,7 +375,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                             $hlsKeyUrl = $this->controller->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                             $headLeaderInfo = $this->getHeadLeaderInfo();
                             if($headLeaderInfo){
-                                $headLeaderHlsKeyUrl = $this->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
+                                $headLeaderHlsKeyUrl = $this->controller->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
                                 $lesson['headUrl'] = $client->generateHLSEncryptedListUrl($headLeaderInfo['convertParams'], $headLeaderInfo['metas2'], $headLeaderHlsKeyUrl, '', '', 3600);
                             }
 
