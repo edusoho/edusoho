@@ -72,8 +72,8 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $baseUrl = $this->request->getSchemeAndHttpHost();
         $result = array(
             "code"=>2,
-            "androidVersion"=>"2.0.0",
-            "iPhoneVersion"=>"2.0.0",
+            "androidVersion"=>"2.0.1",
+            "iPhoneVersion"=>"1.1.0",
             "updateInfo"=>"更新日志",
             "updateUrl"=>$baseUrl . '/mapi_v2/School/getDownloadUrl'
             );
