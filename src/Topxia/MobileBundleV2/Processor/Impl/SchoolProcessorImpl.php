@@ -72,6 +72,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $baseUrl = $this->request->getSchemeAndHttpHost();
         $updateInfo = $this->controller->render('TopxiaMobileBundleV2:Content:update.html.twig', array());
         $result = array(
+            "show"=>true,
             "code"=>2,
             "androidVersion"=>"2.0.1",
             "iPhoneVersion"=>"1.1.0",
