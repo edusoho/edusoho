@@ -6,8 +6,8 @@
   <title>阔知学堂移动客户端下载</title>
   <script>
     var urls = {
-      iphone: '',
-      android: 'http://mobcdn.qiniudn.com/Edianshang-Android-v2.0.1.apk'
+      iphone: '{{iphoneUrl | raw}}',
+      android: 'http://mobcdn.qiniudn.com/{{code | raw}}-Android-v2.0.1.apk'
     };
     var uagent = navigator.userAgent.toLowerCase();
     if (uagent.search("iphone") > -1 || uagent.search("ipad") > -1 ) {
