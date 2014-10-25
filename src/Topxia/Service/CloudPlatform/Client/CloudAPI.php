@@ -36,6 +36,11 @@ class CloudAPI
         return $this->_request('PUT', $uri, $params, $header);
     }
 
+    public function patch($uri, array $params = array(), array $header = array())
+    {
+        return $this->_request('PATCH', $uri, $params, $header);
+    }
+
     public function get($uri, array $params = array(), array $header = array())
     {
         return $this->_request('GET', $uri, $params, $header);
@@ -68,6 +73,9 @@ class CloudAPI
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
         } else if ($method == 'DELETE') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
+        } else if ($method == 'PATCH') {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
         } else {
             if (!empty($params)) {

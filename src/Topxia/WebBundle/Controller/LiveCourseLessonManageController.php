@@ -74,6 +74,23 @@ class LiveCourseLessonManageController extends BaseController
 			$liveLesson['free'] = empty($editLiveLesson['free']) ? 0 : $editLiveLesson['free'];
 			$liveLesson['length'] = empty($editLiveLesson['timeLength']) ? $liveLesson['length'] : $editLiveLesson['timeLength'];
 
+			$speakerId = current($liveCourse['teacherIds']);
+			$speaker = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
+			$speaker = $speaker ? $speaker['nickname'] : '老师';
+
+			$client = LiveClientFactory::createClient();
+			$live = $client->updateLive(array(
+				'liveId' => $liveLesson['mediaId'],
+				'provider' => $liveLesson['liveProvider'],
+				'summary' => $liveLesson['summary'],
+				'title' => $liveLesson['title'],
+				'speaker' => $speaker,
+				'startTime' => $liveLesson['startTime'] . '',
+				'endTime' => ($liveLesson['startTime'] + $liveLesson['length']*60) . '',
+				'authUrl' => $this->generateUrl('live_auth', array(), true),
+				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
+			));
+
 			$liveLesson = $this->getCourseService()->updateLesson($courseId,$lessonId,$liveLesson);
 			
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(

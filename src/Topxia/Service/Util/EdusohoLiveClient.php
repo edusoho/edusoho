@@ -25,6 +25,11 @@ class EdusohoLiveClient
         return $this->cloudApi->post('/lives', $args);
     }
 
+    public function updateLive(array $args)
+    {
+        return $this->cloudApi->patch('/lives/'.$args['liveId'], $args);
+    }
+
     public function getCapacity()
     {
         $args = array(
