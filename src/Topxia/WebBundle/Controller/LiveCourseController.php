@@ -191,20 +191,20 @@ class LiveCourseController extends BaseController
 
     public function verifyAction(Request $request)
     {
-        $condition = $request->query->all();
+        $condition = $request->request->all();
 
-        // $token = $this->getTokenService()->verifyToken('live.view', $condition['k']);
-        // if (empty($token)) {
-        //     $result = array(
-        //         "code" => 500,
-        //         "msg" => "校验码错误"
-        //     );
-        // }else{
+        $token = $this->getTokenService()->verifyToken('live.view', $condition['k']);
+        if (empty($token)) {
+            $result = array(
+                "code" => 500,
+                "msg" => "校验码错误"
+            );
+        }else{
             $result = array(
                 "code" => "0",
                 "msg" => "ok"
             );
-        // }
+        }
 
         return $this->createJsonResponse($result);
     }
