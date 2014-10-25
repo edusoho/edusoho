@@ -77,18 +77,26 @@ class LiveCourseLessonManageController extends BaseController
 			$speakerId = current($liveCourse['teacherIds']);
 			$speaker = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
 			$speaker = $speaker ? $speaker['nickname'] : '老师';
-			$client = LiveClientFactory::createClient();
-			$live = $client->updateLive(array(
+
+			$liveParams = array(
 				'liveId' => $liveLesson['mediaId'],
 				'provider' => $liveLesson['liveProvider'],
 				'summary' => $editLiveLesson['summary'],
 				'title' => $editLiveLesson['title'],
 				'speaker' => $speaker,
-				'startTime' => strtotime($editLiveLesson['startTime']),
-				'endTime' => (strtotime($editLiveLesson['startTime']) + $editLiveLesson['timeLength']*60) . '',
 				'authUrl' => $this->generateUrl('live_auth', array(), true),
 				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
-			));
+			);
+
+			if(array_key_exists('startTime', $editLiveLesson)) {
+				$liveParams['startTime'] = strtotime($editLiveLesson['startTime']);
+			}
+			if(array_key_exists('startTime', $editLiveLesson) && array_key_exists('timeLength', $editLiveLesson)) {
+				$liveParams['endTime'] = (strtotime($editLiveLesson['startTime']) + $editLiveLesson['timeLength']*60) . '';
+			}
+
+			$client = LiveClientFactory::createClient();
+			$live = $client->updateLive($liveParams);
 
 			$liveLesson = $this->getCourseService()->updateLesson($courseId,$lessonId,$liveLesson);
 			
