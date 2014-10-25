@@ -718,7 +718,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'startTime' => 0,
 			'giveCredit' => 0,
 			'requireCredit' => 0,
+			'liveProvider' => 'none',
 		));
+
 		if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
 			throw $this->createServiceException('参数缺失，创建课时失败！');
 		}
@@ -736,8 +738,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
-		$this->fillLessonMediaFields($lesson);
 
+		$this->fillLessonMediaFields($lesson);
 
 		//课程内容的过滤 @todo
 		// if(isset($lesson['content'])){
@@ -2062,11 +2064,18 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lesson = $this->getLessonDao()->getLesson($lessonId);
 		$mediaId = $lesson["mediaId"];
 		$client = LiveClientFactory::createClient();
-		$replayList = $client->createReplayList($mediaId, "录播回放");
+		$replayList = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
+
 		if(array_key_exists("error", $replayList)){
 			return $replayList;
 		}
+		
 		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
+
+		if(array_key_exists("data", $replayList)){
+			$replayList = json_decode($replayList["data"], true);
+		}
+
 		foreach ($replayList as $key => $replay) {
 			$fields = array();
 			$fields["courseId"] = $courseId;
@@ -2088,12 +2097,23 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$lesson = $this->getLessonDao()->getLesson($lessonId);
 		list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
-		$mediaId = $lesson["mediaId"];
-		$client = LiveClientFactory::createClient();
-		$email = $this->getCurrentUser()->email;
+
 		$courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);
-		$url = $client->entryReplay($mediaId, $courseLessonReplay["replayId"]);
-		return $url;
+		$token = $this->getTokenService()->makeToken('live.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
+		$user = $this->getCurrentUser();
+
+		$args = array(
+			'liveId' => $lesson["mediaId"], 
+			'replayId' => $courseLessonReplay["replayId"], 
+			'provider' => $lesson["liveProvider"],
+			'token' => $token['token'],
+            'user' => $user['email'],
+            'nickname' => $user['nickname']
+		);
+
+		$client = LiveClientFactory::createClient();
+		$url = $client->entryReplay($args);
+		return $url['url'];
 	}
 
 	public function getCourseLessonReplayByLessonId($lessonId)
@@ -2258,6 +2278,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('System.SettingService');
     }
+
+    private function getTokenService()
+    {
+        return $this->createService('User.TokenService');
+    }
+
 
     private function getLevelService()
     {
