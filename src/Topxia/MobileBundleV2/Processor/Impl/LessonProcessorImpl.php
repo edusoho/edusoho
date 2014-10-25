@@ -375,8 +375,10 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                             $hlsKeyUrl = $this->controller->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                             $headLeaderInfo = $this->getHeadLeaderInfo();
                             if($headLeaderInfo){
+                                //var_dump($headLeaderInfo);exit();
                                 $headLeaderHlsKeyUrl = $this->controller->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
-                                $lesson['headUrl'] = $headLeaderHlsKeyUrl;
+                                $headUrl = $client->generateHLSEncryptedListUrl($headLeaderInfo['convertParams'], $headLeaderInfo['metas2'], $headLeaderHlsKeyUrl, '', '', 3600);
+                                $lesson['headUrl'] = (isset($headUrl) and is_array($headUrl) and !empty($headUrl['url'])) ? $headUrl['url'] : '';
                             }
 
                             $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, '', '', 3600);
@@ -456,8 +458,14 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
             private function getHeadLeaderInfo()
             {
-                return $this->controller->getUploadFileService()->getFileByTargetType('headLeader');
-                    
+                $storage = $this->controller->getSettingService()->get("storage");
+                if(!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]){
+                    $file = $this->controller->getUploadFileService()->getFileByTargetType('headLeader');
+                    $file["convertParams"] = json_decode($file["convertParams"], true);
+                    $file["metas2"] = json_decode($file["metas2"], true);
+                    return $file;
+                }
+                return false;
             }
 
 	private function wrapContent($content)
