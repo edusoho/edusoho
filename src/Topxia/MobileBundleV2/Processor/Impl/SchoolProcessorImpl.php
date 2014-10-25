@@ -63,13 +63,15 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public function getDownloadUrl()
     {
-        return $this->controller->render('TopxiaMobileBundleV2:Content:download.html.twig', array(
+        $code = $this->request->get("code", "kuozhi");
+        return $this->controller->render('TopxiaMobileBundleV2:Content:download-' . $code . '.html.twig', array(
         ));
     }
 
     public function getClientVersion()
     {
         $baseUrl = $this->request->getSchemeAndHttpHost();
+        $code = $this->getParam("code");
         $updateInfo = $this->controller->render('TopxiaMobileBundleV2:Content:update.html.twig', array());
         $result = array(
             "show"=>true,
@@ -77,7 +79,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             "androidVersion"=>"2.0.1",
             "iPhoneVersion"=>"1.1.0",
             "updateInfo"=>$updateInfo->getContent(),
-            "updateUrl"=>$baseUrl . '/mapi_v2/School/getDownloadUrl'
+            "updateUrl"=>$baseUrl . '/mapi_v2/School/getDownloadUrl?code=' . $code
             );
         return $result;
     }
