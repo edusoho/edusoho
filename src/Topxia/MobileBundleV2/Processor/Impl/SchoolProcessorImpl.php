@@ -71,7 +71,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     public function getClientVersion()
     {
         $baseUrl = $this->request->getSchemeAndHttpHost();
-        $code = $this->getParam("code");
+        $code = $this->getParam("code", 'kuozhi');
         $updateInfo = $this->controller->render('TopxiaMobileBundleV2:Content:update.html.twig', array());
         $result = array(
             "show"=>true,
