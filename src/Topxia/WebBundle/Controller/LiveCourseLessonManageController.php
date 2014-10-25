@@ -77,7 +77,6 @@ class LiveCourseLessonManageController extends BaseController
 			$speakerId = current($liveCourse['teacherIds']);
 			$speaker = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
 			$speaker = $speaker ? $speaker['nickname'] : '老师';
-
 			$client = LiveClientFactory::createClient();
 			$live = $client->updateLive(array(
 				'liveId' => $liveLesson['mediaId'],
@@ -85,8 +84,8 @@ class LiveCourseLessonManageController extends BaseController
 				'summary' => $editLiveLesson['summary'],
 				'title' => $editLiveLesson['title'],
 				'speaker' => $speaker,
-				'startTime' => $editLiveLesson['startTime'] . '',
-				'endTime' => ($editLiveLesson['startTime'] + $editLiveLesson['length']*60) . '',
+				'startTime' => strtotime($editLiveLesson['startTime']),
+				'endTime' => (strtotime($editLiveLesson['startTime']) + $editLiveLesson['timeLength']*60) . '',
 				'authUrl' => $this->generateUrl('live_auth', array(), true),
 				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
 			));
