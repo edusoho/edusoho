@@ -82,11 +82,11 @@ class LiveCourseLessonManageController extends BaseController
 			$live = $client->updateLive(array(
 				'liveId' => $liveLesson['mediaId'],
 				'provider' => $liveLesson['liveProvider'],
-				'summary' => $liveLesson['summary'],
-				'title' => $liveLesson['title'],
+				'summary' => $editLiveLesson['summary'],
+				'title' => $editLiveLesson['title'],
 				'speaker' => $speaker,
-				'startTime' => $liveLesson['startTime'] . '',
-				'endTime' => ($liveLesson['startTime'] + $liveLesson['length']*60) . '',
+				'startTime' => $editLiveLesson['startTime'] . '',
+				'endTime' => ($editLiveLesson['startTime'] + $editLiveLesson['length']*60) . '',
 				'authUrl' => $this->generateUrl('live_auth', array(), true),
 				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
 			));
