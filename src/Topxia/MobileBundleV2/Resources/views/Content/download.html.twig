@@ -17,9 +17,9 @@
       if (href.search("iphone") > -1 || href.search("ipad") > -1 ) {
         if (urls.iphone == "#") {
           document.write("<div class='message'>暂无iphone版本...</div>");
-          return;
+        } else {
+          window.location = urls.iphone;
         }
-        window.location = urls.iphone;
       } else {
         window.location = urls.android;
       }
