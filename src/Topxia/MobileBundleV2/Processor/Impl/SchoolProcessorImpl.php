@@ -30,7 +30,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     {
         $result = false;
         $parames = array();
-        $parames["imei"] = $this->getParam("imei",  "");
+        $parames["imei"] = $this->getParam("deviceSn",  "");
         $parames["platform"] = $this->getParam( "platform",  "");
         $parames["version"] = $this->getParam("version",  "");
         $parames["screenresolution"] = $this->getParam("screenresolution",  "");
