@@ -369,14 +369,14 @@ class CourseLessonManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-		$client = LiveClientFactory::createClient();
-		$result = $client->deleteLive($lesson['mediaId'], $lesson['liveProvider']);
-		if(empty($result) || !array_key_exists('status', $result) || $result['status'] != 'ok'){
-			throw new \RuntimeException('删除直播错误');
-		}
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);
 		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 		if($course['type']=='live'){
+			$client = LiveClientFactory::createClient();
+			$result = $client->deleteLive($lesson['mediaId'], $lesson['liveProvider']);
+			if(empty($result) || !array_key_exists('status', $result) || $result['status'] != 'ok'){
+				throw new \RuntimeException('删除直播错误');
+			}
 			$this->getCourseService()->deleteCourseLessonReplayByLessonId($lessonId);
 		}
 		return $this->createJsonResponse(true);
