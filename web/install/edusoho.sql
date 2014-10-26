@@ -301,6 +301,7 @@ CREATE TABLE `course_lesson` (
   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时结束时间',
   `memberNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时加入人数',
   `replayStatus` enum('ungenerated','generating','generated') NOT NULL DEFAULT 'ungenerated',
+  `liveProvider` int(10) unsigned NOT NULL DEFAULT '0',
   `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
