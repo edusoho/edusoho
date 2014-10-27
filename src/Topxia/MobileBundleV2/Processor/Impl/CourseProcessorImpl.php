@@ -4,6 +4,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\CourseProcessor;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Response;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
@@ -27,7 +28,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             		return null;
      		}
      		$member = $this->checkMemberStatus($member);
-     		return empty($member) ? null: $member;
+     		return empty($member) ? new Response("null"): $member;
 	}
 
 	public function postThread()
