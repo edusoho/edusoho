@@ -144,6 +144,9 @@ parent_child_status:
     pattern:  /parent/child/status
     defaults: { _controller: TopxiaWebBundle:Parent:childStatus }
 
+parent_child_schedules:
+    pattern:  /parent/child/schedules
+    defaults: { _controller: TopxiaWebBundle:Parent:childSchedules }
 parent_child_more_status:
     pattern:  /parent/child/more/status
     defaults: { _controller: TopxiaWebBundle:Parent:moreStatuses }

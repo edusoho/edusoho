@@ -60,7 +60,7 @@ class ParentImporterServiceImpl extends BaseImporterService implements ParentImp
                 $classMember = array();
                 $classMember['userId'] = $parent['id'];
                 $classMember['classId'] = $class['id'];
-                $classMember['role'] = 'parent';
+                $classMember['role'] = 'PARENT';
                 $classMember['createdTime'] = time();
                 $this->getClassesService()->addClassMember($classMember);
 

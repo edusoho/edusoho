@@ -21,6 +21,10 @@
                   href="{{path('parent_child_status',{childId:selectedChild.id|default(null)})}}">学习动态</a>
 
                   <a class="list-group-item 
+                  {% if side_nav == 'parent-child-schedules' %} active {% endif %}" 
+                  href="{{path('parent_child_schedules',{childId:selectedChild.id|default(null)}) }}">学习课表</a>
+
+                  <a class="list-group-item 
                   {% if side_nav == 'parent-child-courses' %} active {% endif %}" 
                   href="{{path('parent_child_courses',{childId:selectedChild.id|default(null)}) }}">在学课程</a>
 

@@ -39,6 +39,22 @@ class ParentController extends BaseController
         ));
     }
 
+    public function childSchedulesAction(Request $request)
+    {
+        $user=$this->getCurrentUser();
+        if(!$user->isParent()) {
+            return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
+        }
+
+        $childId = $request->query->get('childId');
+        $selectedChild=$this->getSelectedChild($childId);
+        $class = $this->getClassesService()->getStudentClass($childId);
+        return $this->render('TopxiaWebBundle:Parent:child-schedules.html.twig', array(
+            'selectedChild' => $selectedChild,
+            'class' => $class,
+        )); 
+    }
+
     function moreStatusesAction(Request $request)
     {
         $fields=$request->query->all();
