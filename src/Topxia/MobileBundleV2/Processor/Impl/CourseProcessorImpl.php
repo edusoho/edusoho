@@ -205,12 +205,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         );
 
         $courseMember = $this->controller->getCourseService()->searchMember($conditions,$start,$limit);
-        //var_dump($courseMember);
-        // $courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMember, 'courseId'));
-        // var_dump($courseMember);
 
-    	// $noteList = $this->controller->getNoteService()->searchNotes(array('userId'=>$user['id']),'created',$start,$limit);
-    	// var_dump($noteList);
     	$noteList = array();
     	$index = 0;
     	for($i = 0;$i < count($courseMember);$i++){
@@ -228,6 +223,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     		}
     	}
 
+    	/**
+    	 *排序（可以不用）
+    	 *
+    	 **/
     	foreach ($noteList as $key => $value) {
     		$sort_course[$key] = $value['courseId'];
     		$sort_lesson[$key] = $value['lessonId'];
@@ -301,7 +300,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
 		$isTeacherPost = $this->controller->getThreadService()->findThreadElitePosts($course['id'], $thread['id'], 0, 100);
 		$thread['isTeacherPost'] = empty($isTeacherPost) ? false : true;
-		$thread['user'] = $user;
+		$thread['user'] = $this->controller->filterUsers($user);
+		//var_dump($this->controller->filterUsers($user));
+		//$thread['user'] = $user;
 		$thread['createdTime'] = date('c', $thread['createdTime']);
 		$thread['latestPostTime'] = date('c', $thread['latestPostTime']);
 
