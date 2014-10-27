@@ -18,6 +18,8 @@ interface UserService
 
     public function findUsersByIds(array $ids);
 
+    public function findUsersByNumbers(array $numbers);
+
     public function findUsersByIdsAndOrder(array $ids, array $orderBy);    
 
     public function findUserProfilesByIds(array $ids);
@@ -205,6 +207,8 @@ interface UserService
     /**用户关联关系*/
     public function addUserRelation($userRelation);
 
+    public function getUserRelationByFromIdAndToIdAndType($fromId,$toId,$type);
+    
     public function findUserRelationsByFromIdsAndType(array $fromIds,$type);
 
     public function findUserRelationsByToIdsAndType(array $toIds,$type);

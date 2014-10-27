@@ -106,6 +106,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
             'view' => array('STUDENT', 'TEACHER', 'HEAD_TEACHER', 'ADMIN'),
             'manage' => array('HEAD_TEACHER', 'ADMIN'),
             'manageSchedule' => array('TEACHER', 'HEAD_TEACHER', 'ADMIN'),
+            'viewSchedule' => array('STUDENT', 'TEACHER', 'HEAD_TEACHER', 'ADMIN', 'PARENT'),
         );
 
         if (!array_key_exists($name, $permissionRoles)) {

@@ -24,6 +24,14 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->fetchAssoc($sql, array($number)) ? : null;
     }
 
+    public function findUsersByNumbers(array $numbers)
+    {
+        if(empty($numbers)){ return array(); }
+        $marks = str_repeat('?,', count($numbers) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE number IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $numbers);
+    }
+
     public function findUserByEmail($email)
     {
         $sql = "SELECT * FROM {$this->table} WHERE email = ? LIMIT 1";

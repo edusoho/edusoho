@@ -13,26 +13,27 @@
           </p>
           {{ render(controller('TopxiaWebBundle:Parent:childInfo',{childId:selectedChild.id|default(null)})) }}
           <div class="list-group-block">
-            {% if app.user.isParent() %}
-              <div class="list-group-panel">
-                <ul class="list-group">
-                  <a class="list-group-item
-                  {% if side_nav == 'parent-child-status' %} active {% endif %}" 
-                  href="{{path('parent_child_status',{childId:selectedChild.id|default(null)})}}">学习动态</a>
+            <div class="list-group-panel">
+              <ul class="list-group">
+                <a class="list-group-item
+                {% if side_nav == 'parent-child-status' %} active {% endif %}"href="{{path('parent_child_status',{childId:selectedChild.id|default(null)})}}">学习动态</a>
 
-                  <a class="list-group-item 
-                  {% if side_nav == 'parent-child-courses' %} active {% endif %}" 
-                  href="{{path('parent_child_courses',{childId:selectedChild.id|default(null)}) }}">在学课程</a>
+                <a class="list-group-item 
+                {% if side_nav == 'parent-child-schedules' %} active {% endif %}" 
+                href="{{path('parent_child_schedules',{childId:selectedChild.id|default(null)}) }}">学习课表</a>
 
-                  <a class="list-group-item 
-                  {% if side_nav == 'parent-child-testpapers' %} active {% endif %}"
-                  href="{{path('parent_child_testpapers', {childId:selectedChild.id|default(null)}) }}">考试成绩</a>
+                <a class="list-group-item 
+                {% if side_nav == 'parent-child-courses' %} active {% endif %}" 
+                href="{{path('parent_child_courses',{childId:selectedChild.id|default(null)}) }}">在学课程</a>
 
-                  <a class="list-group-item {% if side_nav == 'parent-child-threads' %} active {% endif %}"
-                  href="{{path('parent_child_threads', {type:'question',childId:selectedChild.id|default(null)}) }}">课程讨论</a>
-                </ul>
-              </div>
-            {% endif %}
+                <a class="list-group-item 
+                {% if side_nav == 'parent-child-testpapers' %} active {% endif %}"
+                href="{{path('parent_child_testpapers', {childId:selectedChild.id|default(null)}) }}">考试成绩</a>
+
+                <a class="list-group-item {% if side_nav == 'parent-child-threads' %} active {% endif %}"
+                href="{{path('parent_child_threads', {type:'question',childId:selectedChild.id|default(null)}) }}">课程讨论</a> 
+              </ul>
+            </div>
           </div>
         </div>
       </div>

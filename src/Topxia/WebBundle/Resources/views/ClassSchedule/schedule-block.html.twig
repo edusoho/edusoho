@@ -1,0 +1,28 @@
+{{ import_javascript({'lessonSelect':'schedule/lesson'}) }}
+<div class="schedule" data-save="{{ path('class_schedule_save', {classId:class.id}) }}" data-reset="{{ path('class_schedule_reset', {classId:class.id}) }}">
+  <div class="schedule-header row tal">
+    <div class="view-type col-md-3">
+      <select class="viewType form-control">
+        <option value="week">按周查看</option>
+        <option value="month">按月查看</option>
+      </select> 
+    </div>
+    <div class="month  col-md-6 tac">
+      <a href="javascript:;" class="previous-month"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <span class="yearMonth"> {{ "now" | date(' Y 年 m 月')}}</span>
+      <a href="javascript:;" class="next-month"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div>
+    <div class="week-operation pull-right">
+      <a class="btn btn-link previous-week">
+        <span class="glyphicon glyphicon-circle-arrow-left"></span>上周</a>
+      <a class="btn btn-link next-week">
+        下周<span class="glyphicon glyphicon-circle-arrow-right"></span></a>
+    </div>
+  </div>
+
+
+  <div class="schedule-body">
+    {{ render(controller('TopxiaWebBundle:ClassSchedule:schedule', {classId:class.id})) }}
+  </div>
+  <div class="popover-container"></div>
+</div>

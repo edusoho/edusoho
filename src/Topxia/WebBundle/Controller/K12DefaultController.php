@@ -21,7 +21,10 @@ class K12DefaultController extends BaseController
         }
 
         if($user->isParent()){
-            return $this->redirect($this->generateUrl('parent_child_status'));
+            $relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
+            $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
+            $selectedChild=current($children);
+            return $this->redirect($this->generateUrl('parent_child_status',array('childId'=>$selectedChild['id'])));
         }
 
         $class = $this->getClassesService()->getStudentClass($user['id']);

@@ -54,6 +54,22 @@ abstract class ClassBaseController extends BaseController
         return $class;
     }
 
+    protected function tryViewSchedule($classId)
+    {
+        $class = $this->getClassesService()->getClass($classId);
+        if (empty($class)) {
+            throw $this->createNotFoundException('班级不存在');
+        }
+
+        $checked = $this->getClassesService()->checkPermission('viewSchedule', $classId);
+
+        if (empty($checked)) {
+            throw $this->createAccessDeniedException('您无权操作');
+        }
+
+        return $class;
+    }
+
     protected function getClassesService()
     {
         return $this->getServiceKernel()->createService('Classes.ClassesService');

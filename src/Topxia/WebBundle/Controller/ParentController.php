@@ -8,20 +8,9 @@ use Topxia\Common\ArrayToolkit;
 
 class ParentController extends BaseController
 {
-    const CACHE_NAME = 'parent';
-
-    private $cached;
-
-    function childStatusAction(Request $request)
+    function childStatusAction(Request $request,$childId)
     {
-        $user=$this->getCurrentUser();
-        if(!$user->isParent()) {
-            return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
-        }
-        // $weekCount=$request->query->get('weekCount');
-        // $weekCount=empty($weekCount)?1:$weekCount;
-
-        $selectedChild=$this->getSelectedChild($request->query->get('childId'));
+        $selectedChild=$this->tryViewChild($childId);
         $statuses=$this->getStatusService()->findStatusesByUserId($selectedChild['id'],0,30);
         $statusCount=$this->getStatusService()->findStatusesByUserIdCount($selectedChild['id']);
         $moreBtnShow=$statusCount>count($statuses)?true:false;
@@ -39,10 +28,19 @@ class ParentController extends BaseController
         ));
     }
 
-    function moreStatusesAction(Request $request)
+    public function childSchedulesAction(Request $request,$childId)
     {
-        $fields=$request->query->all();
-        $selectedChild=$this->getSelectedChild($fields['childId']);
+        $selectedChild=$this->tryViewChild($childId);
+        $class=$this->getClassesService()->getStudentClass($selectedChild['id']);
+        return $this->render('TopxiaWebBundle:Parent:child-schedules.html.twig', array(
+            'selectedChild' => $selectedChild,
+            'class' => $class,
+        )); 
+    }
+
+    function moreStatusesAction(Request $request,$childId)
+    {
+        $selectedChild=$this->tryViewChild($childId);
         $statuses=$this->getStatusService()->findStatusesByUserId($selectedChild['id'],$fields['count']*30,30);
         foreach ($statuses as &$status) {
             $status['time']=date('Y年m月d日',$status['createdTime'])==date('Y年m月d日',time())?'今天':date('Y年m月d日',$status['createdTime']);
@@ -55,13 +53,9 @@ class ParentController extends BaseController
         ));
     }
 
-    function childCoursesAction(Request $request)
+    function childCoursesAction(Request $request,$childId)
     {
-        $user=$this->getCurrentUser();
-        if(!$user->isParent()) {
-            return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
-        }
-        $selectedChild=$this->getSelectedChild($request->query->get('childId'));
+        $selectedChild=$this->tryViewChild($childId);
 
         $leaningCourses = $this->getCourseService()->findUserLeaningCourses(
             $selectedChild['id'],
@@ -82,13 +76,9 @@ class ParentController extends BaseController
     }
 
 
-    public function childTestpapersAction(Request $request)
+    public function childTestpapersAction(Request $request,$childId)
     {
-        $user=$this->getCurrentUser();
-        if(!$user->isParent()) {
-            return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
-        }
-        $selectedChild=$this->getSelectedChild($request->query->get('childId'));
+        $selectedChild=$this->tryViewChild($childId);
         
         $paginator = new Paginator(
             $request,
@@ -123,13 +113,9 @@ class ParentController extends BaseController
             'paginator' => $paginator
         ));
     }
-    public function childThreadsAction(Request $request,$type)
+    public function childThreadsAction(Request $request,$childId,$type)
     {
-        $user=$this->getCurrentUser();
-        if(!$user->isParent()) {
-            return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
-        }
-        $selectedChild=$this->getSelectedChild($request->query->get('childId'));
+        $selectedChild=$this->tryViewChild($childId);
 
         $conditions = array(
             'userId' => $selectedChild['id'],
@@ -165,51 +151,41 @@ class ParentController extends BaseController
 
     public function childInfoAction(Request $request,$childId)
     {
+        $selectedChild=$this->tryViewChild($childId);
         $user=$this->getCurrentUser();
-
-        $cachedData=$this->getParentCached();
-        $children=$cachedData['children'];
-        $classMembers=$cachedData['classMembers'];
-        $classes=$cachedData['classes'];
-        $selectedChild=empty($childId)?current($children):$children[$childId];
-        
+        $relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
+        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
+        $class=$this->getClassesService()->getStudentClass($selectedChild['id']);
         return $this->render('TopxiaWebBundle:Parent:child-info.html.twig',array(
             'children'=>$children,
-            'classMembers'=>$classMembers,
-            'classes'=>$classes,
+            'class'=>$class,
             'selectedChild'=>$selectedChild
         ));
     }
 
-    private function getParentCached()
-    {
-        if (is_null($this->cached)) {
-            $this->cached = $this->getCacheService()->get(self::CACHE_NAME.$this->getCurrentUser()->id);
-            if (is_null($this->cached)) {
-                $user=$this->getCurrentUser();
-                $relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
-                $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
-                
-                $classMembers=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($relations, 'toId'));
-                $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($classMembers, 'classId'));
-                $classMembers=ArrayToolkit::index($classMembers, 'userId');
-
-                $this->cached['children']=$children;
-                $this->cached['classMembers']=$classMembers;
-                $this->cached['classes']=$classes;
-                $relation = current($relations);
-                $this->cached['relation']=$relation['relation'];
-                $this->getCacheService()->set(self::CACHE_NAME.$this->getCurrentUser()->id, $this->cached);
-            }
+    private function tryViewChild($selectedChildId){
+        $child=$this->getUserService()->getUser($selectedChildId);
+        if(!empty($selectedChildId) && empty($child)){
+            return $this->createMessageResponse('error', '用户不存在！');
         }
-        return $this->cached;
-    }
 
-    private function getSelectedChild($childId){
-        $cachedData=$this->getParentCached();
-        $children=$cachedData['children'];
-        $selectedChild=empty($childId)?current($children):$children[$childId];
-        $selectedChild['relation']=$cachedData['relation'];
+        $user=$this->getCurrentUser();
+        if(!$user->isParent()) {
+            return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
+        }
+
+        $relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
+        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
+        $selectedChild=empty($selectedChildId)?current($children):$children[$selectedChildId];
+
+        $rela=$this->getUserService()->getUserRelationByFromIdAndToIdAndType($user['id'],$selectedChild['id'],'family');
+        if(empty($rela)){
+            return $this->createMessageResponse('error', '无法查看其他家长子女信息！');
+        }
+
+        $relation=current($relations);
+        $selectedChild['relation']=$relation['relation'];
+        
         return $selectedChild;
     }
 

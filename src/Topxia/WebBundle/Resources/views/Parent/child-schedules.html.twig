@@ -1,0 +1,25 @@
+{% extends 'TopxiaWebBundle:Parent:layout.html.twig' %}
+
+{% block title %}学习课表 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'parent-child-schedules' %}
+
+{% block main %}
+
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">
+      学习课表
+    </div>
+    <div class="panel-body">
+      {% if class %}
+        {% include 'TopxiaWebBundle:ClassSchedule:schedule-block.html.twig' %}
+      {% else %}
+        <div class="empty">
+          <span class="text-muted">{{ selectedChild.truename }} 还没有加入班级!</span>
+        </div>
+      {% endif %}
+      
+    </div> 
+  </div>
+
+{% endblock %}

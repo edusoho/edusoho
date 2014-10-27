@@ -10,7 +10,7 @@ class ClassScheduleController extends ClassBaseController
 {
     public function showAction(Request $request, $classId)
     {
-        $class = $this->tryViewClass($classId);
+        $class = $this->tryViewSchedule($classId);
         return $this->render("TopxiaWebBundle:ClassSchedule:show.html.twig", array(
             "class" => $class,
         ));
@@ -18,7 +18,7 @@ class ClassScheduleController extends ClassBaseController
 
     public function coursesAction(Request $request, $classId)
     {
-        $class = $this->tryViewClass($classId);
+        $class = $this->tryViewSchedule($classId);
         $user = $this->getCurrentUser();
         $courses = array();
         $conditions =array(
@@ -70,7 +70,7 @@ class ClassScheduleController extends ClassBaseController
 
     public function scheduleAction(Request $request, $classId)
     {
-        $this->tryViewClass($classId);
+        $this->tryViewSchedule($classId);
         $user = $this->getCurrentUser();
         $previewAs = $request->query->get('previewAs') ? : 'week';
         $sunDay = $request->query->get('sunday');

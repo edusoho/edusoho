@@ -7,8 +7,6 @@ use Topxia\Common\Paginator;
 
 class ParentController extends BaseController 
 {
-    const CACHE_NAME = 'parent';
-
     public function indexAction (Request $request)
     {
         $fields = $request->query->all();
@@ -67,11 +65,14 @@ class ParentController extends BaseController
                 
             $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER','ROLE_PARENT'));
 
-            foreach ($formData['numbers'] as $number) {
-                $child=$this->getUserService()->getUserByNumber($number);
-                if(empty($child)){
-                    throw $this->createNotFoundException('学号为'.$number.'的学生不存在！');
-                }
+            $children=$this->getUserService()->findUsersByNumbers($formData['numbers']);
+            $childrenNumbers=ArrayToolkit::column($children, 'number');
+            $diffIds=array_diff($formData['numbers'], $childrenNumbers);
+            if(!empty($diffIds)){
+                throw $this->createNotFoundException('学号为'.$diffIds[0].'的学生不存在！');
+            }
+
+            foreach ($children as $child) {
                 $userRelation['fromId']=$user['id'];
                 $userRelation['toId']=$child['id'];
                 $userRelation['type']='family';
@@ -79,7 +80,14 @@ class ParentController extends BaseController
                 $userRelation['createdTime']=time();
                 $this->getUserService()->addUserRelation($userRelation);
             }
-
+            $classMembers=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($children, 'id'));
+            $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($classMembers,'classId'));
+            foreach ($classes as $class) {
+                $classMember['classId']=$class['id'];
+                $classMember['userId']=$user['id'];
+                $classMember['role']='PARENT';
+                $this->getClassesService()->addClassMember($classMember);
+            }
             $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['truename']} ({$user['id']})");
 
             return $this->redirect($this->generateUrl('admin_user'));
@@ -104,11 +112,16 @@ class ParentController extends BaseController
             $this->getUserService()->changeEmail($user['id'],$fields['email']);
             
             $this->getUserService()->deleteUserRelationsByFromIdAndType($id,'family');
-            foreach ($fields['numbers'] as $number) {
-                $child=$this->getUserService()->getUserByNumber($number);
-                if(empty($child)){
-                    throw $this->createNotFoundException('学号为'.$number.'的学生不存在！');
-                }
+            $this->getClassesService()->deleteClassMemberByUserId($id);
+
+            $children=$this->getUserService()->findUsersByNumbers($fields['numbers']);
+            $childrenNumbers=ArrayToolkit::column($children, 'number');
+            $diffIds=array_diff($fields['numbers'], $childrenNumbers);
+            if(!empty($diffIds)){
+                throw $this->createNotFoundException('学号为'.$diffIds[0].'的学生不存在！');
+            }
+
+            foreach ($children as $child) {
                 $userRelation['fromId']=$user['id'];
                 $userRelation['toId']=$child['id'];
                 $userRelation['type']='family';
@@ -117,7 +130,15 @@ class ParentController extends BaseController
                 $this->getUserService()->addUserRelation($userRelation);
             }
 
-            $this->getCacheService()->clear(self::CACHE_NAME.$user['id']);
+            $classMembers=$this->getClassesService()->findClassMembersByUserIds(ArrayToolkit::column($children, 'id'));
+            $classes=$this->getClassesService()->findClassesByIds(ArrayToolkit::column($classMembers,'classId'));
+            foreach ($classes as $class) {
+                $classMember['classId']=$class['id'];
+                $classMember['userId']=$user['id'];
+                $classMember['role']='PARENT';
+                $this->getClassesService()->addClassMember($classMember);
+            }
+
             $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
             return $this->redirect($this->generateUrl('settings'));
         }
