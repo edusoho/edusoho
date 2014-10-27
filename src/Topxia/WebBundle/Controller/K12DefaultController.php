@@ -60,7 +60,6 @@ class K12DefaultController extends BaseController
         if ($request->getMethod() == 'POST') {
             $passwords = $request->request->all();
             $this->getAuthService()->changePassword($user['id'], null, $passwords['newPassword']);
-            $this->setFlashMessage('success', '密码修改成功。');
             $this->getUserService()->changeFirstLogin($user['id']);
             return $this->redirect($this->generateUrl('homepage'));
         }
