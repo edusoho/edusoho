@@ -391,6 +391,57 @@ class SystemInit
 		$settings['primaryYear'] == '6' ? $school['primaryYear'] = 6 : $school['primaryYear'] = 5;
 		$school = array_merge($default, $school);
 		$this->getSettingService()->set('school', $school);
+
+		$this->createDafultClasses($settings);
+	}
+
+	public function createDafultClasses($settings)
+	{
+		$className = array('1班', '2班', '3班', '4班', '5班');
+		$sql = array();
+		$year = date('Y');
+		$createdTime = time();
+		if($settings['primarySchool'] == '1') {
+			if($settings['primaryYear'] == '6') {
+				for ($i=1; $i <= 6 ; $i++) { 
+					foreach ($className as $key => $value) {
+						$sql[] = "INSERT INTO `class` (`name`, `gradeId`, `year`, `term`, `headTeacherId`, `enabled`, `icon`, `backgroundImg`, `studentNum`, `createdTime`) VALUES ('{$value}', {$i}, {$year}, 'first', '1', '0', NULL, '', '0', {$createdTime});";
+					}
+				}
+			} else {
+				for ($i=1; $i <= 5 ; $i++) { 
+					foreach ($className as $key => $value) {
+						$sql[] = "INSERT INTO `class` (`name`, `gradeId`, `year`, `term`, `headTeacherId`, `enabled`, `icon`, `backgroundImg`, `studentNum`, `createdTime`) VALUES ('{$value}', {$i}, {$year}, 'first', '1', '0', NULL, '', '0', {$createdTime});";
+					}
+				}
+			}
+		}
+
+		if($settings['middleSchool'] == '1') {
+			for ($i=7; $i <= 9 ; $i++) {
+				 foreach ($className as $key => $value) {
+				 	$sql[] = "INSERT INTO `class` (`name`, `gradeId`, `year`, `term`, `headTeacherId`, `enabled`, `icon`, `backgroundImg`, `studentNum`, `createdTime`) VALUES ('{$value}', {$i}, {$year}, 'first', '1', '0', NULL, '', '0', {$createdTime});";
+				 }
+			}
+		}
+
+		if($settings['middleSchool'] == '1') {
+			for ($i=10; $i <= 12 ; $i++) {
+				 foreach ($className as $key => $value) {
+				 	$sql[] = "INSERT INTO `class` (`name`, `gradeId`, `year`, `term`, `headTeacherId`, `enabled`, `icon`, `backgroundImg`, `studentNum`, `createdTime`) VALUES ('{$value}', {$i}, {$year}, 'first', '1', '0', NULL, '', '0', {$createdTime});";
+				 }
+			}
+		}
+
+		$this->getClassesDao()->getConnection()->beginTransaction();
+		try{
+			$sql = implode(" ", $sql);
+			$this->getClassesDao()->getConnection()->exec($sql);
+			$this->getClassesDao()->getConnection()->commit();
+		} catch (Exception $e) {
+			$this->getClassesDao()->getConnection()->rollBack();
+		}
+
 	}
 
 	public function initRegisterSetting($user)
@@ -640,6 +691,11 @@ EOD;
 	private function getUserService()
 	{
 		return ServiceKernel::instance()->createService('User.UserService');
+	}
+
+	private function getClassesDao()
+	{
+		return ServiceKernel::instance()->createDao('Classes.ClassesDao');
 	}
 
 	private function getSettingService()
