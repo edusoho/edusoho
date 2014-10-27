@@ -17,6 +17,12 @@ class UserRelationDaoImpl extends BaseDao implements UserRelationDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
+    public function getUserRelationByFromIdAndToIdAndType($fromId,$toId,$type)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE fromId = ? and toId=? and type=?  LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($fromId,$toId,$type)) ? : null;
+    }
+
     public function findUserRelationsByToIdsAndType(array $toIds,$type)
     {
         if(empty($toIds)){ return array(); }

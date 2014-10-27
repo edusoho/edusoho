@@ -8,6 +8,8 @@ interface UserDao
 
 	public function getUserByNumber($number);
 	
+	public function findUsersByNumbers(array $numbers);
+
 	public function findUserByEmail($email);
 
 	public function findUserByNickname($nickname);

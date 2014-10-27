@@ -82,6 +82,11 @@ class UserServiceImpl extends BaseService implements UserService
         return ArrayToolkit::index($users, 'id');
     }
 
+    public function findUsersByNumbers(array $numbers)
+    {
+        return $this->getUserDao()->findUsersByNumbers($numbers);
+    }
+
     public function findUsersByIdsAndOrder(array $ids, array $orderBy)
     {
         $users = UserSerialize::unserializes(
@@ -1009,6 +1014,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserRelationDao()->addUserRelation($userRelation);
     }
 
+    public function getUserRelationByFromIdAndToIdAndType($fromId,$toId,$type)
+    {
+        return $this->getUserRelationDao()->getUserRelationByFromIdAndToIdAndType($fromId,$toId,$type);
+    }
+    
     public function findUserRelationsByFromIdsAndType(array $fromIds,$type)
     {
         return $this->getUserRelationDao()->findUserRelationsByFromIdsAndType($fromIds,$type);;

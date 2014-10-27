@@ -25,9 +25,8 @@
       </ul>
     {% endif %}
     <div style="padding:10px;">
-      {% set classMember = classMembers[selectedChild.id]|default(null) %}
-      {% if classMember %}
-        {{class_name(classes[classMember.classId]|default(null))}}
+      {% if class %}
+        {{class_name(class|default(null))}}
       {% else %}
         未加入班级
       {% endif %}

@@ -141,25 +141,26 @@ class_student_schedule:
     defaults: { _controller: TopxiaWebBundle:Class:schedule }
 
 parent_child_status:
-    pattern:  /parent/child/status
+    pattern:  /parent/child/{childId}/status
     defaults: { _controller: TopxiaWebBundle:Parent:childStatus }
 
 parent_child_schedules:
-    pattern:  /parent/child/schedules
+    pattern:  /parent/child/{childId}/schedules
     defaults: { _controller: TopxiaWebBundle:Parent:childSchedules }
+
 parent_child_more_status:
-    pattern:  /parent/child/more/status
+    pattern:  /parent/child/{childId}/more/status
     defaults: { _controller: TopxiaWebBundle:Parent:moreStatuses }
 
 parent_child_courses:
-    pattern:  /parent/child/courses
+    pattern:  /parent/child/{childId}/courses
     defaults: { _controller: TopxiaWebBundle:Parent:childCourses }
 
 parent_child_testpapers:
-    pattern:  /parent/child/testpapers
+    pattern:  /parent/child/{childId}/testpapers
     defaults: { _controller: TopxiaWebBundle:Parent:childTestpapers }
 
 parent_child_threads:    
-    pattern:  /parent/child/threads/{type}
+    pattern:  /parent/child/{childId}/threads/{type}
     defaults: { _controller: TopxiaWebBundle:Parent:childThreads }
 
