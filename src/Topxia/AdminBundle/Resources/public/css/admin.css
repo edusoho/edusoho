@@ -228,6 +228,46 @@ input.LargeInput {width: 600px;}
     color: #777;
 }
 
+.class-list {
+  margin:10px;
+}
+
+.class-list .class-grid {
+  position:relative;
+  padding-bottom: 20px;
+}
+
+.class-list .class-grid .class-img {
+  width: 206px;
+  height:109px;
+  border-radius:5px;
+}
+
+.class-list .class-grid .class-option {
+  position:absolute;
+  left:30px;
+  top:69px;
+  width: 206px;
+  height:40px;
+  border-radius:0 0 5px 5px;
+  background-color: #fff;
+  opacity: 0.8;
+  display: none;
+}
+
+.class-list .class-grid .class-option .button{
+  margin-top:10px;
+}
+
+.class-list .class-grid .class-name {
+  width: 206px;
+  margin-top:5px;
+}
+
+.class-list .class-grid .class-member {
+  width: 206px;
+}
+
 .class-course-grid .close {
   visibility: hidden;
 }
