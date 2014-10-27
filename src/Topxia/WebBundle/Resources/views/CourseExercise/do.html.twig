@@ -31,7 +31,7 @@
           <div class="panel-heading">练习题目 <small class="text-muted">共{{ itemSet.total }}题</small></div>
           <div class="panel-body">
             <div class="question-set-items">
-              {% for item in itemSet.items %}
+              {% for key,item in itemSet.items %}
                 {% if item.subItems|default(null) %}
                   {% include 'TopxiaWebBundle:Question:question-set-item-have-sub.html.twig' %}
                 {% else %}

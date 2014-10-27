@@ -104,7 +104,6 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             $indexdItems[$item['parentId']]['subItems'][] = $item;
             unset($indexdItems[$item['questionId']]);
         }
-
         $set = array(
             'items' => array_values($indexdItems),
             'questionIds' => array(),

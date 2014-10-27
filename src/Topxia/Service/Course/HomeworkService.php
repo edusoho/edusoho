@@ -48,9 +48,11 @@ interface HomeworkService
 
     public function findHomeworkResultsByHomeworkIds($homeworkIds);
 
+    public function findHomeworkResultsByCourseIdAndLessonIdAndStatus($courseId, $lessonId,$status);
+
     public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId);
 
-    public function findHomeworkResultsByStatusAndCheckTeacherId($checkTeacherId, $status);
+    public function findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId);
 
     public function findHomeworkResultsByCourseIdAndStatusAndCheckTeacherId($courseId,$checkTeacherId, $status);
 

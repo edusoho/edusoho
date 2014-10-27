@@ -29,11 +29,8 @@ class CourseExerciseController extends BaseController
         $questionTypeRange = $exercise['questionTypeRange'];
         $questionTypeRange = $this->getquestionTypeRangeStr($questionTypeRange);
 
-        $questionCount = $this->getQuestionService()->findQuestionsCountbyTypeRange($questionTypeRange);
         $itemCount = $exercise['itemCount'];
-        $start = rand(0,$questionCount-$itemCount);
-        $questions = $this->getQuestionService()->findQuestionsbyTypeRange($questionTypeRange,$start,$itemCount);
-        $excludeIds = ArrayToolkit::column($questions,'id');
+        $excludeIds = $this->getExcludeIds($questionTypeRange,$itemCount);
         $result = $this->getExerciseService()->startExercise($exerciseId,$excludeIds);
 
         return $this->redirect($this->generateUrl('course_exercise_do', 
@@ -45,10 +42,26 @@ class CourseExerciseController extends BaseController
         );
 	}
 
+    private function getExcludeIds($questionTypeRange,$itemCount)
+    {
+        $questionCount = $this->getQuestionService()->findQuestionsCountbyTypeRange($questionTypeRange);
+
+        $start = rand(0,$questionCount-$itemCount);
+        $questions = $this->getQuestionService()->findQuestionsbyTypeRange($questionTypeRange,$start,$itemCount);
+        $excludeIds = ArrayToolkit::column($questions,'id');
+
+        while ( count($excludeIds) < $itemCount) {
+            $questions = $this->getQuestionService()->findQuestionsbyTypeRange($questionTypeRange,$start,$itemCount);
+            $Ids = ArrayToolkit::column($questions,'id');
+            $excludeIds = array_merge($excludeIds,$Ids);
+            $excludeIds = array_unique($excludeIds);
+        }
+        return $excludeIds;
+    }
+
 	public function doAction(Request $Request,$courseId,$exerciseId,$resultId)
 	{
         $exercise = $this->getExerciseService()->getExercise($exerciseId);
-
         if (empty($exercise['itemCount']) && empty($exercise['questionTypeRange'])) {
         	throw $this->createNotFoundException();
         }
@@ -69,9 +82,11 @@ class CourseExerciseController extends BaseController
 		return $this->render('TopxiaWebBundle:CourseExercise:do.html.twig', array(
             'exercise' => $exercise,
             'itemSet' => $itemSet,
+            'itemCount' => count($itemSet['items']),
             'course' => $course,
             'lesson' => $lesson,
-            'questionStatus' => 'doing'
+            'questionStatus' => 'doing',
+            'questionFor' => 'exercise',
         ));
 	}
 

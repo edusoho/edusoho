@@ -14,10 +14,7 @@
     			<a href="{{ url('my_teaching_homework_list', {status:'unchecked'}) }}">未批改
     			<span class="badge">{{ reviewingCount|default(0) }}</span></a>
     		</li>
-    		<li {% if status == 'uncommitted' %} class="active"{% endif %}>
-    			<a href="{{ url('my_teaching_homework_list', {status:'uncommitted'}) }}">未提交 <span class="badge">{{ uncommitCount|default(0) }}</span></span>
-    			</a>
-    		</li>
+
     		<li {% if status == 'finished' %} class="active"{% endif %}>
     			<a href="{{ url('my_teaching_homework_list', {status:'finished'}) }}">已批改
     			<span class="badge">{{ finishedCount|default(0) }}</span>

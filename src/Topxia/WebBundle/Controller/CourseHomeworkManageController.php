@@ -371,10 +371,12 @@ class CourseHomeworkManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         $studentUserIds = ArrayToolkit::column($students, 'userId');
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findHomeworkResultsByCourseIdAndLessonId($course['id'], $lesson['id']), 'userId');
+        $homeworkFinishedResults = $this->getHomeworkService()->findHomeworkResultsByCourseIdAndLessonIdAndStatus($course['id'], $lesson['id'],'finished');
+        $homeworkReviewingResults = $this->getHomeworkService()->findHomeworkResultsByCourseIdAndLessonIdAndStatus($course['id'], $lesson['id'],'reviewing');
+        $homeworkResults = array_merge($homeworkFinishedResults,$homeworkReviewingResults);
+        $homeworkResults = ArrayToolkit::index($homeworkResults, 'userId');
 
         $committedCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
             'commitStatus' => 'committed',
@@ -395,7 +397,6 @@ class CourseHomeworkManageController extends BaseController
             'courseId' => $course['id'],
             'lessonId' => $lesson['id']
         ));
-
         if (!empty($homeworkResults)) {
             $students = $this->getHomeworkStudents($status, $students, $homeworkResults);
         } else {
@@ -403,7 +404,6 @@ class CourseHomeworkManageController extends BaseController
                 $students = array();
             }
         }
-
         if (empty($homework)) {
             $uncommitCount = 0;
         }
@@ -432,6 +432,7 @@ class CourseHomeworkManageController extends BaseController
         }
 
         $homeworks = $this->getHomeworkService()->findHomeworksByCreatedUserId($currentUser['id']);
+
         $homeworkIds = ArrayToolkit::column($homeworks, 'id');
         $homeworkLessonIds = ArrayToolkit::column($homeworks, 'lessonId');
         $homeworks = ArrayToolkit::index($homeworks, 'courseId');
@@ -439,16 +440,20 @@ class CourseHomeworkManageController extends BaseController
 
         $courses = $this->getCourseService()->findCoursesByIds($homeworkCourseIds);
         $lessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
-
         $conditions = array('courseIds' => $homeworkCourseIds);
 
-        $memberCount = $this->getCourseService()->searchMemberCount($conditions);
+        // $memberCount = $this->getCourseService()->searchMemberCount($conditions);
         if (empty($homeworkCourseIds)) {
             $count = 0;
         }
+
+
+        $homeworkReviewingResults = $this->getHomeworkService()->findHomeworkResultsByStatusAndCheckTeacherId('reviewing',$currentUser['id']);
+        $homeworkFinishedResults = $this->getHomeworkService()->findHomeworkResultsByStatusAndCheckTeacherId('finished',$currentUser['id']);
+        $homeworkResults = array_merge($homeworkReviewingResults,$homeworkFinishedResults);
         $paginator = new Paginator(
             $this->get('request'),
-            $memberCount
+            count($homeworkResults)
             , 25
         );
 
@@ -461,17 +466,18 @@ class CourseHomeworkManageController extends BaseController
         $studentUserIds = ArrayToolkit::column($students, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findHomeworkResultsByHomeworkIds(ArrayToolkit::column($homeworks, 'id')), 'userId');
+        $homeworkResults = ArrayToolkit::index($homeworkResults, 'userId');
         $committedCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
             'commitStatus' => 'committed',
             'checkTeacherId' => $currentUser['id']
         ));
 
-        $uncommitCount = $this->getCourseService()->searchMemberCount($conditions) - $committedCount;
+        // $uncommitCount = $this->getCourseService()->searchMemberCount($conditions) - $committedCount;
         $reviewingCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
             'status' => 'reviewing',
             'checkTeacherId' => $currentUser['id']
         ));
+
         $finishedCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
             'status' => 'finished',
             'checkTeacherId' => $currentUser['id']
@@ -484,9 +490,11 @@ class CourseHomeworkManageController extends BaseController
                 $students = array();
             }
         }
+
         if (empty($homeworks)) {
             $uncommitCount = 0;
         }
+
         return $this->render('TopxiaWebBundle:CourseHomeworkManage:teaching-list.html.twig', array(
             'status' => $status,
             'homeworks' => empty($homeworks) ? array() : $homeworks,
@@ -496,7 +504,7 @@ class CourseHomeworkManageController extends BaseController
             'paginator' => $paginator,
             'courses' => $courses,
             'lessons' => $lessons,
-            'uncommitCount' => $uncommitCount,
+            // 'uncommitCount' => $uncommitCount,
             'reviewingCount' => $reviewingCount,
             'finishedCount' => $finishedCount
         ));

@@ -40,7 +40,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
 
     public function findQuestionsbyTypeRange($typeRange, $start, $limit)
     {
-        $sql ="SELECT * FROM {$this->table} WHERE type in ({$typeRange}) LIMIT {$start},{$limit}";
+        $sql ="SELECT * FROM {$this->table} WHERE `parentId` = 0 AND type in ({$typeRange})  LIMIT {$start},{$limit}";
         $questions = $this->getConnection()->fetchAll($sql, array($typeRange));
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
