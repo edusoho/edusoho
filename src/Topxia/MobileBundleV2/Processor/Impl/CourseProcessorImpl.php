@@ -26,8 +26,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
      		if ($member && $member['locked']) {
             		return null;
      		}
-     		
-        		return $this->checkMemberStatus($member);
+     		$member = $this->checkMemberStatus($member);
+     		return empty($member) ? null: $member;
 	}
 
 	public function postThread()

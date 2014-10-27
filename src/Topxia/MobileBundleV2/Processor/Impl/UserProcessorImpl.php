@@ -95,6 +95,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             ));
         return $message->getContent();
     }
+    
     public function getUserInfo()
     {
         $userId = $this->getParam('userId');
