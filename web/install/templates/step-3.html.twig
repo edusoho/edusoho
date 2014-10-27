@@ -57,6 +57,41 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <div class="col-sm-4  control-label">
+        <label>启用年级</label>
+      </div>
+     <div class="controls col-sm-8 checkbox">
+      <label>
+        <input type="checkbox" name="primarySchool" value="{{ request.primarySchool|default(1)}}">小学
+      </label>
+      <label style="margin-left:5px;">
+        <input type="radio" name="primaryYear" value="6" checked>6年制<span class="text-muted">（1年级到6年级）</span>
+      </label>
+      <label>
+        <input type="radio" name="primaryYear" value="5">5年制<span class="text-muted">（1年级到5年级）</span>
+      </label>  
+     </div>
+    </div>
+   
+   <div class="form-group">
+      <div class="controls col-sm-5 checkbox col-sm-offset-4">
+        <label>
+          <input type="checkbox" value="{{ request.middleSchool|default(1)}}" name="middleSchool">初中
+          <span class="mll">3年制<span class="text-muted">（初1到初3）</span></span>
+        </label> 
+      </div>
+    </div>
+
+   <div class="form-group">
+      <div class="controls col-sm-5 checkbox col-sm-offset-4">
+        <label>
+          <input type="checkbox" value="{{ request.highSchool|default(1)}}" name="highSchool">高中
+          <span class="mll">3年制<span class="text-muted">（高1到高3）</span></span>
+        </label> 
+      </div>
+    </div>
+
     <div class="actions">
       <button type="submit" id="init-btn" class="btn btn-primary btn-lg">初始化系统</button>
     </div>

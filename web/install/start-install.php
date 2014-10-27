@@ -157,10 +157,10 @@ function install_step3()
 
 	$error = null;
 	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
-
         $init = new SystemInit();
         $admin = $init->initAdmin($_POST);
         $init->initSiteSettings($_POST);
+        $init->initSchoolSetting($_POST);
         $init->initRegisterSetting($admin);
         $init->initMailerSetting($_POST['sitename']);
         $init->initPaymentSetting();
@@ -375,6 +375,23 @@ class SystemInit
 	    $this->getSettingService()->set('site', $default);
 	}
 
+	public function initSchoolSetting($settings)
+	{
+		$default = array(
+            'primarySchool' => 0,
+            'primaryYear' => 6,
+            'middleSchool' => 0,
+            'highSchool' => 0,
+            'homepagePicture' => '',
+        );
+		$school = array();
+		$settings['primarySchool'] == '1' ? $school['primarySchool'] = 1 : $school['primarySchool'] = 0;
+		$settings['middleSchool'] == '1' ? $school['middleSchool'] = 1 : $school['middleSchool'] = 0;
+		$settings['highSchool'] == '1' ? $school['highSchool'] = 1 : $school['highSchool'] = 0;
+		$settings['primaryYear'] == '6' ? $school['primaryYear'] = 6 : $school['primaryYear'] = 5;
+		$school = array_merge($default, $school);
+		$this->getSettingService()->set('school', $school);
+	}
 
 	public function initRegisterSetting($user)
 	{
