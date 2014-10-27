@@ -157,10 +157,10 @@ function install_step3()
 
 	$error = null;
 	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
-
         $init = new SystemInit();
         $admin = $init->initAdmin($_POST);
         $init->initSiteSettings($_POST);
+        $init->initSchoolSetting($_POST);
         $init->initRegisterSetting($admin);
         $init->initMailerSetting($_POST['sitename']);
         $init->initPaymentSetting();
@@ -375,6 +375,74 @@ class SystemInit
 	    $this->getSettingService()->set('site', $default);
 	}
 
+	public function initSchoolSetting($settings)
+	{
+		$default = array(
+            'primarySchool' => 0,
+            'primaryYear' => 6,
+            'middleSchool' => 0,
+            'highSchool' => 0,
+            'homepagePicture' => '',
+        );
+		$school = array();
+		$settings['primarySchool'] == '1' ? $school['primarySchool'] = 1 : $school['primarySchool'] = 0;
+		$settings['middleSchool'] == '1' ? $school['middleSchool'] = 1 : $school['middleSchool'] = 0;
+		$settings['highSchool'] == '1' ? $school['highSchool'] = 1 : $school['highSchool'] = 0;
+		$settings['primaryYear'] == '6' ? $school['primaryYear'] = 6 : $school['primaryYear'] = 5;
+		$school = array_merge($default, $school);
+		$this->getSettingService()->set('school', $school);
+
+		$this->createDafultClasses($settings);
+	}
+
+	public function createDafultClasses($settings)
+	{
+		$className = array('1班', '2班', '3班', '4班', '5班');
+		$year = date('Y');
+		$createdTime = time();
+		$class = array();
+		$class['year'] = $year;
+		$class['term'] = 'first';
+		$class['headTeacherId'] = 1;
+		$class['enabled'] = 0;
+		$class['createdTime'] = $createdTime;
+	
+		$this->getClassesDao()->getConnection()->beginTransaction();
+		try{
+			if($settings['primarySchool'] == '1') {
+				for ($i=1; $i < intval($settings['primaryYear']); $i++) { 
+					foreach ($className as $value) {
+						$class['name'] = $value;
+						$class['gradeId'] = $i;
+						$this->getClassesService()->createClass($class);
+					}
+				}
+			}
+			if($settings['middleSchool'] == '1') {
+				for ($i=7; $i <= 9 ; $i++) {
+					foreach ($className as $key => $value) {
+					 	$class['name'] = $value;
+						$class['gradeId'] = $i;
+						$this->getClassesService()->createClass($class);
+					}
+				}
+			}
+			if($settings['middleSchool'] == '1') {
+				for ($i=10; $i <= 12 ; $i++) {
+					foreach ($className as $key => $value) {
+				 	 	$class['name'] = $value;
+				 		$class['gradeId'] = $i;
+				 		$this->getClassesService()->createClass($class);
+					}
+				}
+			}
+
+			$this->getClassesDao()->getConnection()->commit();
+		} catch (Exception $e) {
+			$this->getClassesDao()->getConnection()->rollBack();
+		}
+
+	}
 
 	public function initRegisterSetting($user)
 	{
@@ -624,6 +692,16 @@ EOD;
 	{
 		return ServiceKernel::instance()->createService('User.UserService');
 	}
+
+	private function getClassesDao()
+	{
+		return ServiceKernel::instance()->createDao('Classes.ClassesDao');
+	}
+
+    private function getClassesService()
+    {
+        return ServiceKernel::instance()->createService('Classes.ClassesService');
+    }
 
 	private function getSettingService()
 	{
