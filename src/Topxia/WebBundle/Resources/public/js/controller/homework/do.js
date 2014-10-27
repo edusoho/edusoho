@@ -52,17 +52,6 @@ define(function(require, exports, module) {
         setup: function() {
             var card = this;
 
-            setInterval(
-                function(){
-                   saveModule.save($('#homework-save-btn'),0);
-                    var $homeworkFinishBtn = $('#homework-finish-btn');
-                    $homeworkFinishBtn.text('提交作业');
-                    $homeworkFinishBtn.attr('disabled',false);
-                    Notify.success('作业已被保存');
-                }
-                ,1000*600
-            );
-
             this.get('questionSet').on('answer_change', function(answerData) {
                 var questionId = answerData.questionId;
                 changeAnswers[questionId] = answerData;
