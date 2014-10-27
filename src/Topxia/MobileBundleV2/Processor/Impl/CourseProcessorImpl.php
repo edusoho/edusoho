@@ -13,6 +13,23 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		return $this->formData;
 	}
 
+	public function getCourseMember()
+	{
+		$courseId = $this->getParam("courseId");
+		$user = $this->controller->getUserByToken($this->request);
+		if (empty($courseId)) {
+            		return null;
+		}
+		$member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($courseId, $user['id']) : null;
+     		$member = $this->previewAsMember($member, $courseId, $user);
+
+     		if ($member && $member['locked']) {
+            		return null;
+     		}
+     		
+        		return $this->checkMemberStatus($member);
+	}
+
 	public function postThread()
 	{
 		$courseId = $this->getParam("courseId", 0);
