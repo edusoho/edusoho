@@ -300,7 +300,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
 		$isTeacherPost = $this->controller->getThreadService()->findThreadElitePosts($course['id'], $thread['id'], 0, 100);
 		$thread['isTeacherPost'] = empty($isTeacherPost) ? false : true;
-		$thread['user'] = $this->controller->filterUsers($user);
+		$thread['user'] = $user;
 		$thread['createdTime'] = date('c', $thread['createdTime']);
 		$thread['latestPostTime'] = date('c', $thread['latestPostTime']);
 
@@ -347,6 +347,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		$course = $this->controller->getCourseService()->getCourse($thread['courseId']);
 		$user = $this->controller->getUserService()->findUsersByIds(array($thread['userId']));
         //$user = $this->controller->getUserService()->getUser($thread['userId']);
+        $user = $this->controller->filterUsers($user);
 		return $this->filterThread($thread, $course, $user);
 	}
 
