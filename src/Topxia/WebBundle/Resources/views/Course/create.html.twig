@@ -10,7 +10,7 @@
     <div class="panel panel-default panel-page">
       <div class="panel-heading"><h2>创建{% if type == 'normal' %}课程{% else %}直播课程{% endif %}</h2></div>
 
-      {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
+      {# {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
         <div class="alert alert-info">
           <h5><strong>请先完成以下设置，才能创建课程：</strong></h5>
           <ol>
@@ -29,7 +29,7 @@
             </li>
           </ol>
         </div>
-      {% else %}
+      {% else %} #}
         <form id="course-create-form" class="form-horizontal" method="post">
 
           {{ web_macro.flash_messages() }}
@@ -59,7 +59,7 @@
 
         </form>
 
-      {% endif %}
+      {# {% endif %} #}
     </div>
 
   </div>
