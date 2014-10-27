@@ -1,4 +1,47 @@
-<tr id="user-table-tr-{{ class.id }}">
+<div class="col-sm-6 col-md-4 class-grid">
+  <a href="{{ path('class_show',{ classId: class.id })}}" target="_blank">
+    <img src="{{ file_url(class.icon, 'class.png') }}" alt="{{ class.name }}" class="class-img">
+  </a>
+  <div class="class-option row">
+    <a href="{{ path('admin_school_class_editor', { type:'edit', classId:class.id, search:app.request.query.all() }) }}">
+      <span class="glyphicon glyphicon-pencil col-md-3 button"></span>
+    </a>
+    <a href="{{ path('admin_school_class_delete', { classId:class.id }) }}" onClick=" return confirm('您确定删除吗？')">
+      <span class="glyphicon glyphicon-trash col-md-3 button"></span>
+    </a>
+    <a href="{{ path('admin_school_class_student', { classId:class.id }) }}">
+      <span class="glyphicon glyphicon-user col-md-3 button"></span>
+    </a>
+    <a href="{{ path('admin_school_class_course_manage', { classId:class.id }) }}">
+      <span class="glyphicon glyphicon-book col-md-3 button"></span>
+    </a>
+  </div>
+  <div class="class-name">
+    <a href="{{ path('class_show',{ classId: class.id })}}" target="_blank">
+      <p class="text-center">{{ class_name(class) }}
+        <small class="text-muted">
+          {{ class.year}}届
+          {% if class.term == 'first' %}
+            一学期  
+          {% else %}
+            二学期
+          {% endif %}
+        </small>
+      </p>
+    </a>
+  </div>
+
+  <div class="class-member">
+    <small class="pull-left">学生：{{ class.studentNum }}人</small>
+    <small class="pull-right">班主任：{{class.headTeacherName}}</small>
+  </div>
+</div>
+
+
+
+
+
+{# <tr id="user-table-tr-{{ class.id }}">
   <td>
     <a class="pull-left" href="{{ path('class_show',{ classId: class.id })}}" target="_blank">
       {{ class_name(class) }}
@@ -44,5 +87,5 @@
       </ul>
     </div>
   </td>
-</tr>
+</tr> #}
 
