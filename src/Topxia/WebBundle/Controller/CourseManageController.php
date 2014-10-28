@@ -48,7 +48,7 @@ class CourseManageController extends BaseController
 			'course' => $course,
             'tags' => ArrayToolkit::column($tags, 'name'),
             'liveCapacity' => empty($liveCapacity['capacity']) ? 0 : $liveCapacity['capacity'],
-            'liveProvider' => empty($liveCapacity['provider']) ? 0 : $liveCapacity['provider'],
+            'liveProvider' => empty($liveCapacity['code']) ? 0 : $liveCapacity['code'],
 		));
 	}
 
