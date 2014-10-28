@@ -207,6 +207,57 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function dataAction($id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $isLearnedNum=$this->getCourseService()->searchMemberCount(array('isLearned'=>1,'courseId'=>$id));
+
+        $learnTime=$this->getCourseService()->searchLearnTime(array('courseId'=>$id));
+        $learnTime=$course['studentNum']==0 ? 0 : intval($learnTime/$course['studentNum']);
+
+        $noteCount=$this->getNoteService()->searchNoteCount(array('courseId'=>$id));
+
+        $questionCount=$this->getThreadService()->searchThreadCount(array('courseId'=>$id,'type'=>'question'));
+
+        $lessons=$this->getCourseService()->searchLessons(array('courseId'=>$id),array('createdTime', 'ASC'),0,1000);
+
+        foreach ($lessons as $key => $value) {
+            $lessonLearnedNum=$this->getCourseService()->findLearnsCountByLessonId($value['id']);
+
+            $finishedNum=$this->getCourseService()->searchLearnCount(array('status'=>'finished','lessonId'=>$value['id']));
+            
+            $lessonLearnTime=$this->getCourseService()->searchLearnTime(array('lessonId'=>$value['id']));
+            $lessonLearnTime=$lessonLearnedNum==0 ? 0 : intval($lessonLearnTime/$lessonLearnedNum);
+
+            $lessonWatchTime=$this->getCourseService()->searchWatchTime(array('lessonId'=>$value['id']));
+            $lessonWatchTime=$lessonWatchTime==0 ? 0 : intval($lessonWatchTime/$lessonLearnedNum);
+
+            $lessons[$key]['LearnedNum']=$lessonLearnedNum;
+            $lessons[$key]['length']=intval($lessons[$key]['length']/60);
+            $lessons[$key]['finishedNum']=$finishedNum;
+            $lessons[$key]['learnTime']=$lessonLearnTime;
+            $lessons[$key]['watchTime']=$lessonWatchTime;
+
+            if($value['type']=='testpaper'){
+                $paperId=$value['mediaId'];
+                $score=$this->getTestpaperService()->searchTestpapersScore(array('testId'=>$paperId));
+                $paperNum=$this->getTestpaperService()->searchTestpaperResultsCount(array('testId'=>$paperId));
+                
+                $lessons[$key]['score']=$finishedNum==0 ? 0 : intval($score/$paperNum);
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:CourseManage:learning-data.html.twig', array(
+            'course' => $course,
+            'isLearnedNum'=>$isLearnedNum,
+            'learnTime'=>$learnTime,
+            'noteCount'=>$noteCount,
+            'questionCount'=>$questionCount,
+            'lessons'=>$lessons,
+        ));
+    }
+
     private function makeLevelChoices($levels)
     {
         $choices = array();
@@ -346,6 +397,21 @@ class CourseManageController extends BaseController
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    private function getNoteService()
+    {
+        return $this->getServiceKernel()->createService('Course.NoteService');
+    }
+
+    private function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    private function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
     private function getSettingService()

@@ -1,11 +1,11 @@
 <?php
-namespace Topxia\MobileBundleV2\Service\Impl;
+namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Topxia\MobileBundleV2\Service\BaseService;
-use Topxia\MobileBundleV2\Service\OrderService;
+use Topxia\MobileBundleV2\Processor\BaseProcessor;
+use Topxia\MobileBundleV2\Processor\OrderProcessor;
 use Topxia\MobileBundleV2\Alipay\MobileAlipayConfig;
 
-class OrderServiceImpl extends BaseService implements OrderService
+class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 {
 	public function payCourse()
 	{
