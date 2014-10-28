@@ -778,6 +778,15 @@ body {
 .thread-post:hover .thread-post-dropdown .dropdown-toggle {
 	visibility: visible;
 }
+.thread-post-action{
+	text-align: right;
+	font-size: 12px;
+	visibility: hidden;
+}
+
+.thread-post:hover .thread-post-action {
+	visibility: visible;
+}
 
 .lt-ie8 .thread-post-dropdown .dropdown-toggle {
 	visibility: visible;

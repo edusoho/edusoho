@@ -14,7 +14,7 @@
   </div>
   {% endif %}
 
-  <div class="thread-post-body media-body">
+  <div class="thread-post-body media-body" style="word-break:break-all;">
     <div class="media-heading">
       <a href="javascript:">{{ author.nickname }}</a>
       <span class="bullet">•</span>
@@ -23,6 +23,6 @@
 
     </div>
     <div class="thread-post-content">{{ post.content|raw }}</div>
-    
+    <div class="thread-post-action"><a href="javascript:" data-user="{{ author.nickname }}">回复</a></div>
   </div>
 </li>
