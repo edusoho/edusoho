@@ -166,22 +166,21 @@ class ParentController extends BaseController
     private function tryViewChild($selectedChildId){
         $child=$this->getUserService()->getUser($selectedChildId);
         if(!empty($selectedChildId) && empty($child)){
-            return $this->createMessageResponse('error', '用户不存在！');
+            throw $this->createNotFoundException('用户不存在！');
         }
 
         $user=$this->getCurrentUser();
         if(!$user->isParent()) {
-            return $this->createMessageResponse('error', '您不是家长，不能查看此页面！');
+            throw $this->createAccessDeniedException('您不是家长，不能查看此页面！');
         }
 
+        $rela=$this->getUserService()->getUserRelationByFromIdAndToIdAndType($user['id'],$selectedChildId,'family');
+        if(empty($rela)){
+            throw $this->createAccessDeniedException('无法查看其他家长子女信息！');
+        }
         $relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
         $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
         $selectedChild=empty($selectedChildId)?current($children):$children[$selectedChildId];
-
-        $rela=$this->getUserService()->getUserRelationByFromIdAndToIdAndType($user['id'],$selectedChild['id'],'family');
-        if(empty($rela)){
-            return $this->createMessageResponse('error', '无法查看其他家长子女信息！');
-        }
 
         $relation=current($relations);
         $selectedChild['relation']=$relation['relation'];
