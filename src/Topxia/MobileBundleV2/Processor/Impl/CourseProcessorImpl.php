@@ -4,6 +4,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\CourseProcessor;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Response;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
@@ -11,6 +12,23 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	{
 		var_dump("CourseProcessorImpl->getVersion");
 		return $this->formData;
+	}
+
+	public function getCourseMember()
+	{
+		$courseId = $this->getParam("courseId");
+		$user = $this->controller->getUserByToken($this->request);
+		if (empty($courseId)) {
+            		return null;
+		}
+		$member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($courseId, $user['id']) : null;
+     		$member = $this->previewAsMember($member, $courseId, $user);
+
+     		if ($member && $member['locked']) {
+            		return null;
+     		}
+     		$member = $this->checkMemberStatus($member);
+     		return empty($member) ? new Response("null"): $member;
 	}
 
 	public function postThread()
