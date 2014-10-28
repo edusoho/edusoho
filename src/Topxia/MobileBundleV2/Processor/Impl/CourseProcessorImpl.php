@@ -183,9 +183,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	public function getCourseThreads()
 	{
 		$user = $this->controller->getUserByToken($this->request);
+		$type = $this->getParam("type","question");
+
 		$conditions = array(
             		'userId' => $user['id'],
-            		'type' => 'question',
+            		'type' => $type,
         		);
 
 		$start = (int) $this->getParam("start", 0);
