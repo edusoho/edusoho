@@ -744,6 +744,11 @@ body {
 	overflow: visible;
 }
 
+.show-user{
+	color:#BDB76B;;
+	font-size: 18px;
+}
+
 .thread-post-body {
 	/*overflow: visible;*/
 }
