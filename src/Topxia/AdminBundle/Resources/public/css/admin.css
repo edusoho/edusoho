@@ -246,9 +246,9 @@ input.LargeInput {width: 600px;}
 .class-list .class-grid .class-option {
   position:absolute;
   left:30px;
-  top:69px;
+  top:84px;
   width: 206px;
-  height:40px;
+  height:25px;
   border-radius:0 0 5px 5px;
   background-color: #fff;
   opacity: 0.8;
@@ -256,12 +256,14 @@ input.LargeInput {width: 600px;}
 }
 
 .class-list .class-grid .class-option .button{
-  margin-top:10px;
+  margin-top:5px;
 }
 
 .class-list .class-grid .class-name {
   width: 206px;
+  height: 20px;
   margin-top:5px;
+  overflow:hidden;
 }
 
 .class-list .class-grid .class-member {
