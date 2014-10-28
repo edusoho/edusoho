@@ -216,10 +216,14 @@ interface CourseService
 
 	public function remarkStudent($courseId, $userId, $remark);
 
+	public function tryBecomeCourseMember($userId, $classId, $courseId);
+
 	/**
 	 * 成为学生，即加入课程的学习
 	 */
 	public function becomeStudent($courseId, $userId);
+
+	public function becomeGuest($courseId, $userId);
 
 	/**
 	 * 退学

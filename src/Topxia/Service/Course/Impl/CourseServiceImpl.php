@@ -1672,6 +1672,50 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $member;
 	}
 
+	public function becomeGuest($courseId, $userId)
+	{
+		$course = $this->getCourse($courseId);
+
+		if (empty($course)) {
+			throw $this->createNotFoundException();
+		}
+
+		if($course['status'] != 'published') {
+			throw $this->createServiceException('不能加入未发布课程');
+		}
+
+		$user = $this->getUserService()->getUser($userId);
+		if (empty($user)) {
+			throw $this->createServiceException("用户(#{$userId})不存在，加入课程失败！");
+		}
+
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+		if ($member) {
+			throw $this->createServiceException("用户(#{$userId})已加入该课程！");
+		}
+
+		if ($course['expiryDay'] > 0) {
+			$deadline = $course['expiryDay']*24*60*60 + time();
+		} else {
+			$deadline = 0;
+		}
+
+		$fields = array(
+			'courseId' => $courseId,
+			'userId' => $userId,
+			'orderId' => 0,
+			'deadline' => $deadline,
+			'levelId' => 0,
+			'role' => 'guest',
+			'remark' => '',
+			'createdTime' => time()
+		);
+
+		$member = $this->getMemberDao()->addMember($fields);
+
+		return $member;
+	}
+
 	private function getWelcomeMessageBody($user, $course)
     {
         $setting = $this->getSettingService()->get('course', array());
@@ -1854,25 +1898,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (!$user->isLogin()) {
 			throw $this->createAccessDeniedException('您尚未登录用户，请登录后再查看！');
 		}
-		if($user->isParent()){
-			$relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
-	        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
-	        $childIds=ArrayToolkit::column($children,'id');
-			$members=$this->getMemberDao()->findMembersByCourseIdAndRole($courseId,'student',0,PHP_INT_MAX);
-			$memberIds=ArrayToolkit::column($members,'userId');	
-			if(count(array_intersect($childIds,$memberIds))>0){
-				return array($course, array());
-			}else{
-				throw $this->createAccessDeniedException('您的子女不是课程学生，不能查看课程内容！');
-			}
-		}
-
+		
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
 		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
 			return array($course, $member);
 		}
 
-		if (empty($member) or !in_array($member['role'], array('teacher', 'student'))) {
+		if (empty($member)) {
 			throw $this->createAccessDeniedException('您不是课程学生，不能查看课程内容！');
 		}
 
@@ -1914,29 +1946,32 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return false;
 		}
 
-		if($user->isParent()){
-			$relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
-	        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
-	        $childIds=ArrayToolkit::column($children,'id');
-			$members=$this->getMemberDao()->findMembersByCourseIdAndRole($course['id'],'student',0,PHP_INT_MAX);
-			$memberIds=ArrayToolkit::column($members,'userId');	
-			if(count(array_intersect($childIds,$memberIds))>0){
-				return true;
-			}else{
-				throw false;
-			}
-		}
-
 		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
 			return true;
 		}
 
+		$this->tryBecomeCourseMember($user['id'], $course['classId'], $course['id']);
+		
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
-		if ($member and in_array($member['role'], array('teacher', 'student'))) {
+		if ($member) {
 			return true;
 		}
 
 		return false;
+	}
+
+	public function tryBecomeCourseMember($userId, $classId, $courseId)
+	{
+		$canViewRoles = array('STUDENT', 'PARENT');
+		$classMember = $this->getClassesService()->getMemberByUserIdAndClassId($userId, $classId);
+		$courseMember = $this->getCourseMember($courseId, $userId);
+		if(empty($courseMember) && $classMember && in_array($classMember['role'], $canViewRoles)) {
+			if($classMember['role'] == 'STUDENT') {
+				$this->becomeStudent($courseId, $userId);
+			} else {
+				$this->becomeGuest($courseId, $userId);
+			}
+		}
 	}
 
 	public function tryLearnCourse($courseId)

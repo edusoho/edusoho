@@ -261,32 +261,17 @@ class CourseController extends BaseController
 
 		$this->getCourseService()->hitCourse($id);
 
-		if ($classMember && $classMember['role'] == 'STUDENT' && empty($member)) {
-			$member = $this->getCourseService()->becomeStudent($course['id'], $user['id']);
+		if(!$user->isAdmin() && empty($empty)) {
+			$this->getCourseService()->tryBecomeCourseMember($user['id'], $course['classId'], $course['id']);
 		}
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
 		
-		if($user->isParent()){
-			$relations=$this->getUserService()->findUserRelationsByFromIdAndType($user['id'],'family');
-	        $children=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations, 'toId'));
-	        $childIds=ArrayToolkit::column($children,'id');
-			$members=$this->getCourseService()->findCourseStudents($course['id'],0,PHP_INT_MAX);
-			$memberIds=ArrayToolkit::column($members,'userId');	
-			if(count(array_intersect($childIds,$memberIds))==0){
-				throw $this->createAccessDeniedException('您的子女不是课程学生，不能查看课程内容！');
-			}
-		}else{
-			/**1.非本班非管理员的学生*/
-			if (!in_array('ROLE_TEACHER', $user['roles']) && !$user->isAdmin() && empty($classMember)){
-				throw $this->createAccessDeniedException('只能查看自己班级的课程');
-			}
-
-			/**2.非班主任非该课程任课老师非超级管理员的老师*/
-			if(in_array('ROLE_TEACHER', $user['roles']) && !$user->isAdmin() && $class['headTeacherId']!=$user['id'] && !in_array($user['id'], $course['teacherIds'])){
-				throw $this->createAccessDeniedException('只能查看自己所教的课程');
-			}
+		/**1.非本班非管理员的学生*/
+		if (!$user->isAdmin() && empty($member)){
+			throw $this->createAccessDeniedException('不是本课程的学生或者老师！');
 		}
+
 		/**3.符合查看条件,但用户被封禁*/
 		if($member && !empty($member['locked'])){
 			throw $this->createAccessDeniedException('用户被封禁,无权查看该课程');
@@ -300,39 +285,6 @@ class CourseController extends BaseController
 			'learnStatuses' => $learnStatuses,
 			'currentTime' => $currentTime,
 			'weeks' => $weeks
-		));
-
-		$groupedItems = $this->groupCourseItems($items);
-		$hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
-
-		$category = $this->getCategoryService()->getCategory($course['categoryId']);
-		$tags = $this->getTagService()->findTagsByIds($course['tags']);
-
-		$checkMemberLevelResult = $courseMemberLevel = null;
-		if ($this->setting('vip.enabled')) {
-			$courseMemberLevel = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
-			if ($courseMemberLevel) {
-				$checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
-			}
-		}
-
-		$courseReviews = $this->getReviewService()->findCourseReviews($course['id'],'0','1');
-		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
-			'course' => $course,
-			'member' => $member,
-			'courseMemberLevel' => $courseMemberLevel,
-			'checkMemberLevelResult' => $checkMemberLevelResult,
-			'groupedItems' => $groupedItems,
-			'hasFavorited' => $hasFavorited,
-			'category' => $category,
-			'previewAs' => $previewAs,
-			'tags' => $tags,
-			'nextLiveLesson' => $nextLiveLesson,
-			'currentTime' => $currentTime,
-			'courseReviews' => $courseReviews,
-			'weeks' => $weeks,
-			'courseShareContent'=>$courseShareContent,
-			'consultDisplay' => true,
 		));
 
 	}
