@@ -1,0 +1,39 @@
+{% extends 'TopxiaWebBundle:MaterialLib:layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+
+{% block title %}教学资料库 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'material-lib' %}
+{% set parentId = parentId | default(null)%}
+{% set script_controller = 'test-paper/index' %}
+
+{% block list %}
+
+<div id="aticle-table-container">
+    <table class="table table-hover table-striped" id="article-table">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox"  data-role="batch-select"></th>
+                <th width="35%">文件名</th>
+                <th width="15%">大小</th>
+                <th width="15%">时长</th>
+                <th width="15%">上传时间</th>
+                <th width="28%">
+                    <span style="float: right;">
+                        <a href="{{path('course_manage_list_teacher_materials', {type: type, viewMode:'thumb'}) }}">图</a>
+                        <a href="{{path('course_manage_list_teacher_materials', {type: type, viewMode:'list'}) }}">表</a>
+                    </span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for uploadFile in materialResults %}
+                {% include 'TopxiaWebBundle:MaterialLib:material-list-view-item.html.twig' %}
+            {% else %}
+                <tr class="empty"><td colspan="20">无文件记录</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

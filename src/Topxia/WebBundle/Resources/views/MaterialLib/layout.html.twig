@@ -1,0 +1,59 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}教学资料库 - {{ parent() }}{% endblock %}
+{% set side_nav = 'material-lib' %}
+{% set script_controller = 'material-lib/index' %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+
+	<div class="panel-heading">
+		教学资料库
+		<span class="text-sm" style="font-weight: normal;">&gt; 来自上传</span>
+		
+		<span class="text-sm" style="float: right; font-weight: normal;">
+		  <a href="">来自分享</a> | <a href="">分享我的教学资料</a> | <a href="">我的分享历史</a>
+		</span>
+	</div>
+	<div class="panel-body">
+		<ul class="nav nav-tabs">
+			<li class="{{ type == 'all' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'all'}) }}">全部</a></li>
+			<li class="{{ type == 'video' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'video'}) }}">视频</a></li>
+			<li class="{{ type == 'audio' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'audio', viewMode:'thumb'}) }}">音频</a></li>
+			<li class="{{ type == 'pic' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'pic', viewMode:'thumb'}) }}">图片</a></li>
+			<li class="{{ type == 'document' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'document', viewMode:'thumb'}) }}">文档</a></li>
+			<li class="{{ type == 'ppt' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'ppt', viewMode:'thumb'}) }}">PPT</a></li>
+			<li class="{{ type == 'other' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'other', viewMode:'thumb'}) }}">其它</a></li>
+			</ul>
+		<br>
+		
+		<form id="message-search-form" class="form-inline well well-sm" action="{{ path('course_manage_list_teacher_materials', {type: type}) }}" method="get" novalidate>
+        	<div class="form-group">
+        	  <select class="form-control" name="sortBy">
+        	    {{ select_options({latestCreated:'按时间', sizeAsc: '按大小', nameAsc:'按名字'}, app.request.get('sortBy')) }}
+        	  </select>
+        	</div>
+        	<div class="form-group">
+        	  <input class="form-control" type="text" placeholder="输入标题关键词" name="keyword" value="{{ app.request.get('keyword') }}">
+        	</div>
+        	<button class="btn btn-primary">搜索</button>
+        </form>
+        
+        <div id="material-lib-items-panel">
+        
+    		{% block list %}{% endblock %}
+    		
+    		{{ web_macro.paginator(paginator) }}
+    		
+    	    <div>
+                <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+                <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="教学资料" data-url="{{ path('admin_article_delete') }}">删除</button>
+
+                
+                
+                </div>
+        </div>
+		
+	</div>
+</div>
+{% endblock %}

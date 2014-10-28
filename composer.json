@@ -1,60 +1,82 @@
 {
-    "name": "topxia/edusoho",
-    "type": "project",
-    "description": "Edusoho",
-    "autoload": {
-        "psr-0": { "": ["src/", "plugins/"] }
-    },
-    "require": {
-        "php": ">=5.3.3",
-        "symfony/symfony": "v2.3.18",
-        "doctrine/orm": "v2.3.6",
-        "doctrine/doctrine-bundle": "1.2.*",
-        "twig/extensions": "1.0.*",
-        "symfony/assetic-bundle": "2.3.*",
-        "symfony/swiftmailer-bundle": "2.3.*",
-        "symfony/monolog-bundle": "2.3.*",
-        "sensio/distribution-bundle": "2.3.*",
-        "sensio/framework-extra-bundle": "2.3.*",
-        "sensio/generator-bundle": "2.3.*",
-        "incenteev/composer-parameter-handler": "~2.0",
-        "doctrine/migrations" : "dev-master",
-        "doctrine/doctrine-migrations-bundle": "2.1.*@dev",
-        "imagine/imagine": "v0.5.0",
-        "ezyang/htmlpurifier": "v4.5.0",
-        "endroid/qrcode": "1.2.4",
-        "phpoffice/phpexcel": "1.8.0"
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
-        ],
-        "post-update-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
-        ]
-    },
-    "config": {
-        "bin-dir": "bin"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "extra": {
-        "symfony-app-dir": "app",
-        "symfony-web-dir": "web",
-        "symfony-assets-install": "relative",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
-        },
-        "branch-alias": {
-            "dev-master": "2.3-dev"
-        }
-    }
+	"autoload":
+	{
+		"psr-0":
+		{
+			"":
+			[
+				"src/",
+				"plugins/"
+			]
+		}
+	},
+	"config":
+	{
+		"bin-dir": "bin"
+	},
+	"description": "Edusoho",
+	"extra":
+	{
+		"branch-alias":
+		{
+			"dev-master": "2.3-dev"
+		},
+		"incenteev-parameters":
+		{
+			"file": "app/config/parameters.yml"
+		},
+		"symfony-app-dir": "app",
+		"symfony-assets-install": "relative",
+		"symfony-web-dir": "web"
+	},
+	"folders":
+	[
+		{
+			"path": "/home/jimmy/edusoho/edusoho"
+		}
+	],
+	"minimum-stability": "dev",
+	"name": "topxia/edusoho",
+	"prefer-stable": true,
+	"require":
+	{
+		"doctrine/doctrine-bundle": "1.2.*",
+		"doctrine/doctrine-migrations-bundle": "2.1.*@dev",
+		"doctrine/migrations": "dev-master",
+		"doctrine/orm": "v2.3.6",
+		"endroid/qrcode": "1.2.4",
+		"ezyang/htmlpurifier": "v4.5.0",
+		"imagine/imagine": "v0.5.0",
+		"incenteev/composer-parameter-handler": "~2.0",
+		"php": ">=5.3.3",
+		"phpoffice/phpexcel": "1.8.0",
+		"sensio/distribution-bundle": "2.3.*",
+		"sensio/framework-extra-bundle": "2.3.*",
+		"sensio/generator-bundle": "2.3.*",
+		"symfony/assetic-bundle": "2.3.*",
+		"symfony/monolog-bundle": "2.3.*",
+		"symfony/swiftmailer-bundle": "2.3.*",
+		"symfony/symfony": "v2.3.18",
+		"twig/extensions": "1.0.*"
+	},
+	"scripts":
+	{
+		"post-install-cmd":
+		[
+			"Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+		],
+		"post-update-cmd":
+		[
+			"Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+		]
+	},
+	"type": "project"
 }

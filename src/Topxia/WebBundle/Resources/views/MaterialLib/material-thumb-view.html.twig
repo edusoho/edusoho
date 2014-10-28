@@ -1,0 +1,37 @@
+{% extends 'TopxiaWebBundle:MaterialLib:layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+
+{% block title %}教学资料库 - {{ parent() }}{% endblock %}
+
+{% block list %}
+
+<div id="aticle-table-container">
+    <table class="table table-hover table-striped" id="article-table">
+        <thead>
+            <tr>
+                <th width="50%"><label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label></th>
+                <th width="50%">
+                    <span style="float: right;">
+                        <a href="{{path('course_manage_list_teacher_materials', {type: type, viewMode:'thumb'}) }}">图</a>
+                        <a href="{{path('course_manage_list_teacher_materials', {type: type, viewMode:'list'}) }}">表</a>
+                    </span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="2">
+                    <ul class="course-grids" id="material-item-list">
+                        {% for uploadFile in materialResults %}
+                            {% include 'TopxiaWebBundle:MaterialLib:material-thumb-view-item.html.twig' %}
+                        {% else %}
+                            <div class="empty">无文件记录</div>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -67,6 +67,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             case 'nameDesc':
                 $orderBy =  array('filename', 'DESC');
                 break;
+            case 'sizeAsc':
+                $orderBy =  array('size', 'ASC');
+                break;
+            case 'sizeDesc':
+                $orderBy =  array('size', 'DESC');
+                break;
             default:
                 throw $this->createServiceException('参数sort不正确。');
         }

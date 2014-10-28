@@ -1,0 +1,13 @@
+    <li class="course-grid item-material" style="width: 180px; height: 180px; padding: 8px;">
+      <input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" >
+      
+      <img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
+        <span class="text-sm">{{ uploadFile.filename }}</span>
+        <span class="row">
+            <button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="{{ path('course_manage_delete_teacher_material', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-edit"></span></button>
+
+	        <button class="btn btn-link delete-material-btn" title="删除" data-url="{{ path('course_manage_delete_teacher_material', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-trash"></span></button>
+        
+            
+            </span>
+    </li>
