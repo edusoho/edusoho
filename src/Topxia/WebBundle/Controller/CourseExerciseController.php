@@ -51,7 +51,7 @@ class CourseExerciseController extends BaseController
         $excludeIds = ArrayToolkit::column($questions,'id');
 
         while ( count($excludeIds) < $itemCount) {
-            $questions = $this->getQuestionService()->findQuestionsbyTypeRange($questionTypeRange,$start,$itemCount);
+            $questions = $this->getQuestionService()->findQuestionsbyTypeRange($questionTypeRange,$start,1);
             $Ids = ArrayToolkit::column($questions,'id');
             $excludeIds = array_merge($excludeIds,$Ids);
             $excludeIds = array_unique($excludeIds);
