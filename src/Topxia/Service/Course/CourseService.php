@@ -32,6 +32,8 @@ interface CourseService
 
 	public function searchCourseCount($conditions);
 
+	public function searchCourseNumbers();
+
 	public function findUserLearnCourses($userId, $start, $limit);
 
 	public function findUserLearnCourseCount($userId);

@@ -13,14 +13,20 @@
 
   <div class="row row-3-9">
     <div class="col-md-9" style="min-height:300px;">
+      <form class="form-inline well well-sm" action="{{ path('search') }}">
 
-      <form class="well well-sm" action="{{ path('search') }}">
-        <div class="input-group input-group-lg">
+      {% if vip  %}
+      <div class="form-group">
+          <select  class="form-control" name="vipLevelId">
+            {{ select_options(vipLevelId, app.request.query.get('vipLevelId'), '全部课程') }}
+          </select>
+          </div>
+      {% endif %}
+
+      <div class="form-group">
           <input type="text" class="form-control" name="q" value="{{ keywords }}">
-          <span class="input-group-btn">
             <button class="btn btn-primary" type="submit">搜索</button>
-          </span>
-        </div>
+      </div>
       </form>
 
       {% if keywords  %}

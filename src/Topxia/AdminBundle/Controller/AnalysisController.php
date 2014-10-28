@@ -32,6 +32,7 @@ class AnalysisController extends BaseController
                    'tab' => "trend",
                 )));
         }
+        // var_dump($timeRasnge);exit();
         $paginator = new Paginator(
                 $request,
                 $this->getUserService()->searchUserCount($timeRange),
@@ -48,12 +49,23 @@ class AnalysisController extends BaseController
         $registerData="";
         if($tab=="trend"){
                 $registerData=$this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'],$timeRange['endTime']);
-        
-        $data=$this->fillAnalysisData($condition,$registerData);            
-            }
-        
-        $registerStartData=$this->getUserService()->searchUsers(array(),array('createdTime', 'ASC'),0,1);
+        // var_dump($registerDetail); exit();
 
+        foreach ($registerData as $key) {
+            var_dump($key); 
+            // if($key['count'] == 0){
+            //         $registerData = $key['count'];
+            // }
+
+
+        }   
+
+        $data=$this->fillAnalysisData($condition,$registerData);
+        // var_dump($data); exit();           
+            }
+
+
+        $registerStartData=$this->getUserService()->searchUsers(array(),array('createdTime', 'ASC'),0,1);
         if($registerStartData) $registerStartDate=date("Y-m-d",$registerStartData[0]['createdTime']);
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
@@ -67,6 +79,116 @@ class AnalysisController extends BaseController
           ));
     }
 
+    public function userNumbersAction(Request $request,$tab)
+    {      
+        $data=array();
+        $userNumbersStartDate="";
+
+        $condition=$request->query->all();
+        $timeRange=$this->getTimeRange($condition);
+        if(!$timeRange) {
+
+              $this->setFlashMessage("danger","输入的日期有误!");
+                    return $this->redirect($this->generateUrl('admin_operation_analysis_user_numbers', array(
+                   'tab' => "trend",
+                )));
+        }
+
+        $paginator = new Paginator(
+                $request,
+                $this->getUserService()->searchUserNumbers($timeRange['startTime'],$timeRange['endTime']),
+                20
+        );
+        $userNumbersDetail=$this->getUserService()->searchUserNumbersDetails($timeRange['startTime'],$timeRange['endTime']
+            // $timeRange,
+            // array('createdTime', 'DESC'),
+            //   $paginator->getOffsetCount(),
+            //   $paginator->getPerPageCount()
+         );
+
+        $userNumbersData="";
+        if($tab=="trend"){
+        $userNumbersData=$this->getUserService()->searchUserNumbers($timeRange['startTime'],$timeRange['endTime']);
+        
+        $data=$this->fillAnalysisData($condition,$userNumbersData);            
+var_dump($data); exit();
+            }
+
+        $userNumbersStartData=$this->getUserService()->searchUsers(array(),array('createdTime', 'ASC'),0,1);
+
+        if($userNumbersStartData) $userNumbersStartDate=date("Y-m-d",$userNumbersStartData[0]['createdTime']);
+
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
+        return $this->render("TopxiaAdminBundle:OperationAnalysis:user-numbers.html.twig",array(
+            'userNumbersDetail'=>$userNumbersDetail,
+            'paginator'=>$paginator,
+            'tab'=>$tab,
+            'data'=>$data,
+            "userNumbersStartDate"=>$userNumbersStartDate,
+            "dataInfo"=>$dataInfo,    
+        ));
+    }
+
+    public function courseNumbersAction(Request $request,$tab)
+    {       
+        $data=array();
+        $courseNumbersStartDate="";
+
+        $condition=$request->query->all();
+        $timeRange=$this->getTimeRange($condition);
+    
+        if(!$timeRange) {
+
+              $this->setFlashMessage("danger","输入的日期有误!");
+                        return $this->redirect($this->generateUrl('admin_operation_analysis_course_numbers', array(
+                   'tab' => "trend",
+                )));
+        }
+
+        $paginator = new Paginator(
+                $request,
+                $this->getCourseService()->searchCourseCount($timeRange),
+             20
+        );
+
+        $courseNumbersDetail=$this->getCourseService()->searchCourses(
+            $timeRange,
+            '',
+              $paginator->getOffsetCount(),
+              $paginator->getPerPageCount()
+         );
+
+        $courseNumbersData="";
+
+        if($tab=="trend"){
+            $courseNumbersData=$this->getCourseService()->analysisCourseDataByTime($timeRange['startTime'],$timeRange['endTime']);
+    
+            $data=$this->fillAnalysisData($condition,$courseNumbersData);          
+        }
+
+        $userIds = ArrayToolkit::column($courseNumbersDetail, 'userId');
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseNumbersDetail, 'categoryId'));
+
+        $courseNumbersStartData=$this->getCourseService()->searchCourses(array(),'createdTimeByAsc',0,1);
+
+        if($courseNumbersStartData) $courseNumbersStartDate=date("Y-m-d",$courseNumbersStartData[0]['createdTime']);
+
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
+        return $this->render("TopxiaAdminBundle:OperationAnalysis:course-numbers.html.twig",array(
+            'courseNumbersDetail'=>$courseNumbersDetail,
+            'paginator'=>$paginator,
+            'tab'=>$tab,
+            'categories'=>$categories,
+            'data'=>$data,
+            'users'=>$users,
+            'courseNumbersStartDate'=>$courseNumbersStartDate,
+            'dataInfo'=>$dataInfo,          
+         ));
+    }
+
     public function loginAction(Request $request,$tab)
     {       
         $data=array();
@@ -74,7 +196,6 @@ class AnalysisController extends BaseController
 
         $condition=$request->query->all();
         $timeRange=$this->getTimeRange($condition);
-
         if(!$timeRange) {
 
               $this->setFlashMessage("danger","输入的日期有误!");
@@ -95,6 +216,7 @@ class AnalysisController extends BaseController
               $paginator->getOffsetCount(),
               $paginator->getPerPageCount()
          );
+        var_dump($loginDetail); exit();
 
         $LoginData="";
 

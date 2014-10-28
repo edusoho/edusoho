@@ -28,6 +28,16 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
+    public function searchUserNumbers($startTime,$endTime)
+    {
+        return $this->getUserDao()->searchUserNumbers($startTime,$endTime);
+    }
+
+    public function searchUserNumbersDetails($startTime,$endTime)
+    {
+        return $this->getUserDao()->searchUserNumbersDetails($startTime,$endTime);
+    }
+
     public function getUserProfile($id)
     {
        return $this->getProfileDao()->getProfile($id);
@@ -873,6 +883,11 @@ class UserServiceImpl extends BaseService implements UserService
     public function analysisRegisterDataByTime($startTime,$endTime)
     {
         return $this->getUserDao()->analysisRegisterDataByTime($startTime,$endTime);
+    }
+
+        public function analysisuserNumbersDataByTime($startTime,$endTime)
+    {
+        return $this->getUserDao()->analysisuserNumbersDataByTime($startTime,$endTime);
     }
 
     private function getFriendDao()

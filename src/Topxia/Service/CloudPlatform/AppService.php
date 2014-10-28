@@ -65,6 +65,8 @@ interface AppService
 
     public function uninstallApp($code);
 
+    public function findInstallApp($code);
+
     public function updateAppVersion($code,$fromVersion,$version);
 
 }

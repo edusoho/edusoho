@@ -168,6 +168,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('freeStartTime > :freeStartTimeGreaterThan')
             ->andWhere('rating > :ratingGreaterThan')
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
+            ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime');
 
@@ -206,6 +207,13 @@ class CourseDaoImpl extends BaseDao implements CourseDao
              $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
             return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function searchCourseNumbers()
+    {
+        $sql="SELECT count(id) as count FROM `{$this->getTablename()}` ";
+
+        return $this->getConnection()->fetchColumn($sql);
     }
 
     private function getTablename()

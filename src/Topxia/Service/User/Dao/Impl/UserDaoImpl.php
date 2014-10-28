@@ -95,7 +95,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('approvalStatus = :approvalStatus')
             ->andWhere('email = :email')
             ->andWhere('level = :level')
-            ->andWhere('createdTime >= :startTime')
+            // ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
             ->andWhere('locked = :locked')
             ->andWhere('level >= :greatLevel');
@@ -138,9 +138,30 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function analysisRegisterDataByTime($startTime,$endTime)
     {
+        $sql="SELECT * FROM (SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC) AS A ";
+        return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function analysisuserNumbersDataByTime($startTime,$endTime)
+    {
         $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
         return $this->getConnection()->fetchAll($sql);
     }
 
+        public function searchUserNumbers($startTime,$endTime)
+    {
+         
+        $sql="SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<={$endTime}  ";
+
+        return $this->getConnection()->fetchColumn($sql);
+    }
+
+        public function searchUserNumbersDetails($startTime,$endTime)
+    {
+         
+        $sql="SELECT * FROM `{$this->table}` WHERE  `createdTime`<={$endTime}  ";
+
+        return $this->getConnection()->fetchColumn($sql);
+    }
 }

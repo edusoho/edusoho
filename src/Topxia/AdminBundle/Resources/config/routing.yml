@@ -952,6 +952,14 @@ admin_operation_analysis_course_income:
     pattern:  /operation/analysis/course/income/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:courseIncome }
 
+admin_operation_analysis_course_numbers:
+    pattern:  /operation/analysis/course/numbers/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:courseNumbers }
+
+admin_operation_analysis_user_numbers:
+    pattern:  /operation/analysis/user/numbers/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:userNumbers }
+
 admin_operation_analysis_rount:
     pattern:  /operation/analysis/rountByanalysisDateType/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:rountByanalysisDateType }
