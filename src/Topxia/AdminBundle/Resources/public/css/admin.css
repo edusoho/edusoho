@@ -252,6 +252,7 @@ input.LargeInput {width: 600px;}
   border-radius:0 0 5px 5px;
   background-color: #fff;
   opacity: 0.8;
+  filter: alpha(opacity=80);
   display: none;
 }
 
