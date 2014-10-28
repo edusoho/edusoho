@@ -69,7 +69,7 @@
         </div>
 
         <div class="dashboard-footer clearfix">
-          {% if not app.user.isAdmin %}
+          {% if not (app.user.isAdmin or  app.user.isParent()) %}
             <div class="pull-right">
               <button class="btn btn-primary finish-btn" data-role="finish-lesson" style="display:none;"><span class="glyphicon glyphicon-unchecked"></span> 学过了</button>
             </div>
@@ -80,7 +80,6 @@
 
       <div class="toolbar toolbar-open" id="lesson-dashboard-toolbar">
         <div class="toolbar-nav">
-
           <ul class="toolbar-nav-stacked" id="lesson-toolbar-primary"></ul>
           <ul class="toolbar-nav-stacked" id="lesson-toolbar-secondary">
             <li class="hide-pane" style="display:none;">

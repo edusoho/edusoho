@@ -261,10 +261,11 @@ input.LargeInput {width: 600px;}
 }
 
 .class-list .class-grid .class-name {
-  width: 206px;
+  width: 203px;
   height: 20px;
   margin-top:5px;
   overflow:hidden;
+  /*white-space: pre-wrap;*/
 }
 
 .class-list .class-grid .class-member {

@@ -6,7 +6,10 @@
   {% endif %}
   {% if status.type=='learned_lesson' %}
     <span class="message">
-      学习了课时 <a href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:status.properties.course.id,lessonId:status.properties.lesson.id}) }}">《{{ status.properties.lesson.title }}》</a>
+      学习了课时 
+      <a class=" title" href="{{ path('course_learn', {id:status.properties.course.id}) ~ '#lesson/' ~ status.properties.lesson.id}}" title="{{ status.properties.lesson.title }}" data-id="{{ status.properties.lesson.id }}" data-experience="" style="white-space:nowrap; overflow:hidden; text-overflow: ellipsis;">
+        《{{ status.properties.lesson.title }}》
+      </a>
     </span>
   {% elseif status.type=='finished_testpaper' %}
     <span class="message">

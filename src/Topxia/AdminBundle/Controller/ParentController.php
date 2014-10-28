@@ -86,6 +86,7 @@ class ParentController extends BaseController
                 $classMember['classId']=$class['id'];
                 $classMember['userId']=$user['id'];
                 $classMember['role']='PARENT';
+                $classMember['createdTime']=time();
                 $this->getClassesService()->addClassMember($classMember);
             }
             $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['truename']} ({$user['id']})");
@@ -136,6 +137,7 @@ class ParentController extends BaseController
                 $classMember['classId']=$class['id'];
                 $classMember['userId']=$user['id'];
                 $classMember['role']='PARENT';
+                $classMember['createdTime']=time();
                 $this->getClassesService()->addClassMember($classMember);
             }
 
