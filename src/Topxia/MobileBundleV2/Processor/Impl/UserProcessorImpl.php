@@ -92,10 +92,17 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $message = $this->controller->render("TopxiaWebBundle:Notification:item-" .$type. ".html.twig", array(
             "notification"=>$notification
-            ));
-        return $message->getContent();
+            ))->getContent();
+
+        $message = preg_replace_callback('/<(\\/?)a/', function($matches) {
+            if (empty($matches[1])) {
+                return "<link";
+            }
+            return "</link";
+        }, $message);
+        return $message;
     }
-    
+
     public function getUserInfo()
     {
         $userId = $this->getParam('userId');
