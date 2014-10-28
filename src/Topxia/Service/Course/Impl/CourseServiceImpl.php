@@ -1096,6 +1096,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$lesson = $this->getCourseLesson($courseId, $lessonId);
 
+		if (!empty($lesson) && $lesson['type'] != 'video') {
+			return true;
+		}
+
 		$createLessonView['courseId'] = $courseId;
 		$createLessonView['lessonId'] = $lessonId;
 		$createLessonView['fileId'] = $lesson['mediaId'];
@@ -1136,7 +1140,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$createLessonView['userId'] = $this->getCurrentUser()->id;
 		$createLessonView['createdTime'] = time();
 
-		$lessonView = $this->getLessonViewDao()->addLessonView($createLessonView);
+		$lessonView = $this->getLessonViewDao()->addLessonView	($createLessonView);
 
 		$lesson = $this->getCourseLesson($createLessonView['courseId'], $createLessonView['lessonId']);
 
