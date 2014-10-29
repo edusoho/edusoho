@@ -184,9 +184,9 @@ interface UserService
 
     public function analysisRegisterDataByTime($startTime,$endTime);
 
-    public function analysisUserNumbersDataByTime($startTime,$endTime);
+    public function analysisUserCountByTime($startTime,$endTime);
 
-    public function searchUserNumbers($startTime,$endTime);
+    public function searchUserCounts($startTime,$endTime);
 
     public function dropFieldData($fieldName);
 

@@ -195,3 +195,44 @@ input.LargeInput {width: 600px;}
     margin-bottom: 10px;
   }
 }
+
+/*2014.10.29 by xiaomi*/
+.main-system-alert {
+  margin-bottom: 40px;
+  padding: 14px 10px 0 14px;
+  border: 1px solid #d0ffe6;
+  background: #ecf8fb;
+}
+
+.main-system-alert h2 {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 15px;
+  color: #ffb400;
+  font-size: 18px;
+}
+
+.main-system-alert  ul {
+  padding: 0;
+  margin: 0 0 0 30px;
+  list-style: none;
+}
+
+.main-system-alert  ul li {
+  margin-bottom: 20px;
+  padding-left: 44px;
+  background: url(/assets/img/common/ding.png) no-repeat left center;
+}
+
+.main-system-alert  .alert-list a {
+  text-decoration:  none;
+  font-size: 16px;
+  color: #39bf6d;
+  font-weight: bold;
+}
+
+.main-system-alert  .alert-list a span {
+  margin-left: 22px;
+  font-weight: normal;
+  font-size: 14px;
+}

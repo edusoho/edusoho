@@ -135,7 +135,7 @@
 				<td><span class="pull-right">{{todayCourseNums}}</span></td>
 				<td><span class="pull-right">{{yesterdayCourseNums}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
-				<td><a href="{{path('admin_operation_analysis_course_numbers',{tab:"trend",analysisDateType:'courseNumbers'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_course_numbers',{tab:"detail",analysisDateType:'courseNumbers'})}}">详情</a></td>
+				<td><a href="{{path('admin_operation_analysis_course_numbers',{tab:"trend",analysisDateType:'courseCount'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_course_numbers',{tab:"detail",analysisDateType:'courseCount'})}}">详情</a></td>
 				{% endif %}
 			</tr>
 
@@ -144,7 +144,7 @@
 				<td><span class="pull-right">{{todayUserNums}}</span></td>
 				<td><span class="pull-right">{{yesterdayUserNums}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
-				<td><a href="{{path('admin_operation_analysis_user_numbers',{tab:"trend",analysisDateType:'userNumbers'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_user_numbers',{tab:"detail",analysisDateType:'userNumbers'})}}">详情</a></td>
+				<td><a href="{{path('admin_operation_analysis_user_numbers',{tab:"trend",analysisDateType:'userCount'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_user_numbers',{tab:"detail",analysisDateType:'userCount'})}}">详情</a></td>
 				{% endif %}
 			</tr>
 {# 			<tr>

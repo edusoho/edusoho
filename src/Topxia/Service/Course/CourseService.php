@@ -32,9 +32,9 @@ interface CourseService
 
 	public function searchCourseCount($conditions);
 
-	public function searchCourseNumbers($startTime,$endTime);
+	public function searchCourseCounts($startTime,$endTime);
     	
-    	public function analysisCourseNumbersDataByTime($startTime,$endTime);
+    	public function analysisCourseCountByTime($startTime,$endTime);
 
 	public function findUserLearnCourses($userId, $start, $limit);
 

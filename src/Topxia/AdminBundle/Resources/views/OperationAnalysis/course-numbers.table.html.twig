@@ -8,8 +8,8 @@
             </tr>
           </thead>
           <tbody>
-            {% if courseNumbersDetail %}
-            {% for data in courseNumbersDetail %}
+            {% if courseCountDetail %}
+            {% for data in courseCountDetail %}
               <tr>
                   <td> <a href="{{ path('course_show', {id:data.id}) }}" target="_blank"><strong>{{ data.title }}</strong></a><br><span class="text-muted text-sm">分类：{{ categories[data.categoryId].name|default('--') }}</span></td>
                    <td>{{ admin_macro.user_link(users[data.userId]) }}<br>{{data.createdTime|date("Y-m-d H:i:s")}}</td>

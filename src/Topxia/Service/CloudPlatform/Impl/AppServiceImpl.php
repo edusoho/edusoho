@@ -678,6 +678,7 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->client;
     }
 
+    
     protected function getSettingService()
     {
         return $this->createService('System.SettingService');

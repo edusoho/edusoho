@@ -32,7 +32,6 @@ class AnalysisController extends BaseController
                    'tab' => "trend",
                 )));
         }
-        // var_dump($timeRasnge);exit();
         $paginator = new Paginator(
                 $request,
                 $this->getUserService()->searchUserCount($timeRange),
@@ -67,10 +66,10 @@ class AnalysisController extends BaseController
           ));
     }
 
-    public function userNumbersAction(Request $request,$tab)
+    public function userCountAction(Request $request,$tab)
     {      
         $data=array();
-        $userNumbersStartDate="";
+        $userCountStartDate="";
 
         $condition=$request->query->all();
         $timeRange=$this->getTimeRange($condition);
@@ -84,42 +83,42 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
                 $request,
-                $this->getUserService()->searchUserNumbers($timeRange['startTime'],$timeRange['endTime']),
+                $this->getUserService()->searchUserCounts($timeRange['startTime'],$timeRange['endTime']),
                 20
         );
 
-        $userNumbersDetail=$this->getUserService()->searchUsers(
+        $userCountDetail=$this->getUserService()->searchUsers(
             $timeRange,
             array('createdTime', 'DESC'),
               $paginator->getOffsetCount(),
               $paginator->getPerPageCount()
          );
 
-        $userNumbersData="";
+        $userCountData="";
         if($tab=="trend"){
-        $userNumbersData=$this->getUserService()->analysisUserNumbersDataByTime($timeRange['startTime'],$timeRange['endTime']);
-        $data=$this->fillAnalysisUserCount($condition,$userNumbersData);            
+        $userCountData=$this->getUserService()->analysisUserCountByTime($timeRange['startTime'],$timeRange['endTime']);
+        $data=$this->fillAnalysisUserCount($condition,$userCountData);            
             }
 
-        $userNumbersStartData=$this->getUserService()->searchUsers(array(),array('createdTime', 'ASC'),0,1);
+        $userCountStartData=$this->getUserService()->searchUsers(array(),array('createdTime', 'ASC'),0,1);
 
-        if($userNumbersStartData) $userNumbersStartDate=date("Y-m-d",$userNumbersStartData[0]['createdTime']);
+        if($userCountStartData) $userCountStartDate=date("Y-m-d",$userCountStartData[0]['createdTime']);
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:user-numbers.html.twig",array(
-            'userNumbersDetail'=>$userNumbersDetail,
+            'userCountDetail'=>$userCountDetail,
             'paginator'=>$paginator,
             'tab'=>$tab,
             'data'=>$data,
-            "userNumbersStartDate"=>$userNumbersStartDate,
+            "userCountStartDate"=>$userCountStartDate,
             "dataInfo"=>$dataInfo,    
         ));
     }
 
-    public function courseNumbersAction(Request $request,$tab)
+    public function courseCountAction(Request $request,$tab)
     {  
         $data=array();
-        $courseNumbersStartDate="";
+        $courseCountStartDate="";
 
         $condition=$request->query->all();
         $timeRange=$this->getTimeRange($condition);
@@ -134,44 +133,44 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
                 $request,
-                $this->getCourseService()->searchCourseNumbers($timeRange['startTime'],$timeRange['endTime']),
+                $this->getCourseService()->searchCourseCounts($timeRange['startTime'],$timeRange['endTime']),
              20
         );
 
-        $courseNumbersDetail=$this->getCourseService()->searchCourses(
+        $courseCountDetail=$this->getCourseService()->searchCourses(
             $timeRange,
             '',
               $paginator->getOffsetCount(),
               $paginator->getPerPageCount()
          );
 
-        $courseNumbersData="";
+        $courseCountData="";
 
         if($tab=="trend"){
-            $courseNumbersData=$this->getCourseService()->analysisCourseNumbersDataByTime($timeRange['startTime'],$timeRange['endTime']);
+            $courseCountData=$this->getCourseService()->analysisCourseCountByTime($timeRange['startTime'],$timeRange['endTime']);
     
-            $data=$this->fillAnalysisCourseCount($condition,$courseNumbersData);          
+            $data=$this->fillAnalysisCourseCount($condition,$courseCountData);          
         }
 
-        $userIds = ArrayToolkit::column($courseNumbersDetail, 'userId');
+        $userIds = ArrayToolkit::column($courseCountDetail, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseNumbersDetail, 'categoryId'));
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseCountDetail, 'categoryId'));
 
-        $courseNumbersStartData=$this->getCourseService()->searchCourses(array(),'createdTimeByAsc',0,1);
+        $courseCountStartData=$this->getCourseService()->searchCourses(array(),'createdTimeByAsc',0,1);
 
-        if($courseNumbersStartData) $courseNumbersStartDate=date("Y-m-d",$courseNumbersStartData[0]['createdTime']);
+        if($courseCountStartData) $courseCountStartDate=date("Y-m-d",$courseCountStartData[0]['createdTime']);
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:course-numbers.html.twig",array(
-            'courseNumbersDetail'=>$courseNumbersDetail,
+            'courseCountDetail'=>$courseCountDetail,
             'paginator'=>$paginator,
             'tab'=>$tab,
             'categories'=>$categories,
             'data'=>$data,
             'users'=>$users,
-            'courseNumbersStartDate'=>$courseNumbersStartDate,
+            'courseCountStartDate'=>$courseCountStartDate,
             'dataInfo'=>$dataInfo,          
          ));
     }
@@ -1012,10 +1011,10 @@ class AnalysisController extends BaseController
             $zeroData[] = array("date"=>$value,"count"=>0);
         }
 
-        $userNumbersData=$this->getUserService()->analysisUserNumbersDataByTime($timeRange['startTime'],$timeRange['endTime']);
-        $countTmp = $userNumbersData[0]["count"];
+        $userCountData=$this->getUserService()->analysisUserCountByTime($timeRange['startTime'],$timeRange['endTime']);
+        $countTmp = $userCountData[0]["count"];
         foreach ($zeroData as $key => $value) {
-            if($value["date"]<$userNumbersData[0]["date"]){
+            if($value["date"]<$userCountData[0]["date"]){
                 $countTmp = 0;
             }
             $date = $value['date'];
@@ -1040,10 +1039,10 @@ class AnalysisController extends BaseController
             $zeroData[] = array("date"=>$value,"count"=>0);
         }
 
-        $courseNumbersData=$this->getCourseService()->analysisCourseNumbersDataByTime($timeRange['startTime'],$timeRange['endTime']);
-        $countTmp = $courseNumbersData[0]["count"];
+        $courseCountData=$this->getCourseService()->analysisCourseCountByTime($timeRange['startTime'],$timeRange['endTime']);
+        $countTmp = $courseCountData[0]["count"];
         foreach ($zeroData as $key => $value) {
-            if($value["date"]<$courseNumbersData[0]["date"]){
+            if($value["date"]<$courseCountData[0]["date"]){
                 $countTmp = 0;
             }
             $date = $value['date'];

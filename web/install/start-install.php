@@ -178,9 +178,11 @@ function install_step3()
 function install_step4()
 {
 	global $twig;
-
+	// $signals=$this->createEduSohoOpenClient()->getEsSignal();
+	// var_dump($signals);exit();
 	echo $twig->render('step-4.html.twig', array(
 		'step' => 4,
+		// "signals"=>$signals,
 	));
 }
 
@@ -674,6 +676,24 @@ EOD;
         curl_close($curl);
 
         return $response;
+    }
+
+    private function createEduSohoOpenClient()
+    {
+        if (!isset($this->client)) {
+            $cloud = $this->getSettingService()->get('storage', array());
+            $developer = $this->getSettingService()->get('developer', array());
+
+            $options = array(
+                'accessKey' => empty($cloud['cloud_access_key']) ? null : $cloud['cloud_access_key'],
+                'secretKey' => empty($cloud['cloud_secret_key']) ? null : $cloud['cloud_secret_key'],
+                'apiUrl' => empty($developer['app_api_url']) ? null : $developer['app_api_url'],
+                'debug' => empty($developer['debug']) ? false : true,
+            );
+
+            $this->client = new EduSohoOpenClient($options);
+        }
+        return $this->client;
     }
 
 }

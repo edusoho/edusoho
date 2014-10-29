@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>管理中心</h1>
+  <h1>管理中心  </h1>
 </div>
 
 {% if is_granted('ROLE_ADMIN') %}
@@ -16,6 +16,11 @@
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
       </div>
     </div>
+
+  <div class="col-md-12">
+        {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
+    </div>
+
 
  <div class="col-md-6">
   <div class="panel panel-default">

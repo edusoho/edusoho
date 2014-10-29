@@ -142,13 +142,13 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->fetchAll($sql);
     }
 
-    public function analysisUserNumbersDataByTime($startTime,$endTime)
+    public function analysisUserCountByTime($startTime,$endTime)
     {
          $sql="SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  {$this->table}   i   WHERE   i.createdTime<=o.createdTime  )  as Count from {$this->table}  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
          return $this->getConnection()->fetchAll($sql);
     }
 
-        public function searchUserNumbers($startTime,$endTime)
+        public function searchUserCounts($startTime,$endTime)
     {
          
         $sql="SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<={$endTime}  ";

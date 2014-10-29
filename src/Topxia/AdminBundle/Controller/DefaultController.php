@@ -5,6 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
 
 class DefaultController extends BaseController
 {
@@ -48,6 +49,14 @@ class DefaultController extends BaseController
     public function indexAction(Request $request)
     {   
         return $this->render('TopxiaAdminBundle:Default:index.html.twig');
+    }
+
+    public function getCloudNoticesAction(Request $request)
+    {
+        $notices=$this->createEduSohoOpenClient()->getCloudNotices();
+        return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
+            "notices"=>$notices,
+        ));
     }
 
     public function officialMessagesAction()
@@ -112,8 +121,8 @@ class DefaultController extends BaseController
         $todayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
         $yesterdayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
         
-        $todayUserNums=$this->getUserService()->searchUserNumbers(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
-        $yesterdayUserNums=$this->getUserService()->searchUserNumbers(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
+        $todayUserNums=$this->getUserService()->searchUserCounts(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
+        $yesterdayUserNums=$this->getUserService()->searchUserCounts(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
         
         $todayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
         $yesterdayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
@@ -121,8 +130,8 @@ class DefaultController extends BaseController
         $todayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));    
         $yesterdayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
      
-        $todayCourseNums=$this->getCourseService()->searchCourseNumbers(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
-        $yesterdayCourseNums=$this->getCourseService()->searchCourseNumbers(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
+        $todayCourseNums=$this->getCourseService()->searchCourseCounts(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
+        $yesterdayCourseNums=$this->getCourseService()->searchCourseCounts(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
          
         $todayLessonNum=$this->getCourseService()->searchLessonCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
 
@@ -281,6 +290,25 @@ class DefaultController extends BaseController
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
     }
+
+    private function createEduSohoOpenClient()
+    {
+        if (!isset($this->client)) {
+            $cloud = $this->getSettingService()->get('storage', array());
+            $developer = $this->getSettingService()->get('developer', array());
+
+            $options = array(
+                'accessKey' => empty($cloud['cloud_access_key']) ? null : $cloud['cloud_access_key'],
+                'secretKey' => empty($cloud['cloud_secret_key']) ? null : $cloud['cloud_secret_key'],
+                'apiUrl' => empty($developer['app_api_url']) ? null : $developer['app_api_url'],
+                'debug' => empty($developer['debug']) ? false : true,
+            );
+
+            $this->client = new EduSohoOpenClient($options);
+        }
+        return $this->client;
+    }
+
 
     protected function getSettingService()
     {

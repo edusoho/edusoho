@@ -209,14 +209,14 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             return $this->getConnection()->fetchAll($sql);
     }
 
-    public function searchCourseNumbers($startTime,$endTime)
+    public function searchCourseCounts($startTime,$endTime)
     {
         $sql="SELECT count(id) as count FROM `{$this->getTablename()}` WHERE `createdTime`<={$endTime} ";
 
         return $this->getConnection()->fetchColumn($sql);
     }
 
-        public function analysisCourseNumbersDataByTime($startTime,$endTime)
+        public function analysisCourseCountByTime($startTime,$endTime)
     {
          $sql="SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  `{$this->getTablename()}`   i   WHERE   i.createdTime<=o.createdTime  )  as Count from `{$this->getTablename()}`  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
          return $this->getConnection()->fetchAll($sql);
