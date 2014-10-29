@@ -25,6 +25,9 @@
       {% endif %}
       
     {% endif %}
+    {% if uploadFile.useNum == 0 %}
+    <span class="label label-danger pull-right tip">未使用</span>
+    {% endif %}
     {% if uploadFile.convertStatus == 'waiting' %}
       {{uploadFile.filename}}<br><span class="text-warning text-sm">正在文件格式转换</span>
       {% if ( now - uploadFile.updatedTime ) > 28800 %}

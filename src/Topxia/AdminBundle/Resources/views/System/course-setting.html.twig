@@ -266,6 +266,26 @@ glyphicon glyphicon-chevron-up"></span></a></div>
       </div>
     </div>
 
+     <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>图文课时防复制</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('copy_enabled', {1:'开启', 0:'关闭'}, courseSetting.copy_enabled) }}
+        <div class="help-block"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>课程图片预览</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('picturePreview_enabled', {1:'开启', 0:'关闭'}, courseSetting.picturePreview_enabled) }}
+        <div class="help-block">如果允许此项设置,点击课程图片预览课程首个免费视频</div>
+      </div>
+    </div>
+
 {#     <div class="form-group">
       <div class="col-md-3 control-label">
         <label>免费课程允许未登录用户观看</label>

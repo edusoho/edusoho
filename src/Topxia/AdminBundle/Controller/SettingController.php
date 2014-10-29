@@ -601,6 +601,8 @@ class SettingController extends BaseController
             'live_course_enabled' => '0',
             'userinfoFields'=>array(),
             "userinfoFieldNameArray"=>array(),
+            "copy_enabled"=>'0',
+            "picturePreview_enabled"=>'0',
         );
 
         $this->getSettingService()->set('course', $courseSetting);
