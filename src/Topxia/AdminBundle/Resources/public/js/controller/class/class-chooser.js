@@ -18,8 +18,9 @@ define(function(require, exports, module) {
             element.attr('style',"cursor: pointer;opacity: 1;background-color:white");
             
             element.parent().addClass('has-feedback');
-            element.before("<span style='cursor: pointer;' class='glyphicon glyphicon-remove form-control-feedback'></span>");
+            element.before("<span style='display:none;cursor: pointer;' class='glyphicon glyphicon-remove form-control-feedback'></span>");
             element.parent().find('.form-control-feedback').click(function(){
+                $(this).hide();
                 element.val('');
                 element.next().eq(0).val('');
             });
@@ -54,6 +55,7 @@ define(function(require, exports, module) {
             var self=this;
             modal.on('click','.class-item',function(){
                 self.trigger('choosed',$(this).data().id,$(this).data().name);
+                self.element.parent().find('.form-control-feedback').show();
                 modal.modal('hide');
             });
 
@@ -74,6 +76,7 @@ define(function(require, exports, module) {
                     classIds=classIds.substring(1);
                 }
                 self.trigger('choosed',classIds,classNames);
+                self.element.parent().find('.form-control-feedback').show();
                 modal.modal('hide');
             });
         }
