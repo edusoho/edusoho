@@ -2,7 +2,7 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}添加新用户{% endblock %}
+{% block title %}添加{% if type=='student' %}学生{% else %}教师{% endif %}{% endblock %}
 {% block body %}
 
 <form id="user-create-form" class="form-horizontal" method="post" action="{{ path('admin_user_create')}}">
