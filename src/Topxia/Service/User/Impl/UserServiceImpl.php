@@ -329,9 +329,9 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $user = array();
-        $user['number'] =$registration['number'];
+        $user['number'] =trim($registration['number']);
         $user['email'] = $registration['email'];
-        $user['nickname'] = $registration['nickname'];
+        $user['nickname'] = trim($registration['nickname']);
         $user['truename'] = $registration['truename'];
         $user['mobile'] =isset($registration['mobile'])?$registration['mobile']:null;
         $user['roles'] =  array('ROLE_USER');
