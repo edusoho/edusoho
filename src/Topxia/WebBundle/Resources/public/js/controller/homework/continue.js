@@ -12,6 +12,7 @@ define(function(require, exports, module) {
         var questionSet = new QuestionSet({
             element: '#homework-set'
         });
+
     };
 
     var QuestionSet = Widget.extend({

@@ -42,7 +42,7 @@
       {% if questionStatus  == 'doing' %}
 
           <div class="col-md-3 question-set-side">
-            <div class="panel panel-default question-set-card" data-spy="affix" data-offset-top="" data-offset-bottom="200">
+            <div class="panel panel-default question-set-card" data-spy="affix" data-offset-top="200" data-offset-bottom="200">
                 <div class="panel-body">
                   {%- for questionId in itemSet.questionIds -%}
                     <a href="javascript:;" class="question-index for-question-{{ questionId }} " data-anchor="{{questionId}}">{{ loop.index }}</a>

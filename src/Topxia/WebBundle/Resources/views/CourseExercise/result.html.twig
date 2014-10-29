@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{# {% if questionStatus != 'finished' %}{% set script_controller = 'exercise/do' %}{% endif %} #}
+{% set script_controller = 'exercise/do' %}
 
 {% if itemSetResult|default(null) %}{% set itemSet = itemSetResult %}{% endif %}
 
@@ -42,31 +42,18 @@
           </div>
         </div>
       </div>
-   {#  {% if not app.user.isTeacher() and questionStatus == 'reviewing' %}
-    {% else %}
-      {% if questionStatus in ['doing','reviewing'] %}
 
           <div class="col-md-3 question-set-side">
-            <div class="panel panel-default question-set-card">
-            {% if questionStatus == 'doing' %}
-                <div class="panel-heading">
-                答题卡 <button class="btn btn-default btn-sm pull-right" id="exercise-save-btn" data-url="{{ path('course_homework_save',{courseId:course.id,homeworkId:homework.id}) }}">下次再做</button>
-                </div>
-            {% endif %}
+            <div class="panel panel-default question-set-card" data-spy="affix" data-offset-top="200" data-offset-bottom="200">
 
                 <div class="panel-body">
                   {%- for questionId in itemSet.questionIds -%}
                     <a href="javascript:;" class="question-index for-question-{{ questionId }} " data-anchor="{{questionId}}">{{ loop.index }}</a>
                   {%- endfor -%}
                 </div>
-                <div class="panel-footer">
-                  <button class="btn btn-success btn-block " id="{% if questionStatus == 'doing' %}homework-finish-btn{% else %}homework-check-btn{% endif %}" data-url="{% if questionStatus == 'doing' %}{{ path('course_homework_submit',{courseId:course.id,homeworkId:homework.id}) }} {% else %} {{ path('course_homework_check',{courseId:course.id,homeworkId:homework.id,userId:userId}) }} {% endif %}" data-saving-text="正在保存...">{% if questionStatus == 'doing' %}提交作业{% else %}完成批改{% endif %}</button>
-                </div>
+
             </div>
         </div>
-      {% endif %}
-
-    {% endif %} #}
     </div>
 
   </div>

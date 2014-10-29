@@ -11,13 +11,6 @@ define(function(require, exports, module) {
         var questionSet = new QuestionSet({
             element: '#homework-set'
         });
-
-        $('.question-set-card').affix({
-            offset: {
-                top: 100
-            },
-        });
-
     };
 
     var QuestionSet = Widget.extend({
