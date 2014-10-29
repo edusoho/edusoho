@@ -13,11 +13,8 @@
           <div class="panel-body">
             <div class="question-set-type">练习</div>
             <div class="question-set-title">{{ lesson.title }}</div>
-{#             <div class="homwork-status">
-              <div class="pull-right label label-success">{% if questionStatus == 'doing'%}答题中{% elseif questionStatus == 'reviewing' %}批阅中{% else %}批阅完成{% endif %}</div>
-            </div> #}
+
             <div class="question-set-description">
-              {# {{ exercise.description |raw }} #}
               <p class="text-muted">所属课程 <a href="{{ path('course_show',{id:course.id}) }}">{{ course.title }}</a></p>
             </div>
           </div>
@@ -45,7 +42,7 @@
       {% if questionStatus  == 'doing' %}
 
           <div class="col-md-3 question-set-side">
-            <div class="panel panel-default question-set-card">
+            <div class="panel panel-default question-set-card" data-spy="affix" data-offset-top="" data-offset-bottom="200">
                 <div class="panel-body">
                   {%- for questionId in itemSet.questionIds -%}
                     <a href="javascript:;" class="question-index for-question-{{ questionId }} " data-anchor="{{questionId}}">{{ loop.index }}</a>

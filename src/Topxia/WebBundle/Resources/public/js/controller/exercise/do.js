@@ -10,11 +10,6 @@ define(function(require, exports, module) {
             element: '#exercise-set'
         });
 
-        $('.question-set-card').affix({
-            offset: {
-              top: 100
-            }
-        });
     };
 
     var QuestionSet = Widget.extend({
@@ -143,13 +138,21 @@ define(function(require, exports, module) {
         },
 
         onClickInputChoiceInput: function(event) {
-            event.stopPropagation();
+            return false;
         },
 
         onClickInputChoiceLabel: function(event) {
             var $answer = $(event.currentTarget).find('input');
-            $(event.currentTarget).find('input').prop("checked") ? $(event.currentTarget).addClass('active') : $(event.currentTarget).removeClass('active');
-            this._setChoiceQuestionAnswer($answer);
+            if ($answer.prop("checked")) {
+                $answer.prop("checked",false);
+                this._setChoiceQuestionAnswer($answer);
+                return false;
+            };
+            if (!$answer.prop("checked")) {
+                $answer.prop("checked",true);
+                this._setChoiceQuestionAnswer($answer);
+                return false;
+            };
         },
 
         onClickChoice: function(event) {

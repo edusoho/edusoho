@@ -4183,6 +4183,10 @@ body {
     width:261px;
 }
 
+.question-set-card.affix {
+	top: 0!important;
+}
+
 .question-set-card  .question-index {
 	display: inline-block;
 	border: 1px solid #ccc;
