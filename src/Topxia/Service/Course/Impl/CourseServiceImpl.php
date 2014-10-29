@@ -2103,14 +2103,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
 
 		$courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);
-		$token = $this->getTokenService()->makeToken('live.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
 		$user = $this->getCurrentUser();
 
 		$args = array(
 			'liveId' => $lesson["mediaId"], 
 			'replayId' => $courseLessonReplay["replayId"], 
 			'provider' => $lesson["liveProvider"],
-			'token' => $token['token'],
             'user' => $user['email'],
             'nickname' => $user['nickname']
 		);
@@ -2268,7 +2266,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('User.DiskService');
     }
 
-
     private function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
@@ -2282,12 +2279,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('System.SettingService');
     }
-
-    private function getTokenService()
-    {
-        return $this->createService('User.TokenService');
-    }
-
 
     private function getLevelService()
     {
