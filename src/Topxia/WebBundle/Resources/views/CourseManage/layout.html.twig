@@ -40,9 +40,9 @@
             <div class="list-group">
               <a class="list-group-item {% if side_nav == 'question' %}active{% endif %}" href="{{ path('course_manage_question', {courseId:course.id}) }}">题目管理</a>
 
-              {% if setting('question_plus.enabled') %}
+          {#     {% if setting('question_plus.enabled') %}
                 <a class="list-group-item {% if side_nav == 'question_plumber' %}active{% endif %}" href="{{ path('course_question_plumber', {courseId:course.id, type:'import'}) }}">题目导入/导出</a>
-              {% endif %}
+              {% endif %} #}
 
               <a class="list-group-item {% if side_nav == 'question_category' %}active{% endif %}" href="{{ path('course_manage_question_category', {courseId:course.id}) }}">题目类别管理</a>
               <a class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}" href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">试卷管理</a>
