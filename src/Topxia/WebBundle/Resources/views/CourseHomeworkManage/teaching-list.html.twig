@@ -2,72 +2,74 @@
 
 {% block title %}作业批改 - {{ parent() }}{% endblock %}
 {% set side_nav = 'my-teaching-homework-check' %}
-{% set statuses = { unchecked:'未批改', uncommitted:'未提交', checked:'已批改' } %}
-{% set script_controller = 'course-manage/homework-list' %}
 
 {% block main %}
-<div class="panel panel-default panel-col">
-  	<div class="panel-heading">作业批改</div>
-  	<div class="panel-body">
-    	<ul class="nav nav-tabs">
-    		<li {% if status == 'unchecked' %} class="active"{% endif %}>
-    			<a href="{{ url('my_teaching_homework_list', {status:'unchecked'}) }}">未批改
-    			<span class="badge">{{ reviewingCount|default(0) }}</span></a>
-    		</li>
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">作业批改</div>
+     <div class="panel-body">
+       <ul class="nav nav-tabs">
+            <li {% if status == 'reviewing' %} class="active"{% endif %}>
+            <a href="{{ url('my_teaching_homework_list', {status:'reviewing'}) }}">未批改
+               <span class="badge">{{ reviewingCount|default(0) }}</span>
+            </a>
+            </li>
 
-    		<li {% if status == 'finished' %} class="active"{% endif %}>
-    			<a href="{{ url('my_teaching_homework_list', {status:'finished'}) }}">已批改
-    			<span class="badge">{{ finishedCount|default(0) }}</span>
-    			</a>
-    		</li>
-  	  	</ul>
-  	  	{% if homeworks and students %}
-  	  	<table class="table table-striped" id="homework-student-list">
-	      	<thead>
-		        <tr>
-		          <th width="70%">学员</th>
-		          <th width="30%">操作</th>
-		        </tr>
-	      	</thead>
-      		<tbody>
-      			{% for student in students %}
-      			{% set user = users[student.userId] %}
-      			{% set homework = homeworks[student.courseId] %}
-      			{% set homeworkResult = homeworkResults[user.id]|default(null) %}
-      			{% set course = courses[homework.courseId] %}
-      			{% set lesson = lessons[homework.lessonId] %}
-      			{% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
-      			{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-      			<tr id="student-{{ user.id }}-tr">
-    					<td class="media">
-    					    {{ web_macro.user_avatar(user, 'pull-left') }}
-    					    <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
-    					    <div class="clear-fix text-sm">
-    					    	<div class="pull-left"><a class="text-success" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title }}》</a><a class="text-success" href="{{ lessonUrl }}">第 {{ lesson.number }}课时</a></div>
-    					    	{% if status == 'unchecked' %}
-    					    		<div class="pull-left mll text-muted">提交时间：{{ homeworkResult.usedTime|date('Y-n-d H:i') }}</div>
-    					    	{% endif %}
-    					    </div>
-    					</td>
-    					<td>
-    					    <div class="btn-group">
-    					    	{% if status == 'uncommitted' %}
-    					    		<a class="btn btn-default btn-sm homework-urge-btn" href="{{ path('homework_urge', { homeworkId:homework.id, userId:user.id } )}}">私信催缴</a>
-    					    	{% elseif status == 'unchecked' or status == null %}
-    					        	<a class="btn btn-default btn-sm" href="{{ path('course_homework_check',{courseId:course.id,homeworkId:homework.id,userId:user.id}) }}">批改</a>
-    					        {% else %}
-    					        	<a class="btn btn-default btn-sm" href="{{ path('course_homework_result',{courseId:course.id,homeworkId:homework.id,resultId:homeworkResult.id,userId:user.id}) }}">查看</a>
-    					        {% endif %}
-    					    </div>
-    					</td>
-    				</tr>
-    				{% endfor %}                
-          </tbody>
-    	  </table>
-    	{% else %}
-			<div class="empty">没有需要批改的作业</div>
-		{% endif %}
-		{{ web_macro.paginator(paginator) }}
-  	</div>
-</div>
+            <li {% if status == 'finished' %} class="active"{% endif %}>
+                <a href="{{ url('my_teaching_homework_list', {status:'finished'}) }}">已批改
+                  <span class="badge">{{ finishedCount|default(0) }}</span>
+                </a>
+            </li>
+
+           </ul>
+    <table class="table table-striped table-hover">
+      <tbody>
+            <thead>
+            <tr>
+                <th width="70%">学员</th>
+                <th width="30%">操作</th>
+            </tr>
+           </thead>
+
+        {% if homeworksResults|default(null) %}
+
+              {% for key,homeworkResult in homeworksResults %}
+                  {% set userId = users[homeworkResult.userId].id %}
+                  {% set user = users[homeworkResult.userId] %}
+                  {% set lesson = lessons[homeworkResult.lessonId] %}
+                  {% set course = courses[homeworkResult.courseId] %}
+                  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
+                  {% set courseUrl = path('course_show', {id:course.id}) %}
+                  <tr>
+                      <td class="media">
+                            {{ web_macro.user_avatar(user, 'pull-left') }}
+                            <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+
+                            <div class="clear-fix text-sm">
+                              <div class="pull-left"><a class="text-success" href="{{ courseUrl }}">《{{ course.title }}》</a></div>
+                              <div class="pull-left"><a class="text-success" href="{{ lessonUrl }}">第 {{ lesson.number }}课时</a></div>
+                              <div class="mll text-muted pull-left">提交时间：{{ homeworkResult.usedTime|date('Y-n-d H:i') }}</div>
+                            </div>
+                      </td>
+                    <td>
+                    {% if status == 'reviewing' %}
+                        <a href="{{ path('course_homework_check', {courseId:course.id,homeworkId:homeworkResult.homeworkId,userId:userId }) }}" class="btn btn-default btn-sm " target="_blank">批阅</a>
+                    {% else %}
+                        <a class="btn btn-default btn-sm"  href="{{ path('course_homework_result',{courseId:course.id,homeworkId:homeworkResult.homeworkId,resultId:homeworkResult.id, userId:userId }) }}" target="_blank" >查看</a>
+                    {% endif %}
+                    </td>
+                  </tr>
+              {% endfor %}
+        {% else %}
+            {% if status == 'reviewing' %}
+                  <div class="empty">没有需要批改的作业</div>
+              {% else %}
+                  <div class="empty">没有已批改的作业</div>
+               {% endif %}
+      {% endif  %}
+
+      </tbody>
+    </table>
+  {{ web_macro.paginator(paginator) }}
+    </div>
+  </div>
 {% endblock %}

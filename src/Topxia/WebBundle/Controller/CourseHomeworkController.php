@@ -177,6 +177,9 @@ class CourseHomeworkController extends BaseController
         $usersIds = ArrayToolkit::column($homeworkResults,'userId');
         $users = $this->getUserService()->findUsersByIds($usersIds);
 
+        $lessonIds = ArrayToolkit::column($homeworkResults,'lessonId');
+        $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
+
         if ($status == 'reviewing') {
             $reviewingCount = $homeworkResultsCounts;
             $finishedCount = $this->getHomeworkService()->findHomeworkResultsCountsByCourseIdAndStatus($courseId,'finished');
@@ -189,13 +192,12 @@ class CourseHomeworkController extends BaseController
 
         return $this->render('TopxiaWebBundle:CourseHomework:check-list.html.twig', array(
             'status' => $status,
-            // 'testpapers' => ArrayToolkit::index($testpapers, 'id'),
             'homeworkResults' => $homeworkResults,
             'course' => $course,
             'users' => $users,
             'reviewingCount' => $reviewingCount,
             'finishedCount' => $finishedCount,
-            // 'teachers' => ArrayToolkit::index($teachers, 'id'),
+            'lessons' => $lessons,
             'paginator' => $paginator
         ));
     }

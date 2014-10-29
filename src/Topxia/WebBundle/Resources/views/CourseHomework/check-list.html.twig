@@ -34,12 +34,17 @@
         {% for key,homeworkResult in homeworkResults %}
         {% set userId = users[homeworkResult.userId].id %}
         {% set user = users[homeworkResult.userId] %}
-
+        {% set lesson = lessons[homeworkResult.lessonId] %}
+        {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
          <tr>
           <td class="media">
               {{ web_macro.user_avatar(user, 'pull-left') }}
               <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
-              <div class="text-muted text-sm">提交时间：{{ homeworkResult.usedTime|date('Y-n-d H:i') }}</div>
+
+              <div class="clear-fix text-sm">
+                <div class="pull-left"><a class="text-success" href="{{ lessonUrl }}">第 {{ lesson.number }}课时</a></div>
+                <div class="mll text-muted pull-left">提交时间：{{ homeworkResult.usedTime|date('Y-n-d H:i') }}</div>
+              </div>
           </td>
 
          <td>

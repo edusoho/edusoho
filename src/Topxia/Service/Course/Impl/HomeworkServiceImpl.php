@@ -342,9 +342,14 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     	return $this->getHomeworkResultDao()->findHomeworkResultsByHomeworkIds($homeworkIds);
     }
 
-    public function findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId)
+    public function findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$start,$limit)
     {
-        return $this->getHomeworkResultDao()->findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId);
+        return $this->getHomeworkResultDao()->findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$start,$limit);
+    }
+
+    public function findHomeworkResultsCountsByStatusAndCheckTeacherId($status,$checkTeacherId)
+    {
+        return $this->getHomeworkResultDao()->findHomeworkResultsCountsByStatusAndCheckTeacherId($status,$checkTeacherId);
     }
 
     public function findHomeworkResultsByCourseIdAndStatus($courseId, $status ,$start,$limit)
