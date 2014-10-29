@@ -28,6 +28,7 @@ class LiveCourseLessonManageController extends BaseController
 
 			$client = LiveClientFactory::createClient();
 			$live = $client->createLive(array(
+				'summary' => $liveLesson['summary'],
 				'title' => $liveLesson['title'],
 				'speaker' => $speaker,
 				'startTime' => $liveLesson['startTime'] . '',
@@ -35,14 +36,15 @@ class LiveCourseLessonManageController extends BaseController
 				'authUrl' => $this->generateUrl('live_auth', array(), true),
 				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
 			));
+
 			if (empty($live) or isset($live['error'])) {
 				throw new \RuntimeException('创建直播教室失败，请重试！');
 			}
 
 			$liveLesson['mediaId'] = $live['id'];
-
-
+			$liveLesson['liveProvider'] = $live['provider'];
 			$liveLesson = $this->getCourseService()->createLesson($liveLesson);
+
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $liveCourse,
 				'lesson' => $liveLesson,
@@ -71,6 +73,30 @@ class LiveCourseLessonManageController extends BaseController
 			$liveLesson['startTime'] = empty($editLiveLesson['startTime']) ? $liveLesson['startTime'] : strtotime($editLiveLesson['startTime']);
 			$liveLesson['free'] = empty($editLiveLesson['free']) ? 0 : $editLiveLesson['free'];
 			$liveLesson['length'] = empty($editLiveLesson['timeLength']) ? $liveLesson['length'] : $editLiveLesson['timeLength'];
+
+			$speakerId = current($liveCourse['teacherIds']);
+			$speaker = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
+			$speaker = $speaker ? $speaker['nickname'] : '老师';
+
+			$liveParams = array(
+				'liveId' => $liveLesson['mediaId'],
+				'provider' => $liveLesson['liveProvider'],
+				'summary' => $editLiveLesson['summary'],
+				'title' => $editLiveLesson['title'],
+				'speaker' => $speaker,
+				'authUrl' => $this->generateUrl('live_auth', array(), true),
+				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
+			);
+
+			if(array_key_exists('startTime', $editLiveLesson)) {
+				$liveParams['startTime'] = strtotime($editLiveLesson['startTime']);
+			}
+			if(array_key_exists('startTime', $editLiveLesson) && array_key_exists('timeLength', $editLiveLesson)) {
+				$liveParams['endTime'] = (strtotime($editLiveLesson['startTime']) + $editLiveLesson['timeLength']*60) . '';
+			}
+
+			$client = LiveClientFactory::createClient();
+			$live = $client->updateLive($liveParams);
 
 			$liveLesson = $this->getCourseService()->updateLesson($courseId,$lessonId,$liveLesson);
 			
