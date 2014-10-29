@@ -19,6 +19,11 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return ArrayToolkit::index($homeworks, 'lessonId');
 	}
 
+    public function findHomeworksByCourseIdAndstatus($courseId, $status)
+    {
+        return $this->getHomeworkDao()->findHomeworksByCourseIdAndstatus($courseId, $status);
+    }
+
 	public function findHomeworksByCreatedUserId($userId)
 	{
 		return $this->getHomeworkDao()->findHomeworksByCreatedUserId($userId);
@@ -70,6 +75,8 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         $fields['lessonId'] = $lessonId;
         $excludeIds = explode(',',$excludeIds);
         $fields['itemCount'] = count($excludeIds);
+        $fields['updatedUserId'] = 0;
+        $fields['updatedTime'] = 0;
 
         $homework = $this->getHomeworkDao()->addHomework($fields);
 		$this->addHomeworkItems($homework['id'],$excludeIds);
@@ -233,6 +240,10 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         $fields['teacherSay'] = empty($checkHomeworkData['teacherFeedback']) ? "" : $checkHomeworkData['teacherFeedback'];
         $this->getHomeworkResultDao()->updateHomeworkResult($homeworkResult['id'],$fields);
 
+        if (empty($checkHomeworkData['questionIds'])) {
+            return true;
+        }
+
         foreach ($checkHomeworkData['questionIds'] as $key => $questionId) {
                 if (!empty($checkHomeworkData['teacherSay'][$key])) {
                 $this->getHomeworkItemResultDao()->updateHomeworkItemResult($id,$homeworkResult['id'],$questionId,array('teacherSay'=>$checkHomeworkData['teacherSay'][$key]));
@@ -336,9 +347,14 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return $this->getHomeworkResultDao()->findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId);
     }
 
-    public function findHomeworkResultsByCourseIdAndStatusAndCheckTeacherId($courseId,$checkTeacherId, $status)
+    public function findHomeworkResultsByCourseIdAndStatus($courseId, $status ,$start,$limit)
     {
+        return $this->getHomeworkResultDao()->findHomeworkResultsByCourseIdAndStatus($courseId, $status ,$start,$limit);
+    }
 
+    public function findHomeworkResultsCountsByCourseIdAndStatus($courseId, $status)
+    {
+        return $this->getHomeworkResultDao()->findHomeworkResultsCountsByCourseIdAndStatus($courseId, $status);
     }
 
     public function findHomeworkResultsByStatusAndStatusAndUserId($userId, $status)

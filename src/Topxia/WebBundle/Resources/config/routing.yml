@@ -627,6 +627,10 @@ course_homework_check:
     pattern: /course/{courseId}/homework/{homeworkId}/check/{userId}
     defaults: { _controller: TopxiaWebBundle:CourseHomework:check }
 
+course_homework_check_list:
+    pattern: /course/{courseId}/check/homework/{status}/list
+    defaults: { _controller: TopxiaWebBundle:CourseHomework:checkList }
+
 course_homework_check_show:
     pattern: /course/{courseId}/homework/{homeworkId}/check/show/{userId}
     defaults: { _controller: TopxiaWebBundle:CourseHomework:checkShow }

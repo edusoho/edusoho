@@ -121,6 +121,7 @@ class CourseHomeworkController extends BaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         $homework = $this->getHomeworkService()->getHomework($homeworkId);
+
         if (empty($homework)) {
             throw $this->createNotFoundException();
         }
@@ -137,6 +138,7 @@ class CourseHomeworkController extends BaseController
 
         $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'],$userId);
         $homeworkResult = $this->getHomeworkService()->getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $homework['lessonId'], $userId);
+
         return $this->render('TopxiaWebBundle:CourseHomework:result.html.twig', array(
             'homework' => $homework,
             'itemSetResult' => $itemSetResult,
@@ -154,6 +156,47 @@ class CourseHomeworkController extends BaseController
             'courseId' => $courseId,
             'homeworkId' => $homeworkId,
             'userId' => $userId
+        ));
+    }
+
+    public function checkListAction(Request $request ,$courseId, $status)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $homeworkResultsCounts = $this->getHomeworkService()->findHomeworkResultsCountsByCourseIdAndStatus($courseId, $status);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $homeworkResultsCounts
+            , 5
+        );
+
+        $homeworkResults = $this->getHomeworkService()->findHomeworkResultsByCourseIdAndStatus(
+           $courseId, $status,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $usersIds = ArrayToolkit::column($homeworkResults,'userId');
+        $users = $this->getUserService()->findUsersByIds($usersIds);
+
+        if ($status == 'reviewing') {
+            $reviewingCount = $homeworkResultsCounts;
+            $finishedCount = $this->getHomeworkService()->findHomeworkResultsCountsByCourseIdAndStatus($courseId,'finished');
+        }
+
+        if ($status == 'finished') {
+            $reviewingCount = $this->getHomeworkService()->findHomeworkResultsCountsByCourseIdAndStatus($courseId,'reviewing');
+            $finishedCount = $homeworkResultsCounts;
+        }
+
+        return $this->render('TopxiaWebBundle:CourseHomework:check-list.html.twig', array(
+            'status' => $status,
+            // 'testpapers' => ArrayToolkit::index($testpapers, 'id'),
+            'homeworkResults' => $homeworkResults,
+            'course' => $course,
+            'users' => $users,
+            'reviewingCount' => $reviewingCount,
+            'finishedCount' => $finishedCount,
+            // 'teachers' => ArrayToolkit::index($teachers, 'id'),
+            'paginator' => $paginator
         ));
     }
 
@@ -178,7 +221,8 @@ class CourseHomeworkController extends BaseController
         if ($request->getMethod() == 'POST') {
 
             $checkHomeworkData = $request->request->all();
-            $this->getHomeworkService()->checkHomework($homeworkId,$userId,$checkHomeworkData['data']);
+            $checkHomeworkData = empty($checkHomeworkData['data']) ? "" : $checkHomeworkData['data'];
+            $this->getHomeworkService()->checkHomework($homeworkId,$userId,$checkHomeworkData);
 
             return $this->createJsonResponse(
                 array(
@@ -227,6 +271,11 @@ class CourseHomeworkController extends BaseController
             'lesson' => $lesson,
             'questionStatus' => 'previewing'
         ));   
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
     private function getQuestionService()

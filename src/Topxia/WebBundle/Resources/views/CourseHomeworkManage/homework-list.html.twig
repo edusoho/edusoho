@@ -15,10 +15,7 @@
     			<a href="{{ url('course_homework_list', {courseId:course.id, lessonId:lesson.id, status:'unchecked'}) }}">未批改
     			<span class="badge">{{ reviewingCount }}</span></a>
     		</li>
-{#     		<li {% if status == 'uncommitted' %} class="active"{% endif %}>
-    			<a href="{{ url('course_homework_list', {courseId:course.id, lessonId:lesson.id, status:'uncommitted'}) }}">未提交
-    			<span class="badge">{{ uncommitCount }}</span></a>
-    		</li> #}
+
     		<li {% if status == 'finished' %} class="active"{% endif %}>
     			<a href="{{ url('course_homework_list', {courseId:course.id, lessonId:lesson.id, status:'finished'}) }}">已批改
     			<span class="badge">{{ finishedCount }}</span></a>
