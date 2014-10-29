@@ -13,6 +13,7 @@ class StatusServiceImpl extends BaseService implements StatusService
 
         $status['userId'] = $user['id'];
         $status['createdTime'] = time();
+        $status['message'] = empty($status['message']) ? '' : $status['message'];
 
         return $this->getStatusDao()->addStatus($status);
     }

@@ -301,6 +301,7 @@ CREATE TABLE `course_lesson` (
   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时结束时间',
   `memberNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时加入人数',
   `replayStatus` enum('ungenerated','generating','generated') NOT NULL DEFAULT 'ungenerated',
+  `liveProvider` int(10) unsigned NOT NULL DEFAULT '0',
   `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
@@ -342,8 +343,8 @@ CREATE TABLE `course_lesson_view` (
   `lessonId` int(10) NOT NULL,
   `fileId` int(10) NOT NULL,
   `userId` int(10) NOT NULL,
-  `fileType` enum('document','video','audio','image','ppt','other') NOT NULL DEFAULT 'other',
-  `fileStorage` enum('local','cloud','net') NOT NULL,
+  `fileType` enum('document','video','audio','image','ppt','other','none') NOT NULL DEFAULT 'none',
+  `fileStorage` enum('local','cloud','net','none') NOT NULL DEFAULT 'none',
   `fileSource` varchar(32) NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
