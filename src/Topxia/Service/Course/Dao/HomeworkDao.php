@@ -12,20 +12,9 @@ interface HomeworkDao
     
     public function getHomeworkByCourseIdAndLessonId($courseId, $lessonId);
 
-	public function searchHomeworks($conditions, $sort, $start, $limit);
-
 	public function addHomework($fields);
 
     public function updateHomework($id,$fields);
 
     public function deleteHomework($id);
-
-    public function deleteHomeworksByCourseId($courseId);
-
-    public function findHomeworkResultsByStatusAndCheckTeacherId($checkTeacherId, $status);
-
-    public function findHomeworkResultsByCourseIdAndStatusAndCheckTeacherId($courseId,$checkTeacherId, $status);
-
-    public function findAllHomeworksByCourseId($courseId);
-
 }

@@ -119,12 +119,12 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchAll($sql, array($courseId, $lessonId,$status));
     }
 
-    public function findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId, $start, $limit)
+    public function findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$orderBy, $start, $limit)
     {
         if(empty($checkTeacherId) or empty($status)){
             return array();
         }
-        $sql = "SELECT * FROM {$this->table} Where status = ? AND checkTeacherId = ?  LIMIT {$start}, {$limit} ";
+        $sql = "SELECT * FROM {$this->table} Where status = ? AND checkTeacherId = ?  ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit} ";
         return $this->getConnection()->fetchAll($sql, array($status,$checkTeacherId));
     }
 
@@ -137,12 +137,12 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchColumn($sql, array($status,$checkTeacherId));
     }
 
-    public function findHomeworkResultsByCourseIdAndStatus($courseId, $status, $start, $limit)
+    public function findHomeworkResultsByCourseIdAndStatus($courseId, $status, $orderBy,$start, $limit)
     {
         if(empty($courseId) or empty($status)){
             return array();
         }
-        $sql = "SELECT * FROM {$this->table} Where courseId = ? AND status = ?  LIMIT {$start}, {$limit} ";
+        $sql = "SELECT * FROM {$this->table} Where courseId = ? AND status = ? ORDER BY {$orderBy[0]} {$orderBy[1]}  LIMIT {$start}, {$limit} ";
         return $this->getConnection()->fetchAll($sql, array($courseId,$status));
     }
 
@@ -158,7 +158,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
     public function findResultsByHomeworkIdAndStatus($homeworkId, $status, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} Where homeworkId = ? And status = ?  LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} Where homeworkId = ? And status = ? LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($homeworkId, $status));
     }
 

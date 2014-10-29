@@ -89,11 +89,6 @@
 						<a href="{{ path('course_manage_lesson_homework_create', {courseId:course.id, lessonId:lesson.id,homeworkId:homeworkId}) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>布置作业</a>
 					{% endif %}
           		</li>
-          		{% if homework %}
-          		<li>
-          			<a href="{{ path('course_homework_list', {courseId:course.id, lessonId:lesson.id }) }}" ><span class="glyphicon glyphicon-check prs"></span>作业批改 <span class="badge">{{ homework.results|default(null) }}</span></a>
-          		</li>
-          		{% endif %}
 			<li class="divider"></li>
           		<li>
           			{% set lessonId = lesson.id %}

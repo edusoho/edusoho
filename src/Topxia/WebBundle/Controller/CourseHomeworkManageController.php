@@ -445,8 +445,16 @@ class CourseHomeworkManageController extends BaseController
             , 5
         );
 
-       $homeworksResults = $this->getHomeworkService()->findHomeworkResultsByStatusAndCheckTeacherId(
-            $status,$currentUser['id'],
+        if ($status == 'reviewing') {
+            $orderBy = array('usedTime','DESC');
+        }
+
+        if ($status == 'finished') {
+            $orderBy = array('checkedTime','DESC');
+        }
+
+        $homeworksResults = $this->getHomeworkService()->findHomeworkResultsByStatusAndCheckTeacherId(
+            $status,$currentUser['id'],$orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

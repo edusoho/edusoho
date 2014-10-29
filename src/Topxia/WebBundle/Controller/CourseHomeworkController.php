@@ -169,8 +169,16 @@ class CourseHomeworkController extends BaseController
             , 5
         );
 
+        if ($status == 'reviewing') {
+            $orderBy = array('usedTime','DESC');
+        }
+
+        if ($status == 'finished') {
+            $orderBy = array('checkedTime','DESC');
+        }
+
         $homeworkResults = $this->getHomeworkService()->findHomeworkResultsByCourseIdAndStatus(
-           $courseId, $status,
+           $courseId, $status,$orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

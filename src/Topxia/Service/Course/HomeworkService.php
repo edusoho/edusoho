@@ -32,8 +32,6 @@ interface HomeworkService
 
     public function saveHomework($id,$homework);
 
-    public function deleteHomeworksByCourseId($courseId);
-
     //HomeworkResults
 
     public function getHomeworkResultByHomeworkId($homeworkId);
@@ -52,11 +50,11 @@ interface HomeworkService
 
     public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId);
 
-    public function findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId, $start, $limit);
+    public function findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId, $orderBy,$start, $limit);
 
     public function findHomeworkResultsCountsByStatusAndCheckTeacherId($status,$checkTeacherId);
 
-    public function findHomeworkResultsByCourseIdAndStatus($courseId,$status,$start,$limit);
+    public function findHomeworkResultsByCourseIdAndStatus($courseId,$status,$orderBy,$start,$limit);
 
     public function findHomeworkResultsCountsByCourseIdAndStatus($courseId,$status);
 

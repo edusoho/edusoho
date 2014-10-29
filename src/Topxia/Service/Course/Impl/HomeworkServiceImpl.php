@@ -297,11 +297,6 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return $homeworkResult;
     }
 
-    public function deleteHomeworksByCourseId($courseId)
-    {
-
-    }
-
     public function getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId)
     {
         return $this->getHomeworkResultDao()->getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId);
@@ -342,9 +337,9 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     	return $this->getHomeworkResultDao()->findHomeworkResultsByHomeworkIds($homeworkIds);
     }
 
-    public function findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$start,$limit)
+    public function findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$orderBy,$start,$limit)
     {
-        return $this->getHomeworkResultDao()->findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$start,$limit);
+        return $this->getHomeworkResultDao()->findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$orderBy,$start,$limit);
     }
 
     public function findHomeworkResultsCountsByStatusAndCheckTeacherId($status,$checkTeacherId)
@@ -352,9 +347,9 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return $this->getHomeworkResultDao()->findHomeworkResultsCountsByStatusAndCheckTeacherId($status,$checkTeacherId);
     }
 
-    public function findHomeworkResultsByCourseIdAndStatus($courseId, $status ,$start,$limit)
+    public function findHomeworkResultsByCourseIdAndStatus($courseId, $status ,$orderBy,$start,$limit)
     {
-        return $this->getHomeworkResultDao()->findHomeworkResultsByCourseIdAndStatus($courseId, $status ,$start,$limit);
+        return $this->getHomeworkResultDao()->findHomeworkResultsByCourseIdAndStatus($courseId, $status ,$orderBy,$start,$limit);
     }
 
     public function findHomeworkResultsCountsByCourseIdAndStatus($courseId, $status)

@@ -44,11 +44,6 @@ class HomeworkDaoImpl extends BaseDao Implements HomeworkDao
         return $this->getConnection()->fetchAll($sql,array($userId)) ? : array();
     }
 
-	public function searchHomeworks($conditions, $sort, $start, $limit)
-	{
-
-	}
-
 	public function addHomework($fields)
 	{
 		$affect = $this->getConnection()->insert($this->table,$fields);
@@ -68,25 +63,4 @@ class HomeworkDaoImpl extends BaseDao Implements HomeworkDao
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
-
-    public function deleteHomeworksByCourseId($courseId)
-    {
-
-    }
-
-    public function findHomeworkResultsByStatusAndCheckTeacherId($checkTeacherId, $status)
-    {
-
-    }
-
-    public function findHomeworkResultsByCourseIdAndStatusAndCheckTeacherId($courseId,$checkTeacherId, $status)
-    {
-
-    }
-
-    public function findAllHomeworksByCourseId($courseId)
-    {
-
-    }
-
 }
