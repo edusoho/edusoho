@@ -132,8 +132,8 @@
 			{% endif %}
 			<tr>
 				<td>课程总数</td>
-				{# <td><span class="pull-right">{{todayCourseNums}}</span></td>
-				<td><span class="pull-right">{{yesterdayCourseNums}}</span></td> #}
+				<td><span class="pull-right">{{todayCourseNums}}</span></td>
+				<td><span class="pull-right">{{yesterdayCourseNums}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
 				<td><a href="{{path('admin_operation_analysis_course_numbers',{tab:"trend",analysisDateType:'courseNumbers'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_course_numbers',{tab:"detail",analysisDateType:'courseNumbers'})}}">详情</a></td>
 				{% endif %}

@@ -98,8 +98,7 @@ class AnalysisController extends BaseController
         $userNumbersData="";
         if($tab=="trend"){
         $userNumbersData=$this->getUserService()->analysisUserNumbersDataByTime($timeRange['startTime'],$timeRange['endTime']);
-        
-        $data=$this->fillAnalysisData($condition,$userNumbersData);            
+        $data=$this->fillAnalysisUserCount($condition,$userNumbersData);            
             }
 
         $userNumbersStartData=$this->getUserService()->searchUsers(array(),array('createdTime', 'ASC'),0,1);
@@ -107,7 +106,6 @@ class AnalysisController extends BaseController
         if($userNumbersStartData) $userNumbersStartDate=date("Y-m-d",$userNumbersStartData[0]['createdTime']);
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
-        // var_dump($dataInfo); exit();
         return $this->render("TopxiaAdminBundle:OperationAnalysis:user-numbers.html.twig",array(
             'userNumbersDetail'=>$userNumbersDetail,
             'paginator'=>$paginator,
@@ -119,7 +117,7 @@ class AnalysisController extends BaseController
     }
 
     public function courseNumbersAction(Request $request,$tab)
-    {       
+    {  
         $data=array();
         $courseNumbersStartDate="";
 
@@ -136,7 +134,7 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
                 $request,
-                $this->getCourseService()->searchCourseCount($timeRange),
+                $this->getCourseService()->searchCourseNumbers($timeRange['startTime'],$timeRange['endTime']),
              20
         );
 
@@ -150,9 +148,9 @@ class AnalysisController extends BaseController
         $courseNumbersData="";
 
         if($tab=="trend"){
-            $courseNumbersData=$this->getCourseService()->analysisCourseDataByTime($timeRange['startTime'],$timeRange['endTime']);
+            $courseNumbersData=$this->getCourseService()->analysisCourseNumbersDataByTime($timeRange['startTime'],$timeRange['endTime']);
     
-            $data=$this->fillAnalysisData($condition,$courseNumbersData);          
+            $data=$this->fillAnalysisCourseCount($condition,$courseNumbersData);          
         }
 
         $userIds = ArrayToolkit::column($courseNumbersDetail, 'userId');
@@ -205,7 +203,6 @@ class AnalysisController extends BaseController
               $paginator->getOffsetCount(),
               $paginator->getPerPageCount()
          );
-        var_dump($loginDetail); exit();
 
         $LoginData="";
 
@@ -1005,13 +1002,68 @@ class AnalysisController extends BaseController
         ));
     }
 
+    private function fillAnalysisUserCount($condition,$currentData)
+    {
+        $dates=$this->getDatesByCondition($condition);
+        $currentData=ArrayToolkit::index($currentData,'date');
+        $timeRange=$this->getTimeRange($condition);
+
+        foreach ($dates as $key => $value) {
+            $zeroData[] = array("date"=>$value,"count"=>0);
+        }
+
+        $userNumbersData=$this->getUserService()->analysisUserNumbersDataByTime($timeRange['startTime'],$timeRange['endTime']);
+        $countTmp = $userNumbersData[0]["count"];
+        foreach ($zeroData as $key => $value) {
+            if($value["date"]<$userNumbersData[0]["date"]){
+                $countTmp = 0;
+            }
+            $date = $value['date'];
+            if (array_key_exists($date,$currentData)){
+                $zeroData[$key]['count'] = $currentData[$date]['count'];
+                $countTmp = $currentData[$date]['count'];
+            } else {
+                $zeroData[$key]['count'] = $countTmp;
+            }
+        }
+
+        return json_encode($zeroData);
+    }
+
+    private function fillAnalysisCourseCount($condition,$currentData)
+    {
+        $dates=$this->getDatesByCondition($condition);
+        $currentData=ArrayToolkit::index($currentData,'date');
+        $timeRange=$this->getTimeRange($condition);
+
+        foreach ($dates as $key => $value) {
+            $zeroData[] = array("date"=>$value,"count"=>0);
+        }
+
+        $courseNumbersData=$this->getCourseService()->analysisCourseNumbersDataByTime($timeRange['startTime'],$timeRange['endTime']);
+        $countTmp = $courseNumbersData[0]["count"];
+        foreach ($zeroData as $key => $value) {
+            if($value["date"]<$courseNumbersData[0]["date"]){
+                $countTmp = 0;
+            }
+            $date = $value['date'];
+            if (array_key_exists($date,$currentData)){
+                $zeroData[$key]['count'] = $currentData[$date]['count'];
+                $countTmp = $currentData[$date]['count'];
+            } else {
+                $zeroData[$key]['count'] = $countTmp;
+            }
+        }
+
+        return json_encode($zeroData);
+    }
+
     private function fillAnalysisData($condition,$currentData)
     {
         $dates=$this->getDatesByCondition($condition);
 
         foreach ($dates as $key => $value) {
-            
-            $zeroData[]=array("date"=>$value,"count"=>0);
+            $zeroData[] = array("date"=>$value,"count"=>0);
         }
 
         $currentData=ArrayToolkit::index($currentData,'date');
@@ -1023,6 +1075,7 @@ class AnalysisController extends BaseController
         foreach ($currentData as $key => $value) {
             $data[]=$value;
         }
+
         return json_encode($data);
     }
 

@@ -66,10 +66,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getCourseDao()->getCoursesCount();
 	}
 
-	public function searchCourseNumbers()
+	public function searchCourseNumbers($startTime,$endTime)
 	{
-	        	return $this->getCourseDao()->searchCourseNumbers();
+	        	return $this->getCourseDao()->searchCourseNumbers($startTime,$endTime);
 	}
+
+	public function analysisCourseNumbersDataByTime($startTime,$endTime)
+    	{
+        		return $this->getCourseDao()->analysisCourseNumbersDataByTime($startTime,$endTime);
+    	}
 
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
 	{

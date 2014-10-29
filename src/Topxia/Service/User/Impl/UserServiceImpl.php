@@ -880,7 +880,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->analysisRegisterDataByTime($startTime,$endTime);
     }
 
-        public function analysisUserNumbersDataByTime($startTime,$endTime)
+    public function analysisUserNumbersDataByTime($startTime,$endTime)
     {
         return $this->getUserDao()->analysisUserNumbersDataByTime($startTime,$endTime);
     }

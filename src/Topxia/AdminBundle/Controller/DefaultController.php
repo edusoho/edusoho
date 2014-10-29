@@ -118,18 +118,12 @@ class DefaultController extends BaseController
         $todayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
         $yesterdayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
 
-        $todayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
-        // if($todayCourseNum == 0){
-        //     $todayCourseNums=$this->getCourseService()->searchCourseNumbers();
-        //     $yesterdayCourseNums = $todayCourseNums;
-        // } else {
-        //     $todayCourseNums=$this->getCourseService()->searchCourseNumbers();
-        //     $yesterdayCourseNums = $todayCourseNums - $todayCourseNum;
-        // }
-
-
+        $todayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));    
         $yesterdayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
      
+        $todayCourseNums=$this->getCourseService()->searchCourseNumbers(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
+        $yesterdayCourseNums=$this->getCourseService()->searchCourseNumbers(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
+         
         $todayLessonNum=$this->getCourseService()->searchLessonCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
 
         $yesterdayLessonNum=$this->getCourseService()->searchLessonCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
@@ -187,8 +181,8 @@ class DefaultController extends BaseController
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
             'todayUserNums' => $todayUserNums,
             'yesterdayUserNums' => $yesterdayUserNums,
-            // 'todayCourseNums' => $todayCourseNums,
-            // 'yesterdayCourseNums' => $yesterdayCourseNums,
+            'todayCourseNums' => $todayCourseNums,
+            'yesterdayCourseNums' => $yesterdayCourseNums,
             'todayRegisterNum'=>$todayRegisterNum,
             'yesterdayRegisterNum'=>$yesterdayRegisterNum,
             'todayLoginNum'=>$todayLoginNum,
