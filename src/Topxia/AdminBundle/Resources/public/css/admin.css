@@ -318,3 +318,62 @@ input.LargeInput {width: 600px;}
 .user-guide .content {
   margin: 11px;
 }
+
+
+/*2014.10.29 by xiaomi*/
+.class-choise {
+  margin: 25px auto;
+  width: 82%;
+}
+
+.class-choise .class-choise-item {
+  margin-bottom: 20px;
+}
+
+.class-choise .class-choise-title {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+  margin-bottom: 30px;
+  padding-left: 5px;
+  font-size: 16px;
+  color: #428bca;
+  border-left: 5px solid #428bca;
+}
+
+.class-choise .class-choise-body {
+
+}
+
+.class-choise-body span {
+  padding-left: 10px;
+  display: inline-block;
+  height: 30px;
+  width: 80px;
+  line-height: 30px;
+  color: #393939;
+  overflow: hidden;
+}
+
+.class-choise-body .class-choise-btn {
+  margin-left: 80px;
+  width: 100%;
+}
+
+.class-choise-body .class-choise-btn button {
+  margin: 0 20px 20px 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  width: 135px;
+  height: 30px;
+  line-height: 30px;
+}
+
+.class-choise-body .class-choise-btn button:hover,
+.class-choise-body .class-choise-btn button:focus,
+.class-choise-body .class-choise-btn button:active {
+  background-color: #d8edff;
+  border-color: #7eb7e8;
+}
+
+
