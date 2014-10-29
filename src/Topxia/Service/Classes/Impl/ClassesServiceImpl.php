@@ -35,11 +35,6 @@ class ClassesServiceImpl extends BaseService implements ClassesService
     {
         $class = $this->getClassesDao()->createClass($class);
         $this->addOrUpdateTeacher($class['headTeacherId'], $class['id'], 'HEAD_TEACHER');
-/*        $classMember['classId'] = $class['id'];
-        $classMember['userId'] = $class['headTeacherId'];
-        $classMember['role'] = 'HEAD_TEACHER';
-        $classMember['createdTime'] = time();
-        $this->addClassMember($classMember);*/
         return $class;
     }
 
@@ -67,7 +62,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
             return null;
         }
 
-        return array_merge($user, $profile);
+        return array_merge($profile, $user);
     }
 
     public function getClassesByHeadTeacherId($headTeacherId)
@@ -199,7 +194,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
     public function addOrUpdateTeacher($userId, $classId, $role)
     {
         $classDao = $this->getClassMemberDao();
-        $classMember = $classDao->getMemberByUserIdAndClassId($userId, $classId);
+        $classMember = $classDao->getMemberByClassIdAndRole($classId, 'HEAD_TEACHER');
         if(empty($classMember)) {
             $newClassMember = array();
             $newClassMember['classId'] = $classId;
@@ -208,9 +203,7 @@ class ClassesServiceImpl extends BaseService implements ClassesService
             $newClassMember['createdTime'] = time();
             $classMember = $classDao->addClassMember($newClassMember);
         } else {
-            if ($role != $classMember['role'] && $role == 'HEAD_TEACHER') {
-                $this->updateClassMember(array('role'=>$role), $classMember['id']);
-            }
+            $classMember = $this->updateClassMember(array('userId'=>$userId), $classMember['id']);
         }
 
         return $classMember;
