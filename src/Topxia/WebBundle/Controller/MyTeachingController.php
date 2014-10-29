@@ -7,7 +7,7 @@ use Topxia\Common\ArrayToolkit;
 
 class MyTeachingController extends BaseController
 {
-    
+    //已废弃
     public function coursesAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -49,6 +49,13 @@ class MyTeachingController extends BaseController
         $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
         $courseCount=count($courses);
         $courseList =ArrayToolkit::group($courses,'classId');
+
+        /**如果存在模板课程,则排除这些课程*/
+        if(isset($courseList[0])){
+            $courseCount-=count($courseList[0]);
+            unset($courseList[0]);
+        }
+
         $classIds = array_keys($courseList);
         $classes = $this->getClassesService()->findClassesByIds($classIds);
 
@@ -111,6 +118,12 @@ class MyTeachingController extends BaseController
         $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
         $courseCount=count($courses);
         $courses =ArrayToolkit::group($courses,'classId');
+        
+        /**如果存在模板课程,则排除这些课程*/
+        if(isset($courses[0])){
+            $courseCount-=count($courses[0]);
+            unset($courses[0]);
+        }
         
         $classes = $this->getClassesService()->findClassesByIds(array_keys($courses));
 
