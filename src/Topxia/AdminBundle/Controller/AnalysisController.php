@@ -42,26 +42,14 @@ class AnalysisController extends BaseController
         $registerDetail=$this->getUserService()->searchUsers(
             $timeRange,
             array('createdTime', 'DESC'),
-              $paginator->getOffsetCount(),
-              $paginator->getPerPageCount()
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
          );
 
         $registerData="";
         if($tab=="trend"){
-                $registerData=$this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'],$timeRange['endTime']);
-        // var_dump($registerDetail); exit();
-
-        foreach ($registerData as $key) {
-            var_dump($key); 
-            // if($key['count'] == 0){
-            //         $registerData = $key['count'];
-            // }
-
-
-        }   
-
-        $data=$this->fillAnalysisData($condition,$registerData);
-        // var_dump($data); exit();           
+            $registerData=$this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'],$timeRange['endTime']);
+            $data=$this->fillAnalysisData($condition,$registerData);
             }
 
 
@@ -99,19 +87,19 @@ class AnalysisController extends BaseController
                 $this->getUserService()->searchUserNumbers($timeRange['startTime'],$timeRange['endTime']),
                 20
         );
-        $userNumbersDetail=$this->getUserService()->searchUserNumbersDetails($timeRange['startTime'],$timeRange['endTime']
-            // $timeRange,
-            // array('createdTime', 'DESC'),
-            //   $paginator->getOffsetCount(),
-            //   $paginator->getPerPageCount()
+
+        $userNumbersDetail=$this->getUserService()->searchUsers(
+            $timeRange,
+            array('createdTime', 'DESC'),
+              $paginator->getOffsetCount(),
+              $paginator->getPerPageCount()
          );
 
         $userNumbersData="";
         if($tab=="trend"){
-        $userNumbersData=$this->getUserService()->searchUserNumbers($timeRange['startTime'],$timeRange['endTime']);
+        $userNumbersData=$this->getUserService()->analysisUserNumbersDataByTime($timeRange['startTime'],$timeRange['endTime']);
         
         $data=$this->fillAnalysisData($condition,$userNumbersData);            
-var_dump($data); exit();
             }
 
         $userNumbersStartData=$this->getUserService()->searchUsers(array(),array('createdTime', 'ASC'),0,1);
@@ -119,6 +107,7 @@ var_dump($data); exit();
         if($userNumbersStartData) $userNumbersStartDate=date("Y-m-d",$userNumbersStartData[0]['createdTime']);
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
+        // var_dump($dataInfo); exit();
         return $this->render("TopxiaAdminBundle:OperationAnalysis:user-numbers.html.twig",array(
             'userNumbersDetail'=>$userNumbersDetail,
             'paginator'=>$paginator,

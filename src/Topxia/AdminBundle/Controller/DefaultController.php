@@ -108,22 +108,14 @@ class DefaultController extends BaseController
 
         $yesterdayTimeStart=strtotime(date("Y-m-d",time()-24*3600));
         $yesterdayTimeEnd=strtotime(date("Y-m-d",time()));
-        // var_dump($yesterdayTimeEnd); exit();
 
         $todayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
-        // if($todayRegisterNum == 0){
-        //     $todayUserNums=$this->getUserService()->searchUserNumbers();
-        //     $yesterdayUserNums = $todayUserNums;
-        // } else {
-        //     $todayUserNums=$this->getUserService()->searchUserNumbers();
-        //     $yesterdayUserNums = $todayUserNums - $todayRegisterNum;
-        // }
-
         $yesterdayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
+        
         $todayUserNums=$this->getUserService()->searchUserNumbers(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
         $yesterdayUserNums=$this->getUserService()->searchUserNumbers(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
+        
         $todayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
-
         $yesterdayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
 
         $todayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));

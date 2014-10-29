@@ -26,10 +26,8 @@ interface UserDao
 
 	public function analysisRegisterDataByTime($startTime,$endTime);
 
-	public function analysisuserNumbersDataByTime($startTime,$endTime);
+	public function analysisUserNumbersDataByTime($startTime,$endTime);
 
 	public function searchUserNumbers($startTime,$endTime);
-
-	public function searchUserNumbersDetails($startTime,$endTime);
 
 }
