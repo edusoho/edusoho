@@ -131,7 +131,7 @@ class StudentImporterServiceImpl extends BaseImporterService implements StudentI
             }
             $student = array();
             foreach ($matchFields as $key => $value) {
-                if($key == 'truename') {
+                if($key == 'truename' || $key == 'number') {
                     $student[$key] = $this->trim($rowData[$value - 1]);
                 } else {
                    $student[$key] = $rowData[$value - 1]; 

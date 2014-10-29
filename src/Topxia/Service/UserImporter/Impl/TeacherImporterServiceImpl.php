@@ -129,7 +129,7 @@ class TeacherImporterServiceImpl extends BaseImporterService implements TeacherI
             }
             $teacher = array();
             foreach ($matchFields as $key => $value) {
-                if($key == 'truename') {
+                if($key == 'truename' || $key == 'number') {
                     $teacher[$key] = $this->trim($rowData[$value - 1]);
                 } else {
                    $teacher[$key] = $rowData[$value - 1]; 
