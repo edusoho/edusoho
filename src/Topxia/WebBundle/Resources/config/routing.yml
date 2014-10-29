@@ -734,10 +734,6 @@ course_homework_list:
     pattern:  /course/{courseId}/lesson/{lessonId}/homework/list
     defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:homeworkList }
 
-homework_urge:
-    pattern:  /homework/{homeworkId}/student/{userId}/urge
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:urge }
-
 question_file_url:
     pattern: /question_ajax/file_url
     defaults: { _controller: TopxiaWebBundle:Question:fileUrl }

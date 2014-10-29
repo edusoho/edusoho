@@ -225,8 +225,6 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         } else {
             return $result;
         }
-
-
     }
 
     public function checkHomework($id,$userId,$checkHomeworkData)
