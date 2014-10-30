@@ -347,7 +347,7 @@ class UserController extends BaseController
         try {
             $this->sendEmail(
                 $user['email'],
-                "请激活你的帐号，完成注册",
+                "请激活你的账号，完成注册",
                 $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(
                     'user' => $user,
                     'token' => $token,
