@@ -5,7 +5,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
-use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
 
 class DefaultController extends BaseController
 {
