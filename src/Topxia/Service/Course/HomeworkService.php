@@ -6,7 +6,7 @@ interface HomeworkService
 {
 	public function getHomework($id);
 
-    public function getHomeworkByCourseIdAndLessonId($courseId, $lessonId);
+    public function findHomeworksByCourseIdAndLessonId($courseId, $lessonId);
 
     public function findHomeworksByCourseIdAndLessonIds($courseId, $lessonIds);
 

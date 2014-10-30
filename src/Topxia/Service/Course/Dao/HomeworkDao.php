@@ -10,7 +10,7 @@ interface HomeworkDao
 
     public function findHomeworksByCreatedUserId($userId);
     
-    public function getHomeworkByCourseIdAndLessonId($courseId, $lessonId);
+    public function findHomeworksByCourseIdAndLessonId($courseId, $lessonId);
 
 	public function addHomework($fields);
 

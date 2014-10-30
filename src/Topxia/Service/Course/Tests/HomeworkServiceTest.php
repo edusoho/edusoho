@@ -104,10 +104,10 @@ class HomeworkServiceTest extends BaseTestCase
         $this->getHomeworkService()->removeHomework(-1);
     }
 
-    public function testGetHomeworkByCourseIdAndLessonId($value='')
+    public function testfindHomeworksByCourseIdAndLessonId($value='')
     {
         $generatedHomework = $this->generateHomework();
-        $homework = $this->getHomeworkService()->getHomeworkByCourseIdAndLessonId($generatedHomework['courseId'], $generateHomework['lessonId']);
+        $homework = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonId($generatedHomework['courseId'], $generateHomework['lessonId']);
         $this->assertEquals($generatedHomework['id'], $homework['id']);
     }
 
