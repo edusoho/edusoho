@@ -360,10 +360,10 @@ class CourseThreadController extends BaseController
     {   
         $currentUser = $this->getCurrentUser();
         $content=$postData['content'];
-        $relpace_data=$content;
+        $users=array();
         preg_match_all('/@([\x{4e00}-\x{9fa5}\w]{2,16})/u', $content, $matches);
         $mentions = array_unique($matches[1]);
-        
+   
         foreach ($mentions as $mention) {
             
             $user=$this->getUserService()->getUserByNickname($mention);
@@ -380,9 +380,9 @@ class CourseThreadController extends BaseController
             }
          
         }
-
+     
         $postData['content']=$content;
-       
+    
         return array($postData,$users);
         
     }
