@@ -3,11 +3,11 @@
   <div class="col-md-12">
     <div class="main-system-alert">
       <h2> 站长公告</h2>
-        {% for notice in notices %}
         <ul class="alert-list">
-          <li><a href="">ddd<span>2014-10-29 16:52</span></a></li>
-        </ul>
+        {% for notice in notices %}
+          <li><a href="{{notice.detailUrl}}" target="_blank">{{notice.content}}<span>{{notice.createdTime|date("Y-m-d H:i:s")}}</span></a></li>
         {% endfor %}
+        </ul>
     </div>
   </div>
   {% endif %}

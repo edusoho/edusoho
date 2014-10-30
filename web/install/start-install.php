@@ -182,7 +182,7 @@ function install_step4()
         $userAgent = 'EduSoho Install Client 1.0';
         $connectTimeout = 10;
         $timeout = 10;
-        $url = "http://www.sqcop.com/api/v1/context/two_dimension_code";
+        $url = "http://www.sqcop.com/api/v1/block/two_dimension_code";
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
