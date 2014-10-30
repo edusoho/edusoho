@@ -14,8 +14,8 @@ interface HomeworkItemResultDao
 
 	public function updateItemResult($id,$fields);
 
-	public function findHomeworkItemsResultsbyHomeworkId($homeworkId);
+	public function findItemsResultsbyHomeworkId($homeworkId);
 
-	public function findHomeworkItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId);
+	public function findItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId);
 	
 }
