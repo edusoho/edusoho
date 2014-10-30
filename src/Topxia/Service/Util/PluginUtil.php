@@ -33,10 +33,8 @@ class PluginUtil
             'installed' => array()
         );
 
-        $cop = self::getSettingService()->get('_app_cop', null);
-
         foreach ($apps as $app) {
-            if ($app['code'] == 'K12MAIN' or $cop) {
+            if ($app['code'] == 'K12MAIN') {
                 continue;
             }
 
@@ -63,10 +61,8 @@ class PluginUtil
 
         $config = '';
 
-        $cop = self::getSettingService()->get('_app_cop', null);
-
         foreach ($apps as $app) {
-            if ($app['code'] == 'K12MAIN' or $cop) {
+            if ($app['code'] == 'K12MAIN') {
                 continue;
             }
             $code = $app['code'];

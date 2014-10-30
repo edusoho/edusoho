@@ -24,6 +24,8 @@ class AppController extends BaseController
         $apps = $this->getAppService()->getCenterApps();
 
         if(isset($apps['error'])) return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status'=>'error',));
+        
+        if(!$apps) return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status'=>'unlink',));
         $codes = ArrayToolkit::column($apps, 'code');
 
         $installedApps = $this->getAppService()->findAppsByCodes($codes);

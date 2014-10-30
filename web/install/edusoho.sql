@@ -517,6 +517,19 @@ CREATE TABLE `course_chapter` (
 -- Table structure for table `course_favorite`
 --
 
+DROP TABLE IF EXISTS `course_draft`;
+CREATE TABLE `course_draft` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL COMMENT '标题',
+  `summary` text COMMENT '摘要',
+  `courseId` int(10) unsigned NOT NULL COMMENT '课程ID',
+  `content` text COMMENT '内容',
+  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+  `lessonId` int(10) unsigned NOT NULL COMMENT '课时ID',
+  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
 DROP TABLE IF EXISTS `course_favorite`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -564,8 +577,9 @@ CREATE TABLE `course_lesson` (
   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时结束时间',
   `memberNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时加入人数',
   `replayStatus` enum('ungenerated','generating','generated') NOT NULL DEFAULT 'ungenerated',
-  `userId` int(10) unsigned NOT NULL,
-  `createdTime` int(10) unsigned NOT NULL,
+  `liveProvider` int(10) unsigned NOT NULL DEFAULT '0',
+  `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
+  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -578,13 +592,16 @@ DROP TABLE IF EXISTS `course_lesson_learn`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `course_lesson_learn` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `userId` int(10) unsigned NOT NULL,
-  `courseId` int(10) unsigned NOT NULL,
-  `lessonId` int(10) unsigned NOT NULL,
-  `status` enum('learning','finished') NOT NULL,
-  `startTime` int(10) unsigned NOT NULL DEFAULT '0',
-  `finishedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '学员课时学习记录ID',
+  `userId` int(10) unsigned NOT NULL COMMENT '学员ID',
+  `courseId` int(10) unsigned NOT NULL COMMENT '课程ID',
+  `lessonId` int(10) unsigned NOT NULL COMMENT '课时ID',
+  `status` enum('learning','finished') NOT NULL COMMENT '学习状态',
+  `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习开始时间',
+  `finishedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习完成时间',
+  `learnTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习时间',
+  `watchTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习观看时间',
+  `videoStatus` enum('paused','playing') NOT NULL DEFAULT 'paused' COMMENT '学习观看时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `userId_lessonId` (`userId`,`lessonId`),
   KEY `userId_courseId` (`userId`,`courseId`)
@@ -623,8 +640,8 @@ CREATE TABLE `course_lesson_view` (
   `lessonId` int(10) NOT NULL,
   `fileId` int(10) NOT NULL,
   `userId` int(10) NOT NULL,
-  `fileType` enum('document','video','audio','image','ppt','other') NOT NULL DEFAULT 'other',
-  `fileStorage` enum('local','cloud','net') NOT NULL,
+  `fileType` enum('document','video','audio','image','ppt','other','none') NOT NULL DEFAULT 'none',
+  `fileStorage` enum('local','cloud','net','none') NOT NULL DEFAULT 'none',
   `fileSource` varchar(32) NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)

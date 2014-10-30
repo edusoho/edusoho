@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>阔知学堂移动客户端下载</title>
+  <script>
+    var urls = {
+      iphone: '{{iphoneUrl | raw}}',
+      android: 'http://mobcdn.qiniudn.com/{{code | raw}}-Android-v2.0.1.apk'
+    };
+    var uagent = navigator.userAgent.toLowerCase();
+    if (uagent.search("iphone") > -1 || uagent.search("ipad") > -1 ) {
+        window.location = urls.iphone;
+    } else {
+      var href = window.location.href;
+      if (href.search("iphone") > -1 || href.search("ipad") > -1 ) {
+        if (urls.iphone == "#") {
+          document.write("<div class='message'>暂无iphone版本...</div>");
+        } else {
+          window.location = urls.iphone;
+        }
+      } else {
+        window.location = urls.android;
+      }
+    }
+  </script>
+
+  <style>
+    .message {font-style: 12px; color: #444;}
+  </style>
+</head>
+
+<body>
+    <div class="message">正在载入数据...</div>
+</body>
+</html>

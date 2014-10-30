@@ -95,9 +95,9 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->chmod("{$this->distDirectory}/app/data/backup", 0777);
 		$this->filesystem->chmod("{$this->distDirectory}/app/logs", 0777);
 
-		$this->filesystem->remove("{$this->distDirectory}/app/config/config_dev.yml");
-		$this->filesystem->remove("{$this->distDirectory}/app/config/config_test.yml");
-		$this->filesystem->remove("{$this->distDirectory}/app/config/routing_dev.yml");
+		// $this->filesystem->remove("{$this->distDirectory}/app/config/config_dev.yml");
+		// $this->filesystem->remove("{$this->distDirectory}/app/config/config_test.yml");
+		// $this->filesystem->remove("{$this->distDirectory}/app/config/routing_dev.yml");
 		$this->filesystem->remove("{$this->distDirectory}/app/config/routing_plugins.yml");
 		$this->filesystem->touch("{$this->distDirectory}/app/config/routing_plugins.yml");
 		$this->filesystem->remove("{$this->distDirectory}/app/config/parameters.yml");
@@ -118,6 +118,7 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->remove("{$this->distDirectory}/app/config/uc_client_config.php.dist");
 		$this->filesystem->remove("{$this->distDirectory}/app/config/windid_client_config.php.dist");
 
+		$this->filesystem->copy("{$this->rootDirectory}/app/console", "{$this->distDirectory}/app/console");
 		$this->filesystem->copy("{$this->rootDirectory}/app/AppCache.php", "{$this->distDirectory}/app/AppCache.php");
 		$this->filesystem->copy("{$this->rootDirectory}/app/AppKernel.php", "{$this->distDirectory}/app/AppKernel.php");
 		$this->filesystem->copy("{$this->rootDirectory}/app/autoload.php", "{$this->distDirectory}/app/autoload.php");
@@ -153,6 +154,12 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->remove("{$this->distDirectory}/src/Custom/WebBundle/Resources/public");
 
 		$this->filesystem->remove("{$this->distDirectory}/src/Topxia/WebBundle/Command");
+		$this->filesystem->mkdir("{$this->distDirectory}/src/Topxia/WebBundle/Command");
+
+		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/BaseCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/BaseCommand.php");
+		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/BuildPluginAppCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/BuildPluginAppCommand.php");
+		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/BuildThemeAppCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/BuildThemeAppCommand.php");
+		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/PluginRegisterCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/PluginRegisterCommand.php");
 
 		$finder = new Finder();
 		$finder->directories()->in("{$this->distDirectory}/src/");
@@ -196,7 +203,9 @@ class BuildCommand extends BaseCommand
 			'monolog/monolog/src',
 			'phpoffice/phpexcel/Classes',
 			'psr/log/Psr',
+			'sensio/distribution-bundle',
 			'sensio/framework-extra-bundle',
+			'sensio/generator-bundle',
 			'swiftmailer/swiftmailer/lib',
 			'symfony/assetic-bundle',
 			'symfony/icu',
@@ -283,6 +292,7 @@ class BuildCommand extends BaseCommand
 
 		$this->filesystem->copy("{$this->rootDirectory}/web/.htaccess", "{$this->distDirectory}/web/.htaccess");
 		$this->filesystem->copy("{$this->rootDirectory}/web/app.php", "{$this->distDirectory}/web/app.php");
+		$this->filesystem->copy("{$this->rootDirectory}/web/app_dev.php", "{$this->distDirectory}/web/app_dev.php");
 		$this->filesystem->copy("{$this->rootDirectory}/web/favicon.ico", "{$this->distDirectory}/web/favicon.ico");
 		$this->filesystem->copy("{$this->rootDirectory}/web/robots.txt", "{$this->distDirectory}/web/robots.txt");
 		$this->filesystem->copy("{$this->rootDirectory}/web/crossdomain.xml", "{$this->distDirectory}/web/crossdomain.xml");

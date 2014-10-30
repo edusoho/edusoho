@@ -64,7 +64,10 @@
             {% if app.user %}
               <li><a href="{{ path('my') }}"> 我的课程 </a></li>
               {% if setting('mobile.enabled') %}
-                <li><a href="{{ path('mobile') }}"><span class="glyphicon glyphicon-phone"></span></a></li>
+                <li><a href="{{ path('mobile') }}" class="mobile-badge-container">
+                  <span class="glyphicon glyphicon-phone"></span>
+                  <span class="badge">v2</span>
+                </a></li>
               {% endif %}
               <li><a href="{{ path('search') }}"><span class="glyphicon glyphicon-search"></span></a></li>
               <li><a href="{{ path('notification') }}" class="badge-container notification-badge-container">
@@ -97,8 +100,8 @@
                 <li><a href="{{ path('mobile') }}"><span class="glyphicon glyphicon-phone"></span> 手机版</a></li>
               {% endif %}
               <li><a href="{{ path('search') }}"><span class="glyphicon glyphicon-search"></span> 搜索</a></li>
-              <li><a href="{{ path('login') }}">登录</a></li>
-              <li><a href="{{ path('register') }}">注册</a></li>
+              <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
+              <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
             {% endif %}
           </ul>
         </div><!--/.navbar-collapse -->

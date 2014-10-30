@@ -21,7 +21,7 @@ class MobileAlipayConfig
 
 	public static function createAlipayOrderUrl($request, $name, $order)
 	{
-        $alipay_config  = self::getAlipayConfig($name);
+        		$alipay_config  = self::getAlipayConfig($name);
 
 		$payUrl = $request->getSchemeAndHttpHost() . "/mapi_v1/alipay_pay?WIDseller_email=" . $alipay_config['seller_email'];
 		$payUrl = $payUrl."&WIDout_trade_no=" . $order["sn"];
@@ -39,7 +39,7 @@ class MobileAlipayConfig
 
 		$alipay_config['seller_email'] = empty($payment['alipay_account']) ? '' : $payment['alipay_account'];
 
-        $alipay_config['partner'] = empty($payment['alipay_key']) ? '' : $payment['alipay_key'];
+        		$alipay_config['partner'] = empty($payment['alipay_key']) ? '' : $payment['alipay_key'];
 
 		//安全检验码，以数字和字母组成的32位字符
 		//如果签名方式设置为“MD5”时，请设置该参数

@@ -41,6 +41,7 @@
             {% if setting('storage.video_fingerprint') and app.user %}
               data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
             {% endif %}
+              data-user-id="{{ app.user.id }}"
           ></div>
           <div class="watermarkEmbedded" ></div>
  

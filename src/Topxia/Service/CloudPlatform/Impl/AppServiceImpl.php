@@ -51,6 +51,30 @@ class AppServiceImpl extends BaseService implements AppService
         return  $app['version'];
     }
 
+    public function registerApp($app)
+    {
+        if (!ArrayToolkit::requireds($app, array('code', 'name', 'version'))) {
+            throw $this->createServiceException('参数缺失,注册APP失败!');
+        }
+
+        $app = ArrayToolkit::parts($app, array('code', 'name', 'description', 'version'));
+
+        $app['fromVersion'] = $app['version'];
+        $app['description'] = empty($app['description']) ? '' : $app['description'] ;
+        $app['icon'] = empty($app['icon']) ? '' : $app['icon'] ;
+        $app['developerId'] = 0;
+        $app['developerName'] = empty($app['author']) ? '未知' : $app['author'];
+        $app['installedTime'] = time();
+        $app['updatedTime'] = time();
+
+        $exist = $this->getAppDao()->getAppByCode($app['code']);
+        if ($exist) {
+            return $this->getAppDao()->updateApp($exist['id'], $app);
+        }
+
+        return $this->getAppDao()->addApp($app);
+    }
+
     public function checkAppUpgrades()
     {
         $mainApp = $this->getAppDao()->getAppByCode('K12MAIN');

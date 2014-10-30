@@ -36,9 +36,19 @@ class CloudAPI
         return $this->_request('PUT', $uri, $params, $header);
     }
 
+    public function patch($uri, array $params = array(), array $header = array())
+    {
+        return $this->_request('PATCH', $uri, $params, $header);
+    }
+
     public function get($uri, array $params = array(), array $header = array())
     {
         return $this->_request('GET', $uri, $params, $header);
+    }
+
+    public function delete($uri, array $params = array(), array $header = array())
+    {
+        return $this->_request('DELETE', $uri, $params, $header);
     }
 
     private function _request($method, $uri, $params, $headers)
@@ -58,8 +68,14 @@ class CloudAPI
         if ($method == 'POST') {
             curl_setopt($curl, CURLOPT_POST, 1);
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } elseif ($method == 'PUT') {
+        } else if ($method == 'PUT') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
+        } else if ($method == 'DELETE') {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
+        } else if ($method == 'PATCH') {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
         } else {
             if (!empty($params)) {
@@ -67,7 +83,7 @@ class CloudAPI
             }
         }
 
-        $headers[] = 'Auth-Token: ' . $this->_makeAuthToken($url, $params);
+        $headers[] = 'Auth-Token: ' . $this->_makeAuthToken($url, $method == 'GET' ? array() : $params);
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_URL, $url );
@@ -92,6 +108,7 @@ class CloudAPI
         }
 
         $text = $matches[1] . "\n". json_encode($params) . "\n" . $this->secretKey;
+
         $hash = md5($text);
 
         return "{$this->accessKey}:{$hash}";
