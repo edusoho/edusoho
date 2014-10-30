@@ -211,50 +211,59 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	}
 
 	public function getNoteList(){
-    	$user = $this->controller->getUserByToken($this->request);
-    	$start = $this->getParam("start", 0);
-    	$limit = $this->getParam("limit", 10);
+	    	$user = $this->controller->getUserByToken($this->request);
+	    	$start = $this->getParam("start", 0);
+	    	$limit = $this->getParam("limit", 10);
 
-    	if(!$user->isLogin()){
-    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
+	    	if(!$user->isLogin()){
+	    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
+	    	}
+
+	     	$conditions = array(
+	            	'userId' => $user['id'],
+	            	'noteNumGreaterThan' => 0
+	        	);
+
+	        	$courseMembers = $this->controller->getCourseService()->searchMember($conditions,$start,$limit);
+	        	$courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
+	        	$noteInfos = array();
+	        	for ($i=0; $i < count($courseMembers); $i++) { 
+	        		$courseMember = $courseMembers[$i];
+	        		$course = $courses[$courseMember['courseId']];
+	        		$noteInfos[] = array(
+	        			"coursesId"=>$courseMember['courseId'],
+	        			"courseTitle"=>$course['title'],
+	        			"noteLastUpdateTime"=>$courseMember['noteLastUpdateTime'],
+	        			"noteNum"=>$courseMember['noteNum'],
+	        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png')
+	        			);
+	        	}
+	        	/*
+	    	$noteList = array();
+	    	$index = 0;
+	    	for($i = 0;$i < count($courseMember);$i++){
+	    		$noteListByOneCourse =  $this->controller->getNoteService()->findUserCourseNotes($user['id'],$courseMember[$i]['courseId']);
+	    		foreach ($noteListByOneCourse as $key => $value) {
+		    		$courseId = $value['courseId'];
+		    		$lessonId = $value['lessonId'];
+		    		$courseInfo = $this->controller->getCourseService()->getCourse($courseId);
+		    		$lessonInfo = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+		    		$value["title"] = $courseInfo["title"];
+		    		$value["largePicture"] = $this->controller->coverPath($courseInfo["largePicture"], 'course-large.png');
+		    		$value["lessonName"] = $lessonInfo["title"];
+		    		$value["number"] = $lessonInfo["number"];
+		    		$noteList[$index++] = $value;
+	    		}
+	    	}
+
+	    	foreach ($noteList as $key => $value) {
+	    		$sort_course[$key] = $value['courseId'];
+	    		$sort_lesson[$key] = $value['lessonId'];
+	    	}
+	    	array_multisort($sort_course,SORT_ASC,$sort_lesson,SORT_ASC,$noteList);
+	    	*/
+    		return $noteInfos;
     	}
-
-     	$conditions = array(
-            'userId' => $user['id'],
-            'noteNumGreaterThan' => 0
-        );
-
-        $courseMember = $this->controller->getCourseService()->searchMember($conditions,$start,$limit);
-
-    	$noteList = array();
-    	$index = 0;
-    	for($i = 0;$i < count($courseMember);$i++){
-    		$noteListByOneCourse =  $this->controller->getNoteService()->findUserCourseNotes($user['id'],$courseMember[$i]['courseId']);
-    		foreach ($noteListByOneCourse as $key => $value) {
-	    		$courseId = $value['courseId'];
-	    		$lessonId = $value['lessonId'];
-	    		$courseInfo = $this->controller->getCourseService()->getCourse($courseId);
-	    		$lessonInfo = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
-	    		$value["title"] = $courseInfo["title"];
-	    		$value["largePicture"] = $this->controller->coverPath($courseInfo["largePicture"], 'course-large.png');
-	    		$value["lessonName"] = $lessonInfo["title"];
-	    		$value["number"] = $lessonInfo["number"];
-	    		$noteList[$index++] = $value;
-    		}
-    	}
-
-    	/**
-    	 *排序（可以不用）
-    	 *
-    	 **/
-    	foreach ($noteList as $key => $value) {
-    		$sort_course[$key] = $value['courseId'];
-    		$sort_lesson[$key] = $value['lessonId'];
-    	}
-    	array_multisort($sort_course,SORT_ASC,$sort_lesson,SORT_ASC,$noteList);
-
-    	return $noteList;
-    }
 
     public function AddNote(){
     	$courseId = $this->getParam("courseId", 0);
