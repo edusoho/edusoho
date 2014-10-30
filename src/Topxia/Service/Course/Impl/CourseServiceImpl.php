@@ -1949,7 +1949,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
 			return true;
 		}
-
+		//临时增加这行代码，紧急解决复制课程的试卷无法考试的bug.
+		if($course['parentId'] == 0) {
+			return true;
+		}
 		$this->tryBecomeCourseMember($user['id'], $course['classId'], $course['id']);
 		
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
@@ -1965,13 +1968,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$canViewRoles = array('STUDENT', 'PARENT');
 		$classMember = $this->getClassesService()->getMemberByUserIdAndClassId($userId, $classId);
 		$courseMember = $this->getCourseMember($courseId, $userId);
+		$member = array();
 		if(empty($courseMember) && $classMember && in_array($classMember['role'], $canViewRoles)) {
 			if($classMember['role'] == 'STUDENT') {
-				$this->becomeStudent($courseId, $userId);
+				$member = $this->becomeStudent($courseId, $userId);
 			} else {
-				$this->becomeGuest($courseId, $userId);
+				$member = $this->becomeGuest($courseId, $userId);
 			}
 		}
+
+		return $member;
 	}
 
 	public function tryLearnCourse($courseId)

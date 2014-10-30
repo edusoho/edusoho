@@ -261,8 +261,8 @@ class CourseController extends BaseController
 
 		$this->getCourseService()->hitCourse($id);
 
-		if(!$user->isAdmin() && empty($empty)) {
-			$this->getCourseService()->tryBecomeCourseMember($user['id'], $course['classId'], $course['id']);
+		if(!$user->isAdmin() && empty($member)) {
+			$member = $this->getCourseService()->tryBecomeCourseMember($user['id'], $course['classId'], $course['id']);
 		}
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
