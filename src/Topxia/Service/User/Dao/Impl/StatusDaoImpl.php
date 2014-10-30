@@ -83,6 +83,12 @@ class StatusDaoImpl extends BaseDao implements StatusDao
         return $this->createSerializer()->unserializes($statuses, $this->serializeFields);
     }
 
+    private function _createSearchQueryBuilder($conditions)
+    {
+        return  $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, $this->table);
+    }
+
     public function addStatus($fields)
     {
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);

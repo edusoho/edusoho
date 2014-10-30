@@ -144,7 +144,7 @@ interface UserService
 
     /**
      * 
-     * 绑定第三方登录的帐号到系统中的用户帐号
+     * 绑定第三方登录的账号到系统中的用户账号
      * 
      */
     public function bindUser($type, $fromId, $toId, $token);
@@ -201,6 +201,10 @@ interface UserService
     public function rejectApproval($userId, $note = null);
 
     public function analysisRegisterDataByTime($startTime,$endTime);
+
+    public function analysisUserSumByTime($endTime);
+
+    public function findUsersCountByLessThanCreatedTime($endTime);
 
     public function dropFieldData($fieldName);
 

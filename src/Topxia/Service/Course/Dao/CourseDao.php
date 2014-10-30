@@ -16,9 +16,9 @@ interface CourseDao
 
     public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit);
 
-	public function searchCourses($conditions, $orderBy, $start, $limit);
+    public function searchCourses($conditions, $orderBy, $start, $limit);
 
-	public function searchCourseCount($conditions);
+    public function searchCourseCount($conditions);
 
     public function addCourse($course);
 
@@ -33,5 +33,9 @@ interface CourseDao
     public function findCourseByClassIdAndParentId($classId, $parentId);
 
     public function findCoursesByClassId($classId);
+
+    public function findCoursesCountByLessThanCreatedTime($endTime);
+
+    public function analysisCourseSumByTime($endTime);
 
 }

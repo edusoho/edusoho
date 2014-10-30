@@ -50,6 +50,28 @@ class DefaultController extends BaseController
         return $this->render('TopxiaAdminBundle:Default:index.html.twig');
     }
 
+    public function getCloudNoticesAction(Request $request)
+    {
+        $userAgent = 'Open Edusoho App Client 1.0';
+        $connectTimeout = 10;
+        $timeout = 10;
+        $url = "http://open.edusoho.com/api/v1/context/notice";
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_URL, $url );
+        $notices = curl_exec($curl);
+        curl_close($curl);
+        $notices = json_decode($notices, true);
+        
+        return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
+            "notices"=>$notices,
+        ));
+    }
+
     public function officialMessagesAction()
     {
         $message=$this->getAppService()->getMessages();
@@ -110,17 +132,20 @@ class DefaultController extends BaseController
         $yesterdayTimeEnd=strtotime(date("Y-m-d",time()));
 
         $todayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
-
         $yesterdayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
-
+        
+        $todayUserSum=$this->getUserService()->findUsersCountByLessThanCreatedTime(strtotime(date("Y-m-d",time()+24*3600)));
+        $yesterdayUserSum=$this->getUserService()->findUsersCountByLessThanCreatedTime(strtotime(date("Y-m-d",time())));
+        
         $todayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
-
         $yesterdayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
 
-        $todayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
-
+        $todayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));    
         $yesterdayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
      
+        $todayCourseSum=$this->getCourseService()->findCoursesCountByLessThanCreatedTime(strtotime(date("Y-m-d",time()+24*3600)));
+        $yesterdayCourseSum=$this->getCourseService()->findCoursesCountByLessThanCreatedTime(strtotime(date("Y-m-d",time())));
+         
         $todayLessonNum=$this->getCourseService()->searchLessonCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
 
         $yesterdayLessonNum=$this->getCourseService()->searchLessonCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
@@ -176,6 +201,10 @@ class DefaultController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
+            'todayUserSum' => $todayUserSum,
+            'yesterdayUserSum' => $yesterdayUserSum,
+            'todayCourseSum' => $todayCourseSum,
+            'yesterdayCourseSum' => $yesterdayCourseSum,
             'todayRegisterNum'=>$todayRegisterNum,
             'yesterdayRegisterNum'=>$yesterdayRegisterNum,
             'todayLoginNum'=>$todayLoginNum,

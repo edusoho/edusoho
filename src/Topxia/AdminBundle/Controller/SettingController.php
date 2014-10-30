@@ -601,6 +601,8 @@ class SettingController extends BaseController
             'live_course_enabled' => '0',
             'userinfoFields'=>array(),
             "userinfoFieldNameArray"=>array(),
+            "copy_enabled"=>'0',
+            "picturePreview_enabled"=>'0',
         );
 
         $this->getSettingService()->set('course', $courseSetting);
@@ -663,7 +665,7 @@ class SettingController extends BaseController
         $currentUser = $this->getCurrentUser();
         $setting = $this->getSettingService()->get('user_partner', array());
         if (empty($setting['mode']) or !in_array($setting['mode'], array('phpwind', 'discuz'))) {
-            return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员帐号！');
+            return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员账号！');
         }
 
         $bind = $this->getUserService()->getUserBindByTypeAndUserId($setting['mode'], $currentUser['id']);
@@ -687,7 +689,7 @@ class SettingController extends BaseController
                 $user = $this->getUserService()->getUser($currentUser['id']);
                 $this->authenticateUser($user);
 
-                $this->setFlashMessage('success', '管理员帐号同步成功。');
+                $this->setFlashMessage('success', '管理员账号同步成功。');
 
                 return $this->redirect($this->generateUrl('admin_setting_user_center'));
             }

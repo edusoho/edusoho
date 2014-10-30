@@ -190,11 +190,28 @@ function install_step3()
 function install_step4()
 {
 	global $twig;
+	
+        $userAgent = 'EduSoho Install Client 1.0';
+        $connectTimeout = 10;
+        $timeout = 10;
+        $url = "http://open.edusoho.com/api/v1/block/two_dimension_code";
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_URL, $url );
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $response = json_decode($response, true);
 
 	echo $twig->render('step-4.html.twig', array(
 		'step' => 4,
+		"response"=>$response,
 	));
 }
+
 
 /**
  * 生产Key
@@ -315,7 +332,7 @@ class SystemInit
         $users = $this->getUserService()->searchUsers(array('roles' => 'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);
 
         if (empty($users) or empty($users[0])) {
-            return array('error' => '管理员帐号不存在，创建Key失败');
+            return array('error' => '管理员账号不存在，创建Key失败');
         }
         $keys = $applier->applyKey($users[0], 'k12', 'install');
 
@@ -466,7 +483,7 @@ EOD;
 
 	    $default = array(
 	        'register_mode'=>'opened',
-	        'email_activation_title' => '请激活您的{{sitename}}帐号',
+	        'email_activation_title' => '请激活您的{{sitename}}账号',
 	        'email_activation_body' => trim($emailBody),
 	        'welcome_enabled' => 'opened',
 	        'welcome_sender' => $user['nickname'],
@@ -767,4 +784,5 @@ EOD;
         return $response;
     }
 
+    
 }

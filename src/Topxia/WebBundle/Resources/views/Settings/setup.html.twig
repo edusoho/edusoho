@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}设置帐号 - {{ parent() }}{% endblock %}
+{% block title %}设置账号 - {{ parent() }}{% endblock %}
 {% set script_controller = 'settings/setup' %}
 
 {% set hideSetupHint = true %}
@@ -10,12 +10,12 @@
   <div class="col-md-6 col-md-offset-3">
 
     <div class="panel panel-default panel-page">
-      <div class="panel-heading"><h2>设置帐号</h2></div>
+      <div class="panel-heading"><h2>设置账号</h2></div>
 
       {% if not app.user.setup %}
         <form id="setup-form" class="form-vertical" method="post" action="{{ path('settings_setup') }}">
 
-          <div class="alert alert-warning"> 为了帐号的安全以及更好的使用体验，请设置以下信息。 </div>
+          <div class="alert alert-warning"> 为了账号的安全以及更好的使用体验，请设置以下信息。 </div>
 
           <div class="form-group">
             <label class="control-label" for="setup-email-field">Email地址</label>
@@ -42,7 +42,7 @@
         </form>
       {% else %}
         <div class="alert alert-danger">
-          <p>该帐号已经设置过Email地址和昵称，不能再次设置！</p>
+          <p>该账号已经设置过Email地址和昵称，不能再次设置！</p>
           <p><a href="{{ path('homepage') }}" class="btn btn-primary">返回首页</a></p>
         </div>
       {% endif %}

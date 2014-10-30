@@ -33,8 +33,8 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
     public function updateOrderStatus($targetId,$userId,$status)
     {
-        $sql = "UPDATE {$this->table} SET  status ='{$status}'  WHERE targetId = ? AND userId = ? ";
-        return $order = $this->getConnection()->executeQuery($sql, array($targetId,$userId)) ;
+        $sql = "UPDATE {$this->table} SET  status = ?  WHERE targetId = ? AND userId = ? ";
+        return $order = $this->getConnection()->executeQuery($sql, array($status, $targetId,$userId)) ;
     }
 
     public function getOrderBySn($sn)

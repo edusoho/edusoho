@@ -277,12 +277,24 @@ class CourseController extends BaseController
 			throw $this->createAccessDeniedException('用户被封禁,无权查看该课程');
 		}
 		$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
+		$freeLesson=$this->getCourseService()->searchLessons(array('courseId'=>$id,'type'=>'video','status'=>'published','free'=>'1'),array('createdTime','ASC'),0,1);
+		if($freeLesson)$freeLesson=$freeLesson[0];
+
 		return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
 			'course' => $course,
 			'type' => $course['type'],
 			'member' => $member,
 			'items' => $items,
 			'learnStatuses' => $learnStatuses,
+			'freeLesson'=>$freeLesson,
+			'courseMemberLevel' => $courseMemberLevel,
+			'checkMemberLevelResult' => $checkMemberLevelResult,
+			'groupedItems' => $groupedItems,
+			'hasFavorited' => $hasFavorited,
+			'category' => $category,
+			'previewAs' => $previewAs,
+			'tags' => $tags,
+			'nextLiveLesson' => $nextLiveLesson,
 			'currentTime' => $currentTime,
 			'weeks' => $weeks
 		));

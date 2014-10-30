@@ -28,6 +28,11 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
+    public function findUsersCountByLessThanCreatedTime($endTime)
+    {
+        return $this->getUserDao()->findUsersCountByLessThanCreatedTime($endTime);
+    }
+
     public function getUserProfile($id)
     {
        return $this->getProfileDao()->getProfile($id);
@@ -121,10 +126,10 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $this->getUser($userId);
         if (empty($user)) {
-            throw $this->createServiceException('用户不存在，设置帐号失败！');
+            throw $this->createServiceException('用户不存在，设置账号失败！');
         }
         if (!SimpleValidator::nickname($nickname)) {
-            throw $this->createServiceException('用户昵称格式不正确，设置帐号失败！');
+            throw $this->createServiceException('用户昵称格式不正确，设置账号失败！');
         }
         $existUser = $this->getUserDao()->findUserByNickname($nickname);
         if ($existUser && $existUser['id'] != $userId) {
@@ -416,11 +421,11 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $this->getUser($userId);
         if (empty($user)) {
-            throw $this->createServiceException('用户不存在，设置帐号失败！');
+            throw $this->createServiceException('用户不存在，设置账号失败！');
         }
 
         if ($user['setup']) {
-            throw $this->createServiceException('该帐号，已经设置过帐号信息，不能再设置！');
+            throw $this->createServiceException('该账号，已经设置过账号信息，不能再设置！');
         }
 
         $this->getUserDao()->updateUser($userId, array('setup' => 1));
@@ -1042,6 +1047,11 @@ class UserServiceImpl extends BaseService implements UserService
     private function getUserRelationDao()
     {
         return $this->createDao('User.UserRelationDao');
+    }
+
+    public function analysisUserSumByTime($endTime)
+    {
+        return $this->getUserDao()->analysisUserSumByTime($endTime);
     }
 
     private function getFriendDao()
