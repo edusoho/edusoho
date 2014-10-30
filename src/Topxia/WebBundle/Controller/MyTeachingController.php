@@ -71,7 +71,6 @@ class MyTeachingController extends BaseController
                 'courseIds' => $courseIds,
                 'type' => 'question'
             );
-            // $threadCount= $this->getThreadService()->searchThreadCountInCourseIds($conditions);
             $threads = $this->getThreadService()->searchThreadInCourseIds($conditions,'createdNotStick',0,6);
             $threadList=array();
             foreach ($threads as $thread) {
@@ -87,8 +86,9 @@ class MyTeachingController extends BaseController
 
         $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($user['id']);
         $testpaperIds = ArrayToolkit::column($teacherTests, 'id');
-        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+        // $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
         $testpaperCount=$this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds,'reviewing');
+        
         $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds($testpaperIds,'reviewing',0,6);
         $testpapers = $this->getTestpaperService()->findTestpapersByIds(ArrayToolkit::column($paperResults, 'testId'));
         $testpaperUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($paperResults, 'userId'));
