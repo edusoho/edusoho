@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% block title %}设置向导{% endblock %}
-{% set modal_class = 'modal-custom' %}
+{% set modal_class = 'modal-custom-2' %}
 
 
 {% block body %}
@@ -16,23 +16,26 @@
       </ul>
     </div>
 
-
+    <div class="guide-step-content">
     {% if index=='0' %}
       <h4>{{step.content}}</h4>
-      <p style="text-indent:2em;">前往<a href="{{path('admin_setting_site')}}">系统>>站点设置</a>,设置网站名称、网站域名等信息。</p>
+      <p>前往<a href="{{path('admin_setting_site')}}">系统>>站点设置</a>,设置网站名称、网站域名等信息。</p>
     {% elseif index=='1' %}
       <h4>{{step.content}}</h4>
-      <p style="text-indent:2em;">前往<a href="{{path('admin_school_setting')}}">学校>>学校设置</a>,勾选需要启用的年级，设置学校首页图片。</p>
+      <p>前往<a href="{{path('admin_school_setting')}}">学校>>学校设置</a>,勾选需要启用的年级，设置学校首页图片。</p>
     {% elseif index=='2' %}
       <h4>{{step.content}}</h4>
-      <p style="text-indent:2em;">前往<a href="{{path('admin_course')}}">课程>>课程管理</a>,创建至少一个课程模板，用于班级教学。</p>
+      <p>前往<a href="{{path('admin_course')}}">课程>>课程管理</a>,创建至少一个课程模板，用于班级教学。</p>
     {% elseif index=='3' %}
       <h4>{{step.content}}</h4>
-      <p style="text-indent:2em;">前往<a href="{{path('admin_student')}}">用户>>学生管理和教师管理</a>，添加或者导入至少一个教师账号和一个学生账号，这样在后续的班级建立之后，可以给班级分配学生账号，在给班级添加课程时可以指定任课老师。</p>
+      <p>前往<a href="{{path('admin_student')}}">用户>>学生管理和教师管理</a>，添加或者导入至少一个教师账号和一个学生账号，这样在后续的班级建立之后，可以给班级分配学生账号，在给班级添加课程时可以指定任课老师。</p>
     {% elseif index=='4' %}
       <h4>{{step.content}}</h4>
-      <p style="text-indent:2em;">前往<a href="{{path('admin_school_classes_setting')}}">学校>>班级设置</a>，新建一个班级，然后给班级设置课程、设置所属的学生。</p>
+      <p>前往<a href="{{path('admin_school_classes_setting')}}">学校>>班级设置</a>，新建一个班级，然后给班级设置课程、设置所属的学生。</p>
     {% endif %}
+
+    </div>
+
   {% else %}
     <h4 class="text-center">{{step.content}}</h4>
     <p class="text-center">准备好您想要的课程、老师、学生、班级，马上开始使用吧！</p>

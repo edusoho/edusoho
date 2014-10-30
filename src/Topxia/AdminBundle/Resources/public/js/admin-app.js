@@ -69,6 +69,7 @@ define(function(require, exports, module) {
             guideDiv.slideDown('fast');
             completedDiv.find(".percent").html(index+"/5");
             completedDiv.slideDown('fast');
+            $(".progress-bar").attr('aria-valuenow',index/5*100).css('width',index/5*100 + '%');
         }
     });
 
