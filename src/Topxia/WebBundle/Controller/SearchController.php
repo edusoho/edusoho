@@ -10,9 +10,9 @@ class SearchController extends BaseController
     public function indexAction(Request $request)
     {
         $courses = $paginator = null;
+        $code = 'Vip';
 
         $keywords = $request->query->get('q');
-        $code = 'Vip';
         $vip = $this->getAppService()->findInstallApp($code);
         $vipLevel = $this->getLevelService()->getVipLevel();
         $vipLevelCount = $this->getLevelService()->getVipLevelCount();
@@ -46,7 +46,6 @@ class SearchController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        // var_dump($courses);exit();
         response:
         return $this->render('TopxiaWebBundle:Search:index.html.twig', array(
             'courses' => $courses,
@@ -68,14 +67,14 @@ class SearchController extends BaseController
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
-        protected function getAppService()
+    protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
-    protected function getLevelService()
+   protected function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip.LevelService');
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 
 }
