@@ -547,7 +547,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         			$reason = $this->getParam("reason", "");
         			$amount = $this->getParam("amount", 0);
         			$refund = $this->getCourseOrderService()->applyRefundOrder(
-        				$member['orderId'], $amount, $reason, $this->getContainer());
+        				$member['orderId'], $amount, array("type"=>"other", "note"=>$reason), $this->getContainer());
         			if (empty($refund) || $refund['status'] != "success") {
         				return false;
         			}
