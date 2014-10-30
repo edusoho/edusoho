@@ -322,8 +322,8 @@ input.LargeInput {width: 600px;}
 
 /*2014.10.29 by xiaomi*/
 .class-choise {
-  margin: 25px auto;
-  width: 82%;
+  margin: 15px auto;
+  width: 88.69294605809129%;
 }
 
 .class-choise .class-choise-item {
@@ -375,5 +375,38 @@ input.LargeInput {width: 600px;}
   background-color: #d8edff;
   border-color: #7eb7e8;
 }
+
+/*modal*/
+.modal-dialog .modal-content{
+
+}
+
+.modal-dialog .modal-header {
+  padding: 0 15px;
+  height: 50px;
+  line-height: 50px;
+  background: #f3f3f3;
+}
+
+.modal-dialog .modal-header .modal-title {
+  padding-left: 15px;
+  color: #428bca;
+  font-size: 20px;
+  height: 50px;
+  line-height: 50px;
+}
+
+.modal-dialog .modal-header .close {
+  margin-top: 15px;
+}
+
+@media (min-width: 992px) {
+  .modal-custom {
+    width: 964px;
+  }
+}
+
+
+
 
 
