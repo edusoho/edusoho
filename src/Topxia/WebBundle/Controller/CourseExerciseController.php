@@ -49,13 +49,15 @@ class CourseExerciseController extends BaseController
         $start = rand(0,$questionCount-$itemCount);
         $questions = $this->getQuestionService()->findQuestionsbyTypeRange($questionTypeRange,$start,$itemCount);
         $excludeIds = ArrayToolkit::column($questions,'id');
+        $leftCount = $itemCount-count($excludeIds);
 
-        while ( count($excludeIds) < $itemCount) {
-            $questions = $this->getQuestionService()->findQuestionsbyTypeRange($questionTypeRange,$start,1);
+        if ($leftCount > 0) {
+            $questions = $this->getQuestionService()->findQuestionsbyTypeRange($questionTypeRange,$start-$leftCount,$leftCount);
             $Ids = ArrayToolkit::column($questions,'id');
             $excludeIds = array_merge($excludeIds,$Ids);
             $excludeIds = array_unique($excludeIds);
         }
+
         return $excludeIds;
     }
 
