@@ -66,7 +66,9 @@ class DefaultController extends BaseController
         $notices = curl_exec($curl);
         curl_close($curl);
         $notices = json_decode($notices, true);
+        
         var_dump($notices);
+
         return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
             "notices"=>$notices,
         ));

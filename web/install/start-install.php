@@ -193,7 +193,7 @@ function install_step4()
         $response = curl_exec($curl);
         curl_close($curl);
         $response = json_decode($response, true);
-        var_dump($response);
+
 	echo $twig->render('step-4.html.twig', array(
 		'step' => 4,
 		"response"=>$response,
