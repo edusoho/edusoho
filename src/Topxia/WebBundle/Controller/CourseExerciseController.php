@@ -44,15 +44,15 @@ class CourseExerciseController extends BaseController
 
     private function getExcludeIds($questionTypeRange,$itemCount)
     {
-        $questionCount = $this->getQuestionService()->findQuestionsCountbyTypeRange($questionTypeRange);
+        $questionCount = $this->getQuestionService()->findQuestionsCountbyTypes($questionTypeRange);
 
         $start = rand(0,$questionCount-$itemCount);
-        $questions = $this->getQuestionService()->findQuestionsbyTypeRange($questionTypeRange,$start,$itemCount);
+        $questions = $this->getQuestionService()->findQuestionsbyTypes($questionTypeRange,$start,$itemCount);
         $excludeIds = ArrayToolkit::column($questions,'id');
         $leftCount = $itemCount-count($excludeIds);
 
         if ($leftCount > 0) {
-            $questions = $this->getQuestionService()->findQuestionsbyTypeRange($questionTypeRange,$start-$leftCount,$leftCount);
+            $questions = $this->getQuestionService()->findQuestionsbyTypes($questionTypeRange,$start-$leftCount,$leftCount);
             $Ids = ArrayToolkit::column($questions,'id');
             $excludeIds = array_merge($excludeIds,$Ids);
             $excludeIds = array_unique($excludeIds);

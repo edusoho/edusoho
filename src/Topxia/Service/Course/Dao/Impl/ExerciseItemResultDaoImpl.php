@@ -21,12 +21,6 @@ class ExerciseItemResultDaoImpl extends BaseDao implements ExerciseItemResultDao
         return $this->getConnection()->fetchAssoc($sql, array($exerciseId,$status)) ? : null;
 	}
 
-	public function getItemResultByExerciseIdAndExerciseResultIdAndQuestionId($exerciseId,$exerciseResultId,$questionId)
-	{
-		$sql = "SELECT * FROM {$this->table} WHERE exerciseId = ?  AND exerciseResultId = ? AND questionId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($exerciseId,$exerciseResultId,$questionId)) ? : null;
-	}
-
 	public function addItemResult($itemResult)
 	{
         $affected = $this->getConnection()->insert($this->table, $itemResult);
