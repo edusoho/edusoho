@@ -377,7 +377,86 @@ input.LargeInput {width: 600px;}
 }
 
 
+/*guide-step*/
+.guide-step-top {
+  margin: 80px auto;
+  width: 800px;
+}
 
+.guide-step-top > ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.guide-step-top .step-num li {
+  float: left;
+  width: 128px;
+}
+
+.guide-step-top .step-num li {
+  position: relative;
+  height: 8px;
+  border: 1px solid #d5d5d5;
+  border-right: 0;
+  background-color: #e5e5e5;
+}
+
+.guide-step-top .step-num li > span {
+  position: absolute;
+  top: -17px;
+  right: 0;
+  display: block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  font-weight: bolder;
+  font-size: 22px;
+  background-color: #e5e5e5;
+  border: 1px solid #d5d5d5;
+  -webkit-border-radius: 50%;
+          border-radius: 50%;
+}
+
+.guide-step-top .step-num li .step-title {
+  position: absolute;
+  top: -70px;
+  right: -15px;
+  width: 68px;
+  height: 60px;
+  font-size: 16px;
+}
+
+.guide-step-top .step-num li .step-title > span {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  height: 60px;
+  width: 68px;
+  color: #393939;
+}
+
+.guide-step-top .step-num li.active .step-title > span {
+  color: #3192e5;
+}
+
+.guide-step-top .step-num li.active,
+.guide-step-top .step-num li.active > span {
+  border-color: #7eb7e8;
+  background-color: #90c6f5;
+}
+
+
+.guide-step-top .step-num .first {
+  width: 100px;
+}
+
+.guide-step-top .step-num .last {
+  width: 60px;
+  border-right: 1px solid #d5d5d5;
+}
 
 
 

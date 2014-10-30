@@ -14,23 +14,27 @@ class UserGuideController extends BaseController
         if(empty($guideSteps)){
             $guideSteps=array(
                 array(
-                    'content'=>'步骤一：系统设置',
+                    'content'=>'系统设置',
                     'completed'=>0
                 ),
                 array(
-                    'content'=>'步骤二：学校设置',
+                    'content'=>'学校设置',
                     'completed'=>0
                 ),
                 array(
-                    'content'=>'步骤三：至少创建一个课程模板',
+                    'content'=>'创建一个课程模板',
                     'completed'=>0
                 ),
                 array(
-                    'content'=>'步骤四：至少创建一个老师和一个学生账号',
+                    'content'=>'创建老师学生账号',
                     'completed'=>0
                 ),
                 array(
-                    'content'=>'步骤五：创建班级',
+                    'content'=>'创建班级',
+                    'completed'=>0
+                ),
+                array(
+                    'content'=>'完成',
                     'completed'=>0
                 )
             );
@@ -51,6 +55,7 @@ class UserGuideController extends BaseController
     public function showAction(Request $request)
     {
         $guideSteps=$this->getSettingService()->get('guide_step');
+
         $index=$request->query->get('index');
         if(is_null($index)){
             return $this->createJsonResponse(false);
@@ -60,6 +65,7 @@ class UserGuideController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:UserGuide:show-modal.html.twig',array(
+            'guideSteps'=>$guideSteps,
             'step'=>$guideSteps[$index],
             'index'=>$index
         ));
@@ -88,12 +94,14 @@ class UserGuideController extends BaseController
             if(empty($step['completed'])){
                 $step['index']=$index;
                 return $this->render('TopxiaAdminBundle:UserGuide:show-modal.html.twig',array(
+                    'guideSteps'=>$guideSteps,
                     'step'=>$step,
                     'index'=>$index
                 ));
             }
         }
         return $this->render('TopxiaAdminBundle:UserGuide:show-modal.html.twig',array(
+            'guideSteps'=>$guideSteps,
             'step'=>array('content'=>'恭喜，网站设置已完成'),
             'index'=>99
         ));

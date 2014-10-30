@@ -1,9 +1,26 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% block title %}设置向导{% endblock %}
+{% set modal_class = 'modal-custom' %}
+
 
 {% block body %}
   <input type="hidden" id="guideIndex" value="{{index}}">
   <input type="hidden" id="guideContent" value="{{step.content}}">
+
+  <div class="guide-step-top">
+    
+    <ul class="step-num clearfix">
+    
+    {% for i in 1..6 %}
+
+      <li class="{% if loop.first %}first {% endif %}{% if index + 1 >= i %}active{% endif %}"><span>{{ i }}</span><div class="step-title"><span>{{ guideSteps[i-1].content }}</span></div></li>
+
+    {% endfor %}
+    <li class="last"></li>
+    </ul>
+
+  </div>
+
   {% if index=='0' %}
     <h4>{{step.content}}</h4>
     <p style="text-indent:2em;">前往<a href="{{path('admin_setting_site')}}">系统>>站点设置</a>,设置网站名称、网站域名等信息。</p>
