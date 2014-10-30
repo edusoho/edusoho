@@ -9,48 +9,46 @@ class HomeworkItemResultDaoImpl extends BaseDao implements HomeworkItemResultDao
 {
 	protected $table = 'homework_item_result';
 
-	public function getHomeworkItemResult($id)
+	public function getItemResult($id)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 	
-	public function getHomeworkItemResultByHomeworkIdAndStatus($homeworkId,$status)
+	public function getItemResultByHomeworkIdAndStatus($homeworkId,$status)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE homeworkId = ?  AND status = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($homeworkId,$status)) ? : null;
 	}
 
-	public function getHomeworkItemResultByHomeworkIdAndHomeworkResultIdAndQuestionId($homeworkId,$homeworkResultId,$questionId)
+	public function getItemResultByResultIdAndQuesitionId($resultId,$quesitionId)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE homeworkId = ?  AND HomeworkResultId = ? AND questionId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($homeworkId,$homeworkResultId,$questionId)) ? : null;
+		$sql = "SELECT * FROM {$this->table} WHERE homeworkResultId = ?  AND quesitionId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($resultId,$quesitionId)) ? : null;
 	}
 
-	public function addHomeworkItemResult($itemResult)
+	public function addItemResult($itemResult)
 	{
         $affected = $this->getConnection()->insert($this->table, $itemResult);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert HomeworkItemResult error.');
         }
-        return $this->getHomeworkItemResult($this->getConnection()->lastInsertId());
+        return $this->getItemResult($this->getConnection()->lastInsertId());
 	}
 
-	public function updateHomeworkItemResult($homeworkId,$homeworkResultId,$questionId,$fields)
+	public function updateItemResult($id,$fields)
 	{
-		$homeworkItemResult = $this->getHomeworkItemResultByHomeworkIdAndHomeworkResultIdAndQuestionId($homeworkId,$homeworkResultId,$questionId);
-
-        $this->getConnection()->update($this->table, $fields, array('id' => $homeworkItemResult['id']));
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return true;
 	}
 
-	public function findHomeworkItemsResultsbyHomeworkId($homeworkId)
+	public function findItemsResultsbyHomeworkId($homeworkId)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE homeworkId = ? ";
         return $this->getConnection()->fetchAll($sql,array($homeworkId)) ? : array();
 	}
 
-	public function findHomeworkItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId)
+	public function findItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE homeworkId = ? AND userId = ?";
         return $this->getConnection()->fetchAll($sql,array($homeworkId,$userId)) ? : array();

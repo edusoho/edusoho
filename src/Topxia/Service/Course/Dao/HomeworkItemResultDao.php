@@ -4,15 +4,15 @@ namespace Topxia\Service\Course\Dao;
 
 interface HomeworkItemResultDao
 {
-	public function getHomeworkItemResult($id);
+	public function getItemResult($id);
 
-	public function getHomeworkItemResultByHomeworkIdAndStatus($homeworkId,$status);
+	public function getItemResultByHomeworkIdAndStatus($homeworkId,$status);
 
-	public function getHomeworkItemResultByHomeworkIdAndHomeworkResultIdAndQuestionId($homeworkId,$homeworkResultId,$questionId);
+	public function getItemResultByResultIdAndQuesitionId($resultId,$quesitionId);
 
-	public function addHomeworkItemResult($itemResult);
+	public function addItemResult($itemResult);
 
-	public function updateHomeworkItemResult($homeworkId,$homeworkResultId,$questionId,$fields);
+	public function updateItemResult($id,$fields);
 
 	public function findHomeworkItemsResultsbyHomeworkId($homeworkId);
 

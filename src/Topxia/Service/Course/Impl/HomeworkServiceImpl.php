@@ -244,7 +244,8 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
         foreach ($checkHomeworkData['questionIds'] as $key => $questionId) {
                 if (!empty($checkHomeworkData['teacherSay'][$key])) {
-                $this->getHomeworkItemResultDao()->updateHomeworkItemResult($id,$homeworkResult['id'],$questionId,array('teacherSay'=>$checkHomeworkData['teacherSay'][$key]));
+                $itemResult = $this->getItemResultDao()->getItemResultByResultIdAndQuesitionId($homeworkResult['id'],$questionId);
+                $this->getItemResultDao()->updateItemResult($itemResult['id'],array('teacherSay'=>$checkHomeworkData['teacherSay'][$key]));
             }
         }
         return true;
@@ -252,11 +253,11 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
     public function submitHomework($id,$homework)
     {
-        $this->addHomeworkItemResult($id,$homework);
+        $this->addItemResult($id,$homework);
         //reviewing
         $rightItemCount = 0;
 
-        $homeworkItemsRusults = $this->getHomeworkItemResultDao()->findHomeworkItemsResultsbyHomeworkId($id);
+        $homeworkItemsRusults = $this->getItemResultDao()->findItemsResultsbyHomeworkId($id);
 
         foreach ($homeworkItemsRusults as $key => $homeworkItemRusult) {
             if ($homeworkItemRusult['status'] == 'right') {
@@ -278,9 +279,9 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     public function saveHomework($id,$homework)
     {
         $userId = $this->getCurrentUser()->id;
-        $homeworkItemResults = $this->getHomeworkItemResultDao()->findHomeworkItemsResultsbyHomeworkIdAndUserId($id,$userId);
+        $homeworkItemResults = $this->getItemResultDao()->findItemsResultsbyHomeworkIdAndUserId($id,$userId);
         if (empty($homeworkItemResults)) {
-           $this->addHomeworkItemResult($id,$homework);
+           $this->addItemResult($id,$homework);
         }
         $homeworkResult = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndUserId($id, $userId);
         foreach ($homework as $questionId => $value) {
@@ -290,7 +291,8 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             } else {
                 $answer = $answer[0];
             }
-            $this->getHomeworkItemResultDao()->updateHomeworkItemResult($id,$homeworkResult['id'],$questionId,array('answer'=>$answer));
+            $itemResult = $this->getItemResultDao()->getItemResultByResultIdAndQuesitionId($homeworkResult['id'],$questionId);
+            $this->getItemResultDao()->updateItemResult($itemResult['id'],array('answer'=>$answer));
         }
         return $homeworkResult;
     }
@@ -406,7 +408,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     public function getItemSetResultByHomeworkIdAndUserId($homeworkId,$userId)
     {
         $items = $this->getHomeworkItemDao()->findItemsByHomeworkId($homeworkId);
-        $itemsResults = $this->getHomeworkItemResultDao()->findHomeworkItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId);
+        $itemsResults = $this->getItemResultDao()->findItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId);
         $indexdItems = ArrayToolkit::index($items, 'questionId');
         $indexdItemsResults = ArrayToolkit::index($itemsResults, 'questionId');
 
@@ -467,7 +469,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 		$this->getHomeworkItemDao()->addItem($items);
 	}
 
-    private function addHomeworkItemResult($id,$homework)
+    private function addItemResult($id,$homework)
     {
         $homeworkResult = $this->getHomeworkResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
         $homeworkItems = $this->findHomeworkItemsByHomeworkId($id);
@@ -509,7 +511,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             $itemResult['status'] = $status;
             $itemResult['answer'] = $answer;
 
-            $this->getHomeworkItemResultDao()->addHomeworkItemResult($itemResult);
+            $this->getItemResultDao()->addItemResult($itemResult);
         }
     }
 
@@ -586,7 +588,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     	return $this->createDao('Course.HomeworkItemDao');
     }
 
-    private function getHomeworkItemResultDao()
+    private function getItemResultDao()
     {
         return $this->createDao('Course.HomeworkItemResultDao');
     }
