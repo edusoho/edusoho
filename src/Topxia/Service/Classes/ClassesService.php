@@ -57,6 +57,8 @@ interface ClassesService
 
     public function importStudents($classId, array $userIds);
 
+    public function importParents($classId, array $userIds);
+
     public function refreashStudentRank($userId, $classId);
 
 }

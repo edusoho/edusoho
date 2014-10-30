@@ -293,6 +293,19 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         $this->updateClassStudentNum(count($userIds),$classId);
     }
 
+    public function importParents($classId, array $userIds)
+    {
+        foreach ($userIds as $userId) 
+        {
+            $classMember['classId']=$classId;
+            $classMember['userId']=$userId;
+            $classMember['role']='PARENT';
+            $classMember['title']='';
+            $classMember['createdTime']=time();
+            $this->addClassMember($classMember);
+        }
+    }
+
     public function refreashStudentRank($userId, $classId)
     {
         $studentMembers = $this->findClassStudentMembers($classId);

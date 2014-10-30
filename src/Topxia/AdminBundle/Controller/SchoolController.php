@@ -379,6 +379,10 @@ class SchoolController extends BaseController
                 $userIds[]=$user['id'];
             }
             $this->getClassesService()->importStudents($classId,$userIds);
+            $relations=$this->getUserService()->findUserRelationsByToIdsAndType($userIds,'family');
+            $parentIds=ArrayToolkit::column($relations,'fromId');
+            $this->getClassesService()->importParents($classId,$parentIds);
+            
             return $this->createJsonResponse(true);
         }
         return $this->render('TopxiaAdminBundle:School:student-import-modal.html.twig', array(
