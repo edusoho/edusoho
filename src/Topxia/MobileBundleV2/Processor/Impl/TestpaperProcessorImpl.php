@@ -389,8 +389,6 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 				}
 
 				$itemValue = $controller->filterMetas($itemValue);
-				$question['stem'] = $controller->filterQuestionStem($question['stem']);
-				$itemValue['question'] = $question;
 				return $itemValue;
 				
 			}, $item);
@@ -421,6 +419,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	public function filterMetas($itemValue)
 	{
 		$question = $itemValue['question'];
+		$question['stem'] = $this->filterQuestionStem($question['stem']);
 		if (isset($question['metas'])) {
 			$metas= $question['metas'];
 			if (isset($metas['choices'])) {
