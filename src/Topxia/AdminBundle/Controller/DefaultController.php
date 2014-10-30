@@ -134,8 +134,8 @@ class DefaultController extends BaseController
         $todayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
         $yesterdayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
         
-        $todayUserSum=$this->getUserService()->getUserSum(strtotime(date("Y-m-d",time()+24*3600)));
-        $yesterdayUserSum=$this->getUserService()->getUserSum(strtotime(date("Y-m-d",time())));
+        $todayUserSum=$this->getUserService()->analysisUserSumByTime(strtotime(date("Y-m-d",time()+24*3600)));
+        $yesterdayUserSum=$this->getUserService()->analysisUserSumByTime(strtotime(date("Y-m-d",time())));
         
         $todayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
         $yesterdayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
@@ -143,8 +143,8 @@ class DefaultController extends BaseController
         $todayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));    
         $yesterdayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
      
-        $todayCourseSum=$this->getCourseService()->getCourseSum(strtotime(date("Y-m-d",time()+24*3600)));
-        $yesterdayCourseSum=$this->getCourseService()->getCourseSum(strtotime(date("Y-m-d",time())));
+        $todayCourseSum=$this->getCourseService()->findCoursesCountByLessThanCreatedTime(strtotime(date("Y-m-d",time()+24*3600)));
+        $yesterdayCourseSum=$this->getCourseService()->findCoursesCountByLessThanCreatedTime(strtotime(date("Y-m-d",time())));
          
         $todayLessonNum=$this->getCourseService()->searchLessonCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
 
