@@ -2,10 +2,16 @@
   <div class="col-md-12">
     <div class="main-system-alert">
       <h2> 站长公告</h2>
+  {# {% if notices %} #}
+      {# {% for notice in notices %} #}
       <ul class="alert-list">
         <li><a href="">EDUSOHO新版上线,点击查看 <span>2014-10-29 16:52</span></a></li>
         <li><a href="">EDUSOHO新版上线,点击查看 <span>2014-10-29 16:52</span></a></li>
         <li><a href="">EDUSOHO新版上线,点击查看 <span>2014-10-29 16:52</span></a></li>
       </ul>
+      {# {% endfor %} #}
     </div>
+{#         {% else %}
+      <div class="empty">暂无公告</div>
+    {% endif %} #}
     </div>

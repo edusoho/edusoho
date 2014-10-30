@@ -28,9 +28,9 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
-    public function searchUserCounts($startTime,$endTime)
+    public function getUserSum($endTime)
     {
-        return $this->getUserDao()->searchUserCounts($startTime,$endTime);
+        return $this->getUserDao()->getUserSum($endTime);
     }
 
     public function getUserProfile($id)
@@ -880,9 +880,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->analysisRegisterDataByTime($startTime,$endTime);
     }
 
-    public function analysisUserCountByTime($startTime,$endTime)
+    public function analysisUserSumByTime($endTime)
     {
-        return $this->getUserDao()->analysisUserCountByTime($startTime,$endTime);
+        return $this->getUserDao()->analysisUserSumByTime($endTime);
     }
 
     private function getFriendDao()

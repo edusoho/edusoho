@@ -75,7 +75,7 @@ class SearchController extends BaseController
 
     protected function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->getServiceKernel()->createService('Vip.LevelService');
     }
 
 }

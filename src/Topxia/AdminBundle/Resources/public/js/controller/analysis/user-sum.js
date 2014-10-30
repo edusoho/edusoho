@@ -26,7 +26,7 @@ define(function(require, exports, module) {
             minView: 'month'
         });
         $('[name=endTime]').datetimepicker('setEndDate', now);
-        $('[name=endTime]').datetimepicker('setStartDate', $('#userCountStartDate').attr("value"));
+        $('[name=endTime]').datetimepicker('setStartDate', $('#userSumStartDate').attr("value"));
         $("[name=startTime]").datetimepicker({
             language: 'zh-CN',
             autoclose: true,
@@ -34,7 +34,7 @@ define(function(require, exports, module) {
             minView: 'month'
         });
         $('[name=startTime]').datetimepicker('setEndDate', now);
-        $('[name=startTime]').datetimepicker('setStartDate', $('#userCountStartDate').attr("value"));
+        $('[name=startTime]').datetimepicker('setStartDate', $('#userSumStartDate').attr("value"));
 
         var validator = new Validator({          
             element: '#operation-form'});
