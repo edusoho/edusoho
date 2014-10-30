@@ -34,9 +34,9 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 		return $this->getHomeworkDao()->findHomeworksByCourseIdAndLessonId($courseId, $lessonId);
 	}
 
-	public function getHomeworkResult($id)
+	public function getResult($id)
 	{
-        return $this->getHomeworkResultDao()->getHomeworkResult($id);
+        return $this->getResultDao()->getResult($id);
 	}
 
 	public function searchHomeworks($conditions, $sort, $start, $limit)
@@ -203,13 +203,13 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
         $user = $this->getCurrentUser();
 
-        $homeworkResult = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndUserId($id,$user->id);
+        $homeworkResult = $this->getResultDao()->getResultByHomeworkIdAndUserId($id,$user->id);
 
         if (!empty($homeworkResult)) {
             throw $this->createServiceException('您已经做过该作业了！');
         }
 
-        $result = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndStatusAndUserId($id,$user->id, 'doing');
+        $result = $this->getResultDao()->getResultByHomeworkIdAndStatusAndUserId($id,$user->id, 'doing');
         if (empty($result)){
             $homeworkResult = array(
                 'homeworkId' => $homework['id'],
@@ -221,7 +221,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
                 'usedTime' => time(),
             );
 
-            return $this->getHomeworkResultDao()->addHomeworkResult($homeworkResult);
+            return $this->getResultDao()->addResult($homeworkResult);
         } else {
             return $result;
         }
@@ -229,14 +229,14 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
     public function checkHomework($id,$userId,$checkHomeworkData)
     {
-        $homeworkResult = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndUserId($id,$userId);
+        $homeworkResult = $this->getResultDao()->getResultByHomeworkIdAndUserId($id,$userId);
         if (empty($homeworkResult)) {
             throw $this->createServiceException();
         }
         $fields['status'] = 'finished';
         $fields['checkedTime'] = time();
         $fields['teacherSay'] = empty($checkHomeworkData['teacherFeedback']) ? "" : $checkHomeworkData['teacherFeedback'];
-        $this->getHomeworkResultDao()->updateHomeworkResult($homeworkResult['id'],$fields);
+        $this->getResultDao()->updateResult($homeworkResult['id'],$fields);
 
         if (empty($checkHomeworkData['questionIds'])) {
             return true;
@@ -269,9 +269,9 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         $homeworkitemResult['rightItemCount'] = $rightItemCount;
         $homeworkitemResult['status'] = 'reviewing';
 
-        $homeworkResult = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
+        $homeworkResult = $this->getResultDao()->getResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
 
-        $result = $this->getHomeworkResultDao()->updateHomeworkResult($homeworkResult['id'],$homeworkitemResult);
+        $result = $this->getResultDao()->updateResult($homeworkResult['id'],$homeworkitemResult);
 
         return $result;
     }
@@ -283,7 +283,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         if (empty($homeworkItemResults)) {
            $this->addItemResult($id,$homework);
         }
-        $homeworkResult = $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndUserId($id, $userId);
+        $homeworkResult = $this->getResultDao()->getResultByHomeworkIdAndUserId($id, $userId);
         foreach ($homework as $questionId => $value) {
             $answer = $value['answer'];
             if (count($answer) > 1) {
@@ -297,64 +297,64 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return $homeworkResult;
     }
 
-    public function getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId)
+    public function getResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId)
     {
-        return $this->getHomeworkResultDao()->getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId);
+        return $this->getResultDao()->getResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId);
     }
 
-    public function getHomeworkResultByHomeworkId($homeworkId)
+    public function getResultByHomeworkId($homeworkId)
     {
-        return $this->getHomeworkResultDao()->getHomeworkResultByHomeworkId($homeworkId);
+        return $this->getResultDao()->getResultByHomeworkId($homeworkId);
     }
 
-    public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId)
+    public function getResultByHomeworkIdAndUserId($homeworkId, $userId)
     {
-    	return $this->getHomeworkResultDao()->getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId);
+    	return $this->getResultDao()->getResultByHomeworkIdAndUserId($homeworkId, $userId);
     }
 
-    public function searchHomeworkResults($conditions, $orderBy, $start, $limit)
+    public function searchResults($conditions, $orderBy, $start, $limit)
     {
-    	return $this->getHomeworkResultDao()->searchHomeworkResults($conditions, $orderBy, $start, $limit);
+    	return $this->getResultDao()->searchResults($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchHomeworkResultsCount($conditions)
+    public function searchResultsCount($conditions)
     {
-    	return $this->getHomeworkResultDao()->searchHomeworkResultsCount($conditions);
+    	return $this->getResultDao()->searchResultsCount($conditions);
     }
 
-    public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId)
+    public function findResultsByCourseIdAndLessonId($courseId, $lessonId)
     {
-    	return $this->getHomeworkResultDao()->findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId);
+    	return $this->getResultDao()->findResultsByCourseIdAndLessonId($courseId, $lessonId);
     }
     
-    public function findHomeworkResultsByCourseIdAndLessonIdAndStatus($courseId, $lessonId,$status)
+    public function findResultsByCourseIdAndLessonIdAndStatus($courseId, $lessonId,$status)
     {
-        return $this->getHomeworkResultDao()->findHomeworkResultsByCourseIdAndLessonIdAndStatus($courseId, $lessonId,$status);
+        return $this->getResultDao()->findResultsByCourseIdAndLessonIdAndStatus($courseId, $lessonId,$status);
     }
 
-    public function findHomeworkResultsByHomeworkIds($homeworkIds)
+    public function findResultsByIds($homeworkIds)
     {
-    	return $this->getHomeworkResultDao()->findHomeworkResultsByHomeworkIds($homeworkIds);
+    	return $this->getResultDao()->findResultsByIds($homeworkIds);
     }
 
-    public function findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$orderBy,$start,$limit)
+    public function findResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$orderBy,$start,$limit)
     {
-        return $this->getHomeworkResultDao()->findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$orderBy,$start,$limit);
+        return $this->getResultDao()->findResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$orderBy,$start,$limit);
     }
 
-    public function findHomeworkResultsCountsByStatusAndCheckTeacherId($status,$checkTeacherId)
+    public function findResultsCountsByStatusAndCheckTeacherId($status,$checkTeacherId)
     {
-        return $this->getHomeworkResultDao()->findHomeworkResultsCountsByStatusAndCheckTeacherId($status,$checkTeacherId);
+        return $this->getResultDao()->findResultsCountsByStatusAndCheckTeacherId($status,$checkTeacherId);
     }
 
-    public function findHomeworkResultsByCourseIdAndStatus($courseId, $status ,$orderBy,$start,$limit)
+    public function findResultsByCourseIdAndStatus($courseId, $status ,$orderBy,$start,$limit)
     {
-        return $this->getHomeworkResultDao()->findHomeworkResultsByCourseIdAndStatus($courseId, $status ,$orderBy,$start,$limit);
+        return $this->getResultDao()->findResultsByCourseIdAndStatus($courseId, $status ,$orderBy,$start,$limit);
     }
 
-    public function findHomeworkResultsCountsByCourseIdAndStatus($courseId, $status)
+    public function findResultsCountsByCourseIdAndStatus($courseId, $status)
     {
-        return $this->getHomeworkResultDao()->findHomeworkResultsCountsByCourseIdAndStatus($courseId, $status);
+        return $this->getResultDao()->findResultsCountsByCourseIdAndStatus($courseId, $status);
     }
 
     public function findHomeworkItemsByHomeworkId($homeworkId)
@@ -471,7 +471,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
     private function addItemResult($id,$homework)
     {
-        $homeworkResult = $this->getHomeworkResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
+        $homeworkResult = $this->getResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
         $homeworkItems = $this->findHomeworkItemsByHomeworkId($id);
         $itemResult = array();
         $homeworkitemResult = array();
@@ -593,7 +593,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return $this->createDao('Course.HomeworkItemResultDao');
     }
 
-    private function getHomeworkResultDao()
+    private function getResultDao()
     {
     	return $this->createDao('Course.HomeworkResultDao');
     }

@@ -9,13 +9,13 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
 {
     protected $table = 'homework_result';
 
-    public function getHomeworkResult($id)
+    public function getResult($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function addHomeworkResult(array $fields)
+    public function addResult(array $fields)
     {
         $affected = $this->getConnection()->insert($this->table, $fields);
 
@@ -23,16 +23,16 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
             throw $this->createDaoException('Insert HomeworkResult error.');
         }
 
-        return $this->getHomeworkResult($this->getConnection()->lastInsertId());  
+        return $this->getResult($this->getConnection()->lastInsertId());  
     }
 
-    public function updateHomeworkResult($id,array $fields)
+    public function updateResult($id,array $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getHomeworkResult($id);
+        return $this->getResult($id);
     }
 
-    public function getHomeworkResultByHomeworkId($homeworkId)
+    public function getResultByHomeworkId($homeworkId)
     {
         if (empty($homeworkId)) {
             return null;
@@ -43,7 +43,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
 
     }
     
-    public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId)
+    public function getResultByHomeworkIdAndUserId($homeworkId, $userId)
     {
         if (empty($homeworkId) or empty($userId)) {
             return null;
@@ -53,7 +53,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchAssoc($sql, array($homeworkId, $userId)) ? : null;
     }
 
-    public function getHomeworkResultByHomeworkIdAndStatusAndUserId($homeworkId, $status, $userId)
+    public function getResultByHomeworkIdAndStatusAndUserId($homeworkId, $status, $userId)
     {
         if (empty($homeworkId)  or empty($status) or empty($userId)) {
             return null;
@@ -63,7 +63,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchAssoc($sql, array($homeworkId, $status, $userId)) ? : null;
     }
 
-    public function getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId)
+    public function getResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId)
     {
         if (empty($courseId) or empty($lessonId) or empty($userId)) {
             return null;
@@ -73,7 +73,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchAssoc($sql, array($courseId, $lessonId, $userId)) ? : null;
     }
 
-    public function searchHomeworkResults($conditions, $orderBy, $start, $limit)
+    public function searchResults($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -84,14 +84,14 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-    public function searchHomeworkResultsCount($conditions)
+    public function searchResultsCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function findHomeworkResultsByHomeworkIds($homeworkIds)
+    public function findResultsByIds($homeworkIds)
     {
         if(empty($homeworkIds)){
             return array();
@@ -101,7 +101,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchAll($sql, $homeworkIds);
     }
 
-    public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId)
+    public function findResultsByCourseIdAndLessonId($courseId, $lessonId)
     {   
         if(empty($courseId) or empty($lessonId)){
             return array();
@@ -110,7 +110,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchAll($sql, array($courseId, $lessonId));
     }
 
-    public function findHomeworkResultsByCourseIdAndLessonIdAndStatus($courseId, $lessonId,$status)
+    public function findResultsByCourseIdAndLessonIdAndStatus($courseId, $lessonId,$status)
     {
         if(empty($courseId) or empty($lessonId) or empty($status)){
             return array();
@@ -119,7 +119,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchAll($sql, array($courseId, $lessonId,$status));
     }
 
-    public function findHomeworkResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$orderBy, $start, $limit)
+    public function findResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$orderBy, $start, $limit)
     {
         if(empty($checkTeacherId) or empty($status)){
             return array();
@@ -128,7 +128,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchAll($sql, array($status,$checkTeacherId));
     }
 
-    public function findHomeworkResultsCountsByStatusAndCheckTeacherId($status,$checkTeacherId)
+    public function findResultsCountsByStatusAndCheckTeacherId($status,$checkTeacherId)
     {
         if(empty($checkTeacherId) or empty($status)){
             return array();
@@ -137,7 +137,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchColumn($sql, array($status,$checkTeacherId));
     }
 
-    public function findHomeworkResultsByCourseIdAndStatus($courseId, $status, $orderBy,$start, $limit)
+    public function findResultsByCourseIdAndStatus($courseId, $status, $orderBy,$start, $limit)
     {
         if(empty($courseId) or empty($status)){
             return array();
@@ -146,7 +146,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchAll($sql, array($courseId,$status));
     }
 
-    public function findHomeworkResultsCountsByCourseIdAndStatus($courseId, $status)
+    public function findResultsCountsByCourseIdAndStatus($courseId, $status)
     {
         if(empty($courseId) or empty($status)){
             return array();
@@ -155,7 +155,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchColumn($sql, array($courseId, $status));
     }
 
-    public function findHomeworkResultsByStatusAndUserId($userId, $status)
+    public function findResultsByStatusAndUserId($userId, $status)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND status = ? ";
         return $this->getConnection()->fetchAssoc($sql,array($userId, $status)) ? : null;

@@ -41,18 +41,18 @@ class HomeworkController extends BaseController
         );
         $studentUserIds = ArrayToolkit::column($students, 'userId');
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findHomeworkResultsByHomeworkIds(ArrayToolkit::column($homeworks, 'id')), 'homeworkId');
+        $homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findResultsByIds(ArrayToolkit::column($homeworks, 'id')), 'homeworkId');
 
-        $committedCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
+        $committedCount = $this->getHomeworkService()->searchResultsCount(array(
             'commitStatus' => 'committed',
             'checkTeacherId' => $currentUser['id']
         ));
         $uncommitCount = $this->getCourseService()->searchMemberCount($conditions) - $committedCount;
-        $reviewingCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
+        $reviewingCount = $this->getHomeworkService()->searchResultsCount(array(
             'status' => 'reviewing',
             'checkTeacherId' => $currentUser['id']
         ));
-        $finishedCount = $this->getHomeworkService()->searchHomeworkResultsCount(array(
+        $finishedCount = $this->getHomeworkService()->searchResultsCount(array(
             'status' => 'finished',
             'checkTeacherId' => $currentUser['id']
         ));
@@ -91,10 +91,10 @@ class HomeworkController extends BaseController
         );
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getHomeworkService()->searchHomeworkResultsCount($conditions), 
+            $this->getHomeworkService()->searchResultsCount($conditions), 
             25
         );
-        $homeworkResults = $this->getHomeworkService()->searchHomeworkResults(
+        $homeworkResults = $this->getHomeworkService()->searchResults(
             $conditions, 
             array('usedTime', 'DESC'), 
             $paginator->getOffsetCount(),

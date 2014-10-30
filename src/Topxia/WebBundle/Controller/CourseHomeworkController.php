@@ -137,7 +137,7 @@ class CourseHomeworkController extends BaseController
         }
 
         $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'],$userId);
-        $homeworkResult = $this->getHomeworkService()->getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $homework['lessonId'], $userId);
+        $homeworkResult = $this->getHomeworkService()->getResultByCourseIdAndLessonIdAndUserId($courseId, $homework['lessonId'], $userId);
 
         return $this->render('TopxiaWebBundle:CourseHomework:result.html.twig', array(
             'homework' => $homework,
@@ -162,7 +162,7 @@ class CourseHomeworkController extends BaseController
     public function checkListAction(Request $request ,$courseId, $status)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $homeworkResultsCounts = $this->getHomeworkService()->findHomeworkResultsCountsByCourseIdAndStatus($courseId, $status);
+        $homeworkResultsCounts = $this->getHomeworkService()->findResultsCountsByCourseIdAndStatus($courseId, $status);
         $paginator = new Paginator(
             $this->get('request'),
             $homeworkResultsCounts
@@ -177,7 +177,7 @@ class CourseHomeworkController extends BaseController
             $orderBy = array('checkedTime','DESC');
         }
 
-        $homeworkResults = $this->getHomeworkService()->findHomeworkResultsByCourseIdAndStatus(
+        $homeworkResults = $this->getHomeworkService()->findResultsByCourseIdAndStatus(
            $courseId, $status,$orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -190,11 +190,11 @@ class CourseHomeworkController extends BaseController
 
         if ($status == 'reviewing') {
             $reviewingCount = $homeworkResultsCounts;
-            $finishedCount = $this->getHomeworkService()->findHomeworkResultsCountsByCourseIdAndStatus($courseId,'finished');
+            $finishedCount = $this->getHomeworkService()->findResultsCountsByCourseIdAndStatus($courseId,'finished');
         }
 
         if ($status == 'finished') {
-            $reviewingCount = $this->getHomeworkService()->findHomeworkResultsCountsByCourseIdAndStatus($courseId,'reviewing');
+            $reviewingCount = $this->getHomeworkService()->findResultsCountsByCourseIdAndStatus($courseId,'reviewing');
             $finishedCount = $homeworkResultsCounts;
         }
 

@@ -149,7 +149,7 @@ class HomeworkServiceTest extends BaseTestCase
         $this->assertContains($generatedHomework3, $homeworks);
     }
 
-    public function testGetHomeworkResult();
+    public function testgetResult();
 
     private function generateCourse2()
     {

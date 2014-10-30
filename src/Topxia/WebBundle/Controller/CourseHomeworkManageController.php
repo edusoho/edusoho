@@ -257,7 +257,7 @@ class CourseHomeworkManageController extends BaseController
 
         $itemSet = $this->getHomeworkService()->getItemSetByHomeworkId($homework['id']);
 
-        $homeworkResult = $this->getHomeworkService()->getHomeworkResultByHomeworkId($id);
+        $homeworkResult = $this->getHomeworkService()->getResultByHomeworkId($id);
 
         $user = $this->getUserService()->getUser($homeworkResult['userId']);
 
@@ -287,7 +287,7 @@ class CourseHomeworkManageController extends BaseController
         $homeworkCourseIds = ArrayToolkit::column($homeworks, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($homeworkCourseIds);
         $lessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
-        $homeworksResultsCounts = $this->getHomeworkService()->findHomeworkResultsCountsByStatusAndCheckTeacherId($status,$currentUser['id']);
+        $homeworksResultsCounts = $this->getHomeworkService()->findResultsCountsByStatusAndCheckTeacherId($status,$currentUser['id']);
         $paginator = new Paginator(
             $this->get('request'),
             $homeworksResultsCounts
@@ -302,18 +302,18 @@ class CourseHomeworkManageController extends BaseController
             $orderBy = array('checkedTime','DESC');
         }
 
-        $homeworksResults = $this->getHomeworkService()->findHomeworkResultsByStatusAndCheckTeacherId(
+        $homeworksResults = $this->getHomeworkService()->findResultsByStatusAndCheckTeacherId(
             $status,$currentUser['id'],$orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
         if ($status == 'reviewing') {
             $reviewingCount = $homeworksResultsCounts;
-            $finishedCount = $this->getHomeworkService()->findHomeworkResultsCountsByStatusAndCheckTeacherId('finished',$currentUser['id']);
+            $finishedCount = $this->getHomeworkService()->findResultsCountsByStatusAndCheckTeacherId('finished',$currentUser['id']);
         }
 
         if ($status == 'finished') {
-            $reviewingCount = $this->getHomeworkService()->findHomeworkResultsCountsByStatusAndCheckTeacherId('reviewing',$currentUser['id']);
+            $reviewingCount = $this->getHomeworkService()->findResultsCountsByStatusAndCheckTeacherId('reviewing',$currentUser['id']);
             $finishedCount = $homeworksResultsCounts;
         }
         $usersIds = ArrayToolkit::column($homeworksResults,'userId');
@@ -343,10 +343,10 @@ class CourseHomeworkManageController extends BaseController
         );
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getHomeworkService()->searchHomeworkResultsCount($conditions), 
+            $this->getHomeworkService()->searchResultsCount($conditions), 
             25
         );
-        $homeworkResults = $this->getHomeworkService()->searchHomeworkResults(
+        $homeworkResults = $this->getHomeworkService()->searchResults(
             $conditions, 
             array('usedTime', 'DESC'), 
             $paginator->getOffsetCount(),

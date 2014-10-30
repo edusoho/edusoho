@@ -18,7 +18,7 @@ class CourseLessonManageController extends BaseController
 		$exercises = $this->getExerciseService()->findExercisesByCourseIdAndLessonIds($course['id'], $lessonIds);
 		$homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
 		foreach ($homeworks as &$homework) {
-			$homework['results'] = $this->getHomeworkService()->searchHomeworkResultsCount(array( 'courseId' => $homework['courseId'], 'lessonId' => $homework['lessonId'], 'status' => 'reviewing' ));
+			$homework['results'] = $this->getHomeworkService()->searchResultsCount(array( 'courseId' => $homework['courseId'], 'lessonId' => $homework['lessonId'], 'status' => 'reviewing' ));
 		}
 		$mediaMap = array();
 		foreach ($courseItems as $item) {

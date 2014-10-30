@@ -4,37 +4,37 @@ namespace Topxia\Service\Course\Dao;
 
 interface HomeworkResultDao
 {   
-    public function getHomeworkResult($id);
+    public function getResult($id);
     
-    public function addHomeworkResult(array $fields);
+    public function addResult(array $fields);
 
-    public function updateHomeworkResult($id,array $fields);
+    public function updateResult($id,array $fields);
 
-    public function getHomeworkResultByHomeworkId($homeworkId);
+    public function getResultByHomeworkId($homeworkId);
     
-    public function getHomeworkResultByHomeworkIdAndUserId($homeworkId, $userId);
+    public function getResultByHomeworkIdAndUserId($homeworkId, $userId);
 
-    public function getHomeworkResultByHomeworkIdAndStatusAndUserId($homeworkId, $status, $userId);
+    public function getResultByHomeworkIdAndStatusAndUserId($homeworkId, $status, $userId);
 
-    public function getHomeworkResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId);
+    public function getResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId);
 
-    public function searchHomeworkResults($conditions, $orderBy, $start, $limit);
+    public function searchResults($conditions, $orderBy, $start, $limit);
 
-    public function searchHomeworkResultsCount($conditions);
+    public function searchResultsCount($conditions);
 
-    public function findHomeworkResultsByHomeworkIds($homeworkIds);
+    public function findResultsByIds($homeworkIds);
 
-    public function findHomeworkResultsByStatusAndUserId($userId, $status);
+    public function findResultsByStatusAndUserId($userId, $status);
 
-    public function findHomeworkResultsByCourseIdAndLessonId($courseId, $lessonId);
+    public function findResultsByCourseIdAndLessonId($courseId, $lessonId);
 
-    public function findHomeworkResultsByCourseIdAndLessonIdAndStatus($courseId, $lessonId,$status);
+    public function findResultsByCourseIdAndLessonIdAndStatus($courseId, $lessonId,$status);
 
-    public function findHomeworkResultsByStatusAndCheckTeacherId($checkTeacherId, $status, $orderBy,$start, $limit);
+    public function findResultsByStatusAndCheckTeacherId($checkTeacherId, $status, $orderBy,$start, $limit);
 
-    public function findHomeworkResultsCountsByStatusAndCheckTeacherId($checkTeacherId, $status);
+    public function findResultsCountsByStatusAndCheckTeacherId($checkTeacherId, $status);
 
-    public function findHomeworkResultsByCourseIdAndStatus($courseId, $status,$orderBy, $start, $limit);
+    public function findResultsByCourseIdAndStatus($courseId, $status,$orderBy, $start, $limit);
 
-    public function findHomeworkResultsCountsByCourseIdAndStatus($courseId, $status);
+    public function findResultsCountsByCourseIdAndStatus($courseId, $status);
 }
