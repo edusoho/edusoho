@@ -220,7 +220,7 @@ input.LargeInput {width: 600px;}
 .main-system-alert  ul li {
   margin-bottom: 20px;
   padding-left: 44px;
-  background: url(/assets/img/common/ding.png) no-repeat left center;
+  display: block;
 }
 
 .main-system-alert  .alert-list a {

@@ -30,7 +30,7 @@ interface CourseDao
 
     public function analysisCourseDataByTime($startTime,$endTime);
 
-    public function getCourseSum($endTime);
+    public function findCoursesCountByLessThanCreatedTime($endTime);
 
     public function analysisCourseSumByTime($endTime);
 

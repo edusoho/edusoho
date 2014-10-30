@@ -32,7 +32,7 @@ interface CourseService
 
 	public function searchCourseCount($conditions);
 
-	public function getCourseSum($endTime);
+	public function findCoursesCountByLessThanCreatedTime($endTime);
     	
     	public function analysisCourseSumByTime($endTime);
 

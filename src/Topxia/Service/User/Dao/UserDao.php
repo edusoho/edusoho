@@ -28,6 +28,6 @@ interface UserDao
 
 	public function analysisUserSumByTime($endTime);
 
-	public function getUserSum($endTime);
+	public function findUsersCountByLessThanCreatedTime($endTime);
 
 }

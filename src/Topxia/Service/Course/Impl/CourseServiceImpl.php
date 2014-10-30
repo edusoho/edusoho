@@ -66,9 +66,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getCourseDao()->getCoursesCount();
 	}
 
-	public function getCourseSum($endTime)
+	public function findCoursesCountByLessThanCreatedTime($endTime)
 	{
-	        	return $this->getCourseDao()->getCourseSum($endTime);
+	        	return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
 	}
 
 	public function analysisCourseSumByTime($endTime)

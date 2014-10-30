@@ -83,7 +83,7 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
                 $request,
-                $this->getUserService()->getUserSum($timeRange['endTime']),
+                $this->getUserService()->findUsersCountByLessThanCreatedTime($timeRange['endTime']),
                 20
         );
 
@@ -110,8 +110,8 @@ class AnalysisController extends BaseController
             'paginator'=>$paginator,
             'tab'=>$tab,
             'data'=>$data,
-            "userSumStartDate"=>$userSumStartDate,
-            "dataInfo"=>$dataInfo,    
+            'userSumStartDate'=>$userSumStartDate,
+            'dataInfo'=>$dataInfo,    
         ));
     }
 
@@ -133,7 +133,7 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
                 $request,
-                $this->getCourseService()->getCourseSum($timeRange['endTime']),
+                $this->getCourseService()->findCoursesCountByLessThanCreatedTime($timeRange['endTime']),
              20
         );
 

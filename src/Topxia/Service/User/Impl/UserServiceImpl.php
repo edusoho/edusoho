@@ -28,9 +28,9 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
-    public function getUserSum($endTime)
+    public function findUsersCountByLessThanCreatedTime($endTime)
     {
-        return $this->getUserDao()->getUserSum($endTime);
+        return $this->getUserDao()->findUsersCountByLessThanCreatedTime($endTime);
     }
 
     public function getUserProfile($id)

@@ -209,7 +209,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             return $this->getConnection()->fetchAll($sql);
     }
 
-    public function getCourseSum($endTime)
+    public function findCoursesCountByLessThanCreatedTime($endTime)
     {
         $sql="SELECT count(id) as count FROM `{$this->getTablename()}` WHERE `createdTime`<={$endTime} ";
 

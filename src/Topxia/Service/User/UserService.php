@@ -186,7 +186,7 @@ interface UserService
 
     public function analysisUserSumByTime($endTime);
 
-    public function getUserSum($endTime);
+    public function findUsersCountByLessThanCreatedTime($endTime);
 
     public function dropFieldData($fieldName);
 
