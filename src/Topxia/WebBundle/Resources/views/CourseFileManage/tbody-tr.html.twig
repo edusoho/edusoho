@@ -10,26 +10,26 @@
     {% endif %}
 
     {% if uploadFile.convertStatus == 'waiting' %}
-      {{uploadFile.filename|plain_text(30)}}<br><span class="text-warning text-sm">正在文件格式转换</span>
+      {{uploadFile.filename|plain_text(20)}}<br><span class="text-warning text-sm">正在文件格式转换</span>
       {% if ( now - uploadFile.updatedTime ) > 28800 %}
         <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
       {% endif %}
 
     {% elseif uploadFile.convertStatus == 'doing' %}
-      {{uploadFile.filename|plain_text(30)}}<br><span class="text-info text-sm">正在文件格式转换</span>
+      {{uploadFile.filename|plain_text(20)}}<br><span class="text-info text-sm">正在文件格式转换</span>
       {% if uploadFile.type == 'ppt' and ( now - uploadFile.updatedTime ) > 1800 %}
         <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
       {% endif %}
     {% elseif uploadFile.convertStatus == 'error' %}
-      {{uploadFile.filename|plain_text(30)}}<br><span class="text-danger text-sm">文件格式转换失败，<a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn">重新转换</a></span>
+      {{uploadFile.filename|plain_text(20)}}<br><span class="text-danger text-sm">文件格式转换失败，<a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn">重新转换</a></span>
     {% else %}
       {% if uploadFile.targetType in ['courselesson', 'coursematerial'] %}
-        <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank">{{ uploadFile.filename|plain_text(30) }}</a>
+        <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank">{{ uploadFile.filename|plain_text(20) }}</a>
         {% if uploadFile.type == 'ppt' and ( not uploadFile.metas2.length|default(null) ) and uploadFile.targetType == 'courselesson'  %}
           <br><a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
         {% endif %}
       {% else %}
-        {{ uploadFile.filename|plain_text(30) }}
+        {{ uploadFile.filename|plain_text(20) }}
       {% endif %}
     {% endif %}
 
