@@ -123,7 +123,7 @@ class CourseHomeworkController extends BaseController
         $homework = $this->getHomeworkService()->getHomework($homeworkId);
 
         if (empty($homework)) {
-            throw $this->createNotFoundException();
+            throw $this->createNotFoundException('此作业不存在或者已删除！');
         }
 
         if ($homework['courseId'] != $course['id']) {
