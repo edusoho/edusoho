@@ -177,11 +177,11 @@ class DataDict
 		),
 
 		'analysisDateType' => array(
-			'register' => '新注册用户数',
+			// 'register' => '新注册用户数',
 			'login' => '用户登录数',
 			'course' => '新增课程数',
 			'lesson' => '新增课时数',
-			'joinLesson' => '加入学习数',
+			// 'joinLesson' => '加入学习数',
 			// 'paidLesson' => '购买课程数',
 			'finishedLesson' => '完成课时学习数',
 			'videoViewed' => '视频观看数',
