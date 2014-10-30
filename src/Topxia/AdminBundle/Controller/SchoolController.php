@@ -45,7 +45,7 @@ class SchoolController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getClassesService()->searchClassCount($conditions),
-            6);
+            9);
 
         $classes = $this->getClassesService()->searchClasses(
             $conditions,
