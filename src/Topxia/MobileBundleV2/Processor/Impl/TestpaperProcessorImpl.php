@@ -389,7 +389,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 				}
 
 				$itemValue = $controller->filterMetas($itemValue);
-				$question['stem'] = $this->filterQuestionStem($question['stem']);
+				$question['stem'] = $controller->filterQuestionStem($question['stem']);
 				$itemValue['question'] = $question;
 				return $itemValue;
 				
