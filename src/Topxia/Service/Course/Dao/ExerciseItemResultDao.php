@@ -6,16 +6,16 @@ interface ExerciseItemResultDao
 {
 	public function getExerciseItemResult($id);
 
-	public function getExerciseItemResultByExerciseIdAndStatus($ExerciseId,$status);
+	public function getExerciseItemResultByExerciseIdAndStatus($exerciseId,$status);
 
 	public function addExerciseItemResult($itemResult);
 
 	public function deleteItemResultByExerciseId($exerciseId);
 
-	public function updateExerciseItemResult($ExerciseId,$ExerciseResultId,$questionId,$fields);
+	public function updateExerciseItemResult($exerciseId,$exerciseResultId,$questionId,$fields);
 
-	public function findExerciseItemsResultsbyExerciseId($ExerciseId);
+	public function findExerciseItemsResultsbyExerciseId($exerciseId);
 
-	public function findExerciseItemsResultsbyExerciseIdAndUserId($ExerciseId,$userId);
+	public function findExerciseItemsResultsbyExerciseIdAndUserId($exerciseId,$userId);
 	
 }

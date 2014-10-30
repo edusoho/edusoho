@@ -15,16 +15,16 @@ class ExerciseItemResultDaoImpl extends BaseDao implements ExerciseItemResultDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 	
-	public function getExerciseItemResultByExerciseIdAndStatus($ExerciseId,$status)
+	public function getExerciseItemResultByExerciseIdAndStatus($exerciseId,$status)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE ExerciseId = ?  AND status = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($ExerciseId,$status)) ? : null;
+		$sql = "SELECT * FROM {$this->table} WHERE exerciseId = ?  AND status = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($exerciseId,$status)) ? : null;
 	}
 
-	public function getExerciseItemResultByExerciseIdAndExerciseResultIdAndQuestionId($ExerciseId,$ExerciseResultId,$questionId)
+	public function getExerciseItemResultByExerciseIdAndExerciseResultIdAndQuestionId($exerciseId,$exerciseResultId,$questionId)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE ExerciseId = ?  AND ExerciseResultId = ? AND questionId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($ExerciseId,$ExerciseResultId,$questionId)) ? : null;
+		$sql = "SELECT * FROM {$this->table} WHERE exerciseId = ?  AND exerciseResultId = ? AND questionId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($exerciseId,$exerciseResultId,$questionId)) ? : null;
 	}
 
 	public function addExerciseItemResult($itemResult)
@@ -41,24 +41,24 @@ class ExerciseItemResultDaoImpl extends BaseDao implements ExerciseItemResultDao
         return $this->getConnection()->delete($this->table,array('exerciseId'=>$exerciseId));
 	}
 
-	public function updateExerciseItemResult($ExerciseId,$ExerciseResultId,$questionId,$fields)
+	public function updateExerciseItemResult($exerciseId,$exerciseResultId,$questionId,$fields)
 	{
-		$ExerciseItemResult = $this->getExerciseItemResultByExerciseIdAndExerciseResultIdAndQuestionId($ExerciseId,$ExerciseResultId,$questionId);
+		$exerciseItemResult = $this->getExerciseItemResultByExerciseIdAndExerciseResultIdAndQuestionId($exerciseId,$exerciseResultId,$questionId);
 
-        $this->getConnection()->update($this->table, $fields, array('id' => $ExerciseItemResult['id']));
+        $this->getConnection()->update($this->table, $fields, array('id' => $exerciseItemResult['id']));
         return true;
 	}
 
-	public function findExerciseItemsResultsbyExerciseId($ExerciseId)
+	public function findExerciseItemsResultsbyExerciseId($exerciseId)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE ExerciseId = ? ";
-        return $this->getConnection()->fetchAll($sql,array($ExerciseId)) ? : array();
+		$sql = "SELECT * FROM {$this->table} WHERE exerciseId = ? ";
+        return $this->getConnection()->fetchAll($sql,array($exerciseId)) ? : array();
 	}
 
-	public function findExerciseItemsResultsbyExerciseIdAndUserId($ExerciseId,$userId)
+	public function findExerciseItemsResultsbyExerciseIdAndUserId($exerciseId,$userId)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE ExerciseId = ? AND userId = ?";
-        return $this->getConnection()->fetchAll($sql,array($ExerciseId,$userId)) ? : array();
+		$sql = "SELECT * FROM {$this->table} WHERE exerciseId = ? AND userId = ?";
+        return $this->getConnection()->fetchAll($sql,array($exerciseId,$userId)) ? : array();
 	}
 
 }
