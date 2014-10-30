@@ -1096,6 +1096,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$lesson = $this->getCourseLesson($courseId, $lessonId);
 
+		if (!empty($lesson) && $lesson['type'] != 'video') {
+			return true;
+		}
+
 		$createLessonView['courseId'] = $courseId;
 		$createLessonView['lessonId'] = $lessonId;
 		$createLessonView['fileId'] = $lesson['mediaId'];
@@ -1136,7 +1140,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$createLessonView['userId'] = $this->getCurrentUser()->id;
 		$createLessonView['createdTime'] = time();
 
-		$lessonView = $this->getLessonViewDao()->addLessonView($createLessonView);
+		$lessonView = $this->getLessonViewDao()->addLessonView	($createLessonView);
 
 		$lesson = $this->getCourseLesson($createLessonView['courseId'], $createLessonView['lessonId']);
 
@@ -2099,14 +2103,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
 
 		$courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);
-		$token = $this->getTokenService()->makeToken('live.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
 		$user = $this->getCurrentUser();
 
 		$args = array(
 			'liveId' => $lesson["mediaId"], 
 			'replayId' => $courseLessonReplay["replayId"], 
 			'provider' => $lesson["liveProvider"],
-			'token' => $token['token'],
             'user' => $user['email'],
             'nickname' => $user['nickname']
 		);
@@ -2264,7 +2266,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('User.DiskService');
     }
 
-
     private function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
@@ -2278,12 +2279,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('System.SettingService');
     }
-
-    private function getTokenService()
-    {
-        return $this->createService('User.TokenService');
-    }
-
 
     private function getLevelService()
     {

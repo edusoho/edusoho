@@ -343,8 +343,8 @@ CREATE TABLE `course_lesson_view` (
   `lessonId` int(10) NOT NULL,
   `fileId` int(10) NOT NULL,
   `userId` int(10) NOT NULL,
-  `fileType` enum('document','video','audio','image','ppt','other') NOT NULL DEFAULT 'other',
-  `fileStorage` enum('local','cloud','net') NOT NULL,
+  `fileType` enum('document','video','audio','image','ppt','other','none') NOT NULL DEFAULT 'none',
+  `fileStorage` enum('local','cloud','net','none') NOT NULL DEFAULT 'none',
   `fileSource` varchar(32) NOT NULL,
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
