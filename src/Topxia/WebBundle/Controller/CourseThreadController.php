@@ -315,7 +315,7 @@ class CourseThreadController extends BaseController
             if ($form->isValid()) {
                 $postData=$form->getData();
                 
-                list($postData,$users)=$this->replace_mention($postData);
+                list($postData,$users)=$this->replaceMention($postData);
              
                 $post = $this->getThreadService()->createPost($postData);
 
@@ -356,7 +356,7 @@ class CourseThreadController extends BaseController
         ));
     }
 
-    private function replace_mention($postData)
+    private function replaceMention($postData)
     {   
         $currentUser = $this->getCurrentUser();
         $content=$postData['content'];
