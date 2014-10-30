@@ -76,7 +76,7 @@ define(function(require, exports, module) {
             },
             width: 'off',
             multiple: false,
-            placeholder: "选择班主任",
+            placeholder: "选择老师",
             createSearchChoice: function() {
                 return null;
             }
