@@ -55,7 +55,6 @@ class CourseHomeworkController extends BaseController
         }
 
         $itemSet = $this->getHomeworkService()->getItemSetByHomeworkId($homework['id']);
-
         return $this->render('TopxiaWebBundle:CourseHomework:do.html.twig', array(
             'homework' => $homework,
             'itemSet' => $itemSet,
