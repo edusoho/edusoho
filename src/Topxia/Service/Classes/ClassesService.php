@@ -35,6 +35,8 @@ interface ClassesService
 
     public function getStudentMemberByUserIdAndClassId($userId, $classId);
 
+    public function findStudentMembersByUserIdsAndClassId($userIds, $classId);
+
     public function findClassStudentMembers($classId);
 
     public function findClassMemberByUserNumber($number, $classId);

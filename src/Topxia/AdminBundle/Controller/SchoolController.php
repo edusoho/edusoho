@@ -394,6 +394,14 @@ class SchoolController extends BaseController
     {
         $this->getClassesService()->deleteClassMemberByUserId($userId);
         $this->getClassesService()->updateClassStudentNum(-1,$classId);
+        $relations=$this->getUserService()->findUserRelationsByToIdAndType($userId,'family');
+        foreach ($relations as $relation) {
+            $relationPs=$this->getUserService()->findUserRelationsByFromIdAndType($relation['fromId'],'family');
+            $classMembers=$this->getClassesService()->findStudentMembersByUserIdsAndClassId(ArrayToolkit::column($relationPs,'toId'),$classId);
+            if(empty($classMembers)){
+                $this->getClassesService()->deleteClassMemberByUserId($relation['fromId']);
+            }
+        }
         return $this->createJsonResponse(true);
     }
 

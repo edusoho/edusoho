@@ -223,8 +223,14 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return $this->getClassMemberDao()->getMemberByUserIdAndClassId($userId, $classId);
     }
 
-    public function getStudentMemberByUserIdAndClassId($userId ,$classId){
+    public function getStudentMemberByUserIdAndClassId($userId ,$classId)
+    {
         return $this->getClassMemberDao()->getStudentMemberByUserIdAndClassId($userId, $classId);
+    }
+
+    public function findStudentMembersByUserIdsAndClassId($userIds, $classId)
+    {
+        return $this->getClassMemberDao()->findStudentMembersByUserIdsAndClassId($userIds, $classId);
     }
 
     public function findClassStudentMembers($classId)
@@ -297,12 +303,15 @@ class ClassesServiceImpl extends BaseService implements ClassesService
     {
         foreach ($userIds as $userId) 
         {
-            $classMember['classId']=$classId;
-            $classMember['userId']=$userId;
-            $classMember['role']='PARENT';
-            $classMember['title']='';
-            $classMember['createdTime']=time();
-            $this->addClassMember($classMember);
+            $member=$this->getStudentClass($userId);
+            if(empty($member)){
+                $classMember['classId']=$classId;
+                $classMember['userId']=$userId;
+                $classMember['role']='PARENT';
+                $classMember['title']='';
+                $classMember['createdTime']=time();
+                $this->addClassMember($classMember);
+            }
         }
     }
 

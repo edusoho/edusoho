@@ -211,9 +211,12 @@ interface UserService
     
     public function findUserRelationsByFromIdsAndType(array $fromIds,$type);
 
-    public function findUserRelationsByToIdsAndType(array $toIds,$type);
-    
     public function findUserRelationsByFromIdAndType($fromId,$type);
+
+    public function findUserRelationsByToIdsAndType(array $toIds,$type);
+
+    public function findUserRelationsByToIdAndType($toId,$type);
+    
 
     public function deleteUserRelationsByFromIdAndType($fromId,$type);
 

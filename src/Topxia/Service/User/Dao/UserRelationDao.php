@@ -12,6 +12,8 @@ interface UserRelationDao
 
 	public function findUserRelationsByToIdsAndType(array $toIds,$type);
 
+	public function findUserRelationsByToIdAndType($toId,$type);
+
 	public function findUserRelationsByFromIdAndType($fromId,$type);
 
 	public function findUserRelationsByFromIdsAndType(array $fromIds,$type);

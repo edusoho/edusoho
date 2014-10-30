@@ -1024,16 +1024,21 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserRelationDao()->findUserRelationsByFromIdsAndType($fromIds,$type);;
     }
 
+    public function findUserRelationsByFromIdAndType($fromId,$type)
+    {
+        return $this->getUserRelationDao()->findUserRelationsByFromIdAndType($fromId,$type);
+    }
+
     public function findUserRelationsByToIdsAndType(array $toIds,$type)
     {
         return $this->getUserRelationDao()->findUserRelationsByToIdsAndType($toIds,$type);
     }
 
-    public function findUserRelationsByFromIdAndType($fromId,$type)
+    public function findUserRelationsByToIdAndType($toId,$type)
     {
-        return $this->getUserRelationDao()->findUserRelationsByFromIdAndType($fromId,$type);
+        return $this->getUserRelationDao()->findUserRelationsByToIdAndType($toId,$type);
     }
-    
+
     public function deleteUserRelationsByFromIdAndType($fromId,$type)
     {
         $this->getUserRelationDao()->deleteUserRelationsByFromIdAndType($fromId,$type);
