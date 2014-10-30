@@ -420,6 +420,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	{
 		$question = $itemValue['question'];
 		$question['stem'] = $this->filterQuestionStem($question['stem']);
+		$itemValue['question'] = $question;
 		if (isset($question['metas'])) {
 			$metas= $question['metas'];
 			if (isset($metas['choices'])) {
