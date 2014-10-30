@@ -182,8 +182,7 @@ function install_step4()
         $userAgent = 'EduSoho Install Client 1.0';
         $connectTimeout = 10;
         $timeout = 10;
-        $url = "";
-
+        $url = "http://www.sqcop.com/api/v1/context/two_dimension_code";
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
@@ -193,7 +192,8 @@ function install_step4()
         curl_setopt($curl, CURLOPT_URL, $url );
         $response = curl_exec($curl);
         curl_close($curl);
-
+        $response = json_decode($response, true);
+        var_dump($response);
 	echo $twig->render('step-4.html.twig', array(
 		'step' => 4,
 		"response"=>$response,

@@ -53,7 +53,21 @@ class DefaultController extends BaseController
 
     public function getCloudNoticesAction(Request $request)
     {
-        $notices=$this->createEduSohoOpenClient()->getCloudNotices();
+        $userAgent = 'Open Edusoho App Client 1.0';
+        $connectTimeout = 10;
+        $timeout = 10;
+        $url = "http://www.sqcop.com/api/v1/context/notice";
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_URL, $url );
+        $notices = curl_exec($curl);
+        curl_close($curl);
+        $notices = json_decode($notices, true);
+        var_dump($notices);
         return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
             "notices"=>$notices,
         ));
@@ -232,13 +246,13 @@ class DefaultController extends BaseController
     public function onlineCountAction(Request $request)
     {
         $onlineCount =  $this->getStatisticsService()->getOnlineCount(15*60);
-        return $this->createJsonResponse(array('onlineCount' => $onlineCount, 'message' => 'ok'));
+        return $this->createJsonnotices(array('onlineCount' => $onlineCount, 'message' => 'ok'));
     }
 
     public function loginCountAction(Request $request)
     {
         $loginCount = $this->getStatisticsService()->getloginCount(15*60);
-        return $this->createJsonResponse(array('loginCount' => $loginCount, 'message' => 'ok'));
+        return $this->createJsonnotices(array('loginCount' => $loginCount, 'message' => 'ok'));
     }
 
     public function unsolvedQuestionsBlockAction(Request $request)
@@ -288,27 +302,8 @@ class DefaultController extends BaseController
                 "课程《{$course['title']}》有新问题 <a href='{$questionUrl}' target='_blank'>{$questionTitle}</a>，请及时回答。");
         }
 
-        return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
+        return $this->createJsonnotices(array('success' => true, 'message' => 'ok'));
     }
-
-    private function createEduSohoOpenClient()
-    {
-        if (!isset($this->client)) {
-            $cloud = $this->getSettingService()->get('storage', array());
-            $developer = $this->getSettingService()->get('developer', array());
-
-            $options = array(
-                'accessKey' => empty($cloud['cloud_access_key']) ? null : $cloud['cloud_access_key'],
-                'secretKey' => empty($cloud['cloud_secret_key']) ? null : $cloud['cloud_secret_key'],
-                'apiUrl' => empty($developer['app_api_url']) ? null : $developer['app_api_url'],
-                'debug' => empty($developer['debug']) ? false : true,
-            );
-
-            $this->client = new EduSohoOpenClient($options);
-        }
-        return $this->client;
-    }
-
 
     protected function getSettingService()
     {

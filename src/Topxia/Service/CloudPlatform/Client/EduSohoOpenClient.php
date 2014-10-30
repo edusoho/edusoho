@@ -12,8 +12,7 @@ class EduSohoOpenClient
 
     protected $timeout = 5;
 
-    private $apiUrl = 'http://open.edusoho.com/api/v1';
-
+    private $apiUrl = 'http://www.sqcop.com/api/v1';
     private $debug = false;
 
     public function __construct (array $options)
@@ -31,13 +30,7 @@ class EduSohoOpenClient
     public function getCloudNotices()
     {
         $args = array();
-        return $this->callRemoteApi('GET', '/cloud/notice', $args);
-    }
-
-    public function getEsSignal()
-    {
-        $args = array();
-        return $this->callRemoteApi('GET', '/edusoho/signal', $args);
+        return $this->callRemoteApi('GET', '/context/notice', $args);
     }
 
     private function callRemoteApi($httpMethod, $action, array $args)
