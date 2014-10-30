@@ -35,9 +35,11 @@
               {% for key,homeworkResult in homeworksResults %}
                   {% set userId = users[homeworkResult.userId].id %}
                   {% set user = users[homeworkResult.userId] %}
-                  {% set lesson = lessons[homeworkResult.lessonId] %}
+                  {% set lesson = lessons[homeworkResult.lessonId]|default(null) %}
                   {% set course = courses[homeworkResult.courseId] %}
-                  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
+                  {% if lesson %}
+                    {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
+                  {% endif %}
                   {% set courseUrl = path('course_show', {id:course.id}) %}
                   <tr>
                       <td class="media">
@@ -46,7 +48,9 @@
 
                             <div class="clear-fix text-sm">
                               <div class="pull-left"><a class="text-success" href="{{ courseUrl }}">《{{ course.title }}》</a></div>
-                              <div class="pull-left"><a class="text-success" href="{{ lessonUrl }}">第 {{ lesson.number }}课时</a></div>
+                               {% if lesson %}
+                                  <div class="pull-left"><a class="text-success" href="{{ lessonUrl }}">第 {{ lesson.number }}课时</a></div>
+                              {% endif %}
                               <div class="mll text-muted pull-left">提交时间：{{ homeworkResult.usedTime|date('Y-n-d H:i') }}</div>
                             </div>
                       </td>

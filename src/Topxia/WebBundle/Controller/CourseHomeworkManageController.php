@@ -287,7 +287,6 @@ class CourseHomeworkManageController extends BaseController
         $homeworkCourseIds = ArrayToolkit::column($homeworks, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($homeworkCourseIds);
         $lessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
-
         $homeworksResultsCounts = $this->getHomeworkService()->findHomeworkResultsCountsByStatusAndCheckTeacherId($status,$currentUser['id']);
         $paginator = new Paginator(
             $this->get('request'),
@@ -308,7 +307,6 @@ class CourseHomeworkManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         if ($status == 'reviewing') {
             $reviewingCount = $homeworksResultsCounts;
             $finishedCount = $this->getHomeworkService()->findHomeworkResultsCountsByStatusAndCheckTeacherId('finished',$currentUser['id']);
