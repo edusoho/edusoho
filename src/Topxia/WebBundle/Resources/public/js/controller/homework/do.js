@@ -76,9 +76,7 @@ define(function(require, exports, module) {
         onClickSaveBtn: function(event) {
             if (!confirm('确认要下次再做吗？')) return false;
             var $btn = $(event.currentTarget);
-            $.post($btn.data('url'),{data:changeAnswers},function(res){
-                location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/learn#lesson/"+res.lessonId;
-            });
+            saveModule.save($btn,1);
         },
 
         onClickSetCard: function(event) {
