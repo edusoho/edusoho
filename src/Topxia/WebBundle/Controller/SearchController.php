@@ -14,15 +14,19 @@ class SearchController extends BaseController
 
         $keywords = $request->query->get('q');
         $vip = $this->getAppService()->findInstallApp($code);
-        $vipLevel = $this->getLevelService()->getVipLevel();
-        $vipLevelCount = $this->getLevelService()->getVipLevelCount();
-        $vipLevelId=array();
-        for($i=0;$i<$vipLevelCount;$i++){
-            $seq = $vipLevel[$i]['seq'];
-            $name = $vipLevel[$i]['name'];
-            $vipLevelId[$seq] = $name;
+        if($vip){
+            $vipLevel = $this->getLevelService()->getVipLevel();
+            $vipLevelCount = $this->getLevelService()->getVipLevelCount();
+            $vipLevelId=array();
+            for($i=0;$i<$vipLevelCount;$i++){
+                $seq = $vipLevel[$i]['seq'];
+                $name = $vipLevel[$i]['name'];
+                $vipLevelId[$seq] = $name;
+            }
+        } else{
+            $vipLevel = null;
+            $vipLevelId=array();
         }
-
         if (!$keywords) {
             goto response;
         }
