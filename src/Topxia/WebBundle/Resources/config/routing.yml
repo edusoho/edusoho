@@ -135,6 +135,10 @@ live_auth:
     pattern:  /live/auth
     defaults: { _controller: TopxiaWebBundle:LiveAuth:index }
 
+live_verify:
+    pattern:  /live/verify
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:verify }
+
 live_course_explore:
     pattern:  /live
     defaults: { _controller: TopxiaWebBundle:LiveCourse:explore }

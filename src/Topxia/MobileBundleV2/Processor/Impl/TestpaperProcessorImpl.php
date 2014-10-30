@@ -1,12 +1,12 @@
 <?php
-namespace Topxia\MobileBundleV2\Service\Impl;
+namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Topxia\MobileBundleV2\Service\BaseService;
-use Topxia\MobileBundleV2\Service\TestpaperService;
+use Topxia\MobileBundleV2\Processor\BaseProcessor;
+use Topxia\MobileBundleV2\Processor\TestpaperProcessor;
 use Topxia\Common\ArrayToolkit;
 
 
-class TestpaperServiceImpl extends BaseService implements TestpaperService
+class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 {
 
 	public function reDoTestpaper()

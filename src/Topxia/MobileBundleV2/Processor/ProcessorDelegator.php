@@ -1,7 +1,7 @@
 <?php
-namespace Topxia\MobileBundleV2\Service;
+namespace Topxia\MobileBundleV2\Processor;
 
-class serviceDelegator
+class ProcessorDelegator
 {
 	private $target;
 	private $invokeArray;

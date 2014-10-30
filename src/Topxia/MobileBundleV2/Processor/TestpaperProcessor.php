@@ -1,7 +1,7 @@
 <?php
-namespace Topxia\MobileBundleV2\Service;
+namespace Topxia\MobileBundleV2\Processor;
 
-interface TestpaperService
+interface TestpaperProcessor
 {
 	public function doTestpaper();
 

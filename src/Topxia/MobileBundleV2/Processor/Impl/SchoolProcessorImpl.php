@@ -1,16 +1,15 @@
 <?php
 
-
-namespace Topxia\MobileBundleV2\Service\Impl;
-use Topxia\MobileBundleV2\Service\BaseService;
-use Topxia\MobileBundleV2\Service\SchoolService;
+namespace Topxia\MobileBundleV2\Processor\Impl;
+use Topxia\MobileBundleV2\Processor\BaseProcessor;
+use Topxia\MobileBundleV2\Processor\SchoolProcessor;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 
-class SchoolServiceImpl extends BaseService implements SchoolService {
+class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public $banner;
-
+    
     public function loginSchoolWithSite()
     {
         $version = $this->request->query->get('version', 1);
@@ -31,7 +30,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
     {
         $result = false;
         $parames = array();
-        $parames["imei"] = $this->getParam("imei",  "");
+        $parames["imei"] = $this->getParam("deviceSn",  "");
         $parames["platform"] = $this->getParam( "platform",  "");
         $parames["version"] = $this->getParam("version",  "");
         $parames["screenresolution"] = $this->getParam("screenresolution",  "");
@@ -64,19 +63,26 @@ class SchoolServiceImpl extends BaseService implements SchoolService {
 
     public function getDownloadUrl()
     {
+        $code = $this->request->get("code", "EduSoho");
         return $this->controller->render('TopxiaMobileBundleV2:Content:download.html.twig', array(
-        ));
+            "code"=>$code,
+            "iphoneUrl"=>$code == "EduSoho" ? "https://itunes.apple.com/cn/app/kuo-zhi-xue-tang/id887301045" : "#"
+            )
+        );
     }
 
     public function getClientVersion()
     {
         $baseUrl = $this->request->getSchemeAndHttpHost();
+        $code = $this->getParam("code", 'EduSoho');
+        $updateInfo = $this->controller->render('TopxiaMobileBundleV2:Content:update.html.twig', array());
         $result = array(
-            "code"=>2,
-            "androidVersion"=>"2.0.0",
-            "iPhoneVersion"=>"2.0.0",
-            "updateInfo"=>"更新日志",
-            "updateUrl"=>$baseUrl . '/mapi_v2/School/getDownloadUrl'
+            "show"=>true,
+            "code"=>3,
+            "androidVersion"=>"2.0.1",
+            "iPhoneVersion"=>"1.1.0",
+            "updateInfo"=>$updateInfo->getContent(),
+            "updateUrl"=>$baseUrl . '/mapi_v2/School/getDownloadUrl?code=' . $code
             );
         return $result;
     }
