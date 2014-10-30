@@ -302,28 +302,12 @@ input.LargeInput {width: 600px;}
   margin: 11px;
 }
 
-.user-guide {
-  position: fixed;
-  bottom: 5%;
-  right: 0%;
-  z-index: 9999;
-  display: none;
-
-  /*border-radius: 5px 0 0 5px;*/
-  width: 400px;
-  height: 40px;
-  background-color: #fea161;
-}
-
-.user-guide .content {
-  margin: 11px;
-}
 
 
 /*2014.10.29 by xiaomi*/
 .class-choise {
-  margin: 25px auto;
-  width: 82%;
+  margin: 15px auto;
+  width: 88.69294605809129%;
 }
 
 .class-choise .class-choise-item {
@@ -375,5 +359,177 @@ input.LargeInput {width: 600px;}
   background-color: #d8edff;
   border-color: #7eb7e8;
 }
+
+
+/*guide-step*/
+.modal-custom-2 {
+  width: 884px;
+}
+
+.modal-custom-1 {
+  width: 800px;
+}
+
+.guide-step-top {
+  margin: 80px auto;
+  width: 800px;
+}
+
+.guide-step-top > ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.guide-step-top .step-num li {
+  float: left;
+  width: 128px;
+}
+
+.guide-step-top .step-num li {
+  position: relative;
+  height: 8px;
+  border: 1px solid #d5d5d5;
+  border-right: 0;
+  background-color: #e5e5e5;
+}
+
+.guide-step-top .step-num li > span {
+  position: absolute;
+  top: -17px;
+  right: 0;
+  display: block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  font-weight: bolder;
+  font-size: 22px;
+  background-color: #e5e5e5;
+  border: 1px solid #d5d5d5;
+  -webkit-border-radius: 50%;
+          border-radius: 50%;
+}
+
+.guide-step-top .step-num li .step-title {
+  position: absolute;
+  top: -70px;
+  right: -15px;
+  width: 68px;
+  height: 60px;
+  font-size: 16px;
+}
+
+.guide-step-top .step-num li .step-title > span {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  height: 60px;
+  width: 68px;
+  color: #393939;
+}
+
+.guide-step-top .step-num li.active .step-title > span {
+  color: #3192e5;
+}
+
+.guide-step-top .step-num li.active,
+.guide-step-top .step-num li.active > span {
+  border-color: #7eb7e8;
+  background-color: #90c6f5;
+}
+
+
+.guide-step-top .step-num .first {
+  width: 100px;
+}
+
+.guide-step-top .step-num .last {
+  width: 60px;
+  border-right: 1px solid #d5d5d5;
+}
+
+.user-guide {
+  position: fixed;
+  bottom: 30px;
+  right: 10px;
+  z-index: 9999;
+  padding: 8px 8px 8px 20px;
+  width: 440px;
+  height: 58px;
+  display: none;
+  background-color: #5bc0de;
+  box-shadow: 0 2px 8px #ddd;
+  -webkit-box-shadow: 0 2px 8px rgba(0,0,0,.27);
+  box-shadow: 0 2px 8px rgba(0,0,0,.27);
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.user-guide .content {
+  margin-bottom: 8px;
+}
+
+.user-guide .progress {
+  padding: 1px;
+  height: 14px;
+  margin-bottom: 0;
+  background-color: #fff;
+}
+
+.user-guide .progress .progress-bar {
+  background-color: #75dc75;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.user-guide .content .btn {
+  margin-left: 5px;
+}
+
+.guide-step0-title {
+  margin-left: 35px;
+  margin-bottom: 40px;
+  padding-left: 5px;
+  border-left: 5px solid #428bca;
+  font-size: 16px;
+}
+
+.guide-step0-title span {
+  color: #428bca;
+}
+
+.guide-glyphicon {
+  margin-top: 14px;
+  margin-bottom: 14px;
+  color: #90c6f5!important;
+}
+
+.guide-step0-btn {
+  border: 1px solid #7eb7e8!important;
+}
+
+.btn-odd {
+  background-color: #d8edff!important;
+}
+
+.guide-step-content {
+  margin: 0 auto;
+  width: 800px;
+}
+
+.guide-step-content h4 {
+  margin-bottom: 30px;
+  font-size: 16px;
+  color: #428bca;
+}
+
+.guide-step-content p {
+  padding: 10px 10px 10px 30px;
+  background-color: #f8f8f8;
+}
+
 
 

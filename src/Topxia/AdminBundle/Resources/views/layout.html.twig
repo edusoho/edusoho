@@ -71,9 +71,8 @@
   </div>
 
   <div class="container">
-    <div class="completed">
-      <div class="percent">0/5</div>
-    </div>
+
+
     <div class="user-guide">
       <div class="content">
         <div class="pull-right">
@@ -82,9 +81,19 @@
         </div>
         <div class="text"></div>
       </div>
+
+      <div class="guide-progress">
+        <div class="progress">
+          <div class="progress-bar active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+        </div>
+      </div>
+      
+
     </div>
     <div id="user-guide-path" data-url="{{ path('admin_user_guide_index') }}" ></div>
 
+
+   
 
 
     <div class="row">{% block content %}{% endblock %}</div>

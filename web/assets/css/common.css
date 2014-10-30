@@ -1790,3 +1790,36 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   opacity: 0.6;
   pointer-events:none;
 }
+
+
+
+/*modal*/
+.modal-dialog .modal-content{
+
+}
+
+.modal-dialog .modal-header {
+  padding: 0 15px;
+  height: 50px;
+  line-height: 50px;
+  background: #f3f3f3;
+}
+
+.modal-dialog .modal-header .modal-title {
+  padding-left: 15px;
+  color: #428bca;
+  font-size: 20px;
+  height: 50px;
+  line-height: 50px;
+}
+
+.modal-dialog .modal-header .close {
+  margin-top: 15px;
+}
+
+@media (min-width: 992px) {
+  .modal-custom {
+    width: 964px;
+  }
+}
+
