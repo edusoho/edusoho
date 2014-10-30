@@ -369,7 +369,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
 	private function filterQuestionStem($stem)
 	{
-		return $this->controller->get('topxia.twig.web_extension')->bbCode2Html($stem);
+		return $this->controller->get('topxia.twig.web_extension')->bbCode2HtmlFilter($stem);
 	}
 
 	private function coverTestpaperItems($items)
