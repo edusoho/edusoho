@@ -61,6 +61,12 @@ class ClassScheduleController extends ClassBaseController
     {
         $items = $this->getCourseService()->getCourseItems($courseId);
 
+        foreach ($items as $key => $item) {
+            if($item['itemType'] == 'lesson' && $item['status'] != 'published') {
+                unset($items[$key]);
+            }
+        }
+        
         $course = $this->getCourseService()->getCourse($courseId);
         return $this->render('TopxiaWebBundle:ClassSchedule:item-list.html.twig', array(
             'items' => $items,
