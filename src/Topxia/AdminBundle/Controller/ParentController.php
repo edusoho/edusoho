@@ -65,6 +65,9 @@ class ParentController extends BaseController
                 
             $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER','ROLE_PARENT'));
 
+            foreach ($formData['numbers'] as $key => $value) {
+                $formData['numbers'][$key]=trim($value);
+            }
             $children=$this->getUserService()->findUsersByNumbers($formData['numbers']);
             $childrenNumbers=ArrayToolkit::column($children, 'number');
             $diffIds=array_diff($formData['numbers'], $childrenNumbers);
@@ -115,6 +118,12 @@ class ParentController extends BaseController
             $this->getUserService()->deleteUserRelationsByFromIdAndType($id,'family');
             $this->getClassesService()->deleteClassMemberByUserId($id);
 
+
+
+
+            foreach ($fields['numbers'] as $key => $value) {
+                $fields[$key]=trim($value);
+            }
             $children=$this->getUserService()->findUsersByNumbers($fields['numbers']);
             $childrenNumbers=ArrayToolkit::column($children, 'number');
             $diffIds=array_diff($fields['numbers'], $childrenNumbers);
