@@ -131,12 +131,9 @@ class LiveCourseController extends BaseController
 
             $client = LiveClientFactory::createClient();
 
-            $token = $this->getTokenService()->makeToken('live.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
-
             $params = array(
                 'liveId' => $lesson['mediaId'], 
                 'provider' => $lesson['liveProvider'],
-                'token' => $token['token'],
                 'user' => $user['email'],
                 'nickname' => $user['nickname'],
                 'role' => 'teacher'
@@ -173,8 +170,6 @@ class LiveCourseController extends BaseController
 
             $client = LiveClientFactory::createClient();
 
-            $token = $this->getTokenService()->makeToken('live.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
-            $params['token'] = $token['token'];
             $params['user'] = $params['email'];
 
             $result = $client->entryLive($params);
@@ -191,20 +186,11 @@ class LiveCourseController extends BaseController
 
     public function verifyAction(Request $request)
     {
-        $condition = $request->request->all();
 
-        $token = $this->getTokenService()->verifyToken('live.view', $condition['k']);
-        if (empty($token)) {
-            $result = array(
-                "code" => 500,
-                "msg" => "校验码错误"
-            );
-        }else{
-            $result = array(
-                "code" => "0",
-                "msg" => "ok"
-            );
-        }
+        $result = array(
+            "code" => "0",
+            "msg" => "ok"
+        );
 
         return $this->createJsonResponse($result);
     }
@@ -307,11 +293,6 @@ class LiveCourseController extends BaseController
         }
 
         return $categories;
-    }
-
-    private function getTokenService()
-    {
-        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     private function getCourseService()
