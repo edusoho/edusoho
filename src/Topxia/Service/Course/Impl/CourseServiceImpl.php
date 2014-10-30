@@ -1097,6 +1097,21 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lesson = $this->getCourseLesson($courseId, $lessonId);
 
 		if (!empty($lesson) && $lesson['type'] != 'video') {
+
+			$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
+			if ($learn) {
+				return false;
+			}
+
+			$this->getLessonLearnDao()->addLearn(array(
+				'userId' => $user['id'],
+				'courseId' => $courseId,
+				'lessonId' => $lessonId,
+				'status' => 'learning',
+				'startTime' => time(),
+				'finishedTime' => 0,
+			));
+
 			return true;
 		}
 
