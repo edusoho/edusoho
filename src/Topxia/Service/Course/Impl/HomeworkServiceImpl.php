@@ -297,9 +297,9 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return $homeworkResult;
     }
 
-    public function getResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId)
+    public function getResultByLessonIdAndUserId($lessonId, $userId)
     {
-        return $this->getResultDao()->getResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId);
+        return $this->getResultDao()->getResultByLessonIdAndUserId($lessonId, $userId);
     }
 
     public function getResultByHomeworkId($homeworkId)

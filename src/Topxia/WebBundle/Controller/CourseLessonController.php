@@ -264,7 +264,7 @@ class CourseLessonController extends BaseController
     public function lessonHomeworkShowAction(Request $request, $courseId, $lessonId)
     {
         $user = $this->getCurrentUser();
-        $homework = $this->getHomeworkService()->getResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $user['id']);
+        $homework = $this->getHomeworkService()->getResultByLessonIdAndUserId($lessonId, $user['id']);
         return $this->createJsonResponse($homework);
     }
 

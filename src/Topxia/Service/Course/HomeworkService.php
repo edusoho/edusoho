@@ -38,7 +38,7 @@ interface HomeworkService
 
     public function getResultByHomeworkIdAndUserId($homeworkId, $userId);
 
-    public function getResultByCourseIdAndLessonIdAndUserId($courseId, $lessonId, $userId);
+    public function getResultByLessonIdAndUserId($lessonId, $userId);
 
     public function searchResults($conditions, $orderBy, $start, $limit);
 

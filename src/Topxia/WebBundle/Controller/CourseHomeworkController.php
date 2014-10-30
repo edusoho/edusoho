@@ -136,7 +136,7 @@ class CourseHomeworkController extends BaseController
         }
 
         $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'],$userId);
-        $homeworkResult = $this->getHomeworkService()->getResultByCourseIdAndLessonIdAndUserId($courseId, $homework['lessonId'], $userId);
+        $homeworkResult = $this->getHomeworkService()->getResultByLessonIdAndUserId($homework['lessonId'], $userId);
 
         return $this->render('TopxiaWebBundle:CourseHomework:result.html.twig', array(
             'homework' => $homework,
