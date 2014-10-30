@@ -210,6 +210,25 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		);
 	}
 
+	public function getCourseNotes()
+	{
+	    	$start = $this->getParam("start", 0);
+	    	$limit = $this->getParam("limit", 10);
+	    	$courseId = $this->getParam("courseId");
+
+	    	$user = $this->controller->getUserByToken($this->request);
+	    	if(!$user->isLogin()){
+	    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
+	    	}
+	    	$conditions = array(
+	            	'userId' => $user['id'],
+	            	'courseId' => $courseId,
+	            	'noteNumGreaterThan' => 0
+	        	);
+	    	$courseNotes =  $this->controller->getNoteService()->searchNotes($conditions, 'created', $start, $limit);
+	    	return $courseNotes;
+	}
+
 	public function getNoteList(){
 	    	$user = $this->controller->getUserByToken($this->request);
 	    	$start = $this->getParam("start", 0);
@@ -230,11 +249,15 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	        	for ($i=0; $i < count($courseMembers); $i++) { 
 	        		$courseMember = $courseMembers[$i];
 	        		$course = $courses[$courseMember['courseId']];
+	        		$noteNum = $courseMember['noteNum'];
+	        		if (empty($noteNum)) {
+	        			continue;
+	        		}
 	        		$noteInfos[] = array(
 	        			"coursesId"=>$courseMember['courseId'],
 	        			"courseTitle"=>$course['title'],
 	        			"noteLastUpdateTime"=>$courseMember['noteLastUpdateTime'],
-	        			"noteNum"=>$courseMember['noteNum'],
+	        			"noteNum"=>$noteNum,
 	        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png')
 	        			);
 	        	}
