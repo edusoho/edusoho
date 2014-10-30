@@ -134,8 +134,8 @@ class DefaultController extends BaseController
         $todayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
         $yesterdayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
         
-        $todayUserSum=$this->getUserService()->analysisUserSumByTime(strtotime(date("Y-m-d",time()+24*3600)));
-        $yesterdayUserSum=$this->getUserService()->analysisUserSumByTime(strtotime(date("Y-m-d",time())));
+        $todayUserSum=$this->getUserService()->findUsersCountByLessThanCreatedTime(strtotime(date("Y-m-d",time()+24*3600)));
+        $yesterdayUserSum=$this->getUserService()->findUsersCountByLessThanCreatedTime(strtotime(date("Y-m-d",time())));
         
         $todayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
         $yesterdayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
