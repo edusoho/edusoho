@@ -371,13 +371,13 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	{
 		$ext = $this;
 		$baseUrl = $this->request->getSchemeAndHttpHost();
-        		$bbCode = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function($matches) use ($baseUrl, $ext) {
+        		$stem = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function($matches) use ($baseUrl, $ext) {
 			$url = $ext->controller->get('topxia.twig.web_extension')->getFileUrl($matches[1]);
 			$url = $baseUrl . $url;
             		return "<img src='{$src}' />";
-       		 }, $bbCode);
+       		 }, $stem);
 
-        		return $bbCode;
+        		return $stem;
 	}
 
 	private function coverTestpaperItems($items)
