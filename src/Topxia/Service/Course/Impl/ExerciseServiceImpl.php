@@ -330,9 +330,9 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseItemDao()->findItemsByExerciseId($exerciseId);
     }
 
-    public function findExerciseByCourseIdAndLessonIds($courseId, $lessonIds)
+    public function findExercisesByCourseIdAndLessonIds($courseId, $lessonIds)
     {
-        $exercises = $this->getExerciseDao()->findExerciseByCourseIdAndLessonIds($courseId, $lessonIds);
+        $exercises = $this->getExerciseDao()->findExercisesByCourseIdAndLessonIds($courseId, $lessonIds);
         return ArrayToolkit::index($exercises, 'lessonId');
     }  
 

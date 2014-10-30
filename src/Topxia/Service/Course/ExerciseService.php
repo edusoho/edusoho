@@ -21,7 +21,7 @@ interface ExerciseService
 
 	public function getItemSetByExerciseId($exerciseId);
 
-	public function findExerciseByCourseIdAndLessonIds($courseId, $lessonIds);
+	public function findExercisesByCourseIdAndLessonIds($courseId, $lessonIds);
 
 	public function canBuildExercise($fields);
 

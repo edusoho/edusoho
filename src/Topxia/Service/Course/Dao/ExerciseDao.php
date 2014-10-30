@@ -15,6 +15,6 @@ interface ExerciseDao
 
     public function deleteExercise($id);
 
-    public function findExerciseByCourseIdAndLessonIds($courseId, $lessonIds);
+    public function findExercisesByCourseIdAndLessonIds($courseId, $lessonIds);
 
 }

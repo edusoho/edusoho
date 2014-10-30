@@ -41,7 +41,7 @@ class ExerciseDaoImpl extends BaseDao implements ExerciseDao
         return $this->getExercise($id);
     }
 
-    public function findExerciseByCourseIdAndLessonIds($courseId, $lessonIds)
+    public function findExercisesByCourseIdAndLessonIds($courseId, $lessonIds)
     {   
         if(empty($lessonIds)){
             return array();
