@@ -1790,3 +1790,7 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   opacity: 0.6;
   pointer-events:none;
 }
+
+.searchSelect {
+  height: 46px;
+}

@@ -1010,9 +1010,9 @@ class AnalysisController extends BaseController
         foreach ($dates as $key => $value) {
             $zeroData[] = array("date"=>$value,"count"=>0);
         }
-
+        $countTmp =0;
         $userSumData=$this->getUserService()->analysisUserSumByTime($timeRange['endTime']);
-        $countTmp = $userSumData[0]["count"];
+        if($userSumData) $countTmp = $userSumData[0]["count"];
         foreach ($zeroData as $key => $value) {
             if($value["date"]<$userSumData[0]["date"]){
                 $countTmp = 0;
@@ -1039,8 +1039,9 @@ class AnalysisController extends BaseController
             $zeroData[] = array("date"=>$value,"count"=>0);
         }
 
+        $countTmp=0;
         $courseSumData=$this->getCourseService()->analysisCourseSumByTime($timeRange['endTime']);
-        $countTmp = $courseSumData[0]["count"];
+        if($courseSumData) $countTmp = $courseSumData[0]["count"];
         foreach ($zeroData as $key => $value) {
             if($value["date"]<$courseSumData[0]["date"]){
                 $countTmp = 0;
