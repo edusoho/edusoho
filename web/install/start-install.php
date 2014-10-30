@@ -410,7 +410,7 @@ class SystemInit
 		$this->getClassesDao()->getConnection()->beginTransaction();
 		try{
 			if($settings['primarySchool'] == '1') {
-				for ($i=1; $i < intval($settings['primaryYear']); $i++) { 
+				for ($i=1; $i <= intval($settings['primaryYear']); $i++) { 
 					foreach ($className as $value) {
 						$class['name'] = $value;
 						$class['gradeId'] = $i;
