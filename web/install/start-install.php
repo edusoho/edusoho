@@ -427,7 +427,7 @@ class SystemInit
 					}
 				}
 			}
-			if($settings['middleSchool'] == '1') {
+			if($settings['highSchool'] == '1') {
 				for ($i=10; $i <= 12 ; $i++) {
 					foreach ($className as $key => $value) {
 				 	 	$class['name'] = $value;
