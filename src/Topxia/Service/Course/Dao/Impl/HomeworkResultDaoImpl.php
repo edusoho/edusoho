@@ -101,22 +101,22 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchAll($sql, $homeworkIds);
     }
 
-    public function findResultsByCourseIdAndLessonId($courseId, $lessonId)
+    public function findResultsByLessonId($lessonId)
     {   
-        if(empty($courseId) or empty($lessonId)){
+        if(empty($lessonId)){
             return array();
         }
-        $sql = "SELECT * FROM {$this->table} Where courseId = ? And lessonId = ?";
-        return $this->getConnection()->fetchAll($sql, array($courseId, $lessonId));
+        $sql = "SELECT * FROM {$this->table} Where lessonId = ?";
+        return $this->getConnection()->fetchAll($sql, array($lessonId));
     }
 
-    public function findResultsByCourseIdAndLessonIdAndStatus($courseId, $lessonId,$status)
+    public function findResultsByLessonIdAndStatus($lessonId,$status)
     {
-        if(empty($courseId) or empty($lessonId) or empty($status)){
+        if(empty($lessonId) or empty($status)){
             return array();
         }
-        $sql = "SELECT * FROM {$this->table} Where courseId = ? And lessonId = ? AND status = ?";
-        return $this->getConnection()->fetchAll($sql, array($courseId, $lessonId,$status));
+        $sql = "SELECT * FROM {$this->table} Where lessonId = ? AND status = ?";
+        return $this->getConnection()->fetchAll($sql, array($lessonId,$status));
     }
 
     public function findResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$orderBy, $start, $limit)
