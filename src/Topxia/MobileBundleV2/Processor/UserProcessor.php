@@ -1,7 +1,7 @@
 <?php
-namespace Topxia\MobileBundleV2\Service;
+namespace Topxia\MobileBundleV2\Processor;
 
-interface UserService
+interface UserProcessor
 {
 	public function getVersion();
 	public function login();

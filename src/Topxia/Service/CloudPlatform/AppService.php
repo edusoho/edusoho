@@ -11,6 +11,8 @@ interface AppService
 
     public function getMainVersion();
 
+    public function registerApp($app);
+
     /**
      * 获得应用中心应用列表
      */

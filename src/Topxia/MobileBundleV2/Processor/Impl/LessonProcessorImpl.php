@@ -1,13 +1,67 @@
 <?php
-namespace Topxia\MobileBundleV2\Service\Impl;
+namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Topxia\MobileBundleV2\Service\BaseService;
-use Topxia\MobileBundleV2\Service\LessonService;
+use Topxia\MobileBundleV2\Processor\BaseProcessor;
+use Topxia\MobileBundleV2\Processor\LessonProcessor;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Util\CloudClientFactory;
 
-class LessonServiceImpl extends BaseService implements LessonService
+class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 {
+
+            public function getVideoMediaUrl()
+            {
+                $courseId = $this->request->get("courseId");
+                $lessonId = $this->request->get("lessonId");
+                if (empty($courseId)) {
+                    return $this->createErrorResponse('not_courseId', '课程信息不存在！');
+                }
+
+                $user = $this->controller->getUserByToken($this->request);
+                $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+                if (empty($lesson)) {
+                    return $this->createErrorResponse('not_courseId', '课时信息不存在！');
+                }
+
+                if ($lesson['free'] == 1) {
+                        if ($user->isLogin()) {
+                                if ($this->controller->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+                                    $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
+                                }
+                                        
+                        }
+                        $lesson = $this->coverLesson($lesson);
+                        if ($lesson['mediaSource'] == 'self') {
+                            $response = $this->curlRequest("GET", $lesson['mediaUri'], null);
+                            return new Response($response);
+                        }
+                        return $lesson['mediaUri'];
+                        
+                }
+
+                if (!$user->isLogin()) {
+                    return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+                }
+
+                $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
+                $member = $this->controller->getCourseService()->getCourseMember($courseId, $user['id']);
+                $member = $this->previewAsMember($member, $courseId, $user);
+                if ($member && in_array($member['role'], array("teacher", "student"))) {
+                    $lesson = $this->coverLesson($lesson);
+                    if ($lesson['mediaSource'] == 'self') {
+                        $response = $this->curlRequest("GET", $lesson['mediaUri'], null);
+                        return new Response($response);
+                    }
+                    return $lesson['mediaUri'];
+                }
+
+                if ($lesson['mediaSource'] == 'self') {
+                        $response = $this->curlRequest("GET", $lesson['mediaUri'], null);
+                        return new Response($response);
+                }
+                return $lesson['mediaUri'];
+            }
 
 	public function getLessonMaterial()
 	{
@@ -189,7 +243,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 			return $this->createErrorResponse('not_courseId', '课程信息不存在！');
 		}
 
-		$user = $this->controller->getuserByToken($this->request);
+		$user = $this->controller->getUserByToken($this->request);
 		$lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
 		if (empty($lesson)) {
 			return $this->createErrorResponse('not_courseId', '课时信息不存在！');
@@ -213,7 +267,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 		$member = $this->controller->getCourseService()->getCourseMember($courseId, $user['id']);
 		$member = $this->previewAsMember($member, $courseId, $user);
 		if ($member && in_array($member['role'], array("teacher", "student"))) {
-			return $this->coverLesson($lesson);;
+			return $this->coverLesson($lesson);
 		}
 		return $this->createErrorResponse('not_student', '你不是该课程学员，请加入学习!');
 	}
@@ -298,6 +352,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $token = $this->controller->getUserToken($this->request);
         $mediaId = $lesson['mediaId'];
         $mediaSource= $lesson['mediaSource'];
+        $mediaUri = $lesson['mediaUri'];
         if ($lesson['length'] > 0) {
             $lesson['length'] =  $this->getContainer()->get('topxia.twig.web_extension')->durationFilter($lesson['length']);
         } else {
@@ -319,7 +374,14 @@ class LessonServiceImpl extends BaseService implements LessonService
                             $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
                             $hlsKeyUrl = $this->controller->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                             $headLeaderInfo = $this->getHeadLeaderInfo();
-                            $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, $headLeaderInfo['headLeaders'], $headLeaderInfo['headLeaderHlsKeyUrl'], 3600);
+                            if($headLeaderInfo){
+                                //var_dump($headLeaderInfo);exit();
+                                $headLeaderHlsKeyUrl = $this->controller->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
+                                $headUrl = $client->generateHLSEncryptedListUrl($headLeaderInfo['convertParams'], $headLeaderInfo['metas2'], $headLeaderHlsKeyUrl, '', '', 3600);
+                                $lesson['headUrl'] = (isset($headUrl) and is_array($headUrl) and !empty($headUrl['url'])) ? $headUrl['url'] : '';
+                            }
+
+                            $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, '', '', 3600);
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         }
@@ -396,26 +458,14 @@ class LessonServiceImpl extends BaseService implements LessonService
 
             private function getHeadLeaderInfo()
             {
-                $storage = $this->getSettingService()->get("storage");
+                $storage = $this->controller->getSettingService()->get("storage");
                 if(!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]){
-
-                    $headLeader = $this->controller->getUploadFileService()->getFileByTargetType('headLeader');
-                    $headLeaderArray = json_decode($headLeader['metas2'],true);
-                    $headLeaders = array();
-                    foreach ($headLeaderArray as $key => $value) {
-                        $headLeaders[$key] = $value['key'];
-                    }
-                    $headLeaderHlsKeyUrl = $this->controller->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
-                    return array(
-                        'headLeaders' => $headLeaders,
-                        'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl
-                    );
-                } else {
-                    return array(
-                        'headLeaders' => '',
-                        'headLeaderHlsKeyUrl' => ''
-                    );
+                    $file = $this->controller->getUploadFileService()->getFileByTargetType('headLeader');
+                    $file["convertParams"] = json_decode($file["convertParams"], true);
+                    $file["metas2"] = json_decode($file["metas2"], true);
+                    return $file;
                 }
+                return false;
             }
 
 	private function wrapContent($content)

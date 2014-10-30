@@ -1,10 +1,10 @@
 <?php
-namespace Topxia\MobileBundleV2\Service\Impl;
+namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Topxia\MobileBundleV2\Service\BaseService;
-use Topxia\MobileBundleV2\Service\CategoryService;
+use Topxia\MobileBundleV2\Processor\BaseProcessor;
+use Topxia\MobileBundleV2\Processor\CategoryProcessor;
 
-class CategoryServiceImpl extends BaseService implements CategoryService
+class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
 {
     public function getCategories()
     {

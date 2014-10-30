@@ -1,7 +1,7 @@
 <?php
-namespace Topxia\MobileBundleV2\Service;
+namespace Topxia\MobileBundleV2\Processor;
 
-interface LessonService
+interface LessonProcessor
 {
 	public function getCourseLessons();
 	public function getLesson();
@@ -26,4 +26,6 @@ interface LessonService
 	public function getLessonStatus();
 
 	public function getTestpaperInfo();
+
+	public function getVideoMediaUrl();
 }

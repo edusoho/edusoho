@@ -1,12 +1,12 @@
 <?php
-namespace Topxia\MobileBundleV2\Service\Impl;
+namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Topxia\MobileBundleV2\Service\BaseService;
-use Topxia\MobileBundleV2\Service\UserService;
+use Topxia\MobileBundleV2\Processor\BaseProcessor;
+use Topxia\MobileBundleV2\Processor\UserProcessor;
 use Topxia\Common\SimpleValidator;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
-class UserServiceImpl extends BaseService implements UserService
+class UserProcessorImpl extends BaseProcessor implements UserProcessor
 {
     public function getVersion()
     {
