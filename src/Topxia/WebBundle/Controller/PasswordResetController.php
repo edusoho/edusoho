@@ -61,7 +61,7 @@ class PasswordResetController extends BaseController
                         'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
                     ));
                 } else {
-                    $error = '该邮箱地址没有注册过帐号';
+                    $error = '该邮箱地址没有注册过账号';
                 }
             }
         }

@@ -6,7 +6,7 @@ interface AppService
     public function findApps($start, $limit);
 
     public function findAppCount();
-
+    
     public function findAppsByCodes(array $codes);
 
     public function getMainVersion();
@@ -66,6 +66,8 @@ interface AppService
     public function repairProblem($token);
 
     public function uninstallApp($code);
+
+    public function findInstallApp($code);
 
     public function updateAppVersion($code,$fromVersion,$version);
 

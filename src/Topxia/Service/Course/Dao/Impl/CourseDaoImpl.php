@@ -172,6 +172,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('gradeId =:gradeId')
             ->andWhere('public =:public')
             ->andWhere('parentId =:parentId')
+            ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
             ->andWhere('term =:term');
@@ -246,6 +247,18 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     {
         $sql = "SELECT * FROM {$this->getTablename()} WHERE classId = ?";
         return $this->getConnection()->fetchAll($sql, array($classId)) ? : null;
+    }
+    public function findCoursesCountByLessThanCreatedTime($endTime)
+    {
+        $sql="SELECT count(id) as count FROM `{$this->getTablename()}` WHERE `createdTime`<={$endTime} ";
+
+        return $this->getConnection()->fetchColumn($sql);
+    }
+
+    public function analysisCourseSumByTime($endTime)
+    {
+         $sql="SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  `{$this->getTablename()}`   i   WHERE   i.createdTime<=o.createdTime  )  as Count from `{$this->getTablename()}`  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
+         return $this->getConnection()->fetchAll($sql);
     }
 
     private function getTablename()

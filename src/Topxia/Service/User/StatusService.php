@@ -10,4 +10,6 @@ interface StatusService
     public function findStatusesByUserId($userId, $start, $limit);
 
     public function findStatusesByUserIdCount($userId);
+
+    public function searchStatuses($conditions, $sort, $start, $limit);
 }

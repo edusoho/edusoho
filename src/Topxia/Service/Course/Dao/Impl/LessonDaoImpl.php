@@ -169,6 +169,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('type = :type')
             ->andWhere('free = :free')
             ->andWhere('userId = :userId')
+            ->andWhere('mediaId = :mediaId')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('endTime < :endTimeLessThan')
             ->andWhere('startTime <= :startTimeLessThan')

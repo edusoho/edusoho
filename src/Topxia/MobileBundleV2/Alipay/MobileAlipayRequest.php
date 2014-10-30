@@ -51,7 +51,7 @@ class MobileAlipayRequest
         $merchant_url = $this->request->getSchemeAndHttpHost() . "/mapi_v2/pay/alipay/alipay_merchant";
         //用户付款中途退出返回商户的地址。需http://格式的完整路径，不允许加?id=123这类自定义参数
 
-        //卖家支付宝帐户
+        //卖家支付宝账户
         $seller_email = $this->requestData['WIDseller_email'];
 
         //商户订单号

@@ -664,10 +664,15 @@ class GroupController extends BaseController
     }
 
     public function hotThreadAction($textNum=15)
-    {
+    {   
+        $groupSetting=$this->getSettingService()->get('group', array());
+
+        $time=7*24*60*60;
+        if(isset($groupSetting['threadTime_range'])) $time=$groupSetting['threadTime_range']*24*60*60;
+        
         $hotThreads = $this->getThreadService()->searchThreads(
             array(
-                'createdTime'=>time()-14*24*60*60,
+                'createdTime'=>time()-$time,
                 'status'=>'open'
                 ),
             $this->filterSort('byPostNum'),0, 11

@@ -10,15 +10,32 @@ class SearchController extends BaseController
     public function indexAction(Request $request)
     {
         $courses = $paginator = null;
+        $code = 'Vip';
 
         $keywords = $request->query->get('q');
+        $vip = $this->getAppService()->findInstallApp($code);
+        if($vip){
+            $vipLevel = $this->getLevelService()->getVipLevel();
+            $vipLevelCount = $this->getLevelService()->getVipLevelCount();
+            $vipLevelId=array();
+            for($i=0;$i<$vipLevelCount;$i++){
+                $seq = $vipLevel[$i]['seq'];
+                $name = $vipLevel[$i]['name'];
+                $vipLevelId[$seq] = $name;
+            }
+        } else{
+            $vipLevel = null;
+            $vipLevelId=array();
+        }
         if (!$keywords) {
             goto response;
         }
+        $vipId = $request->query->get('vipLevelId');
 
         $conditions = array(
             'status' => 'published',
-            'title' => $keywords
+            'title' => $keywords,
+            'vipLevelId' =>  $vipId
         );
 
         $paginator = new Paginator(
@@ -33,12 +50,14 @@ class SearchController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         response:
         return $this->render('TopxiaWebBundle:Search:index.html.twig', array(
             'courses' => $courses,
             'paginator' => $paginator,
             'keywords' => $keywords,
+            'vip' => $vip,
+            'vipLevel' => $vipLevel,
+            'vipLevelId' => $vipLevelId
         ));
     }
 
@@ -52,5 +71,14 @@ class SearchController extends BaseController
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+   protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
 
 }

@@ -34,4 +34,8 @@ interface UserDao
 
 	public function analysisRegisterDataByTime($startTime,$endTime);
 
+	public function analysisUserSumByTime($endTime);
+
+	public function findUsersCountByLessThanCreatedTime($endTime);
+
 }

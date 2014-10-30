@@ -138,7 +138,7 @@ class InitCommand extends BaseCommand
 			'roles' => array(),
 			'createdIp' => '127.0.0.1',
 		);
-		$output->write("  创建管理员帐号:{$fields['email']}, 密码：{$fields['password']}   ");
+		$output->write("  创建管理员账号:{$fields['email']}, 密码：{$fields['password']}   ");
 
 		$user = $this->getUserService()->getUserByEmail('test@edusoho.com');
 		if (!$user) {
@@ -182,7 +182,7 @@ EOD;
 
         $default = array(
             'register_mode'=>'opened',
-            'email_activation_title' => '请激活您的{{sitename}}帐号',
+            'email_activation_title' => '请激活您的{{sitename}}账号',
             'email_activation_body' => trim($emailBody),
             'welcome_enabled' => 'opened',
             'welcome_sender' => $user['nickname'],

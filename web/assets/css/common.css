@@ -1792,7 +1792,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 }
 
 
-
 /*modal*/
 .modal-dialog .modal-content{
 
@@ -1823,3 +1822,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   }
 }
 
+.searchSelect {
+  height: 46px;
+}
