@@ -245,13 +245,13 @@ class DefaultController extends BaseController
     public function onlineCountAction(Request $request)
     {
         $onlineCount =  $this->getStatisticsService()->getOnlineCount(15*60);
-        return $this->createJsonnotices(array('onlineCount' => $onlineCount, 'message' => 'ok'));
+        return $this->createJsonResponse(array('onlineCount' => $onlineCount, 'message' => 'ok'));
     }
 
     public function loginCountAction(Request $request)
     {
         $loginCount = $this->getStatisticsService()->getloginCount(15*60);
-        return $this->createJsonnotices(array('loginCount' => $loginCount, 'message' => 'ok'));
+        return $this->createJsonResponse(array('loginCount' => $loginCount, 'message' => 'ok'));
     }
 
     public function unsolvedQuestionsBlockAction(Request $request)
@@ -301,7 +301,7 @@ class DefaultController extends BaseController
                 "课程《{$course['title']}》有新问题 <a href='{$questionUrl}' target='_blank'>{$questionTitle}</a>，请及时回答。");
         }
 
-        return $this->createJsonnotices(array('success' => true, 'message' => 'ok'));
+        return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
     }
 
     protected function getSettingService()
