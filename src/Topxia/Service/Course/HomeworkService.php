@@ -58,10 +58,6 @@ interface HomeworkService
 
     public function findHomeworkResultsCountsByCourseIdAndStatus($courseId,$status);
 
-    public function findHomeworkResultsByStatusAndStatusAndUserId($userId, $status);
-
-    public function findAllHomeworksByCourseId($courseId);
-
     //item
     public function findHomeworkItemsByHomeworkId($homeworkId);
 
@@ -73,8 +69,6 @@ interface HomeworkService
     // public function getItemSetResultByHomeworkIdAndResultId($homeworkId,$resultId);
 
     public function getItemSetResultByHomeworkIdAndUserId($homeworkId,$userId);
-
-    public function updateHomeworkItems($homeworkId, $items);
 
     public function createHomeworkItems($homeworkId, $items);
 

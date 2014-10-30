@@ -355,16 +355,6 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return $this->getHomeworkResultDao()->findHomeworkResultsCountsByCourseIdAndStatus($courseId, $status);
     }
 
-    public function findHomeworkResultsByStatusAndStatusAndUserId($userId, $status)
-    {
-
-    }
-
-    public function findAllHomeworksByCourseId ($courseId)
-    {
-
-    }
-
     public function findHomeworkItemsByHomeworkId($homeworkId)
     {
 		return $this->getHomeworkItemDao()->findItemsByHomeworkId($homeworkId);
@@ -464,11 +454,6 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         }
 
         return $set;
-    }
-
-    public function updateHomeworkItems($homeworkId, $items)
-    {
-
     }
 
 	public function createHomeworkItems($homeworkId, $items)
