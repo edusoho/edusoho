@@ -14,7 +14,10 @@ class SearchController extends BaseController
 
         $keywords = $request->query->get('q');
         $vip = $this->getAppService()->findInstallApp($code);
-        if($vip){
+
+        $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.5", ">=");
+
+        if($isShowVipSearch){
             $vipLevel = $this->getLevelService()->getVipLevel();
             $vipLevelCount = $this->getLevelService()->getVipLevelCount();
             $vipLevelId=array();
@@ -55,7 +58,7 @@ class SearchController extends BaseController
             'courses' => $courses,
             'paginator' => $paginator,
             'keywords' => $keywords,
-            'vip' => $vip,
+            'isShowVipSearch' => $isShowVipSearch,
             'vipLevel' => $vipLevel,
             'vipLevelId' => $vipLevelId
         ));
