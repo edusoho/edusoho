@@ -411,7 +411,7 @@
       {% endif %}
 
       {# 学员动态 #}
-      {% set learns = data('LatestFinishedLearns', {'count':5}) %}
+      {% set learns = data('PersonDynamic', {'count':5}) %}
       {% if learns %}
         <div class="panel panel-autumn panel-autumn-default status-side">
           <div class="panel-heading side-autumn-default">
@@ -420,23 +420,21 @@
           <div class="panel-body">
             <ul class="media-list">
               {% for learn in learns %}
-                {% if learn.lesson is defined %}
-                  <li class="media">
-                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
-                    </a>
-                    <div class="media-body">
-                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      {% if learn.status == 'learning' %}
-                        正在学习
-                      {% else %}
-                        在{{ learn.finishedTime|smart_time }} 完成了
-                      {% endif %}
-                      <a href="{{ path('course_show', {id:learn.courseId}) }}">《{{ learn.lesson.title|plain_text(15) }}》</a>
-                      的学习
-                    </div>
-                  </li>
-                {% endif %}
+                <li class="media">
+                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
+                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
+                  </a>
+                  <div class="media-body">
+                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+                    {% if learn.type == "finished_testpaper" %}
+                    完成了考试 {{learn.properties.testpaper.name|plain_text(15)}}
+                    {% elseif learn.type == "become_student" %}
+                    加入了课程 {{learn.properties.course.title|plain_text(15)}}
+                    {% elseif learn.type == "learned_lesson" %}
+                    完成了课时 {{learn.properties.lesson.title|plain_text(15)}}
+                    {% endif %}
+                  </div>
+                </li>
               {% endfor %}
             </ul>
           </div>
