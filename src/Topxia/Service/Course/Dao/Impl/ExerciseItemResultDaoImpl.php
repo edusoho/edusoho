@@ -9,44 +9,36 @@ class ExerciseItemResultDaoImpl extends BaseDao implements ExerciseItemResultDao
 {
 	protected $table = 'exercise_item_result';
 
-	public function getExerciseItemResult($id)
+	public function getItemResult($id)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 	
-	public function getExerciseItemResultByExerciseIdAndStatus($exerciseId,$status)
+	public function getItemResultByExerciseIdAndStatus($exerciseId,$status)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE exerciseId = ?  AND status = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($exerciseId,$status)) ? : null;
 	}
 
-	public function getExerciseItemResultByExerciseIdAndExerciseResultIdAndQuestionId($exerciseId,$exerciseResultId,$questionId)
+	public function getItemResultByExerciseIdAndExerciseResultIdAndQuestionId($exerciseId,$exerciseResultId,$questionId)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE exerciseId = ?  AND exerciseResultId = ? AND questionId = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($exerciseId,$exerciseResultId,$questionId)) ? : null;
 	}
 
-	public function addExerciseItemResult($itemResult)
+	public function addItemResult($itemResult)
 	{
         $affected = $this->getConnection()->insert($this->table, $itemResult);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert ExerciseItemResult error.');
         }
-        return $this->getExerciseItemResult($this->getConnection()->lastInsertId());
+        return $this->getItemResult($this->getConnection()->lastInsertId());
 	}
 
 	public function deleteItemResultByExerciseId($exerciseId)
 	{
         return $this->getConnection()->delete($this->table,array('exerciseId'=>$exerciseId));
-	}
-
-	public function updateExerciseItemResult($exerciseId,$exerciseResultId,$questionId,$fields)
-	{
-		$exerciseItemResult = $this->getExerciseItemResultByExerciseIdAndExerciseResultIdAndQuestionId($exerciseId,$exerciseResultId,$questionId);
-
-        $this->getConnection()->update($this->table, $fields, array('id' => $exerciseItemResult['id']));
-        return true;
 	}
 
 	public function findExerciseItemsResultsbyExerciseId($exerciseId)
