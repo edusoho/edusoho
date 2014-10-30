@@ -367,6 +367,11 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         		return $this->coverTestpaperItems($items);
 	}
 
+	private function filterQuestionStem($stem)
+	{
+		return $this->controller->get('topxia.twig.web_extension')->bbCode2Html($stem);
+	}
+
 	private function coverTestpaperItems($items)
 	{
 		$controller = $this;
@@ -384,6 +389,8 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 				}
 
 				$itemValue = $controller->filterMetas($itemValue);
+				$question['stem'] = $this->filterQuestionStem($question['stem']);
+				$itemValue['question'] = $question;
 				return $itemValue;
 				
 			}, $item);
