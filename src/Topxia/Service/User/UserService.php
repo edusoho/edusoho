@@ -184,6 +184,10 @@ interface UserService
 
     public function analysisRegisterDataByTime($startTime,$endTime);
 
+    public function analysisUserSumByTime($endTime);
+
+    public function getUserSum($endTime);
+
     public function dropFieldData($fieldName);
 
 }
