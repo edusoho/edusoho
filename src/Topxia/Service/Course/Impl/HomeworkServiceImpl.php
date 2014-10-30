@@ -244,7 +244,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
         foreach ($checkHomeworkData['questionIds'] as $key => $questionId) {
                 if (!empty($checkHomeworkData['teacherSay'][$key])) {
-                $itemResult = $this->getItemResultDao()->getItemResultByResultIdAndQuesitionId($homeworkResult['id'],$questionId);
+                $itemResult = $this->getItemResultDao()->getItemResultByResultIdAndQuestionId($homeworkResult['id'],$questionId);
                 $this->getItemResultDao()->updateItemResult($itemResult['id'],array('teacherSay'=>$checkHomeworkData['teacherSay'][$key]));
             }
         }
@@ -291,7 +291,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             } else {
                 $answer = $answer[0];
             }
-            $itemResult = $this->getItemResultDao()->getItemResultByResultIdAndQuesitionId($homeworkResult['id'],$questionId);
+            $itemResult = $this->getItemResultDao()->getItemResultByResultIdAndQuestionId($homeworkResult['id'],$questionId);
             $this->getItemResultDao()->updateItemResult($itemResult['id'],array('answer'=>$answer));
         }
         return $homeworkResult;

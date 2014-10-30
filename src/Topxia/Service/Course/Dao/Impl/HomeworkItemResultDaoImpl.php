@@ -21,10 +21,10 @@ class HomeworkItemResultDaoImpl extends BaseDao implements HomeworkItemResultDao
         return $this->getConnection()->fetchAssoc($sql, array($homeworkId,$status)) ? : null;
 	}
 
-	public function getItemResultByResultIdAndQuesitionId($resultId,$quesitionId)
+	public function getItemResultByResultIdAndQuestionId($resultId,$questionId)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE homeworkResultId = ?  AND quesitionId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($resultId,$quesitionId)) ? : null;
+		$sql = "SELECT * FROM {$this->table} WHERE homeworkResultId = ?  AND questionId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($resultId,$questionId)) ? : null;
 	}
 
 	public function addItemResult($itemResult)

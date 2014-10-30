@@ -8,7 +8,7 @@ interface HomeworkItemResultDao
 
 	public function getItemResultByHomeworkIdAndStatus($homeworkId,$status);
 
-	public function getItemResultByResultIdAndQuesitionId($resultId,$quesitionId);
+	public function getItemResultByResultIdAndQuestionId($resultId,$quesitionId);
 
 	public function addItemResult($itemResult);
 

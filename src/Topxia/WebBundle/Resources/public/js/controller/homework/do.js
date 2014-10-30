@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     var saveModule = require('./save.js');
+    var InitIndexActiveModule = require('./active.js');
     var EditorFactory = require('common/kindeditor-factory');
     var Notify = require('common/bootstrap-notify');
     var changeAnswers = {};
@@ -11,6 +12,7 @@ define(function(require, exports, module) {
         var questionSet = new QuestionSet({
             element: '#homework-set'
         });
+
     };
 
     var QuestionSet = Widget.extend({
@@ -21,6 +23,7 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
+
             var list = new QuestionSetList({
                 element: this.$('.question-set-main'),
                 questionSet: this
@@ -43,6 +46,8 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
+            InitIndexActiveModule.QuestionIndexActive();
+
             var card = this;
 
             this.get('questionSet').on('answer_change', function(answerData) {
@@ -58,6 +63,7 @@ define(function(require, exports, module) {
 
         events: {
             'click #homework-finish-btn': 'onClickFinishBtn',
+            'click #homework-check-btn': 'onClickCheckBtn',
             'click #homework-save-btn': 'onClickSaveBtn',
             'click .question-index': 'onClickSetCard',
         },
@@ -67,9 +73,19 @@ define(function(require, exports, module) {
             var $btn = $(event.currentTarget);
                 $btn.button('saving');
                 $btn.attr('disabled', 'disabled');
-
             $.post($btn.data('url'),{data:changeAnswers},function(res){
                 location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/learn#lesson/"+res.lessonId;
+            });
+        },
+
+        onClickCheckBtn: function(event) {
+            if (!confirm('确认要提交作业批改吗？')) return false;
+            var $btn = $(event.currentTarget);
+                $btn.button('saving');
+                $btn.attr('disabled', 'disabled');
+
+            $.post($btn.data('url'),{data:changeTeacherSay},function(res){
+                location.href= window.location.protocol+"//"+window.location.host+"/my/teaching/homework/list";
             });
         },
 
@@ -156,13 +172,11 @@ define(function(require, exports, module) {
                 this._setChoiceQuestionAnswer($answer);
                 return false;
             };
-
             if (!$answer.prop("checked")) {
                 $answer.prop("checked",true);
                 this._setChoiceQuestionAnswer($answer);
                 return false;
             };
-
         },
 
         onClickChoice: function(event) {
@@ -236,5 +250,4 @@ define(function(require, exports, module) {
             $this.parent().find(".essay-textarea-pack-up").hide();
         }
     });
-
 });

@@ -5,9 +5,13 @@
 {% endblock %}
 
 {% block body %}
+
+{% if itemResult.answer|default(null) %}
+{% set fileItemResultAnswer = itemResult.answer|split(',') %}
+{% endif %}
   <div class="homework-question-fill question-fill-inputs">
-    {% for answer in question.answer %}
-      <input class="form-control " type="text" data-type="fill" name="answer[{{ question.id }}][]" placeholder="填空({{ loop.index }})答案，请填在这里"/>
+    {% for index,answer in question.answer %}
+      <input class="form-control " type="text" data-type="fill" name="answer[{{ question.id }}][]" placeholder="填空({{ loop.index }})答案，请填在这里" value="{% if fileItemResultAnswer[index]|default("") %} {{ fileItemResultAnswer[index]|default("") }}  {% endif %}" />
     {% endfor %}
   </div>
 {% endblock %}
