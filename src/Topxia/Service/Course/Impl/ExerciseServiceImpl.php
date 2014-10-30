@@ -32,7 +32,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     public function getItemSetResultByExerciseIdAndUserId($exerciseId,$userId)
     {
         $items = $this->getExerciseItemDao()->findItemsByExerciseId($exerciseId);
-        $itemsResults = $this->getExerciseItemResultDao()->findExerciseItemsResultsbyExerciseIdAndUserId($exerciseId,$userId);
+        $itemsResults = $this->getItemResultDao()->findItemsResultsbyExerciseIdAndUserId($exerciseId,$userId);
         $indexdItems = ArrayToolkit::index($items, 'questionId');
         $indexdItemsResults = ArrayToolkit::index($itemsResults, 'questionId');
 
@@ -164,7 +164,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         if (!empty($exerciseResult)) {
             $this->getExerciseResultDao()->deleteExerciseResult($exerciseResult['id']);
             $this->getExerciseItemDao()->deleteItemByExerciseId($exercise['id']);
-            $this->getExerciseItemResultDao()->deleteItemResultByExerciseId($exercise['id']);
+            $this->getItemResultDao()->deleteItemResultByExerciseId($exercise['id']);
         }
 
         $result = $this->getExerciseResultDao()->getExerciseResultByExerciseIdAndStatusAndUserId($id,$user->id, 'doing');
@@ -190,11 +190,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function submitExercise($id,$exercise)
     {
-        $this->addExerciseItemResult($id,$exercise);
+        $this->addItemResult($id,$exercise);
         //finished
         $rightItemCount = 0;
 
-        $exerciseItemsRusults = $this->getExerciseItemResultDao()->findExerciseItemsResultsbyExerciseId($id);
+        $exerciseItemsRusults = $this->getItemResultDao()->findItemsResultsbyExerciseId($id);
 
         foreach ($exerciseItemsRusults as $key => $exerciseItemRusult) {
             if ($exerciseItemRusult['status'] == 'right') {
@@ -213,7 +213,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $result;
     }
 
-    private function addExerciseItemResult($id,$exercise)
+    private function addItemResult($id,$exercise)
     {
         $exerciseResult = $this->getExerciseResultByExerciseIdAndUserId($id, $this->getCurrentUser()->id);
         $exerciseItems = $this->findExerciseItemsByExerciseId($id);
@@ -255,7 +255,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             $itemResult['status'] = $status;
             $itemResult['answer'] = $answer;
 
-            $this->getExerciseItemResultDao()->addExerciseItemResult($itemResult);
+            $this->getItemResultDao()->addItemResult($itemResult);
         }
     }
 
@@ -409,7 +409,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->createDao('Course.ExerciseResultDao');
     }
 
-    private function getExerciseItemResultDao()
+    private function getItemResultDao()
     {
         return $this->createDao('Course.ExerciseItemResultDao');
     }
