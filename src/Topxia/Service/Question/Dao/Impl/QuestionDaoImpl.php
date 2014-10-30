@@ -52,7 +52,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
     public function findQuestionsCountbyTypes($types)
     {
         $sql ="SELECT count(*) FROM {$this->table} WHERE type in ({$types})";
-        return $this->getConnection()->fetchColumn($sql, array($typeRange));
+        return $this->getConnection()->fetchColumn($sql, array($types));
     }
 
     public function findQuestionsByParentIds(array $ids)

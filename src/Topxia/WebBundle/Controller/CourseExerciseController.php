@@ -26,11 +26,16 @@ class CourseExerciseController extends BaseController
             return $this->createMessageResponse('info','作业所属课时不存在！');
         }
 
-        $questionTypeRange = $exercise['questionTypeRange'];
-        $questionTypeRange = $this->getquestionTypeRangeStr($questionTypeRange);
+        $typeRange = $exercise['questionTypeRange'];
+        $typeRange = $this->getquestionTypeRangeStr($typeRange);
 
+        $questionsCount = $this->getQuestionService()->findQuestionsCountbyTypes($typeRange);
+        $questions = $this->getQuestionService()->findQuestionsbyTypes($typeRange, 0, $questionsCount);
+
+        $questionIds = ArrayToolkit::column($questions,'id');
         $itemCount = $exercise['itemCount'];
-        $excludeIds = $this->getExcludeIds($questionTypeRange,$itemCount);
+        $excludeIds = array_rand($questionIds,$itemCount);
+
         $result = $this->getExerciseService()->startExercise($exerciseId,$excludeIds);
 
         return $this->redirect($this->generateUrl('course_exercise_do', 
@@ -41,25 +46,6 @@ class CourseExerciseController extends BaseController
             ))
         );
 	}
-
-    private function getExcludeIds($questionTypeRange,$itemCount)
-    {
-        $questionCount = $this->getQuestionService()->findQuestionsCountbyTypes($questionTypeRange);
-
-        $start = rand(0,$questionCount-$itemCount);
-        $questions = $this->getQuestionService()->findQuestionsbyTypes($questionTypeRange,$start,$itemCount);
-        $excludeIds = ArrayToolkit::column($questions,'id');
-        $leftCount = $itemCount-count($excludeIds);
-
-        if ($leftCount > 0) {
-            $questions = $this->getQuestionService()->findQuestionsbyTypes($questionTypeRange,$start-$leftCount,$leftCount);
-            $Ids = ArrayToolkit::column($questions,'id');
-            $excludeIds = array_merge($excludeIds,$Ids);
-            $excludeIds = array_unique($excludeIds);
-        }
-
-        return $excludeIds;
-    }
 
 	public function doAction(Request $Request,$courseId,$exerciseId,$resultId)
 	{
