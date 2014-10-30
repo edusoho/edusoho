@@ -10,35 +10,35 @@ class SearchController extends BaseController
     public function indexAction(Request $request)
     {
         $courses = $paginator = null;
-        $code = 'Vip';
+        // $code = 'Vip';
 
         $keywords = $request->query->get('q');
-        $vip = $this->getAppService()->findInstallApp($code);
+        // $vip = $this->getAppService()->findInstallApp($code);
 
-        $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.5", ">=");
+        // $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.5", ">=");
 
-        if($isShowVipSearch){
-            $vipLevel = $this->getLevelService()->getVipLevel();
-            $vipLevelCount = $this->getLevelService()->getVipLevelCount();
-            $vipLevelId=array();
-            for($i=0;$i<$vipLevelCount;$i++){
-                $seq = $vipLevel[$i]['seq'];
-                $name = $vipLevel[$i]['name'];
-                $vipLevelId[$seq] = $name;
-            }
-        } else{
-            $vipLevel = null;
-            $vipLevelId=array();
-        }
+        // if($isShowVipSearch){
+        //     $vipLevel = $this->getLevelService()->getVipLevel();
+        //     $vipLevelCount = $this->getLevelService()->getVipLevelCount();
+        //     $vipLevelId=array();
+        //     for($i=0;$i<$vipLevelCount;$i++){
+        //         $seq = $vipLevel[$i]['seq'];
+        //         $name = $vipLevel[$i]['name'];
+        //         $vipLevelId[$seq] = $name;
+        //     }
+        // } else{
+        //     $vipLevel = null;
+        //     $vipLevelId=array();
+        // }
         if (!$keywords) {
             goto response;
         }
-        $vipId = $request->query->get('vipLevelId');
+        // $vipId = $request->query->get('vipLevelId');
 
         $conditions = array(
             'status' => 'published',
             'title' => $keywords,
-            'vipLevelId' =>  $vipId
+            // 'vipLevelId' =>  $vipId
         );
 
         $paginator = new Paginator(
@@ -58,9 +58,9 @@ class SearchController extends BaseController
             'courses' => $courses,
             'paginator' => $paginator,
             'keywords' => $keywords,
-            'isShowVipSearch' => $isShowVipSearch,
-            'vipLevel' => $vipLevel,
-            'vipLevelId' => $vipLevelId
+            // 'isShowVipSearch' => $isShowVipSearch,
+            // 'vipLevel' => $vipLevel,
+            // 'vipLevelId' => $vipLevelId
         ));
     }
 
