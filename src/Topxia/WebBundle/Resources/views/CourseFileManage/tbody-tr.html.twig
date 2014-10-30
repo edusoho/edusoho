@@ -51,13 +51,13 @@
       {% endif %}
       {% if uploadFile.metas2.shd|default(null) %}
       {% if uploadFile.useNum != 0 %}<br>{% endif %}
-      <span class="label label-info pull-right tip" data-toggle="tooltip" title="{{quality}}">超清</span>
+      <span class="label label-info  tip" data-toggle="tooltip" title="{{quality}}">超清</span>
       {% elseif uploadFile.metas2.hd|default(null) %}
       {% if uploadFile.useNum != 0 %}<br>{% endif %}
-      <span class="label label-info pull-right tip" data-toggle="tooltip" title="{{quality}}">高清</span>
+      <span class="label label-info  tip" data-toggle="tooltip" title="{{quality}}">高清</span>
       {% elseif uploadFile.metas2.sd|default(null) %}
       {% if uploadFile.useNum != 0 %}<br>{% endif %}
-      <span class="label label-info pull-right tip" data-toggle="tooltip" title="{{quality}}">标清</span>
+      <span class="label label-info  tip" data-toggle="tooltip" title="{{quality}}">标清</span>
       {% endif %}
       
     {% endif %}
