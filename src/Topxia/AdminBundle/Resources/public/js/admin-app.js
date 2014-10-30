@@ -36,7 +36,6 @@ define(function(require, exports, module) {
 
 
     var guideDiv=$(".user-guide");
-    var completedDiv=$(".completed");
     //每次进入显示判断
     $.get($('#user-guide-path').data('url'),function(data){
         if(!isNaN(data.index)){//有index则显示右下角简短步骤
@@ -44,8 +43,7 @@ define(function(require, exports, module) {
             guideDiv.find(".view-step").data().index=data.index;
             guideDiv.find(".complete-step").data().index=data.index;
             guideDiv.show();
-            completedDiv.find(".percent").html(data.index+"/5");
-            completedDiv.show();
+            $(".progress-bar").attr('aria-valuenow',data.index/5*100).css('width',data.index/5*100 + '%');
         }else if(data){//无index则为显示具体步骤提示modal框
             $('#modal').modal({
                 backdrop: false
@@ -53,7 +51,6 @@ define(function(require, exports, module) {
             $('#modal').html(data).modal('show');
         }else{
             guideDiv.hide();
-            completedDiv.hide();
         }
     });
 
@@ -67,8 +64,6 @@ define(function(require, exports, module) {
             guideDiv.find(".complete-step").data().index=index;
             guideDiv.find(".complete-step").removeAttr('disabled');
             guideDiv.slideDown('fast');
-            completedDiv.find(".percent").html(index+"/5");
-            completedDiv.slideDown('fast');
             $(".progress-bar").attr('aria-valuenow',index/5*100).css('width',index/5*100 + '%');
         }
     });
@@ -81,7 +76,6 @@ define(function(require, exports, module) {
             if(html){
                 $('#step-modal').html(html).modal('show');
                 guideDiv.slideUp("fast");
-                completedDiv.slideUp('fast');
             }else{
                 Notify.danger('步骤参数错误！');
             }   
@@ -96,7 +90,6 @@ define(function(require, exports, module) {
                 Notify.success('完成步骤');
                 $('#step-modal').html(html).modal('show');
                 guideDiv.slideUp("fast");
-                completedDiv.slideUp('fast');
             }else{
                 guideDiv.find(".complete-step").removeAttr('disabled');
                 Notify.danger('尚未完成该步骤');
