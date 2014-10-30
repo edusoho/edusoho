@@ -55,7 +55,7 @@ class DefaultController extends BaseController
         $userAgent = 'Open Edusoho App Client 1.0';
         $connectTimeout = 10;
         $timeout = 10;
-        $url = "http://www.sqcop.com/api/v1/context/notice";
+        $url = "http://open.edusoho.com/api/v1/context/notice";
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
