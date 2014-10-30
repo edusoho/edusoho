@@ -61,7 +61,7 @@ define(function(require, exports, module) {
     //关闭modal框时显示右下快捷栏
     $('#step-modal').on('hidden.bs.modal', function (e) {
         var index=$(this).find("#guideIndex").val();
-        if(index<6){
+        if(index<5){
             guideDiv.find(".text").html($(this).find("#guideContent").val());
             guideDiv.find(".view-step").data().index=index;
             guideDiv.find(".complete-step").data().index=index;

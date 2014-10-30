@@ -44,7 +44,7 @@ class UserGuideController extends BaseController
             ));
         }
         foreach ($guideSteps as $index=>$step) {
-            if(empty($step['completed'])){
+            if(empty($step['completed']) && $index<5){
                 $step['index']=$index;
                 return $this->createJsonResponse($step);
             }
@@ -100,11 +100,6 @@ class UserGuideController extends BaseController
                 ));
             }
         }
-        return $this->render('TopxiaAdminBundle:UserGuide:show-modal.html.twig',array(
-            'guideSteps'=>$guideSteps,
-            'step'=>array('content'=>'恭喜，网站设置已完成'),
-            'index'=>99
-        ));
     }
 
     private function tryCompleteStep($index)

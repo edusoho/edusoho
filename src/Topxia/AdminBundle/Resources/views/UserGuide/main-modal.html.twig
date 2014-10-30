@@ -20,17 +20,12 @@
               </button>
           </div>
         </div>
-        <div class="row text-center">
-          <span class="glyphicon glyphicon-arrow-down"></span>
-        </div>
+        {% if loop.index<6 %}
+          <div class="row text-center">
+            <span class="glyphicon glyphicon-arrow-down"></span>
+          </div>
+        {% endif %}
       {% endfor %}
-      <div class="row">
-        <div class="col-md-offset-2 col-md-8">
-          <button type="button" class="btn btn-default btn-lg btn-block" disabled="disabled" style="font-size: 14px;color:#000">
-            开始使用
-          </button>
-        </div>
-      </div>
 
     </div>
     {% if not hide_footer|default(false) %}
