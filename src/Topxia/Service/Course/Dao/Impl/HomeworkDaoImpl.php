@@ -15,10 +15,10 @@ class HomeworkDaoImpl extends BaseDao Implements HomeworkDao
         return $this->getConnection()->fetchAssoc($sql,array($id)) ? : null;
 	}
 
-    public function findHomeworksByCourseIdAndLessonId($courseId, $lessonId)
+    public function findHomeworksByLessonId($lessonId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? And lessonId = ? Limit 1";
-        return $this->getConnection()->fetchAssoc($sql, array($courseId, $lessonId)) ? : null;
+        $sql = "SELECT * FROM {$this->table} WHERE lessonId = ? Limit 1";
+        return $this->getConnection()->fetchAssoc($sql, array($lessonId)) ? : null;
     }
 
     public function findHomeworkByCourseIdAndLessonIds($courseId, $lessonIds)

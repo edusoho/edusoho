@@ -29,19 +29,14 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 		return $this->getHomeworkDao()->findHomeworksByCreatedUserId($userId);
 	}
 
-	public function findHomeworksByCourseIdAndLessonId($courseId, $lessonId)
+	public function findHomeworksByLessonId($lessonId)
 	{
-		return $this->getHomeworkDao()->findHomeworksByCourseIdAndLessonId($courseId, $lessonId);
+		return $this->getHomeworkDao()->findHomeworksByLessonId($lessonId);
 	}
 
 	public function getResult($id)
 	{
         return $this->getResultDao()->getResult($id);
-	}
-
-	public function searchHomeworks($conditions, $sort, $start, $limit)
-	{
-
 	}
 
 	public function createHomework($courseId,$lessonId,$fields)
@@ -357,7 +352,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return $this->getResultDao()->findResultsCountsByCourseIdAndStatus($courseId, $status);
     }
 
-    public function findHomeworkItemsByHomeworkId($homeworkId)
+    public function findItemsByHomeworkId($homeworkId)
     {
 		return $this->getHomeworkItemDao()->findItemsByHomeworkId($homeworkId);
     }
@@ -472,7 +467,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     private function addItemResult($id,$homework)
     {
         $homeworkResult = $this->getResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
-        $homeworkItems = $this->findHomeworkItemsByHomeworkId($id);
+        $homeworkItems = $this->findItemsByHomeworkId($id);
         $itemResult = array();
         $homeworkitemResult = array();
 

@@ -67,7 +67,7 @@ class CourseHomeworkManageController extends BaseController
 			throw $this->createNotFoundException("作业(#{$homeworkId})不存在！");
 		}
 
-		$homeworkItems = $this->getHomeworkService()->findHomeworkItemsByHomeworkId($homeworkId);
+		$homeworkItems = $this->getHomeworkService()->findItemsByHomeworkId($homeworkId);
         $homeworkItemsArray = array();
 
         foreach ($homeworkItems as $key => $homeworkItem) {

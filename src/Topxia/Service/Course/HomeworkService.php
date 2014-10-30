@@ -6,17 +6,15 @@ interface HomeworkService
 {
 	public function getHomework($id);
 
-    public function findHomeworksByCourseIdAndLessonId($courseId, $lessonId);
+    public function findHomeworksByLessonId($lessonId);
 
     public function findHomeworksByCourseIdAndLessonIds($courseId, $lessonIds);
 
     public function findHomeworksByCreatedUserId($userId);
     
-	public function getResult($id);
+    public function getResult($id);
 
-	public function searchHomeworks($conditions, $sort, $start, $limit);
-
-	public function createHomework($courseId,$lessonId,$fields);
+    public function createHomework($courseId,$lessonId,$fields);
 
     public function updateHomework($id, $fields);
 
@@ -59,7 +57,7 @@ interface HomeworkService
     public function findResultsCountsByCourseIdAndStatus($courseId,$status);
 
     //item
-    public function findHomeworkItemsByHomeworkId($homeworkId);
+    public function findItemsByHomeworkId($homeworkId);
 
     /**
      * 获得作业的问题集（含子题）
