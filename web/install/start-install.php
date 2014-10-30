@@ -178,13 +178,28 @@ function install_step3()
 function install_step4()
 {
 	global $twig;
-	// $signals=$this->createEduSohoOpenClient()->getEsSignal();
-	// var_dump($signals);exit();
+	
+        $userAgent = 'EduSoho Install Client 1.0';
+        $connectTimeout = 10;
+        $timeout = 10;
+        $url = "";
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_URL, $url );
+        $response = curl_exec($curl);
+        curl_close($curl);
+
 	echo $twig->render('step-4.html.twig', array(
 		'step' => 4,
-		// "signals"=>$signals,
+		"response"=>$response,
 	));
 }
+
 
 /**
  * 生产Key
@@ -678,22 +693,5 @@ EOD;
         return $response;
     }
 
-    private function createEduSohoOpenClient()
-    {
-        if (!isset($this->client)) {
-            $cloud = $this->getSettingService()->get('storage', array());
-            $developer = $this->getSettingService()->get('developer', array());
-
-            $options = array(
-                'accessKey' => empty($cloud['cloud_access_key']) ? null : $cloud['cloud_access_key'],
-                'secretKey' => empty($cloud['cloud_secret_key']) ? null : $cloud['cloud_secret_key'],
-                'apiUrl' => empty($developer['app_api_url']) ? null : $developer['app_api_url'],
-                'debug' => empty($developer['debug']) ? false : true,
-            );
-
-            $this->client = new EduSohoOpenClient($options);
-        }
-        return $this->client;
-    }
-
+    
 }
