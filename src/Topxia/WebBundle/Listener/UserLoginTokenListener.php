@@ -52,7 +52,7 @@ class UserLoginTokenListener
             $response = new RedirectResponse($goto, '302');
             $response->headers->setCookie(new Cookie("REMEMBERME", ''));
 
-            $this->container->get('session')->getFlashBag()->add('danger', '此帐号已在别处登录，请重新登录');
+            $this->container->get('session')->getFlashBag()->add('danger', '此账号已在别处登录，请重新登录');
 
     		$event->setResponse($response);
     	}

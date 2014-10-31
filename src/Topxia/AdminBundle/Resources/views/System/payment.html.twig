@@ -50,12 +50,12 @@
         <label for="alipay_key">接口类型</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('alipay_type', {'direct':'立即到帐接口', 'dualfun':'标准双接口' }, payment.alipay_type)}}
+        {{ radios('alipay_type', {'direct':'立即到账接口', 'dualfun':'标准双接口' }, payment.alipay_type)}}
         <div class="help-block">
-          由于支付宝政策限制，"立即到帐接口"只能以企业的名义申请，个人用户请申请“标准双接口”。
+          由于支付宝政策限制，"立即到账接口"只能以企业的名义申请，个人用户请申请“标准双接口”。
           <a href="http://www.edusoho.com/intro/96#payment" target="_blank">如何申请？</a>
           <br>
-          "立即到帐接口"如需在移动客户端使用，还需开通<a href="https://b.alipay.com/order/productDetail.htm?productId=2013080604609688" target="blank">手机网站支付</a>
+          "立即到账接口"如需在移动客户端使用，还需开通<a href="https://b.alipay.com/order/productDetail.htm?productId=2013080604609688" target="blank">手机网站支付</a>
 
 
         </div>
@@ -82,11 +82,11 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="alipay_key">支付宝帐号</label>
+        <label for="alipay_key">支付宝账号</label>
       </div>
       <div class="controls col-md-8">
         <input type="text" id="alipay_account" name="alipay_account" class="form-control" value="{{payment.alipay_account}}">
-        <div class="help-block">如需开启移动客户端支付，需填写支付宝帐号。</div>
+        <div class="help-block">如需开启移动客户端支付，需填写支付宝账号。</div>
       </div>
     </div>
 

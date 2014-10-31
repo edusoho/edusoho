@@ -764,6 +764,11 @@ body {
 	overflow: visible;
 }
 
+.show-user{
+	color:#BDB76B;;
+	font-size: 18px;
+}
+
 .thread-post-body {
 	/*overflow: visible;*/
 }
@@ -796,6 +801,15 @@ body {
 }
 
 .thread-post:hover .thread-post-dropdown .dropdown-toggle {
+	visibility: visible;
+}
+.thread-post-action{
+	text-align: right;
+	font-size: 12px;
+	visibility: hidden;
+}
+
+.thread-post:hover .thread-post-action {
 	visibility: visible;
 }
 
@@ -4464,4 +4478,7 @@ a.homework-essay-textarea-pack-up{
 
 .homepage .hot-group p {
 	margin-bottom: 10px;
+}
+.course-data a{
+	color:#2a6496;
 }

@@ -291,9 +291,12 @@ class CourseController extends BaseController
 
 		$courseReviews = $this->getReviewService()->findCourseReviews($course['id'],'0','1');
 
+		$freeLesson=$this->getCourseService()->searchLessons(array('courseId'=>$id,'type'=>'video','status'=>'published','free'=>'1'),array('createdTime','ASC'),0,1);
+		if($freeLesson)$freeLesson=$freeLesson[0];
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
+			'freeLesson'=>$freeLesson,
 			'courseMemberLevel' => $courseMemberLevel,
 			'checkMemberLevelResult' => $checkMemberLevelResult,
 			'groupedItems' => $groupedItems,

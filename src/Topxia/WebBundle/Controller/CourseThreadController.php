@@ -313,13 +313,30 @@ class CourseThreadController extends BaseController
             $form->bind($request);
             $userId = $user->id;
             if ($form->isValid()) {
-                $post = $this->getThreadService()->createPost($form->getData());
+                $postData=$form->getData();
+                
+                list($postData,$users)=$this->replaceMention($postData);
+             
+                $post = $this->getThreadService()->createPost($postData);
+
+                $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
+                $threadUrl .= "#post-". $post['id'];
+
                 if ($thread['userId'] != $user->id) {
+
                     $userUrl = $this->generateUrl('user_show', array('id'=>$userId), true);
-                    $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
-                    $threadUrl .= "#post-". $post['id'];
+                    
                     $this->getNotifiactionService()->notify($thread['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
                 }
+
+                foreach ($users as $user) {
+
+                    if ($user['id'] != $userId) {
+                    $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+                    $this->getNotifiactionService()->notify($user['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中@了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
+                    }
+                }
+
                 return $this->render('TopxiaWebBundle:CourseThread:post-list-item.html.twig', array(
                     'course' => $course,
                     'thread' => $thread,
@@ -337,6 +354,37 @@ class CourseThreadController extends BaseController
             'thread' => $thread,
             'form' => $form->createView()
         ));
+    }
+
+    private function replaceMention($postData)
+    {   
+        $currentUser = $this->getCurrentUser();
+        $content=$postData['content'];
+        $users=array();
+        preg_match_all('/@([\x{4e00}-\x{9fa5}\w]{2,16})/u', $content, $matches);
+        $mentions = array_unique($matches[1]);
+   
+        foreach ($mentions as $mention) {
+            
+            $user=$this->getUserService()->getUserByNickname($mention);
+            
+            if($user){
+
+                $path = $this->generateUrl('user_show', array('id' => $user['id']));
+                $nickname=$user['nickname'];
+                $html = "<a href=\"{$path}\" class=\"show-user\">@{$nickname}</a>";
+
+                $content = preg_replace("/@{$nickname}/ui", $html, $content);
+
+                $users[]=$user;
+            }
+         
+        }
+     
+        $postData['content']=$content;
+    
+        return array($postData,$users);
+        
     }
 
     public function editPostAction(Request $request, $courseId, $threadId, $id)

@@ -32,7 +32,9 @@
             <div id="lesson-preview-ppt-player" data-url="{{ path('course_lesson_ppt', {courseId:lesson.courseId, lessonId:lesson.id}) }}"></div>
 
         {% else %}
-            {{ lesson.content|raw }}
+            <div {% if setting('course.copy_enabled')|default(0) > 0 %} oncopy="return false;" oncut="return false;" onselectstart="return false" oncontextmenu="return false;"{% endif %}>
+                {{ lesson.content|raw }}
+            </div>
         {% endif %}
     {% else %}
         <div class="empty">课时尚未发布，无法预览！</div>

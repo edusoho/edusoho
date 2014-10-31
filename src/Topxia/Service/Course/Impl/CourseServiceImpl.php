@@ -66,6 +66,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getCourseDao()->getCoursesCount();
 	}
 
+	public function findCoursesCountByLessThanCreatedTime($endTime)
+	{
+	        	return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
+	}
+
+	public function analysisCourseSumByTime($endTime)
+    	{
+        		return $this->getCourseDao()->analysisCourseSumByTime($endTime);
+    	}
+
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
@@ -1108,6 +1118,21 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lesson = $this->getCourseLesson($courseId, $lessonId);
 
 		if (!empty($lesson) && $lesson['type'] != 'video') {
+
+			$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
+			if ($learn) {
+				return false;
+			}
+
+			$this->getLessonLearnDao()->addLearn(array(
+				'userId' => $user['id'],
+				'courseId' => $courseId,
+				'lessonId' => $lessonId,
+				'status' => 'learning',
+				'startTime' => time(),
+				'finishedTime' => 0,
+			));
+
 			return true;
 		}
 

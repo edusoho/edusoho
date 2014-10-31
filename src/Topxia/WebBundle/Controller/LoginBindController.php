@@ -57,9 +57,9 @@ class LoginBindController extends BaseController
             $message = $e->getMessage();
             $clientInfo = $client->getClientInfo();
             if ($message == 'unaudited') {
-                $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$clientInfo['name'].'登录连接的审核还未通过。';
+                $message = '抱歉！暂时无法通过第三方账号登录。原因：'.$clientInfo['name'].'登录连接的审核还未通过。';
             } else {
-                $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$message;
+                $message = '抱歉！暂时无法通过第三方账号登录。原因：'.$message;
             }
             $this->setFlashMessage('danger', $message);
             return $this->redirect($this->generateUrl('login'));
@@ -198,7 +198,7 @@ class LoginBindController extends BaseController
         } elseif(!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
             $response = array('success' => false, 'message' => '密码不正确，请重试！');
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
-            $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！");
+            $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}账号已经绑定了该第三方网站的其他账号，如需重新绑定，请先到账户设置中取消绑定！");
         } else {
             $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
             $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);

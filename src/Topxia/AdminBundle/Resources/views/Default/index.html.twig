@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>管理中心</h1>
+  <h1>管理中心  </h1>
 </div>
 
 {% if is_granted('ROLE_ADMIN') %}
@@ -17,12 +17,17 @@
       </div>
     </div>
 
+  <div class="col-md-12">
+        {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
+    </div>
+
+
  <div class="col-md-6">
   <div class="panel panel-default">
   
     <div class="panel-heading clearfix">
      <span class="pull-right" style="display:block">
-         <span id="onlineNum" data-url="{{path('admin_online_count')}}">正在载入在线人数...</span>（<span id="loginNum" data-url="{{path('admin_login_count')}}">正在载入登陆人数...</span>）
+         <span id="onlineNum" data-url="{{path('admin_online_count')}}">正在载入在线人数...</span>（<span id="loginNum" data-url="{{path('admin_login_count')}}">正在载入登录人数...</span>）
      </span>
      <h3 class="panel-title pull-left" id="operation-analysis-title" data-url="{{path('admin_operation_analysis')}}"> 数据统计
 

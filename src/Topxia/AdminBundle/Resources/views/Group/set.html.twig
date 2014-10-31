@@ -19,7 +19,15 @@
               </div>
             </div>
 
-           
+           <div class="row form-group">
+              <div class="col-md-2 control-label">
+                <label >最热话题的时间范围</label>
+              </div>
+              <div class="controls col-md-7 radios">
+                {{ radios('threadTime_range', {'1':'天', '7':'周','30':'月'}, setting('group').threadTime_range|default('7')) }}
+                <div class="help-block"></div>
+              </div>
+            </div>
 
             <div class="row form-group">
               <div class="col-md-2 control-label"></div>

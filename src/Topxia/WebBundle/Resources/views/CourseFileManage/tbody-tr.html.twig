@@ -8,6 +8,39 @@
     {% if uploadFile.storage == 'cloud' %}
       <span class="glyphicon glyphicon-cloud text-muted" title="云文件"></span>
     {% endif %}
+
+    {% if uploadFile.convertStatus == 'waiting' %}
+      {{uploadFile.filename|sub_text(15)}}<br><span class="text-warning text-sm">正在文件格式转换</span>
+      {% if ( now - uploadFile.updatedTime ) > 28800 %}
+        <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
+      {% endif %}
+
+    {% elseif uploadFile.convertStatus == 'doing' %}
+      {{uploadFile.filename|sub_text(15)}}<br><span class="text-info text-sm">正在文件格式转换</span>
+      {% if uploadFile.type == 'ppt' and ( now - uploadFile.updatedTime ) > 1800 %}
+        <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
+      {% endif %}
+    {% elseif uploadFile.convertStatus == 'error' %}
+      {{uploadFile.filename|sub_text(15)}}<br><span class="text-danger text-sm">文件格式转换失败，<a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn">重新转换</a></span>
+    {% else %}
+      {% if uploadFile.targetType in ['courselesson', 'coursematerial'] %}
+        <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank">{{ uploadFile.filename|sub_text(15) }}</a>
+        {% if uploadFile.type == 'ppt' and ( not uploadFile.metas2.length|default(null) ) and uploadFile.targetType == 'courselesson'  %}
+          <br><a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
+        {% endif %}
+      {% else %}
+        {{ uploadFile.filename|sub_text(15) }}
+      {% endif %}
+    {% endif %}
+
+    {% if setting('developer.debug') and uploadFile.convertParams.convertor|default(null) %}
+      <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换(调试模式)</a>
+    {% endif %}
+    {% if uploadFile.useNum == 0 %}
+    <br>
+    <span class="label label-danger tip">未使用</span>
+    {% endif %}
+
     {% if uploadFile.type == "video" and uploadFile.metas2|default(null) %}
       {% if uploadFile.convertParams.videoQuality == "low" %}
       {% set quality = "流畅画质" %}
@@ -17,42 +50,17 @@
       {% set quality = "精细画质" %}
       {% endif %}
       {% if uploadFile.metas2.shd|default(null) %}
-      <span class="label label-info pull-right tip" data-toggle="tooltip" title="{{quality}}">超清</span>
+      {% if uploadFile.useNum != 0 %}<br>{% endif %}
+      <span class="label label-info  tip" data-toggle="tooltip" title="{{quality}}">超清</span>
       {% elseif uploadFile.metas2.hd|default(null) %}
-      <span class="label label-info pull-right tip" data-toggle="tooltip" title="{{quality}}">高清</span>
+      {% if uploadFile.useNum != 0 %}<br>{% endif %}
+      <span class="label label-info  tip" data-toggle="tooltip" title="{{quality}}">高清</span>
       {% elseif uploadFile.metas2.sd|default(null) %}
-      <span class="label label-info pull-right tip" data-toggle="tooltip" title="{{quality}}">标清</span>
+      {% if uploadFile.useNum != 0 %}<br>{% endif %}
+      <span class="label label-info  tip" data-toggle="tooltip" title="{{quality}}">标清</span>
       {% endif %}
       
     {% endif %}
-    {% if uploadFile.convertStatus == 'waiting' %}
-      {{uploadFile.filename}}<br><span class="text-warning text-sm">正在文件格式转换</span>
-      {% if ( now - uploadFile.updatedTime ) > 28800 %}
-        <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
-      {% endif %}
-
-    {% elseif uploadFile.convertStatus == 'doing' %}
-      {{uploadFile.filename}}<br><span class="text-info text-sm">正在文件格式转换</span>
-      {% if uploadFile.type == 'ppt' and ( now - uploadFile.updatedTime ) > 1800 %}
-        <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
-      {% endif %}
-    {% elseif uploadFile.convertStatus == 'error' %}
-      {{uploadFile.filename}}<br><span class="text-danger text-sm">文件格式转换失败，<a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn">重新转换</a></span>
-    {% else %}
-      {% if uploadFile.targetType in ['courselesson', 'coursematerial'] %}
-        <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank">{{ uploadFile.filename }}</a>
-        {% if uploadFile.type == 'ppt' and ( not uploadFile.metas2.length|default(null) ) and uploadFile.targetType == 'courselesson'  %}
-          <br><a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
-        {% endif %}
-      {% else %}
-        {{ uploadFile.filename }}
-      {% endif %}
-    {% endif %}
-
-    {% if setting('developer.debug') and uploadFile.convertParams.convertor|default(null) %}
-      <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换(调试模式)</a>
-    {% endif %}
-
   </td>
   <td> 
     {{ dict_text('fileType', uploadFile.type) }}
