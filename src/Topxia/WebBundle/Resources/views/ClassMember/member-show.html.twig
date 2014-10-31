@@ -9,56 +9,53 @@
       </div>
     </div>
 
-    <div class="row panel-block-body">
+    <div class="row panel-block-body class-student-grids">
       <div class="col-md-6">
-        <div class="media">
+        <div class="student-status-img pull-left">
           <a href="{{ path('user_show', {id:headTeacher.id}) }}" class="pull-left">
-            <img class="media-object {% if not loginSessions[headTeacher.id]|default('') %}img-grey{% endif %}" width="48" height="48" src="{{file_path(headTeacher.smallAvatar, 'avatar.png')}}" alt="{{headTeacher.truename}}">
+            <img class="avatar {% if not loginSessions[headTeacher.id]|default('') %}img-grey{% endif %}" width="48" height="48" src="{{file_path(headTeacher.smallAvatar, 'avatar.png')}}" alt="{{headTeacher.truename}}">
           </a>
-        {#   <div class="teacher-status">
-            <span style={% if loginSessions[headTeacher.id]|default('') %}"color:green"{% else %}"color:grey"{% endif %} class="glyphicon glyphicon-user"></span>
-          </div> #}
-          <div class="media-body">
-            {% if app.user.id!=headTeacher.id %}
-              <button class="btn btn-success btn-xs pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:headTeacher.id})}}">发私信</button>
-            {% endif %}
-            <a href="{{ path('user_show', {id:headTeacher.id}) }}">
-              <h5>{{headTeacher.truename}}（班主任）</h5>
-            </a>
-          </div>
         </div>
+
+
+
+          <div class="member-name">
+            <a href="{{ path('user_show', {id:headTeacher.id}) }}" class="truename pull-left">{{headTeacher.truename}}（班主任）</a></br>
+            {% if app.user.id!=headTeacher.id %}
+              <div class="send-message">
+                <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:headTeacher.id})}}">发私信</button>
+              </div>
+            {% endif %}
+          </div>
       </div>
+
+
       {% for teacher in teachers %}
         {% if teacher['id']!=headTeacher.id %}
           <div class="col-md-6">
-            <div class="media">
-
+            <div class="student-status-img pull-left">
               <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-left">
-                <img class="media-object {% if not loginSessions[teacher.id]|default('') %}img-grey{% endif %}" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
+                <img class="avatar {% if not loginSessions[teacher.id]|default('') %}img-grey{% endif %}" width="48" height="48" src="{{file_path(teacher.smallAvatar, 'avatar.png')}}" alt="{{teacher.truename}}">
               </a>
-              
-              {# <div class="teacher-status">
-                <span style={% if loginSessions[teacher.id]|default('') %}"color:green"{% else %}"color:grey"{% endif %} class="glyphicon glyphicon-user"></span>
-              </div> #}
-
-
-
-              <div class="media-body">
-                {% if app.user.id!=teacher.id %}
-                  <button class="btn btn-success btn-xs pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">发私信</button>
-                {% endif %}
-                <a href="{{ path('user_show', {id:teacher.id}) }}">
-                  <h5>{{teacher.truename}}</h5>
-                </a>
-              </div>
             </div>
+
+            <div class="member-name">
+              <a href="{{ path('user_show', {id:teacher.id}) }}" class="truename pull-left">{{teacher.truename}}</a><br>
+
+              {% if app.user.id!=teacher.id %}
+                <div class="send-message">
+                  <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">发私信</button>
+                </div>
+              {% endif %}
+            </div>
+
           </div>
         {% endif %}
       {% else %}
         <div class="empty">尚无任课老师</div>
       {% endfor %}    
     </div>
-  </div><!-- /panel-body-block -->
+  </div>
 
   <div class="panel-block">
     <div class="row panel-block-heading">
@@ -69,28 +66,30 @@
 
     <div class="row panel-block-body class-student-grids">
       {% for student in students %}
-        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 grid ">
-          <div class="student-status-img">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 grid ">
+          <div class="student-status-img pull-left">
             <a href="{{ path('user_show', {id:student.id}) }}">
               <img class="avatar {% if not loginSessions[student.id]|default('') %}img-grey{% endif %}" width="48" height="48" src="{{ file_path(student.smallAvatar, 'avatar.png') }}" alt="{{student.truename}}">
-              
             </a>
-            {# <div class="student-status">
-              <span style={% if loginSessions[student.id]|default('') %}"color:green"{% else %}"color:grey"{% endif %} class="glyphicon glyphicon-user"></span>
-            </div> #}
           </div>
 
-          <a href="{{ path('user_show', {id:student.id}) }}" class="truename">{{student.truename}}</a>
+          <div class="member-name">
+            <a href="{{ path('user_show', {id:student.id}) }}" class="truename pull-left">{{student.truename}}</a><br>
+            
+            <div class="login-status">
+              {% if loginSessions[student.id]|default('') %}
+                <span class="label label-success">在线</button>
+              {% else %}
+                <span class="label label-default">离线</button>
+              {% endif %}
+            </div>
+          </div>
+
           <div class="student-card-content">
             <div class="media">
               <a href="{{ path('user_show', {id:student.id}) }}" class="pull-left">
                 <img class="media-object pull-left {% if not loginSessions[student.id]|default('') %}img-grey{% endif %}" src="{{ file_path(student.smallAvatar, 'avatar.png') }}">
               </a>
-
-              {# <div class="student-status-popover">
-                <span style={% if loginSessions[student.id]|default('') %}"color:green"{% else %}"color:grey"{% endif %} class="glyphicon glyphicon-user"></span>
-              </div> #}
-
 
               <div class="media-body">
                 <spann class="text-success">{{student.truename}} </spann>
@@ -113,5 +112,5 @@
         <div class="empty">尚无学生</div>
       {% endfor %}
     </div>
-  </div><!-- /panel-body-block -->
+  </div>
 {% endblock %}
