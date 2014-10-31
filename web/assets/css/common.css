@@ -1830,3 +1830,11 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 .green-color {
   color: #57c332;
 }
+
+a {
+  color: #57c332;
+}
+
+a:hover, a:focus {
+  color: #57c332;
+}
