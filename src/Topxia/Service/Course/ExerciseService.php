@@ -5,7 +5,7 @@ interface ExerciseService
 {
 	public function getExercise($id);
 
-	public function getExerciseByCourseIdAndLessonId($courseId, $lessonId);
+	public function getExerciseByLessonId($lessonId);
 
 	public function getItemSetResultByExerciseIdAndUserId($exerciseId,$userId);
 

@@ -19,9 +19,9 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $exercise;
     }
 
-    public function getExerciseByCourseIdAndLessonId($courseId, $lessonId)
+    public function getExerciseByLessonId($lessonId)
     {
-        $exercise = $this->getExerciseDao()->getExerciseByCourseIdAndLessonId($courseId, $lessonId);
+        $exercise = $this->getExerciseDao()->getExerciseByLessonId($lessonId);
         if (empty($exercise)) {
             return null;
         }
@@ -128,7 +128,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId', 'questionCount', 'difficulty', 'ranges', 'source'))) {
             throw $this->createServiceException('参数缺失，创建练习失败！');
         }
-        $exercise = $this->getExerciseByCourseIdAndLessonId($fields['courseId'], $fields['lessonId']);
+        $exercise = $this->getExerciseByLessonId($fields['lessonId']);
 
         if (!empty($exercise)) {
             $this->getExerciseDao()->deleteExercise($exercise['id']);

@@ -50,7 +50,7 @@ class ExerciseServiceTest extends BaseTestCase
         $this->assertEquals(false, $result);
     }
 
-    public function testGetExerciseByCourseIdAndLessonId()
+    public function testgetExerciseByLessonId()
     {
         $course = $this->generateCourse();
         $lesson = $this->generateLesson($course);

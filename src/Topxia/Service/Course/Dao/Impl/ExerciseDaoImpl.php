@@ -15,7 +15,7 @@ class ExerciseDaoImpl extends BaseDao implements ExerciseDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function getExerciseByCourseIdAndLessonId($courseId, $lessonId)
+    public function getExerciseByLessonId($lessonId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND lessonId = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($courseId, $lessonId)) ? : null;

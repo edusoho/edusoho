@@ -14,7 +14,7 @@ class LessonHomeworkPluginController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $request->query->get('lessonId'));
 
         $homework = $this->getHomeworkService()->findHomeworksByLessonId($lesson['id']);
-        $exercise = $this->getExerciseService()->getExerciseByCourseIdAndLessonId($course['id'], $lesson['id']);
+        $exercise = $this->getExerciseService()->getExerciseByLessonId($lesson['id']);
         $homeworkResult = $this->getHomeworkService()->getResultByHomeworkIdAndUserId($homework['id'], $user['id']);
         return $this->render('TopxiaWebBundle:LessonHomeworkPlugin:list.html.twig', array(
             'course' => $course,
