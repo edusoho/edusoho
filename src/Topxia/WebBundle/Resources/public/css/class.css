@@ -135,9 +135,10 @@
     font-weight: normal;
 }
 
+
+
 .class-student-grids {
-
-
+    padding-left: 20px
 }
 
 
@@ -148,11 +149,33 @@
 .class-student-grids .avatar {
     display: block;
     margin: 0 auto 5px;
+    float: left;
 }
 
-.class-student-grids .truename {
+.class-student-grids .member-name {
+    float: left;
+    padding-left: 15px;
+} 
+
+.class-student-grids .member-name .truename {
     text-align: center;
     display: block;
+}
+
+.class-student-grids .member-name .send-message {
+    margin-top: 6px; 
+}
+
+.class-student-grids .member-name .login-status {
+    margin-top: 8px; 
+}
+
+.class-student-grids .login-status span{
+    font-weight: normal;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 4px;
+    padding-right:4px;
 }
 
 .class-student-grids .popover.right {
@@ -171,6 +194,7 @@
     width: 48px;
     height: 48px;
 }
+
 
 .panel-block {
     margin-bottom: 30px;
