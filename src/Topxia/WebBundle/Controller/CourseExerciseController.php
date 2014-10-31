@@ -28,13 +28,7 @@ class CourseExerciseController extends BaseController
 
         $typeRange = $exercise['questionTypeRange'];
         $typeRange = $this->getquestionTypeRangeStr($typeRange);
-
-        $questionsCount = $this->getQuestionService()->findQuestionsCountbyTypes($typeRange);
-        $questions = $this->getQuestionService()->findQuestionsbyTypes($typeRange, 0, $questionsCount);
-
-        $questionIds = ArrayToolkit::column($questions,'id');
-        $itemCount = $exercise['itemCount'];
-        $excludeIds = array_rand($questionIds,$itemCount);
+        $excludeIds = $this->getRandQuestionIds($typeRange,$exercise['itemCount']);
 
         $result = $this->getExerciseService()->startExercise($exerciseId,$excludeIds);
 
@@ -46,6 +40,8 @@ class CourseExerciseController extends BaseController
             ))
         );
 	}
+
+
 
 	public function doAction(Request $Request,$courseId,$exerciseId,$resultId)
 	{
@@ -135,6 +131,22 @@ class CourseExerciseController extends BaseController
 		}
         return substr($questionTypeRangeStr, 0,-1);
 	}
+
+    private function getRandQuestionIds($typeRange,$itemCount)
+    {
+        $questionsCount = $this->getQuestionService()->findQuestionsCountbyTypes($typeRange);
+        $questions = $this->getQuestionService()->findQuestionsbyTypes($typeRange, 0, $questionsCount);
+        $questionIds = ArrayToolkit::column($questions,'id');
+
+        $excludeIds = array_rand($questionIds,$itemCount);
+
+        $excludeIdsArr = array();
+        foreach ($excludeIds as $key => $excludeId) {
+            array_push($excludeIdsArr, $questions[$excludeId]['id']);
+        }
+
+        return $excludeIdsArr;
+    }
 
 	private function getCourseService()
     {
