@@ -4247,10 +4247,3 @@ body {
 	color:#2a6496;
 }
 
-/*k12 CSS*/
-.site-navbar .navbar-nav > li > a:hover, .site-navbar .navbar-nav > li > a:focus {
-  background-color: #57c332;
-}
-.site-navbar .navbar-nav > li > a {
-	color: #57c332;
-}
