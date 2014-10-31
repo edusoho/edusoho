@@ -170,7 +170,7 @@ class ExerciseServiceTest extends BaseTestCase
         $this->getExerciseService()->deleteExercise(999);
     }
 
-    public function testfindExercisesByCourseIdAndLessonIds()
+    public function testfindExercisesByLessonIds()
     {
         $course = $this->generateCourse();
         $lesson1 = $this->generateLesson($course);
@@ -204,7 +204,7 @@ class ExerciseServiceTest extends BaseTestCase
             $exercise2[0]['lessonId']
         );
 
-        $exercises = $this->getExerciseService()->findExercisesByCourseIdAndLessonIds($course['id'], $exerciseIds);
+        $exercises = $this->getExerciseService()->findExercisesByLessonIds($exerciseIds);
         $this->assertContains($exercise1[0], $exercises);
         $this->assertContains($exercise2[0], $exercises);
     }
