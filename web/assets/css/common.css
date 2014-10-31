@@ -1825,3 +1825,8 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 .searchSelect {
   height: 46px;
 }
+
+/*K12 Common CSS*/
+.green-color {
+  color: #57c332;
+}
