@@ -83,6 +83,24 @@
     text-align: center;
 }
 
+.myteaching-thread {
+    float: left;
+}
+
+.myteaching-thread .text{
+    float: left;
+    margin-left: 15px;
+}
+
+.myteaching-thread .text .title a{
+    font-size: 14px;
+    color: #444;
+}
+
+.myteaching-thread .text .name {
+    margin-top: 10px;
+}
+
 .status-list {
     font-size: 13px;
 }
