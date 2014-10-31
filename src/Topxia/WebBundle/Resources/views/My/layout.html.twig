@@ -17,7 +17,7 @@
             <a href="{{path('user_show',{id:app.user.id})}}">
               <img  alt="{{ app.user.truename }}" src="{{ file_path(app.user.mediumAvatar, 'avatar.png') }}">
             </a><br/><br/>
-            <b>欢迎回来，{{app.user.truename}}</b>
+            <p class="green-color"><b>欢迎回来，{{app.user.truename}}</b></p>
           </div>
 
           {% if app.user.isTeacher() %}

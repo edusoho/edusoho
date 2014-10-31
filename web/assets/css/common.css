@@ -1838,3 +1838,24 @@ a {
 a:hover, a:focus {
   color: #57c332;
 }
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+  background-color: #57c332;
+}
+
+.btn-default {
+  color: #57c332;
+}
+
+.navbar-inverse {
+  border-color: #57c332 #fff #fff #fff;
+  border-width: 2px;
+}
+
+.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
+  color: #57c332;
+}
+
+.navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
+  color: #57c332;
+}
