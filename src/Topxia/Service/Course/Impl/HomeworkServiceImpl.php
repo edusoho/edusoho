@@ -260,7 +260,6 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
             }
         }
 
-        $homeworkitemResult['commitStatus'] = 'committed';
         $homeworkitemResult['rightItemCount'] = $rightItemCount;
         $homeworkitemResult['status'] = 'reviewing';
 

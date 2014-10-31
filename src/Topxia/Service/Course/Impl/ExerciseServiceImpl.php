@@ -202,7 +202,6 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             }
         }
 
-        $exerciseitemResult['commitStatus'] = 'committed';
         $exerciseitemResult['rightItemCount'] = $rightItemCount;
         $exerciseitemResult['status'] = 'finished';
 

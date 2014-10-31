@@ -17,8 +17,8 @@ class ExerciseDaoImpl extends BaseDao implements ExerciseDao
 
     public function getExerciseByLessonId($lessonId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND lessonId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($courseId, $lessonId)) ? : null;
+        $sql = "SELECT * FROM {$this->table} WHERE lessonId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($lessonId)) ? : null;
     }
 
     public function addExercise($fields)
@@ -47,7 +47,7 @@ class ExerciseDaoImpl extends BaseDao implements ExerciseDao
             return array();
         }
         $marks = str_repeat('?,', count($lessonIds) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE courseId = {$courseId} AND lessonId IN ({$marks});";
+        $sql ="SELECT * FROM {$this->table} WHERE lessonId IN ({$marks});";
         
         return $this->getConnection()->fetchAll($sql, $lessonIds);
     }

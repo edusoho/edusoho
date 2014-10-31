@@ -43,11 +43,6 @@ class HomeworkController extends BaseController
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
         $homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findResultsByIds(ArrayToolkit::column($homeworks, 'id')), 'homeworkId');
 
-        $committedCount = $this->getHomeworkService()->searchResultsCount(array(
-            'commitStatus' => 'committed',
-            'checkTeacherId' => $currentUser['id']
-        ));
-        $uncommitCount = $this->getCourseService()->searchMemberCount($conditions) - $committedCount;
         $reviewingCount = $this->getHomeworkService()->searchResultsCount(array(
             'status' => 'reviewing',
             'checkTeacherId' => $currentUser['id']
@@ -57,24 +52,14 @@ class HomeworkController extends BaseController
             'checkTeacherId' => $currentUser['id']
         ));
 
-        if (!empty($homeworkResults)) {
-            $students = $this->getHomeworkStudents($status, $students, $homeworkResults);
-        } else {
-            if ($status != 'uncommitted') {
-                $students = array();
-            }
-        }
-
         return $this->render('TopxiaWebBundle:MyHomework:teaching-list.html.twig', array(
             'status' => $status,
             'homeworks' => empty($homeworks) ? array() : $homeworks,
-            'students' => $students,
             'users' => $users,
             'homeworkResults' => $homeworkResults,
             'paginator' => $paginator,
             'courses' => $courses,
             'lessons' => $lessons,
-            'uncommitCount' => $uncommitCount,
             'reviewingCount' => $reviewingCount,
             'finishedCount' => $finishedCount
         ));
@@ -113,52 +98,6 @@ class HomeworkController extends BaseController
             'lessons' => $lessons,
             'paginator' => $paginator
         ));
-    }
-
-    private function getHomeworkStudents($status, $students, $homeworkResults)
-    {
-        if ($status == 'uncommitted') {
-            foreach ($students as &$student) {
-                foreach ($homeworkResults as $item) {
-                    if ($item['status'] != 'doing' && $item['userId'] == $student['userId'] && $item['courseId'] == $student['courseId'] ) {
-                        $student = null;
-                    }
-                }
-            }
-        } 
-
-        if ($status == 'unchecked') {
-            foreach ($students as &$student) {
-                $key = false;
-                foreach ($homeworkResults as $item) {
-                    if ($item['status'] == 'reviewing' && $item['userId'] == $student['userId'] && $item['courseId'] == $student['courseId'] ) {
-                        $key = true;
-                    }
-                }
-
-                if ($key == true) {
-                    continue;
-                }
-                $student = null;
-            }
-        }
-
-        if ($status == 'finished') {
-            foreach ($students as &$student) {
-                $key = false;
-                foreach ($homeworkResults as $item) {
-                    if ($item['status'] == 'finished' && $item['userId'] == $student['userId'] && $item['courseId'] == $student['courseId'] ) {
-                        $key = true;
-                    }
-                }
-
-                if ($key == true) {
-                    continue;
-                }
-                $student = null;
-            }
-        }
-        return array_filter($students);
     }
 
     protected function getCourseService()
