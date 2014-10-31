@@ -6,9 +6,11 @@
   {% endif %}
   <a href="{{ path('course_show',{id:course.id}) }}"><img  alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}"></a>
   <div class="caption">
-    <a href="{{ path('course_show',{id:course.id}) }}"><h3 class="title">{{ course.title }}</h3></a>
-    <div class="metas clearfix">
-      <a href="{{ path('class_show',{ classId: class.id })}}" class="pull-left">{{ class_name(class) }}</a>
+    <div class="title">
+      <a href="{{ path('course_show',{id:course.id}) }}">{{ course.title }}</a>
+    </div>
+    <div class="clearfix">
+      <a href="{{ path('class_show',{ classId: class.id })}}" class="pull-left"><small>{{ class_name(class) }}</small></a>
     </div>
   </div>
 </div>

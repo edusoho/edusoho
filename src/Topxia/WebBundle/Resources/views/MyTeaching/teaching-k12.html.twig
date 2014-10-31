@@ -8,7 +8,10 @@
 <div class="panel panel-default panel-col lesson-manage-panel class-table">
 
   <div class="panel-body">
-    <h5>正在教学（{{courseCount|default(0)}}）</h5>
+    <div class="myteaching-title">
+      <div class="text">正在教学</div>
+      <div class="num"><span class="label label-success">{{courseCount|default(0)}}</span></div>
+    </div><br>
     <hr>
     <div class="row">
       {% set count =0 %}
@@ -28,14 +31,17 @@
     </div>
     {% if courseCount>0 %}
       <div class="row">
-        <a class="col-md-1 col-md-offset-11 text-rigth" href="{{path('my_teaching_courses') }}">更多</a>
+        <a class="col-md-1 col-md-offset-11 text-rigtht" href="{{path('my_teaching_courses') }}">更多 ></a>
       </div>
     {% endif %}
   </div>
 
   <div class="panel-body">
     {% if manageClasses %}
-      <h5>我的班级（{{manageClasses|length}}）</h5>
+      <div class="myteaching-title">
+        <div class="text">我的班级</div>
+        <div class="num"><span class="label label-success">{{manageClasses|length}}</span></div>
+      </div><br>
       <hr>
       <div class="row">
         {% for manageClass in manageClasses %}
@@ -48,7 +54,10 @@
   </div>
 
   <div class="panel-body">
-    <h5>等待解答（{{threadCount|default(0)}}）</h5>
+    <div class="myteaching-title">
+      <div class="text">等待解答</div>
+      <div class="num"><span class="label label-success">{{threadCount|default(0)}}</span></div>
+    </div><br>
     <hr>
     <div class="row">
       {% for thread in threads %}
@@ -62,13 +71,16 @@
     </div>
     {% if threadCount>0 %}
       <div class="row">
-        <a class="col-md-1 col-md-offset-11 text-rigth" href="{{path('my_teaching_threads', {type:'question'}) }}">更多</a>
+        <a class="col-md-1 col-md-offset-11 text-rigtht" href="{{path('my_teaching_threads', {type:'question'}) }}">更多 ></a>
       </div>
     {% endif %}
   </div>
 
   <div class="panel-body">
-    <h5>等待批阅（{{testpaperCount|default(0)}}）</h5>
+    <div class="myteaching-title">
+      <div class="text">等待批阅</div>
+      <div class="num"><span class="label label-success">{{testpaperCount|default(0)}}</span></div>
+    </div><br>
     <hr>
     <div class="row">
       {% for paperResult in paperResults %}
@@ -83,7 +95,7 @@
     </div>
     {% if testpaperCount>0 %}
       <div class="row">
-        <a class="col-md-1 col-md-offset-11 text-rigth" href="{{path('course_manage_list_teacher_test_reviewing') }}">更多</a>
+        <a class="col-md-1 col-md-offset-11 text-rigtht" href="{{path('course_manage_list_teacher_test_reviewing') }}">更多 ></a>
       </div>
     {% endif %}
   </div>

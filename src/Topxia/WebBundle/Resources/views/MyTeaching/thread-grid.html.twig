@@ -1,13 +1,15 @@
-<div style="margin-bottom:15px"  class="">
-  <a class="pull-left" href="{{path('user_show',{id:threadUser.id})}}">
+<div class="">
+  <a href="{{path('user_show',{id:threadUser.id})}}">
     <img class="media-object pull-left"  width="48" height="48" src="{{file_path(threadUser.smallAvatar, 'avatar.png')}}" alt="{{threadUser.truename}}">
   </a>
-  <div class="media-body">
-    <div style="margin-bottom:15px">
+  <div class="">
+    <div>
       <a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}"><h5 class="media-heading">{{thread.title}}</h5></a>
     </div>
-    <a href="{{ path('user_show', {id:threadUser.id}) }}">
-      <h5 class="media-heading">{{threadUser.truename}}</h5>
-    </a>
+    <div>
+      <a href="{{ path('user_show', {id:threadUser.id}) }}">
+        <h5 class="media-heading">{{threadUser.truename}}</h5>
+      </a>
+    </div>
   </div>
 </div>

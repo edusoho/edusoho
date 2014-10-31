@@ -58,10 +58,29 @@
 }
 
 
+.class-table {
+    margin-bottom: 10px;
+}
+
+.class-table .class-border{
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    padding: 4px 2px 4px 2px;
+}
+
 .class-table .class-picture {
-    width: 140px;
-    height: 70px;
-    margin-right: 10px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    -webkit-border-radius: 6px;
+            border-radius: 6px;
+}
+
+.class-table .class-name {
+    text-align: center;
 }
 
 .status-list {
@@ -195,13 +214,18 @@
 }
 
 .class-course-grid .title {
-    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.class-course-grid .title a{
+    font-size: 15px;
+    color: #444;
     margin: 0;
     padding: 0;
     line-height: 20px;
     height: 40px;
     overflow: hidden;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .class-course-grid .metas a,
@@ -803,30 +827,27 @@ ul.schedule-lesson-list a .finished-icon {
     border: 2px solid #5bc0de;
 
 }
-/*.teacher-status {
-    position:absolute;
-    left: 46px;
-    bottom: -2px;
-}
-
-.student-status-img {
-    position:relative;
-}
-
-.student-status {
-    position:absolute;
-    left: 55px;
-    bottom: -2px;
-}
-
-.student-status-popover {
-    position:absolute;
-    left: 46px;
-    top: 40px;
-}*/
 
 .img-grey {
     filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 3.5+ */
     filter: gray; /* IE6-9 */
     -webkit-filter: grayscale(100%); /* Chrome 19+ & Safari 6+ */
+}
+
+.myteaching-title {
+    margin:10px 0 10px 0;
+    font-size: 16px;
+}   
+.myteaching-title .text {
+    float: left;
+    font-weight: normal;
+}
+
+.myteaching-title .num {
+    float: left;
+    padding-left: 10px;
+}
+
+.myteaching-title span{
+    padding:1px 5px 1px 5px;
 }
