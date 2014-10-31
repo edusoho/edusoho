@@ -454,7 +454,7 @@ input.LargeInput {width: 600px;}
   position: fixed;
   bottom: 30px;
   right: 10px;
-  z-index: 9999;
+  z-index: 1;
   padding: 8px 8px 8px 20px;
   width: 440px;
   height: 58px;
