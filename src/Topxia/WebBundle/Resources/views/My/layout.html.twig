@@ -15,7 +15,7 @@
         <div class="list-group-block">
           <div style="margin:10px" align="center">
             <a href="{{path('user_show',{id:app.user.id})}}">
-              <img  alt="{{ app.user.truename }}" src="{{ file_path(app.user.mediumAvatar, 'avatar.png') }}">
+              <img  class="img-thumbnail" alt="{{ app.user.truename }}" src="{{ file_path(app.user.mediumAvatar, 'avatar.png') }}" >
             </a><br/><br/>
             <p class="green-color"><b>欢迎回来，{{app.user.truename}}</b></p>
           </div>

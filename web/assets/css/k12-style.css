@@ -21,6 +21,15 @@ a:hover, a:focus {
   background-color: #57c332;
 }
 
+.site-navbar .navbar-nav > .active > a, 
+.site-navbar .navbar-nav > .active > a:hover, 
+.site-navbar .navbar-nav > .active > a:focus, 
+.site-navbar .navbar-nav > .open > a, 
+.site-navbar .navbar-nav > .open > a:hover, 
+.site-navbar .navbar-nav > .open > a:focus {
+  background-color: #57c332;
+}
+
 .site-navbar .navbar-nav > li > a {
 	color: #57c332;
 }

@@ -775,11 +775,19 @@ ul.schedule-lesson-list a .finished-icon {
     margin: 0;
 }
 
-.taks-body .task-table-div {
+.tasks-body .task-table-div {
     padding-top: 10px;
 }
 
-.task-body .task-button {
+.tasks-body .label-not-finished {
+    background-color: #428bca;
+} 
+
+.tasks-body .label-finished {
+    background-color: #57c332;
+} 
+
+.tasks-body .task-button {
     text-align: center;
 }
 
@@ -791,7 +799,7 @@ ul.schedule-lesson-list a .finished-icon {
     height: 370px;
 }
 
-.task-body .task-panel {
+.tasks-body .task-panel {
     margin-left: -20px;
 }
 
@@ -800,7 +808,7 @@ ul.schedule-lesson-list a .finished-icon {
 }
 
 .lesson-selected {
-    border: 2px solid #5bc0de;
+    border: 1px solid #57c332;
 
 }
 /*.teacher-status {
