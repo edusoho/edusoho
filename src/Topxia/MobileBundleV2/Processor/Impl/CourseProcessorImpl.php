@@ -348,6 +348,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 				continue;
 			}
 			$course = $courses[$thread['courseId']];
+			if($thread["lessonId"]!=0){
+				$lessonInfo = $this->controller->getCourseService()->findLessonsByIds(array($thread["lessonId"]));
+				$thread["number"] =  $lessonInfo[$thread["lessonId"]]["number"];
+			}else{
+				$thread["number"] = 0;
+			}
         	$threads[$i] = $this->filterThread($thread, $course, null);
         }
         return $threads;
