@@ -243,7 +243,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
 	private function filterNote($note)
 	{
-		return = preg_replace_callback('/<img [^>]+\\/?>/', function($matches) {
+		return  preg_replace_callback('/<img [^>]+\\/?>/', function($matches) {
 			return "<p>" . $matches[0] . "</p>";
 		}, $note);
 	}
