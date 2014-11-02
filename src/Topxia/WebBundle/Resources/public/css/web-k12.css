@@ -612,6 +612,10 @@ ul.schedule-lesson-list li.placeholder {
     list-style: none;
 }
 
+.schedule-panel .nav-tabs {
+    line-height: 42px;
+}
+
 .schedule-panel .media-list {
     margin-top: 10px;
 }
