@@ -51,11 +51,11 @@ interface ClassesService
 
     public function addClassMember(array $classMember);
 
+    public function addRoleToClass($userId, $classId, $role);
+
     public function updateClassMember(array $fields, $id);
 
     public function deleteClassMemberByUserId($userId);
-
-    public function addOrUpdateTeacher($userId, $classId, $role);
 
     public function importStudents($classId, array $userIds);
 

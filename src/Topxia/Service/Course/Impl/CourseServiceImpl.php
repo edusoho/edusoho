@@ -1675,7 +1675,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			//如果是班级课程,将教师设置到班级中
 			if($course['parentId'] != 0)
 			{
-				$this->getClassesService()->addOrUpdateTeacher($member['userId'], $course['classId'], 'TEACHER');
+				$this->getClassesService()->addRoleToClass($member['userId'], $course['classId'], 'TEACHER');
 			}
 		}
 
@@ -2311,7 +2311,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				'isVisible' => 1
 				)));
 			//添加课程老师到classmember
-			$classService->addOrUpdateTeacher($teacherId, $classId, 'TEACHER');
+			$classService->addRoleToClass($teacherId, $classId, 'TEACHER');
 
 			$chapterIdMap = array();
 			$newChapters = array();

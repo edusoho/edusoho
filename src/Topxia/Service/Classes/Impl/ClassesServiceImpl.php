@@ -7,6 +7,7 @@ use Topxia\Common\ArrayToolkit;
 
 class ClassesServiceImpl extends BaseService implements ClassesService
 {
+    protected   $roles = array('PARENT' => 1, 'STUDENT' => 2, 'TEACHER' => 3, 'HEAD_TEACHER' => 4);
     public function getClass($id)
     {
         return $this->getClassesDao()->getClass($id);
@@ -34,7 +35,12 @@ class ClassesServiceImpl extends BaseService implements ClassesService
     public function createClass($class)
     {
         $class = $this->getClassesDao()->createClass($class);
-        $this->addOrUpdateTeacher($class['headTeacherId'], $class['id'], 'HEAD_TEACHER');
+        $newClassMember = array();
+        $newClassMember['classId'] = $classId;
+        $newClassMember['userId'] = $userId;
+        $newClassMember['role'] = 'HEAD_TEACHER';
+        $newClassMember['createdTime'] = time();
+        $classDao->addClassMember($newClassMember);
         return $class;
     }
 
@@ -50,13 +56,13 @@ class ClassesServiceImpl extends BaseService implements ClassesService
 
     public function getClassHeadTeacher($classId)
     {
-        $member = $this->getClassMemberDao()->getMemberByClassIdAndRole($classId, 'HEAD_TEACHER');
-        if (empty($member)) {
+        $class = $this->getClass($classId);
+        if (empty($class)) {
             return null;
         }
 
-        $user = $this->getUserService()->getUser($member['userId']);
-        $profile = $this->getUserService()->getUserProfile($member['userId']);
+        $user = $this->getUserService()->getUser($class['headTeacherId']);
+        $profile = $this->getUserService()->getUserProfile($class['headTeacherId']);
 
         if (empty($user) or empty($profile)) {
             return null;
@@ -187,27 +193,11 @@ class ClassesServiceImpl extends BaseService implements ClassesService
     public function editClass($fields, $id)
     {
         $class = $this->getClassesDao()->editClass($fields, $id);
-        $this->addOrUpdateTeacher($class['headTeacherId'], $id, 'HEAD_TEACHER');
+        $classMember = $classDao->getMemberByClassIdAndRole($classId, 'HEAD_TEACHER');
+        $this->updateClassMember(array('userId'=>$userId), $classMember['id']);
         return $class;
     }
 
-    public function addOrUpdateTeacher($userId, $classId, $role)
-    {
-        $classDao = $this->getClassMemberDao();
-        $classMember = $classDao->getMemberByClassIdAndRole($classId, 'HEAD_TEACHER');
-        if(empty($classMember)) {
-            $newClassMember = array();
-            $newClassMember['classId'] = $classId;
-            $newClassMember['userId'] = $userId;
-            $newClassMember['role'] = $role;
-            $newClassMember['createdTime'] = time();
-            $classMember = $classDao->addClassMember($newClassMember);
-        } else {
-            $classMember = $this->updateClassMember(array('userId'=>$userId), $classMember['id']);
-        }
-
-        return $classMember;
-    }
 
     public function updateClassStudentNum($num,$id){
         $this->getClassesDao()->updateClassStudentNum($num,$id);
@@ -275,6 +265,23 @@ class ClassesServiceImpl extends BaseService implements ClassesService
 
     public function addClassMember(array $classMember){
         return $this->getClassMemberDao()->addClassMember($classMember);
+    }
+
+    public function addRoleToClass($userId, $classId, $role)
+    {
+
+        $member = $this->getMemberByUserIdAndClassId($userId, $classId);
+        if (empty($member)) {
+            $newClassMember = array();
+            $newClassMember['classId'] = $classId;
+            $newClassMember['userId'] = $userId;
+            $newClassMember['role'] = $role;
+            $newClassMember['createdTime'] = time();
+            $member = $this->addClassMember($newClassMember);
+        } elseif ($this->roles[$role] > $this->roles[$member['role']]) {
+            $member = $this->updateClassMember(array('role' => $role), $member['id']); 
+        }
+        return $member;
     }
 
     public function deleteClassMemberByUserId($userId){
