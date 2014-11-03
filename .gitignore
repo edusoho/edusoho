@@ -14,7 +14,6 @@
 /app/data/backup/*
 /app/data/upgrade/*
 /app/config/routing_plugins.yml
-/plugins/*
 /build/
 /vendor/
 /bin/

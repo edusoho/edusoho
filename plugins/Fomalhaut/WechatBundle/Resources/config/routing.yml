@@ -1,0 +1,3 @@
+wechat_homepage:
+    path:     /weadmin/
+    defaults: { _controller: WechatBundle:Default:index }
