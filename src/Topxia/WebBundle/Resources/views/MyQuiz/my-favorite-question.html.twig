@@ -17,7 +17,7 @@
     	</tbody>
     </table>
   {% else %}
-    <div class="empty">还没有收藏的题目</div>
+    <div class="empty">{{ '还没有收藏的题目'|trans }}</div>
   {% endif %}
 
 {{ web_macro.paginator(paginator) }}

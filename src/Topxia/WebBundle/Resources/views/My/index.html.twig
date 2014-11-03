@@ -1,5 +1,5 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
-{% block title %}个人中心 - {{ parent() }}{% endblock %}
+{% block title %}{{ '个人中心'|trans }} - {{ parent() }}{% endblock %}
 {% set nav = 'index' %}
 {% set bodyClass = 'index' %}
 {% block content %}
@@ -13,7 +13,7 @@
               </div>
               <div class="panel-body">
                 {% if learningCourses is empty %}
-                <h3>你还没有学习任何课程，<a href="{{ path('course_explore') }}">来探索更多课程吧！ </a>
+                <h3>{{ '你还没有学习任何课程，'|trans }}<a href="{{ path('course_explore') }}">{{ '来探索更多课程吧！'|trans }} </a>
             {% else %}
                 {% include 'TopxiaWebBundle:MyCourse:my-courses-list.html.twig' with { users: users, courses: learningCourses } %}
             {% endif %}
