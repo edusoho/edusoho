@@ -299,13 +299,6 @@ class UserController extends BaseController
     {
         $this->getUserService()->lockUser($id);
         $currentUser = $this->getCurrentUser();
-        // var_dump($currentUser);exit();
-        // $user = $this->getUserService()->getUser($id);
-        // if(!in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])){
-        //     if (array_search("ROLE_SUPER_ADMIN",$user['roles'])){
-
-        //     }
-        // }
         return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user' => $this->getUserService()->getUser($id),
             'currentUser' =>$currentUser,
