@@ -43,10 +43,13 @@ class UserController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-      
+
+         $currentUser = $this->getCurrentUser();
+
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+             'currentUser' =>$currentUser
         ));
     }
 
@@ -159,12 +162,14 @@ class UserController extends BaseController
             $user = $this->getUserService()->getUser($id);
 
             return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
-            'user' => $user
+            'user' => $user,
+            'currentUser' =>$this->getCurrentUser()
             ));
         }
            
         return $this->render('TopxiaAdminBundle:User:roles-modal.html.twig', array(
-            'user' => $user
+            'user' => $user,
+            'currentUser' =>$this->getCurrentUser()
         ));
     }
 
@@ -293,8 +298,17 @@ class UserController extends BaseController
     public function lockAction($id)
     {
         $this->getUserService()->lockUser($id);
+        $currentUser = $this->getCurrentUser();
+        // var_dump($currentUser);exit();
+        // $user = $this->getUserService()->getUser($id);
+        // if(!in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])){
+        //     if (array_search("ROLE_SUPER_ADMIN",$user['roles'])){
+
+        //     }
+        // }
         return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user' => $this->getUserService()->getUser($id),
+            'currentUser' =>$currentUser,
         ));
     }
 
@@ -304,6 +318,7 @@ class UserController extends BaseController
 
         return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user' => $this->getUserService()->getUser($id),
+            'currentUser' =>$this->getCurrentUser()
         ));
     }
 
