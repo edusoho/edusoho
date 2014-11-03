@@ -1,3 +1,11 @@
+wechat:
+    resource: "@WechatBundle/Resources/config/routing.yml"
+    prefix:   /
+
+test:
+    resource: "@TestBundle/Resources/config/routing.yml"
+    prefix:   /
+
 __web:
     resource: "@TopxiaWebBundle/Resources/config/routing.yml"
 
@@ -24,6 +32,15 @@ custom_admin:
 _plugins:
     resource: routing_plugins.yml
 
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /login
+
+    
 
 # Internal routing configuration to handle ESI
 # _internal:

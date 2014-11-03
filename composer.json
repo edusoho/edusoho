@@ -23,7 +23,8 @@
         "imagine/imagine": "v0.5.0",
         "ezyang/htmlpurifier": "v4.5.0",
         "endroid/qrcode": "1.2.4",
-        "phpoffice/phpexcel": "1.8.0"
+        "phpoffice/phpexcel": "1.8.0",
+        "hwi/oauth-bundle": "0.4.*@dev"
     },
     "scripts": {
         "post-install-cmd": [

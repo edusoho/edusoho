@@ -43,7 +43,6 @@ security:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
         main:
             pattern:    /.*
             form_login:
@@ -61,6 +60,20 @@ security:
                 path:   logout
                 success_handler: topxia.logout.success_handler
             anonymous:  true
+        secured_area:
+            anonymous: ~
+            oauth:
+                resource_owners:
+                    facebook:           "/login/check-facebook"
+                    google:             "/login/check-google"
+                    my_custom_provider: "/login/check-custom"
+                    my_github:          "/login/check-github"
+                login_path:        /login
+                use_forward:       false
+                failure_path:      /login
+
+                oauth_user_provider:
+                    service: hwi_oauth.user.provider
     access_control:
         - { path: ^/task, role: ROLE_USER }
         - { path: ^/my, role: ROLE_USER }
