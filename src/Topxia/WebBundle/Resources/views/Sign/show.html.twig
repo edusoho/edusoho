@@ -1,19 +1,23 @@
 {{ import_javascript({'sign' : 'sign/sign'}) }}
-<div style="margin:20px 0; ">
+{# <div style="margin:20px 0; "> #}
 
-  <div class="class-sign class-sign-finished">
-    <div class="date-col">
-      <div class="dayofweek">周{{ 'now'|day_of_week }}</div>
-      <div class="date">{{ 'now'|date('m-d') }}</div>
+  <div class="class-sign class-sign-finished row">
+    <div class="date-col col-md-6">
+      <div class="date-area">
+        <div class="day">{{ 'now' | date('d') }}</div>
+        <div class="week">星期{{ 'now'|day_of_week }}</div>
+        <div class="yearMonth">{{ 'now'|date('Y.m') }}</div>
+      </div>
     </div>
 
-    <div class="action-col">
+    <div class="action-col  col-md-6">
     <div id="class-sign" data-records="{{ path('signed_records', {'classId':class.id,'userId':app.user.id})}}" data-signurl="{{ path('user_sign', {'classId':class.id,'userId':app.user.id}) }}">
-    <div>
+    <div  class="sign-area" {% if not isSignedToday %} data-role="sign" {% else %} data-role="signed" onclick="return false;" {% endif %} >
+      <img src="{{ asset('bundles/topxiaweb/img/smile.png') }}" />
       {% if not isSignedToday %}
-        <button class="btn btn-primary btn-block" data-role="sign">签到</button>
+        <span class="sign-text">签到</span>
       {% else %}
-        <button class="btn btn-primary btn-block sign-btn" data-role="signed" onclick="return false;">已签</button>
+        <span class="sign-text">已签</span>
       {% endif %}
     </div>
     
@@ -53,8 +57,8 @@
     </div>
   </div>
 
-</div>
-
+{# </div>
+ #}
 
 
 

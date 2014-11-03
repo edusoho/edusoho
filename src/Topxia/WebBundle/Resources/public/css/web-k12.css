@@ -297,7 +297,7 @@
 }
 .sign_main {
     position: absolute;
-    left: 1px;
+    left: -70px;
     width: 278px;
     background: #fbfefe;
     display: none;
@@ -364,33 +364,50 @@
 .class-sign {
     cursor: pointer;
     display: inline-block;
+    margin: 20px 5px;
     border: 1px solid #ddd;
+    background-color: #edfaeb;
     border-radius: 5px;
 }
 
 .class-sign .date-col {
     float: left;
-    width: 60px;
-    padding: 6px 10px;
-    font-size: 13px;
+    width: 150px;
+    padding-bottom: 10px;
+    text-align: center; 
+    color: #57c332;
+    font-size: 14px;
 }
 
-.class-sign .dayofweek {
-    font-size: 16px;
+.class-sign .date-col .week {
+    margin-top: -15px;
+}
+
+.class-sign .date-col .day {
+    font-size: 60px;
 }
 
 .class-sign .action-col {
     float: left;
-    padding: 9px 8px;
-    width: 80px;
+    margin: 30px 0;
+    width: 150px;
 }
 
-.class-sign-finished .sign-btn {
+.class-sign .action-col .sign-area {
+    font-size: 18px;
+    color: #fff;
+    line-height: 55px;
+    text-align: center;
+    width: 100px;
+    background-color: #57c332;
+}
+
+/*.class-sign-finished .sign-btn {
     background-color: #428bca;
     filter: alpha(opacity=65);
     box-shadow: none;
     opacity: .65;
-}
+}*/
 
 
 /** schedule css */
