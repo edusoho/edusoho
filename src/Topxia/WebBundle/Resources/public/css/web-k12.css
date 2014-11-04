@@ -411,6 +411,9 @@
 
 
 /** schedule css */
+.schedule {
+    color: #57c332;
+}
 .schedule .popover-container .popover {
     width: 290px;
 }
