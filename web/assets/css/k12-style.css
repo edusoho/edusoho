@@ -1,6 +1,6 @@
 /* override bootstrap css */
 a {
-  color: #57c332;
+  color: #68F868;
 }
 
 a:hover, a:focus {
@@ -8,11 +8,11 @@ a:hover, a:focus {
 }
 
 .btn-default {
-  color: #57c332;
+  color: #68F868;
 }
 
 .form-control {
-  color: #57c332;
+  color: #68F868;
 }
 
 .form-control:focus {
@@ -21,7 +21,7 @@ a:hover, a:focus {
 /* override default css */
 
 .green-color {
-  color: #57c332;
+  color: #68F868;
 }
 
 .site-navbar .navbar-nav > li > a:hover, .site-navbar .navbar-nav > li > a:focus {
@@ -38,7 +38,7 @@ a:hover, a:focus {
 }
 
 .site-navbar .navbar-nav > li > a {
-	color: #57c332;
+	color: #68F868;
 }
 
 .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
@@ -46,7 +46,7 @@ a:hover, a:focus {
 }
 
 .navbar-inverse {
-  border-color: #57c332 #fff #fff #fff;
+  border-color: #68F868 #fff #fff #fff;
   border-width: 2px;
 }
 
