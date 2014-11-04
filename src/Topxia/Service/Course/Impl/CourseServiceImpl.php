@@ -2310,8 +2310,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 			//临时增加以下代码，紧急解决复制课程的试卷无法被老师批阅.
 			$teachers = $this->findCourseTeachers($parentId);
-			$teacherIds = ArrayToolkit::column($teachers, 'id');
-			$teacherIds[] = $teacherId;
+			$teacherIds = ArrayToolkit::column($teachers, 'userId');
+			if(!in_array($teacherId, $teacherIds)) {
+				$teacherIds[] = $teacherId;
+			}
 			$newTeacherIds = array();
 			foreach ($teacherIds as $key => $id) {
 				$newTeacherIds[] = array(
