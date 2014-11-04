@@ -1,0 +1,35 @@
+<div class="col-md-6 teaching-course">
+  <div class="course-border class-course-grid">
+    <a href="{{ path('course_show',{id:course.id}) }}">
+      {% if course.compulsory %}
+        <span class="label label-success compulsory">必修</span>
+      {% else %}
+        <span class="label label-warning compulsory">选修</span>
+      {% endif %}
+      <img class="course-picture" width="203" height="114" alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}">
+    </a>
+  </div>
+  <div class="course-name">
+    <div class="course-title">
+      <a href="{{ path('course_show',{id:course.id}) }}">
+        {{ course.title }}
+      </a>
+    </div>
+    <div class="class-name">
+      <a href="{{ path('class_show',{classId:selectedClass.id} ) }}">
+        {{class_name(selectedClass)}}
+      </a>
+    </div>
+
+    <div class="course-lesson-student">
+      课时：{{course.lessonNum}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      学生：
+      {% if course.studentNum==0 %}
+        {{course.studentNum}}
+      {% else %}
+        <a data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" href="#modal">{{course.studentNum}}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>

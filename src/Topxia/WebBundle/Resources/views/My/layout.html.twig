@@ -34,7 +34,7 @@
 
                <a class="list-group-item
                {% if side_nav == 'my-teaching-courses' %} active {% endif %}" 
-               href="{{path('my_teaching_courses')}}">在教课程</a>
+               href="{{path('my_teaching_courses',{classId:'all'})}}">在教课程</a>
 
               <a class="list-group-item {% if side_nav == 'my-task' %} active {% endif %}"
                  href="{{path('my_teaching_task') }}">学生学习进度</a>

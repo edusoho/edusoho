@@ -15,7 +15,7 @@ my_teaching:
     defaults: { _controller: TopxiaWebBundle:MyTeaching:teaching }
 
 my_teaching_courses:
-    pattern: /my/teaching/courses
+    pattern: /my/teaching/courses/{classId}/class
     defaults: { _controller: TopxiaWebBundle:MyTeaching:teachingCourses }
 
 my_teaching_threads:

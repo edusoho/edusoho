@@ -107,7 +107,7 @@ class MyTeachingController extends BaseController
         ));
     }
 
-    public function teachingCoursesAction(Request $request)
+    public function teachingCoursesAction(Request $request,$classId)
     {
         $user = $this->getCurrentUser();
 
@@ -118,19 +118,32 @@ class MyTeachingController extends BaseController
         $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
         $courseCount=count($courses);
         $courses =ArrayToolkit::group($courses,'classId');
+        $classIds=array_keys($courses);
+
+        $selectedClass=array();
+        if($classId!='all'){
+            $selectedClass=$this->getClassesService()->getClass($classId);
+            if(empty($selectedClass)){
+                throw $this->createNotFoundException('班级不存在');
+            }
+        }
+
+        if($classId!='all' && !in_array($classId, $classIds)){
+            throw $this->createNotFoundException('在该班级无在教课程');
+        }
         
         /**如果存在模板课程,则排除这些课程*/
         if(isset($courses[0])){
             $courseCount-=count($courses[0]);
             unset($courses[0]);
         }
-        
-        $classes = $this->getClassesService()->findClassesByIds(array_keys($courses));
+        $classes = $this->getClassesService()->findClassesByIds($classIds);
 
         return $this->render('TopxiaWebBundle:MyTeaching:teaching-courses.html.twig',array(
             'courses'=>$courses,
             'classes'=>$classes,
-            'courseCount'=>$courseCount
+            'courseCount'=>$courseCount,
+            'selectedClass'=>$selectedClass
         ));
     }
 
