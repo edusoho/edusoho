@@ -450,15 +450,25 @@
 
 .schedule-calendar {
     width: 100%;
+
 }
 
 .schedule-calendar > thead > tr > th {
-    background-color: #f3f3f3;
     height: 30px;
+    font-size: 20px;
+    font-weight: normal;
     width: 14.2857%;
     text-align: center;
     vertical-align: middle;
     padding: 10px 0;
+}
+
+.schedule-calendar-week {
+    min-height: 430px;
+}
+
+.schedule-calendar-week > thead > tr > th {
+    border: 1px solid #dcdcdc;
 }
 
 .schedule-calendar > thead > tr > th.today,
@@ -480,35 +490,48 @@
     height: 80px;
     border: 1px solid #e3e3e3;
     text-align: center;
+    background-clip: padding-box;
 }
 .schedule-calendar-month > tbody >tr > td.today {
     background-color: #ffffda;
 }
 
-.schedule-calendar-month > tbody >tr > td .count-text {
+.schedule-calendar-month > tbody >tr > td .day-text {
     position: absolute;
-    bottom: 5px;
+    top: 5px;
     right: 5px;
-    font-weight: 800;
-    color: blue;
+    font-size: 14px;
+    color: #999;
 }
+
+.schedule-calendar-month > tbody >tr > td .count-text .count {
+    color: #48ad25;
+    line-height: 36px;
+    font-size: 45px;
+}
+
+.schedule-calendar-month > tbody >tr > td .count-text .text {
+    color: #acacac;
+    line-height: 36px;
+    font-size: 12px;
+}
+
 .schedule-calendar-month > tbody >tr > td.has-lesson {
     cursor: pointer;
 }
 
 .schedule-calendar-month > tbody >tr > td.not-in-month {
-    background-color: #f7f7f7;
+    background-color: #f6f6f6;
     background-clip: padding-box;
 }
 
 .schedule-calendar-month > tbody >tr > td.has-lesson:hover {
-    background-color: #e3e3e3;
+    background-color: #f0fcee;
 }
 
-.schedule-calendar-month > thead > tr {
+/*.schedule-calendar-month > thead > tr {
     border: 1px solid #e3e3e3;
-
-}
+}*/
 
 .schedule-lesson-list {
     margin: 0;
@@ -642,9 +665,9 @@ li.draging {
 
 ul.schedule-lesson-list li.placeholder {
     position: relative;
-    margin-bottom: 10px 0;
+    margin-top: 10px;
     width: 100%;
-    height: 40px;
+    height: 100px;
     background: #FCFFC0;
     border: 1px dashed #ccc;
     list-style: none;

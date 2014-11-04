@@ -4,7 +4,7 @@ a {
 }
 
 a:hover, a:focus {
-  color: #57c332;
+  color: #33a10e;
 }
 
 .btn-default {
@@ -16,7 +16,7 @@ a:hover, a:focus {
 }
 
 .form-control:focus {
-  border-color: #57c332;
+  border-color: #33a10e;
 }
 /* override default css */
 
@@ -25,7 +25,7 @@ a:hover, a:focus {
 }
 
 .site-navbar .navbar-nav > li > a:hover, .site-navbar .navbar-nav > li > a:focus {
-  background-color: #57c332;
+  background-color: #33a10e;
 }
 
 .site-navbar .navbar-nav > .active > a, 
@@ -34,7 +34,7 @@ a:hover, a:focus {
 .site-navbar .navbar-nav > .open > a, 
 .site-navbar .navbar-nav > .open > a:hover, 
 .site-navbar .navbar-nav > .open > a:focus {
-  background-color: #57c332;
+  background-color: #33a10e;
 }
 
 .site-navbar .navbar-nav > li > a {
@@ -42,7 +42,7 @@ a:hover, a:focus {
 }
 
 .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
-  background-color: #57c332;
+  background-color: #33a10e;
 }
 
 .navbar-inverse {
@@ -51,9 +51,9 @@ a:hover, a:focus {
 }
 
 .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
-  color: #57c332;
+  color: #33a10e;
 }
 
 .navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
-  color: #57c332;
+  color: #33a10e;
 }

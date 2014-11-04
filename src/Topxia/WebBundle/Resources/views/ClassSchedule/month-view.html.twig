@@ -24,7 +24,7 @@
                   
                   {% if schedules[day] is defined %}
                     <div class="count-text">
-                      ({{ schedules[day]|length }})
+                      <span class="count">{{ schedules[day]|length }}</span><span class="text">课程</span>
                     </div> 
                     <div class='hidden popover-content'>
                     <ul class='media-list'>
