@@ -1672,11 +1672,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			if ($member['isVisible']) {
 				$visibleTeacherIds[] = $member['userId'];
 			}
-			//如果是班级课程,将教师设置到班级中
-			if($course['parentId'] != 0)
-			{
-				$this->getClassesService()->addRoleToClass($member['userId'], $course['classId'], 'TEACHER');
-			}
 		}
 
 		$this->getLogService()->info('course', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
@@ -2312,6 +2307,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 				)));
 			//添加课程老师到classmember
 			$classService->addRoleToClass($teacherId, $classId, 'TEACHER');
+
+			//临时增加以下代码，紧急解决复制课程的试卷无法被老师批阅.
+			$teachers = $this->findCourseTeachers($parentId);
+			$teacherIds = ArrayToolkit::column($teachers, 'id');
+			$teacherIds[] = $teacherId;
+			$newTeacherIds = array();
+			foreach ($teacherIds as $key => $id) {
+				$newTeacherIds[] = array(
+					'id' => $id,
+					'isVisible' => 1
+				);
+			}
+			$this->setCourseTeachers($parentId, $newTeacherIds);
+			//到这里为止，要删除
 
 			$chapterIdMap = array();
 			$newChapters = array();

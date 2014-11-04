@@ -11,6 +11,13 @@ a:hover, a:focus {
   color: #57c332;
 }
 
+.form-control {
+  color: #57c332;
+}
+
+.form-control:focus {
+  border-color: #57c332;
+}
 /* override default css */
 
 .green-color {
