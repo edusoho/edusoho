@@ -1,4 +1,4 @@
-{% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
 {% block title %}检查应用更新 - {{ parent() }}{% endblock %}
 
@@ -26,7 +26,7 @@
       {% for app in apps %}
         <tr>
           <td>
-            <div class=""><a href="#" class="">{{ app.name }}</a> {% if app.package.edusohoMinVersion > version %}<div class="text-danger">需要主系统版本为{{app.package.edusohoMinVersion}}以上才能更新</div>{% endif %}</div>
+            <div class=""><a href="#" class="">{{ app.name }}</a> <span class="text-muted">当前版本：{{ version }}<span>{% if app.package.edusohoMinVersion > version %}<div class="text-danger">需要主系统版本为{{app.package.edusohoMinVersion}}以上才能更新</div>{% endif %}</div>
             <div class="text-muted">更新日志： {{ app.package.description|plain_text(80) }} <a href="javascript:;" class="text-warning description-more" data-content="{{ app.package.description }}">查看详情  &raquo; </a>
             </div>
             <div class="text-muted"><small>开发者：{{ app.developerName }}</small></div>

@@ -3,6 +3,8 @@
   <tbody>
     {% for course in courses %}
     {% include 'TopxiaAdminBundle:School:class-course-table-tr.html.twig' with {course:course} %}
+    {% else %}
+    <div class="empty-course"><span class="text-muted">没有可以选取的课程</span></div>
     {% endfor %}
   </tbody>
 </table>

@@ -570,3 +570,14 @@ input.LargeInput {width: 600px;}
   font-weight: normal;
   font-size: 14px;
 }
+
+#class-course-add-form #course-table {
+  margin-top: 10px;
+  min-height: 185px;
+}
+
+#class-course-add-form .empty-course {
+  min-height: 185px;
+  text-align: center;
+  line-height: 185px;
+}

@@ -19,6 +19,8 @@
        {% if setting('storage.upload_mode') == 'cloud' %}
         <a href="{{ url('admin_cloud_bill') }}" class="list-group-item {% if menu == 'bill' %}active{% endif %}">云视频账单</a>
        {% endif %}
+
+        <a href="{{ url('admin_app_upgrades') }}" class="list-group-item {% if menu == 'upgrades' %}active{% endif %}">检查应用更新</a>
         <a href="{{ url('admin_operation_analysis_register',{tab:"trend",analysisDateType:"register"}) }}" class="list-group-item {% if menu == 'analysis' %}active{% endif %}">数据统计</a>
         <a href="{{ url('admin_logs') }}" class="list-group-item {% if menu == 'logs' %}active{% endif %}">系统日志</a>
 
