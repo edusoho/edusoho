@@ -1,31 +1,31 @@
 /* override bootstrap css */
 a {
-  color: #68F868;
-}
-
-a:hover, a:focus {
   color: #57c332;
 }
 
+a:hover, a:focus {
+  color: #33a10e;
+}
+
 .btn-default {
-  color: #68F868;
+  color: #57c332;
 }
 
 .form-control {
-  color: #68F868;
+  color: #57c332;
 }
 
 .form-control:focus {
-  border-color: #57c332;
+  border-color: #33a10e;
 }
 /* override default css */
 
 .green-color {
-  color: #68F868;
+  color: #57c332;
 }
 
 .site-navbar .navbar-nav > li > a:hover, .site-navbar .navbar-nav > li > a:focus {
-  background-color: #57c332;
+  background-color: #33a10e;
 }
 
 .site-navbar .navbar-nav > .active > a, 
@@ -34,26 +34,26 @@ a:hover, a:focus {
 .site-navbar .navbar-nav > .open > a, 
 .site-navbar .navbar-nav > .open > a:hover, 
 .site-navbar .navbar-nav > .open > a:focus {
-  background-color: #57c332;
+  background-color: #33a10e;
 }
 
 .site-navbar .navbar-nav > li > a {
-	color: #68F868;
+	color: #57c332;
 }
 
 .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
-  background-color: #57c332;
+  background-color: #33a10e;
 }
 
 .navbar-inverse {
-  border-color: #68F868 #fff #fff #fff;
+  border-color: #57c332 #fff #fff #fff;
   border-width: 2px;
 }
 
 .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
-  color: #57c332;
+  color: #33a10e;
 }
 
 .navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
-  color: #57c332;
+  color: #33a10e;
 }
