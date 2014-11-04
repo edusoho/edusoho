@@ -170,6 +170,10 @@ class ParentController extends BaseController
         $childNumber = $request->query->get('value');
         $user=$this->getUserService()->getUserByNumber($childNumber);
         if(empty($user)){
+            $response = array('success' => false, 'message' => '该用户并不存在!');
+        }
+
+        if(in_array('ROLE_TEACHER', $user['roles']) || in_array('ROLE_PARENT', $user['roles'])){
             $response = array('success' => false, 'message' => '该学号学生并不存在!');
         }else{
             $response = array('success' => true, 'message' => '该学号可以使用');
