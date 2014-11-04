@@ -46,14 +46,33 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function setPriceAction($id)
+    public function setPriceAction(Request $request,$id)
     {   
         if ($this->get('security.context')->isGranted('ROLE_ADMIN')!==true) {
             return $this->createMessageResponse('info', '只允许管理员设置课时价格!');
         }
 
-        
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $lessons=$this->getCourseService()->getCourseLessons($id);
+
+        if($request->getMethod()=="POST"){
+
+            $prices=$request->request->all();
+            $prices=$prices['price'];
+
+            foreach ($lessons as $key => $lesson) {
+              
+                $this->getCourseService()->updateLesson($id,$lesson['id'],array('price'=>$prices[$lesson['id']]));
+            }
+
+            $lessons=$this->getCourseService()->getCourseLessons($id);
+            
+        }
+
         return $this->render('CustomWebBundle:CourseManage:set-price.html.twig',array(
+           'course' => $course,
+           'lessons'=>$lessons,
             ));
     }
 
@@ -68,7 +87,7 @@ class CourseManageController extends BaseController
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Custom:Course.CourseService');
     }
 
     private function getLevelService()

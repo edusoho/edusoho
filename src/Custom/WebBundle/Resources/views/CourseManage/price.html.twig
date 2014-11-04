@@ -9,7 +9,7 @@
 <div class="panel panel-default panel-col">
   <div class="panel-heading">价格设置
     {% if is_granted('ROLE_ADMIN') %}
-    <a class="btn btn-primary btn-sm pull-right" href="">设置课时价格</a>
+    <a class="btn btn-primary btn-sm pull-right" href="{{path('course_set_price',{id:course.id})}}">设置课时价格</a>
     {% endif %}
   </div>
   <div class="panel-body">
