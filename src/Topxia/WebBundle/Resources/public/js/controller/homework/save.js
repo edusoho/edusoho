@@ -45,7 +45,6 @@ define(function(require, exports) {
 		    saveAnswers[$questionId] = {answer:answer,questionId:$questionId};
 		});
 		});
-
 	    $.post($btn.data('url'),{data:saveAnswers},function(res){
 	    	if (isRedirect == true) {
 		        location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/learn#lesson/"+res.lessonId;

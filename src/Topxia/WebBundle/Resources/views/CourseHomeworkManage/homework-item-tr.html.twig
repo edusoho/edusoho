@@ -13,6 +13,12 @@
       {% else %}
         {{ targets[question.target].simple_name|default('--') }}
       {% endif %}
+      {% if question.subCount|default(0) > 0 %}
+      （包含子题 {{question.subCount}}个
+        {% if homeworkItem.seq|default('') %}
+        题号{{homeworkItem.seq|default(' ')}} ~ {{homeworkItem.seq|default(' ')+question.subCount-1}}
+      {% endif %}）
+      {% endif %}
     </div>
   </td>
   <td>{{ dict_text('questionType',question.type ) }}</td>

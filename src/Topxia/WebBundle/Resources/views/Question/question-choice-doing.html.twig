@@ -1,7 +1,10 @@
 {% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
 
 {% block heading %}
-  {{ question.stem|bbCode2Html|raw }}
+  {% if question.type == 'single_choice' %}（单选）
+  {% elseif question.type == 'choice' %}（多选）
+  {% endif %}
+{{ question.stem|bbCode2Html|raw }}
 {% endblock %}
 
 {% block body %}
@@ -11,7 +14,6 @@
 {% if itemResult.answer|default(null) %}
   {% set answerChoiceIndex = itemResult.answer|split(',') %}
 {% endif %}
-
   <div class="question-choices-inputs">
     {% for key, choice in question.metas.choices %}
       {% set choiceIndex = (65+key)|chr %}

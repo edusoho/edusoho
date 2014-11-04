@@ -20,8 +20,17 @@
 			        </div>
 			      </div>
 
-		</form><hr>
+		{% if homework|default(null) %}
+		<div class="col-md-offset-2 col-md-8 controls">
+			<div class="btn btn-primary confirm-submit" id="save-homework-btn" data-saving-text="正在保存..." data-url="{{ path('course_manage_lesson_homework_edit',{ courseId:course.id, lessonId:lesson.id,homeworkId:homework.id }) }} ">确定</div>
+		</div>
+		{% endif %}
 
+	      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+		</form>
+	{% if homework|default(null) is null %}
+	<hr>
 	    <div class="clearfix mbm">
 	      <button  id="picker_homework_items" data-url="{{ path('course_manage_homework_item_picker',{courseId:course.id}) }}" class="btn btn-info btn-sm pull-right" data-role="pick-item"　><span class="glyphicon glyphicon-plus"  ></span> 新增题目</button>
 	    </div>
@@ -60,6 +69,7 @@
 	      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
 	  </form>
+  {% endif %}
 	</div>
 
 </div>

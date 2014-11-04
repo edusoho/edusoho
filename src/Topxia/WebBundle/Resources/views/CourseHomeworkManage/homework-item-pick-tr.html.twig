@@ -1,4 +1,5 @@
 <tr>
+<th><input type="checkbox" data-role="item-select" data-replace="{{ replace|default('') }}" data-url="{{ path('course_manage_homework_item_picked', {courseId:course.id,questionId:question.id }) }}"></th>
   <td>
     {{ question.stem|fill_question_stem_text|plain_text(40) }}
     {% if question.type == 'material' %}

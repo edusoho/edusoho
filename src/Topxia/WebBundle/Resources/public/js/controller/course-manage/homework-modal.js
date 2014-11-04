@@ -40,11 +40,17 @@ define(function(require, exports, module) {
                 $('#homework_items_help').css('color','#a94442');
                 $('#homework_items_help').show();
                 $btn.attr("disabled", true);
+                $btn.button('saving');
+                $.post($('#save-homework-btn').data('url'),{description:$description},function(response){
+                        if (response.status == 'success') {
+                            window.location.href="/course/"+response.courseId+"/manage/lesson";
+                        }
+                 });
 
             } else {
 
                 $('#homework_items_help').hide();
-                $btn.attr("disabled", false);
+                $btn.attr("disabled", true);
                 $btn.button('saving');
 
                 $("#homework-table-tbody").find('[name="questionId[]"]').each(function(){
@@ -156,7 +162,7 @@ define(function(require, exports, module) {
             element: '#homework-items-manager'
         });
 
-
+        require('./header').run();
     };
 
 });

@@ -7,7 +7,7 @@
 {% block title %}作业{% if replaceFor %}替换{% else %}添加{% endif %}题目{% endblock %}
 
 {% block body %}
-
+<div id="homework-item-picker-body">
   <form id="homework-item-picker-form" class="form-inline well well-sm" action="{{ path('course_manage_homework_item_picker', {courseId:course.id}) }}" novalidate>
     <div class="form-group">
       <select class="form-control" name="target" style="width:200px;height:32px;">
@@ -29,6 +29,7 @@
   <table class="table table-condensed" id="homework-item-picker-table">
     <thead>
     <tr>
+    <th><input type="checkbox" data-role="item-batch-select"></th>
       <th width="45%">题干</th>
       <th>类型</th>
       <th>操作</th>
@@ -42,8 +43,13 @@
       {% endfor %}
     </tbody>
   </table>
-  {{ web_macro.paginator(paginator) }}
 
+  <div id="homework-item-operate">
+    <label class="checkbox-inline"><input type="checkbox" data-role="item-batch-select"> 全选</label>
+    <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-select-save"  data-name="题目">批量选择</button>
+  </div>
+  {{ web_macro.paginator(paginator) }}
+</div>
   <script>app.load('course-manage/homework-item-picker')</script>
 
 {% endblock %}

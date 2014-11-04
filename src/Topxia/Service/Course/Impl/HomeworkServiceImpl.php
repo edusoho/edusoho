@@ -89,25 +89,10 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     		throw $this->createServiceException('作业不存在，更新作业失败！');
     	}
 
-    	$this->deleteHomeworkItemsByHomeworkId($homework['id']);
-
-		$excludeIds = $fields['excludeIds'];
-
-		if (empty($excludeIds)) {
-			$this->createServiceException("题目不能为空，编辑作业失败！");
-		}
-
-		unset($fields['excludeIds']);
-
 		$fields = $this->filterHomeworkFields($fields,$mode = 'edit');
-		
-		$excludeIds = explode(',',$excludeIds);
-		$fields['itemCount'] = count($excludeIds);
 
 		$homework = $this->getHomeworkDao()->updateHomework($id,$fields);
 
-		$this->addHomeworkItems($homework['id'],$excludeIds);
-		
 		$this->getLogService()->info('homework','update','更新课程{$courseId}课时{$lessonId}的{$id}作业');
 		
 		return $homework;
