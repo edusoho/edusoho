@@ -12,7 +12,7 @@
             {% for day,items in schedules %}
               <th class=" {% if day == 'now'|date('Ymd')%} today {% endif %} {% if loop.index0 == 0 %} sunday {% endif %}"  data-day="{{ day }}" >
                 <div class="week-text">{{ week[loop.index0]}}</div>
-                <div class="day-text">{{ day|slice(6,2) }}</div>
+                <div class="day-text">{{ day|slice(6,2)|number_format }}</div>
               </th>
             {% endfor %}
           </tr>
