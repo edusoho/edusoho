@@ -18,6 +18,20 @@ a:hover, a:focus {
 .form-control:focus {
   border-color: #33a10e;
 }
+
+.btn-link {
+  color: #57c332;
+}
+
+.btn-link:hover, .btn-link:focus {
+  color: #33a10e;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  background-color: #57c332;
+  color: #fff;
+}
+
 /* override default css */
 
 .green-color {
@@ -38,7 +52,7 @@ a:hover, a:focus {
 }
 
 .site-navbar .navbar-nav > li > a {
-	color: #57c332;
+	color: #333333;
 }
 
 .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
