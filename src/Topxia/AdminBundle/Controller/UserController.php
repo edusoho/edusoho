@@ -151,15 +151,15 @@ class UserController extends BaseController
 
         $user = $this->getUserService()->getUser($id);
         $currentUser = $this->getCurrentUser();
-        $startRoleNums = count($user['roles']);
+        // $startRoleNums = count($user['roles']);
         if ($request->getMethod() == 'POST') {
             $roles = $request->request->get('roles');
             $this->getUserService()->changeUserRoles($user['id'], $roles);
             $dif = "";
             $stopRoleNums = count($roles);
-            if($startRoleNums <= $stopRoleNums){
-                $diff = array_diff($roles, $user['roles']); 
-                foreach ($diff as $key => $value) {    
+            if(in_array("ROLE_USER",$roles) && $stopRoleNums >1){
+                // $diff = array_diff($roles, $user['roles']); 
+                foreach ($roles as $key => $value) {    
                     if($value == "ROLE_USER" ){
                             $value =  "";
                     }
@@ -174,8 +174,8 @@ class UserController extends BaseController
                     }
                     $dif .= $value.".";
                 }
-                $this->getNotifiactionService()->notify($user['id'],'default',"您被“{$currentUser['nickname']}”新增为“{$dif}”身份。");
-            }else{
+                $this->getNotifiactionService()->notify($user['id'],'default',"您被“{$currentUser['nickname']}”设置为“{$dif}”身份。");
+            }elseif(in_array("ROLE_USER",$roles) && $stopRoleNums ==1){
                 $diff = array_diff($user['roles'],$roles);     
                  foreach ($diff as $key => $value) {    
                     if($value == "ROLE_USER" ){
