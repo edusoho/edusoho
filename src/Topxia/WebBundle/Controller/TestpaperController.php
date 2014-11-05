@@ -490,7 +490,7 @@ class TestpaperController extends BaseController
         $userIds = ArrayToolkit::column($paperResults, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
-
+        $users = ArrayToolkit::index($users, 'id');
         $targets = ArrayToolkit::column($testpapers, 'target');
         $courseIds = array_map(function($target){
             $course = explode('/', $target);
@@ -499,9 +499,23 @@ class TestpaperController extends BaseController
         }, $targets);
 
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        //临时增加以下代码，紧急解决复制课程的试卷无法被老师批阅.
+        $myCourses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, 1000);
+        $classIds = ArrayToolkit::column($myCourses, 'classId');
+        $classMembers = $this->getClassesService()->findClassMembersByUserIds($userIds);
+        foreach ($classMembers as $key => $member) {
+            if(!in_array($member['classId'], $classIds)) {
+                foreach ($paperResults as $key => $paperResult) {
+                    if($member['userId'] == $paperResult['userId']) {
+                        unset($paperResults[$key]);
+                    }
+                }
+            }
+        } 
+        //到这里为止.
         return $this->render('TopxiaWebBundle:MyQuiz:teacher-test-layout.html.twig', array(
             'status' => 'reviewing',
-            'users' => ArrayToolkit::index($users, 'id'),
+            'users' => $users,
             'paperResults' => $paperResults,
             'courses' => ArrayToolkit::index($courses, 'id'),
             'testpapers' => ArrayToolkit::index($testpapers, 'id'),
@@ -535,7 +549,7 @@ class TestpaperController extends BaseController
         $userIds = ArrayToolkit::column($paperResults, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
-
+        $users = ArrayToolkit::index($users, 'id');
         $targets = ArrayToolkit::column($testpapers, 'target');
         $courseIds = array_map(function($target){
             $course = explode('/', $target);
@@ -544,10 +558,23 @@ class TestpaperController extends BaseController
         }, $targets);
 
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
+        //临时增加以下代码，紧急解决复制课程的试卷无法被老师批阅.
+        $myCourses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, 1000);
+        $classIds = ArrayToolkit::column($myCourses, 'classId');
+        $classMembers = $this->getClassesService()->findClassMembersByUserIds($userIds);
+        foreach ($classMembers as $key => $member) {
+            if(!in_array($member['classId'], $classIds)) {
+                foreach ($paperResults as $key => $paperResult) {
+                    if($member['userId'] == $paperResult['userId']) {
+                        unset($paperResults[$key]);
+                    }
+                }
+            }
+        } 
+        //到这里为止.
         return $this->render('TopxiaWebBundle:MyQuiz:teacher-test-layout.html.twig', array(
             'status' => 'finished',
-            'users' => ArrayToolkit::index($users, 'id'),
+            'users' => $users,
             'paperResults' => $paperResults,
             'courses' => ArrayToolkit::index($courses, 'id'),
             'testpapers' => ArrayToolkit::index($testpapers, 'id'),
@@ -641,6 +668,11 @@ class TestpaperController extends BaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getClassesService()
+    {
+        return $this->getServiceKernel()->createService('Classes.ClassesService');
     }
 
     private function getNotificationService()
