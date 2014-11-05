@@ -67,7 +67,6 @@
 			{% if course.type == 'normal' %}
 				<div class="form-group">
 					<label class="col-md-2 control-label">进度条件设置</label>
-					{{dump(course.progressControl)}}
 					<div class="col-md-8 controls radios">
 						{{ radios('progressControl', {'learned':'必须确认“学过了”才能进入下一课时
 ', 'noControl':'不做控制'}, course.progressControl|default('noControl') ) }}
