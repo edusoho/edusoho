@@ -149,3 +149,15 @@ hwi_oauth:
             type:                facebook
             client_id:           <client_id>
             client_secret:       <client_secret>
+
+wechat:
+    debug: true
+    clients:
+        demo1:
+            token: ilovejack
+            appid: wechatappid
+            appsecret: wechatsecret
+        demo2:
+            token: ilovejack
+            appid: wechatappid
+            appsecret: wechatsecret          

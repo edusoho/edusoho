@@ -20,9 +20,24 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('wechat');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        // 第一个子节点是一个布尔节点，默认为false
+        $rootNode
+            ->children()
+                ->booleanNode('debug')->defaultFalse()->end()
+            ->end();
+
+        // 第二个节点是一个数组节点
+        $rootNode
+            ->children()
+                ->arrayNode('clients')
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('token')->isRequired()->end()
+                            ->scalarNode('appid')->defaultNull()->end()
+                            ->scalarNode('appsecret')->defaultNull()->end()
+                        ->end()
+                ->end()
+            ->end();
 
         return $treeBuilder;
     }
