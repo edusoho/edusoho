@@ -667,6 +667,10 @@
     overflow: hidden;
 }
 
+.schedule-course >ul >li .lesson-num {
+    float: right;
+    color: #57c332;
+}
 .schedule-course h4 {
     font-size: 14px;
 }
@@ -702,7 +706,7 @@
 }
 
 .schedule-course-item-list .lesson-item .name {
-    color: #666;
+    color: #57c332;
     margin-right: 8px;
 }
 
@@ -800,6 +804,10 @@ ul.schedule-lesson-list .item-div .finished-icon .text-success{
     position: relative;
 }
 
+.course-display .text-tip {
+    font-size: 14px;
+    color: #57c332;
+}
 .course-display .mode {
     position: absolute;
     right: 2px;
@@ -815,6 +823,10 @@ ul.schedule-lesson-list .item-div .finished-icon .text-success{
     font-size: 10px;
     top: 0px;
     left: 0px
+}
+
+.course-display .course-list .glyphicon {
+    color: #57c332;
 }
 
 .course-display .course-list .title {
