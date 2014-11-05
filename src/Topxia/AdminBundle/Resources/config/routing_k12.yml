@@ -95,6 +95,10 @@ admin_student:
     pattern:  /student
     defaults: { _controller: TopxiaAdminBundle:Student:index }
 
+admin_student_match:
+    pattern:  /student/match
+    defaults: { _controller: TopxiaAdminBundle:Student:match }
+
 admin_admin:
     pattern:  /admin
     defaults: { _controller: TopxiaAdminBundle:Admin:index }

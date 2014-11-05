@@ -55,20 +55,22 @@
   </div>
 
   <input type="hidden" id="numberInputNum" value="{{children|length-1}}" />
-  
+  <input type="hidden" id="dataSource" value="{{path('admin_student_match')}}">
   {% for child in children %}
     {% set index=loop.index-1 %}
     <div class="row form-group">
       <div class="col-md-2 control-label">
         {% if index==0 %}
-          <label for="number_{{index}}">子女学号</label>
+          <label for="id_{{index}}">子女姓名</label>
         {% else %}
-          <label style="display:none" for="number_{{index}}">子女学号</label>
+          <label style="display:none" for="id_{{index}}">子女姓名</label>
         {% endif %}
       </div>
-      <div class="col-md-7 controls has-feedback">
-        <input type="text" id="number_{{index}}" name="numbers[]" class="form-control childNumber" data-url="{{path('admin_parent_create_childNumber_check')}}" value="{{child.number}}" >
-        <span style="cursor: pointer;" class="glyphicon glyphicon-remove form-control-feedback deleteNumberBtn"></span>
+      <div class="col-md-7 controls">
+        <input type="text" id="id_{{index}}" name="ids[]" class="select2-offscreen childId" data-url="{{path('admin_parent_create_childNumber_check')}}" value="{{child.truename}}({{child.number}})" data-id="{{ child.id|default('')}}" data-name="{{ child.truename|default('')}}({{child.number}})">
+        
+        <span class="glyphicon glyphicon-remove deleteNumberBtn"></span>
+        {# form-control-feedback #}
       </div>
     </div>
   {% endfor %}
@@ -96,24 +98,6 @@
         <input type="text" id="mobile" data-url="{{path('admin_user_create_mobile_check',{id:user.id})}}" name="mobile" class="form-control" value="{{user.mobile}}">
      </div>
     </div>
-
-    {# <div class="row form-group">
-        <div class="col-md-2 control-label"> 
-          <label for="company">公司</label>
-        </div>
-        <div class="col-md-7 controls">
-          <input type="text" id="company" name="company" class="form-control" value="{{profile.company}}">
-       </div>
-    </div>
-    
-    <div class="row form-group">
-      <div class="col-md-2 control-label"> 
-        <label for="job">职业</label>
-      </div>
-      <div class="col-md-7 controls">
-        <input type="text" id="job" name="job" class="form-control" value="{{profile.job}}">
-     </div>
-    </div> #}
 
     <p></p>
     <div class="row form-group">

@@ -5,6 +5,8 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var EditorFactory = require('common/kindeditor-factory');
 
+    require('jquery.select2-css');
+    require('jquery.select2');
     exports.run = function() {
 
         var editor = EditorFactory.create('#about', 'simple', {extraFileUploadParams:{group:'course'}});
@@ -36,14 +38,14 @@ define(function(require, exports, module) {
         Validator.addRule('numberUnique', function(options) {
             var v = options.element.val();
             var result=0;
-            $numberList=$form.find('.childNumber');
+            $numberList=$form.find('.childId');
             for(var i=0;i<$numberList.length;i++){
                 if($numberList.eq(i).val()==v){
                     result++;
                 }
             }
             return result==1;
-        }, '填写的学号不可重复');
+        }, '填写的姓名不可重复');
 
         $form.on('click', '#addNumberBtn', function() {
             var $numberInputNum=$form.find("#numberInputNum");
@@ -51,15 +53,17 @@ define(function(require, exports, module) {
             var $newObject = $(this).parent().parent().prev().clone();
 
             
-            $newObject.find('label').attr('for','number_'+$count);
+            $newObject.find('label').attr('for','id_'+$count);
             $newObject.find('label').hide();
-            $newObject.find('.childNumber').attr('id','number_'+$count);
+            $newObject.find('.childId').attr('id','id_'+$count);
+            $newObject.find('.childId').val('');
+            $newObject.find('.select2-container').remove();
 
-            $newObject.find('.childNumber').val('');
+            addSelect($newObject.find('.childId'));
             $(this).parent().parent().before($newObject);
 
             validator.addItem({
-                element: $newObject.find('.childNumber'),
+                element: $newObject.find('#id_'+$count),
                 required: true,
                 rule: 'remote numberUnique'
             });
@@ -68,24 +72,80 @@ define(function(require, exports, module) {
         });
 
         $form.delegate('.deleteNumberBtn','click',function() {
-            if($form.find('.childNumber').length>1){
+            if($form.find('.childId').length>2){
                 var $divObject=$(this).parent().parent();
                 if($divObject.find('label').is(":visible")){
                     $divObject.next().find('label').show();
                 }
-                validator.removeItem($divObject.find('.childNumber'));
+                validator.removeItem($divObject.find('.childId'));
                 $divObject.remove();
             }
         });
 
-        for(var i=0;i<$form.find('.childNumber').length;i++){
+        for(var i=0;i<$form.find('.childId').length;i++){
+
             validator.addItem({
-                element: $form.find('.childNumber').eq(i),
+                element: $form.find('#id_'+i),
                 required: true,
                 rule: 'remote numberUnique'
             });
+            addSelect($form.find('#id_'+i));
         }
         
+        function addSelect(element){
+            element.select2({
+                ajax: {
+                    url: $("#dataSource").val() + '#',
+                    dataType: 'json',
+                    quietMillis: 100,
+                    data: function(term, page) {
+                        return {
+                            q: term,
+                            page_limit: 10
+                        };
+                    },
+                    results: function(data) {
+
+                        var results = [];
+
+                        $.each(data, function(index, item) {
+
+                            results.push({
+                                id: item.id,
+                                name: item.name
+                            });
+                        });
+
+                        return {
+                            results: results
+                        };
+
+                    }
+                },
+                initSelection: function(element, callback) {
+                    var data = [];
+                    data['id'] = element.data('id');
+                    data['name'] = element.data('name');
+                    element.val(element.data('id'));
+                    callback(data);
+                },
+                formatSelection: function(item) {
+                    return item.name;
+                },
+                formatResult: function(item) {
+                    return item.name;
+                },
+                width: 'off',
+                multiple: false,
+                placeholder: "选择学生",
+                createSearchChoice: function() {
+                    return null;
+                }
+            });
+
+            element.parent().parent().find('label').attr('for',element.attr("id"));
+        }
+
         validator.addItem({
             element: '[name="email"]',
             rule: 'email email_remote'

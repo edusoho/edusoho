@@ -65,15 +65,15 @@ class ParentController extends BaseController
                 
             $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER','ROLE_PARENT'));
 
-            foreach ($formData['numbers'] as $key => $value) {
-                $formData['numbers'][$key]=trim($value);
-            }
-            $children=$this->getUserService()->findUsersByNumbers($formData['numbers']);
-            $childrenNumbers=ArrayToolkit::column($children, 'number');
-            $diffIds=array_diff($formData['numbers'], $childrenNumbers);
-            if(!empty($diffIds)){
-                throw $this->createNotFoundException('学号为'.$diffIds[0].'的学生不存在！');
-            }
+            // foreach ($formData['numbers'] as $key => $value) {
+            //     $formData['numbers'][$key]=trim($value);
+            // }
+            $children=$this->getUserService()->findUsersByIds($formData['ids']);
+            // $childrenNumbers=ArrayToolkit::column($children, 'number');
+            // $diffIds=array_diff($formData['numbers'], $childrenNumbers);
+            // if(!empty($diffIds)){
+            //     throw $this->createNotFoundException('学号为'.$diffIds[0].'的学生不存在！');
+            // }
 
             foreach ($children as $child) {
                 $userRelation['fromId']=$user['id'];
@@ -118,18 +118,15 @@ class ParentController extends BaseController
             $this->getUserService()->deleteUserRelationsByFromIdAndType($id,'family');
             $this->getClassesService()->deleteClassMemberByUserId($id);
 
-
-
-
-            foreach ($fields['numbers'] as $key => $value) {
-                $fields[$key]=trim($value);
-            }
-            $children=$this->getUserService()->findUsersByNumbers($fields['numbers']);
-            $childrenNumbers=ArrayToolkit::column($children, 'number');
-            $diffIds=array_diff($fields['numbers'], $childrenNumbers);
-            if(!empty($diffIds)){
-                throw $this->createNotFoundException('学号为'.$diffIds[0].'的学生不存在！');
-            }
+            // foreach ($fields['numbers'] as $key => $value) {
+            //     $fields[$key]=trim($value);
+            // }
+            $children=$this->getUserService()->findUsersByIds($fields['ids']);
+            // $childrenNumbers=ArrayToolkit::column($children, 'number');
+            // $diffIds=array_diff($fields['numbers'], $childrenNumbers);
+            // if(!empty($diffIds)){
+            //     throw $this->createNotFoundException('学号为'.$diffIds[0].'的学生不存在！');
+            // }
 
             foreach ($children as $child) {
                 $userRelation['fromId']=$user['id'];
@@ -167,8 +164,8 @@ class ParentController extends BaseController
 
     public function childNumberCheckAction(Request $request)
     {
-        $childNumber = $request->query->get('value');
-        $user=$this->getUserService()->getUserByNumber($childNumber);
+        $childId = $request->query->get('value');
+        $user=$this->getUserService()->getUser($childId);
         if(empty($user)){
             $response = array('success' => false, 'message' => '该学号学生并不存在!');
         }else{

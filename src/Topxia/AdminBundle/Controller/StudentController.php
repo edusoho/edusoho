@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
@@ -51,6 +52,31 @@ class StudentController extends BaseController
             'classes' =>$classes,
             'paginator' => $paginator
         ));
+    }
+
+    public function matchAction(Request $request)
+    {
+        $truename = $request->query->get('q');
+        $conditions = array(
+            'role' => 'ROLE_USER',
+            'truename'=> $truename 
+        );
+        $total = $this->getUserService()->searchUserCount($conditions);
+        $users = $this->getUserService()->searchUsers(
+            $conditions,
+            array('id','ASC'),
+            0,
+            $total
+        );
+
+        $response = array();
+        foreach ($users as $user) {
+            $temp = array();
+            $temp['id'] = $user['id'];
+            $temp['name'] = $user['truename'].'('.$user['number'].')';
+            $response[] = $temp;
+        }
+        return new Response(json_encode($response)); 
     }
 
     protected function getClassesService()
