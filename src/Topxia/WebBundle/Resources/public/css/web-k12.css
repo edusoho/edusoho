@@ -440,6 +440,14 @@
     width: 120px;
 }
 
+.schedule-header .form-control {
+    color: #57c332;
+}
+
+.schedule-header .form-control:focus {
+  border-color: #33a10e;
+}
+
 .schedule-header .month {
     font-size: 20px;
 }
@@ -464,7 +472,7 @@
 }
 
 .schedule-calendar-week {
-    min-height: 430px;
+    min-height: 400px;
 }
 
 .schedule-calendar-week > thead > tr > th {
@@ -529,9 +537,44 @@
     background-color: #f0fcee;
 }
 
-/*.schedule-calendar-month > thead > tr {
-    border: 1px solid #e3e3e3;
-}*/
+.schedule .lesson-ul-pop {
+    padding: 0;
+    margin: 0;
+}
+
+.schedule .lesson-ul-pop li {
+    background-color: #f7f7f7;
+    margin: 10px 0;
+    height: 50px;
+    width: auto;
+    -webkit-border-radius: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.schedule .lesson-ul-pop li.lesson-deleted {
+    cursor: not-allowed;
+}
+
+.schedule .lesson-ul-pop li .delete-text{
+    padding-left: 10px;
+    line-height: 25px;
+    font-style: italic;
+}
+
+.schedule .lesson-ul-pop li:hover {
+    background-color: #E4DEDE;
+}
+
+.schedule .lesson-ul-pop li .lesson-title,.schedule .lesson-ul-pop li .course-title {
+    padding-left: 10px;
+    line-height: 25px;
+    font-style: italic;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
 .schedule-lesson-list {
     margin: 0;
@@ -542,6 +585,30 @@
 .schedule-lesson-list .thumbnail {
     position: relative;
     margin: 10px 3px;
+    height: 100px;
+    width: auto;
+    margin: 0;
+    padding: 0px;
+    font-size: 12px;
+}
+
+.schedule-lesson-list .thumbnail .course-title{
+    height: 32px;
+    overflow: hidden;
+
+}
+
+.schedule-lesson-list .thumbnail .lesson-title{
+    color: #474747;
+    font-size: 12px;
+    height: 36px;
+    word-break: break-all;
+    overflow: hidden;
+}
+
+.schedule-lesson-list .thumbnail .lesson-num{
+    margin: 10px 0;
+    text-align: center;
 }
 
 .schedule-lesson-list .thumbnail img {
@@ -701,15 +768,26 @@ ul.schedule-lesson-list li.placeholder {
     bottom: 0px;
 }
 
-ul.schedule-lesson-list a {
+ul.schedule-lesson-list .item-div {
     position: relative;
     display: block;
+    padding: 4px;
+    cursor: pointer;
 }
 
-ul.schedule-lesson-list a .finished-icon {
+ ul.schedule-lesson-list .deleted-lesson {
+    cursor: not-allowed;
+    color: #a94442;
+ }
+ul.schedule-lesson-list .item-div .finished-icon {
     position: absolute;
-    right: 0px;
-    bottom: 0px;
+    right: 5px;
+    bottom: 5px;
+}
+
+ul.schedule-lesson-list .item-div .finished-icon .text-success{
+    background-color: #f66459;
+    color: #fff;
 }
 
 .schedule-item-list {

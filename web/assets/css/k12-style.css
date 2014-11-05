@@ -11,14 +11,6 @@ a:hover, a:focus {
   color: #57c332;
 }
 
-.form-control {
-  color: #57c332;
-}
-
-.form-control:focus {
-  border-color: #33a10e;
-}
-
 .btn-link {
   color: #57c332;
 }
@@ -70,4 +62,68 @@ a:hover, a:focus {
 
 .navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
   color: #33a10e;
+}
+
+.schedule-color0 {
+  background-color: #fff;
+}
+
+.schedule-color1 {
+  background-color: #42d692;
+}
+
+.schedule-color2 {
+  background-color: #16a765;
+}
+
+.schedule-color3 {
+  background-color: #7bd148;
+}
+
+.schedule-color4 {
+  background-color: #b3dc6c;
+}
+
+.schedule-color5 {
+  background-color: #fbe983;
+}
+
+.schedule-color6 {
+  background-color: #fad165;
+}
+
+.schedule-color7 {
+  background-color: #92e1c0;
+}
+
+.schedule-color8 {
+  background-color: #9fc6e7;
+}
+
+.schedule-color9 {
+  background-color: #9fe1e7;
+}
+
+.schedule-color10 {
+  background-color: #4986e7;
+}
+
+.schedule-color11 {
+  background-color: #9a9cff;
+}
+
+.schedule-color12 {
+  background-color: #b99aff;
+}
+
+.schedule-color13 {
+  background-color: #f691b2;
+}
+
+.schedule-color14 {
+  background-color: #f83a22;
+}
+
+.schedule-color15 {
+  background-color: #c2c2c2;
 }

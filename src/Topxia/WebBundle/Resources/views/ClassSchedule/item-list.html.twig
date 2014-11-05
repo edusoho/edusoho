@@ -15,7 +15,7 @@
 		    {% endif %}
 		  {% elseif 'lesson' in id %}
 	    	  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
-		    <li class="item lesson-item hover-item clearfix " data-id="{{ item.id }}" data-icon="{{ file_path(course.middlePicture, 'course-large.png') }}" data-title="{{ item.title }}">
+		    <li class="item lesson-item hover-item clearfix " data-id="{{ item.id }}" data-icon="{{ file_path(course.middlePicture, 'course-large.png') }}" data-title="{{ item.title }}" data-cid="{{ course.id }}" data-ctitle="{{ course.title }}">
 
 		    	<span class="name ">课时{{ item.number }}</span>
 		    	<a class=" title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}">

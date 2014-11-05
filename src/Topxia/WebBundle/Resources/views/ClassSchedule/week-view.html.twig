@@ -29,24 +29,33 @@
                       {% set lessonUrl = path('course_learn', {id:courses[lessons[item.lessonId].courseId].id}) ~ '#lesson/' ~ item.lessonId %}
 
                         <li class="{% if mode == 'edit' %}{% if item.id not in mySchedules[day]|default(null) and not app.user.isAdmin() %} hidden {% endif %}{% endif %}" data-id="{{ item.lessonId }}" data-url="{{ lessonUrl }}">
-                          <div class="thumbnail">
-                            {% if mode == 'edit' %}
-                              <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                            {% endif %}
-                            <a href="{{ lessonUrl }}" target="_blank">
-                              {% if lessonLearn and lessonLearn.status == 'finished' %}
-                                <span class="finished-icon"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                          {% set course = courses[lessons[item.lessonId].courseId] %}
+                          {% set color = (course.id)%15+1 %}
+                          <div class="item-div gotolesson" data-url="{{ lessonUrl }}">
+                            <div class="thumbnail schedule-color{{ color }}">
+                              {% if mode == 'edit' %}
+                                <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
                               {% endif %}
-                              <img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ></a>
-                            <div class="caption" title="{{ lessons[item.lessonId].title}}">
-                              {{ lessons[item.lessonId].title}}
+
+                                {% if lessonLearn and lessonLearn.status == 'finished' %}
+                                  <span class="finished-icon"><span class="text-success">已学</span></span>
+                                {% endif %}
+                                  <div class="lesson-title" title="来自{{ course.title }}课程">{{ lessons[item.lessonId].title }}</div>
+                            {#   <a href="{{ lessonUrl }}" target="_blank">
+                                {% if lessonLearn and lessonLearn.status == 'finished' %}
+                                  <span class="finished-icon"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                {% endif %}
+                                <img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ></a>
+                              <div class="caption" title="{{ lessons[item.lessonId].title}}">
+                                {{ lessons[item.lessonId].title}}
+                              </div> #}
                             </div>
                           </div>
                         </li>
 
                       {% else %}
                         <li>
-                          <div class="thumbnail">
+   {#                        <div class="thumbnail">
                             {% if mode == 'edit' %}
                               <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
                             {% endif %}
@@ -55,6 +64,14 @@
                             </a>
                             <div class="caption" title="课时已删除!">
                               <span class="text-danger">课时已删除!</span>
+                            </div>
+                          </div> #}
+                          <div class="item-div deleted-lesson">
+                            <div class="thumbnail schedule-color0">
+                              {% if mode == 'edit' %}
+                                <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                              {% endif %}
+                                <div class="" title="课时已删除!">课时已删除!</div>
                             </div>
                           </div>
                         </li>

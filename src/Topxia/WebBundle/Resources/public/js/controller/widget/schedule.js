@@ -21,6 +21,7 @@ define(function(require, exports, module) {
             "click .previous-month": "previousMonth",
             'click .course-display .mode': 'changeMode',
             "click button.lesson-remove": "removeLesson",
+            "click .gotolesson": "goTolesson",
             "change select.viewType": "changeView"
         },
         setup: function() {
@@ -55,10 +56,10 @@ define(function(require, exports, module) {
                     _super($item);
                 },
                 onDrop: function ($item, container, _super, event) {
-                    var $template = $('<li data-id="'+$item.data('id')+'" data-url="'+$item.find('a').attr('href')+'"><div class="thumbnail"><button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><a href="/course/89/learn#lesson/39" target="_blank"><img src="/assets/img/default/course-large.png?k12v1"></a><div class="caption" title="sssssss">sssssss</div></div></li>');
-                    $template.find('img').attr('src', $item.data('icon'));
-                    $template.find('.caption').html($item.data('title')).attr('title', $item.data('title'));
-                    $template.find('a').attr('href', $item.find('a').attr('href'));
+                    var $template = $('<li data-id="'+$item.data('id')+'" data-url="'+$item.find('a').attr('href')+'"><div class="item-div gotolesson" data-url="'+$item.find('a').attr('href')+'"><div class="thumbnail"><div class="lesson-title">测试试卷</div></div></div></li>');
+                    var color = 'schedule-color' + (parseInt($item.data('cid'))%15 + 1);
+                    $template.find('.thumbnail').addClass(color);
+                    $template.find('.lesson-title').html($item.data('title')).attr('title', '来自'+$item.data('ctitle')+'课程');
                     $item.prop('outerHTML', $template.prop("outerHTML"));
 
                     _super($item);
@@ -100,12 +101,17 @@ define(function(require, exports, module) {
             });
         },
         removeLesson: function(e) {
+            e.stopPropagation();
             var $button = $(e.currentTarget),
-                $li = $button.parent().parent(),
+                $a = $button.parent().parent();
+                $li = $button.parent().parent().parent(),
                 $ul = $li.parent();
             $li.remove();
             var result = this.serializeContainer($ul);
             this.save(result);
+        },
+        goTolesson: function(e) {
+            window.open($(e.currentTarget).data('url'));
         },
         sortableAPI: function(selector, API) {
             $(selector).each(function(){
@@ -129,10 +135,10 @@ define(function(require, exports, module) {
                     _super($item);
                 },
                 onDrop: function ($item, container, _super, event) {
-                    var $template = $('<li data-id="'+$item.data('id')+'" data-url="'+$item.find('a').attr('href')+'"><div class="thumbnail"><button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><a href="/course/89/learn#lesson/39" target="_blank"><img src="/assets/img/default/course-large.png?k12v1"></a><div class="caption" title="sssssss">sssssss</div></div></li>');
-                    $template.find('img').attr('src', $item.data('icon'));
-                    $template.find('.caption').html($item.data('title')).attr('title', $item.data('title'));
-                    $template.find('a').attr('href', $item.find('a').attr('href'));
+                    var $template = $('<li data-id="'+$item.data('id')+'" data-url="'+$item.find('a').attr('href')+'"><div class="item-div gotolesson" data-url="'+$item.find('a').attr('href')+'"><div class="thumbnail"><div class="lesson-title">测试试卷</div></div></div></li>');
+                    var color = 'schedule-color' + (parseInt($item.data('cid'))%15 + 1);
+                    $template.find('.thumbnail').addClass(color);
+                    $template.find('.lesson-title').html($item.data('title')).attr('title', '来自'+$item.data('ctitle')+'课程');
                     $item.prop('outerHTML', $template.prop("outerHTML"));
 
                     _super($item);
