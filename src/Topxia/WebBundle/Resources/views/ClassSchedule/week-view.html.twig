@@ -32,7 +32,7 @@
                           {% set course = courses[lessons[item.lessonId].courseId] %}
                           {% set color = (course.id)%15+1 %}
                           <div class="item-div gotolesson" data-url="{{ lessonUrl }}">
-                            <div class="thumbnail schedule-color{{ color }}">
+                            <div class="thumbnail" data-title="{{ course.title }}">
                               {% if mode == 'edit' %}
                                 <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
                               {% endif %}
@@ -46,7 +46,7 @@
                         </li>
 
                       {% else %}
-                        <li>
+                        <li data-id="{{ item.lessonId }}">
                           <div class="item-div deleted-lesson">
                             <div class="thumbnail schedule-color0">
                               {% if mode == 'edit' %}
