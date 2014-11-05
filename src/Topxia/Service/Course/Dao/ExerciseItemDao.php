@@ -8,8 +8,6 @@ interface ExerciseItemDao
 
     public function addItem($items);
 
-    public function updateItem($id, $fields);
-
     public function deleteItem($id);
 
     public function deleteItemByexerciseId($exerciseId);

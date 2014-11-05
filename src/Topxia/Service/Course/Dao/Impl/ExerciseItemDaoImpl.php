@@ -24,11 +24,6 @@ class ExerciseItemDaoImpl extends BaseDao implements ExerciseItemDao
         return $this->getItem($this->getConnection()->lastInsertId());
     }
 
-    public function updateItem($id, $fields)
-    {
-
-    }
-
     public function deleteItem($id)
     {
         return $this->getConnection()->delete($this->table,array('id'=>$id));
