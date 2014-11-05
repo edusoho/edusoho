@@ -53,7 +53,7 @@ define(function(require, exports, module) {
                 success: function(data){
                     self.showSignTable();
                     self.initTable(true);
-                    self.element.find("td:contains("+  today +")").addClass('signed_anime_day');
+                    self.element.find('.d-' + today).addClass('signed_anime_day');
                 },
                 error: function(xhr){
                     if(xhr.status == 404) {
