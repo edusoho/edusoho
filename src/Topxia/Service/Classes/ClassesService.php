@@ -23,7 +23,7 @@ interface ClassesService
 
     public function createClass($class);
 
-    public function editClass($fields, $id);
+    public function updateClass($id, $fields);
 
     public function updateClassStudentNum($num,$id);
 
@@ -51,7 +51,7 @@ interface ClassesService
 
     public function addClassMember(array $classMember);
 
-    public function addRoleToClass($userId, $classId, $role);
+    public function changeClassMemberRole($userId, $classId, $role);
 
     public function updateClassMember(array $fields, $id);
 

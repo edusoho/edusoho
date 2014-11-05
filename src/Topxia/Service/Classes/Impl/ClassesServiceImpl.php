@@ -7,7 +7,7 @@ use Topxia\Common\ArrayToolkit;
 
 class ClassesServiceImpl extends BaseService implements ClassesService
 {
-    protected   $roles = array('PARENT' => 1, 'STUDENT' => 2, 'TEACHER' => 3, 'HEAD_TEACHER' => 4);
+
     public function getClass($id)
     {
         return $this->getClassesDao()->getClass($id);
@@ -36,11 +36,11 @@ class ClassesServiceImpl extends BaseService implements ClassesService
     {
         $class = $this->getClassesDao()->createClass($class);
         $newClassMember = array();
-        $newClassMember['classId'] = $classId;
-        $newClassMember['userId'] = $userId;
+        $newClassMember['classId'] = $class['id'];
+        $newClassMember['userId'] = $class['headTeacherId'];
         $newClassMember['role'] = 'HEAD_TEACHER';
         $newClassMember['createdTime'] = time();
-        $classDao->addClassMember($newClassMember);
+        $this->addClassMember($newClassMember);
         return $class;
     }
 
@@ -190,11 +190,11 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return true;
     }
 
-    public function editClass($fields, $id)
+    public function updateClass($id, $fields)
     {
-        $class = $this->getClassesDao()->editClass($fields, $id);
-        $classMember = $classDao->getMemberByClassIdAndRole($classId, 'HEAD_TEACHER');
-        $this->updateClassMember(array('userId'=>$userId), $classMember['id']);
+        $class = $this->getClassesDao()->updateClass($id, $fields);
+        $classMember = $this->getClassMemberDao()->getMemberByClassIdAndRole($id, 'HEAD_TEACHER');
+        $this->updateClassMember(array('userId'=>$class['headTeacherId']), $classMember['id']);
         return $class;
     }
 
@@ -267,18 +267,13 @@ class ClassesServiceImpl extends BaseService implements ClassesService
         return $this->getClassMemberDao()->addClassMember($classMember);
     }
 
-    public function addRoleToClass($userId, $classId, $role)
+    public function changeClassMemberRole($userId, $classId, $role)
     {
 
         $member = $this->getMemberByUserIdAndClassId($userId, $classId);
         if (empty($member)) {
-            $newClassMember = array();
-            $newClassMember['classId'] = $classId;
-            $newClassMember['userId'] = $userId;
-            $newClassMember['role'] = $role;
-            $newClassMember['createdTime'] = time();
-            $member = $this->addClassMember($newClassMember);
-        } elseif ($this->roles[$role] > $this->roles[$member['role']]) {
+            $this->createNotFoundException('用户id{$userId}的{$role}不存在班级id{$classId}.');
+        } else {
             $member = $this->updateClassMember(array('role' => $role), $member['id']); 
         }
         return $member;

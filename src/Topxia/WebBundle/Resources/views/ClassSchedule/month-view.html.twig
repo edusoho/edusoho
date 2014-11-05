@@ -35,33 +35,11 @@
                           {% set teacher = teachers[course.teacherIds[0]] %}
                           {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id%}
                             <li class='gotolesson' data-url="{{ lessonUrl }}">
-                       {#        <a class="pull-left" href="{{ lessonUrl }}" target="_blank">
-                                <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="">
-                              </a>
-                              <div class="media-body" title="{{ lesson.title }}">
-                                <a href="{{ lessonUrl }}" target="_blank"><h4 class="media-heading">{{ lesson.title }}</h4></a>
-                                <span class="teacher-name">{{ teacher.truename}}</span>
-                              </div> #}
                               <div class="lesson-title">{{ lesson.title }}</div>
                               <div class="course-title text-muted">来自{{ course.title }}课程</div>
                             </li>
                         {% else %}
-         {#                  <li class='media'>
-                              <a class="pull-left" href="javascript:;" target="_blank">
-                                <img class="media-object" src="{{ file_path('', 'course-large.png') }}" alt="">
-                              </a>
-                              <div class="media-body" title="课时已删除!">
-                                <h4 class="media-heading text-danger">课时已删除!</h4>
-                              </div>
-                            </li> #}
                            <li class="lesson-deleted">
-                      {#        <a class="pull-left" href="{{ lessonUrl }}" target="_blank">
-                               <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="">
-                             </a>
-                             <div class="media-body" title="{{ lesson.title }}">
-                               <a href="{{ lessonUrl }}" target="_blank"><h4 class="media-heading">{{ lesson.title }}</h4></a>
-                               <span class="teacher-name">{{ teacher.truename}}</span>
-                             </div> #}
                              <div class="delete-text text-danger">课时已删除!</div>
                            </li>
                         {% endif %}  

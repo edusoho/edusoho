@@ -1155,3 +1155,28 @@ ul.schedule-lesson-list .item-div .finished-icon .text-success{
 .myteaching-menu .examine {
     background: url(../img/myteaching/examine.png) 0 0 no-repeat;
 }
+
+.intro-block .name-area {
+    margin-bottom: 10px;
+}
+.intro-block .name-area .name {
+    color: #57c332;
+    margin: 0 5px;
+    font-size: 16px;
+}
+
+.intro-block .point-area {
+    margin-bottom: 10px;
+}
+
+.intro-block .point-area .point-num {
+    color: #ff0000;
+}
+
+.intro-block .point-area .rank-up {
+    color: #00ff00;
+}
+
+.intro-block .point-area .rank-down {
+    color: #ff0000;
+}

@@ -41,31 +41,12 @@
                                   <span class="finished-icon"><span class="text-success">已学</span></span>
                                 {% endif %}
                                   <div class="lesson-title" title="来自{{ course.title }}课程">{{ lessons[item.lessonId].title }}</div>
-                            {#   <a href="{{ lessonUrl }}" target="_blank">
-                                {% if lessonLearn and lessonLearn.status == 'finished' %}
-                                  <span class="finished-icon"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                {% endif %}
-                                <img src="{{ file_path(courses[lessons[item.lessonId].courseId].middlePicture, 'course-large.png') }}" ></a>
-                              <div class="caption" title="{{ lessons[item.lessonId].title}}">
-                                {{ lessons[item.lessonId].title}}
-                              </div> #}
                             </div>
                           </div>
                         </li>
 
                       {% else %}
                         <li>
-   {#                        <div class="thumbnail">
-                            {% if mode == 'edit' %}
-                              <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                            {% endif %}
-                            <a href="javascript:;">
-                              <img src="{{ file_path('', 'course-large.png') }}">
-                            </a>
-                            <div class="caption" title="课时已删除!">
-                              <span class="text-danger">课时已删除!</span>
-                            </div>
-                          </div> #}
                           <div class="item-div deleted-lesson">
                             <div class="thumbnail schedule-color0">
                               {% if mode == 'edit' %}

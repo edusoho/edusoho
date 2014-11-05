@@ -105,7 +105,7 @@ class SchoolController extends BaseController
             $classId = $fields['classId'];
             unset($fields['classId']);
             if($classId) {
-                $class = $this->getClassesService()->editClass($fields,$classId);
+                $class = $this->getClassesService()->updateClass($classId, $fields);
                 return new Response('success');
             } else {
                 $class = $this->getClassesService()->createClass($fields);

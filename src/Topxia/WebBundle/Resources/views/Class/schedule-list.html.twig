@@ -2,7 +2,7 @@
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" {% if viewType == 'today' %} class="active" {% endif %} data-url="{{ path('class_student_schedule',{classId:classId,userId:app.user.id,viewType:'today'}) }}"><a href="javascript:;">今日课表</a></li>
   <li role="presentation" {% if viewType == 'tomorrow' %} class="active" {% endif %} data-url="{{ path('class_student_schedule',{classId:classId,userId:app.user.id,viewType:'tomorrow'}) }}"><a href="javascript:;">明日课表</a></li>
-  <a href="{{ path('class_schedule', {classId:classId}) }}" class="pull-right">全部课表>></a>
+  <a href="{{ path('class_schedule', {classId:classId}) }}" class="pull-right">全部课表&raquo;</a>
 </ul>
 <ul class="media-list">
   {% for schedule in schedules %}

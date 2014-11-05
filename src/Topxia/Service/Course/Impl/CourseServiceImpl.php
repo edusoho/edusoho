@@ -2306,7 +2306,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 				'isVisible' => 1
 				)));
 			//添加课程老师到classmember
-			$classService->addRoleToClass($teacherId, $classId, 'TEACHER');
+			$member = $this->getClassesService()->getMemberByUserIdAndClassId($teacherId, $classId);
+			if(empty($member)) {
+				$newClassMember = array();
+				$newClassMember['classId'] = $classId;
+				$newClassMember['userId'] = $teacherId;
+				$newClassMember['role'] = 'TEACHER';
+				$newClassMember['createdTime'] = time();
+				$this->getClassesService()->addClassMember($newClassMember);
+			}
 
 			//临时增加以下代码，紧急解决复制课程的试卷无法被老师批阅.
 			$teachers = $this->findCourseTeachers($parentId);
