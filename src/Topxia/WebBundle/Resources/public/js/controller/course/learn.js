@@ -78,7 +78,7 @@ define(function(require, exports, module) {
             var homeworkUrl = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/homework';
             var homeworkDone = false;
             $.get(homeworkUrl, function(response) {
-                if (response.commitStatus == 'uncommitted') {
+                if (response.status == 'doing' || response.status == 'none') {
                     self.set('homeworkStatus', 'unfinished');
                 }
             }, 'json');  
@@ -103,30 +103,36 @@ define(function(require, exports, module) {
                 playStatus = this.get('playStatus'),
                 self = this;
 
-            if (progressControl == 'Learned' && learnedControl == 'mediaPlayed') {
+            if (progressControl == 'learned' && learnedControl == 'mediaPlayed') {
                 if (playStatus != 'ended') {
                     $('#mediaPlayed-control-modal').modal('show');
                     return;
                 };
             };
 
-            if (progressControl == 'Learned' && learnedControl == 'homeworkDone') {
+            if (progressControl == 'learned' && learnedControl == 'homeworkDone') {
 
-                if (this.get('homeworkStatus') == 'unfinished') {
-                   $('#homeworkDone-control-modal').modal('show');
-                   return; 
-                }
+
+                var homeworkUrl = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/homework';
+                var homeworkDone = false;
+
+                var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
+                $.post(url, function(response) {
+                    if (response.homeworkStatus == 'doing' || response.homeworkStatus == 'none') {
+                        $('#homeworkDone-control-modal').modal('show');
+                        return false;
+                    }
+                    if (response.isLearned) {
+                        $('#course-learned-modal').modal('show');
+                    }
+
+                    $btn.addClass('btn-success');
+                    $btn.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
+                    toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
+
+                }, 'json');
             };
 
-            var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
-            $.post(url, function(response) {
-                if (response.isLearned) {
-                    $('#course-learned-modal').modal('show');
-                }
-                $btn.addClass('btn-success');
-                $btn.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
-                toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
-            }, 'json');
         },
 
         _onCancelLearnLesson: function() {
@@ -142,7 +148,6 @@ define(function(require, exports, module) {
         },
 
         _readAttrsFromData: function() {
-
             this.set('courseId', this.element.data('courseId'));
             this.set('courseUri', this.element.data('courseUri'));
             this.set('dashboardUri', this.element.data('dashboardUri'));
@@ -215,7 +220,6 @@ define(function(require, exports, module) {
             this.element.find('[data-role=lesson-content]').hide();
 
             var that = this;
-
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
 
 
@@ -258,7 +262,7 @@ define(function(require, exports, module) {
                 var number = lesson.number -1;
                 $.get(self.get('courseUri') + '/lesson/number/' + number , function(lesson) {
                     var prevId = lesson.id;
-                    if (self.get('progressControl') == 'Learned' && prevId > 0) {
+                    if (self.get('progressControl') == 'learned' && prevId > 0) {
                         $.get(self.get('courseUri') + '/lesson/' + prevId + '/learn/status', function(json) {
                             var $finishButton = that.element.find('[data-role=finish-lesson]');
                             if (json.status != 'finished') {
@@ -266,12 +270,13 @@ define(function(require, exports, module) {
                                 $('#lesson-text-content').hide();
                                 $('#lesson-video-content').hide();
                                 $('#lesson-audio-content').hide();
+                                $('#lesson-testpaper-content').hide();
+                                $('#lesson-ppt-content').hide();
                                 return;
                             } 
                         }, 'json');
                     }
                 }, 'json');
-
                 if (lesson.canLearn.status != 'yes') {
                     $("#lesson-alert-content .lesson-content-text-body").html(lesson.canLearn.message);
                     $("#lesson-alert-content").show();

@@ -264,7 +264,11 @@ class CourseLessonController extends BaseController
     public function lessonHomeworkShowAction(Request $request, $courseId, $lessonId)
     {
         $user = $this->getCurrentUser();
-        $homework = $this->getHomeworkService()->getResultByLessonIdAndUserId($lessonId, $user['id']);
+        $homework = $this->getHomeworkService()->getHomeworkByLessonId($lessonId);
+        $homework = $this->getHomeworkService()->getResultByHomeworkIdAndUserId($homework['id'],$user['id']);
+        if (empty($homework)) {
+            return $this->createJsonResponse(array('status'=>'none'));
+        }
         return $this->createJsonResponse($homework);
     }
 
@@ -427,14 +431,20 @@ class CourseLessonController extends BaseController
 
     public function learnFinishAction(Request $request, $courseId, $lessonId)
     {
-        $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
-
         $user = $this->getCurrentUser();
+        $homework = $this->getHomeworkService()->getHomeworkByLessonId($lessonId);
+        $homework = $this->getHomeworkService()->getResultByHomeworkIdAndUserId($homework['id'],$user['id']);
+
+        if (!empty($homework['status'])&&($homework['status'] != 'doing')) {
+            $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
+        }
+
         $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
 
         $response = array(
             'learnedNum' => empty($member['learnedNum']) ? 0 : $member['learnedNum'],
             'isLearned' => empty($member['isLearned']) ? 0 : $member['isLearned'],
+            'homeworkStatus' => empty($homework['status']) ? 'none' : $homework['status'],
         );
 
         return $this->createJsonResponse($response);

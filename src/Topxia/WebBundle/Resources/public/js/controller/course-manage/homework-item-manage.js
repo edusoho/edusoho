@@ -232,10 +232,6 @@ define(function(require, exports, module) {
                             var $tr = $(this);
                             $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
                         });
-
-                        // console.log($tbody.find('[data-parent-id=' + item.data('id') + ']'));
-
-                        // $tbody.find('[data-parent-id=' + item.data('id') + ']').detach().insertAfter(item);
                     }
 
                     self.refreshSeqs();
