@@ -68,6 +68,13 @@ define(function(require, exports, module) {
             maximumSelectionSize: 20
         });
 
+        $('[name=progressControl]').click(function(){
+                if ($("[name='progressControl']:checked").val() == 'learned') {
+                    $('.learned-condition').show();
+                } else {
+                    $('.learned-condition').hide();
+                }
+        });
 
         var validator = new Validator({
             element: '#course-form',
