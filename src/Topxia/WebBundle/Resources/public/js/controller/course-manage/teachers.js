@@ -20,7 +20,7 @@ define(function(require, exports, module) {
 	        filter: {
 	            name: 'stringMatch',
 	            options: {
-	                key: 'nickname'
+	                key: 'truename'
 	            }
 	        },
             selectFirst: true
