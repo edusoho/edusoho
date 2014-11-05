@@ -1,7 +1,7 @@
 {% for learn in learns %}
 {% set student = students[learn.userId] %}
 <tr class="has-item tac">
-  <td width="10%"><span class="label {% if start+loop.index==1 %} label-finished {% elseif start+loop.index==2 %} llabel-finished {% elseif start+loop.index==3 %} label-finished {% else %} label-finished {% endif %}" >{{ (start + loop.index) }}</span></td>
+  <td width="10%"><span class="label {% if start+loop.index==1 %} label-finished {% elseif start+loop.index==2 %} label-finished {% elseif start+loop.index==3 %} label-finished {% else %} label-finished {% endif %}" >{{ (start + loop.index) }}</span></td>
   <td width="15%">{{ student.truename }}</td>
   <td width="45%" style="overflow:hidden">
     {% if questions[student.id] is defined %}

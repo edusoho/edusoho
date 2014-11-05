@@ -6,7 +6,7 @@
   {% endif %}
   <a href="{{ path('course_show',{id:course.id}) }}"><img  alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}"></a>
   <div class="caption">
-    <div class="title">
+    <div class="title" title="{{ course.title }}">
       <a href="{{ path('course_show',{id:course.id}) }}">{{ course.title }}</a>
     </div>
     <div class="clearfix">

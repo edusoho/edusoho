@@ -71,7 +71,7 @@
 
 .class-table .class-picture {
     max-width: 100%;
-    height: auto;
+    min-height: 92px;
     display: block;
     margin-right: auto;
     margin-left: auto;
@@ -81,6 +81,9 @@
 
 .class-table .class-name {
     text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .myteaching-thread {
@@ -257,6 +260,9 @@
 
 .class-course-grid .title {
     margin-bottom: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .class-course-grid .title a{
@@ -1081,6 +1087,10 @@ ul.schedule-lesson-list .item-div .finished-icon .text-success{
 }
 .teaching-course .course-name .course-title {
     margin-top: 8px;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .teaching-course .course-name .course-title a{
     color:#444;

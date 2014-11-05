@@ -4,7 +4,7 @@
       <img src="{{ file_url(manageClass.icon, 'class.png') }}" alt="{{ manageClass.name }}" class="class-picture">
     </a>
   </div>
-  <div class="class-name">
+  <div class="class-name" title="{{ class_name(manageClass) }}">
     <a href="{{ path('class_show',{ classId: manageClass.id })}}">{{ class_name(manageClass) }}</a>
     <div class="clearfix"></div>
   </div>
