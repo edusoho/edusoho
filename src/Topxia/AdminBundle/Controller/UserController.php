@@ -150,17 +150,56 @@ class UserController extends BaseController
         }
 
         $user = $this->getUserService()->getUser($id);
-
+        $currentUser = $this->getCurrentUser();
+        $startRoleNums = count($user['roles']);
         if ($request->getMethod() == 'POST') {
             $roles = $request->request->get('roles');
             $this->getUserService()->changeUserRoles($user['id'], $roles);
+            $dif = "";
+            $stopRoleNums = count($roles);
+            if($startRoleNums <= $stopRoleNums){
+                $diff = array_diff($roles, $user['roles']); 
+                foreach ($diff as $key => $value) {    
+                    if($value == "ROLE_USER" ){
+                            $value =  "";
+                    }
+                    if($value == "ROLE_TEACHER" ){
+                            $value =  "教师";
+                    }
+                    if($value == "ROLE_ADMIN" ){
+                            $value =  "管理员";
+                    }
+                    if($value == "ROLE_SUPER_ADMIN" ){
+                            $value =  "超级管理员";
+                    }
+                    $dif .= $value.".";
+                }
+                $this->getNotifiactionService()->notify($user['id'],'default',"您被“{$currentUser['nickname']}”新增为“{$dif}”身份。");
+            }else{
+                $diff = array_diff($user['roles'],$roles);     
+                 foreach ($diff as $key => $value) {    
+                    if($value == "ROLE_USER" ){
+                            $value =  "";
+                    }
+                    if($value == "ROLE_TEACHER" ){
+                            $value =  "教师";
+                    }
+                    if($value == "ROLE_ADMIN" ){
+                            $value =  "管理员";
+                    }
+                    if($value == "ROLE_SUPER_ADMIN" ){
+                            $value =  "超级管理员";
+                    }
+                    $dif .= $value.".";
+                }
+                $this->getNotifiactionService()->notify($user['id'],'default',"您被“{$currentUser['nickname']}”取消“{$dif}”身份。");
+            }
 
             if (in_array('ROLE_TEACHER', $user['roles']) && !in_array('ROLE_TEACHER', $roles)) {
                 $this->getCourseService()->cancelTeacherInAllCourses($user['id']);
             }
 
             $user = $this->getUserService()->getUser($id);
-
             return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user' => $user,
             'currentUser' =>$this->getCurrentUser()
@@ -418,5 +457,10 @@ class UserController extends BaseController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getNotifiactionService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
     }
 }
