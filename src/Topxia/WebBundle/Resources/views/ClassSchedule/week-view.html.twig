@@ -30,7 +30,6 @@
 
                         <li class="{% if mode == 'edit' %}{% if item.id not in mySchedules[day]|default(null) and not app.user.isAdmin() %} hidden {% endif %}{% endif %}" data-id="{{ item.lessonId }}" data-url="{{ lessonUrl }}">
                           {% set course = courses[lessons[item.lessonId].courseId] %}
-                          {% set color = (course.id)%15+1 %}
                           <div class="item-div gotolesson" data-url="{{ lessonUrl }}">
                             <div class="thumbnail" data-title="{{ course.title }}">
                               {% if mode == 'edit' %}
