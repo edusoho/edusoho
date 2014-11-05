@@ -66,27 +66,6 @@
 
 			{% if course.type == 'normal' %}
 				<div class="form-group">
-					<label class="col-md-2 control-label">进度条件设置</label>
-					<div class="col-md-8 controls radios">
-						{{ radios('progressControl', {'learned':'必须确认“学过了”才能进入下一课时
-', 'noControl':'不做控制'}, course.progressControl|default('noControl') ) }}
-					<div class="help-block">开启后请注意不要随意更改课时顺序</div>
-					</div>
-				</div>
-			{% endif %}
-
-			{% if course.type == 'normal' %}
-				<div class="form-group learned-condition">
-					<label class="col-md-2 control-label">“学过了”的条件</label>
-					<div class="col-md-8 controls radios">
-						{{ radios('learnedCondition', {'mediaPlayed':'视频/音频/PPT播完后
-', 'homeworkDone':'作业提交后','noControl':'不做控制'}, course.learnedCondition|default('noControl') ) }}
-					</div>
-				</div>
-			{% endif %}
-
-			{% if course.type == 'normal' %}
-				<div class="form-group">
 					<label class="col-md-2 control-label">连载状态</label>
 					<div class="col-md-8 controls radios">
 						{{ radios('serializeMode', {'none':'非连载课程', 'serialize':'更新中', 'finished':'已完结'}, course.serializeMode|default('none') ) }}

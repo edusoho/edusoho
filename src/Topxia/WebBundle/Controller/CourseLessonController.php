@@ -435,9 +435,7 @@ class CourseLessonController extends BaseController
         $homework = $this->getHomeworkService()->getHomeworkByLessonId($lessonId);
         $homework = $this->getHomeworkService()->getResultByHomeworkIdAndUserId($homework['id'],$user['id']);
 
-        if (!empty($homework['status'])&&($homework['status'] != 'doing')) {
-            $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
-        }
+        $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
         $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
 
