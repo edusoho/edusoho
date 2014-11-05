@@ -1,0 +1,129 @@
+/* override bootstrap css */
+a {
+  color: #57c332;
+}
+
+a:hover, a:focus {
+  color: #33a10e;
+}
+
+.btn-default {
+  color: #57c332;
+}
+
+.btn-link {
+  color: #57c332;
+}
+
+.btn-link:hover, .btn-link:focus {
+  color: #33a10e;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  background-color: #57c332;
+  color: #fff;
+}
+
+/* override default css */
+
+.green-color {
+  color: #57c332;
+}
+
+.site-navbar .navbar-nav > li > a:hover, .site-navbar .navbar-nav > li > a:focus {
+  background-color: #33a10e;
+}
+
+.site-navbar .navbar-nav > .active > a, 
+.site-navbar .navbar-nav > .active > a:hover, 
+.site-navbar .navbar-nav > .active > a:focus, 
+.site-navbar .navbar-nav > .open > a, 
+.site-navbar .navbar-nav > .open > a:hover, 
+.site-navbar .navbar-nav > .open > a:focus {
+  background-color: #33a10e;
+}
+
+.site-navbar .navbar-nav > li > a {
+	color: #333333;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+  background-color: #33a10e;
+}
+
+.navbar-inverse {
+  border-color: #57c332 #fff #fff #fff;
+  border-width: 2px;
+}
+
+.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
+  color: #33a10e;
+}
+
+.navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
+  color: #33a10e;
+}
+
+.schedule-color0 {
+  background-color: #fff;
+}
+
+.schedule-color1 {
+  background-color: #42d692;
+}
+
+.schedule-color2 {
+  background-color: #16a765;
+}
+
+.schedule-color3 {
+  background-color: #7bd148;
+}
+
+.schedule-color4 {
+  background-color: #b3dc6c;
+}
+
+.schedule-color5 {
+  background-color: #fbe983;
+}
+
+.schedule-color6 {
+  background-color: #fad165;
+}
+
+.schedule-color7 {
+  background-color: #92e1c0;
+}
+
+.schedule-color8 {
+  background-color: #9fc6e7;
+}
+
+.schedule-color9 {
+  background-color: #9fe1e7;
+}
+
+.schedule-color10 {
+  background-color: #4986e7;
+}
+
+.schedule-color11 {
+  background-color: #9a9cff;
+}
+
+.schedule-color12 {
+  background-color: #b99aff;
+}
+
+.schedule-color13 {
+  background-color: #f691b2;
+}
+
+.schedule-color14 {
+  background-color: #f83a22;
+}
+
+.schedule-color15 {
+  background-color: #c2c2c2;
+}

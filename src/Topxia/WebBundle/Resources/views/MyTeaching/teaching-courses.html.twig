@@ -7,54 +7,87 @@
 {% block main %}
   <div class="panel panel-default panel-col">
     <div class="panel-body">
-      <h5>在教课程（{{courseCount}}）</h5>
-      <table class="table table-condensed class-table">
-        {% for class in classes %}
-          <tr>
-            <td width="20%">
-              <a href="{{ path('class_show',{ classId: class.id })}}" class="btn-link pull-left">{{ class_name(class) }}</a>
-             </td>
-             
-             <td width="60%">
-               <ul class="media-list">
-                {% for course in courses[class.id] %}
-                  <li class="media">
-                    <a class="pull-left class-course-grid" href="{{ path('course_show',{id:course.id}) }}">
-                      {% if course.compulsory %}
-                        <span class="label label-success compulsory">必修</span>
-                      {% else %}
-                        <span class="label label-warning compulsory">选修</span>
-                      {% endif %}
-                      <img  width="203" height="114" alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}">
-                    </a>
-                    <div class="media-body">
-                      <a href="{{ path('course_show',{id:course.id}) }}"><h5>{{ course.title }}</h5></a>
-                      <div style="margin-top:60px">
-                        课时：{{course.lessonNum}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        学生：
-                        {% if course.studentNum==0 %}
-                          {{course.studentNum}}
-                        {% else %}
-                          <a data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" href="#modal">{{course.studentNum}}
-                          </a>
-                        {% endif %}
-                      </div>
-                    </div>
-                  </li>
-                {% endfor %}
-              </ul>
-             </td>
-          </tr>
+      <div class="myteaching-title">
+        <div class="text">在教课程</div>
+        <div class="num"><span class="label label-success">{{courseCount|default(0)}}</span></div>
+      </div><br>
+      <hr>
+
+      {% if classes %}
+        <ul class="nav nav-pills class-nav" role="tablist">
+          <li role="presentation" {% if not selectedClass|default("") %}class="active"{% endif %}><a href="{{path('my_teaching_courses',{'classId':'all'})}}">全部</a></li>
+          {% for class in classes %}
+            <li role="presentation" {% if selectedClass.id|default(0)==class.id %}class="active"{% endif %}><a href="{{path('my_teaching_courses',{'classId':class.id})}}">{{ class_name(class) }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+
+      <div class="row">
+        {% if selectedClass|default("") %}
+          {#如果存在选中的班级，则只显示选中班级的课程#}
+          {% for course in courses[selectedClass.id] %}
+            {% include 'TopxiaWebBundle:MyTeaching:teaching-course-gird.html.twig' %}
+          {% else %}
+            <div class="empty">尚无在教课程</div>
+          {% endfor %}
         {% else %}
-          <div class="empty">尚无在教课程</div>
-        {% endfor %}
-      </table>
+          {#如果为选中任何班级，循环全部，显示所有课程#}
+          {% for class in classes %}
+            {% set selectedClass=class %}
+            {% for course in courses[selectedClass.id] %}
+              {% include 'TopxiaWebBundle:MyTeaching:teaching-course-gird.html.twig' %}
+            {% endfor %}
+          {% else %}
+            <div class="empty">尚无在教课程</div>
+          {% endfor %}
+        {% endif %}
+      </div>
     </div>
   </div>
 {% endblock %}
 
-
-
+{# <table class="table table-condensed class-table">
+  {% for class in classes %}
+    <tr>
+      <td width="20%">
+        <a href="{{ path('class_show',{ classId: class.id })}}" class="btn-link pull-left">{{ class_name(class) }}</a>
+       </td>
+       
+       <td width="60%">
+         <ul class="media-list">
+          {% for course in courses[class.id] %}
+            <li class="media">
+              <a class="pull-left class-course-grid" href="{{ path('course_show',{id:course.id}) }}">
+                {% if course.compulsory %}
+                  <span class="label label-success compulsory">必修</span>
+                {% else %}
+                  <span class="label label-warning compulsory">选修</span>
+                {% endif %}
+                <img  width="203" height="114" alt="{{ course.title }}" src="{{ file_path(course.middlePicture, 'course-large.png') }}">
+              </a>
+              <div class="media-body">
+                <a href="{{ path('course_show',{id:course.id}) }}"><h5>{{ course.title }}</h5></a>
+                <div style="margin-top:60px">
+                  课时：{{course.lessonNum}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  学生：
+                  {% if course.studentNum==0 %}
+                    {{course.studentNum}}
+                  {% else %}
+                    <a data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" href="#modal">{{course.studentNum}}
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+       </td>
+    </tr>
+  {% else %}
+    <div class="empty">尚无在教课程</div>
+  {% endfor %}
+</table> #}
 
 
 

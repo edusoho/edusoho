@@ -1,58 +1,58 @@
 {{ import_javascript({'sign' : 'sign/sign'}) }}
-<div style="margin:20px 0; ">
-
-  <div class="class-sign class-sign-finished">
-    <div class="date-col">
-      <div class="dayofweek">周{{ 'now'|day_of_week }}</div>
-      <div class="date">{{ 'now'|date('m-d') }}</div>
-    </div>
-
-    <div class="action-col">
-    <div id="class-sign" data-records="{{ path('signed_records', {'classId':class.id,'userId':app.user.id})}}" data-signurl="{{ path('user_sign', {'classId':class.id,'userId':app.user.id}) }}">
-    <div>
-      {% if not isSignedToday %}
-        <button class="btn btn-primary btn-block" data-role="sign">签到</button>
-      {% else %}
-        <button class="btn btn-primary btn-block sign-btn" data-role="signed" onclick="return false;">已签</button>
-      {% endif %}
-    </div>
-    
-    <div class="sign_main" style="display:none">
-      <div class="">
-        <div class="calendar_title_month clearfix">
-          <span class="pull-left glyphicon glyphicon-chevron-left title-margin" data-role="previous"></span>
-          <span class="pull-right glyphicon glyphicon-chevron-right title-margin disabled-next" data-role="next"></span>
-          <div class="text-center title-month title-margin" data-time="{{ "now"|date('Y/m') }}" id="title-month">{{ "now"|date('Y年m月') }}
-          </div>
-        </div>
-        
-        <table class="sign_succ_table ">
-          <thead align="center">
-            <tr class="sign_succ_canlerdar_head">
-              <td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td>
-            </tr>
-          </thead>
-          <tbody align="center" class="sign_succ_canlerdar_days j_canlerdar_days">
-
-          </tbody>
-        </table>
-      </div>
-      <div class="sign_tip_boards">
-        <div class="mlm mtm">
-          <p class=" text-muted">签到排名：今日本班第<span class="today-rank"></span>个签到</p>
-        </div>
-        <div class="mlm">
-          <p class=" text-muted">本班签到人数：<span class="signed-number"></span></p>
-        </div>
-        <div class="mlm">
-          <p class=" text-muted">连续签到：<span class="keep-days"></span>天</p>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="class-sign class-sign-finished row">
+  <div class="date-col col-md-6">
+    <div class="date-area">
+      <div class="day">{{ 'now' | date('d') }}</div>
+      <div class="week">星期{{ 'now'|day_of_week }}</div>
+      <div class="yearMonth">{{ 'now'|date('Y.m') }}</div>
     </div>
   </div>
 
+  <div class="action-col  col-md-6">
+  <div id="class-sign" data-records="{{ path('signed_records', {'classId':class.id,'userId':app.user.id})}}" data-signurl="{{ path('user_sign', {'classId':class.id,'userId':app.user.id}) }}">
+  <div  class="sign-area" {% if not isSignedToday %} data-role="sign" {% else %} data-role="signed" onclick="return false;" {% endif %} >
+    <img src="{{ asset('bundles/topxiaweb/img/smile.png') }}" />
+    {% if not isSignedToday %}
+      <span class="sign-text">签到</span>
+    {% else %}
+      <span class="sign-text">已签</span>
+    {% endif %}
+  </div>
+  
+  <div class="sign_main" style="display:none">
+    <div class="">
+      <div class="calendar_title_month clearfix">
+        <span class="pull-left glyphicon glyphicon-chevron-left title-margin" data-role="previous"></span>
+        <span class="pull-right glyphicon glyphicon-chevron-right title-margin disabled-next" data-role="next"></span>
+        <div class="text-center title-month title-margin" data-time="{{ "now"|date('Y/m') }}" id="title-month">{{ "now"|date('Y年m月') }}
+        </div>
+      </div>
+      
+      <table class="sign_succ_table ">
+        <thead align="center">
+          <tr class="sign_succ_canlerdar_head">
+            <td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td>
+          </tr>
+        </thead>
+        <tbody align="center" class="sign_succ_canlerdar_days j_canlerdar_days">
+
+        </tbody>
+      </table>
+    </div>
+    <div class="sign_tip_boards">
+      <div class="mlm mtm">
+        <p class=" text-muted">签到排名：今日本班第<span class="today-rank"></span>个签到</p>
+      </div>
+      <div class="mlm">
+        <p class=" text-muted">本班签到人数：<span class="signed-number"></span></p>
+      </div>
+      <div class="mlm">
+        <p class=" text-muted">连续签到：<span class="keep-days"></span>天</p>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
 </div>
 
 

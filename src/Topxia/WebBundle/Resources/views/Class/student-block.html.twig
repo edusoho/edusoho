@@ -1,26 +1,29 @@
-<div style="display:block;height:200px; width:auto;background-color: #fff;"  class="well">
-  <div>亲爱的&nbsp;&nbsp;&nbsp;<span style="color:red;font-size:16px">{{user.truename}}</span>&nbsp;&nbsp;&nbsp;同学
-  </div>
-  {% if classMember and setting('point').show|default(1) %}
-    <div style="margin:10px 0 10px 0">
-      我的{{ setting('point', '学分').name|default('学分') }} <span style="color:red">{{user.point}}</span> 
-      <div class="pull-right">
-        排名<span style="color:red"> {{ classMember.currentRank }}</span>
-        {% if classMember.lastRank - classMember.currentRank > 0 %}
-          <span class="glyphicon glyphicon-arrow-up" style="color:green" title="比昨日上升了{{ classMember.lastRank - classMember.currentRank }}名,击败了{{classMember.rate}}的同学" />
-        {% elseif classMember.lastRank - classMember.currentRank < 0 %}
-          <span class="glyphicon glyphicon-arrow-down" style="color:red" title="比昨日下降了{{ classMember.currentRank - classMember.lastRank }}名, 击败了{{classMember.rate}}的同学"/>
-        {% else %}
-          <span class="glyphicon glyphicon-minus text-muted" title="击败了{{classMember.rate}}的同学"/>
-        {% endif %}
-      </div>
+<div class="panel panel-default intro-block">
+  <div class="panel-body">
+    <div class="name-area">亲爱的<span class="name">{{user.truename}}</span>同学
     </div>
-  {% endif %}
-  {% if nextCourse %}
-    <a style="margin:10px 0 10px 0" href="{{ path('course_learn', {id:nextCourse.id}) ~ '#lesson/' ~ nextLesson.id }}">上次正在学习《{{nextCourse.title}}》 课时 {{ nextLesson.title}}</a>
-  {% else %}
-    <a style="margin:10px 0 10px 0" href="{{ path('class_schedule', {classId:class.id})}}">还没有开始学习课程，快去学习吧!</a>
-  {% endif %}
-{% include 'TopxiaWebBundle:Sign:show.html.twig'%}
-
+    {% if classMember and setting('point').show|default(1) %}
+      <div class="point-area">
+        我的{{ setting('point', '学分').name|default('学分') }} <span class="point-num">{{user.point}}</span> 
+        <div class="pull-right">
+          排名<span class="point-num"> {{ classMember.currentRank }}</span>
+          {% if classMember.lastRank - classMember.currentRank > 0 %}
+            <span class="glyphicon glyphicon-arrow-up rank-up"title="比昨日上升了{{ classMember.lastRank - classMember.currentRank }}名,击败了{{classMember.rate}}的同学" />
+          {% elseif classMember.lastRank - classMember.currentRank < 0 %}
+            <span class="glyphicon glyphicon-arrow-down rank-down" title="比昨日下降了{{ classMember.currentRank - classMember.lastRank }}名, 击败了{{classMember.rate}}的同学"/>
+          {% else %}
+            <span class="glyphicon glyphicon-minus text-muted" title="击败了{{classMember.rate}}的同学"/>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+    <div class="next-lesson">
+      {% if nextCourse %}
+        <a href="{{ path('course_learn', {id:nextCourse.id}) ~ '#lesson/' ~ nextLesson.id }}">上次正在学习《{{nextCourse.title}}》 课时 {{ nextLesson.title}}</a>
+      {% else %}
+        <a href="{{ path('class_schedule', {classId:class.id})}}">还没有开始学习课程，快去学习吧!</a>
+      {% endif %}
+    </div>
+    {% include 'TopxiaWebBundle:Sign:show.html.twig'%}
+  </div>
 </div>

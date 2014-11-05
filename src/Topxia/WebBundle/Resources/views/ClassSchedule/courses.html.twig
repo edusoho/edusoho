@@ -10,17 +10,17 @@
       <h3 class="panel-title">班级课程</h3>
       <span class="mode normal">
       {% if app.user.isAdmin or app.user.isTeacher %}
-        <button class="btn btn-link">编辑课表</button> 
+        <button class="btn btn-link">编辑课表>></button> 
       {% endif %}  
       </span>
   </div>
   <div class="panel-body hidden editable-body">
-     <span class="text-muted text-sm">把课时拖动到左侧相应的日期中以完成编辑</span>
+     <span class="text-tip"><span class="glyphicon glyphicon-arrow-left mrm"></span>把课时拖动到左侧相应的日期中</span>
        <ul class="course-list">
         {% set Editablecourses = teachCourses == null ? courses : teachCourses%}
           {% for course in Editablecourses %}
            <li>
-             <span class="glyphicon glyphicon-plus-sign text-info mrs"></span>
+             <span class="glyphicon glyphicon-plus-sign mrs"></span>
              <span class="title" title="{{ course.title }}">{{ course.title }}</span>
              {{ render(controller('TopxiaWebBundle:ClassSchedule:getItems', {courseId:course.id})) }}
            </li>
@@ -50,7 +50,7 @@
               </h4>
               <div class="pvs">
                 <span>{{ teacher.truename }}</span> 
-                <span class="mll">{{ course.lessonNum }}个课时</span>
+                <span class="mll lesson-num">{{ course.lessonNum }}<span class="text-muted">课时</span></span>
               </div>
             </div> 
            

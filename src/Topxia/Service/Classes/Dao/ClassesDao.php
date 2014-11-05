@@ -18,7 +18,7 @@ interface ClassesDao
 
     public function createClass($class);
 
-    public function editClass($fields, $id);
+    public function updateClass($id, $fields);
 
     public function updateClassStudentNum($num,$id);
 

@@ -24,34 +24,24 @@
                   
                   {% if schedules[day] is defined %}
                     <div class="count-text">
-                      ({{ schedules[day]|length }})
+                      <span class="count">{{ schedules[day]|length }}</span><span class="text">门课</span>
                     </div> 
                     <div class='hidden popover-content'>
-                    <ul class='media-list'>
+                    <ul class='lesson-ul-pop'>
                       {% for schedule in schedules[day] %}
                         {% if lessons[schedule.lessonId]|default(null) %}
                           {% set lesson = lessons[schedule.lessonId] %}
                           {% set course = courses[lesson.courseId]%}
                           {% set teacher = teachers[course.teacherIds[0]] %}
                           {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id%}
-                            <li class='media'>
-                              <a class="pull-left" href="{{ lessonUrl }}" target="_blank">
-                                <img class="media-object" src="{{ file_path(course.middlePicture, 'course-large.png') }}" alt="">
-                              </a>
-                              <div class="media-body" title="{{ lesson.title }}">
-                                <a href="{{ lessonUrl }}" target="_blank"><h4 class="media-heading">{{ lesson.title }}</h4></a>
-                                <span class="teacher-name">{{ teacher.truename}}</span>
-                              </div>
+                            <li class='gotolesson' data-url="{{ lessonUrl }}">
+                              <div class="lesson-title">{{ lesson.title }}</div>
+                              <div class="course-title text-muted">来自{{ course.title }}课程</div>
                             </li>
                         {% else %}
-                          <li class='media'>
-                              <a class="pull-left" href="javascript:;" target="_blank">
-                                <img class="media-object" src="{{ file_path('', 'course-large.png') }}" alt="">
-                              </a>
-                              <div class="media-body" title="课时已删除!">
-                                <h4 class="media-heading text-danger">课时已删除!</h4>
-                              </div>
-                            </li>
+                           <li class="lesson-deleted">
+                             <div class="delete-text text-danger">课时已删除!</div>
+                           </li>
                         {% endif %}  
                       {% endfor %}
                     </ul>

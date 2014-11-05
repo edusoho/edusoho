@@ -221,12 +221,12 @@ textarea {
  */
 .site-navbar {
 	border-radius: 0;
-	background-color: #363e45;
+	background-color: #fff;
 	z-index: 1024;
 }
 
 .site-navbar .navbar-brand {
-  color: #fff;
+  color: #57c332;
   padding-top: 17px;
   padding-bottom: 17px;
 }
@@ -4246,3 +4246,4 @@ body {
 .course-data a{
 	color:#2a6496;
 }
+

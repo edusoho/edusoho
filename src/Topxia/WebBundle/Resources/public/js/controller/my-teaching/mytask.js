@@ -56,8 +56,8 @@ define(function(require, exports, module) {
         $('.carousel-inner').delegate('.thumbnail', 'click', function(){
             $('.carousel-inner').find('.lesson-selected').toggleClass('lesson-selected');
             $(this).toggleClass('lesson-selected');
-            lessonId = $(this).parent().data('id');
-            ($('.taks-body .nav li.active').attr('id') == 'finished-btn') ? getFinishedLessonStudents(0, default_limit) : getNotFinishedLessonStudents(0, default_limit);
+            lessonId = $(this).parent().data('id');console.log($('.tasks-body .nav li.active').attr('id'));
+            ($('.tasks-body .nav li.active').attr('id') == 'finished-btn') ? getFinishedLessonStudents(0, default_limit) : getNotFinishedLessonStudents(0, default_limit);
         });
 
         $('#carousel-lesson').hover(function(){
@@ -76,7 +76,7 @@ define(function(require, exports, module) {
         {
             if($(window).scrollTop() == $(document).height() - $(window).height())
             {
-                var type = ($('.taks-body .nav li.active').attr('id') == 'finished-btn') ? 'finished' : 'not-finished',
+                var type = ($('.tasks-body .nav li.active').attr('id') == 'finished-btn') ? 'finished' : 'not-finished',
                     start = ($table.find('.has-item')).length;
                 
                 start%default_limit==0 && $.ajax({

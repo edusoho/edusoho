@@ -1,13 +1,13 @@
-<div style="margin-bottom:15px"  class="">
-  <a class="pull-left" href="{{path('user_show',{id:threadUser.id})}}">
-    <img class="media-object pull-left"  width="48" height="48" src="{{file_path(threadUser.smallAvatar, 'avatar.png')}}" alt="{{threadUser.truename}}">
+<div class="myteaching-thread">
+  <a href="{{path('user_show',{id:threadUser.id})}}">
+    <img class="pull-left"  width="48" height="48" src="{{file_path(threadUser.smallAvatar, 'avatar.png')}}" alt="{{threadUser.truename}}">
   </a>
-  <div class="media-body">
-    <div style="margin-bottom:15px">
-      <a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}"><h5 class="media-heading">{{thread.title}}</h5></a>
+  <div class="text">
+    <div class="title">
+      <a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}">{{thread.title}}</a>
     </div>
-    <a href="{{ path('user_show', {id:threadUser.id}) }}">
-      <h5 class="media-heading">{{threadUser.truename}}</h5>
-    </a>
+    <div class="name">
+      <a href="{{ path('user_show', {id:threadUser.id}) }}">{{threadUser.truename}}</a>
+    </div>
   </div>
-</div>
+</div><br><br><hr>

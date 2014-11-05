@@ -58,10 +58,50 @@
 }
 
 
+.class-table {
+    margin-bottom: 10px;
+}
+
+.class-table .class-border{
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    padding: 4px 2px 4px 2px;
+}
+
 .class-table .class-picture {
-    width: 140px;
-    height: 70px;
-    margin-right: 10px;
+    max-width: 100%;
+    min-height: 92px;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    -webkit-border-radius: 6px;
+            border-radius: 6px;
+}
+
+.class-table .class-name {
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.myteaching-thread {
+    float: left;
+}
+
+.myteaching-thread .text{
+    float: left;
+    margin-left: 15px;
+}
+
+.myteaching-thread .text .title a{
+    font-size: 14px;
+    color: #444;
+}
+
+.myteaching-thread .text .name {
+    margin-top: 10px;
 }
 
 .status-list {
@@ -219,13 +259,21 @@
 }
 
 .class-course-grid .title {
-    font-size: 14px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.class-course-grid .title a{
+    font-size: 15px;
+    color: #444;
     margin: 0;
     padding: 0;
     line-height: 20px;
     height: 40px;
     overflow: hidden;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .class-course-grid .metas a,
@@ -255,7 +303,7 @@
 }
 .sign_main {
     position: absolute;
-    left: 1px;
+    left: -70px;
     width: 278px;
     background: #fbfefe;
     display: none;
@@ -322,36 +370,56 @@
 .class-sign {
     cursor: pointer;
     display: inline-block;
+    margin: 20px 13px;
     border: 1px solid #ddd;
+    background-color: #edfaeb;
     border-radius: 5px;
 }
 
 .class-sign .date-col {
     float: left;
-    width: 60px;
-    padding: 6px 10px;
-    font-size: 13px;
+    width: 150px;
+    padding-bottom: 10px;
+    text-align: center; 
+    color: #57c332;
+    font-size: 14px;
 }
 
-.class-sign .dayofweek {
-    font-size: 16px;
+.class-sign .date-col .week {
+    margin-top: -15px;
+}
+
+.class-sign .date-col .day {
+    font-size: 60px;
 }
 
 .class-sign .action-col {
     float: left;
-    padding: 9px 8px;
-    width: 80px;
+    margin: 30px 0;
+    width: 150px;
 }
 
-.class-sign-finished .sign-btn {
+.class-sign .action-col .sign-area {
+    font-size: 18px;
+    color: #fff;
+    line-height: 55px;
+    text-align: center;
+    width: 100px;
+    background-color: #57c332;
+}
+
+/*.class-sign-finished .sign-btn {
     background-color: #428bca;
     filter: alpha(opacity=65);
     box-shadow: none;
     opacity: .65;
-}
+}*/
 
 
 /** schedule css */
+.schedule {
+    color: #57c332;
+}
 .schedule .popover-container .popover {
     width: 290px;
 }
@@ -378,6 +446,14 @@
     width: 120px;
 }
 
+.schedule-header .form-control {
+    color: #57c332;
+}
+
+.schedule-header .form-control:focus {
+  border-color: #33a10e;
+}
+
 .schedule-header .month {
     font-size: 20px;
 }
@@ -388,15 +464,25 @@
 
 .schedule-calendar {
     width: 100%;
+
 }
 
 .schedule-calendar > thead > tr > th {
-    background-color: #f3f3f3;
     height: 30px;
+    font-size: 20px;
+    font-weight: normal;
     width: 14.2857%;
     text-align: center;
     vertical-align: middle;
     padding: 10px 0;
+}
+
+.schedule-calendar-week {
+    min-height: 400px;
+}
+
+.schedule-calendar-week > thead > tr > th {
+    border: 1px solid #dcdcdc;
 }
 
 .schedule-calendar > thead > tr > th.today,
@@ -418,34 +504,82 @@
     height: 80px;
     border: 1px solid #e3e3e3;
     text-align: center;
+    background-clip: padding-box;
 }
 .schedule-calendar-month > tbody >tr > td.today {
     background-color: #ffffda;
 }
 
-.schedule-calendar-month > tbody >tr > td .count-text {
+.schedule-calendar-month > tbody >tr > td .day-text {
     position: absolute;
-    bottom: 5px;
+    top: 5px;
     right: 5px;
-    font-weight: 800;
-    color: blue;
+    font-size: 14px;
+    color: #999;
 }
+
+.schedule-calendar-month > tbody >tr > td .count-text .count {
+    color: #48ad25;
+    line-height: 36px;
+    font-size: 45px;
+}
+
+.schedule-calendar-month > tbody >tr > td .count-text .text {
+    color: #acacac;
+    line-height: 36px;
+    font-size: 12px;
+}
+
 .schedule-calendar-month > tbody >tr > td.has-lesson {
     cursor: pointer;
 }
 
 .schedule-calendar-month > tbody >tr > td.not-in-month {
-    background-color: #f7f7f7;
+    background-color: #f6f6f6;
     background-clip: padding-box;
 }
 
 .schedule-calendar-month > tbody >tr > td.has-lesson:hover {
-    background-color: #e3e3e3;
+    background-color: #f0fcee;
 }
 
-.schedule-calendar-month > thead > tr {
-    border: 1px solid #e3e3e3;
+.schedule .lesson-ul-pop {
+    padding: 0;
+    margin: 0;
+}
 
+.schedule .lesson-ul-pop li {
+    background-color: #f7f7f7;
+    margin: 10px 0;
+    height: 50px;
+    width: auto;
+    -webkit-border-radius: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.schedule .lesson-ul-pop li.lesson-deleted {
+    cursor: not-allowed;
+}
+
+.schedule .lesson-ul-pop li .delete-text{
+    padding-left: 10px;
+    line-height: 25px;
+    font-style: italic;
+}
+
+.schedule .lesson-ul-pop li:hover {
+    background-color: #E4DEDE;
+}
+
+.schedule .lesson-ul-pop li .lesson-title,.schedule .lesson-ul-pop li .course-title {
+    padding-left: 10px;
+    line-height: 25px;
+    font-style: italic;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .schedule-lesson-list {
@@ -457,6 +591,30 @@
 .schedule-lesson-list .thumbnail {
     position: relative;
     margin: 10px 3px;
+    height: 100px;
+    width: auto;
+    margin: 0;
+    padding: 0px;
+    font-size: 12px;
+}
+
+.schedule-lesson-list .thumbnail .course-title{
+    height: 32px;
+    overflow: hidden;
+
+}
+
+.schedule-lesson-list .thumbnail .lesson-title{
+    color: #474747;
+    font-size: 12px;
+    height: 36px;
+    word-break: break-all;
+    overflow: hidden;
+}
+
+.schedule-lesson-list .thumbnail .lesson-num{
+    margin: 10px 0;
+    text-align: center;
 }
 
 .schedule-lesson-list .thumbnail img {
@@ -515,6 +673,10 @@
     overflow: hidden;
 }
 
+.schedule-course >ul >li .lesson-num {
+    float: right;
+    color: #57c332;
+}
 .schedule-course h4 {
     font-size: 14px;
 }
@@ -550,7 +712,7 @@
 }
 
 .schedule-course-item-list .lesson-item .name {
-    color: #666;
+    color: #57c332;
     margin-right: 8px;
 }
 
@@ -580,12 +742,16 @@ li.draging {
 
 ul.schedule-lesson-list li.placeholder {
     position: relative;
-    margin-bottom: 10px 0;
+    margin-top: 10px;
     width: 100%;
-    height: 40px;
+    height: 100px;
     background: #FCFFC0;
     border: 1px dashed #ccc;
     list-style: none;
+}
+
+.schedule-panel .nav-tabs {
+    line-height: 42px;
 }
 
 .schedule-panel .media-list {
@@ -612,15 +778,26 @@ ul.schedule-lesson-list li.placeholder {
     bottom: 0px;
 }
 
-ul.schedule-lesson-list a {
+ul.schedule-lesson-list .item-div {
     position: relative;
     display: block;
+    padding: 4px;
+    cursor: pointer;
 }
 
-ul.schedule-lesson-list a .finished-icon {
+ ul.schedule-lesson-list .deleted-lesson {
+    cursor: not-allowed;
+    color: #a94442;
+ }
+ul.schedule-lesson-list .item-div .finished-icon {
     position: absolute;
-    right: 0px;
-    bottom: 0px;
+    right: 5px;
+    bottom: 5px;
+}
+
+ul.schedule-lesson-list .item-div .finished-icon .text-success{
+    background-color: #f66459;
+    color: #fff;
 }
 
 .schedule-item-list {
@@ -633,6 +810,10 @@ ul.schedule-lesson-list a .finished-icon {
     position: relative;
 }
 
+.course-display .text-tip {
+    font-size: 14px;
+    color: #57c332;
+}
 .course-display .mode {
     position: absolute;
     right: 2px;
@@ -648,6 +829,10 @@ ul.schedule-lesson-list a .finished-icon {
     font-size: 10px;
     top: 0px;
     left: 0px
+}
+
+.course-display .course-list .glyphicon {
+    color: #57c332;
 }
 
 .course-display .course-list .title {
@@ -799,11 +984,19 @@ ul.schedule-lesson-list a .finished-icon {
     margin: 0;
 }
 
-.taks-body .task-table-div {
+.tasks-body .task-table-div {
     padding-top: 10px;
 }
 
-.task-body .task-button {
+.tasks-body .label-not-finished {
+    background-color: #428bca;
+} 
+
+.tasks-body .label-finished {
+    background-color: #57c332;
+} 
+
+.tasks-body .task-button {
     text-align: center;
 }
 
@@ -815,7 +1008,7 @@ ul.schedule-lesson-list a .finished-icon {
     height: 370px;
 }
 
-.task-body .task-panel {
+.tasks-body .task-panel {
     margin-left: -20px;
 }
 
@@ -824,33 +1017,166 @@ ul.schedule-lesson-list a .finished-icon {
 }
 
 .lesson-selected {
-    border: 2px solid #5bc0de;
+    border: 1px solid #57c332;
 
 }
-/*.teacher-status {
-    position:absolute;
-    left: 46px;
-    bottom: -2px;
-}
-
-.student-status-img {
-    position:relative;
-}
-
-.student-status {
-    position:absolute;
-    left: 55px;
-    bottom: -2px;
-}
-
-.student-status-popover {
-    position:absolute;
-    left: 46px;
-    top: 40px;
-}*/
 
 .img-grey {
     filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 3.5+ */
     filter: gray; /* IE6-9 */
     -webkit-filter: grayscale(100%); /* Chrome 19+ & Safari 6+ */
+}
+
+.myteaching-title {
+    margin:10px 0 10px 0;
+    font-size: 16px;
+}   
+.myteaching-title .text {
+    float: left;
+    font-weight: normal;
+}
+
+.myteaching-title .num {
+    float: left;
+    padding-left: 10px;
+}
+
+.myteaching-title span{
+    padding:1px 5px 1px 5px;
+}
+
+
+
+.class-nav {
+    margin-bottom: 30px;
+    padding-left: 15px;
+}
+
+.class-nav >li >a {
+    padding: 5px 10px;
+}
+
+.teaching-course {
+    margin-bottom: 25px;
+    padding-left: 30px;
+    float:left;
+}
+
+.teaching-course .course-border{
+    width:50%;
+    height: 112px;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+            border-radius: 4px;
+    padding: 4px;
+    float:left;
+}
+
+.teaching-course .course-picture {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+.teaching-course .course-name{
+    float:left;
+    margin-left: 20px;
+}
+.teaching-course .course-name .course-title {
+    margin-top: 8px;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.teaching-course .course-name .course-title a{
+    color:#444;
+    font-size:14px;
+    font-weight: 900;
+}
+
+.teaching-course .course-name .class-name {
+    margin-top: 10px;
+}
+
+.teaching-course .course-name .class-name a{
+    color:#444;
+    font-size:12px;
+}
+
+.teaching-course .course-name .course-lesson-student {
+    float: left;
+    font-size:12px;
+    margin-top: 25px; 
+}
+
+
+.myteaching-menu {
+    position: relative;
+}
+
+
+.myteaching-menu .myteaching-text {
+    margin-left: 40px;
+    font-size: 16px;
+}
+
+.myteaching-menu .myteaching-icon {
+    position: absolute;
+    bottom: 10px;
+    left:15px;
+    height:25px;
+    width:25px;
+}
+
+.myteaching-menu .myteaching {
+    background: url(../img/myteaching/myteaching.png) 0 0 no-repeat;
+}
+
+.myteaching-menu .myteaching-course {
+    background: url(../img/myteaching/myteaching-course.png) 0 0 no-repeat;
+}
+
+.myteaching-menu .learning-progress {
+    background: url(../img/myteaching/learning-progress.png) 0 0 no-repeat;
+}
+
+.myteaching-menu .question {
+    background: url(../img/myteaching/question.png) 0 0 no-repeat;
+}
+
+.myteaching-menu .topic {
+    background: url(../img/myteaching/topic.png) 0 0 no-repeat;
+}
+
+.myteaching-menu .examine {
+    background: url(../img/myteaching/examine.png) 0 0 no-repeat;
+}
+
+.intro-block .name-area {
+    margin-bottom: 10px;
+}
+.intro-block .name-area .name {
+    color: #57c332;
+    margin: 0 5px;
+    font-size: 16px;
+}
+
+.intro-block .point-area {
+    margin-bottom: 10px;
+}
+
+.intro-block .point-area .point-num {
+    color: #ff0000;
+}
+
+.intro-block .point-area .rank-up {
+    color: #00ff00;
+}
+
+.intro-block .point-area .rank-down {
+    color: #ff0000;
 }

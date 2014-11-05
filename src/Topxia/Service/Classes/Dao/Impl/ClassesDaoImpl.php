@@ -65,7 +65,7 @@ class ClassesDaoImpl extends BaseDao implements ClassesDao
         return $this->getClass($this->getConnection()->lastInsertId());
     }
 
-    public function editClass($fields, $id)
+    public function updateClass($id, $fields)
     {
         $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
         return $this->getClass($id);
