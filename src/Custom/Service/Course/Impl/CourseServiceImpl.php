@@ -888,9 +888,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             'price' => 0,
         ));
 
-/*        if(is_int(var)){
-
-        }*/
+        if(!is_numeric($fields['price'])){
+            throw $this->createServiceException("价格必须为整数！");
+        }
         
         if (isset($fields['title'])) {
             $fields['title'] = $this->purifyHtml($fields['title']);
@@ -900,8 +900,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($fields['type'] == 'live') {
             $fields['endTime'] = $fields['startTime'] + $fields['length']*60;
         }
-        
-        $this->fillLessonMediaFields($fields);
+     
+        /*$this->fillLessonMediaFields($fields);*/
         
         $lesson = LessonSerialize::unserialize(
             $this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))
