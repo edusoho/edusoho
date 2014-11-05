@@ -1090,3 +1090,46 @@ ul.schedule-lesson-list .item-div .finished-icon .text-success{
     font-size:12px;
     margin-top: 25px; 
 }
+
+
+.myteaching-menu {
+    position: relative;
+}
+
+
+.myteaching-menu .myteaching-text {
+    margin-left: 40px;
+    font-size: 16px;
+}
+
+.myteaching-menu .myteaching-icon {
+    position: absolute;
+    bottom: 10px;
+    left:15px;
+    height:25px;
+    width:25px;
+}
+
+.myteaching-menu .myteaching {
+    background: url(../img/myteaching/myteaching.png) 0 0 no-repeat;
+}
+
+.myteaching-menu .myteaching-course {
+    background: url(../img/myteaching/myteaching-course.png) 0 0 no-repeat;
+}
+
+.myteaching-menu .learning-progress {
+    background: url(../img/myteaching/learning-progress.png) 0 0 no-repeat;
+}
+
+.myteaching-menu .question {
+    background: url(../img/myteaching/question.png) 0 0 no-repeat;
+}
+
+.myteaching-menu .topic {
+    background: url(../img/myteaching/topic.png) 0 0 no-repeat;
+}
+
+.myteaching-menu .examine {
+    background: url(../img/myteaching/examine.png) 0 0 no-repeat;
+}
