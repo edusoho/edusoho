@@ -21,7 +21,7 @@
 			<span class="glyphicon glyphicon-file text-success"></span>
 		{% endif %}
 
-		课时 <span class="number">{{ lesson.number }}</span>：{% if lesson.free == 1 %}<span class="label label-danger">免费</span>{% endif %} {{ lesson.title }}
+		课时 <span class="number">{{ lesson.number }}</span>：{% if lesson.free == 1 %}<span class="label label-danger">免费</span>{% endif %} {% if lesson.content == "无效文件" %}<span class="label label-danger">无效文件</span>{% endif %} {{ lesson.title }}
 
 		{% if lesson.type in ['video', 'audio'] %}
 		  <span class="text-muted">{{ lesson.length|duration }}</span>

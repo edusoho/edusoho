@@ -53,6 +53,12 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
+    public function getLessonIdsByMediaId($mediaId)
+    {
+        $sql = "SELECT id FROM {$this->table} WHERE mediaId = ? ";
+        return $this->getConnection()->fetchAll($sql, array($mediaId));
+    }
+
     public function searchLessons($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -122,6 +128,12 @@ class LessonDaoImpl extends BaseDao implements LessonDao
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getLesson($id);
+    }
+
+        public function updateLessonContent($id)
+    {
+        $sql ="UPDATE {$this->table} SET content = '无效文件' WHERE id = ? ";
+        return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
     public function deleteLessonsByCourseId($courseId)

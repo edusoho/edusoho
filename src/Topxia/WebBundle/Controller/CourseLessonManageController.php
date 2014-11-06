@@ -29,8 +29,19 @@ class CourseLessonManageController extends BaseController
 		}
 
 		$mediaIds = array_keys($mediaMap);
-
 		$files = $this->getUploadFileService()->findFilesByIds($mediaIds);
+		
+		foreach ($mediaIds as $key => $value) {
+			$file = $this->getUploadFileService()->getFile($value);
+			if(!$file){
+				$lessonIds = $this->getCourseService()->getLessonIdsByMediaId($value);
+				foreach ($lessonIds as $key => $value) {
+					foreach ($value as $key => $value1) {
+						$a = $this->getCourseService()->updateLessonContent($value1);
+					}
+				}
+			}
+		}
 
 		foreach ($files as $file) {
 			$lessonIds = $mediaMap[$file['id']];

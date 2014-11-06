@@ -195,6 +195,10 @@ interface CourseService
 	 * 
 	 */
 	public function getCourseItems($courseId);
+	
+	public function updateLessonContent($id);
+	
+	public function getLessonIdsByMediaId($mediaId);
 
 	public function sortCourseItems($courseId, array $itemIds);
 
