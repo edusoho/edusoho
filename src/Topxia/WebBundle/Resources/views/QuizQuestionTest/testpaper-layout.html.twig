@@ -12,7 +12,7 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="testpaper-titlebar clearfix">
-        <h1 class="testpaper-title">{{ paper.name }} <br><small class="text-sm">{% if paperResult.status|default(null) == 'reviewing' %}答题人：{{ student.nickname }} 交卷时间：{{ paperResult.endTime|date('Y-n-d H:i') }} 用时：{{ paperResult.usedTime|duration }}{% elseif paperResult.status|default(null) == 'finished' %}答题人：{{ student.nickname }} 交卷时间：{{ paperResult.endTime|date('Y-n-d H:i') }} 用时：{{ paperResult.usedTime|duration }}{% endif %}</small></h1>
+        <h1 class="testpaper-title">{{ paper.name }} <br><small class="text-sm">{% if paperResult.status|default(null) == 'reviewing' %}答题人：{{ student.truename }} 交卷时间：{{ paperResult.endTime|date('Y-n-d H:i') }} 用时：{{ paperResult.usedTime|duration }}{% elseif paperResult.status|default(null) == 'finished' %}答题人：{{ student.truename }} 交卷时间：{{ paperResult.endTime|date('Y-n-d H:i') }} 用时：{{ paperResult.usedTime|duration }}{% endif %}</small></h1>
         <div class="testpaper-status">{% block testpaper_heading_status %}{% endblock %}</div>
       </div>
       {% block testpaper_heading_content %}{% endblock %}

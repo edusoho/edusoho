@@ -92,6 +92,22 @@ class MyTeachingController extends BaseController
         $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds($testpaperIds,'reviewing',0,6);
         $testpapers = $this->getTestpaperService()->findTestpapersByIds(ArrayToolkit::column($paperResults, 'testId'));
         $testpaperUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($paperResults, 'userId'));
+        //临时增加以下代码，紧急解决复制课程的试卷无法被老师批阅.
+        $myCourses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, 1000);
+        $classIds = ArrayToolkit::column($myCourses, 'classId');
+        $userIds = ArrayToolkit::column($testpaperUsers, 'id');
+        $classMembers = $this->getClassesService()->findClassMembersByUserIds($userIds);
+        foreach ($classMembers as $key => $member) {
+            if(!in_array($member['classId'], $classIds)) {
+                foreach ($paperResults as $key => $paperResult) {
+                    if($member['userId'] == $paperResult['userId']) {
+                        unset($paperResults[$key]);
+                    }
+                }
+            }
+        }
+        $testpaperCount = count($paperResults); 
+        //到这里为止.
         return $this->render('TopxiaWebBundle:MyTeaching:teaching-k12.html.twig', array(
             'classes' => $classes,
             'courseList' => $courseList,

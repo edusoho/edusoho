@@ -332,10 +332,10 @@ class TestpaperController extends BaseController
 
                 $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
                 $teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testpaperResult['id']), true);
-
-                foreach ($course['teacherIds'] as $receiverId) {
+                //临时增加以下代码，紧急解决复制课程的试卷无法被老师批阅.
+/*                foreach ($course['teacherIds'] as $receiverId) {
                     $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['truename']}</a> 刚刚完成了 {$testpaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
-                }
+                }*/
             }
 
             // @todo refactor. , wellming
