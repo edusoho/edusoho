@@ -18,9 +18,9 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
                     Notify.success('私信发送成功');
-                }).error(function(){
+                }).error(function(e){
                     $modal.modal('hide');
-                    Notify.danger('私信发送失败，请重试！');
+                    Notify.danger('私信发送失败，'+ e.responseJSON.error.message);
                 });
             }
 
