@@ -106,7 +106,9 @@
                 </div>
               </div>
               {% if app.user.isTeacher() %}
-                <div style="color:#f6f6f6;"><hr></div>
+                {% if relations[student.id]|default('') %}
+                  <div style="color:#f6f6f6;"><hr></div>
+                {% endif %}
                 <div style="margin-top:10px" class="list-group">
                   {% for relation in relations[student.id]|default('') %}
                     {% set parent=parents[relation.fromId]|default('') %}
@@ -125,8 +127,6 @@
                         </div>
                       </a>
                     {% endif %}
-                  {% else %}
-                    <div class="empty">尚无已登记家长</div>
                   {% endfor %}
                 </div>
               {% endif %}
