@@ -1004,10 +1004,19 @@ ul.schedule-lesson-list .item-div .finished-icon .text-success{
     height: auto;
 }
 
-.task-table-div.fixed-height {
-    height: 370px;
+.task-table-div{
+    min-height: 370px;
 }
 
+.task-table-div .task-table {
+    margin-bottom: 0px;
+}
+
+.task-table-div .task-table .label{
+    display: block;
+    padding: .2em;
+    width: 24px;
+}
 .tasks-body .task-panel {
     margin-left: -20px;
 }

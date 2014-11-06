@@ -40,14 +40,12 @@ define(function(require, exports, module) {
         }
 
         $('#not-finished-btn').on('click', function(){
-            $table_div.addClass('fixed-height'); 
             getNotFinishedLessonStudents(0, default_limit);
             $(this).addClass('active');
             $('#finished-btn').removeClass('active');
         });
 
         $('#finished-btn').on('click', function(){
-            $table_div.addClass('fixed-height'); 
             getFinishedLessonStudents(0, default_limit);
             $(this).addClass('active');
             $('#not-finished-btn').removeClass('active');
@@ -86,7 +84,6 @@ define(function(require, exports, module) {
                 {
                     if($(html).hasClass('has-item'))
                     {
-                        $table_div.removeClass('fixed-height');  
                         $table.find('tbody').append(html);
                     }
                 }
