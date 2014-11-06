@@ -89,8 +89,6 @@ interface CourseService
 
 	public function getCourseLesson($courseId, $lessonId);
 
-	public function getCourseLessonByCourseIdAndNumber($courseId, $number);
-
 	public function findCourseDraft($courseId,$lessonId, $userId);
 
 	public function getCourseLessons($courseId);

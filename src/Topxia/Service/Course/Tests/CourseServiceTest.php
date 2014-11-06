@@ -202,30 +202,6 @@ class CourseServiceTest extends BaseTestCase
 
     }
 
-
-    /**
-     *  @group current
-    */
-    public function testGetLessonByCourseIdAndNumber()
-    {
-        $course = array(
-            'title' => 'online test course 1',
-        );
-        $createdCourse = $this->getCourseService()->createCourse($course);
-
-        $lesson = array(
-            'courseId' => $createdCourse['id'],
-            'title' => 'test lesson 2',
-            'content' => 'test lesson content 2',
-            'type' => 'text'
-        );
-        $createdLesson1 = $this->getCourseService()->createLesson($lesson);
-        $createdLesson2 = $this->getCourseService()->createLesson($lesson);
-
-        $lesson = $this->getCourseService()->getCourseLessonByCourseIdAndNumber($createdCourse['id'], 1);
-        $this->assertEquals($lesson['id'], $createdLesson1['id']);
-    }
-
     public function testCreateLesson()
     {
         $course = array(
