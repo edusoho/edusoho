@@ -1212,3 +1212,15 @@ ul.schedule-lesson-list .item-div .finished-icon .text-success{
     background-size: inherit;
   }
 }
+
+.list-group-block p.welcome-text {
+    font-size: 16px;
+    color: #57c332;
+}
+
+.testpaper-card .btn-default:hover, 
+.testpaper-card .btn-default:focus, 
+.testpaper-card.btn-default:active, 
+.testpaper-card .btn-default.active {
+    color: #fff;
+}

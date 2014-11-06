@@ -326,7 +326,7 @@ input.LargeInput {width: 600px;}
 }
 
 .class-choise .class-choise-body {
-
+  min-height: 50px;
 }
 
 .class-choise-body span {

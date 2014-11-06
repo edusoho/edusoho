@@ -15,6 +15,14 @@ a:hover, a:focus {
   color: #57c332;
 }
 
+.btn-danger, .btn-warning, .btn-success{
+  color: #fff;
+}
+
+.btn-danger:hover, .btn-warning:hover, .btn-success:hover{
+  color: #fff;
+}
+
 .btn-link:hover, .btn-link:focus {
   color: #33a10e;
 }
@@ -26,7 +34,7 @@ a:hover, a:focus {
 
 /* override default css */
 
-.green-color {
+.k12-theme-color {
   color: #57c332;
 }
 
