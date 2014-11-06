@@ -208,6 +208,8 @@ interface CourseService
 
 	public function searchMemberCount($conditions);
 
+	public function findWillOverdueCourses();
+
 	public function getCourseMember($courseId, $userId);
 
 	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit);

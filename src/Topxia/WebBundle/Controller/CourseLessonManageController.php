@@ -51,6 +51,7 @@ class CourseLessonManageController extends BaseController
 			'items' => $courseItems,
 			'exercises' => $exercises,
 			'homeworks' => $homeworks,
+			'files' => ArrayToolkit::index($files,'id')
 		));
 	}
 

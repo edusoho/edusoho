@@ -115,6 +115,17 @@ define(function(require, exports, module) {
             }
         });
 
+        $("input[name='notificationStatus']").change(function(){
+            var element = $(this);
+            if(element.val()=='active') {
+                $("#courseNotificationDuration").show();
+                $("#notificationStatusBlock").hide();
+            } else {
+                $("#courseNotificationDuration").hide();
+                $("#notificationStatusBlock").show();
+            }
+        })
+
     };
 
 });

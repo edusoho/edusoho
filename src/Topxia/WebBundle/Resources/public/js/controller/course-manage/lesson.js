@@ -138,6 +138,7 @@ define(function(require, exports, module) {
         });
 
         $("#course-item-list .item-actions .btn-link").tooltip();
+        $("#course-item-list .fileDeletedLesson").tooltip();
 
         $('.dropdown-menu').parent().on('shown.bs.dropdown', function () {
             if ($(this).find('.dropdown-menu-more').css('display') == 'block') {

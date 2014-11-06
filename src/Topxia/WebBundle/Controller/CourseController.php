@@ -252,6 +252,20 @@ class CourseController extends BaseController
 		$user = $this->getCurrentUser();
 
 		$items = $this->getCourseService()->getCourseItems($course['id']);
+		$mediaMap = array();
+		foreach ($items as $item) {
+			if (empty($item['mediaId'])) {
+				continue;
+			}
+
+			if (empty($mediaMap[$item['mediaId']])) {
+				$mediaMap[$item['mediaId']] = array();
+			}
+			$mediaMap[$item['mediaId']][] = $item['id'];
+		}
+
+		$mediaIds = array_keys($mediaMap);
+		$files = $this->getUploadFileService()->findFilesByIds($mediaIds);
 
 		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
@@ -264,6 +278,7 @@ class CourseController extends BaseController
 			if( $member['deadline'] < time() && !empty($course['freeStartTime']) && !empty($course['freeEndTime']) && $course['freeEndTime'] >= time()) {
 				$member = $this->getCourseService()->updateCourseMember($member['id'], array('deadline'=>$course['freeEndTime']));
 			}
+
 			return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
 				'course' => $course,
 				'type' => $course['type'],
@@ -271,7 +286,8 @@ class CourseController extends BaseController
 				'items' => $items,
 				'learnStatuses' => $learnStatuses,
 				'currentTime' => $currentTime,
-				'weeks' => $weeks
+				'weeks' => $weeks,
+				'files' => ArrayToolkit::index($files,'id')
 			));
 		}
 		
@@ -744,7 +760,7 @@ class CourseController extends BaseController
 
 		return $this->redirect($this->generateUrl('course_show',array('id' => $courseId)));
 	}
-	
+
 	private function createCourseForm()
 	{
 		return $this->createNamedFormBuilder('course')
@@ -800,5 +816,10 @@ class CourseController extends BaseController
     private function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    private function getUploadFileService()
+    {
+	return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }
