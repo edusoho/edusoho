@@ -233,6 +233,11 @@ course_order_pay:
     defaults: { _controller: TopxiaWebBundle:CourseOrder:pay }
     methods: [POST]
 
+course_order_repay:
+    pattern:  /course/order/repay
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }
+    methods: [POST]
+
 course_order_pay_return:
     pattern:  /course/order/pay/{name}/return
     defaults: { _controller: TopxiaWebBundle:CourseOrder:payReturn }

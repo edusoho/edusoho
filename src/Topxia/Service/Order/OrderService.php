@@ -6,10 +6,6 @@ interface OrderService
 {
     public function getOrder($id);
 
-    public function getOrderByTargetIdAndUserId($targetId,$userId);
-
-    public function cancelOrders($targetId,$userId);
-
     public function getOrderBySn($sn);
 
     public function findOrdersByIds(array $ids);
