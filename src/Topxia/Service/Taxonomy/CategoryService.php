@@ -3,6 +3,7 @@ namespace Topxia\Service\Taxonomy;
 
 interface CategoryService
 {
+    public function findCategoriesByGroupIdAndParentId($groupId, $parentId);
 
     public function getCategory($id);
 

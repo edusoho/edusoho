@@ -7,6 +7,14 @@ use Topxia\Common\ArrayToolkit;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {
+    public function findCategoriesByGroupIdAndParentId($groupId, $parentId)
+    {
+        if (empty($groupId) || empty($parentId)) {
+            return array();
+        }
+        return $this->getCategoryDao()->findCategoriesByGroupIdAndParentId($groupId, $parentId);
+    }
+
     public function getCategory($id)
     {
         if (empty($id)) {

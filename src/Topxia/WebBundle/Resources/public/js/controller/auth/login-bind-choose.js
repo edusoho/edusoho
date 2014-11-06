@@ -62,7 +62,7 @@ define(function(require, exports, module) {
                         return ;
                     }
 
-                    Notify.success('绑定账号成功，正在跳转至首页！');
+                    Notify.success('绑定帐号成功，正在跳转至首页！');
                     window.location.href = response._target_path;;
 
                 }, 'json').fail(function() {
