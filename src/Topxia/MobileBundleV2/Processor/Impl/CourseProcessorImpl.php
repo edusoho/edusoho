@@ -122,8 +122,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	public function updateThread(){
 		$courseId = $this->getParam("courseId", 0);
 		$threadId = $this->getParam("threadId", 0);
-		$title = $this->getParam("title", 0);
+		$title = $this->getParam("title", "");
 		$content = $this->getParam("content","");
+		$type = $this->getParam("type", "update")
 		$imageCount = $this->getParam("imageCount", 0);
 
 		$user = $this->controller->getUserByToken($this->request);
@@ -139,9 +140,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		$formData['content'] = $content;
 		unset($formData['imageCount']);
 
-		$fields = array("title" => $title, "content" => $content);
-		
-		return $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
+		if ($type == "update") {
+			$fields = array("title" => $title, "content" => $content);
+			return $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
+		} else {
+			return $this->controller->getThreadService()->createThread($formData)
+		}
 	}
 
 	private function uploadImage($content)
