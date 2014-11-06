@@ -66,17 +66,15 @@
 
   <input type="hidden" id="numberInputNum" value="1" />
   
+  <input type="hidden" id="dataSource" value="{{path('admin_student_match')}}">
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="number_1">子女学号</label>
+      <label for="id_1">子女选择</label>
     </div>
-    <div class="col-md-7 controls has-feedback">
-      <input type="text" id="number_1" name="numbers[]" class="form-control childNumber" data-url="{{path('admin_parent_create_childNumber_check')}}">
-      <span style="cursor: pointer;" class="glyphicon glyphicon-remove form-control-feedback deleteNumberBtn"></span>
+    <div class="col-md-7 controls">
+      <input type="text" id="id_1" name="ids[]" class=" select2-offscreen childId" data-url="{{path('admin_parent_create_childNumber_check')}}">
+      <span style="cursor: pointer;" class="glyphicon glyphicon-remove deleteNumberBtn"></span>
     </div>
-    {# <div class="col-md-1 controls">
-      <button type="button" class="btn btn-default deleteNumberBtn">-</button>
-    </div> #}
   </div>
 
   <div class="row form-group">

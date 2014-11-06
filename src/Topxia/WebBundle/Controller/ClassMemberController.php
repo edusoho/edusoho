@@ -39,12 +39,15 @@ class ClassMemberController extends ClassBaseController
             PHP_INT_MAX
         );
         $studentIds=ArrayToolkit::column($studentMembers, 'userId');
+        $relations=$this->getUserService()->findUserRelationsByToIdsAndType($studentIds,'family');
+        $parents=$this->getUserService()->findUsersByIds(ArrayToolkit::column($relations,'fromId'));
+        $relations=ArrayToolkit::group($relations,'toId');
+
         $students=$this->getUserService()->findUsersByIds($studentIds);
 
         $userIds=array_merge($studentIds,$userIds);
         $loginSessions=$this->getSessionService()->findLoginsByUserIds($userIds);
         $loginSessions=ArrayToolkit::index($loginSessions,'user_id');
-        //@todo member-list.html.twig
 
         return $this->render("TopxiaWebBundle:ClassMember:member-show.html.twig",array(
 			'class'=>$class,
@@ -53,6 +56,8 @@ class ClassMemberController extends ClassBaseController
             'headTeacher'=>$headTeacher,
 			'teachers'=>$teachers,
 			'students'=>$students,
+            'relations'=>$relations,
+            'parents'=>$parents,
             'loginSessions'=>$loginSessions
 		));
 	}

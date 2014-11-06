@@ -105,6 +105,27 @@
                   {% endif %}
                 </div>
               </div>
+              {% if app.user.isTeacher() %}
+                <div style="margin-top:10px" class="list-group">
+                  {% for relation in relations[student.id]|default('') %}
+                    {% set parent=parents[relation.fromId]|default('') %}
+                    {% if parent %}
+                      <a style="border:none;" class="list-group-item">
+                        <div class="pull-right">
+                          {% if app.user.id != parent.id %}
+                            <button class="btn btn-xs btn-success pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:parent.id})}}">发私信</button>
+                          {% endif %}
+                        </div>
+                        <div class="">
+                          {{ dict_text('family', relation.relation)}}{{parent.truename}}
+                        </div>
+                      </a>
+                    {% endif %}
+                  {% else %}
+                    <div class="empty">尚无已登记家长</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
             </div>
           </div> 
         </div>

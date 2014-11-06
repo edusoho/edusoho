@@ -1,0 +1,11 @@
+.childId {
+  width:90%;
+  padding-top: 5px;
+}
+
+.deleteNumberBtn {
+  position: relative;;
+  top:10px;
+  cursor: pointer;
+  float: right;
+}
