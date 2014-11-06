@@ -44,12 +44,9 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
 
-         $currentUser = $this->getCurrentUser();
-
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
             'paginator' => $paginator,
-             'currentUser' =>$currentUser
         ));
     }
 
@@ -151,7 +148,6 @@ class UserController extends BaseController
 
         $user = $this->getUserService()->getUser($id);
         $currentUser = $this->getCurrentUser();
-        // $startRoleNums = count($user['roles']);
         if ($request->getMethod() == 'POST') {
             $roles = $request->request->get('roles');
             $this->getUserService()->changeUserRoles($user['id'], $roles);
@@ -201,13 +197,11 @@ class UserController extends BaseController
             $user = $this->getUserService()->getUser($id);
             return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user' => $user,
-            'currentUser' =>$this->getCurrentUser()
             ));
         }
            
         return $this->render('TopxiaAdminBundle:User:roles-modal.html.twig', array(
             'user' => $user,
-            'currentUser' =>$this->getCurrentUser()
         ));
     }
 
