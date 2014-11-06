@@ -38,7 +38,6 @@ define(function(require, exports, module) {
                 $('#homework_items_help').css('color','#a94442');
                 $('#homework_items_help').show();
                 $btn.attr("disabled", true);
-                $btn.button('saving');
                 $.post($('#save-homework-btn').data('url'),{description:$description},function(response){
                         if (response.status == 'success') {
                             window.location.href="/course/"+response.courseId+"/manage/lesson";
