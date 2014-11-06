@@ -35,7 +35,7 @@ class ClassesDaoImpl extends BaseDao implements ClassesDao
     public function searchClasses($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $defaultOrderby = array('year' => 'DESC', 'gradeId' => 'ASC', 'name' => 'ASC');
+        $defaultOrderby = array('gradeId' => 'ASC', 'name' => 'ASC');
         $orderBy = array_merge($defaultOrderby, $orderBy);
         $builder = $this->_createSearchQueryBuilder($conditions)
         ->select('*')
