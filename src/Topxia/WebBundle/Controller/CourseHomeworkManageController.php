@@ -102,6 +102,7 @@ class CourseHomeworkManageController extends BaseController
 
 	public function removeAction(Request $request,$courseId,$lessonId,$homeworkId)
 	{
+        $course = $this->getCourseService()->tryManageCourse($courseId);
 		$result = $this->getHomeworkService()->removeHomework($homeworkId);
 
         if($result){

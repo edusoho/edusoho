@@ -96,6 +96,16 @@ class CourseExerciseController extends BaseController
 
     public function resultAction(Request $request, $courseId, $exerciseId, $resultId ,$userId)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('您尚未登录用户，请登录后再查看！');
+        }
+
+        $rolesCount = count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')));
+        if ($userId != $user->id && $rolesCount == 0) {
+            throw $this->createNotFoundException('不能查看别人的结果页！');
+        }
+
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         $exercise = $this->getExerciseService()->getExercise($exerciseId);
 
