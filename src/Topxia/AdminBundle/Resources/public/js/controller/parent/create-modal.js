@@ -73,7 +73,9 @@ define(function(require, exports, module) {
                 if($divObject.find('label').is(":visible")){
                     $divObject.next().find('label').show();
                 }
-                validator.removeItem($divObject.find('.childId'));
+                $divObject.find('.childId').each(function(){
+                    validator.removeItem($(this));
+                });
                 $divObject.remove();
             }
         });
