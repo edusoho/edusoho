@@ -129,7 +129,6 @@ define(function(require, exports, module) {
             this.set('courseId', this.element.data('courseId'));
             this.set('courseUri', this.element.data('courseUri'));
             this.set('dashboardUri', this.element.data('dashboardUri'));
-            this.set('learnedControl', this.element.data('learnedControl'));
 
         },
 
