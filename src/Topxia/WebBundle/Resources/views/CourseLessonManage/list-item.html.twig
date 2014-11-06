@@ -21,7 +21,7 @@
 			<span class="glyphicon glyphicon-file text-success"></span>
 		{% endif %}
 		课时 <span class="number">{{ lesson.number }}</span>：{% if lesson.free == 1 %}<span class="label label-danger">免费</span>{% endif %}
-		{% if lesson.type != 'text' %}
+		{% if lesson.type != 'text' and lesson.type != 'live' %}
 		{% if files[lesson.mediaId]|default(false) %}
 		{% else %}
 		<span class="label label-danger fileDeletedLesson" title="课时文件已删除">无效课时</span>
