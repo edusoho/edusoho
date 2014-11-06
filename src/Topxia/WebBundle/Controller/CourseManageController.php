@@ -300,7 +300,7 @@ class CourseManageController extends BaseController
         	}
         	$teachers[] = array(
                 'id' => $member['userId'],
-        		'nickname' => $users[$member['userId']]['nickname'],
+        		'truename' => $users[$member['userId']]['truename'],
                 'avatar'  => $this->getWebExtension()->getFilePath($users[$member['userId']]['smallAvatar'], 'avatar.png'),
         		'isVisible' => $member['isVisible'] ? true : false,
     		);
@@ -321,13 +321,13 @@ class CourseManageController extends BaseController
     public function teachersMatchAction(Request $request)
     {
         $likeString = $request->query->get('q');
-        $users = $this->getUserService()->searchUsers(array('nickname'=>$likeString, 'roles'=> 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 10);
+        $users = $this->getUserService()->searchUsers(array('truename'=>$likeString, 'roles'=> 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 10);
 
         $teachers = array();
         foreach ($users as $user) {
             $teachers[] = array(
                 'id' => $user['id'],
-                'nickname' => $user['nickname'],
+                'truename' => $user['truename'],
                 'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
                 'isVisible' => 1
             );
