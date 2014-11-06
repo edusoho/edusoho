@@ -29,7 +29,7 @@ class CourseLessonManageController extends BaseController
 		}
 
 		$mediaIds = array_keys($mediaMap);
-		
+
 		$files = $this->getUploadFileService()->findFilesByIds($mediaIds);
 
 		foreach ($files as $file) {
@@ -416,4 +416,5 @@ class CourseLessonManageController extends BaseController
 		return $this->getServiceKernel()->createService('File.UploadFileService');
 	}
 
+}
 }
