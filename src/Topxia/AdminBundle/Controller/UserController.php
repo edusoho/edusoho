@@ -157,13 +157,13 @@ class UserController extends BaseController
             $dataDict = new UserRoleDict();
             
             $role = "";
-            $stopRoleNums = count($roles);
+            $RoleNums = count($roles);
             $deletedRoles = array_diff($user['roles'], $roles);
             $addedRoles = array_diff($roles, $user['roles']);
             if(!empty($deletedRoles) || !empty($addedRoles) ){
-                for ($i=0;$i<$stopRoleNums;$i++) {
+                for ($i=0;$i<$RoleNums;$i++) {
                     $role .= $dataDict->getDict()[$roles[$i]];
-                    if ($i<$stopRoleNums - 1){
+                    if ($i<$RoleNums - 1){
                         $role .= "、";
                     }
                 }
