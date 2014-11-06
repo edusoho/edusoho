@@ -2248,6 +2248,10 @@ body {
 	padding-bottom: 5px;
 }
 
+.dropdown-menu > li > a {
+	padding: 3px 32px;
+}
+
 .shares-dropdown-menu {
 	width: 170px;
 }

@@ -56,7 +56,6 @@
 	</div>
 
 	<div class="item-actions">
-	    <span class="dropdown open">
           	<a class="btn btn-link" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
 				{% if lesson.type == 'testpaper' %}
 				  data-url="{{ path('course_manage_lesson_edit_testpaper', {courseId:course.id, lessonId:lesson.id}) }}"
@@ -72,9 +71,10 @@
 			{% else %}
 				<a class="btn btn-link" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open prs"></span>预览</a>
 			{% endif %}
-			
-			<a class="dropdown-toggle" data-toggle="dropdown" href="#">点击更多</a>
-			<ul class="dropdown-menu pull-right" role="menu" style="margin-top:12px;min-width:144px">
+			<span class="dropdown">
+			<a class=" dropdown dropdown-toggle dropdown-more" id="dropdown-more" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-chevron-down" style="top:4px;margin-right:3px" aria-haspopup="true" aria-expanded="false"></span>更多</a>
+
+			<ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
           		<li>
 			{% if lesson.type != 'testpaper' %}
           		{% set homework =  homeworks[lesson.id]|default(null) %}
@@ -109,6 +109,7 @@
 						<a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip prs"></span>添加资料</a>
 			{% endif %}
 				</li>
+				<li class="divider"></li>
 	            <li>  	  
 	            	{% if lesson.status == 'unpublished' %}
 	  					<a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-ok-circle prs"></span>发布</a>
@@ -116,10 +117,8 @@
 	  					<a href="javascript:;" class="unpublish-lesson-btn" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-remove-circle prs"></span>取消发布</a>
 				{% endif %}
 				</li>
-				<li class="divider"></li>
 	            <li><a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-trash prs"></span>删除</a></li>
 	        </ul>
-        </span>
-
+</span>
 	</div>
 </li>

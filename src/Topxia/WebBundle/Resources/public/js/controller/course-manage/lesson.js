@@ -139,6 +139,25 @@ define(function(require, exports, module) {
 
         $("#course-item-list .item-actions .btn-link").tooltip();
 
+        $('.dropdown-menu').parent().on('shown.bs.dropdown', function () {
+            if ($(this).find('.dropdown-menu-more').css('display') == 'block') {
+                $(this).parent().find('.dropdown-menu-more').mouseout(function(){
+                    $(this).parent().find('.dropdown-menu-more').hide();
+                });
+
+                 $(this).parent().find('.dropdown-menu-more').mouseover(function(){
+                    $(this).parent().find('.dropdown-menu-more').show();
+                });
+
+            } else {
+                $(this).parent().find('.dropdown-menu-more').show();
+            }
+        });
+
+        $('.dropdown-menu').parent().on('hide.bs.dropdown',function() {
+            $(this).find('.dropdown-menu-more').show();
+        });
+
     };
 
 });
