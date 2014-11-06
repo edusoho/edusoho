@@ -64,4 +64,21 @@ seajs.config({
 	charset: 'utf-8',
 
 	debug: app.debug
-})
+});
+
+seajs.on('fetch', function(data) {
+	if (!data.uri) {
+		return ;
+	}
+
+	if (data.uri.indexOf(app.mainScript) > 0) {
+		return ;
+	}
+
+    if (/\:\/\/.*?\/assets\/libs\/[^(common)]/.test(data.uri)) {
+        return ;
+    }
+
+    data.requestUri = data.uri + '?' + app.version;
+
+});

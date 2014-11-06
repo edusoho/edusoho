@@ -23,11 +23,11 @@ class UserController extends MobileController
         $user = $this->loadUserByUsername($request, $username);
 
         if (empty($user)) {
-            return $this->createErrorResponse($request, 'username_error', '用户账号不存在');
+            return $this->createErrorResponse($request, 'username_error', '用户帐号不存在');
         }
 
         if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
-            return $this->createErrorResponse($request, 'password_error', '账号密码不正确');
+            return $this->createErrorResponse($request, 'password_error', '帐号密码不正确');
         }
 
         $token = $this->createToken($user, $request);
