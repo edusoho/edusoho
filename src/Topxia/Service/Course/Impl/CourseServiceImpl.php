@@ -870,16 +870,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $fields;
 	}
 
-	public function updateLessonContent($id)
-	{
-		return $this->getLessonDao()->updateLessonContent($id);
-	}
-
-	public function getLessonIdsByMediaId($mediaId)
-	{
-		return $this->getLessonDao()->getLessonIdsByMediaId($mediaId);
-	}
-
 	public function updateLesson($courseId, $lessonId, $fields)
 	{
 		$course = $this->getCourse($courseId);

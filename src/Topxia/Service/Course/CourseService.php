@@ -195,10 +195,6 @@ interface CourseService
 	 * 
 	 */
 	public function getCourseItems($courseId);
-	
-	public function updateLessonContent($id);
-	
-	public function getLessonIdsByMediaId($mediaId);
 
 	public function sortCourseItems($courseId, array $itemIds);
 
@@ -331,8 +327,4 @@ interface CourseService
 
 	public function entryReplay($lessonId, $courseLessonReplayId);
 
-	public function getCourseLessonReplayByLessonId($lessonId);
-
-	public function deleteCourseLessonReplayByLessonId($lessonId);
-
-}
+	public function getCourseLesso

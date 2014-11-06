@@ -20,8 +20,6 @@ interface LessonDao
     public function searchLessonCount($conditions);
 
     public function getLessonCountByCourseId($courseId);
-    
-    public function getLessonIdsByMediaId($mediaId);
 
     public function getLessonMaxSeqByCourseId($courseId);
 
@@ -34,8 +32,6 @@ interface LessonDao
     public function addLesson($course);
 
     public function updateLesson($id, $fields);
-    
-    public function updateLessonContent($id);
 
     public function deleteLesson($id);
 
