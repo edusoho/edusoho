@@ -29,7 +29,7 @@
 
 		{% if homework|default(null) %}
 		<div class="col-md-offset-2 col-md-8 controls">
-			<div class="btn btn-primary confirm-submit" id="save-homework-btn" data-saving-text="正在保存..." data-url="{{ path('course_manage_lesson_homework_edit',{ courseId:course.id, lessonId:lesson.id,homeworkId:homework.id }) }} ">确定</div>
+			<div class="btn btn-primary confirm-submit" id="save-homework-btn" data-saving-text="正在保存..." data-url="{{ path('course_manage_lesson_homework_edit',{ courseId:course.id, lessonId:lesson.id,homeworkId:homework.id }) }} " data-role="homework-edit">确定</div>
 		</div>
 		{% endif %}
 
