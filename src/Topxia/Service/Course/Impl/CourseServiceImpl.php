@@ -359,7 +359,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'address' => '',
 			'maxStudentNum' => 0,
 			'freeStartTime' => 0,
-			'freeEndTime' => 0
+			'freeEndTime' => 0,
+			'notificationStatus' => 'none',
+			'notificationDuration' => 0
 		));
 		
 		if (!empty($fields['about'])) {

@@ -63,6 +63,11 @@ class UserLoginTokenListener
         return ServiceKernel::instance()->createService('User.UserService');
     }
 
+    protected function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('User.CourseService');
+    }
+
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
