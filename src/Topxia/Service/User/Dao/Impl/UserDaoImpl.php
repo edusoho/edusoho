@@ -53,7 +53,7 @@ class UserDaoImpl extends BaseDao implements UserDao
     {
         if(empty($ids)){ return array(); }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks}) ORDER BY createdTime;";
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 

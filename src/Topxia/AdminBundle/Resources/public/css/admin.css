@@ -351,6 +351,9 @@ input.LargeInput {width: 600px;}
   width: 135px;
   height: 30px;
   line-height: 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .class-choise-body .class-choise-btn button:hover,

@@ -1071,13 +1071,8 @@ ul.schedule-lesson-list .item-div .finished-icon .text-success{
     float:left;
 }
 
-.teaching-course .course-border{
+.teaching-course .class-course-grid {
     width:50%;
-    height: 112px;
-    border: 1px solid #ddd;
-    -webkit-border-radius: 4px;
-            border-radius: 4px;
-    padding: 4px;
     float:left;
 }
 
