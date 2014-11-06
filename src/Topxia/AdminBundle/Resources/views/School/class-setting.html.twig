@@ -40,26 +40,6 @@
     {% include 'TopxiaAdminBundle:School:class-table-tr.html.twig' with {class:class} %}
   {% endfor %}
 </div>
-{# <table id="class-table" class="table table-striped table-hover" data-search-form="#class-search-form">
-  <thead>
-    <tr>
-      <th>班级</th>
-      <th>学生人数</th>
-      <th>班主任</th>
-      <th>状态</th>
-      <th>操作</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for class in classes %}
-      {% include 'TopxiaAdminBundle:School:class-table-tr.html.twig' with {class:class} %}
-    {% endfor %}
-  </tbody>
-</table> #}
-
-
-
-
 
 {{ web_macro.paginator(paginator) }} 
 
