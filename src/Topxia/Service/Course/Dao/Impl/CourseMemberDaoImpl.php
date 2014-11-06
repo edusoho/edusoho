@@ -177,12 +177,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->executeUpdate($sql, array($userId, $courseId));
     }
 
-    public function findWillOverdueCoursesByUserId($userId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND role = 'student' AND notified = 0; ";
-        return $this->getConnection()->fetchAll($sql, array($userId));
-    }
-
     private function _createSearchQueryBuilder($conditions)
     {   
         $builder = $this->createDynamicQueryBuilder($conditions)

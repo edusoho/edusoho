@@ -31,8 +31,6 @@ interface CourseMemberDao
 
     public function searchMemberIds($conditions, $orderBy, $start, $limit);
 
-    public function findWillOverdueCoursesByUserId($userId);
-
     public function addMember($member);
 
     public function updateMember($id, $member);

@@ -13,11 +13,10 @@ use Topxia\Common\ArrayToolkit;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Custom login listener.
+ * 
  */
 class GenerateNotificationHandler
 {
-	/** @var \Symfony\Component\Security\Core\SecurityContext */
 	private $container;
 	
 	
@@ -38,10 +37,8 @@ class GenerateNotificationHandler
 	public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
 	{
 		
-		// do some other magic here
-		$user = $event->getAuthenticationToken()->getUser();
+		$user = ServiceKernel::instance()->getCurrentUser();
 		
-		// ...
 		list($courses, $courseMembers) = $this->getCourseService()->findWillOverdueCourses();
 		$courseMembers = ArrayToolkit::index($courseMembers, "courseId");
 

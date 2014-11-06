@@ -1509,25 +1509,33 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($currentUser) && !array_key_exists("id", $currentUser)) {
 			throw $this->createServiceException('用户未登录');
 		}
-		$courseMembers = $this->getMemberDao()->findWillOverdueCoursesByUserId($currentUser["id"]);
-		$courseIds = ArrayToolkit::column($courseMembers, "courseId");
+		$courseMembers = $this->getMemberDao()->findAllMemberByUserIdAndRole($currentUser["id"],"student");
+
+		$willOverdueCourses = array();
+		foreach ($courseMembers as $key => $courseMember) {
+			if($courseMember["notified"] == 0){
+				$willOverdueCourses[] = $courseMember;
+			}
+		}
+
+		$courseIds = ArrayToolkit::column($willOverdueCourses, "courseId");
 		$courses = $this->findCoursesByIds($courseIds);
 
-		$courseMembers = ArrayToolkit::index($courseMembers, "courseId");
+		$courseMembers = ArrayToolkit::index($willOverdueCourses, "courseId");
 
 		$shouldNotifyCourses = array();
-		$shouldNotifyMembers = array();
+		$shouldNotifyCourseMembers = array();
 		foreach ($courses as $key => $course) {
 			if($course['notificationStatus'] == "active") {
 				$courseMember = $courseMembers[$course["id"]];
 				$currentTime = time();
 				if($currentTime < $courseMember["deadline"]  && ($course["notificationDuration"]*24*60*60+$currentTime) > $courseMember["deadline"]){
 					$shouldNotifyCourses[] = $course;
-					$shouldNotifyMembers[] = $courseMember;
+					$shouldNotifyCourseMembers[] = $courseMember;
 				}
 			}
 		}
-		return array($shouldNotifyCourses, $shouldNotifyMembers);
+		return array($shouldNotifyCourses, $shouldNotifyCourseMembers);
 	}
 
 	public function searchMembers($conditions, $orderBy, $start, $limit)
