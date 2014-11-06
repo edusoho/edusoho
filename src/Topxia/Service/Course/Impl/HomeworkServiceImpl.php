@@ -185,7 +185,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
 
         $homeworkResult = $this->getResultDao()->getResultByHomeworkIdAndUserId($id,$user->id);
 
-        $result = $this->getResultDao()->getResultByHomeworkIdAndStatusAndUserId($id,$user->id, 'doing');
+        $result = $this->getResultDao()->getResultByHomeworkIdAndStatusAndUserId($id,'doing',$user->id);
         if (empty($result)){
             $homeworkResult = array(
                 'homeworkId' => $homework['id'],
@@ -307,9 +307,9 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return $this->getResultDao()->findResultsByLessonIdAndStatus($lessonId,$status);
     }
 
-    public function findResultsByIds($homeworkIds)
+    public function findResultsByHomeworkIds($homeworkIds)
     {
-    	return $this->getResultDao()->findResultsByIds($homeworkIds);
+    	return $this->getResultDao()->findResultsByHomeworkIds($homeworkIds);
     }
 
     public function findResultsByStatusAndCheckTeacherId($status,$checkTeacherId,$orderBy,$start,$limit)

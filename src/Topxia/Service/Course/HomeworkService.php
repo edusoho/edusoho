@@ -42,7 +42,7 @@ interface HomeworkService
 
     public function searchResultsCount($conditions);
 
-    public function findResultsByIds($homeworkIds);
+    public function findResultsByHomeworkIds($homeworkIds);
 
     public function findResultsByLessonIdAndStatus($lessonId,$status);
 

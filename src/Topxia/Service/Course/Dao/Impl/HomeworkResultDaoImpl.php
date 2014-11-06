@@ -91,7 +91,7 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function findResultsByIds($homeworkIds)
+    public function findResultsByHomeworkIds($homeworkIds)
     {
         if(empty($homeworkIds)){
             return array();

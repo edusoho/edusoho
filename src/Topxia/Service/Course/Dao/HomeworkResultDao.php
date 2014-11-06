@@ -22,7 +22,7 @@ interface HomeworkResultDao
 
     public function searchResultsCount($conditions);
 
-    public function findResultsByIds($homeworkIds);
+    public function findResultsByHomeworkIds($homeworkIds);
 
     public function findResultsByStatusAndUserId($userId, $status);
 

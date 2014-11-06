@@ -41,7 +41,7 @@ class HomeworkController extends BaseController
         );
         $studentUserIds = ArrayToolkit::column($students, 'userId');
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findResultsByIds(ArrayToolkit::column($homeworks, 'id')), 'homeworkId');
+        $homeworkResults = ArrayToolkit::index($this->getHomeworkService()->findResultsByHomeworkIds(ArrayToolkit::column($homeworks, 'id')), 'homeworkId');
 
         $reviewingCount = $this->getHomeworkService()->searchResultsCount(array(
             'status' => 'reviewing',
