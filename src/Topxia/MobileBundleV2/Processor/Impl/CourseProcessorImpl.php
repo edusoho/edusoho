@@ -120,15 +120,15 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	}
 
 	/**
-	* add need param (courseId, lessonId, title, content)
-	* update need param (courseId, threadId, title, content)
+	* add need param (courseId, lessonId, title, content, type)
+	* update need param (courseId, threadId, title, content, type)
 	*/
 	public function updateThread(){
 		$courseId = $this->getParam("courseId", 0);
 		$threadId = $this->getParam("threadId", 0);
 		$title = $this->getParam("title", "");
 		$content = $this->getParam("content","");
-		$type = $this->getParam("type", "update");
+		$action = $this->getParam("action", "update");
 		$imageCount = $this->getParam("imageCount", 0);
 
 		$user = $this->controller->getUserByToken($this->request);
@@ -141,12 +141,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		}
 
 		$formData = $this->formData;
-		$formData['content'] = $content;
 		unset($formData['imageCount']);
-		unset($formData['type']);
+		unset($formData['action']);
 		unset($formData['threadId']);
 
-		if ($type == "add") {
+		if ($action == "add") {
 			return $this->controller->getThreadService()->createThread($formData);
 		} else {
 			$fields = array("title" => $title, "content" => $content);
