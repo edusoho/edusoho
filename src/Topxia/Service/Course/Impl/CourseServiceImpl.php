@@ -1503,6 +1503,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->searchMemberCount($conditions);
 	}
 
+	public function findWillOverdueCourses()
+	{
+		$currentUser = $this->getCurrentUser();
+		if (empty($currentUser) && !array_key_exists("id", $currentUser)) {
+			throw $this->createServiceException('用户未登录');
+		}
+		$courses = $this->getMemberDao()->findWillOverdueCoursesByUserId($currentUser["id"]);
+
+		return ;
+	}
+
 	public function searchMembers($conditions, $orderBy, $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);

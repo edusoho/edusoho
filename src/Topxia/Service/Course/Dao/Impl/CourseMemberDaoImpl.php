@@ -177,6 +177,12 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->executeUpdate($sql, array($userId, $courseId));
     }
 
+    public function findWillOverdueCoursesByUserId($userId)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE userId AND courseId = ?";
+        return $this->getConnection()->executeUpdate($sql, array($userId, $courseId));
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {   
         $builder = $this->createDynamicQueryBuilder($conditions)
