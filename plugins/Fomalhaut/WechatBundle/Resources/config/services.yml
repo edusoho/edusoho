@@ -1,18 +1,17 @@
 parameters:
     wechat.class: Fomalhaut\WechatBundle\WechatSDK\Wechat
-    wechat.config: 
-        - token
-        - encodingAesKey
-        - appid
-        - appsecret
-        - partnerid
-        - partnerkey
-        - paysignkey
-        - debug
-        - logcallback
+    token: 123
+    encodingAesKey: 12345
+    appid: 123
+    appsecret: 123
+    partnerid: 123
+    partnerkey: 123
+    paysignkey: 123
+    debug: 123
+    logcallback: 123
 services:
     fomalhaut_wechat.sdk.wechat:
         class: %wechat.class%
-        arguments: [%wechat.config%]
+        arguments: [%token%, %encodingAesKey%, %appid%, %appsecret%, %partnerid%, %partnerkey%, %paysignkey%, %debug%, %logcallback%]
         calls:
           - [setContainer, [@service_container]]

@@ -79,20 +79,19 @@ final class Wechat implements ContainerAwareInterface
 	public $errCode = 40001;
 	public $errMsg = "no access";
 	private $_logcallback;
-	
-	public function __construct($options)
+
+    public function __construct($token,$encodingAesKey,$appid,$appsecret,$partnerid,$partnerkey,$paysignkey,$debug,$logcallback)
 	{
-		$this->token = isset($options['token'])?$options['token']:'';
-		$this->encodingAesKey = isset($options['encodingaeskey'])?$options['encodingaeskey']:'';
-		$this->appid = isset($options['appid'])?$options['appid']:'';
-		$this->appsecret = isset($options['appsecret'])?$options['appsecret']:'';
-		$this->partnerid = isset($options['partnerid'])?$options['partnerid']:'';
-		$this->partnerkey = isset($options['partnerkey'])?$options['partnerkey']:'';
-		$this->paysignkey = isset($options['paysignkey'])?$options['paysignkey']:'';
-		$this->debug = isset($options['debug'])?$options['debug']:false;
-		$this->_logcallback = isset($options['logcallback'])?$options['logcallback']:false;
+		$this->token = $token;
+		$this->encodingAesKey = $encodingAesKey;
+		$this->appid = $appid;
+		$this->appsecret = $appsecret;
+		$this->partnerid = $partnerid;
+		$this->partnerkey = $partnerkey;
+		$this->paysignkey = $paysignkey;
+		$this->debug = $debug;
+		$this->_logcallback = $logcallback;
 	}
-	
     /**
      * Sets the Container.
      *
