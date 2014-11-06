@@ -71,7 +71,7 @@
 
 .class-table .class-picture {
     max-width: 100%;
-    min-height: 92px;
+    height: 92px;
     display: block;
     margin-right: auto;
     margin-left: auto;
@@ -608,6 +608,7 @@
     color: #474747;
     font-size: 12px;
     height: 36px;
+    margin: 8px;
     word-break: break-all;
     overflow: hidden;
 }
@@ -1215,7 +1216,12 @@ ul.schedule-lesson-list .item-div .finished-icon .text-success{
 
 .testpaper-card .btn-default:hover, 
 .testpaper-card .btn-default:focus, 
-.testpaper-card.btn-default:active, 
 .testpaper-card .btn-default.active {
     color: #fff;
+}
+
+.testpaper-card .btn-index:hover, 
+.testpaper-card .btn-index:focus, 
+.testpaper-card .btn-index.active {
+    color: #333;
 }

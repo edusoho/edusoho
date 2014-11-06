@@ -13,8 +13,8 @@ define(function(require, exports, module) {
             resetUrl: null
         },
         events: {
-            "click span.glyphicon-plus-sign": "expand",
-            "click span.glyphicon-minus-sign": "collapse",
+            "click li.plus": "expand",
+            "click li.minus": "collapse",
             "click .next-week": "nextWeek",
             "click .previous-week": "previousWeek",
             "click .next-month": "nextMonth",
@@ -87,14 +87,16 @@ define(function(require, exports, module) {
         },
         expand: function(e) {
             var target = e.currentTarget;
-            $(target).removeClass('glyphicon-plus-sign').addClass('glyphicon-minus-sign');
-            $(target).parent().find('.schedule-course-item-list-wrap').addClass('show').removeClass('hidden');
+            $(target).removeClass('plus').addClass('minus');
+            $(target).find('.glyphicon').removeClass('glyphicon-plus-sign').addClass('glyphicon-minus-sign');
+            $(target).find('.schedule-course-item-list-wrap').addClass('show').removeClass('hidden');
             
         },
         collapse: function(e) {
             var target = e.currentTarget;
-            $(target).removeClass('glyphicon-minus-sign').addClass('glyphicon-plus-sign');
-            $(target).parent().find('.schedule-course-item-list-wrap').addClass('hidden').removeClass('show');
+            $(target).removeClass('minus').addClass('plus');
+            $(target).find('.glyphicon').removeClass('glyphicon-minus-sign').addClass('glyphicon-plus-sign');
+            $(target).find('.schedule-course-item-list-wrap').addClass('hidden').removeClass('show');
         },
         save: function(data){
             $.post(this.get('saveUrl'), data, function(){

@@ -19,7 +19,7 @@
        <ul class="course-list">
         {% set Editablecourses = teachCourses == null ? courses : teachCourses%}
           {% for course in Editablecourses %}
-           <li>
+           <li class="plus">
              <span class="glyphicon glyphicon-plus-sign mrs"></span>
              <span class="title" title="{{ course.title }}">{{ course.title }}</span>
              {{ render(controller('TopxiaWebBundle:ClassSchedule:getItems', {courseId:course.id})) }}
