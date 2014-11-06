@@ -54,7 +54,7 @@ define(function(require, exports, module) {
         $('.carousel-inner').delegate('.thumbnail', 'click', function(){
             $('.carousel-inner').find('.lesson-selected').toggleClass('lesson-selected');
             $(this).toggleClass('lesson-selected');
-            lessonId = $(this).parent().data('id');console.log($('.tasks-body .nav li.active').attr('id'));
+            lessonId = $(this).parent().data('id');
             ($('.tasks-body .nav li.active').attr('id') == 'finished-btn') ? getFinishedLessonStudents(0, default_limit) : getNotFinishedLessonStudents(0, default_limit);
         });
 
