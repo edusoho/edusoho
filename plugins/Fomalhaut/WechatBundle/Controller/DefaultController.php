@@ -8,8 +8,8 @@ class DefaultController extends BaseController
 {
     public function indexAction()
     {
-        $sdk = $this->get('fomalhaut_wechat.sdk.wechat');
-
+        $wechat = $this->get('fomalhaut_wechat.sdk.wechat');
+        $wechat->valid();
         $curuser = $this->getCurrentUser();
         return $this->render('WechatBundle:Default:index.html.twig', array('name' => $curuser['nickname']));
     }
