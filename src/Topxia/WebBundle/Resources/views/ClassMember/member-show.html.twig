@@ -117,8 +117,11 @@
                             <button class="btn btn-xs btn-success pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:parent.id})}}">发私信</button>
                           {% endif %}
                         </div>
-                        <div class="">
-                          {{ dict_text('family', relation.relation)}}{{parent.truename}}
+                        <div class="parent-name">
+                          <small class="text-muted">
+                            {{ dict_text('family', relation.relation)}}
+                          </small>
+                          {{parent.truename}}
                         </div>
                       </a>
                     {% endif %}
