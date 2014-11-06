@@ -59,7 +59,7 @@ class GenerateNotificationHandler
 			if($vipSetting["notificationStatus"] == 1) {
 				$vip = $this->getVipService()->getMemberByUserId($user["id"]);
 				$currentTime = time();
-				if($vip["isNotified"] != 1 && $currentTime < $vip["deadline"] && ($currentTime + $vipSetting["notificationDuration"]*24*60*60) > $vip["deadline"]) {
+				if($vip["notified"] != 1 && $currentTime < $vip["deadline"] && ($currentTime + $vipSetting["notificationDuration"]*24*60*60) > $vip["deadline"]) {
 					$this->getNotificationService()->notify($user["id"], "default", 
                 			"您购买的会员将在".date("Y年m月d日",$vip["deadline"])."到期。");
 					$this->getVipService()->updateNotified($vip["id"], 1);
