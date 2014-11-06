@@ -358,8 +358,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'locationId' => 0,
 			'address' => '',
 			'maxStudentNum' => 0,
-			'progressControl' => 'noControl',
-			'learnedCondition' => 'noControl',
 			'freeStartTime' => 0,
 			'freeEndTime' => 0
 		));
