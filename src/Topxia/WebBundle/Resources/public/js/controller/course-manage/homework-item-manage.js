@@ -19,7 +19,7 @@ define(function(require, exports, module) {
             'click [data-role=batch-delete]': 'onClickBatchDelete',
             'click .confirm-submit': 'onConfirmSubmit',
             'click .request-save': 'onRequestSave',
-            'change [name="scores[]"]': 'onChangeScore',
+            'change [name="scores[]"]': 'onChangeScore'
         },
 
         setup:function() {

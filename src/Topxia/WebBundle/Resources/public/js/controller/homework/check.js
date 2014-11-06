@@ -29,7 +29,7 @@ define(function(require, exports, module) {
 		},
 
      	events:{
-			'change #homework-teacherSay-select':'onChangeTeacherSaySelect',
+			'change #homework-teacherSay-select':'onChangeTeacherSaySelect'
      	},
 
 		onChangeTeacherSaySelect: function (event) {
@@ -43,7 +43,7 @@ define(function(require, exports, module) {
 	var homeworkFootCheck = Widget.extend({
 
      	events:{
-            'click #homework-check-btn': 'onClickCheckBtn',
+            'click #homework-check-btn': 'onClickCheckBtn'
      	},
         onClickCheckBtn: function(event) {
             var $btn = $(event.currentTarget);

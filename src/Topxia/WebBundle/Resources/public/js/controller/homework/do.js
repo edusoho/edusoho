@@ -65,7 +65,7 @@ define(function(require, exports, module) {
             'click #homework-finish-btn': 'onClickFinishBtn',
             'click #homework-check-btn': 'onClickCheckBtn',
             'click #homework-save-btn': 'onClickSaveBtn',
-            'click .question-index': 'onClickSetCard',
+            'click .question-index': 'onClickSetCard'
         },
 
         onClickFinishBtn: function(event) {
@@ -106,7 +106,7 @@ define(function(require, exports, module) {
 
         deactiveQuestionIndex: function(questionId) {
             this.element.find('.for-question-' + questionId).removeClass('question-index-active');
-        },
+        }
 
     });
 
@@ -122,7 +122,7 @@ define(function(require, exports, module) {
             'click .question-essay-input-short': 'onClickEssay',
             'click .essay-textarea-pack-up': 'onClickEssayPackup',
             'change .question-fill-inputs input': 'onChangeFillInput',
-            'change .question-teacher-say-input': 'onChangeTeacherSayInput',
+            'change .question-teacher-say-input': 'onChangeTeacherSayInput'
         },
 
         setup: function() {

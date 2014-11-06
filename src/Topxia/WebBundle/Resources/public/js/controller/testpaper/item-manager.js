@@ -19,7 +19,7 @@ define(function(require, exports, module) {
             'click [data-role=batch-delete]': 'onClickBatchDelete',
             'click .confirm-submit': 'onConfirmSubmit',
             'click .request-save': 'onRequestSave',
-            'change [name="scores[]"]': 'onChangeScore',
+            'change [name="scores[]"]': 'onChangeScore'
         },
 
         setup:function() {
@@ -145,11 +145,9 @@ define(function(require, exports, module) {
             var $btn = $(e.currentTarget);
 
             var excludeIds = [];
-            console.log("#testpaper-items-" + this.get('currentType'));
             $("#testpaper-items-" + this.get('currentType')).find('[name="questionId[]"]').each(function(){
                 excludeIds.push($(this).val());
             });
-                console.log(excludeIds);
 
             var $modal = $("#modal").modal();
             $modal.data('manager', this);
@@ -234,10 +232,6 @@ define(function(require, exports, module) {
                             var $tr = $(this);
                             $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
                         });
-
-                        // console.log($tbody.find('[data-parent-id=' + item.data('id') + ']'));
-
-                        // $tbody.find('[data-parent-id=' + item.data('id') + ']').detach().insertAfter(item);
                     }
 
                     self.refreshSeqs();
@@ -252,5 +246,4 @@ define(function(require, exports, module) {
             element: '#testpaper-items-manager'
         });
     }
-
 });

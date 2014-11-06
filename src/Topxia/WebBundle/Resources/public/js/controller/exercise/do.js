@@ -57,7 +57,7 @@ define(function(require, exports, module) {
 
         events: {
             'click #exercise-finish-btn': 'onClickFinishBtn',
-            'click .question-index': 'onClickSetCard',
+            'click .question-index': 'onClickSetCard'
         },
 
         onClickFinishBtn: function(event) {
@@ -98,7 +98,7 @@ define(function(require, exports, module) {
             'click .question-essay-input-short': 'onClickEssay',
             'click .essay-textarea-pack-up': 'onClickEssayPackup',
             'change .question-fill-inputs input': 'onChangeFillInput',
-            'change .question-teacher-say-input': 'onChangeTeacherSayInput',
+            'change .question-teacher-say-input': 'onChangeTeacherSayInput'
         },
 
         setup: function() {

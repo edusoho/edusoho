@@ -4,8 +4,6 @@ define(function(require, exports, module) {
     var editor = EditorFactory.create('#homework-about-field', 'simple_noimage');
     var  $modal = $("#modal");
     var Widget = require('widget');
-    // var Handlebars = require('handlebars');
-    // var Notify = require('common/bootstrap-notify');
         require('jquery.sortable');
 
     var HomeworkItemManager = Widget.extend({
