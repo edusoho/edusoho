@@ -61,7 +61,7 @@
             </div>
             {% if member.role|default(null) == 'student' %}
                   {% if member.orderId %}
-                   <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
+                   <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}"><i class="glyphicon glyphicon-log-out"></i></a>
                   {% else %}
                   <a class="btn btn-default btn-sm course-exit-btn" id="exit-course-learning" title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
                     {% endif %}
