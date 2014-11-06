@@ -16,7 +16,7 @@ define(function(require, exports, module) {
         classList.on('click','.class-remove',function(){
             if($(this).data('stunum')>0){
                 Notify.danger('尚存在学生,请先移除班级学生');
-            }else{
+            }else if(confirm('您确定删除吗？')){
                 $.get($(this).data('url'),function(){
                     Notify.success('成功移除班级');
                     window.location.reload();
