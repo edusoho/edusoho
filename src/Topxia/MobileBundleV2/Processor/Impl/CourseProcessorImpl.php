@@ -119,6 +119,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		return $post;
 	}
 
+	/**
+	* add need param (courseId, lessonId, title, content)
+	* update need param (courseId, threadId, title, content)
+	*/
 	public function updateThread(){
 		$courseId = $this->getParam("courseId", 0);
 		$threadId = $this->getParam("threadId", 0);
@@ -140,6 +144,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		$formData['content'] = $content;
 		unset($formData['imageCount']);
 		unset($formData['type']);
+		unset($formData['threadId']);
 
 		if ($type == "add") {
 			return $this->controller->getThreadService()->createThread($formData);
