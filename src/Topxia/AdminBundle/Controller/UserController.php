@@ -158,7 +158,6 @@ class UserController extends BaseController
             $dif = "";
             $stopRoleNums = count($roles);
             if(in_array("ROLE_USER",$roles) && $stopRoleNums >1){
-                // $diff = array_diff($roles, $user['roles']); 
                 foreach ($roles as $key => $value) {    
                     if($value == "ROLE_USER" ){
                             $value =  "";

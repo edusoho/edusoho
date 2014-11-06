@@ -11,7 +11,7 @@ class DefaultController extends BaseController
     public function popularCoursesAction(Request $request)
     {
         $dateType = $request->query->get('dateType');
-        $coursesSortord = $request->query->get('coursesSortord');
+
         $map = array();
         $students = $this->getCourseService()->searchMember(array('date'=>$dateType, 'role'=>'student'), 0 , 10000);
         foreach ($students as $student) {
@@ -23,6 +23,7 @@ class DefaultController extends BaseController
         }
         asort($map, SORT_NUMERIC);
         $map = array_slice($map, 0, 5, true);
+
         $courses = array();
         foreach ($map as $courseId => $studentNum) {
             $course = $this->getCourseService()->getCourse($courseId);
@@ -37,9 +38,9 @@ class DefaultController extends BaseController
 
             $courses[] = $course;
         }
+
         return $this->render('TopxiaAdminBundle:Default:popular-courses-table.html.twig', array(
-            'courses' => $courses,
-            'coursesSortord' => $coursesSortord
+            'courses' => $courses
         ));
         
     }
