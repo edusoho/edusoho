@@ -1509,9 +1509,25 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($currentUser) && !array_key_exists("id", $currentUser)) {
 			throw $this->createServiceException('用户未登录');
 		}
-		$courses = $this->getMemberDao()->findWillOverdueCoursesByUserId($currentUser["id"]);
+		$courseMembers = $this->getMemberDao()->findWillOverdueCoursesByUserId($currentUser["id"]);
+		$courseIds = ArrayToolkit::column($courseMembers, "courseId");
+		$courses = $this->findCoursesByIds($courseIds);
 
-		return ;
+		$courseMembers = ArrayToolkit::index($courseMembers, "courseId");
+
+		$shouldNotifyCourses = array();
+		$shouldNotifyMembers = array();
+		foreach ($courses as $key => $course) {
+			if($course['notificationStatus'] == "active") {
+				$courseMember = $courseMembers[$course["id"]];
+				$currentTime = time();
+				if($currentTime < $courseMember["deadline"]  && ($course["notificationDuration"]*24*60*60+$currentTime) > $courseMember["deadline"]){
+					$shouldNotifyCourses[] = $course;
+					$shouldNotifyMembers[] = $courseMember;
+				}
+			}
+		}
+		return array($shouldNotifyCourses, $shouldNotifyMembers);
 	}
 
 	public function searchMembers($conditions, $orderBy, $start, $limit)
