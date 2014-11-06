@@ -39,7 +39,8 @@ class K12DefaultController extends BaseController
     {
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
-            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
+            $this->redirect($this->generateUrl('homepage'));
+            //return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
         }
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
