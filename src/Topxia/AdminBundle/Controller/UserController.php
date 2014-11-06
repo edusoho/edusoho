@@ -155,14 +155,14 @@ class UserController extends BaseController
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
             $dataDict = new UserRoleDict();
-            
+            $roleDict = $dataDict->getDict();
             $role = "";
             $roleCount = count($roles);
             $deletedRoles = array_diff($user['roles'], $roles);
             $addedRoles = array_diff($roles, $user['roles']);
             if(!empty($deletedRoles) || !empty($addedRoles) ){
                 for ($i=0; $i<$roleCount; $i++) {
-                    $role .= $dataDict->getDict()[$roles[$i]];
+                    $role .= $roleDict[$roles[$i]];
                     if ($i<$roleCount - 1){
                         $role .= "、";
                     }
