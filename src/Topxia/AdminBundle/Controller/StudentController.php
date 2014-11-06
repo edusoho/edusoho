@@ -56,11 +56,19 @@ class StudentController extends BaseController
 
     public function matchAction(Request $request)
     {
-        $truename = $request->query->get('q');
-        $conditions = array(
-            'role' => 'ROLE_USER',
-            'truename'=> $truename 
-        );
+        $matchStr = $request->query->get('q');
+
+        if(!eregi("[^\x80-\xff]","$matchStr")){
+            $conditions = array(
+                'role' => 'ROLE_USER',
+                'truename'=> $matchStr 
+            );
+        }else{
+            $conditions = array(
+                'role' => 'ROLE_USER',
+                'numberLike'=> $matchStr 
+            );
+        }
         $total = $this->getUserService()->searchUserCount($conditions);
         $users = $this->getUserService()->searchUsers(
             $conditions,

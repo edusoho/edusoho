@@ -114,6 +114,10 @@ class UserDaoImpl extends BaseDao implements UserDao
             $conditions['nickname'] = "%{$conditions['nickname']}%";
         }
 
+        if (isset($conditions['numberLike'])) {
+            $conditions['numberLike'] = "%{$conditions['numberLike']}%";
+        }
+
         if (isset($conditions['truename'])) {
             $conditions['truename'] = "%{$conditions['truename']}%";
         }
@@ -126,6 +130,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('nickname LIKE :nickname')
             ->andWhere('truename LIKE :truename')
             ->andWhere('number = :number')
+            ->andWhere('number LIKE:numberLike')
             ->andWhere('loginIp = :loginIp')
             ->andWhere('approvalStatus = :approvalStatus')
             ->andWhere('email = :email')
