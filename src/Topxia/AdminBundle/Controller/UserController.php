@@ -151,7 +151,7 @@ class UserController extends BaseController
         if ($request->getMethod() == 'POST') {
             $roles = $request->request->get('roles');
             $this->getUserService()->changeUserRoles($user['id'], $roles);
-            $dif = "";
+            $role = "";
             $stopRoleNums = count($roles);
             if(in_array("ROLE_USER",$roles) && $stopRoleNums >1){
                 foreach ($roles as $key => $value) {    
@@ -167,9 +167,9 @@ class UserController extends BaseController
                     if($value == "ROLE_SUPER_ADMIN" ){
                             $value =  "超级管理员";
                     }
-                    $dif .= $value.".";
+                    $role .= $value.".";
                 }
-                $this->getNotifiactionService()->notify($user['id'],'default',"您被“{$currentUser['nickname']}”设置为“{$dif}”身份。");
+                $this->getNotifiactionService()->notify($user['id'],'default',"您被“{$currentUser['nickname']}”设置为“{$role}”身份。");
             }elseif(in_array("ROLE_USER",$roles) && $stopRoleNums ==1){
                 $diff = array_diff($user['roles'],$roles);     
                  foreach ($diff as $key => $value) {    
@@ -185,9 +185,9 @@ class UserController extends BaseController
                     if($value == "ROLE_SUPER_ADMIN" ){
                             $value =  "超级管理员";
                     }
-                    $dif .= $value.".";
+                    $role .= $value.".";
                 }
-                $this->getNotifiactionService()->notify($user['id'],'default',"您被“{$currentUser['nickname']}”取消“{$dif}”身份。");
+                $this->getNotifiactionService()->notify($user['id'],'default',"您被“{$currentUser['nickname']}”取消“{$role}”身份。");
             }
 
             if (in_array('ROLE_TEACHER', $user['roles']) && !in_array('ROLE_TEACHER', $roles)) {
@@ -330,10 +330,8 @@ class UserController extends BaseController
     public function lockAction($id)
     {
         $this->getUserService()->lockUser($id);
-        $currentUser = $this->getCurrentUser();
         return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user' => $this->getUserService()->getUser($id),
-            'currentUser' =>$currentUser,
         ));
     }
 
@@ -343,7 +341,6 @@ class UserController extends BaseController
 
         return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user' => $this->getUserService()->getUser($id),
-            'currentUser' =>$this->getCurrentUser()
         ));
     }
 

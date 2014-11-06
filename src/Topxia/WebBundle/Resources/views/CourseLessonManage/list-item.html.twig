@@ -24,7 +24,7 @@
 		{% if lesson.type != 'text' %}
 		{% if files[lesson.mediaId]|default(false) %}
 		{% else %}
-		<span class="label label-danger deletedlessons" title="课时文件已删除">无效课时</span>
+		<span class="label label-danger fileDeletedLesson" title="课时文件已删除">无效课时</span>
 		{% endif %} 
 		{% endif %} 
 		{{ lesson.title }}
