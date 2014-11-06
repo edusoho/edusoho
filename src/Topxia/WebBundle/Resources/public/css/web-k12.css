@@ -1180,3 +1180,19 @@ ul.schedule-lesson-list .item-div .finished-icon .text-success{
 .intro-block .point-area .rank-down {
     color: #ff0000;
 }
+
+@media (max-width: 800px) {
+  .login-body .login-picture {
+    display: none;
+  }
+
+  .login-body .login-main {
+    margin: 0 auto;
+  }
+  .login-box .login-header {
+    text-align: center;
+  }
+  .login-page {
+    background-size: inherit;
+  }
+}
