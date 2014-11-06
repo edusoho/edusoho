@@ -14,6 +14,6 @@ interface ExerciseItemResultDao
 
 	public function findItemResultsbyExerciseId($exerciseId);
 
-	public function findItemsResultsbyExerciseIdAndUserId($exerciseId,$userId);
+	public function findItemResultsbyExerciseIdAndUserId($exerciseId,$userId);
 	
 }

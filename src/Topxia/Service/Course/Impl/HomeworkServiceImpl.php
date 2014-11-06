@@ -233,7 +233,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         //reviewing
         $rightItemCount = 0;
 
-        $homeworkItemsRusults = $this->getItemResultDao()->findItemsResultsbyHomeworkId($id);
+        $homeworkItemsRusults = $this->getItemResultDao()->findItemResultsbyHomeworkId($id);
 
         foreach ($homeworkItemsRusults as $key => $homeworkItemRusult) {
             if ($homeworkItemRusult['status'] == 'right') {
@@ -254,7 +254,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     public function saveHomework($id,$homework)
     {
         $userId = $this->getCurrentUser()->id;
-        $homeworkItemResults = $this->getItemResultDao()->findItemsResultsbyHomeworkIdAndUserId($id,$userId);
+        $homeworkItemResults = $this->getItemResultDao()->findItemResultsbyHomeworkIdAndUserId($id,$userId);
         if (empty($homeworkItemResults)) {
            $this->addItemResult($id,$homework);
         }
@@ -383,7 +383,7 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
     public function getItemSetResultByHomeworkIdAndUserId($homeworkId,$userId)
     {
         $items = $this->getHomeworkItemDao()->findItemsByHomeworkId($homeworkId);
-        $itemsResults = $this->getItemResultDao()->findItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId);
+        $itemsResults = $this->getItemResultDao()->findItemResultsbyHomeworkIdAndUserId($homeworkId,$userId);
         $indexdItems = ArrayToolkit::index($items, 'questionId');
         $indexdItemsResults = ArrayToolkit::index($itemsResults, 'questionId');
         $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
@@ -431,9 +431,9 @@ class HomeworkServiceImpl extends BaseService implements HomeworkService
         return $set;
     }
 
-    public function findItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId)
+    public function findItemResultsbyHomeworkIdAndUserId($homeworkId,$userId)
     {
-        return $this->getItemResultDao()->findItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId);
+        return $this->getItemResultDao()->findItemResultsbyHomeworkIdAndUserId($homeworkId,$userId);
     }
 
 	public function createHomeworkItems($homeworkId, $items)

@@ -68,7 +68,7 @@ interface HomeworkService
 
     public function getItemSetResultByHomeworkIdAndUserId($homeworkId,$userId);
 
-    public function findItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId);
+    public function findItemResultsbyHomeworkIdAndUserId($homeworkId,$userId);
 
     public function createHomeworkItems($homeworkId, $items);
 

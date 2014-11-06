@@ -42,13 +42,13 @@ class HomeworkItemResultDaoImpl extends BaseDao implements HomeworkItemResultDao
         return true;
 	}
 
-	public function findItemsResultsbyHomeworkId($homeworkId)
+	public function findItemResultsbyHomeworkId($homeworkId)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE homeworkId = ? ";
         return $this->getConnection()->fetchAll($sql,array($homeworkId)) ? : array();
 	}
 
-	public function findItemsResultsbyHomeworkIdAndUserId($homeworkId,$userId)
+	public function findItemResultsbyHomeworkIdAndUserId($homeworkId,$userId)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE homeworkId = ? AND userId = ?";
         return $this->getConnection()->fetchAll($sql,array($homeworkId,$userId)) ? : array();
