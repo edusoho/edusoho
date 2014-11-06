@@ -286,10 +286,6 @@ course_lesson_show:
     pattern:  /course/{courseId}/lesson/{lessonId}
     defaults: { _controller: TopxiaWebBundle:CourseLesson:show }
 
-course_lesson_number_show:
-    pattern:  /course/{courseId}/lesson/number/{number}
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:lessonNumberShow }
-
 course_lesson_homework_show:
     pattern:  /course/{courseId}/lesson/{lessonId}/homework
     defaults: { _controller: TopxiaWebBundle:CourseLesson:lessonHomeworkShow }

@@ -254,13 +254,6 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($json);
     }
 
-    public function lessonNumberShowAction(Request $request, $courseId, $number)
-    {
-        $lesson = $this->getCourseService()->getCourseLessonByCourseIdAndNumber($courseId, $number);
-
-        return $this->createJsonResponse($lesson);
-    }
-
     public function lessonHomeworkShowAction(Request $request, $courseId, $lessonId)
     {
         $user = $this->getCurrentUser();

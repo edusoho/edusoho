@@ -678,15 +678,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserializes($lessons);
 	}
 
-	public function getCourseLessonByCourseIdAndNumber($courseId, $number)
-	{	
-		if ($number < 1) {
-			return null;
-		}
-		$lesson = $this->getLessonDao()->getLessonByCourseIdAndNumber($courseId, $number);
-		return LessonSerialize::unserialize($lesson);
-	}
-	
 	public function deleteCourseDrafts($courseId,$lessonId, $userId)
 	{
 		 return   $this->getCourseDraftDao()->deleteCourseDrafts($courseId,$lessonId, $userId);
