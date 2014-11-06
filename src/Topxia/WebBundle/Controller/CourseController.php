@@ -760,7 +760,7 @@ class CourseController extends BaseController
 
 		return $this->redirect($this->generateUrl('course_show',array('id' => $courseId)));
 	}
-	
+
 	private function createCourseForm()
 	{
 		return $this->createNamedFormBuilder('course')

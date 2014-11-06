@@ -173,7 +173,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
     public function deleteMemberByCourseIdAndUserId($courseId, $userId)
     {
-        $sql = "DELETE FROM {$this->table} WHERE userId AND courseId = ?";
+        $sql = "DELETE FROM {$this->table} WHERE userId = ? AND courseId = ?";
         return $this->getConnection()->executeUpdate($sql, array($userId, $courseId));
     }
 
