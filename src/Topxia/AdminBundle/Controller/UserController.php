@@ -14,6 +14,7 @@ use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
 use Topxia\Common\ConvertIpToolkit;
+use Topxia\WebBundle\DataDict\UserRoleDict;
 
 class UserController extends BaseController 
 {
@@ -150,44 +151,23 @@ class UserController extends BaseController
         $currentUser = $this->getCurrentUser();
         if ($request->getMethod() == 'POST') {
             $roles = $request->request->get('roles');
+
             $this->getUserService()->changeUserRoles($user['id'], $roles);
+
+            $dataDict = new UserRoleDict();
+            
             $role = "";
             $stopRoleNums = count($roles);
-            if(in_array("ROLE_USER",$roles) && $stopRoleNums >1){
-                foreach ($roles as $key => $value) {    
-                    if($value == "ROLE_USER" ){
-                            $value =  "";
+            $deletedRoles = array_diff($user['roles'], $roles);
+            $addedRoles = array_diff($roles, $user['roles']);
+            if(!empty($deletedRoles) || !empty($addedRoles) ){
+                for ($i=0;$i<$stopRoleNums;$i++) {
+                    $role .= $dataDict->getDict()[$roles[$i]];
+                    if ($i<$stopRoleNums - 1){
+                        $role .= "、";
                     }
-                    if($value == "ROLE_TEACHER" ){
-                            $value =  "教师";
-                    }
-                    if($value == "ROLE_ADMIN" ){
-                            $value =  "管理员";
-                    }
-                    if($value == "ROLE_SUPER_ADMIN" ){
-                            $value =  "超级管理员";
-                    }
-                    $role .= $value.".";
                 }
                 $this->getNotifiactionService()->notify($user['id'],'default',"您被“{$currentUser['nickname']}”设置为“{$role}”身份。");
-            }elseif(in_array("ROLE_USER",$roles) && $stopRoleNums ==1){
-                $diff = array_diff($user['roles'],$roles);     
-                 foreach ($diff as $key => $value) {    
-                    if($value == "ROLE_USER" ){
-                            $value =  "";
-                    }
-                    if($value == "ROLE_TEACHER" ){
-                            $value =  "教师";
-                    }
-                    if($value == "ROLE_ADMIN" ){
-                            $value =  "管理员";
-                    }
-                    if($value == "ROLE_SUPER_ADMIN" ){
-                            $value =  "超级管理员";
-                    }
-                    $role .= $value.".";
-                }
-                $this->getNotifiactionService()->notify($user['id'],'default',"您被“{$currentUser['nickname']}”取消“{$role}”身份。");
             }
 
             if (in_array('ROLE_TEACHER', $user['roles']) && !in_array('ROLE_TEACHER', $roles)) {
