@@ -116,6 +116,7 @@ define(function(require, exports, module) {
         });
 
         $("#course-item-list .item-actions .btn-link").tooltip();
+        $(".deletedlessons").tooltip();
 
     };
 

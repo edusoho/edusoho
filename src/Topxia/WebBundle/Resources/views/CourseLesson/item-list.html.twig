@@ -69,7 +69,11 @@
 		    	<span class="name ">课时{{ item.number }}</span>
 		    	<span class="pie ">&nbsp;</span>
 		    	<a class=" title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}" style="white-space:nowrap; overflow:hidden; text-overflow: ellipsis;">
-			    		{{ item.title }}
+			    		{{ item.title }} 
+			    		{% if files[item.mediaId]|default(false) %}
+			    		{% else %}
+				<span class="label label-danger deletedlessons" title="课时文件已删除" >无效课时</span>
+				{% endif %}
 				    {% if item.materialNum > 0 %}
 				      <span class="glyphicon  glyphicon-download" title="资料"></span>
 				    {% endif %}
