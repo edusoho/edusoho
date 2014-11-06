@@ -139,6 +139,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		$formData = $this->formData;
 		$formData['content'] = $content;
 		unset($formData['imageCount']);
+		unset($formData['type']);
 
 		if ($type == "add") {
 			return $this->controller->getThreadService()->createThread($formData);
