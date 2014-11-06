@@ -12,7 +12,6 @@ class DefaultController extends BaseController
     {
         $dateType = $request->query->get('dateType');
         $coursesSortord = $request->query->get('coursesSortord');
-        // var_dump($dateType);exit();
         $map = array();
         $students = $this->getCourseService()->searchMember(array('date'=>$dateType, 'role'=>'student'), 0 , 10000);
         foreach ($students as $student) {
@@ -22,7 +21,7 @@ class DefaultController extends BaseController
                 $map[$student['courseId']] ++;
             }
         }
-        // asort($map, SORT_NUMERIC);
+        asort($map, SORT_NUMERIC);
         $map = array_slice($map, 0, 5, true);
         $courses = array();
         foreach ($map as $courseId => $studentNum) {

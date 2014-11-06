@@ -61,9 +61,6 @@
     <div id="popular-courses-panel" class="col-md-6">
        <div class="panel panel-default">
         <div class="panel-heading">
-          <select id="popular-courses-sortord" class="pull-right" data-url="{{path('admin_popular_courses')}}">
-              {{ select_options(dict('coursesSortord'), app.request.query.get('coursesSortord')) }}
-          </select>
           <select id="popular-courses-type" class="pull-right" data-url="{{path('admin_popular_courses')}}">
               {{ select_options(dict('dateType'), app.request.query.get('dateType')) }}
           </select>
