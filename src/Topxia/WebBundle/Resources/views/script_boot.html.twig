@@ -111,11 +111,10 @@
   {% if script_arguments is defined %}
     app.arguments = {{ script_arguments|json_encode|raw }};
   {% endif %}
-  app.mainScript = '{{ script_main }}';
 </script>
 <script src="{{ asset('assets/libs/seajs/seajs/2.2.1/sea.js') }}"></script>
 <script src="{{ asset('assets/libs/seajs/seajs-style/1.0.2/seajs-style.js') }}"></script>
 <script src="{{ asset('assets/libs/seajs-global-config.js') }}"></script>
 <script>
-  seajs.use(app.mainScript);
+  seajs.use("{{ script_main }}")
 </script>

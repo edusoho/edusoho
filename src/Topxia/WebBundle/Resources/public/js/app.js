@@ -8,6 +8,8 @@ define(function(require, exports, module) {
 			name = window.app.basePath + '/bundles/topxiaweb/js/controller/' + name;
 		}
 
+		name += '.js?' + window.app.version;
+
 		seajs.use(name, function(module) {
 			if ($.isFunction(module.run)) {
 				module.run();
