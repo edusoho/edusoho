@@ -21,7 +21,7 @@
         <div class="class-choise-btn">
         {# 一班，二班，三班......#}
         {% for class in classes %}
-          <button type="button" class="btn btn-default class-item" data-id="{{class.id}}" data-name="{{class.name}}" autocomplete="off" >
+          <button type="button" class="btn btn-default class-item" data-id="{{class.id}}" title="{{class.name}}" data-name="{{class.name}}" autocomplete="off" >
               {{class.name}}
           </button>
         {% endfor %}
