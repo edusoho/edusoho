@@ -124,7 +124,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		$threadId = $this->getParam("threadId", 0);
 		$title = $this->getParam("title", "");
 		$content = $this->getParam("content","");
-		$type = $this->getParam("type", "update")
+		$type = $this->getParam("type", "update");
 		$imageCount = $this->getParam("imageCount", 0);
 
 		$user = $this->controller->getUserByToken($this->request);
