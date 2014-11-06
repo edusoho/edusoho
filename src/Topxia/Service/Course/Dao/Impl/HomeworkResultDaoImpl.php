@@ -155,12 +155,6 @@ class HomeworkResultDaoImpl extends BaseDao implements HomeworkResultDao
         return $this->getConnection()->fetchColumn($sql, array($courseId, $status));
     }
 
-    public function findResultsByStatusAndUserId($userId, $status)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND status = ? ";
-        return $this->getConnection()->fetchAssoc($sql,array($userId, $status)) ? : null;
-    }
-    
     private function _createSearchQueryBuilder($conditions)
     {   
         $builder = $this->createDynamicQueryBuilder($conditions)
