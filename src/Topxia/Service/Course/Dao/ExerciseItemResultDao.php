@@ -12,7 +12,7 @@ interface ExerciseItemResultDao
 
 	public function deleteItemResultByExerciseId($exerciseId);
 
-	public function findItemsResultsbyExerciseId($exerciseId);
+	public function findItemResultsbyExerciseId($exerciseId);
 
 	public function findItemsResultsbyExerciseIdAndUserId($exerciseId,$userId);
 	

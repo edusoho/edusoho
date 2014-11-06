@@ -32,7 +32,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     public function getItemSetResultByExerciseIdAndUserId($exerciseId,$userId)
     {
         $items = $this->getExerciseItemDao()->findItemsByExerciseId($exerciseId);
-        $itemsResults = $this->getItemResultDao()->findItemsResultsbyExerciseIdAndUserId($exerciseId,$userId);
+        $itemsResults = $this->getItemResultDao()->findItemResultsbyExerciseIdAndUserId($exerciseId,$userId);
         $indexdItems = ArrayToolkit::index($items, 'questionId');
         $indexdItemsResults = ArrayToolkit::index($itemsResults, 'questionId');
 
@@ -194,7 +194,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         //finished
         $rightItemCount = 0;
 
-        $exerciseItemsRusults = $this->getItemResultDao()->findItemsResultsbyExerciseId($id);
+        $exerciseItemsRusults = $this->getItemResultDao()->findItemResultsbyExerciseId($id);
 
         foreach ($exerciseItemsRusults as $key => $exerciseItemRusult) {
             if ($exerciseItemRusult['status'] == 'right') {

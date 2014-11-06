@@ -35,13 +35,13 @@ class ExerciseItemResultDaoImpl extends BaseDao implements ExerciseItemResultDao
         return $this->getConnection()->delete($this->table,array('exerciseId'=>$exerciseId));
 	}
 
-	public function findItemsResultsbyExerciseId($exerciseId)
+	public function findItemResultsbyExerciseId($exerciseId)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE exerciseId = ? ";
         return $this->getConnection()->fetchAll($sql,array($exerciseId)) ? : array();
 	}
 
-	public function findItemsResultsbyExerciseIdAndUserId($exerciseId,$userId)
+	public function findItemResultsbyExerciseIdAndUserId($exerciseId,$userId)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE exerciseId = ? AND userId = ?";
         return $this->getConnection()->fetchAll($sql,array($exerciseId,$userId)) ? : array();
