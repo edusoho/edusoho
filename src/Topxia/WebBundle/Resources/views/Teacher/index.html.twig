@@ -30,7 +30,7 @@
               <button class="btn btn-default pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</button>
 
               <h4 class="media-heading">
-                <a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                <a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.truename }}</a>
               </h4>
               <div class="teacher-title">
                 {% if teacher.title %}

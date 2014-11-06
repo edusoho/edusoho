@@ -345,7 +345,7 @@ class TestpaperController extends BaseController
                 $lessons = $this->getCourseService()->findLessonsByIds(array($targets[$testpaperResult['target']]['id']));
                 if (!empty($lessons[$targets[$testpaperResult['target']]['id']])) {
                     $lesson = $lessons[$targets[$testpaperResult['target']]['id']];
-                    $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
+                    $user->isAdmin() ? : $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
                 }
             }
             
