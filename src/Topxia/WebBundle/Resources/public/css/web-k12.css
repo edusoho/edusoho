@@ -1113,14 +1113,21 @@ ul.schedule-lesson-list .item-div .finished-icon .text-success{
     margin-top: 25px; 
 }
 
+.list-group-panel .myteaching-menu.list-group-item.active {
+    color: #57c332;
+    border-left: 3px solid #57c332;
+}
 
 .myteaching-menu {
     position: relative;
 }
 
+.myteaching-menu .k12-iconfont {
+    font-size: 20px;
+}
 
 .myteaching-menu .myteaching-text {
-    margin-left: 40px;
+    margin-left: 10px;
     font-size: 16px;
 }
 

@@ -24,27 +24,27 @@
             <div class="list-group-panel">
               <ul class="list-group">
                 <a class="myteaching-menu list-group-item {% if side_nav == 'my-teaching' %} active {% endif %}" href="{{path('my_teaching')}}">
-                  <div class="myteaching-icon myteaching"></div>
+                  <span class="k12-iconfont icon-book"></span>
                   <span class="myteaching-text">我的教学</span>
                 </a>
                 <a class="myteaching-menu list-group-item {% if side_nav == 'my-teaching-courses' %} active {% endif %}" href="{{path('my_teaching_courses',{classId:'all'})}}">
-                  <div class="myteaching-icon myteaching-course"></div>
+                  <span class="k12-iconfont icon-zaixue"></span>
                   <span class="myteaching-text">在教课程</span>
                 </a>
                 <a class="myteaching-menu list-group-item {% if side_nav == 'my-task' %} active {% endif %}" href="{{path('my_teaching_task') }}">
-                  <div class="myteaching-icon learning-progress"></div>
+                  <span class="k12-iconfont icon-chart-icon"></span>
                   <span class="myteaching-text">学生学习进度</span>
                 </a>
                 <a class="myteaching-menu list-group-item {% if side_nav == 'my-teaching-questions' %} active {% endif %}" href="{{path('my_teaching_threads', {type:'question'}) }}">
-                  <div class="myteaching-icon question"></div>
+                  <span class="k12-iconfont icon-huida"></span>
                   <span class="myteaching-text">学生问答</span>
                 </a>
                 <a class="myteaching-menu list-group-item {% if side_nav == 'my-teaching-discussions' %} active {% endif %}" href="{{path('my_teaching_threads', {type:'discussion'}) }}">
-                  <div class="myteaching-icon topic"></div>
+                  <span class="k12-iconfont icon-taolun"></span>
                   <span class="myteaching-text">学生话题</span>
                 </a>
                 <a class="myteaching-menu list-group-item {% if side_nav == 'my-teaching-check' %} active {% endif %}" href="{{path('course_manage_list_teacher_test_reviewing') }}">
-                  <div class="myteaching-icon examine"></div>
+                  <span class="k12-iconfont icon-shijuan"></span>
                   <span class="myteaching-text">我的批阅</span>
                 </a>
               </ul>
