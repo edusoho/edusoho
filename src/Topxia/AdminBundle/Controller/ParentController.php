@@ -65,15 +65,15 @@ class ParentController extends BaseController
                 
             $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER','ROLE_PARENT'));
 
-            // foreach ($formData['numbers'] as $key => $value) {
-            //     $formData['numbers'][$key]=trim($value);
-            // }
+            foreach ($formData['ids'] as $key => $value) {
+                $formData['ids'][$key]=trim($value);
+            }
             $children=$this->getUserService()->findUsersByIds($formData['ids']);
-            // $childrenNumbers=ArrayToolkit::column($children, 'number');
-            // $diffIds=array_diff($formData['numbers'], $childrenNumbers);
-            // if(!empty($diffIds)){
-            //     throw $this->createNotFoundException('学号为'.$diffIds[0].'的学生不存在！');
-            // }
+            $childrenIds=ArrayToolkit::column($children, 'id');
+            $diffIds=array_diff($formData['ids'], $childrenIds);
+            if(!empty($diffIds)){
+                throw $this->createNotFoundException('id为'.$diffIds[0].'的学生不存在！');
+            }
 
             foreach ($children as $child) {
                 $userRelation['fromId']=$user['id'];
@@ -118,15 +118,15 @@ class ParentController extends BaseController
             $this->getUserService()->deleteUserRelationsByFromIdAndType($id,'family');
             $this->getClassesService()->deleteClassMemberByUserId($id);
 
-            // foreach ($fields['numbers'] as $key => $value) {
-            //     $fields[$key]=trim($value);
-            // }
+            foreach ($formData['ids'] as $key => $value) {
+                $formData['ids'][$key]=trim($value);
+            }
             $children=$this->getUserService()->findUsersByIds($fields['ids']);
-            // $childrenNumbers=ArrayToolkit::column($children, 'number');
-            // $diffIds=array_diff($fields['numbers'], $childrenNumbers);
-            // if(!empty($diffIds)){
-            //     throw $this->createNotFoundException('学号为'.$diffIds[0].'的学生不存在！');
-            // }
+            $childrenIds=ArrayToolkit::column($children, 'id');
+            $diffIds=array_diff($formData['ids'], $childrenIds);
+            if(!empty($diffIds)){
+                throw $this->createNotFoundException('id为'.$diffIds[0].'的学生不存在！');
+            }
 
             foreach ($children as $child) {
                 $userRelation['fromId']=$user['id'];

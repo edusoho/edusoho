@@ -58,7 +58,7 @@ class StudentController extends BaseController
     {
         $matchStr = $request->query->get('q');
 
-        if(!eregi("[^\x80-\xff]","$matchStr")){
+        if(!!preg_match('/^[\x{4e00}-\x{9fa5}]{1,5}$/u', $matchStr)){
             $conditions = array(
                 'role' => 'ROLE_USER',
                 'truename'=> $matchStr 
@@ -69,12 +69,11 @@ class StudentController extends BaseController
                 'numberLike'=> $matchStr 
             );
         }
-        $total = $this->getUserService()->searchUserCount($conditions);
         $users = $this->getUserService()->searchUsers(
             $conditions,
             array('id','ASC'),
             0,
-            $total
+            10
         );
 
         $response = array();
@@ -84,7 +83,7 @@ class StudentController extends BaseController
             $temp['name'] = $user['truename'].'('.$user['number'].')';
             $response[] = $temp;
         }
-        return new Response(json_encode($response)); 
+        return  $this->createJsonResponse($response); 
     }
 
     protected function getClassesService()
