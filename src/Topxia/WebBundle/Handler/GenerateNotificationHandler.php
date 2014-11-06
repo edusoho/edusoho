@@ -54,7 +54,7 @@ class GenerateNotificationHandler
 		}
 
 		$vipApp = $this->getAppService()->findInstallApp('Vip');
-		if(!empty($vipApp) && version_compare($vipApp['version'], "1.0.6", ">="){
+		if(!empty($vipApp) && version_compare($vipApp['version'], "1.0.6", ">=")){
 			$vipSetting = $this->getSettingService()->get('vip', array());
 			if($vipSetting["notificationStatus"] == 1) {
 				$vip = $this->getVipService()->getMemberByUserId($user["id"]);
