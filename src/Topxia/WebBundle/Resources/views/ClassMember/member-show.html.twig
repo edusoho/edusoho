@@ -99,13 +99,14 @@
                   {{ setting('point', '学分').name|default('学分') }}：<span class="text-danger">{{student.point}}</span>
                 {% endif %}
                 
-                <div class="actions clearfix">
+                <div style="padding-right:15px" class="actions clearfix">
                   {% if app.user.id != student.id %}
                     <button class="btn btn-xs btn-success pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:student.id})}}">发私信</button>
                   {% endif %}
                 </div>
               </div>
               {% if app.user.isTeacher() %}
+                <div style="color:#f6f6f6;"><hr></div>
                 <div style="margin-top:10px" class="list-group">
                   {% for relation in relations[student.id]|default('') %}
                     {% set parent=parents[relation.fromId]|default('') %}
@@ -116,8 +117,11 @@
                             <button class="btn btn-xs btn-success pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:parent.id})}}">发私信</button>
                           {% endif %}
                         </div>
-                        <div class="">
-                          {{ dict_text('family', relation.relation)}}{{parent.truename}}
+                        <div class="parent-name">
+                          <small class="text-muted">
+                            {{ dict_text('family', relation.relation)}}
+                          </small>
+                          {{parent.truename}}
                         </div>
                       </a>
                     {% endif %}
