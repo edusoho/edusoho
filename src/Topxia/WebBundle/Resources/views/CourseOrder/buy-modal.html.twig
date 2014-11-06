@@ -246,7 +246,7 @@
         <span class="text-muted">预览模式无法支付</span>
         <button class="btn btn-primary" disabled="disabled">去支付</button> 
       {% else %}
-        <button id="course-pay" class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
+        <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="正在创建订单..." data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
       {% endif %}
     {% endif %}
   {% else %}
@@ -255,7 +255,7 @@
       <button class="btn btn-primary" disabled="disabled">加入学习</button> 
     {% else %}  
       {% if not avatarAlert %}
-        <button id="join-course-btn" class="btn btn-primary" data-submiting-text="正在加入" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
+        <button id="join-course-btn" class="btn btn-primary" data-loading-text="正在加入..." type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
       {% endif %}
     {% endif %}
 
