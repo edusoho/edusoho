@@ -14,6 +14,26 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		return $this->formData;
 	}
 
+	public function getLessonNote()
+	{
+		$courseId = $this->getParam("courseId");
+	    	$lessonId = $this->getParam("lessonId");
+
+	    	$user = $this->controller->getUserByToken($this->request);
+	    	if(!$user->isLogin()){
+	    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
+	    	}
+
+	    	$lessonNote =  $this->controller->getNoteService()->getUserLessonNote($user['id'], $lessonId);
+	    	$lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+	    	$lessonNote['lessonTitle'] = $lesson['title'];
+	    	$lessonNote['lessonNum'] = $lesson['number'];
+	    	$content = $this->controller->convertAbsoluteUrl($this->request, $lessonNote['content']);;
+	    	$content = $this->filterNote($content);
+	    	$lessonNote['content'] = $content;
+	    	return $lessonNote;
+	}
+
 	public function getCourseMember()
 	{
 		$courseId = $this->getParam("courseId");

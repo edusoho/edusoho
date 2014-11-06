@@ -85,6 +85,12 @@ interface CourseProcessor
 	* 获取课程所有笔记
 	*/
 	public function getCourseNotes();
+
+	/**
+	*获取课时笔记
+	*/
+	public function getLessonNote();
+
 	/**
 	 *
 	 *添加一条笔记
