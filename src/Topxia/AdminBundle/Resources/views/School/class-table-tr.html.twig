@@ -6,9 +6,9 @@
     <a title="编辑" href="{{ path('admin_school_class_editor', { type:'edit', classId:class.id, search:app.request.query.all() }) }}">
       <span class="glyphicon glyphicon-pencil col-md-3 button"></span>
     </a>
-    <a title="删除" href="{{ path('admin_school_class_delete', { classId:class.id }) }}" onClick=" return confirm('您确定删除吗？')">
+    <a title="删除" class="class-remove" href="javascript:;" data-stunum="{{class.studentNum}}" data-url="{{ path('admin_school_class_delete', { classId:class.id }) }}" {# onClick=" return confirm('您确定删除吗？')" #}>
       <span class="glyphicon glyphicon-trash col-md-3 button"></span>
-    </a>
+    </a> 
     <a title="学生管理" href="{{ path('admin_school_class_student', { classId:class.id }) }}">
       <span class="glyphicon glyphicon-user col-md-3 button"></span>
     </a>
