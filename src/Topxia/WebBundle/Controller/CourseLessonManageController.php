@@ -361,8 +361,11 @@ class CourseLessonManageController extends BaseController
 
 	public function sortAction(Request $request, $id)
 	{
-		$course = $this->getCourseService()->tryManageCourse($id);
-		$this->getCourseService()->sortCourseItems($course['id'], $request->request->get('ids'));
+		$ids = $request->request->get('ids');
+		if(!empty($ids)){
+			$course = $this->getCourseService()->tryManageCourse($id);
+			$this->getCourseService()->sortCourseItems($course['id'], $request->request->get('ids'));
+		}
 		return $this->createJsonResponse(true);
 	}
 
