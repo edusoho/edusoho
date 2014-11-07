@@ -115,7 +115,7 @@ class CourseLessonManageController extends BaseController
 				unset($lesson['second']);
 			}
 			$lesson = $this->getCourseService()->createLesson($lesson);
-
+			$file = false;
 			if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
 				$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 				$lesson['mediaStatus'] = $file['convertStatus'];
