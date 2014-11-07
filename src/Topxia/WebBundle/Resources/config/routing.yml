@@ -291,10 +291,6 @@ course_lesson_show:
     pattern:  /course/{courseId}/lesson/{lessonId}
     defaults: { _controller: TopxiaWebBundle:CourseLesson:show }
 
-course_lesson_homework_show:
-    pattern:  /course/{courseId}/lesson/{lessonId}/homework
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:lessonHomeworkShow }
-
 course_lesson_preview:
     pattern:  /course/{courseId}/lesson/{lessonId}/preview
     defaults: { _controller: TopxiaWebBundle:CourseLesson:preview }
@@ -370,10 +366,6 @@ course_lesson_plugin_note_save:
     pattern:  /lessonplugin/note/save
     defaults: { _controller: TopxiaWebBundle:LessonNotePlugin:save }
     methods: [POST]
-
-course_lesson_plugin_homework_list:
-    pattern:  /lessonplugin/homework/list
-    defaults: { _controller: TopxiaWebBundle:LessonHomeworkPlugin:list }
 
 course_review_create:
     pattern:  /course/{id}/review/create
@@ -604,94 +596,6 @@ course_manage_lesson_sort:
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:sort }
     methods: [POST]
 
-course_exercise_start_do:
-    pattern: /course/{courseId}/exercise/{exerciseId}/startDo
-    defaults: { _controller: TopxiaWebBundle:CourseExercise:startDo }
-
-course_exercise_do:
-    pattern: /course/{courseId}/exercise/{exerciseId}/do/{resultId}
-    defaults: { _controller: TopxiaWebBundle:CourseExercise:do }
-
-course_exercise_result:
-    pattern: /course/{courseId}/exercise/{exerciseId}/result/{resultId}/{userId}
-    defaults: { _controller: TopxiaWebBundle:CourseExercise:result }
-
-course_homework_start_do:
-    pattern: /course/{courseId}/homework/{homeworkId}/startDo
-    defaults: { _controller: TopxiaWebBundle:CourseHomework:startDo }
-
-course_homework_do:
-    pattern: /course/{courseId}/homework/{homeworkId}/do/{resultId}
-    defaults: { _controller: TopxiaWebBundle:CourseHomework:do }
-
-course_homework_result:
-    pattern: /course/{courseId}/homework/{homeworkId}/result/{resultId}/{userId}
-    defaults: { _controller: TopxiaWebBundle:CourseHomework:result }
-
-course_homework_check:
-    pattern: /course/{courseId}/homework/{homeworkId}/check/{userId}
-    defaults: { _controller: TopxiaWebBundle:CourseHomework:check }
-
-course_homework_check_list:
-    pattern: /course/{courseId}/check/homework/{status}/list
-    defaults: { _controller: TopxiaWebBundle:CourseHomework:checkList }
-
-course_homework_check_show:
-    pattern: /course/{courseId}/homework/{homeworkId}/check/show/{userId}
-    defaults: { _controller: TopxiaWebBundle:CourseHomework:checkShow }
-
-course_homework_preview:
-    pattern: /course/{courseId}/homework/{homeworkId}/preview
-    defaults: { _controller: TopxiaWebBundle:CourseHomework:preview }
-
-course_homework_submit:
-    pattern: /course/{courseId}/homework/{homeworkId}/submit
-    defaults: { _controller: TopxiaWebBundle:CourseHomework:submit }
-
-course_exercise_submit:
-    pattern: /course/{courseId}/exercise/{exerciseId}/submit
-    defaults: { _controller: TopxiaWebBundle:CourseExercise:submit }
-
-course_homework_save:
-    pattern: /course/{courseId}/homework/{homeworkId}/save
-    defaults: { _controller: TopxiaWebBundle:CourseHomework:save }
-
-course_homework_continue:
-    pattern: /course/{courseId}/homework/{homeworkId}/continue/{resultId}
-    defaults: { _controller: TopxiaWebBundle:CourseHomework:continue }
-
-course_manage_lesson_homework_preview:
-    pattern: /course/{courseId}/manage/homework/{id}/review
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:preview }
-
-course_manage_lesson_homework_result:
-    pattern: /homework/{id}/result
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:homeworkResult }
-
-course_manage_lesson_homework_create:
-    pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/create
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:create }
-
-course_manage_lesson_homework_edit:
-    pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/edit
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:edit }
-
-course_manage_lesson_homework_remove:
-    pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/remove
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:remove }
-
-course_manage_homework_items:
-    pattern: /course/{courseId}/manage/homework/{homeworkId}/items
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:homeworkItems }
-
-course_manage_homework_item_picker:
-    pattern: /course/{courseId}/manage/item_picker
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:homeworkItemPicker }
-
-course_manage_homework_item_picked:
-    pattern: /course/{courseId}/manage/item_picked
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:homeworkItemPicked }
-
 course_manage_lesson_edit:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:edit }
@@ -714,26 +618,6 @@ course_manage_lesson_unpublish:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/unpublish
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:unpublish }
     methods: [POST]
-
-course_exercise_create:
-    pattern:  /course/{courseId}/lesson/{lessonId}/exercise/create
-    defaults: { _controller: TopxiaWebBundle:CourseExerciseManage:createExercise }
-
-course_exercise_update:
-    pattern:  /course/{courseId}/lesson/{lessonId}/exercise/{id}/update
-    defaults: { _controller: TopxiaWebBundle:CourseExerciseManage:updateExercise }
-
-course_exercise_delete:
-    pattern:  /course/{courseId}/lesson/{lessonId}/exercise/{id}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseExerciseManage:deleteExercise }
-
-course_exercise_check:
-    pattern:  /course/{courseId}/lesson/{lessonId}/exercise/check
-    defaults: { _controller: TopxiaWebBundle:CourseExerciseManage:buildCheck }
-
-course_homework_list:
-    pattern:  /course/{courseId}/lesson/{lessonId}/homework/list
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:homeworkList }
 
 question_file_url:
     pattern: /question_ajax/file_url
@@ -1181,14 +1065,6 @@ my_show_favorite_question:
 my_favorite_question_preview:
     pattern: /my/favorite/question/{id}/preview
     defaults: { _controller: TopxiaWebBundle:MyQuestion:preview }
-
-my_teaching_homework_list:
-    pattern: /my/teaching/homework/list
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:teachingList }
-
-my_homework_list:
-    pattern: /my/homework/list
-    defaults: { _controller: TopxiaWebBundle:CourseHomeworkManage:list }
 
 user_show: 
     pattern:  /user/{id}

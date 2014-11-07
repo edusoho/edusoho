@@ -439,7 +439,7 @@ class CourseLessonManageController extends BaseController
     
     private function getHomeworkService()
     {
-        return $this->getServiceKernel()->createService('Course.HomeworkService');
+        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
     }
 
     private function getTestpaperService()
@@ -464,7 +464,7 @@ class CourseLessonManageController extends BaseController
     
     private function getExerciseService()
     {
-    	return $this->getServiceKernel()->createService('Course.ExerciseService');
+    	return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
     }
 
     private function getQuestionService()

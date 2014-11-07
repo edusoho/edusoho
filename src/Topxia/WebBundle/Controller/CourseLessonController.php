@@ -254,17 +254,6 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($json);
     }
 
-    public function lessonHomeworkShowAction(Request $request, $courseId, $lessonId)
-    {
-        $user = $this->getCurrentUser();
-        $homework = $this->getHomeworkService()->getHomeworkByLessonId($lessonId);
-        $homework = $this->getHomeworkService()->getResultByHomeworkIdAndUserId($homework['id'],$user['id']);
-        if (empty($homework)) {
-            return $this->createJsonResponse(array('status'=>'none'));
-        }
-        return $this->createJsonResponse($homework);
-    }
-
     public function mediaAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
@@ -425,8 +414,6 @@ class CourseLessonController extends BaseController
     public function learnFinishAction(Request $request, $courseId, $lessonId)
     {
         $user = $this->getCurrentUser();
-        $homework = $this->getHomeworkService()->getHomeworkByLessonId($lessonId);
-        $homework = $this->getHomeworkService()->getResultByHomeworkIdAndUserId($homework['id'],$user['id']);
 
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
@@ -435,7 +422,6 @@ class CourseLessonController extends BaseController
         $response = array(
             'learnedNum' => empty($member['learnedNum']) ? 0 : $member['learnedNum'],
             'isLearned' => empty($member['isLearned']) ? 0 : $member['isLearned'],
-            'homeworkStatus' => empty($homework['status']) ? 'none' : $homework['status'],
         );
 
         return $this->createJsonResponse($response);
@@ -534,11 +520,6 @@ class CourseLessonController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    private function getHomeworkService()
-    {
-        return $this->getServiceKernel()->createService('Course.HomeworkService');
     }
 
     private function getDiskService()

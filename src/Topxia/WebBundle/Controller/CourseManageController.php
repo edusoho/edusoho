@@ -34,7 +34,6 @@ class CourseManageController extends BaseController
         }
 
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
-
         if ($course['type'] == 'live') {
             $client = LiveClientFactory::createClient();
             $liveCapacity = $client->getCapacity();
