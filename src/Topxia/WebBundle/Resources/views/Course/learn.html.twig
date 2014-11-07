@@ -41,13 +41,15 @@
             {% if setting('storage.video_fingerprint') and app.user %}
               data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
             {% endif %}
+              data-user-id="{{ app.user.id }}"
           ></div>
           <div class="watermarkEmbedded" ></div>
  
           <div class="lesson-content lesson-content-audio" id="lesson-audio-content" data-role="lesson-content" style="display:none;"></div>
           <div class="lesson-content" id="lesson-swf-content" data-role="lesson-content" style="display:none;"></div>
           <div class="lesson-content" id="lesson-iframe-content" data-role="lesson-content" style="display:none;"></div>
-          <div class="lesson-content lesson-content-text" id="lesson-text-content" data-role="lesson-content" style="display:none;">
+          <div class="lesson-content lesson-content-text" id="lesson-text-content" data-role="lesson-content" style="display:none;"
+          {% if setting('course.copy_enabled')|default(0) > 0 %} oncopy="return false;" oncut="return false;" onselectstart="return false" oncontextmenu="return false;"{% endif %}>
             <div class="lesson-content-text-body"></div>
           </div>
           <div class="lesson-content lesson-content-text" id="lesson-live-content" data-role="lesson-content" style="display:none;">

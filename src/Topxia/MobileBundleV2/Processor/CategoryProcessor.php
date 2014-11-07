@@ -1,7 +1,7 @@
 <?php
-namespace Topxia\MobileBundleV2\Service;
+namespace Topxia\MobileBundleV2\Processor;
 
-interface CategoryService
+interface CategoryProcessor
 {
 	public function getCategories();
 	public function getAllCategories();

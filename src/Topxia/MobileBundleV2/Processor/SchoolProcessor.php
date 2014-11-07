@@ -1,7 +1,7 @@
 <?php
-namespace Topxia\MobileBundleV2\Service;
+namespace Topxia\MobileBundleV2\Processor;
 
-interface SchoolService
+interface SchoolProcessor
 {
 	public function getSchoolSite();
 	public function getSchoolSiteByQrCode();

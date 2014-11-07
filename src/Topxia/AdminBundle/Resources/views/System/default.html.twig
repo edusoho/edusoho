@@ -21,8 +21,7 @@
     </div>
   </fieldset>
 
-{% if hasOwnCopyright %}
-
+  {% if setting('copyright.owned') %}
   <fieldset>
     <legend>课程默认图片</legend>
     <div class="form-group">
@@ -34,7 +33,7 @@
       </div>
     </div>
   </fieldset>
-{% endif %}
+  {% endif %}
 
   <div class="page-header" style="display:none;"><h1>分享内容</h1></div>
 <legend></legend>

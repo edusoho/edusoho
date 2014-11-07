@@ -1,10 +1,10 @@
 <?php
 
-namespace Topxia\MobileBundleV2\Service;
+namespace Topxia\MobileBundleV2\Processor;
 
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
-class BaseService {
+class BaseProcessor {
     public $formData;
     public $controller;
     public $request;
@@ -16,9 +16,9 @@ class BaseService {
     }
     public static function getInstance($class, $controller) {
         $instance = new $class($controller);
-        $serviceDelegator = new serviceDelegator($instance);
-        $instance->setDelegator($serviceDelegator);
-        return $serviceDelegator;
+        $processorDelegator = new ProcessorDelegator($instance);
+        $instance->setDelegator($processorDelegator);
+        return $processorDelegator;
     }
     protected function getParam($name, $default = null) {
         $result = $this->request->request->get($name, $default);
@@ -37,8 +37,8 @@ class BaseService {
         $this->request->request->set($name, $value);
     }
 
-    public function setDelegator($serviceDelegator) {
-        $this->delegator = $serviceDelegator;
+    public function setDelegator($processorDelegator) {
+        $this->delegator = $processorDelegator;
     }
     public function getDelegator() {
         return $this->delegator;
@@ -186,9 +186,38 @@ class BaseService {
             'splashs' => $splashs,
             'apiVersionRange' => array(
                 "min" => "1.0.0",
-                "max" => "2.0.0"
+                "max" => "2.0.1"
             ) ,
         );
+    }
+
+    protected function curlRequest($method, $url, $params = array())
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_USERAGENT, "video request");
+
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 20);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+
+        if (strtoupper($method) == 'POST') {
+            curl_setopt($curl, CURLOPT_POST, 1);
+            $params = http_build_query($params);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+        } else {
+            if (!empty($params)) {
+                $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
+            }
+        }
+
+        curl_setopt($curl, CURLOPT_URL, $url );
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        return $response;
     }
 }
 
