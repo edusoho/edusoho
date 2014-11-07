@@ -115,14 +115,14 @@ define(function(require, exports, module) {
             }
         });
 
-        $("input[name='notificationStatus']").change(function(){
+        $("input[name='deadlineNotify']").change(function(){
             var element = $(this);
             if(element.val()=='active') {
-                $("#courseNotificationDuration").show();
-                $("#notificationStatusBlock").hide();
+                $("#courseDaysOfNotifyBeforeDeadline").show();
+                $("#deadlineNotifyBlock").hide();
             } else {
-                $("#courseNotificationDuration").hide();
-                $("#notificationStatusBlock").show();
+                $("#courseDaysOfNotifyBeforeDeadline").hide();
+                $("#deadlineNotifyBlock").show();
             }
         })
 

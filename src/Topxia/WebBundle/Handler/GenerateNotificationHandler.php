@@ -47,19 +47,19 @@ class GenerateNotificationHandler
 			$this->getNotificationService()->notify($user["id"], "default", 
                 "您加入的课程<a href='{$courseUrl}'>《{$course['title']}》</a>将在".date("Y年m月d日",$courseMembers[$course["id"]]["deadline"])."到期。");
 			$courseMemberId = $courseMembers[$course["id"]]["id"];
-			$this->getCourseService()->updateCourseMember($courseMemberId, array("notified"=>1));
+			$this->getCourseService()->updateCourseMember($courseMemberId, array("deadlineNotified"=>1));
 		}
 
 		$vipApp = $this->getAppService()->findInstallApp('Vip');
 		if(!empty($vipApp) && version_compare($vipApp['version'], "1.0.5", ">=")){
 			$vipSetting = $this->getSettingService()->get('vip', array());
-			if(array_key_exists("notificationStatus", $vipSetting) && $vipSetting["notificationStatus"] == 1) {
+			if($vipSetting["deadlineNotify"] == 1) {
 				$vip = $this->getVipService()->getMemberByUserId($user["id"]);
 				$currentTime = time();
-				if($vip["notified"] != 1 && $currentTime < $vip["deadline"] && ($currentTime + $vipSetting["notificationDuration"]*24*60*60) > $vip["deadline"]) {
+				if($vip["deadlineNotified"] != 1 && $currentTime < $vip["deadline"] && ($currentTime + $vipSetting["daysOfNotifyBeforeDeadline"]*24*60*60) > $vip["deadline"]) {
 					$this->getNotificationService()->notify($user["id"], "default", 
                 			"您购买的会员将在".date("Y年m月d日",$vip["deadline"])."到期。");
-					$this->getVipService()->updateNotified($vip["id"], 1);
+					$this->getVipService()->updateDeadlineNotified($vip["id"], 1);
 				}
 			}
 		}
