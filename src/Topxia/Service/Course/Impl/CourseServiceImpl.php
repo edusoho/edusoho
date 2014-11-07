@@ -360,8 +360,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'maxStudentNum' => 0,
 			'freeStartTime' => 0,
 			'freeEndTime' => 0,
-			'notificationStatus' => 'none',
-			'notificationDuration' => 0
+			'deadlineNotify' => 'none',
+			'daysOfNotifyBeforeDeadline' => 0
 		));
 		
 		if (!empty($fields['about'])) {
@@ -1506,30 +1506,24 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function findWillOverdueCourses()
 	{
 		$currentUser = $this->getCurrentUser();
-		if (empty($currentUser) && !array_key_exists("id", $currentUser)) {
+		if (!$currentUser->isLogin()) {
 			throw $this->createServiceException('用户未登录');
 		}
-		$courseMembers = $this->getMemberDao()->findAllMemberByUserIdAndRole($currentUser["id"],"student");
+		$courseMembers = $this->getMemberDao()->findCourseMembersByUserId($currentUser["id"]);
 
-		$willOverdueCourses = array();
-		foreach ($courseMembers as $key => $courseMember) {
-			if($courseMember["notified"] == 0){
-				$willOverdueCourses[] = $courseMember;
-			}
-		}
-
-		$courseIds = ArrayToolkit::column($willOverdueCourses, "courseId");
+		$courseIds = ArrayToolkit::column($courseMembers, "courseId");
 		$courses = $this->findCoursesByIds($courseIds);
 
-		$courseMembers = ArrayToolkit::index($willOverdueCourses, "courseId");
+		$courseMembers = ArrayToolkit::index($courseMembers, "courseId");
 
 		$shouldNotifyCourses = array();
 		$shouldNotifyCourseMembers = array();
+		
+		$currentTime = time();
 		foreach ($courses as $key => $course) {
-			if($course['notificationStatus'] == "active") {
+			if($course['deadlineNotify'] == "active") {
 				$courseMember = $courseMembers[$course["id"]];
-				$currentTime = time();
-				if($currentTime < $courseMember["deadline"]  && ($course["notificationDuration"]*24*60*60+$currentTime) > $courseMember["deadline"]){
+				if($currentTime < $courseMember["deadline"]  && ($course["daysOfNotifyBeforeDeadline"]*24*60*60+$currentTime) > $courseMember["deadline"]){
 					$shouldNotifyCourses[] = $course;
 					$shouldNotifyCourseMembers[] = $courseMember;
 				}
