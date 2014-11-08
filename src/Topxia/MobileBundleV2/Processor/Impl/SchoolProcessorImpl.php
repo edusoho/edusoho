@@ -79,7 +79,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             "show"=>$cilentVersion["updateMode"],
             "code"=>$cilentVersion["versionCode"],
             "androidVersion"=>$cilentVersion["version"],
-            "updateInfo"=>$cilentVersion["updateInfo"]
+            "updateInfo"=>$cilentVersion["updateInfo"],
             "updateUrl"=>$cilentVersion["url"]
             );
         return $result;
