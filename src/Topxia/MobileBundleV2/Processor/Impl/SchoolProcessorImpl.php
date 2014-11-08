@@ -63,12 +63,8 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public function getDownloadUrl()
     {
-        $code = $this->request->get("code", "EduSoho");
-        return $this->controller->render('TopxiaMobileBundleV2:Content:download.html.twig', array(
-            "code"=>$code,
-            "iphoneUrl"=>$code == "EduSoho" ? "https://itunes.apple.com/cn/app/kuo-zhi-xue-tang/id887301045" : "#"
-            )
-        );
+        $code = $this->request->get("code", "edusoho");
+        return $this->controller->redirect("http://www.edusoho.com/download/mobile?code=" . $code);
     }
 
     public function getClientVersion()
