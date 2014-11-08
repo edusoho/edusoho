@@ -73,14 +73,14 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public function getClientVersion()
     {
-        $cilentVersion = $this->sendRequest("GET", "http://www.edusoho.com/version/edusoho-android", array());
-
+        $clientVersion = $this->sendRequest("GET", "http://www.edusoho.com/version/edusoho-android", array());
+        $clientVersion = json_decode($clientVersion); 
         $result = array(
-            "show"=>$cilentVersion["updateMode"],
-            "code"=>$cilentVersion["versionCode"],
-            "androidVersion"=>$cilentVersion["version"],
-            "updateInfo"=>$cilentVersion["updateInfo"],
-            "updateUrl"=>$cilentVersion["url"]
+            "show"=>$clientVersion->updateMode,
+            "code"=>$clientVersion->versionCode,
+            "androidVersion"=>$clientVersion->version,
+            "updateInfo"=>$clientVersion->updateInfo,
+            "updateUrl"=>$clientVersion->url
             );
         return $result;
     }
