@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle:Question:question-choice-finished.html.twig' %}
+
+{% block body %}
+
+  {% include 'TopxiaWebBundle:Question:question-choice-options-result.html.twig' %}
+
+{% set itemResultAnswer = itemResult.answer|default(null)  %}
+
+{% if itemResultAnswer >= 0 %}
+ {% set choiceIndex = (65+itemResult.answer)|chr %}
+  <div class="homework-question-result">
+    {% if itemResult.status == 'right' %}
+	  <span class="glyphicon glyphicon-ok question-text-success"></span> 你答对了!
+    {% elseif itemResult.status == 'wrong' %}
+     <span class="glyphicon glyphicon-remove question-text-danger"></span> 你答错了,你选择了<strong class="question-text-danger">{{ choiceIndex }}</strong>
+	 {% elseif itemResult.status == 'noAnswer' %}
+　　　  <span class="glyphicon glyphicon-remove question-text-danger"></span>你未答题
+    {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

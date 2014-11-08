@@ -207,7 +207,7 @@ class CourseController extends BaseController
 	 * 如果用户未购买该课程，那么显示课程的营销界面。
 	 */
 	public function showAction(Request $request, $id)
-	{	
+	{
 
 		$course = $this->getCourseService()->getCourse($id);
 

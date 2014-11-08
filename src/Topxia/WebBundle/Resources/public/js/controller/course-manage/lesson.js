@@ -104,6 +104,28 @@ define(function(require, exports, module) {
             });
         });
 
+        $list.on('click', '.delete-exercise-btn', function(e) {
+            if (!confirm('您真的要删除该课时练习吗？')) {
+                return ;
+            }
+            var $btn = $(e.currentTarget);
+            $.post($(this).data('url'), function(response) {
+                Notify.success('练习已删除！');
+                window.location.reload();
+            }, 'json');
+        });
+
+        $list.on('click', '.delete-homework-btn', function(e) {
+            if (!confirm('您真的要删除该课时作业吗？')) {
+                return ;
+            }
+            var $btn = $(e.currentTarget);
+            $.post($(this).data('url'), function(response) {
+                Notify.success('作业已删除！');
+                window.location.reload();
+            }, 'json');
+        });
+
         Sticky('.lesson-manage-panel .panel-heading', 0, function(status){
             if (status) {
                 var $elem = this.elem;
@@ -117,6 +139,25 @@ define(function(require, exports, module) {
 
         $("#course-item-list .item-actions .btn-link").tooltip();
         $("#course-item-list .fileDeletedLesson").tooltip();
+
+        $('.dropdown-menu').parent().on('shown.bs.dropdown', function () {
+            if ($(this).find('.dropdown-menu-more').css('display') == 'block') {
+                $(this).parent().find('.dropdown-menu-more').mouseout(function(){
+                    $(this).parent().find('.dropdown-menu-more').hide();
+                });
+
+                 $(this).parent().find('.dropdown-menu-more').mouseover(function(){
+                    $(this).parent().find('.dropdown-menu-more').show();
+                });
+
+            } else {
+                $(this).parent().find('.dropdown-menu-more').show();
+            }
+        });
+
+        $('.dropdown-menu').parent().on('hide.bs.dropdown',function() {
+            $(this).find('.dropdown-menu-more').show();
+        });
 
     };
 

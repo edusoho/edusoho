@@ -64,7 +64,6 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order['status'] = 'created';
         $order['createdTime'] = time();
-
         $order = $this->getOrderDao()->addOrder($order);
 
         if ($order['coupon']) {

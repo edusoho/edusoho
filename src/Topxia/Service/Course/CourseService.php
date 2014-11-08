@@ -90,7 +90,7 @@ interface CourseService
 	public function getCourseLesson($courseId, $lessonId);
 
 	public function findCourseDraft($courseId,$lessonId, $userId);
-	
+
 	public function getCourseLessons($courseId);
 
 	public function deleteCourseDrafts($courseId,$lessonId, $userId);
@@ -332,5 +332,4 @@ interface CourseService
 	public function getCourseLessonReplayByLessonId($lessonId);
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
-
 }

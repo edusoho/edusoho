@@ -289,7 +289,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $items = $this->getTestpaperItems($testpaperId);
         $items = ArrayToolkit::index($items, 'questionId');
-
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
         $questions = ArrayToolkit::index($questions, 'id');
 
@@ -311,6 +310,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
 
         }
+
         ksort($formatItems);
         return $formatItems;
     }
