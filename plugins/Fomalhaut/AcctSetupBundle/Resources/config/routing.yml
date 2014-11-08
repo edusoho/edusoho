@@ -1,0 +1,3 @@
+acct_setup_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: AcctSetupBundle:Default:index }

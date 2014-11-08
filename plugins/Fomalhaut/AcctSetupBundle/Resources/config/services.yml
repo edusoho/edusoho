@@ -1,0 +1,7 @@
+parameters:
+#    acct_setup.example.class: fomalhaut\AcctSetupBundle\Example
+
+services:
+#    acct_setup.example:
+#        class: %acct_setup.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

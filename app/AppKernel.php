@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new Test\TestBundle\TestBundle(),
             new Fomalhaut\WechatBundle\WechatBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new fomalhaut\AcctSetupBundle\AcctSetupBundle(),
         );
 
         $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';
