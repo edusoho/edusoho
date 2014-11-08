@@ -24,7 +24,8 @@
         "ezyang/htmlpurifier": "v4.5.0",
         "endroid/qrcode": "1.2.4",
         "phpoffice/phpexcel": "1.8.0",
-        "hwi/oauth-bundle": "0.4.*@dev"
+        "hwi/oauth-bundle": "0.4.*@dev",
+        "sylius/flow-bundle": "~0.12@dev"
     },
     "scripts": {
         "post-install-cmd": [

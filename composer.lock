@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3c67a23b68d16d6b0172e6701834b50c",
+    "hash": "33624b8a1e3cf436e152a1cf8d7104a7",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1572,6 +1572,66 @@
             "time": "2014-10-04 05:53:18"
         },
         {
+            "name": "sylius/flow-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Sylius/SyliusFlowBundle.git",
+                "reference": "a8c24f3ecffe69b23dcf725e97c3d2ad8937bc30"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Sylius/SyliusFlowBundle/zipball/a8c24f3ecffe69b23dcf725e97c3d2ad8937bc30",
+                "reference": "a8c24f3ecffe69b23dcf725e97c3d2ad8937bc30",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/framework-bundle": "~2.1"
+            },
+            "require-dev": {
+                "symfony/yaml": "~2.1"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.12-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sylius\\Bundle\\FlowBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sylius project",
+                    "homepage": "http://sylius.org"
+                },
+                {
+                    "name": "Community contributions",
+                    "homepage": "http://github.com/Sylius/Sylius/contributors"
+                },
+                {
+                    "name": "Paweł Jędrzejewski",
+                    "homepage": "http://pjedrzejewski.com"
+                }
+            ],
+            "description": "Multiple action setups for Symfony2, build your checkouts/installers or whatever needs more than one step to complete.",
+            "homepage": "http://sylius.org",
+            "keywords": [
+                "checkout",
+                "flow",
+                "installation",
+                "steps"
+            ],
+            "time": "2014-10-27 21:29:59"
+        },
+        {
             "name": "symfony/assetic-bundle",
             "version": "v2.3.1",
             "target-dir": "Symfony/Bundle/AsseticBundle",
@@ -2023,7 +2083,8 @@
     "stability-flags": {
         "doctrine/migrations": 20,
         "doctrine/doctrine-migrations-bundle": 20,
-        "hwi/oauth-bundle": 20
+        "hwi/oauth-bundle": 20,
+        "sylius/flow-bundle": 20
     },
     "prefer-stable": true,
     "platform": {
