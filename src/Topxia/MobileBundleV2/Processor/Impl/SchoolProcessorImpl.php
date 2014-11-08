@@ -64,14 +64,14 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     public function getDownloadUrl()
     {
         $code = $this->request->get("code", "edusoho");
-        return $this->controller->redirect("http://www.edusoho.com/download/mobile?code=" . $code);
+        $client = $this->request->get("client", "android");
+        return $this->controller->redirect("http://www.edusoho.com/download/mobile?client={$client}&code=" . $code);
     }
 
     public function getClientVersion()
     {
-        $params = $request->query->all();
         $code = $this->getParam("code", "edusoho");
-        $clientVersion = $this->sendRequest("GET", "http://www.edusoho.com/version/{$code}-android" . http_build_query($params), array());
+        $clientVersion = $this->sendRequest("GET", "http://www.edusoho.com/version/{$code}-android", array());
         if ("{}" == $clientVersion) {
             return null;
         }
