@@ -65,7 +65,7 @@
 			</div>
 
 			<div class="form-group">
-			  <label class="col-md-2 control-label" for="course_expiryDay">开启到期提醒</label>
+			  <label class="col-md-2 control-label">到期提醒</label>
 			  <div class="col-md-8 controls radios">
 			  	{{ radios('deadlineNotify', {'active':'开启', 'none':'关闭'}, course.deadlineNotify|default('none') ) }}
 
@@ -82,9 +82,19 @@
 			  	style="display:none"
 			  	{% endif %}
 			>
-			  <label class="col-md-2 control-label" for="course_expiryDay"></label>
+			  <label class="col-md-2 control-label" >
+			  </label>
+			  <label for="course_daysOfNotifyBeforeDeadline" style="display:none">
+			  	到期日期前的提醒天数
+			  </label>
 			  <div class="col-md-8 controls radios">
-			  	过期日期前的 <input type="text" id="course_daysOfNotifyBeforeDeadline" name="daysOfNotifyBeforeDeadline" required="required" class="form-control width-input width-input-mini" value="{{ course.daysOfNotifyBeforeDeadline }}" data-widget-cid="widget-3"> 天系统自动提醒
+			  	到期日期前的 <input type="text" id="course_daysOfNotifyBeforeDeadline" name="daysOfNotifyBeforeDeadline" required="required" class="form-control width-input width-input-mini" 
+			  	{% if course.daysOfNotifyBeforeDeadline|default(0)|number_format == 0 %}
+			  	value="10"
+			  	{% else %}
+			  	value="{{ course.daysOfNotifyBeforeDeadline|default(10) }}"
+			  	{% endif %}
+			  	> 天系统自动提醒
 			  </div>
 			</div>
 

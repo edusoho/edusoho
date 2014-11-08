@@ -91,6 +91,11 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
+            element: '[name=daysOfNotifyBeforeDeadline]',
+            rule: 'integer'
+        });
+
+        validator.addItem({
             element: '[name=maxStudentNum]',
             rule: 'integer',
             onItemValidated: function(error, message, elem) {
