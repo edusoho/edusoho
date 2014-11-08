@@ -15,11 +15,7 @@ class CourseLessonManageController extends BaseController
 		$courseItems = $this->getCourseService()->getCourseItems($course['id']);
 
 		$lessonIds = ArrayToolkit::column($courseItems, 'id');
-		$exercises = $this->getExerciseService()->findExercisesByLessonIds($lessonIds);
-		$homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
-		foreach ($homeworks as &$homework) {
-			$homework['results'] = $this->getHomeworkService()->searchResultsCount(array( 'courseId' => $homework['courseId'], 'lessonId' => $homework['lessonId'], 'status' => 'reviewing' ));
-		}
+
 		$mediaMap = array();
 		foreach ($courseItems as $item) {
 			if ($item['itemType'] != 'lesson') {
@@ -46,11 +42,17 @@ class CourseLessonManageController extends BaseController
 				$courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
 			}
 		}
+
+		if ($this->isPluginInstalled('Homework')) {
+			$exercises = $this->getServiceKernel()->createService('Homework:Homework.ExerciseService')->findExercisesByLessonIds($lessonIds);
+			$homeworks = $this->getServiceKernel()->createService('Homework:Homework.HomeworkService')->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
+		}
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
 			'course' => $course,
 			'items' => $courseItems,
-			'exercises' => $exercises,
-			'homeworks' => $homeworks,
+			'exercises' => empty($exercises) ? array() : $exercises,
+			'homeworks' => empty($homeworks) ? array() : $homeworks,
 			'files' => ArrayToolkit::index($files,'id')
 		));
 	}
@@ -437,11 +439,6 @@ class CourseLessonManageController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
     
-    private function getHomeworkService()
-    {
-        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
-    }
-
     private function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
@@ -462,11 +459,6 @@ class CourseLessonManageController extends BaseController
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
     
-    private function getExerciseService()
-    {
-    	return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
-    }
-
     private function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');

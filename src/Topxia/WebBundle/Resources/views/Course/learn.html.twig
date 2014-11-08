@@ -8,6 +8,13 @@
 {% endblock %}
 
 {% set hideSetupHint = true %}
+
+{% if is_plugin_installed('Homework') %}
+  {% set script_arguments = {plugins: ['lesson', 'question', 'note', 'material', 'homework']}  %}
+{% else %}  
+  {% set script_arguments = {plugins: ['lesson', 'question', 'note', 'material']}  %}
+{% endif %}
+
 {% set script_controller = 'course/learn' %}
 {% set bodyClass = 'lesson-dashboard-page' %}
 
