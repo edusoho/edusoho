@@ -117,6 +117,7 @@ class CourseLessonManageController extends BaseController
 				unset($lesson['second']);
 			}
 			$lesson = $this->getCourseService()->createLesson($lesson);
+			
 			$file = false;
 			if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
 				$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
@@ -196,6 +197,7 @@ class CourseLessonManageController extends BaseController
 			$lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
 			$this->getCourseService()->deleteCourseDrafts($course['id'],$lesson['id'], $this->getCurrentUser()->id);
 			
+			$file = false;
 			if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
 				$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 				$lesson['mediaStatus'] = $file['convertStatus'];
@@ -367,6 +369,7 @@ class CourseLessonManageController extends BaseController
 		$course = $this->getCourseService()->getCourse($courseId);
 		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
+		$file = false;
 		if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
 			$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 			$lesson['mediaStatus'] = $file['convertStatus'];
@@ -386,6 +389,7 @@ class CourseLessonManageController extends BaseController
 		$course = $this->getCourseService()->getCourse($courseId);
 		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
+		$file = false;
 		if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
 			$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 			$lesson['mediaStatus'] = $file['convertStatus'];
