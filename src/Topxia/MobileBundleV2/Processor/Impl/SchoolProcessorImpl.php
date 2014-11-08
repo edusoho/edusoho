@@ -69,7 +69,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public function getClientVersion()
     {
-        $code = $this->request->get("code", "edusoho");
+        $code = $this->getParam("code", "edusoho");
         $clientVersion = $this->sendRequest("GET", "http://www.edusoho.com/version/{$code}-android", array());
         if ("{}" == $clientVersion) {
             return null;
