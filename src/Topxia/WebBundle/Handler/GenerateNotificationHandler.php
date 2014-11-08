@@ -53,7 +53,7 @@ class GenerateNotificationHandler
 		$vipApp = $this->getAppService()->findInstallApp('Vip');
 		if(!empty($vipApp) && version_compare($vipApp['version'], "1.0.5", ">=")){
 			$vipSetting = $this->getSettingService()->get('vip', array());
-			if($vipSetting["deadlineNotify"] == 1) {
+			if(array_key_exists("deadlineNotify", $vipSetting) && $vipSetting["deadlineNotify"] == 1) {
 				$vip = $this->getVipService()->getMemberByUserId($user["id"]);
 				$currentTime = time();
 				if($vip["deadlineNotified"] != 1 && $currentTime < $vip["deadline"] && ($currentTime + $vipSetting["daysOfNotifyBeforeDeadline"]*24*60*60) > $vip["deadline"]) {
