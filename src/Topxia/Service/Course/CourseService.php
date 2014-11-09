@@ -90,7 +90,7 @@ interface CourseService
 	public function getCourseLesson($courseId, $lessonId);
 
 	public function findCourseDraft($courseId,$lessonId, $userId);
-	
+
 	public function getCourseLessons($courseId);
 
 	public function deleteCourseDrafts($courseId,$lessonId, $userId);
@@ -207,6 +207,8 @@ interface CourseService
 	public function searchMember($conditions, $start, $limit);
 
 	public function searchMemberCount($conditions);
+
+	public function findWillOverdueCourses();
 
 	public function getCourseMember($courseId, $userId);
 
@@ -330,5 +332,4 @@ interface CourseService
 	public function getCourseLessonReplayByLessonId($lessonId);
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
-
 }

@@ -18,9 +18,9 @@ use Imagine\Image\ImageInterface;
 
 class UserServiceImpl extends BaseService implements UserService
 {
-    public function getUser($id)
+    public function getUser($id, $lock = false)
     {
-        $user = $this->getUserDao()->getUser($id);
+        $user = $this->getUserDao()->getUser($id, $lock);
         if(!$user){
             return null;
         } else {

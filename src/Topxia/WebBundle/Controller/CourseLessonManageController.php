@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Common\Paginator;
 
 class CourseLessonManageController extends BaseController
 {
@@ -12,6 +13,9 @@ class CourseLessonManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
 		$courseItems = $this->getCourseService()->getCourseItems($course['id']);
+
+		$lessonIds = ArrayToolkit::column($courseItems, 'id');
+
 		$mediaMap = array();
 		foreach ($courseItems as $item) {
 			if ($item['itemType'] != 'lesson') {
@@ -38,9 +42,18 @@ class CourseLessonManageController extends BaseController
 				$courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
 			}
 		}
+
+		if ($this->isPluginInstalled('Homework')) {
+			$exercises = $this->getServiceKernel()->createService('Homework:Homework.ExerciseService')->findExercisesByLessonIds($lessonIds);
+			$homeworks = $this->getServiceKernel()->createService('Homework:Homework.HomeworkService')->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
+		}
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
 			'course' => $course,
-			'items' => $courseItems
+			'items' => $courseItems,
+			'exercises' => empty($exercises) ? array() : $exercises,
+			'homeworks' => empty($homeworks) ? array() : $homeworks,
+			'files' => ArrayToolkit::index($files,'id')
 		));
 	}
 
@@ -104,7 +117,8 @@ class CourseLessonManageController extends BaseController
 				unset($lesson['second']);
 			}
 			$lesson = $this->getCourseService()->createLesson($lesson);
-
+			
+			$file = false;
 			if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
 				$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 				$lesson['mediaStatus'] = $file['convertStatus'];
@@ -117,6 +131,7 @@ class CourseLessonManageController extends BaseController
 			  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
+				'file' => $file
 			));
 		}
 
@@ -181,9 +196,17 @@ class CourseLessonManageController extends BaseController
 			$fields['free'] = empty($fields['free']) ? 0 : 1;
 			$lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
 			$this->getCourseService()->deleteCourseDrafts($course['id'],$lesson['id'], $this->getCurrentUser()->id);
+			
+			$file = false;
+			if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
+				$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+				$lesson['mediaStatus'] = $file['convertStatus'];
+			}
+			
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
+				'file' => $file
 			));
 		}
 
@@ -343,25 +366,48 @@ class CourseLessonManageController extends BaseController
 	public function publishAction(Request $request, $courseId, $lessonId)
 	{
 		$this->getCourseService()->publishLesson($courseId, $lessonId);
+		$course = $this->getCourseService()->getCourse($courseId);
+		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+		$file = false;
+		if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
+			$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+			$lesson['mediaStatus'] = $file['convertStatus'];
+		}
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
-			'course' => $this->getCourseService()->getCourse($courseId),
-			'lesson' => $this->getCourseService()->getCourseLesson($courseId, $lessonId),
+			'course' => $course,
+			'lesson' => $lesson,
+			'file' => $file
 		));
 	}
 
 	public function unpublishAction(Request $request, $courseId, $lessonId)
 	{
 		$this->getCourseService()->unpublishLesson($courseId, $lessonId);
+
+		$course = $this->getCourseService()->getCourse($courseId);
+		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+		$file = false;
+		if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
+			$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+			$lesson['mediaStatus'] = $file['convertStatus'];
+		}
+
 		return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
-			'course' => $this->getCourseService()->getCourse($courseId),
-			'lesson' => $this->getCourseService()->getCourseLesson($courseId, $lessonId),
+			'course' => $course,
+			'lesson' => $lesson,
+			'file' => $file
 		));
 	}
 
 	public function sortAction(Request $request, $id)
 	{
-		$course = $this->getCourseService()->tryManageCourse($id);
-		$this->getCourseService()->sortCourseItems($course['id'], $request->request->get('ids'));
+		$ids = $request->request->get('ids');
+		if(!empty($ids)){
+			$course = $this->getCourseService()->tryManageCourse($id);
+			$this->getCourseService()->sortCourseItems($course['id'], $request->request->get('ids'));
+		}
 		return $this->createJsonResponse(true);
 	}
 
@@ -391,29 +437,34 @@ class CourseLessonManageController extends BaseController
 		return intval($minutes) * 60 + intval($seconds);
 	}
 
-	private function getCourseService()
-	{
-		return $this->getServiceKernel()->createService('Course.CourseService');
-	}
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+    
+    private function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
 
-	private function getTestpaperService()
-	{
-		return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
-	}
+    private function getCourseMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.MaterialService');
+    }
 
-	private function getCourseMaterialService()
-	{
-		return $this->getServiceKernel()->createService('Course.MaterialService');
-	}
+    private function getDiskService()
+    {
+        return $this->getServiceKernel()->createService('User.DiskService');
+    }
 
-	private function getDiskService()
-	{
-		return $this->getServiceKernel()->createService('User.DiskService');
-	}
-
-	private function getUploadFileService()
-	{
-		return $this->getServiceKernel()->createService('File.UploadFileService');
-	}
+    private function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+    
+    private function getQuestionService()
+    {
+        return $this->getServiceKernel()->createService('Question.QuestionService');
+    }
 
 }
