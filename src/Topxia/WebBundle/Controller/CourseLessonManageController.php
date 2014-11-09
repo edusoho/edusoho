@@ -366,7 +366,7 @@ class CourseLessonManageController extends BaseController
 		$this->getCourseService()->publishLesson($courseId, $lessonId);
 		$course = $this->getCourseService()->getCourse($courseId);
 		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-
+		$file = false;
 		if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
 			$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 			$lesson['mediaStatus'] = $file['convertStatus'];
@@ -385,7 +385,7 @@ class CourseLessonManageController extends BaseController
 
 		$course = $this->getCourseService()->getCourse($courseId);
 		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-
+		$file = false;
 		if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
 			$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 			$lesson['mediaStatus'] = $file['convertStatus'];

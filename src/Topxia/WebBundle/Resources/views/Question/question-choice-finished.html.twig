@@ -8,16 +8,29 @@
 
   {% include 'TopxiaWebBundle:Question:question-choice-options-result.html.twig' %}
 
- {% set choiceIndex = (65+itemResult.answer)|chr %}
-
+{% if itemResult.answer|default(null) or itemResult.answer == 0 %}
+  {% set choiceIndex = itemResult.answer|split(',') %}
+{% endif %}
   <div class="homework-question-result">
 
     {% if itemResult.status == 'right' %}
      <span class="glyphicon glyphicon-ok question-text-success"></span> 你答对了!
     {% elseif itemResult.status == 'wrong' %}
-       <span class="glyphicon glyphicon-remove question-text-danger"></span> 你答错了,你选择了<strong class="question-text-danger">{{ choiceIndex }}</strong>
+       <span class="glyphicon glyphicon-remove question-text-danger"></span> 你答错了,你选择了<strong class="question-text-danger">
+       {% for key,choice in choiceIndex %}
+          {% if choice != '-1' %}
+          {{ (65+choice)|chr }}
+          {% endif %}
+        {% endfor %}
+       </strong>
   {% elseif itemResult.status == 'partRight' %}
-       <span class="glyphicon glyphicon-remove question-text-danger"></span> 你部分答对,你选择了<strong class="question-text-danger">{{ choiceIndex }}</strong>
+       <span class="glyphicon glyphicon-remove question-text-danger"></span> 你部分答对,你选择了<strong class="question-text-danger">
+           {% for key,choice in choiceIndex %}
+          {% if choice != '-1' %}
+          {{ (65+choice)|chr }}
+          {% endif %}
+        {% endfor %}
+       </strong>
     {% elseif itemResult.status == 'noAnswer' %}
 　　　  <span class="glyphicon glyphicon-remove question-text-danger"></span>你未答题
     {% endif %}
