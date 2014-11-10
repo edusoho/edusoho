@@ -245,7 +245,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		"start"=>$start,
 		"limit"=>$limit,
 		"total"=>$total,
-		'threads'=>$this->filterThreads($threads, $courses),
+		'threads'=>$this->filterThreads($threads, $courses, $user['id']),
 		);
 	}
 
@@ -384,7 +384,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     	return $this->controller->getNoteService()->deleteNote($id);
     }
 
-	private function filterThreads($threads, $courses)
+	private function filterThreads($threads, $courses ,$userId)
 	{
 		if (empty($threads)) {
             return array();
@@ -403,7 +403,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 			}else{
 				$thread["number"] = 0;
 			}
-        	$threads[$i] = $this->filterThread($thread, $course, null);
+        	$threads[$i] = $this->filterThread($thread, $course, $this->controller->getUserService()->getUser($userId));
         }
         return $threads;
 	}
