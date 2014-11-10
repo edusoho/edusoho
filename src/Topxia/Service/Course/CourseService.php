@@ -206,6 +206,10 @@ interface CourseService
 
 	public function searchMember($conditions, $start, $limit);
 
+	public function sortordByAddedNumber($startTime,$endTime);
+
+	public function sortordByStudentNumber($startTime,$endTime);
+
 	public function searchMemberCount($conditions);
 
 	public function findWillOverdueCourses();

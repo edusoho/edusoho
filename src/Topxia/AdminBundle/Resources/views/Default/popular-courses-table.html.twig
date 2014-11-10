@@ -1,4 +1,4 @@
-{% if courses %}
+{% if members %}
 	<table class="table table-condensed table-striped table-hover" style="word-break: break-all;">
 	  <thead>
 	    <tr>
@@ -9,14 +9,14 @@
 	    </tr>
 	  </thead>
 		<tbody>
-			{% for course in courses %}
+			{% for member in members %}
 				<tr>
 					<td>
-						<a href="{{ path('course_show', {id: course.id}) }}" target="_blank">{{ course.title }}</a>
+						<a href="{{ path('course_show', {id: member.courseId}) }}" target="_blank">{{ member.title }}</a>
 					</td>
-					<td>{{ course['addedStudentNum'] }} 人 </td>
-					<td>{{ course['studentNum'] }} 人</td>
-					<td class="money-text">{{ course['addedMoney'] }} 元 </td>
+					<td>{{ member['co'] }} 人 </td>
+					<td>{{ member['studentNum'] }} 人</td>
+					<td class="money-text">{{ member['income'] }} 元 </td>
 				</tr>
 			{% endfor %}
 		</tbody>
