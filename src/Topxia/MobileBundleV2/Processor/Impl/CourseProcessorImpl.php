@@ -217,6 +217,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	{
 		$user = $this->controller->getUserByToken($this->request);
 		$type = $this->getParam("type","question");
+		$lessonId = $this->getParam("lessonId" , "0");
 
 		$conditions = array(
             		'userId' => $user['id'],
@@ -235,12 +236,19 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		);
 
 		$courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
-		return array(
-		"start"=>$start,
-		"limit"=>$limit,
-		"total"=>$total,
-		'threads'=>$this->filterThreads($threads, $courses),
-		);
+		$threadsFilterByLessonId = $this->filterThreads($threads, $courses, $lessonId);
+
+		if($lessonId != 0){
+			$threadsFilterByLessonId = array_filter($threadsFilterByLessonId,function($item) use ($lessonId){
+																	return $item["lessonId"] == $lessonId;
+												   				 });
+		}		
+
+		return array("start"=>$start,
+							 "limit"=>$limit,
+							 "total"=>$total,
+							 'threads'=>$threadsFilterByLessonId,
+							);
 	}
 
 	public function getCourseNotes()
