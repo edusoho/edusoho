@@ -10,7 +10,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
 	public function getVersion()
 	{
-		var_dump("CourseProcessorImpl->getVersion1");
+		var_dump("CourseProcessorImpl->getVersion");
 		return $this->formData;
 	}
 
@@ -217,12 +217,17 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	{
 		$user = $this->controller->getUserByToken($this->request);
 		$type = $this->getParam("type","question");
-		$lessonId = $this->getParam("lessonId" , "0");
+		$lessonId = $this->getParam("lessonId","0");
 
-		$conditions = array(
-            		'userId' => $user['id'],
-            		'type' => $type,
-        		);
+		if($lessonId == "0"){
+			$conditions = array(
+	            		'userId' => $user['id'],
+	            		'type' => $type,
+	        		);
+		}else{
+			$conditions = array('lessonId' => $lessonId,
+								'type' => $type,);
+		}
 
 		$start = (int) $this->getParam("start", 0);
 		$limit = (int) $this->getParam("limit", 10);
@@ -236,19 +241,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		);
 
 		$courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
-		$threadsFilterByLessonId = $this->filterThreads($threads, $courses, $lessonId);
-
-		if($lessonId != 0){
-			$threadsFilterByLessonId = array_filter($threadsFilterByLessonId,function($item) use ($lessonId){
-																	return $item["lessonId"] == $lessonId;
-												   				 });
-		}		
-
-		return array("start"=>$start,
-							 "limit"=>$limit,
-							 "total"=>$total,
-							 'threads'=>$threadsFilterByLessonId,
-							);
+		return array(
+		"start"=>$start,
+		"limit"=>$limit,
+		"total"=>$total,
+		'threads'=>$this->filterThreads($threads, $courses),
+		);
 	}
 
 	public function getCourseNotes()
