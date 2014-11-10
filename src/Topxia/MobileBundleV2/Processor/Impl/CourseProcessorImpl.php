@@ -10,7 +10,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
 	public function getVersion()
 	{
-		var_dump("CourseProcessorImpl->getVersion1");
+		var_dump("CourseProcessorImpl->getVersion");
 		return $this->formData;
 	}
 
@@ -229,11 +229,17 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	{
 		$user = $this->controller->getUserByToken($this->request);
 		$type = $this->getParam("type","question");
+		$lessonId = $this->getParam("lessonId","0");
 
-		$conditions = array(
-            		'userId' => $user['id'],
-            		'type' => $type,
-        		);
+		if($lessonId == "0"){
+			$conditions = array(
+	            		'userId' => $user['id'],
+	            		'type' => $type,
+	        		);
+		}else{
+			$conditions = array('lessonId' => $lessonId,
+								'type' => $type,);
+		}
 
 		$start = (int) $this->getParam("start", 0);
 		$limit = (int) $this->getParam("limit", 10);
@@ -251,7 +257,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		"start"=>$start,
 		"limit"=>$limit,
 		"total"=>$total,
-		'threads'=>$this->filterThreads($threads, $courses),
+		'threads'=>$this->filterThreads($threads, $courses, $user['id']),
 		);
 	}
 
@@ -390,7 +396,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     	return $this->controller->getNoteService()->deleteNote($id);
     }
 
-	private function filterThreads($threads, $courses)
+	private function filterThreads($threads, $courses ,$userId)
 	{
 		if (empty($threads)) {
             return array();
@@ -409,7 +415,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 			}else{
 				$thread["number"] = 0;
 			}
-        	$threads[$i] = $this->filterThread($thread, $course, null);
+        	$threads[$i] = $this->filterThread($thread, $course, $this->controller->getUserService()->getUser($userId));
         }
         return $threads;
 	}
