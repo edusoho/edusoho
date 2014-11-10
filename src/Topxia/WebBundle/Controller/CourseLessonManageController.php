@@ -16,6 +16,11 @@ class CourseLessonManageController extends BaseController
 
 		$lessonIds = ArrayToolkit::column($courseItems, 'id');
 
+		if ($this->isPluginInstalled('Homework')) {
+			$exercises = $this->getServiceKernel()->createService('Homework:Homework.ExerciseService')->findExercisesByLessonIds($lessonIds);
+			$homeworks = $this->getServiceKernel()->createService('Homework:Homework.HomeworkService')->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
+		}
+
 		$mediaMap = array();
 		foreach ($courseItems as $item) {
 			if ($item['itemType'] != 'lesson') {
@@ -41,11 +46,6 @@ class CourseLessonManageController extends BaseController
 			foreach ($lessonIds as $lessonId) {
 				$courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
 			}
-		}
-
-		if ($this->isPluginInstalled('Homework')) {
-			$exercises = $this->getServiceKernel()->createService('Homework:Homework.ExerciseService')->findExercisesByLessonIds($lessonIds);
-			$homeworks = $this->getServiceKernel()->createService('Homework:Homework.HomeworkService')->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
 		}
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
