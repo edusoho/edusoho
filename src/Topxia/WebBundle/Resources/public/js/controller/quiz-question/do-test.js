@@ -123,14 +123,12 @@ define(function(require, exports, module) {
                 deadline--;
                 usedTime++;
                 $('#time_show').text(formatTime(deadline));
-
                 if (deadline < 0) {
-
                     timer.stop();
-
                     if (isAjaxing == 0) {
                         $.post($('#finishPaper').data('url'), {data:changeAnswers, usedTime:usedTime }, function(){
                             changeAnswers = {};
+                            usedTime = 0;
                             $('#timeout-dialog').show();
                             timer.stop();
                         }).error(function(){
@@ -145,6 +143,7 @@ define(function(require, exports, module) {
                                 clearInterval(timerFinish);
                                 $.post($('#finishPaper').data('url'), {data:changeAnswers, usedTime:usedTime }, function(){
                                     changeAnswers = {};
+                                    usedTime = 0;
                                     $('#timeout-dialog').show();
                                 }).error(function(){
                                     $('#timeout-dialog').find('.empty').text('系统好像出了点小问题，请稍后再交卷');
@@ -156,14 +155,16 @@ define(function(require, exports, module) {
                     }
 
                 }
-                if (deadline == timeLastPost) {
+                if (deadline == timeLastPost) {                           
 
                     isAjaxing = 1;
 
                     timeLastPost = timeLastPost - interval;
+
                     $.post($('#finishPaper').data('ajax'), { data:changeAnswers, usedTime:usedTime }, function(){
                         changeAnswers = {};
                         isAjaxing = 0;
+                        usedTime = 0;
                     });
 
                     if (!isLimit){
