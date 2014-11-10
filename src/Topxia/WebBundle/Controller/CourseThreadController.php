@@ -309,6 +309,7 @@ class CourseThreadController extends BaseController
             'threadId' => $thread['id']
         ));
         $user = $this->getCurrentUser();
+        $me = $user;
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
             $userId = $user->id;
@@ -333,7 +334,7 @@ class CourseThreadController extends BaseController
 
                     if ($user['id'] != $userId) {
                     $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-                    $this->getNotifiactionService()->notify($user['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中@了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
+                    $this->getNotifiactionService()->notify($user['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$me['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中@了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
                     }
                 }
 
