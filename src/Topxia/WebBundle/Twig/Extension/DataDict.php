@@ -98,10 +98,6 @@ class DataDict
             'this_month' => '本月',
             'last_month' => '上月',
     	),
-        'sortord' => array(
-            'addedStudentNum' => '新增学生人数',
-            'studentNum' => '总学生人数',
-    	),
         'contentStatus' => array(
             'published' => '已发布',
             'unpublished' => '未发布',

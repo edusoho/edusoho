@@ -13,16 +13,11 @@ define(function(require, exports, module) {
         });
 
         $("#popular-courses-type").on('change', function() {
-            $.get($(this).data('url'), {dateType: this.value, sortord: $("#popular-courses-sortord").val()}, function(html) {
+            $.get($(this).data('url'), {dateType: this.value}, function(html) {
                 $('#popular-courses-table').html(html);
             });
         }).trigger('change');
 
-        $("#popular-courses-sortord").on('change', function() {
-            $.get($(this).data('url'), {sortord: this.value,dateType:$("#popular-courses-type").val()}, function(html) {
-                $('#popular-courses-table').html(html);
-            });
-        }).trigger('change');
 
 /*        var $alert = $("#app-upgrade-alert");
         $.post($alert.data('url'), function(result) {

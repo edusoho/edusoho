@@ -11,48 +11,53 @@ class DefaultController extends BaseController
     public function popularCoursesAction(Request $request)
     {
         $dateType = $request->query->get('dateType');
-        $sortord = $request->query->get('sortord');
 
         if($dateType == "today"){
-            $StartTime=strtotime(date("Y-m-d",time()));
-            $EndTime=strtotime(date("Y-m-d",time()+24*3600));
+            $startTime=strtotime(date("Y-m-d",time()));
+            $endTime=strtotime(date("Y-m-d",time()+24*3600));
         }
 
         if($dateType == "yesterday"){
-            $StartTime=strtotime(date("Y-m-d",time()-24*3600));
-            $EndTime=strtotime(date("Y-m-d",time()));
+            $startTime=strtotime(date("Y-m-d",time()-24*3600));
+            $endTime=strtotime(date("Y-m-d",time()));
         }
 
         if($dateType == "this_week"){
-            $StartTime = strtotime('Monday this week');
-            $EndTime = strtotime('Monday next week');
+            $startTime = strtotime('Monday this week');
+            $endTime = strtotime('Monday next week');
         }
 
         if($dateType == "last_week"){
-            $StartTime = strtotime('Monday last week');
-            $EndTime = strtotime('Monday this week');
+            $startTime = strtotime('Monday last week');
+            $endTime = strtotime('Monday this week');
         }
 
         if($dateType == "this_month"){
-            $StartTime = strtotime('first day of this month midnight');
-            $EndTime = strtotime('first day of next month midnight');
+            $startTime = strtotime('first day of this month midnight');
+            $endTime = strtotime('first day of next month midnight');
         }
 
         if($dateType == "last_month"){
-            $StartTime = strtotime('first day of last month midnight');
-            $EndTime = strtotime('first day of this month midnight');
+            $startTime = strtotime('first day of last month midnight');
+            $endTime = strtotime('first day of this month midnight');
         }
 
-        if($sortord == "addedStudentNum"){
-            $members = $this->getCourseService()->sortordByAddedNumber($StartTime,$EndTime);
-        }
+        $courses = array();
+        $members = $this->getCourseService()->sortordByAddedNumber($startTime,$endTime);
+            for ($i=0; $i < count($members); $i++) { 
+                $course = $this->getCourseService()->getCourse($members[$i]['courseId']); 
+                $course['addedStudentNum'] = $members[$i]['co'];
+                $course['addedMoney'] = 0;
+                $orders = $this->getOrderService()->searchOrders(array('targetType'=>'course', 'targetId'=>$members[$i]['courseId'], 'status' => 'paid', 'date'=>$dateType), 'latest', 0, 10000);
 
-        if($sortord == "studentNum"){
-            $members = $this->getCourseService()->sortordByStudentNumber($StartTime,$EndTime);
-        }
+                foreach ($orders as $id => $order) {
+                    $course['addedMoney'] += $order['amount'];
+                }
+                    $courses[] = $course;
+            }
 
         return $this->render('TopxiaAdminBundle:Default:popular-courses-table.html.twig', array(
-            'members' => $members
+            'courses' => $courses
         ));
         
     }

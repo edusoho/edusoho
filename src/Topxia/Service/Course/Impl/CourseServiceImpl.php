@@ -1549,11 +1549,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->sortordByAddedNumber($startTime,$endTime);
 	}
 
-	public function sortordByStudentNumber($startTime,$endTime)
-	{
-		return $this->getMemberDao()->sortordByStudentNumber($startTime,$endTime);
-	}
-
 	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit)
 	{	
 		$conditions = $this->_prepareCourseConditions($conditions);
