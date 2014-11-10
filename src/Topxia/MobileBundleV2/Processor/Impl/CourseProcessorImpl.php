@@ -14,6 +14,18 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		return $this->formData;
 	}
 
+	public function getCourseNotices()
+	{
+		$start = (int) $this->getParam("start", 0);
+		$limit = (int) $this->getParam("limit", 10);
+		$courseId = $this->getParam("courseId");
+		if (empty($courseId)) {
+			return array();
+		}
+		$announcements = $this->controller->getCourseService()->findAnnouncements($courseId, $start, $limit);
+		return $this->filterAnnouncements($announcements);
+	}
+
 	public function getLessonNote()
 	{
 		$courseId = $this->getParam("courseId");

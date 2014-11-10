@@ -17,6 +17,12 @@ interface CourseProcessor
 	public function getTeacherCourses();
 
 	public function getCourseNotice();
+
+	/**
+	*获取课程公告列表
+	*/
+	public function getCourseNotices();
+
 	public function unLearnCourse();
 
 	public function getCourseThreads();
