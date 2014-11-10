@@ -275,8 +275,11 @@ class TestpaperController extends BaseController
             $data = $request->request->all();
             $answers = array_key_exists('data', $data) ? $data['data'] : array();
             $usedTime = $data['usedTime'];
+
             $results = $this->getTestpaperService()->submitTestpaperAnswer($id, $answers);
+
             $this->getTestpaperService()->updateTestpaperResult($id, $usedTime);
+
             return $this->createJsonResponse(true);
         }
     }
@@ -295,6 +298,7 @@ class TestpaperController extends BaseController
             $answers = array_key_exists('data', $data) ? $data['data'] : array();
             $usedTime = $data['usedTime'];
             $user = $this->getCurrentUser();
+
             //提交变化的答案
             $results = $this->getTestpaperService()->submitTestpaperAnswer($id, $answers);
 
