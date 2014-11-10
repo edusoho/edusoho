@@ -14,11 +14,11 @@ class AcctSetupScenario extends ContainerAware implements ProcessScenarioInterfa
     {
         $builder
             ->add('baseinfo', new Step\BaseinfoStep())
-            ->add('oneclick', new Step\OneclickStep())
-            ->add('setup', new Step\SetupStep())
-            ->add('advanced', new Step\AdvancedStep())
-            ->add('guide', new Step\GuideStep())
-            ->setRedirect('homepage')
+            //->add('oneclick', new Step\OneclickStep())
+            //->add('setup', new Step\SetupStep())
+            //->add('advanced', new Step\AdvancedStep())
+            //->add('guide', new Step\GuideStep())
+            //->setRedirect('homepage')
         ;
     }
 } 

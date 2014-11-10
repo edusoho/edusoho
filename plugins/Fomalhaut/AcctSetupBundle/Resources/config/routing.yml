@@ -1,3 +1,10 @@
 acct_setup_homepage:
     path:     /hello/{name}
     defaults: { _controller: AcctSetupBundle:Default:index }
+wechat_acctsetup_flow:
+    pattern: /weadmin/acctsetup
+    defaults: { _controller: sylius.controller.process:startAction, scenarioAlias: 'wechat_acctsetup' }
+
+acctsetup_flow_bundle:
+    resource: @SyliusFlowBundle/Resources/config/routing.yml
+    prefix: /weadmin/acctsetup

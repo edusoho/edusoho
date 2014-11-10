@@ -1,0 +1,8 @@
+parameters:
+    fomalhaut_acctsetup.form.type.baseinfo.class: Fomalhaut\AcctSetupBundle\Form\Type\BaseinfoType
+
+services:
+    fomalhaut_acctsetup.form.type.baseinfo:
+        class: %fomalhaut_acctsetup.form.type.baseinfo.class%
+        tags:
+            - { name: form.type, alias: wechat_acctsetup_baseinfo }

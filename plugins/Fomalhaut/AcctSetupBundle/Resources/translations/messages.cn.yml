@@ -1,0 +1,4 @@
+form:
+    baseinfo:
+        acctname: 名称
+        describe: 描述

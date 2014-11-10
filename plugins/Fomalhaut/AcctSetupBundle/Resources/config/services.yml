@@ -1,7 +1,9 @@
 parameters:
-#    acct_setup.example.class: fomalhaut\AcctSetupBundle\Example
-
+    acctsetup.scenario.class: fomalhaut\AcctSetupBundle\Process\AcctSetupScenario
 services:
-#    acct_setup.example:
-#        class: %acct_setup.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    acctsetup.scenario.flow:
+        class: %acctsetup.scenario.class%
+        calls:
+          - [ setContainer, ["@service_container"] ]
+        tags:
+          - { name: sylius.process.scenario, alias: wechat_acctsetup}
