@@ -300,7 +300,11 @@ class UserController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
+        foreach ($courses as $key=>$course) {
+            if(empty($course['classId'])){
+                unset($courses[$key]);
+            }
+        }
         return $this->render('TopxiaWebBundle:User:courses.html.twig', array(
             'user' => $user,
             'courses' => $courses,
