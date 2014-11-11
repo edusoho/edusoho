@@ -12,7 +12,7 @@ interface OrderService
 
     public function searchOrders($conditions, $sort = 'latest', $start, $limit);
     
-    public function countOrderAmounts($startTime,$endTime,array $courseId);
+    public function sumOrderAmounts($startTime,$endTime,array $courseId);
 
     public function searchOrderCount($conditions);
 

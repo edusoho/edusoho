@@ -79,7 +79,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
     }
 
     
-    public function countOrderAmounts($startTime,$endTime,array $courseId)
+    public function sumOrderAmounts($startTime,$endTime,array $courseId)
     {
          if(empty($courseId)) {
             return array();

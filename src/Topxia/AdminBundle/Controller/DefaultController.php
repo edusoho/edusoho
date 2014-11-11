@@ -52,7 +52,7 @@ class DefaultController extends BaseController
 
 
 
-        $orders = $this->getOrderService()->countOrderAmounts($startTime,$endTime,$courseIds);
+        $orders = $this->getOrderService()->sumOrderAmounts($startTime,$endTime,$courseIds);
         $orders = ArrayToolkit::index($orders,"targetId");
 
         foreach ($members as $key => $value) {
