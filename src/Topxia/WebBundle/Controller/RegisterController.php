@@ -24,14 +24,9 @@ class RegisterController extends BaseController
             $registration = $request->request->all();
             $captchaCodePostedByUser = $registration['captcha_num'];
 
-            error_log("post captcha\n",3,'/var/tmp/mylogs.log');
-            error_log("captchaCode posted by user:".$captchaCodePostedByUser."\n",3,'/var/tmp/mylogs.log');
-
             $session = new Session();
             $captchaCode = $session->get('captcha_code');   
-            
-            error_log("captchaCode in Session:".$captchaCode."\n",3,'/var/tmp/mylogs.log');
-            
+          
             if ($captchaCode != $captchaCodePostedByUser){   
                 throw new \RuntimeException('验证码错误。');
             }
