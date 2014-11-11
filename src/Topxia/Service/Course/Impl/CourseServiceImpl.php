@@ -1503,6 +1503,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->searchMemberCount($conditions);
 	}
 
+	public function countMembersByStartTimeAndEndTime($startTime,$endTime)
+	{	
+		return $this->getMemberDao()->countMembersByStartTimeAndEndTime($startTime,$endTime);
+	}
+
 	public function findWillOverdueCourses()
 	{
 		$currentUser = $this->getCurrentUser();
@@ -1543,6 +1548,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$conditions = $this->_prepareCourseConditions($conditions);
 		return $this->getMemberDao()->searchMember($conditions, $start, $limit);
 	}
+
 	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit)
 	{	
 		$conditions = $this->_prepareCourseConditions($conditions);

@@ -17,6 +17,8 @@ interface OrderDao
 
     public function searchOrders($conditions, $orderBy, $start, $limit);
 
+    public function sumOrderAmounts($startTime,$endTime,array $courseId);
+
     public function searchOrderCount($conditions);
 
     public function sumOrderPriceByTargetAndStatuses($targetType, $targetId, array $statuses);
