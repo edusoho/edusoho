@@ -84,6 +84,10 @@ register_analysis:
     pattern:  /register/analysis
     defaults: { _controller: TopxiaWebBundle:Register:analysis }
 
+register_captcha_num:
+    path:     /captcha_num
+    defaults: { _controller: TopxiaWebBundle:Register:captcha }
+
 file_upload:
     pattern:  /file/upload
     defaults: { _controller: TopxiaWebBundle:File:upload }

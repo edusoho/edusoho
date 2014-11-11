@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Form\RegisterType;
 
 class RegisterController extends BaseController
@@ -229,6 +230,16 @@ class RegisterController extends BaseController
     public function analysisAction(Request $request)
     {
         return $this->render('TopxiaWebBundle:Register:analysis.html.twig',array());
+    }
+
+    public function captchaAction(Request $request)
+    {
+        $image = "1222px.png";
+        $file = readfile("/home/zjsxwc/1px.png");
+        $headers = array(
+            'Content-Type' => 'image/png',
+            'Content-Disposition' => 'inline; filename="'.$image.'"');
+        return new Response($file, 200, $headers);
     }
 
     protected function getSettingService()
