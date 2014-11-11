@@ -20,82 +20,43 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Common\ArrayToolkit;
 
-class PluginBuildCommand extends GeneratorCommand
+class PluginCreateCommand extends GeneratorCommand
 {
     protected function configure()
     {
         $this
-            ->setDefinition(array(
-                new InputOption('bundlename', '', InputOption::VALUE_REQUIRED, '插件名称'),
-                new InputOption('dir', '', InputOption::VALUE_REQUIRED, '保存路径'),
-                )
+            ->addArgument(
+                'bundlename',
+                InputArgument::OPTIONAL,
+                '插件名称?'
             )
-            ->setName('plugin:build')
+            ->setName('plugin:create')
             ->setDescription('创建插件模板')
         ;
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output)
-    {
-        $dialog = $this->getDialogHelper();
-        $dialog->writeSection($output, '欢迎使用插件包脚本');
-
-        // namespace
-        $namespace = null;
-        try {
-            $namespace = $input->getOption('bundlename') ? Validators::validateBundleNamespace($input->getOption('bundlename')) : null;
-        } catch (\Exception $error) {
-            $output->writeln($dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
-        }
-
-        if (null === $namespace) {
-            $output->writeln(array(
-                '',
-            ));
-
-            $namespace = $dialog->askAndValidate($output, $dialog->getQuestion('Bundle name', $input->getOption('bundlename')),  array('Sensio\Bundle\GeneratorBundle\Command\Validators', 'validateBundleName'), false, $input->getOption('bundlename'));
-            $input->setOption('bundlename', $namespace);
-        }
-
-
-        // target dir
-        $dir = null;
-        try {
-            $dir = $input->getOption('dir') ? Validators::validateTargetDir($input->getOption('dir'), $bundle, $namespace) : null;
-        } catch (\Exception $error) {
-            $output->writeln($dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
-        }
-
-        if (null === $dir) {
-            $dir = dirname($this->getContainer()->getParameter('kernel.root_dir')).'/plugins';
-
-            $output->writeln(array(
-                '',
-            ));
-            $dir = $dialog->askAndValidate($output, $dialog->getQuestion('存放路径', $dir), function ($dir) use ($bundle, $namespace) { return Validators::validateTargetDir($dir, $bundle, $namespace); }, false, $dir);
-            $input->setOption('dir', $dir);
-        }
-    }
-
-
     protected function execute(InputInterface $input, OutputInterface $output)
     {   
         $dialog = $this->getDialogHelper();
-        $name = $input->getOption('bundlename');
+        $name = $input->getArgument('bundlename');
 
         if (!$name) {
             throw new \RuntimeException("插件名称不能为空！");
         }
 
-        
+        if (!preg_match('/^[a-zA-Z\s]+$/', $name)) {
+            throw new \RuntimeException("插件名称只能为英文！");
+        }
+        $name=ucfirst($name);
 
-        $bundle=$name;
-        $namespace=str_replace("Bundle","",$name);
+        $bundle=$name."Bundle";
+        $namespace=$name;
         $pluginName=$namespace;
-        $namespace=$namespace."\\".$name;
+        $namespace=$namespace."\\".$name."Bundle";
        
         
-        $dir=$input->getOption('dir');
+        $dir=$this->getContainer()->getParameter('kernel.root_dir')."/..";
+        $dir=$dir."/plugins";
         $format="yml";
         $structure="yes";
         $generator = $this->getGenerator();
@@ -107,7 +68,8 @@ class PluginBuildCommand extends GeneratorCommand
         $runner = $dialog->getRunner($output, $errors);
 
         //write jspn
-        $filename=$dir.$pluginName."/plugin.json";
+        $filename=$dir."/".$pluginName."/plugin.json";
+        
         $data = 
         '{
             "code": "'.$pluginName.'",
@@ -123,32 +85,32 @@ class PluginBuildCommand extends GeneratorCommand
         //mkdir script
         $this->filesystem = new Filesystem();
 
-        $this->filesystem ->mkdir($dir.$pluginName."/Scripts");
-        $this->filesystem ->mkdir($dir.$pluginName."/Service");
+        $this->filesystem ->mkdir($dir."/".$pluginName."/Scripts");
+        $this->filesystem ->mkdir($dir."/".$pluginName."/Service");
 
-        $this->filesystem ->mkdir($dir.$pluginName."/Service/Demo");
+        $this->filesystem ->mkdir($dir."/".$pluginName."/Service/Demo");
 
-        $this->filesystem ->mkdir($dir.$pluginName."/Service/Demo/Impl");
-        $this->filesystem ->mkdir($dir.$pluginName."/Service/Demo/Dao");
-        $this->filesystem ->mkdir($dir.$pluginName."/Service/Demo/Dao/Impl");
+        $this->filesystem ->mkdir($dir."/".$pluginName."/Service/Demo/Impl");
+        $this->filesystem ->mkdir($dir."/".$pluginName."/Service/Demo/Dao");
+        $this->filesystem ->mkdir($dir."/".$pluginName."/Service/Demo/Dao/Impl");
 
         $data=$this->getBaseInstallScript();
-        file_put_contents ($dir.$pluginName."/Scripts/BaseInstallScript.php", $data);
+        file_put_contents ($dir."/".$pluginName."/Scripts/BaseInstallScript.php", $data);
 
         $data=$this->getInstallScript();
-        file_put_contents ($dir.$pluginName."/Scripts/InstallScript.php", $data);
+        file_put_contents ($dir."/".$pluginName."/Scripts/InstallScript.php", $data);
 
         $data=$this->getService($pluginName);
-        file_put_contents ($dir.$pluginName."/Service/Demo/DemoService.php", $data);
+        file_put_contents ($dir."/".$pluginName."/Service/Demo/DemoService.php", $data);
 
         $data=$this->getServiceImpl($pluginName);
-        file_put_contents ($dir.$pluginName."/Service/Demo/Impl/DemoServiceImpl.php", $data);
+        file_put_contents ($dir."/".$pluginName."/Service/Demo/Impl/DemoServiceImpl.php", $data);
 
         $data=$this->getDao($pluginName);
-        file_put_contents ($dir.$pluginName."/Service/Demo/Dao/DemoDao.php", $data);
+        file_put_contents ($dir."/".$pluginName."/Service/Demo/Dao/DemoDao.php", $data);
 
         $data=$this->getDaoImpl($pluginName);
-        file_put_contents ($dir.$pluginName."/Service/Demo/Dao/Impl/DemoDaoImpl.php", $data);
+        file_put_contents ($dir."/".$pluginName."/Service/Demo/Dao/Impl/DemoDaoImpl.php", $data);
         $dialog->writeGeneratorSummary($output, $errors);
     }
 
