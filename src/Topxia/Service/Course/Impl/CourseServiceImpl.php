@@ -398,7 +398,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'gradeId' => 0,
 			'freeStartTime' => 0,
 			'freeEndTime' => 0,
-			'compulsory' => 0
+			'compulsory' => 0,
 			'deadlineNotify' => 'none',
 			'daysOfNotifyBeforeDeadline' => 0
 
