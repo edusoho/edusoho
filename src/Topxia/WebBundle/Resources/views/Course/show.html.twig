@@ -171,6 +171,9 @@
 							<span class="badge">{{ course.ratingNum }}</span>
 						</a>
 					</li>
+					<li>
+						<a class="btn btn-primary btn-sm pull-right" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+					</li>
 				</ul>
 			</div>
 
