@@ -7,6 +7,8 @@ interface LessonDao
 
     public function getLesson($id);
 
+    public function getLessonByCourseIdAndNumber($courseId, $number);
+
     public function findLessonsByCourseId($courseId);
 
     public function findLessonsByTypeAndMediaId($type, $mediaId);

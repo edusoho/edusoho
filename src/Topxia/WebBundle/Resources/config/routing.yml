@@ -233,6 +233,11 @@ course_order_pay:
     defaults: { _controller: TopxiaWebBundle:CourseOrder:pay }
     methods: [POST]
 
+course_order_repay:
+    pattern:  /course/order/repay
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }
+    methods: [POST]
+
 course_order_pay_return:
     pattern:  /course/order/pay/{name}/return
     defaults: { _controller: TopxiaWebBundle:CourseOrder:payReturn }
@@ -649,9 +654,6 @@ course_manage_question_upload:
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadFile }
     methods: [POST]
 
-
-
-
 course_manage_question_category:
     pattern: /course/{courseId}/manage/question/category
     defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:index }
@@ -745,7 +747,6 @@ course_manage_testpaper_build_check:
 course_manage_testpaper_update:
     pattern: /course/{courseId}/manage/testpaper/{id}/update
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:update }
-
 
 course_manage_testpaper_delete:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/delete

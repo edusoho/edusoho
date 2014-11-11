@@ -54,6 +54,7 @@ class CourseTestpaperManageController extends BaseController
 
         $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
         $types = array();
+        
         foreach ($typeNames as $type => $name) {
             $typeObj = QuestionTypeFactory::create($type);
             $types[] = array(
@@ -206,7 +207,6 @@ class CourseTestpaperManageController extends BaseController
         }
 
         $items = $this->getTestpaperService()->getTestpaperItems($testpaper['id']);
-
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
 
         $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));
@@ -290,7 +290,7 @@ class CourseTestpaperManageController extends BaseController
 
 
         $replace = empty($conditions['replace']) ? '' : $conditions['replace'];
-
+        
         $paginator = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),
@@ -305,7 +305,6 @@ class CourseTestpaperManageController extends BaseController
         );
 
         $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));
-
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:item-picker-modal.html.twig', array(
             'course' => $course,
             'testpaper' => $testpaper,

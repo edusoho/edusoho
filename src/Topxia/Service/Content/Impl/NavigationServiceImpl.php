@@ -47,9 +47,10 @@ class NavigationServiceImpl extends BaseService implements NavigationService
                 $navigations[$nav['parentId']]['children'] = array();
             }
 
+            if ($nav['isOpen']) {
             $navigations[$nav['parentId']]['children'][] = $nav;
-
             unset($navigations[$index]);
+            }
         }
 
         return $navigations;

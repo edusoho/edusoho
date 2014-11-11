@@ -1,2 +1,9 @@
-Powered by <a href="http://www.edusoho.com/" target="_blank">EduSoho校园版 v{{ constant('\\Topxia\\System::VERSION') }}</a>
-©2013-2014 <a href="http://www.howzhi.com/" target="_blank"> 好知网</a>
+{% if setting('copyright.owned') %}
+  {% if setting('copyright.name') %}
+    Powered by <a href="{{ path('homepage') }}" target="_blank">{{ setting('copyright.name') }}</a>
+  {% endif %}
+{% else %}
+  Powered by <a href="http://www.edusoho.com/" target="_blank">EduSoho v{{ constant('\\Topxia\\System::VERSION') }}</a>
+  ©2013-2014 <a href="http://www.howzhi.com/" target="_blank"> 好知网</a>
+{% endif %}
+

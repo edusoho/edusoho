@@ -13,13 +13,13 @@ define(function(require, exports, module) {
 
         name += '.js?' + window.app.version;
 
-        seajs.use(name, function(module) {
-            if ($.isFunction(module.run)) {
-                module.run();
-            }
-        });
+		seajs.use(name, function(module) {
+			if ($.isFunction(module.run)) {
+				module.run();
+			}
+		});
 
-    };
+	};
     
     window.app.load = exports.load;
 

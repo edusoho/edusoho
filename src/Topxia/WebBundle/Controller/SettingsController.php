@@ -365,11 +365,11 @@ class SettingsController extends BaseController
 		$user = $this->getCurrentUser();
 		$binds = array(
 			'weibo' => array(
-				'type' => '新浪微博账号' , 'image' => '/assets/img/social/weibo.png' , 'state' => null),
+				'type' => '新浪微博帐号' , 'image' => '/assets/img/social/weibo.png' , 'state' => null),
 			'qq' => array(
-				'type' => 'QQ账号' , 'image' => '/assets/img/social/qzone.png' , 'state' => null),
+				'type' => 'QQ帐号' , 'image' => '/assets/img/social/qzone.png' , 'state' => null),
 			'renren' => array(
-				'type' => '人人网账号' , 'image' => '/assets/img/social/renren.gif' , 'state' => null)
+				'type' => '人人网帐号' , 'image' => '/assets/img/social/renren.gif' , 'state' => null)
 		);
 		$userBinds = $this->getUserService()->findBindsByUserId($user->id) ?  : array();
 
@@ -408,7 +408,7 @@ class SettingsController extends BaseController
 
 		$bind = $this->getUserService()->getUserBindByTypeAndUserId($type, $user->id);
 		if (! empty($bind)) {
-			$this->setFlashMessage('danger', '您已经绑定了该第三方网站的账号，不能重复绑定!');
+			$this->setFlashMessage('danger', '您已经绑定了该第三方网站的帐号，不能重复绑定!');
 			goto response;
 		}
 
@@ -429,12 +429,12 @@ class SettingsController extends BaseController
 
 		$bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
 		if (!empty($bind)) {
-			$this->setFlashMessage('danger', '该第三方账号已经被其他账号绑定，不能重复绑定!');
+			$this->setFlashMessage('danger', '该第三方帐号已经被其他帐号绑定，不能重复绑定!');
 			goto response;
 		}
 
 		$this->getUserService()->bindUser($type, $token['userId'], $user['id'], $token);
-		$this->setFlashMessage('success', '账号绑定成功!');
+		$this->setFlashMessage('success', '帐号绑定成功!');
 
 		response:
 		return $this->redirect($this->generateUrl('settings_binds'));

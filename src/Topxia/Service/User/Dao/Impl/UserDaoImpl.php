@@ -11,11 +11,16 @@ class UserDaoImpl extends BaseDao implements UserDao
 {
     protected $table = 'user';
 
+
     protected $allowedOrderByFields = array('point');
 
-    public function getUser($id)
+
+    public function getUser($id, $lock = false)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        if ($lock) {
+            $sql .= " FOR UPDATE";
+        }
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 

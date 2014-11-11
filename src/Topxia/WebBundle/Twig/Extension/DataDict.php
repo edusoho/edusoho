@@ -271,7 +271,6 @@ class DataDict
     		'open'=>'开启',
     		'close'=>'关闭',
     	),
-
     	'family' =>array(
     		'mother' =>'妈妈',
     		'father' =>'爸爸',

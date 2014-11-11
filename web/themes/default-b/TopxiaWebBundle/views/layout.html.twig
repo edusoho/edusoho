@@ -8,7 +8,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %} {{ setting('site.name', 'EDUSOHO') }} - {% if setting('site.slogan') %}{{ setting('site.slogan') }} -{% endif %} Powered by EduSoho校园版{% endblock %}</title>
+  <title>
+    {%- block title -%}
+      {{ setting('site.name', 'EDUSOHO') }}
+      {% if setting('site.slogan') %} - {{ setting('site.slogan') }} {% endif %}
+      {% if not setting('copyright.owned') %} - Powered by EDUSOHO校园版 {% endif %}
+    {%- endblock -%}
+  </title>
   <meta name="keywords" content="{% block keywords %}{% endblock %}" />
   <meta name="description" content="{% block description %}{% endblock %}" />
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
@@ -86,7 +92,7 @@
                 <a href="javascript:;" class="dropdown-toggle"  data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
-                  <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 账号设置</a></li>
+                  <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 帐号设置</a></li>
                   <li class="divider"></li>
                   {% if is_granted('ROLE_BACKEND') %}
                     <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> 管理后台</a></li>
@@ -113,7 +119,7 @@
     {% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) %}
       <div class="alert alert-warning">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        为了账号的安全，以及更好的使用体验，请设置您的Email地址。
+        为了帐号的安全，以及更好的使用体验，请设置您的Email地址。
         <a href="{{ path('settings_setup') }}">现在就去设置</a>
       </div>
     {% endif %}

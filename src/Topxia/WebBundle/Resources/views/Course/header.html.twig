@@ -61,7 +61,7 @@
             </div>
 {#             {% if member.role|default(null) == 'student' %}
                   {% if member.orderId %}
-                   <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
+                   <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}"><i class="glyphicon glyphicon-log-out"></i></a>
                   {% else %}
                   <a class="btn btn-default btn-sm course-exit-btn" id="exit-course-learning" title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}"><i class="glyphicon glyphicon-log-in"></i></a>
                     {% endif %}
@@ -123,7 +123,14 @@
       {% else %}
        <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师。
+          您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师，或点击
+          <a class="btn btn-primary btn-sm "  href="{{path('course_rebuy',{courseId:course.id})}}">
+          {% if course.price>0 %}
+          重新购买
+          {% else %}
+          重新加入
+          {% endif %}
+          </a>
       </div>
       {% endif %}
     {% endif %}

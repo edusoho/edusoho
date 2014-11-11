@@ -3,41 +3,37 @@ define(function(require, exports, module) {
 	var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
 
+    var $modal = $('#course-buy-form').parents('.modal');
+
     exports.run = function() {
         var validator = new Validator({
             element: '#course-buy-form',
-            failSilently: true
-        });
-
-        if ($('#course-buy-form').find('input[name="mobile"]').length > 0){
-            validator.addItem({
-                element: '[name="mobile"]',
-                onFormValidated: function(error, results, $form) {
+            failSilently: true,
+            onFormValidated: function(error, results, $form) {
                 if (error) {
                     return false;
                 }
-                $('#join-course-btn').button('submiting').addClass('disabled');
-                 },
-                required: true,
-                rule: 'phone'
-            });
-        }
+                $modal.find('[type=submit]').button('loading').addClass('disabled');
+            }
+        });
 
-        if ($('#course-buy-form').find('input[name="truename"]').length > 0){
-            validator.addItem({
-                element: '[name="truename"]',
-                required: true,
-                rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}'
-            });
-        }
+        validator.addItem({
+            element: '[name="mobile"]',
+            required: true,
+            rule: 'phone'
+        });
 
-        if ($('#course-buy-form').find('input[name="qq"]').length > 0){
-            validator.addItem({
-                element: '[name="qq"]',
-                required: true,
-                rule: 'qq'
-            });
-        }
+        validator.addItem({
+            element: '[name="truename"]',
+            required: true,
+            rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}'
+        });
+
+        validator.addItem({
+            element: '[name="qq"]',
+            required: true,
+            rule: 'qq'
+        });
 
         validator.addItem({
             element: '[name="idcard"]',

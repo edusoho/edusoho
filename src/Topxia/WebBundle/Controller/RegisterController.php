@@ -304,7 +304,7 @@ class RegisterController extends BaseController
         $auth = $this->getSettingService()->get('auth', array());
         $site = $this->getSettingService()->get('site', array());
         $emailTitle = $this->setting('auth.email_activation_title',
-            '请激活你的账号 完成注册');
+            '请激活你的帐号 完成注册');
         $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
 
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');

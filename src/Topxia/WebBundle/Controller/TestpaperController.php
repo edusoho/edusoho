@@ -182,10 +182,8 @@ class TestpaperController extends BaseController
         }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-
         $result = $this->getTestpaperService()->showTestpaper($id);
         $items = $result['formatItems'];
-
         $total = $this->makeTestpaperTotal($testpaper, $items);
 
         $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);

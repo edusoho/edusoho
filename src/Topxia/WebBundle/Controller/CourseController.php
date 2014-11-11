@@ -207,7 +207,7 @@ class CourseController extends BaseController
 	 * 如果用户未购买该课程，那么显示课程的营销界面。
 	 */
 	public function showAction(Request $request, $id)
-	{	
+	{
 
 		$course = $this->getCourseService()->getCourse($id);
 
@@ -256,6 +256,20 @@ class CourseController extends BaseController
 		$class=$this->getClassesService()->getClass($course['classId']);
 
 		$items = $this->getCourseService()->getCourseItems($course['id']);
+		$mediaMap = array();
+		foreach ($items as $item) {
+			if (empty($item['mediaId'])) {
+				continue;
+			}
+
+			if (empty($mediaMap[$item['mediaId']])) {
+				$mediaMap[$item['mediaId']] = array();
+			}
+			$mediaMap[$item['mediaId']][] = $item['id'];
+		}
+
+		$mediaIds = array_keys($mediaMap);
+		$files = $this->getUploadFileService()->findFilesByIds($mediaIds);
 
 		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
@@ -731,7 +745,7 @@ class CourseController extends BaseController
 
 		return $this->redirect($this->generateUrl('course_show',array('id' => $courseId)));
 	}
-	
+
 	private function createCourseForm()
 	{
 		return $this->createNamedFormBuilder('course')
@@ -792,5 +806,10 @@ class CourseController extends BaseController
     private function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    private function getUploadFileService()
+    {
+	return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }
