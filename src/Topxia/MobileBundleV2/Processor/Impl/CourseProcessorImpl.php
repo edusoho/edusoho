@@ -428,6 +428,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
 		$isTeacherPost = $this->controller->getThreadService()->findThreadElitePosts($course['id'], $thread['id'], 0, 100);
 		$thread['isTeacherPost'] = empty($isTeacherPost) ? false : true;
+		$user['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'course-large.png', true);
+        $user['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'course-large.png', true);
+        $user['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'course-large.png', true);
 		$thread['user'] = $user;
 		$thread['createdTime'] = date('c', $thread['createdTime']);
 		$thread['latestPostTime'] = date('c', $thread['latestPostTime']);
