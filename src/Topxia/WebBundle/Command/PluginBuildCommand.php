@@ -101,7 +101,7 @@ class PluginBuildCommand extends GeneratorCommand
         $generator = $this->getGenerator();
         $generator->generate($namespace, $bundle, $dir, $format, $structure);
 
-        $output->writeln('Generating the bundle code: <info>OK</info>');
+        $output->writeln('创建插件包: <info>OK</info>');
 
         $errors = array();
         $runner = $dialog->getRunner($output, $errors);
