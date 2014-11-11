@@ -328,6 +328,7 @@ class SettingController extends BaseController
             'renren_secret'=>'',
             'renren_set_fill_account'=>0,
             'verify_code' => '',
+            'captcha_enabled'=>0,
         );
 
         $loginConnect = array_merge($default, $loginConnect);

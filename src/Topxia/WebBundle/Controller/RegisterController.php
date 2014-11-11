@@ -23,8 +23,8 @@ class RegisterController extends BaseController
     
             $registration = $request->request->all();
 
-            $site = $this->getSettingService()->get('site', array());
-            if ($site['captcha_enabled'] == 1){
+            $loginConnect = $this->getSettingService()->get('login_bind', array());
+            if ($loginConnect['captcha_enabled'] == 1){
                 
                 $captchaCodePostedByUser = $registration['captcha_num'];
 
