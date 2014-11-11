@@ -39,7 +39,7 @@ class SettingController extends BaseController
             'closed_note'=>'',
             'favicon'=>'',
             'copyright'=>'',
-            'chatcha_enabled' => 0,
+            'captcha_enabled' => 0,
         );
 
         $site = array_merge($default, $site);
