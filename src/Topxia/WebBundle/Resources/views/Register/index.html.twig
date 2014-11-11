@@ -169,6 +169,16 @@
             </div>
           {% endif %}
 
+          {% if setting('site.chatcha_enabled') == 1 %}
+		    <div class="form-group">
+		        <div class="controls">
+		            <label>
+		                我是验证码!!
+		            </label>
+		        </div>
+		    </div>
+          {% endif %}
+
           {% if setting('auth.user_terms') == 'opened' %}
             <div class="form-group">
               <div class="controls">
