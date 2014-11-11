@@ -172,10 +172,11 @@
           {% if setting('site.captcha_enabled') == 1 %}
 		    <div class="form-group">
 		        <div class="controls">
-		            <p>验证码：
-			            <input type="text" class="form-control" id="captcha_num" name="captcha_num" maxlength="4" data-explain="CAPTCHA" required="required">
-						<img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" align="absmiddle"/>
-					</p>
+		          <label class="control-label required" for="captcha_num">验证码</label>
+              <div class="controls">
+			            <input type="text" class="controls col-md-2" id="captcha_num" name="captcha_num" maxlength="4" data-explain="CAPTCHA" required="required">
+						      <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" align="absmiddle">
+					   </div>
 		        </div>
 		    </div>
           {% endif %}
