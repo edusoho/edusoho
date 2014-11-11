@@ -683,13 +683,29 @@ course_manage_list_teacher_test_reviewing:
     defaults: { _controller: TopxiaWebBundle:Testpaper:listReviewingTest }
 
 course_manage_list_teacher_materials:
-    pattern: /my/teacher/materials/{type}/{viewMode}
-    defaults: { _controller: TopxiaWebBundle:MaterialLib:index, type: all, viewMode: thumb }
+    pattern: /my/teacher/materials/browse/{type}/{viewMode}/{source}
+    defaults: { _controller: TopxiaWebBundle:MaterialLib:index, type: 'all', viewMode: 'thumb', source: 'upload'}
     
 course_manage_delete_teacher_material:
     pattern: /my/teacher/materials/{id}/delete
     defaults: { _controller: TopxiaWebBundle:MaterialLib:delete }
+ 
+course_manage_show_share_my_material:
+    pattern: /my/teacher/materials/share/show
+    defaults: { _controller: TopxiaWebBundle:MaterialLib:showShare }
     
+course_manage_save_share_my_material:
+    pattern: /my/teacher/materials/share/save
+    defaults: { _controller: TopxiaWebBundle:MaterialLib:saveShare }
+
+course_manage_show_share_history:
+    pattern: /my/teacher/materials/share/history
+    defaults: { _controller: TopxiaWebBundle:MaterialLib:showShareHistory } 
+
+course_manage_cancel_share:
+    pattern: /my/teacher/materials/share/cancel
+    defaults: { _controller: TopxiaWebBundle:MaterialLib:cancelShare } 
+           
 course_manage_list_teacher_test_finished:
     pattern: /my/teacher/finished/test/list
     defaults: { _controller: TopxiaWebBundle:Testpaper:listFinishedTest }
@@ -1140,6 +1156,10 @@ content_page_list:
 teacher:
     pattern: /teacher
     defaults: {_controller: TopxiaWebBundle:Teacher:index }
+
+teacher_search:
+    pattern: /teacher/search
+    defaults: {_controller: TopxiaWebBundle:Teacher:search }
 
 partner_login:
     pattern: /partner/login

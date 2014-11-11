@@ -36,4 +36,22 @@ class TeacherController extends BaseController
             'paginator' => $paginator
         ));
     }
+    
+	public function searchAction($request, $keyword) {
+		$conditions = array (
+				'roles' => 'ROLE_TEACHER',
+				'locked' => 0 
+		);
+		
+		if (! empty ( $keyword )) {
+			$conditions ['nickname'] = $keyword;
+		}
+		
+		$teachers = $this->getUserService ()->searchUsers ( $conditions, array (
+				'nickname',
+				'ASC' 
+		), 0, 1000 );
+		
+		return $this->createJsonResponse ( $teachers );
+	}
 }

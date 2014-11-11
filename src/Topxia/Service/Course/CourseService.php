@@ -68,6 +68,8 @@ interface CourseService
 
 	public function analysisCourseDataByTime($startTime,$endTime);
 
+	public function uploadCourseFile($targetType, $targetId, array $fileInfo, $implemtor, UploadedFile $originalFile);
+
 	/**
 	 * 删除课程
 	 */

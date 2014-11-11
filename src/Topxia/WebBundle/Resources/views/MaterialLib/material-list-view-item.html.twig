@@ -1,6 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% set quality = "" %}
-<tr id="upload-file-tr-{{uploadFile.id}}" data-role="item" data-convertHash="{{uploadFile.convertHash}}">
+<tr id="upload-file-tr-{{uploadFile.id}}" data-role="item" data-convertHash="{{uploadFile.convertHash}}" class="item-material">
 
   <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
 
@@ -9,27 +9,10 @@
       <span class="glyphicon glyphicon-cloud text-muted" title="云文件"></span>
     {% endif %}
     
-    {% if uploadFile.type == "video" and uploadFile.metas2|default(null) %}
-      {% if uploadFile.convertParams.videoQuality == "low" %}
-      {% set quality = "流畅画质" %}
-      {% elseif uploadFile.convertParams.videoQuality == "normal" %}
-      {% set quality = "标准画质" %}
-      {% elseif uploadFile.convertParams.videoQuality == "high" %}
-      {% set quality = "精细画质" %}
-      {% endif %}
-      {% if uploadFile.metas2.shd|default(null) %}
-      <span class="label label-info pull-right tip" data-toggle="tooltip" title="{{quality}}">超清</span>
-      {% elseif uploadFile.metas2.hd|default(null) %}
-      <span class="label label-info pull-right tip" data-toggle="tooltip" title="{{quality}}">高清</span>
-      {% elseif uploadFile.metas2.sd|default(null) %}
-      <span class="label label-info pull-right tip" data-toggle="tooltip" title="{{quality}}">标清</span>
-      {% endif %}
-      
-    {% endif %}
     {% if uploadFile.convertStatus == 'waiting' %}
       {{uploadFile.filename}}<br><span class="text-warning text-sm">正在文件格式转换</span>
       {% if ( now - uploadFile.updatedTime ) > 28800 %}
-        <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
+        <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:'0', fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
       {% endif %}
 
     {% elseif uploadFile.convertStatus == 'doing' %}
@@ -43,7 +26,7 @@
       {% if uploadFile.targetType in ['courselesson', 'coursematerial'] %}
         <a href="" target="_blank">{{ uploadFile.filename }}</a>
         {% if uploadFile.type == 'ppt' and ( not uploadFile.metas2.length|default(null) ) and uploadFile.targetType == 'courselesson'  %}
-          <br><a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
+          <br><a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:'0', fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
         {% endif %}
       {% else %}
         {{ uploadFile.filename }}
@@ -56,18 +39,22 @@
 
   </td>
   <td>{{ web_macro.bytesToSize(uploadFile.size) }}</td>
+{% if type == 'all' or type == 'video' or type == 'audio'%}
   <td> 
-    {{ dict_text('fileType', uploadFile.type) }}
+  {% if uploadFile.type == 'video' or uploadFile.type == 'audio'%}
+		{{ uploadFile.length|date('i:s') }}
+		{% endif %}
   </td>
+  {% endif %}
   <td> 
-    <span class="text-sm">{{ web_macro.user_link(users[uploadFile.updatedUserId]|default(null)) }}</span>
-    <br>
     <span class="text-muted text-sm">{{ uploadFile.updatedTime|date('Y-n-d H:i')}}</span>
   </td>
-  <td>
+  <td  >
+  <span style="float: right;">
     <a class="btn btn-link" title="预览" href="" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
 	<a class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="}}"><span class="glyphicon glyphicon-edit"></span></a>
-	<a class="btn btn-link" title="删除" data-url="}}"><span class="glyphicon glyphicon-trash"></span></a>
+	<a class="btn btn-link delete-material-btn" title="删除" data-url="{{ path('course_manage_delete_teacher_material', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-trash"></span></a>
+  </span>
   </td>
 
 </tr>

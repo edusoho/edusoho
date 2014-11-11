@@ -892,9 +892,11 @@ class FileToolkit
             return 'audio';
         } elseif (in_array($extension, array('jpg', 'jpeg', 'gif', 'png'))) {
             return 'image';
-        } elseif (in_array($extension, array('txt', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'ppt', 'pptx'))) {
+        } elseif (in_array($extension, array('txt', 'doc', 'docx', 'xls', 'xlsx', 'pdf'))) {
             return 'document';
-        } else {
+        } elseif (in_array($extension, array('ppt', 'pptx'))) {
+            return 'ppt';
+        }else {
             return 'other';
         }
     }

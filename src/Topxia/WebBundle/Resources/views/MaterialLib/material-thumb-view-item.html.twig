@@ -1,13 +1,31 @@
-    <li class="course-grid item-material" style="width: 180px; height: 180px; padding: 8px;">
-      <input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" >
-      
-      <img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
-        <span class="text-sm">{{ uploadFile.filename }}</span>
-        <span class="row">
-            <button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="{{ path('course_manage_delete_teacher_material', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-edit"></span></button>
+<li class="course-grid item-material">
+	<div style="width: 180px; height: 180px; padding: 8px;">
+    <input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" >
+    	
+		{% if uploadFile.type == 'video' %}
+    	<img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
+		{% elseif uploadFile.type == 'audio' %}
+    	<img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
+		{% elseif uploadFile.type == 'image' %}
+    	<img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
+		{% elseif uploadFile.type == 'ppt' %}
+    	<img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
+  	{% elseif uploadFile.type == 'document' %}
+    	<img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
+  	{% elseif uploadFile.type == 'other' %}
+    	<img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
+		{% endif %}
+		
+    <span class="text-sm">{{ uploadFile.filename }}</span>
+    
+    {% if uploadFile.type == 'video' or uploadFile.type == 'audio'%}
+			<span class="text-sm"> Length: {{ uploadFile.length|date('i:s') }}</span>
+    
+    {% endif %}
 
-	        <button class="btn btn-link delete-material-btn" title="删除" data-url="{{ path('course_manage_delete_teacher_material', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-trash"></span></button>
-        
-            
-            </span>
-    </li>
+    <span class="row">
+    	<a class="btn btn-link" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="{{ path('course_manage_delete_teacher_material', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-edit"></span>编辑</a>
+    	<a class="btn btn-link delete-material-btn" data-url="{{ path('course_manage_delete_teacher_material', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-trash"></span>删除</a>
+    </span>
+  </div>
+</li>

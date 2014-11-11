@@ -1,5 +1,4 @@
-{% extends 'TopxiaWebBundle:MaterialLib:layout.html.twig' %}
-{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+{% extends 'TopxiaWebBundle:MaterialLib:layout.browse.html.twig' %}
 
 {% block title %}教学资料库 - {{ parent() }}{% endblock %}
 
@@ -10,18 +9,24 @@
 {% block list %}
 
 <div id="aticle-table-container">
-    <table class="table table-hover table-striped" id="article-table">
+    <table class="table table-hover table-striped" id="material-item-list">
         <thead>
             <tr>
                 <th width="2%"><input type="checkbox"  data-role="batch-select"></th>
                 <th width="35%">文件名</th>
                 <th width="15%">大小</th>
+                {% if type == 'all' or type == 'video' or type == 'audio'%}
                 <th width="15%">时长</th>
+                {% endif %}
                 <th width="15%">上传时间</th>
                 <th width="28%">
                     <span style="float: right;">
-                        <a href="{{path('course_manage_list_teacher_materials', {type: type, viewMode:'thumb'}) }}">图</a>
-                        <a href="{{path('course_manage_list_teacher_materials', {type: type, viewMode:'list'}) }}">表</a>
+                        <a href="{{path('course_manage_list_teacher_materials', {type: type, viewMode:'thumb', source: source}) }}">
+                             <span class="glyphicon glyphicon-th-large" />
+                        </a>
+                        <a href="{{path('course_manage_list_teacher_materials', {type: type, viewMode:'list', source: source}) }}">
+                            <span class="glyphicon glyphicon-th-list" />
+                        </a>
                     </span>
                 </th>
             </tr>

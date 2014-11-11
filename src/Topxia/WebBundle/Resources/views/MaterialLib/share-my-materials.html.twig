@@ -1,0 +1,87 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}分享教学资料{% endblock %}
+{% block body %}
+
+<script type="text/javascript">
+$("#target-teachers-input").select2({
+	multiple: true,
+	data:[
+		{% for contact in recentContacts %}
+	  	{id: '{{ contact.id }}', text: '{{ contact.nickname }}'},
+		{% endfor %}
+	  	]
+});
+
+$(".teacherNameBtn").click(function() { 
+	addTeacher(this.id, this.innerHTML);
+	
+	
+	
+//   	alert($("#target-teachers-input").select2("val"));
+	return false;
+	});
+
+	addTeacher = function(id, nickname){
+// 		alert("Teacher added: " + id + ", " + nickname);
+
+		var data = $("#target-teachers-input").select2("data");
+
+		data.push({id: id, text: nickname});
+		
+		$("#target-teachers-input").select2("data", data);
+	}
+</script>
+
+<form id="share-materials-form" class="form-horizontal" method="post" action="{{ path('course_manage_save_share_my_material') }}">
+				
+	<div class="row form-group">
+		<label class="col-md-3 control-label">分享我的教学资料给</label>
+		<div class="col-md-7 controls">
+			<div class="select2-container select2-container-multi width-full"
+				id="target-teachers-input"></div>
+		</div>
+	</div>
+
+	<div class="row form-group">
+
+		<div class="col-md-3 control-label">
+			<label for="student-nickname">最近联系人</label>
+		</div>
+		<div class="col-md-7 controls">
+			{% for contact in recentContacts %}
+			<button class="btn btn-info btn-sm mhs teacherNameBtn"
+				id="{{ contact.id }}">{{ contact.nickname }}</button>
+			{% else %}
+			<div class="empty">无联系人记录</div>
+			{% endfor %}
+		</div>
+	</div>
+
+	<div class="row form-group">
+		<div class="col-md-3 control-label">
+			<label for="buy-price">查找</label>
+		</div>
+		<div class="col-md-4 controls">	
+			<div class="input-group">
+            {% set url = path('course_manage_teachers_match', {id:"1"}) ~ '?q={{query}}' %}
+            <input class="form-control" id="teacher-input" type="text" data-role="item-input" data-url="{{ url }}">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" data-role="item-add" >添加</button>
+            </span>
+          </div>
+     </div>
+		</div>
+</form>		
+
+<script>app.load('material-lib/teachers')</script>
+{% endblock %}
+
+{% block footer %}
+	<button id="share-materials-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#share-materials-form" data-submiting-text="正在保存...">保存</button>
+	<button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+{% endblock %}
+
+

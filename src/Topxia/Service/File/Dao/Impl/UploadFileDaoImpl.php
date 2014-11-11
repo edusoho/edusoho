@@ -100,13 +100,16 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             unset($conditions['filename']);
         }
 
-        return $this->createDynamicQueryBuilder($conditions)
+         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
             ->andWhere('targetType = :targetType')
             ->andWhere('targetId = :targetId')
             ->andWhere('type = :type')
             ->andWhere('storage = :storage')
-            ->andWhere('filename LIKE :filenameLike');
+            ->andWhere('filename LIKE :filenameLike')
+							->andWhere('createdUserId in (:createdUserIds)');
+
+         return $builder;
     }
 
 }

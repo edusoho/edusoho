@@ -10,7 +10,9 @@ define(function(require, exports, module) {
         _inited: false,
 
         events: {
-            'click .file-browser-item': 'onSelectFile'
+            'click .file-browser-item': 'onSelectFile',
+            'keypress #file-filter-by-name': 'onFilterByName',
+            'change [name=source]': 'onFilterBySource'
         },
 
         setup: function() {
@@ -42,12 +44,14 @@ define(function(require, exports, module) {
                         html += '</li>';
                     });
                     html += '</ul>';
-                    self.element.html(html);
+                    $("#file-browser-list-container").html(html);
+//                    self.element.html(html);
                     self.set('files', files);
                 } else {
                     var message = self.element.data('empty');
                     if (message) {
                         self.element.html('<div class="empty">' + message + '</div>');
+//                	    $("#file-browser-list-container").html('<div class="empty">' + message + '</div>');
                     }
                 }
 
@@ -60,6 +64,14 @@ define(function(require, exports, module) {
             var $file = $(e.currentTarget);
             var file = this.get('files')[$file.data('index')];
             this.trigger('select', file);
+        },
+        
+        onFilterByName: function(e){
+        	alert("file name changed");
+        },
+        
+        onFilterBySource: function(e){
+        	alert("file source changed");
         },
 
         _readAttrFromData: function() {

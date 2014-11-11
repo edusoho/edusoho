@@ -12,6 +12,7 @@ use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -569,6 +570,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 	    	return $this->getCourseDao()->analysisCourseDataByTime($startTime,$endTime);
 	}
+
+	public function uploadCourseFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null)
+	{
+		return $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, $implemtor, $originalFile);
+	}
+
 
 	private function autosetCourseFields($courseId)
 	{
@@ -2044,6 +2051,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getCourseDao ()
     {
         return $this->createDao('Course.CourseDao');
+    }
+    
+    private function getCourseFileDao ()
+    {
+    	return $this->createDao('Course.CourseFileDao');
     }
 
     private function getOrderDao ()

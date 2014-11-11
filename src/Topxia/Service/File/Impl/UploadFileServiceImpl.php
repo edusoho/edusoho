@@ -71,13 +71,33 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 $orderBy =  array('size', 'ASC');
                 break;
             case 'sizeDesc':
-                $orderBy =  array('size', 'DESC');
-                break;
-            default:
-                throw $this->createServiceException('参数sort不正确。');
-        }
-
-        return $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
+                $orderBy =  array('size',
+						'DESC' 
+				);
+				break;
+			default :
+				throw $this->createServiceException ( '参数sort不正确。' );
+		}
+		
+		if (array_key_exists ('source', $conditions ) && $conditions ['source'] == 'shared') {
+			$myFriends = $this->getUploadFileShareDao ()->findMySharingContacts ( $conditions ['currentUserId'] );
+			
+			if (isset ( $myFriends )) {
+				$createdUserIds = implode ( ",", ArrayToolkit::column ( $myFriends, "sourceUserId" ) );
+			}else{
+				//Browsing shared files, but nobody is sharing with current user.
+				return array();
+			}
+			
+		} elseif (isset($conditions['currentUserId'] )) {
+			$createdUserIds = $conditions ['currentUserId'];
+		}
+		
+		if(isset($createdUserIds)){
+			$conditions ['createdUserIds'] = $createdUserIds;
+		}
+		
+		return $this->getUploadFileDao ()->searchFiles ( $conditions, $orderBy, $start, $limit );
     }
 
     public function searchFileCount($conditions)
@@ -88,7 +108,16 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function addFile($targetType,$targetId,array $fileInfo=array(),$implemtor='local',UploadedFile $originalFile=null)    
     {
         $file = $this->getFileImplementor($implemtor)->addFile($targetType,$targetId,$fileInfo,$originalFile);
-        return $this->getUploadFileDao()->addFile($file);
+        
+        $file = $this->getUploadFileDao()->addFile($file);
+        
+        if(!empty($targetId)){
+	        $courseFileFields = array('fileId' => $file['id'], 'userId' => $this->getCurrentUser()->id, 'targetId' => $targetId, 'targetType' => $targetType, 'createdTime' => time());
+	        
+	        $this->getCourseFileDao()->addCourseFile($courseFileFields);
+        }
+        
+        return $file;
     }
 
     public function renameFile($id, $newFilename)
@@ -119,9 +148,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'ppt') {
             $deleteSubFile = true;
         }
-
+        
         $this->getFileImplementorByFile($file)->deleteFile($file, $deleteSubFile);
 
+        $this->getCourseFileDao()->deleteCourseFileLink($file['createdUserId'], $file['id'], $file['targetId']);
+        
         return $this->getUploadFileDao()->deleteFile($id);
     }
 
@@ -321,6 +352,63 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         return $this->getUploadFileDao()->getFileByTargetType($targetType);
     }
+    
+    public function findRecentContacts($sourceUserId){
+    	$userIds = $this->getUploadFileShareDao()->findRecentContacts($sourceUserId);
+    	
+    	if(!empty($userIds)){
+    		return $this->getUserService()->findUsersByIds ( ArrayToolkit::column ( $userIds, 'targetUserId' ) );
+    	}else{
+    			return null;
+    	}
+	}
+	
+	public function findShareHistory($sourceUserId){
+		$shareHistories = $this->getUploadFileShareDao()->findShareHistoryByUserId($sourceUserId);
+		
+		return $shareHistories;
+	}
+
+	public function shareFiles($sourceUserId, $targetUserIds) {
+		foreach ( $targetUserIds as $targetUserId ) {
+			$shareHistory = $this->getUploadFileShareDao()->findShareHistory($sourceUserId, $targetUserId);
+			
+			if(isset($shareHistory)){
+				//File share record exists, update the existing record
+				$fileShareFields = array (
+						'isActive' => 1,
+						'updatedTime' => time ()
+				);
+				
+				$this->getUploadFileShareDao()->updateShare($shareHistory['id'], $fileShareFields);
+			}else{
+				//Add new file share record
+				$fileShareFields = array (
+						'sourceUserId' => $sourceUserId,
+						'targetUserId' => $targetUserId,
+						'isActive' => 1,
+						'createdTime' => time (),
+						'updatedTime' => time () 
+				);
+				
+				$this->getUploadFileShareDao()->createShare($fileShareFields);
+			}
+		}
+	}
+
+	public function cancelShareFile($sourceUserId, $targetUserId) {
+		$shareHistory = $this->getUploadFileShareDao ()->findShareHistory ( $sourceUserId, $targetUserId );
+		
+		if (! empty ( $shareHistory )) {
+			$fileShareFields = array (
+					'isActive' => 0,
+					'updatedTime' => time () 
+			);
+			
+			$this->getUploadFileShareDao ()->updateShare ( $shareHistory ['id'], $fileShareFields );
+		}
+	}
+    
 
     private function generateKey ($length = 0 )
     {
@@ -342,6 +430,15 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     private function getUploadFileDao()
     {
         return $this->createDao('File.UploadFileDao');
+    }
+    
+    private function getCourseFileDao ()
+    {
+    	return $this->createDao('Course.CourseFileDao');
+    }
+    
+    private function getUploadFileShareDao(){
+    	return $this->createDao('File.UploadFileShareDao');
     }
 
     private function getUserService()

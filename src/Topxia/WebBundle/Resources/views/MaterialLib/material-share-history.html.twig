@@ -1,0 +1,45 @@
+{% extends 'TopxiaWebBundle:MaterialLib:layout.html.twig' %}
+
+{% block title %}我的资料库分享历史- {{ parent() }}{% endblock %}
+
+{% set side_nav = 'material-lib' %}
+{% set parentId = parentId | default(null)%}
+{% set script_controller = 'material-lib/share-history' %}
+
+{% block browse_files %}
+
+<div id="share-history-table-container">
+    <table class="table table-hover table-striped" id="share-history-table">
+        <thead>
+            <tr>
+                <th width="20%"></th>
+                <th width="60%" class="text-center">我的资料库分享历史</th>
+                <th width="20%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for history in shareHistories %}
+                <tr class="share-history-record" data-role="item">
+                	<td>{{ history['updatedTime']|date('Y-n-d H:i') }}</td>
+                	<td>
+                	{% if history['isActive'] == '1' %}
+                							将资料分享给 {{ (targetUsers[history['targetUserId']])['nickname'] }} 老师。
+                	{% else %}
+                							取消分享资料给 {{ (targetUsers[history['targetUserId']])['nickname'] }} 老师。
+                	{% endif %}
+                	
+                	</td>
+                	<td>
+                		{% if history['isActive'] == '1' %}
+                			<a data-url="{{ path('course_manage_cancel_share') }}" targetUserId="{{ history['targetUserId'] }}" class="btn btn-info btn-sm cancel-share-btn">取消分享</a>
+                		{% endif %}
+                	</td>
+                </tr>
+            {% else %}
+                <tr class="empty"><td colspan="3">无资料分享记录</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
