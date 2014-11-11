@@ -31,6 +31,8 @@ interface CourseMemberDao
 
     public function sortordByAddedNumber($startTime,$endTime);
     
+    public function getStudentCount($courseId,$endTime);
+    
     public function searchMemberIds($conditions, $orderBy, $start, $limit);
 
     public function addMember($member);

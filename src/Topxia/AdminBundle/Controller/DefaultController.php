@@ -46,7 +46,9 @@ class DefaultController extends BaseController
         $members = $this->getCourseService()->sortordByAddedNumber($startTime,$endTime);
             for ($i=0; $i < count($members); $i++) { 
                 $course = $this->getCourseService()->getCourse($members[$i]['courseId']); 
+                $students = $this->getCourseService()->getStudentCount($members[$i]['courseId'],$endTime);
                 $course['addedStudentNum'] = $members[$i]['co'];
+                $course['studentNum'] = $students['co'];
                 $course['addedMoney'] = 0;
                 $orders = $this->getOrderService()->searchOrders(array('targetType'=>'course', 'targetId'=>$members[$i]['courseId'], 'status' => 'paid', 'date'=>$dateType), 'latest', 0, 10000);
 

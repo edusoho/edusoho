@@ -207,6 +207,8 @@ interface CourseService
 	public function searchMember($conditions, $start, $limit);
 
 	public function sortordByAddedNumber($startTime,$endTime);
+	
+	public function getStudentCount($courseId,$endTime);
 
 	public function searchMemberCount($conditions);
 
