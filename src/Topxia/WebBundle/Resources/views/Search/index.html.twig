@@ -14,13 +14,20 @@
   <div class="row row-3-9">
     <div class="col-md-9" style="min-height:300px;">
 
-      {# {% if isShowVipSearch  %}
+      {% if isShowVipSearch  %}
     <form class="well well-sm" action="{{ path('search') }}">
-      <div style="float:left;" class="col-md-3" >
-      <select  class="form-control searchSelect" name="vipLevelId" >
-            {{ select_options(vipLevelId, app.request.query.get('vipLevelId'), '全部课程') }}
+      <div style="float:left;" class="col-md-2.5" >
+      <select  class="form-control searchSelect " name="categoryId">
+            {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}
       </select>
       </div>
+      {% if currentUserVipLevel  %}
+      <div style="float:left;" class="col-md-2.5" >
+      <select  class="form-control searchSelect" name="userStatus" >
+            {{ select_options(dict('userStatus'), app.request.query.get('userStatus')) }}
+      </select>
+      </div>
+      {% endif %}
       <div class="input-group input-group-lg">
       <input type="text" class="form-control" name="q" value="{{ keywords }}">
       <span class="input-group-btn">
@@ -29,8 +36,13 @@
       </div>
       </form>
 
-      {% else %} #}
+      {% else %}
       <form class="well well-sm" action="{{ path('search') }}">
+      <div style="float:left;" class="col-md-2.5" >
+      <select  class="form-control searchSelect " name="categoryId">
+            {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}
+      </select>
+      </div>
       <div class="input-group input-group-lg">
            <input type="text" class="form-control" name="q" value="{{ keywords }}">
              <span class="input-group-btn">
@@ -38,7 +50,7 @@
       </span>
       </div>
       </form>
-{#       {% endif %} #}
+      {% endif %}
 
 
       {% if keywords  %}

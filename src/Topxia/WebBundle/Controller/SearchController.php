@@ -10,36 +10,37 @@ class SearchController extends BaseController
     public function indexAction(Request $request)
     {
         $courses = $paginator = null;
-        // $code = 'Vip';
+        $code = 'Vip';
+
+        $currentUser = $this->getCurrentUser();
+        $currentUserVipLevel = $this->getVipService()->getMemberByUserId($currentUser['id']);
 
         $keywords = $request->query->get('q');
-        // $vip = $this->getAppService()->findInstallApp($code);
+        $vip = $this->getAppService()->findInstallApp($code);
 
-        // $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.5", ">=");
+        $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.5", ">=");
 
-        // if($isShowVipSearch){
-        //     $vipLevel = $this->getLevelService()->getVipLevel();
-        //     $vipLevelCount = $this->getLevelService()->getVipLevelCount();
-        //     $vipLevelId=array();
-        //     for($i=0;$i<$vipLevelCount;$i++){
-        //         $seq = $vipLevel[$i]['seq'];
-        //         $name = $vipLevel[$i]['name'];
-        //         $vipLevelId[$seq] = $name;
-        //     }
-        // } else{
-        //     $vipLevel = null;
-        //     $vipLevelId=array();
-        // }
         if (!$keywords) {
             goto response;
         }
-        // $vipId = $request->query->get('vipLevelId');
 
-        $conditions = array(
+        $categoryId = $request->query->get('categoryId');
+        $userStatus = $request->query->get('userStatus');       
+
+        if($userStatus == "vipCourses" ){
+            $conditions = array(
+                'status' => 'published',
+                'title' => $keywords,
+                'categoryId' => $categoryId,
+                'vipLevelId' =>  $currentUserVipLevel['levelId']
+            );
+        }else{
+            $conditions = array(
             'status' => 'published',
             'title' => $keywords,
-            // 'vipLevelId' =>  $vipId
-        );
+            'categoryId' => $categoryId
+            );
+        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -53,14 +54,16 @@ class SearchController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
+
         response:
         return $this->render('TopxiaWebBundle:Search:index.html.twig', array(
             'courses' => $courses,
             'paginator' => $paginator,
             'keywords' => $keywords,
-            // 'isShowVipSearch' => $isShowVipSearch,
-            // 'vipLevel' => $vipLevel,
-            // 'vipLevelId' => $vipLevelId
+            'isShowVipSearch' => $isShowVipSearch,
+            'currentUserVipLevel' => $currentUserVipLevel
         ));
     }
 
@@ -82,6 +85,16 @@ class SearchController extends BaseController
    protected function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+     protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }    
+
+    private function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
 }
