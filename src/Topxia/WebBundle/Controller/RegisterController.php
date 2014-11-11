@@ -23,8 +23,8 @@ class RegisterController extends BaseController
     
             $registration = $request->request->all();
 
-            
-            if (setting('site.chatcha_enabled') == 1){
+            $site = $this->getSettingService()->get('site', array());
+            if ($site['captcha_enabled'] == 1){
                 
                 $captchaCodePostedByUser = $registration['captcha_num'];
 
