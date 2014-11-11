@@ -45,6 +45,18 @@
 
           {% endif %}
 
+          {% if setting('login_bind.captcha_enabled') == 1 %}
+            <div class="form-group">
+                 <div class="controls">
+                   <label class="control-label required" for="captcha_num">验证码</label>
+                   <div class="controls">
+                        <input type="text" class="controls col-md-2" id="captcha_num" name="captcha_num" maxlength="4" data-explain="CAPTCHA" required="required">
+                        <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" align="absmiddle">
+                   </div>
+                 </div>
+            </div>
+          {% endif %}
+
           {% if setting('auth.user_terms') == 'opened' %}
               <label id="user_terms">
                 <input type="checkbox"  checked="checked">我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
