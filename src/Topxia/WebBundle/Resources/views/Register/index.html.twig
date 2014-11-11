@@ -174,7 +174,7 @@
 		        <div class="controls">
 		            <p>验证码：
 			            <input type="text" class="form-control" id="captcha_num" name="captcha_num" maxlength="4" data-explain="CAPTCHA" required="required">
-						<img src="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" align="absmiddle"/>
+						<img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" align="absmiddle"/>
 					</p>
 		        </div>
 		    </div>

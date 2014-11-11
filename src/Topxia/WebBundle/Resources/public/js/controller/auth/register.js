@@ -4,6 +4,15 @@ define(function(require, exports, module) {
     require("jquery.bootstrap-datetimepicker");
 
     exports.run = function() {
+        $(function(){
+            //数字验证 
+            if ($("#getcode_num").length > 0){
+                $("#getcode_num").click(function(){ 
+                    $(this).attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+                }); 
+            }
+        });
+
         $(".date").datetimepicker({
             language: 'zh-CN',
             autoclose: true,

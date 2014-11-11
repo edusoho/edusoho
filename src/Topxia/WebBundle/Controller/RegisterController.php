@@ -29,7 +29,9 @@ class RegisterController extends BaseController
 
             $session = new Session();
             $captchaCode = $session->get('captcha_code');   
+            
             error_log("captchaCode in Session:".$captchaCode."\n",3,'/var/tmp/mylogs.log');
+            
             if ($captchaCode != $captchaCodePostedByUser){   
                 throw new \RuntimeException('验证码错误。');
             }
@@ -247,6 +249,8 @@ class RegisterController extends BaseController
     public function captchaAction(Request $request)
     {
         $captchaCode = ""; 
+        $h = 20;$w = 60;$num = 4;
+
         for ($i = 0; $i < 4; $i++) { 
             $captchaCode .= rand(0, 9); 
         } 
@@ -254,8 +258,6 @@ class RegisterController extends BaseController
         $session = new Session();
         $session->set('captcha_code',$captchaCode);
 
-
-        $h=20;$w=60;$num = 4;
         $im = imagecreate($w, $h); 
         $black = imagecolorallocate($im, 0, 0, 0); 
         $gray = imagecolorallocate($im, 200, 200, 200); 
