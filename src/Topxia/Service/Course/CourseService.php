@@ -208,8 +208,6 @@ interface CourseService
 
 	public function countMembersByStartTimeAndEndTime($startTime,$endTime);
 	
-	public function getStudentCount($courseId,$endTime);
-
 	public function searchMemberCount($conditions);
 
 	public function findWillOverdueCourses();

@@ -143,13 +143,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAll($sql, array($endTime,$startTime));
     }
 
-    public function getStudentCount($courseId,$endTime)
-    {
-        $sql = "SELECT courseId, count(userId) AS co,role FROM {$this->table} WHERE createdTime < ? AND role='student' AND courseId = ? GROUP BY courseId ";
-        return $this->getConnection()->fetchAssoc($sql, array($endTime,$courseId)) ? : null;        
-    }
-
-
     public function searchMemberIds($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
