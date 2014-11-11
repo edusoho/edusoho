@@ -130,14 +130,22 @@ class LiveCourseController extends BaseController
             // 老师登录
 
             $client = LiveClientFactory::createClient();
+            
+            $liveLogo = $this->getSettingService()->get('course');
+            $liveLogoUrl = "";
+            if(!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])){
+                $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
+            }
 
             $params = array(
                 'liveId' => $lesson['mediaId'], 
                 'provider' => $lesson['liveProvider'],
                 'user' => $user['email'],
                 'nickname' => $user['nickname'],
-                'role' => 'teacher'
+                'role' => 'teacher',
+                'liveLogoUrl' => $liveLogoUrl
             );
+
             $result = $client->startLive($params);
 
             if (empty($result) or isset($result['error'])) {
@@ -171,6 +179,14 @@ class LiveCourseController extends BaseController
             $client = LiveClientFactory::createClient();
 
             $params['user'] = $params['email'];
+
+            $liveLogo = $this->getSettingService()->get('course');
+            $liveLogoUrl = "";
+            if(!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])){
+                $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
+            }
+
+            $params['liveLogoUrl'] = $liveLogoUrl;
 
             $result = $client->entryLive($params);
 
