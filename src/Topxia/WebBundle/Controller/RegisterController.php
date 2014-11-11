@@ -22,14 +22,22 @@ class RegisterController extends BaseController
         if ($request->getMethod() == 'POST') {
     
             $registration = $request->request->all();
-            $captchaCodePostedByUser = $registration['captcha_num'];
 
-            $session = new Session();
-            $captchaCode = $session->get('captcha_code');   
-          
-            if ($captchaCode != $captchaCodePostedByUser){   
-                throw new \RuntimeException('验证码错误。');
+            
+            if (setting('site.chatcha_enabled') == 1){
+                
+                $captchaCodePostedByUser = $registration['captcha_num'];
+
+                $session = new Session();
+                $captchaCode = $session->get('captcha_code');   
+              
+                if ($captchaCode != $captchaCodePostedByUser){   
+                    throw new \RuntimeException('验证码错误。');
+                }
             }
+
+
+
             $registration['createdIp'] = $request->getClientIp();
 
             $user = $this->getAuthService()->register($registration);
