@@ -92,24 +92,45 @@ admin_blockhistory_preview:
     defaults: { _controller: TopxiaAdminBundle:Block:preview }
 
 admin_tag:
-    pattern:  /tag
-    defaults: { _controller: TopxiaAdminBundle:Tag:index }
+    pattern:  /tag/group
+    defaults: { _controller: TopxiaAdminBundle:Tag2:index }
+
+admin_tag_list:
+    pattern:  /tag/{id}/group
+    defaults: { _controller: TopxiaAdminBundle:Tag2:list }
+
+admin_tag_group_create:
+    pattern:  /tag/group/create
+    defaults: { _controller: TopxiaAdminBundle:Tag2:groupCreate }
 
 admin_tag_create:
     pattern:  /tag/create
-    defaults: { _controller: TopxiaAdminBundle:Tag:create }
+    defaults: { _controller: TopxiaAdminBundle:Tag2:create }
 
 admin_tag_checkname:
     pattern:  /tag/checkname
-    defaults: { _controller: TopxiaAdminBundle:Tag:checkName}
+    defaults: { _controller: TopxiaAdminBundle:Tag2:checkName}
+
+admin_tag_group_checkname:
+    pattern:  /tag/group/checkname
+    defaults: { _controller: TopxiaAdminBundle:Tag2:checkGroupName}
+
+admin_tag_group_update:
+    pattern:  /tag/{id}/update
+    defaults: { _controller: TopxiaAdminBundle:Tag2:groupUpdate }
 
 admin_tag_update:
     pattern:  /tag/{id}/update
-    defaults: { _controller: TopxiaAdminBundle:Tag:update }
+    defaults: { _controller: TopxiaAdminBundle:Tag2:update }
+
+admin_tag_group_delete:
+    pattern:  /tag/group/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Tag2:groupDelete }
+    methods:  [POST]
 
 admin_tag_delete:
     pattern:  /tag/{id}/delete
-    defaults: { _controller: TopxiaAdminBundle:Tag:delete }
+    defaults: { _controller: TopxiaAdminBundle:Tag2:delete }
     methods:  [POST]
 
 admin_user:
@@ -996,6 +1017,3 @@ admin_official_messages:
 admin_uploadfile_head_leader_params:
     pattern: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
-
-
-

@@ -1,0 +1,37 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set tagGroup = tagGroup|default(null) %}
+
+{% block title %}
+{% if tagGroup %}编辑{% else %}新增{% endif %}标签
+{% endblock %}
+{% block body %}
+  <form class="form-horizontal" id="tag-form" action="{% if tagGroup %}{{ path('admin_tag_group_update', {id:tagGroup.id}) }}{% else %}{{ path('admin_tag_group_create') }}{% endif %}" method="post">
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="tag-type">标签类别</label>
+      <div class="controls col-md-8 radios">
+        {{ radios('type', {public:'公共', courseware:'课件',libriory:'文库',qestion:'题库'},  tagGroup.type|default('public')) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="tag-group">标签组名</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="tag-group" type="text" name="name" value="{{ tagGroup.name|default(null) }}" data-url="{{ path('admin_tag_group_checkname') }}">
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  <script type="text/javascript">app.load('tag2/save-modal')</script>
+{% endblock %}
+
+{% block footer %}
+  {% if tagGroup %}
+    <button class="btn btn-default pull-left delete-tag" data-url="{{ path('admin_tag_group_delete', {id:tagGroup.id}) }}" data-target="{{ tagGroup.id }}" data-tag-id="{{ tagGroup.id }}"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+  {% endif %}
+
+  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+  <button id="tag-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#tag-form">保存</button>
+{% endblock %}

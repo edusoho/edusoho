@@ -1,0 +1,54 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set tagGroup = tagGroup|default(null) %}
+
+{% block title %}
+<h4>{{ tagGroup.name }}&nbsp;<small>标签管理</small></h4>
+{% endblock %}
+{% block body %}
+  <form class="form-horizontal" id="tag-form" action="{{ path('admin_tag_create') }}" method="post">
+
+    <div class="form-group row">
+      <div class="col-md-9 controls">
+        <input class="form-control" id="tag-group" type="text" name="name" data-url="{{ path('admin_tag_checkname') }}">
+      </div>
+      <div class="col-md-3 controls">
+        <button id="tag-create-btn" data-submiting-text="正在提交" type="button" class="btn btn-primary" data-toggle="form-submit" data-target="#tag-form">添加标签</button>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+
+<table class="table table-striped">
+  <thead>
+    <th width="60%">标签</th>
+    <th width="40%">操作</th>
+  </thead>
+    {% for tag in tags %}
+      <tr>
+        <td>{{ tag.name }}</td>
+        <td>
+          <button class="btn btn-default btn-sm" data-url="{{ path('admin_tag_update', {id:tag.id}) }}">编辑</button>
+          <button class="btn btn-default btn-sm" data-url="{{ path('admin_tag_delete', {id:tag.id}) }}">删除</button>
+        </td>
+      </tr>
+      <tr style="display:none;">
+        <td>
+          <input class="form-control" value="{{ tag.name }}" name="name" data-url="{{ path('admin_tag_checkname') }}">
+        </td>
+        <td>
+          <button class="btn btn-default btn-sm" data-url="{{ path('admin_tag_update', {id:tag.id}) }}">保存</button>
+          <button class="btn btn-default btn-sm" data-url="{{ path('admin_tag_delete', {id:tag.id}) }}">取消</button>
+        </td>        
+      </tr>
+    {% else %}
+      <tr><td colspan="20"><div class="empty">暂无标签记录</div></td></tr>
+    {% endfor %}
+</table>
+
+  <script type="text/javascript">app.load('tag2/manage-modal')</script>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

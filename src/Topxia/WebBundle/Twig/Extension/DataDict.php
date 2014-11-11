@@ -210,11 +210,17 @@ class DataDict
         'targetName' => array(
         	'course' => '课程',
         	'vip' => '会员'
-    	),
-    	'groupstatus'=>array(
-    		'open'=>'开启',
-    		'close'=>'关闭',
-    	),
+	    	),
+	    	'groupstatus'=>array(
+	    		'open'=>'开启',
+	    		'close'=>'关闭',
+	    	),
+        'tagType' => array(
+            'public' => '公共',
+            'courseware' => '课件',
+            'libriory' => '文库',
+            'qestion' => '题库'
+        ),
 	);
 
 	public static function dict($type)
