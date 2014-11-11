@@ -254,7 +254,7 @@ class RegisterController extends BaseController
         $captchaCode = ""; 
         $h = 20;$w = 60;$num = 4;
 
-        for ($i = 0; $i < 4; $i++) { 
+        for ($i = 0; $i < $num; $i++) { 
             $captchaCode .= rand(0, 9); 
         } 
 
