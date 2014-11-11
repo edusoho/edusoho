@@ -137,16 +137,16 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-    public function sortordByAddedNumber($startTime,$endTime)
+    public function countMembersByStartTimeAndEndTime($startTime,$endTime)
     {
-        $sql = "SELECT * FROM (SELECT courseId, count(userId) AS co,role FROM {$this->table} WHERE createdTime<$endTime AND createdTime >$startTime AND role='student'  GROUP BY courseId) coursemembers ORDER BY coursemembers.co DESC LIMIT 0,5";
-        return $this->getConnection()->fetchAll($sql);
+        $sql = "SELECT * FROM (SELECT courseId, count(userId) AS co,role FROM {$this->table} WHERE createdTime <  ? AND createdTime > ? AND role='student'  GROUP BY courseId) coursemembers ORDER BY coursemembers.co DESC LIMIT 0,5";
+        return $this->getConnection()->fetchAll($sql, array($endTime,$startTime));
     }
 
     public function getStudentCount($courseId,$endTime)
     {
-        $sql = "SELECT courseId, count(userId) AS co,role FROM {$this->table} WHERE createdTime<$endTime AND role='student' AND courseId = ? GROUP BY courseId ";
-        return $this->getConnection()->fetchAssoc($sql, array($courseId)) ? : null;        
+        $sql = "SELECT courseId, count(userId) AS co,role FROM {$this->table} WHERE createdTime < ? AND role='student' AND courseId = ? GROUP BY courseId ";
+        return $this->getConnection()->fetchAssoc($sql, array($endTime,$courseId)) ? : null;        
     }
 
 

@@ -1503,6 +1503,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->searchMemberCount($conditions);
 	}
 
+	public function countMembersByStartTimeAndEndTime($startTime,$endTime)
+	{	
+		return $this->getMemberDao()->countMembersByStartTimeAndEndTime($startTime,$endTime);
+	}
+
 	public function findWillOverdueCourses()
 	{
 		$currentUser = $this->getCurrentUser();

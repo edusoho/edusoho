@@ -426,6 +426,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         return ArrayToolkit::index($orders, 'id');
     }
 
+    public function countOrderAmounts($startTime,$endTime,array $courseId)
+    {
+        return $this->getOrderDao()->countOrderAmounts($startTime,$endTime,$courseId);
+    }
+
     public function searchOrderCount($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);

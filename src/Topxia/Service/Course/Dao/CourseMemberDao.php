@@ -29,7 +29,7 @@ interface CourseMemberDao
     
     public function searchMember($conditions, $start, $limit);
 
-    public function sortordByAddedNumber($startTime,$endTime);
+    public function countMembersByStartTimeAndEndTime($startTime,$endTime);
     
     public function getStudentCount($courseId,$endTime);
     

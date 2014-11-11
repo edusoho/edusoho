@@ -11,6 +11,8 @@ interface OrderService
     public function findOrdersByIds(array $ids);
 
     public function searchOrders($conditions, $sort = 'latest', $start, $limit);
+    
+    public function countOrderAmounts($startTime,$endTime,array $courseId);
 
     public function searchOrderCount($conditions);
 

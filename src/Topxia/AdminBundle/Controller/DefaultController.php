@@ -13,13 +13,13 @@ class DefaultController extends BaseController
         $dateType = $request->query->get('dateType');
 
         if($dateType == "today"){
-            $startTime=strtotime(date("Y-m-d",time()));
-            $endTime=strtotime(date("Y-m-d",time()+24*3600));
+            $startTime = strtotime('today'); 
+            $endTime = strtotime('tomorrow');
         }
 
         if($dateType == "yesterday"){
-            $startTime=strtotime(date("Y-m-d",time()-24*3600));
-            $endTime=strtotime(date("Y-m-d",time()));
+            $startTime =  strtotime('yesterday');
+            $endTime =  strtotime('today');
         }
 
         if($dateType == "this_week"){
@@ -42,24 +42,30 @@ class DefaultController extends BaseController
             $endTime = strtotime('first day of this month midnight');
         }
 
-        $courses = array();
-        $members = $this->getCourseService()->sortordByAddedNumber($startTime,$endTime);
-            for ($i=0; $i < count($members); $i++) { 
-                $course = $this->getCourseService()->getCourse($members[$i]['courseId']); 
-                $students = $this->getCourseService()->getStudentCount($members[$i]['courseId'],$endTime);
-                $course['addedStudentNum'] = $members[$i]['co'];
-                $course['studentNum'] = $students['co'];
-                $course['addedMoney'] = 0;
-                $orders = $this->getOrderService()->searchOrders(array('targetType'=>'course', 'targetId'=>$members[$i]['courseId'], 'status' => 'paid', 'date'=>$dateType), 'latest', 0, 10000);
+        $members = $this->getCourseService()->countMembersByStartTimeAndEndTime($startTime,$endTime);
+        $courseIds = ArrayToolkit::column($members,"courseId");
+        
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = ArrayToolkit::index($courses,"id");
 
-                foreach ($orders as $id => $order) {
-                    $course['addedMoney'] += $order['amount'];
-                }
-                    $courses[] = $course;
-            }
+        $sortedCourses = array();
 
+
+
+        $orders = $this->getOrderService()->countOrderAmounts($startTime,$endTime,$courseIds);
+        $orders = ArrayToolkit::index($orders,"targetId");
+
+        foreach ($members as $key => $value) {
+            $course = array();
+            $course['title'] = $courses[$value["courseId"]]['title'];
+            $course['courseId'] = $courses[$value["courseId"]]['id'];
+            $course['addedStudentNum'] = $value['co'];
+            $course['studentNum'] = $courses[$value["courseId"]]['studentNum'];
+            $course['addedMoney'] = $orders[$value["courseId"]]['amount'];
+            $sortedCourses[] = $course;
+      }
         return $this->render('TopxiaAdminBundle:Default:popular-courses-table.html.twig', array(
-            'courses' => $courses
+            'sortedCourses' => $sortedCourses
         ));
         
     }
