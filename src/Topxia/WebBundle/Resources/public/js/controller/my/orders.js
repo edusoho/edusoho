@@ -14,6 +14,17 @@ define(function(require, exports, module) {
     		});
     	});
 
+        $("#orders-table").on('click', '.cancel', function(){
+            if (!confirm('真的要取消订单吗？')) {
+                return false;
+            }
+
+            $.post($(this).data('url'), function() {
+                Notify.success('订单已取消成功！');
+                window.location.reload();
+            });
+        });
+
     };
 
 });
