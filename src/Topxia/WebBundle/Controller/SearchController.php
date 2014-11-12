@@ -21,8 +21,8 @@ class SearchController extends BaseController
         $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.5", ">=");
 
         $parentId = 0;
-
         $categories = $this->getCategoryService()->searchCategoriesByParentId($parentId);
+        
         $categoryIds=array();
         for($i=0;$i<count($categories);$i++){
             $id = $categories[$i]['id'];
@@ -35,27 +35,27 @@ class SearchController extends BaseController
         }
 
         $categoryId = $request->query->get('categoryIds');
-        $coursesChoicesList = $request->query->get('coursesChoicesList');       
+        $coursesTypeChoices = $request->query->get('coursesTypeChoices');       
 
-        if($coursesChoicesList == 1){
+        if($coursesTypeChoices == 1){
             $conditions = array(
                 'status' => 'published',
                 'title' => $keywords,
                 'categoryId' => $categoryId,
                 'vipLevelId' =>  $currentUserVipLevel['levelId']
             );
-        }elseif($coursesChoicesList == 2){
+        }elseif($coursesTypeChoices == 2){
             $conditions = array(
-            'status' => 'published',
-            'title' => $keywords,
-            'categoryId' => $categoryId,
-            'type' => 'live'
+                'status' => 'published',
+                'title' => $keywords,
+                'categoryId' => $categoryId,
+                'type' => 'live'
             );
         }else{
             $conditions = array(
-            'status' => 'published',
-            'title' => $keywords,
-            'categoryId' => $categoryId
+                'status' => 'published',
+                'title' => $keywords,
+                'categoryId' => $categoryId
             );
         }
 
@@ -81,7 +81,7 @@ class SearchController extends BaseController
             'isShowVipSearch' => $isShowVipSearch,
             'currentUserVipLevel' => $currentUserVipLevel,
             'categoryIds' => $categoryIds,
-            'coursesChoicesList' => $coursesChoicesList
+            'coursesTypeChoices' => $coursesTypeChoices
         ));
     }
 

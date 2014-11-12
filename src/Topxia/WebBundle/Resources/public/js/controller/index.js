@@ -16,7 +16,7 @@ define(function(require, exports, module) {
             display: ''
         });
 
-        $('input:checkbox[name="coursesChoicesList"]').on("change", function () {
+        $('input:checkbox[name="coursesTypeChoices"]').on("change", function () {
             var element = $(this);
             if(element.attr("id") == "liveCourses" && element.prop('checked')){
                 $("#vipCourses").prop('checked', false);
