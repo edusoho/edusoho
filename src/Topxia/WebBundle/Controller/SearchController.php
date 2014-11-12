@@ -20,19 +20,36 @@ class SearchController extends BaseController
 
         $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.5", ">=");
 
+        $parentId = 0;
+
+        $categories = $this->getCategoryService()->searchCategoriesByParentId($parentId);
+        $categoryIds=array();
+        for($i=0;$i<count($categories);$i++){
+            $id = $categories[$i]['id'];
+            $name = $categories[$i]['name'];
+            $categoryIds[$id] = $name;
+        }
+
         if (!$keywords) {
             goto response;
         }
 
-        $categoryId = $request->query->get('categoryId');
-        $userStatus = $request->query->get('userStatus');       
+        $categoryId = $request->query->get('categoryIds');
+        $coursesChoicesList = $request->query->get('coursesChoicesList');       
 
-        if($userStatus == "vipCourses" ){
+        if($coursesChoicesList == 1){
             $conditions = array(
                 'status' => 'published',
                 'title' => $keywords,
                 'categoryId' => $categoryId,
                 'vipLevelId' =>  $currentUserVipLevel['levelId']
+            );
+        }elseif($coursesChoicesList == 2){
+            $conditions = array(
+            'status' => 'published',
+            'title' => $keywords,
+            'categoryId' => $categoryId,
+            'type' => 'live'
             );
         }else{
             $conditions = array(
@@ -55,7 +72,6 @@ class SearchController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
 
         response:
         return $this->render('TopxiaWebBundle:Search:index.html.twig', array(
@@ -63,7 +79,9 @@ class SearchController extends BaseController
             'paginator' => $paginator,
             'keywords' => $keywords,
             'isShowVipSearch' => $isShowVipSearch,
-            'currentUserVipLevel' => $currentUserVipLevel
+            'currentUserVipLevel' => $currentUserVipLevel,
+            'categoryIds' => $categoryIds,
+            'coursesChoicesList' => $coursesChoicesList
         ));
     }
 

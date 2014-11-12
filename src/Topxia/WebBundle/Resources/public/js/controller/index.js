@@ -15,6 +15,18 @@ define(function(require, exports, module) {
             icons: 'itemsAll',
             display: ''
         });
+
+        $('input:checkbox[name="coursesChoicesList"]').on("change", function () {
+            var element = $(this);
+            if(element.attr("id") == "liveCourses" && element.prop('checked')){
+                $("#vipCourses").prop('checked', false);
+            }
+            if(element.attr("id") == "vipCourses" && element.prop('checked')){
+                $("#liveCourses").prop('checked', false);
+            }
+            $(this).parents("form").submit();
+        });
+
     };
 
 });

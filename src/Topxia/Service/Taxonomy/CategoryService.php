@@ -12,6 +12,8 @@ interface CategoryService
     public function getCategoryTree($groupId);
 
     public function findCategories($groupId);
+    
+    public function searchCategoriesByParentId($parentId);
 
     public function findGroupRootCategories($groupCode);
 
