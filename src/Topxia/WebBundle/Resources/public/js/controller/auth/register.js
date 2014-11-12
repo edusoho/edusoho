@@ -31,6 +31,14 @@ define(function(require, exports, module) {
             failSilently: true
         });
 
+        if ($("#getcode_num").length > 0){
+            validator.addItem({
+                element: '[name="captcha_num"]',
+                required: true,
+                rule: 'integer',
+            });
+        };
+
         validator.addItem({
             element: '[name="email"]',
             required: true,

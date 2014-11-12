@@ -174,8 +174,10 @@
 		        <div class="controls">
 		          <label class="control-label required" for="captcha_num">验证码</label>
               <div class="controls">
-			            <input type="text" class="controls col-md-2" id="captcha_num" name="captcha_num" maxlength="4" data-explain="CAPTCHA" required="required">
+			            <input type="form-control" class="controls col-md-2" id="captcha_num" name="captcha_num" maxlength="4" data-explain="请输入CAPTCHA" required="required">
+                  <div class="controls col-md-1"></div>
 						      <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" align="absmiddle">
+                  <p class="help-block">输入4位数字验证码</p>
 					   </div>
 		        </div>
 		    </div>
