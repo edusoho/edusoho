@@ -169,17 +169,16 @@
             </div>
           {% endif %}
 
-          {% if setting('login_bind.captcha_enabled') == 1 %}
+          {% if setting('auth.captcha_enabled') == 1 %}
 		    <div class="form-group">
-		        <div class="controls">
-		          <label class="control-label required" for="captcha_num">验证码</label>
-              <div class="controls">
-			            <input type="form-control" class="controls col-md-2" id="captcha_num" name="captcha_num" maxlength="4" data-explain="请输入CAPTCHA" required="required">
-                  <div class="controls col-md-1"></div>
-						      <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" align="absmiddle">
-                  <p class="help-block">输入4位数字验证码</p>
-					   </div>
-		        </div>
+				<label class="control-label required" for="captcha_num">验证码</label>
+					<div>
+						<input type="text" class="form-control controls col-md-2" id="captcha_num" name="captcha_num" maxlength="4" data-explain="请输入CAPTCHA" required="required" style="width:45%;">
+                  
+				   		<img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" align="absmiddle" style = "position:relative; left:10px;width:20%">
+                 		<p style="width:50%"></p>
+                 		<p class="help-block">输入4位数字验证码</p>
+				  </div>  
 		    </div>
           {% endif %}
 
