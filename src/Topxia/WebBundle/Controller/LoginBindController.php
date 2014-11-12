@@ -199,8 +199,7 @@ class LoginBindController extends BaseController
             
             $captchaCodePostedByUser = $data['captcha_num'];
 
-            $session = new Session();
-            $captchaCode = $session->get('captcha_code');   
+            $captchaCode = $request->getSession()->get('captcha_code');   
           
             if ($captchaCode != $captchaCodePostedByUser){   
                 throw new \RuntimeException('验证码错误。');

@@ -3,7 +3,6 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Topxia\WebBundle\Form\RegisterType;
 
 
@@ -28,8 +27,7 @@ class RegisterController extends BaseController
                 
                 $captchaCodePostedByUser = $registration['captcha_num'];
 
-                $session = new Session();
-                $captchaCode = $session->get('captcha_code');   
+                $captchaCode = $request->getSession()->get('captcha_code');   
               
                 if ($captchaCode != $captchaCodePostedByUser){   
                     throw new \RuntimeException('验证码错误。');
@@ -258,8 +256,7 @@ class RegisterController extends BaseController
             $captchaCode .= rand(0, 9); 
         } 
 
-        $session = new Session();
-        $session->set('captcha_code',$captchaCode);
+        $request->getSession()->set('captcha_code',$captchaCode);
 
         $im = imagecreate($w, $h); 
         $black = imagecolorallocate($im, 0, 0, 0); 
