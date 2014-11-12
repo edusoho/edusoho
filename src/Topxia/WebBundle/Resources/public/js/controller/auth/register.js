@@ -35,7 +35,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="captcha_num"]',
                 required: true,
-                rule: 'integer',
+                rule: 'alphanumeric',
             });
         };
 
