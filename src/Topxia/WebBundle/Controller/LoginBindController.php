@@ -194,7 +194,7 @@ class LoginBindController extends BaseController
     {
         $data = $request->request->all();
 
-        $loginConnect = $this->getSettingService()->get('loginConnect', array());
+        $loginConnect = $this->getSettingService()->get('login_bind', array());
         if ($loginConnect['captcha_enabled'] == 1){
             
             $captchaCodePostedByUser = $data['captcha_num'];
