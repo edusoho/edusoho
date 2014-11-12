@@ -32,7 +32,6 @@ define(function(require, exports, module) {
         });
 
         if ($("#getcode_num").length > 0){
-            console.log("ssss");
             validator.addItem({
                 element: '[name="captcha_num"]',
                 required: true,
