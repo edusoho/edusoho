@@ -19,7 +19,7 @@ define(function(require, exports, module) {
                 return false;
             }
 
-            $.post($(this).data('url'), function() {
+            $.post($(this).data('url'), function(data) {
                 Notify.success('订单已取消成功！');
                 window.location.reload();
             });
