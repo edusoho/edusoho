@@ -22,7 +22,7 @@ class KernelRequestListener
             if (stripos($request->getPathInfo(), '/mapi') === 0) {
                 return;
             }
-            $whiteList = array('/course/order/pay/alipay/notify', '/vip/pay_notify/alipay', '/uploadfile/upload', '/uploadfile/cloud_convertcallback', '/uploadfile/cloud_convertcallback2', '/uploadfile/cloud_convertcallback3', '/uploadfile/cloud_convertheadleadercallback', '/disk/upload', '/file/upload', '/kindeditor/upload', '/disk/convert/callback', '/partner/phpwind/api/notify', '/partner/discuz/api/notify', '/live/auth');
+            $whiteList = array('/live/verify','/course/order/pay/alipay/notify', '/vip/pay_notify/alipay', '/uploadfile/upload', '/uploadfile/cloud_convertcallback', '/uploadfile/cloud_convertcallback2', '/uploadfile/cloud_convertcallback3', '/uploadfile/cloud_convertheadleadercallback', '/disk/upload', '/file/upload', '/kindeditor/upload', '/disk/convert/callback', '/partner/phpwind/api/notify', '/partner/discuz/api/notify', '/live/auth');
             if (in_array($request->getPathInfo(), $whiteList)) {
                 return ;
             }
@@ -35,9 +35,7 @@ class KernelRequestListener
     		$request->request->remove('_csrf_token');
 
     		$expectedToken = $this->container->get('form.csrf_provider')->generateCsrfToken('site');
-
     		if ($token != $expectedToken) {
-
                 // @todo 需要区分ajax的response
                 if ($request->getPathInfo() == '/admin') {
                     $token = $request->request->get('token');

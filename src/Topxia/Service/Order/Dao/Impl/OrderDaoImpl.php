@@ -17,16 +17,18 @@ class OrderDaoImpl extends BaseDao implements OrderDao
     public function getOrder($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+
         $order = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
         return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
+    
     }
 
-	public function getOrderBySn($sn)
-	{
+    public function getOrderBySn($sn)
+    {
         $sql = "SELECT * FROM {$this->table} WHERE sn = ? LIMIT 1";
         $order = $this->getConnection()->fetchAssoc($sql, array($sn));
         return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
-	}
+    }
 
     public function findOrdersByIds(array $ids)
     {

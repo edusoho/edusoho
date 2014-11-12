@@ -88,6 +88,22 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function searchLearnTime($conditions)
+    {
+        $builder=$this->_createSearchQueryBuilder($conditions)
+            ->select('sum(learnTime)');
+
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchWatchTime($conditions)
+    {
+        $builder=$this->_createSearchQueryBuilder($conditions)
+            ->select('sum(watchTime)');
+
+        return $builder->execute()->fetchColumn(0);
+    }
+
     public function searchLearns($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -104,6 +120,9 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $builder=$this->createDynamicQueryBuilder($conditions)
             ->from($this->table,$this->table)
             ->andWhere("status = :status")
+            ->andWhere("userId = :userId")
+            ->andWhere("lessonId = :lessonId")
+            ->andWhere("courseId = :courseId")
             ->andWhere("finishedTime >= :startTime")
             ->andWhere("finishedTime <= :endTime");
         return $builder;

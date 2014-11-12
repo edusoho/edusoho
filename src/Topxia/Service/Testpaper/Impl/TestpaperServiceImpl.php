@@ -36,6 +36,16 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->searchTestpapersCount($conditions);
 	}
 
+    public function searchTestpaperResultsCount($conditions)
+    {
+        return $this->getTestpaperResultDao()->searchTestpaperResultsCount($conditions);
+    }
+
+    public function searchTestpapersScore($conditions)
+    {
+        return $this->getTestpaperResultDao()->searchTestpapersScore($conditions);
+    }
+
     public function createTestpaper($fields)
     {
         $testpaper = $this->getTestpaperDao()->addTestpaper($this->filterTestpaperFields($fields, 'create'));
@@ -279,7 +289,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $items = $this->getTestpaperItems($testpaperId);
         $items = ArrayToolkit::index($items, 'questionId');
-
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
         $questions = ArrayToolkit::index($questions, 'id');
 
@@ -301,6 +310,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
 
         }
+
         ksort($formatItems);
         return $formatItems;
     }

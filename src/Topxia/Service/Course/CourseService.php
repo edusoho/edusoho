@@ -32,6 +32,10 @@ interface CourseService
 
 	public function searchCourseCount($conditions);
 
+	public function findCoursesCountByLessThanCreatedTime($endTime);
+    	
+    	public function analysisCourseSumByTime($endTime);
+
 	public function findUserLearnCourses($userId, $start, $limit);
 
 	public function findUserLearnCourseCount($userId);
@@ -86,8 +90,12 @@ interface CourseService
 	public function findLessonsByIds(array $ids);
 
 	public function getCourseLesson($courseId, $lessonId);
-	
+
+	public function findCourseDraft($courseId,$lessonId, $userId);
+
 	public function getCourseLessons($courseId);
+
+	public function deleteCourseDrafts($courseId,$lessonId, $userId);
 
 	public function findLessonsByTypeAndMediaId($type, $mediaId);
 
@@ -97,7 +105,13 @@ interface CourseService
 
 	public function createLesson($lesson);
 
+	public function getCourseDraft($id);
+
+	public function createCourseDraft($draft);
+
 	public function updateLesson($courseId, $lessonId, $fields);
+
+	public function updateCourseDraft($courseId,$lessonId, $userId,$fields);
 
 	public function deleteLesson($courseId, $lessonId);
 
@@ -145,6 +159,21 @@ interface CourseService
 
 	public function analysisLessonViewDataByTime($startTime,$endTime,$conditions);
 
+	public function waveLearningTime($lessonId,$userId,$time);
+
+	public function findLearnsCountByLessonId($lessonId);
+
+	public function waveWatchingTime($userId,$lessonId,$time);
+
+	public function watchPlay($userId,$lessonId);
+
+	public function watchPaused($userId,$lessonId);
+
+	public function searchLearnTime($conditions);
+
+	public function searchWatchTime($conditions);
+
+
 	/**
 	 * Chapter API
 	 */
@@ -180,6 +209,8 @@ interface CourseService
 	public function searchMember($conditions, $start, $limit);
 
 	public function searchMemberCount($conditions);
+
+	public function findWillOverdueCourses();
 
 	public function getCourseMember($courseId, $userId);
 
@@ -303,5 +334,4 @@ interface CourseService
 	public function getCourseLessonReplayByLessonId($lessonId);
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
-
 }

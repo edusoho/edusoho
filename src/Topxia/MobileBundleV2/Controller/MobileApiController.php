@@ -73,7 +73,7 @@ class MobileApiController extends MobileBaseController
 	    	}
 	    }
 
-	    public function IndexAction(Request $request, $service, $method)
+	    public function indexAction(Request $request, $service, $method)
 	    {
 	    	$this->init($request);
 	    	if ($this->filter($service, $method) ){
@@ -101,6 +101,6 @@ class MobileApiController extends MobileBaseController
 	    private function getClassName($name)
 	    {
 	    	$namespace = __NAMESPACE__;
-	    	return 'Topxia\\MobileBundleV2\\Service\\Impl\\' . $name . 'ServiceImpl';
+	    	return 'Topxia\\MobileBundleV2\\Processor\\Impl\\' . $name . 'ProcessorImpl';
 	    }
 }

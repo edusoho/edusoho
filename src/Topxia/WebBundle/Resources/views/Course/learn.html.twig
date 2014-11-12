@@ -8,6 +8,13 @@
 {% endblock %}
 
 {% set hideSetupHint = true %}
+
+{% if is_plugin_installed('Homework') %}
+  {% set script_arguments = {plugins: ['lesson', 'question', 'note', 'material', 'homework']}  %}
+{% else %}  
+  {% set script_arguments = {plugins: ['lesson', 'question', 'note', 'material']}  %}
+{% endif %}
+
 {% set script_controller = 'course/learn' %}
 {% set bodyClass = 'lesson-dashboard-page' %}
 
@@ -41,13 +48,15 @@
             {% if setting('storage.video_fingerprint') and app.user %}
               data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
             {% endif %}
+              data-user-id="{{ app.user.id }}"
           ></div>
           <div class="watermarkEmbedded" ></div>
  
           <div class="lesson-content lesson-content-audio" id="lesson-audio-content" data-role="lesson-content" style="display:none;"></div>
           <div class="lesson-content" id="lesson-swf-content" data-role="lesson-content" style="display:none;"></div>
           <div class="lesson-content" id="lesson-iframe-content" data-role="lesson-content" style="display:none;"></div>
-          <div class="lesson-content lesson-content-text" id="lesson-text-content" data-role="lesson-content" style="display:none;">
+          <div class="lesson-content lesson-content-text" id="lesson-text-content" data-role="lesson-content" style="display:none;"
+          {% if setting('course.copy_enabled')|default(0) > 0 %} oncopy="return false;" oncut="return false;" onselectstart="return false" oncontextmenu="return false;"{% endif %}>
             <div class="lesson-content-text-body"></div>
           </div>
           <div class="lesson-content lesson-content-text" id="lesson-live-content" data-role="lesson-content" style="display:none;">
@@ -56,9 +65,7 @@
           <div class="lesson-content lesson-content-text" id="lesson-unpublished-content" data-role="lesson-content" style="display:none;">
             <div class="lesson-content-text-body">当前课时正在编辑中，暂时无法观看。</div>
           </div>
-          <div class="lesson-content lesson-content-text" id="lesson-alert-content" data-role="lesson-content" style="display:none;">
-            <div class="lesson-content-text-body"></div>
-          </div>
+
           <div class="lesson-content lesson-content-text" id="lesson-testpaper-content" data-role="lesson-content" style="display:none;">
             <div class="lesson-content-text-body"></div>
           </div>
@@ -109,6 +116,34 @@
       </div>
       <div class="modal-footer">
         <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">回课程主页</a>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal" id="mediaPlayed-control-modal" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">媒体课时学习提示</h4>
+      </div>
+      <div class="modal-body">
+        <p class="text-success">此课时设置了必须完整播放完整个课时才能学完～～</p>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal" id="homeworkDone-control-modal" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">作业未完成提示</h4>
+      </div>
+      <div class="modal-body">
+        <p class="text-success">此课时设置了必须做完本课时作业并提交后才能学完～～</p>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
