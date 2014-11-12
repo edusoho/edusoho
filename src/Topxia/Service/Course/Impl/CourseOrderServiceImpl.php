@@ -9,6 +9,10 @@ use Topxia\Service\Common\ServiceKernel;
 
 class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 {
+    public function cancelOrder($id)
+    {
+        $this->getOrderService()->cancelOrder($id);
+    }
 
     private function cancelOldOrders($course, $user)
     {

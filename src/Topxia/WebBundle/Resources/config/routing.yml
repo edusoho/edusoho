@@ -1029,6 +1029,11 @@ my_orders:
     pattern: /my/orders
     defaults: { _controller: TopxiaWebBundle:MyOrder:index }
 
+my_order_cancel:
+    pattern: /my/order/{id}/cancel
+    defaults: { _controller: TopxiaWebBundle:MyOrder:cancel }
+    methods: [POST]
+
 my_order_cancel_refund:
     pattern: /my/order/{id}/cancel_refund
     defaults: { _controller: TopxiaWebBundle:MyOrder:cancelRefund }
