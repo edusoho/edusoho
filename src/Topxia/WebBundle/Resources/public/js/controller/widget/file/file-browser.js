@@ -43,6 +43,17 @@ define(function(require, exports, module) {
             return this;
         },
         
+        refreshTeacherList: function (self, teachers){
+        	if(Object.keys(teachers).length > 0){
+        		var html="<option value=''>请选择老师</option>";
+        		$.each(teachers, function (i, teacher){
+        			html += "<option value='"+teacher.id+"'>" + teacher.nickname + "</option>" 
+        		});
+        		
+        		$(".file-filter-by-owner", self.element).html(html);
+        	}
+        },
+        
         refreshFileList: function(self, files){
         	if (files.length > 0) {
                         var html = '<ul class="file-browser-list">';
@@ -106,14 +117,20 @@ define(function(require, exports, module) {
         	$source = $("input:radio[name="+this.element.attr("id")+"-source]:checked", this.element).val();
         	$(".file-filter-by-name", this.element).val("");
         	
+        	var self = this;
+        	
         	if($source == "shared"){
         		$(".file-filter-by-owner-container", this.element).show();
+        		
+        		//Refresh the sharing teacher list
+	            $.get(this.get('mySharingContactsUrl'), function(files) {
+	        	    self.refreshTeacherList(self, files);
+	            }, 'json');
         	}else{
         		$(".file-filter-by-owner-container", this.element).hide();
         	}
         	
-        	var self = this;
-        	
+        	//Refresh the file list panel
         	$.get(self.get('baseUrl'), {source: $source}, function(files) {
             	    self.refreshFileList(self, files);
                 }, 'json');
@@ -127,8 +144,8 @@ define(function(require, exports, module) {
                     this.set('baseUrl', this.element.data('base-url'));
                 }
             
-            if (!this.get('mySharingContacts')) {
-                    this.set('mySharingContacts', this.element.data('my-sharing-contacts-url'));
+            if (!this.get('mySharingContactsUrl')) {
+                    this.set('mySharingContactsUrl', this.element.data('my-sharing-contacts-url'));
                 }
         },
         

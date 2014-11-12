@@ -60,14 +60,8 @@ class MaterialLibController extends BaseController {
 	public function findMySharingContactsAction(Request $request){
 		$user = $this->getCurrentUser ();
 		
-		$mySharingUsers = $this->getUploadFileService()->findMySharingContacts($user['id']);
-		
-		$mySharingContacts = array();
-		
-		foreach ($mySharingUsers as $contact){
-			$mySharingContacts[$contact["id"]] = $contact["nickname"];
-		}
-		
+		$mySharingContacts = $this->getUploadFileService()->findMySharingContacts($user['id']);
+
 		return $this->createJsonResponse($mySharingContacts);
 	}
 

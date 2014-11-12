@@ -122,25 +122,8 @@
             <div id="file-browser-video" data-role="file-browser"
             data-base-url="{{ path('uploadfile_browser', {type:'video'}) }}" 
             data-default-url="{{ path('uploadfile_browser', {type:'video', source:'upload'}) }}" 
-            data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts')) }}"
+            data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
             data-empty="暂无视频文件，请先上传。">
-            <!--  
-            	<div class="file-browser-filter">
-		        			<div class="radios">资料来源：
-		        			  {{ radios('source', {'upload':'来自上传', 'shared':'来自分享'}, 'upload') }}
-						      </div>
-						      <div class="file-filter-by-owner-container" style="display: none;">
-						      	<select required="required" class="file-filter-by-owner form-control width-input">
-								    	{{ select_options(mySharingContacts, '', '请选择老师') }}
-								    </select>
-						      </div>
-						      <div class="input-group">
-			            <input class="form-control width-input-small file-filter-by-name" type="text" placeholder="输入视频标题关键字"  />
-			            <span class="input-group-btn">
-			              <button type="button" class="btn btn-default" data-loading-text="正在搜索，请稍等">搜索</button>
-			            </span>
-			          </div>
-		      			</div>-->
             	<div class="file-browser-list-container"></div>
             </div>
         </div>
@@ -222,7 +205,10 @@
         </div>
         <div class="tab-pane" id="audio-chooser-disk-pane">
           <div id="file-browser-audio" data-role="file-browser"
-          data-url="{{ path('uploadfile_browser', {type:'audio'}) }}" data-empty="暂无音频文件，请先上传。">
+          		data-base-url="{{ path('uploadfile_browser', {type:'audio'}) }}" 
+            data-default-url="{{ path('uploadfile_browser', {type:'audio', source:'upload'}) }}" 
+            data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+            data-empty="暂无音频文件，请先上传。">
           		<div class="file-browser-list-container"></div>
           </div>
         </div>
@@ -285,7 +271,10 @@
         </div>
         <div class="tab-pane" id="ppt-chooser-disk-pane">
           <div id="file-browser-ppt" data-role="file-browser"
-          data-url="{{ path('uploadfile_browser', {type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。">
+          		data-base-url="{{ path('uploadfile_browser', {type:'ppt'}) }}" 
+            data-default-url="{{ path('uploadfile_browser', {type:'ppt', source:'upload'}) }}" 
+            data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+          		data-empty="暂无PPT文件，请先上传。">
           	<div class="file-browser-list-container"></div>
           </div>
         </div>
