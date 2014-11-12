@@ -55,6 +55,21 @@ class MaterialLibController extends BaseController {
 		
 		return $this->createJsonResponse ( true);
 	}
+	
+	//Get the users who is sharing material lib to current user
+	public function findMySharingContactsAction(Request $request){
+		$user = $this->getCurrentUser ();
+		
+		$mySharingUsers = $this->getUploadFileService()->findMySharingContacts($user['id']);
+		
+		$mySharingContacts = array();
+		
+		foreach ($mySharingUsers as $contact){
+			$mySharingContacts[$contact["id"]] = $contact["nickname"];
+		}
+		
+		return $this->createJsonResponse($mySharingContacts);
+	}
 
 	public function showShareAction(Request $request) {
 		$user = $this->getCurrentUser ();

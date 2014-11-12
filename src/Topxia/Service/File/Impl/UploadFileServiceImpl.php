@@ -80,10 +80,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 		}
 		
 		if (array_key_exists ('source', $conditions ) && $conditions ['source'] == 'shared') {
+			//Find all the users who is sharing with current user.
 			$myFriends = $this->getUploadFileShareDao ()->findMySharingContacts ( $conditions ['currentUserId'] );
 			
 			if (isset ( $myFriends )) {
-				$createdUserIds = implode ( ",", ArrayToolkit::column ( $myFriends, "sourceUserId" ) );
+				$createdUserIds = "'" . implode ( "','", ArrayToolkit::column ( $myFriends, "sourceUserId" ) ) . "'";
 			}else{
 				//Browsing shared files, but nobody is sharing with current user.
 				return array();
@@ -102,6 +103,26 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function searchFileCount($conditions)
     {
+    	
+    	if (array_key_exists ('source', $conditions ) && $conditions ['source'] == 'shared') {
+    		//Find all the users who is sharing with current user.
+    		$myFriends = $this->getUploadFileShareDao ()->findMySharingContacts ( $conditions ['currentUserId'] );
+    			
+    		if (isset ( $myFriends )) {
+    			$createdUserIds = implode ( ",", ArrayToolkit::column ( $myFriends, "sourceUserId" ) );
+    		}else{
+    			//Browsing shared files, but nobody is sharing with current user.
+    			return array();
+    		}
+    			
+    	} elseif (isset($conditions['currentUserId'] )) {
+    		$createdUserIds = $conditions ['currentUserId'];
+    	}
+    	
+    	if(isset($createdUserIds)){
+    		$conditions ['createdUserIds'] = $createdUserIds;
+    	}
+    	
         return $this->getUploadFileDao()->searchFileCount($conditions);
     }
 
@@ -361,6 +382,16 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     	}else{
     			return null;
     	}
+	}
+	
+	public function findMySharingContacts($targetUserId){
+		$userIds = $this->getUploadFileShareDao()->findMySharingContacts($targetUserId);
+		 
+		if(!empty($userIds)){
+			return $this->getUserService()->findUsersByIds ( ArrayToolkit::column ( $userIds, 'sourceUserId' ) );
+		}else{
+			return null;
+		}
 	}
 	
 	public function findShareHistory($sourceUserId){

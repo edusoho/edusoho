@@ -44,6 +44,8 @@ interface UploadFileService
     	
     public function findRecentContacts($size);
     
+    public function findMySharingContacts($targetUserId);
+    
     public function shareFiles($sourceUserId, $targetUserIds);
     
     public function findShareHistory($sourceUserId);
