@@ -38,7 +38,7 @@ define(function(require, exports, module) {
 
         $body.scrollspy({
             target: '.course-nav-tabs',
-            offset: 120
+            offset: 120,
         });
 
         $(window).on('load', function () {
@@ -48,8 +48,21 @@ define(function(require, exports, module) {
         $('#course-nav-tabs').affix({
             offset: {
                 top: 300
-            }
+            },
         });
+
+        $(window).bind("scroll",function(){ 
+            var vtop=$(document).scrollTop();
+            console.log(vtop);
+            if (vtop>300){
+                $('li.pull-right').css("display","inline");
+            }else{
+                $('li.pull-right').css("display","none");
+            }
+
+        });
+
+
 
         $('#course-nav-tabs').on('click', '.btn-index', function(event) {
             event.preventDefault();
