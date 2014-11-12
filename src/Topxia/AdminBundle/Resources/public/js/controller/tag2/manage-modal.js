@@ -29,40 +29,22 @@ define(function(require, exports, module) {
             display: '标签名'
         });
 
-        var updataValidator = new Validator({
-            element: $table,
-            autoSubmit: false,
-            onFormValidated: function(error, results, $form) {
-                if (error) {
-                    return ;
+        $table.on('click','[data-role=update-save]',function(){
+            var $btn = $(this);
+            var $form = $btn.parent().prev('td').children('form');
+            $btn.addClass('disabled');
+            $.post($btn.data('url'), $form.serialize(),function(response) {
+                if (response.success == false){
+                    Notify.danger(response.message);
+                    $btn.removeClass('disabled');
+                } else {
+                    $btn.parent().parent().prev('tr').remove();
+                    $btn.parent().parent('tr').remove();
+                    $table.find('tbody').prepend(response);
+                    Notify.success('标签更新成功！');
                 }
+            });
 
-                $table.on('click','[data-role=update-save]',function(){
-                    var $btn = $(this);
-                    var $form = $btn.parent().prev('td').children('form');
-                    console.log($form.find('input'));
-                    $btn.addClass('disabled');
-                    $.post($btn.data('url'), $form.serialize(),function(html) {
-                        $btn.parent().parent().prev('tr').remove();
-                        $btn.parent().parent('tr').remove();
-                        $table.find('tbody').prepend(html);
-                        Notify.success('标签更新成功！');
-                    }).error(function() {
-                        Notify.danger("标签更新失败，请重试！");
-                    });
-
-                });
-            }
-                    // updataValidator.addItem({
-                    //     element: $form.find('input'),
-                    //     required: true,
-                    //     rule: 'remote'
-                    // });
-        });
-
-        updataValidator.addItem({
-            element: '.tag-input',
-            required: true
         });
 
         $table.on('click','[data-role=update]',function(){
