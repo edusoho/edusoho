@@ -32,10 +32,23 @@
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="category-description-field">分类描述</label>
 			<div class="col-md-8 controls">
-				<textarea class="form-control" id="category-description-field" style="height:100px;" name="description">{{category.description}}</textarea>
+				<textarea class="form-control" id="category-description-field" style="height:100px;" name="description" tabindex="4">{{category.description}}</textarea>
 				<div class="help-block">非必填</div>
 			</div>
 		</div>
+
+		{% if category.parentId %}
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-8">
+			    <div class="checkbox {% if not allowed %}disabled{% endif %}">
+		            <label>
+                        <input type="checkbox" name="isSubject" value="1" {% if category.isSubject == '1' %} checked {% endif %} {% if not allowed %}disabled{% endif %}> 此分类为科目
+		            </label>
+			    </div>
+			    <div class="help-block">勾选后，此分类将作为科目使用，且不可添加子分类。在科目下添加知识点后，则此选项成为默认勾选项，不可取消。</div>
+			</div>
+		</div>
+		{% endif %}
 
 		<div class="form-group" style="display:none;">
 			<label class="col-md-2 control-label" for="category-code-field">图标</label>

@@ -99,8 +99,13 @@ define(function(require, exports, module) {
             }
 
             $.post($(this).data('url'), function(html) {
-                $modal.modal('hide');
-                $table.find('tbody').replaceWith(html);
+                if(html.success) {
+                    Notify.danger(html.message);
+                } else {
+                    $modal.modal('hide');
+                    $table.find('tbody').replaceWith(html);
+                }
+
             });
 
         });

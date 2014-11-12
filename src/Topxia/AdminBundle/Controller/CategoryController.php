@@ -24,7 +24,17 @@ class CategoryController extends BaseController
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $category = $this->getCategoryService()->createCategory($request->request->all());
+            $fields = $request->request->all();
+            if($fields['parentId']) {
+                $parentCatrgory = $this->getCategoryService()->getCategory($fields['parentId']);
+                if($parentCatrgory['isSubject']) {
+                    $this->createAccessDeniedException('科目不能添加子分类!');
+                } else {
+                    $category = $this->getCategoryService()->createCategory($fields);    
+                }
+            } else {
+                $category = $this->getCategoryService()->createCategory($fields);
+            }
             return $this->renderTbody($category['groupId']);
         }
 
@@ -36,28 +46,42 @@ class CategoryController extends BaseController
             'groupId' => (int) $request->query->get('groupId'),
             'parentId' => (int) $request->query->get('parentId', 0),
             'weight' => 0,
-            'icon' => ''
+            'icon' => '',
+            'isSubject' => 0,
         );
 
         return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
-            'category' => $category
+            'category' => $category,
+            'allowed' => true,
         ));
     }
 
     public function editAction(Request $request, $id)
     {
+        $allowed = true;
         $category = $this->getCategoryService()->getCategory($id);
         if (empty($category)) {
             throw $this->createNotFoundException();
         }
 
         if ($request->getMethod() == 'POST') {
-            $category = $this->getCategoryService()->updateCategory($id, $request->request->all());
+            $fields = $request->request->all();
+            $fields['isSubject'] = empty($fields['isSubject']) ? 0 : $fields['isSubject'];
+            if($category['isSubject'] && !$fields['isSubject']) {
+                $this->getCategoryService()->canChangeOrDeleteSubject($id) ? '':
+                    $this->createAccessDeniedException('科目下有知识点，无法转为分类!');
+            }
+            $category = $this->getCategoryService()->updateCategory($id, $fields);
             return $this->renderTbody($category['groupId']);
         }
 
+        if($category['isSubject']) {
+            $allowed = $this->getCategoryService()->canChangeOrDeleteSubject($id);
+        }
+        var_dump($allowed);
         return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
             'category' => $category,
+            'allowed' => $allowed,
         ));
     }
 
@@ -66,6 +90,18 @@ class CategoryController extends BaseController
         $category = $this->getCategoryService()->getCategory($id);
         if (empty($category)) {
             throw $this->createNotFoundException();
+        }
+        $categories = array();
+        $categories[] =  $category;
+        $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($id);
+        foreach ($childrenIds as $childId) {
+            $categories[] = $this->getCategoryService()->getCategory($childId);
+        }
+        foreach ($categories as $key => $category) {
+            if($category['isSubject'] && !$this->getCategoryService()->canChangeOrDeleteSubject($category['id'])) {
+                $response = array('success' => true, 'message' => '科目下还有有知识点不能删除。');
+                return $this->createJsonResponse($response);
+            }
         }
 
         $this->getCategoryService()->deleteCategory($id);
@@ -119,4 +155,8 @@ class CategoryController extends BaseController
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
+    private function getKnowledgeService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.KnowledgeService');
+    }
 }

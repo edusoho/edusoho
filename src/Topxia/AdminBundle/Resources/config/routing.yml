@@ -664,6 +664,15 @@ admin_category_upload:
     defaults: { _controller: TopxiaAdminBundle:Category:uploadFile }
     methods: [POST]
 
+admin_category_manage:
+    pattern: /category/{id}/manage
+    defaults: { _controller: TopxiaAdminBundle:CategoryManage:index }
+
+admin_category_manage_edit:
+    pattern: /category/{id}/manage/edit
+    defaults: { _controller: TopxiaAdminBundle:CategoryManage:edit }
+    methods: [POST]
+
 admin_file:
     pattern:  /file
     defaults: { _controller: TopxiaAdminBundle:File:index }

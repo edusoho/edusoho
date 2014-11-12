@@ -23,6 +23,8 @@ interface CategoryService
 
     public function isCategoryCodeAvaliable($code, $exclude = null);
 
+    public function canChangeOrDeleteSubject($id);
+
     public function createCategory(array $category);
 
     public function updateCategory($id, array $fields);
