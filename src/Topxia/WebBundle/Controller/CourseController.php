@@ -295,22 +295,30 @@ class CourseController extends BaseController
 		if($freeLesson)$freeLesson=$freeLesson[0];
 
 		return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
-			'course' => $course,
-			'type' => $course['type'],
-			'member' => $member,
-			'items' => $items,
-			'learnStatuses' => $learnStatuses,
-			'freeLesson'=>$freeLesson,
-		//	'courseMemberLevel' => $courseMemberLevel,
-		//	'checkMemberLevelResult' => $checkMemberLevelResult,
-		//	'groupedItems' => $groupedItems,
-		//	'hasFavorited' => $hasFavorited,
-		//	'category' => $category,
-			'previewAs' => $previewAs,
-		//	'tags' => $tags,
-			'nextLiveLesson' => $nextLiveLesson,
-			'currentTime' => $currentTime,
-			'weeks' => $weeks
+		// 	'course' => $course,
+		// 	'type' => $course['type'],
+		// 	'member' => $member,
+		// 	'items' => $items,
+		// 	'learnStatuses' => $learnStatuses,
+		// 	'freeLesson'=>$freeLesson,
+		// //	'courseMemberLevel' => $courseMemberLevel,
+		// //	'checkMemberLevelResult' => $checkMemberLevelResult,
+		// //	'groupedItems' => $groupedItems,
+		// //	'hasFavorited' => $hasFavorited,
+		// //	'category' => $category,
+		// 	'previewAs' => $previewAs,
+		// //	'tags' => $tags,
+		// 	'nextLiveLesson' => $nextLiveLesson,
+		// 	'currentTime' => $currentTime,
+		// 	'weeks' => $weeks
+            'course' => $course,
+            'type' => $course['type'],
+            'member' => $member,
+            'items' => $items,
+            'learnStatuses' => $learnStatuses,
+            'currentTime' => $currentTime,
+            'weeks' => $weeks,
+            'files' => ArrayToolkit::index($files,'id')
 		));
 
 	}
