@@ -18,6 +18,7 @@ define(function(require, exports, module) {
             });
         }).trigger('change');
 
+
 /*        var $alert = $("#app-upgrade-alert");
         $.post($alert.data('url'), function(result) {
             var count = parseInt(result);
