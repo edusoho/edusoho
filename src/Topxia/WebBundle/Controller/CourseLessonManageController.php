@@ -158,6 +158,15 @@ class CourseLessonManageController extends BaseController
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
+		//Get the users who is sharing material lib to current user
+		$mySharingUsers = $this->getUploadFileService()->findMySharingContacts($user['id']);
+		
+		$mySharingContacts = array();
+		
+		foreach ($mySharingUsers as $contact){
+			$mySharingContacts[$contact["id"]] = $contact["nickname"];
+		}
+		
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'targetType' => $targetType,
@@ -168,7 +177,8 @@ class CourseLessonManageController extends BaseController
 			'storageSetting' => $setting,
 			'features' => $features,
 			'parentId'=>$parentId,
-			'draft' => $draft
+			'draft' => $draft,
+			'mySharingContacts' =>  $mySharingContacts
 		));
 	}
 
@@ -259,6 +269,15 @@ class CourseLessonManageController extends BaseController
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
+		//Get the users who is sharing material lib to current user
+		$mySharingUsers = $this->getUploadFileService()->findMySharingContacts($user['id']);
+		
+		$mySharingContacts = array();
+		
+		foreach ($mySharingUsers as $contact){
+			$mySharingContacts[$contact["id"]] = $contact["nickname"];
+		}
+		
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
@@ -270,7 +289,8 @@ class CourseLessonManageController extends BaseController
 			'convertKey' => $convertKey,
 			'storageSetting' => $setting,
 			'features' => $features,
-			'draft' => $draft
+			'draft' => $draft,
+			'mySharingContacts' => $mySharingContacts
 		));
 	}
 

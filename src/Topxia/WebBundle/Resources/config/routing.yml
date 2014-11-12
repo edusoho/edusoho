@@ -742,11 +742,15 @@ course_manage_save_share_my_material:
 
 course_manage_show_share_history:
     pattern: /my/teacher/materials/share/history
-    defaults: { _controller: TopxiaWebBundle:MaterialLib:showShareHistory } 
+    defaults: { _controller: TopxiaWebBundle:MaterialLib:showShareHistory }
 
 course_manage_cancel_share:
     pattern: /my/teacher/materials/share/cancel
     defaults: { _controller: TopxiaWebBundle:MaterialLib:cancelShare } 
+
+material_lib_my_sharing_contacts:
+    pattern: /my/teacher/materials/my/friends
+    defaults: { _controller: TopxiaWebBundle:MaterialLib:findMySharingContacts } 
            
 course_manage_list_teacher_test_finished:
     pattern: /my/teacher/finished/test/list
