@@ -125,18 +125,18 @@ class LiveCourseController extends BaseController
         if ($lesson['endTime'] < time()) {
             return $this->createMessageResponse('info', '直播已结束!');
         }
+
+        $liveLogo = $this->getSettingService()->get('course');
+        $liveLogoUrl = "";
+        if(!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])){
+            $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
+        }
           
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
             // 老师登录
 
             $client = LiveClientFactory::createClient();
             
-            $liveLogo = $this->getSettingService()->get('course');
-            $liveLogoUrl = "";
-            if(!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])){
-                $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
-            }
-
             $params = array(
                 'liveId' => $lesson['mediaId'], 
                 'provider' => $lesson['liveProvider'],
@@ -179,12 +179,6 @@ class LiveCourseController extends BaseController
             $client = LiveClientFactory::createClient();
 
             $params['user'] = $params['email'];
-
-            $liveLogo = $this->getSettingService()->get('course');
-            $liveLogoUrl = "";
-            if(!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])){
-                $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
-            }
 
             $params['liveLogoUrl'] = $liveLogoUrl;
 
