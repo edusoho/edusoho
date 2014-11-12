@@ -53,7 +53,6 @@ define(function(require, exports, module) {
 
         $(window).bind("scroll",function(){ 
             var vtop=$(document).scrollTop();
-            console.log(vtop);
             if (vtop>300){
                 $('li.pull-right').css("display","inline");
             }else{
