@@ -30,6 +30,12 @@ class Tag2DaoImpl extends BaseDao implements Tag2Dao
         return $this->getTag2($id);
     }
 
+    public function updateTagToDisabled($id)
+    {
+        $this->getConnection()->update($this->table, array('disabled' => 1), array('id' => $id));
+        return $this->getTag2($id);
+    }
+
     public function findTag2sByIds(array $ids)
     {
         if(empty($ids)){ return array(); }
@@ -46,19 +52,12 @@ class Tag2DaoImpl extends BaseDao implements Tag2Dao
         return $this->getConnection()->fetchAll($sql, $names);
     }
 
-    public function findTagsByTagGroupIds(array $tagGroupIds)
+    public function findTagsByTagGroupIds(array $groupIds)
     {
-        if(empty($tagGroupIds)){ return array(); }
-        $marks = str_repeat('?,', count($tagGroupIds) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE groupId IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $tagGroupIds);
-    }
-
-    public function findAllTag2s($start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array());
+        if(empty($groupIds)){ return array(); }
+        $marks = str_repeat('?,', count($groupIds) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE groupId IN ({$marks}) AND disabled = 0;";
+        return $this->getConnection()->fetchAll($sql, $groupIds);
     }
 
     public function getTag2ByName($name)
@@ -78,12 +77,6 @@ class Tag2DaoImpl extends BaseDao implements Tag2Dao
         $name = "%{$name}%";
         $sql = "SELECT * FROM {$this->table} WHERE name LIKE ?";
         return $this->getConnection()->fetchAll($sql, array($name));
-    }
-
-    public function findAllTag2sCount()
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table} ";
-        return $this->getConnection()->fetchColumn($sql, array());
     }
 
 }

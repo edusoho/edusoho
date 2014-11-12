@@ -44,10 +44,17 @@ class Tag2Controller extends BaseController
         ));
     }
 
-    // public function createAction(Request $request)
-    // {
-    //     return 
-    // }
+    public function createAction(Request $request,$id)
+    {
+        if ('POST' == $request->getMethod()){
+            $tag = $request->request->get('name');
+            $tag = $this->getTagService()->addTag($tag,$id);
+        }
+
+        return $this->render('TopxiaAdminBundle:Tag2:tag-manage-modal-tr.html.twig',array(
+            'tag' => $tag,
+        ));
+    }
 
     public function groupCreateAction(Request $request)
     {
@@ -66,6 +73,18 @@ class Tag2Controller extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Tag2:tag-modal.html.twig');
+    }
+
+    public function updateAction(Request $request, $id)
+    {
+        if ('POST' == $request->getMethod()) {
+            $tag = $request->request->all();
+            $tag = $this->getTagService()->updateTag($id, $tag);
+
+            return $this->render('TopxiaAdminBundle:Tag2:tag-manage-modal-tr.html.twig', array(
+                'tag' => $tag
+            ));
+        }
     }
 
     public function groupUpdateAction(Request $request, $id)

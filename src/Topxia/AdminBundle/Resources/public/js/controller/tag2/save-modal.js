@@ -4,9 +4,9 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
     exports.run = function() {
-        var $form = $('#tag-form');
+        var $form = $('#tag-group-form');
         var $modal = $form.parents('.modal');
-        var $table = $('#tag-table');
+        var $table = $('#tag-group-table');
 
         var validator = new Validator({
             element: $form,
@@ -16,11 +16,10 @@ define(function(require, exports, module) {
                     return ;
                 }
 
-                $('#tag-create-btn').button('submiting').addClass('disabled');
+                $('#tag-group-create-btn').button('submiting').addClass('disabled');
 
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     var $html = $(html);
-                    console.log($html);
                     if ($table.find( '#' +  $html.attr('id')).length > 0) {
                         $('#' + $html.attr('id')).replaceWith($html);
                         Notify.success('标签组更新成功！');
@@ -40,7 +39,7 @@ define(function(require, exports, module) {
             rule: 'remote'
         });
 
-        $modal.find('.delete-tag').on('click', function() {
+        $modal.find('.delete-tag-group').on('click', function() {
             if (!confirm('真的要删除该标签组吗？')) {
                 return ;
             }

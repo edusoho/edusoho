@@ -96,7 +96,7 @@ admin_tag:
     defaults: { _controller: TopxiaAdminBundle:Tag2:index }
 
 admin_tag_list:
-    pattern:  /tag/{id}/group
+    pattern:  /tag/{id}/list
     defaults: { _controller: TopxiaAdminBundle:Tag2:list }
 
 admin_tag_group_create:
@@ -104,7 +104,7 @@ admin_tag_group_create:
     defaults: { _controller: TopxiaAdminBundle:Tag2:groupCreate }
 
 admin_tag_create:
-    pattern:  /tag/create
+    pattern:  /tag/{id}/create
     defaults: { _controller: TopxiaAdminBundle:Tag2:create }
 
 admin_tag_checkname:
@@ -116,7 +116,7 @@ admin_tag_group_checkname:
     defaults: { _controller: TopxiaAdminBundle:Tag2:checkGroupName}
 
 admin_tag_group_update:
-    pattern:  /tag/{id}/update
+    pattern:  /tag/group/{id}/update
     defaults: { _controller: TopxiaAdminBundle:Tag2:groupUpdate }
 
 admin_tag_update:

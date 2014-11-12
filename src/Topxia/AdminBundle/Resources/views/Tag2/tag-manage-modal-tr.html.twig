@@ -1,0 +1,16 @@
+<tr>
+  <td>{{ tag.name }}</td>
+  <td>
+    <button class="btn btn-default btn-sm update" data-role="update">编辑</button>
+    <button class="btn btn-default btn-sm delete" data-role="delete" data-url="{{ path('admin_tag_delete', {id:tag.id}) }}">删除</button>
+  </td>
+</tr>
+<tr style="display:none;">
+  <td>
+    <form><input class="form-control" value="{{ tag.name }}" name="name" data-url="{{ path('admin_tag_checkname') }}"></form>
+  </td>
+  <td>
+    <button class="btn btn-default btn-sm" data-role="update-save" data-url="{{ path('admin_tag_update', {id:tag.id}) }}">保存</button>
+    <button class="btn btn-default btn-sm" data-role="update-cancle">取消</button>
+  </td>
+</tr>
