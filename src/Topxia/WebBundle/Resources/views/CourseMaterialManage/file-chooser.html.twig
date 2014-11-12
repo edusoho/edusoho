@@ -51,8 +51,11 @@
       </div>
       <div class="tab-pane" id="file-chooser-browser-pane">
           <div id="file-browser" data-role="file-browser"
-          data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId}) }}" 
-          data-empty="暂无文件，请先上传。">
+	          data-base-url="{{ path('uploadfile_browser') }}" 
+            data-default-url="{{ path('uploadfile_browser', {source:'upload'}) }}" 
+            data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+         	 data-empty="暂无文件，请先上传。">
+         	 	<div class="file-browser-list-container"></div>
           </div>
       </div>
       <div class="tab-pane" id="file-chooser-link-pane">
