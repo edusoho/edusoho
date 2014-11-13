@@ -40,14 +40,14 @@ class SearchController extends BaseController
             goto response;
         }
 
-        if($coursesTypeChoices == 1){
+        if($coursesTypeChoices == 'vipCourses'){
             $conditions = array(
                 'status' => 'published',
                 'title' => $keywords,
                 'categoryId' => $categoryId,
                 'vipLevelIds' =>  $vipLevelIds
             );
-        }elseif($coursesTypeChoices == 2){
+        }elseif($coursesTypeChoices == 'liveCourses'){
             $conditions = array(
                 'status' => 'published',
                 'title' => $keywords,

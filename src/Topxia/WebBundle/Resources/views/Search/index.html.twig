@@ -36,9 +36,9 @@
       筛选课程:
        </label>
       <input type="checkbox" name="coursesTypeChoices" id="vipCourses" 
-         value="1" data-url="{{path('search')}}" {% if coursesTypeChoices == 1 %} checked{% endif %} > 仅显示会员课程
+         value="vipCourses" data-url="{{path('search')}}" {% if coursesTypeChoices == 'vipCourses' %} checked{% endif %} > 仅显示会员课程
       <input type="checkbox" name="coursesTypeChoices" id="liveCourses" 
-         value="2" data-url="{{path('search')}}" {% if coursesTypeChoices == 2 %} checked{% endif %} >
+         value="liveCourses" data-url="{{path('search')}}" {% if coursesTypeChoices == 'liveCourses' %} checked{% endif %} >
          仅显示直播课程
       </div>
       </div>
@@ -50,7 +50,7 @@
       筛选课程:
        </label>
       <input type="checkbox" name="coursesTypeChoices" id="liveCourses" 
-         value="2" data-url="{{path('search')}}" {% if coursesTypeChoices == 2 %} checked{% endif %} >
+         value="liveCourses" data-url="{{path('search')}}" {% if coursesTypeChoices == 'liveCourses' %} checked{% endif %} >
          仅显示直播课程
       </div>
       </div>
