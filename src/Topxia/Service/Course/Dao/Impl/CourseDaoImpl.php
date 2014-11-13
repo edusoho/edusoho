@@ -127,7 +127,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     private function _createSearchQueryBuilder($conditions)
     {
-
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";
             unset($conditions['title']);
@@ -174,7 +173,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('freeStartTime > :freeStartTimeGreaterThan')
             ->andWhere('rating > :ratingGreaterThan')
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
-            ->andWhere('vipLevelId <= :vipLevel')
+            ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime');
 
@@ -192,9 +191,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         if (isset($conditions['vipLevelIds'])) {
+
             $vipLevelIds = array();
             foreach ($conditions['vipLevelIds'] as $vipLevelId) {
-                if (ctype_digit((string)abs($vipLevelId))) {
+                if (ctype_digit((string)$vipLevelId)) {
                     $vipLevelIds[] = $vipLevelId;
                 }
             }
@@ -203,6 +203,18 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 $builder->andStaticWhere("vipLevelId IN ($vipLevelIds)");
             }
 
+            // if (isset($conditions['vipLevels'])) {
+            // $vipLevels = array();
+            // foreach ($conditions['vipLevels'] as $vipLevelId) {
+            //     if (ctype_digit((string)abs($vipLevelId))) {
+            //         $vipLevels[] = $vipLevelId;
+            //     }
+            // }
+            // if ($vipLevels) {
+            //     $vipLevels = join(',', $vipLevels);
+            //     $builder->andStaticWhere("vipLevelId IN ($vipLevels)");
+            // }
+            // }
         }
 
         return $builder;
