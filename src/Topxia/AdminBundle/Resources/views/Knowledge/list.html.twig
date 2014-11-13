@@ -1,0 +1,17 @@
+{% extends 'TopxiaAdminBundle:CategoryManage:layout.html.twig' %}
+
+{% block title %}知识点管理 - {{ parent() }}{% endblock %}
+{% set nav = 'course' %}
+{% set side_nav = 'knowledge' %}
+{% set script_controller = 'knowledge/main' %}
+
+{% block main %}
+<div class="page-header clearfix">
+  <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_knowledge_create', {categoryId:category.id}) }}">添加知识点</button>
+  <h1 class="pull-left">知识点管理</h1>
+</div>
+
+<div class="knowledge-list">
+  {{ render(controller('TopxiaAdminBundle:Knowledge:getKnowledgeByParentId', {categoryId:category.id, parentId:0})) }}
+<div>
+{% endblock %}
