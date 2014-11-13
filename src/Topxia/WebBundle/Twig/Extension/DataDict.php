@@ -215,10 +215,6 @@ class DataDict
     		'open'=>'开启',
     		'close'=>'关闭',
     	),
-    	'userStatus'=>array(
-	'allCourses'=>'全部课程',
-	'vipCourses'=>'会员课程',
-    	),
 	);
 
 	public static function dict($type)

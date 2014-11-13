@@ -30,12 +30,12 @@ class SearchController extends BaseController
             $categoryIds[$id] = $name;
         }
 
+        $categoryId = $request->query->get('categoryIds');
+        $coursesTypeChoices = $request->query->get('coursesTypeChoices');       
+
         if (!$keywords) {
             goto response;
         }
-
-        $categoryId = $request->query->get('categoryIds');
-        $coursesTypeChoices = $request->query->get('coursesTypeChoices');       
 
         if($coursesTypeChoices == 1){
             $conditions = array(

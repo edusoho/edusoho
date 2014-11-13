@@ -17,7 +17,7 @@
     <form class="well well-sm" action="{{ path('search') }}">
 
       <div style="float:left;" class="col-md-2.5" >
-      <select  class="form-control searchSelect " name="categoryIds" id="select_id">
+      <select  class="form-control searchSelect " name="categoryIds">
             {{ select_options(categoryIds, app.request.query.get('categoryIds'), '课程分类') }}
       </select>
       </div>
