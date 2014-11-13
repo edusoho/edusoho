@@ -3,6 +3,13 @@ namespace Topxia\Service\Taxonomy;
 
 interface KnowledgeService
 {
+
+	public function getKnowledge($id);
+
+	public function updateKnowledge($id, $fields);
+	
+	public function deleteKnowledge($id);
+		
     public function createKnowledge($knowledge);
 
     public function findKnowledgeByCategoryId($categoryId);

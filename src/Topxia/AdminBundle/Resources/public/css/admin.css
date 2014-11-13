@@ -235,3 +235,17 @@ input.LargeInput {width: 600px;}
   font-weight: normal;
   font-size: 14px;
 }
+
+/* knowledge css */
+.knowledge-list ul {
+  list-style: none;
+}
+
+.knowledge-list li{
+  cursor: pointer;
+}
+
+.knowledge-list li:hover{
+  cursor: pointer;
+  background-color: #eee;
+}

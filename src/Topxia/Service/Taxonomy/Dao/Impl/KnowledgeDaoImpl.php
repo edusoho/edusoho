@@ -16,6 +16,17 @@ class KnowledgeDaoImpl extends BaseDao implements KnowledgeDao
         return $this->getConnection()->fetchAssoc($sql, array($id));
     }
     
+    public function updateKnowledge($id, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getKnowledge($id);
+    }   
+
+    public function deleteKnowledge($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+    
     public function createKnowledge($knowledge)
     {
         $affected = $this->getConnection()->insert($this->table, $knowledge);

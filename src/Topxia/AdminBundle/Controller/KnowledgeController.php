@@ -18,7 +18,19 @@ class KnowledgeController extends BaseController
 
 	public function editAction(Request $request, $categoryId, $id)
 	{
+		$knowledge = $this->getKnowledgeService()->getKnowledge($id);
+		if (empty($knowledge)) {
+		    throw $this->createNotFoundException();
+		}
 
+		if ($request->getMethod() == 'POST') {
+		    $knowledge = $this->getCategoryService()->updateCategory($id, $request->request->all());
+		    return $this->createJsonResponse(true);
+		}
+
+		return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
+		    'category' => $category,
+		));
 	}
 
 	public function createAction(Request $request, $categoryId)
@@ -64,8 +76,10 @@ class KnowledgeController extends BaseController
 	public function getKnowledgeByParentIdAction(Request $request, $categoryId, $parentId)
 	{
 	    $knowledges = $this->getKnowledgeService()->findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
+	    $category = $this->getCategoryService()->getCategory($categoryId);
 	    return $this->render('TopxiaAdminBundle:Knowledge:ul.html.twig', array(
 	        'knowledges' => $knowledges,
+	        'category' => $category,
 	    ));
 	}
 

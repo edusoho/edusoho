@@ -6,6 +6,10 @@ interface KnowledgeDao
 {
 	public function getKnowledge($id);
 	
+	public function updateKnowledge($id, $fields);
+
+	public function deleteKnowledge($id);
+
 	public function createKnowledge($Knowledge);
 
 	public function findKnowledgeByCategoryId($categoryId);

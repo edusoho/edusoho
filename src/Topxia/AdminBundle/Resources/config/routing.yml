@@ -685,6 +685,10 @@ admin_knowledge_create:
     pattern: /category/{categoryId}/manage/knowledge/create
     defaults: { _controller: TopxiaAdminBundle:Knowledge:create }
 
+admin_knowledge_delete:
+    pattern: /category/{categoryId}/manage/knowledge/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:delete }
+
 admin_knowledge_checkcode:
     pattern:  /knowledge/checkcode
     defaults: { _controller: TopxiaAdminBundle:Knowledge:checkCode }

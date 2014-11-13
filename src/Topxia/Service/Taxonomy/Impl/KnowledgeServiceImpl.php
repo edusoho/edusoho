@@ -15,12 +15,50 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
 		return $this->getKnowledgeDao()->getKnowledge($id);
 	}
 
+	public function updateKnowledge($id, $fields)
+	{
+		$knowledge = $this->getKnowledge($id);
+		if (empty($knowledge)) {
+		    throw $this->createNoteFoundException("知识点(#{$id})不存在，更新知识点失败！");
+		}
+
+		$fields = ArrayToolkit::parts($fields, array('description','name', 'code', 'weight'));
+		if (empty($fields)) {
+		    throw $this->createServiceException('参数不正确，更新知识点失败！');
+		}
+
+		// filterknowledgeFields里有个判断，需要用到这个$fields['groupId']
+		$fields['categoryId'] = $knowledge['categoryId'];
+
+		$this->filterKnowledgeFields($fields, $knowledge);
+
+		$this->getLogService()->info('knowledge', 'update', "编辑知识点 {$fields['name']}(#{$id})", $fields);
+
+		return $this->getKnowledgeDao()->updateKnowledge($id, $fields);
+	}
+
+	public function deleteKnowledge($id)
+	{
+		$knowledge = $this->getKnowledge($id);
+		if (empty($knowledge)) {
+		    throw $this->createNotFoundException();
+		}
+
+		//$ids = $this->findKnowledgeChildrenIds($id);
+		//$ids[] = $id;
+		//foreach ($ids as $id) {
+		    $this->getknowledgeDao()->deleteknowledge($id);
+		//}
+
+		$this->getLogService()->info('knowledge', 'delete', "删除知识点{$knowledge['name']}(#{$id})");
+	}
+
 	public function createKnowledge($knowledge)
 	{
 		$knowledge = ArrayToolkit::parts($knowledge, array('description','name', 'code', 'weight', 'categoryId', 'parentId', 'isVisible'));
 
 		if (!ArrayToolkit::requireds($knowledge, array('name', 'code', 'weight', 'categoryId', 'parentId'))) {
-		    throw $this->createServiceException("缺少必要参数，，添加分类失败");
+		    throw $this->createServiceException("缺少必要参数，，添加知识点失败");
 		}
 
 		$this->filterKnowledgeFields($knowledge);
@@ -40,7 +78,7 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
 	{
 	    $category = $this->getCategoryService()->getCategory($categoryId);
 	    if (empty($category)) {
-	        throw $this->createServiceException("分类Category #{$categoryId}，不存在");
+	        throw $this->createServiceException("知识点Category #{$categoryId}，不存在");
 	    }
 	    $prepare = function($knowledges) {
 	        $prepared = array();
