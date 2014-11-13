@@ -4,15 +4,6 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
-        $(function(){
-            //数字验证 
-            if ($("#getcode_num").length > 0){
-                $("#getcode_num").click(function(){ 
-                    $(this).attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
-                }); 
-            }
-        });
-
         $('#bind-new-btn').on('click', function() {
             var $btn = $(this);
 
@@ -123,14 +114,6 @@ define(function(require, exports, module) {
             }
         });
 
-        if ($("#getcode_num").length > 0){
-            validator.addItem({
-                element: '[name="captcha_num"]',
-                required: true,
-                rule: 'alphanumeric remote',
-            });
-        };
-        
         validator.addItem({
             element: '#bind-email-field',
             required: true,
