@@ -1,0 +1,64 @@
+{% extends 'TopxiaAdminBundle:CategoryManage:layout.html.twig' %}
+
+{% block title %}基本信息 - {{ parent() }}{% endblock %}
+
+{% set nav = 'course' %}
+{% set side_nav = 'base' %}
+{% set script_controller = 'category-manage/base' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+	<div class="panel-heading">基本信息</div>
+	<div class="panel-body">
+		<form id="category-form" class="form-horizontal" action="{{ path('admin_category_manage_edit', {categoryId:category.id}) }}" method="post">
+
+		  {{ web_macro.flash_messages() }}
+
+		  <div class="form-group">
+		  	<label class="col-md-2 control-label" for="category-name-field">名称</label>
+		  	<div class="col-md-8 controls">
+		  		<input class="form-control" id="category-name-field" type="text" name="name" value="{{ category.name }}" tabindex="1">
+		  	</div>
+		  </div>
+
+		  <div class="form-group">
+		  	<label class="col-md-2 control-label" for="category-weight-field">显示序号</label>
+		  	<div class="col-md-8 controls">
+		  		<input class="form-control" id="category-weight-field" type="text" name="weight" value="{{ category.weight }}" tabindex="2">
+		  		<div class="help-block">显示序号需为整数，分类按序号的顺序从小到大排序。</div>
+		  	</div>
+		  </div>
+
+		  <div class="form-group">
+		  	<label class="col-md-2 control-label" for="category-code-field">编码</label>
+		  	<div class="col-md-8 controls">
+		  		<input class="form-control" id="category-code-field" type="text" name="code" value="{{ category.code }}" data-url="{{ path('admin_category_checkcode', {exclude:category.code}) }}" tabindex="3">
+		  		<div class="help-block">必填，建议使用分类名称的英文单词或缩写作为编码。</div>
+		  	</div>
+		  </div>
+
+		  <div class="form-group">
+		  	<label class="col-md-2 control-label" for="category-description-field">分类描述</label>
+		  	<div class="col-md-8 controls">
+		  		<textarea class="form-control" id="category-description-field" style="height:100px;" name="description" tabindex="4">{{category.description}}</textarea>
+		  		<div class="help-block">非必填</div>
+		  	</div>
+		  </div>
+
+		  <div class="form-group">
+		    <div class="col-md-offset-2 col-md-8 controls">
+		    	<button id="category-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form" tabindex="4">保存</button>
+		    </div>
+		  </div>
+
+		  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+		</form>
+	</div>
+</div>
+
+{% endblock %}
+
+
+
