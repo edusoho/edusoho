@@ -71,6 +71,18 @@
              <button class="btn btn-primary" type="submit">搜索</button>
       </span>
       </div>
+
+      <div class="checkbox-group coursesTypeChoices" RepeatDirection="Horizontal" id="coursesTypeChoices" name="coursesTypeChoices" >
+      <div class="sortedCourses">
+      <label >
+      筛选课程:
+       </label>
+      <input type="checkbox" name="coursesTypeChoices" id="liveCourses" 
+         value="liveCourses" data-url="{{path('search')}}" {% if coursesTypeChoices == 'liveCourses' %} checked{% endif %} >
+         仅显示直播课程
+      </div>
+      </div>
+
       </form>
       {% endif %}
 
