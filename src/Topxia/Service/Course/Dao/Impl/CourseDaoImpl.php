@@ -202,19 +202,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 $vipLevelIds = join(',', $vipLevelIds);
                 $builder->andStaticWhere("vipLevelId IN ($vipLevelIds)");
             }
-
-            // if (isset($conditions['vipLevels'])) {
-            // $vipLevels = array();
-            // foreach ($conditions['vipLevels'] as $vipLevelId) {
-            //     if (ctype_digit((string)abs($vipLevelId))) {
-            //         $vipLevels[] = $vipLevelId;
-            //     }
-            // }
-            // if ($vipLevels) {
-            //     $vipLevels = join(',', $vipLevels);
-            //     $builder->andStaticWhere("vipLevelId IN ($vipLevels)");
-            // }
-            // }
         }
 
         return $builder;
