@@ -194,18 +194,6 @@ class LoginBindController extends BaseController
     {
         $data = $request->request->all();
 
-        $loginConnect = $this->getSettingService()->get('login_bind', array());
-        if ($loginConnect['captcha_enabled'] == 1){
-            
-            $captchaCodePostedByUser = $data['captcha_num'];
-
-            $captchaCode = $request->getSession()->get('captcha_code');   
-          
-            if ($captchaCode != $captchaCodePostedByUser){   
-                throw new \RuntimeException('验证码错误。');
-            }
-        }
-
         $token = $request->getSession()->get('oauth_token');
         $client = $this->createOAuthClient($type);
 
