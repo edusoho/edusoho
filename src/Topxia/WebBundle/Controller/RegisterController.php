@@ -24,11 +24,7 @@ class RegisterController extends BaseController
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
-            if (!array_key_exists('captcha_enabled',$authSettings)){
-                $authSettings['captcha_enabled']=0;
-            }
-
-            if ($authSettings['captcha_enabled'] == 1){
+            if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){
                 
                 $captchaCodePostedByUser = strtolower($registration['captcha_num']);
 
@@ -38,8 +34,6 @@ class RegisterController extends BaseController
                     throw new \RuntimeException('验证码错误。');
                 }
             }
-
-
 
             $registration['createdIp'] = $request->getClientIp();
 
@@ -228,12 +222,11 @@ class RegisterController extends BaseController
 
     public function captchaCheckAction(Request $request)
     {
-        $captchaFilledByUser = strtolower($request->query->get('value'));
-        $result = $request->getSession()->get('captcha_code') == $captchaFilledByUser ? 'success':"failed";
-        if ($result == 'success') {
+        $captchaFilledByUser = strtolower($request->query->get('value'));       
+        if ($request->getSession()->get('captcha_code') == $captchaFilledByUser) {
             $response = array('success' => true, 'message' => '验证码正确');
         } else {
-            $response = array('success' => false, 'message' => '验证码错误!');
+            $response = array('success' => false, 'message' => '验证码错误');
         }
         return $this->createJsonResponse($response);
     }
