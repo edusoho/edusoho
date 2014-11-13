@@ -13,14 +13,15 @@ class SearchController extends BaseController
         $code = 'Vip';
 
         $currentUser = $this->getCurrentUser();
-        $currentUserVip = $this->getVipService()->getMemberByUserId($currentUser['id']);
-        $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
 
         $keywords = $request->query->get('q');
         $vip = $this->getAppService()->findInstallApp($code);
 
         $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.7", ">=");
+        
         if($isShowVipSearch){
+            $currentUserVip = $this->getVipService()->getMemberByUserId($currentUser['id']);
+            $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
             $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
             $vipLevelIds = ArrayToolkit::column($vipLevels, "id");
         }
