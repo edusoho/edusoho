@@ -38,6 +38,19 @@
             <button type="submit" class="btn btn-fat btn-primary btn-large">登录</button>
           </div>
         </div>
+
+
+        {% if setting('login_bind.captcha_enabled') == 1 %}
+          <div class="form-group">
+            <label class="control-label required" for="captcha_num">验证码</label>
+            <div class="controls">
+            <input type="text" class="form-control controls col-md-2" id="captcha_num" name="captcha_num" maxlength="5" data-explain="输入5位数字和字母验证码" required="required" style="width:52%;" data-url="{{path('register_captcha_check')}}" >
+            <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" align="absmiddle" style = "position:relatkive;left:10px;width:28%">
+            <p class="help-block">输入5位数字和字母验证码</p> 
+            </div> 
+          </div>
+        {% endif %}
+
         <input type="hidden" name="_target_path" value="{{ _target_path }}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>

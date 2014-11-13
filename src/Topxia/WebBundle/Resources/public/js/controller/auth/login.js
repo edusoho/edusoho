@@ -15,7 +15,13 @@ define(function(require, exports, module) {
             element: '[name="_password"]',
             required: true
         });
-
+        if ($("#getcode_num").length > 0){
+            validator.addItem({
+                element: '[name="captcha_num"]',
+                required: true,
+                rule: 'alphanumeric remote',
+            });
+        };
     };
 
 });
