@@ -18,7 +18,7 @@ interface CategoryDao {
 
 	public function findCategoriesByParentId($parentId, $orderBy = null, $start, $limit);
 	
-	public function searchCategoriesByParentId($parentId);
+	public function findAllCategoriesByParentId($parentId);
 
 	public function findCategoriesCountByParentId($parentId);
 

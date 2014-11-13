@@ -174,7 +174,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('freeStartTime > :freeStartTimeGreaterThan')
             ->andWhere('rating > :ratingGreaterThan')
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
-            ->andWhere('vipLevelId <= :vipLevelId')
+            ->andWhere('vipLevelId <= :vipLevel')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime');
 

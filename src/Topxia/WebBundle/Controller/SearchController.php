@@ -13,7 +13,8 @@ class SearchController extends BaseController
         $code = 'Vip';
 
         $currentUser = $this->getCurrentUser();
-        $currentUserVipLevel = $this->getVipService()->getMemberByUserId($currentUser['id']);
+        $currentUserVip = $this->getVipService()->getMemberByUserId($currentUser['id']);
+        $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
 
         $keywords = $request->query->get('q');
         $vip = $this->getAppService()->findInstallApp($code);
@@ -21,7 +22,7 @@ class SearchController extends BaseController
         $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.5", ">=");
 
         $parentId = 0;
-        $categories = $this->getCategoryService()->searchCategoriesByParentId($parentId);
+        $categories = $this->getCategoryService()->findAllCategoriesByParentId($parentId);
         
         $categoryIds=array();
         for($i=0;$i<count($categories);$i++){
@@ -42,7 +43,7 @@ class SearchController extends BaseController
                 'status' => 'published',
                 'title' => $keywords,
                 'categoryId' => $categoryId,
-                'vipLevelId' =>  $currentUserVipLevel['levelId']
+                'vipLevel' =>  $currentUserVipLevel['seq']
             );
         }elseif($coursesTypeChoices == 2){
             $conditions = array(

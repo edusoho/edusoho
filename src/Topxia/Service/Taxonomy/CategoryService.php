@@ -13,7 +13,7 @@ interface CategoryService
 
     public function findCategories($groupId);
     
-    public function searchCategoriesByParentId($parentId);
+    public function findAllCategoriesByParentId($parentId);
 
     public function findGroupRootCategories($groupCode);
 

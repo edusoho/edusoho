@@ -62,9 +62,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getCategoryDao()->findCategoriesByGroupId($group['id']);
     }
 
-        public function searchCategoriesByParentId($parentId)
+        public function findAllCategoriesByParentId($parentId)
     {   
-        return $this->getCategoryDao()->searchCategoriesByParentId($parentId);
+        return $this->getCategoryDao()->findAllCategoriesByParentId($parentId);
     }
 
     public function findGroupRootCategories($groupCode)
