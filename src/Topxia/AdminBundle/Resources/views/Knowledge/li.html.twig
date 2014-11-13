@@ -1,6 +1,6 @@
 <li class="">
 	<span>{{ knowledge.name }}</span>
 	<span class="pull-right glyphicon glyphicon-trash delete" data-url="{{ path('admin_knowledge_delete', {categoryId:knowledge.categoryId,id:knowledge.id})}}"></span>
-	<span class="pull-right glyphicon glyphicon-pencil edit"  data-url="{{ path('admin_knowledge_edit', {categoryId:knowledge.categoryId,id:knowledge.id}) }}"></span>knowledge
+	<span class="pull-right glyphicon glyphicon-pencil edit"  data-url="{{ path('admin_knowledge_edit', {categoryId:knowledge.categoryId,id:knowledge.id}) }}"></span>
 	<span class="pull-right glyphicon glyphicon-plus add" data-url="{{ path('admin_knowledge_create', {categoryId:knowledge.categoryId,parentId:knowledge.id})}}"></span>
 </li>
