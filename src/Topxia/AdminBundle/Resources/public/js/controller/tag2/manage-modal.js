@@ -74,8 +74,7 @@ define(function(require, exports, module) {
             selfTr.hide();
         });
 
-        $('#modal').on('hidden.bs.modal',function(){
-            console.log(1111);
+        $('#modal').on('click','.close',function(){
             window.location.reload();
         });
     }
