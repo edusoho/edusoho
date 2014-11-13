@@ -14,14 +14,13 @@
   <div class="row row-3-9">
     <div class="col-md-9" style="min-height:300px;">
       {% if isShowVipSearch  %}
-    <form class="well well-sm" action="{{ path('search') }}">
+    <form class="well well-sm" action="{{ path('search') }}" id="search_box">
 
       <div style="float:left;" class="col-md-2.5" >
       <select  class="form-control searchSelect " name="categoryIds">
             {{ select_options(categoryIds, app.request.query.get('categoryIds'), '课程分类') }}
       </select>
       </div>
-
       <div class="input-group input-group-lg">
       <input type="text" class="form-control" name="q" value="{{ keywords }}" id="searchText">
       <span class="input-group-btn">
@@ -31,26 +30,29 @@
 
       {% if currentUserVipLevel  %}
 
-      <div class="checkbox-group" RepeatDirection="Horizontal" id="coursesTypeChoices" name="coursesTypeChoices" >
-      <label>
+      <div class="checkbox-group coursesTypeChoices" RepeatDirection="Horizontal" id="coursesTypeChoices" name="coursesTypeChoices">
+      <div class="col-md-1.5 sortedCourses">
+      <label >
+      筛选课程:
+       </label>
       <input type="checkbox" name="coursesTypeChoices" id="vipCourses" 
          value="1" data-url="{{path('search')}}" {% if coursesTypeChoices == 1 %} checked{% endif %} > 仅显示会员课程
-      </label>
-      <label>
       <input type="checkbox" name="coursesTypeChoices" id="liveCourses" 
          value="2" data-url="{{path('search')}}" {% if coursesTypeChoices == 2 %} checked{% endif %} >
          仅显示直播课程
-      </label>
       </div>
-
+      </div>
       {% else %}
 
-      <div class="checkbox-group" RepeatDirection="Horizontal" id="coursesTypeChoices" name="coursesTypeChoices" >
-      <label>
+      <div class="checkbox-group coursesTypeChoices" RepeatDirection="Horizontal" id="coursesTypeChoices" name="coursesTypeChoices" >
+      <div class="col-md-1.5 sortedCourses">
+      <label >
+      筛选课程:
+       </label>
       <input type="checkbox" name="coursesTypeChoices" id="liveCourses" 
          value="2" data-url="{{path('search')}}" {% if coursesTypeChoices == 2 %} checked{% endif %} >
          仅显示直播课程
-      </label>
+      </div>
       </div>
       
       {% endif %}
