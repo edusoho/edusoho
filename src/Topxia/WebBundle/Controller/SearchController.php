@@ -15,13 +15,15 @@ class SearchController extends BaseController
         $currentUser = $this->getCurrentUser();
         $currentUserVip = $this->getVipService()->getMemberByUserId($currentUser['id']);
         $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
-        $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
-        $vipLevelIds = ArrayToolkit::column($vipLevels, "id");
 
         $keywords = $request->query->get('q');
         $vip = $this->getAppService()->findInstallApp($code);
 
-        $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.5", ">=");
+        $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.7", ">=");
+        if($isShowVipSearch){
+            $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
+            $vipLevelIds = ArrayToolkit::column($vipLevels, "id");
+        }
 
         $parentId = 0;
         $categories = $this->getCategoryService()->findAllCategoriesByParentId($parentId);
