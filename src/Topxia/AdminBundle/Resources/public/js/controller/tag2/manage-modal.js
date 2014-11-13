@@ -75,6 +75,7 @@ define(function(require, exports, module) {
         });
 
         $('#modal').on('hidden.bs.modal',function(){
+            console.log(1111);
             window.location.reload();
         });
     }
