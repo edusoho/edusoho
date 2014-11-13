@@ -41,6 +41,9 @@ class MyTeachingController extends BaseController
     public function teachingAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        if (empty($user)) {
+            throw $this->createServiceException('用户不存在或者尚未登录，请先登录');
+        }
 
         if(!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
@@ -86,7 +89,6 @@ class MyTeachingController extends BaseController
 
         $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($user['id']);
         $testpaperIds = ArrayToolkit::column($teacherTests, 'id');
-        // $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
         $testpaperCount=$this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds,'reviewing');
         
         $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds($testpaperIds,'reviewing',0,6);
@@ -108,18 +110,49 @@ class MyTeachingController extends BaseController
         }
         $testpaperCount = count($paperResults); 
         //到这里为止.
+
+        $status = 'reviewing';
+        $homeworks = $this->getHomeworkService()->findHomeworksByCreatedUserId($user['id']);
+        $homeworkLessonIds = ArrayToolkit::column($homeworks, 'lessonId');
+        $homeworks = ArrayToolkit::index($homeworks, 'id');
+        $homeworkCourseIds = ArrayToolkit::column($homeworks, 'courseId');
+        $homeworkCourses = $this->getCourseService()->findCoursesByIds($homeworkCourseIds);
+        $homeworkLessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
+        $reviewingCount = $this->getHomeworkService()->findResultsCountsByStatusAndCheckTeacherId($status,$user['id']);
+
+        $homeworkResults = $this->getHomeworkService()->findResultsByStatusAndCheckTeacherId(
+            $status,
+            $user['id'],
+            array('usedTime','DESC'),
+            0,6
+        );
+
+        $usersIds = ArrayToolkit::column($homeworkResults,'userId');
+        $users = $this->getUserService()->findUsersByIds($usersIds);
+
+
         return $this->render('TopxiaWebBundle:MyTeaching:teaching-k12.html.twig', array(
             'classes' => $classes,
             'courseList' => $courseList,
             'courseCount'=>$courseCount,
+
             'manageClasses'=>$manageClasses,
+
             'threads'=>$threads,
             'threadCount'=>$threadCount,
             'threadUsers'=>$threadUsers,
+
             'paperResults'=>$paperResults,
             'testpapers'=>$testpapers,
             'testpaperCount'=>$testpaperCount,
-            'testpaperUsers'=>$testpaperUsers
+            'testpaperUsers'=>$testpaperUsers,
+
+            'homeworks' => empty($homeworks) ? array() : $homeworks,
+            'users' => $users,
+            'homeworkResults' => $homeworkResults,
+            'homeworkCourses' => $homeworkCourses,
+            'homeworkLessons' => $homeworkLessons,
+            'reviewingCount' => $reviewingCount
         ));
     }
 
@@ -324,11 +357,9 @@ class MyTeachingController extends BaseController
                 'total' => $totalCount,
             )); 
         }
-        
-
     }
 
-	protected function getThreadService()
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
@@ -361,6 +392,11 @@ class MyTeachingController extends BaseController
     private function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
+
+    private function getHomeworkService()
+    {
+        return $this->getServiceKernel()->createService('Homework.K12HomeworkService');
     }
 
 }
