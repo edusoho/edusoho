@@ -5,7 +5,6 @@
 {% set menu = 'category' %}
 
 {% block main %}
-
 <div class="page-header clearfix">
   <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_category_create', {groupId:group.id}) }}">添加分类</button>
   <h1 class="pull-left">{{ group.name }}管理</h1>
