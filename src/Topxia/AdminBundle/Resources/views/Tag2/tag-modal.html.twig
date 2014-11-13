@@ -3,7 +3,7 @@
 {% set tagGroup = tagGroup|default(null) %}
 
 {% block title %}
-{% if tagGroup %}编辑{% else %}新增{% endif %}标签
+{% if tagGroup %}编辑{% else %}新增{% endif %}标签组
 {% endblock %}
 {% block body %}
   <form class="form-horizontal" id="tag-group-form" action="{% if tagGroup %}{{ path('admin_tag_group_update', {id:tagGroup.id}) }}{% else %}{{ path('admin_tag_group_create') }}{% endif %}" method="post">

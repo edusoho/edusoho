@@ -153,7 +153,7 @@ class TagServiceImpl extends BaseService implements TagService
             $tagGroup = $this->getTag2GroupDao()->updateTag2Group($disabledTagGroup['id'], $fields);
             $this->getTag2GroupDao()->updateTag2sByGroupId($tagGroup['id'],$disabledTagGroup['id']);
         } else {
-            $fields = ArrayToolkit::parts($fields, array('name'));
+            $fields = ArrayToolkit::parts($fields, array('name','type'));
             $tagGroup = $this->getTag2GroupDao()->updateTag2Group($id, $fields);
         }
         $this->getLogService()->info('tagGroup', 'update', "编辑标签组{$fields['name']}(#{$id})");
