@@ -18,7 +18,7 @@
     <div class="form-group">
       <label class="col-md-3 control-label" for="tag-group">标签组名</label>
       <div class="col-md-6 controls">
-        <input class="form-control" id="tag-group" type="text" name="name" value="{{ tagGroup.name|default(null) }}" data-url="{{ path('admin_tag_group_checkname') }}">
+        <input class="form-control" id="tag-group" type="text" name="name" value="{{ tagGroup.name|default(null) }}" data-url="{{ path('admin_tag_group_checkname', {exclude:tagGroup.name}) }}">
       </div>
     </div>
 

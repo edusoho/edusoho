@@ -19,7 +19,6 @@ define(function(require, exports, module) {
                     $table.find('tbody').prepend(html);
                     Notify.success('标签添加成功！');
                 });
-
             }
         });
         validator.addItem({
@@ -73,6 +72,10 @@ define(function(require, exports, module) {
             selfTr.prev('tr').show();
             selfTr.find('input').val(selfTr.prev('tr').find('td').eq(0).text());
             selfTr.hide();
+        });
+
+        $('#modal').on('hidden.bs.modal',function(){
+            window.location.reload();
         });
     }
 });

@@ -10,7 +10,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
-  <title>{% block title %}{% if not setting('copyright.owned') %}EduSoho{% endif %}管理后台{% endblock %}</title>
+  <title>{% block title %}{% if not setting('copyright.owned') %}好学教育{% endif %}管理后台{% endblock %}</title>
   {% if setting('site.favicon') %}
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
