@@ -91,7 +91,7 @@ class TagServiceImpl extends BaseService implements TagService
 
         if(!empty($disabledTagGroup)) {
             $fields = array (
-                'type' => $disabledTagGroup['type'],
+                'type' => $tagGroup['type'],
                 'name' => $disabledTagGroup['name'],
                 'disabled' => '0',
                 'createdTime' => time()
@@ -113,7 +113,7 @@ class TagServiceImpl extends BaseService implements TagService
         if(!empty($disabledTag)){
             $fields = array (
                 'name' => $disabledTag['name'],
-                'groupId' => $disabledTag['groupId'],
+                'groupId' => $groupId,
                 'disabled' => '0',
                 'createdTime' => time()
             );
@@ -141,13 +141,24 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException("标签组(#{$id})不存在，更新失败！");
         }
 
-        $fields = ArrayToolkit::parts($fields, array('name'));
+        $disabledTagGroup = $this->getTag2GroupDao()->getDisabledTag2GroupByName($tagGroup['name']);
 
-        $fields['createdTime'] = time();
-
+        if(!empty($disabledTagGroup)) {
+            $fields = array (
+                'type' => $tagGroup['type'],
+                'name' => $disabledTagGroup['name'],
+                'disabled' => '0',
+                'createdTime' => $tagGroup['createdTime']
+            );
+            $tagGroup = $this->getTag2GroupDao()->updateTag2Group($disabledTagGroup['id'], $fields);
+            $this->getTag2GroupDao()->updateTag2sByGroupId($tagGroup['id'],$disabledTagGroup['id']);
+        } else {
+            $fields = ArrayToolkit::parts($fields, array('name'));
+            $tagGroup = $this->getTag2GroupDao()->updateTag2Group($id, $fields);
+        }
         $this->getLogService()->info('tagGroup', 'update', "编辑标签组{$fields['name']}(#{$id})");
 
-        return $this->getTag2GroupDao()->updateTag2Group($id, $fields);
+        return $tagGroup;
     }
 
     public function updateTag($id, array $fields)
@@ -157,17 +168,30 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException("标签(#{$id})不存在，更新失败！");
         }
 
-        $fields = ArrayToolkit::parts($fields, array('name'));
-        $fields['createdTime'] = time();
+        $disabledTag = $this->getTag2Dao()->getDisabledTag2ByName($tag['name']);
+
+        if(!empty($disabledTag)){
+            $fields = array (
+                'name' => $disabledTag['name'],
+                'groupId' => $tag['groupId'],
+                'disabled' => '0',
+                'createdTime' => $tag['createdTime']
+            );
+            $tag = $this->getTag2Dao()->updateTag2($disabledTag['id'], $fields);
+        } else {
+            $fields = ArrayToolkit::parts($fields, array('name'));
+            $tag = $this->getTag2Dao()->updateTag2($id, $fields);
+        }
 
         $this->getLogService()->info('tag', 'update', "编辑标签{$fields['name']}(#{$id})");
 
-        return $this->getTag2Dao()->updateTag2($id, $fields);
+        return $tag;
     }
 
     public function deleteTagGroup($id)
     {
         $this->getTag2GroupDao()->updateTagGroupToDisabled($id);
+        $this->getTag2Dao()->updateTagToDisabledByGroupId($id);
 
         $this->getLogService()->info('tagGroup', 'delete', "删除标签组#{$id}");
     }

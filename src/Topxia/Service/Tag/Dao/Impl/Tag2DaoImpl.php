@@ -36,6 +36,16 @@ class Tag2DaoImpl extends BaseDao implements Tag2Dao
         return $this->getTag2($id);
     }
 
+    public function updateTag2sByGroupId($groupId,$newGroupId)
+    {
+        $this->getConnection()->update($this->table, array('groupId' => $newGroupId), array('groupId' => $groupId));
+    }
+
+    public function updateTagToDisabledByGroupId($groupId)
+    {
+        $this->getConnection()->update($this->table, array('disabled' => 1), array('groupId' => $groupId));
+    }
+
     public function findTag2sByIds(array $ids)
     {
         if(empty($ids)){ return array(); }

@@ -34,7 +34,7 @@ define(function(require, exports, module) {
             var $form = $btn.parent().prev('td').children('form');
             $btn.addClass('disabled');
             $.post($btn.data('url'), $form.serialize(),function(response) {
-                if (response.success == false){
+                if (response.error){
                     Notify.danger(response.message);
                     $btn.removeClass('disabled');
                 } else {

@@ -79,11 +79,17 @@ class Tag2Controller extends BaseController
     {
         if ('POST' == $request->getMethod()) {
             $tag = $request->request->all();
+            if (empty($tag['name'])){
+                $response = array('error' => true, 'message' => '请输入标签');
+                return $this->createJsonResponse($response);
+            }
             $tagCheck = $this->getTagService()->getTagByName($tag['name']);
+
             if(!empty($tagCheck)){
-                $response = array('success' => false, 'message' => '标签已存在');
+                $response = array('error' => true, 'message' => '标签已存在');
                 return $this->createJsonResponse($response);
             } 
+
             $tag = $this->getTagService()->updateTag($id, $tag);
 
             return $this->render('TopxiaAdminBundle:Tag2:tag-manage-modal-tr.html.twig', array(
