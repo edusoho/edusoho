@@ -46,8 +46,13 @@ class AuthenticationProvider extends UserAuthenticationProvider
     {
         $request = $this->userProvider->container->get('request');
         $data = $request->request->all();
-        error_log("loglog....",3,"/var/tmp/mylogs.log");
+
         $loginConnect = $this->getSettingService()->get('login_bind', array());
+        
+        if (!array_key_exists('captcha_enabled',$loginConnect)){
+            $loginConnect['captcha_enabled']=0;
+        }
+
         if ($loginConnect['captcha_enabled'] == 1){
 
             $captchaCodePostedByUser = $data['captcha_num'];
@@ -57,8 +62,6 @@ class AuthenticationProvider extends UserAuthenticationProvider
                 throw new \RuntimeException('验证码错误。');
             }
         }
-
-
 
         $currentUser = $token->getUser();
         if ($currentUser instanceof UserInterface) {

@@ -23,6 +23,11 @@ class RegisterController extends BaseController
             $registration = $request->request->all();
 
             $authSettings = $this->getSettingService()->get('auth', array());
+
+            if (!array_key_exists('captcha_enabled',$authSettings)){
+                $authSettings['captcha_enabled']=0;
+            }
+
             if ($authSettings['captcha_enabled'] == 1){
                 
                 $captchaCodePostedByUser = $registration['captcha_num'];
