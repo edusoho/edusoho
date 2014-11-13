@@ -269,7 +269,8 @@ class RegisterController extends BaseController
         ob_start();
         $imgBuilder->output();
         $str = ob_get_clean();
-
+        $imgBuilder = null;
+        
         $headers = array(
             'Content-type' => 'image/jpeg',
             'Content-Disposition' => 'inline; filename="'."reg_captcha.jpg".'"');
