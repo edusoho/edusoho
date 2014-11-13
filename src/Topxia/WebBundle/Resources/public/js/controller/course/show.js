@@ -51,6 +51,18 @@ define(function(require, exports, module) {
             }
         });
 
+        $(window).bind("scroll",function(){ 
+            var vtop=$(document).scrollTop();
+            if (vtop>300){
+                $('li.pull-right').css("display","inline");
+            }else{
+                $('li.pull-right').css("display","none");
+            }
+
+        });
+
+
+
         $('#course-nav-tabs').on('click', '.btn-index', function(event) {
             event.preventDefault();
             var position = $($(this).data('anchor')).offset();

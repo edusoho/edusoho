@@ -30,6 +30,22 @@
           </div>
         </div>
 
+        {% if (setting('login_bind.captcha_enabled')|default(0)) == 1 %}
+          <div class="form-group">
+            <label class="control-label required" for="captcha_num">验证码</label>
+            <div class="controls row" >
+              <div class = "col-md-7" >
+                <input type="text" class="form-control" id="captcha_num" name="captcha_num" maxlength="5" data-explain="输入验证码" required="required"  data-url="{{path('register_captcha_check')}}" >
+              </div>
+              <div class="col-md-5">
+                <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" style="cursor:pointer;" >
+              </div>
+              <div class="col-md-12 help-block">输入验证码</div>  
+            </div>
+            
+          </div>  
+        {% endif %}
+
         <div class="form-group">
           <div class="controls">
             <span class="checkbox mtm pull-right">
@@ -38,6 +54,7 @@
             <button type="submit" class="btn btn-fat btn-primary btn-large">登录</button>
           </div>
         </div>
+
         <input type="hidden" name="_target_path" value="{{ _target_path }}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
