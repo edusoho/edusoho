@@ -80,6 +80,10 @@ register_nickname_check:
     pattern:  /register/nickname/check
     defaults: { _controller: TopxiaWebBundle:Register:nicknameCheck }
 
+register_captcha_check:
+    pattern:  /register/captcha/check
+    defaults: { _controller: TopxiaWebBundle:Register:captchaCheck }
+
 register_analysis:
     pattern:  /register/analysis
     defaults: { _controller: TopxiaWebBundle:Register:analysis }

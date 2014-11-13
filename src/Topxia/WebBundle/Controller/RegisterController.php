@@ -221,6 +221,18 @@ class RegisterController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function captchaCheckAction(Request $request)
+    {
+        $captchaFilledByUser = $request->query->get('value');
+        $result = $request->getSession()->get('captcha_code') == $captchaFilledByUser ? 'success':"failed";
+        if ($result == 'success') {
+            $response = array('success' => true, 'message' => '');
+        } else {
+            $response = array('success' => false, 'message' => '验证码错误!');
+        }
+        return $this->createJsonResponse($response);
+    }
+
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
