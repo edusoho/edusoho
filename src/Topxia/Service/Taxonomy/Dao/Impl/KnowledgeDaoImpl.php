@@ -10,13 +10,19 @@ class KnowledgeDaoImpl extends BaseDao implements KnowledgeDao
 
     protected $table = 'knowledge';
 
-    public function addKnowledge($knowledge)
+    public function getKnowledge($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id));
+    }
+    
+    public function createKnowledge($knowledge)
     {
         $affected = $this->getConnection()->insert($this->table, $knowledge);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert knowledge error.');
         }
-        return $this->getCategory($this->getConnection()->lastInsertId());
+        return $this->getKnowledge($this->getConnection()->lastInsertId());
     }
 
     public function findKnowledgeByCategoryId($categoryId)
@@ -29,5 +35,11 @@ class KnowledgeDaoImpl extends BaseDao implements KnowledgeDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE categoryId = ? AND parentId = ? ORDER BY weight ASC";
         return $this->getConnection()->fetchAll($sql, array($categoryId, $parentId)) ? : array();
+    }
+
+    public function findKnowledgeByCode($code)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE code = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($code));
     }
 }

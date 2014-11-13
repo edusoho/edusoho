@@ -37,42 +37,11 @@ class CategoryManageController extends BaseController
         }
 
         $fields = $request->request->all();
-        if(isset($fields['isSubject'])) {
-            $this->createAccessDeniedException('非法编辑科目属性!');
-        }
-
+        $fields = ArrayToolkit::parts($fields, array('description','name', 'code', 'weight'));
         $category = $this->getCategoryService()->updateCategory($categoryId, $fields);
         return $this->createJsonResponse(true);
         
     }
-
-    public function listKnowledgeAction(Request $request, $categoryId)
-    {
-        $category = $this->getCategoryService()->getCategory($categoryId);
-        return $this->render('TopxiaAdminBundle:CategoryManage:list-knowledge.html.twig', array(
-            'category' => $category,
-        ));
-    }
-
-    public function editKnowledgeAction(Request $request, $categoryId, $id)
-    {
-
-    }
-
-    public function createKnowledgeAction(Request $request, $categoryId)
-    {
-        return $this->render('TopxiaAdminBundle:CategoryManage:modal.html.twig', array(
-        ));
-    }
-
-    public function getKnowledgeByParentIdAction(Request $request, $categoryId, $parentId)
-    {
-        $knowledges = $this->getKnowledgeService()->findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
-        return $this->render('TopxiaAdminBundle:CategoryManage:knowledge-ul.html.twig', array(
-            'knowledges' => $knowledges,
-        ));
-    }
-
 
     private function getCategoryService()
     {

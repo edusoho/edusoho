@@ -675,15 +675,19 @@ admin_category_manage_edit:
 
 admin_category_knowledge:
     pattern: /category/{categoryId}/manage/knowledge
-    defaults: { _controller: TopxiaAdminBundle:CategoryManage:listKnowledge }
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:list }
 
 admin_knowledge_edit:
     pattern: /category/{categoryId}/manage/knowledge/{id}/edit
-    defaults: { _controller: TopxiaAdminBundle:CategoryManage:editKnowledge }
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:edit }
 
 admin_knowledge_create:
     pattern: /category/{categoryId}/manage/knowledge/create
-    defaults: { _controller: TopxiaAdminBundle:CategoryManage:createKnowledge }
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:create }
+
+admin_knowledge_checkcode:
+    pattern:  /knowledge/checkcode
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:checkCode }
 
 admin_file:
     pattern:  /file
