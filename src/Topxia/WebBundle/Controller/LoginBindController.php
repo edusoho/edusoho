@@ -185,20 +185,13 @@ class LoginBindController extends BaseController
     }
 
 
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
 
     public function existAction(Request $request, $type)
     {
-        $data = $request->request->all();
-
         $token = $request->getSession()->get('oauth_token');
         $client = $this->createOAuthClient($type);
-
         $oauthUser = $client->getUserInfo($token);
-
+        $data = $request->request->all();
         $user = $this->getUserService()->getUserByEmail($data['email']);
         if (empty($user)) {
             $response = array('success' => false, 'message' => '该Email地址尚未注册');
