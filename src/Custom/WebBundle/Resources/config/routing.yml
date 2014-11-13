@@ -1,6 +1,0 @@
-course_manage_price:
-    pattern:  /course/{id}/manage/price
-    defaults: { _controller: CustomWebBundle:CourseManage:price }
-course_set_price:
-    pattern:  /course/{id}/set/price
-    defaults: { _controller: CustomWebBundle:CourseManage:setPrice }
