@@ -7,5 +7,7 @@ interface KnowledgeService
 
     public function findKnowledgeByCategoryId($categoryId);
 
+    public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
+
     public function getKnowledgeTree($categoryId);
 }

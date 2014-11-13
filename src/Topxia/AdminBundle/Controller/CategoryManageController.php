@@ -49,10 +49,8 @@ class CategoryManageController extends BaseController
     public function listKnowledgeAction(Request $request, $categoryId)
     {
         $category = $this->getCategoryService()->getCategory($categoryId);
-        $knowledges = $this->getKnowledgeService()->getKnowledgeTree($categoryId);
         return $this->render('TopxiaAdminBundle:CategoryManage:list-knowledge.html.twig', array(
             'category' => $category,
-            'knowledges' => $knowledges,
         ));
     }
 
@@ -63,18 +61,18 @@ class CategoryManageController extends BaseController
 
     public function createKnowledgeAction(Request $request, $categoryId)
     {
-        
-    }
-
-    private function renderTbody($categoryId)
-    {
-        $category = $this->getCategoryService()->getCategory($categoryId);
-        $knowledges = $this->getCategoryService()->getCategoryTree($categoryId);
-        return $this->render('TopxiaAdminBundle:CategoryManage:knowledge-tbody.html.twig', array(
-            'knowledges' => $knowledges,
-            'category' => $category,
+        return $this->render('TopxiaAdminBundle:CategoryManage:modal.html.twig', array(
         ));
     }
+
+    public function getKnowledgeByParentIdAction(Request $request, $categoryId, $parentId)
+    {
+        $knowledges = $this->getKnowledgeService()->findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
+        return $this->render('TopxiaAdminBundle:CategoryManage:knowledge-ul.html.twig', array(
+            'knowledges' => $knowledges,
+        ));
+    }
+
 
     private function getCategoryService()
     {

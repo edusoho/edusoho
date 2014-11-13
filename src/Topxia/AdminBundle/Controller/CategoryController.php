@@ -78,7 +78,6 @@ class CategoryController extends BaseController
         if($category['isSubject']) {
             $allowed = $this->getCategoryService()->canChangeOrDeleteSubject($id);
         }
-        var_dump($allowed);
         return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
             'category' => $category,
             'allowed' => $allowed,

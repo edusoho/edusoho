@@ -42,6 +42,11 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
 	    return $tree;
 	}
 
+	public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId)
+	{
+		return $this->getKnowledgeDao()->findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
+	}
+
 	private function makeKnowledgeTree(&$tree, &$knowledges, $parentId)
 	{
 	    static $depth = 0;
