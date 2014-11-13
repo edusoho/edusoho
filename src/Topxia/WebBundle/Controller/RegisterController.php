@@ -267,7 +267,7 @@ class RegisterController extends BaseController
     public function captchaAction(Request $request)
     {
         $imgBuilder = new CaptchaBuilder;
-        $imgBuilder->build();
+        $imgBuilder->build($width = 150, $height = 32, $font = null);
 
         $request->getSession()->set('captcha_code',$imgBuilder->getPhrase());
 
