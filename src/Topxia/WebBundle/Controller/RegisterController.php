@@ -30,7 +30,7 @@ class RegisterController extends BaseController
 
             if ($authSettings['captcha_enabled'] == 1){
                 
-                $captchaCodePostedByUser = $registration['captcha_num'];
+                $captchaCodePostedByUser = strtolower($registration['captcha_num']);
 
                 $captchaCode = $request->getSession()->get('captcha_code');   
               
@@ -228,7 +228,7 @@ class RegisterController extends BaseController
 
     public function captchaCheckAction(Request $request)
     {
-        $captchaFilledByUser = $request->query->get('value');
+        $captchaFilledByUser = strtolower($request->query->get('value'));
         $result = $request->getSession()->get('captcha_code') == $captchaFilledByUser ? 'success':"failed";
         if ($result == 'success') {
             $response = array('success' => true, 'message' => '验证码正确');
@@ -269,7 +269,7 @@ class RegisterController extends BaseController
         $imgBuilder = new CaptchaBuilder;
         $imgBuilder->build($width = 150, $height = 32, $font = null);
 
-        $request->getSession()->set('captcha_code',$imgBuilder->getPhrase());
+        $request->getSession()->set('captcha_code',strtolower($imgBuilder->getPhrase()));
 
         ob_start();
         $imgBuilder->output();

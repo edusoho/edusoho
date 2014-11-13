@@ -55,7 +55,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
 
         if ($loginConnect['captcha_enabled'] == 1){
 
-            $captchaCodePostedByUser = $data['captcha_num'];
+            $captchaCodePostedByUser = strtolower($data['captcha_num']);
             $captchaCode = $request->getSession()->get('captcha_code'); 
 
             if ($captchaCode != $captchaCodePostedByUser){ 
