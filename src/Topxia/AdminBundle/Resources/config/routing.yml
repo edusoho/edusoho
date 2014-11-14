@@ -678,7 +678,7 @@ admin_category_knowledge:
     defaults: { _controller: TopxiaAdminBundle:Knowledge:list }
 
 admin_knowledge_edit:
-    pattern: /category/{categoryId}/manage/knowledge/{id}/edit
+    pattern: /knowledge/edit
     defaults: { _controller: TopxiaAdminBundle:Knowledge:edit }
 
 admin_knowledge_create:
@@ -686,12 +686,17 @@ admin_knowledge_create:
     defaults: { _controller: TopxiaAdminBundle:Knowledge:create }
 
 admin_knowledge_delete:
-    pattern: /category/{categoryId}/manage/knowledge/{id}/delete
+    pattern: /knowledge/delete
     defaults: { _controller: TopxiaAdminBundle:Knowledge:delete }
+    methods: [POST]
 
 admin_knowledge_checkcode:
     pattern:  /knowledge/checkcode
     defaults: { _controller: TopxiaAdminBundle:Knowledge:checkCode }
+
+admin_knowledge_getNodes:
+    pattern:  /knowledge/getNodes
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:getNodes }
 
 admin_file:
     pattern:  /file

@@ -16,45 +16,77 @@ class KnowledgeController extends BaseController
 	    ));
 	}
 
-	public function editAction(Request $request, $categoryId, $id)
+	public function editAction(Request $request)
 	{
-		$knowledge = $this->getKnowledgeService()->getKnowledge($id);
-		if (empty($knowledge)) {
-		    throw $this->createNotFoundException();
-		}
-
+		$query = $request->query->all();
 		if ($request->getMethod() == 'POST') {
-		    $knowledge = $this->getCategoryService()->updateCategory($id, $request->request->all());
-		    return $this->createJsonResponse(true);
+			$fields =  $request->request->all();
+			$id = $fields['id'];
+			$knowledge = $this->getKnowledgeService()->updateKnowledge($id, $fields);
+			$result = array(
+				'tid' => $fields['tid'],
+				'type' => 'edit',
+				'knowledge' => $knowledge
+			);
+		    return $this->createJsonResponse($result);
 		}
 
-		return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
-		    'category' => $category,
+		$knowledge = $this->getKnowledgeService()->getKnowledge($query['id']);
+		if(empty($knowledge)) {
+			$knowledge = array(
+			    'id' => 0,
+			    'name' => '',
+			    'code' => '',
+			    'description'=>'',
+			    'categoryId' => (int) $query['categoryId'],
+			    'parentId' => 0,
+			    'weight' => 0
+			);
+		}
+		$knowledge['tid'] = $query['tid'];
+		return $this->render('TopxiaAdminBundle:Knowledge:modal.html.twig', array(
+		    'knowledge' => $knowledge,
 		));
 	}
 
 	public function createAction(Request $request, $categoryId)
 	{
 	    if ($request->getMethod() == 'POST') {
-	        $knowledge = $this->getKnowledgeService()->createKnowledge($request->request->all());
-	        return $this->render('TopxiaAdminBundle:Knowledge:li.html.twig', array(
-	        	'knowledge' => $knowledge,
-	   		));
+	    	$fields =  $request->request->all();
+	        $knowledge = $this->getKnowledgeService()->createKnowledge($fields);
+	        $result = array(
+	        	'tid' => $fields['tid'],
+	        	'knowledge' => $knowledge
+	        );
+	        return $this->createJsonResponse($result);
 	    }
 
+	    $query =  $request->query->all();
 	    $knowledge = array(
 	        'id' => 0,
 	        'name' => '',
 	        'code' => '',
 	        'description'=>'',
 	        'categoryId' => (int) $categoryId,
-	        'parentId' => 0,
 	        'weight' => 0
 	    );
+	    if(empty($query['pid'])) {
+	    	$knowledge['parentId'] = 0;
+	    	$knowledge['tid'] = null;
+	    } else {
+	    	$knowledge['parentId'] =  $query['pid'];
+	    	$knowledge['tid'] = $query['tid'];
+	    }
 
 	    return $this->render('TopxiaAdminBundle:Knowledge:modal.html.twig', array(
 	        'knowledge' => $knowledge,
 	    ));
+	}
+
+	public function deleteAction(Request $request)
+	{
+		$this->getKnowledgeService()->deleteKnowledge($request->request->get('id'));
+		return $this->createJsonResponse(true);
 	}
 
 	public function checkCodeAction(Request $request)
@@ -73,14 +105,12 @@ class KnowledgeController extends BaseController
 		return $this->createJsonResponse($response);
 	}
 
-	public function getKnowledgeByParentIdAction(Request $request, $categoryId, $parentId)
+	public function getNodesAction(Request $request)
 	{
-	    $knowledges = $this->getKnowledgeService()->findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
-	    $category = $this->getCategoryService()->getCategory($categoryId);
-	    return $this->render('TopxiaAdminBundle:Knowledge:ul.html.twig', array(
-	        'knowledges' => $knowledges,
-	        'category' => $category,
-	    ));
+		$query = $request->request->all();
+		$parentId = empty($query['id']) ? 0 : $query['id'];
+		$knowledges = $this->getKnowledgeService()->findNodesData($query['categoryId'], $parentId);
+		return $this->createJsonResponse($knowledges);
 	}
 
 	private function getCategoryService()
