@@ -31,7 +31,7 @@ class LiveCourseLessonManageController extends BaseController
 	        if(!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])){
 	            $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
 	        }
-var_dump($liveLogoUrl);exit();
+
 			$client = LiveClientFactory::createClient();
 			$live = $client->createLive(array(
 				'summary' => $liveLesson['summary'],
@@ -41,9 +41,9 @@ var_dump($liveLogoUrl);exit();
 				'endTime' => ($liveLesson['startTime'] + $liveLesson['length']*60) . '',
 				'authUrl' => $this->generateUrl('live_auth', array(), true),
 				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
-				'liveLogoUrl' => $liveLogoUrl
+				'liveLogoUrl' => 'http://try6.edusoho.cn/files/system/logo_1415873279.png?4.4.5'
 			));
-
+var_dump($live);exit();
 			if (empty($live) or isset($live['error'])) {
 				throw new \RuntimeException('创建直播教室失败，请重试！');
 			}
