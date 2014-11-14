@@ -158,16 +158,10 @@ class CourseLessonManageController extends BaseController
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
-		//Get the users who is sharing material lib to current user
-		$mySharingUsers = $this->getUploadFileService()->findMySharingContacts($user['id']);
+		//TODO: Check whether the MaterialLib plugin is installed.
+		$materialLibInstalled = $this->getAppService()->findInstallApp('MaterialLib') == null ? false : true;
 		
-		$mySharingContacts = array();
-		
-		if(isset($mySharingUsers)){
-			foreach ($mySharingUsers as $contact){
-				$mySharingContacts[$contact["id"]] = $contact["nickname"];
-			}
-		}
+		$materialLibInstalled = true;
 		
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
@@ -180,7 +174,7 @@ class CourseLessonManageController extends BaseController
 			'features' => $features,
 			'parentId'=>$parentId,
 			'draft' => $draft,
-			'mySharingContacts' =>  $mySharingContacts
+			'materialLibInstalled' =>  $materialLibInstalled
 		));
 	}
 
@@ -462,6 +456,10 @@ class CourseLessonManageController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+    
+    private function getAppService(){
+			return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
     
     private function getTestpaperService()
