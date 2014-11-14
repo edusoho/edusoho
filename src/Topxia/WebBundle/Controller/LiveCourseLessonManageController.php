@@ -41,7 +41,7 @@ class LiveCourseLessonManageController extends BaseController
 				'endTime' => ($liveLesson['startTime'] + $liveLesson['length']*60) . '',
 				'authUrl' => $this->generateUrl('live_auth', array(), true),
 				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
-				'liveLogoUrl' => $liveLogoUrl
+				'liveLogoUrl' => 'http://try6.edusoho.cn/files/system/logo_1415873279.png?4.4.5'
 			));
 
 			if (empty($live) or isset($live['error'])) {
