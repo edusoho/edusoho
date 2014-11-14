@@ -78,6 +78,31 @@
 
   <div class="panel-body">
     <div class="myteaching-title">
+      <div class="text">待批作业</div>
+      <div class="num"><span class="label label-success">{{reviewingCount|default(0)}}</span></div>
+    </div><br>
+    <hr>
+    <div class="row">
+      {% for homeworkResult in homeworkResults %}
+        {% set user = users[homeworkResult.userId] %}
+        {% set homeworkCourse = homeworkCourses[homeworkResult.courseId] %}
+        {% set homeworkLesson = homeworkLessons[homeworkResult.lessonId] %}
+        <div class="col-md-6">
+          {% include 'TopxiaWebBundle:MyTeaching:homework-grid.html.twig' %}
+        </div>
+      {% else %}
+        <div class="empty">暂无等待批改的作业</div>
+      {% endfor %}
+    </div>
+    {% if reviewingCount>0 %}
+      <div class="row">
+        <a class="col-md-1 col-md-offset-11 text-rigtht" href="{{path('my_teaching_homework_list') }}">更多</a>
+      </div>
+    {% endif %}
+  </div>
+  
+  <div class="panel-body">
+    <div class="myteaching-title">
       <div class="text">待批试卷</div>
       <div class="num"><span class="label label-success">{{testpaperCount|default(0)}}</span></div>
     </div><br>
@@ -100,31 +125,6 @@
     {% endif %}
   </div>
 
-  <div class="panel-body">
-    <div class="myteaching-title">
-      <div class="text">待批作业</div>
-      <div class="num"><span class="label label-success">{{reviewingCount|default(0)}}</span></div>
-    </div><br>
-    <hr>
-    <div class="row">
-      {% for homeworkResult in homeworkResults %}
-        {% set homework = homeworks[homeworkResult.homeworkId] %}
-        {% set user = users[homeworkResult.userId] %}
-        {% set homeworkCourse = homeworkCourses[homeworkResult.courseId] %}
-        {% set homeworkLesson = homeworkLessons[homeworkResult.lessonId] %}
-        <div class="col-md-6">
-          {% include 'TopxiaWebBundle:MyTeaching:homework-grid.html.twig' %}
-        </div>
-      {% else %}
-        <div class="empty">暂无等待批改的作业</div>
-      {% endfor %}
-    </div>
-    {% if reviewingCount>0 %}
-      <div class="row">
-        <a class="col-md-1 col-md-offset-11 text-rigtht" href="{{path('my_teaching_homework_list') }}">更多</a>
-      </div>
-    {% endif %}
-  </div>
 </div>
 
 {% endblock %}
