@@ -126,12 +126,6 @@ class LiveCourseController extends BaseController
             return $this->createMessageResponse('info', '直播已结束!');
         }
 
-        $liveLogo = $this->getSettingService()->get('course');
-        $liveLogoUrl = "";
-        if(!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])){
-            $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
-        }
-          
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
             // 老师登录
 
@@ -142,8 +136,7 @@ class LiveCourseController extends BaseController
                 'provider' => $lesson['liveProvider'],
                 'user' => $user['email'],
                 'nickname' => $user['nickname'],
-                'role' => 'teacher',
-                'liveLogoUrl' => $liveLogoUrl
+                'role' => 'teacher'
             );
 
             $result = $client->startLive($params);
@@ -179,8 +172,6 @@ class LiveCourseController extends BaseController
             $client = LiveClientFactory::createClient();
 
             $params['user'] = $params['email'];
-
-            $params['liveLogoUrl'] = $liveLogoUrl;
 
             $result = $client->entryLive($params);
 
@@ -313,11 +304,6 @@ class LiveCourseController extends BaseController
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
-
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }
