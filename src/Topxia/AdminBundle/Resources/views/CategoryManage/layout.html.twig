@@ -4,8 +4,8 @@
 
 {% block content %}
 
-
-课程&gt分类管理&gt科目管理
+{# @review #}
+课程&gt;分类管理&gt;科目管理
 <div class="row">
   <div class="col-md-3">
     {% block side %}
@@ -23,7 +23,7 @@
           <div class="list-group-panel">
             <div class="list-group-heading">课件</div>
             <div class="list-group">
-              <a class="list-group-item {% if side_nav == 'courseware' %}active{% endif %}" href="#">课件管理</a>
+              <a class="list-group-item {% if side_nav == 'courseware' %}active{% endif %}" href="{{ path('admin_courseware_manage', {categoryId:category.id})}}">课件管理</a>
             </div>
           </div>
 

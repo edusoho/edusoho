@@ -698,6 +698,10 @@ admin_category_knowledge:
     pattern: /category/{categoryId}/manage/knowledge
     defaults: { _controller: TopxiaAdminBundle:Knowledge:list }
 
+admin_courseware_manage:
+    pattern: /category/{categoryId}/manage/courseware
+    defaults: { _controller: TopxiaAdminBundle:Courseware:manage }
+
 admin_knowledge_edit:
     pattern: /category/{categoryId}/manage/knowledge/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:Knowledge:edit }

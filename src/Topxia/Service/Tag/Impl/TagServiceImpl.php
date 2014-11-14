@@ -230,7 +230,6 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->createDao('Tag.Tag2GroupDao');
     }
 
-
     private function getLogService()
     {
         return $this->createService('System.LogService');
