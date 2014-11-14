@@ -125,7 +125,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             $course['teachers'] = $teachers;
 
             $categoryId = $course['categoryId'];
-            if($categoryId!=0) {
+            if($categoryId!=0 && array_key_exists($categoryId, $categories)) {
                 $course['category'] = $categories[$categoryId];
             }
         }
