@@ -31,7 +31,7 @@ class LiveCourseLessonManageController extends BaseController
 	        if(!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])){
 	            $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
 	        }
-
+var_dump($liveLogoUrl);exit();
 			$client = LiveClientFactory::createClient();
 			$live = $client->createLive(array(
 				'summary' => $liveLesson['summary'],
