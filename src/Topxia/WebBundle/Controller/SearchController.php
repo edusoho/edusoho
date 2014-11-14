@@ -19,6 +19,8 @@ class SearchController extends BaseController
 
         $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.7", ">=");
         
+        $currentUserVipLevel = "";
+        $vipLevelIds = "";
         if($isShowVipSearch){
             $currentUserVip = $this->getVipService()->getMemberByUserId($currentUser['id']);
             $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
