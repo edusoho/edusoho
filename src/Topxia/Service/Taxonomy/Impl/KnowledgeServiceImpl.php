@@ -7,135 +7,117 @@ use Topxia\Common\ArrayToolkit;
 
 class KnowledgeServiceImpl extends BaseService implements KnowledgeService
 {
-	public function getKnowledge($id)
-	{
-		if (empty($id)) {
-		    return null;
-		}
-		return $this->getKnowledgeDao()->getKnowledge($id);
-	}
+    public function getKnowledge($id)
+    {
+        if (empty($id)) {
+            return null;
+        }
+        return $this->getKnowledgeDao()->getKnowledge($id);
+    }
 
-	public function updateKnowledge($id, $fields)
-	{
-		$knowledge = $this->getKnowledge($id);
-		if (empty($knowledge)) {
-		    throw $this->createNoteFoundException("知识点(#{$id})不存在，更新知识点失败！");
-		}
+    public function updateKnowledge($id, $fields)
+    {
+       list($knowledge) = $this->checkExist(null, $id);
 
-		$fields = ArrayToolkit::parts($fields, array('description','name', 'code', 'weight'));
-		if (empty($fields)) {
-		    throw $this->createServiceException('参数不正确，更新知识点失败！');
-		}
+        $fields = ArrayToolkit::parts($fields, array('description','name', 'code', 'weight'));
+        if (empty($fields)) {
+            throw $this->createServiceException('参数不正确，更新知识点失败！');
+        }
 
-		// filterknowledgeFields里有个判断，需要用到这个$fields['groupId']
-		$fields['categoryId'] = $knowledge['categoryId'];
+        // filterknowledgeFields里有个判断，需要用到这个$fields['groupId']
+        $fields['categoryId'] = $knowledge['categoryId'];
 
-		$this->filterKnowledgeFields($fields, $knowledge);
+        $this->filterKnowledgeFields($fields, $knowledge);
 
-		$this->getLogService()->info('knowledge', 'update', "编辑知识点 {$fields['name']}(#{$id})", $fields);
+        $this->getLogService()->info('knowledge', 'update', "编辑知识点 {$fields['name']}(#{$id})", $fields);
 
-		return $this->getKnowledgeDao()->updateKnowledge($id, $fields);
-	}
+        return $this->getKnowledgeDao()->updateKnowledge($id, $fields);
+    }
 
-	public function deleteKnowledge($id)
-	{
-		$knowledge = $this->getKnowledge($id);
-		if (empty($knowledge)) {
-		    throw $this->createNotFoundException();
-		}
+    public function deleteKnowledge($id)
+    {
+        $ids = array();
+        $ids = $this->findKnowledgeChildrenIds($id, $ids);
+        $ids[] = $id;
+        foreach ($ids as $id) {
+            $this->getknowledgeDao()->deleteknowledge($id);
+        }
 
-		//$ids = $this->findKnowledgeChildrenIds($id);
-		//$ids[] = $id;
-		//foreach ($ids as $id) {
-		    $this->getknowledgeDao()->deleteknowledge($id);
-		//}
+        $this->getLogService()->info('knowledge', 'delete', "删除知识点(#{$id})");
+    }
 
-		$this->getLogService()->info('knowledge', 'delete', "删除知识点{$knowledge['name']}(#{$id})");
-	}
+    public function createKnowledge($knowledge)
+    {
+        $knowledge = ArrayToolkit::parts($knowledge, array('description','name', 'code', 'weight', 'categoryId', 'parentId', 'isVisible'));
 
-	public function createKnowledge($knowledge)
-	{
-		$knowledge = ArrayToolkit::parts($knowledge, array('description','name', 'code', 'weight', 'categoryId', 'parentId', 'isVisible'));
+        if (!ArrayToolkit::requireds($knowledge, array('name', 'code', 'weight', 'categoryId', 'parentId'))) {
+            throw $this->createServiceException("缺少必要参数，，添加知识点失败");
+        }
 
-		if (!ArrayToolkit::requireds($knowledge, array('name', 'code', 'weight', 'categoryId', 'parentId'))) {
-		    throw $this->createServiceException("缺少必要参数，，添加知识点失败");
-		}
+        $this->filterKnowledgeFields($knowledge);
+        $knowledge = $this->getKnowledgeDao()->createKnowledge($knowledge);
 
-		$this->filterKnowledgeFields($knowledge);
-		$knowledge = $this->getKnowledgeDao()->createKnowledge($knowledge);
+        $this->getLogService()->info('knowledge', 'create', "添加知识点 {$knowledge['name']}(#{$knowledge['id']})", $knowledge);
 
-		$this->getLogService()->info('knowledge', 'create', "添加知识点 {$knowledge['name']}(#{$knowledge['id']})", $knowledge);
+        return $knowledge;
+    }
 
-		return $knowledge;
-	}
+    public function findKnowledgeByCategoryId($categoryId)
+    {
+        return $this->getKnowledgeDao()->findKnowledgeByCategoryId($categoryId);
+    }
 
-	public function findKnowledgeByCategoryId($categoryId)
-	{
-		return $this->getKnowledgeDao()->findKnowledgeByCategoryId($categoryId);
-	}
+    public function findKnowledgeChildrenIds($id, &$result)
+    {
+        $knowledge = $this->getKnowledge($id);
+        if(empty($knowledge)) {
+            return $result;
+        }
+        $knowledges = $this->findKnowledgeByCategoryIdAndParentId($knowledge['categoryId'], $id);
+        foreach ($knowledges as $key => $knowledge) {
+            $result[] = $knowledge['id'];
+            $this->findKnowledgeChildrenIds($knowledge['id'], $result); 
+        }
 
-	public function getKnowledgeTree($categoryId)
-	{
-	    $category = $this->getCategoryService()->getCategory($categoryId);
-	    if (empty($category)) {
-	        throw $this->createServiceException("知识点Category #{$categoryId}，不存在");
-	    }
-	    $prepare = function($knowledges) {
-	        $prepared = array();
-	        foreach ($knowledges as $knowledge) {
-	            if (!isset($prepared[$knowledge['parentId']])) {
-	                $prepared[$knowledge['parentId']] = array();
-	            }
-	            $prepared[$knowledge['parentId']][] = $knowledge;
-	        }
-	        return $prepared;
-	    };
+        return $result;
+    }
 
-	    $knowledges = $prepare($this->findKnowledgeByCategoryId($categoryId));
+    public function findNodesData($categoryId, $parentId)
+    {
+        $this->checkExist($categoryId, $parentId);
+        $knowledges = $this->findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
+        foreach ($knowledges as $key => $knowledge) {
+            if(count($this->findKnowledgeByCategoryIdAndParentId($categoryId, $knowledge['id']))) {
+                $knowledge['isParent'] = true;
+            } else {
+                $knowledge['isParent'] = false;
+            }
+            $knowledges[$key] = $knowledge;
+        }
+        return $knowledges;
+    }
 
-	    $tree = array();
-	    $this->makeKnowledgeTree($tree, $knowledges, 0);
+    public function isKnowledgeCodeAvaliable($code, $exclude = null)
+    {
+        if (empty($code)) {
+            return false;
+        }
 
-	    return $tree;
-	}
+        if ($code == $exclude) {
+            return true;
+        }
 
-	public function isKnowledgeCodeAvaliable($code, $exclude = null)
-	{
-		if (empty($code)) {
-		    return false;
-		}
+        $knowledge = $this->getKnowledgeDao()->findKnowledgeByCode($code);
 
-		if ($code == $exclude) {
-		    return true;
-		}
+        return $knowledge ? false : true;
+    }
 
-		$knowledge = $this->getKnowledgeDao()->findKnowledgeByCode($code);
+    public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId)
+    {
+        return $this->getKnowledgeDao()->findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
+    }
 
-		return $knowledge ? false : true;
-	}
-
-	public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId)
-	{
-		return $this->getKnowledgeDao()->findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
-	}
-
-	private function makeKnowledgeTree(&$tree, &$knowledges, $parentId)
-	{
-	    static $depth = 0;
-	    static $leaf = false;
-	    if (isset($knowledges[$parentId]) && is_array($knowledges[$parentId])) {
-	        foreach ($knowledges[$parentId] as $knowledge) {
-	            $depth++;
-	            $knowledge['depth'] = $depth;
-	            $tree[] = $knowledge;
-	            $this->makeKnowledgeTree($tree, $knowledges, $knowledge['id']);
-	            $depth--;
-	        }
-	    }
-	    return $tree;
-	}
-
-	private function filterKnowledgeFields(&$knowledge, $releatedKnowledge = null)
+    private function filterKnowledgeFields(&$knowledge, $releatedKnowledge = null)
     {
         foreach (array_keys($knowledge) as $key) {
             switch ($key) {
@@ -183,19 +165,42 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
         return $knowledge;
     }
 
-	protected function getKnowledgeDao()
-	{
-		return $this->createDao('Taxonomy.KnowledgeDao');
-	}
 
-	protected function getCategoryService()
-	{
-		return $this->createService('Taxonomy.CategoryService');
-	}
+    private function checkExist($categoryId, $knowledgeId)
+    {
+        $result = array();
+        if($categoryId) {
+            $category = $this->getCategoryService()->getCategory($categoryId);
+            if (empty($category)) {
+                throw $this->createServiceException("知识点Category #{$categoryId}，不存在");
+            }
+            $result[] = $category;
+        }
 
-	private function getLogService()
-	{
-	    return $this->createService('System.LogService');
-	}
+        if($knowledgeId) {
+            $knowledge = $this->getKnowledge($knowledgeId);
+            if (empty($knowledge)) {
+                throw $this->createNoteFoundException("知识点(#{$id})不存在，操作失败！");
+            }
+            $result[] = $knowledge;
+        }
+
+        return $result;
+    }
+
+    protected function getKnowledgeDao()
+    {
+        return $this->createDao('Taxonomy.KnowledgeDao');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy.CategoryService');
+    }
+
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');
+    }
 
 }

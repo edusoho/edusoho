@@ -16,7 +16,7 @@ interface KnowledgeService
 
     public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
 
-    public function getKnowledgeTree($categoryId);
+    public function findNodesData($categoryId, $parentId);
 
     public function isKnowledgeCodeAvaliable($code, $exclude);
 }
