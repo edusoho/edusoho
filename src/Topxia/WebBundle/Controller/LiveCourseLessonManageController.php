@@ -43,7 +43,7 @@ class LiveCourseLessonManageController extends BaseController
 				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
 				'liveLogoUrl' => 'http://try6.edusoho.cn/files/system/logo_1415873279.png?4.4.5'
 			));
-var_dump($live);exit();
+
 			if (empty($live) or isset($live['error'])) {
 				throw new \RuntimeException('创建直播教室失败，请重试！');
 			}
