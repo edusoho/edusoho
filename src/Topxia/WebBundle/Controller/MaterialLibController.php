@@ -9,7 +9,7 @@ use Topxia\Common\Paginator;
 class MaterialLibController extends BaseController {
 
 	public function indexAction(Request $request, $type = "all", $viewMode = "thumb", $source = "upload") {
-		$user = $this->getCurrentUser ();
+		$currentUserId = $this->getCurrentUser ()['id'];
 		
 		$keyWord = $request->query->get ( 'keyword' ) ?  : "";
 		$sortBy = $request->query->get ( 'sortBy' ) ?  : "latestUpdated";
@@ -25,8 +25,8 @@ class MaterialLibController extends BaseController {
 		}
 		
 		$param ['source'] = $source;
-		$param ['currentUserId'] = $user['id'];
-		
+		$param ['currentUserId'] = $currentUserId;
+
 		$paginator = new Paginator ( $request, $this->getUploadFileService ()->searchFileCount ( $param ) );
 		
 		$materialResults = $this->getUploadFileService ()->searchFiles ( $param, $sortBy, $paginator->getOffsetCount (), $paginator->getPerPageCount () );
@@ -40,6 +40,7 @@ class MaterialLibController extends BaseController {
 		$storageSetting = $this->getSettingService ()->get ( "storage" );
 		
 		return $this->render ( $resultPage, array (
+				'currentUserId' => $currentUserId,
 				'type' => $type,
 				'materialResults' => $materialResults,
 				'paginator' => $paginator,
@@ -66,12 +67,15 @@ class MaterialLibController extends BaseController {
 	}
 
 	public function showShareAction(Request $request) {
-		$user = $this->getCurrentUser ();
+		$currentUserId = $this->getCurrentUser()['id'];
 		
-		$recentContacts = $this->getUploadFileService()->findRecentContacts($user['id']);
+		$recentContacts = $this->getUploadFileService()->findRecentContacts($currentUserId);
+		$allTeachers =  $this->getUserService()->searchUsers(array('roles'=> 'ROLE_TEACHER', 'locked'=>0), array('nickname', 'ASC'), 0, 100);
 		
 		return $this->render ( 'TopxiaWebBundle:MaterialLib:share-my-materials.html.twig', array (
-				'recentContacts' => $recentContacts
+				'recentContacts' => $recentContacts,
+				'allTeachers' => $allTeachers,
+				'currentUserId' => $currentUserId
 		) );
 	}
 	

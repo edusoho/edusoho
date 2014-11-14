@@ -163,8 +163,10 @@ class CourseLessonManageController extends BaseController
 		
 		$mySharingContacts = array();
 		
-		foreach ($mySharingUsers as $contact){
-			$mySharingContacts[$contact["id"]] = $contact["nickname"];
+		if(isset($mySharingUsers)){
+			foreach ($mySharingUsers as $contact){
+				$mySharingContacts[$contact["id"]] = $contact["nickname"];
+			}
 		}
 		
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(

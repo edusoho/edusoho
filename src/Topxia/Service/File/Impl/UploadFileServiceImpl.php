@@ -112,7 +112,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     			$createdUserIds = implode ( ",", ArrayToolkit::column ( $myFriends, "sourceUserId" ) );
     		}else{
     			//Browsing shared files, but nobody is sharing with current user.
-    			return array();
+    			return 0;
     		}
     			
     	} elseif (isset($conditions['currentUserId'] )) {
@@ -402,27 +402,30 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
 	public function shareFiles($sourceUserId, $targetUserIds) {
 		foreach ( $targetUserIds as $targetUserId ) {
-			$shareHistory = $this->getUploadFileShareDao()->findShareHistory($sourceUserId, $targetUserId);
-			
-			if(isset($shareHistory)){
-				//File share record exists, update the existing record
-				$fileShareFields = array (
-						'isActive' => 1,
-						'updatedTime' => time ()
-				);
+			//Ignore sharing request if the sourceUserId equasls to targetUserId
+			if($targetUserId != $sourceUserId){
+				$shareHistory = $this->getUploadFileShareDao()->findShareHistory($sourceUserId, $targetUserId);
 				
-				$this->getUploadFileShareDao()->updateShare($shareHistory['id'], $fileShareFields);
-			}else{
-				//Add new file share record
-				$fileShareFields = array (
-						'sourceUserId' => $sourceUserId,
-						'targetUserId' => $targetUserId,
-						'isActive' => 1,
-						'createdTime' => time (),
-						'updatedTime' => time () 
-				);
-				
-				$this->getUploadFileShareDao()->createShare($fileShareFields);
+				if(isset($shareHistory)){
+					//File sharing record exists, update the existing record
+					$fileShareFields = array (
+							'isActive' => 1,
+							'updatedTime' => time ()
+					);
+					
+					$this->getUploadFileShareDao()->updateShare($shareHistory['id'], $fileShareFields);
+				}else{
+					//Add new file sharing record
+					$fileShareFields = array (
+							'sourceUserId' => $sourceUserId,
+							'targetUserId' => $targetUserId,
+							'isActive' => 1,
+							'createdTime' => time (),
+							'updatedTime' => time () 
+					);
+					
+					$this->getUploadFileShareDao()->createShare($fileShareFields);
+				}
 			}
 		}
 	}

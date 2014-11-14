@@ -52,8 +52,8 @@
   <td  >
   <span style="float: right;">
     <a class="btn btn-link" title="预览" href="" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
-	<a class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="}}"><span class="glyphicon glyphicon-edit"></span></a>
-	<a class="btn btn-link delete-material-btn" title="删除" data-url="{{ path('course_manage_delete_teacher_material', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-trash"></span></a>
+	<a {% if uploadFile.createdUserId != currentUserId %}disabled="disabled" {% endif %} class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="}}"><span class="glyphicon glyphicon-edit"></span></a>
+	<a {% if uploadFile.createdUserId != currentUserId %}disabled="disabled" {% endif %} class="btn btn-link delete-material-btn" title="删除" data-url="{{ path('course_manage_delete_teacher_material', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-trash"></span></a>
   </span>
   </td>
 

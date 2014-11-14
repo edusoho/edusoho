@@ -156,18 +156,22 @@ define(function(require, exports, module) {
         			<label><input type='radio' name='"+this.element.attr("id")+"-source' value='upload' checked>来自上传</label> \
         			<label><input type='radio' name='"+this.element.attr("id")+"-source' value='shared'>来自分享</label> \
 		      </div> \
-		      <div class='file-filter-by-owner-container' style='display: none;'> \
-		      	<select required='required' class='file-filter-by-owner form-control width-input'> \
-			    		<option value=''>请选择老师</option> \
-			    </select> \
-		      </div> \
-		      <div class='input-group'> \
-			    <input class='form-control width-input-small file-filter-by-name' type='text' placeholder='输入视频标题关键字'  /> \
-			    <span class='input-group-btn'> \
-			      <button type='button' class='btn btn-default' data-loading-text='正在搜索，请稍等'>搜索</button> \
-			    </span> \
-			  </div> \
-			</div> ";
+	        	<div class='row'> \
+        			<div  class='col-xs-5'> \
+			      	<span class='input-group'> \
+				    <input name='file-filter-by-name' class='form-control width-input-small file-filter-by-name' type='text' placeholder='输入视频标题关键字'  /> \
+				    <span class='input-group-btn'> \
+				      <button type='button' class='btn btn-default' data-loading-text='正在搜索，请稍等'>搜索</button> \
+				    </span> \
+				  </span> \
+        			</div> \
+			      <span class='file-filter-by-owner-container col-xs-5' style='display: none;'> \
+			      	<select name='file-filter-by-owner' class='file-filter-by-owner form-control width-input-large'> \
+				    		<option value=''>请选择老师</option> \
+				    </select> \
+			      </span> \
+			     </div> \
+        		</div> ";
 		
         	this.element.prepend($filterHtml);
         }
