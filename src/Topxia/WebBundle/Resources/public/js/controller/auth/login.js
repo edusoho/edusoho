@@ -18,21 +18,6 @@ define(function(require, exports, module) {
             required: true
         });
 
-        $(function(){
-            //数字验证 
-            if ($("#getcode_num").length > 0){
-                $("#getcode_num").click(function(){ 
-                    $(this).attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
-                }); 
-            }
-        });
-        if ($("#getcode_num").length > 0){
-            validator.addItem({
-                element: '[name="captcha_num"]',
-                required: true,
-                rule: 'alphanumeric remote',
-            });
-        };
     };
 
 });

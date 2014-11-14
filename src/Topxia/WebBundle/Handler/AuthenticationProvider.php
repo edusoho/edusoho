@@ -44,25 +44,6 @@ class AuthenticationProvider extends UserAuthenticationProvider
      */
     protected function checkAuthentication(UserInterface $user, UsernamePasswordToken $token)
     {
-        $request = $this->userProvider->container->get('request');
-        $data = $request->request->all();
-
-        $loginConnect = $this->getSettingService()->get('login_bind', array());
-        
-        if (!array_key_exists('captcha_enabled',$loginConnect)){
-            $loginConnect['captcha_enabled']=0;
-        }
-
-        if ($loginConnect['captcha_enabled'] == 1){
-
-            $captchaCodePostedByUser = strtolower($data['captcha_num']);
-            $captchaCode = $request->getSession()->get('captcha_code'); 
-
-            if ($captchaCode != $captchaCodePostedByUser){ 
-                throw new \RuntimeException('验证码错误。');
-            }
-        }
-
         $currentUser = $token->getUser();
         if ($currentUser instanceof UserInterface) {
             if ($currentUser->getPassword() !== $user->getPassword()) {
