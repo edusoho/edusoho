@@ -354,30 +354,19 @@ class TeachingPageDataBuilder extends BaseController
     public function buildHomeworkArray()
     {
         $status = 'reviewing';
-        $homeworks = $this->getHomeworkService()->findHomeworksByCreatedUserId($this->teacherId);
-        $homeworkLessonIds = ArrayToolkit::column($homeworks, 'lessonId');
-        $homeworks = ArrayToolkit::index($homeworks, 'id');
-        $homeworkCourseIds = ArrayToolkit::column($homeworks, 'courseId');
-        $homeworkCourses = $this->getCourseService()->findCoursesByIds($homeworkCourseIds);
-        $homeworkLessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
+        $courses = $this->getCourseService()->findUserTeachCourses($this->teacherId, 0, PHP_INT_MAX,false);
+        $courseIds=ArrayToolkit::column($courses, 'id');
+        $reviewingCount=$this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds,$status);
 
-        $homeworkResults = $this->getHomeworkService()->findResultsByStatusAndCheckTeacherId(
-            $status,
-            $this->teacherId,
-            array('usedTime','DESC'),
+        $homeworkResults = $this->getHomeworkService()->findResultsByCourseIdsAndStatus(
+            $courseIds,$status,array('usedTime','DESC'),
             0,6
         );
-
+        $homeworkCourses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($homeworkResults,'courseId'));
+        $homeworkLessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($homeworkResults,'lessonId'));
+        
         $usersIds = ArrayToolkit::column($homeworkResults,'userId');
         $users = $this->getUserService()->findUsersByIds($usersIds);
-
-        $homeworkIds = ArrayToolkit::column($homeworks, 'id');
-        foreach ($homeworkResults as $key=>$homeworkResult) {
-            if(!in_array($homeworkResult['homeworkId'], $homeworkIds)){
-                unset($homeworkResults[$key]);
-            }
-        }
-        $reviewingCount=count($homeworkResults);
 
         $this->result['users']=$users;
         $this->result['homeworkResults']=$homeworkResults;
