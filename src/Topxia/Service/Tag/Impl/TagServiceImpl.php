@@ -141,17 +141,18 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException("标签组(#{$id})不存在，更新失败！");
         }
 
-        $disabledTagGroup = $this->getTag2GroupDao()->getDisabledTag2GroupByName($tagGroup['name']);
+        $disabledTagGroup = $this->getTag2GroupDao()->getDisabledTag2GroupByName($fields['name']);
 
         if(!empty($disabledTagGroup)) {
             $fields = array (
                 'type' => $tagGroup['type'],
-                'name' => $disabledTagGroup['name'],
+                'name' => $fields['name'],
                 'disabled' => '0',
                 'createdTime' => $tagGroup['createdTime']
             );
+            $this->getTag2GroupDao()->updateTagGroupToDisabled($tagGroup['id']);
+            $this->getTag2Dao()->updateTag2sByGroupId($tagGroup['id'],$disabledTagGroup['id']);
             $tagGroup = $this->getTag2GroupDao()->updateTag2Group($disabledTagGroup['id'], $fields);
-            $this->getTag2GroupDao()->updateTag2sByGroupId($tagGroup['id'],$disabledTagGroup['id']);
         } else {
             $fields = ArrayToolkit::parts($fields, array('name','type'));
             $tagGroup = $this->getTag2GroupDao()->updateTag2Group($id, $fields);
@@ -168,7 +169,7 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException("标签(#{$id})不存在，更新失败！");
         }
 
-        $disabledTag = $this->getTag2Dao()->getDisabledTag2ByName($tag['name']);
+        $disabledTag = $this->getTag2Dao()->getDisabledTag2ByName($fields['name']);
 
         if(!empty($disabledTag)){
             $fields = array (
@@ -177,6 +178,7 @@ class TagServiceImpl extends BaseService implements TagService
                 'disabled' => '0',
                 'createdTime' => $tag['createdTime']
             );
+            $this->getTag2Dao()->updateTagToDisabled($id);
             $tag = $this->getTag2Dao()->updateTag2($disabledTag['id'], $fields);
         } else {
             $fields = ArrayToolkit::parts($fields, array('name'));
