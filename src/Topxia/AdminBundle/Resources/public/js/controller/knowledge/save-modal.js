@@ -20,12 +20,20 @@ define(function(require, exports, module) {
 
                 $('#knowledge-create-btn').button('submiting').addClass('disabled');
 
-                $.post($form.attr('action'), $form.serialize(), function(html){
+                $.post($form.attr('action'), $form.serialize(), function(result){
                     $modal.modal('hide');
-                    $list.find('ul:first').append(html);
+                    var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");
+                    var node = result.tid ? zTree.getNodeByTId(result.tid) : null;
+                    if(result.type) {
+                        node.name = result.knowledge.name;
+                        node.id = result.knowledge.id;
+                        zTree.updateNode(node);
+                    } else {
+                        zTree.addNodes(node,  {id:(result.knowledge.id), pId:result.knowledge.parentId, name:result.knowledge.name, categoryId:result.knowledge.categoryId});
+                    }
                     Notify.success('保存知识点成功！');
 				}).fail(function() {
-                    Notify.danger("添加知识点失败，请重试！");
+                    Notify.danger("保存知识点失败，请重试！");
                 });
 
             }
