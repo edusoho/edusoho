@@ -56,7 +56,10 @@ define(function(require, exports, module) {
         $table.on('click','[data-role=delete]',function(){
             var $btn = $(this);
             $btn.addClass('disabled');
-            if (!confirm('确定要删除标签吗?')) {return ;}
+            if (!confirm('确定要删除标签吗?')) {
+                $btn.removeClass('disabled');
+                return ;
+            }
             $.post($btn.data('url'),function(response) {
                 $btn.parent().parent().prev('tr').remove();
                 $btn.parent().parent('tr').remove();
