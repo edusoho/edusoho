@@ -230,7 +230,7 @@ function install_step999()
     $init = new SystemInit();
 
     $key = $init->initKey();
-    $install_plugins();
+    install_plugins();
     echo json_encode($key);
 }
 
