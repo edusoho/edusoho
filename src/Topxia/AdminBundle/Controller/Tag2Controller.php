@@ -93,7 +93,8 @@ class Tag2Controller extends BaseController
             $tag = $this->getTagService()->updateTag($id, $tag);
 
             return $this->render('TopxiaAdminBundle:Tag2:tag-manage-modal-tr.html.twig', array(
-                'tag' => $tag
+                'tag' => $tag,
+                'id' => $id
             ));
         }
     }
