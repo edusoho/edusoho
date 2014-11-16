@@ -11,6 +11,8 @@ use Topxia\System;
 class BuildCommand extends BaseCommand
 {
 
+	protected $pluginsFilter = array('Homework');
+
 	protected function configure()
 	{
 		$this->setName ( 'topxia:build' );
@@ -140,6 +142,11 @@ class BuildCommand extends BaseCommand
 	{
 		$this->output->writeln('build plugins/ .');
 		$this->filesystem->mkdir("{$this->distDirectory}/plugins");
+		foreach ($this->pluginsFilter as $pluginName) {
+			$this->filesystem->mirror("{$this->rootDirectory}/plugins/{$pluginName}", "{$this->distDirectory}/plugins/{$pluginName}");
+			$this->filesystem->remove("{$this->distDirectory}/plugins/{$pluginName}/.git");
+		}
+	
 	}
 
 	public function buildSrcDirectory()
