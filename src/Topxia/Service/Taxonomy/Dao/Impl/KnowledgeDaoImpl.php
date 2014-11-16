@@ -38,13 +38,13 @@ class KnowledgeDaoImpl extends BaseDao implements KnowledgeDao
 
     public function findKnowledgeByCategoryId($categoryId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE categoryId = ? ORDER BY weight ASC";
+        $sql = "SELECT * FROM {$this->table} WHERE categoryId = ? ORDER BY sequence ASC";
         return $this->getConnection()->fetchAll($sql, array($categoryId)) ? : array();
     }
 
     public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE categoryId = ? AND parentId = ? ORDER BY weight ASC";
+        $sql = "SELECT * FROM {$this->table} WHERE categoryId = ? AND parentId = ? ORDER BY sequence ASC";
         return $this->getConnection()->fetchAll($sql, array($categoryId, $parentId)) ? : array();
     }
 

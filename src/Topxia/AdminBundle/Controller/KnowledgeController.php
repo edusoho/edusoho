@@ -40,7 +40,8 @@ class KnowledgeController extends BaseController
 			    'description'=>'',
 			    'categoryId' => (int) $query['categoryId'],
 			    'parentId' => 0,
-			    'weight' => 0
+			    'weight' => 0,
+			    'sequence' => 1
 			);
 		}
 		$knowledge['tid'] = $query['tid'];
@@ -78,6 +79,12 @@ class KnowledgeController extends BaseController
 	    	$knowledge['tid'] = $query['tid'];
 	    }
 
+	    if(empty($query['seq'])) {
+	    	$knowledge['sequence'] = count($this->getKnowledgeService()->findKnowledgeByCategoryIdAndParentId($categoryId, 0)) +1;
+	    } else {
+	    	$knowledge['sequence'] = $query['seq'];
+	    }
+
 	    return $this->render('TopxiaAdminBundle:Knowledge:modal.html.twig', array(
 	        'knowledge' => $knowledge,
 	    ));
@@ -111,6 +118,15 @@ class KnowledgeController extends BaseController
 		$parentId = empty($query['id']) ? 0 : $query['id'];
 		$knowledges = $this->getKnowledgeService()->findNodesData($query['categoryId'], $parentId);
 		return $this->createJsonResponse($knowledges);
+	}
+
+	public function sortAction(Request $request)
+	{
+		$id = $request->request->get('id');
+		$parentId = $request->request->get('pid');
+		$seq = $request->request->get('seq');
+		$knowledge = $this->getKnowledgeService()->sort($id, empty($parentId)?0:$parentId, $seq);
+		return $this->createJsonResponse($knowledge);
 	}
 
 	private function getCategoryService()

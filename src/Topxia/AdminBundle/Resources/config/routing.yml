@@ -718,6 +718,11 @@ admin_knowledge_checkcode:
 admin_knowledge_getNodes:
     pattern:  /knowledge/getNodes
     defaults: { _controller: TopxiaAdminBundle:Knowledge:getNodes }
+    methods: [POST]
+
+admin_knowledge_sort:
+    pattern:  /knowledge/sort
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:sort }
 
 admin_file:
     pattern:  /file

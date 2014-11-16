@@ -19,7 +19,7 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
     {
        list($knowledge) = $this->checkExist(null, $id);
 
-        $fields = ArrayToolkit::parts($fields, array('description','name', 'code', 'weight'));
+        $fields = ArrayToolkit::parts($fields, array('description','name', 'code', 'weight', 'sequence', 'parentId'));
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新知识点失败！');
         }
@@ -29,7 +29,7 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
 
         $this->filterKnowledgeFields($fields, $knowledge);
 
-        $this->getLogService()->info('knowledge', 'update', "编辑知识点 {$fields['name']}(#{$id})", $fields);
+        $this->getLogService()->info('knowledge', 'update', "编辑知识点 {$knowledge['name']}(#{$id})", $fields);
 
         return $this->getKnowledgeDao()->updateKnowledge($id, $fields);
     }
@@ -48,7 +48,7 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
 
     public function createKnowledge($knowledge)
     {
-        $knowledge = ArrayToolkit::parts($knowledge, array('description','name', 'code', 'weight', 'categoryId', 'parentId', 'isVisible'));
+        $knowledge = ArrayToolkit::parts($knowledge, array('description','name', 'code', 'weight', 'categoryId', 'parentId', 'isVisible', 'sequence'));
 
         if (!ArrayToolkit::requireds($knowledge, array('name', 'code', 'weight', 'categoryId', 'parentId'))) {
             throw $this->createServiceException("缺少必要参数，，添加知识点失败");
@@ -60,6 +60,18 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
         $this->getLogService()->info('knowledge', 'create', "添加知识点 {$knowledge['name']}(#{$knowledge['id']})", $knowledge);
 
         return $knowledge;
+    }
+
+    public function sort($id, $parentId, $seq)
+    {
+        list($knowledge) = $this->checkExist(null, $id);
+        if($knowledge['parentId'] != $parentId) {
+            $this->updateKnowledge($id, array('parentId' => $parentId));
+        } 
+        $index = 1;
+        foreach ($seq as $key => $knowledgeId) {
+            $this->updateKnowledge($knowledgeId, array('sequence' => $index++));
+        }
     }
 
     public function findKnowledgeByCategoryId($categoryId)
