@@ -2,3 +2,7 @@ form:
     baseinfo:
         acctname: 名称
         describe: 描述
+    oneclick:
+        wxusername: 微信公众号用户名
+        wxpassword: 微信公众号密码
+        imgcode: 验证码

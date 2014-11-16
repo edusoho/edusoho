@@ -1,0 +1,31 @@
+<div>
+    <div>
+        <form action="{{ path('sylius_flow_forward', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'oneclick'}) }}" method="post">
+            {{ form_errors(form) }}
+            <div>
+                <div>
+                    <h3>微信公众号用户名</h3>
+                    {{ form_widget(form.wxusername) }}
+                </div>
+                <div>
+                    <h3>微信公众号密码</h3>
+                    {{ form_widget(form.wxpassword) }}
+                </div>
+                <div>
+                    <h3>验证码</h3>
+                    {{ form_widget(form.imgcode) }}
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            <div>
+                <a href="{{ path('sylius_flow_display', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'oneclick'}) }}" >
+                    <i></i>
+                    返回
+                </a> &nbsp;
+                <button  type="submit">
+                    <i></i> 下一步
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,2 +1,23 @@
-<a href="{{ path('sylius_flow_display', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'baseinfo'}) }}" class="btn btn-success"><i class="icon-backward icon-white"></i> back</a>
-{{ form(form) }}
+<div>
+    <div>
+        <form action="{{ path('sylius_flow_forward', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'baseinfo'}) }}" method="post">
+            {{ form_errors(form) }}
+            <div>
+                <div>
+                    <h3>名称</h3>
+                    {{ form_widget(form.acctname) }}
+                </div>
+                <div>
+                    <h3>描述</h3>
+                    {{ form_widget(form.describe) }}
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            <div>
+                <button  type="submit">
+                    下一步<i></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
