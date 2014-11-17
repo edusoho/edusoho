@@ -109,7 +109,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
             if ($type == "material"){
                 $validatedMaterialQuestionNum = 0;
                 foreach ($questions["material"] as $materialQuestion ){
-                    if ($materialQuestion['subCount'] > 0){$validatedMaterialQuestionNum +=1;}
+                    if ($materialQuestion['subCount'] > 0){$validatedMaterialQuestionNum += 1;}
                 }               
                 if ($validatedMaterialQuestionNum < $needCount){
                     $missing["material"] = $needCount - $validatedMaterialQuestionNum;
