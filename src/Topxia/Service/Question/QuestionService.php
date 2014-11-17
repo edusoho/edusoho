@@ -15,6 +15,8 @@ interface QuestionService
 
     public function findQuestionsbyTypes($types, $start, $limit);
 
+    public function findQuestionsbyTypesAndNotQueryUnvalidatedMaterial($types, $start, $limit);
+
     public function findQuestionsCountbyTypes($types);
 
     public function searchQuestions($conditions, $sort, $start, $limit);

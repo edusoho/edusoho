@@ -13,6 +13,8 @@ interface QuestionDao
     public function findQuestionsByParentIds(array $ids);
 
     public function findQuestionsbyTypes($types, $start, $limit);
+    
+    public function findQuestionsbyTypesAndNotQueryUnvalidatedMaterial($types, $start, $limit);
 
     public function findQuestionsCountbyTypes($types);
 
