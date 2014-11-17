@@ -8,8 +8,10 @@
 {% block main %}
 <div class="page-header clearfix">
   <h1 class="pull-left">课件管理</h1>
+    <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_courseware_create', {categoryId:category.id}) }}">添加课件</button>
 </div>
 
 <div class="courseware-list">
+
 <div>
 {% endblock %}
