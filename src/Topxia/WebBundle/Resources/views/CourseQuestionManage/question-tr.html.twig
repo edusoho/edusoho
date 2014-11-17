@@ -9,6 +9,11 @@
       {% else %}
         <small class="text-muted">从属于 本课程</small>
       {% endif %}
+      {% if question.type == 'material'%}
+           {% if  question.subCount == 0  %}
+              <span class="label label-danger">无效材料题</span>
+           {% endif %}
+      {% endif %}
     </div>
     
   </td>
