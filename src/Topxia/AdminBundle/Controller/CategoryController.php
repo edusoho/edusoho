@@ -98,7 +98,7 @@ class CategoryController extends BaseController
         }
         foreach ($categories as $key => $category) {
             if($category['isSubject'] && !$this->getCategoryService()->canChangeOrDeleteSubject($category['id'])) {
-                $response = array('success' => true, 'message' => '科目下还有有知识点不能删除。');
+                $response = array('success' => true, 'message' => '科目下还有知识点,不能被删除。');
                 return $this->createJsonResponse($response);
             }
         }
