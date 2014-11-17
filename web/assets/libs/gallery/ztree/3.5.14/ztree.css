@@ -16,7 +16,7 @@ span.tmpzTreeMove_arrow {
     *background-image: url(https://i.alipayobjects.com/e/201303/2MFzMNFUUn.gif)
 }
 
-.ztree {margin:0; padding:5px; color:#333; border: 1px solid #ccc;}
+.ztree {margin:0; padding:5px; color:#333;}
 .ztree li{padding:0; margin:0; list-style:none; line-height:36px; text-align:left; white-space:nowrap; outline:0;border-bottom: 1px solid #eee;}
 .ztree li ul{ margin:0; padding:0 0 0 18px; border-top: 1px solid #eee;}
 
