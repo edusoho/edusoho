@@ -14,6 +14,7 @@
             </div>
             {{ form_rest(form) }}
             <div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
                 <button  type="submit">
                     下一步<i></i>
                 </button>

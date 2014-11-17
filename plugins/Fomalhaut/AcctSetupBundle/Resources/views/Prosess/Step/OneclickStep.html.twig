@@ -18,10 +18,13 @@
             </div>
             {{ form_rest(form) }}
             <div>
-                <a href="{{ path('sylius_flow_display', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'oneclick'}) }}" >
+                <a href="{{ path('sylius_flow_display', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'baseinfo'}) }}" >
                     <i></i>
                     返回
                 </a> &nbsp;
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
                 <button  type="submit">
                     <i></i> 下一步
                 </button>
