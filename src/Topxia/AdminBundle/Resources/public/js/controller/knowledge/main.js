@@ -191,5 +191,6 @@ define(function(require, exports, module) {
 
 		$.fn.zTree.init($("#knowledge-tree"), setting);
 
+
 	}
 });
