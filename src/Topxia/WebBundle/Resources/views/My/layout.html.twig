@@ -43,10 +43,19 @@
                   <span class="k12-iconfont icon-taolun"></span>
                   <span class="myteaching-text">学生话题</span>
                 </a>
+
+                {% if is_plugin_installed('Homework') %}
+                  <a class="myteaching-menu list-group-item {% if side_nav == 'my-teaching-homework-check' %} active {% endif %}" href="{{path('my_teaching_homework_list') }}">
+                    <span class="k12-iconfont icon-shijuan"></span>
+                  <span class="myteaching-text">作业批改</span>
+                  </a>
+                {% endif %}
+
                 <a class="myteaching-menu list-group-item {% if side_nav == 'my-teaching-check' %} active {% endif %}" href="{{path('course_manage_list_teacher_test_reviewing') }}">
                   <span class="k12-iconfont icon-shijuan"></span>
-                  <span class="myteaching-text">我的批阅</span>
+                  <span class="myteaching-text">试卷批阅</span>
                 </a>
+
               </ul>
             </div>
           {% else %}

@@ -8,7 +8,13 @@
   {% for schedule in schedules %}
     {% if lessons[schedule.lessonId]|default(null) %}
       {% set lessonUrl = path('course_learn', {id:courses[lessons[schedule.lessonId].courseId].id}) ~ '#lesson/' ~ schedule.lessonId%}
-      {% set teacher = teachers[courses[lessons[schedule.lessonId].courseId].teacherIds[0]|default(0)]|default(null) %}
+
+      {% set lessonId=schedule.lessonId %}
+      {% set courseId=lessons[lessonId].courseId %}
+      {% set teacherId=courses[courseId].teacherIds[0]|default(0) %}
+      {% set teacher = teachers[teacherId]|default(null) %}
+
+      {# {% set teacher = teachers[courses[lessons[schedule.lessonId].courseId].teacherIds[0]|default(0)]|default(null) %} #}
         <li class="media">
           <a class="pull-left img-a" href="{{ lessonUrl }}" target="_blank">
             {% if schedule.status == 'finished' %}

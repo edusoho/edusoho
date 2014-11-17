@@ -1,0 +1,15 @@
+<div class="myteaching-thread">
+  <a href="{{path('user_show',{id:user.id})}}">
+    <img class="pull-left"  width="48" height="48" src="{{file_path(user.smallAvatar, 'avatar.png')}}" alt="{{user.truename}}">
+  </a>
+  <div class="text">
+    <div class="title">
+      <a href="{{ path('course_homework_check', {courseId:homeworkCourse.id,homeworkId:homeworkResult.homeworkId,userId:user.id }) }}" target="_blank">
+        <h5 class="media-heading">{{ homeworkCourse.title|plain_text(20) }}<small>{{ homeworkLesson.title|plain_text(10) }}</small></h5>
+      </a>
+    </div>
+    <div class="name">
+      <a href="{{ path('user_show', {id:user.id}) }}">{{user.truename}}</a>
+    </div>
+  </div>
+</div><br><br><hr>

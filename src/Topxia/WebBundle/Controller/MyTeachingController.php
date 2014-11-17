@@ -40,96 +40,20 @@ class MyTeachingController extends BaseController
 
     public function teachingAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-
-        if(!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
-        }
-        
-        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
-        $courseCount=count($courses);
-        $courseList =ArrayToolkit::group($courses,'classId');
-
-        /**如果存在模板课程,则排除这些课程*/
-        if(isset($courseList[0])){
-            $courseCount-=count($courseList[0]);
-            unset($courseList[0]);
-        }
-
-        $classIds = array_keys($courseList);
-        $classes = $this->getClassesService()->findClassesByIds($classIds);
-
-        $manageClasses = $this->getClassesService()->getClassesByHeadTeacherId($user['id']);
-
-        $courseIds=ArrayToolkit::column($courses, 'id');
-        if(empty($courseIds)){
-            $threadCount=0;
-            $threads=array();
-            $threadUsers=array();
-        }else{
-            $conditions = array(
-                'courseIds' => $courseIds,
-                'type' => 'question'
-            );
-            $threads = $this->getThreadService()->searchThreadInCourseIds($conditions,'createdNotStick',0,6);
-            $threadList=array();
-            foreach ($threads as $thread) {
-                $elitePosts=$this->getThreadService()->findThreadElitePosts($thread['courseId'], $thread['id'], 0, PHP_INT_MAX);
-                if(count($elitePosts)==0){
-                    $threadList[]=$thread;
-                }
-            }
-            $threads=$threadList;
-            $threadCount=count($threads);
-            $threadUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
-        }
-
-        $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($user['id']);
-        $testpaperIds = ArrayToolkit::column($teacherTests, 'id');
-        // $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
-        $testpaperCount=$this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds,'reviewing');
-        
-        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds($testpaperIds,'reviewing',0,6);
-        $testpapers = $this->getTestpaperService()->findTestpapersByIds(ArrayToolkit::column($paperResults, 'testId'));
-        $testpaperUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($paperResults, 'userId'));
-        //临时增加以下代码，紧急解决复制课程的试卷无法被老师批阅.
-        $myCourses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, 1000);
-        $classIds = ArrayToolkit::column($myCourses, 'classId');
-        $userIds = ArrayToolkit::column($testpaperUsers, 'id');
-        $classMembers = $this->getClassesService()->findClassMembersByUserIds($userIds);
-        foreach ($classMembers as $key => $member) {
-            if(!in_array($member['classId'], $classIds)) {
-                foreach ($paperResults as $key => $paperResult) {
-                    if($member['userId'] == $paperResult['userId']) {
-                        unset($paperResults[$key]);
-                    }
-                }
-            }
-        }
-        $testpaperCount = count($paperResults); 
-        //到这里为止.
-        return $this->render('TopxiaWebBundle:MyTeaching:teaching-k12.html.twig', array(
-            'classes' => $classes,
-            'courseList' => $courseList,
-            'courseCount'=>$courseCount,
-            'manageClasses'=>$manageClasses,
-            'threads'=>$threads,
-            'threadCount'=>$threadCount,
-            'threadUsers'=>$threadUsers,
-            'paperResults'=>$paperResults,
-            'testpapers'=>$testpapers,
-            'testpaperCount'=>$testpaperCount,
-            'testpaperUsers'=>$testpaperUsers
-        ));
+        $user=$this->tryViewTeachingPage();
+        $builder=new TeachingPageDataBuilder($user['id']);
+        $builder->buildCourseArray();
+        $builder->buildManageClassArray();
+        $builder->buildThreadArray();
+        $builder->buildHomeworkArray();
+        $builder->buildTestpaperArray();
+        $result=$builder->getResult();
+        return $this->render('TopxiaWebBundle:MyTeaching:teaching-k12.html.twig', $result);
     }
 
     public function teachingCoursesAction(Request $request,$classId)
     {
-        $user = $this->getCurrentUser();
-
-        if(!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
-        }
+        $user=$this->tryViewTeachingPage();
 
         $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
         $courseCount=count($courses);
@@ -165,11 +89,7 @@ class MyTeachingController extends BaseController
 
 	public function threadsAction(Request $request, $type)
 	{
-		$user = $this->getCurrentUser();
-
-        if(!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
-        }
+		$user=$this->tryViewTeachingPage();
 
 		$myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount($user['id'], true);
 
@@ -215,10 +135,7 @@ class MyTeachingController extends BaseController
 
     public function myTasksAction(Request $request)
     {   
-        $user = $this->getCurrentUser();
-        if(!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
-        }
+        $user=$this->tryViewTeachingPage();
 
         $classId = $request->query->get('classId');
         $classId = empty($classId) ? 0 : $classId;
@@ -239,10 +156,7 @@ class MyTeachingController extends BaseController
 
     public function getLessonsAction(Request $request, $classId, $date)
     {
-        $user = $this->getCurrentUser();
-        if(!$user->isTeacher()) {
-            return $this->createNotFoundException('您不是老师，不能查看此页面！');
-        }
+        $user=$this->tryViewTeachingPage();
         $date = empty($date) ? date('Ymd') : str_replace(array('-','/'), '', $date);
 
         $result = $this->getScheduleService()->findOneDaySchedulesByUserId($classId, $user['id'], $date);
@@ -257,10 +171,7 @@ class MyTeachingController extends BaseController
 
     public function getFinshedLessonStudentsAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-        if(!$user->isTeacher()) {
-            return $this->createNotFoundException('您不是老师，不能查看此页面！');
-        }
+        $user=$this->tryViewTeachingPage();
         $lessonId = $request->query->get('lessonId');
         $start = $request->query->get('start');
         $limit = $request->query->get('limit');
@@ -324,11 +235,21 @@ class MyTeachingController extends BaseController
                 'total' => $totalCount,
             )); 
         }
-        
-
     }
 
-	protected function getThreadService()
+    private function tryViewTeachingPage()
+    {
+        $user = $this->getCurrentUser();
+        if (empty($user)) {
+            throw $this->createServiceException('用户不存在或者尚未登录，请先登录');
+        }
+
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+        return $user;
+    }
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
@@ -363,4 +284,157 @@ class MyTeachingController extends BaseController
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
+    private function getHomeworkService()
+    {
+        return $this->getServiceKernel()->createService('Homework.K12HomeworkService');
+    }
+
+}
+
+class TeachingPageDataBuilder extends BaseController
+{
+    private $result= array();
+    private $teacherId;
+    public function __construct($teacherId)
+    {
+        $this->teacherId=$teacherId;
+    }
+    public function buildCourseArray()
+    {
+        $courseList = $this->getCourseService()->findUserTeachCourses($this->teacherId, 0, PHP_INT_MAX,false);
+        $courseCount=count($courseList);
+        $courseList =ArrayToolkit::group($courseList,'classId');
+
+        /**如果存在模板课程,则排除这些课程*/
+        if(isset($courseList[0])){
+            $courseCount-=count($courseList[0]);
+            unset($courseList[0]);
+        }
+
+        $classIds = array_keys($courseList);
+        $classes = $this->getClassesService()->findClassesByIds($classIds);
+        $this->result['classes']=$classes;
+        $this->result['courseList']=$courseList;
+        $this->result['courseCount']=$courseCount;
+    }
+    public function buildManageClassArray()
+    {
+        $manageClasses = $this->getClassesService()->getClassesByHeadTeacherId($this->teacherId);
+        $this->result['manageClasses']=$manageClasses;
+    }
+    public function buildThreadArray()
+    {
+        $courses = $this->getCourseService()->findUserTeachCourses($this->teacherId, 0, PHP_INT_MAX,false);
+        $courseIds=ArrayToolkit::column($courses, 'id');
+        if(empty($courseIds)){
+            $threadCount=0;
+            $threads=array();
+            $threadUsers=array();
+        }else{
+            $conditions = array(
+                'courseIds' => $courseIds,
+                'type' => 'question'
+            );
+            $threads = $this->getThreadService()->searchThreadInCourseIds($conditions,'createdNotStick',0,6);
+            $threadList=array();
+            foreach ($threads as $thread) {
+                $elitePosts=$this->getThreadService()->findThreadElitePosts($thread['courseId'], $thread['id'], 0, PHP_INT_MAX);
+                if(count($elitePosts)==0){
+                    $threadList[]=$thread;
+                }
+            }
+            $threads=$threadList;
+            $threadCount=count($threads);
+            $threadUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
+        }
+        $this->result['threads']=$threads;
+        $this->result['threadCount']=$threadCount;
+        $this->result['threadUsers']=$threadUsers;
+    }
+    public function buildHomeworkArray()
+    {
+        $status = 'reviewing';
+        $courses = $this->getCourseService()->findUserTeachCourses($this->teacherId, 0, PHP_INT_MAX,false);
+        $courseIds=ArrayToolkit::column($courses, 'id');
+        $reviewingCount=$this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds,$status);
+
+        $homeworkResults = $this->getHomeworkService()->findResultsByCourseIdsAndStatus(
+            $courseIds,$status,array('usedTime','DESC'),
+            0,6
+        );
+        $homeworkCourses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($homeworkResults,'courseId'));
+        $homeworkLessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($homeworkResults,'lessonId'));
+        
+        $usersIds = ArrayToolkit::column($homeworkResults,'userId');
+        $users = $this->getUserService()->findUsersByIds($usersIds);
+
+        $this->result['users']=$users;
+        $this->result['homeworkResults']=$homeworkResults;
+        $this->result['homeworkCourses']=$homeworkCourses;
+        $this->result['homeworkLessons']=$homeworkLessons;
+        $this->result['reviewingCount']=$reviewingCount;
+    }
+    public function buildTestpaperArray()
+    {
+        $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($this->teacherId);
+        $testpaperIds = ArrayToolkit::column($teacherTests, 'id');
+        $testpaperCount=$this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds,'reviewing');
+        
+        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds($testpaperIds,'reviewing',0,6);
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds(ArrayToolkit::column($paperResults, 'testId'));
+        $testpaperUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($paperResults, 'userId'));
+        //临时增加以下代码，紧急解决复制课程的试卷无法被老师批阅.
+        $myCourses = $this->getCourseService()->findUserTeachCourses($this->teacherId, 0, 1000);
+        $classIds = ArrayToolkit::column($myCourses, 'classId');
+        $userIds = ArrayToolkit::column($testpaperUsers, 'id');
+        $classMembers = $this->getClassesService()->findClassMembersByUserIds($userIds);
+        foreach ($classMembers as $key => $member) {
+            if(!in_array($member['classId'], $classIds)) {
+                foreach ($paperResults as $key => $paperResult) {
+                    if($member['userId'] == $paperResult['userId']) {
+                        unset($paperResults[$key]);
+                    }
+                }
+            }
+        }
+        $testpaperCount = count($paperResults); 
+        //到这里为止.
+        $this->result['paperResults']=$paperResults;
+        $this->result['testpapers']=$testpapers;
+        $this->result['testpaperCount']=$testpaperCount;
+        $this->result['testpaperUsers']=$testpaperUsers;
+    }
+    public function getResult(){
+        return $this->result;
+    }
+
+    protected function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getClassesService()
+    {
+        return $this->getServiceKernel()->createService('Classes.ClassesService');
+    }
+
+    private function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
+
+    private function getHomeworkService()
+    {
+        return $this->getServiceKernel()->createService('Homework.K12HomeworkService');
+    }
 }
