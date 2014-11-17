@@ -53,9 +53,22 @@ class BaseProcessor {
         return $this->controller->getContainer();
     }
 
+    protected function getAppService()
+    {
+        return $this->controller->getService('CloudPlatform.AppService');
+    }
+
     protected function getBlockService()
     {
         return $this->controller->getService('Content.BlockService');
+    }
+
+    protected function getUserService(){
+        return $this->controller->getService('User.UserService');
+    }
+
+    protected function getMessageService(){
+        return $this->controller->getService('User.MessageService');
     }
 
     protected function getCouponService()

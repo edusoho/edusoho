@@ -10,6 +10,22 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public $banner;
     
+    public function getPlugins()
+    {
+        $apps = $this->getAppService()->getCenterApps();
+        return $apps;
+        return array(
+                array(
+                    "pluginName"=>"blog",
+                    "version"=>"1.0.0",
+                    "lastUpdateTime"=>"2014-11-13",
+                    "price"=>"0",
+                    "updateInfo"=>"blog",
+                    "require"=>null
+                    )
+            );
+    }
+
     public function loginSchoolWithSite()
     {
         $version = $this->request->query->get('version', 1);

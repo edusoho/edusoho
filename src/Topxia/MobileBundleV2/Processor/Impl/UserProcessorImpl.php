@@ -5,6 +5,7 @@ use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\UserProcessor;
 use Topxia\Common\SimpleValidator;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
+use Topxia\Common\ArrayToolkit;
 
 class UserProcessorImpl extends BaseProcessor implements UserProcessor
 {
@@ -14,6 +15,32 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $this->formData;
     }
     
+    public function getUserMessages()
+    {
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $start = (int) $this->getParam("start", 0);
+        $limit = (int) $this->getParam("limit", 10);
+        $conversations = $this->getMessageService()->findUserConversations(
+            $user->id,
+            $start,
+            $limit
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($conversations, 'fromId'));
+        $users = $this->controller->filterUsers($users);
+        $this->getMessageService()->clearUserNewMessageCounter($user['id']);
+
+        $conversations = array_map(function($conversation) use ($users){
+            $conversation['user'] = $users[$conversation['fromId']];
+            return $conversation;
+        }, $conversations);
+        return $conversations;
+    }
+
     public function getUserLastlearning()
     {
         $user = $this->controller->getUserByToken($this->request);

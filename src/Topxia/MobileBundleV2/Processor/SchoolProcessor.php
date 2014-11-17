@@ -28,4 +28,6 @@ interface SchoolProcessor
 	public function suggestionLog();
 
 	public function loginSchoolWithSite();
+
+	public function getPlugins();
 }
