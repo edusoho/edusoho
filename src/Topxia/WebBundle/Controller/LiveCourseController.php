@@ -125,12 +125,12 @@ class LiveCourseController extends BaseController
         if ($lesson['endTime'] < time()) {
             return $this->createMessageResponse('info', '直播已结束!');
         }
-          
+
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
             // 老师登录
 
             $client = LiveClientFactory::createClient();
-
+            
             $params = array(
                 'liveId' => $lesson['mediaId'], 
                 'provider' => $lesson['liveProvider'],
@@ -138,6 +138,7 @@ class LiveCourseController extends BaseController
                 'nickname' => $user['nickname'],
                 'role' => 'teacher'
             );
+
             $result = $client->startLive($params);
 
             if (empty($result) or isset($result['error'])) {
@@ -303,11 +304,6 @@ class LiveCourseController extends BaseController
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
-
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

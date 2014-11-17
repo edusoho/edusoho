@@ -63,26 +63,25 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public function getDownloadUrl()
     {
-        $code = $this->request->get("code", "EduSoho");
-        return $this->controller->render('TopxiaMobileBundleV2:Content:download.html.twig', array(
-            "code"=>$code,
-            "iphoneUrl"=>$code == "EduSoho" ? "https://itunes.apple.com/cn/app/kuo-zhi-xue-tang/id887301045" : "#"
-            )
-        );
+        $code = $this->request->get("code", "edusoho");
+        $client = $this->request->get("client", "android");
+        return $this->controller->redirect("http://www.edusoho.com/download/mobile?client={$client}&code=" . $code);
     }
 
     public function getClientVersion()
     {
-        $baseUrl = $this->request->getSchemeAndHttpHost();
-        $code = $this->getParam("code", 'EduSoho');
-        $updateInfo = $this->controller->render('TopxiaMobileBundleV2:Content:update.html.twig', array());
+        $code = $this->getParam("code", "edusoho");
+        $clientVersion = $this->sendRequest("GET", "http://www.edusoho.com/version/{$code}-android", array());
+        if ("{}" == $clientVersion) {
+            return null;
+        }
+        $clientVersion = json_decode($clientVersion); 
         $result = array(
-            "show"=>true,
-            "code"=>3,
-            "androidVersion"=>"2.0.1",
-            "iPhoneVersion"=>"1.1.0",
-            "updateInfo"=>$updateInfo->getContent(),
-            "updateUrl"=>$baseUrl . '/mapi_v2/School/getDownloadUrl?code=' . $code
+            "show"=>"alert" == $clientVersion->updateMode ? true : false,
+            "code"=>$clientVersion->versionCode,
+            "androidVersion"=>$clientVersion->version,
+            "updateInfo"=>$clientVersion->updateInfo,
+            "updateUrl"=>$clientVersion->url
             );
         return $result;
     }

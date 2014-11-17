@@ -64,4 +64,29 @@ seajs.config({
 	charset: 'utf-8',
 
 	debug: app.debug
-})
+});
+
+var __SEAJS_FILE_VERSION = '?v' + app.version;
+
+seajs.on('fetch', function(data) {
+	if (!data.uri) {
+		return ;
+	}
+
+	if (data.uri.indexOf(app.mainScript) > 0) {
+		return ;
+	}
+
+    if (/\:\/\/.*?\/assets\/libs\/[^(common)]/.test(data.uri)) {
+        return ;
+    }
+
+    data.requestUri = data.uri + __SEAJS_FILE_VERSION;
+
+});
+
+seajs.on('define', function(data) {
+	if (data.uri.lastIndexOf(__SEAJS_FILE_VERSION) > 0) {
+	    data.uri = data.uri.replace(__SEAJS_FILE_VERSION, '');
+	}
+});

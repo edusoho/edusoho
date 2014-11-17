@@ -103,6 +103,11 @@ abstract class BaseController extends Controller
         return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
     }
 
+    protected function isPluginInstalled($name)
+    {
+        return $this->get('topxia.twig.web_extension')->isPluginInstaled($name);
+    }
+
     protected function createNamedFormBuilder($name, $data = null, array $options = array())
     {
         return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $data, $options);

@@ -14,6 +14,12 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
+    public function getLessonByCourseIdAndNumber($courseId, $number)
+    {
+        $sql = "SELECT * FROM {$this->getTablename()} WHERE courseId = ? AND number = ? LIMIT 1";
+        return $this->getConnection()->fetchAll($sql, array($courseId, $number)) ? : null;
+    }
+
     public function getCoursesCount()
     {
         $sql = "SELECT COUNT(*) FROM {$this->getTablename()}";
@@ -121,7 +127,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     private function _createSearchQueryBuilder($conditions)
     {
-
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";
             unset($conditions['title']);
@@ -186,9 +191,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         if (isset($conditions['vipLevelIds'])) {
+
             $vipLevelIds = array();
             foreach ($conditions['vipLevelIds'] as $vipLevelId) {
-                if (ctype_digit((string)abs($vipLevelId))) {
+                if (ctype_digit((string)$vipLevelId)) {
                     $vipLevelIds[] = $vipLevelId;
                 }
             }
@@ -196,7 +202,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 $vipLevelIds = join(',', $vipLevelIds);
                 $builder->andStaticWhere("vipLevelId IN ($vipLevelIds)");
             }
-
         }
 
         return $builder;

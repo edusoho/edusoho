@@ -11,6 +11,10 @@ class StatusServiceImpl extends BaseService implements StatusService
     {
         $user = $this->getCurrentUser();
 
+        if($user['id']==0){
+            return ;
+        }
+
         $status['userId'] = $user['id'];
         $status['createdTime'] = time();
         $status['message'] = empty($status['message']) ? '' : $status['message'];

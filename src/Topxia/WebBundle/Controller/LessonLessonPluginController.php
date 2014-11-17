@@ -13,7 +13,6 @@ class LessonLessonPluginController extends BaseController
 
         $items = $this->getCourseService()->getCourseItems($course['id']);
         $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-
         return $this->render('TopxiaWebBundle:LessonLessonPlugin:list.html.twig', array(
             'course' => $course,
             'items' => $items,

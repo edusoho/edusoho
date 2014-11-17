@@ -215,7 +215,6 @@ class DataDict
     		'open'=>'开启',
     		'close'=>'关闭',
     	),
-
 	);
 
 	public static function dict($type)
