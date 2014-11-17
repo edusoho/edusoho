@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}私信 - {{ parent() }}{% endblock %}
+{% block title %}{{ '私信'|trans }} - {{ parent() }}{% endblock %}
 {% set script_controller = 'message/conversation-list' %}
 
 {% block content %}
@@ -8,8 +8,8 @@
   <div class="col-md-8 col-md-offset-2">
     <div class="panel panel-default panel-page">
       <div class="panel-heading">
-        <a class="btn btn-primary pull-right" href="{{ path('message_send') }}">写私信</a>
-        <h2>私信</h2>
+        <a class="btn btn-primary pull-right" href="{{ path('message_send') }}">{{ '写私信'|trans }}</a>
+        <h2>{{ '私信'|trans }}</h2>
       </div>
 
       <ul class="media-list conversation-list">
@@ -20,28 +20,28 @@
             <div class="media-body">
               <h4 class="media-heading">
                 {% if conversation.latestMessageUserId == app.user.id %}
-                  发给
+                  {{ '发给'|trans }}
                 {% endif  %}
                 {{ web_macro.user_link(fromUser) }}:
                 {{conversation.latestMessageContent|plain_text(40)}}
 
                 {% if conversation.unreadNum > 0 %}
-                  <span class="text-warning">({{conversation.unreadNum}}条未读)</span>
+                  <span class="text-warning">({{conversation.unreadNum}}{{ '条未读'|trans }})</span>
                 {% endif %}
               </h4>
 
               <div class="conversation-footer clearfix">
                 <span class="pull-left">{{ conversation.latestMessageTime|smart_time }}</span>
-                <span class="pull-right">共{{ conversation.messageNum }}条</span>
+                <span class="pull-right">{{ '共%number%条'|trans({'%number%': conversation.messageNum}) }}</span>
                 <div class="actions pull-right">
-                  <a class="delete-conversation-btn text-muted" href="javascript:" data-url="{{ path('message_conversation_delete', {conversationId:conversation.id })}}">删除</a>
+                  <a class="delete-conversation-btn text-muted" href="javascript:" data-url="{{ path('message_conversation_delete', {conversationId:conversation.id })}}">{{ '删除'|trans }}</a>
                   <span class="text-muted mhm">|</span> 
                 </div>
               </div>
             </div>
           </li>
         {% else %}
-          <li class="empty">暂无私信</li>
+          <li class="empty">{{ '暂无私信'|trans }}</li>
         {% endfor %}
       </ul>
 

@@ -2,7 +2,7 @@
 
 {% set script_controller = 'group/group' %}
 
-{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+{% block title %}{{groupinfo.title}}{{ '小组'|trans }} - {{ parent() }}{% endblock %}
 
 {% set settingNav = 'info' %}
 
@@ -11,7 +11,7 @@
   <form id="user-group-form" class="form-horizontal" method="post" action="{{path('group_edit',{id:groupinfo.id})}}">
                       
     <div class="form-group">
-      <label class="col-md-2 control-label" for="group_grouptitle">小组名称</label>
+      <label class="col-md-2 control-label" for="group_grouptitle">{{ '小组名称'|trans }}</label>
       <div class="col-md-9 controls">
         <input type="text" id="group_grouptitle" name="group[grouptitle]" class="form-control"
         value="{{groupinfo.title}}" >
@@ -20,7 +20,7 @@
     </div>
 
     <div class="form-group">
-      <label class="col-md-2 control-label" for="group">小组介绍</label>
+      <label class="col-md-2 control-label" for="group">{{ '小组介绍'|trans }}</label>
       <div class="col-md-9 controls">
         <textarea name="group[about]" rows="10" id="group" class="form-control">{{groupinfo.about}}</textarea>
       </div>
@@ -31,7 +31,7 @@
 
     <div class="row">
       <div class="col-xs-7 col-xs-offset-2">
-        <button id="group-save-btn" data-submiting-text="正在修改" type="submit" class="btn btn-primary">修改</button>
+        <button id="group-save-btn" data-submiting-text="{{ '正在修改'|trans }}" type="submit" class="btn btn-primary">{{ '修改'|trans }}</button>
       </div>
     </div>
 

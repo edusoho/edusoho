@@ -1,14 +1,14 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 
-{% block title %}小组 - {{ parent() }}{% endblock %}
-{% block keywords %}小组{% endblock %}
-{% block description %}小组首页{% endblock %}
+{% block title %}{{ '小组'|trans }} - {{ parent() }}{% endblock %}
+{% block keywords %}{{ '小组'|trans }}{% endblock %}
+{% block description %}{{ '小组首页'|trans }}{% endblock %}
 {% block content %}
 <div class="row">
   <div class="col-md-8">
     <div class="panel panel-default">
       <div class="panel-heading">
-        热门小组<a href="{{path('group_search_group')}}" class="pull-right">&raquo;更多</a>
+        {{ '热门小组'|trans }}<a href="{{path('group_search_group')}}" class="pull-right">&raquo;{{ '更多'|trans }}</a>
       </div>
       <div class="panel-body">
         <div class="row group-grids">
@@ -24,14 +24,14 @@
             </div>
 
           {% else %}
-            <div class="empty">暂无小组信息！</div>
+            <div class="empty">{{ '暂无小组信息！'|trans }}</div>
           {% endfor %}
         </div>
       </div>
     </div>
 
     <div class="panel panel-default">
-      <div class="panel-heading">最近话题</div>
+      <div class="panel-heading">{{ '最近话题'|trans }}</div>
       <div class="panel-body">
          {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {
          threads:recentlyThread,
@@ -53,9 +53,9 @@
                  {{ web_macro.user_avatar(user, ' pull-left media-object media-object-small') }}
                     <div class="media-body">
                         <p >{{ web_macro.user_link(user , 'link-muted') }}</p>
-                        <a href="{{ path ('group_member_center') }}" class="btn btn-primary btn-xs btn-default active" role="button">我的小组主页</a>
+                        <a href="{{ path ('group_member_center') }}" class="btn btn-primary btn-xs btn-default active" role="button">{{ '我的小组主页'|trans }}</a>
                         {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path ('group_add') }}" class="btn btn-primary btn-xs btn-default active" role="button">创建小组</a>
+                        <a href="{{ path ('group_add') }}" class="btn btn-primary btn-xs btn-default active" role="button">{{ '创建小组'|trans }}</a>
                         {% endif %}
                     </div>
                 </div>
@@ -67,7 +67,7 @@
           <form action="{{path('group_search_group')}}" method="get">
                 <div class="input-group">
                   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-                  <input type="text" class="form-control" placeholder="小组搜索" name="keyWord">
+                  <input type="text" class="form-control" placeholder="{{ '小组搜索'|trans }}" name="keyWord">
                   <span class="input-group-btn">
                   <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
                   </span>
@@ -77,8 +77,8 @@
     {% if myJoinGroup %} 
       <div class="panel panel-default">
         <div class="panel-heading">
-          我的小组
-          {% if user.id %} <a href="{{ path ('group_member_join',{type:'myGroup'}) }}" class="pull-right">&raquo;更多</a>{% endif %}
+          {{ '我的小组'|trans }}
+          {% if user.id %} <a href="{{ path ('group_member_join',{type:'myGroup'}) }}" class="pull-right">&raquo;{{ '更多'|trans }}</a>{% endif %}
         </div>
         <div class="panel-body">
           <div class="row group-grids">

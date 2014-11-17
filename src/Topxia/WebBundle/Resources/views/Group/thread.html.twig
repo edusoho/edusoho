@@ -9,16 +9,16 @@
       <h2>
         {{ threadMain.title }}
         {% if threadMain.isElite %}
-        <span class="label label-warning">精</span>
+        <span class="label label-warning">{{ '精'|trans }}</span>
       {% endif %}
         {% if threadMain.isStick %}
-        <span class="label label-danger">置顶</span>
+        <span class="label label-danger">{{ '置顶'|trans }}</span>
       {% endif %}
       </h2>
       <div class="metas">
-        发表于 {{ threadMain.createdTime|smart_time }}
+        {{ '发表于'|trans }} {{ threadMain.createdTime|smart_time }}
         <span class="divider">•</span>
-        <span>{{ threadMain.hitNum }} 次查看</span><div class="share pull-right" data-bdText="{{groupShareContent}}"></div>
+        <span>{{ threadMain.hitNum }} {{ '次查看'|trans }}</span><div class="share pull-right" data-bdText="{{groupShareContent}}"></div>
       </div>
     </div>
     <div class="panel-body" id="post-action">
@@ -27,44 +27,44 @@
       <div class="mtl">
 
         {% if filters.type=='onlyOwner' %}
-          <a class="btn btn-link" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}" %}><span class="glyphicon glyphicon-filter"></span> 查看全部回复</a>
+          <a class="btn btn-link" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}" %}><span class="glyphicon glyphicon-filter"></span> {{ '查看全部回复'|trans }}</a>
         {% else %}
-          <a class="btn btn-link" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}"><span class="glyphicon glyphicon-filter"></span> 只看楼主回复</a>
+          <a class="btn btn-link" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}"><span class="glyphicon glyphicon-filter"></span> {{ '只看楼主回复'|trans }}</a>
         {% endif %}
         
         {% if filters.sort=='desc' %}
-          <a type="button" class="btn btn-link " href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"><span class="glyphicon glyphicon-sort"></span> 顺序查看回复</a>
+          <a type="button" class="btn btn-link " href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}"><span class="glyphicon glyphicon-sort"></span> {{ '顺序查看回复'|trans }}</a>
         {% else %}
-          <a type="button" class="btn btn-link " href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"><span class="glyphicon glyphicon-sort"></span> 倒序查看回复</a>
+          <a type="button" class="btn btn-link " href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"><span class="glyphicon glyphicon-sort"></span> {{ '倒序查看回复'|trans }}</a>
         {% endif %}
 
         
         {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3%}
-          <a class="btn btn-link" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
+          <a class="btn btn-link" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"><span class="glyphicon glyphicon-edit"></span> {{ '编辑'|trans }}</a>
         {% endif %}
 
         {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
           {% if threadMain.isElite==1 %}
-            <a id="elite"  title="取消加精" class="btn btn-link"
+            <a id="elite"  title="{{ '取消加精'|trans }}" class="btn btn-link"
               href="javascript:"
-            data-url="{{path('group_thread_removeElite',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-hand-right"></span> 取消加精</a>
+            data-url="{{path('group_thread_removeElite',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-hand-right"></span> {{ '取消加精'|trans }}</a>
           {% else %}
-            <a id="elite"  title="加精" class="btn btn-link"
-            href="javascript:" data-url="{{path('group_thread_setElite',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-thumbs-up"></span> 加精</a>
+            <a id="elite"  title="{{ '加精'|trans }}" class="btn btn-link"
+            href="javascript:" data-url="{{path('group_thread_setElite',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-thumbs-up"></span> {{ '加精'|trans }}</a>
           {% endif %}
 
           {% if threadMain.isStick==1 %}
-             <a id="stick" title="取消置顶" class="btn btn-link"
-            href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
+             <a id="stick" title="{{ '取消置顶'|trans }}" class="btn btn-link"
+            href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-minus-sign"></span> {{ '取消置顶'|trans }}</a>
           {% else %}
-            <a id="stick"  title="置顶" class="btn btn-link"
-            href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-circle-arrow-up"></span>  置顶</a>
+            <a id="stick"  title="{{ '置顶'|trans }}" class="btn btn-link"
+            href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-circle-arrow-up"></span>  {{ '置顶'|trans }}</a>
           {% endif %}
           
 {# 
-          <a id="closeThread"  title="一但关闭话题将删除！确定关闭话题" class="btn btn-link"
+          <a id="closeThread"  title="{{ '一但关闭话题将删除！确定关闭话题'|trans }}" class="btn btn-link"
           href="javascript:" data-url="{{path('group_thread_closeThread',{threadId:threadMain.id,memberId:user.id})}}">
-          <span class="glyphicon glyphicon-remove-sign"></span> 关闭话题
+          <span class="glyphicon glyphicon-remove-sign"></span> {{ '关闭话题'|trans }}
           </a> #}
 
         {% endif %}
@@ -74,7 +74,7 @@
   {% if threadMain.postNum %}
   <div class="panel panel-default group-post-list">
     <div class="panel-heading">
-      {{threadMain.postNum}}回复
+      {{threadMain.postNum}}{{ '回复'|trans }}
     </div>
     <div class="panel-body">
 
@@ -87,9 +87,9 @@
               <div class="metas">
                 <span class="floor">
                   {% if filters.sort=='desc' %}
-                    {{ (postCount+1)-paginator.getPerPageCount()*(paginator.currentPage-1)-loop.index0 }}楼
+                    {{ (postCount+1)-paginator.getPerPageCount()*(paginator.currentPage-1)-loop.index0 }}{{ '楼'|trans }}
                   {% else %}
-                    {{ (loop.index+1)+paginator.getPerPageCount()*(paginator.currentPage-1) }}楼
+                    {{ (loop.index+1)+paginator.getPerPageCount()*(paginator.currentPage-1) }}{{ '楼'|trans }}
                   {% endif %}
                 </span>
                 <strong>{{ web_macro.user_link(postMember[post.userId]) }}</strong>
@@ -102,15 +102,15 @@
 
               <div class="actions">
                 {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                  <a title="确定删除这条回复" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">删除</a>
+                  <a title="{{ '确定删除这条回复'|trans }}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">{{ '删除'|trans }}</a>
                 {% endif %}
    
                 {% if not subPosts %}
-                  <a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}">回复</a>
-                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">收起</a>
+                  <a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}">{{ '回复'|trans }}</a>
+                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">{{ '收起'|trans }}</a>
                 {% else %}
-                  <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="">回复({{postReplyCount[post.id]}})</a>
-                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >收起</a>
+                  <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="">{{ '回复'|trans }}({{postReplyCount[post.id]}})</a>
+                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >{{ '收起'|trans }}</a>
                 {% endif %}
               </div>
               <div class="reply-{{post.id}}">
@@ -121,14 +121,14 @@
                 <div class="reply-{{post.id}}" style="display:none;">
                   <form  class="thread-post-reply-form reply-{{post.id}}" method="post"  post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
                     <div class="form-group">
-                      <label class="control-label hide" for="reply-content-{{post.id}}">回复内容</label>
+                      <label class="control-label hide" for="reply-content-{{post.id}}">{{ '回复内容'|trans }}</label>
                       <div class="controls">
                       <textarea id="reply-content-{{post.id}}" class="form-control"></textarea>
                     </div>
                     </div>
                     <div id="fromUserIdNoSubDiv"></div>
                     <div class="form-group">
-                      <button type="submit" postId="{{post.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
+                      <button type="submit" postId="{{post.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="{{ '正在发表回复'|trans }}">{{ '发表'|trans }}</button>
                     </div>
                   </form>
                 </div>
@@ -148,21 +148,21 @@
   </div>
   {% endif %}
   <div class="panel panel-default">
-    <div class="panel-heading">发表回复</div>
+    <div class="panel-heading">{{ '发表回复'|trans }}</div>
     <div class="panel-body">
 
       {% if app.user %}
         <form id="post-thread-form" class="post-thread-form " method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
 
           <div class="form-group">
-              <label class="control-label hide" for="post_content">回复内容</label>
+              <label class="control-label hide" for="post_content">{{ '回复内容'|trans }}</label>
               <div class="controls">
               <textarea name="content" value="" rows="10" id="post_content" class="form-control"></textarea>
               </div>
           </div>
           <div class="form-group">
             <div class="controls">
-            <button id="post-thread-btn" data-submiting-text="正在回复" type="submit" class="post-thread-btn btn btn-primary pull-right">发表</button>
+            <button id="post-thread-btn" data-submiting-text="{{ '正在回复'|trans }}" type="submit" class="post-thread-btn btn btn-primary pull-right">{{ '发表'|trans }}</button>
             </div>
           </div>
 
@@ -170,7 +170,7 @@
         </form>
       {% else %}
         <div class="empty">
-          你还没有登录，请先<a href="{{ path('login', {goto:app.request.server.get('REQUEST_URI')}) }}">登录</a>或<a href="{{ path('register', {goto:app.request.server.get('REQUEST_URI')}) }}">注册</a>！
+          {{ '你还没有登录，请先'|trans }}<a href="{{ path('login', {goto:app.request.server.get('REQUEST_URI')}) }}">{{ '登录'|trans }}</a>{{ '或'|trans }}<a href="{{ path('register', {goto:app.request.server.get('REQUEST_URI')}) }}">{{ '注册'|trans }}</a>
         </div>
 
       {% endif %}
@@ -182,7 +182,7 @@
 
 {% block group_side %}
   <div class="panel panel-default">
-    <div class="panel-heading">话题作者</div>
+    <div class="panel-heading">{{ '话题作者'|trans }}</div>
     <div class="panel-body">
       <div class="media">
         <a class="pull-left" href="{{ path('user_show', {id:owner.id}) }}">
@@ -192,7 +192,7 @@
           <div class="metas mbm">
             <strong>{{ web_macro.user_link(owner)}}</strong>
           </div>
-          <div class="content"> <span class="text-muted">头衔:</span>{{owner.title|default("无")}}</div>
+          <div class="content"> <span class="text-muted">{{ '头衔'|trans }}:</span>{{owner.title|default("{{ '无'|trans }}")}}</div>
         </div>
       </div>
     </div>

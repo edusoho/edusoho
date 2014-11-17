@@ -18,8 +18,8 @@
                             <div class="media-body">
                               <p style="margin:0 0 10px;"><a  href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></p>
                               <div class="text-muted text-normal">
-                                {{group.memberNum}}个成员&nbsp;
-                                {{group.threadNum}}个话题
+                                {{group.memberNum}}{{ '个成员'|trans }}&nbsp;
+                                {{group.threadNum}}{{ '个话题'|trans }}
                               </div>
                             </div> 
                           </div>
@@ -30,7 +30,7 @@
     {% endfor %}
 
   {% else %}
-        <div class="empty">暂无小组信息！</div>
+        <div class="empty">{{ '暂无小组信息！'|trans }}</div>
   {% endif %}
       
 </ul>
