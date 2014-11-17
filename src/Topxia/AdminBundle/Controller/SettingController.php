@@ -192,6 +192,48 @@ class SettingController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function liveLogoUploadAction(Request $request)
+    {
+        $file = $request->files->get('logo');
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+
+        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+        
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file = $file->move($directory, $filename);
+
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        $courseSetting['live_logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $courseSetting['live_logo'] = ltrim($courseSetting['live_logo'], '/');
+
+        $this->getSettingService()->set('course', $courseSetting);
+
+        $this->getLogService()->info('system', 'update_settings', "更新站点LOGO", array('live_logo' => $courseSetting['live_logo']));
+
+        $response = array(
+            'path' => $courseSetting['live_logo'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($courseSetting['live_logo']),
+        );
+
+        return new Response(json_encode($response));
+
+    }
+
+    public function liveLogoRemoveAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get("course");
+        $setting['live_logo'] = '';
+
+        $this->getSettingService()->set('course', $setting);
+
+        $this->getLogService()->info('system', 'update_settings', "移除直播LOGO");
+
+        return $this->createJsonResponse(true);
+    }
+
     public function faviconUploadAction(Request $request)
     {
         $file = $request->files->get('favicon');
