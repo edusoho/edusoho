@@ -38,11 +38,14 @@ class CourseFileManageController extends BaseController
         );
 
         foreach ($files as $key => $file) {
-         
+            
             $files[$key]['metas2'] = json_decode($file['metas2'],true) ? : array();
 
             $files[$key]['convertParams'] = json_decode($file['convertParams']) ? : array();
             
+            $useNum=$this->getCourseService()->searchLessonCount(array('mediaId'=>$file['id']));
+            
+            $files[$key]['useNum']=$useNum;
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));

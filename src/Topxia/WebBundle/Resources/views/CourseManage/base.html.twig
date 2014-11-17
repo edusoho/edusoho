@@ -64,6 +64,40 @@
 			  </div>
 			</div>
 
+			<div class="form-group">
+			  <label class="col-md-2 control-label">到期提醒</label>
+			  <div class="col-md-8 controls radios">
+			  	{{ radios('deadlineNotify', {'active':'开启', 'none':'关闭'}, course.deadlineNotify|default('none') ) }}
+
+			  	<div id="deadlineNotifyBlock" class="help-block" 
+			  	{% if course.deadlineNotify == 'active' %}
+			  	style="display:none"
+			  	{% endif %}
+			  	>系统会在该设置的到期天数前给学员发课程到期的通知。</div>
+			  </div>
+			</div>
+
+			<div id="courseDaysOfNotifyBeforeDeadline" class="form-group"
+				{% if course.deadlineNotify != 'active' %}
+			  	style="display:none"
+			  	{% endif %}
+			>
+			  <label class="col-md-2 control-label" >
+			  </label>
+			  <label for="course_daysOfNotifyBeforeDeadline" style="display:none">
+			  	到期日期前的提醒天数
+			  </label>
+			  <div class="col-md-8 controls radios">
+			  	到期日期前的 <input type="text" id="course_daysOfNotifyBeforeDeadline" name="daysOfNotifyBeforeDeadline" required="required" class="form-control width-input width-input-mini" 
+			  	{% if course.daysOfNotifyBeforeDeadline|default(0)|number_format == 0 %}
+			  	value="10"
+			  	{% else %}
+			  	value="{{ course.daysOfNotifyBeforeDeadline|default(10) }}"
+			  	{% endif %}
+			  	> 天系统自动提醒
+			  </div>
+			</div>
+
 			{% if course.type == 'normal' %}
 				<div class="form-group">
 					<label class="col-md-2 control-label">连载状态</label>
@@ -90,13 +124,11 @@
 			  </div>
 			</div>
 
-		{% if liveCapacity != 0 %}
 			<div class="form-group">
 			    <div class="col-md-offset-2 col-md-8 controls">
-			    	<a href="http://www.edusoho.com/files/liveplugin/live_desktop.rar" target="_blank">直播“桌面分享”插件下载</a>
+		    		<a href="http://www.edusoho.com/files/liveplugin/live_desktop_{{liveProvider}}.rar" target="_blank">直播“桌面分享”插件下载</a>
 			    </div>
 			</div>
-		{% endif %}
 		
 		  <div class="form-group">
 		    <div class="col-md-offset-2 col-md-8 controls">

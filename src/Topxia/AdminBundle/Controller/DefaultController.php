@@ -12,35 +12,60 @@ class DefaultController extends BaseController
     {
         $dateType = $request->query->get('dateType');
 
-        $map = array();
-        $students = $this->getCourseService()->searchMember(array('date'=>$dateType, 'role'=>'student'), 0 , 10000);
-        foreach ($students as $student) {
-            if (empty($map[$student['courseId']])) {
-                $map[$student['courseId']] = 1;
-            } else {
-                $map[$student['courseId']] ++;
-            }
-        }
-        asort($map, SORT_NUMERIC);
-        $map = array_slice($map, 0, 5, true);
-
-        $courses = array();
-        foreach ($map as $courseId => $studentNum) {
-            $course = $this->getCourseService()->getCourse($courseId);
-            $course['addedStudentNum'] = $studentNum;
-            $course['addedMoney'] = 0;
-
-            $orders = $this->getOrderService()->searchOrders(array('targetType'=>'course', 'targetId'=>$courseId, 'status' => 'paid', 'date'=>$dateType), 'latest', 0, 10000);
-
-            foreach ($orders as $id => $order) {
-                $course['addedMoney'] += $order['amount'];
-            }
-
-            $courses[] = $course;
+        if($dateType == "today"){
+            $startTime = strtotime('today'); 
+            $endTime = strtotime('tomorrow');
         }
 
+        if($dateType == "yesterday"){
+            $startTime =  strtotime('yesterday');
+            $endTime =  strtotime('today');
+        }
+
+        if($dateType == "this_week"){
+            $startTime = strtotime('Monday this week');
+            $endTime = strtotime('Monday next week');
+        }
+
+        if($dateType == "last_week"){
+            $startTime = strtotime('Monday last week');
+            $endTime = strtotime('Monday this week');
+        }
+
+        if($dateType == "this_month"){
+            $startTime = strtotime('first day of this month midnight');
+            $endTime = strtotime('first day of next month midnight');
+        }
+
+        if($dateType == "last_month"){
+            $startTime = strtotime('first day of last month midnight');
+            $endTime = strtotime('first day of this month midnight');
+        }
+
+        $members = $this->getCourseService()->countMembersByStartTimeAndEndTime($startTime,$endTime);
+        $courseIds = ArrayToolkit::column($members,"courseId");
+        
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = ArrayToolkit::index($courses,"id");
+
+        $sortedCourses = array();
+
+
+
+        $orders = $this->getOrderService()->sumOrderAmounts($startTime,$endTime,$courseIds);
+        $orders = ArrayToolkit::index($orders,"targetId");
+
+        foreach ($members as $key => $value) {
+            $course = array();
+            $course['title'] = $courses[$value["courseId"]]['title'];
+            $course['courseId'] = $courses[$value["courseId"]]['id'];
+            $course['addedStudentNum'] = $value['co'];
+            $course['studentNum'] = $courses[$value["courseId"]]['studentNum'];
+            $course['addedMoney'] = $orders[$value["courseId"]]['amount'];
+            $sortedCourses[] = $course;
+      }
         return $this->render('TopxiaAdminBundle:Default:popular-courses-table.html.twig', array(
-            'courses' => $courses
+            'sortedCourses' => $sortedCourses
         ));
         
     }
@@ -48,6 +73,28 @@ class DefaultController extends BaseController
     public function indexAction(Request $request)
     {   
         return $this->render('TopxiaAdminBundle:Default:index.html.twig');
+    }
+
+    public function getCloudNoticesAction(Request $request)
+    {
+        $userAgent = 'Open Edusoho App Client 1.0';
+        $connectTimeout = 10;
+        $timeout = 10;
+        $url = "http://open.edusoho.com/api/v1/context/notice";
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_URL, $url );
+        $notices = curl_exec($curl);
+        curl_close($curl);
+        $notices = json_decode($notices, true);
+        
+        return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
+            "notices"=>$notices,
+        ));
     }
 
     public function officialMessagesAction()
@@ -110,17 +157,20 @@ class DefaultController extends BaseController
         $yesterdayTimeEnd=strtotime(date("Y-m-d",time()));
 
         $todayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
-
         $yesterdayRegisterNum=$this->getUserService()->searchUserCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
-
+        
+        $todayUserSum=$this->getUserService()->findUsersCountByLessThanCreatedTime(strtotime(date("Y-m-d",time()+24*3600)));
+        $yesterdayUserSum=$this->getUserService()->findUsersCountByLessThanCreatedTime(strtotime(date("Y-m-d",time())));
+        
         $todayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d",time()+24*3600)));
-
         $yesterdayLoginNum=$this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d",time()-24*3600)),strtotime(date("Y-m-d",time())));
 
-        $todayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
-
+        $todayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));    
         $yesterdayCourseNum=$this->getCourseService()->searchCourseCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
      
+        $todayCourseSum=$this->getCourseService()->findCoursesCountByLessThanCreatedTime(strtotime(date("Y-m-d",time()+24*3600)));
+        $yesterdayCourseSum=$this->getCourseService()->findCoursesCountByLessThanCreatedTime(strtotime(date("Y-m-d",time())));
+         
         $todayLessonNum=$this->getCourseService()->searchLessonCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd));
 
         $yesterdayLessonNum=$this->getCourseService()->searchLessonCount(array("startTime"=>$yesterdayTimeStart,"endTime"=>$yesterdayTimeEnd));
@@ -176,6 +226,10 @@ class DefaultController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
+            'todayUserSum' => $todayUserSum,
+            'yesterdayUserSum' => $yesterdayUserSum,
+            'todayCourseSum' => $todayCourseSum,
+            'yesterdayCourseSum' => $yesterdayCourseSum,
             'todayRegisterNum'=>$todayRegisterNum,
             'yesterdayRegisterNum'=>$yesterdayRegisterNum,
             'todayLoginNum'=>$todayLoginNum,

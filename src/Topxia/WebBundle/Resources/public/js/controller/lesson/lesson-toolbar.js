@@ -38,11 +38,13 @@ define(function(require, exports, module) {
 			var QuestionPlugin = require('./plugins/question/plugin');
 			var NotePlugin = require('./plugins/note/plugin');
 			var MaterialPlugin = require('./plugins/material/plugin');
+			var HomeworkPlugin = require('./plugins/homework/plugin');
 
 			toolbar.registerPlugin(new LessonPlugin(toolbar));
 			toolbar.registerPlugin(new QuestionPlugin(toolbar));
 			toolbar.registerPlugin(new NotePlugin(toolbar));
 			toolbar.registerPlugin(new MaterialPlugin(toolbar));
+			toolbar.registerPlugin(new HomeworkPlugin(toolbar));
 
 			var activePlugins = this.get('activePlugins');
 

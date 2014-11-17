@@ -32,6 +32,10 @@ interface CourseService
 
 	public function searchCourseCount($conditions);
 
+	public function findCoursesCountByLessThanCreatedTime($endTime);
+    	
+    	public function analysisCourseSumByTime($endTime);
+
 	public function findUserLearnCourses($userId, $start, $limit);
 
 	public function findUserLearnCourseCount($userId);
@@ -86,7 +90,7 @@ interface CourseService
 	public function getCourseLesson($courseId, $lessonId);
 
 	public function findCourseDraft($courseId,$lessonId, $userId);
-	
+
 	public function getCourseLessons($courseId);
 
 	public function deleteCourseDrafts($courseId,$lessonId, $userId);
@@ -202,7 +206,11 @@ interface CourseService
 
 	public function searchMember($conditions, $start, $limit);
 
+	public function countMembersByStartTimeAndEndTime($startTime,$endTime);
+	
 	public function searchMemberCount($conditions);
+
+	public function findWillOverdueCourses();
 
 	public function getCourseMember($courseId, $userId);
 
@@ -326,5 +334,4 @@ interface CourseService
 	public function getCourseLessonReplayByLessonId($lessonId);
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
-
 }

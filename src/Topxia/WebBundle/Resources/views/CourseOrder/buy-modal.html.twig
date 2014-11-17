@@ -70,7 +70,7 @@
           <div class="col-md-12">
             <div class="alert alert-info">
               <h4>付款提示</h4>
-              请在随后的支付宝支付页面中，选择“<strong>即时到帐交易</strong>”，如下图所示。如果选择“担保交易”需要手动确认收货，会增加不必要的操作步骤。
+              请在随后的支付宝支付页面中，选择“<strong>即时到账交易</strong>”，如下图所示。如果选择“担保交易”需要手动确认收货，会增加不必要的操作步骤。
               <br>
               <img src="{{ asset('bundles/topxiaweb/img/order/alipay_dualfun_example.png') }}">
             </div>
@@ -246,7 +246,7 @@
         <span class="text-muted">预览模式无法支付</span>
         <button class="btn btn-primary" disabled="disabled">去支付</button> 
       {% else %}
-        <button id="course-pay" class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
+        <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="正在创建订单..." data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
       {% endif %}
     {% endif %}
   {% else %}
@@ -255,7 +255,7 @@
       <button class="btn btn-primary" disabled="disabled">加入学习</button> 
     {% else %}  
       {% if not avatarAlert %}
-        <button id="join-course-btn" class="btn btn-primary" data-submiting-text="正在加入" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
+        <button id="join-course-btn" class="btn btn-primary" data-loading-text="正在加入..." type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
       {% endif %}
     {% endif %}
 

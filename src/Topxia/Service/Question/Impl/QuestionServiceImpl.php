@@ -27,11 +27,21 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsByParentId($id);
     }
 
+    public function findQuestionsbyTypes($types, $start, $limit)
+    {
+        return $this->getQuestionDao()->findQuestionsbyTypes($types, $start, $limit); 
+    }
+
+    public function findQuestionsCountbyTypes($types)
+    {
+        return $this->getQuestionDao()->findQuestionsCountbyTypes($types);
+    }
+
     public function findQuestionsByParentIds($ids)
     {
         return $this->getQuestionDao()->findQuestionsByParentIds($ids);
     }
-
+    
     public function searchQuestions($conditions, $orderBy, $start, $limit)
     {
         return $this->getQuestionDao()->searchQuestions($conditions, $orderBy, $start, $limit);
@@ -117,7 +127,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function judgeQuestion($id, $answer, $refreshStats = false)
     {
-        $results = $this->judgeQuestions(array($id => $answers), $refreshStats);
+        $results = $this->judgeQuestions(array($id => $answer), $refreshStats);
         return $results[$id];
     }
 

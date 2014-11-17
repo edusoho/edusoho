@@ -11,10 +11,20 @@ class StatusServiceImpl extends BaseService implements StatusService
     {
         $user = $this->getCurrentUser();
 
+        if($user['id']==0){
+            return ;
+        }
+
         $status['userId'] = $user['id'];
         $status['createdTime'] = time();
+        $status['message'] = empty($status['message']) ? '' : $status['message'];
 
         return $this->getStatusDao()->addStatus($status);
+    }
+
+    public function searchStatuses($conditions, $sort, $start, $limit)
+    {
+        return $this->getStatusDao()->searchStatuses($conditions, $sort, $start, $limit);
     }
 
     public function findStatusesByUserIds($userIds, $start, $limit)

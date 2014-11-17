@@ -413,9 +413,10 @@ class CourseLessonController extends BaseController
 
     public function learnFinishAction(Request $request, $courseId, $lessonId)
     {
+        $user = $this->getCurrentUser();
+
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
-        $user = $this->getCurrentUser();
         $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
 
         $response = array(

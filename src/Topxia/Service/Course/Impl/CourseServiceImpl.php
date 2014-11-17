@@ -66,6 +66,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getCourseDao()->getCoursesCount();
 	}
 
+	public function findCoursesCountByLessThanCreatedTime($endTime)
+	{
+	        	return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
+	}
+
+	public function analysisCourseSumByTime($endTime)
+    	{
+        		return $this->getCourseDao()->analysisCourseSumByTime($endTime);
+    	}
+
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
@@ -349,7 +359,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'address' => '',
 			'maxStudentNum' => 0,
 			'freeStartTime' => 0,
-			'freeEndTime' => 0
+			'freeEndTime' => 0,
+			'deadlineNotify' => 'none',
+			'daysOfNotifyBeforeDeadline' => 0
 		));
 		
 		if (!empty($fields['about'])) {
@@ -1096,6 +1108,25 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$lesson = $this->getCourseLesson($courseId, $lessonId);
 
+		if (!empty($lesson) && $lesson['type'] != 'video') {
+
+			$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
+			if ($learn) {
+				return false;
+			}
+
+			$this->getLessonLearnDao()->addLearn(array(
+				'userId' => $user['id'],
+				'courseId' => $courseId,
+				'lessonId' => $lessonId,
+				'status' => 'learning',
+				'startTime' => time(),
+				'finishedTime' => 0,
+			));
+
+			return true;
+		}
+
 		$createLessonView['courseId'] = $courseId;
 		$createLessonView['lessonId'] = $lessonId;
 		$createLessonView['fileId'] = $lesson['mediaId'];
@@ -1136,7 +1167,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$createLessonView['userId'] = $this->getCurrentUser()->id;
 		$createLessonView['createdTime'] = time();
 
-		$lessonView = $this->getLessonViewDao()->addLessonView($createLessonView);
+		$lessonView = $this->getLessonViewDao()->addLessonView	($createLessonView);
 
 		$lesson = $this->getCourseLesson($createLessonView['courseId'], $createLessonView['lessonId']);
 
@@ -1472,6 +1503,40 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->searchMemberCount($conditions);
 	}
 
+	public function countMembersByStartTimeAndEndTime($startTime,$endTime)
+	{	
+		return $this->getMemberDao()->countMembersByStartTimeAndEndTime($startTime,$endTime);
+	}
+
+	public function findWillOverdueCourses()
+	{
+		$currentUser = $this->getCurrentUser();
+		if (!$currentUser->isLogin()) {
+			throw $this->createServiceException('用户未登录');
+		}
+		$courseMembers = $this->getMemberDao()->findCourseMembersByUserId($currentUser["id"]);
+
+		$courseIds = ArrayToolkit::column($courseMembers, "courseId");
+		$courses = $this->findCoursesByIds($courseIds);
+
+		$courseMembers = ArrayToolkit::index($courseMembers, "courseId");
+
+		$shouldNotifyCourses = array();
+		$shouldNotifyCourseMembers = array();
+		
+		$currentTime = time();
+		foreach ($courses as $key => $course) {
+			if($course['deadlineNotify'] == "active") {
+				$courseMember = $courseMembers[$course["id"]];
+				if($currentTime < $courseMember["deadline"]  && ($course["daysOfNotifyBeforeDeadline"]*24*60*60+$currentTime) > $courseMember["deadline"]){
+					$shouldNotifyCourses[] = $course;
+					$shouldNotifyCourseMembers[] = $courseMember;
+				}
+			}
+		}
+		return array($shouldNotifyCourses, $shouldNotifyCourseMembers);
+	}
+
 	public function searchMembers($conditions, $orderBy, $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
@@ -1483,6 +1548,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$conditions = $this->_prepareCourseConditions($conditions);
 		return $this->getMemberDao()->searchMember($conditions, $start, $limit);
 	}
+
 	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit)
 	{	
 		$conditions = $this->_prepareCourseConditions($conditions);
@@ -2099,14 +2165,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
 
 		$courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);
-		$token = $this->getTokenService()->makeToken('live.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
 		$user = $this->getCurrentUser();
 
 		$args = array(
 			'liveId' => $lesson["mediaId"], 
 			'replayId' => $courseLessonReplay["replayId"], 
 			'provider' => $lesson["liveProvider"],
-			'token' => $token['token'],
             'user' => $user['email'],
             'nickname' => $user['nickname']
 		);
@@ -2264,7 +2328,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('User.DiskService');
     }
 
-
     private function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
@@ -2278,12 +2341,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('System.SettingService');
     }
-
-    private function getTokenService()
-    {
-        return $this->createService('User.TokenService');
-    }
-
 
     private function getLevelService()
     {
