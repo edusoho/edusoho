@@ -10,7 +10,7 @@
         {% if setting('course.live_course_enabled') %}
         <a href="{{ path('admin_live_course', {status: 'underway'}) }}" class="list-group-item {% if menu == 'live-course' %}active{% endif %}">直播管理</a>
         {% endif %}
-        <a href="{{ path('admin_course_recommend_list') }}" class="list-group-item {% if menu == 'course-recommend-list' %}active{% endif %}">推荐课程列表</a>
+       {#  <a href="{{ path('admin_course_recommend_list') }}" class="list-group-item {% if menu == 'course-recommend-list' %}active{% endif %}">推荐课程列表</a>
 
         <a href="{{ url('admin_course_order_manage') }}" class="list-group-item {% if menu == 'order' %}active{% endif %}">订单管理</a>
 
@@ -22,15 +22,15 @@
 
         <a href="{{ url('admin_question', {postStatus: 'unPosted'}) }}" class="list-group-item {% if menu == 'question' %}active{% endif %}">问答管理</a>
 
-        <a href="{{ url('admin_note') }}" class="list-group-item {% if menu == 'note' %}active{% endif %}" >笔记管理</a>
+        <a href="{{ url('admin_note') }}" class="list-group-item {% if menu == 'note' %}active{% endif %}" >笔记管理</a> #}
 
         <a href="{{ url('admin_course_category') }}" class="list-group-item {% if menu == 'category' %}active{% endif %}">分类管理</a>
 
         <a href="{{ url('admin_tag') }}" class="list-group-item {% if menu == 'tag' %}active{% endif %}">标签管理</a>
 
-        <a href="{{ url('admin_course_disk') }}" class="list-group-item {% if menu == 'course-disk' %}active{% endif %}" style="display:none;">文件管理</a>
+{#         <a href="{{ url('admin_course_disk') }}" class="list-group-item {% if menu == 'course-disk' %}active{% endif %}" style="display:none;">文件管理</a>
 
-        <a href="{{path('admin_course_data')}}" class="list-group-item {% if menu == 'course-data' %}active{% endif %}">数据管理</a>
+        <a href="{{path('admin_course_data')}}" class="list-group-item {% if menu == 'course-data' %}active{% endif %}">数据管理</a> #}
 
       </div>
     {% endblock %}
