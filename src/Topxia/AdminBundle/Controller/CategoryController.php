@@ -80,12 +80,8 @@ class CategoryController extends BaseController
         }
 
         $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($id);
-        foreach ($childrenIds as $childId) {
-            $child = $this->getCategoryService()->getCategory($childId);
-            if($child['isSubject']) {
-                $allowed = false;
-                break;
-            }
+        if($childrenIds) {
+            $allowed = false;
         }
         return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
             'category' => $category,
