@@ -2,7 +2,7 @@
   	{% for category in categories %}
 		<tr id="category-tr-{{ category.id }}">
 		  <td>
-		    {% for i in 0..(category.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ category.name }}
+		    {% for i in 0..(category.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ category.name }}{% if category.isSubject %}科目{% endif %}
 		  </td>
 		  <td>{{ category.code }}</td>
 		  <td>{{ category.weight }}</td>

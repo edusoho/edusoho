@@ -1,7 +1,7 @@
 <tr id="tag-tr-{{ tagGroup.id }}">
   <td>{{ tagGroup.name }}</td>
   <td>{{ dict_text('tagType', tagGroup.type) }}</td>
-  <td>{% for result in tag %}{{ result.name|default(null) }}&nbsp;{% endfor %}
+  <td>{% for result in tag %}{{ result.name|default(null) }}  {% endfor %}
   </td>
   <td>
     <button class="btn btn-default btn-sm" data-url="{{ path('admin_tag_group_update', {id:tagGroup.id}) }}" data-toggle="modal" data-target="#modal">编辑</button>
