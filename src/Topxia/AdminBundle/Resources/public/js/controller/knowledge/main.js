@@ -19,7 +19,9 @@ define(function(require, exports, module) {
 				selectedMulti: false
 			},
 			edit: {
-				enable: true
+				enable: true,
+				removeTitle: '删除知识点',
+				renameTitle: '编辑知识点'
 			},
 			data: {
 				simpleData: {
@@ -28,7 +30,8 @@ define(function(require, exports, module) {
 			},
 			callback: {
 				beforeRemove: beforeRemove,
-				beforeEditName: beforeEditName
+				beforeEditName: beforeEditName,
+				onDrop: onDrop
 			}
 		};
 
@@ -74,16 +77,42 @@ define(function(require, exports, module) {
 			return false;
 		}
 
+		function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
+			var pid = treeNodes[0].pId,
+				id = treeNodes[0].id,
+				zTree = $.fn.zTree.getZTreeObj(treeId),
+				parentNode = treeNodes[0].getParentNode(),
+				childNodes = parentNode ? parentNode.children :  zTree.getNodesByParam('pId', null);
+			var seq = [];
+			for (var i = 0; i <= childNodes.length - 1; i++) {
+				seq[i] =  childNodes[i].id;
+			};
+
+			$.ajax({ 
+					type: 'POST', 
+					url: $tree.data('surl'), 
+					data: {id:id, pid:pid, seq:seq}, 
+					success: function(result){
+						treeNodes[0].parentId = pid;
+					}, 
+					error:function() {
+                	},
+					async:true 
+				});
+			
+		}
+
 		function addHoverDom(treeId, treeNode) {
 			var sObj = $("#" + treeNode.tId + "_span");
 			if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
 			var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
-				+ "' title='add node' onfocus='this.blur();'></span>";
+				+ "' title='增加知识点' onfocus='this.blur();'></span>";
 			sObj.after(addStr);
 			var btn = $("#addBtn_"+treeNode.tId);
 			if (btn) btn.bind("click", function(){
 				var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");
-				var newUrl = $('#add-knowledge').data('turl')+'?pid='+treeNode.id+'&tid='+treeNode.tId;
+				var seq = treeNode.children ? treeNode.children.length+1:1;
+				var newUrl = $('#add-knowledge').data('turl')+'?pid='+treeNode.id+'&tid='+treeNode.tId+'&seq='+seq;
 				$('#add-knowledge').data('url', newUrl);
 				$('#add-knowledge').click();
 				return false;

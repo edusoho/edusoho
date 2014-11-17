@@ -12,6 +12,8 @@ interface KnowledgeService
 		
     public function createKnowledge($knowledge);
 
+    public function sort($id, $parentId, $seq);
+
     public function findKnowledgeByCategoryId($categoryId);
 
     public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
