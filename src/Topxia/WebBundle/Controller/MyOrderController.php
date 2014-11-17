@@ -32,7 +32,7 @@ class MyOrderController extends BaseController
         return $this->render('TopxiaWebBundle:MyOrder:index.html.twig',array(
         	'orders' => $orders,
             'paginator' => $paginator
-        ));
+        ));   
     }
 
     public function refundsAction(Request $request)
@@ -63,6 +63,12 @@ class MyOrderController extends BaseController
     public function cancelRefundAction(Request $request, $id)
     {
         $this->getCourseOrderService()->cancelRefundOrder($id);
+        return $this->createJsonResponse(true);
+    }
+
+    public function cancelAction(Request $request, $id)
+    {
+        $this->getCourseOrderService()->cancelOrder($id);
         return $this->createJsonResponse(true);
     }
 

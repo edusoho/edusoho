@@ -125,12 +125,21 @@ class LiveCourseController extends BaseController
         if ($lesson['endTime'] < time()) {
             return $this->createMessageResponse('info', '直播已结束!');
         }
-          
+
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
             // 老师登录
 
             $client = LiveClientFactory::createClient();
-            $result = $client->startLive($lesson['mediaId']);
+            
+            $params = array(
+                'liveId' => $lesson['mediaId'], 
+                'provider' => $lesson['liveProvider'],
+                'user' => $user['email'],
+                'nickname' => $user['nickname'],
+                'role' => 'teacher'
+            );
+
+            $result = $client->startLive($params);
 
             if (empty($result) or isset($result['error'])) {
                 return $this->createMessageResponse('info', '进入直播教室失败，请重试！');
@@ -156,10 +165,15 @@ class LiveCourseController extends BaseController
             $params['sign'] = "c{$lesson['courseId']}u{$user['id']}t{$now}";
             $params['sign'] .= 's' . $this->makeSign($params['sign']);
 
+            $params['liveId'] = $lesson['mediaId'];
+            $params['provider'] = $lesson["liveProvider"];
+            $params['role'] = 'student';
+
             $client = LiveClientFactory::createClient();
 
+            $params['user'] = $params['email'];
 
-            $result = $client->entryLive($lesson['mediaId'], $params);
+            $result = $client->entryLive($params);
 
             return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
                 'lesson' => $lesson,
@@ -171,6 +185,16 @@ class LiveCourseController extends BaseController
         return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
     }
 
+    public function verifyAction(Request $request)
+    {
+
+        $result = array(
+            "code" => "0",
+            "msg" => "ok"
+        );
+
+        return $this->createJsonResponse($result);
+    }
 
     protected function makeSign($string)
     {
@@ -191,6 +215,7 @@ class LiveCourseController extends BaseController
     public function replayCreateAction(Request $request, $courseId, $lessonId)
     {
         $resultList = $this->getCourseService()->generateLessonReplay($courseId,$lessonId);
+        
         if(array_key_exists("error", $resultList)) {
             return $this->createJsonResponse($resultList);
         }
@@ -279,11 +304,6 @@ class LiveCourseController extends BaseController
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
-
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

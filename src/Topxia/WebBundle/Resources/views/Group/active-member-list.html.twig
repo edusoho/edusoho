@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-  <div class="panel-heading">活跃成员</div>
+  <div class="panel-heading">{{ '活跃成员'|trans }}</div>
   <div class="panel-body">
     {% if activeMembers %} 
 
@@ -20,7 +20,7 @@
 
     {% else %}
 
-      还没有小组成员！
+      {{ '还没有小组成员！'|trans }}
       
     {% endif %}
       <br>

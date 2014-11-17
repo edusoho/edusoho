@@ -2,7 +2,7 @@
 	<div class="item-line"></div>
 	<div class="item-content">
 	  {% set mediaStatus = lesson.mediaStatus|default(null) %}
-		
+
 		{% if lesson.type in ['video', 'live'] %}
 		  {% if mediaStatus == 'waiting' %}
 			<span class="glyphicon glyphicon-facetime-video text-warning"></span>
@@ -20,8 +20,12 @@
 		{% else %}
 			<span class="glyphicon glyphicon-file text-success"></span>
 		{% endif %}
-
-		课时 <span class="number">{{ lesson.number }}</span>： {{ lesson.title }}
+		课时 <span class="number">{{ lesson.number }}</span>：{% if lesson.free == 1 %}<span class="label label-danger">免费</span>{% endif %}
+		
+		{% if lesson.type != 'text' and lesson.type != 'live' and lesson.type != 'testpaper' and lesson.mediaId != 0 and not file|default(false) %}
+			<span class="label label-danger fileDeletedLesson" title="课时文件已删除">无效课时</span>
+		{% endif %}
+		{{ lesson.title }}
 
 		{% if lesson.type in ['video', 'audio'] %}
 		  <span class="text-muted">{{ lesson.length|duration }}</span>
@@ -39,7 +43,7 @@
       <small class="text-muted">(需{{ lesson.requireCredit }}学分)</small>
     {% endif %}
 
-		{% if lesson.type != 'testpaper' %}
+	{% if lesson.type != 'testpaper' %}
 			{% set mediaTypeName = lesson.type == 'video' ? '视频' : (lesson.type == 'audio' ? '音频' : '文件') %}
 			{% if mediaStatus == 'waiting' %}
 			  <span class="text-warning">(正在等待{{ mediaTypeName }}格式转换)</span>
@@ -48,43 +52,67 @@
 			{% elseif mediaStatus == 'error' %}
 			  <span class="text-danger">({{ mediaTypeName }}格式转换失败)</span>
 			{% endif %}
-		{% endif  %}
+	{% endif  %}
 
 		{% if lesson.status == 'unpublished' %}
 		  <span class="text-warning">(未发布)</span>
 		{% endif %}
-
 	</div>
 
-	<div class="item-actions prs">
-	  {% if lesson.type != 'testpaper' %}
-		<button class="btn btn-link" title="添加资料" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip"></span>
-		</button>
-	  {% endif %}
-	  {% if lesson.type == 'testpaper' %}
-			<a class="btn btn-link" title="预览" href="{{ path('course_manage_preview_test', {testId:lesson.mediaId}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
-	  {% else %}
-			<a class="btn btn-link" title="预览" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
-	  {% endif %}
-
-
-  	{% if lesson.status == 'unpublished' %}
-	  	<button class="btn btn-link publish-lesson-btn" title="发布" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-ok-circle"></span></button>
-	  {% else %}
-	  	<button class="btn btn-link unpublish-lesson-btn" title="取消发布" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span></button>
-	  {% endif %}
-
-		<button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
-		  {% if lesson.type == 'testpaper' %}
+	<div class="item-actions">
+  	<a class="btn btn-link" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
+			{% if lesson.type == 'testpaper' %}
 			  data-url="{{ path('course_manage_lesson_edit_testpaper', {courseId:course.id, lessonId:lesson.id}) }}"
 			{% elseif lesson.type == 'live' %}
 			  data-url="{{ path('live_course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
 			{% else %}
 			  data-url="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}"
 			{% endif %}
-		  ><i class="glyphicon glyphicon-edit"></i></button>
+		  ><span class="glyphicon glyphicon-edit prs"></span>编辑</a>
+		{% if lesson.type == 'testpaper' %}
+			<a class="btn btn-link" href="{{ path('course_manage_preview_test', {testId:lesson.mediaId}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open prs"></span>预览</a>
+		{% else %}
+			<a class="btn btn-link" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open prs"></span>预览</a>
+		{% endif %}
+		<span class="dropdown">
+			<a class=" dropdown dropdown-toggle dropdown-more" id="dropdown-more" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-chevron-down" style="top:4px;margin-right:3px" aria-haspopup="true" aria-expanded="false"></span>更多</a>
 
-	  <button class="btn btn-link delete-lesson-btn" title="删除" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-trash"></span></button>
-	 
+			<ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
+        
+			  {% if is_plugin_installed('Homework') and (lesson.type != 'testpaper') %}
+          {% set homework =  homeworks[lesson.id]|default(null) %}
+          {% set homeworkId =  homework.id|default(null) %}
+      		{% if homework %}
+						<li><a href="{{ path('course_manage_lesson_homework_edit', {courseId:course.id, lessonId:lesson.id, homeworkId:homeworkId }) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>编辑作业</a></li>
+						<li><a href="{{ path('course_homework_preview', {courseId:course.id,homeworkId:homeworkId }) }}" class="preview-homework-btn" ><span class="glyphicon glyphicon-eye-open prs"></span>预览作业</a></li>
+						<li><a href="javascript:;" class="delete-homework-btn" data-url="{{ path('course_manage_lesson_homework_remove', {courseId:course.id, lessonId:lesson.id, homeworkId:homeworkId }) }}" ><span class="glyphicon glyphicon-trash prs"></span>移除作业</a></li>
+					{% else %}
+						<li><a href="{{ path('course_manage_lesson_homework_create', {courseId:course.id, lessonId:lesson.id,homeworkId:homeworkId}) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>布置作业</a></li>
+					{% endif %}
+					<li class="divider"></li>
+    			{% set lessonId = lesson.id %}
+    			{% set exercise = exercises[lessonId]|default(null) %}
+    			{% if exercise %}
+						<li><a href="{{ path('course_exercise_update', {courseId:course.id, lessonId:lesson.id, id:exercise.id }) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>编辑练习</a></li>
+						<li><a href="javascript:;" class="delete-exercise-btn" data-url="{{ path('course_exercise_delete', {courseId:course.id, lessonId:lesson.id, id:exercise.id }) }}" ><span class="glyphicon glyphicon-trash prs"></span>移除练习</a></li>
+					{% else %}
+						<li><a href="{{ path('course_exercise_create', {courseId:course.id, lessonId:lesson.id}) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>新增练习</a></li>
+					{% endif %}
+					<li class="divider"></li>
+				{% endif %}
+
+      	{% if lesson.type != 'testpaper' %}
+					<li><a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip prs"></span>添加资料</a></li>
+					<li class="divider"></li>
+				{% endif %}
+
+				{% if lesson.status == 'unpublished' %}
+  				<li><a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-ok-circle prs"></span>发布</a></li>
+				{% else %}
+          <li><a href="javascript:;" class="unpublish-lesson-btn" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-remove-circle prs"></span>取消发布</a></li>
+				{% endif %}
+				<li><a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-trash prs"></span>删除</a></li>
+      </ul>
+		</span>
 	</div>
 </li>

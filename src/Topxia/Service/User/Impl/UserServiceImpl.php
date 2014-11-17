@@ -18,14 +18,19 @@ use Imagine\Image\ImageInterface;
 
 class UserServiceImpl extends BaseService implements UserService
 {
-    public function getUser($id)
+    public function getUser($id, $lock = false)
     {
-        $user = $this->getUserDao()->getUser($id);
+        $user = $this->getUserDao()->getUser($id, $lock);
         if(!$user){
             return null;
         } else {
             return UserSerialize::unserialize($user);
         }
+    }
+
+    public function findUsersCountByLessThanCreatedTime($endTime)
+    {
+        return $this->getUserDao()->findUsersCountByLessThanCreatedTime($endTime);
     }
 
     public function getUserProfile($id)
@@ -873,6 +878,11 @@ class UserServiceImpl extends BaseService implements UserService
     public function analysisRegisterDataByTime($startTime,$endTime)
     {
         return $this->getUserDao()->analysisRegisterDataByTime($startTime,$endTime);
+    }
+
+    public function analysisUserSumByTime($endTime)
+    {
+        return $this->getUserDao()->analysisUserSumByTime($endTime);
     }
 
     private function getFriendDao()

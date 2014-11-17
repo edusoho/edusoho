@@ -80,9 +80,17 @@ register_nickname_check:
     pattern:  /register/nickname/check
     defaults: { _controller: TopxiaWebBundle:Register:nicknameCheck }
 
+register_captcha_check:
+    pattern:  /register/captcha/check
+    defaults: { _controller: TopxiaWebBundle:Register:captchaCheck }
+
 register_analysis:
     pattern:  /register/analysis
     defaults: { _controller: TopxiaWebBundle:Register:analysis }
+
+register_captcha_num:
+    path:     /captcha_num
+    defaults: { _controller: TopxiaWebBundle:Register:captcha }
 
 file_upload:
     pattern:  /file/upload
@@ -134,6 +142,10 @@ kindeditor_upload:
 live_auth:
     pattern:  /live/auth
     defaults: { _controller: TopxiaWebBundle:LiveAuth:index }
+
+live_verify:
+    pattern:  /live/verify
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:verify }
 
 live_course_explore:
     pattern:  /live
@@ -229,6 +241,11 @@ course_order_pay:
     defaults: { _controller: TopxiaWebBundle:CourseOrder:pay }
     methods: [POST]
 
+course_order_repay:
+    pattern:  /course/order/repay
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }
+    methods: [POST]
+
 course_order_pay_return:
     pattern:  /course/order/pay/{name}/return
     defaults: { _controller: TopxiaWebBundle:CourseOrder:payReturn }
@@ -253,6 +270,30 @@ course_set_expiryday:
 course_learn:
     pattern:  /course/{id}/learn
     defaults: { _controller: TopxiaWebBundle:Course:learn }
+
+course_learn_time:
+    pattern:  /course/{lessonId}/learn/time/{time}
+    defaults: { _controller: TopxiaWebBundle:Course:recordLearningTime }
+
+course_watch_time:
+    pattern:  /course/{lessonId}/watch/time/{time}
+    defaults: { _controller: TopxiaWebBundle:Course:recordWatchingTime }
+
+course_watch_play:
+    pattern:  /course/{lessonId}/watch/play
+    defaults: { _controller: TopxiaWebBundle:Course:watchPlay }
+
+course_detail_data:
+    pattern:  /course/detail/data/{id}
+    defaults: { _controller: TopxiaWebBundle:Course:detailData }
+
+course_watch_paused:
+    pattern:  /course/{lessonId}/watch/paused
+    defaults: { _controller: TopxiaWebBundle:Course:watchPaused }
+
+course_lesson_detail_data:
+    pattern:  /course/lesson/detail/data/{courseId}/{lessonId}
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:detailData }
 
 course_lesson_show:
     pattern:  /course/{courseId}/lesson/{lessonId}
@@ -455,6 +496,10 @@ course_manage_teachers:
     pattern:  /course/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachers }
 
+course_manage_data:
+    pattern:  /course/{id}/manage/data
+    defaults: { _controller: TopxiaWebBundle:CourseManage:data }
+
 course_manage_files:
     pattern:  /course/{id}/manage/files
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:index }
@@ -525,6 +570,14 @@ course_manage_lesson:
 course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
+
+course_draft_create:
+    pattern:  /course/draft/create
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:draftCreate }
+
+course_draft_view:
+    pattern:  /course/draft/view
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:viewDraft }
 
 live_course_manage_lesson_create:
     pattern:  /course/{id}/manage/live/lesson/create
@@ -608,9 +661,6 @@ course_manage_question_upload:
     pattern: /course/{courseId}/manage/question/uploadfile/{type}
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadFile }
     methods: [POST]
-
-
-
 
 course_manage_question_category:
     pattern: /course/{courseId}/manage/question/category
@@ -705,7 +755,6 @@ course_manage_testpaper_build_check:
 course_manage_testpaper_update:
     pattern: /course/{courseId}/manage/testpaper/{id}/update
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:update }
-
 
 course_manage_testpaper_delete:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/delete
@@ -987,6 +1036,11 @@ my_note_delete:
 my_orders:
     pattern: /my/orders
     defaults: { _controller: TopxiaWebBundle:MyOrder:index }
+
+my_order_cancel:
+    pattern: /my/order/{id}/cancel
+    defaults: { _controller: TopxiaWebBundle:MyOrder:cancel }
+    methods: [POST]
 
 my_order_cancel_refund:
     pattern: /my/order/{id}/cancel_refund

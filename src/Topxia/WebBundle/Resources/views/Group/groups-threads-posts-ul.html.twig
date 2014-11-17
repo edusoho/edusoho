@@ -3,7 +3,7 @@
     {% for postThread in postThreads%}
     
             <li class="media" style="word-break: break-all;">
-              <img src="{{asset('assets/img/default/reply.gif')}}" > {{ web_macro.user_link(user , 'link-muted') }}回复了话题 <a  href="{{path('group_thread_show',{id:groupsAsPostThreads[threads[postThread.threadId].groupId].id,threadId:postThread.threadId})}}" >"{{threads[postThread.threadId].title|sub_text(40)}}"</a>
+              <img src="{{asset('assets/img/default/reply.gif')}}" > {{ web_macro.user_link(user , 'link-muted') }}{{ '回复了话题'|trans }} <a  href="{{path('group_thread_show',{id:groupsAsPostThreads[threads[postThread.threadId].groupId].id,threadId:postThread.threadId})}}" >"{{threads[postThread.threadId].title|sub_text(40)}}"</a>
               &nbsp;
               <div class="media-body " >
                 
@@ -21,6 +21,6 @@
     {% endfor %}
 
   {% else %}
-    <div class="empty">暂无回复！</div>
+    <div class="empty">{{ '暂无回复！'|trans }}</div>
   {% endif %}
 </ul>

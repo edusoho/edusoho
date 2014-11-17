@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% set script_controller = 'group/group_member' %}
-{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+{% block title %}{{groupinfo.title}}{{ '小组'|trans }} - {{ parent() }}{% endblock %}
 
 {% set groupNav = 'member' %}
 
@@ -10,10 +10,10 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default panel-lg">
-        <div class="panel-heading"><h1>成员列表</h1></div>
+        <div class="panel-heading"><h1>{{ '成员列表'|trans }}</h1></div>
         <div class="panel-body">
 
-        <h4>组长</h4>
+        <h4>{{ '组长'|trans }}</h4>
         <div class="clearfix">
           <div class="grouplist" >  
             <a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}"  >
@@ -25,12 +25,12 @@
         </div>
 
 
-        <h4>副组长</h4>
+        <h4>{{ '副组长'|trans }}</h4>
         <div class="clearfix">
         <form action="{{path('group_remove_admin',{id:groupinfo.id})}}" method="post" id="admin-form"> 
           {% if groupAdmin %}
           {% if is_groupmember==2 or is_granted('ROLE_ADMIN')  %}
-          <button id="remove-admin-btn" type="button" class="btn btn-default btn-sm pull-right">撤消副组长</button> 
+          <button id="remove-admin-btn" type="button" class="btn btn-default btn-sm pull-right">{{ '撤消副组长'|trans }}</button> 
           {% endif %}
           {% for member in groupAdmin %}
               <div class="grouplist" style="width: 96px;" >
@@ -47,7 +47,7 @@
           
           {% endfor %}
           {% else %}
-            <p><sapn class="text-muted">还没有副组长！</span></p>
+            <p><sapn class="text-muted">{{ '还没有副组长！'|trans }}</span></p>
           {% endif %}
         </form>
         </div>
@@ -56,11 +56,11 @@
           {% if groupmember_info %}
 
             {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
-              <button  id="delete-btn" type="button" class="btn btn-default btn-sm ">踢出成员</button> 
+              <button  id="delete-btn" type="button" class="btn btn-default btn-sm ">{{ '踢出成员'|trans }}</button> 
             {% endif %} 
 
             {% if is_groupmember==2 or is_granted('ROLE_ADMIN') %}
-              <button  id="set-admin-btn" type="button" class="btn btn-default btn-sm ">设置副组长</button>
+              <button  id="set-admin-btn" type="button" class="btn btn-default btn-sm ">{{ '设置副组长'|trans }}</button>
               <input id="set-admin-url" type="hidden" value="{{path('group_set_admin',{id:groupinfo.id})}}"> 
             {% endif %} 
 
@@ -68,7 +68,7 @@
         </div>
         <form action="{{path('group_member_delete',{id:groupinfo.id})}}" method="post" id="member-form"> 
 
-             <h4>组员</h4>
+             <h4>{{ '组员'|trans }}</h4>
 
           {% if groupmember_info %}
              
@@ -90,7 +90,7 @@
             
           {% else %}
                    
-                      <p><sapn class="text-muted">还没有小组成员！</span></p>
+                      <p><sapn class="text-muted">{{ '还没有小组成员！'|trans }}</span></p>
 
         
 

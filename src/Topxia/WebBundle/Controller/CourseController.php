@@ -207,7 +207,7 @@ class CourseController extends BaseController
 	 * 如果用户未购买该课程，那么显示课程的营销界面。
 	 */
 	public function showAction(Request $request, $id)
-	{	
+	{
 
 		$course = $this->getCourseService()->getCourse($id);
 
@@ -252,6 +252,20 @@ class CourseController extends BaseController
 		$user = $this->getCurrentUser();
 
 		$items = $this->getCourseService()->getCourseItems($course['id']);
+		$mediaMap = array();
+		foreach ($items as $item) {
+			if (empty($item['mediaId'])) {
+				continue;
+			}
+
+			if (empty($mediaMap[$item['mediaId']])) {
+				$mediaMap[$item['mediaId']] = array();
+			}
+			$mediaMap[$item['mediaId']][] = $item['id'];
+		}
+
+		$mediaIds = array_keys($mediaMap);
+		$files = $this->getUploadFileService()->findFilesByIds($mediaIds);
 
 		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
@@ -264,6 +278,7 @@ class CourseController extends BaseController
 			if( $member['deadline'] < time() && !empty($course['freeStartTime']) && !empty($course['freeEndTime']) && $course['freeEndTime'] >= time()) {
 				$member = $this->getCourseService()->updateCourseMember($member['id'], array('deadline'=>$course['freeEndTime']));
 			}
+
 			return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
 				'course' => $course,
 				'type' => $course['type'],
@@ -271,7 +286,8 @@ class CourseController extends BaseController
 				'items' => $items,
 				'learnStatuses' => $learnStatuses,
 				'currentTime' => $currentTime,
-				'weeks' => $weeks
+				'weeks' => $weeks,
+				'files' => ArrayToolkit::index($files,'id')
 			));
 		}
 		
@@ -291,9 +307,12 @@ class CourseController extends BaseController
 
 		$courseReviews = $this->getReviewService()->findCourseReviews($course['id'],'0','1');
 
+		$freeLesson=$this->getCourseService()->searchLessons(array('courseId'=>$id,'type'=>'video','status'=>'published','free'=>'1'),array('createdTime','ASC'),0,1);
+		if($freeLesson)$freeLesson=$freeLesson[0];
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
+			'freeLesson'=>$freeLesson,
 			'courseMemberLevel' => $courseMemberLevel,
 			'checkMemberLevelResult' => $checkMemberLevelResult,
 			'groupedItems' => $groupedItems,
@@ -526,6 +545,80 @@ class CourseController extends BaseController
 		));
 	}
 
+	public function recordLearningTimeAction(Request $request,$lessonId,$time)
+	{	
+		$user = $this->getCurrentUser();
+
+		$this->getCourseService()->waveLearningTime($lessonId,$user['id'],$time);
+
+		return $this->createJsonResponse(true);
+	}
+
+
+    public function detailDataAction($id)
+    {   
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $count = $this->getCourseService()->getCourseStudentCount($id);
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $students = $this->getCourseService()->findCourseStudents($id, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+
+        foreach ($students as $key => $student) {
+            
+            $user=$this->getUserService()->getUser($student['userId']);
+            $students[$key]['nickname']=$user['nickname'];
+
+            $questionCount=$this->getThreadService()->searchThreadCount(array('courseId'=>$id,'type'=>'question','userId'=>$user['id']));
+            $students[$key]['questionCount']=$questionCount;
+
+            if( $student['learnedNum']>=$course['lessonNum'] && $course['lessonNum']>0){
+                $finishLearn=$this->getCourseService()->searchLearns(array('courseId'=>$id,'userId'=>$user['id'],'sttaus'=>'finished'),array('finishedTime','DESC'),0,1);
+                $students[$key]['fininshTime']=$finishLearn[0]['finishedTime'];
+
+                $students[$key]['fininshDay']=intval(($finishLearn[0]['finishedTime']-$student['createdTime'])/(60*60*24));
+            }else{
+                $students[$key]['fininshDay']=intval((time()-$student['createdTime'])/(60*60*24));
+            }
+
+            $learnTime=$this->getCourseService()->searchLearnTime(array('userId'=>$user['id'],'courseId'=>$id));
+            $students[$key]['learnTime']=$learnTime;
+        }
+
+        return $this->render('TopxiaWebBundle:Course:course-data-modal.html.twig', array(
+            'course'=>$course,
+            'paginator'=>$paginator,
+            'students'=>$students,
+            ));
+    }
+
+	public function recordWatchingTimeAction(Request $request,$lessonId,$time)
+	{	
+		$user = $this->getCurrentUser();
+
+		$this->getCourseService()->waveWatchingTime($user['id'],$lessonId,$time);
+
+		return $this->createJsonResponse(true);
+	}
+
+	public function watchPlayAction(Request $request,$lessonId)
+	{	
+		$user = $this->getCurrentUser();
+
+		$this->getCourseService()->watchPlay($user['id'],$lessonId);
+
+		return $this->createJsonResponse(true);
+	}
+
+	public function watchPausedAction(Request $request,$lessonId)
+	{	
+		$user = $this->getCurrentUser();
+
+		$this->getCourseService()->watchPaused($user['id'],$lessonId);
+
+		return $this->createJsonResponse(true);
+	}
+
 	public function addMemberExpiryDaysAction(Request $request, $courseId, $userId)
 	{
 		$user = $this->getUserService()->getUser($userId);
@@ -667,7 +760,7 @@ class CourseController extends BaseController
 
 		return $this->redirect($this->generateUrl('course_show',array('id' => $courseId)));
 	}
-	
+
 	private function createCourseForm()
 	{
 		return $this->createNamedFormBuilder('course')
@@ -720,4 +813,13 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
+    private function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    private function getUploadFileService()
+    {
+	return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
 }

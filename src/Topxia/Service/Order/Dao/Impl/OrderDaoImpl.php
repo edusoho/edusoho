@@ -17,16 +17,18 @@ class OrderDaoImpl extends BaseDao implements OrderDao
     public function getOrder($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+
         $order = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
         return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
+    
     }
 
-	public function getOrderBySn($sn)
-	{
+    public function getOrderBySn($sn)
+    {
         $sql = "SELECT * FROM {$this->table} WHERE sn = ? LIMIT 1";
         $order = $this->getConnection()->fetchAssoc($sql, array($sn));
         return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
-	}
+    }
 
     public function findOrdersByIds(array $ids)
     {
@@ -40,22 +42,22 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->createSerializer()->unserializes($orders, $this->serializeFields);
     }
 
-	public function addOrder($order)
-	{
+    public function addOrder($order)
+    {
         $order = $this->createSerializer()->serialize($order, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $order);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert order error.');
         }
         return $this->getOrder($this->getConnection()->lastInsertId());
-	}
+    }
 
-	public function updateOrder($id, $fields)
-	{
+    public function updateOrder($id, $fields)
+    {
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-		return $this->getOrder($id);
-	}
+        return $this->getOrder($id);
+    }
     
     public function searchOrders($conditions, $orderBy, $start, $limit)
     {
@@ -74,6 +76,19 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
+    }
+
+    
+    public function sumOrderAmounts($startTime,$endTime,array $courseId)
+    {
+         if(empty($courseId)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($courseId) - 1) . '?';
+
+        $sql = "SELECT  targetId,sum(amount) as  amount from {$this->table} WHERE  createdTime > ? AND createdTime < ? AND targetId IN ({$marks}) AND targetType = 'course' AND status = 'paid' group by targetId";
+        return $this->getConnection()->fetchAll($sql, array_merge(array($startTime, $endTime), $courseId));
     }
 
     private function _createSearchQueryBuilder($conditions)

@@ -184,13 +184,13 @@ class LoginBindController extends BaseController
         return $user;
     }
 
+
+
     public function existAction(Request $request, $type)
     {
         $token = $request->getSession()->get('oauth_token');
         $client = $this->createOAuthClient($type);
-
         $oauthUser = $client->getUserInfo($token);
-
         $data = $request->request->all();
         $user = $this->getUserService()->getUserByEmail($data['email']);
         if (empty($user)) {

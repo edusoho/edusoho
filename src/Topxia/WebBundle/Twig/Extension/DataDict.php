@@ -9,6 +9,7 @@ class DataDict
 			'published' => '已发布',
 			'closed' => '已关闭'
 		),
+
 		'courseStatus:html' => array(
 			'draft' => '<span class="text-muted">未发布</span>',
 			'published' => '<span class="text-success">已发布</span>',
@@ -180,6 +181,8 @@ class DataDict
 			'netVideoViewed' => '└─ 网络视频观看数',
 			'income' => '营收额',
 			'courseIncome' => '└─ 课程营收额',
+			'courseSum' => '课程总数',
+			'userSum' => '用户总数',
 			// 'exitLesson' => '退出学习数',
 		),
 
@@ -212,7 +215,6 @@ class DataDict
     		'open'=>'开启',
     		'close'=>'关闭',
     	),
-
 	);
 
 	public static function dict($type)
