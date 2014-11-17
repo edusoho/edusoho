@@ -197,6 +197,7 @@ class BuildCommand extends BaseCommand
 			'doctrine/migrations/lib',
 			'doctrine/orm/lib',
 			'ezyang/htmlpurifier/library',
+			'gregwar/captcha',
 			'imagine/imagine/lib',
 			'jdorn/sql-formatter/lib',
 			'kriswallsmith/assetic/src',
