@@ -3,7 +3,7 @@
 {% block title %}课件管理 - {{ parent() }}{% endblock %}
 {% set nav = 'course' %}
 {% set side_nav = 'courseware' %}
-{# {% set script_controller = 'courseware/main' %} #}
+{% set script_controller = 'courseware/main' %}
 
 {% block main %}
 <div class="page-header clearfix">
@@ -13,19 +13,21 @@
 
     <div class="form-group">
       <input class="form-control" type="text" placeholder="知识点搜索" name="knowledges[]" value="{{ app.request.get('knowledges[]') }}">
+      <span class="glyphicon glyphicon-tasks"></span>
     </div>
-    <div class="form-group">123123123</div>
+
     <div class="form-group">
-      <select class="form-control" name="status">
+      <select class="form-control" name="method" id="method">
         {{ select_options(dict('courseware'), app.request.query.get('method')) }}
       </select>
     </div>
-    <div class="form-group"><span class="glyphicon glyphicon-tasks"></span></div>
-    <div class="form-group">
+
+    <div class="form-group" id="tags">
       <input class="form-control" type="text" placeholder="标签搜索" name="tags[]" value="{{ app.request.get('tags[]') }}">
+      <span class="glyphicon glyphicon-tasks"></span>
     </div>
 
-    <div class="form-group hide">
+    <div class="form-group" style="display:none;" id="title">
       <input class="form-control" type="text" placeholder="标题关键词搜索" name="title" value="{{ app.request.get('title') }}">
     </div>
 
