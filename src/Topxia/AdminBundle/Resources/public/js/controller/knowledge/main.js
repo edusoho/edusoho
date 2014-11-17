@@ -19,7 +19,9 @@ define(function(require, exports, module) {
 				selectedMulti: false
 			},
 			edit: {
-				enable: true
+				enable: true,
+				removeTitle: '删除知识点',
+				renameTitle: '编辑知识点'
 			},
 			data: {
 				simpleData: {
@@ -104,7 +106,7 @@ define(function(require, exports, module) {
 			var sObj = $("#" + treeNode.tId + "_span");
 			if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
 			var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
-				+ "' title='add node' onfocus='this.blur();'></span>";
+				+ "' title='增加知识点' onfocus='this.blur();'></span>";
 			sObj.after(addStr);
 			var btn = $("#addBtn_"+treeNode.tId);
 			if (btn) btn.bind("click", function(){
