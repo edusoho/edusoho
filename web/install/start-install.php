@@ -3,6 +3,7 @@
 use Composer\Autoload\ClassLoader;
 
 require __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__.'/../../app/AppKernel.php';
 
 $loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
 $twig = new Twig_Environment($loader, array(
@@ -22,6 +23,9 @@ use Topxia\Service\User\CurrentUser;
 use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Topxia\WebBundle\Command\PluginRegisterCommand;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
 
 function check_installed()
 {
@@ -41,7 +45,6 @@ function install_step1()
 {
 	check_installed();
 	global $twig;
-
 	$pass = true;
 
 	$env = array();
@@ -227,8 +230,24 @@ function install_step999()
     $init = new SystemInit();
 
     $key = $init->initKey();
-
+    install_plugins();
     echo json_encode($key);
+}
+
+function install_plugins()
+{
+	$kernel = new AppKernel('dev', false);
+	$kernel->boot();
+	$application = new Application($kernel);
+    $application->add(new PluginRegisterCommand());
+    $command = $application->find('plugin:register');
+    $commandTester = new CommandTester($command);
+	$pluginsFilter = array('Homework');
+	foreach ($pluginsFilter as $code) {
+		$commandTester->execute(
+		    array('command' => $command->getName(), 'code' => $code)
+		);
+	}
 }
 
 function _create_database($config, $replace)

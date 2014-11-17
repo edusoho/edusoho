@@ -10,6 +10,8 @@ class BuildPackageCommand extends BaseCommand
 {
     private $fileSystem;
 
+    protected $pluginsFilter = array('Homework');
+
     protected function configure()
     {
         $this
@@ -36,6 +38,8 @@ class BuildPackageCommand extends BaseCommand
         $this->generateFiles($diff_file, $packageDirectory, $output);
 
         $this->copyUpgradeScript($packageDirectory, $version, $output);
+
+        $this->copyPluginsDirectory($packageDirectory, $output);
 
         $output->writeln('<question>编制升级包完毕</question>');
     }
@@ -143,4 +147,16 @@ class BuildPackageCommand extends BaseCommand
 
     }
 
+    private function copyPluginsDirectory($packageDirectory, $output)
+    {
+        $output->writeln('<info>拷贝插件源代码</info>');
+        $destPath = $packageDirectory . '/source/plugins';
+        $root = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../');
+        $this->filesystem->mkdir($destPath);
+        foreach ($this->pluginsFilter as $pluginName) {
+            $this->filesystem->mirror("{$root}/plugins/{$pluginName}", "{$destPath}/{$pluginName}");
+            $this->filesystem->remove("{$destPath}/{$pluginName}/.git");
+        }
+        
+    }
 }
