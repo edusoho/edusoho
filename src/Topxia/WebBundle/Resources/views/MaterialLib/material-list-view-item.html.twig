@@ -18,23 +18,19 @@
     {% elseif uploadFile.convertStatus == 'doing' %}
       {{uploadFile.filename}}<br><span class="text-info text-sm">正在文件格式转换</span>
       {% if uploadFile.type == 'ppt' and ( now - uploadFile.updatedTime ) > 1800 %}
-        <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
+        <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:'0', fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
       {% endif %}
     {% elseif uploadFile.convertStatus == 'error' %}
-      {{uploadFile.filename}}<br><span class="text-danger text-sm">文件格式转换失败，<a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn">重新转换</a></span>
+      {{uploadFile.filename}}<br><span class="text-danger text-sm">文件格式转换失败，<a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:'0', fileId:uploadFile.id}) }}" class="convert-file-btn">重新转换</a></span>
     {% else %}
-      {% if uploadFile.targetType in ['courselesson', 'coursematerial'] %}
-        <a href="" target="_blank">{{ uploadFile.filename }}</a>
+        {{ uploadFile.filename }}
         {% if uploadFile.type == 'ppt' and ( not uploadFile.metas2.length|default(null) ) and uploadFile.targetType == 'courselesson'  %}
           <br><a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:'0', fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
         {% endif %}
-      {% else %}
-        {{ uploadFile.filename }}
-      {% endif %}
     {% endif %}
 
     {% if setting('developer.debug') and uploadFile.convertParams.convertor|default(null) %}
-      <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换(调试模式)</a>
+      <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:'0', fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换(调试模式)</a>
     {% endif %}
 
   </td>
@@ -51,8 +47,7 @@
   </td>
   <td  >
   <span style="float: right;">
-    <a class="btn btn-link" title="预览" href="" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
-	<a {% if uploadFile.createdUserId != currentUserId %}disabled="disabled" {% endif %} class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="}}"><span class="glyphicon glyphicon-edit"></span></a>
+    <a class="btn btn-link" title="预览"  href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
 	<a {% if uploadFile.createdUserId != currentUserId %}disabled="disabled" {% endif %} class="btn btn-link delete-material-btn" title="删除" data-url="{{ path('course_manage_delete_teacher_material', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-trash"></span></a>
   </span>
   </td>

@@ -132,11 +132,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         
         $file = $this->getUploadFileDao()->addFile($file);
         
-        if(!empty($targetId)){
-	        $courseFileFields = array('fileId' => $file['id'], 'userId' => $this->getCurrentUser()->id, 'targetId' => $targetId, 'targetType' => $targetType, 'createdTime' => time());
+//         if(!empty($targetId)){
+// 	        $courseFileFields = array('fileId' => $file['id'], 'userId' => $this->getCurrentUser()->id, 'targetId' => $targetId, 'targetType' => $targetType, 'createdTime' => time());
 	        
-	        $this->getCourseFileDao()->addCourseFile($courseFileFields);
-        }
+// 	        $this->getCourseFileDao()->addCourseFile($courseFileFields);
+//         }
         
         return $file;
     }
@@ -172,7 +172,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         
         $this->getFileImplementorByFile($file)->deleteFile($file, $deleteSubFile);
 
-        $this->getCourseFileDao()->deleteCourseFileLink($file['createdUserId'], $file['id'], $file['targetId']);
+//         $this->getCourseFileDao()->deleteCourseFileLink($file['createdUserId'], $file['id'], $file['targetId']);
         
         return $this->getUploadFileDao()->deleteFile($id);
     }
@@ -466,10 +466,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->createDao('File.UploadFileDao');
     }
     
-    private function getCourseFileDao ()
-    {
-    	return $this->createDao('Course.CourseFileDao');
-    }
+//     private function getCourseFileDao ()
+//     {
+//     	return $this->createDao('Course.CourseFileDao');
+//     }
     
     private function getUploadFileShareDao(){
     	return $this->createDao('File.UploadFileShareDao');

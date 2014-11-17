@@ -750,7 +750,19 @@ course_manage_cancel_share:
 
 material_lib_my_sharing_contacts:
     pattern: /my/teacher/materials/my/friends
-    defaults: { _controller: TopxiaWebBundle:MaterialLib:findMySharingContacts } 
+    defaults: { _controller: TopxiaWebBundle:MaterialLib:findMySharingContacts }  
+    
+material_lib_file_preview:
+    pattern:  /materialLib/file/{fileId}/preview
+    defaults: { _controller: TopxiaWebBundle:MaterialLib:preview }
+
+material_lib_file_preview_hlskeyurl:
+    pattern: /materialLib/file/{fileId}/preview/hlskeyurl
+    defaults: { _controller: TopxiaWebBundle:MaterialLib:hlskeyurl }  
+    
+material_lib_file_preview_header:
+    pattern:  /materialLib/file/{fileId}/preview/header
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:file }
            
 course_manage_list_teacher_test_finished:
     pattern: /my/teacher/finished/test/list

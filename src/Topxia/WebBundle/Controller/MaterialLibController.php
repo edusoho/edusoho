@@ -5,6 +5,8 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Util\CloudClientFactory;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class MaterialLibController extends BaseController {
 
@@ -119,8 +121,86 @@ class MaterialLibController extends BaseController {
 			$this->getUploadFileService()->cancelShareFile($currentUserId, $targetUserId);
 		}
 		
-		return $this->createJsonResponse(true); 
-// 		return $this->forward('TopxiaWebBundle:MaterialLib:showShareHistory');
+		return $this->createJsonResponse ( true );
+	}
+
+	public function previewAction(Request $request, $fileId) {
+		$user = $this->getCurrentUser ();
+
+		$file = $this->getUploadFileService()->getFile($fileId);
+		
+		if (empty ( $file )) {
+			throw $this->createNotFoundException ();
+		}
+		
+		if ($file ['type'] == 'video') {
+			if (! empty ( $file ['metas2'] ) && ! empty ( $file ['metas2'] ['sd'] ['key'] )) {
+				$factory = new CloudClientFactory ();
+				$client = $factory->createClient ();
+				$hls = $client->generateHLSQualitiyListUrl ( $file ['metas2'], 3600 );
+				
+				if (isset ( $file ['convertParams'] ['convertor'] ) && ($file ['convertParams'] ['convertor'] == 'HLSEncryptedVideo')) {
+					$token = $this->getTokenService ()->makeToken ( 'hlsvideo.view', array (
+							'data' => $fileId,
+							'times' => 1,
+							'duration' => 3600 
+					) );
+					
+					$hlsKeyUrl = $this->generateUrl ( 'material_lib_file_preview_hlskeyurl', array (
+							'fileId' => $fileId,
+							'token' => $token ['token'] 
+					), true );
+					
+					$headLeaderInfo = $this->getHeadLeaderInfo ();
+					$hls = $client->generateHLSEncryptedListUrl ( $file ['convertParams'], $file ['metas2'], $hlsKeyUrl, $headLeaderInfo ['headLeaders'], $headLeaderInfo ['headLeaderHlsKeyUrl'], 3600 );
+				} else {
+					$hls = $client->generateHLSQualitiyListUrl ( $file ['metas2'], 3600 );
+				}
+			}
+		}
+
+		return $this->render ( 'TopxiaWebBundle:MaterialLib:preview-modal.html.twig', array (
+				'user' => $user,
+				'file' => $file,
+				'hlsUrl' => (isset ( $hls ) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
+		));
+	}
+	
+	public function hlskeyurlAction(Request $request, $fileId, $token)
+	{
+		$token = $this->getTokenService()->verifyToken('hlsvideo.view', $token);
+		
+		if (empty($token)) {
+			$fakeKey = $this->getTokenService()->makeFakeTokenString(16);
+			return new Response($fakeKey);
+		}
+	
+// 		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+	
+// 		if (empty($lesson)) {
+// 			throw $this->createNotFoundException();
+// 		}
+	
+// 		if ($token['data'] != $lesson['id']) {
+// 			$fakeKey = $this->getTokenService()->makeFakeTokenString(16);
+// 			return new Response($fakeKey);
+// 		}
+	
+// 		if (empty($lesson['mediaId'])) {
+// 			throw $this->createNotFoundException();
+// 		}
+	
+		$file = $this->getUploadFileService()->getFile($fileId);
+		
+		if (empty($file)) {
+			throw $this->createNotFoundException();
+		}
+	
+		if (empty($file['convertParams']['hlsKey'])) {
+			throw $this->createNotFoundException();
+		}
+	
+		return new Response($file['convertParams']['hlsKey']);
 	}
 
 	protected function getSettingService() {
