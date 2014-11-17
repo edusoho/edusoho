@@ -4506,3 +4506,15 @@ a.homework-essay-textarea-pack-up{
 	color:#2a6496;
 }
 
+.coursesTypeChoices {
+	margin:15px 0;
+}
+
+.coursesTypeChoices .sortedCourses  {
+	overflow:hidden;
+	text-align:left;
+}
+
+.coursesTypeChoices input{
+	margin:0 0 0px 45px;
+}

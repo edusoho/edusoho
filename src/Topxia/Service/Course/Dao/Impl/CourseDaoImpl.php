@@ -127,7 +127,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     private function _createSearchQueryBuilder($conditions)
     {
-
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";
             unset($conditions['title']);
@@ -209,9 +208,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         if (isset($conditions['vipLevelIds'])) {
+
             $vipLevelIds = array();
             foreach ($conditions['vipLevelIds'] as $vipLevelId) {
-                if (ctype_digit((string)abs($vipLevelId))) {
+                if (ctype_digit((string)$vipLevelId)) {
                     $vipLevelIds[] = $vipLevelId;
                 }
             }
@@ -219,7 +219,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 $vipLevelIds = join(',', $vipLevelIds);
                 $builder->andStaticWhere("vipLevelId IN ($vipLevelIds)");
             }
-
         }
 
         if (isset($conditions['excludeIds']) and is_array($conditions['excludeIds'])) {

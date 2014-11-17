@@ -13,32 +13,78 @@
 
   <div class="row row-3-9">
     <div class="col-md-9" style="min-height:300px;">
+      {% if isShowVipSearch  %}
+    <form class="well well-sm" action="{{ path('search') }}" id="search_box">
 
-      {# {% if isShowVipSearch  %}
-    <form class="well well-sm" action="{{ path('search') }}">
-      <div style="float:left;" class="col-md-3" >
-      <select  class="form-control searchSelect" name="vipLevelId" >
-            {{ select_options(vipLevelId, app.request.query.get('vipLevelId'), '全部课程') }}
+      <div style="float:left;">
+      <select  class="form-control searchSelect " name="categoryIds">
+            {{ select_options(categoryIds, app.request.query.get('categoryIds'), '课程分类') }}
       </select>
       </div>
       <div class="input-group input-group-lg">
-      <input type="text" class="form-control" name="q" value="{{ keywords }}">
+      <input type="text" class="form-control" name="q" value="{{ keywords }}" id="searchText">
       <span class="input-group-btn">
       <button class="btn btn-primary" type="submit">搜索</button>
       </span>
       </div>
+
+      {% if currentUserVipLevel  %}
+
+      <div class="checkbox-group coursesTypeChoices" RepeatDirection="Horizontal" id="coursesTypeChoices" name="coursesTypeChoices">
+      <div class="sortedCourses">
+      <label >
+      筛选课程:
+       </label>
+      <input type="checkbox" name="coursesTypeChoices" id="vipCourses" 
+         value="vipCourses" data-url="{{path('search')}}" {% if coursesTypeChoices == 'vipCourses' %} checked{% endif %} > 仅显示会员课程
+      <input type="checkbox" name="coursesTypeChoices" id="liveCourses" 
+         value="liveCourses" data-url="{{path('search')}}" {% if coursesTypeChoices == 'liveCourses' %} checked{% endif %} >
+         仅显示直播课程
+      </div>
+      </div>
+      {% else %}
+
+      <div class="checkbox-group coursesTypeChoices" RepeatDirection="Horizontal" id="coursesTypeChoices" name="coursesTypeChoices" >
+      <div class="sortedCourses">
+      <label >
+      筛选课程:
+       </label>
+      <input type="checkbox" name="coursesTypeChoices" id="liveCourses" 
+         value="liveCourses" data-url="{{path('search')}}" {% if coursesTypeChoices == 'liveCourses' %} checked{% endif %} >
+         仅显示直播课程
+      </div>
+      </div>
+      
+      {% endif %}
       </form>
 
-      {% else %} #}
+      {% else %}
       <form class="well well-sm" action="{{ path('search') }}">
+      <div style="float:left;">
+      <select  class="form-control searchSelect " name="categoryIds">
+            {{ select_options(categoryIds, app.request.query.get('categoryIds'), '课程分类') }}
+      </select>
+      </div>
       <div class="input-group input-group-lg">
            <input type="text" class="form-control" name="q" value="{{ keywords }}">
              <span class="input-group-btn">
              <button class="btn btn-primary" type="submit">搜索</button>
       </span>
       </div>
+
+      <div class="checkbox-group coursesTypeChoices" RepeatDirection="Horizontal" id="coursesTypeChoices" name="coursesTypeChoices" >
+      <div class="sortedCourses">
+      <label >
+      筛选课程:
+       </label>
+      <input type="checkbox" name="coursesTypeChoices" id="liveCourses" 
+         value="liveCourses" data-url="{{path('search')}}" {% if coursesTypeChoices == 'liveCourses' %} checked{% endif %} >
+         仅显示直播课程
+      </div>
+      </div>
+
       </form>
-{#       {% endif %} #}
+      {% endif %}
 
 
       {% if keywords  %}

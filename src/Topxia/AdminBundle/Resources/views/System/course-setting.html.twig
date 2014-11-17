@@ -307,6 +307,21 @@ glyphicon glyphicon-chevron-up"></span></a></div>
         {{ radios('live_course_enabled', {1:'开启', 0:'关闭'}, courseSetting.live_course_enabled) }}
       </div>
     </div>
+    
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="logo">直播LOGO</label>
+      </div>
+      <div class="col-md-8 controls">
+        <div id="live-course-logo-container">{% if courseSetting.live_logo|default(false) %}<img src="{{ asset(courseSetting.live_logo) }}">{% endif %}</div>
+        <button class="btn btn-default btn-sm" id="live-course-logo-upload" type="button" data-url="{{ path('admin_setting_logo_upload') }}">上传</button>
+        <button class="btn btn-default btn-sm" id="live-course-logo-remove" type="button" data-url="{{ path('admin_setting_logo_remove') }}" {% if not courseSetting.live_logo|default(false) %}style="display:none;"{% endif %}>删除</button>
+        <p class="help-block">
+          <b>只针对直播新方案。</b><br>
+          请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过100*23。</p>
+        <input type="hidden" name="live_logo" value="{{ courseSetting.live_logo|default("") }}">
+      </div>
+    </div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
