@@ -42,11 +42,11 @@ class MyTeachingController extends BaseController
     {
         $user=$this->tryViewTeachingPage();
         $builder=new TeachingPageDataBuilder($user['id']);
-        $builder->buildCourseArray();
-        $builder->buildManageClassArray();
-        $builder->buildThreadArray();
-        $builder->buildHomeworkArray();
-        $builder->buildTestpaperArray();
+        $builder->buildTeachingCourses();
+        $builder->buildTeachingManageClasses();
+        $builder->buildTeachingThreads();
+        $builder->buildTeachingHomeworks();
+        $builder->buildTeachingTestpapers();
         $result=$builder->getResult();
         return $this->render('TopxiaWebBundle:MyTeaching:teaching-k12.html.twig', $result);
     }
@@ -299,7 +299,7 @@ class TeachingPageDataBuilder extends BaseController
     {
         $this->teacherId=$teacherId;
     }
-    public function buildCourseArray()
+    public function buildTeachingCourses()
     {
         $courseList = $this->getCourseService()->findUserTeachCourses($this->teacherId, 0, PHP_INT_MAX,false);
         $courseCount=count($courseList);
@@ -317,12 +317,12 @@ class TeachingPageDataBuilder extends BaseController
         $this->result['courseList']=$courseList;
         $this->result['courseCount']=$courseCount;
     }
-    public function buildManageClassArray()
+    public function buildTeachingManageClasses()
     {
         $manageClasses = $this->getClassesService()->getClassesByHeadTeacherId($this->teacherId);
         $this->result['manageClasses']=$manageClasses;
     }
-    public function buildThreadArray()
+    public function buildTeachingThreads()
     {
         $courses = $this->getCourseService()->findUserTeachCourses($this->teacherId, 0, PHP_INT_MAX,false);
         $courseIds=ArrayToolkit::column($courses, 'id');
@@ -351,7 +351,7 @@ class TeachingPageDataBuilder extends BaseController
         $this->result['threadCount']=$threadCount;
         $this->result['threadUsers']=$threadUsers;
     }
-    public function buildHomeworkArray()
+    public function buildTeachingHomeworks()
     {
         $status = 'reviewing';
         $courses = $this->getCourseService()->findUserTeachCourses($this->teacherId, 0, PHP_INT_MAX,false);
@@ -374,7 +374,7 @@ class TeachingPageDataBuilder extends BaseController
         $this->result['homeworkLessons']=$homeworkLessons;
         $this->result['reviewingCount']=$reviewingCount;
     }
-    public function buildTestpaperArray()
+    public function buildTeachingTestpapers()
     {
         $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($this->teacherId);
         $testpaperIds = ArrayToolkit::column($teacherTests, 'id');
