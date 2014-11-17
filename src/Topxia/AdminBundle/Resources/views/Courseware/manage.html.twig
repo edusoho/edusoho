@@ -9,6 +9,29 @@
 <div class="page-header clearfix">
   <h1 class="pull-left">课件管理</h1>
 </div>
+  <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="知识点搜索" name="knowledges[]" value="{{ app.request.get('knowledges[]') }}">
+    </div>
+    <div class="form-group">123123123</div>
+    <div class="form-group">
+      <select class="form-control" name="status">
+        {{ select_options(dict('courseware'), app.request.query.get('method')) }}
+      </select>
+    </div>
+    <div class="form-group"><span class="glyphicon glyphicon-tasks"></span></div>
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="标签搜索" name="tags[]" value="{{ app.request.get('tags[]') }}">
+    </div>
+
+    <div class="form-group hide">
+      <input class="form-control" type="text" placeholder="标题关键词搜索" name="title" value="{{ app.request.get('title') }}">
+    </div>
+
+    <button class="btn btn-primary">搜索</button>
+
+  </form>
 
 <div class="courseware-list">
 <div>
