@@ -237,3 +237,41 @@ input.LargeInput {width: 600px;}
 }
 
 /* knowledge css */
+
+/* category list */
+.list-group-panel {
+
+}
+
+.list-group-panel .list-group-heading {
+  color: #999;
+  /*border-bottom: 1px solid #ccc;*/
+  padding: 5px 0;
+  /*margin-bottom: 5px;*/
+}
+
+.list-group-panel .list-group {
+
+}
+
+.list-group-panel .list-group-item {
+  border: none;
+  border-radius: 0 0 !important;
+  color: #444;
+  border-left: 3px solid #fff;
+}
+
+.list-group-panel .list-group-item.active,
+.list-group-panel .list-group-item.active:hover {
+  background: #f3f3f3;
+  color: #428bca;
+  font-weight: bold;
+  border-left: 3px solid #428bca;
+
+}
+
+.list-group-panel .list-group-item:hover {
+    border-left: 3px solid #eee;
+
+}
+
