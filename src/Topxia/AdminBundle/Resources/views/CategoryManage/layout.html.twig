@@ -4,8 +4,8 @@
 
 {% block content %}
 
-{# @review #}
-课程&gt;分类管理&gt;科目管理
+<h5><a href="{{ path('admin_course') }}">课程</a>&gt;<a href="{{ path('admin_course_category') }}">分类管理</a>&gt;科目管理</h5>
+
 <div class="row">
   <div class="col-md-3">
     {% block side %}
@@ -18,33 +18,34 @@
               <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('admin_category_manage', {categoryId:category.id})}}">基本信息</a>
               <a class="list-group-item {% if side_nav == 'knowledge' %}active{% endif %}" href="{{ path('admin_category_knowledge', {categoryId:category.id})}}">知识点管理</a>
             </div>
-          </div><!-- /list-group-block -->
-
-          <div class="list-group-panel">
-            <div class="list-group-heading">课件</div>
-            <div class="list-group">
-              <a class="list-group-item {% if side_nav == 'courseware' %}active{% endif %}" href="{{ path('admin_courseware_manage', {categoryId:category.id})}}">课件管理</a>
-            </div>
           </div>
 
-          <div class="list-group-panel">
-            <div class="list-group-heading">文库</div>
-            <div class="list-group">
-              <a class="list-group-item {% if side_nav == 'article_material' %}active{% endif %}" href="#">文章素材</a>
-              <a class="list-group-item {% if side_nav == ' article_manage' %}active{% endif %}" href="#">文章管理</a>
-            </div>
-          </div>
-
-          <div class="list-group-panel">
-            <div class="list-group-heading">题库</div>
-            <div class="list-group">
-              <a class="list-group-item {% if side_nav == 'question' %}active{% endif %}" href="#">题目管理</a>
-              <a class="list-group-item {% if side_nav == 'question_plumber' %}active{% endif %}" href="#">题目导入/导出</a>
-              <a class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}" href="#">试卷管理</a>
-            </div>
-          </div>
-
+      <div class="list-group-panel">
+        <div class="list-group-heading">课件</div>
+        <div class="list-group">
+          <a class="list-group-item {% if side_nav == 'courseware' %}active{% endif %}" href="{{ path('admin_courseware_manage', {categoryId:category.id})}}">课件管理</a>
         </div>
+      </div>
+
+      <div class="list-group-panel">
+        <div class="list-group-heading">文库</div>
+        <div class="list-group">
+          <a class="list-group-item {% if side_nav == 'article_material' %}active{% endif %}" href="#">文章素材</a>
+          <a class="list-group-item {% if side_nav == ' article_manage' %}active{% endif %}" href="#">文章管理</a>
+        </div>
+      </div>
+
+        <div class="list-group-panel">
+        <div class="list-group-heading">题库</div>
+        <div class="list-group">
+          <div class="list-group">
+            <a class="list-group-item {% if side_nav == 'question' %}active{% endif %}" href="#">题目管理</a>
+            <a class="list-group-item {% if side_nav == 'question_plumber' %}active{% endif %}" href="#">题目导入/导出</a>
+            <a class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}" href="#">试卷管理</a>
+          </div>
+        </div>
+      </div>
+      </div>
 
       </div>
     {% endblock %}
