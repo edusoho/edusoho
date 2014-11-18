@@ -5,9 +5,9 @@ interface CoursewareService
 {
     public function getCourseware($id);
 
-    public function searchCourseware(array $conditions, $sort, $start, $limit);
+    public function searchCoursewares(array $conditions, $orderBy, $start, $limit);
 
-    public function searchCoursewareCount($conditions);
+    public function searchCoursewaresCount($conditions);
 
     public function createCourseware($courseware);
 
