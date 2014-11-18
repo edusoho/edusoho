@@ -29,7 +29,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             true
             );
 
-            return $userinfo;
+            return json_decode($userinfo);;
         }
         return "error";
     }
