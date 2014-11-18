@@ -233,4 +233,9 @@ class MaterialLibController extends BaseController {
 	protected function getUserService() {
 		return $this->getServiceKernel ()->createService ( 'User.UserService' );
 	}
+	
+	private function getTokenService()
+	{
+		return $this->getServiceKernel()->createService('User.TokenService');
+	}
 }
