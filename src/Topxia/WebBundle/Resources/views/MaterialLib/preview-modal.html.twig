@@ -21,7 +21,7 @@
                  <source src="{{ path('material_lib_file_preview_content', {fileId: file.id}) }}" type='audio/mp3' />
             </audio>
         {% elseif file.type == 'ppt' %}
-            <div id="lesson-preview-ppt-player" data-url="{{ path('material_lib_file_preview_content', {fileId: file.id}) }}"></div>
+            <div id="lesson-preview-ppt-player" data-url="{{ path('material_lib_file_preview_ppt', {fileId: file.id}) }}"></div>
         {% endif %}
 
         <script>app.load('course/lesson-preview')</script>

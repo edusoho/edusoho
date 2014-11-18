@@ -207,6 +207,35 @@ class MaterialLibController extends BaseController {
 	
 		return new Response($file['convertParams']['hlsKey']);
 	}
+	
+	public function pptAction(Request $request, $fileId)
+	{
+		$file = $this->getUploadFileService()->getFile($fileId);
+		
+		if (empty($file) || $file['type'] != 'ppt') {
+			throw $this->createNotFoundException();
+		}
+	
+		if ($file['convertStatus'] != 'success') {
+			if ($file['convertStatus'] == 'error') {
+				$message = sprintf('PPT文档转换失败，请重新转换。');
+				return $this->createJsonResponse(array(
+						'error' => array('code' => 'error', 'message' => $message),
+				));
+			} else {
+				return $this->createJsonResponse(array(
+						'error' => array('code' => 'processing', 'message' => 'PPT文档还在转换中，还不能查看，请稍等。'),
+				));
+			}
+		}
+	
+		$factory = new CloudClientFactory();
+		$client = $factory->createClient();
+	
+		$result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length']. '');
+	
+		return $this->createJsonResponse($result);
+	}
 
 	protected function getSettingService() {
 		return $this->getServiceKernel ()->createService ( 'System.SettingService' );

@@ -759,7 +759,11 @@ material_lib_file_preview:
 material_lib_file_preview_hlskeyurl:
     pattern: /materialLib/file/{fileId}/preview/hlskeyurl
     defaults: { _controller: TopxiaWebBundle:MaterialLib:hlskeyurl }  
-    
+
+material_lib_file_preview_ppt:
+    pattern: /materialLib/file/{fileId}/preview/ppt
+    defaults: { _controller: TopxiaWebBundle:MaterialLib:ppt }  
+        
 material_lib_file_preview_content:
     pattern:  /materialLib/file/{fileId}/preview/content
     defaults: { _controller: TopxiaWebBundle:CourseLesson:file }
