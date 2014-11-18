@@ -34,6 +34,9 @@ class InitCommand extends BaseCommand
 		$this->initStorageSetting($output);
 
 		$this->initCategory($output);
+		$this->initGrade($output);
+		$this->initSubject($output);
+		$this->initTextbook($output);
 		$this->initTag($output);
 		$this->initRefundSetting($output);
 		$this->initThemes($output);
@@ -294,10 +297,178 @@ EOD;
 				'parentId' => 0,
 			));
 		}
+		$output->writeln(' ...<info>成功</info>');
+	}
+
+	private function initGrade($output){
+		$output->write('  初始化年级');
+		$group = $this->getCategoryService()->addGroup(array(
+			'name' => '年级',
+			'code' => 'grade',
+			'depth' => 1,
+		));
+		
+		$this->getCategoryService()->createCategory(array(
+			'name' => '小学一年级',
+			'code' => 'primary_one',
+			'weight' => 1,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+		
+		$this->getCategoryService()->createCategory(array(
+			'name' => '小学二年级',
+			'code' => 'primary_two',
+			'weight' => 2,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '小学三年级',
+			'code' => 'primary_three',
+			'weight' => 3,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '小学四年级',
+			'code' => 'primary_four',
+			'weight' => 4,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '小学五年级',
+			'code' => 'primary_five',
+			'weight' => 5,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '小学六年级',
+			'code' => 'primary_six',
+			'weight' => 6,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '初中一年级',
+			'code' => 'middle_one',
+			'weight' => 7,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '初中二年级',
+			'code' => 'middle_two',
+			'weight' => 8,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '初中三年级',
+			'code' => 'middle_three',
+			'weight' => 9,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '高中一年级',
+			'code' => 'high_one',
+			'weight' => 10,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '高中二年级',
+			'code' => 'high_two',
+			'weight' => 11,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '高中三年级',
+			'code' => 'high_three',
+			'weight' => 12,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+		$output->writeln(' ...<info>成功</info>');
+	}
+
+	private function initSubject($output)
+	{
+		$output->write('  初始化学科');
+		$group = $this->getCategoryService()->addGroup(array(
+			'name' => '学科',
+			'code' => 'subject',
+			'depth' => 1,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '语文',
+			'code' => 'Chinese',
+			'weight' => 1,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '数学',
+			'code' => 'math',
+			'weight' => 2,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '英语',
+			'code' => 'english',
+			'weight' => 3,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
 
 		$output->writeln(' ...<info>成功</info>');
 	}
 
+	private function initTextbook($output)
+	{
+		$output->write('  初始化教材');
+		$group = $this->getCategoryService()->addGroup(array(
+			'name' => '教材',
+			'code' => 'textbook',
+			'depth' => 1,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '人教版',
+			'code' => 'renjiao',
+			'weight' => 1,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$this->getCategoryService()->createCategory(array(
+			'name' => '苏教版',
+			'code' => 'sujiao',
+			'weight' => 2,
+			'groupId' => $group['id'],
+			'parentId' => 0,
+		));
+
+		$output->writeln(' ...<info>成功</info>');
+	}
 	private function initFile($output)
 	{
 		$output->write('  初始化文件分组');

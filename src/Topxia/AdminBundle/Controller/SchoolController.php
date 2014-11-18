@@ -98,6 +98,13 @@ class SchoolController extends BaseController
         ));
     }
 
+    public function textbookSettingAction(Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:School:textbook-setting.html.twig', array(
+            
+        ));
+    }
+
     public function classEditorAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {

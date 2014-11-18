@@ -27,6 +27,10 @@ admin_school_point_setting:
     pattern:  /school/point/setting
     defaults: { _controller: TopxiaAdminBundle:School:pointSetting }
 
+admin_school_textbook_setting:
+    pattern:  /school/textbook/setting
+    defaults: { _controller: TopxiaAdminBundle:School:textbookSetting }
+
 admin_school_homepage_upload:
     pattern:  /school/homepage/upload
     defaults: { _controller: TopxiaAdminBundle:School:homePageUpload }
