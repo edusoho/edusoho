@@ -36,7 +36,8 @@ class InitCommand extends BaseCommand
 		$this->initCategory($output);
 		$this->initGrade($output);
 		$this->initSubject($output);
-		$this->initTextbook($output);
+		$this->initMaterial($output);
+		$this->initEduMaterial($output);
 		$this->initTag($output);
 		$this->initRefundSetting($output);
 		$this->initThemes($output);
@@ -442,12 +443,12 @@ EOD;
 		$output->writeln(' ...<info>成功</info>');
 	}
 
-	private function initTextbook($output)
+	private function initMaterial($output)
 	{
 		$output->write('  初始化教材');
 		$group = $this->getCategoryService()->addGroup(array(
 			'name' => '教材',
-			'code' => 'textbook',
+			'code' => 'material',
 			'depth' => 1,
 		));
 
@@ -469,6 +470,25 @@ EOD;
 
 		$output->writeln(' ...<info>成功</info>');
 	}
+
+	private function initEduMaterial($output)
+	{
+		$output->write('  初始化教材课本');
+		$grades=$this->getCategoryService()->findCategoriesByGroupCode('grade');
+		$subjects=$this->getCategoryService()->findCategoriesByGroupCode('subject');
+		$material=$this->getCategoryService()->getCategoryByCode('renjiao');
+		foreach ($grades as $grade) {
+			foreach ($subjects as $subject) {
+				$eduMaterial['gradeId']=$grade['id'];
+				$eduMaterial['subjectId']=$subject['id'];
+				$eduMaterial['materialId']=$material['id'];
+				$eduMaterial['materialName']=$material['name'];
+				$this->getEduMaterialService()->addEduMaterial($eduMaterial);
+			}
+		}
+		$output->writeln(' ...<info>成功</info>');
+	}
+
 	private function initFile($output)
 	{
 		$output->write('  初始化文件分组');
@@ -577,4 +597,8 @@ EOD;
 		return $this->getServiceKernel()->createService('User.UserService');
 	}
 
+	protected function getEduMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.EduMaterialService');
+    }
 }

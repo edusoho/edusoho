@@ -98,10 +98,18 @@ class SchoolController extends BaseController
         ));
     }
 
-    public function textbookSettingAction(Request $request)
+    public function eduMaterialSettingAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:School:textbook-setting.html.twig', array(
-            
+        $grades=$this->getCategoryService()->findCategoriesByGroupCode('grade');
+        $subjects=$this->getCategoryService()->findCategoriesByGroupCode('subject');
+        $eduMaterials=ArrayToolkit::group($this->getEduMaterialService()->findAllEduMaterials(),'subjectId');
+        foreach ($eduMaterials as $key => $eduMaterialList) {
+            $eduMaterials[$key]=ArrayToolkit::index($eduMaterialList,'gradeId');
+        }
+        return $this->render('TopxiaAdminBundle:School:eduMaterial-setting.html.twig', array(
+            'grades'=>$grades,
+            'subjects'=>$subjects,
+            'eduMaterials'=>$eduMaterials
         ));
     }
 
@@ -446,5 +454,14 @@ class SchoolController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+    protected function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    protected function getEduMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.EduMaterialService');
     }
 }
