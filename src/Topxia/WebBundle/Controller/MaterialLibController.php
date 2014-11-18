@@ -70,7 +70,8 @@ class MaterialLibController extends BaseController {
 	}
 
 	public function showShareAction(Request $request) {
-		$currentUserId = $this->getCurrentUser()['id'];
+		$currentUser = $this->getCurrentUser ();
+		$currentUserId = $currentUser['id'];
 		
 		$recentContacts = $this->getUploadFileService()->findRecentContacts($currentUserId);
 		$allTeachers =  $this->getUserService()->searchUsers(array('roles'=> 'ROLE_TEACHER', 'locked'=>0), array('nickname', 'ASC'), 0, 100);
@@ -105,10 +106,12 @@ class MaterialLibController extends BaseController {
 	}
 	
 	public function saveShareAction(Request $request){
+		$currentUser = $this->getCurrentUser ();
+		$currentUserId = $currentUser['id'];
 		$targetUserIds = $request->get('targetUserIds');
 		
 		if (!empty($targetUserIds)) {
-			$this->getUploadFileService()->shareFiles($this->getCurrentUser()['id'], $targetUserIds);
+			$this->getUploadFileService()->shareFiles($currentUserId, $targetUserIds);
 		}
 		
 		return $this->createJsonResponse(true);
@@ -116,7 +119,8 @@ class MaterialLibController extends BaseController {
 	
 	public function cancelShareAction(Request $request){
 		$targetUserId = $request->get('targetUserId' );
-		$currentUserId = $this->getCurrentUser()['id'];
+		$currentUser = $this->getCurrentUser ();
+		$currentUserId = $currentUser['id'];
 		
 		if(!empty($targetUserId)){
 			$this->getUploadFileService()->cancelShareFile($currentUserId, $targetUserId);
