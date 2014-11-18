@@ -145,10 +145,10 @@ class MaterialLibController extends BaseController {
 				$hls = $client->generateHLSQualitiyListUrl ( $file ['metas2'], 3600 );
 				
 				if (isset ( $file ['convertParams'] ['convertor'] ) && ($file ['convertParams'] ['convertor'] == 'HLSEncryptedVideo')) {
-					$token = $this->getTokenService ()->makeToken ( 'hlsvideo.view', array (
+					$token = $this->getTokenService()->makeToken('hlsvideo.view', array (
 							'data' => $fileId,
 							'times' => 1,
-							'duration' => 3600 
+							'duration' => 3600
 					) );
 					
 					$hlsKeyUrl = $this->generateUrl ( 'material_lib_file_preview_hlskeyurl', array (
@@ -179,21 +179,6 @@ class MaterialLibController extends BaseController {
 			$fakeKey = $this->getTokenService()->makeFakeTokenString(16);
 			return new Response($fakeKey);
 		}
-	
-// 		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-	
-// 		if (empty($lesson)) {
-// 			throw $this->createNotFoundException();
-// 		}
-	
-// 		if ($token['data'] != $lesson['id']) {
-// 			$fakeKey = $this->getTokenService()->makeFakeTokenString(16);
-// 			return new Response($fakeKey);
-// 		}
-	
-// 		if (empty($lesson['mediaId'])) {
-// 			throw $this->createNotFoundException();
-// 		}
 	
 		$file = $this->getUploadFileService()->getFile($fileId);
 		
