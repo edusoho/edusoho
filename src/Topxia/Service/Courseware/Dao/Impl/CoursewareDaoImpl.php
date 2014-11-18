@@ -99,8 +99,7 @@ class CoursewareDaoImpl extends BaseDao implements CoursewareDao
             ->andWhere('userId = :userId')
             ->andWhere('categoryId = :categoryId')
             ->andWhere('tagIds LIKE :tagsLike')
-            ->andWhere('mainKnowledgeId = :mainKnowledgeId')            
-            ->andWhere('relatedKnowledgeIds LIKE :knowledgesLike')
+            ->andWhere('knowledgeIds LIKE :knowledgesLike')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime');
 
