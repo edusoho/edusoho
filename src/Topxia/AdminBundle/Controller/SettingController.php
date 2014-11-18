@@ -38,7 +38,7 @@ class SettingController extends BaseController
             'status'=>'open',
             'closed_note'=>'',
             'favicon'=>'',
-            'copyright'=>''
+            'copyright'=>'',
         );
 
         $site = array_merge($default, $site);
@@ -249,6 +249,7 @@ class SettingController extends BaseController
             'user_terms_body' => '',
             'registerFieldNameArray'=>array(),
             'registerSort'=>array(0=>"email",1=>"nickname",2=>"password"),
+            'captcha_enabled' => 0,
         );
 
         $auth = array_merge($default, $auth);
@@ -327,6 +328,7 @@ class SettingController extends BaseController
             'renren_secret'=>'',
             'renren_set_fill_account'=>0,
             'verify_code' => '',
+            'captcha_enabled'=>0,
         );
 
         $loginConnect = array_merge($default, $loginConnect);
@@ -665,7 +667,7 @@ class SettingController extends BaseController
         $currentUser = $this->getCurrentUser();
         $setting = $this->getSettingService()->get('user_partner', array());
         if (empty($setting['mode']) or !in_array($setting['mode'], array('phpwind', 'discuz'))) {
-            return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员账号！');
+            return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员帐号！');
         }
 
         $bind = $this->getUserService()->getUserBindByTypeAndUserId($setting['mode'], $currentUser['id']);
@@ -689,7 +691,7 @@ class SettingController extends BaseController
                 $user = $this->getUserService()->getUser($currentUser['id']);
                 $this->authenticateUser($user);
 
-                $this->setFlashMessage('success', '管理员账号同步成功。');
+                $this->setFlashMessage('success', '管理员帐号同步成功。');
 
                 return $this->redirect($this->generateUrl('admin_setting_user_center'));
             }

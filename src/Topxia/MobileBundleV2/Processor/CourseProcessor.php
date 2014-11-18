@@ -24,6 +24,13 @@ interface CourseProcessor
 	public function commitCourse();
 
 	/**
+	*获取用户 课程会员信息
+	* token 用户token
+	* courseId 课程id
+	*/
+	public function getCourseMember();
+
+	/**
 	 *  获取问题详情（包括提问的用户信息）
 	 *	courseId 课程id
 	 *	threadId 问答id
@@ -73,6 +80,16 @@ interface CourseProcessor
 	 *根据用户ID获取笔记信息(全部)
 	 */
 	public function getNoteList();
+
+	/**
+	* 获取课程所有笔记
+	*/
+	public function getCourseNotes();
+
+	/**
+	*获取课时笔记
+	*/
+	public function getLessonNote();
 
 	/**
 	 *

@@ -45,6 +45,7 @@
 
           {% endif %}
 
+
           {% if setting('auth.user_terms') == 'opened' %}
               <label id="user_terms">
                 <input type="checkbox"  checked="checked">我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
@@ -69,7 +70,7 @@
         <hr>
 
         <p class="text-primary">
-          已有账号？绑定到已有账号：
+          已有帐号？绑定到已有帐号：
           <a href="{{ path('login_bind_exist', {type: client.clientInfo.type}) }}"></a>
         </p>
 

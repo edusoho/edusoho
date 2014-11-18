@@ -18,8 +18,6 @@ class CourseOrderController extends OrderController
 
         $user = $this->getCurrentUser();
 
-        $order = $this->getOrderService()->getOrderByTargetIdAndUserId($course['id'],$user['id']);
-
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
@@ -40,8 +38,6 @@ class CourseOrderController extends OrderController
        
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-
-
         for($i=0;$i<count($userFields);$i++){
            if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
            if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
@@ -54,27 +50,71 @@ class CourseOrderController extends OrderController
             return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
                 'course' => $course
             ));
-        } else if($order['targetId'] && $order['userId'] && $order['status'] == 'created' ) {
-             return $this->render('TopxiaWebBundle:CourseOrder:remaid.html.twig', array(
-                'course' => $course,
-                'payments' => $this->getEnabledPayments(),
-                'user' => $userInfo,
-                'avatarAlert' => AvatarAlert::alertJoinCourse($user),
-                'courseSetting' => $courseSetting,
-                'member' => $member,
-                'userFields'=>$userFields,
-            ));
-        } else {
-            return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
-                'course' => $course,
-                'payments' => $this->getEnabledPayments(),
-                'user' => $userInfo,
-                'avatarAlert' => AvatarAlert::alertJoinCourse($user),
-                'courseSetting' => $courseSetting,
-                'member' => $member,
-                'userFields'=>$userFields,
+        }
+
+        $oldOrders = $this->getOrderService()->searchOrders(array(
+                'targetType' => 'course',
+                'targetId' => $course['id'],
+                'userId' => $user['id'],
+                'status' => 'created',
+                'createdTimeGreaterThan' => strtotime('-40 hours'),
+            ), array('createdTime', 'DESC'), 0, 1
+        );
+
+        $order = current($oldOrders);
+
+        if($course['price'] > 0 && $order && ($course['price'] == ($order['amount'] + $order['couponDiscount'])) ) {
+             return $this->render('TopxiaWebBundle:CourseOrder:repay.html.twig', array(
+                'order' => $order,
             ));
         }
+
+        return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
+            'course' => $course,
+            'payments' => $this->getEnabledPayments(),
+            'user' => $userInfo,
+            'avatarAlert' => AvatarAlert::alertJoinCourse($user),
+            'courseSetting' => $courseSetting,
+            'member' => $member,
+            'userFields'=>$userFields,
+        ));
+    }
+
+    public function repayAction(Request $request)
+    {
+        $order = $this->getOrderService()->getOrder($request->request->get('orderId'));
+        if (empty($order)) {
+            return $this->createMessageResponse('error', '订单不存在!');
+        }
+
+        if ( (time() - $order['createdTime']) > 40 * 3600 ) {
+            return $this->createMessageResponse('error', '订单已过期，不能支付，请重新创建订单。');
+        }
+
+        if ($order['targetType'] != 'course') {
+            return $this->createMessageResponse('error', '此类订单不能支付，请重新创建订单!');
+        }
+
+        $course = $this->getCourseService()->getCourse($order['targetId']);
+        if (empty($course)) {
+            return $this->createMessageResponse('error', '购买的课程不存在，请重新创建订单!');
+        }
+
+        if ($course['price'] != ($order['amount'] + $order['couponDiscount'])) {
+            return $this->createMessageResponse('error', '订单价格已变更，请重新创建订单!');
+        }
+
+
+        $payRequestParams = array(
+            'returnUrl' => $this->generateUrl('course_order_pay_return', array('name' => $order['payment']), true),
+            'notifyUrl' => $this->generateUrl('course_order_pay_notify', array('name' => $order['payment']), true),
+            'showUrl' => $this->generateUrl('course_show', array('id' => $order['targetId']), true),
+        );
+
+        return $this->forward('TopxiaWebBundle:Order:submitPayRequest', array(
+            'order' => $order,
+            'requestParams' => $payRequestParams,
+        ));
     }
 
     public function payAction(Request $request)
@@ -103,15 +143,7 @@ class CourseOrderController extends OrderController
         ));
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
-        $order = $this->getOrderService()->getOrderByTargetIdAndUserId($formData['courseId'],$user['id']);
-
-        $orderCreatedTime = $order['createdTime'];
-        $diff = time()-$orderCreatedTime;
-
-        if(!($order['targetId'] && $order['userId'] && $order['status'] == 'created' && $diff<3600)) {
-            $changeStatus = $this->getOrderService()->cancelOrders($formData['courseId'],$user['id']);
-            $order = $this->getCourseOrderService()->createOrder($formData);
-        }
+        $order = $this->getCourseOrderService()->createOrder($formData);
 
         if ($order['status'] == 'paid') {
             return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));

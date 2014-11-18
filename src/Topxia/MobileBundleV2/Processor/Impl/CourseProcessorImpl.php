@@ -4,6 +4,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\CourseProcessor;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Response;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
@@ -11,6 +12,46 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	{
 		var_dump("CourseProcessorImpl->getVersion");
 		return $this->formData;
+	}
+
+	public function getLessonNote()
+	{
+		$courseId = $this->getParam("courseId");
+	    	$lessonId = $this->getParam("lessonId");
+
+	    	$user = $this->controller->getUserByToken($this->request);
+	    	if(!$user->isLogin()){
+	    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
+	    	}
+
+	    	$lessonNote =  $this->controller->getNoteService()->getUserLessonNote($user['id'], $lessonId);
+	    	if (empty($lessonNote)) {
+	    		return null;
+	    	}
+	    	$lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+	    	$lessonNote['lessonTitle'] = $lesson['title'];
+	    	$lessonNote['lessonNum'] = $lesson['number'];
+	    	$content = $this->controller->convertAbsoluteUrl($this->request, $lessonNote['content']);;
+	    	$content = $this->filterNote($content);
+	    	$lessonNote['content'] = $content;
+	    	return $lessonNote;
+	}
+
+	public function getCourseMember()
+	{
+		$courseId = $this->getParam("courseId");
+		$user = $this->controller->getUserByToken($this->request);
+		if (empty($courseId)) {
+            		return null;
+		}
+		$member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($courseId, $user['id']) : null;
+     		$member = $this->previewAsMember($member, $courseId, $user);
+
+     		if ($member && $member['locked']) {
+            		return null;
+     		}
+     		$member = $this->checkMemberStatus($member);
+     		return empty($member) ? new Response("null"): $member;
 	}
 
 	public function postThread()
@@ -78,11 +119,16 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		return $post;
 	}
 
+	/**
+	* add need param (courseId, lessonId, title, content, type)
+	* update need param (courseId, threadId, title, content, type)
+	*/
 	public function updateThread(){
 		$courseId = $this->getParam("courseId", 0);
 		$threadId = $this->getParam("threadId", 0);
-		$title = $this->getParam("title", 0);
+		$title = $this->getParam("title", "");
 		$content = $this->getParam("content","");
+		$action = $this->getParam("action", "update");
 		$imageCount = $this->getParam("imageCount", 0);
 
 		$user = $this->controller->getUserByToken($this->request);
@@ -97,10 +143,15 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		$formData = $this->formData;
 		$formData['content'] = $content;
 		unset($formData['imageCount']);
+		unset($formData['action']);
+		unset($formData['threadId']);
 
-		$fields = array("title" => $title, "content" => $content);
-		
-		return $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
+		if ($action == "add") {
+			return $this->controller->getThreadService()->createThread($formData);
+		} else {
+			$fields = array("title" => $title, "content" => $content);
+			return $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
+		}
 	}
 
 	private function uploadImage($content)
@@ -165,9 +216,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	public function getCourseThreads()
 	{
 		$user = $this->controller->getUserByToken($this->request);
+		$type = $this->getParam("type","question");
+
 		$conditions = array(
             		'userId' => $user['id'],
-            		'type' => 'question',
+            		'type' => $type,
         		);
 
 		$start = (int) $this->getParam("start", 0);
@@ -190,52 +243,102 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		);
 	}
 
+	public function getCourseNotes()
+	{
+	    	$start = $this->getParam("start", 0);
+	    	$limit = $this->getParam("limit", 10);
+	    	$courseId = $this->getParam("courseId");
+
+	    	$user = $this->controller->getUserByToken($this->request);
+	    	if(!$user->isLogin()){
+	    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
+	    	}
+	    	$conditions = array(
+	            	'userId' => $user['id'],
+	            	'courseId' => $courseId,
+	            	'noteNumGreaterThan' => 0
+	        	);
+
+	    	$courseNotes =  $this->controller->getNoteService()->searchNotes($conditions, 'created', $start, $limit);
+	    	$lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($courseNotes, 'lessonId'));
+	    	for ($i=0; $i < count($courseNotes); $i++) { 
+	    		$courseNote = $courseNotes[$i];
+	    		$lesson = $lessons[$courseNote['lessonId']];
+	    		$courseNote['lessonTitle'] = $lesson['title'];
+	    		$courseNote['lessonNum'] = $lesson['number'];
+	    		$content = $this->controller->convertAbsoluteUrl($this->request, $courseNote['content']);;
+	    		$content = $this->filterNote($content);
+	    		$courseNote['content'] = $content;
+	    		$courseNotes[$i] = $courseNote;
+	    	}
+	    	return $courseNotes;
+	}
+
+	private function filterNote($note)
+	{
+		return  preg_replace_callback('/<img [^>]+\\/?>/', function($matches) {
+			return "<p>" . $matches[0] . "</p>";
+		}, $note);
+	}
+
 	public function getNoteList(){
-    	$user = $this->controller->getUserByToken($this->request);
-    	$start = $this->getParam("start", 0);
-    	$limit = $this->getParam("limit", 10);
+	    	$user = $this->controller->getUserByToken($this->request);
+	    	$start = $this->getParam("start", 0);
+	    	$limit = $this->getParam("limit", 10);
 
-    	if(!$user->isLogin()){
-    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
+	    	if(!$user->isLogin()){
+	    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
+	    	}
+
+	     	$conditions = array(
+	            	'userId' => $user['id'],
+	            	'noteNumGreaterThan' => 0
+	        	);
+
+	        	$courseMembers = $this->controller->getCourseService()->searchMember($conditions,$start,$limit);
+	        	$courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
+	        	$noteInfos = array();
+	        	for ($i=0; $i < count($courseMembers); $i++) { 
+	        		$courseMember = $courseMembers[$i];
+	        		$course = $courses[$courseMember['courseId']];
+	        		$noteNum = $courseMember['noteNum'];
+	        		if (empty($noteNum)) {
+	        			continue;
+	        		}
+	        		$noteInfos[] = array(
+	        			"coursesId"=>$courseMember['courseId'],
+	        			"courseTitle"=>$course['title'],
+	        			"noteLastUpdateTime"=>$courseMember['noteLastUpdateTime'],
+	        			"noteNum"=>$noteNum,
+	        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png')
+	        			);
+	        	}
+	        	/*
+	    	$noteList = array();
+	    	$index = 0;
+	    	for($i = 0;$i < count($courseMember);$i++){
+	    		$noteListByOneCourse =  $this->controller->getNoteService()->findUserCourseNotes($user['id'],$courseMember[$i]['courseId']);
+	    		foreach ($noteListByOneCourse as $key => $value) {
+		    		$courseId = $value['courseId'];
+		    		$lessonId = $value['lessonId'];
+		    		$courseInfo = $this->controller->getCourseService()->getCourse($courseId);
+		    		$lessonInfo = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+		    		$value["title"] = $courseInfo["title"];
+		    		$value["largePicture"] = $this->controller->coverPath($courseInfo["largePicture"], 'course-large.png');
+		    		$value["lessonName"] = $lessonInfo["title"];
+		    		$value["number"] = $lessonInfo["number"];
+		    		$noteList[$index++] = $value;
+	    		}
+	    	}
+
+	    	foreach ($noteList as $key => $value) {
+	    		$sort_course[$key] = $value['courseId'];
+	    		$sort_lesson[$key] = $value['lessonId'];
+	    	}
+	    	array_multisort($sort_course,SORT_ASC,$sort_lesson,SORT_ASC,$noteList);
+	    	*/
+    		return $noteInfos;
     	}
-
-     	$conditions = array(
-            'userId' => $user['id'],
-            'noteNumGreaterThan' => 0
-        );
-
-        $courseMember = $this->controller->getCourseService()->searchMember($conditions,$start,$limit);
-        //var_dump($courseMember);
-        // $courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMember, 'courseId'));
-        // var_dump($courseMember);
-
-    	// $noteList = $this->controller->getNoteService()->searchNotes(array('userId'=>$user['id']),'created',$start,$limit);
-    	// var_dump($noteList);
-    	$noteList = array();
-    	$index = 0;
-    	for($i = 0;$i < count($courseMember);$i++){
-    		$noteListByOneCourse =  $this->controller->getNoteService()->findUserCourseNotes($user['id'],$courseMember[$i]['courseId']);
-    		foreach ($noteListByOneCourse as $key => $value) {
-	    		$courseId = $value['courseId'];
-	    		$lessonId = $value['lessonId'];
-	    		$courseInfo = $this->controller->getCourseService()->getCourse($courseId);
-	    		$lessonInfo = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
-	    		$value["title"] = $courseInfo["title"];
-	    		$value["largePicture"] = $this->controller->coverPath($courseInfo["largePicture"], 'course-large.png');
-	    		$value["lessonName"] = $lessonInfo["title"];
-	    		$value["number"] = $lessonInfo["number"];
-	    		$noteList[$index++] = $value;
-    		}
-    	}
-
-    	foreach ($noteList as $key => $value) {
-    		$sort_course[$key] = $value['courseId'];
-    		$sort_lesson[$key] = $value['lessonId'];
-    	}
-    	array_multisort($sort_course,SORT_ASC,$sort_lesson,SORT_ASC,$noteList);
-
-    	return $noteList;
-    }
 
     public function AddNote(){
     	$courseId = $this->getParam("courseId", 0);
@@ -288,6 +391,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 				continue;
 			}
 			$course = $courses[$thread['courseId']];
+			if($thread["lessonId"]!=0){
+				$lessonInfo = $this->controller->getCourseService()->findLessonsByIds(array($thread["lessonId"]));
+				$thread["number"] =  $lessonInfo[$thread["lessonId"]]["number"];
+			}else{
+				$thread["number"] = 0;
+			}
         	$threads[$i] = $this->filterThread($thread, $course, null);
         }
         return $threads;
@@ -346,7 +455,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		}
 
 		$course = $this->controller->getCourseService()->getCourse($thread['courseId']);
-            	$user = $this->controller->getUserService()->getUser($thread['userId']);
+        $user = $this->controller->getUserService()->getUser($thread['userId']);
 		return $this->filterThread($thread, $course, $user);
 	}
 
@@ -528,7 +637,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         			$reason = $this->getParam("reason", "");
         			$amount = $this->getParam("amount", 0);
         			$refund = $this->getCourseOrderService()->applyRefundOrder(
-        				$member['orderId'], $amount, $reason, $this->getContainer());
+        				$member['orderId'], $amount, array("type"=>"other", "note"=>$reason), $this->getContainer());
         			if (empty($refund) || $refund['status'] != "success") {
         				return false;
         			}

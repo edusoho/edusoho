@@ -2,7 +2,9 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Form\RegisterType;
+use Gregwar\Captcha\CaptchaBuilder;
 
 class RegisterController extends BaseController
 {
@@ -19,7 +21,20 @@ class RegisterController extends BaseController
         if ($request->getMethod() == 'POST') {
     
             $registration = $request->request->all();
-   
+
+            $authSettings = $this->getSettingService()->get('auth', array());
+
+            if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){
+                
+                $captchaCodePostedByUser = strtolower($registration['captcha_num']);
+
+                $captchaCode = $request->getSession()->get('captcha_code');   
+              
+                if ($captchaCode != $captchaCodePostedByUser){   
+                    throw new \RuntimeException('验证码错误。');
+                }
+            }
+
             $registration['createdIp'] = $request->getClientIp();
 
             $user = $this->getAuthService()->register($registration);
@@ -205,6 +220,17 @@ class RegisterController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function captchaCheckAction(Request $request)
+    {
+        $captchaFilledByUser = strtolower($request->query->get('value'));       
+        if ($request->getSession()->get('captcha_code') == $captchaFilledByUser) {
+            $response = array('success' => true, 'message' => '验证码正确');
+        } else {
+            $response = array('success' => false, 'message' => '验证码错误');
+        }
+        return $this->createJsonResponse($response);
+    }
+
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
@@ -229,6 +255,25 @@ class RegisterController extends BaseController
     public function analysisAction(Request $request)
     {
         return $this->render('TopxiaWebBundle:Register:analysis.html.twig',array());
+    }
+
+    public function captchaAction(Request $request)
+    {
+        $imgBuilder = new CaptchaBuilder;
+        $imgBuilder->build($width = 150, $height = 32, $font = null);
+
+        $request->getSession()->set('captcha_code',strtolower($imgBuilder->getPhrase()));
+
+        ob_start();
+        $imgBuilder->output();
+        $str = ob_get_clean();
+        $imgBuilder = null;
+        
+        $headers = array(
+            'Content-type' => 'image/jpeg',
+            'Content-Disposition' => 'inline; filename="'."reg_captcha.jpg".'"');
+        
+        return new Response($str, 200, $headers);
     }
 
     protected function getSettingService()
@@ -304,7 +349,7 @@ class RegisterController extends BaseController
         $auth = $this->getSettingService()->get('auth', array());
         $site = $this->getSettingService()->get('site', array());
         $emailTitle = $this->setting('auth.email_activation_title',
-            '请激活你的账号 完成注册');
+            '请激活你的帐号 完成注册');
         $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
 
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');

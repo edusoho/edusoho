@@ -3,6 +3,7 @@
 {% block title %}基本信息 - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'course_manage_data' %}
+{% set script_controller = 'course-manage/manage' %}
 
 {% block main %}
 
@@ -10,7 +11,7 @@
     <div class="panel-heading">基本信息</div>
     <div class="panel-body">
       <div class="table-responsive">
-        <table class="table table-bordered" style="word-break:break-all;text-align:center;">
+        <table class="table table-bordered" id="learning-data-table" style="word-break:break-all;text-align:center;">
           <tr class="active">
             <td>课程名</td>
             <td>课程学习人数</td>

@@ -1,0 +1,3 @@
+course_buy:
+    pattern:  /course/{id}/buy
+    defaults: { _controller: CustomWebBundle:Order:buy }

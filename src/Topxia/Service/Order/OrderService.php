@@ -6,15 +6,13 @@ interface OrderService
 {
     public function getOrder($id);
 
-    public function getOrderByTargetIdAndUserId($targetId,$userId);
-
-    public function cancelOrders($targetId,$userId);
-
     public function getOrderBySn($sn);
 
     public function findOrdersByIds(array $ids);
 
     public function searchOrders($conditions, $sort = 'latest', $start, $limit);
+    
+    public function sumOrderAmounts($startTime,$endTime,array $courseId);
 
     public function searchOrderCount($conditions);
 

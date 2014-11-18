@@ -220,6 +220,7 @@ CREATE TABLE `course` (
   `studentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员数',
   `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '查看次数',
   `userId` int(10) unsigned NOT NULL COMMENT '课程发布人ID',
+  `deadlineNotify` enum('active','none') NOT NULL DEFAULT 'none' COMMENT '开启有效期通知',
   `createdTime` int(10) unsigned NOT NULL COMMENT '课程创建时间',
   `freeStartTime` int(10) NOT NULL DEFAULT '0',
   `freeEndTime` int(10) NOT NULL DEFAULT '0',
@@ -385,6 +386,7 @@ CREATE TABLE `course_member` (
   `isVisible` tinyint(2) NOT NULL DEFAULT '1' COMMENT '可见与否，默认为可见',
   `role` enum('student','teacher') NOT NULL DEFAULT 'student' COMMENT '课程会员角色',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '学员是否被锁定',
+  `deadlineNotified` int(10) NOT NULL DEFAULT '0' COMMENT '有效期通知',
   `createdTime` int(10) unsigned NOT NULL COMMENT '学员加入课程时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `courseId` (`courseId`,`userId`)

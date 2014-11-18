@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 interface UserService
 {
     
-    public function getUser($id);
+    public function getUser($id, $lock = false);
 
     public function getUserByNickname($nickname);
 
@@ -126,7 +126,7 @@ interface UserService
 
     /**
      * 
-     * 绑定第三方登录的账号到系统中的用户账号
+     * 绑定第三方登录的帐号到系统中的用户帐号
      * 
      */
     public function bindUser($type, $fromId, $toId, $token);

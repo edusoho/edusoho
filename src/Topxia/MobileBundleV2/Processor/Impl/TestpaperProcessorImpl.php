@@ -367,6 +367,19 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         		return $this->coverTestpaperItems($items);
 	}
 
+	public function filterQuestionStem($stem)
+	{
+		$ext = $this;
+		$baseUrl = $this->request->getSchemeAndHttpHost();
+        		$stem = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function($matches) use ($baseUrl, $ext) {
+			$url = $ext->controller->get('topxia.twig.web_extension')->getFileUrl($matches[1]);
+			$url = $baseUrl . $url;
+            		return "<img src='{$url}' />";
+       		 }, $stem);
+
+        		return $stem;
+	}
+
 	private function coverTestpaperItems($items)
 	{
 		$controller = $this;
@@ -414,6 +427,8 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	public function filterMetas($itemValue)
 	{
 		$question = $itemValue['question'];
+		$question['stem'] = $this->filterQuestionStem($question['stem']);
+		$itemValue['question'] = $question;
 		if (isset($question['metas'])) {
 			$metas= $question['metas'];
 			if (isset($metas['choices'])) {
