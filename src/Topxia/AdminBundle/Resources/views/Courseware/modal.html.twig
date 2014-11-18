@@ -15,19 +15,21 @@
 		</div>
 
 		<div class="form-group">
-			<label class="col-md-3 control-label" for="courseware-weight-field">主知识点</label>
+			<label class="col-md-3 control-label" for="courseware-mainKnowledgeId-field">
+				主知识点
+			</label>
 			<div class="col-md-7 controls">
-				<input class="form-control" id="courseware-weight-field" type="text" name="mainKnowledgeId" value="{{ courseware.mainKnowledgeId|default(null) }}" >
+				<input class="form-control" id="courseware-mainKnowledgeId-field" type="text" name="mainKnowledgeId" value="{{ courseware.mainKnowledgeId|default(null) }}" >
 				<div class="help-block"></div>
 			</div>
 		</div>
 
 		<div class="form-group">
-			<div class="col-md-3 control-label" for="courseware-weight-field">
-				<label>关联知识点</label>
-			</div>
+			<label class="col-md-3 control-label" for="courseware-relatedKnowledgeIds-field">
+				关联知识点
+			</label>
 			<div class="col-md-7 controls">
-				<input class="form-control" id="courseware-weight-field" type="text" name="relatedKnowledgeIds" value="{{ courseware.relatedKnowledgeIds|default(null) }}" >
+				<input class="form-control" id="courseware-relatedKnowledgeIds-field" type="text" name="relatedKnowledgeIds" value="{{ courseware.relatedKnowledgeIds|default(null) }}" >
 			</div>
 		</div>
 

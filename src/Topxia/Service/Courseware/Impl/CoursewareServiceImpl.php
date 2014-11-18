@@ -40,6 +40,7 @@ class CoursewareServiceImpl extends BaseService implements CoursewareService
 
     public function updateCourseware($id,$courseware)
     {
+        $courseware = $this->filterCoursewareFields($courseware);
         return $this->getCoursewareDao()->updateCourseware($id,$courseware);
     }
 
@@ -76,6 +77,7 @@ class CoursewareServiceImpl extends BaseService implements CoursewareService
     private function filterCoursewareFields($courseware)
     {
         $courseware = ArrayToolkit::parts($courseware,array('mainKnowledgeId','relatedKnowledgeIds','tagIds','source','title','image','categoryId','url'));
+        $courseware['knowledgeIds'] = array_merge($courseware['mainKnowledgeId'],$courseware['relatedKnowledgeIds']);
         $courseware['type'] = 'video';
         $courseware['userId'] = $this->getCurrentUser()->id;
         $courseware['createdTime'] = time();

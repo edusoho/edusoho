@@ -18,7 +18,7 @@ class CoursewareController extends BaseController
 
             if(!empty($videoInfo)){
                 $title = $videoInfo->video->title;
-                return $this->createJsonResponse(array("title" => $title,'categoryId' => $categoryId ));
+                return $this->createJsonResponse(array("title" => $title ));
             } else {
                 return $this->createJsonResponse(array("status" => "failed")); 
             }
