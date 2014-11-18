@@ -14,13 +14,13 @@ class CoursewareController extends BaseController
             if($fields['method'] == 'tag'){
                 $conditions = array(
                     'tagIds' => $fields['tagIds'],
-                    'knowledgeIds' => $fields['knowledgeIds'],
+                    'knowledgeId' => $fields['knowledgeId'],
                     'categoryId' => $categoryId
                 );
             } else {
                 $conditions = array(
                     'title' => $fields['title'],
-                    'knowledgeIds' => $fields['knowledgeIds'],
+                    'knowledgeId' => $fields['knowledgeId'],
                     'categoryId' => $categoryId
                 );
             }

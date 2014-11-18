@@ -67,7 +67,7 @@ class CoursewareDaoImpl extends BaseDao implements CoursewareDao
             unset($conditions['tagIds']);
         }
 
-        if (isset($conditions['knowledgeIds'])) {
+        if (isset($conditions['knowledgeId'])) {
             $conditions['knowledgesLike'] = '%\"'.$conditions['knowledgeId'].'\"';
             unset($conditions['knowledgeIds']);
         }
