@@ -3,11 +3,15 @@
 {% block title %}课件管理 - {{ parent() }}{% endblock %}
 {% set nav = 'course' %}
 {% set side_nav = 'courseware' %}
+<<<<<<< HEAD
 {% set script_controller = 'courseware/main' %}
+=======
+>>>>>>> Custom/haoxue_addCourseware
 
 {% block main %}
 <div class="page-header clearfix">
   <h1 class="pull-left">课件管理</h1>
+    <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_courseware_create', {categoryId:category.id}) }}">添加课件</button>
 </div>
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
@@ -36,5 +40,6 @@
   </form>
 
 <div class="courseware-list">
+
 <div>
 {% endblock %}
