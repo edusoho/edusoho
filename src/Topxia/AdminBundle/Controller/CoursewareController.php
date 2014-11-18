@@ -2,15 +2,48 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Paginator;
 use Topxia\Service\Util\CCVideoClientFactory;
 
 class CoursewareController extends BaseController
 {
     public function manageAction(Request $request, $categoryId)
     {
+        $fields = $request->query->all();
+        if(!empty($fields)){
+            if($fields['method'] == 'tag'){
+                $conditions = array(
+                    'tagIds' => $fields['tagIds'],
+                    'knowledgeIds' => $fields['knowledgeIds'],
+                    'categoryId' => $categoryId
+                );
+            } else {
+                $conditions = array(
+                    'title' => $fields['title'],
+                    'knowledgeIds' => $fields['knowledgeIds'],
+                    'categoryId' => $categoryId
+                );
+            }
+        } else {
+            $conditions = array('categoryId' => $categoryId);
+        }
+
+        $count = $this->getCoursewareService()->searchCoursewaresCount($conditions);
+
+        $paginator = new Paginator($this->get('request'), $count, 6);
+
+        $coursewares = $this->getCoursewareService()->searchCoursewares(
+            $conditions, 
+            array('createdTime','desc'),
+            $paginator->getOffsetCount(),  
+            $paginator->getPerPageCount()
+        );
+
         $category = $this->getCategoryService()->getCategory($categoryId);
+
         return $this->render('TopxiaAdminBundle:Courseware:manage.html.twig',array(
-            'category' => $category
+            'category' => $category,
+            'coursewares' => $coursewares
         ));
     }
 

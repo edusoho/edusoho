@@ -1,4 +1,5 @@
 <?php 
+
 namespace Topxia\Service\Courseware\Impl;
 
 use Topxia\Service\Common\BaseService;
@@ -12,14 +13,15 @@ class CoursewareServiceImpl extends BaseService implements CoursewareService
         return $this->getCoursewareDao()->getCourseware($id);
     }
 
-    public function searchCourseware(array $conditions, $sort, $start, $limit)
+    public function searchCoursewares(array $conditions, $orderBy, $start, $limit)
     {
-
+        return $this->getCoursewareDao()->searchCoursewares($conditions,$orderBy,$start,$limit);
     }
 
-    public function searchCoursewareCount($conditions)
+    public function searchCoursewaresCount($conditions)
     {
-
+        $count = $this->getCoursewareDao()->searchCoursewaresCount($conditions);
+        return $count;
     }
 
     public function createCourseware($courseware)

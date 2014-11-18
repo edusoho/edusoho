@@ -4,11 +4,38 @@
 {% set nav = 'course' %}
 {% set side_nav = 'courseware' %}
 
+{% set script_controller = 'courseware/main' %}
+
 {% block main %}
 <div class="page-header clearfix">
   <h1 class="pull-left">课件管理</h1>
     <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_courseware_create', {categoryId:category.id}) }}">添加课件</button>
 </div>
+  <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="知识点搜索" name="knowledgeIds[]" value="{{ app.request.get('knowledges[]') }}">
+      <span class="glyphicon glyphicon-tasks"></span>
+    </div>
+
+    <div class="form-group">
+      <select class="form-control" name="method" id="method">
+        {{ select_options(dict('courseware'), app.request.query.get('method')) }}
+      </select>
+    </div>
+
+    <div class="form-group" id="tags">
+      <input class="form-control" type="text" placeholder="标签搜索" name="tagIds[]" value="{{ app.request.get('tags[]') }}">
+      <span class="glyphicon glyphicon-tasks"></span>
+    </div>
+
+    <div class="form-group" style="display:none;" id="title">
+      <input class="form-control" type="text" placeholder="标题关键词搜索" name="title" value="{{ app.request.get('title') }}">
+    </div>
+
+    <button class="btn btn-primary">搜索</button>
+
+  </form>
 
 <div class="courseware-list">
 
