@@ -28,7 +28,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             );
             return $userinfo;
         }
-        return $data;
+        return "error";
     }
 
     public function getPlugins()
