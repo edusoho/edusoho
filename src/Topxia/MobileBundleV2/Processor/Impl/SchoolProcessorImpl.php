@@ -29,7 +29,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             true
             );
 
-            $user  = $this->getUserService->getUser(2);
+            $user  = $this->getUserService()->getUser(2);
             $this->setCurrentUser($user['id'], $request);
             return $this->controller->redirect("http://trymob.edusoho.cn/user/2");
             return json_decode($userinfo);;
