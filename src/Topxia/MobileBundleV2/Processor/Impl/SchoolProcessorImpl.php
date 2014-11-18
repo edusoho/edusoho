@@ -10,6 +10,11 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public $banner;
     
+    public function getWXToken()
+    {
+        return $this->formData;
+    }
+
     public function getPlugins()
     {
         $apps = $this->getAppService()->getCenterApps();

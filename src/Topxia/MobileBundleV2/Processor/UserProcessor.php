@@ -15,4 +15,8 @@ interface UserProcessor
 	public function getUserLastlearning();
 
 	public function getUserMessages();
+
+	public function getMessageList();
+
+	public function sendMessage();
 }
