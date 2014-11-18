@@ -176,6 +176,8 @@ class MaterialLibController extends BaseController {
 	{
 		$token = $this->getTokenService()->verifyToken('hlsvideo.view', $token);
 		
+		var_dump($token);exit();
+		
 		if (empty($token)) {
 			$fakeKey = $this->getTokenService()->makeFakeTokenString(16);
 			return new Response($fakeKey);
