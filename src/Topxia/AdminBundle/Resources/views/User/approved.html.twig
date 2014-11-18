@@ -34,7 +34,8 @@
         <td>{{user.email}}</td>
         <td>{{user.approvalTime | date('Y-m-d H:i')}}</td>
         <td>
-         <a data-url="{{ path('admin_approval_cancel', {id:user.id}) }}" class="btn btn-default btn-sm cancel-approval">撤销</a>
+         <a data-url="{{ path('admin_approval_cancel', {id:user.id}) }}" class="btn btn-default btn-sm cancel-approval">直接撤销</a>
+         <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_approve', {id:user.id}) }}" class="btn btn-default btn-sm">再次审核</a>
         </td>
     </tr>
   {% endfor %}
