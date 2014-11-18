@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class MaterialLibController extends BaseController {
 
 	public function indexAction(Request $request, $type = "all", $viewMode = "thumb", $source = "upload") {
-		$currentUserId = $this->getCurrentUser ()['id'];
+		$currentUser = $this->getCurrentUser ();
+		$currentUserId = $currentUser['id'];
 		
 		$keyWord = $request->query->get ( 'keyword' ) ?  : "";
 		$sortBy = $request->query->get ( 'sortBy' ) ?  : "latestUpdated";
