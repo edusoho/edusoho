@@ -55,6 +55,11 @@ define(function(require, exports, module) {
         },
 
         deleteItem: function(e) {
+            var teacherCounts=$("#teacher-list-group").children("li").length;
+            if(teacherCounts == 1){
+                alert("课程至少需要一个教师");
+                return ;
+            }
             $(e.currentTarget).parents('[data-role=item]').remove();
             this._toggleList();
         },
@@ -66,7 +71,6 @@ define(function(require, exports, module) {
         _setupAttrsFromHtml: function() {
             var model = $.parseJSON(this.$('[data-role=model]').html());
             var itemTemplate = Handlebars.compile(this.$('[data-role=item-template]').html());
-
             this.set('model', model);
             this.set('itemTemplate', itemTemplate);
         },
