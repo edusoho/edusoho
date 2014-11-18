@@ -20,23 +20,91 @@ class CoursewareController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $courseware = $request->request->all();
-            $factory = new CCVideoClientFactory();
-            $client = $factory->createClient();
-            $userIdAndVideoId = $this->getUserIdAndVideoId($courseware['url']);
-            $videoInfo = $client->getVideoInfo($userIdAndVideoId['userId'],$userIdAndVideoId['videoId']);
-            $videoInfo = json_decode($videoInfo);
-            $courseware['title'] = $videoInfo->video->title;
-            $courseware['image'] = $videoInfo->video->image;
-            $courseware['releatedKnowledgeIds'] = array_filter(explode(',', $courseware['releatedKnowledgeIds']));
-            $courseware['tagIds'] = array_filter(explode(',', $courseware['tagIds']));
+            $videoMeta = $this->getVideoMeta($courseware['url']);
+            $courseware = $this->filterVideoField($videoMeta,$courseware);
             $courseware['categoryId'] = $categoryId;
-            var_dump($courseware);exit();
-            $this->getCoursewareService()->createCourseware($courseware);
+            $courseware = $this->getCoursewareService()->createCourseware($courseware);
+
+            if (empty($courseware)) {
+                return $this->createJsonResponse(array("status" =>'success'));
+            } else {
+                return $this->createJsonResponse(array("status" =>'fail'));
+            }
         }
 
         return $this->render('TopxiaAdminBundle:Courseware:modal.html.twig',array(
             'category' => $category
         ));
+    }
+
+    public function deleteAction(Request $request)
+    {
+        $ids = $request->request->get('ids', array());
+        $id = $request->query->get('id', null);
+
+        if ($id) {
+            array_push($ids, $id);
+        }
+        $result = $this->getCoursewareService()->deleteCoursewaresByIds($ids);
+        if($result){
+            return $this->createJsonResponse(array("status" =>"success"));
+        } else {
+            return $this->createJsonResponse(array("status" =>"failed"));
+        }
+    }
+
+    public function editAction(Request $request, $categoryId, $id)
+    {
+        $courseware = $this->getCoursewareService()->getCourseware($id);
+        if (empty($courseware)) {
+            throw $this->createNotFoundException('课件已经删除或者不存在.');
+        }
+
+        $category = $this->getCategoryService()->getCategory($categoryId);
+        $courseware['relatedKnowledgeIds'] = implode(",", $courseware['relatedKnowledgeIds']);
+        $courseware['tagIds'] = implode(",", $courseware['tagIds']);
+
+        if ($request->getMethod() == 'POST') {
+            $courseware = $this->request->all();
+            $videoMeta = $this->getVideoMeta($courseware['url']);
+            $courseware = $this->filterVideoField($videoMeta,$courseware);
+            $courseware = $this->getCoursewareService()->updateCourseware($id,$courseware);
+
+            if (empty($courseware)) {
+                return $this->createJsonResponse(array("status" =>'success'));
+            } else {
+                return $this->createJsonResponse(array("status" =>'fail'));
+            }
+        }
+
+        return $this->render('TopxiaAdminBundle:Courseware:modal.html.twig',
+            array(
+                'courseware' => $courseware,
+                'category' => $category,
+            )
+        );
+    }
+
+    private function filterVideoField($videoMeta,$courseware)
+    {
+        $courseware['title'] = $videoMeta['title'];
+        $courseware['image'] = $videoMeta['image'];
+        $courseware['relatedKnowledgeIds'] = array_filter(explode(',', $courseware['relatedKnowledgeIds']));
+        $courseware['tagIds'] = array_filter(explode(',', $courseware['tagIds']));
+        return $courseware;
+    }
+
+    private function getVideoMeta($videoUrl)
+    {
+        $factory = new CCVideoClientFactory();
+        $client = $factory->createClient();
+        $userIdAndVideoId = $this->getUserIdAndVideoId($videoUrl);
+        $videoInfo = $client->getVideoInfo($userIdAndVideoId['userId'],$userIdAndVideoId['videoId']);
+        $videoInfo = json_decode($videoInfo);
+        return array(
+            'title' => $videoInfo->video->title,
+            'image' => $videoInfo->video->image
+        );
     }
 
     private function getUserIdAndVideoId($url)

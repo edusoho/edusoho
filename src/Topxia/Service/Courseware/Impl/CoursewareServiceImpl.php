@@ -1,4 +1,5 @@
 <?php 
+namespace Topxia\Service\Courseware\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Courseware\CoursewareService;
@@ -8,7 +9,7 @@ class CoursewareServiceImpl extends BaseService implements CoursewareService
 {
     public function getCourseware($id)
     {
-
+        return $this->getCoursewareDao()->getCourseware($id);
     }
 
     public function searchCourseware(array $conditions, $sort, $start, $limit)
@@ -28,7 +29,6 @@ class CoursewareServiceImpl extends BaseService implements CoursewareService
         }
 
         $courseware = $this->filterCoursewareFields($courseware);
-        
         $courseware = $this->getCoursewareDao()->addCourseware($courseware);
 
         $this->getLogService()->info('courseware', 'create', "创建课件《({$courseware['title']})》({$courseware['id']})");
@@ -38,22 +38,42 @@ class CoursewareServiceImpl extends BaseService implements CoursewareService
 
     public function updateCourseware($id,$courseware)
     {
-
+        return $this->getCoursewareDao()->updateCourseware($id,$courseware);
     }
 
     public function deleteCourseware($id)
     {
+        $checkCourseware = $this->getArticle($id);
 
+        if(empty($checkCourseware)){
+            throw $this->createServiceException("课件不存在，操作失败。");
+        }
+
+        $res = $this->getCoursewareDao()->deleteCourseware($id);
+        $this->getLogService()->info('Courseware', 'delete', "课件#{$id}永久删除");
+        return true;
+    }
+
+    public function deleteCoursewaresByIds($ids)
+    {
+        if(count($ids) == 1){
+            $this->deleteCourseware($ids[0]);
+        }else{
+            foreach ($ids as $id) {
+                $this->deleteCourseware($id);
+            }
+        }
+        return true;
     }
 
     private function getCoursewareDao()
     {
-        $this->createService('Courseware.CoursewareDao');
+        return $this->createDao('Courseware.CoursewareDao');
     }
 
     private function filterCoursewareFields($courseware)
     {
-        $courseware = ArrayToolkit::parts($courseware,array('mainKnowledgeId','releatedKnowledgeIds','tagIds','source','title','image','categoryId','url'));
+        $courseware = ArrayToolkit::parts($courseware,array('mainKnowledgeId','relatedKnowledgeIds','tagIds','source','title','image','categoryId','url'));
         $courseware['type'] = 'video';
         $courseware['userId'] = $this->getCurrentUser()->id;
         $courseware['createdTime'] = time();
