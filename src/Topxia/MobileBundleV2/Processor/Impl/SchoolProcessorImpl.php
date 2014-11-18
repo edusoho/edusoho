@@ -398,6 +398,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         curl_setopt($curl, CURLOPT_HEADER, 0);
         if ($ssl) {
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
         }
 
         if (strtoupper($method) == 'POST') {
