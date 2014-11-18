@@ -14,17 +14,6 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->getOrder($id);
     }
 
-    public function getOrderByTargetIdAndUserId($targetId,$userId)
-    {
-       return $this->getOrderDao()->getOrderByTargetIdAndUserId($targetId,$userId);
-    }
-
-    public function cancelOrders($targetId,$userId)
-    {
-        $status = 'cancelled';
-        return $this->getOrderDao()->updateOrderStatus($targetId,$userId,$status);
-    }
-
     public function getOrderBySn($sn)
     {
         return $this->getOrderDao()->getOrderBySn($sn);
@@ -75,7 +64,6 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order['status'] = 'created';
         $order['createdTime'] = time();
-
         $order = $this->getOrderDao()->addOrder($order);
 
         if ($order['coupon']) {
@@ -199,7 +187,20 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function cancelOrder($id, $message = '')
     {
-        
+        $order = $this->getOrder($id);
+        if (empty($order)) {
+            throw $this->createServiceException('订单不存在，取消订单失败！');
+        }
+
+        if (!in_array($order['status'], array('created',))) {
+            throw $this->createServiceException('当前订单状态不能取消订单！');
+        }
+
+        $order = $this->getOrderDao()->updateOrder($order['id'], array('status' => 'cancelled'));
+
+        $this->_createLog($order['id'], 'cancelled', $message);
+
+        return $order;
     }
 
     public function sumOrderPriceByTarget($targetType, $targetId)
@@ -422,6 +423,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         $orders = $this->getOrderDao()->searchOrders($conditions, $orderBy, $start, $limit);
 
         return ArrayToolkit::index($orders, 'id');
+    }
+
+    public function sumOrderAmounts($startTime,$endTime,array $courseId)
+    {
+        return $this->getOrderDao()->sumOrderAmounts($startTime,$endTime,$courseId);
     }
 
     public function searchOrderCount($conditions)

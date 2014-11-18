@@ -9,7 +9,7 @@
       <div class="popover-content">
         <div class="message-content">
                <strong>我：</strong> 
-              {{message.content}}
+              {{message.content|raw}}
         </div>
         <div class="message-footer">
           <span class="text-muted">{{ message.createdTime|smart_time }}</span>

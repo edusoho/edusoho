@@ -35,6 +35,9 @@
               {% if order.status == 'refunding' %}
                 <a href="javascript:;" class="text-sm cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">取消退款</a>
               {% endif %}
+              {% if order.status == 'created' %}
+                <a href="javascript:;" class="text-sm cancel" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消</a>
+              {% endif %}
             </div>
           </td>
         </tr>

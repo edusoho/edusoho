@@ -36,17 +36,18 @@
           {{ app.developerName }}
         </td>
         <td>
-          {% if app.code == 'vip' %}
+          {% if app.code|lower == 'vip' %}
             <a href="../vip/list" class="btn btn-primary">管理</a>
-          {% elseif app.code == 'coupon' %}
+          {% elseif app.code|lower == 'coupon' %}
             <a href="../coupon" class="btn btn-primary">管理</a>
-          {% elseif app.code == 'QuestionPlus' %}
+          {% elseif app.code|lower == 'questionplus' %}
             <a href="../question/plumber/setting" class="btn btn-primary">管理</a>
-          {% elseif app.code != 'MAIN' %}
+          {% elseif app.code|lower == 'homework' %}
+          {% elseif app.code|lower != 'main' %}
             <a href="../{{ app.code|lower }}/index" class="btn btn-primary">管理</a>
           {% endif %}
 
-          {% if setting('developer.debug') and app.code != 'MAIN' %}
+          {% if setting('developer.debug') and app.code|lower != 'main' %}
             <a href="javascript:;" data-url="{{ path('admin_app_uninstall', {code:app.code}) }}" class="btn btn-danger uninstall-btn">卸载</a>
           {% endif %}
         </td>

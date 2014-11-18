@@ -32,6 +32,7 @@ define(function(require, exports, module) {
         attrs: {
             courseId: null,
             courseUri: null,
+            playStatus: null,
             dashboardUri: null,
             lessonId: null
         },
@@ -82,16 +83,21 @@ define(function(require, exports, module) {
         _onFinishLearnLesson: function() {
             var $btn = this.element.find('[data-role=finish-lesson]'),
                 toolbar = this._toolbar,
+                playStatus = this.get('playStatus'),
                 self = this;
-            var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
-            $.post(url, function(response) {
-                if (response.isLearned) {
-                    $('#course-learned-modal').modal('show');
-                }
-                $btn.addClass('btn-success');
-                $btn.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
-                toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
-            }, 'json');
+
+                var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
+                $.post(url, function(response) {
+                    if (response.isLearned) {
+                        $('#course-learned-modal').modal('show');
+                    }
+
+                    $btn.addClass('btn-success');
+                    $btn.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
+                    toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
+
+                }, 'json');
+
         },
 
         _onCancelLearnLesson: function() {
@@ -110,12 +116,13 @@ define(function(require, exports, module) {
             this.set('courseId', this.element.data('courseId'));
             this.set('courseUri', this.element.data('courseUri'));
             this.set('dashboardUri', this.element.data('dashboardUri'));
+
         },
 
         _initToolbar: function() {
             this._toolbar = new Toolbar({
                 element: '#lesson-dashboard-toolbar',
-                activePlugins: ['lesson', 'question', 'note', 'material'],
+                activePlugins:  app.arguments.plugins,
                 courseId: this.get('courseId')
             }).render();
 
@@ -176,8 +183,11 @@ define(function(require, exports, module) {
             this.element.find('[data-role=lesson-content]').hide();
 
             var that = this;
-
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
+
+
+                that.element.find('[data-role=lesson-title]').html(lesson.title);
+
 
                 function recordWatchTime(){
                     url="../../course/"+lesson.id+'/watch/time/2';
@@ -204,10 +214,15 @@ define(function(require, exports, module) {
                 } else {
                     that.element.find('[data-role=unit-number]').parent().hide().next().hide();
                 }
+
+
+
                 if ( (lesson.status != 'published') && !/preview=1/.test(window.location.href)) {
                     $("#lesson-unpublished-content").show();
                     return;
                 }
+
+                var number = lesson.number -1;
 
                 if (lesson.canLearn.status != 'yes') {
                     $("#lesson-alert-content .lesson-content-text-body").html(lesson.canLearn.message);
@@ -252,6 +267,7 @@ define(function(require, exports, module) {
                         
                         $.post("../../course/"+lesson.id+'/watch/paused');
                         that._onFinishLearnLesson();
+                        that.set('playStatus', 'ended');
                     });
                     mediaPlayer.on('ready', function() {
                        setInterval(recordWatchTime, 120000);
@@ -289,6 +305,7 @@ define(function(require, exports, module) {
                                     return ;
                                 }
                                 that._onFinishLearnLesson();
+                                that.set('playStatus', 'ended');
                                 player.currentTime(0);
                                 player.pause();
                             });
@@ -337,6 +354,7 @@ define(function(require, exports, module) {
                             enableAutosize:true,
                             success: function(media) {
                                 media.addEventListener("ended", function() {
+                                    that.set('playStatus', 'ended');
                                     $.post("../../course/"+lesson.id+'/watch/paused');
                                     that._onFinishLearnLesson();
                                 });
