@@ -6,9 +6,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Endroid\QrCode\QrCode;
+use Topxia\AdminBundle\Controller\BaseController as AdminBaseController;
 
-class MobileController extends BaseController
+class MobileController extends AdminBaseController
 {
+    var $code = '';
     public function indexAction(Request $request)
     {
         $mobile = $this->setting('mobile', array());
@@ -17,15 +19,20 @@ class MobileController extends BaseController
             return $this->createMessageResponse('info', '客户端尚未开启！');
         }
 
+
+        $result = $this->createAPIClient()->get('/me');
+        $this->code = $result['mobileCode'];
+
+        var_dump($result['mobileCode']);
         return $this->render('TopxiaWebBundle:Mobile:index.html.twig', array(
             'host' => $request->getHttpHost(),
+           // 'mobileCode' => $result["mobileCode"] : ,"edusoho" 000000000000000000000000000000000000
         ));
     }
 
     public function downloadQrcodeAction(Request $request)
     {
-        $url = $this->generateUrl('mobile_download', array('from' => 'qrcode'), true);
-
+        $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', ), true);
         $qrCode = new QrCode();
         $qrCode->setText($url);
         $qrCode->setSize(150);
@@ -41,7 +48,7 @@ class MobileController extends BaseController
     {
         $params = $request->query->all();
         $baseUrl = $request->getSchemeAndHttpHost();
-        return $this->redirect($baseUrl . '/mapi_v2/School/getDownloadUrl?' . http_build_query($params));
+        return $this->redirect($baseUrl . "/mapi_v2/School/getDownloadUrl?code={$this->code}" . http_build_query($params));
     }
 
 }
