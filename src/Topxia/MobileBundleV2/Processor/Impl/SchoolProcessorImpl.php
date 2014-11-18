@@ -21,10 +21,10 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             );
 
         $data = json_decode($data);
-        if (!empty($data) && isset($data["access_token"])) {
+        if (!empty($data) && isset($data->access_token)) {
             $userinfo = $this->sendRequest(
             "GET", 
-            "https://api.weixin.qq.com/sns/userinfo?access_token=" . $data["access_token"] ."&openid=" . $data["openid"] . "&lang=zh_CN",
+            "https://api.weixin.qq.com/sns/userinfo?access_token=" . $data->access_token ."&openid=" . $data->openid . "&lang=zh_CN",
             array(),
             true
             );
