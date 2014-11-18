@@ -13,7 +13,11 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     public function getWXToken()
     {
         $code = $this->request->query->get('code', 1);
-        $data = $this->sendRequest("GET", "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxe2d699a880ac55d5&secret=de737f49ba8b4bc349b5409cc25f6432 &code=" . $code . "&grant_type=authorization_code");
+        $data = $this->sendRequest(
+            "GET", 
+            "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxe2d699a880ac55d5&secret=de737f49ba8b4bc349b5409cc25f6432 &code=" . $code . "&grant_type=authorization_code",
+            true
+            );
         return $data;
     }
 
@@ -381,7 +385,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         return $banner;
     }
 
-    private function sendRequest($method, $url, $params = array())
+    private function sendRequest($method, $url, $params = array(), $ssl = false)
     {
         $curl = curl_init();
 
@@ -391,6 +395,9 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         curl_setopt($curl, CURLOPT_TIMEOUT, 20);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 0);
+        if ($ssl) {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        }
 
         if (strtoupper($method) == 'POST') {
             curl_setopt($curl, CURLOPT_POST, 1);
