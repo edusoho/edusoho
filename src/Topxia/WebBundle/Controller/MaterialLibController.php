@@ -174,7 +174,6 @@ class MaterialLibController extends BaseController {
 	
 	public function hlskeyurlAction(Request $request, $fileId, $token)
 	{
-		var_dump($token);exit();
 		$token = $this->getTokenService()->verifyToken('hlsvideo.view', $token);
 		
 		
