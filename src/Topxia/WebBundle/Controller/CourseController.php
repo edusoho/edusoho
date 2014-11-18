@@ -459,9 +459,11 @@ class CourseController extends BaseController
 			return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
 		}
 
+		$subject = array('1' => '语文', '2' => '数学');
 		return $this->render('TopxiaWebBundle:Course:create.html.twig', array(
 			'userProfile'=>$userProfile,
-			'type'=>$type
+			'type'=>$type,
+			'subject'=>$subject
 		));
 	}
 
