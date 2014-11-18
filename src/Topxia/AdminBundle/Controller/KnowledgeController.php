@@ -27,9 +27,8 @@ class KnowledgeController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields =  $request->request->all();
             $id = $fields['id'];
-            if (empty($fields['isHidden'])){
-                $fields['isHidden'] = '0';
-            }
+            $fields['isHidden'] = empty($fields['isHidden']) ? 0 : $fields['isHidden'];
+
             $knowledge = $this->getKnowledgeService()->updateKnowledge($id, $fields);
             $result = array(
                 'tid' => $fields['tid'],
