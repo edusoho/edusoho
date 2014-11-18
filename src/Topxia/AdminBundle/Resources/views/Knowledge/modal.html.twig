@@ -5,7 +5,7 @@
 {% block body %}
 <div id="knowledge-creater-widget">
 
-	<form id="knowledge-form" class="form-horizontal" action="{% if knowledge.id %}{{ path('admin_knowledge_edit', {categoryId:knowledge.categoryId,id:knowledge.id}) }}{% else %}{{ path('admin_knowledge_create', {categoryId:knowledge.categoryId}) }}{% endif %}" method="post">
+	<form id="knowledge-form" class="form-horizontal" action="{% if knowledge.id %}{{ path('admin_knowledge_edit', {id:knowledge.id}) }}{% else %}{{ path('admin_knowledge_create') }}{% endif %}" method="post">
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="knowledge-name-field">名称</label>
 			<div class="col-md-8 controls">
@@ -40,7 +40,10 @@
 		<input type="hidden" name="id" value="{{ knowledge.id }}">
 		<input type="hidden" name="tid" value="{{ knowledge.tid }}">
 		<input type="hidden" name="sequence" value="{{ knowledge.sequence }}">
-		<input type="hidden" name="categoryId" value="{{ knowledge.categoryId }}">
+		<input type="hidden" name="subjectId" value="{{ knowledge.subjectId }}">
+		<input type="hidden" name="materialId" value="{{ knowledge.materialId }}">
+		<input type="hidden" name="gradeId" value="{{ knowledge.gradeId }}">
+		<input type="hidden" name="term" value="{{ knowledge.term }}">
 		<input type="hidden" name="parentId" value="{{ knowledge.parentId }}">
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	</form>

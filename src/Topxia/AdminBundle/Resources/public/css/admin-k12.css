@@ -9,3 +9,16 @@
   cursor: pointer;
   float: right;
 }
+
+.container.subject {
+	max-width: 100%;
+}
+
+.container.subject {
+	min-height: 132px;
+}
+.subject .btn {
+	width: 68px;
+	margin-bottom: 10px;
+	text-align: center;
+}

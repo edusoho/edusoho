@@ -36,21 +36,45 @@ class KnowledgeDaoImpl extends BaseDao implements KnowledgeDao
         return $this->getKnowledge($this->getConnection()->lastInsertId());
     }
 
+    public function searchKnowledges($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array(); 
+    }
+
     public function findKnowledgeByCategoryId($categoryId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE categoryId = ? ORDER BY sequence ASC";
         return $this->getConnection()->fetchAll($sql, array($categoryId)) ? : array();
     }
 
-    public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId)
+    public function findKnowledgeByParentId($parentId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE categoryId = ? AND parentId = ? ORDER BY sequence ASC";
-        return $this->getConnection()->fetchAll($sql, array($categoryId, $parentId)) ? : array();
+        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? ORDER BY sequence ASC";
+        return $this->getConnection()->fetchAll($sql, array($parentId)) ? : array();
     }
 
     public function findKnowledgeByCode($code)
     {
         $sql = "SELECT * FROM {$this->table} WHERE code = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($code));
+    }
+
+    private function _createSearchQueryBuilder($conditions)
+    {
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'knowledge')
+            ->andWhere('parentId = :parentId')
+            ->andWhere('subjectId = :subjectId')
+            ->andWhere('materialId = :materialId')
+            ->andWhere('gradeId = :gradeId')
+            ->andWhere('term =:term');
+
+        return $builder;
     }
 }

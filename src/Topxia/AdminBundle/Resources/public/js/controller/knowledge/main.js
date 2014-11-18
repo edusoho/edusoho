@@ -10,7 +10,12 @@ define(function(require, exports, module) {
 				enable: true,
 				url:$tree.data('url'),
 				autoParam:["id"],
-				otherParam:{"categoryId":$tree.data('cid')}
+				otherParam:{
+					'gradeId': $('#gradeId').val(),
+					'materialId': $('#materialId').val(),
+					'subjectId': $('#subjectId').val(),
+					'term': $('#term').val()
+				}
 				//dataFilter: filter
 			},
 			view: {
@@ -53,7 +58,8 @@ define(function(require, exports, module) {
 		  		addBtn.bind("click", function(){
 		  			var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");
 		  			var seq = treeNode.children ? treeNode.children.length+1:1;
-		  			var newUrl = $('#add-knowledge').data('turl')+'?pid='+treeNode.id+'&tid='+treeNode.tId+'&seq='+seq;
+		  			var params = '?pid='+treeNode.id+'&tid='+treeNode.tId+'&seq='+seq +'&subjectId='+$('#subjectId').val()+'&materialId='+$('#materialId').val()+'&gradeId='+$('#gradeId').val()+'&term='+$('#term').val();
+		  			var newUrl = $('#add-knowledge').data('turl') + params;
 		  			$('#add-knowledge').data('url', newUrl);
 		  			$('#add-knowledge').click();
 		  		});
@@ -102,48 +108,6 @@ define(function(require, exports, module) {
 	  		
 		};
 
-		/*function filter(treeId, parentNode, childNodes) {
-			if (!childNodes) return null;
-			for (var i=0, l=childNodes.length; i<l; i++) {
-				childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
-			}
-			return childNodes;
-		}
-		function beforeRemove(treeId, treeNode) {
-			var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");
-			zTree.selectNode(treeNode);
-			if(confirm("确认删除 节点 -- " + treeNode.name + " 吗？")) {
-				var flag = false;
-				$.ajax({ 
-					type: 'POST', 
-					url: $tree.data('durl'), 
-					data: {id:treeNode.id}, 
-					success: function(result){
-                    	Notify.success('删除知识点成功！');
-                    	flag = true;
-					}, 
-					error:function() {
-                    	Notify.danger("删除知识点失败！");
-                    	flag = false;
-                	},
-					async:false 
-				});
-				return flag;
-			} else {
-				return false;
-			}
-		}		
-		function beforeEditName(treeId, treeNode, newName) {
-			var pid = treeNode.parentId,
-				cid = treeNode.categoryId,
-				id = treeNode.id,
-				newUrl = $('#edit-knowledge').data('turl')+'?id='+id+'&pid='+pid+'&cid='+cid+'&tid='+treeNode.tId;
-
-			$('#edit-knowledge').data('url', newUrl);
-			$('#edit-knowledge').click();
-			return false;
-		}*/
-
 		function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
 			var pid = treeNodes[0].pId,
 				id = treeNodes[0].id,
@@ -169,26 +133,44 @@ define(function(require, exports, module) {
 			
 		}
 
-/*		function addHoverDom(treeId, treeNode) {
-			var sObj = $("#" + treeNode.tId + "_span");
-			if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
-			var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
-				+ "' title='增加知识点' onfocus='this.blur();'></span>";
-			sObj.after(addStr);
-			var btn = $("#addBtn_"+treeNode.tId);
-			if (btn) btn.bind("click", function(){
-				var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");
-				var seq = treeNode.children ? treeNode.children.length+1:1;
-				var newUrl = $('#add-knowledge').data('turl')+'?pid='+treeNode.id+'&tid='+treeNode.tId+'&seq='+seq;
-				$('#add-knowledge').data('url', newUrl);
-				$('#add-knowledge').click();
-				return false;
-			});
-		};
-		function removeHoverDom(treeId, treeNode) {
-			$("#addBtn_"+treeNode.tId).unbind().remove();
-		};*/
+		$('.select-section').on('change', 'select', function(){
+			$.get($('.select-section').data('url'), {subjectId:$('#subjectId').val(), gradeId:$('#gradeId').val()}, function(result){
+				if(result) {
+					$('#materialId').val(result.id);
+					$('#material').val(result.name);
+					var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");
+					zTree.setting.async.otherParam = {
+						'gradeId': $('#gradeId').val(),
+						'materialId': $('#materialId').val(),
+						'subjectId': $('#subjectId').val(),
+						'term': $('#term').val()
+					};
+					zTree.reAsyncChildNodes(null, "refresh");
+				} else {
+					$('#materialId').val('');
+					$('#material').val('');
+				}
+			})
+		});
 
+		$('#add-knowledge-fake').on('click', function(){
+			if(!$('#gradeId').val()) {
+				Notify.danger('没有选择年级!');
+				return;
+			}
+			if(!$('#subjectId').val()) {
+				Notify.danger('没有选择科目!');	
+				return;
+			} 
+			if(!$('#materialId').val()) {
+				Notify.danger('没有教材!');
+				return;
+			}
+  			var params = '?subjectId='+$('#subjectId').val()+'&materialId='+$('#materialId').val()+'&gradeId='+$('#gradeId').val()+'&term='+$('#term').val();
+  			var newUrl = $('#add-knowledge').data('turl') + params;
+  			$('#add-knowledge').data('url', newUrl);
+  			$('#add-knowledge').click();
+		});
 		$.fn.zTree.init($("#knowledge-tree"), setting);
 
 	}

@@ -98,6 +98,11 @@ class SchoolController extends BaseController
         ));
     }
 
+    public function knowledgeSettingAction(Request $request)
+    {
+        return $this->redirect($this->generateUrl('admin_knowledge'));
+    }
+
     public function classEditorAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {

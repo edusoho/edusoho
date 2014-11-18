@@ -12,11 +12,13 @@ interface KnowledgeService
 		
     public function createKnowledge($knowledge);
 
+    public function searchKnowledges($conditions, $sort, $start, $limit);
+
     public function sort($id, $parentId, $seq);
 
     public function findKnowledgeByCategoryId($categoryId);
 
-    public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
+    public function findKnowledgeByParentId($parentId);
 
     public function findNodesData($categoryId, $parentId);
 

@@ -29,7 +29,7 @@ define(function(require, exports, module) {
                         node.id = result.knowledge.id;
                         zTree.updateNode(node);
                     } else {
-                        zTree.addNodes(node,  {id:(result.knowledge.id), pId:result.knowledge.parentId, name:result.knowledge.name, categoryId:result.knowledge.categoryId});
+                        zTree.addNodes(node,  {id:(result.knowledge.id), pId:result.knowledge.parentId, name:result.knowledge.name});
                     }
                     Notify.success('保存知识点成功！');
 				}).fail(function() {

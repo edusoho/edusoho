@@ -12,9 +12,11 @@ interface KnowledgeDao
 
 	public function createKnowledge($Knowledge);
 
+	public function searchKnowledges($conditions, $sort, $start, $limit);
+
 	public function findKnowledgeByCategoryId($categoryId);
 
-	public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
+	public function findKnowledgeByParentId($parentId);
 
 	public function findKnowledgeByCode($code);
 }
