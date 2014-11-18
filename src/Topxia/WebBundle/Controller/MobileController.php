@@ -20,11 +20,9 @@ class MobileController extends AdminBaseController
             return $this->createMessageResponse('info', '客户端尚未开启！');
         }
 
-
         $result = $this->createAPIClient()->get('/me');
         $this->code = $result['mobileCode'];
 
-        var_dump($result['mobileCode']);
         return $this->render('TopxiaWebBundle:Mobile:index.html.twig', array(
             'host' => $request->getHttpHost(),
             'mobileCode' => ( ($this->code != '') ? $this->code : "edusoho")
