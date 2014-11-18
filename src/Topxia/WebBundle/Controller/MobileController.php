@@ -10,7 +10,8 @@ use Topxia\AdminBundle\Controller\BaseController as AdminBaseController;
 
 class MobileController extends AdminBaseController
 {
-    var $code = '';
+    private $code = '';
+
     public function indexAction(Request $request)
     {
         $mobile = $this->setting('mobile', array());
@@ -26,13 +27,17 @@ class MobileController extends AdminBaseController
         var_dump($result['mobileCode']);
         return $this->render('TopxiaWebBundle:Mobile:index.html.twig', array(
             'host' => $request->getHttpHost(),
-           // 'mobileCode' => $result["mobileCode"] : ,"edusoho" 000000000000000000000000000000000000
+            'mobileCode' => ( ($this->code != '') ? $this->code : "edusoho")
         ));
     }
 
     public function downloadQrcodeAction(Request $request)
     {
-        $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', ), true);
+        if ($this->code == ''){
+            $result = $this->createAPIClient()->get('/me');
+            $this->code = $result['mobileCode'];
+        }
+        $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $this->code), true);     
         $qrCode = new QrCode();
         $qrCode->setText($url);
         $qrCode->setSize(150);
@@ -48,7 +53,7 @@ class MobileController extends AdminBaseController
     {
         $params = $request->query->all();
         $baseUrl = $request->getSchemeAndHttpHost();
-        return $this->redirect($baseUrl . "/mapi_v2/School/getDownloadUrl?code={$this->code}" . http_build_query($params));
+        return $this->redirect($baseUrl . "/mapi_v2/School/getDownloadUrl?" . http_build_query($params));
     }
 
 }
