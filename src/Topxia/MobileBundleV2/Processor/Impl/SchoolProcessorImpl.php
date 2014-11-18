@@ -12,7 +12,9 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     
     public function getWXToken()
     {
-        return $this->formData;
+        $code = $this->request->query->get('code', 1);
+        $data = $this->sendRequest("GET", "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxe2d699a880ac55d5&secret=de737f49ba8b4bc349b5409cc25f6432 &code=" . $code . "&grant_type=authorization_code");
+        return $data;
     }
 
     public function getPlugins()
