@@ -760,8 +760,8 @@ material_lib_file_preview_hlskeyurl:
     pattern: /materialLib/file/{fileId}/preview/hlskeyurl
     defaults: { _controller: TopxiaWebBundle:MaterialLib:hlskeyurl }  
     
-material_lib_file_preview_header:
-    pattern:  /materialLib/file/{fileId}/preview/header
+material_lib_file_preview_content:
+    pattern:  /materialLib/file/{fileId}/preview/content
     defaults: { _controller: TopxiaWebBundle:CourseLesson:file }
            
 course_manage_list_teacher_test_finished:

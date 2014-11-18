@@ -7,7 +7,7 @@
 {% block body %}
 
 		{% if file.type == 'video' %}
-				<div id="lesson-preview-video-player" data-url="{{ path('material_lib_file_preview_header', {fileId: file.id}) }}" data-hls-url="{{ hlsUrl }}"
+				<div id="lesson-preview-video-player" data-url="{{ path('material_lib_file_preview_content', {fileId: file.id}) }}" data-hls-url="{{ hlsUrl }}"
                     {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
                         data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
                     {% endif %}
@@ -18,10 +18,10 @@
                 ></div>
         {% elseif file.type == 'audio' %}
             <audio id="lesson-preview-audio-player" width="100%" height="100%">
-                 <source src="{{ path('material_lib_file_preview_header', {fileId: file.id}) }}" type='audio/mp3' />
+                 <source src="{{ path('material_lib_file_preview_content', {fileId: file.id}) }}" type='audio/mp3' />
             </audio>
         {% elseif file.type == 'ppt' %}
-            <div id="lesson-preview-ppt-player" data-url="{{ path('material_lib_file_preview_header', {fileId: file.id}) }}"></div>
+            <div id="lesson-preview-ppt-player" data-url="{{ path('material_lib_file_preview_content', {fileId: file.id}) }}"></div>
         {% endif %}
 
         <script>app.load('course/lesson-preview')</script>
