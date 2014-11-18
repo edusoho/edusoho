@@ -27,11 +27,14 @@ class KnowledgeController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields =  $request->request->all();
             $id = $fields['id'];
+            if (empty($fields['isHidden'])){
+                $fields['isHidden'] = '0';
+            }
             $knowledge = $this->getKnowledgeService()->updateKnowledge($id, $fields);
             $result = array(
                 'tid' => $fields['tid'],
                 'type' => 'edit',
-                'knowledge' => $knowledge
+                'knowledge' => $knowledge,
             );
             return $this->createJsonResponse($result);
         }
