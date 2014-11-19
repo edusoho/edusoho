@@ -1,7 +1,7 @@
 <tr>
   <td><input type="checkbox"  data-role="batch-select"></td>
   <td>{{ courseware.title }}</td>
-  <td>{{ courseware.knowledgeIds }}</td>
+  <td>{{ knowledge.name|default(null) }}</td>
   <td>
     <a class="btn btn-link update-courseware-btn" data-url=""><span class="glyphicon glyphicon-pencil"></span></a>
     <a class="btn btn-link update-courseware-btn" data-url=""><span class="glyphicon glyphicon-eye-open"></span></a>

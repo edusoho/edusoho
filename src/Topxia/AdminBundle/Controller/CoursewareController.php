@@ -4,28 +4,31 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\CCVideoClientFactory;
+use Topxia\Common\ArrayToolkit;
 
 class CoursewareController extends BaseController
 {
     public function manageAction(Request $request, $categoryId, $type)
     {
-        $fields = $request->query->all();
-        if(!empty($fields)){
-            if($fields['method'] == 'tag'){
-                $conditions = array(
-                    'tagIds' => $fields['tagIds'],
-                    'knowledgeId' => $fields['knowledgeId'],
-                    'categoryId' => $categoryId
-                );
-            } else {
-                $conditions = array(
-                    'title' => $fields['title'],
-                    'knowledgeId' => $fields['knowledgeId'],
-                    'categoryId' => $categoryId
-                );
-            }
-        } else {
+        $method = $request->query->get('method');
+        $knowledgeId = $request->query->get('knowledgeId');
+        $tagIds = $request->query->get('tagIds');
+        $title = $request->query->get('title');
+
+        if (empty($method)){
             $conditions = array('categoryId' => $categoryId);
+        } elseif($fields['method'] == 'tag'){
+            $conditions = array(
+                'tagIds' => $fields['tagIds'],
+                'knowledgeId' => $fields['knowledgeId'],
+                'categoryId' => $categoryId
+            );
+        } else {
+            $conditions = array(
+                'title' => $fields['title'],
+                'knowledgeId' => $fields['knowledgeId'],
+                'categoryId' => $categoryId
+            );
         }
 
         $coursewaresCount = $this->getCoursewareService()->searchCoursewaresCount($conditions);
@@ -42,14 +45,20 @@ class CoursewareController extends BaseController
         $category = $this->getCategoryService()->getCategory($categoryId);
 
         if ($type == 'list') {
+            $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($coursewares,'mainKnowledgeId'));
+            $knowledges = ArrayToolkit::index($knowledges, 'id');
+
             return $this->render('TopxiaAdminBundle:Courseware:list-view.html.twig',array(
                 'category' => $category,
-                'coursewares' => $coursewares
+                'coursewares' => $coursewares,
+                'paginator' => $paginator,
+                'knowledges' => $knowledges
             ));
         } else {
             return $this->render('TopxiaAdminBundle:Courseware:thumb-view.html.twig',array(
                 'category' => $category,
                 'coursewares' => $coursewares,
+                'paginator' => $paginator,
                 'coursewaresCount' => $coursewaresCount
             ));
         }
@@ -111,5 +120,10 @@ class CoursewareController extends BaseController
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    private function getKnowledgeService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.KnowledgeService');
     }
 }
