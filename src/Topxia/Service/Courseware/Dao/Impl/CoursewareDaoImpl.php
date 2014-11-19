@@ -11,6 +11,7 @@ class CoursewareDaoImpl extends BaseDao implements CoursewareDao
     protected $serializeFields = array(
         'relatedKnowledgeIds' => 'json',
         'tagIds' => 'json',
+        'knowledgeIds' => 'json'
     );
 
     public function getCourseware($id)

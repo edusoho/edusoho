@@ -58,11 +58,7 @@ class CoursewareController extends BaseController
             $courseware['categoryId'] = $categoryId;
             $courseware = $this->getCoursewareService()->createCourseware($courseware);
 
-            if (empty($courseware)) {
-                return $this->createJsonResponse(array("status" =>'success'));
-            } else {
-                return $this->createJsonResponse(array("status" =>'fail'));
-            }
+            return $this->redirect($this->generateUrl('admin_courseware_manage',array('categoryId'=>$categoryId)));
         }
 
         return $this->render('TopxiaAdminBundle:Courseware:modal.html.twig',array(
@@ -103,11 +99,7 @@ class CoursewareController extends BaseController
             $courseware = $this->filterVideoField($videoMeta,$courseware);
             $courseware = $this->getCoursewareService()->updateCourseware($id,$courseware);
 
-            if (empty($courseware)) {
-                return $this->createJsonResponse(array("status" =>'success'));
-            } else {
-                return $this->createJsonResponse(array("status" =>'fail'));
-            }
+            return $this->redirect($this->generateUrl('admin_courseware_manage',array('categoryId'=>$categoryId)));
         }
 
         return $this->render('TopxiaAdminBundle:Courseware:modal.html.twig',
@@ -122,6 +114,8 @@ class CoursewareController extends BaseController
     {
         $courseware['title'] = $videoMeta['title'];
         $courseware['image'] = $videoMeta['image'];
+        $courseware['knowledgeIds'] = $courseware['relatedKnowledgeIds'].",".$courseware['tagIds'];
+        $courseware['knowledgeIds'] = array_filter(explode(',', $courseware['knowledgeIds']));
         $courseware['relatedKnowledgeIds'] = array_filter(explode(',', $courseware['relatedKnowledgeIds']));
         $courseware['tagIds'] = array_filter(explode(',', $courseware['tagIds']));
         return $courseware;

@@ -18,10 +18,6 @@ define(function(require, exports, module){
                     }
                     $('#courseware-operate-btn').button('loading').addClass('disabled');
                     Notify.success('操作成功！');
-
-                    $.post($('#courseware-operate-btn').data('url'), $form.serialize(), function(result){
-
-                    });
                 }
             });
 
