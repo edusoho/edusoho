@@ -169,6 +169,32 @@
                       完成了考试 {{learn.properties.testpaper.name|plain_text(15)}}
                     </div>
                   </li>
+
+                {% elseif learn.type == "finished_homework" %}
+                <li class="media">
+                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
+                    <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
+                  </a>
+                  <div class="media-body">
+                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+                    完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的作业
+                  </div>
+                </li>
+
+
+
+
+                {% elseif learn.type == "finished_exercise" %}
+                <li class="media">
+                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
+                    <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
+                  </a>
+                  <div class="media-body">
+                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+                    完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
+                  </div>
+                </li>
+
                   {% elseif learn.type == "become_student" %}
                   <li class="media">
                     <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
