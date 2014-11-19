@@ -5,8 +5,11 @@
 {% block title %}
     用户认证查看
 {% endblock %}
+
 {% block body %}
+  <div class="form-horizontal">
   {% include 'TopxiaAdminBundle:User:user-approval-form-content.html.twig' %}
+  </div>
 {% endblock %}
 
 {% block footer %}
