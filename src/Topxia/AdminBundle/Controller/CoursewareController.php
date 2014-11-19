@@ -96,6 +96,7 @@ class CoursewareController extends BaseController
             array_push($ids, $id);
         }
         $result = $this->getCoursewareService()->deleteCoursewaresByIds($ids);
+
         if($result){
             return $this->createJsonResponse(array("status" =>"success"));
         } else {

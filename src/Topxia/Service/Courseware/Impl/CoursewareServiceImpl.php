@@ -41,6 +41,9 @@ class CoursewareServiceImpl extends BaseService implements CoursewareService
     public function updateCourseware($id,$courseware)
     {
         $courseware = $this->filterCoursewareFields($courseware);
+
+        $this->getLogService()->info('courseware', 'update', "更新课件《({$courseware['title']})》({$courseware['id']})");
+
         return $this->getCoursewareDao()->updateCourseware($id,$courseware);
     }
 
@@ -51,7 +54,7 @@ class CoursewareServiceImpl extends BaseService implements CoursewareService
             throw $this->createServiceException("课件不存在，操作失败。");
         }
 
-        $res = $this->getCoursewareDao()->deleteCourseware($id);
+        $this->getCoursewareDao()->deleteCourseware($id);
         $this->getLogService()->info('Courseware', 'delete', "课件#{$id}永久删除");
         return true;
     }
