@@ -235,6 +235,81 @@ define(function(require, exports, module) {
             $("#who_is_clicked").html("1");
         });
 
+
+        $("input[role='bannerClick2']").on('click', function(){
+            if($(this).val()==1) {
+                $("#bannerUrl2").show();
+                $("#bannerClassNameLabel2").show();
+                $("#bannerClassName2").show();
+                $("#bannerCourseChooseButton2").show();
+            }else{
+                $("#bannerUrl2").hide();
+                 $("#bannerClassNameLabel2").hide();
+                $("#bannerClassName2").hide();
+                $("#bannerCourseChooseButton2").hide();
+            }
+        })
+
+        $("#bannerCourseChooseButton2").click(function(){
+            $("#who_is_clicked").html("2");
+        });
+
+
+        $("input[role='bannerClick3']").on('click', function(){
+            if($(this).val()==1) {
+                $("#bannerUrl3").show();
+                $("#bannerClassNameLabel3").show();
+                $("#bannerClassName3").show();
+                $("#bannerCourseChooseButton3").show();
+            }else{
+                $("#bannerUrl3").hide();
+                 $("#bannerClassNameLabel3").hide();
+                $("#bannerClassName3").hide();
+                $("#bannerCourseChooseButton3").hide();
+            }
+        })
+
+        $("#bannerCourseChooseButton3").click(function(){
+            $("#who_is_clicked").html("3");
+        });
+
+
+        $("input[role='bannerClick4']").on('click', function(){
+            if($(this).val()==1) {
+                $("#bannerUrl4").show();
+                $("#bannerClassNameLabel4").show();
+                $("#bannerClassName4").show();
+                $("#bannerCourseChooseButton4").show();
+            }else{
+                $("#bannerUrl4").hide();
+                 $("#bannerClassNameLabel4").hide();
+                $("#bannerClassName4").hide();
+                $("#bannerCourseChooseButton4").hide();
+            }
+        })
+
+        $("#bannerCourseChooseButton4").click(function(){
+            $("#who_is_clicked").html("4");
+        });
+
+
+        $("input[role='bannerClick5']").on('click', function(){
+            if($(this).val()==1) {
+                $("#bannerUrl5").show();
+                $("#bannerClassNameLabel5").show();
+                $("#bannerClassName5").show();
+                $("#bannerCourseChooseButton5").show();
+            }else{
+                $("#bannerUrl5").hide();
+                 $("#bannerClassNameLabel5").hide();
+                $("#bannerClassName5").hide();
+                $("#bannerCourseChooseButton5").hide();
+            }
+        })
+
+        $("#bannerCourseChooseButton5").click(function(){
+            $("#who_is_clicked").html("5");
+        });
 //=============================================================================
 
 
