@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     var Handlebars = require('handlebars');
-
+    var Notify = require('common/bootstrap-notify');
     var DynamicCollection = Widget.extend({
         attrs: {
             onlyAddItemWithModel: false
@@ -56,8 +56,8 @@ define(function(require, exports, module) {
 
         deleteItem: function(e) {
             var teacherCounts=$("#teacher-list-group").children("li").length;
-            if(teacherCounts == 1){
-                alert("课程至少需要一个教师");
+            if(teacherCounts <= 1){
+                Notify.danger("课程至少需要一个教师！");
                 return ;
             }
             $(e.currentTarget).parents('[data-role=item]').remove();
