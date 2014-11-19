@@ -55,7 +55,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             return array();
         }
 
-        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND (type in ({$types})) AND ( not( `type` = 'material' AND `subCount` = 0 )) LIMIT {$start},{$limit} ";
+        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND (`type` in ({$types})) AND ( not( `type` = 'material' AND `subCount` = 0 )) LIMIT {$start},{$limit} ";
         $questions = $this->getConnection()->fetchAll($sql, array($types));
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
