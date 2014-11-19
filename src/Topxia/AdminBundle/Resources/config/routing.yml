@@ -997,5 +997,50 @@ admin_uploadfile_head_leader_params:
     pattern: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
 
+my_coin:
+    path:     /my/coin
+    defaults: { _controller: TopxiaAdminBundle:CoinWeb:index }
+my_coin_buy:
+    path:     /my/coin/buy
+    defaults: { _controller: TopxiaAdminBundle:CoinWeb:buy }
+coin_pay:
+    path:     /coin/pay
+    defaults: { _controller: TopxiaAdminBundle:CoinWeb:pay }
+coin_order_pay_return:
+    path:     /coin/pay/return/{name}
+    defaults: { _controller: TopxiaAdminBundle:CoinWeb:payReturn }
+coin_order_pay_notify:
+    path:     /coin/order/notify/{name}
+    defaults: { _controller: TopxiaAdminBundle:CoinWeb:payNotify }
+coin_change:
+    path:     /coin/change
+    defaults: { _controller: TopxiaAdminBundle:CoinWeb:change }
 
+
+coin_settings:
+    path:     /coin/settings
+    defaults: { _controller: TopxiaAdminBundle:CoinAdmin:settings }
+coin_records:
+    path:     /coin/records
+    defaults: { _controller: TopxiaAdminBundle:CoinAdmin:records }
+coin_orders:
+    path:     /coin/orders
+    defaults: { _controller: TopxiaAdminBundle:CoinAdmin:orders }
+coin_orders_log:
+    path:     /coin/orders/log/{id}
+    defaults: { _controller: TopxiaAdminBundle:CoinAdmin:logs }
+coin_admin:
+    path:     /coin/admin
+    defaults: { _controller: TopxiaAdminBundle:CoinAdmin:admin }
+coin_admin_edit:
+    path:     /coin/admin/edit/{id}
+    defaults: { _controller: TopxiaAdminBundle:CoinAdmin:edit }
+
+coin_give:
+    path:     /coin/give
+    defaults: { _controller: TopxiaAdminBundle:CoinAdmin:giveCoin }
+
+coin_give_check_nickname:
+    path:     /coin/give/check_nickname
+    defaults: { _controller: TopxiaAdminBundle:CoinAdmin:checkNickname }
 

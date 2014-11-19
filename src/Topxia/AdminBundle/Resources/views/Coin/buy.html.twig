@@ -1,0 +1,70 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}充值 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-coin' %}
+{% set script_controller = "coinbundle/controller/coin/buy" %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col lesson-manage-panel">
+  <div class="panel-heading">
+    充值
+    <a class="btn btn-info btn-sm pull-right" type="button" href="{{path('my_coin')}}">返回</a>
+  </div>
+  <div class="panel-body">
+    <br>
+    <form class="form-horizontal" method="post" action="{{path('coin_pay')}}" id="coin-buy">
+
+        {% if payments %}
+
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="coin_amount">充值金额</label>
+                <div class="col-md-4 controls">
+                <input type="text" class="form-control" name="amount" id="coin_amount"/>
+                <div class="help-block" style="color:#428bca;">1元可充值{{setting('coin.cash_rate')}}{{setting('coin.coin_name')}}</div>
+                </div>
+                <div class="col-md-1 control-label">元</div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">选择支付方式</label>
+                <div class="col-md-9 controls">
+                {% for payment, options in payments %}
+                    <input type="radio" checked="checked"/>
+                    <img src="{{ asset('assets/img/order/alipay.gif') }}" />
+                {% endfor %}
+                </div>
+            </div>
+
+            {% if payments.alipay.type|default(null) == 'dualfun' %}
+            <div class="row">
+                <div class="col-md-12">
+                <div class="alert alert-info">
+                  <h4>付款提示</h4>
+                  请在随后的支付宝支付页面中，选择“<strong>即时到账交易</strong>”，如下图所示。如果选择“担保交易”需要手动确认收货，会增加不必要的操作步骤。
+                  <br>
+                  <img src="{{ asset('bundles/topxiaweb/img/order/alipay_dualfun_example.png') }}">
+                </div>
+                </div>
+            </div>
+            {% endif %}
+
+        {% else %}
+            <div class="alert alert-info">{{ setting('payment.disabled_message')|default('尚未开启支付模块，无法购买课程。')|raw }}</div>
+        {% endif %}
+
+        <div class="form-group">
+        <div class="controls">
+            <br>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+            <button id="coin-pay" class=" btn btn-primary col-md-offset-4" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
+        </div>
+        </div>
+      
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}
