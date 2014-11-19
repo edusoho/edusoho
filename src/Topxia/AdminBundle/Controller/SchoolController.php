@@ -102,6 +102,7 @@ class SchoolController extends BaseController
     {
         $grades=$this->getCategoryService()->findCategoriesByGroupCode('grade');
         $subjects=$this->getCategoryService()->findCategoriesByGroupCode('subject');
+        $materials=$this->getCategoryService()->findCategoriesByGroupCode('material');
         $eduMaterials=ArrayToolkit::group($this->getEduMaterialService()->findAllEduMaterials(),'subjectId');
         foreach ($eduMaterials as $key => $eduMaterialList) {
             $eduMaterials[$key]=ArrayToolkit::index($eduMaterialList,'gradeId');
@@ -109,8 +110,17 @@ class SchoolController extends BaseController
         return $this->render('TopxiaAdminBundle:School:eduMaterial-setting.html.twig', array(
             'grades'=>$grades,
             'subjects'=>$subjects,
+            'materials'=>$materials,
             'eduMaterials'=>$eduMaterials
         ));
+    }
+
+    public function eduMaterialUpdateAction(Request $request)
+    {
+        $fields = $request->request->all();
+        $eduMaterial=$this->getEduMaterialService()->updateEduMaterial($fields['eduMaterialId'],$fields);
+        $result=empty($eduMaterial)?false:true;
+        return $this->createJsonResponse($result);
     }
 
     public function classEditorAction(Request $request)

@@ -33,11 +33,11 @@ class InitCommand extends BaseCommand
 		$this->initPaymentSetting($output);
 		$this->initStorageSetting($output);
 
-		$this->initCategory($output);
 		$this->initGrade($output);
 		$this->initSubject($output);
 		$this->initMaterial($output);
 		$this->initEduMaterial($output);
+		$this->initCategory($output);
 		$this->initTag($output);
 		$this->initRefundSetting($output);
 		$this->initThemes($output);

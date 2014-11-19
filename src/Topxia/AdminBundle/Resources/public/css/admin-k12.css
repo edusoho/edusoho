@@ -9,3 +9,22 @@
   cursor: pointer;
   float: right;
 }
+
+.eduMaterial-table .material-selector {
+  cursor: pointer;
+}
+
+.eduMaterial-table .material-list {
+  display: none;
+}
+
+.eduMaterial-table .material-name{
+    cursor: pointer;
+    padding:5px;
+    -webkit-border-radius: 5px;
+            border-radius: 5px;
+}
+
+.eduMaterial-table span.material-name:hover{
+  background-color: #d9edf7;
+}

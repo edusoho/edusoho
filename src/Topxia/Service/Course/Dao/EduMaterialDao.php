@@ -10,6 +10,8 @@ interface EduMaterialDao
 	
 	public function addEduMaterial($eduMaterial);
 
+	public function updateEduMaterial($id,$eduMaterial);
+
     public function findAllEduMaterials();
 
 }

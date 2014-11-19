@@ -3,13 +3,12 @@
 {% block title %}教材设置 - {{ parent() }}{% endblock %}
 
 {% set menu = 'eduMaterialSetting' %}
-{# {% set script_controller = 'school/school-setting' %} #}
+{% set script_controller = 'school/eduMaterial-setting' %}
 
 {% block main %}
   <div class="page-header"><h1>教材设置</h1></div>
-
   <div class="table-responsive">
-    <table class="table table-bordered">
+    <table class="table table-bordered eduMaterial-table">
       {% for subject in subjects %}
         {% if loop.index==1 %}
           <tr class="info">
@@ -24,7 +23,17 @@
           {% set eduMaterialList=eduMaterials[subject.id] %}
           {% for grade in grades %}
             {% set eduMaterial=eduMaterialList[grade.id] %}
-            <td>{{eduMaterial.materialName}}</td>
+            <td class="materialTd">
+              <div class="material-selector">
+                <div class="pull-left eduMaterial-name">{{eduMaterial.materialName}}</div>
+                <span class="caret"></span>
+                <div class="material-list">
+                  {% for material in materials %}
+                    <span data-url="{{path('admin_school_eduMaterial_update')}}" data-eduMaterialId="{{eduMaterial.id}}" data-materialId="{{material.id}}" class="material-name">{{material.name}}</span>
+                  {% endfor %}
+                </div>
+              </div>
+            </td>
           {% endfor %}
         </tr>
       {% endfor %}
