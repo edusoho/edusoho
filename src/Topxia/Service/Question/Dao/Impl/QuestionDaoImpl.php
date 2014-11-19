@@ -217,7 +217,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             }
         }
 
-        if (isset($conditions['ExcludeUnvalidatedMaterial']) and ($conditions['ExcludeUnvalidatedMaterial'] == 1)){
+        if (isset($conditions['excludeUnvalidatedMaterial']) and ($conditions['excludeUnvalidatedMaterial'] == 1)){
             $builder->andStaticWhere(" not( type = 'material' and subCount = 0 )");
         }
         return $builder;
