@@ -46,7 +46,7 @@
             <label class="col-md-2 control-label">所属年级</label>
             <div class="col-md-4 controls">
               <select class="form-control event" name="gradeId" id="gradeId">
-                {{ select_options_for_grade('') }}
+                {{ select_options_for_grade('','','--通用--') }}
               </select>
               <div class="help-block" style="display:none;"></div>
             </div>
@@ -65,7 +65,7 @@
             <label class="col-md-2 control-label">所属学科</label>
             <div class="col-md-4 controls">
               <select class="form-control event" id="subjectId" name="subjectId">
-                {{ select_options_for_subject('', app.request.query.get('gradeId'), '--选择学科--') }}
+                {{ select_options_for_subject('', app.request.query.get('gradeId'), '--通用--') }}
               </select>
             </div>
           </div>

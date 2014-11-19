@@ -36,43 +36,44 @@
 				</div>
 			</div>
 
-			<div class="form-group">
-				<label class="col-md-2 control-label">所属年级</label>
-				<div class="col-md-4 controls">
-					<select class="form-control" name="gradeId" id="gradeId">
-						{{ select_options_for_grade('', course.gradeId, '通用') }}
-					</select>
-					<div class="help-block" style="display:none;"></div>
+
+
+			<fieldset disabled>
+				<div class="form-group">
+					<label class="col-md-2 control-label">所属年级</label>
+					<div class="col-md-4 controls">
+						<select class="form-control" name="gradeId" id="gradeId">
+							{{ select_options_for_grade('', course.gradeId, '--通用--') }}
+						</select>
+						<div class="help-block" style="display:none;"></div>
+					</div>
 				</div>
-			</div>
-
-			<div class="row form-group">
-				<div class="col-md-2 control-label">
-					<label>学期</label>
+				<div class="row form-group">
+					<div class="col-md-2 control-label">
+						<label>学期</label>
+					</div>
+					<div class="col-md-8 controls radios">
+						{{ radios('term',{'first':'一学期','second':'二学期'},course.term)}}
+					</div>
 				</div>
-				<div class="col-md-8 controls radios">
-					{{ radios('term',{'first':'一学期','second':'二学期'},course.term)}}
+				<div class="form-group">
+				  <label class="col-md-2 control-label">所属学科</label>
+				  <div class="col-md-4 controls">
+				    <select class="form-control event" id="subjectId" name="subjectId">
+				      {{ select_options_for_subject('', course.subjectId, '--通用--') }}
+				    </select>
+				  </div>
 				</div>
-			</div>
-
-			<div class="form-group">
-			  <label class="col-md-2 control-label">所属学科</label>
-			  <div class="col-md-4 controls">
-			    <select class="form-control event" id="subjectId" name="subjectId">
-			      {{ select_options_for_subject('', course.subjectId, '--选择学科--') }}
-			    </select>
-			  </div>
-			</div>
-
-			<div class="form-group">
-			  <div class="col-md-2 control-label"><label for="course_material" class="required">教材</label></div>
-			  <div class="col-md-4 controls">
-			    <input type="text" class="hidden" name="materialId" value="{{ material.id }}" id="materialId" readonly>
-			    <input type="text" class="form-control" value="{{ material.name }}"  id="material" readonly>
-			    <div class="help-block" style="display:none;"></div>
-			  </div>
-			</div>
-
+				<div class="form-group">
+				  <div class="col-md-2 control-label"><label for="course_material" class="required">教材</label></div>
+				  <div class="col-md-4 controls">
+				    <input type="text" class="hidden" name="materialId" value="{{ material.id|default(0) }}" id="materialId" readonly>
+				    <input type="text" class="form-control" value="{{ material.name|default('') }}"  id="material" >
+				    <div class="help-block" style="display:none;"></div>
+				  </div>
+				</div>
+			</fieldset>
+			
 		    <div class="row form-group">
 		      <div class="col-md-2 control-label">
 		        <label>必修课</label>

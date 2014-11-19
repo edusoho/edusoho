@@ -324,6 +324,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$hasCatalog = $course['hasCatalog'];
 		$course = ArrayToolkit::parts($course, array('title', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address', 'gradeId', 'subjectId', 'materialId', 'term'));
 
+		$course['gradeId'] = empty($course['gradeId']) ? 0 : $course['gradeId'];
+		$course['materialId'] = empty($course['materialId']) ? 0 : $course['materialId'];
+		$course['subjectId'] = empty($course['subjectId']) ? 0 : $course['subjectId'];
 		$course['status'] = 'draft';
         $course['about'] = !empty($course['about']) ? $this->getHtmlPurifier()->purify($course['about']) : '';
         $course['tags'] = !empty($course['tags']) ? $course['tags'] : '';
