@@ -1,29 +1,36 @@
 <li class="course-grid item-material">
-	<div style="width: 180px; height: 180px; padding: 8px;">
-    <input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" >
-    	
-		{% if uploadFile.type == 'video' %}
-    	<img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
+	<div style="width: 180px; height: 180px; padding: 8px;" class="course-item-list-multi">
+    <div><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></div>
+
+    {% if uploadFile.type == 'video' %}
+			{% set parentClass = "item-object-video" %}
 		{% elseif uploadFile.type == 'audio' %}
-    	<img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
-		{% elseif uploadFile.type == 'image' %}
-    	<img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
+			{% set parentClass = "item-object-audio" %}
 		{% elseif uploadFile.type == 'ppt' %}
-    	<img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
-  	{% elseif uploadFile.type == 'document' %}
-    	<img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
-  	{% elseif uploadFile.type == 'other' %}
-    	<img src="{{ default_path('avatar',app.user.smallAvatar, '') }}" class="img-responsive thumb" style="height: 80px;">
+			{% set parentClass = "item-object-ppt" %}
+		{% else %}
+			{% set parentClass = "item-object-text" %}
 		{% endif %}
 		
-    <span class="text-sm">{{ uploadFile.filename }}</span>
+		{% if uploadFile.type in ['video', 'audio'] %}
+			{% set subTitle = uploadFile.length|date('i:s') %}
+		{% else %}
+			{% set subTitle = uploadFile.ext|upper %}
+		{% endif %}
+		
+		<div style="height: 90px;" class="center-block">
+			<a style="float: none;" class="item-object {{ parentClass|default('') }} tip center-block mtm" title="预览"   data-placement="bottom" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}">
+				<span class="item-icon"></span>
+					<span class="item-length">
+									{{ subTitle|default('') }}
+							</span>
+			</a>
+			</div>
+											
+    <span class="file-name-container text-sm mhs mvs">{{ uploadFile.filename }}</span>
     
-    {% if uploadFile.type == 'video' or uploadFile.type == 'audio'%}
-			<span class="text-sm"> Length: {{ uploadFile.length|date('i:s') }}</span>
-    
-    {% endif %}
-    <span class="row">
-    	<a {% if uploadFile.createdUserId != currentUserId %}disabled="disabled" {% endif %} class="center-block btn btn-link delete-material-btn" data-url="{{ path('material_lib_delete_file', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-trash"></span>删除</a>
+    <span class="row action-buttons-container center-block" style="display: none; background-color: #f6f6f6;">
+    	<a {% if uploadFile.createdUserId != currentUserId %} disabled="disabled" {% endif %} class="center-block btn btn-link delete-material-btn" data-url="{{ path('material_lib_delete_file', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-trash"></span>删除</a>
     </span>
   </div>
 </li>

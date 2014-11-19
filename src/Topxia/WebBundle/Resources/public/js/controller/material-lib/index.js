@@ -11,11 +11,15 @@ define(function(require, exports, module) {
 		require('../../util/batch-select')($panel);
 		require('../../util/batch-delete')($panel);
 
-//		$("#panel-upload-file .btn-link").tooltip();
-		$("#material-lib-items-panel .btn-link").tooltip();
+		$(".tip").tooltip();
 
 		var $list = $("#material-item-list");
-
+		
+		$list.on('mouseover mouseout', '.item-material', function(e) {
+			$(".file-name-container", this).toggle();
+			$(".action-buttons-container", this).toggle();
+		});
+		
 		$list.on('click', '.delete-material-btn', function(e) {
 			if (!confirm('您真的要删除该文件吗？')) {
 				return;

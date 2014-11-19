@@ -47,8 +47,8 @@
   </td>
   <td  >
   <span style="float: right;">
-    <a class="btn btn-link" title="预览"  href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-	<a {% if uploadFile.createdUserId != currentUserId %}disabled="disabled" {% endif %} class="btn btn-link delete-material-btn" title="删除" data-url="{{ path('material_lib_delete_file', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-trash"></span></a>
+  	<a {% if uploadFile.type not in ['audio', 'video', 'ppt'] %} disabled="disabled" {% endif %}class="btn btn-link tip" title="预览"  href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+		<a {% if uploadFile.createdUserId != currentUserId %} disabled="disabled" {% endif %} class="btn btn-link delete-material-btn tip" title="删除" data-url="{{ path('material_lib_delete_file', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-trash"></span></a>
   </span>
   </td>
 
