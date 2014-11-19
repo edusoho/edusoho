@@ -19,7 +19,7 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
     {
        list($knowledge) = $this->checkExist(null, $id);
 
-        $fields = ArrayToolkit::parts($fields, array('description','name', 'code', 'weight', 'sequence', 'parentId'));
+        $fields = ArrayToolkit::parts($fields, array('description','name', 'code', 'weight', 'sequence', 'parentId', 'isHidden'));
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新知识点失败！');
         }
@@ -48,7 +48,7 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
 
     public function createKnowledge($knowledge)
     {
-        $knowledge = ArrayToolkit::parts($knowledge, array('description','name', 'code', 'weight', 'categoryId', 'parentId', 'isVisible', 'sequence'));
+        $knowledge = ArrayToolkit::parts($knowledge, array('description','name', 'code', 'weight', 'categoryId', 'parentId', 'isHidden', 'sequence'));
 
         if (!ArrayToolkit::requireds($knowledge, array('name', 'code', 'weight', 'categoryId', 'parentId'))) {
             throw $this->createServiceException("缺少必要参数，，添加知识点失败");
@@ -109,6 +109,21 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
         return $knowledges;
     }
 
+    public function findAllNodesData($categoryId, $parentId)
+    {
+        $this->checkExist($categoryId, $parentId);
+        $knowledges = $this->findAllKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
+        foreach ($knowledges as $key => $knowledge) {
+            if(count($this->findAllKnowledgeByCategoryIdAndParentId($categoryId, $knowledge['id']))) {
+                $knowledge['isParent'] = true;
+            } else {
+                $knowledge['isParent'] = false;
+            }
+            $knowledges[$key] = $knowledge;
+        }
+        return $knowledges;
+    }
+
     public function isKnowledgeCodeAvaliable($code, $exclude = null)
     {
         if (empty($code)) {
@@ -127,6 +142,11 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
     public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId)
     {
         return $this->getKnowledgeDao()->findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
+    }
+
+    public function findAllKnowledgeByCategoryIdAndParentId($categoryId, $parentId)
+    {
+        return $this->getKnowledgeDao()->findAllKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
     }
 
     private function filterKnowledgeFields(&$knowledge, $releatedKnowledge = null)

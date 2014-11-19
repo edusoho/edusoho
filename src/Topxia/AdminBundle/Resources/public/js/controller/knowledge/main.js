@@ -10,18 +10,22 @@ define(function(require, exports, module) {
 				enable: true,
 				url:$tree.data('url'),
 				autoParam:["id"],
-				otherParam:{"categoryId":$tree.data('cid')},
-				dataFilter: filter
+				otherParam:{"categoryId":$tree.data('cid')}
+				//dataFilter: filter
 			},
-			view: {expandSpeed:"",
-				addHoverDom: addHoverDom,
-				removeHoverDom: removeHoverDom,
-				selectedMulti: false
+			view: {
+				expandSpeed:"",
+				//addHoverDom: addHoverDom,
+				//removeHoverDom: removeHoverDom,
+				selectedMulti: false,
+				showLine: false,
+				showIcon: false,
+				addDiyDom: addDiyDom
 			},
 			edit: {
 				enable: true,
-				removeTitle: '删除知识点',
-				renameTitle: '编辑知识点'
+				showRemoveBtn: false,
+				showRenameBtn: false
 			},
 			data: {
 				simpleData: {
@@ -29,13 +33,76 @@ define(function(require, exports, module) {
 				}
 			},
 			callback: {
-				beforeRemove: beforeRemove,
-				beforeEditName: beforeEditName,
+				//beforeRemove: beforeRemove,
+				//beforeEditName: beforeEditName,
 				onDrop: onDrop
 			}
 		};
 
-		function filter(treeId, parentNode, childNodes) {
+		function addDiyDom(treeId, treeNode) {
+		    var html = '<div class="actions">';
+		    html += '<button class="btn btn-link btn-sm" id="addBtn_'+treeNode.tId+'"><span class="glyphicon glyphicon-plus"></span> 添加子节点</button>';
+		    html += '<button class="btn btn-link btn-sm" id="editBtn_'+treeNode.tId+'"><span class="glyphicon glyphicon-edit"></span> 编辑</button>';
+		    html += '<button class="btn btn-link btn-sm" id="removeBtn_'+treeNode.tId+'"><span class="glyphicon glyphicon-remove-circle"> 删除</span></button>';
+		    html += '</div>';
+		  	$('#' + treeNode.tId + '_a').after(html);
+		  	var addBtn = $("#addBtn_"+treeNode.tId),
+		  		editBtn = $("#editBtn_"+treeNode.tId),
+		  		removeBtn = $("#removeBtn_"+treeNode.tId);
+		  	if(addBtn) {
+		  		addBtn.bind("click", function(){
+		  			var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");
+		  			var seq = treeNode.children ? treeNode.children.length+1:1;
+		  			var newUrl = $('#add-knowledge').data('turl')+'?pid='+treeNode.id+'&tid='+treeNode.tId+'&seq='+seq;
+		  			$('#add-knowledge').data('url', newUrl);
+		  			$('#add-knowledge').click();
+		  		});
+		  	}
+
+		  	if(editBtn) {
+		  		editBtn.bind("click", function(){
+		  			var pid = treeNode.parentId,
+		  				cid = treeNode.categoryId,
+		  				id = treeNode.id,
+		  				newUrl = $('#edit-knowledge').data('turl')+'?id='+id+'&pid='+pid+'&cid='+cid+'&tid='+treeNode.tId;
+
+		  			$('#edit-knowledge').data('url', newUrl);
+		  			$('#edit-knowledge').click();
+		  		});
+		  	}
+		  	if(removeBtn) {
+		  		removeBtn.bind("click", function(){
+					var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");
+					zTree.selectNode(treeNode);
+					if(confirm("确认删除 节点 -- " + treeNode.name + " 吗？")) {
+						$.ajax({ 
+							type: 'POST', 
+							url: $tree.data('durl'), 
+							data: {id:treeNode.id}, 
+							success: function(result){
+		                    	Notify.success('删除知识点成功！');
+		                    	zTree.removeNode(treeNode);
+							}, 
+							error:function() {
+		                    	Notify.danger("删除知识点失败！");
+		                	},
+							async:false 
+						});
+					} else {
+						return false;
+					}
+		  		});
+	  		}
+
+/*	  		$('#'+ treeId).bind('hover', function(){
+	  			$(this).addClass('show').removeClass('hidden');
+	  		},function(){
+	  			$(this).addClass('hidden').removeClass('show');
+	  		});*/
+	  		
+		};
+
+		/*function filter(treeId, parentNode, childNodes) {
 			if (!childNodes) return null;
 			for (var i=0, l=childNodes.length; i<l; i++) {
 				childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
@@ -75,7 +142,7 @@ define(function(require, exports, module) {
 			$('#edit-knowledge').data('url', newUrl);
 			$('#edit-knowledge').click();
 			return false;
-		}
+		}*/
 
 		function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
 			var pid = treeNodes[0].pId,
@@ -102,7 +169,7 @@ define(function(require, exports, module) {
 			
 		}
 
-		function addHoverDom(treeId, treeNode) {
+/*		function addHoverDom(treeId, treeNode) {
 			var sObj = $("#" + treeNode.tId + "_span");
 			if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
 			var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
@@ -120,9 +187,10 @@ define(function(require, exports, module) {
 		};
 		function removeHoverDom(treeId, treeNode) {
 			$("#addBtn_"+treeNode.tId).unbind().remove();
-		};
+		};*/
 
 		$.fn.zTree.init($("#knowledge-tree"), setting);
+
 
 	}
 });
