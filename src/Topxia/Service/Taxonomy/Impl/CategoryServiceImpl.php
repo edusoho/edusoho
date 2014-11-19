@@ -198,6 +198,15 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $this->getLogService()->info('category', 'delete', "删除分类{$category['name']}(#{$id})");
     }
 
+    public function deleteCategorysByGroupId($groupId)
+    {
+        $group=$this->getGroup($groupId);
+        if(empty($group)){
+            throw $this->createNotFoundException();
+        }
+        $this->getCategoryDao()->deleteCategorysByGroupId($groupId);
+    }
+
     /**
      * group
      */

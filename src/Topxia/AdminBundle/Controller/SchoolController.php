@@ -105,8 +105,22 @@ class SchoolController extends BaseController
 
     public function eduMaterialSettingAction(Request $request)
     {
-        $grades=$this->getCategoryService()->findCategoriesByGroupCode('grade');
+        $school = $this->getSettingService()->get('school', array());
+        if(array_key_exists('primarySchool', $school)){
+            $grades=DataDict::dict('primarySchool');
+            if($school['primaryYear']==5){
+                unset($grades[6]);
+            }
+        }
+        if(array_key_exists('middleSchool', $school)){
+            $grades=DataDict::dict('middleSchool')+$grades;
+        }
+        if(array_key_exists('highSchool', $school)){
+            $grades=DataDict::dict('highSchool')+$grades;
+        }
+        ksort($grades);
         $subjects=$this->getCategoryService()->findCategoriesByGroupCode('subject');
+        $materials=$this->getCategoryService()->findCategoriesByGroupCode('material');
         $eduMaterials=ArrayToolkit::group($this->getEduMaterialService()->findAllEduMaterials(),'subjectId');
         foreach ($eduMaterials as $key => $eduMaterialList) {
             $eduMaterials[$key]=ArrayToolkit::index($eduMaterialList,'gradeId');
@@ -114,8 +128,17 @@ class SchoolController extends BaseController
         return $this->render('TopxiaAdminBundle:School:eduMaterial-setting.html.twig', array(
             'grades'=>$grades,
             'subjects'=>$subjects,
+            'materials'=>$materials,
             'eduMaterials'=>$eduMaterials
         ));
+    }
+
+    public function eduMaterialUpdateAction(Request $request)
+    {
+        $fields = $request->request->all();
+        $eduMaterial=$this->getEduMaterialService()->updateEduMaterial($fields['eduMaterialId'],$fields);
+        $result=empty($eduMaterial)?false:true;
+        return $this->createJsonResponse($result);
     }
 
     public function classEditorAction(Request $request)

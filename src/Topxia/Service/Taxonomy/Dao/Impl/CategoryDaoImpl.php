@@ -24,6 +24,11 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
+    public function deleteCategorysByGroupId($groupId)
+    {
+        return $this->getConnection()->delete($this->table, array('groupId' => $groupId));
+    }
+
 	public function getCategory($id) 
     {
 		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";

@@ -138,19 +138,19 @@ define(function(require, exports, module) {
 				if('id' in result) {
 					$('#materialId').val(result.id);
 					$('#material').val(result.name);
-					var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");
-					zTree.setting.async.otherParam = {
-						'gradeId': $('#gradeId').val(),
-						'materialId': $('#materialId').val(),
-						'subjectId': $('#subjectId').val(),
-						'term': $('#term').val()
-					};
-					zTree.reAsyncChildNodes(null, "refresh");
 				} else {
 					$('#materialId').val('');
 					$('#material').val('');
 				}
-			})
+				var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");
+				zTree.setting.async.otherParam = {
+					'gradeId': $('#gradeId').val(),
+					'materialId': $('#materialId').val(),
+					'subjectId': $('#subjectId').val(),
+					'term': $('#term').val()
+				};
+				zTree.reAsyncChildNodes(null, "refresh");
+			});
 		});
 
 		$('#add-knowledge-fake').on('click', function(){
@@ -162,10 +162,6 @@ define(function(require, exports, module) {
 				Notify.danger('没有选择科目!');	
 				return;
 			} 
-			if(!$('#materialId').val()) {
-				Notify.danger('没有教材!');
-				return;
-			}
   			var params = '?subjectId='+$('#subjectId').val()+'&materialId='+$('#materialId').val()+'&gradeId='+$('#gradeId').val()+'&term='+$('#term').val();
   			var newUrl = $('#add-knowledge').data('turl') + params;
   			$('#add-knowledge').data('url', newUrl);

@@ -179,7 +179,7 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
                     break;
             }
         }
-
+        $knowledge['materialId'] = empty($knowledge['materialId']) ? 0 : $knowledge['materialId'];
         return $knowledge;
     }
 
