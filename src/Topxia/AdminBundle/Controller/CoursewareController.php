@@ -111,7 +111,7 @@ class CoursewareController extends BaseController
         $courseware['tagIds'] = implode(",", $courseware['tagIds']);
 
         if ($request->getMethod() == 'POST') {
-            $courseware = $this->request->all();
+            $courseware = $request->request->all();
             $videoMeta = $this->getVideoMeta($courseware['url']);
             $courseware = $this->filterVideoField($videoMeta,$courseware);
             $courseware = $this->getCoursewareService()->updateCourseware($id,$courseware);
