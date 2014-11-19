@@ -1,3 +1,9 @@
 custom_admin_homepage:
     pattern:  /hello/{name}
     defaults: { _controller: CustomAdminBundle:Default:index }
+admin_tag:
+    pattern:  /tag
+    defaults: { _controller: CustomAdminBundle:Tag:index }
+admin_tag_create:
+    pattern:  /tag/create
+    defaults: { _controller: CustomAdminBundle:Tag:create }

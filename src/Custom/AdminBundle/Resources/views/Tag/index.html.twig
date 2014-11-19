@@ -1,0 +1,37 @@
+{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
+
+{% block title %}标签管理 - {{ parent() }}{% endblock %}
+
+{% set menu = 'tag' %}
+{% set script_controller = 'tag/list' %}
+{% block main %}
+
+<div class="page-header clearfix">
+  <button class="btn btn-info btn-sm pull-right" id="add-tag-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_tag_create') }}">新增标签</button>    
+  <h1 class="pull-left">标签管理</h1>
+</div>
+
+<table id="tag-table" class="table table-striped">
+    <thead>
+        <th width="10%">ID</th>
+        <th width="20%">名称</th>
+        <th width="40%">描述</th>
+        <th width="20%">添加时间</th>
+        <th width="10%">操作</th>
+    </thead>
+    <tbody>
+      {% if tags %}
+        {% for tag in tags %}
+          {% include 'CustomAdminBundle:Tag:list-tr.html.twig' %}
+        {% endfor %}
+      {% else %}
+       <tr><td colspan="20"><div class="empty">暂无标签记录</div></td></tr>
+      {% endif %}
+
+    </tbody>
+</table>
+
+{{ web_macro.paginator(paginator) }}
+
+
+{% endblock %}
