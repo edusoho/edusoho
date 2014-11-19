@@ -8,7 +8,7 @@ use Topxia\AdminBundle\Controller\BaseController;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
  
-class CoinAdminController extends BaseController
+class CoinController extends BaseController
 {
     public function settingsAction(Request $request)
     {
@@ -101,7 +101,7 @@ class CoinAdminController extends BaseController
         $userIds =  ArrayToolkit::column($cashes, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
         
-        return $this->render('CoinBundle:Coin:coin-records.html.twig',array(
+        return $this->render('TopxiaAdminBundle:Coin:coin-records.html.twig',array(
             'users'=>$users,
             'cashes'=>$cashes,
             'paginator'=>$paginator,
@@ -144,7 +144,7 @@ class CoinAdminController extends BaseController
         $userIds =  ArrayToolkit::column($orders, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('CoinBundle:Coin:coin-orders.html.twig',array(
+        return $this->render('TopxiaAdminBundle:Coin:coin-orders.html.twig',array(
             'users'=>$users,
             'orders'=>$orders,
             'paginator'=>$paginator,
@@ -153,7 +153,7 @@ class CoinAdminController extends BaseController
 
     protected function settingsRenderedPage($coinSettings)
     {
-      return $this->render('CoinBundle:Coin:coin-settings.html.twig',array(
+      return $this->render('TopxiaAdminBundle:Coin:coin-settings.html.twig',array(
         'coin_settings_posted' => $coinSettings,
         'range_number' => count($coinSettings['coin_consume_range_and_present']),
         'coin_consume_range_and_present' => $coinSettings['coin_consume_range_and_present']        
@@ -169,7 +169,7 @@ class CoinAdminController extends BaseController
         
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
         
-        return $this->render('CoinBundle:Coin:order-log-modal.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Coin:order-log-modal.html.twig', array(
             'order'=>$order,
             'user'=>$user,
             'orderLogs'=>$orderLogs,
@@ -204,7 +204,7 @@ class CoinAdminController extends BaseController
   
         }
 
-        return $this->render('CoinBundle:Coin:order-create-modal.html.twig', array());
+        return $this->render('TopxiaAdminBundle:Coin:order-create-modal.html.twig', array());
 
     }
 
@@ -242,7 +242,7 @@ class CoinAdminController extends BaseController
         $userIds =  ArrayToolkit::column($cashes, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('CoinBundle:Coin:coin-admin.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Coin:coin-admin.html.twig', array(
             'cashes'=>$cashes,
             'users'=>$users,
             'paginator'=>$paginator,
@@ -277,7 +277,7 @@ class CoinAdminController extends BaseController
   
         }
 
-        return $this->render('CoinBundle:Coin:order-edit-modal.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Coin:order-edit-modal.html.twig', array(
             'id'=>$id,
         ));
     }
@@ -301,12 +301,12 @@ class CoinAdminController extends BaseController
 
     protected function getCashService(){
       
-        return $this->getServiceKernel()->createService('Coin:Cash.CashService');
+        return $this->getServiceKernel()->createService('Cash.CashService');
     }
 
     protected function getCashOrdersService(){
       
-        return $this->getServiceKernel()->createService('Coin:Cash.CashOrdersService');
+        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
     }
 
     protected function getLogService() 

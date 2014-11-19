@@ -205,17 +205,17 @@ class CashServiceImpl extends BaseService implements CashService
 
     protected function getFlowDao()
     {
-        return $this->createDao('Coin:Cash.CashFlowDao');
+        return $this->createDao('Cash.CashFlowDao');
     }
 
     protected function getAccountDao()
     {
-        return $this->createDao('Coin:Cash.CashAccountDao');
+        return $this->createDao('Cash.CashAccountDao');
     }
 
     protected function getChangeDao()
     {
-        return $this->createDao('Coin:Cash.CashChangeDao');
+        return $this->createDao('Cash.CashChangeDao');
     }
 
     protected function getSettingService(){

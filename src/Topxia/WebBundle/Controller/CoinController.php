@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\AdminBundle\Controller;
+namespace Topxia\WebBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,10 +9,10 @@ use Topxia\Common\StringToolkit;
 use Topxia\Component\Payment\Payment;
 use Topxia\WebBundle\Util\AvatarAlert;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\AdminBundle\Controller\BaseController;
+use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\Paginator;
 
-class CoinWebController extends BaseController
+class CoinController extends BaseController
 {
     public function indexAction(Request $request)
     {   
@@ -55,7 +55,7 @@ class CoinWebController extends BaseController
         $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         
 
-        return $this->render('CoinBundle:Coin:index.html.twig',array(
+        return $this->render('TopxiaAdminBundle:Coin:index.html.twig',array(
           'payments' => $this->getEnabledPayments(),
           'account'=>$account,
           'cashes'=>$cashes,
@@ -91,7 +91,7 @@ class CoinWebController extends BaseController
             return $this->redirect($this->generateUrl('my_coin'));
         }
 
-        return $this->render('CoinBundle:Coin:coin-change-modal.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Coin:coin-change-modal.html.twig', array(
             'amount'=>$amount,
             'changeAmount'=>$changeAmount,
             'canChange'=>$canChange,
@@ -167,7 +167,7 @@ class CoinWebController extends BaseController
     public function buyAction(Request $request)
     {  
 
-      return $this->render('CoinBundle:Coin:buy.html.twig',array(
+      return $this->render('TopxiaAdminBundle:Coin:buy.html.twig',array(
           'payments' => $this->getEnabledPayments(),
           ));
     }
@@ -187,7 +187,7 @@ class CoinWebController extends BaseController
             'showUrl' => $this->generateUrl('my_coin_buy',array(),true),
         );
 
-        return $this->forward('CoinBundle:CoinWeb:submitPayRequest', array(
+        return $this->forward('TopxiaAdminBundle:CoinWeb:submitPayRequest', array(
                 'order' => $order,
                 'requestParams' => $payRequestParams,
             ));
@@ -197,7 +197,7 @@ class CoinWebController extends BaseController
     {
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
         
-        return $this->render('CoinBundle:Coin:submit-pay-request.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Coin:submit-pay-request.html.twig', array(
             'form' => $paymentRequest->form(),
             'order' => $order,
         ));
@@ -227,7 +227,7 @@ class CoinWebController extends BaseController
         $payData = $response->getPayData();
 
         if ($payData['status'] == "waitBuyerConfirmGoods") {
-            return $this->forward("CoinBundle:Coin:return-notice");
+            return $this->forward("TopxiaAdminBundle:Coin:return-notice");
         }
 
         list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
@@ -316,12 +316,12 @@ class CoinWebController extends BaseController
 
     protected function getCashService(){
       
-        return $this->getServiceKernel()->createService('Coin:Cash.CashService');
+        return $this->getServiceKernel()->createService('Cash.CashService');
     }
 
     protected function getCashOrdersService(){
       
-        return $this->getServiceKernel()->createService('Coin:Cash.CashOrdersService');
+        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
     }
 
     protected function getOrderService()

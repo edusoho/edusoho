@@ -1358,7 +1358,24 @@ group_thread_post_reply:
     pattern:  /group/post/{postId}/reply
     defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
 
-
+my_coin:
+    path:     /my/coin
+    defaults: { _controller: TopxiaWebBundle:Coin:index }
+my_coin_buy:
+    path:     /my/coin/buy
+    defaults: { _controller: TopxiaWebBundle:Coin:buy }
+coin_pay:
+    path:     /coin/pay
+    defaults: { _controller: TopxiaWebBundle:Coin:pay }
+coin_order_pay_return:
+    path:     /coin/pay/return/{name}
+    defaults: { _controller: TopxiaWebBundle:Coin:payReturn }
+coin_order_pay_notify:
+    path:     /coin/order/notify/{name}
+    defaults: { _controller: TopxiaWebBundle:Coin:payNotify }
+coin_change:
+    path:     /coin/change
+    defaults: { _controller: TopxiaWebBundle:Coin:change }
 
 #占位
 vip:

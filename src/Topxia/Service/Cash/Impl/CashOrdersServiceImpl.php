@@ -147,12 +147,12 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 
     protected function getOrderDao()
     {
-        return $this->createDao('Coin:Cash.CashOrdersDao');
+        return $this->createDao('Cash.CashOrdersDao');
     }
 
     protected function getOrderLogDao()
     {
-        return $this->createDao('Coin:Cash.CashOrdersLogDao');
+        return $this->createDao('Cash.CashOrdersLogDao');
     }
 
     protected function getSettingService(){
@@ -162,7 +162,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 
     protected function getCashService(){
       
-        return $this->createService('Coin:Cash.CashService');
+        return $this->createService('Cash.CashService');
     }
 
 }
