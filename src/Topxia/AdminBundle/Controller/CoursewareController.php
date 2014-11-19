@@ -17,16 +17,16 @@ class CoursewareController extends BaseController
 
         if (empty($method)){
             $conditions = array('categoryId' => $categoryId);
-        } elseif($fields['method'] == 'tag'){
+        } elseif($method == 'tag'){
             $conditions = array(
-                'tagIds' => $fields['tagIds'],
-                'knowledgeId' => $fields['knowledgeId'],
+                'tagIds' => $tagIds,
+                'knowledgeId' => $knowledgeId,
                 'categoryId' => $categoryId
             );
         } else {
             $conditions = array(
-                'title' => $fields['title'],
-                'knowledgeId' => $fields['knowledgeId'],
+                'title' => $title,
+                'knowledgeId' => $knowledgeId,
                 'categoryId' => $categoryId
             );
         }
