@@ -1,8 +1,8 @@
 <?php
-namespace Coin\Service\Cash\Impl;
+namespace Topxia\Service\Cash\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Coin\Service\Cash\CashOrdersService;
+use Topxia\Service\Cash\CashOrdersService;
 use Topxia\Common\ArrayToolkit;
 
 class CashOrdersServiceImpl extends BaseService implements CashOrdersService

@@ -1,9 +1,9 @@
 <?php
 
-namespace Coin\Service\Cash\Dao\Impl;
+namespace Topxia\Service\Cash\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Coin\Service\Cash\Dao\CashFlowDao;
+use Topxia\Service\Cash\Dao\CashFlowDao;
 
 class CashFlowDaoImpl extends BaseDao implements CashFlowDao
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Coin\Service\Cash\Dao;
+namespace Topxia\Service\Cash\Dao;
 
 interface CashOrdersLogDao
 {
