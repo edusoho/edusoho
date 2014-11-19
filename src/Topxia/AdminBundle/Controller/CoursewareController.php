@@ -7,7 +7,7 @@ use Topxia\Service\Util\CCVideoClientFactory;
 
 class CoursewareController extends BaseController
 {
-    public function manageAction(Request $request, $categoryId)
+    public function manageAction(Request $request, $categoryId, $type)
     {
         $fields = $request->query->all();
         if(!empty($fields)){
@@ -41,10 +41,17 @@ class CoursewareController extends BaseController
 
         $category = $this->getCategoryService()->getCategory($categoryId);
 
-        return $this->render('TopxiaAdminBundle:Courseware:manage.html.twig',array(
-            'category' => $category,
-            'coursewares' => $coursewares
-        ));
+        if ($type == 'list') {
+            return $this->render('TopxiaAdminBundle:Courseware:list-view.html.twig',array(
+                'category' => $category,
+                'coursewares' => $coursewares
+            ));
+        } else {
+            return $this->render('TopxiaAdminBundle:Courseware:thumb-view.html.twig',array(
+                'category' => $category,
+                'coursewares' => $coursewares
+            ));
+        }
     }
 
     public function createAction(Request $request, $categoryId)

@@ -703,8 +703,8 @@ admin_courseware_create:
     defaults: { _controller: TopxiaAdminBundle:Courseware:create }
 
 admin_courseware_manage:
-    pattern: /category/{categoryId}/manage/courseware
-    defaults: { _controller: TopxiaAdminBundle:Courseware:manage }
+    pattern: /category/{categoryId}/manage/{type}/courseware
+    defaults: { _controller: TopxiaAdminBundle:Courseware:manage,type:'list'}
 
 admin_knowledge_edit:
     pattern: /knowledge/edit
