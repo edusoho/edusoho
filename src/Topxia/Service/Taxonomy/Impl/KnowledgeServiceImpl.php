@@ -139,6 +139,11 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
         return $knowledge ? false : true;
     }
 
+    public function findKnowledgeByIds(array $ids)
+    {
+        return $this->getKnowledgeDao()->findKnowledgeByIds($ids);
+    }
+
     public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId)
     {
         return $this->getKnowledgeDao()->findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);

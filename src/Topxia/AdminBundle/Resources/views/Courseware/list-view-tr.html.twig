@@ -1,7 +1,7 @@
 <tr>
   <td><input type="checkbox"  data-role="single-select"></td>
   <td>{{ courseware.title }}</td>
-  <td>{{ courseware.knowledgeIds }}</td>
+  <td>{{ knowledge.name|default(null) }}</td>
   <td>
     <a class="btn btn-link update-courseware-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_courseware_edit',{categoryId:category.id,id:courseware.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
     <a class="btn btn-link preview-courseware-btn" data-url=""><span class="glyphicon glyphicon-eye-open"></span></a>

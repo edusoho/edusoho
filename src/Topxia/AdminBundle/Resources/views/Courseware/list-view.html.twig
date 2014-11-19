@@ -26,6 +26,7 @@
     </thead>
     <tbody>
       {% for courseware in coursewares %}
+      {% set knowledge = knowledges[courseware.mainKnowledgeId]|default(null) %}
         {% include 'TopxiaAdminBundle:Courseware:list-view-tr.html.twig' %}
       {% else %}
         <tr class="empty"><td colspan="20">无文件记录</td></tr>

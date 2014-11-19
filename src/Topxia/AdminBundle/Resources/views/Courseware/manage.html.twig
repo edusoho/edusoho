@@ -39,4 +39,5 @@
 <div class="courseware-list">
   {% block list %}{% endblock %}
 </div>
+  {{ web_macro.paginator(paginator) }}
 {% endblock %}
