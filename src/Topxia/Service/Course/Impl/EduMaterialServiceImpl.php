@@ -25,6 +25,11 @@ class EduMaterialServiceImpl extends BaseService implements EduMaterialService
         return $this->getEduMaterialDao()->findAllEduMaterials();
     }
 
+    public function getEduMaterialByGradeIdAndSubjectId($gradeId,$subjectId)
+    {
+        return $this->getEduMaterialDao()->getEduMaterialByGradeIdAndSubjectId($gradeId,$subjectId);
+    }
+
     private function getEduMaterialDao()
     {
         return $this->createDao('Course.EduMaterialDao');

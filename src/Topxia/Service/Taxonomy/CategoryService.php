@@ -7,6 +7,8 @@ interface CategoryService
 
     public function findCategoriesByGroupCode($groupCode);
 
+    public function getMaterialCategoryByGradeIdAndSubjectId($gradeId,$subjectId);
+
     public function getCategory($id);
 
     public function getCategoryByCode($code);

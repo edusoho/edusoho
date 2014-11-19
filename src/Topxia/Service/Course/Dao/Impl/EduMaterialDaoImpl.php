@@ -29,4 +29,10 @@ class EduMaterialDaoImpl extends BaseDao implements EduMaterialDao
         $sql = "SELECT * FROM {$this->table}";
         return $this->getConnection()->fetchAll($sql);
     }
+
+    public function getEduMaterialByGradeIdAndSubjectId($gradeId,$subjectId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE gradeId=? AND subjectId=?";
+        return $this->getConnection()->fetchAssoc($sql,array($gradeId,$subjectId));
+    }
 }

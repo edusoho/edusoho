@@ -12,7 +12,7 @@
     <table class="table table-bordered">
       {% for subject in subjects %}
         {% if loop.index==1 %}
-          <tr>
+          <tr class="info">
             <td></td>
             {% for grade in grades %}
               <td>{{grade.name}}</td>
@@ -20,7 +20,7 @@
           </tr>
         {% endif %}
         <tr>
-          <td>{{subject.name}}</td>
+          <td class="info">{{subject.name}}</td>
           {% set eduMaterialList=eduMaterials[subject.id] %}
           {% for grade in grades %}
             {% set eduMaterial=eduMaterialList[grade.id] %}
