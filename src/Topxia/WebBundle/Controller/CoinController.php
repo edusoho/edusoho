@@ -168,14 +168,6 @@ class CoinController extends BaseController
 
     }
 
-    public function buyAction(Request $request)
-    {  
-
-      return $this->render('TopxiaWebBundle:Coin:buy.html.twig',array(
-          'payments' => $this->getEnabledPayments(),
-          ));
-    }
-
     public function payAction(Request $request)
     {
         $formData = $request->request->all();
@@ -336,5 +328,10 @@ class CoinController extends BaseController
     protected function getSettingService(){
 
       return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 }

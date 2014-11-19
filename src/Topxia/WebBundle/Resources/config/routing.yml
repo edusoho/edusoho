@@ -1361,9 +1361,6 @@ group_thread_post_reply:
 my_coin:
     path:     /my/coin
     defaults: { _controller: TopxiaWebBundle:Coin:index }
-my_coin_buy:
-    path:     /my/coin/buy
-    defaults: { _controller: TopxiaWebBundle:Coin:buy }
 coin_pay:
     path:     /coin/pay
     defaults: { _controller: TopxiaWebBundle:Coin:pay }
