@@ -221,6 +221,7 @@ CREATE TABLE `course` (
   `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '查看次数',
   `userId` int(10) unsigned NOT NULL COMMENT '课程发布人ID',
   `deadlineNotify` enum('active','none') NOT NULL DEFAULT 'none' COMMENT '开启有效期通知',
+  `daysOfNotifyBeforeDeadline` INT(10) NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL COMMENT '课程创建时间',
   `freeStartTime` int(10) NOT NULL DEFAULT '0',
   `freeEndTime` int(10) NOT NULL DEFAULT '0',
