@@ -571,6 +571,10 @@ course_draft_view:
     pattern:  /course/draft/view
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:viewDraft }
 
+courseware_info_get:
+    pattern: /courseware/getVideoInfo
+    defaults: { _controller: TopxiaWebBundle:Courseware:getVideoInfo }
+
 live_course_manage_lesson_create:
     pattern:  /course/{id}/manage/live/lesson/create
     defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:create }

@@ -1,0 +1,65 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% block title %}{% if courseware|default(null) %}编辑{% else %}添加{% endif %}课件{% endblock %}
+{% block body %}
+	<div id="courseware-creater-widget">
+	<form id="courseware-form" class="form-horizontal" action="{% if courseware|default(null) %}{{ path('admin_courseware_edit',{categoryId:category.id,id:courseware.id}) }}{% else %}{{ path('admin_courseware_create',{categoryId:category.id}) }} {% endif %}" method="post">
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="courseware-url-field">文件URL</label>
+			<div class="col-md-7 controls">
+				<input class="form-control" id="courseware-url-field" type="text" name="url" value="http://p.bokecc.com/flash/player.swf?videoID=76A6B883B61A292D_95A35478453CCA9E9C33DC5901307461&autoStart=false&playerid=882520FEC68147E4&playertype=1&htwxpara={'lessonid':46952}" placeholder= "输入网络文件的URL地址">
+			<div class="help-block" data-role="courseware-title"></div>
+			</div class="col-md-2 controls">
+			<div>
+				<div class="btn btn-primary" id="import-courseware-url" data-url="{{ path('courseware_info_get') }}" data-loading-text="正在导入..." autocomplete="off">导入</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="courseware-mainKnowledgeId-field">
+				主知识点
+			</label>
+			<div class="col-md-7 controls">
+				<input class="form-control" id="courseware-mainKnowledgeId-field" type="text" name="mainKnowledgeId" value="{{ courseware.mainKnowledgeId|default(null) }}" >
+				<div class="help-block"></div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="courseware-relatedKnowledgeIds-field">
+				关联知识点
+			</label>
+			<div class="col-md-7 controls">
+				<input class="form-control" id="courseware-relatedKnowledgeIds-field" type="text" name="relatedKnowledgeIds" value="{{ courseware.relatedKnowledgeIds|default(null) }}" >
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="courseware-tag-field">标签</label>
+			<div class="col-md-7 controls">
+				<input class="form-control" id="courseware-tag-field" type="text" name="tagIds" value="{{ courseware.tagIds|default(null) }}" data-url="#" tabindex="3">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="courseware-source-field">课件来源</label>
+			<div class="col-md-7 controls">
+				<input class="form-control" id="courseware-source-field" name="source" tabindex="4" value="{{ courseware.source|default(null) }}">
+			</div>
+		</div>
+
+
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+
+</div>
+<script type="text/javascript">
+app.load('courseware/modal')
+</script>
+{% endblock %}
+
+{% block footer %}
+
+	<button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
+	<button id="courseware-operate-btn" data-loading-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#courseware-form" tabindex="5" data-url="{% if courseware|default(null) %}{{ path('admin_courseware_edit',{categoryId:category.id,id:courseware.id}) }}{% else %}{{ path('admin_courseware_create',{categoryId:category.id}) }} {% endif %}">保存</button>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+<li class="courseware-grid item-courseware">
+  <div style="width: 200px; height: 180px; padding: 8px;">
+    <input value="{{ courseware.id }}" type="checkbox" data-role="single-select" data-courseware-id="{{courseware.id}}">
+
+    <span class="text-sm">{{ courseware.image }}</span>
+    <span class="row">
+      <a class="btn btn-link update-courseware-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_courseware_edit',{categoryId:category.id,id:courseware.id}) }}"><span class="glyphicon glyphicon-pencil"></span>编辑</a>
+      <a class="btn btn-link delete-courseware-btn" data-url="{{ path('admin_courseware_delete',{id:courseware.id}) }}"><span class="glyphicon glyphicon-trash"></span>删除</a>
+    </span>
+  </div>
+</li>

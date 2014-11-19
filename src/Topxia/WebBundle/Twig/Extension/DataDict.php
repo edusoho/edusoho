@@ -221,7 +221,11 @@ class DataDict
             'libriory' => '文库',
             'qestion' => '题库'
         ),
-	);
+        'courseware' => array(
+            'tag' => '标签',
+            'title' => '标题关键词'
+        ),
+    );
 
 	public static function dict($type)
 	{

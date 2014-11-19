@@ -12,6 +12,8 @@ interface KnowledgeDao
 
 	public function createKnowledge($Knowledge);
 
+	public function findKnowledgeByIds(array $ids);
+
 	public function findKnowledgeByCategoryId($categoryId);
 
 	public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
