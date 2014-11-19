@@ -10,36 +10,60 @@ class SearchController extends BaseController
     public function indexAction(Request $request)
     {
         $courses = $paginator = null;
-        // $code = 'Vip';
+        $code = 'Vip';
+
+        $currentUser = $this->getCurrentUser();
 
         $keywords = $request->query->get('q');
-        // $vip = $this->getAppService()->findInstallApp($code);
+        $vip = $this->getAppService()->findInstallApp($code);
 
-        // $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.5", ">=");
+        $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.7", ">=");
+        
+        if($isShowVipSearch){
+            $currentUserVip = $this->getVipService()->getMemberByUserId($currentUser['id']);
+            $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
+            $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
+            $vipLevelIds = ArrayToolkit::column($vipLevels, "id");
+        }
 
-        // if($isShowVipSearch){
-        //     $vipLevel = $this->getLevelService()->getVipLevel();
-        //     $vipLevelCount = $this->getLevelService()->getVipLevelCount();
-        //     $vipLevelId=array();
-        //     for($i=0;$i<$vipLevelCount;$i++){
-        //         $seq = $vipLevel[$i]['seq'];
-        //         $name = $vipLevel[$i]['name'];
-        //         $vipLevelId[$seq] = $name;
-        //     }
-        // } else{
-        //     $vipLevel = null;
-        //     $vipLevelId=array();
-        // }
+        $parentId = 0;
+        $categories = $this->getCategoryService()->findAllCategoriesByParentId($parentId);
+        
+        $categoryIds=array();
+        for($i=0;$i<count($categories);$i++){
+            $id = $categories[$i]['id'];
+            $name = $categories[$i]['name'];
+            $categoryIds[$id] = $name;
+        }
+
+        $categoryId = $request->query->get('categoryIds');
+        $coursesTypeChoices = $request->query->get('coursesTypeChoices');       
+
         if (!$keywords) {
             goto response;
         }
-        // $vipId = $request->query->get('vipLevelId');
 
-        $conditions = array(
-            'status' => 'published',
-            'title' => $keywords,
-            // 'vipLevelId' =>  $vipId
-        );
+        if($coursesTypeChoices == 'vipCourses'){
+            $conditions = array(
+                'status' => 'published',
+                'title' => $keywords,
+                'categoryId' => $categoryId,
+                'vipLevelIds' =>  $vipLevelIds
+            );
+        }elseif($coursesTypeChoices == 'liveCourses'){
+            $conditions = array(
+                'status' => 'published',
+                'title' => $keywords,
+                'categoryId' => $categoryId,
+                'type' => 'live'
+            );
+        }else{
+            $conditions = array(
+                'status' => 'published',
+                'title' => $keywords,
+                'categoryId' => $categoryId
+            );
+        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -53,14 +77,17 @@ class SearchController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+
         response:
         return $this->render('TopxiaWebBundle:Search:index.html.twig', array(
             'courses' => $courses,
             'paginator' => $paginator,
             'keywords' => $keywords,
-            // 'isShowVipSearch' => $isShowVipSearch,
-            // 'vipLevel' => $vipLevel,
-            // 'vipLevelId' => $vipLevelId
+            'isShowVipSearch' => $isShowVipSearch,
+            'currentUserVipLevel' => $currentUserVipLevel,
+            'categoryIds' => $categoryIds,
+            'coursesTypeChoices' => $coursesTypeChoices
         ));
     }
 
@@ -82,6 +109,16 @@ class SearchController extends BaseController
    protected function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+     protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }    
+
+    private function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
 }

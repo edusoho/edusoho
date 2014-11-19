@@ -11,8 +11,11 @@
       {% set question = item.question %}
       {% set itemResult = item.itemResult|default(null) %}
       {% if questionStatus == 'previewing' %}{% set questionStatus = 'doing' %}{% endif %}
+      {% if question %}
       {% include 'TopxiaWebBundle:Question:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
-
+      {% else %}
+      此题已删除。
+      {% endif %}
     </div>
 
   </div>

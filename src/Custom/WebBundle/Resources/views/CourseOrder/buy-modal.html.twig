@@ -1,0 +1,273 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set billable = false %}
+{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}
+  {% set billable = true %}
+{% endif %}
+
+{% block title %}{% if billable %}购买课程{% else %}加入学习{% endif %}{% endblock %}
+{% block body %}
+  {% if billable and course.type=="live" %}
+    <div class="alert alert-info">注意：请在30分钟内完成支付，否则订单将会过期失效</div>
+  {% endif %}
+  <form id="course-buy-form" class="form-horizontal" method="post" action="{{ path('course_order_pay') }}">
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">课程名称</div>
+      <div class="col-md-9 controls">
+        <span class="control-text text-muted">《{{ course.title }}》</span>
+      </div>
+    </div>
+
+    {% if billable %}
+    <div class="form-group">
+      <div class="col-md-3 control-label">价格</div>
+      <div class="col-md-9 controls money-text">
+        <span class="control-text"><strong class="money" {% if level.courseDiscount < 10 %}style="text-decoration: line-through;"{% endif %}>{{ course.price }}</strong>
+            <span class="text-muted">{% if level.courseDiscount < 10 %}{% else %}元{% endif %}</span>
+        </span>
+        {% if level.courseDiscount < 10 %}
+        <span class="control-text"><strong class="money">{{ vipPrice }}</strong>
+            <span class="text-muted">元</span>
+        </span>
+        <div>(VIP折扣价 {{level.courseDiscount}}折)</div>
+      {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if billable %}
+      {% if payments %}
+
+        {% if setting('coupon.enabled') %}
+
+          <div class="form-group coupon-btn-group">
+            <div class="col-md-7 col-md-offset-3 controls">
+              <a href="javascript:;" id="show-coupon-input" data-status='hide'><span id="show-coupon" class="glyphicon glyphicon-plus"></span><span id="hide-coupon" class="glyphicon glyphicon-minus hide"></span>使用优惠码</a>
+            </div>
+          </div>
+
+        {% endif %}
+
+        <div class="form-group coupon-input-group hide">
+          <div class="col-md-7 col-md-offset-3 controls">
+            <div class="input-group">
+              <input type="text" class="form-control" name="coupon">
+              <span class="input-group-btn">
+                <button class="btn btn-default btn-use-coupon" data-url="{{ path('coupon_check', {type:'course', id:course.id}) }}" type="button">使用</button>
+              </span>
+            </div>
+            <div class="help-block coupon-error">温馨提示：点击【去支付】会生成订单，订单生成后，优惠码便不能再使用。</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-3 control-label">选择支付方式</div>
+          <div class="col-md-9 controls">
+            {% for payment, options in payments %}
+                <input type="radio" checked="checked" />
+                <img src="{{ asset('assets/img/order/alipay.gif') }}" />
+            {% endfor %}
+          </div>
+        </div>
+
+        {% if payments.alipay.type|default(null) == 'dualfun' %}
+        <div class="row">
+          <div class="col-md-12">
+            <div class="alert alert-info">
+              <h4>付款提示</h4>
+              请在随后的支付宝支付页面中，选择“<strong>即时到账交易</strong>”，如下图所示。如果选择“担保交易”需要手动确认收货，会增加不必要的操作步骤。
+              <br>
+              <img src="{{ asset('bundles/topxiaweb/img/order/alipay_dualfun_example.png') }}">
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+      {% else %}
+        <div class="alert alert-info">{{ setting('payment.disabled_message')|default('尚未开启支付模块，无法购买课程。')|raw }}</div>
+      {% endif %}
+    {% else %}
+      <div class="row">
+        <div class="col-md-12">
+          {% if avatarAlert %}
+            <div class="alert alert-warning">您还没有头像，设置以后才能加入学习<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="{{ path('settings_avatar') }}" class="alert-link" target="_blank">点击设置</a></div>
+          {% else %}
+            <div class="alert alert-info">此课程为免费课程，无需购买，可直接加入学习。</div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+    <input type="hidden" name="courseId" value="{{ course.id }}" />
+    <input type="hidden" name="payment" value="alipay" />
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+{% if courseSetting.buy_fill_userinfo|default(false) %}
+  {% if courseSetting.userinfoFields %}
+    <br><br>
+    <div class="nav nav-tabs">
+    <div class="help-block">温情提示：如果您的资料有变更，请在此修改，以便更好的为您服务！</div>
+    </div><br>
+
+    {% for field in courseSetting.userinfoFields %}
+
+    {% if field == 'truename' %}
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="truename">真实姓名 </label>
+      <div class="col-md-6 controls">
+        {% if user.approvalStatus == 'approved' %}
+          <div class="control-text">{{ user.truename }} <small class="text-success">(已认证)</small></div>
+        {% elseif user.approvalStatus == 'approving' %}
+          <div class="control-text">{{ user.truename }} <small class="text-warning">(真实认证中)</small></div>
+        {% else %}
+          <input class="form-control" id="truename" type="text" name="truename" value="{{ user.truename }}">
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+    {% if field == 'mobile' %}
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="mobile">手机</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="mobile" type="text" name="mobile" value="{{ user.mobile }}">
+      </div>
+    </div>
+    {% endif %}
+    {% if field == 'qq' %}
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="qq">QQ</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="qq" type="text" name="qq" value="{{ user.qq }}">
+      </div>
+    </div>
+    {% endif %}
+    {% if field == 'company' %}
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="company">所在公司</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="company" type="text" name="company" value="{{ user.company }}">
+      </div>
+    </div>
+    {% endif %}
+    {% if field == 'job' %}
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="job">职业</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="job" type="text" name="job" value="{{ user.job }}">
+      </div>
+    </div>
+    {% endif %}
+    {% if field == 'idcard' %}
+    <div class="form-group">
+      <label class="col-md-3 control-label required" for="idcard">身份证号</label>
+      <div class="col-md-6 controls">
+        <input type="text" id="idcard" name="{{ field }}"  class="form-control" value="{{user.idcard}}">
+      </div>
+    </div>
+    {% endif %}
+    {% if field == 'gender' %}
+    <div class="form-group">        
+      <div class="controls">
+        <label class="col-md-3 control-label required" for="{{ field }}" style="padding: 0 20px 0 0px;">性别</label>&nbsp;
+        <input type="radio" id="{{ field }}_0" name="{{ field }}" required="required" value="male" {% if user.gender=="male"%}checked=true{% endif %}>
+        <label for="profile_gender_0" class="required" style="padding: 0 20px 0 0px;">男</label>
+        <input type="radio" id="{{ field }}_1" name="{{ field }}" required="required" value="female"  {% if user.gender=="female"%}checked=true{% endif %}>
+        <label for="profile_gender_1" class="required" >女</label>
+      </div>
+    </div>
+    {% endif %}
+    {% if field == 'weixin' %}
+    <div class="form-group">
+      <label class="col-md-3 control-label required" for="weixin">微信</label>
+      <div class="col-md-6 controls">
+        <input type="text" id="weixin" name="{{ field }}"  class="form-control" value="{{user.weixin}}">
+      </div>
+    </div>
+    {% endif %}
+    {% if field == 'weibo' %}
+    <div class="form-group">
+      <label class="col-md-3 control-label required" for="weibo">微博</label>
+      <div class="col-md-6 controls">
+        <input type="text" id="weibo" name="{{ field }}"  class="form-control" value="{{user.weibo}}">
+      </div>
+    </div>
+    {% endif %} 
+    {% for userField in userFields %}
+              {% if field==userField.fieldName %}
+                 {% if userField.type=="text" %}             
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class="col-md-3 control-label ">{{userField.title}}</label>
+                    <div class="col-md-6 controls">
+                      <textarea id="{{userField.fieldName}}" name="{{userField.fieldName}}" class="form-control ">{{ user[userField.fieldName]|default('') }}</textarea>
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                  {% elseif userField.type=="int" %}
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class=" col-md-3 control-label">{{userField.title}}</label>
+                    <div class="col-md-6 controls">
+                      <input type="text" id="{{userField.fieldName}}" placeholder="最大值为9位整数" name="{{userField.fieldName}}" class="{{userField.type}}  form-control" data-widget-cid="widget-5" data-explain="" value="{{ user[userField.fieldName]|default('') }}">
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                  {% elseif userField.type=="float" %}
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class="col-md-3 control-label">{{userField.title}}</label>
+                    <div class=" col-md-6 controls">
+                      <input type="text" id="{{userField.fieldName}}" placeholder="保留到2位小数" name="{{userField.fieldName}}" class="{{userField.type}} form-control" data-widget-cid="widget-5" data-explain="" value="{{ user[userField.fieldName]|default('') }}">
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                  {% elseif userField.type=="date" %}
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class="col-md-3 control-label">{{userField.title}}</label>
+                    <div class=" col-md-6 controls">
+                      <input type="text" id="{{userField.fieldName}}" name="{{userField.fieldName}}" class="{{userField.type}}  form-control" data-widget-cid="widget-5" data-explain="" value="{{ user[userField.fieldName]|default('') }}">
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                  {% elseif userField.type=="varchar" %}
+                  <div class="form-group">
+                    <label for="{{userField.fieldName}}" class="col-md-3 control-label">{{userField.title}}</label>
+                    <div class="col-md-6  controls">
+                      <input type="text" id="{{userField.fieldName}}" name="{{userField.fieldName}}" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ user[userField.fieldName]|default('') }}">
+                      <div class="help-block" style="display:none;"></div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+    {% endfor %}
+    {% endif %}
+{% endif %}
+
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+  {% if billable %}
+    {% if payments %}
+      {% if member %}
+        <span class="text-muted">预览模式无法支付</span>
+        <button class="btn btn-primary" disabled="disabled">去支付</button> 
+      {% else %}
+        <button id="course-pay" class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
+      {% endif %}
+    {% endif %}
+  {% else %}
+    {% if member %}
+      <span class="text-muted">预览模式无法加入学习</span>
+      <button class="btn btn-primary" disabled="disabled">加入学习</button> 
+    {% else %}  
+      {% if not avatarAlert %}
+        <button id="join-course-btn" class="btn btn-primary" data-submiting-text="正在加入" type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
+      {% endif %}
+    {% endif %}
+
+  {% endif %}
+
+  <script>
+    app.load('course/buy-modal');
+  </script>
+{% endblock %}

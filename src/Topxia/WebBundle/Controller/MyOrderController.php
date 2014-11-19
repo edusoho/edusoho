@@ -66,6 +66,12 @@ class MyOrderController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function cancelAction(Request $request, $id)
+    {
+        $this->getCourseOrderService()->cancelOrder($id);
+        return $this->createJsonResponse(true);
+    }
+
     private function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');

@@ -38,7 +38,7 @@ class SettingController extends BaseController
             'status'=>'open',
             'closed_note'=>'',
             'favicon'=>'',
-            'copyright'=>''
+            'copyright'=>'',
         );
 
         $site = array_merge($default, $site);
@@ -249,6 +249,7 @@ class SettingController extends BaseController
             'user_terms_body' => '',
             'registerFieldNameArray'=>array(),
             'registerSort'=>array(0=>"email",1=>"nickname",2=>"password"),
+            'captcha_enabled' => 0,
         );
 
         $auth = array_merge($default, $auth);
@@ -327,6 +328,7 @@ class SettingController extends BaseController
             'renren_secret'=>'',
             'renren_set_fill_account'=>0,
             'verify_code' => '',
+            'captcha_enabled'=>0,
         );
 
         $loginConnect = array_merge($default, $loginConnect);
