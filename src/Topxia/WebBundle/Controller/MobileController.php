@@ -9,9 +9,7 @@ use Endroid\QrCode\QrCode;
 use Topxia\Service\CloudPlatform\Client\CloudAPI;
 
 class MobileController extends BaseController
-{
-    private $code = '';
-    
+{    
     protected function createAPIClient()
     {
         $settings = $this->getServiceKernel()->createService('System.SettingService')->get('storage', array());
@@ -31,21 +29,17 @@ class MobileController extends BaseController
         }
 
         $result = $this->createAPIClient()->get('/me');
-        $this->code = $result['mobileCode'];
 
         return $this->render('TopxiaWebBundle:Mobile:index.html.twig', array(
             'host' => $request->getHttpHost(),
-            'mobileCode' => ( ($this->code != '') ? $this->code : "edusoho")
+            'mobileCode' => ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho")
         ));
     }
 
     public function downloadQrcodeAction(Request $request)
     {
-        if ($this->code == ''){
-            $result = $this->createAPIClient()->get('/me');
-            $this->code = $result['mobileCode'];
-        }
-        $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $this->code), true);     
+        $code = $request->get("code");
+        $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $code), true);     
         $qrCode = new QrCode();
         $qrCode->setText($url);
         $qrCode->setSize(150);
