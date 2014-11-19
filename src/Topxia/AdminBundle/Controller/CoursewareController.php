@@ -7,20 +7,20 @@ use Topxia\Service\Util\CCVideoClientFactory;
 
 class CoursewareController extends BaseController
 {
-    public function manageAction(Request $request, $categoryId)
+    public function manageAction(Request $request, $categoryId, $type)
     {
         $fields = $request->query->all();
         if(!empty($fields)){
             if($fields['method'] == 'tag'){
                 $conditions = array(
                     'tagIds' => $fields['tagIds'],
-                    'knowledgeIds' => $fields['knowledgeIds'],
+                    'knowledgeId' => $fields['knowledgeId'],
                     'categoryId' => $categoryId
                 );
             } else {
                 $conditions = array(
                     'title' => $fields['title'],
-                    'knowledgeIds' => $fields['knowledgeIds'],
+                    'knowledgeId' => $fields['knowledgeId'],
                     'categoryId' => $categoryId
                 );
             }
@@ -28,9 +28,9 @@ class CoursewareController extends BaseController
             $conditions = array('categoryId' => $categoryId);
         }
 
-        $count = $this->getCoursewareService()->searchCoursewaresCount($conditions);
+        $coursewaresCount = $this->getCoursewareService()->searchCoursewaresCount($conditions);
 
-        $paginator = new Paginator($this->get('request'), $count, 6);
+        $paginator = new Paginator($this->get('request'), $coursewaresCount, 8);
 
         $coursewares = $this->getCoursewareService()->searchCoursewares(
             $conditions, 
@@ -41,10 +41,18 @@ class CoursewareController extends BaseController
 
         $category = $this->getCategoryService()->getCategory($categoryId);
 
-        return $this->render('TopxiaAdminBundle:Courseware:manage.html.twig',array(
-            'category' => $category,
-            'coursewares' => $coursewares
-        ));
+        if ($type == 'list') {
+            return $this->render('TopxiaAdminBundle:Courseware:list-view.html.twig',array(
+                'category' => $category,
+                'coursewares' => $coursewares
+            ));
+        } else {
+            return $this->render('TopxiaAdminBundle:Courseware:thumb-view.html.twig',array(
+                'category' => $category,
+                'coursewares' => $coursewares,
+                'coursewaresCount' => $coursewaresCount
+            ));
+        }
     }
 
     public function createAction(Request $request, $categoryId)

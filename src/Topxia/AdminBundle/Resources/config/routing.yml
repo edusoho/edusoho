@@ -707,8 +707,8 @@ admin_courseware_edit:
     defaults: { _controller: TopxiaAdminBundle:Courseware:edit }
 
 admin_courseware_manage:
-    pattern: /category/{categoryId}/manage/courseware
-    defaults: { _controller: TopxiaAdminBundle:Courseware:manage }
+    pattern: /category/{categoryId}/manage/{type}/courseware
+    defaults: { _controller: TopxiaAdminBundle:Courseware:manage,type:'thumb'}
 
 admin_courseware_delete:
     pattern: /category/{categoryId}/delete/courseware/{id}
