@@ -60,9 +60,7 @@ class UserApprovalController extends BaseController
 
     public function approveAction(Request $request, $id)
     {
-        $user = $this->getUserService()->getUser($id);
-
-        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
+        list($user, $userApprovalInfo) = $this->getApprovalInfo($request, $id);
 
         if ($request->getMethod() == 'POST') {
             
@@ -76,15 +74,30 @@ class UserApprovalController extends BaseController
             return $this->createJsonResponse(array('status' => 'ok'));
         }
 
-        $fromVerified = $request->get('fromVerified');
-
         return $this->render("TopxiaAdminBundle:User:user-approve-modal.html.twig",
             array(
                 'user' => $user,
                 'userApprovalInfo' => $userApprovalInfo,
-                'fromVerified' => $fromVerified
             )
         );
+    }
+
+    public function viewApprovalInfoAction(Request $request, $id){
+        list($user, $userApprovalInfo) = $this->getApprovalInfo($request, $id);
+
+        return $this->render("TopxiaAdminBundle:User:user-approve-info-modal.html.twig",
+            array(
+                'user' => $user,
+                'userApprovalInfo' => $userApprovalInfo,
+            )
+        );
+    }
+
+    public function getApprovalInfo(Request $request, $id){
+        $user = $this->getUserService()->getUser($id);
+
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
+        return array($user, $userApprovalInfo);
     }
 
     public function showIdcardAction($userId, $type)
