@@ -22,7 +22,7 @@ class BaseinfoStep extends AbstractStep
         if ($form->handleRequest($request)->isValid()) {
             $data = $form->getData();
             //$context->getStorage()->set('my_data', $form->getData());
-            $wecaht = $this->getWechatService();
+            $wecaht = $this->getWechatService()->addAccount($data);
             return $this->complete();
         }
         return $this->render(
@@ -33,7 +33,7 @@ class BaseinfoStep extends AbstractStep
 
     private function getWechatService()
     {
-        return $this->getServiceKernel()->createService('Fomalhaut:Wechat.AcctountService');
+        return $this->getServiceKernel()->createService('Fomalhaut:Wechat.AccountService');
     }
 
 } 
