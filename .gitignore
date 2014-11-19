@@ -43,3 +43,4 @@ edusoho.komodoproject
 .settings
 composer.sublime-workspace
 web/assets/img/default/video.png
+.publish

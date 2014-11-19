@@ -88,11 +88,11 @@ class PluginCreateCommand extends GeneratorCommand
         $this->filesystem ->mkdir($dir."/".$pluginName."/Scripts");
         $this->filesystem ->mkdir($dir."/".$pluginName."/Service");
 
-        $this->filesystem ->mkdir($dir."/".$pluginName."/Service/Demo");
+        $this->filesystem ->mkdir($dir."/".$pluginName."/Service/".$pluginName."");
 
-        $this->filesystem ->mkdir($dir."/".$pluginName."/Service/Demo/Impl");
-        $this->filesystem ->mkdir($dir."/".$pluginName."/Service/Demo/Dao");
-        $this->filesystem ->mkdir($dir."/".$pluginName."/Service/Demo/Dao/Impl");
+        $this->filesystem ->mkdir($dir."/".$pluginName."/Service/".$pluginName."/Impl");
+        $this->filesystem ->mkdir($dir."/".$pluginName."/Service/".$pluginName."/Dao");
+        $this->filesystem ->mkdir($dir."/".$pluginName."/Service/".$pluginName."/Dao/Impl");
 
         $data=$this->getBaseInstallScript();
         file_put_contents ($dir."/".$pluginName."/Scripts/BaseInstallScript.php", $data);
@@ -101,19 +101,23 @@ class PluginCreateCommand extends GeneratorCommand
         file_put_contents ($dir."/".$pluginName."/Scripts/InstallScript.php", $data);
 
         $data=$this->getService($pluginName);
-        file_put_contents ($dir."/".$pluginName."/Service/Demo/DemoService.php", $data);
+        file_put_contents ($dir."/".$pluginName."/Service/".$pluginName."/".$pluginName."Service.php", $data);
 
         $data=$this->getServiceImpl($pluginName);
-        file_put_contents ($dir."/".$pluginName."/Service/Demo/Impl/DemoServiceImpl.php", $data);
+        file_put_contents ($dir."/".$pluginName."/Service/".$pluginName."/Impl/".$pluginName."ServiceImpl.php", $data);
 
         $data=$this->getDao($pluginName);
-        file_put_contents ($dir."/".$pluginName."/Service/Demo/Dao/DemoDao.php", $data);
+        file_put_contents ($dir."/".$pluginName."/Service/".$pluginName."/Dao/".$pluginName."Dao.php", $data);
 
         $data=$this->getDaoImpl($pluginName);
-        file_put_contents ($dir."/".$pluginName."/Service/Demo/Dao/Impl/DemoDaoImpl.php", $data);
+        file_put_contents ($dir."/".$pluginName."/Service/".$pluginName."/Dao/Impl/".$pluginName."DaoImpl.php", $data);
         $dialog->writeGeneratorSummary($output, $errors);
     }
 
+    private function getData($data,$pluginName)
+    {
+        return str_replace("{{name}}", $pluginName, $data);
+    }
 
     protected function createGenerator()
     {
@@ -121,173 +125,44 @@ class PluginCreateCommand extends GeneratorCommand
     }
 
     public function getDaoImpl($pluginName)
-    {
-        return '<?php
+    {   
+        $data=file_get_contents(__DIR__."/plugins-tpl/DaoImpl.twig");
 
-namespace '.$pluginName.'\Service\Demo\Dao\Impl;
-
-use Topxia\Service\Common\BaseDao;
-use '.$pluginName.'\Service\Demo\Dao\DemoDao;
-
-class DemoDaoImpl extends BaseDao implements DemoDao
-{
-
-}';
+        return $this->getData($data,$pluginName);
     }
 
     public function getDao($pluginName)
     {
-        return '<?php
+        $data=file_get_contents(__DIR__."/plugins-tpl/Dao.twig");
 
-namespace '.$pluginName.'\Service\Demo\Dao;
-
-interface DemoDao
-{
-
-}';
+        return $this->getData($data,$pluginName);
     }   
 
     public function getServiceImpl($pluginName)
     {
-        return '<?php
-namespace '.$pluginName.'\Service\Demo\Impl;
+        $data=file_get_contents(__DIR__."/plugins-tpl/ServiceImpl.twig");
 
-use Topxia\Service\Common\BaseService;
-use '.$pluginName.'\Service\Demo\DemoService;
-
-class DemoServiceImpl extends BaseService implements DemoService
-{
-    protected function getDemoDao()
-    {
-        return $this->createDao(\''.$pluginName.':Demo.DemoDao\');
-    }
-}';
+        return $this->getData($data,$pluginName);
     }
 
     public function getService($pluginName)
     {
-        return '<?php
-namespace '.$pluginName.'\Service\Demo;
+        $data=file_get_contents(__DIR__."/plugins-tpl/Service.twig");
 
-interface DemoService
-{
-
-}';
+        return $this->getData($data,$pluginName);
     }
 
     private function getInstallScript()
     {
-        return '<?php
+        $data=file_get_contents(__DIR__."/plugins-tpl/InstallScript.twig");
 
-include_once __DIR__ . \'/BaseInstallScript.php\';
-
-class InstallScript extends BaseInstallScript
-{
-
-    public function install()
-    {
-
-        $connection = $this->getConnection();
-        /* create you database table 
-        $connection->exec("DROP TABLE IF EXISTS `cash_orders_log`;");
-        $connection->exec("
-            CREATE TABLE IF NOT EXISTS `cash_orders_log` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-            `orderId` int(10) unsigned NOT NULL,
-            `message` text,
-            PRIMARY KEY (`id`)
-          ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-        ");*/
-    }
-
-}';
+        return $this->getData($data,"");
     }
 
     private function getBaseInstallScript()
     {
-        return '<?php
+        $data=file_get_contents(__DIR__."/plugins-tpl/BaseInstallScript.twig");
 
-use Symfony\Component\Filesystem\Filesystem;
-
-abstract class BaseInstallScript
-{
-
-    protected $meta;
-
-    protected $kernel;
-
-    protected $installMode = \'appstore\';
-
-    public function __construct ($kernel)
-    {
-        $this->kernel = $kernel;
-        $this->meta = json_decode(file_get_contents(__DIR__  . \'/../plugin.json\'), true);
-    }
-
-    abstract public function install();
-
-    public function execute()
-    {
-        $this->getConnection()->beginTransaction();
-        try{
-            $this->install();
-            $this->installAssets();
-            $this->getConnection()->commit();
-        } catch(\Exception $e) {
-            $this->getConnection()->rollback();
-            throw $e;
-        }
-    }
-
-    public function setInstallMode($mode)
-    {
-        if (!in_array($mode, array(\'appstore\', \'command\'))) {
-            throw new \RuntimeException("$mode is not validate install mode.");
-        }
-
-        $this->installMode = $mode;
-    }
-
-    protected function installAssets()
-    {
-        $code = $this->meta[\'code\'];
-
-        $rootDir = realpath($this->kernel->getParameter(\'kernel.root_dir\') . \'/../\');
-        
-        $originDir = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/public";
-        if (!is_dir($originDir)) {
-            return false;
-        }
-
-        $targetDir = "{$rootDir}/web/bundles/" . strtolower($code);
-
-        $filesystem = new Filesystem();
-        if ($filesystem->exists($targetDir)) {
-            $filesystem->remove($targetDir);
-        }
-
-        if ($this->installMode == \'command\') {
-            $filesystem->symlink($originDir, $targetDir, true);
-        } else {
-            $filesystem->mirror($originDir, $targetDir, null, array(\'override\' => true, \'delete\' => true));
-        }
-    }
-
-    protected function createService($name)
-    {
-        return $this->kernel->createService($name);
-    }
-
-    protected function createDao($name)
-    {
-        return $this->kernel->createDao($name);
-    }
-
-    protected function getConnection()
-    {
-        return $this->kernel->getConnection();
-    }
-
-}';
+        return $this->getData($data,"");
     }
 }

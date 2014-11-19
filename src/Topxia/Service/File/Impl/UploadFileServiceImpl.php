@@ -313,6 +313,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSVideo') {
             $file['convertParams']['hlsKeyUrl'] = 'http://hlskey.edusoho.net/placeholder';
             $file['convertParams']['hlsKey'] = $this->generateKey(16);
+            if ($file['convertParams']['videoQuality'] == 'low') {
+                $file['convertParams']['videoQuality'] = 'normal';
+                $file['convertParams']['video'] = array('440k', '640k', '1000K');
+            }
+
             $fileNeedUpdateFields['convertParams'] = json_encode($file['convertParams']);
             $file['convertParams']['convertor'] = 'HLSEncryptedVideo';
         }
@@ -321,10 +326,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $convertParams = array(
                 'convertor' => 'HLSEncryptedVideo',
                 'segtime' => 10,
-                'videoQuality' => 'low',
-                'audioQuality' => 'low',
-                'video' => array('240k', '440k', '640k'),
-                'audio' => array('32k', '48k', '64k'),
+                'videoQuality' => 'normal',
+                'audioQuality' => 'normal',
+                'video' => array('440k', '640k', '1000K'),
+                'audio' => array('48k', '64k', '96k'),
                 'hlsKeyUrl' => 'http://hlskey.edusoho.net/placeholder',
                 'hlsKey' => $this->generateKey(16),
             );

@@ -1,0 +1,13 @@
+<?php
+namespace {{name}}\Service\{{name}}\Impl;
+
+use Topxia\Service\Common\BaseService;
+use {{name}}\Service\{{name}}\{{name}}Service;
+
+class {{name}}ServiceImpl extends BaseService implements {{name}}Service
+{
+    protected function get{{name}}Dao()
+    {
+        return $this->createDao('{{name}}:{{name}}.{{name}}Dao');
+    }
+}

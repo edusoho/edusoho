@@ -1,4 +1,4 @@
-{% if courses %}
+{% if sortedCourses %}
 	<table class="table table-condensed table-striped table-hover" style="word-break: break-all;">
 	  <thead>
 	    <tr>
@@ -9,14 +9,14 @@
 	    </tr>
 	  </thead>
 		<tbody>
-			{% for course in courses %}
+			{% for sortedcourse in sortedCourses %}
 				<tr>
 					<td>
-						<a href="{{ path('course_show', {id: course.id}) }}" target="_blank">{{ course.title }}</a>
+						<a href="{{ path('course_show', {id: sortedcourse.courseId}) }}" target="_blank">{{ sortedcourse.title }}</a>
 					</td>
-					<td>{{ course['addedStudentNum'] }} 人 </td>
-					<td>{{ course['studentNum'] }} 人</td>
-					<td class="money-text">{{ course['addedMoney'] }} 元 </td>
+					<td>{{ sortedcourse['addedStudentNum'] }} 人 </td>
+					<td>{{ sortedcourse['studentNum'] }} 人</td>
+					<td class="money-text">{{sortedcourse['addedMoney'] }} 元 </td>
 				</tr>
 			{% endfor %}
 		</tbody>
