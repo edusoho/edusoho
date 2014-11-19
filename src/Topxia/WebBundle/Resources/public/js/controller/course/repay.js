@@ -10,6 +10,9 @@ define(function(require, exports, module) {
             }
 
             $.post($(this).data('url'), function(data) {
+                if(data!=true) {
+                    Notify.danger('订单取消失败！'); 
+                }
                 Notify.success('订单已取消成功！');
                 window.location.reload();
             });
