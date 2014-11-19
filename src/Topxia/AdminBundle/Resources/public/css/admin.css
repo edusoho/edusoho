@@ -271,7 +271,19 @@ input.LargeInput {width: 600px;}
 }
 
 .list-group-panel .list-group-item:hover {
-    border-left: 3px solid #eee;
-
+  border-left: 3px solid #eee;
 }
 
+.courseware-grids {
+  margin: 0 -15px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.courseware-grid {
+  display: inline-block;
+  vertical-align: top;
+  margin: 15px 15px 15px 0;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+}

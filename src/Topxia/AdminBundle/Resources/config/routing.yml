@@ -704,7 +704,7 @@ admin_courseware_create:
 
 admin_courseware_manage:
     pattern: /category/{categoryId}/manage/{type}/courseware
-    defaults: { _controller: TopxiaAdminBundle:Courseware:manage,type:'list'}
+    defaults: { _controller: TopxiaAdminBundle:Courseware:manage,type:'thumb'}
 
 admin_knowledge_edit:
     pattern: /knowledge/edit

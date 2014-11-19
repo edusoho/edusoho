@@ -2,17 +2,18 @@
 
 {% block list %}
 
-<div id="aticle-table-container">
+<div id="courseware-table-container">
   <table class="table table-hover table-striped" id="article-table">
     <thead>
       <tr>
-        <th width="50%"><label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label></th>
+        <th width="50%"><label class="checkbox-inline"><input type="checkbox" data-role="batch-select">全选</label>&nbsp;&nbsp; <span>共{{ coursewaresCount }}个</span>
+        </th>
         <th width="50%">
           <span style="float: right;">
-            <a href="{{path('admin_courseware_manage', {categoryId:category.id, type:'list'}) }}">
+            <a href="{{path('admin_courseware_manage', {categoryId:category.id, type:'thumb'}) }}">
                <span class="glyphicon glyphicon-th-large" />
             </a>
-            <a href="{{path('admin_courseware_manage', {categoryId:category.id, type:'thumb'}) }}">
+            <a href="{{path('admin_courseware_manage', {categoryId:category.id, type:'list'}) }}">
               <span class="glyphicon glyphicon-th-list" />
             </a>
           </span>
@@ -23,7 +24,7 @@
     </tbody>
   </table>
 
-  <div class="course-grids" id="material-item-list">
+  <div class="courseware-grids" id="courseware-thumb-item-list">
     {% for courseware in coursewares %}
       {% include 'TopxiaAdminBundle:Courseware:thumb-view-item.html.twig' %}
     {% else %}

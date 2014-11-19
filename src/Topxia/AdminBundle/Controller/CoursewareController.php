@@ -28,9 +28,9 @@ class CoursewareController extends BaseController
             $conditions = array('categoryId' => $categoryId);
         }
 
-        $count = $this->getCoursewareService()->searchCoursewaresCount($conditions);
+        $coursewaresCount = $this->getCoursewareService()->searchCoursewaresCount($conditions);
 
-        $paginator = new Paginator($this->get('request'), $count, 6);
+        $paginator = new Paginator($this->get('request'), $coursewaresCount, 8);
 
         $coursewares = $this->getCoursewareService()->searchCoursewares(
             $conditions, 
@@ -49,7 +49,8 @@ class CoursewareController extends BaseController
         } else {
             return $this->render('TopxiaAdminBundle:Courseware:thumb-view.html.twig',array(
                 'category' => $category,
-                'coursewares' => $coursewares
+                'coursewares' => $coursewares,
+                'coursewaresCount' => $coursewaresCount
             ));
         }
     }

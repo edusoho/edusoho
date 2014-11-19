@@ -8,15 +8,16 @@
   <table class="table table-hover table-striped" id="courseware-item-list">
     <thead>
       <tr>
-        <th width="10%"><input type="checkbox"  data-role="batch-select">全选</th>
+        <th width="5%"><input type="checkbox"  data-role="batch-select"></th>
         <th width="">文件名</th>
         <th width="">知识点</th>
-        <th width="">
+        <th width="20%">
+          操作
           <span style="float: right;">
-            <a href="{{path('admin_courseware_manage', {categoryId:category.id, type:'list'}) }}">
+            <a href="{{path('admin_courseware_manage', {categoryId:category.id, type:'thumb'}) }}">
                <span class="glyphicon glyphicon-th-large" />
             </a>
-            <a href="{{path('admin_courseware_manage', {categoryId:category.id, type:'thumb'}) }}">
+            <a href="{{path('admin_courseware_manage', {categoryId:category.id, type:'list'}) }}">
               <span class="glyphicon glyphicon-th-list" />
             </a>
           </span>
