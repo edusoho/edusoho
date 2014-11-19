@@ -49,7 +49,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
-    public function findQuestionsbyTypesAndNotQueryUnvalidatedMaterial($types, $start, $limit)
+    public function findQuestionsByTypesAndExcludeUnvalidatedMaterial($types, $start, $limit)
     {
         if (empty($types)) {
             return array();
@@ -217,7 +217,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             }
         }
 
-        if (isset($conditions['notQueryUnvalidatedMaterial']) and ($conditions['notQueryUnvalidatedMaterial'] == 1)){
+        if (isset($conditions['ExcludeUnvalidatedMaterial']) and ($conditions['ExcludeUnvalidatedMaterial'] == 1)){
             $builder->andStaticWhere(" not( type = 'material' and subCount = 0 )");
         }
         return $builder;
