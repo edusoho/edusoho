@@ -24,7 +24,7 @@ class TagController extends BaseController
 	public function createAction(Request $request)
 	{
 		if ('POST' == $request->getMethod()) {
-			$tag = $this->getTagService()->addTag($request->request->all());
+			$tag = $this->getCustomTagService()->addTag($request->request->all());
 			return $this->render('CustomAdminBundle:Tag:list-tr.html.twig', array('tag' => $tag));
 		}
 
@@ -41,51 +41,25 @@ class TagController extends BaseController
 		}
 
 		if ('POST' == $request->getMethod()) {
-			$tag = $this->getTagService()->updateTag($id, $request->request->all());
-			return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
+			$tag = $this->getCustomTagService()->updateTag($id, $request->request->all());
+			return $this->render('CustomAdminBundle:Tag:list-tr.html.twig', array(
 				'tag' => $tag
 			));
 		}
 
-		return $this->render('TopxiaAdminBundle:Tag:tag-modal.html.twig', array(
+		return $this->render('CustomAdminBundle:Tag:tag-modal.html.twig', array(
 			'tag' => $tag
 		));
 	}
 
-	public function deleteAction(Request $request, $id)
-	{
-		$this->getTagService()->deleteTag($id);
-		return $this->createJsonResponse(true);
-	}
-
-	public function checkNameAction(Request $request)
-	{
-		$name = $request->query->get('value');
-		$exclude = $request->query->get('exclude');
-
-		$avaliable = $this->getTagService()->isTagNameAvalieable($name, $exclude);
-
-        if ($avaliable) {
-            $response = array('success' => true, 'message' => '');
-        } else {
-            $response = array('success' => false, 'message' => '标签已存在');
-        }
-
-        return $this->createJsonResponse($response);
-	}
 
 	private function getTagService()
 	{
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        		return $this->getServiceKernel()->createService('Taxonomy.TagService');
 	}
-
-	private function getTagWithException($tagId)
+	private function getCustomTagService()
 	{
-		$tag = $this->getTagService()->getTag($tagId);
-		if (empty($tag)) {
-			throw $this->createNotFoundException('标签不存在!');
-		}
-		return $tag;
+       	 	return $this->getServiceKernel()->createService('Custom:Taxonomy.TagService');
 	}
 
 }

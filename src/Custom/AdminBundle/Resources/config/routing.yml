@@ -7,3 +7,6 @@ admin_tag:
 admin_tag_create:
     pattern:  /tag/create
     defaults: { _controller: CustomAdminBundle:Tag:create }
+admin_tag_update:
+    pattern:  /tag/{id}/update
+    defaults: { _controller: CustomAdminBundle:Tag:update }

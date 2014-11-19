@@ -4,6 +4,18 @@
   <td>{{tag.description|default("")}}</td>
   <td>{{ tag.createdTime|date('Y-m-d H:i') }}</td>
   <td>
+         <div class="btn-group">
+                   <a href="#modal" data-toggle="modal" data-url="{{ path('admin_tag_update', {id:tag.id}) }}" data-url="" class="btn btn-default btn-sm">编辑</a>
+     	    <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+       	          <span class="caret"></span>
+                 </a>
+	      <ul class="dropdown-menu">
+	        <li><a href="#modal" data-toggle="modal" >设置标签图标</a></li>
+	      </ul>
+        </div>
+   </td>
+ </tr>
+    {#      </div>
     <button class="btn btn-default btn-sm" data-url="{{ path('admin_tag_update', {id:tag.id}) }}" data-toggle="modal" data-target="#modal">编辑</button>
   </td>
-</tr>
+</tr> #}

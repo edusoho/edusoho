@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
 	exports.run = function() {
-		alert(1);
 		$('body').on('click', 'button.delete-btn', function() {
 			if (!confirm('确认要删除标签吗？')) return false;
 			var $btn = $(this);
