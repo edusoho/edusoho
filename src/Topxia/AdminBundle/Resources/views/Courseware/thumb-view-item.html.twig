@@ -2,7 +2,7 @@
   <div style="width: 200px; height: 180px; padding: 8px;">
     <input value="{{ courseware.id }}" type="checkbox" data-role="batch-item" >
 
-    <span class="text-sm">{{ courseware.image }}</span>
+    <div class="text-sm"><img src="{{ courseware.image }}" width="180px" /></div>
     <span class="row">
       <a class="btn btn-link update-courseware-btn" data-url=""><span class="glyphicon glyphicon-pencil"></span>编辑</a>
       <a class="btn btn-link delete-courseware-btn" data-url=""><span class="glyphicon glyphicon-trash"></span>删除</a>
