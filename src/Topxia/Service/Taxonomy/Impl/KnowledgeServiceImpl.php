@@ -98,9 +98,8 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
         return $result;
     }
 
-    public function findNodesData($parentId, $request)
+    public function findNodesData($parentId, $query)
     {
-        $query = $request->request->all();
         unset($query['id']);
         if($parentId) {
             $knowledge = $this->checkExist($parentId);

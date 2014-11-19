@@ -32,7 +32,7 @@ define(function(require, exports, module) {
 
         $('#course-create-form').on('change', '.event', function(){
             $.get($('#course-create-form').data('url'), {subjectId:$('#subjectId').val(), gradeId:$('#gradeId').val()}, function(result){
-                if(result) {
+                if('id' in result) {
                     $('#materialId').val(result.id);
                     $('#material').val(result.name);
                 } else {

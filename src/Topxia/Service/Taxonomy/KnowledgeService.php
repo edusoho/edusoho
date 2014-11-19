@@ -20,7 +20,7 @@ interface KnowledgeService
 
     public function findKnowledgeByParentId($parentId);
 
-    public function findNodesData($categoryId, $parentId);
+    public function findNodesData($parentId, $query);
 
     public function isKnowledgeCodeAvaliable($code, $exclude);
 }

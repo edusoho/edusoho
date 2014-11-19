@@ -15,7 +15,8 @@ class HtmlExtension extends \Twig_Extension
             new \Twig_SimpleFunction('radios', array($this, 'radios'), $options),
             new \Twig_SimpleFunction('checkboxs', array($this, 'checkboxs'), $options),
             new \Twig_SimpleFunction('field_value', array($this, 'fieldValue'), $options),
-            new \Twig_SimpleFunction('select_options_for_school', array($this, 'selectOptions2'), $options),
+            new \Twig_SimpleFunction('select_options_for_grade', array($this, 'selectOptions2'), $options),
+            new \Twig_SimpleFunction('select_options_for_subject', array($this, 'selectOptions3'), $options),
         );
     }
 
@@ -99,6 +100,32 @@ class HtmlExtension extends \Twig_Extension
 
         return $html;
     }
+
+    public function selectOptions3($choices, $selected = null, $empty = null)
+    {
+        $html = '';
+        if (!is_null($empty)) {
+            $html .= "<option value=\"\">{$empty}</option>";
+        }
+
+        $subjects = $this->getCategoryService()->findCategoriesByGroupCode('subject');
+
+        $choices = array();
+        foreach ($subjects as $subject) {
+            $choices[$subject['id']] = $subject['name'];
+        }
+
+        foreach ($choices as $value => $name) {
+            if ($selected == $value) {
+                $html .= "<option value=\"{$value}\" selected=\"selected\">{$name}</option>";
+            } else {
+                $html .= "<option value=\"{$value}\">{$name}</option>";
+            }
+        }
+
+        return $html;
+    }
+
     public function radios($name, $choices, $checked = null)
     {
         $html = '';
@@ -132,6 +159,11 @@ class HtmlExtension extends \Twig_Extension
     public function getName ()
     {
         return 'topxia_html_twig';
+    }
+
+    private function getCategoryService()
+    {
+        return ServiceKernel::instance()->createService('Taxonomy.CategoryService');
     }
 
 }

@@ -14,21 +14,21 @@
   <h1 class="pull-left">知识点管理</h1>
 </div>
 
-<div class="container select-section" data-url="{{ path('admin_get_material') }}">
+<div class="container select-section" data-url="{{ path('get_material') }}">
   <div class="row">
     <div class="col-md-2 form-group">
       <select class="form-control" id="gradeId" name="gradeId">
-        {{ select_options_for_school('', app.request.query.get('gradeId'), '--选择年级--') }}
+        {{ select_options_for_grade('', app.request.query.get('gradeId'), '--选择年级--') }}
       </select>
     </div>
     <div class="col-md-2 form-group">
       <select class="form-control" id="term" name="term">
-        {{ select_options(term, app.request.query.get('gradeId')) }}
+        {{ select_options({'first':'一学期', 'second':'二学期'}, app.request.query.get('gradeId')) }}
       </select>
     </div>
     <div class="col-md-2 form-group">
       <select class="form-control" id="subjectId" name="subjectId">
-        {{ select_options(subject, app.request.query.get('gradeId'), '--选择学科--') }}
+        {{ select_options_for_subject('', app.request.query.get('gradeId'), '--选择学科--') }}
       </select>
     </div>
     <div class="col-md-2 form-group">

@@ -1350,7 +1350,9 @@ group_thread_post_reply:
     pattern:  /group/post/{postId}/reply
     defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
 
-
+get_material:
+    pattern: /get/material
+    defaults: { _controller: TopxiaWebBundle:Category:getMaterial }
 
 #占位
 vip:

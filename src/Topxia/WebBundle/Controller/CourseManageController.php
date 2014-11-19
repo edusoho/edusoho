@@ -41,15 +41,9 @@ class CourseManageController extends BaseController
             $liveCapacity = null;
         }
 
-        $subject = $this->getCategoryService()->findCategoriesByGroupCode('subject');
-        $newSubject = array();
-        foreach ($subject as $subject) {
-            $newSubject[$subject['id']] = $subject['name'];
-        }
         $material = $this->getCategoryService()->getCategory($course['materialId']);
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
-            'subject' => $newSubject,
             'material' => $material,
             'tags' => ArrayToolkit::column($tags, 'name'),
             'liveCapacity' => empty($liveCapacity['capacity']) ? 0 : $liveCapacity['capacity'],

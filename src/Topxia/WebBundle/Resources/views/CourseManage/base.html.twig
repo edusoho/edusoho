@@ -16,7 +16,7 @@
 <div class="panel panel-default panel-col">
 	<div class="panel-heading">基本信息</div>
 	<div class="panel-body">
-		<form class="form-horizontal" id="course-form" method="post" data-url="{{ path('admin_get_material') }}">
+		<form class="form-horizontal" id="course-form" method="post" data-url="{{ path('get_material') }}">
 
 		  {{ web_macro.flash_messages() }}
 
@@ -40,7 +40,7 @@
 				<label class="col-md-2 control-label">所属年级</label>
 				<div class="col-md-4 controls">
 					<select class="form-control" name="gradeId" id="gradeId">
-						{{ select_options_for_school('', course.gradeId, '通用') }}
+						{{ select_options_for_grade('', course.gradeId, '通用') }}
 					</select>
 					<div class="help-block" style="display:none;"></div>
 				</div>
@@ -59,7 +59,7 @@
 			  <label class="col-md-2 control-label">所属学科</label>
 			  <div class="col-md-4 controls">
 			    <select class="form-control event" id="subjectId" name="subjectId">
-			      {{ select_options(subject, course.subjectId, '--选择学科--') }}
+			      {{ select_options_for_subject('', course.subjectId, '--选择学科--') }}
 			    </select>
 			  </div>
 			</div>

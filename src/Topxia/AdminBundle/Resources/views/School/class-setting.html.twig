@@ -14,7 +14,7 @@
     
   <div class="form-group">
     <select class="form-control" name="gradeId">
-      {{ select_options_for_school('', app.request.query.get('gradeId'), '--选择年级--') }}
+      {{ select_options_for_grade('', app.request.query.get('gradeId'), '--选择年级--') }}
     </select>
   </div>
 

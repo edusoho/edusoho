@@ -135,7 +135,7 @@ define(function(require, exports, module) {
 
 		$('.select-section').on('change', 'select', function(){
 			$.get($('.select-section').data('url'), {subjectId:$('#subjectId').val(), gradeId:$('#gradeId').val()}, function(result){
-				if(result) {
+				if('id' in result) {
 					$('#materialId').val(result.id);
 					$('#material').val(result.name);
 					var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");

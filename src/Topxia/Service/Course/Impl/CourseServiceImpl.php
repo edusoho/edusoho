@@ -321,6 +321,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('缺少必要字段，创建课程失败！');
 		}
 
+		$hasCatalog = $course['hasCatalog'];
 		$course = ArrayToolkit::parts($course, array('title', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address', 'gradeId', 'subjectId', 'materialId', 'term'));
 
 		$course['status'] = 'draft';
@@ -331,6 +332,30 @@ class CourseServiceImpl extends BaseService implements CourseService
 		//$course['teacherIds'] = array($course['userId']);
 		$course = $this->getCourseDao()->addCourse(CourseSerialize::serialize($course));
 		
+		if($hasCatalog) {
+			$firstLevel = $this->getKnowledgeService()->findNodesData(0, array(
+				'subjectId' => $course['subjectId'], 
+				'gradeId' => $course['gradeId'],
+				'materialId' => $course['materialId'],
+				'term' => $course['term']));
+			foreach ($firstLevel as $knowledge) {
+				$chapter = array(
+					'title' => $knowledge['name'],
+					'type' => 'chapter',
+					'courseId' => $course['id']
+				);
+				$this->createChapter($chapter);
+				$children = $this->getKnowledgeService()->findKnowledgeByParentId($knowledge['id']);
+				foreach ($children as $child) {
+					$unit = array(
+						'title' => $knowledge['name'],
+						'type' => 'unit',
+						'courseId' => $course['id']
+					); 
+					$this->createChapter($unit);
+				}
+			}
+		}
 		$member = array(
 			'courseId' => $course['id'],
 			'userId' => $course['userId'],
@@ -2605,6 +2630,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('User.StatusService');
     }
 
+    private function getKnowledgeService()
+    {
+        return $this->createService('Taxonomy.KnowledgeService');
+    }
 }
 
 class CourseSerialize

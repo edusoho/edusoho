@@ -10,14 +10,8 @@ class KnowledgeController extends BaseController
 {
 	public function listAction(Request $request)
 	{
-		$term = array('first' => '一学期', 'second' => '二学期');
-		$material = array('1' => '人教版', '2' => '北师大版');
-		$subject = array('1' => '语文', '2' => '数学');
  	    return $this->render('TopxiaAdminBundle:Knowledge:list.html.twig', array(
-	        'term' => $term,
-	        'material' => $material,
-	        'subject' => $subject,
-	    ));
+		));
 	}
 
 	public function editAction(Request $request)
@@ -87,7 +81,7 @@ class KnowledgeController extends BaseController
 	    }
 
 	    if(empty($query['seq'])) {
-	    	$knowledge['sequence'] = count($this->getKnowledgeService()->findNodesData(0, $request)) +1;
+	    	$knowledge['sequence'] = count($this->getKnowledgeService()->findNodesData(0, $query)) +1;
 	    } else {
 	    	$knowledge['sequence'] = $query['seq'];
 	    }
@@ -123,7 +117,7 @@ class KnowledgeController extends BaseController
 	{
 		$query = $request->request->all();
 		$parentId = empty($query['id']) ? 0 : $query['id'];
-		$knowledges = $this->getKnowledgeService()->findNodesData($parentId, $request);
+		$knowledges = $this->getKnowledgeService()->findNodesData($parentId, $query);
 		return $this->createJsonResponse($knowledges);
 	}
 
@@ -134,13 +128,6 @@ class KnowledgeController extends BaseController
 		$seq = $request->request->get('seq');
 		$knowledge = $this->getKnowledgeService()->sort($id, empty($parentId)?0:$parentId, $seq);
 		return $this->createJsonResponse($knowledge);
-	}
-
-	public function getmaterialAction(Request $request)
-	{
-		$query = $request->query->all();
-		$material = $this->getCategoryService()->getMaterialCategoryByGradeIdAndSubjectId($query['gradeId'], $query['subjectId']);
-		return $this->createJsonResponse($material);
 	}
 
 	private function getCategoryService()

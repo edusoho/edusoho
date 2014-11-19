@@ -459,15 +459,9 @@ class CourseController extends BaseController
 			return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
 		}
 
-		$subject = $this->getCategoryService()->findCategoriesByGroupCode('subject');
-		$newSubject = array();
-		foreach ($subject as $subject) {
-			$newSubject[$subject['id']] = $subject['name'];
-		}
 		return $this->render('TopxiaWebBundle:Course:create.html.twig', array(
 			'userProfile'=>$userProfile,
 			'type'=>$type,
-			'subject'=>$newSubject
 		));
 	}
 

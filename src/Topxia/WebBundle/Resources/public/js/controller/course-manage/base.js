@@ -133,7 +133,7 @@ define(function(require, exports, module) {
 
         $('#course-form').on('change', '.event', function(){
             $.get($('#course-form').data('url'), {subjectId:$('#subjectId').val(), gradeId:$('#gradeId').val()}, function(result){
-                if(result) {
+                if('id' in result) {
                     $('#materialId').val(result.id);
                     $('#material').val(result.name);
                 } else {

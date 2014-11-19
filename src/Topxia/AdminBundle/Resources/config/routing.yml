@@ -704,9 +704,6 @@ admin_knowledge_sort:
     pattern:  /knowledge/sort
     defaults: { _controller: TopxiaAdminBundle:Knowledge:sort }
 
-admin_get_material:
-    pattern:  /knowledge/get/material
-    defaults: { _controller: TopxiaAdminBundle:Knowledge:getMaterial }
 admin_file:
     pattern:  /file
     defaults: { _controller: TopxiaAdminBundle:File:index }
