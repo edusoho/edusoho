@@ -19,17 +19,18 @@
     </div>
 
     <div class="form-group">
-      <select class="form-control" name="method" id="method">
+      <select class="form-control method-form-group" name="method">
         {{ select_options(dict('courseware'), app.request.query.get('method')) }}
       </select>
     </div>
 
-    <div class="form-group" id="tags">
-      <input class="form-control" type="text" placeholder="标签搜索" name="tagIds[]" value="{{ app.request.get('tags[]') }}">
+    <div class="form-group tagIds-form-group">
+      {% set tagIds = app.request.get('tagIds') %}
+      <input class="form-control" type="text" placeholder="标签搜索" name="tagIds[]" value="{% for tagId in tagIds %}{{ tagId }}{% endfor %}">
       <span class="glyphicon glyphicon-tasks"></span>
     </div>
 
-    <div class="form-group" style="display:none;" id="title">
+    <div class="form-group title-form-group hide">
       <input class="form-control" type="text" placeholder="标题关键词搜索" name="title" value="{{ app.request.get('title') }}">
     </div>
 
@@ -38,11 +39,16 @@
   </form>
 <div class="courseware-list">
   {% block list %}{% endblock %}
-</div>
+  <div>
+    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+    <button class="btn btn-danger btn-sm mlm" data-role="batch-delete" data-name=""  data-url=""><i class="glyphicon glyphicon-trash"></i> 删除</button>
+  </div>
   {{ web_macro.paginator(paginator) }}
 
       <div>
         <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
         <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete" data-url="{{ path('admin_courseware_delete')}}">删除</button>
       </div>
+</div>
+
 {% endblock %}

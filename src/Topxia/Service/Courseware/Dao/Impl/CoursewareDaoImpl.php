@@ -86,6 +86,7 @@ class CoursewareDaoImpl extends BaseDao implements CoursewareDao
                     $conditions['tagsLike'] .= "{$id},";
                 }
             }
+            $conditions['tagsLike'] = rtrim(trim($conditions['tagsLike']), ',' );
             $conditions['tagsLike'] .= "%";
             unset($conditions['tagIds']);
         }
@@ -94,7 +95,7 @@ class CoursewareDaoImpl extends BaseDao implements CoursewareDao
             $knowledgeId = $conditions['knowledgeId'];
             $conditions['knowledgesLike'] = "%";
             if (!empty($knowledgeId)) {
-                $conditions['knowledgesLike'] = "\"".$conditions['knowledgeId']."\"";
+                $conditions['knowledgesLike'] .= "\"".$conditions['knowledgeId']."\"";
             }
             $conditions['knowledgesLike'] .= "%";
             unset($conditions['knowledgeIds']);
