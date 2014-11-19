@@ -17,8 +17,10 @@
         <div class="col-md-offset-2" style="font-weight:400;">
             <strong style="font-size:28px;">{{account.cash|default(0)}}</strong>
             {{setting('coin.coin_name')}}
+             {% if setting('coin.coin_enabled') %}
             {% if ChargeCoin %}
             <a href="{{path('my_coin_buy')}}" class="mll" style="color: #428bca;">充值</a>
+            {% endif %}
             {% endif %}
         </div>
 
