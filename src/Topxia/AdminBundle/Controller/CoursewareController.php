@@ -51,6 +51,10 @@ class CoursewareController extends BaseController
     {
         $category = $this->getCategoryService()->getCategory($categoryId);
 
+        if (empty($category)) {
+            throw $this->createNotFoundException("分类(#{$categoryId})不存在，创建课件失败！");
+        }
+
         if ($request->getMethod() == 'POST') {
             $courseware = $request->request->all();
             $videoMeta = $this->getVideoMeta($courseware['url']);
@@ -84,12 +88,17 @@ class CoursewareController extends BaseController
 
     public function editAction(Request $request, $categoryId, $id)
     {
+        $category = $this->getCategoryService()->getCategory($categoryId);
+
+        if (empty($category)) {
+            throw $this->createNotFoundException("分类(#{$categoryId})不存在，编辑课件失败！");
+        }
+
         $courseware = $this->getCoursewareService()->getCourseware($id);
         if (empty($courseware)) {
             throw $this->createNotFoundException('课件已经删除或者不存在.');
         }
 
-        $category = $this->getCategoryService()->getCategory($categoryId);
         $courseware['relatedKnowledgeIds'] = implode(",", $courseware['relatedKnowledgeIds']);
         $courseware['tagIds'] = implode(",", $courseware['tagIds']);
 

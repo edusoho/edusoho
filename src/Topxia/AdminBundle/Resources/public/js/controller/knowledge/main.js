@@ -15,8 +15,8 @@ define(function(require, exports, module) {
 			},
 			view: {
 				expandSpeed:"",
-				//addHoverDom: addHoverDom,
-				//removeHoverDom: removeHoverDom,
+				// addHoverDom: addHoverDom,
+				// removeHoverDom: removeHoverDom,
 				selectedMulti: false,
 				showLine: false,
 				showIcon: false,
@@ -29,7 +29,9 @@ define(function(require, exports, module) {
 			},
 			data: {
 				simpleData: {
-					enable: true
+					enable: true,
+					idkey: "id",
+					pidKey: "pid"
 				}
 			},
 			callback: {
@@ -40,7 +42,7 @@ define(function(require, exports, module) {
 		};
 
 		function addDiyDom(treeId, treeNode) {
-		    var html = '<div class="actions">';
+		    var html = '<div class="actions ">';
 		    html += '<button class="btn btn-link btn-sm" id="addBtn_'+treeNode.tId+'"><span class="glyphicon glyphicon-plus"></span> 添加子节点</button>';
 		    html += '<button class="btn btn-link btn-sm" id="editBtn_'+treeNode.tId+'"><span class="glyphicon glyphicon-edit"></span> 编辑</button>';
 		    html += '<button class="btn btn-link btn-sm" id="removeBtn_'+treeNode.tId+'"><span class="glyphicon glyphicon-remove-circle"> 删除</span></button>';
@@ -93,7 +95,8 @@ define(function(require, exports, module) {
 					}
 		  		});
 	  		}
-
+			$('#knowledge-tree_1_switch').click();
+			$('#knowledge-tree_2_switch').click();
 /*	  		$('#'+ treeId).bind('hover', function(){
 	  			$(this).addClass('show').removeClass('hidden');
 	  		},function(){
@@ -169,7 +172,7 @@ define(function(require, exports, module) {
 			
 		}
 
-/*		function addHoverDom(treeId, treeNode) {
+		function addHoverDom(treeId, treeNode) {
 			var sObj = $("#" + treeNode.tId + "_span");
 			if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
 			var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
@@ -186,8 +189,9 @@ define(function(require, exports, module) {
 			});
 		};
 		function removeHoverDom(treeId, treeNode) {
-			$("#addBtn_"+treeNode.tId).unbind().remove();
-		};*/
+			// $("#addBtn_"+treeNode.tId).unbind().remove();
+			$('.actions').html('');
+		};
 
 		$.fn.zTree.init($("#knowledge-tree"), setting);
 
