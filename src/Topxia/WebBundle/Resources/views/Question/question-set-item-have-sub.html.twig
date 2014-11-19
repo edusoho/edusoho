@@ -1,0 +1,10 @@
+<div class="question-set-item-have-sub">
+  {% set question = item.question %}
+
+  <div class="well">{{ question.stem|bbCode2Html|raw }}</div>
+
+  {% for key,item in item.subItems %}
+    {% include 'TopxiaWebBundle:Question:question-set-item.html.twig' %}
+  {% endfor %}
+
+</div>

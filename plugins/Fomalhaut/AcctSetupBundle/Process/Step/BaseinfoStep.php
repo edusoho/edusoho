@@ -34,8 +34,8 @@ class BaseinfoStep extends ControllerStep
         $form = $this->createForm('wechat_acctsetup_baseinfo');
 
         if ($form->handleRequest($request)->isValid()) {
-            //$form->getData();
-            $context->getStorage()->set('my_data', $form->getData());
+            $data = $form->getData();
+            //$context->getStorage()->set('my_data', $form->getData());
 
             return $this->complete();
         }

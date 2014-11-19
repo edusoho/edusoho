@@ -34,7 +34,11 @@
 
 	<div class="row row-5-7 course-cover-heading">
 		<div class="col-sm-5 picture hidden-xs">
+			{% if setting('course.picturePreview_enabled')|default(0) > 0  and freeLesson %}
+			<a  href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:freeLesson.courseId, lessonId:freeLesson.id}) }}" ><img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" /></a>
+			{% else %}
 			<img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
+			{% endif %}
 		</div>
 		<div class="col-sm-7 info">
 			{% if is_granted('ROLE_ADMIN') %}
@@ -166,6 +170,11 @@
 							课程评价
 							<span class="badge">{{ course.ratingNum }}</span>
 						</a>
+					</li>
+					<li class="pull-right" style="display:none;" >
+					<div>
+						<a class="btn btn-primary nav-course-buy-btn" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}" >{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+					</div>
 					</li>
 				</ul>
 			</div>

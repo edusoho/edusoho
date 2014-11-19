@@ -39,3 +39,4 @@ app/data/plugin_installed.php
 !/web/themes/default-b
 edusoho.komodoproject
 /.idea/
+.publish

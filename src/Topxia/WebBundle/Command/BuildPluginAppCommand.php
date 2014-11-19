@@ -39,6 +39,7 @@ class BuildPluginAppCommand extends BaseCommand
         $distDir = $this->_makeDistDirectory($name, $version);
         $sourceDistDir = $this->_copySource($name, $pluginDir, $distDir);
         $this->_copyScript($pluginDir, $distDir);
+        $this->_copyMeta($pluginDir, $distDir);
         $this->_cleanGit($sourceDistDir);
         $this->_zipPackage($distDir);
     }
@@ -82,6 +83,13 @@ class BuildPluginAppCommand extends BaseCommand
         $this->filesystem->copy(__DIR__ . '/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
     }
 
+    private function _copyMeta($pluginDir, $distDir)
+    {
+        $source = "{$pluginDir}/plugin.json";
+        $target = "{$distDir}/plugin.json";
+        $this->filesystem->copy($source, $target);
+    }
+
     private function _zipPackage($distDir)
     {
         $buildDir = dirname($distDir);
@@ -117,15 +125,12 @@ class BuildPluginAppCommand extends BaseCommand
 
     private function getPluginVersion($name, $pluginDir)
     {
-         $content = file_get_contents($pluginDir . '/PluginSystem.php');
-
-         $matched = preg_match('/VERSION\s*=\s*[\'\"](.*?)[\'\"]/', $content, $matches);
-
-         if (!$matched) {
+         $meta = json_decode(file_get_contents($pluginDir . '/plugin.json'), true);
+         if (empty($meta) or empty($meta['version'])) {
             throw new \RuntimeException('获取插件版本号失败！');
          }
 
-         return $matches[1];
+         return $meta['version'];
     }
 
     private function getPluginDirectory($name)

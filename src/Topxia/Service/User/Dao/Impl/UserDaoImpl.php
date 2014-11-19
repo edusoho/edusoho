@@ -11,9 +11,12 @@ class UserDaoImpl extends BaseDao implements UserDao
 {
     protected $table = 'user';
 
-    public function getUser($id)
+    public function getUser($id, $lock = false)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        if ($lock) {
+            $sql .= " FOR UPDATE";
+        }
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
@@ -139,8 +142,21 @@ class UserDaoImpl extends BaseDao implements UserDao
     public function analysisRegisterDataByTime($startTime,$endTime)
     {
         $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
-
         return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function analysisUserSumByTime($endTime)
+    {
+         $sql="SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  {$this->table}   i   WHERE   i.createdTime<=o.createdTime  )  as Count from {$this->table}  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
+         return $this->getConnection()->fetchAll($sql);
+    }
+
+        public function findUsersCountByLessThanCreatedTime($endTime)
+    {
+         
+        $sql="SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<={$endTime}  ";
+
+        return $this->getConnection()->fetchColumn($sql);
     }
 
 }

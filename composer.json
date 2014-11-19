@@ -26,6 +26,7 @@
         "phpoffice/phpexcel": "1.8.0",
         "hwi/oauth-bundle": "0.4.*@dev",
         "sylius/flow-bundle": "~0.12@dev"
+	"gregwar/captcha":"v1.0.11"
     },
     "scripts": {
         "post-install-cmd": [

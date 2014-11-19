@@ -422,6 +422,11 @@ admin_setting_cloud_key_apply:
     defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyApply }
     methods: [POST]
 
+admin_setting_cloud_key_copyright:
+    pattern:  /setting/cloud/key/copyright
+    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyCopyright }
+    methods: [POST]
+
 admin_setting_cloud_video_watermark_upload:
     pattern: /setting/cloud/video_watermark/upload
     defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoWatermarkUpload }
@@ -951,6 +956,14 @@ admin_operation_analysis_income:
 admin_operation_analysis_course_income:
     pattern:  /operation/analysis/course/income/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:courseIncome }
+
+admin_operation_analysis_course_sum:
+    pattern:  /operation/analysis/course/sum/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:courseSum }
+
+admin_operation_analysis_user_sum:
+    pattern:  /operation/analysis/user/sum/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:userSum }
 
 admin_operation_analysis_rount:
     pattern:  /operation/analysis/rountByanalysisDateType/{tab}
