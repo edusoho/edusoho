@@ -131,7 +131,7 @@ class CoursewareController extends BaseController
     {
         $courseware['title'] = $videoMeta['title'];
         $courseware['image'] = $videoMeta['image'];
-        $courseware['knowledgeIds'] = $courseware['relatedKnowledgeIds'].",".$courseware['tagIds'];
+        $courseware['knowledgeIds'] = $courseware['relatedKnowledgeIds'].",".$courseware['mainKnowledgeId'];
         $courseware['knowledgeIds'] = array_filter(explode(',', $courseware['knowledgeIds']));
         $courseware['relatedKnowledgeIds'] = array_filter(explode(',', $courseware['relatedKnowledgeIds']));
         $courseware['tagIds'] = array_filter(explode(',', $courseware['tagIds']));
