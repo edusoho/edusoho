@@ -431,6 +431,8 @@
                   </div>
                 </li>
 
+
+
                 {% elseif learn.type == "finished_homework" %}
                 <li class="media">
                   <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
@@ -438,7 +440,7 @@
                   </a>
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    完成了Class {{learn.properties.course.title|default('')|plain_text(15)}}-Lesson {{learn.properties.lesson.title|default('')|plain_text(15)}}-作业{{learn.properties.homework}}
+                    完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的作业
                   </div>
                 </li>
 
@@ -450,7 +452,7 @@
                   </a>
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    完成了Class {{learn.properties.course.title|default('')|plain_text(15)}}-Lesson {{learn.properties.lesson.title|default('')|plain_text(15)}}-练习{{learn.properties.exercise}}
+                    完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
                   </div>
                 </li>
                                   

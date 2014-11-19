@@ -303,10 +303,10 @@
                       完成了考试 {{learn.properties.testpaper.name|plain_text(15)}}
 
                       {% elseif learn.type == "finished_homework" %}
-                      完成了Class {{learn.properties.course.title|default('')|plain_text(15)}}-Lesson {{learn.properties.lesson.title|default('')|plain_text(15)}}-作业{{learn.properties.homework}}
+                      完成了课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的作业
 
-                      {% elseif learn.type == "finished_homework" %}
-                      完成了Class {{learn.properties.course.title|default('')|plain_text(15)}}-Lesson {{learn.properties.lesson.title|default('')|plain_text(15)}}-练习{{learn.properties.exercise}}
+                      {% elseif learn.type == "finished_exercise" %}
+                      完成了课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
 
                       {% elseif learn.type == "become_student" %}
                       加入了课程 {{learn.properties.course.title|plain_text(15)}}
