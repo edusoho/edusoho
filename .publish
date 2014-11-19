@@ -1,7 +1,0 @@
-publish:
-    buildDirectory:   ./build
-    code:	edusoho
-    accessKey:	d6u6b5rtg29ki7n3z2l7s1a8
-    updateUrl:	http://www.edusoho.com/version/
-    uploadUrl:	http://upload.edusoho.com/
-    changeLogName:	CHANGELOG
