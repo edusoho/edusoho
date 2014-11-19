@@ -4,24 +4,10 @@ namespace Fomalhaut\AcctSetupBundle\Process\Step;
 use Sylius\Bundle\FlowBundle\Process\Context\ProcessContextInterface;
 use Sylius\Bundle\FlowBundle\Process\Step\ControllerStep;
 
-class BaseinfoStep extends ControllerStep
+class BaseinfoStep extends AbstractStep
 {
     public function displayAction(ProcessContextInterface $context)
     {
-        /*$form = $this->createFormBuilder()
-            ->add('name','text')
-            ->add('describe','text')
-            ->add('nextStep', 'submit')
-            ->getForm();
-
-        $form->handleRequest($this->getRequest());
-
-        if ($form->isValid()) {
-            $data = $form->getData();
-        }
-        return $this->render('AcctSetupBundle:Prosess/Step:BaseinfoStep.html.twig', array(
-            'form' => $form->createView(),
-        ));*/
         return $this->render(
             'AcctSetupBundle:Prosess/Step:BaseinfoStep.html.twig',
             array('form' => $this->createForm('wechat_acctsetup_baseinfo')->createView())
@@ -36,7 +22,7 @@ class BaseinfoStep extends ControllerStep
         if ($form->handleRequest($request)->isValid()) {
             $data = $form->getData();
             //$context->getStorage()->set('my_data', $form->getData());
-
+            $wecaht = $this->getWechatService();
             return $this->complete();
         }
         return $this->render(
@@ -44,4 +30,10 @@ class BaseinfoStep extends ControllerStep
             array('form' => $form->createView())
         );
     }
+
+    private function getWechatService()
+    {
+        return $this->getServiceKernel()->createService('Fomalhaut:Wechat.AcctountService');
+    }
+
 } 

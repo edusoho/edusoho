@@ -11,7 +11,7 @@ namespace Fomalhaut\AcctSetupBundle\Process\Step;
 use Sylius\Bundle\FlowBundle\Process\Context\ProcessContextInterface;
 use Sylius\Bundle\FlowBundle\Process\Step\ControllerStep;
 
-class OneclickStep extends ControllerStep
+class OneclickStep extends AbstractStep
 {
     public function displayAction(ProcessContextInterface $context)
     {
