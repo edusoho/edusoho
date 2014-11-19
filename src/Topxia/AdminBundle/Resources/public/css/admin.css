@@ -280,6 +280,10 @@ input.LargeInput {width: 600px;}
   list-style: none;
 }
 
+.float-margin{
+  margin: 5px;
+}
+
 .courseware-grid {
   display: inline-block;
   vertical-align: top;

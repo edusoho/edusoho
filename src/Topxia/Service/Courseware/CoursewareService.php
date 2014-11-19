@@ -14,4 +14,6 @@ interface CoursewareService
     public function updateCourseware($id,$courseware);
 
     public function deleteCourseware($id);
+
+    public function deleteCoursewaresByIds($ids);
 }

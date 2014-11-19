@@ -8,13 +8,22 @@
 {% block main %}
 
 <div class="page-header clearfix">
-  <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_knowledge_create', {categoryId:category.id}) }}">添加知识点</button>
-   <button class="btn btn-sm btn-info pull-right add-category hidden" id="add-knowledge" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_knowledge_create', {categoryId:category.id}) }}" data-turl="{{ path('admin_knowledge_create', {categoryId:category.id}) }}">添加知识点</button>
-   <button class="btn btn-sm btn-info pull-right add-category hidden" id="edit-knowledge" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_knowledge_edit') }}" data-turl="{{ path('admin_knowledge_edit') }}">编辑知识点</button>
+  <button class="btn btn-sm btn-info pull-right add-category float-margin" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_knowledge_create', {categoryId:category.id}) }}">添加知识点</button>
+  {% if isHidden %}
+    <div class="pull-right float-margin">
+      <a class="btn btn-sm btn-info" href="{{ path('admin_category_knowledge', {categoryId:category.id, isHidden:false}) }}">显示隐藏知识点</a>
+    </div>
+  {% else %}
+    <div class="pull-right float-margin">
+      <a class="btn btn-sm btn-info" href="{{ path('admin_category_knowledge', {categoryId:category.id, isHidden:true}) }}">不显示隐藏知识点</a>
+    </div>
+  {% endif %}
+    <button class="btn btn-sm btn-info pull-right add-category hidden" id="add-knowledge" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_knowledge_create', {categoryId:category.id}) }}" data-turl="{{ path('admin_knowledge_create', {categoryId:category.id}) }}">添加知识点</button>
+    <button class="btn btn-sm btn-info pull-right add-category hidden" id="edit-knowledge" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_knowledge_edit') }}" data-turl="{{ path('admin_knowledge_edit') }}">编辑知识点</button>
   <h1 class="pull-left">知识点管理</h1>
 </div>
 
 <div class="knowledge-list">
-  <ul id="knowledge-tree" class="ztree" data-url="{{ path('admin_knowledge_getNodes')}}" data-cid="{{ category.id }}" data-durl="{{ path('admin_knowledge_delete')}}" data-surl="{{ path('admin_knowledge_sort') }}"></ul>
+  <ul id="knowledge-tree" class="ztree" {% if isHidden %}data-url="{{ path('admin_knowledge_getNodes')}}" {% else %}data-url="{{ path('admin_knowledge_getNodes',{isHidden:true})}}"{% endif %}data-cid="{{ category.id }}" data-durl="{{ path('admin_knowledge_delete')}}" data-surl="{{ path('admin_knowledge_sort') }}"></ul>
 <div>
 {% endblock %}
