@@ -25,6 +25,18 @@
 						<div class="help-block" style="display:none;"></div>
 					</div>
 				</div>
+				
+				{% if ChargeCoin %}
+				<div class="form-group">
+					<div class="col-md-2 control-label">
+						<label for="coinPrice">虚拟币价格</label>
+					</div>
+					<div class="col-md-8 controls">
+						<input type="text" id="coinPrice" name="coinPrice" class="form-control" value="{{course.coinPrice}}">
+						<div class="help-block" style="display:none;"></div>
+					</div>
+				</div>
+				{% endif %}
 
 				{% if is_feature_enabled('free_limit') %}
 				<div class="form-group">

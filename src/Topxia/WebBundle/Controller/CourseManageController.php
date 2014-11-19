@@ -168,7 +168,10 @@ class CourseManageController extends BaseController
     public function priceAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
-
+        
+        $code = 'ChargeCoin';
+        $ChargeCoin = $this->getAppService()->findInstallApp($code);
+        
         $canModifyPrice = true;
         $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
         if ($this->setting('vip.enabled')) {
@@ -191,6 +194,7 @@ class CourseManageController extends BaseController
             }
             
             $course = $this->getCourseService()->updateCourse($id, $fields);
+
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
@@ -201,6 +205,7 @@ class CourseManageController extends BaseController
             'course' => $course,
             'canModifyPrice' => $canModifyPrice,
             'levels' => $this->makeLevelChoices($levels),
+            'ChargeCoin'=> $ChargeCoin
         ));
     }
 
@@ -414,5 +419,10 @@ class CourseManageController extends BaseController
     private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 }

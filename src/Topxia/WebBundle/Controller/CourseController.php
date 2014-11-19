@@ -210,7 +210,9 @@ class CourseController extends BaseController
 	{
 
 		$course = $this->getCourseService()->getCourse($id);
-
+        $code = 'ChargeCoin';
+        $ChargeCoin = $this->getAppService()->findInstallApp($code);
+        
         $defaultSetting = $this->getSettingService()->get('default', array());
 
         if (isset($defaultSetting['courseShareContent'])){
@@ -287,7 +289,8 @@ class CourseController extends BaseController
 				'learnStatuses' => $learnStatuses,
 				'currentTime' => $currentTime,
 				'weeks' => $weeks,
-				'files' => ArrayToolkit::index($files,'id')
+				'files' => ArrayToolkit::index($files,'id'),
+				'ChargeCoin'=> $ChargeCoin
 			));
 		}
 		
@@ -326,6 +329,7 @@ class CourseController extends BaseController
 			'weeks' => $weeks,
 			'courseShareContent'=>$courseShareContent,
 			'consultDisplay' => true,
+			'ChargeCoin'=> $ChargeCoin
 		));
 
 	}
@@ -821,5 +825,10 @@ class CourseController extends BaseController
     private function getUploadFileService()
     {
 	return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 }
