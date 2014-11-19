@@ -44,24 +44,16 @@ class CoursewareController extends BaseController
 
         $category = $this->getCategoryService()->getCategory($categoryId);
 
-        if ($type == 'list') {
-            $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($coursewares,'mainKnowledgeId'));
-            $knowledges = ArrayToolkit::index($knowledges, 'id');
+        $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($coursewares,'mainKnowledgeId'));
+        $knowledges = ArrayToolkit::index($knowledges, 'id');
 
-            return $this->render('TopxiaAdminBundle:Courseware:list-view.html.twig',array(
-                'category' => $category,
-                'coursewares' => $coursewares,
-                'paginator' => $paginator,
-                'knowledges' => $knowledges
-            ));
-        } else {
-            return $this->render('TopxiaAdminBundle:Courseware:thumb-view.html.twig',array(
-                'category' => $category,
-                'coursewares' => $coursewares,
-                'paginator' => $paginator,
-                'coursewaresCount' => $coursewaresCount
-            ));
-        }
+        return $this->render('TopxiaAdminBundle:Courseware:'.$type.'-view.html.twig',array(
+            'category' => $category,
+            'coursewares' => $coursewares,
+            'paginator' => $paginator,
+            'knowledges' => $knowledges,
+            'coursewaresCount' => $coursewaresCount
+        ));
     }
 
     public function createAction(Request $request, $categoryId)
