@@ -40,4 +40,9 @@
   {% block list %}{% endblock %}
 </div>
   {{ web_macro.paginator(paginator) }}
+
+      <div>
+        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+        <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete" data-url="{{ path('admin_courseware_delete')}}">删除</button>
+      </div>
 {% endblock %}

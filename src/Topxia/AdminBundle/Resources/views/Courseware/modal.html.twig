@@ -60,6 +60,6 @@ app.load('courseware/modal')
 {% block footer %}
 
 	<button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
-	<button id="courseware-operate-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#courseware-form" tabindex="5" data-url="{% if courseware|default(null) %}{{ path('admin_courseware_edit',{categoryId:category.id,id:courseware.id}) }}{% else %}{{ path('admin_courseware_create',{categoryId:category.id}) }} {% endif %}">保存</button>
+	<button id="courseware-operate-btn" data-loading-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#courseware-form" tabindex="5" data-url="{% if courseware|default(null) %}{{ path('admin_courseware_edit',{categoryId:category.id,id:courseware.id}) }}{% else %}{{ path('admin_courseware_create',{categoryId:category.id}) }} {% endif %}">保存</button>
 
 {% endblock %}

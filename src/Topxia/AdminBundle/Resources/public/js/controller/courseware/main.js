@@ -27,7 +27,31 @@ define(function(require, exports, module) {
             } else {
                $('[data-role=single-select]').prop('checked', false);
             }
-		})
+		});
+
+		$('[data-role=batch-delete]').click(function(){
+
+            var ids = [];
+            $('[data-role=single-select]:checked').each(function(index,item) {
+                ids.push($(item).data('coursewareId'));
+            });
+
+            if (ids.length == 0) {
+                Notify.danger('未选中任何课件');
+                return ;
+            }
+
+            if (!confirm('您真的要删除选中的课件吗？')) {
+                return ;
+            }
+			var $btn = $(this);
+			$.post($btn.data('url'),{ids:ids},function(){
+                Notify.success('删除成功！');
+                window.location.reload();
+			}).error(function(){
+                Notify.danger('删除失败！');
+            });
+		});
 	};
 
 });
