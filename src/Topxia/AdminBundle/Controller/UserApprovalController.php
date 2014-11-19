@@ -93,7 +93,7 @@ class UserApprovalController extends BaseController
         );
     }
 
-    public function getApprovalInfo(Request $request, $id){
+    protected function getApprovalInfo(Request $request, $id){
         $user = $this->getUserService()->getUser($id);
 
         $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
