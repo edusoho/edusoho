@@ -17,7 +17,7 @@
 
 {% block footer %}
   <button id="course-pay" class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-repay-form">点击支付</button>
-    <a href="javascript:;" class="btn btn-primary cancel" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消</a>
+    <a href="javascript:;" class="btn btn-primary cancel" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消此订单</a>
   <script>
     app.load('course/repay');
   </script>
