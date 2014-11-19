@@ -24,14 +24,18 @@ class DefaultController extends BaseController
         }
 
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
-
+        
+        $code = 'ChargeCoin';
+        $ChargeCoin = $this->getAppService()->findInstallApp($code);
+        
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
             'blocks' => $blocks,
             'recentLiveCourses' => $recentLiveCourses,
-            'consultDisplay' => true
+            'consultDisplay' => true,
+            'ChargeCoin'=> $ChargeCoin
         ));
     }
 
@@ -225,4 +229,8 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
 }

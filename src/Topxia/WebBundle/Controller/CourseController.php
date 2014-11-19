@@ -27,7 +27,7 @@ class CourseController extends BaseController
 		} else {
 			$category = array('id' => null);
 		}
-
+		
 
 		$sort = $request->query->get('sort', 'latest');
 		$conditions = array(
@@ -63,6 +63,7 @@ class CourseController extends BaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
+			
 
 		));
 	}
@@ -738,10 +739,14 @@ class CourseController extends BaseController
 		}
 		$users = $this->getUserService()->findUsersByIds($userIds);
 
+		$code = 'ChargeCoin';
+        		$ChargeCoin = $this->getAppService()->findInstallApp($code);
+		
 		return $this->render("TopxiaWebBundle:Course:courses-block-{$view}.html.twig", array(
 			'courses' => $courses,
 			'users' => $users,
 			'mode' => $mode,
+			'ChargeCoin'=>$ChargeCoin
 		));
 	}
 

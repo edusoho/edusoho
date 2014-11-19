@@ -277,6 +277,11 @@
             <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学员</span>
             {% endif %}
             <span class="course-price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+            
+          {# {% if ChargeCoin %} #}
+            <span class="course-coinPrice">{% if course.coinPrice > 0 %} {{ course.coinPrice }}元{% else %} 免费 {% endif %} </span>
+          {# {% endif %} #}
+
           </div>
         </div>
       </div>
