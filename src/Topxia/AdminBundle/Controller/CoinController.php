@@ -208,46 +208,46 @@ class CoinController extends BaseController
 
     }
 
-    public function adminAction(Request $request)
-    {   
-        $fields = $request->query->all();
-        $nickname="";
-        $conditions=array();
+    // public function adminAction(Request $request)
+    // {   
+    //     $fields = $request->query->all();
+    //     $nickname="";
+    //     $conditions=array();
 
-        if(isset($fields['nickName']) && $fields['nickName']!= ""){
-            $nickname =$fields['nickName'];
-            $user = $this->getUserService()->getUserByNickname($nickname);
+    //     if(isset($fields['nickName']) && $fields['nickName']!= ""){
+    //         $nickname =$fields['nickName'];
+    //         $user = $this->getUserService()->getUserByNickname($nickname);
 
-            if($user){
-                $conditions=array('userId'=>$user['id']);
-            }else{
-                $conditions=array('userId'=>-1);
-            }
+    //         if($user){
+    //             $conditions=array('userId'=>$user['id']);
+    //         }else{
+    //             $conditions=array('userId'=>-1);
+    //         }
             
-        }
+    //     }
 
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCashService()->searchAccountCount($conditions),
-            20
-          );
+    //     $paginator = new Paginator(
+    //         $this->get('request'),
+    //         $this->getCashService()->searchAccountCount($conditions),
+    //         20
+    //       );
 
-        $cashes=$this->getCashService()->searchAccount(
-            $conditions,
-            array(),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-          );
+    //     $cashes=$this->getCashService()->searchAccount(
+    //         $conditions,
+    //         array(),
+    //         $paginator->getOffsetCount(),
+    //         $paginator->getPerPageCount()
+    //       );
 
-        $userIds =  ArrayToolkit::column($cashes, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
+    //     $userIds =  ArrayToolkit::column($cashes, 'userId');
+    //     $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('TopxiaAdminBundle:Coin:coin-admin.html.twig', array(
-            'cashes'=>$cashes,
-            'users'=>$users,
-            'paginator'=>$paginator,
-        ));
-    }
+    //     return $this->render('TopxiaAdminBundle:Coin:coin-admin.html.twig', array(
+    //         'cashes'=>$cashes,
+    //         'users'=>$users,
+    //         'paginator'=>$paginator,
+    //     ));
+    // }
 
     public function editAction(Request $request,$id)
     {   
@@ -292,6 +292,91 @@ class CoinController extends BaseController
             $response = array('success' => true, 'message' => '');
         }
         return $this->createJsonResponse($response);
+    }
+
+    public function avatarAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $form = $this->createFormBuilder()
+            ->add('avatar', 'file')
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $file = $data['avatar'];
+
+                if (!FileToolkit::isImageFile($file)) {
+                    return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
+                }
+
+                $filenamePrefix = "user_{$user['id']}_";
+                $hash = substr(md5($filenamePrefix . time()), -8);
+                $ext = $file->getClientOriginalExtension();
+                $filename = $filenamePrefix . $hash . '.' . $ext;
+
+                $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
+                $file = $file->move($directory, $filename);
+
+                $fileName = str_replace('.', '!', $file->getFilename());
+
+                return $this->redirect($this->generateUrl('settings_avatar_crop', array(
+                    'file' => $fileName)
+                ));
+            }
+        }
+
+        $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
+        if ($hasPartnerAuth) {
+            $partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'big');
+        } else {
+            $partnerAvatar = null;
+        }
+
+        $fromCourse = $request->query->get('fromCourse');
+
+        return $this->render('TopxiaWebBundle:Settings:avatar.html.twig', array(
+            'form' => $form->createView(),
+            'user' => $this->getUserService()->getUser($user['id']),
+            'partnerAvatar' => $partnerAvatar,
+            'fromCourse' => $fromCourse,
+        ));
+    }
+
+    public function avatarCropAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        $filename = $request->query->get('file');
+        $filename = str_replace('!', '.', $filename);
+        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
+
+        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
+
+        if($request->getMethod() == 'POST') {
+            $options = $request->request->all();
+            $this->getUserService()->changeAvatar($currentUser['id'], $pictureFilePath, $options);
+            return $this->redirect($this->generateUrl('settings_avatar'));
+        }
+
+        try {
+            $imagine = new Imagine();
+            $image = $imagine->open($pictureFilePath);
+        } catch (\Exception $e) {
+            @unlink($pictureFilePath);
+            return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
+        }
+
+        $naturalSize = $image->getSize();
+        $scaledSize = $naturalSize->widen(270)->heighten(270);
+        $pictureUrl = 'tmp/' . $filename;
+
+        return $this->render('TopxiaWebBundle:Settings:avatar-crop.html.twig', array(
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,
+        ));
     }
 
     protected function getSettingService(){

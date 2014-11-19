@@ -31,21 +31,21 @@
       <table class="table table-striped">
         <tr>
           <th>名称</th>
-          <th>流水号</th>
+{#           <th>流水号</th> #}
           <th>用户</th>
           <th>成交时间</th>
-          <th>收支</th>
+          {# <th>收支</th> #}
         </tr>
 
        {% for cash in cashes %}
        <tr>
             <td>{{cash.name}}<br>
                 <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span></td>
-            <td>{{cash.sn}}</td>
+            {# <td>{{cash.sn}}</td> #}
             <td>   <a target="_blank" href="{{ path('user_show', {id:cash.userId}) }}">
             {{users[cash.userId].nickname}}</a></td>
             <td>{{cash.createdTime|date('Y-m-d H:i:s')}}</td>
-            <td>{% if cash.type =="outflow" %}-{% endif %}{{cash.amount|score_text}}</td>
+            {# <td>{% if cash.type =="outflow" %}-{% endif %}{{cash.amount|score_text}}</td> #}
        </tr>
        {% endfor %}
       </table>

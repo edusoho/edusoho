@@ -1374,6 +1374,8 @@ coin_change:
     path:     /coin/change
     defaults: { _controller: TopxiaWebBundle:Coin:change }
 
+
+
 #占位
 vip:
     pattern: /vip/
