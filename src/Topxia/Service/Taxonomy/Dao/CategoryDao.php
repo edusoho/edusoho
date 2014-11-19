@@ -8,6 +8,8 @@ interface CategoryDao {
 
 	public function deleteCategory($id);
 
+	public function deleteCategorysByGroupId($groupId);
+
 	public function getCategory($id);
 
 	public function findCategoryByCode($code);

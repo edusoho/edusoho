@@ -34,6 +34,8 @@ interface CategoryService
     public function updateCategory($id, array $fields);
 
     public function deleteCategory($id);
+
+    public function deleteCategorysByGroupId($groupId);
     
     public function getGroup($id);
 

@@ -9,6 +9,7 @@ use Topxia\Service\User\CurrentUser;
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\WebBundle\Twig\Extension\DataDict;
 
 class InitCommand extends BaseCommand
 {
@@ -33,11 +34,10 @@ class InitCommand extends BaseCommand
 		$this->initPaymentSetting($output);
 		$this->initStorageSetting($output);
 
-		$this->initGrade($output);
+		$this->initCategory($output);
 		$this->initSubject($output);
 		$this->initMaterial($output);
 		$this->initEduMaterial($output);
-		$this->initCategory($output);
 		$this->initTag($output);
 		$this->initRefundSetting($output);
 		$this->initThemes($output);
@@ -276,6 +276,7 @@ EOD;
 
 		$groups = $this->getCategoryService()->findAllGroups();
 		foreach ($groups as $group) {
+			$this->getCategoryService()->deleteCategorysByGroupId($group['id']);
 			$this->getCategoryService()->deleteGroup($group['id']);
 		}
 
@@ -298,112 +299,6 @@ EOD;
 				'parentId' => 0,
 			));
 		}
-		$output->writeln(' ...<info>成功</info>');
-	}
-
-	private function initGrade($output){
-		$output->write('  初始化年级');
-		$group = $this->getCategoryService()->addGroup(array(
-			'name' => '年级',
-			'code' => 'grade',
-			'depth' => 1,
-		));
-		
-		$this->getCategoryService()->createCategory(array(
-			'name' => '小学一年级',
-			'code' => 'primary_one',
-			'weight' => 1,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-		
-		$this->getCategoryService()->createCategory(array(
-			'name' => '小学二年级',
-			'code' => 'primary_two',
-			'weight' => 2,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-
-		$this->getCategoryService()->createCategory(array(
-			'name' => '小学三年级',
-			'code' => 'primary_three',
-			'weight' => 3,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-
-		$this->getCategoryService()->createCategory(array(
-			'name' => '小学四年级',
-			'code' => 'primary_four',
-			'weight' => 4,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-
-		$this->getCategoryService()->createCategory(array(
-			'name' => '小学五年级',
-			'code' => 'primary_five',
-			'weight' => 5,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-
-		$this->getCategoryService()->createCategory(array(
-			'name' => '小学六年级',
-			'code' => 'primary_six',
-			'weight' => 6,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-
-		$this->getCategoryService()->createCategory(array(
-			'name' => '初中一年级',
-			'code' => 'middle_one',
-			'weight' => 7,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-
-		$this->getCategoryService()->createCategory(array(
-			'name' => '初中二年级',
-			'code' => 'middle_two',
-			'weight' => 8,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-
-		$this->getCategoryService()->createCategory(array(
-			'name' => '初中三年级',
-			'code' => 'middle_three',
-			'weight' => 9,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-
-		$this->getCategoryService()->createCategory(array(
-			'name' => '高中一年级',
-			'code' => 'high_one',
-			'weight' => 10,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-
-		$this->getCategoryService()->createCategory(array(
-			'name' => '高中二年级',
-			'code' => 'high_two',
-			'weight' => 11,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-
-		$this->getCategoryService()->createCategory(array(
-			'name' => '高中三年级',
-			'code' => 'high_three',
-			'weight' => 12,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
 		$output->writeln(' ...<info>成功</info>');
 	}
 
@@ -474,12 +369,17 @@ EOD;
 	private function initEduMaterial($output)
 	{
 		$output->write('  初始化教材课本');
-		$grades=$this->getCategoryService()->findCategoriesByGroupCode('grade');
+		$grades=DataDict::dict('gradeName');
 		$subjects=$this->getCategoryService()->findCategoriesByGroupCode('subject');
 		$material=$this->getCategoryService()->getCategoryByCode('renjiao');
-		foreach ($grades as $grade) {
+		
+		$eduMaterials=$this->getEduMaterialService()->findAllEduMaterials();
+		foreach ($eduMaterials as $eduMaterial) {
+			$this->getEduMaterialService()->deleteEduMaterial($eduMaterial['id']);
+		}
+		foreach ($grades as $gradeId=>$grade) {
 			foreach ($subjects as $subject) {
-				$eduMaterial['gradeId']=$grade['id'];
+				$eduMaterial['gradeId']=$gradeId;
 				$eduMaterial['subjectId']=$subject['id'];
 				$eduMaterial['materialId']=$material['id'];
 				$eduMaterial['materialName']=$material['name'];

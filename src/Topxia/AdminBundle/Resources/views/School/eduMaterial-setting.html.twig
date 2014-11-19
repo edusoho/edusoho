@@ -13,16 +13,16 @@
         {% if loop.index==1 %}
           <tr class="info">
             <td></td>
-            {% for grade in grades %}
-              <td>{{grade.name}}</td>
+            {% for key,grade in grades %}
+              <td>{{grade}}</td>
             {% endfor %}
           </tr>
         {% endif %}
         <tr>
           <td class="info">{{subject.name}}</td>
           {% set eduMaterialList=eduMaterials[subject.id] %}
-          {% for grade in grades %}
-            {% set eduMaterial=eduMaterialList[grade.id] %}
+          {% for key,grade in grades %}
+            {% set eduMaterial=eduMaterialList[key] %}
             <td class="materialTd">
               <div class="material-selector">
                 <div class="pull-left eduMaterial-name">{{eduMaterial.materialName}}</div>
