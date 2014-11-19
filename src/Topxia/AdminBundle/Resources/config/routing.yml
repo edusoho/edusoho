@@ -367,6 +367,16 @@ admin_setting_logo_remove:
     defaults: { _controller: TopxiaAdminBundle:Setting:logoRemove }
     methods: [POST]
 
+admin_setting_live_logo_upload:
+    pattern:  /setting/live/logo/upload
+    defaults: { _controller: TopxiaAdminBundle:Setting:liveLogoUpload }
+    methods: [POST]
+
+admin_setting_live_logo_remove:
+    pattern:  /setting/live/logo/remove
+    defaults: { _controller: TopxiaAdminBundle:Setting:liveLogoRemove }
+    methods: [POST]
+
 admin_setting_favicon_upload:
     pattern: /setting/favicon/upload
     defaults: { _controller: TopxiaAdminBundle:Setting:faviconUpload }
