@@ -64,6 +64,7 @@ class CoursewareDaoImpl extends BaseDao implements CoursewareDao
                     $conditions['tagsLike'] .= "{$id},";
                 }
             }
+            $conditions['tagsLike'] = rtrim(trim($conditions['tagsLike']), ',' );
             $conditions['tagsLike'] .= "%";
             unset($conditions['tagIds']);
         }
