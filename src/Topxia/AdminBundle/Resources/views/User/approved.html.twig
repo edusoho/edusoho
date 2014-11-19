@@ -35,7 +35,7 @@
         <td>{{user.approvalTime | date('Y-m-d H:i')}}</td>
         <td>
             <div class="btn-group">
-              <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_approve', {id:user.id,fromVerified:"1"}) }}" class="btn btn-default btn-sm">查看</a>
+              <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_viewApprovalInfo', {id:user.id}) }}" class="btn btn-default btn-sm">查看</a>
 
               <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>

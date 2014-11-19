@@ -768,6 +768,12 @@ admin_approval_approve:
     pattern:  approvals/{id}/approve
     defaults: { _controller: TopxiaAdminBundle:UserApproval:approve }
 
+admin_approval_viewApprovalInfo:
+    pattern:  approvals/{id}/viewApprovalInfo
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:viewApprovalInfo }
+
+
+
 admin_approval_cancel:
     pattern:  approvals/{id}/cancel
     defaults: { _controller: TopxiaAdminBundle:UserApproval:cancel }
