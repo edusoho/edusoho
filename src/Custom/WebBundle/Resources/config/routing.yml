@@ -1,3 +1,11 @@
 course_buy:
     pattern:  /course/{id}/buy
-    defaults: { _controller: CustomWebBundle:Order:buy }
+    defaults: { _controller: CustomWebBundle:CourseOrder1:buy }
+course_order_pay:
+    pattern:  /course/order/pay
+    defaults: { _controller: CustomWebBundle:CourseOrder1:pay }
+    methods: [POST]
+
+coupon_check:
+    pattern:  /{type}/{id}/coupon/check
+    defaults: { _controller: CustomWebBundle:Order1:couponCheck }

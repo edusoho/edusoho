@@ -7,16 +7,13 @@ use Topxia\WebBundle\Controller\CourseOrderController;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Util\AvatarAlert;
 
-class OrderController extends CourseOrderController
+class CourseOrder1Controller extends CourseOrderController
 {
-    
     public function buyAction(Request $request, $id)
     {   
         $course = $this->getCourseService()->getCourse($id);
 
         $user = $this->getCurrentUser();
-
-        $order = $this->getOrderService()->getOrderByTargetIdAndUserId($course['id'],$user['id']);
 
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
@@ -52,7 +49,6 @@ class OrderController extends CourseOrderController
             }
         }
 
-
         for($i=0;$i<count($userFields);$i++){
            if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
            if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
@@ -65,30 +61,38 @@ class OrderController extends CourseOrderController
             return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
                 'course' => $course
             ));
-        } else if($order['targetId'] && $order['userId'] && $order['status'] == 'created' ) {
-             return $this->render('TopxiaWebBundle:CourseOrder:remaid.html.twig', array(
-                'course' => $course,
-                'payments' => $this->getEnabledPayments(),
-                'user' => $userInfo,
-                'avatarAlert' => AvatarAlert::alertJoinCourse($user),
-                'courseSetting' => $courseSetting,
-                'member' => $member,
-                'userFields'=>$userFields,
-            ));
-        } else {
-            return $this->render('CustomWebBundle:CourseOrder:buy-modal.html.twig', array(
-                'course' => $course,
-                'payments' => $this->getEnabledPayments(),
-                'user' => $userInfo,
-                'avatarAlert' => AvatarAlert::alertJoinCourse($user),
-                'courseSetting' => $courseSetting,
-                'member' => $member,
-                'userFields'=>$userFields,
-                'level'=>$level,
-                'vipPrice'=>$vipPrice,
+        }
+
+        $oldOrders = $this->getOrderService()->searchOrders(array(
+                'targetType' => 'course',
+                'targetId' => $course['id'],
+                'userId' => $user['id'],
+                'status' => 'created',
+                'createdTimeGreaterThan' => strtotime('-40 hours'),
+            ), array('createdTime', 'DESC'), 0, 1
+        );
+
+        $order = current($oldOrders);
+
+        if($course['price'] > 0 && $order && ($course['price'] == ($order['amount'] + $order['couponDiscount'])) ) {
+             return $this->render('TopxiaWebBundle:CourseOrder:repay.html.twig', array(
+                'order' => $order,
             ));
         }
+
+        return $this->render('CustomWebBundle:CourseOrder:buy-modal.html.twig', array(
+            'course' => $course,
+            'payments' => $this->getEnabledPayments(),
+            'user' => $userInfo,
+            'avatarAlert' => AvatarAlert::alertJoinCourse($user),
+            'courseSetting' => $courseSetting,
+            'member' => $member,
+            'userFields'=>$userFields,
+            'level'=>$level,
+            'vipPrice'=>$vipPrice,
+        ));
     }
+    
 
     private function getNotificationService()
     {
@@ -186,5 +190,15 @@ class OrderController extends CourseOrderController
     protected function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+    
+    public function getCourseOrderService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Course.CourseOrder1Service');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Order.Order1Service');
     }
 }
