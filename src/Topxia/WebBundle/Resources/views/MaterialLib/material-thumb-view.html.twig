@@ -11,10 +11,10 @@
                 <th width="50%"><label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label></th>
                 <th width="50%">
                     <span style="float: right;">
-                        <a href="{{path('course_manage_list_teacher_materials', {type: type, viewMode:'thumb', source: source}) }}">
+                        <a href="{{path('material_lib_browsing', {type: type, viewMode:'thumb', source: source}) }}">
                              <span class="glyphicon glyphicon-th-large" />
                         </a>
-                        <a href="{{path('course_manage_list_teacher_materials', {type: type, viewMode:'list', source: source}) }}">
+                        <a href="{{path('material_lib_browsing', {type: type, viewMode:'list', source: source}) }}">
                             <span class="glyphicon glyphicon-th-list" />
                         </a>
                     </span>
@@ -26,11 +26,11 @@
     </table>
 
     <div class="course-grids" id="material-item-list">
-
+			{% if source == "upload" %}
         <li class="course-grid item-material" id="panel-upload-file">
         		<div style="width: 180px; height: 180px; padding: 8px;">
            <div class="container" style="width: 100%; height: 120px; vertical-align: middle;">
-            <a class="btn btn-link center-block" style="margin-top: 20px;"
+            <a class="btn btn-link center-block file-create-btn" style="margin-top: 30px;"
             data-html5-url="{{ path('course_manage_batch_upload_course_files', {id:'0', targetType:'materiallib'}) }}"
             data-normal-url="{{ path('course_manage_upload_course_files', {id:'0', targetType:'materiallib'}) }}"
             data-storage="{{storageSetting.upload_mode}}" title="添加"   data-placement="bottom" >
@@ -57,6 +57,7 @@
             </div>
             </div>
         </li>
+        {% endif %}
 
         {% for uploadFile in materialResults %}
             {% include 'TopxiaWebBundle:MaterialLib:material-thumb-view-item.html.twig' %}

@@ -6,17 +6,17 @@
 {% block browse_files %}
 
 		<ul class="nav nav-tabs">
-			<li class="{{ type == 'all' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'all', viewMode: viewMode, source: source}) }}">全部</a></li>
-			<li class="{{ type == 'video' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'video', viewMode: viewMode, source: source}) }}">视频</a></li>
-			<li class="{{ type == 'audio' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'audio', viewMode: viewMode, source: source}) }}">音频</a></li>
-			<li class="{{ type == 'image' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'image', viewMode: viewMode, source: source}) }}">图片</a></li>
-			<li class="{{ type == 'document' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'document', viewMode: viewMode, source: source}) }}">文档</a></li>
-			<li class="{{ type == 'ppt' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'ppt', viewMode: viewMode, source: source}) }}">PPT</a></li>
-			<li class="{{ type == 'other' ? 'active' : '' }}"><a href="{{ path('course_manage_list_teacher_materials', {type:'other', viewMode: viewMode, source: source}) }}">其它</a></li>
+			<li class="{{ type == 'all' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'all', viewMode: viewMode, source: source}) }}">全部</a></li>
+			<li class="{{ type == 'video' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'video', viewMode: viewMode, source: source}) }}">视频</a></li>
+			<li class="{{ type == 'audio' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'audio', viewMode: viewMode, source: source}) }}">音频</a></li>
+			<li class="{{ type == 'image' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'image', viewMode: viewMode, source: source}) }}">图片</a></li>
+			<li class="{{ type == 'document' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'document', viewMode: viewMode, source: source}) }}">文档</a></li>
+			<li class="{{ type == 'ppt' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'ppt', viewMode: viewMode, source: source}) }}">PPT</a></li>
+			<li class="{{ type == 'other' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'other', viewMode: viewMode, source: source}) }}">其它</a></li>
 			</ul>
 		<br>
 		
-		<form id="message-search-form" class="form-inline well well-sm" action="{{ path('course_manage_list_teacher_materials', {type: type, viewMode: viewMode, source: source}) }}" method="get" novalidate>
+		<form id="message-search-form" class="form-inline well well-sm" action="{{ path('material_lib_browsing', {type: type, viewMode: viewMode, source: source}) }}" method="get" novalidate>
         	<div class="form-group">
         	  <select class="form-control" name="sortBy">
         	    {{ select_options({latestCreated:'按时间', sizeAsc: '按大小', nameAsc:'按名字'}, app.request.get('sortBy')) }}
@@ -26,6 +26,15 @@
         	  <input class="form-control" type="text" placeholder="输入标题关键词"  name="keyword" value="{{ app.request.get('keyword') }}">
         	</div>
         	<button class="btn btn-primary">搜索</button>
+        	{% if source == "upload" %}
+        		<div class="pull-right">
+							<a class="btn btn-info btn-sm file-create-btn"
+								data-html5-url="{{ path('course_manage_batch_upload_course_files', {id:'0', targetType:'materiallib'}) }}"
+	            data-normal-url="{{ path('course_manage_upload_course_files', {id:'0', targetType:'materiallib'}) }}"
+	            data-storage="{{storageSetting.upload_mode}}">
+	            <i class="glyphicon glyphicon-plus"></i>上传文件</a>
+        		</div>
+        		{% endif %}
         </form>
         
         <div id="material-lib-items-panel">

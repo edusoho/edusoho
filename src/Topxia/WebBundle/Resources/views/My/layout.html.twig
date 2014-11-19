@@ -29,7 +29,7 @@
                <a class="list-group-item {% if side_nav == 'my-teaching-check' %} active {% endif %}"
                 href="{{path('course_manage_list_teacher_test_reviewing') }}">试卷批阅</a>
                <a class="list-group-item {% if side_nav == 'material-lib' %} active {% endif %}"
-                href="{{path('course_manage_list_teacher_materials') }}">教学资料库</a>
+                href="{{path('material_lib_browsing') }}">教学资料库</a>
                {% if is_plugin_installed('Homework') %}
                  <a class="list-group-item {% if side_nav == 'my-teaching-homework-check' %} active {% endif %}" href="{{path('my_teaching_homework_list') }}">作业批改</a>
                {% endif %}

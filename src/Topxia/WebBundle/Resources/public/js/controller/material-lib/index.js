@@ -26,6 +26,19 @@ define(function(require, exports, module) {
 				Notify.success('文件已删除！');
 			}, 'json');
 		});
+		
+
+		$list.on('click', '.convert-file-btn', function() {
+			$.post($(this).data('url'), function(response) {
+				if (response.status == 'error') {
+					alert(response.message);
+				} else {
+					window.location.reload();
+				}
+			}, 'json').fail(function() {
+				alert('文件转换提交失败，请重试！');
+			});
+		});
 
 		$('.tip').tooltip();
 
@@ -39,7 +52,7 @@ define(function(require, exports, module) {
 			window.location.reload();
 		})
 
-		$("a", "#panel-upload-file").on(
+		$(".file-create-btn").on(
 				'click',
 				function() {
 					var url = "";

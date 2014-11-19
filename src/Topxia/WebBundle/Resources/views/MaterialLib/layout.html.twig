@@ -17,18 +17,24 @@
 		{% endif %}
 		
 		<span class="text-sm" style="float: right; font-weight: normal;">
-			{% if source != "upload" %}
-				<a href="{{ path('course_manage_list_teacher_materials', {type: type|default('all'), viewMode: viewMode|default('thumb'), source: 'upload'}) }}">来自上传</a> | 
+			{% if source == "upload" %}
+				来自上传
+			{% else %}
+				<a href="{{ path('material_lib_browsing', {type: type|default('all'), viewMode: viewMode|default('thumb'), source: 'upload'}) }}">来自上传</a>
 			{% endif %}
-
-			{% if source  != "shared" %}
-		 		<a href="{{ path('course_manage_list_teacher_materials', {type: type|default('all'), viewMode: viewMode|default('thumb'), source: 'shared'}) }}">来自分享</a> | 
+			| 
+			{% if source  == "shared" %}
+				来自分享
+			{% else %}
+		 		<a href="{{ path('material_lib_browsing', {type: type|default('all'), viewMode: viewMode|default('thumb'), source: 'shared'}) }}">来自分享</a>
 			{% endif %}
-
-		 	<a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_show_share_my_material') }}">分享我的教学资料</a>
-
-		 	{% if source  != "myShareHistory" %}
-		 		| <a href="{{ path('course_manage_show_share_history') }}">我的分享历史</a>
+			| 
+		 	<a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('material_lib_my_sharing') }}">分享我的教学资料</a>
+			| 
+		 	{% if source == "myShareHistory" %}
+		 		我的分享历史
+	 		{% else %}
+		 		<a href="{{ path('material_lib_show_sharing_history') }}">我的分享历史</a>
 		 	{% endif %}
 		</span>
 	</div>

@@ -23,7 +23,7 @@
     
     {% endif %}
     <span class="row">
-    	<a {% if uploadFile.createdUserId != currentUserId %}disabled="disabled" {% endif %} class="center-block btn btn-link delete-material-btn" data-url="{{ path('course_manage_delete_teacher_material', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-trash"></span>删除</a>
+    	<a {% if uploadFile.createdUserId != currentUserId %}disabled="disabled" {% endif %} class="center-block btn btn-link delete-material-btn" data-url="{{ path('material_lib_delete_file', {id: uploadFile.id}) }}"><span class="glyphicon glyphicon-trash"></span>删除</a>
     </span>
   </div>
 </li>
