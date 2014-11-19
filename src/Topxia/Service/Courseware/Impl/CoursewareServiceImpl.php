@@ -47,7 +47,6 @@ class CoursewareServiceImpl extends BaseService implements CoursewareService
     public function deleteCourseware($id)
     {
         $checkCourseware = $this->getCourseware($id);
-
         if(empty($checkCourseware)){
             throw $this->createServiceException("课件不存在，操作失败。");
         }
