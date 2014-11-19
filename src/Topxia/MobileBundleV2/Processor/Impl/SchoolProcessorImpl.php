@@ -21,6 +21,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             );
 
         $data = json_decode($data);
+        return $data;
         if (!empty($data) && isset($data->access_token)) {
             $userinfo = $this->sendRequest(
             "GET", 
