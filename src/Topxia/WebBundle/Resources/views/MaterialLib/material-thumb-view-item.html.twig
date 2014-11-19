@@ -2,7 +2,7 @@
 	<div style="width: 180px; height: 180px; padding: 8px;" class="course-item-list-multi">
     <div><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></div>
 
-    {% if uploadFile.type == 'video' %}
+   	{% if uploadFile.type == 'video' %}
 			{% set parentClass = "item-object-video" %}
 		{% elseif uploadFile.type == 'audio' %}
 			{% set parentClass = "item-object-audio" %}
@@ -19,12 +19,22 @@
 		{% endif %}
 		
 		<div style="height: 90px;" class="center-block">
-			<a style="float: none;" class="item-object {{ parentClass|default('') }} tip center-block mtm" title="预览"   data-placement="bottom" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}">
+			
+		{% if uploadFile.type in ['video', 'audio', 'ppt'] %}
+			{% set tagName = "a" %}
+			{% set title = "预览" %}
+		{% else %}
+			{% set tagName = "span" %}
+			{% set title = "暂不支持预览" %}
+		{% endif %}
+			
+			 <{{ tagName }} style="float: none;" class="item-object {{ parentClass|default('') }} tip center-block mtm" title="{{ title }}" data-placement="bottom" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}">
 				<span class="item-icon"></span>
-					<span class="item-length">
-									{{ subTitle|default('') }}
-							</span>
-			</a>
+				<span class="item-length">
+						{{ subTitle|default('') }}
+				</span>
+					
+				</{{ tagName }}>
 			</div>
 											
     <span class="file-name-container text-sm mhs mvs">{{ uploadFile.filename }}</span>
