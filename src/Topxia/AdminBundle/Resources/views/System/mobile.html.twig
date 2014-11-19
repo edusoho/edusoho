@@ -145,7 +145,7 @@
           <input type="text" id="bannerUrl1" name="bannerUrl1" class="form-control" value="{{mobile.bannerUrl1}}" placeholder="请填写连接地址" {% if not mobile.bannerClick1 %}style="display:none"{% endif %}/>
 
           <div class="row">
-          <div id="bannerClassNameLabel1" class="col-sm-3" style="display:none">Class Name:</div>
+          <div id="bannerClassNameLabel1" class="col-sm-3" style="display:none">Course Name:</div>
           <div class="col-sm-4" id="bannerClassName1" name="bannerClassName1" {% if not mobile.bannerClick1 %}style="display:none"{% endif %}></div>
           <div id="bannerCourseChooseButton1" class="btn btn-xs btn-primary pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if not mobile.bannerClick1 %}style="display:none"{% endif %}>
            choose
