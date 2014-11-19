@@ -66,7 +66,7 @@
             {{order.createdTime|date('Y-m-d H:i:s')}}
           </td> 
           <td>
-            <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('coin_orders_log',{id:order.id})}}">详情</a>
+            <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_orders_log',{id:order.id})}}">详情</a>
           </td>
        </tr>
        {% endfor %}

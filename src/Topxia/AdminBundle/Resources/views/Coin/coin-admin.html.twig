@@ -10,7 +10,7 @@
     {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %}
 
     <div class="page-header">
-        <a href="javascript:;" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('coin_give')}}">发放虚拟币</a>
+        <a href="javascript:;" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_give')}}">发放虚拟币</a>
         <h1>虚拟币管理</h1>
 
     </div>
@@ -40,7 +40,7 @@
                     <td><a target="_blank" href="{{ path('user_show', {id:cash.userId}) }}">
                     {{users[cash.userId].nickname}}</a></td>
                     <td>{{cash.cash|score_text}}</td>
-                    <td><a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('coin_admin_edit',{id:cash.id})}}">修改</a></td>
+                    <td><a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_admin_edit',{id:cash.id})}}">修改</a></td>
                 </tr>
                 {% endfor %}
 

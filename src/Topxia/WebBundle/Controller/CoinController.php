@@ -18,7 +18,10 @@ class CoinController extends BaseController
     {   
         $user=$this->getCurrentUser();
         $account=$this->getCashService()->getAccountByUserId($user->id,true);
-
+        
+        $code = 'ChargeCoin';
+        $ChargeCoin = $this->getAppService()->findInstallApp($code);
+        
         if(empty($account)){
         $this->getCashService()->createAccount($user->id);
         }
@@ -55,12 +58,13 @@ class CoinController extends BaseController
         $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         
 
-        return $this->render('TopxiaAdminBundle:Coin:index.html.twig',array(
+        return $this->render('TopxiaWebBundle:Coin:index.html.twig',array(
           'payments' => $this->getEnabledPayments(),
           'account'=>$account,
           'cashes'=>$cashes,
           'paginator'=>$paginator,
           'amount'=>$amount,
+          'ChargeCoin' => $ChargeCoin
           ));
     }
 
@@ -91,7 +95,7 @@ class CoinController extends BaseController
             return $this->redirect($this->generateUrl('my_coin'));
         }
 
-        return $this->render('TopxiaAdminBundle:Coin:coin-change-modal.html.twig', array(
+        return $this->render('TopxiaWebBundle:Coin:coin-change-modal.html.twig', array(
             'amount'=>$amount,
             'changeAmount'=>$changeAmount,
             'canChange'=>$canChange,
@@ -167,7 +171,7 @@ class CoinController extends BaseController
     public function buyAction(Request $request)
     {  
 
-      return $this->render('TopxiaAdminBundle:Coin:buy.html.twig',array(
+      return $this->render('TopxiaWebBundle:Coin:buy.html.twig',array(
           'payments' => $this->getEnabledPayments(),
           ));
     }
@@ -187,7 +191,7 @@ class CoinController extends BaseController
             'showUrl' => $this->generateUrl('my_coin_buy',array(),true),
         );
 
-        return $this->forward('TopxiaAdminBundle:CoinWeb:submitPayRequest', array(
+        return $this->forward('TopxiaWebBundle:Coin:submitPayRequest', array(
                 'order' => $order,
                 'requestParams' => $payRequestParams,
             ));
@@ -197,7 +201,7 @@ class CoinController extends BaseController
     {
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
         
-        return $this->render('TopxiaAdminBundle:Coin:submit-pay-request.html.twig', array(
+        return $this->render('TopxiaWebBundle:Coin:submit-pay-request.html.twig', array(
             'form' => $paymentRequest->form(),
             'order' => $order,
         ));
