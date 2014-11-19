@@ -19,6 +19,29 @@ define(function(require, exports, module) {
             required: true
         });
         
+        validator.addItem({
+            element: '[name="subjectId"]',
+            required: true
+        });
+
+        validator.addItem({
+            element: '[name="materialId"]',
+            required: true,
+            errormessage: '无教材可用!!'
+        });
+
+        $('#course-create-form').on('change', '.event', function(){
+            $.get($('#course-create-form').data('url'), {subjectId:$('#subjectId').val(), gradeId:$('#gradeId').val()}, function(result){
+                if(result) {
+                    $('#materialId').val(result.id);
+                    $('#material').val(result.name);
+                } else {
+                    $('#materialId').val('');
+                    $('#material').val('');
+                }
+            })
+        });
+
     };
 
 });

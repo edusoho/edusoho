@@ -30,7 +30,7 @@
           </ol>
         </div>
       {% else %} #}
-        <form id="course-create-form" class="form-horizontal" method="post">
+        <form id="course-create-form" class="form-horizontal" method="post" data-url="{{ path('admin_get_material') }}">
 
           {{ web_macro.flash_messages() }}
 
@@ -45,7 +45,7 @@
           <div class="form-group">
             <label class="col-md-2 control-label">所属年级</label>
             <div class="col-md-4 controls">
-              <select class="form-control" name="gradeId" id="gradeId">
+              <select class="form-control event" name="gradeId" id="gradeId">
                 {{ select_options_for_school('') }}
               </select>
               <div class="help-block" style="display:none;"></div>
@@ -64,7 +64,7 @@
           <div class="form-group">
             <label class="col-md-2 control-label">所属学科</label>
             <div class="col-md-4 controls">
-              <select class="form-control" id="subjectId" name="subjectId">
+              <select class="form-control event" id="subjectId" name="subjectId">
                 {{ select_options(subject, app.request.query.get('gradeId'), '--选择学科--') }}
               </select>
             </div>
@@ -76,6 +76,16 @@
               <input type="text" class="hidden" name="materialId" value="" id="materialId" readonly>
               <input type="text" class="form-control" value=""  id="material" readonly>
               <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+
+          <div class="row form-group">
+            <div class="col-md-2 control-label">
+              <label>生成目录</label>
+            </div>
+            <div class="col-md-8 controls radios">
+              {{ radios('hasCatalog',{'true':'是','false':'否'}, 'true')}}
+              <div class="help-block">是否根据知识树生成课程目录</div>
             </div>
           </div>
 

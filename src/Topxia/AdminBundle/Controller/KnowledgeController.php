@@ -138,10 +138,8 @@ class KnowledgeController extends BaseController
 
 	public function getmaterialAction(Request $request)
 	{
-		$material = array(
-			'id' => 1,
-			'name' => '人教版'
-		);
+		$query = $request->query->all();
+		$material = $this->getCategoryService()->getMaterialCategoryByGradeIdAndSubjectId($query['gradeId'], $query['subjectId']);
 		return $this->createJsonResponse($material);
 	}
 

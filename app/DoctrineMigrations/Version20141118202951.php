@@ -19,6 +19,7 @@ class Version20141118202951 extends AbstractMigration
 			ALTER TABLE `knowledge` ADD `subjectId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '科目id' AFTER `gradeId`;
 			ALTER TABLE `knowledge` ADD `materialId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '教材id' AFTER `parentId`;
 			ALTER TABLE `knowledge` ADD `term` ENUM('first', 'second') CHARACTER SET utf32 COLLATE utf32_general_ci NOT NULL DEFAULT 'first' COMMENT '学期' AFTER `parentId`;
+            ALTER TABLE `course` ADD `subjectId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '科目id' AFTER `gradeId`, ADD `materialId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '教材id' AFTER `subjectId`;
     	");
     }
 

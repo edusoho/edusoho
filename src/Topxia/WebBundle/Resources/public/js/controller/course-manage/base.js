@@ -95,6 +95,17 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
+            element: '[name="subjectId"]',
+            required: true
+        });
+
+        validator.addItem({
+            element: '[name="materialId"]',
+            required: true,
+            errormessage: '无教材可用!!'
+        });
+
+        validator.addItem({
             element: '[name=maxStudentNum]',
             rule: 'integer',
             onItemValidated: function(error, message, elem) {
@@ -120,6 +131,18 @@ define(function(require, exports, module) {
             }
         });
 
+        $('#course-form').on('change', '.event', function(){
+            $.get($('#course-form').data('url'), {subjectId:$('#subjectId').val(), gradeId:$('#gradeId').val()}, function(result){
+                if(result) {
+                    $('#materialId').val(result.id);
+                    $('#material').val(result.name);
+                } else {
+                    $('#materialId').val('');
+                    $('#material').val('');
+                }
+            })
+        });
+        
         $("input[name='deadlineNotify']").change(function(){
             var element = $(this);
             if(element.val()=='active') {
@@ -129,7 +152,7 @@ define(function(require, exports, module) {
                 $("#courseDaysOfNotifyBeforeDeadline").hide();
                 $("#deadlineNotifyBlock").show();
             }
-        })
+        });
 
     };
 
