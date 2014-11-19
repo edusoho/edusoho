@@ -76,10 +76,13 @@ class UserApprovalController extends BaseController
             return $this->createJsonResponse(array('status' => 'ok'));
         }
 
+        $fromVerified = $request->get('fromVerified');
+
         return $this->render("TopxiaAdminBundle:User:user-approve-modal.html.twig",
             array(
                 'user' => $user,
-                'userApprovalInfo' => $userApprovalInfo
+                'userApprovalInfo' => $userApprovalInfo,
+                'fromVerified' => $fromVerified
             )
         );
     }

@@ -2,7 +2,13 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}用户认证审核{% endblock %}
+{% block title %}
+ {% if fromVerified != 1 %}
+    用户认证审核
+ {% else %}
+    用户认证查看
+ {% endif %}
+{% endblock %}
 {% block body %}
 
 <form id="approve-form" class="form-horizontal" method="post" action="{{ path('admin_approval_approve', {id:user.id}) }}">
@@ -55,14 +61,17 @@
       </a>
     </div>
   </div>
-    <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="note">备注</label>
+
+  {% if fromVerified != 1 %}
+      <div class="row form-group">
+        <div class="col-md-3 control-label">
+          <label for="note">备注</label>
+        </div>
+        <div class="col-md-8">
+        <textarea id="note" name="note" class="form-control" rows="3"></textarea>
+        </div>
     </div>
-    <div class="col-md-8">
-    <textarea id="note" name="note" class="form-control" rows="3"></textarea>
-    </div>
-  </div>
+  {% endif %}
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   <input id="form_status" type="hidden" name="form_status" >
@@ -73,9 +82,11 @@
 <div class="pull-right">
 
   <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-  <button type="submit" class="btn btn-danger user-approve-btn" data-toggle="form-submit" data-status='fail' data-target="#approve-form">审核失败</button>
-  <button type="submit" class="btn btn-success user-approve-btn" data-toggle="form-submit" data-status='success' data-target="#approve-form">审核成功</button>
 
+  {% if fromVerified != 1 %}
+    <button type="submit" class="btn btn-danger user-approve-btn" data-toggle="form-submit" data-status='fail' data-target="#approve-form">审核失败</button>
+    <button type="submit" class="btn btn-success user-approve-btn" data-toggle="form-submit" data-status='success' data-target="#approve-form">审核成功</button>
+  {% endif %}
 
   <script>app.load('user/approve')</script>
     
