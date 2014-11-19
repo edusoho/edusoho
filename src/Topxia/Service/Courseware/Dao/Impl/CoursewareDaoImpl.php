@@ -72,7 +72,7 @@ class CoursewareDaoImpl extends BaseDao implements CoursewareDao
             $knowledgeId = $conditions['knowledgeId'];
             $conditions['knowledgesLike'] = "%";
             if (!empty($knowledgeId)) {
-                $conditions['knowledgesLike'] = "\"".$conditions['knowledgeId']."\"";
+                $conditions['knowledgesLike'] .= "\"".$conditions['knowledgeId']."\"";
             }
             $conditions['knowledgesLike'] .= "%";
             unset($conditions['knowledgeIds']);
