@@ -140,6 +140,10 @@
           <input type="radio" role="bannerClick1" name="bannerClick1" {% if not mobile.bannerClick1 %}checked="checked"{% endif %} value="0"/>默认（无触发动作）
           <input type="radio" role="bannerClick1" name="bannerClick1" value="1" {% if mobile.bannerClick1 %}checked="checked"{% endif %}/>跳转到连接地址
           <input type="text" id="bannerUrl1" name="bannerUrl1" class="form-control" value="{{mobile.bannerUrl1}}" placeholder="请填写连接地址" {% if not mobile.bannerClick1 %}style="display:none"{% endif %}/>
+          <div data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}">
+           search course
+          </div>
+          <div id="bannerClassName1" name="bannerClassName1"></div>
         </div>
 
         
