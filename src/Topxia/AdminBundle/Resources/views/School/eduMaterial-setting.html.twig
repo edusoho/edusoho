@@ -1,0 +1,33 @@
+{% extends 'TopxiaAdminBundle:School:layout.html.twig' %}
+
+{% block title %}教材设置 - {{ parent() }}{% endblock %}
+
+{% set menu = 'eduMaterialSetting' %}
+{# {% set script_controller = 'school/school-setting' %} #}
+
+{% block main %}
+  <div class="page-header"><h1>教材设置</h1></div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      {% for subject in subjects %}
+        {% if loop.index==1 %}
+          <tr class="info">
+            <td></td>
+            {% for grade in grades %}
+              <td>{{grade.name}}</td>
+            {% endfor %}
+          </tr>
+        {% endif %}
+        <tr>
+          <td class="info">{{subject.name}}</td>
+          {% set eduMaterialList=eduMaterials[subject.id] %}
+          {% for grade in grades %}
+            {% set eduMaterial=eduMaterialList[grade.id] %}
+            <td>{{eduMaterial.materialName}}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% endblock %}

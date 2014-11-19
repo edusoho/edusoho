@@ -15,6 +15,21 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getCategoryDao()->findCategoriesByGroupIdAndParentId($groupId, $parentId);
     }
 
+    public function findCategoriesByGroupCode($groupCode)
+    {
+        if(empty($groupCode)){
+            return array();
+        }
+        $group=$this->getGroupByCode($groupCode);
+        return $this->findCategories($group['id']);
+    }
+
+    public function getMaterialCategoryByGradeIdAndSubjectId($gradeId,$subjectId)
+    {
+        $eduMaterial=$this->getEduMaterialService()->getEduMaterialByGradeIdAndSubjectId($gradeId,$subjectId);
+        return $this->getCategory($eduMaterial['materialId']);
+    }
+
     public function getCategory($id)
     {
         if (empty($id)) {
@@ -293,6 +308,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     private function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getEduMaterialService()
+    {
+        return $this->createService('Course.EduMaterialService');
     }
 
 }
