@@ -42,7 +42,7 @@ class CoursewareServiceImpl extends BaseService implements CoursewareService
     {
         $courseware = $this->filterCoursewareFields($courseware);
 
-        $this->getLogService()->info('courseware', 'update', "更新课件《({$courseware['title']})》({$courseware['id']})");
+        $this->getLogService()->info('courseware', 'update', "更新课件《({$courseware['title']})》({$id})");
 
         return $this->getCoursewareDao()->updateCourseware($id,$courseware);
     }
