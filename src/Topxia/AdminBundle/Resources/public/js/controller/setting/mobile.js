@@ -215,8 +215,14 @@ define(function(require, exports, module) {
         $("input[role='bannerClick1']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl1").show();
+                $("#bannerClassNameLabel1").show();
+                $("#bannerClassName1").show();
+                $("#bannerCourseChooseButton1").show();
             }else{
                 $("#bannerUrl1").hide();
+                 $("#bannerClassNameLabel1").hide();
+                $("#bannerClassName1").hide();
+                $("#bannerCourseChooseButton1").hide();
             }
         })
 

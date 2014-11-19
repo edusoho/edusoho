@@ -16,6 +16,10 @@ define(function(require, exports, module) {
 
 			$('input[name="bannerUrl1"]').val( location.hostname + "/course/" + $(this).data("courseId"));
 			$('div[name="bannerClassName1"]').html($(this).children('div').children('span').html())
+		    $("#bannerUrl1").show();
+            $("#bannerClassNameLabel1").show();
+            $("#bannerClassName1").show();
+            $("#bannerCourseChooseButton1").show();
 			$modal.modal('hide');return;
 			
 
