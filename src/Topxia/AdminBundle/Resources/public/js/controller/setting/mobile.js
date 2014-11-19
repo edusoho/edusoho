@@ -212,6 +212,11 @@ define(function(require, exports, module) {
             }
         });
 
+
+
+
+//=============================================================================
+
         $("input[role='bannerClick1']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl1").show();
@@ -225,6 +230,14 @@ define(function(require, exports, module) {
                 $("#bannerCourseChooseButton1").hide();
             }
         })
+
+        $("#bannerCourseChooseButton1").click(function(){
+            $("#who_is_clicked").html("1");
+        });
+
+//=============================================================================
+
+
 
         $("#mobile-banner1-remove").on('click', function(){
             if (!confirm('确认要删除吗？')) return false;

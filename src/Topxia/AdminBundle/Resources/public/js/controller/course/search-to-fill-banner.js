@@ -14,45 +14,14 @@ define(function(require, exports, module) {
 
 		$('[role="course-list"]').find("li[role='course-item']").on('click', function(){
 
-			$('input[name="bannerUrl1"]').val( location.hostname + "/course/" + $(this).data("courseId"));
-			$('div[name="bannerClassName1"]').html($(this).children('div').children('span').html())
-		    $("#bannerUrl1").show();
-            $("#bannerClassNameLabel1").show();
-            $("#bannerClassName1").show();
-            $("#bannerCourseChooseButton1").show();
+			$('input[name="bannerUrl'+$("#who_is_clicked").html()+'"]').val( location.hostname + "/course/" + $(this).data("courseId"));
+			$('div[name="bannerClassName'+$("#who_is_clicked").html()+'"]').html($(this).children('div').children('span').html())
+		    $("#bannerUrl"+$("#who_is_clicked").html()).show();//$this.children("bannerUrlxx").show
+            $("#bannerClassNameLabel"+$("#who_is_clicked").html()).show();
+            $("#bannerClassName"+$("#who_is_clicked").html()).show();
+            $("#bannerCourseChooseButton"+$("#who_is_clicked").html()).show();
 			$modal.modal('hide');return;
 			
-
-			var $courseIds = $('input[name="courseIds"]');
-			if($courseIds.val().split(",").length>3){
-				Notify.danger('每周精品栏目只能设置三门课程！')
-				return;
-			}
-			if($courseIds.val().indexOf($(this).data("courseId"))>-1){
-				Notify.danger('每周精品栏目中已经0000000000存在此门课程！');
-				return;
-			}
-			$courseIds.val($courseIds.val()+$(this).data("courseId")+",");
-			
-			if($courseIds.val().split(",").length>3){
-				$('[role="add-course"]').hide();
-			}
-
-			var courseItem = $(this).clone();
-			courseItem.find('[role="course-item-delete"]').on('click',function(){
-	            var courseId=$(this).data("courseId");
-	            var courseIds = $('input[name="courseIds"]');
-
-	            $(this).parents('li[role="course-item"]').remove();
-	            courseIds.val(courseIds.val().replace(courseId+',', ''));
-
-	            if($courseIds.val().split(",").length<=3){
-					$('[role="add-course"]').show();
-				}
-	        }).show();
-
-			$('[role="add-course"]').before(courseItem);
-			$modal.modal('hide');
 		})
 	}
 });
