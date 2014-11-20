@@ -224,11 +224,10 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $banner = array();
         $mobile = $this->getSettingService()->get('mobile', array());
         $baseUrl = $this->request->getSchemeAndHttpHost();
-        $keys = array_keys($mobile);
         for ($i=1; $i < 6; $i++) {
-            $banner = $keys["banner" . $i];
+            $banner = $mobile["banner" . $i];
             if (!empty($banner)) { 
-                    $bannerClick = $keys["bannerClick" . $i];
+                    $bannerClick = $mobile["bannerClick" . $i];
                     $bannerParams = null;
                     $action = "none";
                     switch ($bannerClick) {
@@ -238,11 +237,19 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
                             break;
                         case 1:
                             $action = "webview";
-                            $bannerParams = $keys["bannerUrl" . $i];
+                            if(array_key_exists("bannerUrl" . $i, $mobile)){
+                                $bannerParams = $mobile["bannerUrl" . $i];
+                            } else {
+                                $bannerParams = "";
+                            }
                             break;
                         case 2:
                             $action = "course";
-                            $bannerParams = $keys["bannerJumpToCourseId" . $i];
+                            if(array_key_exists("bannerJumpToCourseId" . $i, $mobile)){
+                                $bannerParams = $mobile["bannerJumpToCourseId" . $i];
+                            } else {
+                                $bannerParams = "";
+                            }
                             break;
                     }
                     $banner[] = array(

@@ -117,7 +117,6 @@ class SettingController extends BaseController
         $bannerCourse4 = ($mobile['bannerJumpToCourseId4']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId4']):null;
         $bannerCourse5 = ($mobile['bannerJumpToCourseId5']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId5']):null;
 
-
         return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
             'mobile'=>$mobile,
             'courses'=>$sortedCourses,
