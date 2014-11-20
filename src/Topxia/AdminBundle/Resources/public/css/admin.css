@@ -307,3 +307,14 @@ input.LargeInput {width: 600px;}
   z-index:88;
   font-size:24px;
 }
+
+.courseware-thumb-title{
+  margin-top:15px;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size:12px;
+}
+
+.courseware-thumb-btn{
+  margin-top:15px;
+}

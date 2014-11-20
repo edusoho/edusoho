@@ -1,14 +1,16 @@
 <li class="courseware-grid item-courseware">
-  <div style="width: 200px; height: 190px; padding: 8px;">
+  <div style="width: 200px; height: 210px; padding: 8px;">
     <input value="{{ courseware.id }}" type="checkbox" data-role="single-select" data-courseware-id="{{courseware.id}}">
 
-    <div class="thumb-img-background" align=center><img src="{{ courseware.image }}" class="courseware-thumb-img" width="80%" />
-    <span class="glyphicon glyphicon-play-circle courseware-thumb-play" style="font-size:36px;cursor:pointer" data-url="{{ path('admin_courseware_preview',{categoryId:category.id,id:courseware.id}) }}" data-toggle="modal" data-target="#modal"></span>
+    <div class="thumb-img-background" align=center>
+      <img src="{{ courseware.image }}" class="courseware-thumb-img" width="80%" />
+      <span class="glyphicon glyphicon-play-circle courseware-thumb-play" style="font-size:36px;cursor:pointer" data-url="{{ path('admin_courseware_preview',{categoryId:category.id,id:courseware.id}) }}" data-toggle="modal" data-target="#modal"></span>
     </div>
-    <div class="courseware-thumb-title">{{ courseware.title|plain_text(25) }}</div>
-    <div class="row hide courseware-thumb-btn">
-      <a class="btn btn-link update-courseware-btn col-md-6" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_courseware_edit',{categoryId:category.id,id:courseware.id}) }}"><span class="glyphicon glyphicon-pencil"></span>编辑</a>
-      <a class="btn btn-link delete-courseware-btn col-md-6" data-url="{{ path('admin_courseware_delete',{id:courseware.id}) }}"><span class="glyphicon glyphicon-trash"></span>删除</a>
+
+    <div class="courseware-thumb-title" align=center >{{ courseware.title|plain_text(25) }}</div>
+    <div class="row hide courseware-thumb-btn" align=center>
+      <a class="btn btn-link update-courseware-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_courseware_edit',{categoryId:category.id,id:courseware.id}) }}"><span class="glyphicon glyphicon-pencil"></span>编辑</a>
+      <a class="btn btn-link delete-courseware-btn" data-url="{{ path('admin_courseware_delete',{id:courseware.id}) }}"><span class="glyphicon glyphicon-trash"></span>删除</a>
     </div>
   </div>
 </li>
