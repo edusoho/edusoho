@@ -213,6 +213,12 @@ define(function(require, exports, module) {
         });
 
 
+        $("[data-role='selectBannerCourse']").find('[data-role="selectCourse"]').click(function(){
+            $('[data-status="active"]').attr("data-status", "none");
+            $(this).attr("data-status","active");
+        });
+
+
         $("input[role='bannerClick1']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl1").show();
@@ -226,94 +232,62 @@ define(function(require, exports, module) {
             }
         })
 
-        $("[data-role='selectBannerCourse']").find('[data-role="selectCourse"]').click(function(){
-            $('[data-status="active"]').attr("data-status", "none");
-            $(this).attr("data-status","active");
-        });
-
 
         $("input[role='bannerClick2']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl2").show();
-                $("#bannerCourseShow2").hide();
-                $("#bannerCourseChooseButton2").hide();
+                $("#selectBannerCourse2").hide();
             }else if($(this).val()==2){
+                $("#selectBannerCourse2").show();
                 $("#bannerUrl2").hide();
-                $("#bannerCourseShow2").show();
-                $("#bannerCourseChooseButton2").show();
             }else{
                 $("#bannerUrl2").hide();
-                $("#bannerCourseShow2").hide();
-                $("#bannerCourseChooseButton2").hide();
+                $("#selectBannerCourse2").hide();
             }
         })
-
-        $("#bannerCourseChooseButton2").click(function(){
-            $("#who_is_clicked").html("2");
-        });
 
 
         $("input[role='bannerClick3']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl3").show();
-                $("#bannerCourseShow3").hide();
-                $("#bannerCourseChooseButton3").hide();
+                $("#selectBannerCourse3").hide();
             }else if($(this).val()==2){
+                $("#selectBannerCourse3").show();
                 $("#bannerUrl3").hide();
-                $("#bannerCourseShow3").show();
-                $("#bannerCourseChooseButton3").show();
             }else{
                 $("#bannerUrl3").hide();
-                $("#bannerCourseShow3").hide();
-                $("#bannerCourseChooseButton3").hide();
+                $("#selectBannerCourse3").hide();
             }
         })
 
-        $("#bannerCourseChooseButton3").click(function(){
-            $("#who_is_clicked").html("3");
-        });
 
 
         $("input[role='bannerClick4']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl4").show();
-                $("#bannerCourseShow4").hide();
-                $("#bannerCourseChooseButton4").hide();
+                $("#selectBannerCourse4").hide();
             }else if($(this).val()==2){
+                $("#selectBannerCourse4").show();
                 $("#bannerUrl4").hide();
-                $("#bannerCourseShow4").show();
-                $("#bannerCourseChooseButton4").show();
             }else{
                 $("#bannerUrl4").hide();
-                $("#bannerCourseShow4").hide();
-                $("#bannerCourseChooseButton4").hide();
+                $("#selectBannerCourse4").hide();
             }
         })
-
-        $("#bannerCourseChooseButton4").click(function(){
-            $("#who_is_clicked").html("4");
-        });
 
 
         $("input[role='bannerClick5']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl5").show();
-                $("#bannerCourseShow5").hide();
-                $("#bannerCourseChooseButton5").hide();
+                $("#selectBannerCourse5").hide();
             }else if($(this).val()==2){
+                $("#selectBannerCourse5").show();
                 $("#bannerUrl5").hide();
-                $("#bannerCourseShow5").show();
-                $("#bannerCourseChooseButton5").show();
             }else{
                 $("#bannerUrl5").hide();
-                $("#bannerCourseShow5").hide();
-                $("#bannerCourseChooseButton5").hide();
+                $("#selectBannerCourse5").hide();
             }
         })
-
-        $("#bannerCourseChooseButton5").click(function(){
-            $("#who_is_clicked").html("5");
-        });
 
 
         $("#mobile-banner1-remove").on('click', function(){

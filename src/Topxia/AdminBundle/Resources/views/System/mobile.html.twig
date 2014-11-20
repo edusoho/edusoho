@@ -129,7 +129,6 @@
   <fieldset>
     <legend>banner设置</legend>
     
-    <div id="who_is_clicked" style="display:none"></div>
     
     <div class="help-block">客户端显示的轮播图。最多5张，建议图片大小为640*330，格式支持jpg、png。</div>
     <div class="form-group">
@@ -210,16 +209,17 @@
             </div>  
           </div>
 
-          <div class="row">
-            <a id="bannerCourseChooseButton2" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick2 != "2" %}style="display:none"{% endif %}>
+          <div class="row" id="selectBannerCourse2" data-role="selectBannerCourse" {% if mobile.bannerClick2 != "2" %}style="display:none"{% endif %}>
+            <a data-role="selectCourse" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" >
              选课
             </a>
-            <div id="bannerCourseShow2" name="bannerCourseShow2" class=""{% if mobile.bannerClick2 != "2" %}style="display:none"{% endif %}>
-              <ul class="banner-course" role="bannerCourse2">
+            <div name="bannerCourseShow2">
+              <ul class="banner-course" role="bannerCourse">
                 {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:bannerCourse2} %}
               </ul>
             </div>
-            <input type="text" id="bannerJumpToCourseId2" name="bannerJumpToCourseId2" class="form-control" value="{{mobile.bannerJumpToCourseId2}}" placeholder="请填写内部课程Id" style="display:none;"/>
+
+            <input type="text" name="bannerJumpToCourseId2" class="form-control" value="{{mobile.bannerJumpToCourseId2}}" placeholder="请填写内部课程Id" style="display:none;"/>
           </div>
         </div>
 
@@ -258,16 +258,16 @@
             </div>  
           </div>
 
-          <div class="row">
-            <a id="bannerCourseChooseButton3" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick3 != "2" %}style="display:none"{% endif %}>
+          <div class="row" id="selectBannerCourse3" data-role="selectBannerCourse" {% if mobile.bannerClick3 != "2" %}style="display:none"{% endif %}>
+            <a data-role="selectCourse" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" >
              选课
             </a>
-            <div id="bannerCourseShow3" name="bannerCourseShow3" class=""{% if mobile.bannerClick3 != "2" %}style="display:none"{% endif %}>
-              <ul class="banner-course" role="bannerCourse3">
+            <div name="bannerCourseShow3">
+              <ul class="banner-course" role="bannerCourse">
                 {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:bannerCourse3} %}
               </ul>
             </div>
-            <input type="text" id="bannerJumpToCourseId3" name="bannerJumpToCourseId3" class="form-control" value="{{mobile.bannerJumpToCourseId3}}" placeholder="请填写内部课程Id" style="display:none;"/>
+            <input type="text" name="bannerJumpToCourseId3" class="form-control" value="{{mobile.bannerJumpToCourseId3}}" placeholder="请填写内部课程Id" style="display:none;"/>
           </div>
         </div>
 
@@ -307,16 +307,16 @@
             </div>  
           </div>
 
-          <div class="row">
-            <a id="bannerCourseChooseButton4" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick4 != "2" %}style="display:none"{% endif %}>
+          <div class="row" id="selectBannerCourse4" data-role="selectBannerCourse" {% if mobile.bannerClick4 != "2" %}style="display:none"{% endif %}>
+            <a data-role="selectCourse" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" >
              选课
             </a>
-            <div id="bannerCourseShow4" name="bannerCourseShow4" class=""{% if mobile.bannerClick4 != "2" %}style="display:none"{% endif %}>
-              <ul class="banner-course" role="bannerCourse4">
+            <div name="bannerCourseShow4">
+              <ul class="banner-course" role="bannerCourse">
                 {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:bannerCourse4} %}
               </ul>
             </div>
-            <input type="text" id="bannerJumpToCourseId4" name="bannerJumpToCourseId4" class="form-control" value="{{mobile.bannerJumpToCourseId4}}" placeholder="请填写内部课程Id" style="display:none;"/>
+            <input type="text" name="bannerJumpToCourseId4" class="form-control" value="{{mobile.bannerJumpToCourseId4}}" placeholder="请填写内部课程Id" style="display:none;"/>
           </div>
         </div>
 
@@ -356,16 +356,16 @@
             </div>  
           </div>
 
-          <div class="row">
-            <a id="bannerCourseChooseButton5" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick5 != "2" %}style="display:none"{% endif %}>
+          <div class="row" id="selectBannerCourse5" data-role="selectBannerCourse" {% if mobile.bannerClick5 != "2" %}style="display:none"{% endif %}>
+            <a data-role="selectCourse" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" >
              选课
             </a>
-            <div id="bannerCourseShow5" name="bannerCourseShow5" class=""{% if mobile.bannerClick5 != "2" %}style="display:none"{% endif %}>
-              <ul class="banner-course" role="bannerCourse5">
+            <div name="bannerCourseShow5">
+              <ul class="banner-course" role="bannerCourse">
                 {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:bannerCourse5} %}
               </ul>
             </div>
-            <input type="text" id="bannerJumpToCourseId5" name="bannerJumpToCourseId5" class="form-control" value="{{mobile.bannerJumpToCourseId5}}" placeholder="请填写内部课程Id" style="display:none;"/>
+            <input type="text" name="bannerJumpToCourseId5" class="form-control" value="{{mobile.bannerJumpToCourseId5}}" placeholder="请填写内部课程Id" style="display:none;"/>
           </div>
         </div>
 

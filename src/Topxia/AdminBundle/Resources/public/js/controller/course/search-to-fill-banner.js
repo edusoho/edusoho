@@ -17,8 +17,7 @@ define(function(require, exports, module) {
 			$(element.find('input')[0]).val($(this).data("courseId"));
 			
             var courseItem = $(this).clone();
-            $("[role='bannerCourse']").html(courseItem);
-
+            $(element.find("[role='bannerCourse']")[0]).html(courseItem);
 			$modal.modal('hide');return;
 			
 		})
