@@ -225,7 +225,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $mobile = $this->getSettingService()->get('mobile', array());
         $baseUrl = $this->request->getSchemeAndHttpHost();
         for ($i=1; $i < 6; $i++) {
-            $banner = $mobile["banner" . $i];
+            $bannerIndex = $mobile["banner" . $i];
             if (!empty($banner)) { 
                     $bannerClick = $mobile["bannerClick" . $i];
                     $bannerParams = null;
@@ -253,7 +253,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
                             break;
                     }
                     $banner[] = array(
-                        "url"=>$baseUrl . '/' . $banner,
+                        "url"=>$baseUrl . '/' . $bannerIndex,
                         "action"=>$bannerClick == 0 ? "none" : "webview",
                         "params"=>$bannerParams
                     );
