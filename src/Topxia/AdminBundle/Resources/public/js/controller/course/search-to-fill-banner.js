@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 			$('input[name="bannerUrl'+who_is_clicked+'"]').val( location.hostname + "/course/" + $(this).data("courseId"));
 			$('input[name="bannerJumpToCourseId'+who_is_clicked+'"]').val($(this).data("courseId"));
 						
-            $("#bannerCourseName"+who_is_clicked).show();
+            $("#bannerCourseShow"+who_is_clicked).show();
             $("#bannerCourseChooseButton"+who_is_clicked).show();
 
             var courseItem = $(this).clone();
