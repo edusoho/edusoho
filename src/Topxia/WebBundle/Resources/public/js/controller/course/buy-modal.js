@@ -26,12 +26,6 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="password"]',
-            required: true,
-            rule: 'remote'
-        });
-
-        validator.addItem({
             element: '[name="truename"]',
             required: true,
             rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}'
@@ -123,16 +117,28 @@ define(function(require, exports, module) {
         });
 
         $("input[role='payTypeChoices']").on('click', function(){
+
+            $("#password").prop("type","password");
+            
             if($(this).val()=="chargeCoin") {
-                  $("#screct").show();
-                 if (parseInt($("#leftMoney").html()) <  parseInt($("#neededMoney").html())){
+                $("#screct").show();
+
+                validator.addItem({
+                    element: '[name="password"]',
+                    required: true,
+                    rule: 'remote'
+                });
+
+                if (parseInt($("#leftMoney").html()) <  parseInt($("#neededMoney").html())){
                         $("#notify").show();
                         $modal.find('[type=submit]').addClass('disabled');
                  }
             }else if($(this).val()=="zhiFuBao"){
-                  $("#screct").hide();
-                  $("#notify").hide();
-                 $modal.find('[type=submit]').removeClass('disabled');
+                validator.removeItem('[name="password"]');
+
+                $("#screct").hide();
+                $("#notify").hide();
+                $modal.find('[type=submit]').removeClass('disabled');
             }
         })
 
