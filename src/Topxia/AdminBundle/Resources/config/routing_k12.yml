@@ -28,8 +28,12 @@ admin_school_point_setting:
     defaults: { _controller: TopxiaAdminBundle:School:pointSetting }
 
 admin_school_eduMaterial_setting:
-    pattern:  /school/eduMaterial/setting
+    pattern:  /school/{schoolType}/eduMaterial/setting
     defaults: { _controller: TopxiaAdminBundle:School:eduMaterialSetting }
+
+admin_school_eduMaterial_add:
+    pattern:  /school/eduMaterial/add
+    defaults: { _controller: TopxiaAdminBundle:School:eduMaterialAdd }
 
 admin_school_eduMaterial_update:
     pattern:  /school/eduMaterial/update
