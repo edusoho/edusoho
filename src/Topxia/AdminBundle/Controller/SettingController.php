@@ -83,14 +83,19 @@ class SettingController extends BaseController
             'bannerClick3' => '', // 轮播图3是否触发动作
             'bannerClick4' => '', // 轮播图4是否触发动作
             'bannerClick5' => '', // 轮播图5是否触发动作
+            'bannerJumpToCourseId1' => ' ',
+            'bannerJumpToCourseId2' => ' ',
+            'bannerJumpToCourseId3' => ' ',
+            'bannerJumpToCourseId4' => ' ',
+            'bannerJumpToCourseId5' => ' ',
             'notice' => '', //公告
             'courseIds' => '' //每周精品课
         );
 
         $mobile = array_merge($default, $mobile);
-
         if ($request->getMethod() == 'POST') {
             $mobile = $request->request->all();
+
             $this->getSettingService()->set('mobile', $mobile);
             $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
             $this->setFlashMessage('success', '移动客户端设置已保存！');
@@ -105,9 +110,22 @@ class SettingController extends BaseController
                 $sortedCourses[] = $courses[$value];
         }
 
+
+        $bannerCourse1 = ($mobile['bannerJumpToCourseId1']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']):null;
+        $bannerCourse2 = ($mobile['bannerJumpToCourseId2']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId2']):null;
+        $bannerCourse3 = ($mobile['bannerJumpToCourseId3']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId3']):null;
+        $bannerCourse4 = ($mobile['bannerJumpToCourseId4']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId4']):null;
+        $bannerCourse5 = ($mobile['bannerJumpToCourseId5']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId5']):null;
+
+
         return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
             'mobile'=>$mobile,
-            'courses'=>$sortedCourses
+            'courses'=>$sortedCourses,
+            "bannerCourse1" => $bannerCourse1,
+            "bannerCourse2" => $bannerCourse2,
+            "bannerCourse3" => $bannerCourse3,
+            "bannerCourse4" => $bannerCourse4,
+            "bannerCourse5" => $bannerCourse5,
         ));
     }
 

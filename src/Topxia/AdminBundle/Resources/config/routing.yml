@@ -314,6 +314,10 @@ admin_course_search:
     pattern: /course/search
     defaults: { _controller: TopxiaAdminBundle:Course:search }
 
+admin_course_search_to_fill_banner:
+    pattern: /course/search_to_fill_banner
+    defaults: { _controller: TopxiaAdminBundle:Course:searchToFillBanner }
+
 admin_live_course:
     pattern: /livecourse/{status}
     defaults: { _controller: TopxiaAdminBundle:LiveCourse:index }
