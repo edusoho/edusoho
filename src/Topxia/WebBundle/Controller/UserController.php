@@ -226,6 +226,23 @@ class UserController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function checkPasswordAction(Request $request)
+    {
+        $password = $request->query->get('value');
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isLogin()) {
+            $response = array('success' => false, 'message' => '请先登入');
+        }
+
+        if (!$this->getUserService()->verifyPassword($currentUser['id'], $password)) {
+            $response = array('success' => false, 'message' => '输入的密码不正确');
+        }else{
+            $response = array('success' => true, 'message' => '');
+        }
+        return $this->createJsonResponse($response);
+    }
+
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');

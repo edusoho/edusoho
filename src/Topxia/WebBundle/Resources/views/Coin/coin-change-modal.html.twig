@@ -1,0 +1,65 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}兑换{% endblock %}
+{% block body %}
+
+<form id="change-form" class="form-horizontal" method="post" action="{{path('coin_change')}}">
+
+  <div class="row form-group">
+    <div class="col-md-3 control">
+      <label for="amount">可兑换金额(元):</label>
+    </div>
+    <div class="col-md-3 controls">
+       <label class="money-text">{{changeAmount}}</label>
+    </div>
+
+    <div class="col-md-3 control">
+      <label for="amount">已兑换:</label>
+    </div>
+    <div class="col-md-3 controls">
+       <label class="money-text">{{amount-changeAmount}}</label>
+    </div>
+
+  </div>
+  <div class="table-responsive">
+  <table class="table table-striped">
+    <tr>
+      <th>消费赠送</th>
+      <th>赠送{{setting('coin.coin_name')}}</th>
+    </tr>
+    {% for data in data%}
+    <tr>
+      <td>{{data.send}}</td><td>{{data.sendAmount}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% if not data %}
+    <div class="empty">暂无可兑换信息</div>
+  {% endif %}
+</div>
+  <div class="row form-group">
+    <div class="col-md-3 control">
+      <label for="amount">消费:</label>
+    </div>
+    <div class="col-md-3 controls">
+       <label class="money-text">{{changeAmount-canUseAmount}}</label>
+    </div>
+    <div class="col-md-3 control">
+      <label for="amount">累计赠送:</label>
+    </div>
+    <div class="col-md-3 controls">
+       <label class="money-text">{{canChange}}</label>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button id="create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#change-form">兑换</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+{% endblock %}

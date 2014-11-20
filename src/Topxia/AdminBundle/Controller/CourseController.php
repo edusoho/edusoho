@@ -35,7 +35,7 @@ class CourseController extends BaseController
         ));
     }
 
-    public function searchAction(Request $request)
+    private function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request,$twigToRender)
     {
         $key = $request->request->get("key");
         
@@ -53,13 +53,23 @@ class CourseController extends BaseController
   
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
-        return $this->render('TopxiaAdminBundle:Course:search.html.twig', array(
+        return $this->render($twigToRender, array(
             'key' => $key,
             'courses' => $courses,
             'users' => $users,
             'categories' => $categories,
             'paginator' => $paginator
         ));
+    }
+
+    public function searchAction(Request $request)
+    {
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request,'TopxiaAdminBundle:Course:search.html.twig');
+    }
+
+    public function searchToFillBannerAction(Request $request)
+    {
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request,'TopxiaAdminBundle:Course:search-to-fill-banner.html.twig');
     }
 
     public function deleteAction(Request $request, $id)

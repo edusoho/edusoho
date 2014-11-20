@@ -27,6 +27,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function createOrder($order)
     {
+        
         if (!ArrayToolkit::requireds($order, array('userId', 'title',  'amount', 'targetType', 'targetId', 'payment'))) {
             throw $this->createServiceException('创建订单失败：缺少参数。');
         }
@@ -38,7 +39,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException("订单用户(#{$order['userId']})不存在，不能创建订单。");
         }
 
-        if (!in_array($order['payment'], array('none', 'alipay', 'alipaydouble', 'tenpay'))) {
+        if (!in_array($order['payment'], array('none', 'alipay', 'alipaydouble', 'tenpay','coin'))) {
             throw $this->createServiceException('创建订单失败：payment取值不正确。');
         }
 

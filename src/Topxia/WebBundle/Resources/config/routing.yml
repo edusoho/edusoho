@@ -1354,6 +1354,26 @@ get_material:
     pattern: /get/material
     defaults: { _controller: TopxiaWebBundle:Category:getMaterial }
 
+my_coin:
+    path:     /my/coin
+    defaults: { _controller: TopxiaWebBundle:Coin:index }
+coin_pay:
+    path:     /coin/pay
+    defaults: { _controller: TopxiaWebBundle:Coin:pay }
+coin_order_pay_return:
+    path:     /coin/pay/return/{name}
+    defaults: { _controller: TopxiaWebBundle:Coin:payReturn }
+coin_order_pay_notify:
+    path:     /coin/order/notify/{name}
+    defaults: { _controller: TopxiaWebBundle:Coin:payNotify }
+coin_change:
+    path:     /coin/change
+    defaults: { _controller: TopxiaWebBundle:Coin:change }
+
+user_password_check:
+    path:   /user/password/check
+    defaults: { _controller: TopxiaWebBundle:User:checkPassword }
+
 get_subjects:
     pattern: /get/subjects
     defaults: { _controller: TopxiaWebBundle:Category:getSubjects }
