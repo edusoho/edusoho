@@ -10,3 +10,12 @@ admin_tag_create:
 admin_tag_update:
     pattern:  /tag/{id}/update
     defaults: { _controller: CustomAdminBundle:Tag:update }
+admin_tag_avatar:
+     pattern: /tag/{id}/avatar
+     defaults: {_controller: CustomAdminBundle:Tag:avatar}
+admin_tag_avatar_crop:
+    pattern: /tag/{id}/avatar/crop
+    defaults: {_controller: CustomAdminBundle:Tag:avatarCrop}
+# admin_user_avatar:
+#     pattern:  /user/{id}/avatar
+#     defaults: { _controller: TopxiaAdminBundle:User:avatar }
