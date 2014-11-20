@@ -189,6 +189,33 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         }
     }
 
+    public function paymentByCoin($id) 
+    {
+        //直接扣余额
+        //加入课程
+        //修改订单状态
+        $order = $this->getOrderService()->getOrder($id);
+        $cashAccount = $this->getCashService()->getAccountByUserId($order["userId"]);
+        if($cashAccount["cash"]<$order["amount"]){
+            throw $this->createServiceException('余额不足。');
+        }
+        $this->getCashService()->waveDownCashField($cashAccount["id"], $order["amount"]);
+        $payData = array(
+            'status' => 'success',
+            'amount' => $order['amount'],
+            'paidTime' => time(),
+            'sn'  => $order['sn']
+        );
+        list($success, $order) = $this->getOrderService()->payOrder($payData);
+        $this->doSuccessPayOrder($id);
+        return $order;
+    }
+    
+    protected function getCashService()
+    {
+        return $this->createService('Cash.CashService');
+    }    
+
     protected function getUserService()
     {
         return $this->createService('User.UserService');

@@ -169,10 +169,7 @@ class CourseOrderController extends OrderController
         $order = $this->getCourseOrderService()->createOrder($formData);
 
         if($order['payment'] == 'coin') {
-            //直接扣余额
-            //加入课程
-            //修改订单状态
-            
+            $order = $this->getCourseOrderService()->paymentByCoin($order['id']);
         }
 
 
