@@ -58,8 +58,16 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
 
     private function makeUpResultForMonth($schedules)
     {
-        $lessonIds = ArrayToolkit::column($schedules?:array(), 'lessonId');
-        $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
+        $lessons = array();
+        $schedules = $schedules?:array();
+        foreach ($schedules as $key => $schedule) {
+            $lesson = $this->getCourseService()->getLesson($schedule['lessonId']);
+            if($lesson) {
+                $lessons[] = $lesson;
+            } else {
+                unset($schedules[$key]);
+            }
+        }
         $lessons = ArrayToolkit::index($lessons, 'id');
         $courseIds =  ArrayToolkit::column($lessons?:array(), 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
@@ -81,8 +89,16 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
 
     private function makeUpResultForWeek($schedules, $sunday, $mode)
     {
-        $lessonIds = ArrayToolkit::column($schedules?:array(), 'lessonId');
-        $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
+        $lessons = array();
+        $schedules = $schedules?:array();
+        foreach ($schedules as $key => $schedule) {
+            $lesson = $this->getCourseService()->getLesson($schedule['lessonId']);
+            if($lesson) {
+                $lessons[] = $lesson;
+            } else {
+                unset($schedules[$key]);
+            }
+        }
         $lessons = ArrayToolkit::index($lessons, 'id');
         $courseIds =  ArrayToolkit::column($lessons?:array(), 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
@@ -151,8 +167,16 @@ class ScheduleServiceImpl extends BaseService implements ScheduleService
 
     private function makeUpResultOneDay($schedules)
     {
-        $lessonIds = ArrayToolkit::column($schedules?:array(), 'lessonId');
-        $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
+        $lessons = array();
+        $schedules = $schedules?:array();
+        foreach ($schedules as $key => $schedule) {
+            $lesson = $this->getCourseService()->getLesson($schedule['lessonId']);
+            if($lesson) {
+                $lessons[] = $lesson;
+            } else {
+                unset($schedules[$key]);
+            }
+        }
         $lessons = ArrayToolkit::index($lessons, 'id');
         $courseIds =  ArrayToolkit::column($lessons?:array(), 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);

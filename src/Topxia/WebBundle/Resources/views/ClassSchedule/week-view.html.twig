@@ -43,18 +43,6 @@
                             </div>
                           </div>
                         </li>
-
-                      {% else %}
-                        <li data-id="{{ item.lessonId }}">
-                          <div class="item-div deleted-lesson">
-                            <div class="thumbnail schedule-color0">
-                              {% if mode == 'edit' %}
-                                <button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                              {% endif %}
-                                <div class="" title="课时已删除!">课时已删除!</div>
-                            </div>
-                          </div>
-                        </li>
                     {% endif %}
                   {% endfor %}
                 </ul>

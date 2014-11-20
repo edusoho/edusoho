@@ -38,10 +38,6 @@
                               <div class="lesson-title">{{ lesson.title }}</div>
                               <div class="course-title text-muted">来自{{ course.title }}课程</div>
                             </li>
-                        {% else %}
-                           <li class="lesson-deleted">
-                             <div class="delete-text text-danger">课时已删除!</div>
-                           </li>
                         {% endif %}  
                       {% endfor %}
                     </ul>
