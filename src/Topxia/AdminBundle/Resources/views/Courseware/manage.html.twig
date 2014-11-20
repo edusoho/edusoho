@@ -39,10 +39,7 @@
   </form>
 <div class="courseware-list">
   {% block list %}{% endblock %}
-  <div>
-    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
-    <button class="btn btn-danger btn-sm mlm" data-role="batch-delete" data-name=""  data-url=""><i class="glyphicon glyphicon-trash"></i> 删除</button>
-  </div>
+
   {{ web_macro.paginator(paginator) }}
 
       <div>
