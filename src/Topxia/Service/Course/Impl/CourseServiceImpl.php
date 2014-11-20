@@ -351,7 +351,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				$children = $this->getKnowledgeService()->findKnowledgeByParentId($knowledge['id']);
 				foreach ($children as $child) {
 					$unit = array(
-						'title' => $knowledge['name'],
+						'title' => $child['name'],
 						'type' => 'unit',
 						'courseId' => $course['id']
 					); 

@@ -10,6 +10,8 @@ use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Twig\Extension\DataDict;
+use PHPExcel_IOFactory;
+use PHPExcel_Cell;
 
 class InitCommand extends BaseCommand
 {
@@ -39,6 +41,7 @@ class InitCommand extends BaseCommand
 		$this->initSubject($output);
 		$this->initMaterial($output);
 		$this->initEduMaterial($output);
+		$this->initKnowledge();
 		$this->initTag($output);
 		$this->initRefundSetting($output);
 		$this->initThemes($output);
@@ -386,6 +389,54 @@ EOD;
 		$output->writeln(' ...<info>成功</info>');
 	}
 
+	private function initKnowledge($output)
+    {
+    	$output->write('  初始化知识点');
+    	$objPHPExcel = PHPExcel_IOFactory::load(__DIR__ . '/../../Service/Taxonomy/knowledge.xlsx');
+    	$workSheets = $objPHPExcel->getAllSheets();
+    	foreach ($workSheets as $key => $workSheet) {
+    		$highestRow = $workSheet->getHighestRow(); 
+    		$subjectCode = trim(($workSheet->getCellByColumnAndRow(0, 1)->getValue()));
+    		$materialCode = trim(($workSheet->getCellByColumnAndRow(1, 1)->getValue()));
+    		$gradeId = trim(($workSheet->getCellByColumnAndRow(2, 1)->getValue()));
+    		$term = trim(($workSheet->getCellByColumnAndRow(3, 1)->getValue()));
+    		$subject = $this->getCategoryService()->getCategoryByCode($subjectCode);
+    		$material = $this->getCategoryService()->getCategoryByCode($materialCode);
+    		$subjectId = $subject['id'];
+    		$materialId = $material['id'];
+    		$knowledge = array(
+    			'subjectId' => $subjectId,
+    			'materialId' => $materialId,
+    			'term' => $term,
+    			'gradeId' => $gradeId,
+    			'weight' => 0
+    		);
+    		$parentId = 0;
+    		for ($row = 2;$row <= $highestRow;$row++) { 
+    			$chapterTitle = trim($workSheet->getCellByColumnAndRow(0, $row)->getValue());
+    			$unitTitle = trim($workSheet->getCellByColumnAndRow(1, $row)->getValue());
+    			if(empty($chapterTitle) && empty($unitTitle)) {
+    				break;
+    			}
+    			if(empty($chapterTitle)) {
+    				$knowledge['name'] = $unitTitle;
+    				$knowledge['parentId'] = $parentId;
+    				$knowledge['code'] = 'es_code_' . time() . $row; 
+    				$this->getKnowledgeService()->createKnowledge($knowledge);
+    			} else {
+    				$knowledge['name'] = $chapterTitle;
+    				$knowledge['parentId'] = 0;
+    				$knowledge['code'] = 'es_code_' . time() . $row;
+    				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
+    				$parentId = $newKnowledge['id'];
+    			}
+
+    		}
+    	}
+
+    	$output->writeln(' ...<info>成功</info>');
+    }
+
 	private function initFile($output)
 	{
 		$output->write('  初始化文件分组');
@@ -498,4 +549,9 @@ EOD;
     {
         return $this->getServiceKernel()->createService('Course.EduMaterialService');
     }
+
+    	private function getKnowledgeService()
+	{
+	    return $this->getServiceKernel()->createService('Taxonomy.KnowledgeService');
+	}
 }
