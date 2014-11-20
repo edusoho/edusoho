@@ -24,6 +24,25 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->findCategories($group['id']);
     }
 
+    public function findSubjectCategoriesByGradeId($gradeId)
+    {
+        if(empty($gradeId)){
+            return array();
+        }
+        if($gradeId>0 && $gradeId<7){
+            $schoolType='primarySchool';
+        }else if($gradeId>6 && $gradeId<10){
+            $schoolType='middleSchool';
+        }else if($gradeId>9 && $gradeId<13){
+            $schoolType='highSchool';
+        }else{
+            throw $this->createServiceException("年级参数错误");
+        }
+        $school=$this->getCategoryByCode($schoolType);
+        $group=$this->getGroup('subject_material');
+        return $this->getCategoryDao()->findCategoriesByGroupIdAndParentId($group['id'],$school['id']);
+    }
+
     public function getMaterialCategoryByGradeIdAndSubjectId($gradeId,$subjectId)
     {
         $eduMaterial=$this->getEduMaterialService()->getEduMaterialByGradeIdAndSubjectId($gradeId,$subjectId);

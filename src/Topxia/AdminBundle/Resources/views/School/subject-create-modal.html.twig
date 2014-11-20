@@ -1,0 +1,35 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'small' %}
+
+{% block title %}创建{% if schoolType=='primarySchool'%}小学{% endif %}{% if schoolType=='middleSchool'%}初中{% endif %}{% if schoolType=='highSchool'%}高中{% endif %}学科{% endblock %}
+{% block body %}
+
+<form id="subject-create-form" class="form-horizontal" method="post" action="{{ path('admin_school_eduMaterial_add')}}">
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="name">学科名称</label>
+    </div>
+    <div class="col-md-8 controls">
+      <input type="text" id="name" name="name" class="form-control" {# data-url="{{path('admin_category_checkname')}}" #}>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="code">学科code</label>
+    </div>
+    <div class="col-md-8 controls">
+      <input type="text" id="code" name="code" class="form-control" data-url="{{path('admin_category_checkcode')}}">
+      <div class="help-block">必填，建议使用分类名称的英文单词或缩写作为编码。</div>
+    </div>
+  </div>
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button id="subject-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#subject-create-form">提交</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('school/eduMaterial-add-modal')</script>
+{% endblock %}

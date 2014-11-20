@@ -106,30 +106,81 @@ class SchoolController extends BaseController
     public function eduMaterialSettingAction(Request $request)
     {
         $school = $this->getSettingService()->get('school', array());
-        if(array_key_exists('primarySchool', $school)){
+
+        $eduMaterials=$this->getEduMaterialService()->findAllEduMaterials();
+        $gradeMaterials=ArrayToolkit::group($eduMaterials,'gradeId');
+        if(array_key_exists('primarySchool', $school) && ($schoolType=='primarySchool' || $schoolType=='all')){
             $grades=DataDict::dict('primarySchool');
             if($school['primaryYear']==5){
                 unset($grades[6]);
             }
+            $subjectIds=ArrayToolkit::column($gradeMaterials[1],'subjectId');
+            $schoolType='primarySchool';
         }
-        if(array_key_exists('middleSchool', $school)){
-            $grades=DataDict::dict('middleSchool')+$grades;
+
+        if(array_key_exists('middleSchool', $school) && ($schoolType=='middleSchool' || $schoolType=='all')){
+            $grades=DataDict::dict('middleSchool');
+            $subjectIds=ArrayToolkit::column($gradeMaterials[7],'subjectId');
+            $schoolType='middleSchool';
         }
-        if(array_key_exists('highSchool', $school)){
-            $grades=DataDict::dict('highSchool')+$grades;
+
+        if(array_key_exists('highSchool', $school) && ($schoolType=='highSchool' || $schoolType=='all')){
+            $grades=DataDict::dict('highSchool');
+            $subjectIds=ArrayToolkit::column($gradeMaterials[10],'subjectId');
+            $schoolType='highSchool';
         }
-        ksort($grades);
-        $subjects=$this->getCategoryService()->findCategoriesByGroupCode('subject');
+
+        $subjects=$this->getCategoryService()->findCategoriesByIds($subjectIds);
+        
+        $subjectMaterials=ArrayToolkit::group($eduMaterials,'subjectId');
         $materials=$this->getCategoryService()->findCategoriesByGroupCode('material');
-        $eduMaterials=ArrayToolkit::group($this->getEduMaterialService()->findAllEduMaterials(),'subjectId');
-        foreach ($eduMaterials as $key => $eduMaterialList) {
-            $eduMaterials[$key]=ArrayToolkit::index($eduMaterialList,'gradeId');
+
+        
+        foreach ($subjectMaterials as $key => $eduMaterialList) {
+            $subjectMaterials[$key]=ArrayToolkit::index($eduMaterialList,'gradeId');
         }
         return $this->render('TopxiaAdminBundle:School:eduMaterial-setting.html.twig', array(
+            'school'=>$school,
+            'schoolType'=>$schoolType,
             'grades'=>$grades,
             'subjects'=>$subjects,
             'materials'=>$materials,
-            'eduMaterials'=>$eduMaterials
+            'eduMaterials'=>$subjectMaterials
+        ));
+    }
+
+    public function eduMaterialAddAction(Request $request)
+    {
+        $schoolType = $request->query->get('schoolType');
+
+        if($request->getMethod() == 'POST'){
+            $fields = $request->request->all();
+            if($schoolType=='primarySchool'){
+                $beforeCode='es_xx';
+                $gradeIds=array(1,2,3,4,5,6);
+            }
+            if($schoolType=='middleSchool'){
+                $beforeCode='es_cz';
+                $gradeIds=array(7,8,9);
+            }
+            if($schoolType=='highSchool'){
+                $beforeCode='es_gz';
+                $gradeIds=array(10,11,12);
+            }
+            $group=$this->getCategoryService()->getGroupByCode('subject_material');
+
+            $subject['name']=$fields['name'];
+            $subject['code']=$beforeCode.$fields['code'];
+            $subject['weight']=$fields['weight'];
+            $subject['groupId']=$group['id'];
+            $subject['parentId']=0;
+            $subject=$this->getCategoryService()->createCategory($subject);
+            foreach ($gradeIds as $gradeId) {
+                
+            }
+        }
+        return $this->render('TopxiaAdminBundle:School:subject-create-modal.html.twig',array(
+            'schoolType'=>$schoolType
         ));
     }
 

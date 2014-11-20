@@ -7,36 +7,20 @@
 
 {% block main %}
   <div class="page-header"><h1>教材设置</h1></div>
-  <div class="table-responsive">
-    <table class="table table-bordered eduMaterial-table">
-      {% for subject in subjects %}
-        {% if loop.index==1 %}
-          <tr class="info">
-            <td></td>
-            {% for key,grade in grades %}
-              <td>{{grade}}</td>
-            {% endfor %}
-          </tr>
-        {% endif %}
-        <tr>
-          <td class="info">{{subject.name}}</td>
-          {% set eduMaterialList=eduMaterials[subject.id] %}
-          {% for key,grade in grades %}
-            {% set eduMaterial=eduMaterialList[key] %}
-            <td class="materialTd">
-              <div class="material-selector">
-                <div class="pull-left eduMaterial-name">{{eduMaterial.materialName}}</div>
-                <span class="caret"></span>
-                <div class="material-list">
-                  {% for material in materials %}
-                    <span data-url="{{path('admin_school_eduMaterial_update')}}" data-eduMaterialId="{{eduMaterial.id}}" data-materialId="{{material.id}}" class="material-name">{{material.name}}</span>
-                  {% endfor %}
-                </div>
-              </div>
-            </td>
-          {% endfor %}
-        </tr>
-      {% endfor %}
-    </table>
+  <div class="panel-body">
+    <ul class="nav nav-tabs">
+      {% if school.primarySchool|default('') %}
+        <li class="{% if schoolType == 'primarySchool' %}active{% endif %}"><a href="{{ path('admin_school_eduMaterial_setting',{schoolType:'primarySchool'}) }}">小学</a></li>
+      {% endif %}
+      {% if school.middleSchool|default('') %}
+        <li class="{% if schoolType == 'middleSchool' %}active{% endif %}"><a href="{{ path('admin_school_eduMaterial_setting',{schoolType:'middleSchool'}) }}">初中</a></li>
+      {% endif %}
+      {% if school.highSchool|default('') %}
+        <li class="{% if schoolType == 'highSchool' %}active{% endif %}"><a href="{{ path('admin_school_eduMaterial_setting',{schoolType:'highSchool'}) }}">高中</a></li>
+      {% endif %}
+    
+    </ul>
+    <br>
+    {% include 'TopxiaAdminBundle:School:eduMaterial-table.html.twig' %}
   </div>
 {% endblock %}

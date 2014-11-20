@@ -35,5 +35,14 @@ define(function(require, exports, module) {
             );
         });
 
+        $('.addMaterialTd').click(function(){
+            addTr=$table.find('tr').eq(1).clone();
+            addTr.find('td').each(function(){
+                $(this).html('--');
+            });
+            addTr.find('td').eq(0).html('学科');
+            addTr.appendTo($table);
+        });
+
     }
 });

@@ -1,0 +1,34 @@
+<div class="table-responsive">
+  <table class="table table-bordered eduMaterial-table  text-center">
+    {% for subject in subjects %}
+      {% if loop.index==1 %}
+        <tr class="info">
+          <td></td>
+          {% for key,grade in grades %}
+            <td>{{grade}}</td>
+          {% endfor %}
+        </tr>
+      {% endif %}
+      <tr>
+        <td class="info">{{subject.name}}</td>
+        {% set eduMaterialList=eduMaterials[subject.id] %}
+        {% for key,grade in grades %}
+          {% set eduMaterial=eduMaterialList[key] %}
+          <td class="materialTd">
+            <div class="material-selector">
+              <div class="pull-left eduMaterial-name">{{eduMaterial.materialName}}</div>
+              <span class="caret"></span>
+              <div class="material-list">
+                {% for material in materials %}
+                  <span data-url="{{path('admin_school_eduMaterial_update')}}" data-eduMaterialId="{{eduMaterial.id}}" data-materialId="{{material.id}}" class="material-name">{{material.name}}</span>
+                {% endfor %}
+              </div>
+            </div>
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+    <a href="#modal" data-toggle="modal" data-url="{{path('admin_school_eduMaterial_add',{schoolType:schoolType})}}">+</a>
+    {# <a href="javascript:;" class="addMaterialTd" >+</a> #}
+  </table>
+</div>
