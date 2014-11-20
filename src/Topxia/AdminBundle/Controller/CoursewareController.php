@@ -129,6 +129,21 @@ class CoursewareController extends BaseController
         );
     }
 
+    public function previewAction(Request $request, $categoryId, $id)
+    {
+        $category = $this->getCategoryService()->getCategory($categoryId);
+
+        if (empty($category)) {
+            throw $this->createNotFoundException("分类(#{$categoryId})不存在，编辑课件失败！");
+        }
+
+        $courseware = $this->getCoursewareService()->getCourseware($id);
+        if (empty($courseware)) {
+            throw $this->createNotFoundException('课件已经删除或者不存在.');
+        }
+        return $this->render('TopxiaAdminBundle:Courseware:preview.html.twig',array('courseware' => $courseware));
+    }
+
     private function filterVideoField($videoMeta,$courseware)
     {
         $courseware['title'] = $videoMeta['title'];

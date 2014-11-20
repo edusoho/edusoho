@@ -714,6 +714,10 @@ admin_courseware_delete:
     pattern: /courseware/delete
     defaults: { _controller: TopxiaAdminBundle:Courseware:delete }
 
+admin_courseware_preview:
+    pattern: /category/{categoryId}/preview/courseware/{id}
+    defaults: { _controller: TopxiaAdminBundle:Courseware:preview }
+
 admin_knowledge_edit:
     pattern: /knowledge/edit
     defaults: { _controller: TopxiaAdminBundle:Knowledge:edit }
