@@ -19,6 +19,23 @@ class CashServiceImpl extends BaseService implements CashService
         return $this->getAccountDao()->getAccountByUserId($userId);
     }
 
+    public function outflow($userId, $flow) 
+    {
+        $inflow=array(
+            'userId'=>$userId,
+            'sn'=>$this->makeSn(),
+            'type'=>'outflow',
+            'amount'=> $flow["amount"],
+            'name'=>$flow['name'],
+            'orderSn'=>$flow['sn'],
+            'category'=>$flow['category'],
+            'note'=>$flow['note'],
+            'createdTime'=>time(),
+        );
+
+        $inflow = $this->getFlowDao()->addFlow($inflow);
+    }
+
     public function inflow($userId, $flow)
     {   
         $coinSetting=$this->getSettingService()->get('coin',array());

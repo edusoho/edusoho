@@ -66,8 +66,8 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
                         'sn'=>$order['sn'],
                         'name'=>$order['title'],
                         'note'=>'',
-                        'category'=>'recharge',
-                        );
+                        'category'=>'course',
+                    );
                     $this->getCashService()->inflow($order['userId'],$flow);
 
                     $success = true;

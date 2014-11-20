@@ -203,7 +203,21 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             if($cashAccount["cash"]<$order["amount"]){
                 throw $this->createServiceException('余额不足。');
             }
+
+            $flow=array(
+                'amount'=>$order['amount'],
+                'sn'=>$order['sn'],
+                'name'=>$order['title'],
+                'note'=>'',
+                'category'=>'recharge',
+            );
+            $this->getCashService()->outflow($order['userId'],$flow);
+
             $this->getCashService()->waveDownCashField($cashAccount["id"], $order["amount"]);
+
+            $user = $this->getCurrentUser();
+            $this->getLogService()->info('cash', 'cost_coin', $user['nickname']." 购买课程时消费 {$order['amount']} 虚拟币", array());
+
             $payData = array(
                 'status' => 'success',
                 'amount' => $order['amount'],
@@ -230,6 +244,11 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
     protected function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 
     protected function getCourseService()
