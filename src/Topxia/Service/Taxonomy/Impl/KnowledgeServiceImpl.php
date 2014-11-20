@@ -19,7 +19,7 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
     {
        $knowledge = $this->checkExist($id);
 
-        $fields = ArrayToolkit::parts($fields, array('description','name', 'code', 'weight', 'sequence', 'parentId'));
+        $fields = ArrayToolkit::parts($fields, array('description','name', 'weight', 'sequence', 'parentId'));
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新知识点失败！');
         }
@@ -47,9 +47,9 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
 
     public function createKnowledge($knowledge)
     {
-        $knowledge = ArrayToolkit::parts($knowledge, array('description','name', 'code', 'weight', 'subjectId', 'materialId', 'term', 'gradeId', 'parentId', 'isVisible', 'sequence'));
+        $knowledge = ArrayToolkit::parts($knowledge, array('description','name', 'weight', 'subjectId', 'materialId', 'term', 'gradeId', 'parentId', 'isVisible', 'sequence'));
 
-        if (!ArrayToolkit::requireds($knowledge, array('name', 'code', 'weight', 'subjectId', 'materialId', 'term', 'gradeId', 'parentId'))) {
+        if (!ArrayToolkit::requireds($knowledge, array('name', 'subjectId', 'materialId', 'term', 'gradeId', 'parentId'))) {
             throw $this->createServiceException("缺少必要参数，，添加知识点失败");
         }
 
@@ -150,22 +150,6 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
                     $knowledge['name'] = (string) $knowledge['name'];
                     if (empty($knowledge['name'])) {
                         throw $this->createServiceException("名称不能为空，保存知识点失败");
-                    }
-                    break;
-                case 'code':
-                    if (empty($knowledge['code'])) {
-                        throw $this->createServiceException("编码不能为空，保存知识点失败");
-                    } else {
-                        if (!preg_match("/^[a-zA-Z0-9_]+$/i", $knowledge['code'])) {
-                            throw $this->createServiceException("编码({$knowledge['code']})含有非法字符，保存知识点失败");
-                        }
-                        if (ctype_digit($knowledge['code'])) {
-                            throw $this->createServiceException("编码({$knowledge['code']})不能全为数字，保存知识点失败");
-                        }
-                        $exclude = empty($releatedKnowledge['code']) ? null : $releatedKnowledge['code'];
-                        if (!$this->isknowledgeCodeAvaliable($knowledge['code'], $exclude)) {
-                            throw $this->createServiceException("编码({$knowledge['code']})不可用，保存知识点失败");
-                        }
                     }
                     break;
                 case 'parentId':

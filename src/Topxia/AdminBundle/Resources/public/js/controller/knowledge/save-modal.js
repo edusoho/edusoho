@@ -45,18 +45,6 @@ define(function(require, exports, module) {
             rule: 'maxlength{max:100}'
         });
 
-        validator.addItem({
-            element: '#knowledge-code-field',
-            required: true,
-            rule: 'alphanumeric not_all_digital remote'
-        });
-
-        validator.addItem({
-            element: '#knowledge-weight-field',
-            required: false,
-            rule: 'integer'
-        });
-
 	};
 
 });

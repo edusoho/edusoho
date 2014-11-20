@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Twig\Extension\DataDict;
 use PHPExcel_IOFactory;
+use Symfony\Component\Filesystem\Filesystem;
 
 class InitCommand extends BaseCommand
 {
@@ -380,7 +381,27 @@ EOD;
 	private function initKnowledge($output)
     {
     	$output->write('  初始化知识点');
-    	$objPHPExcel = PHPExcel_IOFactory::load(__DIR__ . '/../../Service/Taxonomy/knowledge.xlsx');
+    	$dir = __DIR__ . '/../../Service/Taxonomy/';  
+		if (is_dir($dir)){
+			if ($dh = opendir($dir)){
+				while (($file = readdir($dh))!= false){
+					$filepath = $dir.$file;
+					if(preg_match('/.*\.xlsx$/', $filepath)) {
+						$this->loadExcel($filepath);
+					}
+					
+				}
+				closedir($dh);
+			}
+		}
+    	
+
+    	$output->writeln(' ...<info>成功</info>');
+    }
+
+    private function loadExcel($filepath)
+    {
+    	$objPHPExcel = PHPExcel_IOFactory::load($filepath);
     	$workSheets = $objPHPExcel->getAllSheets();
     	foreach ($workSheets as $key => $workSheet) {
     		$highestRow = $workSheet->getHighestRow(); 
@@ -399,31 +420,54 @@ EOD;
     			'gradeId' => $gradeId,
     			'weight' => 0
     		);
-    		$parentId = 0;
+    		$chapterId = 0;
+    		$unitId = 0;
+    		$knowledge1Id = 0;
+    		$knowledge2Id = 0;
     		for ($row = 2;$row <= $highestRow;$row++) { 
     			$chapterTitle = trim($workSheet->getCellByColumnAndRow(0, $row)->getValue());
     			$unitTitle = trim($workSheet->getCellByColumnAndRow(1, $row)->getValue());
-    			if(empty($chapterTitle) && empty($unitTitle)) {
+    			$knowledge1 = trim($workSheet->getCellByColumnAndRow(2, $row)->getValue());
+    			$knowledge2 = trim($workSheet->getCellByColumnAndRow(3, $row)->getValue());
+    			$knowledge3 = trim($workSheet->getCellByColumnAndRow(4, $row)->getValue());
+    			if(empty($chapterTitle) && empty($unitTitle) && empty($knowledge1) && empty($knowledge2) && empty($knowledge3)) {
     				break;
     			}
-    			if(empty($chapterTitle)) {
-    				$knowledge['name'] = $unitTitle;
-    				$knowledge['parentId'] = $parentId;
-    				$knowledge['code'] = 'es_code_' . time() . $row . $parentId; 
-    				$this->getKnowledgeService()->createKnowledge($knowledge);
-    			} 
-    			if(empty($unitTitle)) {
+    			if($chapterTitle) {
     				$knowledge['name'] = $chapterTitle;
     				$knowledge['parentId'] = 0;
-    				$knowledge['code'] = 'es_code_' . time() . $row . 0;
     				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
-    				$parentId = $newKnowledge['id'];
+    				$chapterId = $newKnowledge['id'];
     			}
+    			if($unitTitle) {
+    				$knowledge['name'] = $unitTitle;
+    				$knowledge['parentId'] = $chapterId;
+    				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
+    				$unitId = $newKnowledge['id'];
+    			}
+
+    			if($knowledge1) {
+    				$knowledge['name'] = $knowledge1;
+    				$knowledge['parentId'] = $unitId;
+    				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
+    				$knowledge1Id = $newKnowledge['id'];
+    			}
+
+    			if($knowledge2) {
+    				$knowledge['name'] = $knowledge2;
+    				$knowledge['parentId'] = $knowledge1Id;
+    				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
+    				$knowledge2Id = $newKnowledge['id'];
+    			}  
+
+    			if($knowledge3) {
+    				$knowledge['name'] = $knowledge3;
+    				$knowledge['parentId'] = $knowledge2Id;
+    				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
+    			}    
 
     		}
     	}
-
-    	$output->writeln(' ...<info>成功</info>');
     }
 
 	private function initFile($output)

@@ -641,7 +641,7 @@ EOD;
 	private function initEduMaterial()
 	{
 		$grades=DataDict::dict('gradeName');
-		$mappingData = include(__DIR__ . '/../../Service/Taxonomy/MaterialMappingData.php');
+		$mappingData = include(__DIR__ . '/MaterialMappingData.php');
 
 		$eduMaterials=$this->getEduMaterialService()->findAllEduMaterials();
 		foreach ($eduMaterials as $eduMaterial) {
@@ -662,50 +662,93 @@ EOD;
 	}
 
 	private function initKnowledge()
-    {
-    	$objPHPExcel = PHPExcel_IOFactory::load(__DIR__ . '/../../Service/Taxonomy/knowledge.xlsx');
-    	$workSheets = $objPHPExcel->getAllSheets();
-    	foreach ($workSheets as $key => $workSheet) {
-    		$highestRow = $workSheet->getHighestRow(); 
-    		$subjectCode = trim(($workSheet->getCellByColumnAndRow(0, 1)->getValue()));
-    		$materialCode = trim(($workSheet->getCellByColumnAndRow(1, 1)->getValue()));
-    		$gradeId = trim(($workSheet->getCellByColumnAndRow(2, 1)->getValue()));
-    		$term = trim(($workSheet->getCellByColumnAndRow(3, 1)->getValue()));
-    		$subject = $this->getCategoryService()->getCategoryByCode($subjectCode);
-    		$material = $this->getCategoryService()->getCategoryByCode($materialCode);
-    		$subjectId = $subject['id'];
-    		$materialId = $material['id'];
-    		$knowledge = array(
-    			'subjectId' => $subjectId,
-    			'materialId' => $materialId,
-    			'term' => $term,
-    			'gradeId' => $gradeId,
-    			'weight' => 0
-    		);
-    		$parentId = 0;
-    		for ($row = 2;$row <= $highestRow;$row++) { 
-    			$chapterTitle = trim($workSheet->getCellByColumnAndRow(0, $row)->getValue());
-    			$unitTitle = trim($workSheet->getCellByColumnAndRow(1, $row)->getValue());
-    			if(empty($chapterTitle) && empty($unitTitle)) {
-    				break;
-    			}
-    			if(empty($chapterTitle)) {
-    				$knowledge['name'] = $unitTitle;
-    				$knowledge['parentId'] = $parentId;
-    				$knowledge['code'] = 'es_code_' . time() . $row . $parentId; 
-    				$this->getKnowledgeService()->createKnowledge($knowledge);
-    			} else {
-    				$knowledge['name'] = $chapterTitle;
-    				$knowledge['parentId'] = 0;
-    				$knowledge['code'] = 'es_code_' . time() . $row . 0;
-    				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
-    				$parentId = $newKnowledge['id'];
-    			}
+	    {
+	    	$dir = __DIR__ . '/../../Service/Taxonomy/';  
+			if (is_dir($dir)){
+				if ($dh = opendir($dir)){
+					while (($file = readdir($dh))!= false){
+						$filepath = $dir.$file;
+						if(preg_match('/.*\.xlsx$/', $filepath)) {
+							$this->loadExcel($filepath);
+						}
+						
+					}
+					closedir($dh);
+				}
+			}
+	    	
+	    }
 
-    		}
-    	}
+	    private function loadExcel($filepath)
+	    {
+	    	$objPHPExcel = PHPExcel_IOFactory::load($filepath);
+	    	$workSheets = $objPHPExcel->getAllSheets();
+	    	foreach ($workSheets as $key => $workSheet) {
+	    		$highestRow = $workSheet->getHighestRow(); 
+	    		$subjectCode = trim(($workSheet->getCellByColumnAndRow(0, 1)->getValue()));
+	    		$materialCode = trim(($workSheet->getCellByColumnAndRow(1, 1)->getValue()));
+	    		$gradeId = trim(($workSheet->getCellByColumnAndRow(2, 1)->getValue()));
+	    		$term = trim(($workSheet->getCellByColumnAndRow(3, 1)->getValue()));
+	    		$subject = $this->getCategoryService()->getCategoryByCode($subjectCode);
+	    		$material = $this->getCategoryService()->getCategoryByCode($materialCode);
+	    		$subjectId = $subject['id'];
+	    		$materialId = $material['id'];
+	    		$knowledge = array(
+	    			'subjectId' => $subjectId,
+	    			'materialId' => $materialId,
+	    			'term' => $term,
+	    			'gradeId' => $gradeId,
+	    			'weight' => 0
+	    		);
+	    		$chapterId = 0;
+	    		$unitId = 0;
+	    		$knowledge1Id = 0;
+	    		$knowledge2Id = 0;
+	    		for ($row = 2;$row <= $highestRow;$row++) { 
+	    			$chapterTitle = trim($workSheet->getCellByColumnAndRow(0, $row)->getValue());
+	    			$unitTitle = trim($workSheet->getCellByColumnAndRow(1, $row)->getValue());
+	    			$knowledge1 = trim($workSheet->getCellByColumnAndRow(2, $row)->getValue());
+	    			$knowledge2 = trim($workSheet->getCellByColumnAndRow(3, $row)->getValue());
+	    			$knowledge3 = trim($workSheet->getCellByColumnAndRow(4, $row)->getValue());
+	    			if(empty($chapterTitle) && empty($unitTitle) && empty($knowledge1) && empty($knowledge2) && empty($knowledge3)) {
+	    				break;
+	    			}
+	    			if($chapterTitle) {
+	    				$knowledge['name'] = $chapterTitle;
+	    				$knowledge['parentId'] = 0;
+	    				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
+	    				$chapterId = $newKnowledge['id'];
+	    			}
+	    			if($unitTitle) {
+	    				$knowledge['name'] = $unitTitle;
+	    				$knowledge['parentId'] = $chapterId;
+	    				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
+	    				$unitId = $newKnowledge['id'];
+	    			}
 
-    }
+	    			if($knowledge1) {
+	    				$knowledge['name'] = $knowledge1;
+	    				$knowledge['parentId'] = $unitId;
+	    				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
+	    				$knowledge1Id = $newKnowledge['id'];
+	    			}
+
+	    			if($knowledge2) {
+	    				$knowledge['name'] = $knowledge2;
+	    				$knowledge['parentId'] = $knowledge1Id;
+	    				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
+	    				$knowledge2Id = $newKnowledge['id'];
+	    			}  
+
+	    			if($knowledge3) {
+	    				$knowledge['name'] = $knowledge3;
+	    				$knowledge['parentId'] = $knowledge2Id;
+	    				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
+	    			}    
+
+	    		}
+	    	}
+	    }
 
 	public function initFile()
 	{
