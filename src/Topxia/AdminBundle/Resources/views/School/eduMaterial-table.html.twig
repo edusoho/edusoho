@@ -25,14 +25,16 @@
           <td class="materialTd">
             {% if materialList %}
               <div class="material-selector">
-                <div class="pull-left eduMaterial-name">{{eduMaterial.materialName}}</div>
-                <span class="caret pull-right"></span>
-                <div class="material-list row">
-                  {% for material in materialList %}
-                    <div class="col-md-6">
-                      <span data-url="{{path('admin_school_eduMaterial_update')}}" data-eduMaterialId="{{eduMaterial.id}}" data-materialId="{{material.id}}" class="material-name">{{material.name}}</span>
-                    </div>
-                  {% endfor %}
+                <div class="eduMaterial-name">{{eduMaterial.materialName}}</div>
+                <span class="caret"></span>
+                <div class="material-list">
+                  <div class="material-aaa row">
+                    {% for material in materialList %}
+                      <div class="col-md-6">
+                        <span data-url="{{path('admin_school_eduMaterial_update')}}" data-eduMaterialId="{{eduMaterial.id}}" data-materialId="{{material.id}}" class="material-name">{{material.name}}</span>
+                      </div>
+                    {% endfor %}
+                  </div>
                 </div>
               </div>
             {% else %}

@@ -10,7 +10,7 @@ define(function(require, exports, module) {
             trigger: 'click',
             placement: 'bottom',
             html: true,
-            delay: 0,
+            delay: 10,
             viewport: { selector: '.eduMaterial-table', padding: 0 },
             content: function() {
                 return $(this).find('.material-list').html();
@@ -33,6 +33,13 @@ define(function(require, exports, module) {
                     }
                 }
             );
+        });
+
+        $(document).click(function(){
+            var pops=$table.find('.popover');
+            if(pops.length>0){
+                $table.find('.popover').hide();
+            }
         });
 
     }
