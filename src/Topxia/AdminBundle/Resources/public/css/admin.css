@@ -295,14 +295,14 @@ input.LargeInput {width: 600px;}
 .thumb-img-background{
   position: relative;
   background: black;
-  width: 180px;
+  width: 184px;
   height:120px;
 
 }
 
 .courseware-thumb-play{
   position: absolute;
-  left:72px;
+  left:74px;
   top:45px;
   z-index:88;
   font-size:24px;
