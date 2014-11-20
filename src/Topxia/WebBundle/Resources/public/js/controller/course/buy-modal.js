@@ -114,6 +114,14 @@ define(function(require, exports, module) {
             }
         });
 
+        $("input[role='payTypeChoices']").on('click', function(){
+            if($(this).val()=="vipCourses") {
+                $("#bannerUrl1").show();
+            }else{
+                $("#bannerUrl1").hide();
+            }
+        })
+
         $('.btn-use-coupon').on('click', function(){
 
             coupon_code = $('[name=coupon]').val();

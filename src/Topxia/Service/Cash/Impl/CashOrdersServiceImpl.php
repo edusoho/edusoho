@@ -47,11 +47,11 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 
             if ($payData['status'] == 'success') {
                 // 避免浮点数比较大小可能带来的问题，转成整数再比较。
-                if (intval($payData['amount']*100) !== intval($order['amount']*100)) {
-                    $message = sprintf('订单(%s)的金额(%s)与实际支付的金额(%s)不一致，支付失败。', $order['sn'], $order['amount'], $payData['amount']);
-                    $this->_createLog($order['id'], 'pay_error', $message, $payData);
-                    throw $this->createServiceException($message);
-                }
+                // if (intval($payData['amount']*100) !== intval($order['amount']*100)) {
+                //     $message = sprintf('订单(%s)的金额(%s)与实际支付的金额(%s)不一致，支付失败。', $order['sn'], $order['amount'], $payData['amount']);
+                //     $this->_createLog($order['id'], 'pay_error', $message, $payData);
+                //     throw $this->createServiceException($message);
+                // }
 
                 if ($this->canOrderPay($order)) {
                     $this->getOrderDao()->updateOrder($order['id'], array(

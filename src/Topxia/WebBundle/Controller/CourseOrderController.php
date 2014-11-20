@@ -26,6 +26,8 @@ class CourseOrderController extends OrderController
 
         $previewAs = $request->query->get('previewAs');
 
+        $payTypeChoices = $request->query->get('payTypeChoices');
+        
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
         $member = $this->previewAsMember($previewAs, $member, $course);
 
@@ -33,6 +35,20 @@ class CourseOrderController extends OrderController
 
         $userInfo = $this->getUserService()->getUserProfile($user['id']);
         $userInfo['approvalStatus'] = $user['approvalStatus'];
+        
+        $account=$this->getCashService()->getAccountByUserId($user['id'],true);
+        
+         if(empty($account)){
+        $this->getCashService()->createAccount($user['id']);
+        }
+
+        if(isset($account['cash']))
+        $account['cash']=intval($account['cash']);
+    
+        $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        
+
 
         $course = $this->getCourseService()->getCourse($id);
        
@@ -77,6 +93,9 @@ class CourseOrderController extends OrderController
             'courseSetting' => $courseSetting,
             'member' => $member,
             'userFields'=>$userFields,
+            'payTypeChoices'=>$payTypeChoices,
+            'account'=>$account,
+            'amount'=>$amount,
         ));
     }
 
@@ -353,8 +372,19 @@ class CourseOrderController extends OrderController
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
     }
+
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getCashService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    protected function getCashOrdersService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
     }
 }

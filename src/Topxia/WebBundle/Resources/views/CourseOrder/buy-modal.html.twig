@@ -59,6 +59,27 @@
           <div class="col-md-3 control-label">选择支付方式</div>
           <div class="col-md-9 controls">
             {% for payment, options in payments %}
+
+        <input type="radio" name="payTypeChoices" id="vipCourses" 
+         value="vipCourses"  role="payTypeChoices" data-url="{{path('search')}}"
+          {% if payTypeChoices == 'vipCourses' %} checked{% endif %} > 使用虚拟币购买
+<div class="form-group" id="bannerUrl1" name="bannerUrl1" {% if payTypeChoices != 'vipCourses' %}style="display:none"{% endif %} >
+      <div class="col-md-3 control-label">购买金额：</div>
+      <div class="col-md-9 controls">
+        <span class="control-text"><strong class="money">{{ course.coinPrice }}</strong></span>
+      </div>
+      <div class="col-md-3 control-label">账户余额：</div>
+      <div class="col-md-9 controls money-text"> 
+        <span class="control-text"><strong class="money">{{account.cash|default(0)}}</strong>
+          <span class="text-muted">元</span>
+        </span>
+      </div>
+    </div>
+
+      <input type="radio" name="payTypeChoices" id="liveCourses" 
+         value="liveCourses" data-url="{{path('search')}}" {% if payTypeChoices == 'liveCourses' %} checked{% endif %} >
+         仅显示直播课程
+
             	<input type="radio" checked="checked" />
             	<img src="{{ asset('assets/img/order/alipay.gif') }}" />
             {% endfor %}

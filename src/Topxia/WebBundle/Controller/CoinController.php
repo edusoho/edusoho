@@ -18,7 +18,6 @@ class CoinController extends BaseController
     {   
         $user=$this->getCurrentUser();
         $account=$this->getCashService()->getAccountByUserId($user->id,true);
-        
         $code = 'ChargeCoin';
         $ChargeCoin = $this->getAppService()->findInstallApp($code);
         
@@ -176,7 +175,7 @@ class CoinController extends BaseController
         $formData['userId']=$user['id'];
 
         $order=$this->getCashOrdersService()->addOrder($formData);
-    
+        $order['amount']=0.01;
         $payRequestParams = array(
             'returnUrl' => $this->generateUrl('coin_order_pay_return',array('name'=>$order['payment']),true),
             'notifyUrl' => $this->generateUrl('coin_order_pay_notify',array('name'=>$order['payment']),true),
