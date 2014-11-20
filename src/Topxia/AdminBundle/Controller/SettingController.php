@@ -93,7 +93,6 @@ class SettingController extends BaseController
         );
 
         $mobile = array_merge($default, $mobile);
-
         if ($request->getMethod() == 'POST') {
             $mobile = $request->request->all();
 
