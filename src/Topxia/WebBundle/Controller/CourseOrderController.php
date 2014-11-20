@@ -144,8 +144,11 @@ class CourseOrderController extends OrderController
 
         $formData = $request->request->all();
 
-        if($formData['payTypeChoices'] == "chargeCoin"){
-           $formData['payment'] = 'coin';
+        if(isset($formData['payTypeChoices']))
+        {
+            if($formData['payTypeChoices'] == "chargeCoin"){
+               $formData['payment'] = 'coin';
+            }
         }
 
         $user = $this->getCurrentUser();
