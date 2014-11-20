@@ -199,6 +199,24 @@ class UserController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function checkPasswordAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $password = $request->query->get('_password');
+            $currentUser = $this->getCurrentUser();
+
+            if (!$currentUser->isLogin()) {
+                return $this->createJsonResponse(false);
+            }
+
+            if (!$this->getUserService()->verifyPassword($currentUser['id'], $password)) {
+                return $this->createJsonResponse(false);
+            }
+            return $this->createJsonResponse(true);
+        }
+        return $this->createJsonResponse(false);
+    }
+
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');

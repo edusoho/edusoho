@@ -1374,6 +1374,9 @@ coin_change:
     path:     /coin/change
     defaults: { _controller: TopxiaWebBundle:Coin:change }
 
+user_password_check:
+    path:   /user/password/check
+    defaults: { _controller: TopxiaWebBundle:User:checkPassword }
 
 
 #占位
