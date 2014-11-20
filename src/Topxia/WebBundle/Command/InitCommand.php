@@ -421,12 +421,12 @@ EOD;
     			if(empty($chapterTitle)) {
     				$knowledge['name'] = $unitTitle;
     				$knowledge['parentId'] = $parentId;
-    				$knowledge['code'] = 'es_code_' . time() . $row; 
+    				$knowledge['code'] = 'es_code_' . time() . $row . $parentId; 
     				$this->getKnowledgeService()->createKnowledge($knowledge);
     			} else {
     				$knowledge['name'] = $chapterTitle;
     				$knowledge['parentId'] = 0;
-    				$knowledge['code'] = 'es_code_' . time() . $row;
+    				$knowledge['code'] = 'es_code_' . time() . $row . 0;
     				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
     				$parentId = $newKnowledge['id'];
     			}
