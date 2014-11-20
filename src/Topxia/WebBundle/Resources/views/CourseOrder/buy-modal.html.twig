@@ -63,8 +63,8 @@
    
         <img src="{{ asset('assets/img/order/alipay.gif') }}" /></br></br>
 
-        {% if ChargeCoin and course.coinPrice>0 %}
         {% if setting('coin.coin_enabled') %}
+        {% if course.coinPrice|default(0) >0 %}
         <input type="radio" name="payTypeChoices" id="chargeCoin" 
          value="chargeCoin"  role="payTypeChoices" > 使用虚拟币购买
 
