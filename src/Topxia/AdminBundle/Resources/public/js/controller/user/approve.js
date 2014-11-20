@@ -6,6 +6,10 @@ define(function(require, exports, module) {
 
 		var $form = $('#approve-form');
 		$('button[type=submit]').click(function() {
+			var ret=confirm("Are you sure?");
+			if (!ret) {
+				return false;
+			}
 			var submitButton = $(this);
 			var status = submitButton.data('status');
 
