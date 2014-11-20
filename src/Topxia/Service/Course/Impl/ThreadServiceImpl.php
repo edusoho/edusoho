@@ -156,7 +156,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
 
 		$thread['userId'] = $this->getCurrentUser()->id;
-		$thread['title'] = empty($thread['title']) ? '' : $thread['title'];
+		$thread['title'] = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
 
 		//创建thread过滤html
 		$thread['content'] = $this->purifyHtml($thread['content']);
