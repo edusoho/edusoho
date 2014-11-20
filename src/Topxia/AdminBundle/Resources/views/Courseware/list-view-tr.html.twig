@@ -4,7 +4,7 @@
   <td>{{ knowledge.name|default(null) }}</td>
   <td>
     <a class="btn btn-link update-courseware-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_courseware_edit',{categoryId:category.id,id:courseware.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-    <a class="btn btn-link preview-courseware-btn" data-url=""><span class="glyphicon glyphicon-eye-open"></span></a>
+    <a class="btn btn-link preview-courseware-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_courseware_preview',{categoryId:category.id,id:courseware.id}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
     <a class="btn btn-link delete-courseware-btn" data-url="{{ path('admin_courseware_delete',{id:courseware.id}) }}"><span class="glyphicon glyphicon-trash"></span></a>
   </td>  
 </tr>
