@@ -17,10 +17,11 @@ class BaseinfoType extends AbstractType
                 )
             )
             ->add(
-                'describe',
+                'description',
                 'text',
                 array(
-                    'label' => 'form.baseinfo.describe',
+                    'label' => 'form.baseinfo.description',
+                    'required' => false,
                 )
             );
     }

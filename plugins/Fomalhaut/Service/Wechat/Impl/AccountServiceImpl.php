@@ -6,8 +6,13 @@ use Topxia\Service\Common\BaseService;
 
 class AccountServiceImpl extends BaseService implements AccountService
 {
-    public function addAccount($data)
+    public function addUniAccount($uniAcct)
     {
+        $this->getUniAccountDao()->addUniAccount($uniAcct);
+    }
 
+    private function getUniAccountDao ()
+    {
+        return $this->createDao('Fomalhaut:Wechat.UniAccountDao');
     }
 }

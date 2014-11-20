@@ -21,8 +21,12 @@ class BaseinfoStep extends AbstractStep
 
         if ($form->handleRequest($request)->isValid()) {
             $data = $form->getData();
-            //$context->getStorage()->set('my_data', $form->getData());
-            $wecaht = $this->getWechatService()->addAccount($data);
+            $uniAcct = array(
+                'name' => trim($data['acctname']),
+                'description' => ($data['description']),
+                'groupid' => 0
+            );
+            $wecaht = $this->getWechatService()->addUniAccount($uniAcct);
             return $this->complete();
         }
         return $this->render(
