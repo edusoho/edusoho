@@ -9,3 +9,11 @@ course_order_pay:
 coupon_check:
     pattern:  /{type}/{id}/coupon/check
     defaults: { _controller: CustomWebBundle:Order1:couponCheck }
+
+course_order_pay_return:
+    pattern:  /course/order/pay/{name}/return
+    defaults: { _controller: CustomWebBundle:CourseOrder1:payReturn }
+
+course_order_pay_notify:
+    pattern:  /course/order/pay/{name}/notify
+    defaults: { _controller: CustomWebBundle:CourseOrder1:payNotify }

@@ -93,7 +93,34 @@ class CourseOrder1Controller extends CourseOrderController
         ));
     }
     
+    public function payReturnAction(Request $request, $name)
+    {
+        $controller = $this;
+        return $this->doPayReturn($request, $name, function($success, $order) use(&$controller) {
+            if (!$success) {
+                $controller->generateUrl('course_show', array('id' => $order['targetId']));
+            }
 
+            $controller->getCourseOrderService()->doSuccessPayOrder($order['id']);
+
+            return $controller->generateUrl('course_show', array('id' => $order['targetId']));
+        });
+    }
+
+    public function payNotifyAction(Request $request, $name)
+    {
+        $controller = $this;
+        return $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
+            if (!$success) {
+                return ;
+            }
+
+            $controller->getCourseOrderService()->doSuccessPayOrder($order['id']);
+
+            return ;
+        });
+    }
+    
     private function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
