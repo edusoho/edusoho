@@ -8,6 +8,8 @@ interface EduMaterialService
     public function updateEduMaterial($id,array $fields);
 
     public function deleteEduMaterial($id);
+
+    public function deleteAllEduMaterials();
     
     public function findAllEduMaterials();
 

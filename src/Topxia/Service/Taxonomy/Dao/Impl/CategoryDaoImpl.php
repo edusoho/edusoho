@@ -104,4 +104,10 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
         return $this->getConnection()->fetchAll($sql) ? : array();
     }
 
+    public function deleteAllCategories()
+    {
+        $sql="DELETE FROM {$this->table}";
+        return $this->getConnection()->exec($sql);
+    }
+
 }

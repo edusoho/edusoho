@@ -52,4 +52,8 @@ interface CategoryService
     public function addGroup(array $group);
 
     public function deleteGroup($id);
+
+    public function deleteAllCategories();
+
+    public function deleteAllGroups();
 }
