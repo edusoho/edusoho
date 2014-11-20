@@ -41,7 +41,7 @@ class InitCommand extends BaseCommand
 		$this->initSubject($output);
 		$this->initMaterial($output);
 		$this->initEduMaterial($output);
-		$this->initKnowledge();
+		$this->initKnowledge($output);
 		$this->initTag($output);
 		$this->initRefundSetting($output);
 		$this->initThemes($output);
