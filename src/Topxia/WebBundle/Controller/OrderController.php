@@ -53,7 +53,7 @@ class OrderController extends BaseController
         if ($order['status'] == 'paid' and $successCallback) {
             $successUrl = $successCallback($success, $order);
         }
-
+        print_r($successUrl);die;
         $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
         return $this->redirect($goto);
     }
