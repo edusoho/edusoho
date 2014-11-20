@@ -732,50 +732,6 @@ course_manage_list_teacher_test_reviewing:
     pattern: /my/teacher/reviewing/test/list
     defaults: { _controller: TopxiaWebBundle:Testpaper:listReviewingTest }
 
-material_lib_browsing:
-    pattern: /material/lib/browse/{type}/{viewMode}/{source}
-    defaults: { _controller: TopxiaWebBundle:MaterialLib:index, type: 'all', viewMode: 'thumb', source: 'upload'}
-    
-material_lib_delete_file:
-    pattern: //material/lib/{id}/delete
-    defaults: { _controller: TopxiaWebBundle:MaterialLib:delete }
- 
-material_lib_my_sharing:
-    pattern: /material/lib/my/sharing/show
-    defaults: { _controller: TopxiaWebBundle:MaterialLib:showShare }
-    
-material_lib_save_sharing:
-    pattern: /material/lib/my/sharing/save
-    defaults: { _controller: TopxiaWebBundle:MaterialLib:saveShare }
-
-material_lib_show_sharing_history:
-    pattern: /material/lib/my/sharing/history
-    defaults: { _controller: TopxiaWebBundle:MaterialLib:showShareHistory }
-
-material_lib_cancel_sharing:
-    pattern: /material/lib/my/sharing/cancel
-    defaults: { _controller: TopxiaWebBundle:MaterialLib:cancelShare } 
-
-material_lib_my_sharing_contacts:
-    pattern: /material/lib/recent/contacts
-    defaults: { _controller: TopxiaWebBundle:MaterialLib:findMySharingContacts }  
-    
-material_lib_file_preview:
-    pattern:  /material/lib/file/{fileId}/preview
-    defaults: { _controller: TopxiaWebBundle:MaterialLib:preview }
-
-material_lib_file_preview_hlskeyurl:
-    pattern: /material/lib/{fileId}/preview/hlskeyurl/{token}
-    defaults: { _controller: TopxiaWebBundle:MaterialLib:hlskeyurl }  
-
-material_lib_file_preview_ppt:
-    pattern: /material/lib/{fileId}/preview/ppt
-    defaults: { _controller: TopxiaWebBundle:MaterialLib:ppt }  
-        
-material_lib_file_preview_content:
-    pattern:  /material/lib/{fileId}/preview/content
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:file }
-           
 course_manage_list_teacher_test_finished:
     pattern: /my/teacher/finished/test/list
     defaults: { _controller: TopxiaWebBundle:Testpaper:listFinishedTest }

@@ -158,11 +158,6 @@ class CourseLessonManageController extends BaseController
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
-		//TODO: Check whether the MaterialLib plugin is installed.
-		$materialLibInstalled = $this->getAppService()->findInstallApp('MaterialLib') == null ? false : true;
-		
-		$materialLibInstalled = true;
-		
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'targetType' => $targetType,
@@ -173,8 +168,7 @@ class CourseLessonManageController extends BaseController
 			'storageSetting' => $setting,
 			'features' => $features,
 			'parentId'=>$parentId,
-			'draft' => $draft,
-			'materialLibInstalled' =>  $materialLibInstalled
+			'draft' => $draft
 		));
 	}
 
@@ -264,11 +258,6 @@ class CourseLessonManageController extends BaseController
 		$lesson['title'] = str_replace(array('"',"'"), array('&#34;','&#39;'), $lesson['title']);
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
-
-		//TODO: Check whether the MaterialLib plugin is installed.
-		$materialLibInstalled = $this->getAppService()->findInstallApp('MaterialLib') == null ? false : true;
-		
-		$materialLibInstalled = true;
 		
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
@@ -281,8 +270,7 @@ class CourseLessonManageController extends BaseController
 			'convertKey' => $convertKey,
 			'storageSetting' => $setting,
 			'features' => $features,
-			'draft' => $draft,
-			'materialLibInstalled' =>  $materialLibInstalled
+			'draft' => $draft
 		));
 	}
 

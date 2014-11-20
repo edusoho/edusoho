@@ -16,7 +16,7 @@
       <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
         <li class="active"><a class="file-chooser-uploader-tab" href="#video-chooser-upload-pane" data-toggle="tab">上传视频</a></li>
         <li><a href="#video-chooser-disk-pane" data-toggle="tab">
-        		{% if materialLibInstalled == 'true' %}
+						{% if is_plugin_installed('MaterialLib') %}
         					从视频素材库中选择
         		{% else %}
         					从视频库中选择
@@ -124,7 +124,7 @@
 
         </div>
         <div class="tab-pane" id="video-chooser-disk-pane">
-        	{% if materialLibInstalled == 'true' %}
+					{% if is_plugin_installed('MaterialLib') %}
             <div id="file-browser-video" data-role="file-browser"
             data-base-url="{{ path('uploadfile_browser', {type:'video'}) }}" 
             data-default-url="{{ path('uploadfile_browser', {type:'video', source:'upload'}) }}" 
@@ -167,7 +167,7 @@
       <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
         <li class="active"><a class="file-chooser-uploader-tab" href="#audio-chooser-upload-pane" data-toggle="tab">上传音频</a></li>
         <li><a href="#audio-chooser-disk-pane" data-toggle="tab">
-        {% if materialLibInstalled == 'true' %}
+						{% if is_plugin_installed('MaterialLib') %}
         					从音频素材库中选择
         		{% else %}
         					从音频库中选择
@@ -223,7 +223,7 @@
 
         </div>
         <div class="tab-pane" id="audio-chooser-disk-pane">
-        {% if materialLibInstalled == 'true' %}
+					{% if is_plugin_installed('MaterialLib') %}
           <div id="file-browser-audio" data-role="file-browser"
           		data-base-url="{{ path('uploadfile_browser', {type:'audio'}) }}" 
             data-default-url="{{ path('uploadfile_browser', {type:'audio', source:'upload'}) }}" 
@@ -258,7 +258,7 @@
       <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
         <li class="active"><a class="file-chooser-uploader-tab" href="#ppt-chooser-upload-pane" data-toggle="tab">上传PPT</a></li>
         <li><a href="#ppt-chooser-disk-pane" data-toggle="tab">
-         {% if materialLibInstalled == 'true' %}
+						{% if is_plugin_installed('MaterialLib') %}
         					从PPT素材库中选择
         		{% else %}
         					从PPT库中选择
@@ -300,7 +300,7 @@
 
         </div>
         <div class="tab-pane" id="ppt-chooser-disk-pane">
-          {% if materialLibInstalled == 'true' %}
+						{% if is_plugin_installed('MaterialLib') %}
           <div id="file-browser-ppt" data-role="file-browser"
           		data-base-url="{{ path('uploadfile_browser', {type:'ppt'}) }}" 
             data-default-url="{{ path('uploadfile_browser', {type:'ppt', source:'upload'}) }}" 

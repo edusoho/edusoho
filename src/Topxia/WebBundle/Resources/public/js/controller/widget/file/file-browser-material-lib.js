@@ -67,12 +67,10 @@ define(function(require, exports, module) {
                         });
                         html += '</ul>';
                         $(".file-browser-list-container", self.element).html(html);
-//                        self.element.html(html);
                         self.set('files', files);
                     } else {
                         var message = self.element.data('empty');
                         if (message) {
-//                            self.element.html('<div class="empty">' + message + '</div>');
                     	    $(".file-browser-list-container", self.element).html('<div class="empty">' + message + '</div>');
                         }
                     }
