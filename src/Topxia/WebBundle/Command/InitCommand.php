@@ -308,7 +308,7 @@ EOD;
 		$output->write('  初始化学科');
 		$group = $this->getCategoryService()->addGroup(array(
 			'name' => '学科-教材',
-			'code' => 'subject-material',
+			'code' => 'subject_material',
 			'depth' => 1,
 		));
 
@@ -339,7 +339,7 @@ EOD;
 	private function initMaterial($output)
 	{
 		$output->write('  初始化教材');
-		$group = $this->getCategoryService()->getGroupByCode('subject-material');
+		$group = $this->getCategoryService()->getGroupByCode('subject_material');
 
 		$EduMaterialData = include(__DIR__ . '/../../Service/Taxonomy/EduMaterialData.php');
 		foreach($EduMaterialData as $EduMaterials) {

@@ -101,14 +101,14 @@ class HtmlExtension extends \Twig_Extension
         return $html;
     }
 
-    public function selectOptions3($choices, $selected = null, $empty = null)
+    public function selectOptions3($gradeId, $selected = null, $empty = null)
     {
         $html = '';
         if (!is_null($empty)) {
             $html .= "<option value=\"\">{$empty}</option>";
         }
 
-        $subjects = $this->getCategoryService()->findCategoriesByGroupCode('subject');
+        $subjects = $this->getCategoryService()->findSubjectCategoriesByGradeId($gradeId);
 
         $choices = array();
         foreach ($subjects as $subject) {

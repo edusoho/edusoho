@@ -60,7 +60,7 @@
 				  <label class="col-md-2 control-label">所属学科</label>
 				  <div class="col-md-4 controls">
 				    <select class="form-control event" id="subjectId" name="subjectId">
-				      {{ select_options_for_subject('', course.subjectId, '--通用--') }}
+				      {{ select_options_for_subject(course.gradeId, course.subjectId, '--通用--') }}
 				    </select>
 				  </div>
 				</div>

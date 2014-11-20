@@ -24,6 +24,14 @@ class CategoryController extends BaseController
         return $this->createJsonResponse($material);
     }
 
+    public function getSubjectsAction(Request $request)
+    {
+        $query = $request->query->all();
+        return $this->render('TopxiaAdminBundle:Knowledge:subject-options.html.twig', array(
+            'gradeId' => $query['gradeId'],
+        ));
+    }
+
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');

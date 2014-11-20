@@ -17,8 +17,8 @@
 <div class="container select-section" data-url="{{ path('get_material') }}">
   <div class="row">
     <div class="col-md-2 form-group">
-      <select class="form-control" id="gradeId" name="gradeId">
-        {{ select_options_for_grade('', 1) }}
+      <select class="form-control" id="gradeId" name="gradeId" data-url="{{ path('get_subjects') }}">
+        {{ select_options_for_grade('') }}
       </select>
     </div>
     <div class="col-md-2 form-group">
@@ -28,7 +28,6 @@
     </div>
     <div class="col-md-2 form-group">
       <select class="form-control" id="subjectId" name="subjectId">
-        {{ select_options(subject) }}
       </select>
     </div>
     <div class="col-md-2 form-group">
