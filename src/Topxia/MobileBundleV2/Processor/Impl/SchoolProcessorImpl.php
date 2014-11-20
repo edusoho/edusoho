@@ -254,7 +254,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
                     }
                     $banner[] = array(
                         "url"=>$baseUrl . '/' . $bannerIndex,
-                        "action"=>$bannerClick == 0 ? "none" : "webview",
+                        "action"=> $action,
                         "params"=>$bannerParams
                     );
             }
