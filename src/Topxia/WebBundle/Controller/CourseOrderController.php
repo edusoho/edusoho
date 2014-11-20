@@ -141,6 +141,7 @@ class CourseOrderController extends OrderController
 
     public function payAction(Request $request)
     {
+
         $formData = $request->request->all();
 
         if($formData['payTypeChoices'] == "chargeCoin"){
@@ -171,7 +172,6 @@ class CourseOrderController extends OrderController
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         $order = $this->getCourseOrderService()->createOrder($formData);
-
         if($order['payment'] == 'coin') {
             $password = $request->query->get('password');
 

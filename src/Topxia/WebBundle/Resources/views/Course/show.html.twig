@@ -67,14 +67,12 @@
 							<span class="money-num">{{ course.price }}</span>
 							<span class="money-text">元</span>
 							&nbsp;&nbsp;&nbsp;
-						 {% if ChargeCoin %}
 						 {% if setting('coin.coin_enabled') %}
 						 {% if course.coinPrice > 0 %}
 						 <span class="coin-price" >
 							<span >{{ course.coinPrice }}</span>
 							<span  > {{setting('coin.coin_name')}}</span>
 						</span>
-						{% endif %}  
 						{% endif %}  
 						{% endif %}  
 
