@@ -201,20 +201,19 @@ class UserController extends BaseController
 
     public function checkPasswordAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
-            $password = $request->query->get('_password');
-            $currentUser = $this->getCurrentUser();
+        $password = $request->query->get('value');
+        $currentUser = $this->getCurrentUser();
 
-            if (!$currentUser->isLogin()) {
-                return $this->createJsonResponse(false);
-            }
-
-            if (!$this->getUserService()->verifyPassword($currentUser['id'], $password)) {
-                return $this->createJsonResponse(false);
-            }
-            return $this->createJsonResponse(true);
+        if (!$currentUser->isLogin()) {
+            $response = array('success' => false, 'message' => '请先登入');
         }
-        return $this->createJsonResponse(false);
+
+        if (!$this->getUserService()->verifyPassword($currentUser['id'], $password)) {
+            $response = array('success' => false, 'message' => '输入的密码不正确');
+        }else{
+            $response = array('success' => true, 'message' => '');
+        }
+        return $this->createJsonResponse($response);
     }
 
     protected function getUserService()

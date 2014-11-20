@@ -173,7 +173,7 @@ class CourseOrderController extends OrderController
         $order = $this->getCourseOrderService()->createOrder($formData);
 
         if($order['payment'] == 'coin') {
-            $password = $request->query->get('_password');
+            $password = $request->query->get('password');
 
             if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
                 return $this->createMessageResponse('error', '密码错误。');

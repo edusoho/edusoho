@@ -100,13 +100,13 @@
     </div>
   </div>
 
-      <div id="screct"  class="row form-group row"  style="display:none" >
+      <div id="screct" class="row form-group" style="display:none" >
           <div class="col-md-3 control-label" >
-            <lable for="password">登入密码</lable>
+            <label for="password">登入密码</label>
           </div>
           <div class="col-md-5 controls"> 
-               <input id="password" type="password" name="password" placeholder="使用登入密码支付" class="form-control" data-url="{{path('user_password_check')}}"/>
-           </div>
+            <input id="password" type="password" name="password" placeholder="使用登入密码支付" class="form-control" data-url="{{path('user_password_check')}}"/>
+          </div>
        </div>
 
         {% if payments.alipay.type|default(null) == 'dualfun' %}
