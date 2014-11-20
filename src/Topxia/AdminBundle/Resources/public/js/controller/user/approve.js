@@ -6,12 +6,23 @@ define(function(require, exports, module) {
 
 		var $form = $('#approve-form');
 		$('button[type=submit]').click(function() {
-			var ret=confirm("Are you sure?");
-			if (!ret) {
-				return false;
-			}
+
 			var submitButton = $(this);
 			var status = submitButton.data('status');
+
+			if (status == 'fail'){
+				var ret=confirm("是否确认审核失败?");
+				if (!ret) {
+					return false;
+				}
+			}
+			
+			if (status == 'success'){
+				var ret=confirm("是否确认审核通过?");
+				if (!ret) {
+					return false;
+				}
+			}
 
 			if (status == 'fail' && $('#note').val() == '') {
 				Notify.danger('请输入审核失败理由！');
