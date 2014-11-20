@@ -63,7 +63,7 @@
    
         <img src="{{ asset('assets/img/order/alipay.gif') }}" /></br></br>
 
-        {% if ChargeCoin %}
+        {% if ChargeCoin and course.coinPrice>0 %}
         {% if setting('coin.coin_enabled') %}
         <input type="radio" name="payTypeChoices" id="chargeCoin" 
          value="chargeCoin"  role="payTypeChoices" > 使用虚拟币购买
@@ -88,7 +88,6 @@
             {% endif %}
         {% endif %}
   {% endif %}  
-  {% endif %}  
         </div>
         
       </div>
@@ -96,6 +95,7 @@
         <div class="col-md-12">
             <strong class="danger"  id="notify" name="notify"  style="display:none">账户余额小于课程购买金额，请充值后购买！</strong>
         </div>
+       {% endif %}
       {% endfor %}
     </div>
   </div>
