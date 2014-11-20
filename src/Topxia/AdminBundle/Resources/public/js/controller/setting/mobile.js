@@ -240,9 +240,9 @@ define(function(require, exports, module) {
                 $("#bannerClassName2").hide();
                 $("#bannerCourseChooseButton2").hide();
             }else if($(this).val()==2){
+                $("#bannerUrl2").hide();
                 $("#bannerClassName2").show();
                 $("#bannerCourseChooseButton2").show();
-                $("#bannerUrl2").hide();
             }else{
                 $("#bannerUrl2").hide();
                 $("#bannerClassName2").hide();
@@ -258,12 +258,12 @@ define(function(require, exports, module) {
         $("input[role='bannerClick3']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl3").show();
-                $("#bannerClassName3").show();
-                $("#bannerCourseChooseButton3").show();
+                $("#bannerClassName3").hide();
+                $("#bannerCourseChooseButton3").hide();
             }else if($(this).val()==2){
+                $("#bannerUrl3").hide();
                 $("#bannerClassName3").show();
                 $("#bannerCourseChooseButton3").show();
-                $("#bannerUrl3").show();
             }else{
                 $("#bannerUrl3").hide();
                 $("#bannerClassName3").hide();
@@ -279,12 +279,12 @@ define(function(require, exports, module) {
         $("input[role='bannerClick4']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl4").show();
-                $("#bannerClassName4").show();
-                $("#bannerCourseChooseButton4").show();
+                $("#bannerClassName4").hide();
+                $("#bannerCourseChooseButton4").hide();
             }else if($(this).val()==2){
+                $("#bannerUrl4").hide();
                 $("#bannerClassName4").show();
                 $("#bannerCourseChooseButton4").show();
-                $("#bannerUrl4").show();
             }else{
                 $("#bannerUrl4").hide();
                 $("#bannerClassName4").hide();
@@ -300,12 +300,12 @@ define(function(require, exports, module) {
         $("input[role='bannerClick5']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl5").show();
-                $("#bannerClassName5").show();
-                $("#bannerCourseChooseButton5").show();
+                $("#bannerClassName5").hide();
+                $("#bannerCourseChooseButton5").hide();
             }else if($(this).val()==2){
+                $("#bannerUrl5").hide();
                 $("#bannerClassName5").show();
                 $("#bannerCourseChooseButton5").show();
-                $("#bannerUrl5").show();
             }else{
                 $("#bannerUrl5").hide();
                 $("#bannerClassName5").hide();

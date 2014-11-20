@@ -192,34 +192,38 @@
 
         <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
 
+
+
+
+
+
+
         <div class="banner-setting" role="banner2-setting" {% if not mobile.banner2 %}style="display:none;"{% endif %}>
-              <input type="radio" role="bannerClick2" name="bannerClick2" {% if not mobile.bannerClick2 %}checked="checked"{% endif %} value="0"/>默认（无触发动作）
-              <input type="radio" role="bannerClick2" name="bannerClick2" value="1" {% if mobile.bannerClick2 %}checked="checked"{% endif %}/>跳转到连接地址
+          <input type="radio" role="bannerClick2" name="bannerClick2" {% if not mobile.bannerClick2 %}checked="checked"{% endif %} value="0"/>默认（无触发动作）
+          <input type="radio" role="bannerClick2" name="bannerClick2" value="1" {% if mobile.bannerClick2 == "1" %}checked="checked"{% endif %}/>跳转到连接地址
 
           <input type="radio" role="bannerClick2" name="bannerClick2" value="2" {% if mobile.bannerClick2 == "2" %}checked="checked"{% endif %}/>跳转到内部课程
 
+          <div class="row">
+            <div class="col-xs-11">
+              <input type="text" id="bannerUrl2" name="bannerUrl2" class="form-control" value="{{mobile.bannerUrl2}}" placeholder="请填写连接地址" {% if mobile.bannerClick2 != "1" %}style="display:none"{% endif %}/>
+            </div>  
+          </div>
 
-              <input type="text" id="bannerJumpToInnerClassId2" name="bannerJumpToInnerClassId2" class="form-control" value="{{mobile.bannerJumpToInnerClassId2}}" placeholder="请填写内部课程Id" style="display:none;"/>
-
-              <div class="row">
-                <div class="col-xs-11">
-                  <input type="text" id="bannerUrl2" name="bannerUrl2" class="form-control" value="{{mobile.bannerUrl2}}" placeholder="请填写连接地址" {% if mobile.bannerClick2 != "1" %}style="display:none"{% endif %}/>
-                </div>  
-
-                <div class="col-xs-1">
-                  <div id="bannerCourseChooseButton2" class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick2 != "2" %}style="display:none"{% endif %}>
-                   选课
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div id="bannerClassName2" name="bannerClassName2" class="col-md-12 " {% if mobile.bannerClick2 != "2" %}style="display:none"{% endif %}><span class='label label-info'> 课程名:{{ bannerCourse2.title }}</span></div>
-                </div>
-              
-           
+          <div class="row">
+            <a id="bannerCourseChooseButton2" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick2 != "2" %}style="display:none"{% endif %}>
+             选课
+            </a>
+            <div id="bannerClassName2" name="bannerClassName2" class=""{% if mobile.bannerClick2 != "2" %}style="display:none"{% endif %}>
+              <ul class="banner-course" role="bannerCourse2">
+                {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:bannerCourse2} %}
+              </ul>
+            </div>
+            <input type="text" id="bannerJumpToInnerClassId2" name="bannerJumpToInnerClassId2" class="form-control" value="{{mobile.bannerJumpToInnerClassId2}}" placeholder="请填写内部课程Id" style="display:none;"/>
+          </div>
         </div>
 
+        
         <input type="hidden" name="banner2" value="{{ mobile.banner2 }}">
       </div>
     </div>
@@ -236,39 +240,42 @@
 
         <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
 
+
+
+
+
+
+
         <div class="banner-setting" role="banner3-setting" {% if not mobile.banner3 %}style="display:none;"{% endif %}>
           <input type="radio" role="bannerClick3" name="bannerClick3" {% if not mobile.bannerClick3 %}checked="checked"{% endif %} value="0"/>默认（无触发动作）
-          <input type="radio" role="bannerClick3" name="bannerClick3" value="1" {% if mobile.bannerClick3 %}checked="checked"{% endif %}/>跳转到连接地址
-
-
+          <input type="radio" role="bannerClick3" name="bannerClick3" value="1" {% if mobile.bannerClick3 == "1" %}checked="checked"{% endif %}/>跳转到连接地址
 
           <input type="radio" role="bannerClick3" name="bannerClick3" value="2" {% if mobile.bannerClick3 == "2" %}checked="checked"{% endif %}/>跳转到内部课程
 
+          <div class="row">
+            <div class="col-xs-11">
+              <input type="text" id="bannerUrl3" name="bannerUrl3" class="form-control" value="{{mobile.bannerUrl3}}" placeholder="请填写连接地址" {% if mobile.bannerClick3 != "1" %}style="display:none"{% endif %}/>
+            </div>  
+          </div>
 
-              <input type="text" id="bannerJumpToInnerClassId3" name="bannerJumpToInnerClassId3" class="form-control" value="{{mobile.bannerJumpToInnerClassId3}}" placeholder="请填写内部课程Id" style="display:none;"/>
-
-              <div class="row">
-                <div class="col-xs-11">
-                  <input type="text" id="bannerUrl3" name="bannerUrl3" class="form-control" value="{{mobile.bannerUrl3}}" placeholder="请填写连接地址" {% if mobile.bannerClick3 == "" %}style="display:none"{% endif %}/>
-                </div>  
-
-                <div class="col-xs-1">
-                  <div id="bannerCourseChooseButton3" class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick3 == "" %}style="display:none"{% endif %}>
-                   选课
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div id="bannerClassName3" name="bannerClassName3" class="col-md-12 " {% if mobile.bannerClick3 == "" %}style="display:none"{% endif %}><span class='label label-info'> 课程名:{{ bannerCourse3.title }}</span></div>
-                </div>
-              
-
+          <div class="row">
+            <a id="bannerCourseChooseButton3" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick3 != "2" %}style="display:none"{% endif %}>
+             选课
+            </a>
+            <div id="bannerClassName3" name="bannerClassName3" class=""{% if mobile.bannerClick3 != "2" %}style="display:none"{% endif %}>
+              <ul class="banner-course" role="bannerCourse3">
+                {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:bannerCourse3} %}
+              </ul>
+            </div>
+            <input type="text" id="bannerJumpToInnerClassId3" name="bannerJumpToInnerClassId3" class="form-control" value="{{mobile.bannerJumpToInnerClassId3}}" placeholder="请填写内部课程Id" style="display:none;"/>
+          </div>
         </div>
 
+        
         <input type="hidden" name="banner3" value="{{ mobile.banner3 }}">
       </div>
     </div>
+
 
     <div class="form-group">
       <div class="col-md-2 control-label">
@@ -282,43 +289,42 @@
 
         <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
 
+
+
+
+
+
+
         <div class="banner-setting" role="banner4-setting" {% if not mobile.banner4 %}style="display:none;"{% endif %}>
           <input type="radio" role="bannerClick4" name="bannerClick4" {% if not mobile.bannerClick4 %}checked="checked"{% endif %} value="0"/>默认（无触发动作）
-          <input type="radio" role="bannerClick4" name="bannerClick4" value="1" {% if mobile.bannerClick4 %}checked="checked"{% endif %}/>跳转到连接地址
-
-
-
+          <input type="radio" role="bannerClick4" name="bannerClick4" value="1" {% if mobile.bannerClick4 == "1" %}checked="checked"{% endif %}/>跳转到连接地址
 
           <input type="radio" role="bannerClick4" name="bannerClick4" value="2" {% if mobile.bannerClick4 == "2" %}checked="checked"{% endif %}/>跳转到内部课程
 
+          <div class="row">
+            <div class="col-xs-11">
+              <input type="text" id="bannerUrl4" name="bannerUrl4" class="form-control" value="{{mobile.bannerUrl4}}" placeholder="请填写连接地址" {% if mobile.bannerClick4 != "1" %}style="display:none"{% endif %}/>
+            </div>  
+          </div>
 
-              <input type="text" id="bannerJumpToInnerClassId4" name="bannerJumpToInnerClassId4" class="form-control" value="{{mobile.bannerJumpToInnerClassId4}}" placeholder="请填写内部课程Id" style="display:none;"/>
-
-              <div class="row">
-                <div class="col-xs-11">
-                  <input type="text" id="bannerUrl4" name="bannerUrl4" class="form-control" value="{{mobile.bannerUrl4}}" placeholder="请填写连接地址" {% if mobile.bannerClick4 == "" %}style="display:none"{% endif %}/>
-                </div>  
-
-                <div class="col-xs-1">
-                  <div id="bannerCourseChooseButton4" class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick4 == "" %}style="display:none"{% endif %}>
-                   选课
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div id="bannerClassName4" name="bannerClassName4" class="col-md-12 " {% if mobile.bannerClick4 == "" %}style="display:none"{% endif %}><span class='label label-info'> 课程名:{{ bannerCourse4.title }}</span></div>
-                </div>
-
-
-
-
-
+          <div class="row">
+            <a id="bannerCourseChooseButton4" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick4 != "2" %}style="display:none"{% endif %}>
+             选课
+            </a>
+            <div id="bannerClassName4" name="bannerClassName4" class=""{% if mobile.bannerClick4 != "2" %}style="display:none"{% endif %}>
+              <ul class="banner-course" role="bannerCourse4">
+                {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:bannerCourse4} %}
+              </ul>
+            </div>
+            <input type="text" id="bannerJumpToInnerClassId4" name="bannerJumpToInnerClassId4" class="form-control" value="{{mobile.bannerJumpToInnerClassId4}}" placeholder="请填写内部课程Id" style="display:none;"/>
+          </div>
         </div>
 
+        
         <input type="hidden" name="banner4" value="{{ mobile.banner4 }}">
       </div>
     </div>
+
 
     <div class="form-group">
       <div class="col-md-2 control-label">
@@ -332,40 +338,42 @@
 
         <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
 
+
+
+
+
+
+
         <div class="banner-setting" role="banner5-setting" {% if not mobile.banner5 %}style="display:none;"{% endif %}>
           <input type="radio" role="bannerClick5" name="bannerClick5" {% if not mobile.bannerClick5 %}checked="checked"{% endif %} value="0"/>默认（无触发动作）
-          <input type="radio" role="bannerClick5" name="bannerClick5" value="1" {% if mobile.bannerClick5 %}checked="checked"{% endif %}/>跳转到连接地址
- 
-
+          <input type="radio" role="bannerClick5" name="bannerClick5" value="1" {% if mobile.bannerClick5 == "1" %}checked="checked"{% endif %}/>跳转到连接地址
 
           <input type="radio" role="bannerClick5" name="bannerClick5" value="2" {% if mobile.bannerClick5 == "2" %}checked="checked"{% endif %}/>跳转到内部课程
 
+          <div class="row">
+            <div class="col-xs-11">
+              <input type="text" id="bannerUrl5" name="bannerUrl5" class="form-control" value="{{mobile.bannerUrl5}}" placeholder="请填写连接地址" {% if mobile.bannerClick5 != "1" %}style="display:none"{% endif %}/>
+            </div>  
+          </div>
 
-              <input type="text" id="bannerJumpToInnerClassId5" name="bannerJumpToInnerClassId5" class="form-control" value="{{mobile.bannerJumpToInnerClassId5}}" placeholder="请填写内部课程Id" style="display:none;"/>
-
-              <div class="row">
-                <div class="col-xs-11">
-                  <input type="text" id="bannerUrl5" name="bannerUrl5" class="form-control" value="{{mobile.bannerUrl5}}" placeholder="请填写连接地址" {% if mobile.bannerClick5 == "" %}style="display:none"{% endif %}/>
-                </div>  
-
-                <div class="col-xs-1">
-                  <div id="bannerCourseChooseButton5" class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick5 == "" %}style="display:none"{% endif %}>
-                   选课
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div id="bannerClassName5" name="bannerClassName5" class="col-md-12 " {% if mobile.bannerClick5 == "" %}style="display:none"{% endif %}><span class='label label-info'> 课程名:{{ bannerCourse5.title }}</span></div>
-                </div>
-
-
-
+          <div class="row">
+            <a id="bannerCourseChooseButton5" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick5 != "2" %}style="display:none"{% endif %}>
+             选课
+            </a>
+            <div id="bannerClassName5" name="bannerClassName5" class=""{% if mobile.bannerClick5 != "2" %}style="display:none"{% endif %}>
+              <ul class="banner-course" role="bannerCourse5">
+                {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:bannerCourse5} %}
+              </ul>
+            </div>
+            <input type="text" id="bannerJumpToInnerClassId5" name="bannerJumpToInnerClassId5" class="form-control" value="{{mobile.bannerJumpToInnerClassId5}}" placeholder="请填写内部课程Id" style="display:none;"/>
+          </div>
         </div>
 
+        
         <input type="hidden" name="banner5" value="{{ mobile.banner5 }}">
       </div>
     </div>
+
     
   </fieldset>
 

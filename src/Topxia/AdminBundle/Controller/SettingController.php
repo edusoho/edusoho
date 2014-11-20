@@ -96,6 +96,7 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $mobile = $request->request->all();
+
             $this->getSettingService()->set('mobile', $mobile);
             $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
             $this->setFlashMessage('success', '移动客户端设置已保存！');
@@ -110,12 +111,12 @@ class SettingController extends BaseController
                 $sortedCourses[] = $courses[$value];
         }
 
-        $_= ["title"=>""];
-        $bannerCourse1 = ($mobile['bannerJumpToInnerClassId1']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId1']):$_;
-        $bannerCourse2 = ($mobile['bannerJumpToInnerClassId2']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId2']):$_;
-        $bannerCourse3 = ($mobile['bannerJumpToInnerClassId3']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId3']):$_;
-        $bannerCourse4 = ($mobile['bannerJumpToInnerClassId4']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId4']):$_;
-        $bannerCourse5 = ($mobile['bannerJumpToInnerClassId5']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId5']):$_;
+
+        $bannerCourse1 = ($mobile['bannerJumpToInnerClassId1']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId1']):null;
+        $bannerCourse2 = ($mobile['bannerJumpToInnerClassId2']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId2']):null;
+        $bannerCourse3 = ($mobile['bannerJumpToInnerClassId3']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId3']):null;
+        $bannerCourse4 = ($mobile['bannerJumpToInnerClassId4']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId4']):null;
+        $bannerCourse5 = ($mobile['bannerJumpToInnerClassId5']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId5']):null;
 
         $bannerJumpToInnerClassIds = array();
         for ($i=1;$i<=5;$i++){
