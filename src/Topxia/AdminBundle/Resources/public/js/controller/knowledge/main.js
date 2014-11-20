@@ -138,8 +138,9 @@ define(function(require, exports, module) {
 		});
 
 		$('#gradeId').on('change', function(){
-			$.get($(this).data('url'), {gradeId:$(this).val()}, function(result){
-				$('#subjectId').html(result);
+			$.get($(this).data('url'), {gradeId:$(this).val()}, function(html){
+				$('#subjectId').html(html);
+
 				$.get($('.select-section').data('url'), {subjectId:$('#subjectId').val(), gradeId:$('#gradeId').val()}, function(result){
 					if('id' in result) {
 						$('#materialId').val(result.id);
@@ -178,7 +179,6 @@ define(function(require, exports, module) {
 					zTree.reAsyncChildNodes(null, "refresh");
 				});
 			});
-		});
 
 		$('#add-knowledge-fake').on('click', function(){
 			if(!$('#gradeId').val()) {

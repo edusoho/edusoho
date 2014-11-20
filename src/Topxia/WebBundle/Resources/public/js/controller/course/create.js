@@ -20,10 +20,10 @@ define(function(require, exports, module) {
         });
 
         $('#gradeId').on('change', function(){
-            $.get($(this).data('url'), {gradeId:$(this).val()}, function(result){
-                result = '<option value="0">--通用--</option>' + result;
-                $('#subjectId').html(result);
-                $.get($('.select-section').data('url'), {subjectId:$('#subjectId').val(), gradeId:$('#gradeId').val()}, function(result){
+            $.get($(this).data('url'), {gradeId:$(this).val()}, function(html){
+                html = '<option value="0">--通用--</option>' + html;
+                $('#subjectId').html(html);
+                $.get($('#course-create-form').data('url'), { subjectId:$('#subjectId').val(), gradeId:$('#gradeId').val() }, function(result){
                     if('id' in result) {
                         $('#materialId').val(result.id);
                         $('#material').val(result.name);
@@ -31,35 +31,18 @@ define(function(require, exports, module) {
                         $('#materialId').val('');
                         $('#material').val('');
                     }
-                    var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");
-                    zTree.setting.async.otherParam = {
-                        'gradeId': $('#gradeId').val(),
-                        'materialId': $('#materialId').val(),
-                        'subjectId': $('#subjectId').val(),
-                        'term': $('#term').val()
-                    };
-                    zTree.reAsyncChildNodes(null, "refresh");
                 });
             });
         });
         $('#subjectId').on('change', function(){
-                $.get($('#course-create-form').data('url'), {subjectId:$('#subjectId').val(), gradeId:$('#gradeId').val()}, function(result){
-                    if('id' in result) {
-                        $('#materialId').val(result.id);
-                        $('#material').val(result.name);
-                    } else {
-                        $('#materialId').val('');
-                        $('#material').val('');
-                    }
-                    var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");
-                    zTree.setting.async.otherParam = {
-                        'gradeId': $('#gradeId').val(),
-                        'materialId': $('#materialId').val(),
-                        'subjectId': $('#subjectId').val(),
-                        'term': $('#term').val()
-                    };
-                    zTree.reAsyncChildNodes(null, "refresh");
-                });
+            $.get($('#course-create-form').data('url'), {subjectId:$('#subjectId').val(), gradeId:$('#gradeId').val()}, function(result){
+                if('id' in result) {
+                    $('#materialId').val(result.id);
+                    $('#material').val(result.name);
+                } else {
+                    $('#materialId').val('');
+                    $('#material').val('');
+                }
             });
         });
 
