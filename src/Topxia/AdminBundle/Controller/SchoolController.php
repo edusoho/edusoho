@@ -103,49 +103,45 @@ class SchoolController extends BaseController
         return $this->redirect($this->generateUrl('admin_knowledge'));
     }
 
-    public function eduMaterialSettingAction(Request $request)
+    public function eduMaterialSettingAction(Request $request,$schoolType)
     {
         $school = $this->getSettingService()->get('school', array());
 
-        $eduMaterials=$this->getEduMaterialService()->findAllEduMaterials();
-        $gradeMaterials=ArrayToolkit::group($eduMaterials,'gradeId');
         if(array_key_exists('primarySchool', $school) && ($schoolType=='primarySchool' || $schoolType=='all')){
             $grades=DataDict::dict('primarySchool');
             if($school['primaryYear']==5){
                 unset($grades[6]);
             }
-            $subjectIds=ArrayToolkit::column($gradeMaterials[1],'subjectId');
+            $subjects=$this->getCategoryService()->findSubjectCategoriesByGradeId(1);
             $schoolType='primarySchool';
         }
 
         if(array_key_exists('middleSchool', $school) && ($schoolType=='middleSchool' || $schoolType=='all')){
             $grades=DataDict::dict('middleSchool');
-            $subjectIds=ArrayToolkit::column($gradeMaterials[7],'subjectId');
+            $subjects=$this->getCategoryService()->findSubjectCategoriesByGradeId(7);
             $schoolType='middleSchool';
         }
 
         if(array_key_exists('highSchool', $school) && ($schoolType=='highSchool' || $schoolType=='all')){
             $grades=DataDict::dict('highSchool');
-            $subjectIds=ArrayToolkit::column($gradeMaterials[10],'subjectId');
+            $subjects=$this->getCategoryService()->findSubjectCategoriesByGradeId(10);
             $schoolType='highSchool';
         }
-
-        $subjects=$this->getCategoryService()->findCategoriesByIds($subjectIds);
+        $materials=$this->getCategoryService()->findCategoriesByParentIds(ArrayToolkit::column($subjects,'id'));
+        $materials=ArrayToolkit::group($materials,'parentId');
         
-        $subjectMaterials=ArrayToolkit::group($eduMaterials,'subjectId');
-        $materials=$this->getCategoryService()->findCategoriesByGroupCode('material');
-
-        
-        foreach ($subjectMaterials as $key => $eduMaterialList) {
-            $subjectMaterials[$key]=ArrayToolkit::index($eduMaterialList,'gradeId');
+        $eduMaterials=ArrayToolkit::group($this->getEduMaterialService()->findAllEduMaterials(),'subjectId');
+        foreach ($eduMaterials as $key => $eduMaterialList) {
+            $eduMaterials[$key]=ArrayToolkit::index($eduMaterialList,'gradeId');
         }
+
         return $this->render('TopxiaAdminBundle:School:eduMaterial-setting.html.twig', array(
             'school'=>$school,
             'schoolType'=>$schoolType,
             'grades'=>$grades,
             'subjects'=>$subjects,
             'materials'=>$materials,
-            'eduMaterials'=>$subjectMaterials
+            'eduMaterials'=>$eduMaterials
         ));
     }
 
@@ -167,11 +163,12 @@ class SchoolController extends BaseController
                 $beforeCode='es_gz';
                 $gradeIds=array(10,11,12);
             }
+            // $school=$this->getCategoryService()->getCategoryByCode('es_xx');
             $group=$this->getCategoryService()->getGroupByCode('subject_material');
 
             $subject['name']=$fields['name'];
             $subject['code']=$beforeCode.$fields['code'];
-            $subject['weight']=$fields['weight'];
+            $subject['weight']=0;
             $subject['groupId']=$group['id'];
             $subject['parentId']=0;
             $subject=$this->getCategoryService()->createCategory($subject);

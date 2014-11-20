@@ -66,6 +66,18 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
         return $this->getConnection()->fetchAll($sql, array($parentId)) ? : array();
     }
 
+    public function findCategoriesByParentIds(array $parentIds)
+    {
+        if(empty($parentIds)){ return array(); }
+        $marks = str_repeat('?,', count($parentIds) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE parentId IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $parentIds) ? : array();
+    }
+
+
+
+
+
     public function findCategoriesByGroupIdAndParentId($groupId, $parentId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE groupId = ? AND parentId = ? ORDER BY weight ASC";

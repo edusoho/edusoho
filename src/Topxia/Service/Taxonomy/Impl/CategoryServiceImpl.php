@@ -30,16 +30,16 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             return array();
         }
         if($gradeId>0 && $gradeId<7){
-            $schoolType='primarySchool';
+            $schoolType='es_xx';
         }else if($gradeId>6 && $gradeId<10){
-            $schoolType='middleSchool';
+            $schoolType='es_cz';
         }else if($gradeId>9 && $gradeId<13){
-            $schoolType='highSchool';
+            $schoolType='es_gz';
         }else{
             throw $this->createServiceException("年级参数错误");
         }
         $school=$this->getCategoryByCode($schoolType);
-        $group=$this->getGroup('subject_material');
+        $group=$this->getGroupByCode('subject_material');
         return $this->getCategoryDao()->findCategoriesByGroupIdAndParentId($group['id'],$school['id']);
     }
 
@@ -96,11 +96,16 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getCategoryDao()->findCategoriesByGroupId($group['id']);
     }
 
-        public function findAllCategoriesByParentId($parentId)
+    public function findAllCategoriesByParentId($parentId)
     {   
         return $this->getCategoryDao()->findAllCategoriesByParentId($parentId);
     }
 
+    public function findCategoriesByParentIds(array $parentIds)
+    {
+        return $this->getCategoryDao()->findCategoriesByParentIds($parentIds);
+    }
+    
     public function findGroupRootCategories($groupCode)
     {
         $group = $this->getGroupByCode($groupCode);
