@@ -318,3 +318,9 @@ input.LargeInput {width: 600px;}
 .courseware-thumb-btn{
   margin-top:15px;
 }
+
+.item-courseware{
+  width: 200px; 
+  height: 210px; 
+  padding: 8px;
+}
