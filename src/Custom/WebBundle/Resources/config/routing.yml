@@ -17,3 +17,8 @@ course_order_pay_return:
 course_order_pay_notify:
     pattern:  /course/order/pay/{name}/notify
     defaults: { _controller: CustomWebBundle:CourseOrder1:payNotify }
+
+course_order_repay:
+    pattern:  /course/order/repay
+    defaults: { _controller: CustomWebBundle:CourseOrder1:repay }
+    methods: [POST]
