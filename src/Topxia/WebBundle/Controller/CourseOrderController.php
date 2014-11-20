@@ -7,6 +7,7 @@ use Topxia\Common\StringToolkit;
 use Topxia\Component\Payment\Payment;
 use Topxia\WebBundle\Util\AvatarAlert;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\SecurityContext;
 
 class CourseOrderController extends OrderController
 {
@@ -48,8 +49,6 @@ class CourseOrderController extends OrderController
         $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         
-
-
         $course = $this->getCourseService()->getCourse($id);
        
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
@@ -139,6 +138,11 @@ class CourseOrderController extends OrderController
     public function payAction(Request $request)
     {
         $formData = $request->request->all();
+
+        if($formData['payTypeChoices'] == "chargeCoin"){
+           $formData['payment'] = 'coin';
+        }
+
         $user = $this->getCurrentUser();
         if (empty($user)) {
             return $this->createMessageResponse('error', '用户未登录，创建课程订单失败。');
@@ -163,6 +167,14 @@ class CourseOrderController extends OrderController
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         $order = $this->getCourseOrderService()->createOrder($formData);
+
+        if($order['payment'] == 'coin') {
+            //直接扣余额
+            //加入课程
+            //修改订单状态
+            
+        }
+
 
         if ($order['status'] == 'paid') {
             return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));

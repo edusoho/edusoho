@@ -60,10 +60,10 @@
           <div class="col-md-9 controls">
             {% for payment, options in payments %}
 
-        <input type="radio" name="payTypeChoices" id="vipCourses" 
-         value="vipCourses"  role="payTypeChoices" data-url="{{path('search')}}"
-          {% if payTypeChoices == 'vipCourses' %} checked{% endif %} > 使用虚拟币购买
-<div class="form-group" id="bannerUrl1" name="bannerUrl1" {% if payTypeChoices != 'vipCourses' %}style="display:none"{% endif %} >
+        <input type="radio" name="payTypeChoices" id="chargeCoin" 
+         value="chargeCoin"  role="payTypeChoices" {% if payTypeChoices == 'chargeCoin' %} checked{% endif %} > 使用虚拟币购买
+
+        <div class="form-group" id="bannerUrl1" name="bannerUrl1" {% if payTypeChoices != 'chargeCoin' %}style="display:none"{% endif %} >
       <div class="col-md-3 control-label">购买金额：</div>
       <div class="col-md-9 controls">
         <span class="control-text"><strong class="money">{{ course.coinPrice }}</strong></span>
@@ -73,18 +73,22 @@
         <span class="control-text"><strong class="money">{{account.cash|default(0)}}</strong>
           <span class="text-muted">元</span>
         </span>
+        {% if account.cash <  course.coinPrice %}
+            {% if setting('coin.coin_enabled') %}
+            {% if setting('coin.charge_coin_enabled') %}
+            <a href="{{path('my_coin_buy')}}" class="mll" style="color: #428bca;">充值</a>
+            {% endif %}
+            {% endif %}
+        {% endif %}
       </div>
     </div>
 
-      <input type="radio" name="payTypeChoices" id="liveCourses" 
-         value="liveCourses" data-url="{{path('search')}}" {% if payTypeChoices == 'liveCourses' %} checked{% endif %} >
-         仅显示直播课程
+    <input type="radio"  name="payTypeChoices" id="zhiFuBao" 
+   value="zhiFuBao"  {% if not payTypeChoices %}checked="checked"{% endif %}/>            	<img src="{{ asset('assets/img/order/alipay.gif') }}" />
 
-            	<input type="radio" checked="checked" />
-            	<img src="{{ asset('assets/img/order/alipay.gif') }}" />
-            {% endfor %}
-          </div>
-        </div>
+      {% endfor %}
+    </div>
+  </div>
 
         {% if payments.alipay.type|default(null) == 'dualfun' %}
         <div class="row">
@@ -267,6 +271,13 @@
         <span class="text-muted">预览模式无法支付</span>
         <button class="btn btn-primary" disabled="disabled">去支付</button> 
       {% else %}
+
+ {% if payTypeChoices == 'chargeCoin' %}
+    <form id="login-form" class="form-vertical" method="post" action="{{ path('login_check') }}">
+
+      </form>
+ {% endif %} 
+
         <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="正在创建订单..." data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
       {% endif %}
     {% endif %}

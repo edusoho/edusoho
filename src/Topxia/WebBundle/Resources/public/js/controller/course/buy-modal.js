@@ -2,7 +2,8 @@ define(function(require, exports, module) {
 
 	var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-
+    require("jquery.bootstrap-datetimepicker");
+    
     var $modal = $('#course-buy-form').parents('.modal');
 
     exports.run = function() {
@@ -115,7 +116,7 @@ define(function(require, exports, module) {
         });
 
         $("input[role='payTypeChoices']").on('click', function(){
-            if($(this).val()=="vipCourses") {
+            if($(this).val()=="chargeCoin") {
                 $("#bannerUrl1").show();
             }else{
                 $("#bannerUrl1").hide();
