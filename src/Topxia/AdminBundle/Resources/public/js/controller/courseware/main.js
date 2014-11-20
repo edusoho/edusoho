@@ -57,6 +57,9 @@ define(function(require, exports, module) {
                 Notify.danger('删除失败！');
             });
 		});
-	};
 
+        $('.update-courseware-btn,.preview-courseware-btn,.delete-courseware-btn').on('hover',function(){
+            $("#example").tooltip();
+        });
+	};
 });
