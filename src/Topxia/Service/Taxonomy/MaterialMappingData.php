@@ -28,7 +28,7 @@ return array(
     'es_gz_wl' => 'es_gz_wl_rjb',
     'es_gz_hx' => 'es_gz_hx_rjb',
     'es_gz_sw' => 'es_gz_sw_rjb',
-    'es_gz_ls' => 'es_gz_rjxkbb',
+    'es_gz_ls' => 'es_gz_ls_rjxkbb',
     'es_gz_dl' => 'es_gz_dl_rjb',
     'es_gz_zz' => 'es_gz_zz_rjb'
 );

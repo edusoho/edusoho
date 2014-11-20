@@ -643,10 +643,7 @@ EOD;
 		$grades=DataDict::dict('gradeName');
 		$mappingData = include(__DIR__ . '/MaterialMappingData.php');
 
-		$eduMaterials=$this->getEduMaterialService()->findAllEduMaterials();
-		foreach ($eduMaterials as $eduMaterial) {
-			$this->getEduMaterialService()->deleteEduMaterial($eduMaterial['id']);
-		}
+		$this->getEduMaterialService()->deleteAllEduMaterials();
 		foreach ($mappingData as $subjectCode => $materialCode) {
 			foreach ($grades as $gradeId=>$grade) {
 				$eduMaterial['gradeId']=$gradeId;
