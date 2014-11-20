@@ -115,13 +115,13 @@ define(function(require, exports, module) {
             }
         });
 
-        $("input[role='payTypeChoices']").on('click', function(){
-            if($(this).val()=="chargeCoin") {
-                $("#bannerUrl1").show();
-            }else{
-                $("#bannerUrl1").hide();
-            }
-        })
+        // $("input[role='payTypeChoices']").on('click', function(){
+        //     if($(this).val()=="chargeCoin") {
+        //         $("#bannerUrl1").show();
+        //     }else{
+        //         $("#bannerUrl1").hide();
+        //     }
+        // })
 
         $('.btn-use-coupon').on('click', function(){
 

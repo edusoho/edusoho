@@ -59,21 +59,27 @@
           <div class="col-md-3 control-label">选择支付方式</div>
           <div class="col-md-9 controls">
             {% for payment, options in payments %}
-            
-            {% if ChargeCoin %}
-            {% if setting('coin.coin_enabled') %}
+              
+          <input type="radio"  name="payTypeChoices" id="zhiFuBao" value="zhiFuBao"  {% if not payTypeChoices %}checked="checked"{% endif %}/>              
+   
+        <img src="{{ asset('assets/img/order/alipay.gif') }}" /></br></br>
+
+        {% if ChargeCoin %}
+        {% if setting('coin.coin_enabled') %}
         <input type="radio" name="payTypeChoices" id="chargeCoin" 
          value="chargeCoin"  role="payTypeChoices" {% if payTypeChoices == 'chargeCoin' %} checked{% endif %} > 使用虚拟币购买
 
-        <div class="form-group" id="bannerUrl1" name="bannerUrl1" {% if payTypeChoices != 'chargeCoin' %}style="display:none"{% endif %} >
+      <div class="form-group" id="chargeCoin" name="chargeCoin"  >
       <div class="col-md-3 control-label">购买金额：</div>
       <div class="col-md-9 controls">
-        <span class="control-text"><strong class="money">{{ course.coinPrice }}</strong></span>
+        <span class="control-text"><strong class="money">{{ course.coinPrice }}</strong>
+          <span class="text-muted">{{setting('coin.coin_name')}}</span>
+        </span>
       </div>
       <div class="col-md-3 control-label">账户余额：</div>
       <div class="col-md-9 controls money-text"> 
         <span class="control-text"><strong class="money">{{account.cash|default(0)}}</strong>
-          <span class="text-muted">元</span>
+          <span class="text-muted">{{setting('coin.coin_name')}}</span>
         </span>
         {% if account.cash <  course.coinPrice %}
             {% if setting('coin.coin_enabled') %}
@@ -86,10 +92,6 @@
     </div>
   {% endif %}  
   {% endif %}  
-
-
-    <input type="radio"  name="payTypeChoices" id="zhiFuBao" 
-   value="zhiFuBao"  {% if not payTypeChoices %}checked="checked"{% endif %}/>            	<img src="{{ asset('assets/img/order/alipay.gif') }}" />
 
       {% endfor %}
     </div>
