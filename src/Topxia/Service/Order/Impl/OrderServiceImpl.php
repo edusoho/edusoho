@@ -110,7 +110,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         if ($success) {
             $this->getDispatcher()->dispatch('order.service.paid', new ServiceEvent($order));
         }
-        echo $success;print_r($order);
+        
         return array($success, $order);
     }
 
