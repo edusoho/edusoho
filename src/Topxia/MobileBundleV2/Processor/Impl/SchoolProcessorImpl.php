@@ -225,21 +225,31 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $mobile = $this->getSettingService()->get('mobile', array());
         $baseUrl = $this->request->getSchemeAndHttpHost();
         $keys = array_keys($mobile);
-        for ($i=0; $i < count($keys); $i++) {
-            $result = stripos($keys[$i], 'banner');
-            if (is_numeric($result)) {
-                $bannerClick = $mobile[$keys[$i]];
-                $i = $i +1;
-                $bannerParams = $mobile[$keys[$i]];
-                $i = $i +1;
-                $bannerUrl = $mobile[$keys[$i]];
-                if (!empty($bannerUrl)) {   
+        for ($i=1; $i < 6; $i++) {
+            $banner = $keys["banner" . $i];
+            if (!empty($banner)) { 
+                    $bannerClick = $keys["bannerClick" . $i];
+                    $bannerParams = null;
+                    $action = "none";
+                    switch ($bannerClick) {
+                        case 0:
+                            $action = "none";
+                            $bannerParams = null;
+                            break;
+                        case 1:
+                            $action = "webview";
+                            $bannerParams = $keys["bannerUrl" . $i];
+                            break;
+                        case 2:
+                            $action = "course";
+                            $bannerParams = $keys["bannerJumpToCourseId" . $i];
+                            break;
+                    }
                     $banner[] = array(
-                        "url"=>$baseUrl . '/' . $bannerUrl,
+                        "url"=>$baseUrl . '/' . $banner,
                         "action"=>$bannerClick == 0 ? "none" : "webview",
                         "params"=>$bannerParams
                     );
-                }
             }
         }
         return $banner;
