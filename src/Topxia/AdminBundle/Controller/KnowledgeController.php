@@ -10,7 +10,9 @@ class KnowledgeController extends BaseController
 {
 	public function listAction(Request $request)
 	{
+		//$subjec = $this->getCategoryService()->
  	    return $this->render('TopxiaAdminBundle:Knowledge:list.html.twig', array(
+ 	    	'subjec' => $subjec,
 		));
 	}
 

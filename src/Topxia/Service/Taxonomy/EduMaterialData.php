@@ -49,7 +49,7 @@ return array(
             'es_xx_yy_yyb' => '外研版（三年级起点）',
             'es_xx_yy_kpb' => '科普版（一年级起点）',
             'es_xx_yy_qtb' => '其他版本',
-            'es_xx_yy_rjb' => '人教版（新起点）',
+            'es_xx_yy_rjbxqd' => '人教版（新起点）',
             'es_xx_yy_rjbPEP' => '人教版（PEP）',
             'es_xx_yy_xsjb' => '新世纪版',
             'es_xx_yy_gdb' => '广东版(开心版)',
@@ -101,14 +101,14 @@ return array(
             'es_xx_yl_xjb' => '湘教版'
         ),
         'es_xx_ms' => array(
-            'es_xx_ms_rjbms' => '人教版美术',
+            'es_xx_ms_rjb' => '人教版',
             'es_xx_ms_xjb' => '湘美版',
-            'es_xx_ms_rmbms' => '人美版美术',
+            'es_xx_ms_rmb' => '人美版',
             'es_xx_ms_xxmszmb' => '小学美术浙美版',
             'es_xx_ms_qtbb' => '其他版本'
         ),
         'es_xx_ty' => array(
-            'es_xx_ty_rjbty' => '人教版体育'
+            'es_xx_ty_rjb' => '人教版'
         )
     ),
     'middleSchool' => array(
