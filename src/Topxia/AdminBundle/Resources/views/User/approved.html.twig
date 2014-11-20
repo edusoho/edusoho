@@ -34,7 +34,17 @@
         <td>{{user.email}}</td>
         <td>{{user.approvalTime | date('Y-m-d H:i')}}</td>
         <td>
-         <a data-url="{{ path('admin_approval_cancel', {id:user.id}) }}" class="btn btn-default btn-sm cancel-approval">撤销</a>
+            <div class="btn-group">
+              <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_info_view', {id:user.id}) }}" class="btn btn-default btn-sm">查看</a>
+
+              <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+              </a>
+              
+              <ul class="dropdown-menu">
+                <li><a data-url="{{ path('admin_approval_cancel', {id:user.id}) }}" class ="btn cancel-approval">撤销</a></li>
+              </ul>
+            </div>
         </td>
     </tr>
   {% endfor %}

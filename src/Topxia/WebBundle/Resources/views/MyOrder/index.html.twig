@@ -11,6 +11,7 @@
       <th>成交时间</th>
       <th>价格</th>
       <th>状态</th>
+      <th>操作</th>
     </thead>
     <tbody>
       {% for order in orders %}
@@ -31,12 +32,18 @@
           <td>{{ order.amount }}元</td>
           <td>
             {{ dict_text('orderStatus:html', order.status) }}
-            <div class="actions">
+          </td>
+          <td>
+             <div class="actions">
               {% if order.status == 'refunding' %}
                 <a href="javascript:;" class="text-sm cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">取消退款</a>
               {% endif %}
               {% if order.status == 'created' %}
-                <a href="javascript:;" class="text-sm cancel" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消</a>
+
+               <a href="javascript:;" class="text-sm pay"  style="display:block" data-url="{{ path('course_order_repay') }}" data-order-id="{{order.id}}">去支付</a>
+
+                <a href="javascript:;" class="text-sm cancel" style="display:block" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消订单</a>
+
               {% endif %}
             </div>
           </td>

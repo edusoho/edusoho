@@ -306,7 +306,6 @@ class CourseManageController extends BaseController
         		'isVisible' => $member['isVisible'] ? true : false,
     		);
         }
-        
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
             'course' => $course,
             'teachers' => $teachers

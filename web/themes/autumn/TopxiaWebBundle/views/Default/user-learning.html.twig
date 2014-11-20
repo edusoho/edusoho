@@ -10,7 +10,7 @@
     </a>
     <p>《{{ course.title }}》</p>
     {% set teacher = teachers|first %}
-    <p class="teacher-name">教师：{{ teacher.nickname }}</p>
+    <p class="teacher-name">教师：{{ teacher.nickname|default("") }}</p>
     <div class="progress-block clearfix">
       <div class="progress" style="width:90%">
         <span class="progress-bar" style="width: {{ progress.percent }};"></span>

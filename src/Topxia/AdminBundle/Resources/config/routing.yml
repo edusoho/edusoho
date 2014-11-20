@@ -367,6 +367,16 @@ admin_setting_logo_remove:
     defaults: { _controller: TopxiaAdminBundle:Setting:logoRemove }
     methods: [POST]
 
+admin_setting_live_logo_upload:
+    pattern:  /setting/live/logo/upload
+    defaults: { _controller: TopxiaAdminBundle:Setting:liveLogoUpload }
+    methods: [POST]
+
+admin_setting_live_logo_remove:
+    pattern:  /setting/live/logo/remove
+    defaults: { _controller: TopxiaAdminBundle:Setting:liveLogoRemove }
+    methods: [POST]
+
 admin_setting_favicon_upload:
     pattern: /setting/favicon/upload
     defaults: { _controller: TopxiaAdminBundle:Setting:faviconUpload }
@@ -767,6 +777,12 @@ admin_approval_approved:
 admin_approval_approve:
     pattern:  approvals/{id}/approve
     defaults: { _controller: TopxiaAdminBundle:UserApproval:approve }
+
+admin_approval_info_view:
+    pattern:  approvals/{id}/view
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:viewApprovalInfo }
+
+
 
 admin_approval_cancel:
     pattern:  approvals/{id}/cancel
