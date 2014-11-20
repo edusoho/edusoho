@@ -553,6 +553,12 @@ body {
 	font-size: 22px;
 }
 
+.course-cover-heading .coin-price {
+	background:orange;
+	 font-size:15px;
+	 color:white;
+}
+
 .course-cover-heading .money-text {
 	color: #777;
 	font-size: 12px;

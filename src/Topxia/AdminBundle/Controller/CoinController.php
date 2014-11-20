@@ -30,33 +30,6 @@ class CoinController extends BaseController
 
         $coinSettingsPosted['coin_enabled'] = $request->request->get("coin_enabled");
         $coinSettingsPosted['coin_name'] = $request->request->get("coin_name");
-        $coinSettingsPosted['cash_rate'] = $request->request->get("cash_rate");
-        if (!is_numeric($coinSettingsPosted['cash_rate'])){
-          $this->setFlashMessage('danger', '错误，填入的必须为数字！');
-          return $this->settingsRenderedPage($coinSettingsSaved);
-        }
-
-
-        $i=1;
-        foreach ($postedParams as $key => $value) {
-          if($i>3){
-            if (!is_numeric($value)){
-              $this->setFlashMessage('danger', '错误，填入的必须为数字！');
-              return $this->settingsRenderedPage($coinSettingsSaved);
-            }
-            $tmpArray[$i-4]=$value;
-          }
-          $i+=1;
-        }
-       
-        for ($i=0; $i<count($tmpArray)/2 ; $i+=1) { 
-          $oneRangePresent[0] = $tmpArray[2*$i];
-          $oneRangePresent[1] = $tmpArray[2*$i+1];
-          $coinConsumeRangeAndPresent[$i] = $oneRangePresent;
-        }
-   
-        $coinSettingsPosted['coin_consume_range_and_present'] =  $coinConsumeRangeAndPresent;    
-     
         $this->getSettingService()->set('coin', $coinSettingsPosted);
         $this->getLogService()->info('system', 'update_settings', "更新Coin虚拟币设置", $coinSettingsPosted);
         $this->setFlashMessage('success', '虚拟币设置已保存！');      
@@ -155,8 +128,6 @@ class CoinController extends BaseController
     {
       return $this->render('TopxiaAdminBundle:Coin:coin-settings.html.twig',array(
         'coin_settings_posted' => $coinSettings,
-        'range_number' => count($coinSettings['coin_consume_range_and_present']),
-        'coin_consume_range_and_present' => $coinSettings['coin_consume_range_and_present']        
       ));
     }
 

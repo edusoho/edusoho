@@ -37,6 +37,9 @@ class CourseOrderController extends OrderController
         $userInfo = $this->getUserService()->getUserProfile($user['id']);
         $userInfo['approvalStatus'] = $user['approvalStatus'];
         
+        $code = 'ChargeCoin';
+        $ChargeCoin = $this->getAppService()->findInstallApp($code);
+
         $account=$this->getCashService()->getAccountByUserId($user['id'],true);
         
          if(empty($account)){
@@ -95,6 +98,7 @@ class CourseOrderController extends OrderController
             'payTypeChoices'=>$payTypeChoices,
             'account'=>$account,
             'amount'=>$amount,
+            'ChargeCoin'=> $ChargeCoin
         ));
     }
 
@@ -172,7 +176,7 @@ class CourseOrderController extends OrderController
             //直接扣余额
             //加入课程
             //修改订单状态
-            
+
         }
 
 
@@ -398,5 +402,10 @@ class CourseOrderController extends OrderController
     protected function getCashOrdersService()
     {
         return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 }

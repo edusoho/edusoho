@@ -31,103 +31,15 @@
     			<input type="text" id="coin_name" name="coin_name" class="form-control" value="{{coin_settings_posted.coin_name}}">
     		</div>
       </div>
-      <div class="form-group">
-        	 <div class="col-md-3 control-label">
-          	 <label for="cash_rate">现金兑比率</label>
-        	 </div>
-        	 <div class="controls col-md-4">
-          	 <input type="text" id="cash_rate" name="cash_rate" class="form-control" value="{{coin_settings_posted.cash_rate}}">
-          	 <div class="help-block">1元兑换的虚拟币数量</div>
-      	   </div>
-  	 </div>
     </fieldset>
 
-    <fieldset>
-  	 <legend>消费赠送 <span id="range_number" style="display:none">{{range_number}}</span></legend>
-
-      <div class="ranges">
-        {#start of div rages#}
-        {% for i in range(0,range_number-1)%}
-
-          <div class="range">
-            <div class="form-group">
-                <div class="col-md-3 control-label">
-                  <label for="coin_consume_range_min_{{i}}">消费满(元)</label>
-                </div>
-                <div class="controls col-md-2">
-                  <input type="text" id="coin_consume_range_min_{{i}}" name="coin_consume_range_min_{{i+1}}" class="form-control" value="{{coin_consume_range_and_present[i][0]}}">
-                </div>
-                <div class="help-block"></div>
-            </div>
-
-
-            <div class="form-group">
-              <div class="col-md-3 control-label">
-                    <label for="coin_present_{{i+1}}">消费赠送(虚拟币)</label>
-              </div>
-              <div class="controls col-md-2">
-                <input type="text" id="coin_present_{{i+1}}" name="coin_present_{{i+1}}" class="form-control" value="{{coin_consume_range_and_present[i][1]}}">
-                
-              </div>
-
-              {% if i >= 1 %}
-                <div class="controls col-md-offset-1 col-md-2">
-                  <button type="button" class="delete_range btn btn-sm btn-danger">删除此区间</button>
-                </div> 
-              {% endif %}
-              
-              <div class="help-block"></div>
-            </div>
-            <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="80%" color=#987cb9 SIZE=3>
-          </div>
-
-        {% endfor %}
-      {#end of div ranges#}
-      </div>
-
-      <div class="controls col-md-offset-7 col-md-5">
-        <button type="button" class="add_range btn btn-sm btn-warning">增加区间</button>
-      </div>
-    </fieldset>
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
     <div class="row form-group">
-    	<div class="controls col-md-offset-5 col-md-8">
+    	<div class="controls col-md-offset-3 col-md-8">
     		<button type="submit" class="btn btn-primary">提交更新</button>
     	</div>
     </div>
   </form>
-
-  <div name="coin_template" style="display:none;">
-    <div class="range">
-      <div class="form-group">
-          <div class="col-md-3 control-label">
-            <label >消费满(元)</label>
-            <label style="display:none;" for="coin_consume_range_min_NUM">消费满(元)</label>
-            <label style="display:none;" for="coin_consume_range_max_NUM">消费满(元)</label>
-          </div>
-          <div class="controls col-md-2">
-            <input type="text" id="coin_consume_range_min_NUM" name="coin_consume_range_min_NUM" class="form-control" value="">
-          </div>
-          <div class="help-block"></div>
-      </div>
-
-
-      <div class="form-group">
-        <div class="col-md-3 control-label">
-              <label for="coin_present_NUM">消费赠送(虚拟币)</label>
-        </div>
-        <div class="controls col-md-2">
-          <input type="text" id="coin_present_NUM" name="coin_present_NUM" class="form-control" value="">
-        </div>
-        
-        <div class="controls col-md-offset-1 col-md-2">
-          <button type="button" class="delete_rangeNUM btn btn-sm btn-danger">删除此区间</button>
-        </div> 
-        <div class="help-block"></div>
-      </div>
-      <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="80%" color=#987cb9 SIZE=3>
-    </div>
-  </div>
 {% endblock %}

@@ -96,14 +96,10 @@ class LiveCourseController extends BaseController
         }
         $courses = array_filter($courses);
 
-        $code = 'ChargeCoin';
-        $ChargeCoin = $this->getAppService()->findInstallApp($code);
-        
         return $this->render("TopxiaWebBundle:Course:courses-block-{$view}.html.twig", array(
             'courses' => $courses,
             'users' => $users,
             'mode' => $mode,
-            'ChargeCoin'=>$ChargeCoin
         ));
     }
 

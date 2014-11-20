@@ -59,7 +59,9 @@
           <div class="col-md-3 control-label">选择支付方式</div>
           <div class="col-md-9 controls">
             {% for payment, options in payments %}
-
+            
+            {% if ChargeCoin %}
+            {% if setting('coin.coin_enabled') %}
         <input type="radio" name="payTypeChoices" id="chargeCoin" 
          value="chargeCoin"  role="payTypeChoices" {% if payTypeChoices == 'chargeCoin' %} checked{% endif %} > 使用虚拟币购买
 
@@ -82,6 +84,9 @@
         {% endif %}
       </div>
     </div>
+  {% endif %}  
+  {% endif %}  
+
 
     <input type="radio"  name="payTypeChoices" id="zhiFuBao" 
    value="zhiFuBao"  {% if not payTypeChoices %}checked="checked"{% endif %}/>            	<img src="{{ asset('assets/img/order/alipay.gif') }}" />

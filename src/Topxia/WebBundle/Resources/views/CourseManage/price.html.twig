@@ -27,6 +27,7 @@
 				</div>
 				
 				{% if ChargeCoin %}
+				{% if setting('coin.coin_enabled') %}
 				<div class="form-group">
 					<div class="col-md-2 control-label">
 						<label for="coinPrice">虚拟币价格</label>
@@ -36,6 +37,7 @@
 						<div class="help-block" style="display:none;"></div>
 					</div>
 				</div>
+				{% endif %}
 				{% endif %}
 
 				{% if is_feature_enabled('free_limit') %}
