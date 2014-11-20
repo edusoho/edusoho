@@ -22,5 +22,18 @@ class OneclickStep extends AbstractStep
     }
 
     public function forwardAction(ProcessContextInterface $context)
-    {}
+    {
+        $request = $this->getRequest();
+        $form = $this->createForm('wechat_acctsetup_oneclick');
+
+        if ($form->handleRequest($request)->isValid()) {
+
+            return $this->complete();
+        }
+
+        return $this->render(
+            'AcctSetupBundle:Prosess/Step:OneclickStep.html.twig',
+            array('form' => $this->createForm('wechat_acctsetup_oneclick')->createView())
+        );
+    }
 } 

@@ -19,7 +19,7 @@ class OneclickType extends AbstractType
             )
             ->add(
                 'wxpassword',
-                'text',
+                'password',
                 array(
                     'label' => 'form.oneclick.wxpassword',
                 )

@@ -23,7 +23,7 @@ class BaseinfoStep extends AbstractStep
             $data = $form->getData();
             $uniAcct = array(
                 'name' => trim($data['acctname']),
-                'description' => ($data['description']),
+                'description' => $data['description'] ? $data['description'] :'',
                 'groupid' => 0
             );
             $wecaht = $this->getWechatService()->addUniAccount($uniAcct);
