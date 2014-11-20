@@ -27,7 +27,7 @@ class InitCommand extends BaseCommand
 
 		$this->initServiceKernel();
 
-/*		$user = $this->initAdminUser($output);
+		$user = $this->initAdminUser($output);
 
 		$this->initSiteSetting($output);
 		$this->initConsultSetting($output);
@@ -40,13 +40,13 @@ class InitCommand extends BaseCommand
 		$this->initCategory($output);
 		$this->initSubject($output);
 		$this->initMaterial($output);
-		$this->initEduMaterial($output);*/
+		$this->initEduMaterial($output);
 		$this->initKnowledge($output);
-/*		$this->initTag($output);
+		$this->initTag($output);
 		$this->initRefundSetting($output);
 		$this->initThemes($output);
 		$this->initFile($output);
-        $this->initInstallLock($output);*/
+        $this->initInstallLock($output);
 
 		$output->writeln('<info>初始化系统完毕</info>');
 	}
