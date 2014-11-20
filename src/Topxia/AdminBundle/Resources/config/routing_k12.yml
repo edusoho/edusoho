@@ -35,9 +35,13 @@ admin_school_eduMaterial_setting:
     pattern:  /school/{schoolType}/eduMaterial/setting
     defaults: { _controller: TopxiaAdminBundle:School:eduMaterialSetting }
 
-admin_school_eduMaterial_add:
-    pattern:  /school/eduMaterial/add
-    defaults: { _controller: TopxiaAdminBundle:School:eduMaterialAdd }
+admin_school_subject_add:
+    pattern:  /school/subject/add
+    defaults: { _controller: TopxiaAdminBundle:School:subjectAdd }
+
+admin_school_subject_update:
+    pattern:  /school/subject/{subjectId}/update
+    defaults: { _controller: TopxiaAdminBundle:School:subjectUpdate }
 
 admin_school_eduMaterial_update:
     pattern:  /school/eduMaterial/update

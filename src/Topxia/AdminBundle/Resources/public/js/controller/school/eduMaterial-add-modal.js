@@ -5,8 +5,9 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        var $modal = $('#subject-create-form').parents('.modal');
-        
+        var $form = $('#subject-create-form');
+        var $modal = $form.parents('.modal');
+
         var validator = new Validator({
             element: '#subject-create-form',
             autoSubmit: false,
@@ -16,7 +17,6 @@ define(function(require, exports, module) {
                 }
 
                 $('#subject-create-btn').button('submiting').addClass('disabled');
-
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
                     Notify.success('学科添加成功');
@@ -30,8 +30,7 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="name"]',
-            required: true,
-            rule: 'remote'
+            required: true
         });
 
         validator.addItem({
