@@ -10,7 +10,7 @@ return array(
     'es_xx_ms' => 'es_xx_ms_rjb',
     'es_xx_ty' => 'es_xx_ty_rjb',
     'es_cz_yw' => 'es_cz_yw_bsdb',
-    'es_cz_sx' => 'es_cz_yw_bsdb',
+    'es_cz_sx' => 'es_cz_sx_bsdb',
     'es_cz_yy' => 'es_cz_yy_jkb',
     'es_cz_wl' => 'es_cz_wl_xrjb',
     'es_cz_hx' => 'es_cz_hx_xrjb',
