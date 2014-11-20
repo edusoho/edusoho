@@ -226,7 +226,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $baseUrl = $this->request->getSchemeAndHttpHost();
         for ($i=1; $i < 6; $i++) {
             $bannerIndex = $mobile["banner" . $i];
-            if (!empty($banner)) { 
+            if (!empty($bannerIndex)) { 
                     $bannerClick = $mobile["bannerClick" . $i];
                     $bannerParams = null;
                     $action = "none";
