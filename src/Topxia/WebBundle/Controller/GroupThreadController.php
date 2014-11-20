@@ -40,6 +40,7 @@ class GroupThreadController extends BaseController
                 'content'=>$thread['thread']['content'],
                 'groupId'=>$id,
                 'userId'=>$user['id']);
+            
             $thread=$this->getThreadService()->addThread($info);
                 
             return $this->redirect($this->generateUrl('group_thread_show', array(
