@@ -213,19 +213,13 @@ define(function(require, exports, module) {
         });
 
 
-
-
-//=============================================================================
-
         $("input[role='bannerClick1']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl1").show();
-
                 $("#bannerClassName1").show();
                 $("#bannerCourseChooseButton1").show();
             }else{
                 $("#bannerUrl1").hide();
-
                 $("#bannerClassName1").hide();
                 $("#bannerCourseChooseButton1").hide();
             }
@@ -239,12 +233,10 @@ define(function(require, exports, module) {
         $("input[role='bannerClick2']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl2").show();
-
                 $("#bannerClassName2").show();
                 $("#bannerCourseChooseButton2").show();
             }else{
                 $("#bannerUrl2").hide();
-
                 $("#bannerClassName2").hide();
                 $("#bannerCourseChooseButton2").hide();
             }
@@ -258,12 +250,10 @@ define(function(require, exports, module) {
         $("input[role='bannerClick3']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl3").show();
-
                 $("#bannerClassName3").show();
                 $("#bannerCourseChooseButton3").show();
             }else{
                 $("#bannerUrl3").hide();
-
                 $("#bannerClassName3").hide();
                 $("#bannerCourseChooseButton3").hide();
             }
@@ -277,12 +267,10 @@ define(function(require, exports, module) {
         $("input[role='bannerClick4']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl4").show();
-
                 $("#bannerClassName4").show();
                 $("#bannerCourseChooseButton4").show();
             }else{
                 $("#bannerUrl4").hide();
-
                 $("#bannerClassName4").hide();
                 $("#bannerCourseChooseButton4").hide();
             }
@@ -296,12 +284,10 @@ define(function(require, exports, module) {
         $("input[role='bannerClick5']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl5").show();
-
                 $("#bannerClassName5").show();
                 $("#bannerCourseChooseButton5").show();
             }else{
                 $("#bannerUrl5").hide();
-
                 $("#bannerClassName5").hide();
                 $("#bannerCourseChooseButton5").hide();
             }
@@ -310,8 +296,6 @@ define(function(require, exports, module) {
         $("#bannerCourseChooseButton5").click(function(){
             $("#who_is_clicked").html("5");
         });
-//=============================================================================
-
 
 
         $("#mobile-banner1-remove").on('click', function(){
