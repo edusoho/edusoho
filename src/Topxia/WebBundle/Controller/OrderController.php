@@ -49,11 +49,11 @@ class OrderController extends BaseController
         }
 
         list($success, $order) = $this->getOrderService()->payOrder($payData);
-
+        echo $success;die;
         if ($order['status'] == 'paid' and $successCallback) {
             $successUrl = $successCallback($success, $order);
         }
-        echo $successUrl;die;
+
         $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
         return $this->redirect($goto);
     }

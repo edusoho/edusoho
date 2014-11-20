@@ -75,7 +75,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     }
 
     public function payOrder($payData)
-    {
+    {print_r($payData);
         $success = false;
         $order = $this->getOrderDao()->getOrderBySn($payData['sn']);
         if (empty($order)) {
@@ -110,7 +110,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         if ($success) {
             $this->getDispatcher()->dispatch('order.service.paid', new ServiceEvent($order));
         }
-        
+       
         return array($success, $order);
     }
 
