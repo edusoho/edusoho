@@ -83,6 +83,11 @@ class SettingController extends BaseController
             'bannerClick3' => '', // 轮播图3是否触发动作
             'bannerClick4' => '', // 轮播图4是否触发动作
             'bannerClick5' => '', // 轮播图5是否触发动作
+            'bannerJumpToInnerClassId1' => ' ',
+            'bannerJumpToInnerClassId2' => ' ',
+            'bannerJumpToInnerClassId3' => ' ',
+            'bannerJumpToInnerClassId4' => ' ',
+            'bannerJumpToInnerClassId5' => ' ',
             'notice' => '', //公告
             'courseIds' => '' //每周精品课
         );
@@ -105,9 +110,30 @@ class SettingController extends BaseController
                 $sortedCourses[] = $courses[$value];
         }
 
+        $_= ["title"=>""];
+        $bannerCourse1 = ($mobile['bannerJumpToInnerClassId1']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId1']):$_;
+        $bannerCourse2 = ($mobile['bannerJumpToInnerClassId2']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId2']):$_;
+        $bannerCourse3 = ($mobile['bannerJumpToInnerClassId3']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId3']):$_;
+        $bannerCourse4 = ($mobile['bannerJumpToInnerClassId4']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId4']):$_;
+        $bannerCourse5 = ($mobile['bannerJumpToInnerClassId5']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId5']):$_;
+
+        $bannerJumpToInnerClassIds = array();
+        for ($i=1;$i<=5;$i++){
+            if (isset($mobile['bannerJumpToInnerClassId'.$i])&&("" != $mobile['bannerJumpToInnerClassId'.$i])){
+                $bannerJumpToInnerClassIds[] = $mobile['bannerJumpToInnerClassId'.$i];
+            }
+        }
+
+        $bannerJumpToInnerClasses = $this->getCourseService()->findCoursesByIds($bannerJumpToInnerClassIds);
+
         return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
             'mobile'=>$mobile,
-            'courses'=>$sortedCourses
+            'courses'=>$sortedCourses,
+            "bannerCourse1" => $bannerCourse1,
+            "bannerCourse2" => $bannerCourse2,
+            "bannerCourse3" => $bannerCourse3,
+            "bannerCourse4" => $bannerCourse4,
+            "bannerCourse5" => $bannerCourse5,
         ));
     }
 

@@ -216,8 +216,12 @@ define(function(require, exports, module) {
         $("input[role='bannerClick1']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl1").show();
+                $("#bannerClassName1").hide();
+                $("#bannerCourseChooseButton1").hide();
+            }else if($(this).val()==2){
                 $("#bannerClassName1").show();
                 $("#bannerCourseChooseButton1").show();
+                $("#bannerUrl1").hide();
             }else{
                 $("#bannerUrl1").hide();
                 $("#bannerClassName1").hide();
@@ -233,8 +237,12 @@ define(function(require, exports, module) {
         $("input[role='bannerClick2']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl2").show();
+                $("#bannerClassName2").hide();
+                $("#bannerCourseChooseButton2").hide();
+            }else if($(this).val()==2){
                 $("#bannerClassName2").show();
                 $("#bannerCourseChooseButton2").show();
+                $("#bannerUrl2").hide();
             }else{
                 $("#bannerUrl2").hide();
                 $("#bannerClassName2").hide();
@@ -252,6 +260,10 @@ define(function(require, exports, module) {
                 $("#bannerUrl3").show();
                 $("#bannerClassName3").show();
                 $("#bannerCourseChooseButton3").show();
+            }else if($(this).val()==2){
+                $("#bannerClassName3").show();
+                $("#bannerCourseChooseButton3").show();
+                $("#bannerUrl3").show();
             }else{
                 $("#bannerUrl3").hide();
                 $("#bannerClassName3").hide();
@@ -269,6 +281,10 @@ define(function(require, exports, module) {
                 $("#bannerUrl4").show();
                 $("#bannerClassName4").show();
                 $("#bannerCourseChooseButton4").show();
+            }else if($(this).val()==2){
+                $("#bannerClassName4").show();
+                $("#bannerCourseChooseButton4").show();
+                $("#bannerUrl4").show();
             }else{
                 $("#bannerUrl4").hide();
                 $("#bannerClassName4").hide();
@@ -286,6 +302,10 @@ define(function(require, exports, module) {
                 $("#bannerUrl5").show();
                 $("#bannerClassName5").show();
                 $("#bannerCourseChooseButton5").show();
+            }else if($(this).val()==2){
+                $("#bannerClassName5").show();
+                $("#bannerCourseChooseButton5").show();
+                $("#bannerUrl5").show();
             }else{
                 $("#bannerUrl5").hide();
                 $("#bannerClassName5").hide();
