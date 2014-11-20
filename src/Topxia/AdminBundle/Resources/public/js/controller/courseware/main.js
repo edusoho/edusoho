@@ -58,8 +58,16 @@ define(function(require, exports, module) {
             });
 		});
 
-        $('.update-courseware-btn,.preview-courseware-btn,.delete-courseware-btn').on('hover',function(){
+        $('#courseware-item-list').on('hover','.update-courseware-btn,.preview-courseware-btn,.delete-courseware-btn',function(){
             $("#example").tooltip();
+        });
+
+        $('#courseware-thumb-item-list').on('mouseenter','.item-courseware',function(){
+            $(this).find('.courseware-thumb-title').addClass('hide');
+            $(this).find('.courseware-thumb-btn').removeClass('hide');
+        }).on('mouseleave','.item-courseware',function(){
+            $(this).find('.courseware-thumb-title').removeClass('hide');
+            $(this).find('.courseware-thumb-btn').addClass('hide');
         });
 	};
 });
