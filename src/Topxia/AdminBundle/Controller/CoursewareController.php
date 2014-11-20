@@ -52,7 +52,8 @@ class CoursewareController extends BaseController
             'coursewares' => $coursewares,
             'paginator' => $paginator,
             'knowledges' => $knowledges,
-            'coursewaresCount' => $coursewaresCount
+            'coursewaresCount' => $coursewaresCount,
+            'method' => $method
         ));
     }
 
