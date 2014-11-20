@@ -1,6 +1,7 @@
 {% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}我的{{setting('coin.coin_name')}} - {{ parent() }}{% endblock %}
+{# {% block title %}我的{{setting('coin.coin_name')}} - {{ parent() }}{% endblock %} #}
+{% block title %}我的账户 - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-coin' %}
 
@@ -8,7 +9,8 @@
 {# <div class="panel panel-default panel-col"> #}
 <div class="panel panel-default panel-col lesson-manage-panel">
   <div class="panel-heading">
-    我的{{setting('coin.coin_name')}}
+    我的账户
+    {# 我的{{setting('coin.coin_name')}} #}
   </div>
   <div class="panel-heading" style="font-weight:normal;">
 
@@ -27,7 +29,7 @@
     </div>
 
   </div>
-  <div class="panel-heading" style="font-weight:normal;">    网校消费额:<br>
+{#   <div class="panel-heading" style="font-weight:normal;">    网校消费额:<br>
     <div class="row">
         <div class="col-md-offset-2" style="font-weight:400;">
             <strong style="font-size:28px;">{{amount}}</strong>
@@ -36,7 +38,7 @@
         </div>
 
     </div> 
-  </div>
+  </div> #}
   <div class="panel-body">
    <ul class="nav nav-pills" role="tablist">
       <li role="presentation" {% if app.request.query.get('type') != "inflow" and app.request.query.get('type') != "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:''})}}">全部记录</a></li>
