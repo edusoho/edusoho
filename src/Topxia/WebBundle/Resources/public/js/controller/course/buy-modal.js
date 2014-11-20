@@ -123,9 +123,12 @@ define(function(require, exports, module) {
         });
 
         $("input[role='payTypeChoices']").on('click', function(){
+
+            $("#password").prop("type","password");
+            
             if($(this).val()=="chargeCoin") {
-                  $("#screct").show();
-                 if (parseInt($("#leftMoney").html()) <  parseInt($("#neededMoney").html())){
+                $("#screct").show();
+                if (parseInt($("#leftMoney").html()) <  parseInt($("#neededMoney").html())){
                         $("#notify").show();
                         $modal.find('[type=submit]').addClass('disabled');
                  }
