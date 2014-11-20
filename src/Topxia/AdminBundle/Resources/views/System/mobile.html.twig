@@ -35,6 +35,11 @@
   border-radius: 4px;
 }
 
+.banner-course .course-grid {
+  margin: 0 0 0 0;
+  margin-left: 10px;
+}
+
 .course-grid .series-mode-label {
   position: absolute;
   top: 10px;
@@ -151,25 +156,23 @@
 
           <input type="radio" role="bannerClick1" name="bannerClick1" value="2" {% if mobile.bannerClick1 == "2" %}checked="checked"{% endif %}/>跳转到内部课程
 
+          <div class="row">
+            <div class="col-xs-11">
+              <input type="text" id="bannerUrl1" name="bannerUrl1" class="form-control" value="{{mobile.bannerUrl1}}" placeholder="请填写连接地址" {% if mobile.bannerClick1 != "1" %}style="display:none"{% endif %}/>
+            </div>  
+          </div>
 
-              <input type="text" id="bannerJumpToInnerClassId1" name="bannerJumpToInnerClassId1" class="form-control" value="{{mobile.bannerJumpToInnerClassId1}}" placeholder="请填写内部课程Id" style="display:none;"/>
-
-              <div class="row">
-                <div class="col-xs-11">
-                  <input type="text" id="bannerUrl1" name="bannerUrl1" class="form-control" value="{{mobile.bannerUrl1}}" placeholder="请填写连接地址" {% if mobile.bannerClick1 != "1" %}style="display:none"{% endif %}/>
-                </div>  
-              </div>
-
-              <div class="row">
-                <div id="btnBanner1" class="col-md-2">
-                  <div id="bannerCourseChooseButton1" class="btn btn-sm btn-primary " data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick1 != "2" %}style="display:none"{% endif %}>
-                   选课
-                  </div>
-                </div>
-
-                <div id="bannerClassName1" name="bannerClassName1" class="col-md-8 " {% if mobile.bannerClick1 != "2" %}style="display:none"{% endif %}><span class='label label-info'> 课程名:{{  bannerCourse1.title  }}</span></div>
-              </div>
-
+          <div class="row">
+            <a id="bannerCourseChooseButton1" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" {% if mobile.bannerClick1 != "2" %}style="display:none"{% endif %}>
+             选课
+            </a>
+            <div id="bannerClassName1" name="bannerClassName1" class=""{% if mobile.bannerClick1 != "2" %}style="display:none"{% endif %}>
+              <ul class="banner-course" role="bannerCourse1">
+                {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:bannerCourse1} %}
+              </ul>
+            </div>
+            <input type="text" id="bannerJumpToInnerClassId1" name="bannerJumpToInnerClassId1" class="form-control" value="{{mobile.bannerJumpToInnerClassId1}}" placeholder="请填写内部课程Id" style="display:none;"/>
+          </div>
         </div>
 
         
