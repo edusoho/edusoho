@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Topxia\WebBundle\Command\PluginRegisterCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use PHPExcel_IOFactory;
 
 function check_installed()
 {
@@ -170,6 +171,10 @@ function install_step3()
         $init->initStorageSetting();
         $init->initTag();
         $init->initCategory();
+        $this->initSubject();
+        $this->initMaterial();
+        $this->initEduMaterial();
+        $this->initKnowledge();
         $init->initFile();
         $init->initPages();
         $init->initNavigations();
@@ -578,6 +583,130 @@ EOD;
 		));
 	}
 
+	private function initSubject()
+	{
+		$group = $this->getCategoryService()->addGroup(array(
+			'name' => '学科-教材',
+			'code' => 'subject_material',
+			'depth' => 1,
+		));
+
+		$subjectData = include(__DIR__ . '/../../Service/Taxonomy/SubjectData.php');
+		foreach($subjectData as $schoolCode => $subjects) {
+			$schoolName = ($schoolCode == 'es_xx') ? '小学' : ($schoolCode == 'es_cz' ? '初中' : '高中');
+			$parent = $this->getCategoryService()->createCategory(array(
+				'name' => $schoolName,
+				'code' => $schoolCode,
+				'weight' => 0,
+				'groupId' => $group['id'],
+				'parentId' => 0,
+			));
+			foreach ($subjects as $code => $name) {
+				$this->getCategoryService()->createCategory(array(
+					'name' => $name,
+					'code' => $code,
+					'weight' => 0,
+					'groupId' => $group['id'],
+					'parentId' => $parent['id'],
+				));
+			}
+		}
+
+		$output->writeln(' ...<info>成功</info>');
+	}
+
+	private function initMaterial()
+	{
+		$group = $this->getCategoryService()->getGroupByCode('subject_material');
+
+		$EduMaterialData = include(__DIR__ . '/../../Service/Taxonomy/EduMaterialData.php');
+		foreach($EduMaterialData as $EduMaterials) {
+			foreach ($EduMaterials as $code => $materials) {
+				$parentCategory = $this->getCategoryService()->getCategoryByCode($code);
+				foreach ($materials as $mcode => $name) {
+					$this->getCategoryService()->createCategory(array(
+					'name' => $name,
+					'code' => $mcode,
+					'weight' => 0,
+					'groupId' => $group['id'],
+					'parentId' => $parentCategory['id'],
+					));
+				}
+				
+			}
+		}
+
+	}
+
+	private function initEduMaterial()
+	{
+		$grades=DataDict::dict('gradeName');
+		$mappingData = include(__DIR__ . '/../../Service/Taxonomy/MaterialMappingData.php');
+
+		$eduMaterials=$this->getEduMaterialService()->findAllEduMaterials();
+		foreach ($eduMaterials as $eduMaterial) {
+			$this->getEduMaterialService()->deleteEduMaterial($eduMaterial['id']);
+		}
+		foreach ($mappingData as $subjectCode => $materialCode) {
+			foreach ($grades as $gradeId=>$grade) {
+				$eduMaterial['gradeId']=$gradeId;
+				$subject = $this->getCategoryService()->getCategoryByCode($subjectCode);
+				$eduMaterial['subjectId']=$subject['id'];
+				$material = $this->getCategoryService()->getCategoryByCode($materialCode);
+				$eduMaterial['materialId']=$material['id'];
+				$eduMaterial['materialName']=$material['name'];
+				$this->getEduMaterialService()->addEduMaterial($eduMaterial);
+			}
+		}
+		
+	}
+
+	private function initKnowledge()
+    {
+    	$objPHPExcel = PHPExcel_IOFactory::load(__DIR__ . '/../../Service/Taxonomy/knowledge.xlsx');
+    	$workSheets = $objPHPExcel->getAllSheets();
+    	foreach ($workSheets as $key => $workSheet) {
+    		$highestRow = $workSheet->getHighestRow(); 
+    		$subjectCode = trim(($workSheet->getCellByColumnAndRow(0, 1)->getValue()));
+    		$materialCode = trim(($workSheet->getCellByColumnAndRow(1, 1)->getValue()));
+    		$gradeId = trim(($workSheet->getCellByColumnAndRow(2, 1)->getValue()));
+    		$term = trim(($workSheet->getCellByColumnAndRow(3, 1)->getValue()));
+    		$subject = $this->getCategoryService()->getCategoryByCode($subjectCode);
+    		$material = $this->getCategoryService()->getCategoryByCode($materialCode);
+    		$subjectId = $subject['id'];
+    		$materialId = $material['id'];
+    		$knowledge = array(
+    			'subjectId' => $subjectId,
+    			'materialId' => $materialId,
+    			'term' => $term,
+    			'gradeId' => $gradeId,
+    			'weight' => 0
+    		);
+    		$parentId = 0;
+    		for ($row = 2;$row <= $highestRow;$row++) { 
+    			$chapterTitle = trim($workSheet->getCellByColumnAndRow(0, $row)->getValue());
+    			$unitTitle = trim($workSheet->getCellByColumnAndRow(1, $row)->getValue());
+    			if(empty($chapterTitle) && empty($unitTitle)) {
+    				break;
+    			}
+    			if(empty($chapterTitle)) {
+    				$knowledge['name'] = $unitTitle;
+    				$knowledge['parentId'] = $parentId;
+    				$knowledge['code'] = 'es_code_' . time() . $row . $parentId; 
+    				$this->getKnowledgeService()->createKnowledge($knowledge);
+    			} else {
+    				$knowledge['name'] = $chapterTitle;
+    				$knowledge['parentId'] = 0;
+    				$knowledge['code'] = 'es_code_' . time() . $row . 0;
+    				$newKnowledge = $this->getKnowledgeService()->createKnowledge($knowledge);
+    				$parentId = $newKnowledge['id'];
+    			}
+
+    		}
+    	}
+
+    }
+
 	public function initFile()
 	{
 		$this->getFileService()->addFileGroup(array(
@@ -774,6 +903,15 @@ EOD;
         return ServiceKernel::instance()->createService('Content.NavigationService');
     }
 
+	protected function getEduMaterialService()
+    {
+        return ServiceKernel::instance()->createService('Course.EduMaterialService');
+    }
+
+    	private function getKnowledgeService()
+	{
+	    return ServiceKernel::instance()->createService('Taxonomy.KnowledgeService');
+	}
     protected function postRequest($url, $params)
     {
         $userAgent = 'EduSoho Install Client 1.0';

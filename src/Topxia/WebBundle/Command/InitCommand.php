@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Twig\Extension\DataDict;
 use PHPExcel_IOFactory;
-use PHPExcel_Cell;
 
 class InitCommand extends BaseCommand
 {
@@ -423,7 +422,8 @@ EOD;
     				$knowledge['parentId'] = $parentId;
     				$knowledge['code'] = 'es_code_' . time() . $row . $parentId; 
     				$this->getKnowledgeService()->createKnowledge($knowledge);
-    			} else {
+    			} 
+    			if(empty($unitTitle)) {
     				$knowledge['name'] = $chapterTitle;
     				$knowledge['parentId'] = 0;
     				$knowledge['code'] = 'es_code_' . time() . $row . 0;
