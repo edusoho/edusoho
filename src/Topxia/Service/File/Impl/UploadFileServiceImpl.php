@@ -166,8 +166,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         
         $this->getFileImplementorByFile($file)->deleteFile($file, $deleteSubFile);
 
-//         $this->getCourseFileDao()->deleteCourseFileLink($file['createdUserId'], $file['id'], $file['targetId']);
-        
         return $this->getUploadFileDao()->deleteFile($id);
     }
 
