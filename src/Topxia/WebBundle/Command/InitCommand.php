@@ -22,6 +22,7 @@ class InitCommand extends BaseCommand
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$output->writeln('<info>开始初始化系统</info>');
+
 		$this->initServiceKernel();
 
 		$user = $this->initAdminUser($output);
@@ -306,34 +307,31 @@ EOD;
 	{
 		$output->write('  初始化学科');
 		$group = $this->getCategoryService()->addGroup(array(
-			'name' => '学科',
-			'code' => 'subject',
+			'name' => '学科-教材',
+			'code' => 'subject-material',
 			'depth' => 1,
 		));
 
-		$this->getCategoryService()->createCategory(array(
-			'name' => '语文',
-			'code' => 'Chinese',
-			'weight' => 1,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-
-		$this->getCategoryService()->createCategory(array(
-			'name' => '数学',
-			'code' => 'math',
-			'weight' => 2,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-
-		$this->getCategoryService()->createCategory(array(
-			'name' => '英语',
-			'code' => 'english',
-			'weight' => 3,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
+		$subjectData = include(__DIR__ . '/../../Service/Taxonomy/SubjectData.php');
+		foreach($subjectData as $schoolCode => $subjects) {
+			$schoolName = ($schoolCode == 'es_xx') ? '小学' : ($schoolCode == 'es_cz' ? '初中' : '高中');
+			$parent = $this->getCategoryService()->createCategory(array(
+				'name' => $schoolName,
+				'code' => $schoolCode,
+				'weight' => 0,
+				'groupId' => $group['id'],
+				'parentId' => 0,
+			));
+			foreach ($subjects as $code => $name) {
+				$this->getCategoryService()->createCategory(array(
+					'name' => $name,
+					'code' => $code,
+					'weight' => 0,
+					'groupId' => $group['id'],
+					'parentId' => $parent['id'],
+				));
+			}
+		}
 
 		$output->writeln(' ...<info>成功</info>');
 	}
@@ -341,27 +339,24 @@ EOD;
 	private function initMaterial($output)
 	{
 		$output->write('  初始化教材');
-		$group = $this->getCategoryService()->addGroup(array(
-			'name' => '教材',
-			'code' => 'material',
-			'depth' => 1,
-		));
+		$group = $this->getCategoryService()->getGroupByCode('subject-material');
 
-		$this->getCategoryService()->createCategory(array(
-			'name' => '人教版',
-			'code' => 'renjiao',
-			'weight' => 1,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
-
-		$this->getCategoryService()->createCategory(array(
-			'name' => '苏教版',
-			'code' => 'sujiao',
-			'weight' => 2,
-			'groupId' => $group['id'],
-			'parentId' => 0,
-		));
+		$EduMaterialData = include(__DIR__ . '/../../Service/Taxonomy/EduMaterialData.php');
+		foreach($EduMaterialData as $EduMaterials) {
+			foreach ($EduMaterials as $code => $materials) {
+				$parentCategory = $this->getCategoryService()->getCategoryByCode($code);
+				foreach ($materials as $mcode => $name) {
+					$this->getCategoryService()->createCategory(array(
+					'name' => $name,
+					'code' => $mcode,
+					'weight' => 0,
+					'groupId' => $group['id'],
+					'parentId' => $parentCategory['id'],
+					));
+				}
+				
+			}
+		}
 
 		$output->writeln(' ...<info>成功</info>');
 	}
@@ -370,22 +365,24 @@ EOD;
 	{
 		$output->write('  初始化教材课本');
 		$grades=DataDict::dict('gradeName');
-		$subjects=$this->getCategoryService()->findCategoriesByGroupCode('subject');
-		$material=$this->getCategoryService()->getCategoryByCode('renjiao');
-		
+		$mappingData = include(__DIR__ . '/../../Service/Taxonomy/MaterialMappingData.php');
+
 		$eduMaterials=$this->getEduMaterialService()->findAllEduMaterials();
 		foreach ($eduMaterials as $eduMaterial) {
 			$this->getEduMaterialService()->deleteEduMaterial($eduMaterial['id']);
 		}
-		foreach ($grades as $gradeId=>$grade) {
-			foreach ($subjects as $subject) {
-				$eduMaterial['gradeId']=$gradeId;
-				$eduMaterial['subjectId']=$subject['id'];
-				$eduMaterial['materialId']=$material['id'];
-				$eduMaterial['materialName']=$material['name'];
-				$this->getEduMaterialService()->addEduMaterial($eduMaterial);
+		foreach ($mappingData as $subjectCode => $materialCode) {
+			foreach ($grades as $gradeId=>$grade) {
+					$eduMaterial['gradeId']=$gradeId;
+					$subject = $this->getCategoryService()->getCategoryByCode($subjectCode);
+					$eduMaterial['subjectId']=$subject['id'];
+					$material = $this->getCategoryService()->getCategoryByCode($materialCode);
+					$eduMaterial['materialId']=$material['id'];
+					$eduMaterial['materialName']=$material['name'];
+					$this->getEduMaterialService()->addEduMaterial($eduMaterial);
 			}
 		}
+		
 		$output->writeln(' ...<info>成功</info>');
 	}
 
