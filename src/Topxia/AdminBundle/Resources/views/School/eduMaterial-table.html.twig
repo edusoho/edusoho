@@ -19,7 +19,8 @@
               <div class="pull-left eduMaterial-name">{{eduMaterial.materialName}}</div>
               <span class="caret"></span>
               <div class="material-list">
-                {% for material in materials %}
+                {% set materialList=materials[subject.id] %}
+                {% for material in materialList %}
                   <span data-url="{{path('admin_school_eduMaterial_update')}}" data-eduMaterialId="{{eduMaterial.id}}" data-materialId="{{material.id}}" class="material-name">{{material.name}}</span>
                 {% endfor %}
               </div>
@@ -29,6 +30,5 @@
       </tr>
     {% endfor %}
     <a href="#modal" data-toggle="modal" data-url="{{path('admin_school_eduMaterial_add',{schoolType:schoolType})}}">+</a>
-    {# <a href="javascript:;" class="addMaterialTd" >+</a> #}
   </table>
 </div>
