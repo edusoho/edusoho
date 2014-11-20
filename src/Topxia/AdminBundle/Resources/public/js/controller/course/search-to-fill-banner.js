@@ -13,15 +13,11 @@ define(function(require, exports, module) {
 		});
 
 		$('[role="course-list"]').find("li[role='course-item']").on('click', function(){
-			var who_is_clicked = $("#who_is_clicked").html();
-			$('input[name="bannerUrl'+who_is_clicked+'"]').val( location.hostname + "/course/" + $(this).data("courseId"));
-			$('input[name="bannerJumpToCourseId'+who_is_clicked+'"]').val($(this).data("courseId"));
-						
-            $("#bannerCourseShow"+who_is_clicked).show();
-            $("#bannerCourseChooseButton"+who_is_clicked).show();
-
+			var element = $('[data-status="active"]').parent();
+			$(element.find('input')[0]).val($(this).data("courseId"));
+			
             var courseItem = $(this).clone();
-            $("[role='bannerCourse"+who_is_clicked+"']").html(courseItem);
+            $("[role='bannerCourse']").html(courseItem);
 
 			$modal.modal('hide');return;
 			

@@ -216,21 +216,19 @@ define(function(require, exports, module) {
         $("input[role='bannerClick1']").on('click', function(){
             if($(this).val()==1) {
                 $("#bannerUrl1").show();
-                $("#bannerCourseShow1").hide();
-                $("#bannerCourseChooseButton1").hide();
+                $("#selectBannerCourse1").hide();
             }else if($(this).val()==2){
-                $("#bannerCourseShow1").show();
-                $("#bannerCourseChooseButton1").show();
+                $("#selectBannerCourse1").show();
                 $("#bannerUrl1").hide();
             }else{
                 $("#bannerUrl1").hide();
-                $("#bannerCourseShow1").hide();
-                $("#bannerCourseChooseButton1").hide();
+                $("#selectBannerCourse1").hide();
             }
         })
 
-        $("#bannerCourseChooseButton1").click(function(){
-            $("#who_is_clicked").html("1");
+        $("[data-role='selectBannerCourse']").find('[data-role="selectCourse"]').click(function(){
+            $('[data-status="active"]').attr("data-status", "none");
+            $(this).attr("data-status","active");
         });
 
 
