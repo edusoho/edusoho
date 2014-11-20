@@ -376,13 +376,13 @@ EOD;
 		}
 		foreach ($mappingData as $subjectCode => $materialCode) {
 			foreach ($grades as $gradeId=>$grade) {
-					$eduMaterial['gradeId']=$gradeId;
-					$subject = $this->getCategoryService()->getCategoryByCode($subjectCode);
-					$eduMaterial['subjectId']=$subject['id'];
-					$material = $this->getCategoryService()->getCategoryByCode($materialCode);
-					$eduMaterial['materialId']=$material['id'];
-					$eduMaterial['materialName']=$material['name'];
-					$this->getEduMaterialService()->addEduMaterial($eduMaterial);
+				$eduMaterial['gradeId']=$gradeId;
+				$subject = $this->getCategoryService()->getCategoryByCode($subjectCode);
+				$eduMaterial['subjectId']=$subject['id'];
+				$material = $this->getCategoryService()->getCategoryByCode($materialCode);
+				$eduMaterial['materialId']=$material['id'];
+				$eduMaterial['materialName']=$material['name'];
+				$this->getEduMaterialService()->addEduMaterial($eduMaterial);
 			}
 		}
 		

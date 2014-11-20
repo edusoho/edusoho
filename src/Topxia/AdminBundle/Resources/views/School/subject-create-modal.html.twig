@@ -2,17 +2,18 @@
 
 {% set modalSize = 'small' %}
 
-{% block title %}创建{% if schoolType=='primarySchool'%}小学{% endif %}{% if schoolType=='middleSchool'%}初中{% endif %}{% if schoolType=='highSchool'%}高中{% endif %}学科{% endblock %}
+{% block title %}{% if subject|default('') %}编辑{% else %}创建{% endif %}{% if schoolType=='primarySchool'%}小学{% endif %}{% if schoolType=='middleSchool'%}初中{% endif %}{% if schoolType=='highSchool'%}高中{% endif %}学科{% endblock %}
 {% block body %}
 
-<form id="subject-create-form" class="form-horizontal" method="post" action="{{ path('admin_school_eduMaterial_add')}}">
+<form id="subject-create-form" class="form-horizontal" method="post" 
+{% if subject|default('') %}action="{{ path('admin_school_subject_update',{schoolType:schoolType,subjectId:subject.id})}}"{% else %}action="{{ path('admin_school_subject_add',{schoolType:schoolType})}}"{% endif %}>
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
       <label for="name">学科名称</label>
     </div>
     <div class="col-md-8 controls">
-      <input type="text" id="name" name="name" class="form-control" {# data-url="{{path('admin_category_checkname')}}" #}>
+      <input type="text" id="name" name="name" class="form-control" value="{{subject.name|default('')}}" {# data-url="{{path('admin_category_checkname')}}" #}>
     </div>
   </div>
 
@@ -21,7 +22,7 @@
       <label for="code">学科code</label>
     </div>
     <div class="col-md-8 controls">
-      <input type="text" id="code" name="code" class="form-control" data-url="{{path('admin_category_checkcode')}}">
+      <input type="text" id="code" name="code" class="form-control" value="{{subject.code|default('')}}" data-url="{{path('admin_category_checkcode',{exclude:subject.code|default('')})}}">
       <div class="help-block">必填，建议使用分类名称的英文单词或缩写作为编码。</div>
     </div>
   </div>

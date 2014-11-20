@@ -80,17 +80,6 @@ class EduMaterialServiceImpl extends BaseService implements EduMaterialService
                         throw $this->createServiceException("学科不能为空，保存教材失败");
                     }
                     break;
-                case 'materialId':
-                    $eduMaterial['materialId'] = (int) $eduMaterial['materialId'];
-                    if (empty($eduMaterial['materialId'])) {
-                        throw $this->createServiceException("教材分类不能为空，保存教材失败");
-                    }
-                    $material=$this->getCategoryService()->getCategory($eduMaterial['materialId']);
-                    if(empty($material)){
-                        throw $this->createServiceException("教材分类(#{$eduMaterial['materialId']})不存在，保存教材失败");
-                    }
-                    $eduMaterial['materialName']=$material['name'];
-                    break;
             }
         }
 

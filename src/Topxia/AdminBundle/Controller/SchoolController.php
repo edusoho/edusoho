@@ -129,12 +129,10 @@ class SchoolController extends BaseController
         }
         $materials=$this->getCategoryService()->findCategoriesByParentIds(ArrayToolkit::column($subjects,'id'));
         $materials=ArrayToolkit::group($materials,'parentId');
-        
         $eduMaterials=ArrayToolkit::group($this->getEduMaterialService()->findAllEduMaterials(),'subjectId');
         foreach ($eduMaterials as $key => $eduMaterialList) {
             $eduMaterials[$key]=ArrayToolkit::index($eduMaterialList,'gradeId');
         }
-
         return $this->render('TopxiaAdminBundle:School:eduMaterial-setting.html.twig', array(
             'school'=>$school,
             'schoolType'=>$schoolType,
@@ -145,10 +143,9 @@ class SchoolController extends BaseController
         ));
     }
 
-    public function eduMaterialAddAction(Request $request)
+    public function subjectAddAction(Request $request)
     {
         $schoolType = $request->query->get('schoolType');
-
         if($request->getMethod() == 'POST'){
             $fields = $request->request->all();
             if($schoolType=='primarySchool'){
@@ -163,21 +160,41 @@ class SchoolController extends BaseController
                 $beforeCode='es_gz';
                 $gradeIds=array(10,11,12);
             }
-            // $school=$this->getCategoryService()->getCategoryByCode('es_xx');
+            $school=$this->getCategoryService()->getCategoryByCode($beforeCode);
             $group=$this->getCategoryService()->getGroupByCode('subject_material');
 
             $subject['name']=$fields['name'];
-            $subject['code']=$beforeCode.$fields['code'];
+            $subject['code']=$beforeCode.'_'.$fields['code'];
             $subject['weight']=0;
             $subject['groupId']=$group['id'];
-            $subject['parentId']=0;
+            $subject['parentId']=$school['id'];
             $subject=$this->getCategoryService()->createCategory($subject);
             foreach ($gradeIds as $gradeId) {
-                
+                $eduMaterial['gradeId']=$gradeId;
+                $eduMaterial['subjectId']=$subject['id'];
+                $eduMaterial['materialId']=0;
+                $eduMaterial['materialName']='';
+                $this->getEduMaterialService()->addEduMaterial($eduMaterial);
             }
+            return $this->createJsonResponse(true);
         }
         return $this->render('TopxiaAdminBundle:School:subject-create-modal.html.twig',array(
             'schoolType'=>$schoolType
+        ));
+    }
+
+    public function subjectUpdateAction(Request $request,$subjectId)
+    {
+        $schoolType = $request->query->get('schoolType');
+        $subject=$this->getCategoryService()->getCategory($subjectId);
+        if($request->getMethod() == 'POST'){
+            $fields = $request->request->all();
+            $subject=$this->getCategoryService()->updateCategory($subjectId,$fields);
+            return $this->createJsonResponse(empty($subject)?false:true);
+        }
+        return $this->render('TopxiaAdminBundle:School:subject-create-modal.html.twig',array(
+            'schoolType'=>$schoolType,
+            'subject'=>$subject
         ));
     }
 

@@ -10,25 +10,38 @@
         </tr>
       {% endif %}
       <tr>
-        <td class="info">{{subject.name}}</td>
+        {% set materialList=materials[subject.id]|default('') %}
+        <td class="info">
+          {{subject.name}}
+          {% if not materialList %}
+            <a href="#modal" data-toggle="modal" data-url="{{path('admin_school_subject_update',{schoolType:schoolType,subjectId:subject.id})}}">
+              <span class="glyphicon glyphicon-pencil"></span>
+            </a>
+          {% endif %}
+        </td>
         {% set eduMaterialList=eduMaterials[subject.id] %}
         {% for key,grade in grades %}
-          {% set eduMaterial=eduMaterialList[key] %}
+          {% set eduMaterial=eduMaterialList[key]|default('') %}
           <td class="materialTd">
-            <div class="material-selector">
-              <div class="pull-left eduMaterial-name">{{eduMaterial.materialName}}</div>
-              <span class="caret"></span>
-              <div class="material-list">
-                {% set materialList=materials[subject.id] %}
-                {% for material in materialList %}
-                  <span data-url="{{path('admin_school_eduMaterial_update')}}" data-eduMaterialId="{{eduMaterial.id}}" data-materialId="{{material.id}}" class="material-name">{{material.name}}</span>
-                {% endfor %}
+            {% if materialList %}
+              <div class="material-selector">
+                <div class="pull-left eduMaterial-name">{{eduMaterial.materialName}}</div>
+                <span class="caret pull-right"></span>
+                <div class="material-list row">
+                  {% for material in materialList %}
+                    <div class="col-md-6">
+                      <span data-url="{{path('admin_school_eduMaterial_update')}}" data-eduMaterialId="{{eduMaterial.id}}" data-materialId="{{material.id}}" class="material-name">{{material.name}}</span>
+                    </div>
+                  {% endfor %}
+                </div>
               </div>
-            </div>
+            {% else %}
+              --
+            {% endif %}
           </td>
         {% endfor %}
       </tr>
     {% endfor %}
-    <a href="#modal" data-toggle="modal" data-url="{{path('admin_school_eduMaterial_add',{schoolType:schoolType})}}">+</a>
+    <a href="#modal" data-toggle="modal" data-url="{{path('admin_school_subject_add',{schoolType:schoolType})}}">+</a>
   </table>
 </div>
