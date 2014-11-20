@@ -3,7 +3,8 @@ define(function(require, exports, module) {
 	var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     require("jquery.bootstrap-datetimepicker");
-    
+    var Notify = require('common/bootstrap-notify');
+
     var $modal = $('#course-buy-form').parents('.modal');
 
     exports.run = function() {
@@ -22,6 +23,12 @@ define(function(require, exports, module) {
             element: '[name="mobile"]',
             required: true,
             rule: 'phone'
+        });
+
+        validator.addItem({
+            element: '[name="password"]',
+            required: true,
+            rule: 'remote'
         });
 
         validator.addItem({
@@ -117,9 +124,15 @@ define(function(require, exports, module) {
 
         $("input[role='payTypeChoices']").on('click', function(){
             if($(this).val()=="chargeCoin") {
+                  $("#screct").show();
                  if (parseInt($("#leftMoney").html()) <  parseInt($("#neededMoney").html())){
+                        $("#notify").show();
                         $modal.find('[type=submit]').addClass('disabled');
                  }
+            }else if($(this).val()=="zhiFuBao"){
+                  $("#screct").hide();
+                  $("#notify").hide();
+                 $modal.find('[type=submit]').removeClass('disabled');
             }
         })
 
