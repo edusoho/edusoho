@@ -28,16 +28,6 @@
     </div>
 
   </div>
-{#   <div class="panel-heading" style="font-weight:normal;">    网校消费额:<br>
-    <div class="row">
-        <div class="col-md-offset-2" style="font-weight:400;">
-            <strong style="font-size:28px;">{{amount}}</strong>
-            元
-            <a href="javascript:;"  class="mll"  data-toggle="modal" data-target="#modal" data-url="{{path('coin_change')}}" style="color: #428bca;">兑换泰课币</a>
-        </div>
-
-    </div> 
-  </div> #}
   <div class="panel-body">
    <ul class="nav nav-pills" role="tablist">
       <li role="presentation" {% if app.request.query.get('type') != "inflow" and app.request.query.get('type') != "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:''})}}">全部记录</a></li>

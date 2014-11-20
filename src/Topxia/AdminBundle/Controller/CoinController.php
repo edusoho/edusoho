@@ -19,7 +19,7 @@ class CoinController extends BaseController
         $coinSettingsSaved = $coinSettingsPosted;
         $default = array(
           'coin_enabled' => 0,
-          'coin_name' => '泰课币',
+          'coin_name' => '虚拟币',
           'cash_rate' => 10,
           'coin_consume_range_and_present' => array(array(0,0))
         );
