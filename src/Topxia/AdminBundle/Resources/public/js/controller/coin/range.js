@@ -9,11 +9,6 @@ define(function(require, exports, module) {
         var validator = new Validator({
             element: '#coin-settings-form'
         });
-        validator.addItem({
-            element: '[name=cash_rate]',
-            required: true,
-            rule: 'integer'
-        });
 
 		$(document).ready(function(){
 			var validator_someone = function(i){

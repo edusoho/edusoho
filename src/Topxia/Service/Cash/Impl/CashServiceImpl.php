@@ -66,7 +66,7 @@ class CashServiceImpl extends BaseService implements CashService
 
             $this->getAccountDao()->waveCashField($account['id'], $coin);
 
-            $this->getNotifiactionService()->notify($userId, 'default', "您已成功充值".$coin.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的泰课币</a> 查看");
+            $this->getNotifiactionService()->notify($userId, 'default', "您已成功充值".$coin.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
            
             $this->getAccountDao()->getConnection()->commit();
 
@@ -87,7 +87,7 @@ class CashServiceImpl extends BaseService implements CashService
         }
         $coinSetting=$this->getSettingService()->get('coin',array());
         $account=$this->getAccountDao()->getAccount($id);
-        $this->getNotifiactionService()->notify($account['userId'], 'default', "您已成功充值".$value.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的泰课币</a> 查看");
+        $this->getNotifiactionService()->notify($account['userId'], 'default', "您已成功充值".$value.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
            
         return $this->getAccountDao()->waveCashField($id, $value);
     }
@@ -107,7 +107,7 @@ class CashServiceImpl extends BaseService implements CashService
         
         $coinSetting=$this->getSettingService()->get('coin',array());
         $account=$this->getAccountDao()->getAccount($id);
-        $this->getNotifiactionService()->notify($account['userId'], 'default', "您被扣除".$value.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的泰课币</a> 查看");
+        $this->getNotifiactionService()->notify($account['userId'], 'default', "您被扣除".$value.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
         
 
         return $this->getAccountDao()->waveDownCashField($id, $value);
@@ -161,7 +161,7 @@ class CashServiceImpl extends BaseService implements CashService
             
             $this->getChangeDao()->waveCashField($change['id'], $amount);
 
-            $this->getNotifiactionService()->notify($userId, 'default', "您已成功兑换".$coinAmount.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的泰课币</a> 查看");
+            $this->getNotifiactionService()->notify($userId, 'default', "您已成功兑换".$coinAmount.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
            
             $this->getAccountDao()->getConnection()->commit();
 
