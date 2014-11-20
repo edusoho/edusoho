@@ -32,7 +32,7 @@ class CourseController extends BaseController
         ));
     }
 
-    public function searchAction(Request $request)
+    private function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request,$twigToRender)
     {
         $key = $request->request->get("key");
         
@@ -50,7 +50,7 @@ class CourseController extends BaseController
   
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
-        return $this->render('TopxiaAdminBundle:Course:search.html.twig', array(
+        return $this->render($twigToRender, array(
             'key' => $key,
             'courses' => $courses,
             'users' => $users,
@@ -59,31 +59,14 @@ class CourseController extends BaseController
         ));
     }
 
+    public function searchAction(Request $request)
+    {
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request,'TopxiaAdminBundle:Course:search.html.twig');
+    }
+
     public function searchToFillBannerAction(Request $request)
     {
-        $key = $request->request->get("key");
-        
-        $conditions = array( "title"=>$key );
-        $conditions['status'] = 'published';
-        $conditions['type'] = 'normal';
-
-        $count = $this->getCourseService()->searchCourseCount($conditions);
-
-        $paginator = new Paginator($this->get('request'), $count, 6);
-
-        $courses = $this->getCourseService()->searchCourses($conditions, null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
-
-        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
-  
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
-
-        return $this->render('TopxiaAdminBundle:Course:search-to-fill-banner.html.twig', array(
-            'key' => $key,
-            'courses' => $courses,
-            'users' => $users,
-            'categories' => $categories,
-            'paginator' => $paginator
-        ));
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request,'TopxiaAdminBundle:Course:search-to-fill-banner.html.twig');
     }
 
     public function deleteAction(Request $request, $id)

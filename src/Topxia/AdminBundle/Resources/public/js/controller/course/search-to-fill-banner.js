@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 		$('[role="course-list"]').find("li[role='course-item']").on('click', function(){
 			var who_is_clicked = $("#who_is_clicked").html();
 			$('input[name="bannerUrl'+who_is_clicked+'"]').val( "http://"+location.hostname + "/course/" + $(this).data("courseId"));
-			$('div[name="bannerClassName'+who_is_clicked+'"]').html("课名:"+$(this).children('div').children('span').html())
+			$('div[name="bannerClassName'+who_is_clicked+'"]').html("<span class='label label-info'> 课程名:"+$(this).children('div').children('span').html()+"</span>");
 		    $("#bannerUrl"+who_is_clicked).show();
             $("#bannerClassName"+who_is_clicked).show();
             $("#bannerCourseChooseButton"+who_is_clicked).show();
