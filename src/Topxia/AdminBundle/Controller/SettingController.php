@@ -83,11 +83,11 @@ class SettingController extends BaseController
             'bannerClick3' => '', // 轮播图3是否触发动作
             'bannerClick4' => '', // 轮播图4是否触发动作
             'bannerClick5' => '', // 轮播图5是否触发动作
-            'bannerJumpToInnerClassId1' => ' ',
-            'bannerJumpToInnerClassId2' => ' ',
-            'bannerJumpToInnerClassId3' => ' ',
-            'bannerJumpToInnerClassId4' => ' ',
-            'bannerJumpToInnerClassId5' => ' ',
+            'bannerJumpToCourseId1' => ' ',
+            'bannerJumpToCourseId2' => ' ',
+            'bannerJumpToCourseId3' => ' ',
+            'bannerJumpToCourseId4' => ' ',
+            'bannerJumpToCourseId5' => ' ',
             'notice' => '', //公告
             'courseIds' => '' //每周精品课
         );
@@ -112,20 +112,12 @@ class SettingController extends BaseController
         }
 
 
-        $bannerCourse1 = ($mobile['bannerJumpToInnerClassId1']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId1']):null;
-        $bannerCourse2 = ($mobile['bannerJumpToInnerClassId2']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId2']):null;
-        $bannerCourse3 = ($mobile['bannerJumpToInnerClassId3']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId3']):null;
-        $bannerCourse4 = ($mobile['bannerJumpToInnerClassId4']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId4']):null;
-        $bannerCourse5 = ($mobile['bannerJumpToInnerClassId5']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToInnerClassId5']):null;
+        $bannerCourse1 = ($mobile['bannerJumpToCourseId1']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']):null;
+        $bannerCourse2 = ($mobile['bannerJumpToCourseId2']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId2']):null;
+        $bannerCourse3 = ($mobile['bannerJumpToCourseId3']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId3']):null;
+        $bannerCourse4 = ($mobile['bannerJumpToCourseId4']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId4']):null;
+        $bannerCourse5 = ($mobile['bannerJumpToCourseId5']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId5']):null;
 
-        $bannerJumpToInnerClassIds = array();
-        for ($i=1;$i<=5;$i++){
-            if (isset($mobile['bannerJumpToInnerClassId'.$i])&&("" != $mobile['bannerJumpToInnerClassId'.$i])){
-                $bannerJumpToInnerClassIds[] = $mobile['bannerJumpToInnerClassId'.$i];
-            }
-        }
-
-        $bannerJumpToInnerClasses = $this->getCourseService()->findCoursesByIds($bannerJumpToInnerClassIds);
 
         return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
             'mobile'=>$mobile,
