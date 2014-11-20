@@ -60,7 +60,6 @@ class EduMaterialServiceImpl extends BaseService implements EduMaterialService
         }
 
         $this->filterEduMaterialFields($fields, $eduMaterial);
-
         return $this->getEduMaterialDao()->updateEduMaterial($id, $fields);
     }
 
@@ -79,6 +78,17 @@ class EduMaterialServiceImpl extends BaseService implements EduMaterialService
                     if (empty($eduMaterial['subjectId'])) {
                         throw $this->createServiceException("学科不能为空，保存教材失败");
                     }
+                    break;
+                case 'materialId':
+                    $eduMaterial['materialId'] = (int) $eduMaterial['materialId'];
+                    if(empty($eduMaterial['materialId'])){
+                        throw $this->createServiceException("教材id不能为空");
+                    }
+                    $material=$this->getCategoryService()->getCategory($eduMaterial['materialId']);
+                    if(empty($material)){
+                        throw $this->createServiceException("教材未找到");
+                    }
+                    $eduMaterial['materialName']=$material['name'];
                     break;
             }
         }
