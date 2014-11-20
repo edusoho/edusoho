@@ -55,6 +55,7 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 		}
 		$fields = $this->_filterCourseFields($fields);
 
+
 		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
 		$fields = CourseSerialize::serialize($fields);
@@ -89,7 +90,11 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 			'freeEndTime' => 0,
 			'deadlineNotify' => 'none',
 			'daysOfNotifyBeforeDeadline' => 0,
-			'complexity'=>''
+			'complexity'=>'',
+			'originalPrice'=>'',
+			'isFree'=>'none',
+			'discount'=>'0.0'
+
 		));
 		
 		if (!empty($fields['about'])) {
@@ -152,7 +157,6 @@ class CourseSerialize
     			$course['teacherIds'] = null;
     		}
     	}
-
         return $course;
     }
 

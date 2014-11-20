@@ -7,3 +7,6 @@ course_manage_base:
 course_manage:
     pattern:  /course/{id}/manage
     defaults: { _controller: CustomWebBundle:CourseManage:index }
+course_manage_price:
+    pattern:  /course/{id}/manage/price
+    defaults: { _controller: CustomWebBundle:CourseManage:price }
