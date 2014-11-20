@@ -47,4 +47,10 @@ class CategoryGroupDaoImpl extends BaseDao implements CategoryGroupDao
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
+
+    public function deleteAllGroups()
+    {
+        $sql="DELETE FROM {$this->table}";
+        return $this->getConnection()->exec($sql);
+    }
 }

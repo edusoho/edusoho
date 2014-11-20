@@ -13,6 +13,8 @@ interface EduMaterialDao
 	public function updateEduMaterial($id,$eduMaterial);
 
 	public function deleteEduMaterial($id);
+	
+	public function deleteAllEduMaterials();
 
     public function findAllEduMaterials();
 

@@ -37,6 +37,11 @@ class EduMaterialServiceImpl extends BaseService implements EduMaterialService
         return $this->getEduMaterialDao()->deleteEduMaterial($id);
     }
 
+    public function deleteAllEduMaterials()
+    {
+        $this->getEduMaterialDao()->deleteAllEduMaterials();
+    }
+
     public function findAllEduMaterials()
     {
         return $this->getEduMaterialDao()->findAllEduMaterials();

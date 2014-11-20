@@ -35,6 +35,12 @@ class EduMaterialDaoImpl extends BaseDao implements EduMaterialDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
     
+    public function deleteAllEduMaterials()
+    {
+        $sql="DELETE FROM {$this->table}";
+        return $this->getConnection()->exec($sql);
+    }
+    
     public function findAllEduMaterials()
     {
         $sql = "SELECT * FROM {$this->table}";

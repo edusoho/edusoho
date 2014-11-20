@@ -273,17 +273,9 @@ EOD;
 	{
 		$output->write('  初始化分类分组');
 
-		$categories = $this->getCategoryService()->findAllCategories();
-		foreach ($categories as $category) {
-			$this->getCategoryService()->deleteCategory($category['id']);
-		}
-
-		$groups = $this->getCategoryService()->findAllGroups();
-		foreach ($groups as $group) {
-			$this->getCategoryService()->deleteCategorysByGroupId($group['id']);
-			$this->getCategoryService()->deleteGroup($group['id']);
-		}
-
+		$this->getCategoryService()->deleteAllCategories();
+		$this->getCategoryService()->deleteAllGroups();
+		
 		$group = $this->getCategoryService()->getGroupByCode('course');
 		if (!$group) {
 			$group = $this->getCategoryService()->addGroup(array(
@@ -292,7 +284,6 @@ EOD;
 				'depth' => 2,
 			));
 		}
-
 		$category = $this->getCategoryService()->getCategoryByCode('default');
 		if (!$category) {
 			$this->getCategoryService()->createCategory(array(
@@ -370,10 +361,8 @@ EOD;
 		$grades=DataDict::dict('gradeName');
 		$mappingData = include(__DIR__ . '/../../Service/Taxonomy/MaterialMappingData.php');
 
-		$eduMaterials=$this->getEduMaterialService()->findAllEduMaterials();
-		foreach ($eduMaterials as $eduMaterial) {
-			$this->getEduMaterialService()->deleteEduMaterial($eduMaterial['id']);
-		}
+		$this->getEduMaterialService()->deleteAllEduMaterials();
+		
 		foreach ($mappingData as $subjectCode => $materialCode) {
 			foreach ($grades as $gradeId=>$grade) {
 				$eduMaterial['gradeId']=$gradeId;

@@ -212,13 +212,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         if (empty($category)) {
             throw $this->createNotFoundException();
         }
-
         $ids = $this->findCategoryChildrenIds($id);
         $ids[] = $id;
         foreach ($ids as $id) {
             $this->getCategoryDao()->deleteCategory($id);
         }
-
         $this->getLogService()->info('category', 'delete', "删除分类{$category['name']}(#{$id})");
     }
 
@@ -231,6 +229,15 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $this->getCategoryDao()->deleteCategorysByGroupId($groupId);
     }
 
+    public function deleteAllCategories()
+    {
+        $this->getCategoryDao()->deleteAllCategories();
+    }
+
+    public function deleteAllGroups()
+    {
+        return $this->getGroupDao()->deleteAllGroups();
+    }
     /**
      * group
      */
