@@ -46,7 +46,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function getMaterialCategoryByGradeIdAndSubjectId($gradeId,$subjectId)
     {
         $eduMaterial=$this->getEduMaterialService()->getEduMaterialByGradeIdAndSubjectId($gradeId,$subjectId);
-        return $this->getCategory($eduMaterial['materialId']);
+        return $this->getCategory($eduMaterial['materialId']) ? : null;
     }
 
     public function getCategory($id)

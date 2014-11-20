@@ -119,7 +119,7 @@ define(function(require, exports, module) {
 
             }
         });
-
+        
         $("input[name='deadlineNotify']").change(function(){
             var element = $(this);
             if(element.val()=='active') {
@@ -129,7 +129,7 @@ define(function(require, exports, module) {
                 $("#courseDaysOfNotifyBeforeDeadline").hide();
                 $("#deadlineNotifyBlock").show();
             }
-        })
+        });
 
     };
 

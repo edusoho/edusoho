@@ -98,7 +98,12 @@ class SchoolController extends BaseController
         ));
     }
 
-    public function eduMaterialSettingAction(Request $request,$schoolType)
+    public function knowledgeSettingAction(Request $request)
+    {
+        return $this->redirect($this->generateUrl('admin_knowledge'));
+    }
+
+    public function eduMaterialSettingAction(Request $request)
     {
         $school = $this->getSettingService()->get('school', array());
 

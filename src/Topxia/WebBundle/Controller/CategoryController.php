@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
+use Symfony\Component\HttpFoundation\Request;
 
 class CategoryController extends BaseController
 {
@@ -14,6 +15,13 @@ class CategoryController extends BaseController
         }
 
         return $this->createJsonResponse($data);
+    }
+
+    public function getMaterialAction(Request $request)
+    {
+        $query = $request->query->all();
+        $material = $this->getCategoryService()->getMaterialCategoryByGradeIdAndSubjectId($query['gradeId'], $query['subjectId']);
+        return $this->createJsonResponse($material);
     }
 
     private function getCategoryService()

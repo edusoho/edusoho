@@ -461,7 +461,7 @@ class CourseController extends BaseController
 
 		return $this->render('TopxiaWebBundle:Course:create.html.twig', array(
 			'userProfile'=>$userProfile,
-			'type'=>$type
+			'type'=>$type,
 		));
 	}
 

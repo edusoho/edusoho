@@ -18,7 +18,19 @@ define(function(require, exports, module) {
             element: '[name="title"]',
             required: true
         });
-        
+
+        $('#course-create-form').on('change', '.event', function(){
+            $.get($('#course-create-form').data('url'), {subjectId:$('#subjectId').val(), gradeId:$('#gradeId').val()}, function(result){
+                if('id' in result) {
+                    $('#materialId').val(result.id);
+                    $('#material').val(result.name);
+                } else {
+                    $('#materialId').val('');
+                    $('#material').val('');
+                }
+            })
+        });
+
     };
 
 });

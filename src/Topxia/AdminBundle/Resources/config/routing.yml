@@ -665,6 +665,45 @@ admin_category_upload:
     defaults: { _controller: TopxiaAdminBundle:Category:uploadFile }
     methods: [POST]
 
+admin_category_manage:
+    pattern: /category/{categoryId}/manage
+    defaults: { _controller: TopxiaAdminBundle:CategoryManage:index }
+
+admin_category_manage_edit:
+    pattern: /category/{categoryId}/manage/edit
+    defaults: { _controller: TopxiaAdminBundle:CategoryManage:edit }
+    methods: [POST]
+
+admin_knowledge:
+    pattern: /manage/knowledge
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:list }
+
+admin_knowledge_edit:
+    pattern: /knowledge/edit
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:edit }
+
+admin_knowledge_create:
+    pattern: /knowledge/create
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:create }
+
+admin_knowledge_delete:
+    pattern: /knowledge/delete
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:delete }
+    methods: [POST]
+
+admin_knowledge_checkcode:
+    pattern:  /knowledge/checkcode
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:checkCode }
+
+admin_knowledge_getNodes:
+    pattern:  /knowledge/getNodes
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:getNodes }
+    methods: [POST]
+
+admin_knowledge_sort:
+    pattern:  /knowledge/sort
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:sort }
+
 admin_file:
     pattern:  /file
     defaults: { _controller: TopxiaAdminBundle:File:index }

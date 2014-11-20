@@ -109,6 +109,13 @@ class CategoryController extends BaseController
         ));
     }
 
+    public function getmaterialAction(Request $request)
+    {
+        $query = $request->query->all();
+        $material = $this->getCategoryService()->getMaterialCategoryByGradeIdAndSubjectId($query['gradeId'], $query['subjectId']);
+        return $this->createJsonResponse($material);
+    }
+
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');

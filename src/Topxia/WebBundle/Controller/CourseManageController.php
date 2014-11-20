@@ -40,8 +40,11 @@ class CourseManageController extends BaseController
         } else {
             $liveCapacity = null;
         }
+
+        $material = $this->getCategoryService()->getCategory($course['materialId']);
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
+            'material' => $material,
             'tags' => ArrayToolkit::column($tags, 'name'),
             'liveCapacity' => empty($liveCapacity['capacity']) ? 0 : $liveCapacity['capacity'],
             'liveProvider' => empty($liveCapacity['code']) ? 0 : $liveCapacity['code'],
