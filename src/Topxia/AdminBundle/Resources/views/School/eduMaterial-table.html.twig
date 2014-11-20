@@ -44,6 +44,12 @@
         {% endfor %}
       </tr>
     {% endfor %}
-    <a href="#modal" data-toggle="modal" data-url="{{path('admin_school_subject_add',{schoolType:schoolType})}}">+</a>
   </table>
+  <div class="row">
+    <div class="col-md-12">
+      <a href="#modal" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-url="{{path('admin_school_subject_add',{schoolType:schoolType})}}">
+        +添加自定义学科
+      </a>
+    </div>
+  </div>
 </div>
