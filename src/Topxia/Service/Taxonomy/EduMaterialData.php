@@ -19,7 +19,7 @@ return array(
             'es_xx_yw_hjb' => '沪教版',
             'es_xx_yw_ywab' => '语文A版',
             'es_xx_yw_ccb' => '教科版',
-            'es_xx_yw_qtbb' => '其他版本',
+            'es_xx_yw_qtbb' => '其他版本'
         ),
         'es_xx_sx' => array(
             'es_xx_sx_rjb' => '人教版',
@@ -33,26 +33,25 @@ return array(
             'es_xx_sx_qdb54z' => '青岛版54制',
             'es_xx_sx_qdb63z' => '青岛版63制',
             'es_xx_sx_zjb' => '浙教版',
-            'es_xx_sx_qtbb' => '其他版本',
+            'es_xx_sx_qtbb' => '其他版本'
         ),
         'es_xx_yy' => array(
             'es_xx_yy_rjb' => '人教版',
             'es_xx_yy_xljb' => '新路径版',
-            'es_xx_yy_wyb' => '外研版（一年级起点）',
-            'es_xx_yy_mjb' => '闽教版（三年级起点）',
+            'es_xx_yy_wyb' => '外研版(一年级起点)',
+            'es_xx_yy_mjb' => '闽教版(三年级起点)',
             'es_xx_yy_njszb' => '牛津深圳版',
             'es_xx_yy_njsjb' => '牛津苏教版',
-            'es_xx_yy_jjb' => '冀教版（三年级起点）',
+            'es_xx_yy_jjb' => '冀教版(三年级起点)',
             'es_xx_yy_xsb' => '湘少版',
             'es_xx_yy_sgb' => '深港版',
             'es_xx_yy_bsdb' => '北师大版',
             'es_xx_yy_jkb' => '教科版',
             'es_xx_yy_kpb' => '科普版',
-            'es_xx_yy_yyb' => '外研版（三年级起点）',
-            'es_xx_yy_kpb' => '科普版（一年级起点）',
-            'es_xx_yy_qtb' => '其他版本',
-            'es_xx_yy_rjbxqd' => '人教版（新起点）',
-            'es_xx_yy_rjbPEP' => '人教版（PEP）',
+            'es_xx_yy_yyb' => '外研版(三年级起点)',
+            'es_xx_yy_kpb' => '科普版(一年级起点)',
+            'es_xx_yy_rjbxqd' => '人教版(新起点)',
+            'es_xx_yy_rjbPEP' => '人教版(PEP)',
             'es_xx_yy_xsjb' => '新世纪版',
             'es_xx_yy_gdb' => '广东版(开心版)',
             'es_xx_yy_jjb' => '冀教版',
@@ -94,7 +93,7 @@ return array(
             'es_xx_sp_gdb' => '广东版',
             'es_xx_sp_ljb' => '鲁教版',
             'es_xx_sp_bsdb' => '北师大版',
-            'es_xx_sp_qtbb' => '其他版本',
+            'es_xx_sp_qtbb' => '其他版本'
         ),
         'es_xx_yl' => array(
             'es_xx_yl_rjb' => '人教版',
@@ -107,40 +106,40 @@ return array(
             'es_xx_ms_rjb' => '人教版',
             'es_xx_ms_xjb' => '湘美版',
             'es_xx_ms_rmb' => '人美版',
-            'es_xx_ms_xxmszmb' => '小学美术浙美版',
+            'es_xx_ms_zmb' => '浙美版',
             'es_xx_ms_qtbb' => '其他版本'
         ),
         'es_xx_ty' => array(
             'es_xx_ty_rjb' => '人教版',
-            'es_xx_ty_qtbb' => '其他版本',
+            'es_xx_ty_qtbb' => '其他版本'
         )
     ),
     'middleSchool' => array(
         'es_cz_yw' => array(
             'es_cz_yw_xrjb' => '新人教版',
+            'es_cz_yw_bsdb' => '北师大版',
             'es_cz_yw_ywb' => '语文版',
             'es_cz_yw_sjb' => '苏教版',
-            'es_cz_yw_bsdb' => '北师大版',
             'es_cz_yw_hbb' => '湖北版',
             'es_cz_yw_hdb' => '河大版',
             'es_cz_yw_ljb' => '鲁教版',
-            'es_cz_yw_hjb54z' => '沪教版（54学制）',
+            'es_cz_yw_hjb54z' => '沪教版(54学制)',
             'es_cz_yw_zjb' => '浙教版',
             'es_cz_yw_bjkgb' => '北京课改版',
-            'es_cz_yw_hjb63z' => '沪教版（63学制）',
+            'es_cz_yw_hjb63z' => '沪教版(63学制)',
             'es_cz_yw_ccb' => '长春版',
             'es_cz_yw_yjb' => '粤教版',
-            'es_cz_yw_qtb' => '其它版本'
+            'es_cz_yw_qtbb' => '其它版本'
         ),
         'es_cz_sx' => array(
             'es_cz_sx_xrjb' => '新人教版',
+            'es_cz_sx_bsdb' => '北师大版',
             'es_cz_sx_bsdb' => '华师大版',
             'es_cz_sx_skb' => '苏科版',
-            'es_cz_sx_bsdb' => '北师大版',
             'es_cz_sx_jjb' => '冀教版',
             'es_cz_sx_zjb' => '浙教版',
-            'es_cz_sx_ljb54z' => '鲁教版（54学制）',
-            'es_cz_sx_hjb54z' => '沪教版（54学制）',
+            'es_cz_sx_ljb54z' => '鲁教版(54学制)',
+            'es_cz_sx_hjb54z' => '沪教版(54学制)',
             'es_cz_sx_bjkgb' => '北京课改版',
             'es_cz_sx_hkb' => '沪科版',
             'es_cz_sx_qdb' => '青岛版',
@@ -149,18 +148,18 @@ return array(
             'es_cz_sx_qtbb' => '其他版本'
         ),
         'es_cz_yy' => array(
+            'es_cz_yy_bsdb' => '北师大版',
+            'es_cz_yy_jjb' => '冀教版',
+            'es_cz_yy_ljb' => '鲁教版',
             'es_cz_yy_rabjb' => '仁爱北京版',
             'es_cz_yy_raxjb' => '仁爱湘教版',
-            'es_cz_yy_xmbb' => '新目标(Go  for it)版',
-            'es_cz_yy_wyb' => '外研（新标准）版',
+            'es_cz_yy_xmbb' => '新目标(Go for it)版',
+            'es_cz_yy_wyb' => '外研(新标准)版',
             'es_cz_yy_njylb' => '牛津译林版',
             'es_cz_yy_njszb' => '牛津深圳版',
             'es_cz_yy_njshb' => '牛津上海版',
             'es_cz_yy_njsyb' => '牛津沈阳版',
             'es_cz_yy_njgzb' => '牛津广州版',
-            'es_cz_yy_jjb' => '冀教版',
-            'es_cz_yy_ljb' => '鲁教版',
-            'es_cz_yy_bsdb' => '北师大版',
             'es_cz_yy_bjkgb' => '北京课改版',
             'es_cz_yy_jkb' => '教科版',
             'es_cz_yy_qtbb' => '其它版本'
@@ -186,8 +185,8 @@ return array(
             'es_cz_hx_xjb' => '湘教版',
             'es_cz_hx_ejb' => '粤教版',
             'es_cz_hx_ljb' => '鲁教版',
-            'es_cz_hx_rjb54z' => '人教版（五四学制）',
-            'es_cz_hx_ljb54z' => '鲁教版（五四学制）',
+            'es_cz_hx_rjb54z' => '人教版(五四学制)',
+            'es_cz_hx_ljb54z' => '鲁教版(五四学制)',
             'es_cz_hx_bjkgb' => '北京课改版',
             'es_cz_hx_qtbb' => '其他版本'
         ),
@@ -212,10 +211,9 @@ return array(
             'es_cz_ls_jjb' => '冀教版',
             'es_cz_ls_zhsjb' => '中华书局版',
             'es_cz_ls_yjhkb' => '粤教沪科版',
-            'es_cz_ls_qtbb' => '其他版本',
-            'es_cz_ls_bzsyb' => '标准实验版（历史与社会）',
-            'es_cz_ls_hjb' => '沪教版（历史与社会）',
-            'es_cz_ls_xjb' => '湘教版（历史与社会）',
+            'es_cz_ls_bzsyb' => '标准实验版(历史与社会)',
+            'es_cz_ls_hjb' => '沪教版(历史与社会)',
+            'es_cz_ls_xjb' => '湘教版(历史与社会)',
             'es_cz_ls_qtbb' => '其他版本'
         ),
         'es_cz_dl' => array(
@@ -230,7 +228,7 @@ return array(
             'es_cz_dl_bsdb' => '北师大版',
             'es_cz_dl_yjb' => '豫教版',
             'es_cz_dl_zjb' => '浙教版',
-            'es_cz_dl_ljb54z' => '鲁教版（五四学制）',
+            'es_cz_dl_ljb54z' => '鲁教版(五四学制)',
             'es_cz_dl_qtbb' => '其它版本'
         ),
         'es_cz_zz' => array(
@@ -278,16 +276,16 @@ return array(
             'es_gz_yw_qtbb' => '其他版本'
         ),
         'es_gz_sx' => array(
+            'es_gz_sx_sjb' => '苏教版',
             'es_gz_sx_xkbab' => '新课标A版',
             'es_gz_sx_xkbbb' => '新课标B版',
-            'es_gz_sx_sjb' => '苏教版',
             'es_gz_sx_bsdb' => '北师大版',
             'es_gz_sx_xjbb' => '湘教版',
             'es_gz_sx_hjb' => '沪教版',
             'es_gz_sx_qtbb' => '其他版本'
         ),
         'es_gz_yy' => array(
-            'es_gz_yy_rjxkbb' => '人教新课标版',
+            'es_gz_yy_rjxkbb' => '新课标人教版',
             'es_gz_yy_bsdb' => '北师大版',
             'es_gz_yy_shxsjb' => '上海新世纪版',
             'es_gz_yy_njshb' => '牛津上海版',
@@ -319,7 +317,7 @@ return array(
             'es_gz_sw_qtbb' => '其他版本'
         ),
         'es_gz_ls' => array(
-            'es_gz_ls_rjxkbb' => '人教新课标版',
+            'es_gz_ls_rjxkbb' => '新课标人教版',
             'es_gz_ls_ylb' => '岳麓版',
             'es_gz_ls_bjsyb' => '标准实验版',
             'es_gz_ls_rmb' => '人民版',
@@ -337,7 +335,7 @@ return array(
         ),
         'es_gz_zz' => array(
             'es_gz_zz_rjb' => '人教版',
-            'es_gz_zz_gzzzhjb' => '高中政治沪教版',
+            'es_gz_zz_hjb' => '沪教版',
             'es_gz_zz_qtbb' => '其他版本'
         )
     )
