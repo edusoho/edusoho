@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <div class="row form-group">
+  {# <div class="row form-group">
     <div class="col-md-3 control-label">
       <label for="code">学科code</label>
     </div>
@@ -25,7 +25,7 @@
       <input type="text" id="code" name="code" class="form-control" value="{{subject.code|default('')}}" data-url="{{path('admin_category_checkcode',{exclude:subject.code|default('')})}}">
       <div class="help-block">必填，建议使用分类名称的英文单词或缩写作为编码。</div>
     </div>
-  </div>
+  </div> #}
 </form>
 {% endblock %}
 
