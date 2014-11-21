@@ -2,7 +2,6 @@
 namespace Fomalhaut\AcctSetupBundle\Process\Step;
 
 use Sylius\Bundle\FlowBundle\Process\Context\ProcessContextInterface;
-use Sylius\Bundle\FlowBundle\Process\Step\ControllerStep;
 
 class BaseinfoStep extends AbstractStep
 {
@@ -26,7 +25,7 @@ class BaseinfoStep extends AbstractStep
                 'description' => $data['description'] ? $data['description'] :'',
                 'groupid' => 0
             );
-            $wecaht = $this->getWechatService()->addUniAccount($uniAcct);
+            $this->getWechatService()->addUniAccount($uniAcct);
             return $this->complete();
         }
         return $this->render(

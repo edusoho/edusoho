@@ -1,15 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lenovo
- * Date: 2014/11/15
- * Time: 13:04
- */
 
 namespace Fomalhaut\AcctSetupBundle\Process\Step;
 
 use Sylius\Bundle\FlowBundle\Process\Context\ProcessContextInterface;
-use Sylius\Bundle\FlowBundle\Process\Step\ControllerStep;
 
 class OneclickStep extends AbstractStep
 {
