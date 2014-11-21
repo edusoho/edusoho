@@ -27,7 +27,7 @@ class CourseController extends BaseController
 		} else {
 			$category = array('id' => null);
 		}
-
+		
 
 		$sort = $request->query->get('sort', 'latest');
 		$conditions = array(
@@ -63,6 +63,7 @@ class CourseController extends BaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
+			
 
 		));
 	}
@@ -210,7 +211,9 @@ class CourseController extends BaseController
 	{
 
 		$course = $this->getCourseService()->getCourse($id);
-
+        $code = 'ChargeCoin';
+        $ChargeCoin = $this->getAppService()->findInstallApp($code);
+        
         $defaultSetting = $this->getSettingService()->get('default', array());
 
         if (isset($defaultSetting['courseShareContent'])){
@@ -319,6 +322,24 @@ class CourseController extends BaseController
             'currentTime' => $currentTime,
             'weeks' => $weeks,
             'files' => ArrayToolkit::index($files,'id')
+		
+/*			'course' => $course,
+			'member' => $member,
+			'freeLesson'=>$freeLesson,
+			'courseMemberLevel' => $courseMemberLevel,
+			'checkMemberLevelResult' => $checkMemberLevelResult,
+			'groupedItems' => $groupedItems,
+			'hasFavorited' => $hasFavorited,
+			'category' => $category,
+			'previewAs' => $previewAs,
+			'tags' => $tags,
+			'nextLiveLesson' => $nextLiveLesson,
+			'currentTime' => $currentTime,
+			'courseReviews' => $courseReviews,
+			'weeks' => $weeks,
+			'courseShareContent'=>$courseShareContent,
+			'consultDisplay' => true,
+			'ChargeCoin'=> $ChargeCoin*/
 		));
 
 	}
@@ -726,7 +747,7 @@ class CourseController extends BaseController
 			$userIds = array_merge($userIds, $course['teacherIds']);
 		}
 		$users = $this->getUserService()->findUsersByIds($userIds);
-
+		
 		return $this->render("TopxiaWebBundle:Course:courses-block-{$view}.html.twig", array(
 			'courses' => $courses,
 			'users' => $users,
@@ -819,5 +840,10 @@ class CourseController extends BaseController
     private function getUploadFileService()
     {
 	return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 }

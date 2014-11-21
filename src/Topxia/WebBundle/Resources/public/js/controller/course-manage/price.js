@@ -82,6 +82,11 @@ define(function(require, exports, module) {
     });
 
     validator.addItem({
+    element: '[name="coinPrice"]',
+    rule: 'currency'
+    });
+
+    validator.addItem({
         element: '[name="freeStartTime"]',
         rule: 'time_check'
     });

@@ -432,6 +432,8 @@ CREATE TABLE `course` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `classId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班级ID',
   `gradeId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '年级ID',
+  `subjectId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '科目id',
+  `materialId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '教材id',
   `term` enum('first','second') NOT NULL DEFAULT 'first' COMMENT '学期',
   `compulsory` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '是否必修',
   `public` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否公共课',
@@ -467,14 +469,14 @@ CREATE TABLE `course` (
   `address` varchar(255) NOT NULL DEFAULT '',
   `studentNum` int(10) unsigned NOT NULL DEFAULT '0',
   `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '查看次数',
-  `userId` int(10) unsigned NOT NULL COMMENT '课程发布人ID',
+  `userId` int(10) unsigned NOT NULL,
   `deadlineNotify` enum('active','none') NOT NULL DEFAULT 'none' COMMENT '开启有效期通知',
-  `daysOfNotifyBeforeDeadline` INT(10) NOT NULL DEFAULT '0',
-  `createdTime` int(10) unsigned NOT NULL COMMENT '课程创建时间',
+  `daysOfNotifyBeforeDeadline` int(10) NOT NULL DEFAULT '0',
+  `createdTime` int(10) unsigned NOT NULL,
   `freeStartTime` int(10) NOT NULL DEFAULT '0',
   `freeEndTime` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -696,13 +698,13 @@ CREATE TABLE `course_member` (
   `seq` int(10) unsigned NOT NULL DEFAULT '0',
   `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
   `isVisible` tinyint(2) NOT NULL DEFAULT '1' COMMENT '可见与否，默认为可见',
-  `role` enum('student','teacher') NOT NULL DEFAULT 'student' COMMENT '课程会员角色',
-  `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '学员是否被锁定',
-  `deadlineNotified` int(10) NOT NULL DEFAULT '0' COMMENT '有效期通知',
-  `createdTime` int(10) unsigned NOT NULL COMMENT '学员加入课程时间',
+  `role` enum('student','teacher','guest') NOT NULL DEFAULT 'student',
+  `locked` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `deadlineNotified` int(10) NOT NULL DEFAULT '0',
+  `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `courseId` (`courseId`,`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=206 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1999,3 +2001,33 @@ CREATE TABLE `vip_level` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2014-10-13 22:47:40
+
+
+DROP TABLE IF EXISTS `knowledge`;
+
+CREATE TABLE `knowledge` (
+ `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+ `name` varchar(255) NOT NULL COMMENT '知识点名字',
+ `weight` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '知识点顺序',
+ `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '知识点父Id',
+ `term` enum('first','second') CHARACTER SET utf32 NOT NULL DEFAULT 'first' COMMENT '学期',
+ `materialId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '教材id',
+ `gradeId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '年级id',
+ `subjectId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '科目id',
+ `sequence` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '知识点顺序',
+ `isVisible` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '知识点是否可见',
+ `createdTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+ `description` text COMMENT '描述',
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2498 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `edu_material`;
+
+CREATE TABLE `edu_material` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `gradeId` int(11) NOT NULL COMMENT '年级',
+ `subjectId` int(11) NOT NULL COMMENT '学科',
+ `materialId` int(11) NOT NULL COMMENT '教材',
+ `materialName` varchar(255) NOT NULL COMMENT '教材名称',
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3853 DEFAULT CHARSET=utf8

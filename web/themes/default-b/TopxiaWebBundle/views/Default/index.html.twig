@@ -301,6 +301,13 @@
                       <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
                       {% if learn.type == "finished_testpaper" %}
                       完成了考试 {{learn.properties.testpaper.name|plain_text(15)}}
+
+                      {% elseif learn.type == "finished_homework" %}
+                      完成了课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的作业
+
+                      {% elseif learn.type == "finished_exercise" %}
+                      完成了课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
+
                       {% elseif learn.type == "become_student" %}
                       加入了课程 {{learn.properties.course.title|plain_text(15)}}
                       {% elseif learn.type == "learned_lesson" %}
