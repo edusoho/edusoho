@@ -3,8 +3,8 @@
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var EditorFactory = require('common/kindeditor-factory');
-    var Share=require('../../util/share.js');
-    var UserSign = require('user-sign.js');
+    var Share=require('../../../../topxiaweb/js/util/share.js');
+    var UserSign = require('../group/sign.js');
 
     function checkUrl (url){
         var hrefArray=new Array();
