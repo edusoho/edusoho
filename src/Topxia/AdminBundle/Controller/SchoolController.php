@@ -8,6 +8,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Twig\Extension\DataDict;
+use Topxia\WebBundle\Util\ChineseTool;
 
 class SchoolController extends BaseController
 {
@@ -164,8 +165,8 @@ class SchoolController extends BaseController
             $group=$this->getCategoryService()->getGroupByCode('subject_material');
 
             $subject['name']=$fields['name'];
-            $subject['code']=$beforeCode.'_'.$fields['code'];
-            $subject['weight']=0;
+            $subject['code']=$beforeCode.'_'.time();
+            $subject['weight']=1;
             $subject['groupId']=$group['id'];
             $subject['parentId']=$school['id'];
             $subject=$this->getCategoryService()->createCategory($subject);

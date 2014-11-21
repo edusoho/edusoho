@@ -33,11 +33,11 @@ define(function(require, exports, module) {
             required: true
         });
 
-        validator.addItem({
-            element: '[name="code"]',
-            required: true,
-            rule: 'remote'
-        });
+        // validator.addItem({
+        //     element: '[name="code"]',
+        //     required: true,
+        //     rule: 'remote'
+        // });
 
     };
 
