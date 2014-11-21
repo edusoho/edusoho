@@ -7,14 +7,14 @@
 
 	<form id="knowledge-form" class="form-horizontal" action="{% if knowledge.id %}{{ path('admin_knowledge_edit', {id:knowledge.id}) }}{% else %}{{ path('admin_knowledge_create') }}{% endif %}" method="post">
 		<div class="form-group">
-			<label class="col-md-2 control-label" for="knowledge-name-field">名称</label>
+			<label class="col-md-3 control-label" for="knowledge-name-field">名称</label>
 			<div class="col-md-8 controls">
 				<input class="form-control" id="knowledge-name-field" type="text" name="name" value="{{ knowledge.name }}" tabindex="1">
 			</div>
 		</div>
 
 		<div class="form-group">
-			<label class="col-md-2 control-label" for="knowledge-description-field">分类描述</label>
+			<label class="col-md-3 control-label" for="knowledge-description-field">知识点描述</label>
 			<div class="col-md-8 controls">
 				<textarea class="form-control" id="knowledge-description-field" style="height:100px;" name="description" tabindex="4">{{knowledge.description}}</textarea>
 				<div class="help-block">非必填</div>

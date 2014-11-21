@@ -33,10 +33,20 @@
 .eduMaterial-table .material-name{
     cursor: pointer;
     padding:5px;
+    display: block;
+    overflow: hidden;
+    width: 150px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     -webkit-border-radius: 5px;
             border-radius: 5px;
 }
 
 .eduMaterial-table span.material-name:hover{
-  background-color: #d9edf7;
+    background-color: #d9edf7;
+}
+
+.eduMaterial-table .popover {
+  max-width: 400px;
+  min-width: 400px;
 }

@@ -28,10 +28,10 @@
                 <div class="eduMaterial-name">{{eduMaterial.materialName}}</div>
                 <span class="caret"></span>
                 <div class="material-list">
-                  <div class="material-aaa row">
+                  <div class="row">
                     {% for material in materialList %}
                       <div class="col-md-6">
-                        <span data-url="{{path('admin_school_eduMaterial_update')}}" data-eduMaterialId="{{eduMaterial.id}}" data-materialId="{{material.id}}" class="material-name">{{material.name}}</span>
+                        <span data-url="{{path('admin_school_eduMaterial_update')}}" data-eduMaterialId="{{eduMaterial.id}}" data-materialId="{{material.id}}" class="material-name" title="{{material.name}}">{{material.name}}</span>
                       </div>
                     {% endfor %}
                   </div>
