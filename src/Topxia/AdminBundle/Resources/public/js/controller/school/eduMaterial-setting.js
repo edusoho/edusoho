@@ -18,6 +18,13 @@ define(function(require, exports, module) {
         });
 
         $table.on('click','.material-name',function(){
+            if($(this).closest('.materialTd').find('.eduMaterial-name').html()==$(this).html()){
+                $table.find('.popover').hide();
+                return;
+            }
+            if (!confirm('确认更改教材为'+$(this).html()+'？')) {
+                return ;
+            }
             $(this).closest('.materialTd').find('.eduMaterial-name').html($(this).html());
             $table.find('.popover').hide();
             $.post(
