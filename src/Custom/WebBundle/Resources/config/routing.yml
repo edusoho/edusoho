@@ -22,3 +22,7 @@ course_order_repay:
     pattern:  /course/order/repay
     defaults: { _controller: CustomWebBundle:CourseOrder1:repay }
     methods: [POST]
+
+group_show:
+    pattern:  /group/{id}
+    defaults: { _controller: CustomWebBundle:Group1:groupIndex }
