@@ -57,7 +57,7 @@ define(function(require, exports, module) {
                     _super($item);
                 },
                 onDrop: function ($item, container, _super, event) {
-                    var $template = $('<li data-id="'+$item.data('id')+'" data-url="'+$item.find('a').attr('href')+'"><div class="item-div gotolesson" data-url="'+$item.find('a').attr('href')+'"><div class="thumbnail"><div class="lesson-title">测试试卷</div></div></div></li>');
+                    var $template = $('<li data-id="'+$item.data('id')+'" data-url="'+$item.find('a').attr('href')+'"><div class="item-div gotolesson" data-url="'+$item.find('a').attr('href')+'"><div class="thumbnail"><button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><div class="lesson-title">测试试卷</div></div></div></li>');
                     var color = 'schedule-color' + self.hashCode($item.data('ctitle'));
                     $template.find('.thumbnail').addClass(color);
                     $template.find('.lesson-title').html($item.data('title')).attr('title', '来自'+$item.data('ctitle')+'课程');
@@ -138,7 +138,7 @@ define(function(require, exports, module) {
                     _super($item);
                 },
                 onDrop: function ($item, container, _super, event) {
-                    var $template = $('<li data-id="'+$item.data('id')+'" data-url="'+$item.find('a').attr('href')+'"><div class="item-div gotolesson" data-url="'+$item.find('a').attr('href')+'"><div class="thumbnail"><div class="lesson-title">测试试卷</div></div></div></li>');
+                    var $template = $('<li data-id="'+$item.data('id')+'" data-url="'+$item.find('a').attr('href')+'"><div class="item-div gotolesson" data-url="'+$item.find('a').attr('href')+'"><div class="thumbnail"><button type="button" class="close lesson-remove"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><div class="lesson-title">测试试卷</div></div></div></li>');
                     var color = 'schedule-color' + self.hashCode($item.data('ctitle'));
                     $template.find('.thumbnail').addClass(color);
                     $template.find('.lesson-title').html($item.data('title')).attr('title', '来自'+$item.data('ctitle')+'课程');
