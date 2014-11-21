@@ -155,6 +155,14 @@ class CourseLessonController extends BaseController
         $json['courseId'] = $lesson['courseId'];
         $json['videoWatermarkEmbedded'] = 0;
 
+        try{
+            $homework = $this->getHomeworkService()->getHomeworkByLessonId($lesson['id']);
+            $exercise = $this->getExerciseService()->getExerciseByLessonId($lesson['id']);
+            $json['homeworkOrExerciseNum'] = $homework['itemCount'] + $exercise['itemCount'];
+        }catch (Exception $e) { 
+            $json['homeworkOrExerciseNum'] = 0;
+        }
+
         $json['isTeacher'] = $this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
         if($lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated') {
             $json['replays'] = $this->getCourseService()->getCourseLessonReplayByLessonId($lesson['id']);
@@ -546,4 +554,16 @@ class CourseLessonController extends BaseController
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
+
+    //Homework plugins(contains Exercise)
+    private function getHomeworkService()
+    {
+        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+    } 
+
+    private function getExerciseService()
+    {
+        return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+    }
+
 }
