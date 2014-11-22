@@ -7,7 +7,19 @@ form:
         wxpassword: 微信公众号密码
         imgcode: 验证码
     setup:
+        0: 设置公众号信息
         name: 公众号名称
         account: 公众号帐号
-        level: 级别
+        level:
+            0: 级别
+            ordinary_subscription: 普通订阅号
+            auth_sub_or_ordin_serv: 认证订阅号/普通服务号
+            authentication_service: 认证服务号
+        key: AppId
+        secret: AppSecret
+        interface_address: 接口地址
+        token: Token
+        encodingaeskey: EncodingAESKey
+        qrcode: 二维码
+        headimg: 头像
 

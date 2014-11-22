@@ -1,0 +1,37 @@
+<div>
+    <div>
+        <form action="{{ path('sylius_flow_forward', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'setup'}) }}" method="post">
+            {{ form_errors(form) }}
+            <div>
+                <div>设置公众号信息</div>
+                <h4>公众号名称</h4>
+                <div>{{ form_widget(form.name) }}</div>
+                <h4>公众号帐号</h4>
+                <div>{{ form_widget(form.account) }}</div>
+                <h4>级别</h4>
+                <div>{{ form_widget(form.level) }}</div>
+                <h4>AppId</h4>
+                <div>{{ form_widget(form.key) }}</div>
+                <h4>AppSecret</h4>
+                <div>{{ form_widget(form.secret) }}</div>
+                <h4>接口地址</h4>
+                <div>{{ form_widget(form.interfaceaddr) }}</div>
+                <h4>Token</h4>
+                <div>{{ form_widget(form.token) }}</div>
+                <h4>EncodingAESKey</h4>
+                <div>{{ form_widget(form.encodingaeskey) }}</div>
+                <h4>二维码</h4>
+                <div>{{ form_widget(form.qrcode) }}</div>
+                <h4>头像</h4>
+                <div>{{ form_widget(form.headimg) }}</div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+                <button  type="submit">
+                    <i></i> 下一步
+                </button>
+
+            </div>
+        </form>
+    </div>
+</div>
