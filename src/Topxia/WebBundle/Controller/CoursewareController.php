@@ -26,6 +26,19 @@ class CoursewareController extends BaseController
 
     }
 
+    public function knowledgeMatchAction(Request $request)
+    {
+        $likeString = $request->query->get('q');
+
+        $knowledges = $this->getKnowledgeService()->searchKnowledge(array('keywords'=>$likeString),array('createdTime', 'DESC'), 0, 10);
+        return $this->createJsonResponse($knowledges);
+    }
+
+    private function getKnowledgeService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.KnowledgeService');
+    }
+
     private function convertUrlQuery($query)
     {
         $queryParts = explode('&', $query);

@@ -15,6 +15,8 @@ interface KnowledgeService
 
     public function findKnowledgeByIds(array $ids);
 
+    public function searchKnowledge($conditions,$orderBys,$start,$limit);
+
     public function findKnowledgeByCategoryId($categoryId);
 
     public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);

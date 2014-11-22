@@ -11,6 +11,8 @@ define(function(require, exports, module) {
 
     chooser.on('choosed', function(items) {
 
+        console.log(items);
+
     });
 
 
