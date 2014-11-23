@@ -1,3 +1,6 @@
+{% extends 'AcctSetupBundle::layout.html.twig' %}
+
+{% block content %}
 <div>
     <div>
         <form action="{{ path('sylius_flow_forward', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'setup'}) }}" method="post">
@@ -35,3 +38,5 @@
         </form>
     </div>
 </div>
+
+{% endblock %}

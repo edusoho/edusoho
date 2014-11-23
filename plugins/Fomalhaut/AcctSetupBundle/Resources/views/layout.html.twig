@@ -1,0 +1,79 @@
+{% import "AcctSetupBundle::macro.html.twig" as admin_macro %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="{{ csrf_token('site') }}" name="csrf-token" />
+  <title>{% block title %}微信管理后台{% endblock %}</title>
+  {% if setting('site.favicon') %}
+  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+  {% endif %}
+  <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/css/common.css') }}" rel="stylesheet" />
+  <link href="{{ asset('bundles/topxiaadmin/css/admin.css') }}" rel="stylesheet" />
+  <link href="{{ asset('bundles/topxiaadmin/css/admin_v2.css') }}" rel="stylesheet" />
+  {% block javascripts %}{% endblock %}
+  <!--[if lt IE 9]>
+    <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
+    <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
+  <![endif]-->
+</head>
+
+{% set nav = nav|default(null) %}
+{% set menu = menu|default(null) %}
+
+<body>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}管理后台</a>
+      </div>
+      <div class="navbar-collapse collapse">
+
+        <ul class="nav navbar-nav">
+      {% if is_granted('ROLE_ADMIN') %}
+          <li {% if nav == 'course' %}class="active"{% endif %}><a href="{{ path('admin_course') }}">课程</a></li>
+          <li {% if nav == 'user' %}class="active"{% endif %}><a href="{{ path('admin_user') }}">用户</a></li>
+          <li {% if nav == 'content' %}class="active"{% endif %}><a href="{{ path('admin_navigation') }}">内容</a></li>          
+          <li {% if nav == 'group' %}class="active"{% endif %}><a href="{{ path('admin_group') }}">小组</a></li>
+          <li {% if nav == 'app' %}class="active"{% endif %}>
+            <a href="{{ path('admin_app_installed') }}">应用</a>
+          </li>
+        {% endif %}
+
+          {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <li {% if nav == 'system' %}class="active"{% endif %}><a href="{{ path('admin_setting_site') }}">系统</a></li>
+          {% endif %}
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> 回首页</a></li>
+          <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
+        </ul>
+
+      </div><!--/.navbar-collapse -->
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">{% block content %}{% endblock %}</div>
+  </div>
+
+
+  {% block footer %}{% endblock %}
+
+  {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+
+  <div id="modal" class="modal" ></div>
+</body>
+</html>

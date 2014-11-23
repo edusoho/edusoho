@@ -1,0 +1,30 @@
+{% macro user_link(user, class) %}
+  {% if user %}
+		<a {% if class %}class="{{ class }}"{% endif %} href="javascript:;" role="show-user" data-toggle="modal" data-target="#modal" data-url="{{ url('admin_user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+	{% else %}
+	  <span class="text-muted">用户已删除</span>
+	{% endif %}
+{% endmacro %}
+
+{% macro bytesToSize(bytes) %}
+	{% spaceless %}
+	    
+	    {% set kilobyte = 1024 %}
+	    {% set megabyte = kilobyte * 1024 %}
+	    {% set gigabyte = megabyte * 1024 %}
+	    {% set terabyte = gigabyte * 1024 %}
+
+	    {% if bytes < kilobyte %}
+	        {{ bytes ~ ' B' }}
+	    {% elseif bytes < megabyte %}
+	        {{ (bytes / kilobyte)|number_format(2, '.') ~ ' KB' }}
+	    {% elseif bytes < gigabyte %}
+	        {{ (bytes / megabyte)|number_format(2, '.') ~ ' MB' }}
+	    {% elseif bytes < terabyte %}
+	        {{ (bytes / gigabyte)|number_format(2, '.') ~ ' GB' }}
+	    {% else %}
+	        {{ (bytes / terabyte)|number_format(2, '.') ~ ' TB' }}
+	    {% endif %}
+
+	{% endspaceless %}
+{% endmacro %}
