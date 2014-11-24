@@ -29,7 +29,6 @@
             <td>学员人数</td>
             <td>完成课程人数</td>
             <td>课程学习时长（分）</td>
-            <td>课程收入（元）</td>
             <td>操作</td>
           </tr>
           
@@ -41,7 +40,6 @@
             <td>{{course.studentNum}}</td>
             <td>{{course.isLearnedNum}}</td>
             <td>{{course.learnTime}}</td>
-            <td>{{course.income}}</td>
             <td><a href="{{path('admin_course_lesson_data',{id:course.id})}}">查看课时数据</a></td>
             </tr>
             {% endfor %}
