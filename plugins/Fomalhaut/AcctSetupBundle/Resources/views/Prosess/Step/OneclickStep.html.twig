@@ -1,22 +1,32 @@
-{% extends 'AcctSetupBundle::layout.html.twig' %}
+{% extends 'AcctSetupBundle:Prosess/Step:layout.html.twig' %}
 
-{% block content %}
-<div>
-    <div>
-        <form action="{{ path('sylius_flow_forward', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'oneclick'}) }}" method="post">
-            {{ form_errors(form) }}
-            <div>
-                <div>
-                    <h3>微信公众号用户名</h3>
-                    {{ form_widget(form.wxusername) }}
+{% block main %}
+    <div class="panel panel-default panel-col">
+        <div class="panel-heading">一键获取公众号信息</div>
+        <div class="panel-body">
+        <form action="{{ path('sylius_flow_forward', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'oneclick'}) }}" class="form-horizontal" method="post">
+
+            <div class="form-group">
+                {{ form_label(form.wxusername, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls">
+                {{ form_widget(form.wxusername, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block" style="display:none;"></div>
                 </div>
-                <div>
-                    <h3>微信公众号密码</h3>
-                    {{ form_widget(form.wxpassword) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.wxpassword, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls">
+                    {{ form_widget(form.wxpassword, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block" style="display:none;"></div>
                 </div>
-                <div>
-                    <h3>验证码</h3>
-                    {{ form_widget(form.imgcode) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.imgcode, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls">
+                    {{ form_widget(form.imgcode, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block" style="display:none;"></div>
                 </div>
             </div>
             {{ form_rest(form) }}
@@ -28,7 +38,7 @@
 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-                <button  type="submit">
+                <button class="btn btn-fat btn-primary" type="submit">
                     <i></i> 下一步
                 </button>
             </div>

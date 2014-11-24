@@ -1,9 +1,9 @@
-{% extends 'AcctSetupBundle::layout.html.twig' %}
+{% extends 'AcctSetupBundle:Prosess/Step:layout.html.twig' %}
 
-{% block content %}
+{% block main %}
 
 <div class="panel panel-default panel-col">
-    <div class="panel-heading">基本信息</div>
+    <div class="panel-heading">微信账号基本信息</div>
     <div class="panel-body">
         <form action="{{ path('sylius_flow_forward', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'baseinfo'}) }}" class="form-horizontal" method="post">
 
