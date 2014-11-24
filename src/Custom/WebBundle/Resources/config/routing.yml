@@ -26,3 +26,7 @@ course_order_repay:
 group_show:
     pattern:  /group/{id}
     defaults: { _controller: CustomWebBundle:Group1:groupIndex }
+
+group_sign:
+    pattern:  /group/sign/{groupId}
+    defaults: { _controller: CustomWebBundle:Group1:groupSign }

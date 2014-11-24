@@ -3,6 +3,7 @@ namespace Custom\WebBundle\Controller;
 
 use Topxia\WebBundle\Controller\GroupController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
@@ -116,6 +117,7 @@ class Group1Controller extends GroupController
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
 
         $members=$this->getUserService()->findUsersByIds($memberIds);
+
         return $this->render("CustomWebBundle:Group:groupindex.html.twig", array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
@@ -131,8 +133,21 @@ class Group1Controller extends GroupController
             'userIsGroupMember'=>$userIsGroupMember,
             'members'=>$recentlyMembers,
             'now'=>time(),
+            'isSignedToday'=>1,
                    
         ));
+    }
+
+    public function groupSignAction(Request $request,$groupId)
+    {
+        $user=$this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        
+        return $this->createJsonResponse('success');
     }
 
     private function getThreadSearchFilters($request)

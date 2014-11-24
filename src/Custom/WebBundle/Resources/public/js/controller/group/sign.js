@@ -56,11 +56,6 @@ define(function(require, exports, module) {
                     self.element.find('.d-' + today).addClass('signed_anime_day');
                 },
                 error: function(xhr){
-                    if(xhr.status == 404) {
-                        alert('还没有登录');
-                    }else{
-                        alert('签到异常');
-                    }
                 }
             });
         },
