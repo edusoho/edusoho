@@ -49,14 +49,19 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
-    public function findQuestionsByTypesAndExcludeUnvalidatedMaterial($types, $start, $limit)
+    public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId)
     {
         if (empty($types)) {
             return array();
         }
-
-        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND (`type` in ({$types})) AND ( not( `type` = 'material' AND `subCount` = 0 )) LIMIT {$start},{$limit} ";
-        $questions = $this->getConnection()->fetchAll($sql, array($types));
+        if ($questionSource == 'course'){
+            $target = 'course-'.$courseId;
+        }else if ($questionSource == 'lesson'){
+            $target = 'course-'.$courseId.'/lesson-'.$lessonId;
+        }
+        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND  (`type` in ($types)) AND ( not( `type` = 'material' AND `subCount` = 0 )) AND (`target`= '{$target}' )  LIMIT {$start},{$limit} ";
+        
+        $questions = $this->getConnection()->fetchAll($sql, array());
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
@@ -64,6 +69,17 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
     {
         $sql ="SELECT count(*) FROM {$this->table} WHERE type in ({$types})";
         return $this->getConnection()->fetchColumn($sql, array($types));
+    }
+
+    public function findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId)
+    {
+        if ($questionSource == 'course'){
+            $target = 'course-'.$courseId;
+        }else if ($questionSource == 'lesson'){
+            $target = 'course-'.$courseId.'/lesson-'.$lessonId;
+        }
+        $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) AND (`type` in ({$types})) AND (`target`= '{$target}' )";
+        return $this->getConnection()->fetchColumn($sql, array());
     }
 
     public function findQuestionsByParentIds(array $ids)
