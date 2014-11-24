@@ -115,8 +115,7 @@ class UserController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->findUserFollowingCount($user['id']),
-            10
+            $this->getUserService()->findUserFollowingCount($user['id'])
         );
 
         $followings = $this->getUserService()->findUserFollowing(
