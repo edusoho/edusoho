@@ -28,6 +28,8 @@ class CourseCopyCommand extends BaseCommand
 
         $newCourse = $this->copyCourse($course);
 
+        $newTeachers = $this->copyTeachers($courseId, $newCourse);
+
         $newChapters = $this->copyChapters($courseId, $newCourse);
 
         $newLessons = $this->copyLessons($courseId, $newCourse, $newChapters);
@@ -36,7 +38,26 @@ class CourseCopyCommand extends BaseCommand
 
         $newTestpapers = $this->copyTestpapers($courseId, $newCourse, $newQuestions);
 
+        $this->convertTestpaperLesson($newLessons, $newTestpapers);
+
         $output->writeln("New course id: {$newCourse['id']}");
+    }
+
+    protected function copyTeachers($courseId, $newCourse)
+    {
+        $count = $this->getCourseMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'teacher');
+        $members = $this->getCourseMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, $count);
+        foreach ($members as $member) {
+            $fields = array(
+                'courseId' => $newCourse['id'],
+                'userId' => $member['userId'],
+                'isVisible' =>  $member['isVisible'],
+                'role' => $member['role'],
+                'createdTime' => time(),
+            );
+            $this->getCourseMemberDao()->addMember($fields);
+        }
+
     }
 
     protected function copyTestpapers($courseId, $newCourse, $newQuestions)
@@ -71,6 +92,21 @@ class CourseCopyCommand extends BaseCommand
         }
 
         return $map;
+    }
+
+    protected function convertTestpaperLesson($newLessons, $newTestpapers)
+    {
+        foreach ($newLessons as $lesson) {
+            if ($lesson['type'] != 'testpaper') {
+                continue;
+            }
+
+            $fields = array(
+                'mediaId' => empty($newTestpapers[$lesson['mediaId']]['id']) ? 0 : $newTestpapers[$lesson['mediaId']]['id'],
+            );
+
+            $this->getLessonDao()->updateLesson($lesson['id'], $fields);
+        }
     }
 
     protected function copyQuestions($courseId, $newCourse, $newLessons)
@@ -191,6 +227,11 @@ class CourseCopyCommand extends BaseCommand
         $fields['createdTime'] = time();
 
         return $this->getCourseDao()->addCourse($fields);
+    }
+
+    protected function getCourseMemberDao()
+    {
+        return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
     }
 
     protected function getTestpaperItemDao()
