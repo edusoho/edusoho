@@ -130,6 +130,7 @@ class Group1Controller extends GroupController
             'lastPostMembers'=>$lastPostMembers,
             'userIsGroupMember'=>$userIsGroupMember,
             'members'=>$recentlyMembers,
+            'now'=>time(),
                    
         ));
     }
