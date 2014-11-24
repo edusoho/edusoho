@@ -10,7 +10,7 @@ define(function(require, exports, module) {
             trigger: 'click',
             placement: 'bottom',
             html: true,
-            delay: 10,
+            delay: 30,
             viewport: { selector: '.eduMaterial-table', padding: 0 },
             content: function() {
                 return $(this).find('.material-list').html();

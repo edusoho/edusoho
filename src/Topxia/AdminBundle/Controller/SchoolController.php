@@ -107,7 +107,6 @@ class SchoolController extends BaseController
     public function eduMaterialSettingAction(Request $request,$schoolType)
     {
         $school = $this->getSettingService()->get('school', array());
-
         if(array_key_exists('primarySchool', $school) && ($schoolType=='primarySchool' || $schoolType=='all')){
             $grades=DataDict::dict('primarySchool');
             if($school['primaryYear']==5){
@@ -127,6 +126,12 @@ class SchoolController extends BaseController
             $grades=DataDict::dict('highSchool');
             $subjects=$this->getCategoryService()->findSubjectCategoriesByGradeId(10);
             $schoolType='highSchool';
+        }
+        if($schoolType=='all'){
+            return $this->render('TopxiaAdminBundle:School:eduMaterial-setting.html.twig', array(
+                'school'=>$school,
+                'schoolType'=>$schoolType,
+            ));
         }
         $materials=$this->getCategoryService()->findCategoriesByParentIds(ArrayToolkit::column($subjects,'id'));
         $materials=ArrayToolkit::group($materials,'parentId');
