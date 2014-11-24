@@ -1,5 +1,5 @@
 <style>
-.class-sign {
+.group-sign {
     cursor: pointer;
     display: inline-block;
     margin: 20px 13px;
@@ -8,7 +8,7 @@
     border-radius: 5px;
 }
 
-.class-sign .date-col {
+.group-sign .date-col {
     float: left;
     width: 150px;
     padding-bottom: 10px;
@@ -17,21 +17,21 @@
     font-size: 14px;
 }
 
-.class-sign .date-col .week {
+.group-sign .date-col .week {
     margin-top: -15px;
 }
 
-.class-sign .date-col .day {
+.group-sign .date-col .day {
     font-size: 60px;
 }
 
-.class-sign .action-col {
+.group-sign .action-col {
     float: left;
     margin: 30px 0;
     width: 150px;
 }
 
-.class-sign .action-col .sign-area {
+.group-sign .action-col .sign-area {
     font-size: 18px;
     color: #fff;
     line-height: 55px;
@@ -55,7 +55,7 @@
 
 <div class="row col-md-12">
 
-  <div id="class-sign"  data-records="{{ path('signed_records', {'groupId':groupinfo.id})}}" data-signurl="{{path('group_sign',{groupId:groupinfo.id})}}" >
+  <div id="group-sign"  data-records="{{ path('signed_records', {'groupId':groupinfo.id})}}" data-signurl="{{path('group_sign',{groupId:groupinfo.id})}}" >
 {#   <div  class="sign-area" {% if not isSignedToday %} data-role="sign" {% else %} data-role="signed" onclick="return false;" {% endif %} >
  
     {% if not isSignedToday %}
@@ -65,8 +65,13 @@
     {% endif %}
   </div> #}
       <div class="media" id="group-sign" data-signurl="{{path('group_sign',{groupId:groupinfo.id})}}">
+        <div  class="sign-area" {% if not isSignedToday %} data-role="sign" {% else %} data-role="signed" onclick="return false;" {% endif %} >
      {% if not isSignedToday %}
-        <a class="btn btn-info btn-lg pull-left" style="width:100px;font-size:25px;" data-role="sign" > 签 到 </a>
+        <a class="btn btn-info btn-lg pull-left" style="width:100px;font-size:25px;" > 签 到 </a>
+        <div class="media-body pll">
+        <h4 class="media-heading pts">{{ 'now' | date('m') }}月{{ 'now' | date('d') }}号</h4>
+         星期{{week}}
+        </div>
       {% else %}
       <a class="btn btn-info btn-lg pull-left disabled" style="width:100px;font-size:12px;text-align:left;">已签到 
       <br>连续41天</a>
@@ -75,6 +80,7 @@
       漏签<span style="color:red;">10</span>天
     </div>
     {% endif %}
+  </div>
    
 
   </div>

@@ -51,9 +51,10 @@ define(function(require, exports, module) {
                 url:this.get('signUrl'),
                 dataType: 'json',
                 success: function(data){
-                    self.showSignTable();
+                    window.location.reload();
+/*                    self.showSignTable();
                     self.initTable(true);
-                    self.element.find('.d-' + today).addClass('signed_anime_day');
+                    self.element.find('.d-' + today).addClass('signed_anime_day');*/
                 },
                 error: function(xhr){
                 }

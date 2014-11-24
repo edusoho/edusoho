@@ -118,6 +118,10 @@ class Group1Controller extends GroupController
 
         $members=$this->getUserService()->findUsersByIds($memberIds);
 
+        $isSignedToday = $this->getSignService()->isSignedToday($user->id, 'group_sign', $group['id']);
+
+        $week=array('日','一','二','三','四','五','六');
+
         return $this->render("CustomWebBundle:Group:groupindex.html.twig", array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
@@ -133,9 +137,15 @@ class Group1Controller extends GroupController
             'userIsGroupMember'=>$userIsGroupMember,
             'members'=>$recentlyMembers,
             'now'=>time(),
-            'isSignedToday'=>1,
+            'week'=>$week[date('w',time())],
+            'isSignedToday'=>$isSignedToday,
                    
         ));
+    }
+
+    private function getSignService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Sign.SignService');
     }
 
     private function getThreadSearchFilters($request)
