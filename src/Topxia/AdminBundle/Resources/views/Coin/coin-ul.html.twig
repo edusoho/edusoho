@@ -1,0 +1,18 @@
+<ul class="nav nav-tabs mbl">
+    <li class="{% if submenu == 'records' %}active{% endif %}">
+        <a href="{{ url('admin_coin_records') }}">虚拟币记录
+        </a>
+    </li>
+    <li class="{% if submenu == 'orders' %}active{% endif %}">
+        <a href="{{ url('admin_coin_orders') }}">订单记录
+        </a>
+    </li>
+    {# <li class="{% if submenu == 'admin' %}active{% endif %}">
+        <a href="{{ url('admin_coin_admin') }}">虚拟币管理
+        </a>
+    </li>      #}
+    <li class="{% if submenu == 'settings' %}active{% endif %}">
+        <a href="{{ url('admin_coin_settings') }}">虚拟币设置
+        </a>
+    </li>   
+  </ul>

@@ -314,6 +314,10 @@ admin_course_search:
     pattern: /course/search
     defaults: { _controller: TopxiaAdminBundle:Course:search }
 
+admin_course_search_to_fill_banner:
+    pattern: /course/search_to_fill_banner
+    defaults: { _controller: TopxiaAdminBundle:Course:searchToFillBanner }
+
 admin_live_course:
     pattern: /livecourse/{status}
     defaults: { _controller: TopxiaAdminBundle:LiveCourse:index }
@@ -365,6 +369,16 @@ admin_setting_logo_upload:
 admin_setting_logo_remove:
     pattern:  /setting/logo/remove
     defaults: { _controller: TopxiaAdminBundle:Setting:logoRemove }
+    methods: [POST]
+
+admin_setting_live_logo_upload:
+    pattern:  /setting/live/logo/upload
+    defaults: { _controller: TopxiaAdminBundle:Setting:liveLogoUpload }
+    methods: [POST]
+
+admin_setting_live_logo_remove:
+    pattern:  /setting/live/logo/remove
+    defaults: { _controller: TopxiaAdminBundle:Setting:liveLogoRemove }
     methods: [POST]
 
 admin_setting_favicon_upload:
@@ -768,6 +782,12 @@ admin_approval_approve:
     pattern:  approvals/{id}/approve
     defaults: { _controller: TopxiaAdminBundle:UserApproval:approve }
 
+admin_approval_info_view:
+    pattern:  approvals/{id}/view
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:viewApprovalInfo }
+
+
+
 admin_approval_cancel:
     pattern:  approvals/{id}/cancel
     defaults: { _controller: TopxiaAdminBundle:UserApproval:cancel }
@@ -997,5 +1017,38 @@ admin_uploadfile_head_leader_params:
     pattern: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
 
+coin_settings_avatar:
+    pattern:  /coin/settings/avatar
+    defaults: { _controller: TopxiaWebBundle:Coin:avatar }
 
+coin_settings_avatar_crop:
+    pattern:  /coin/settings/avatar/crop
+    defaults: { _controller: TopxiaWebBundle:Coin:avatarCrop }
+
+admin_coin_settings:
+    path:     /coin/settings
+    defaults: { _controller: TopxiaAdminBundle:Coin:settings }
+admin_coin_records:
+    path:     /coin/records
+    defaults: { _controller: TopxiaAdminBundle:Coin:records }
+admin_coin_orders:
+    path:     /coin/orders
+    defaults: { _controller: TopxiaAdminBundle:Coin:orders }
+admin_coin_orders_log:
+    path:     /coin/orders/log/{id}
+    defaults: { _controller: TopxiaAdminBundle:Coin:logs }
+# admin_coin_admin:
+#     path:     /coin/admin
+#     defaults: { _controller: TopxiaAdminBundle:Coin:admin }
+admin_coin_admin_edit:
+    path:     /coin/admin/edit/{id}
+    defaults: { _controller: TopxiaAdminBundle:Coin:edit }
+
+admin_coin_give:
+    path:     /coin/give
+    defaults: { _controller: TopxiaAdminBundle:Coin:giveCoin }
+
+admin_coin_give_check_nickname:
+    path:     /coin/give/check_nickname
+    defaults: { _controller: TopxiaAdminBundle:Coin:checkNickname }
 

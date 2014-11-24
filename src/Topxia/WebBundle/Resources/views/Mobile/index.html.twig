@@ -27,15 +27,15 @@
       <div class="panel-body">
 
         <p style="text-align:center;">
-          <img src="{{ path('mobile_download_qrcode') }}" width="150" height="150" />
+         <img src="{{ path('mobile_download_qrcode',{code:mobileCode}) }}" width="150" height="150" />
         </p>
 
         <p style="text-align:center;">
-          <a href="{{ path('mobile_download', {client:'iphone'}) }}" id="iphone-download-btn" class="btn btn-default btn-lg"><span class="mobile-iconfont icon-pingguo"></span> iPhone 客户端</a>
+          <a href="{{ path('mobile_download', {client:'iphone',code:mobileCode}) }}" id="iphone-download-btn" class="btn btn-default btn-lg"><span class="mobile-iconfont icon-pingguo"></span> iPhone 客户端</a>
         </p>
 
         <p style="text-align:center;">
-          <a href="{{ path('mobile_download', {client:'android'}) }}" class="btn btn-default btn-lg" target="_blank"><span class="mobile-iconfont icon-ux13996155768583524"></span> Android 客户端</a>
+          <a href="{{ path('mobile_download', {client:'android',code:mobileCode}) }}" class="btn btn-default btn-lg" target="_blank"><span class="mobile-iconfont icon-ux13996155768583524"></span> Android 客户端</a>
         </p>
 
       </div>

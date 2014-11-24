@@ -553,6 +553,12 @@ body {
 	font-size: 22px;
 }
 
+.course-cover-heading .coin-price {
+	background:orange;
+	 font-size:15px;
+	 color:white;
+}
+
 .course-cover-heading .money-text {
 	color: #777;
 	font-size: 12px;
@@ -2250,6 +2256,10 @@ body {
 	color: #f40;
 }
 
+.danger{
+	color: #f40;
+}
+
 .shares-dropdown-menu > li > a {
 	padding-top: 5px;
 	padding-bottom: 5px;
@@ -3003,6 +3013,10 @@ body {
 }
 
 .course-wide-list .course-price {
+	color: #e57259;
+	font-size: 16px;
+}
+.course-coinPrice {
 	color: #e57259;
 	font-size: 16px;
 }
