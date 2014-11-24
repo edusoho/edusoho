@@ -42,6 +42,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
         $conversation = $this->getMessageService()->getConversation($conversationId);
         if (empty($conversation) or $conversation['toId'] != $user['id']) {
+            var_dump($conversation);
             throw $this->createNotFoundException('私信会话不存在！');
         }
 
