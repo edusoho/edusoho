@@ -77,23 +77,7 @@
 {% endblock %}
 {% block group_side %}
 
-  <div class="panel panel-default">
-  <div class="panel-body">
-    <div class="media">
-     
-        <a class="btn btn-info btn-lg pull-left" id="group-sign" style="width:100px;font-size:25px;"> 签 到 </a>
-{# <a class="btn btn-info btn-lg pull-left" style="width:100px;font-size:12px;text-align:left;">已签到 
-  <br>连续41天</a> #}
-   
-    <div class="media-body pll">
-      <h4 class="media-heading pts">11月20号</h4>
-      漏签<span style="color:red;">10</span>天
-    </div>
-  </div>
-
-
-  </div>
-</div>
+{% include 'CustomWebBundle:Group:sign.html.twig' %}
 
   {% if is_groupmember in [1, 2, 3] %}
     <div class="panel panel-default">
