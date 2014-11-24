@@ -28,5 +28,9 @@ group_show:
     defaults: { _controller: CustomWebBundle:Group1:groupIndex }
 
 group_sign:
-    pattern:  /group/sign/{groupId}
-    defaults: { _controller: CustomWebBundle:Group1:groupSign }
+    pattern:  /sign/{groupId}
+    defaults: { _controller: CustomWebBundle:Sign:sign }
+
+signed_records:
+    pattern:  /sign/{groupId}/records
+    defaults: { _controller: CustomWebBundle:Sign:getSignedRecordsByPeriod }

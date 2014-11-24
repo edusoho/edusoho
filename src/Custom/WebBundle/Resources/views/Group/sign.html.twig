@@ -14,20 +14,20 @@
 
   </div>
 </div>
-{# 
+ 
 
 <div class="class-sign class-sign-finished row">
   <div class="date-col col-md-6">
     <div class="date-area">
       <div class="day">{{ 'now' | date('d') }}</div>
-      <div class="week">星期{{ week}}</div>
+  
       <div class="yearMonth">{{ 'now'|date('Y.m') }}</div>
     </div>
   </div>
 
   <div class="action-col  col-md-6">
-  <div id="class-sign" {# data-records="{{ path('signed_records', {'classId':class.id,'userId':app.user.id})}}" data-signurl="{{ path('user_sign', {'classId':class.id,'userId':app.user.id}) }}" #}>
- {#  <div  class="sign-area" {% if not isSignedToday %} data-role="sign" {% else %} data-role="signed" onclick="return false;" {% endif %} >
+  <div id="class-sign"  data-records="{{ path('signed_records', {'groupId':groupinfo.id})}}" data-signurl="{{path('group_sign',{groupId:groupinfo.id})}}" >
+  <div  class="sign-area" {% if not isSignedToday %} data-role="sign" {% else %} data-role="signed" onclick="return false;" {% endif %} >
  
     {% if not isSignedToday %}
       <span class="sign-text">签到</span>
@@ -71,4 +71,4 @@
 </div>
   </div>
 </div>
- #} 
+ 

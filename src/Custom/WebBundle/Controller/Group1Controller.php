@@ -138,18 +138,6 @@ class Group1Controller extends GroupController
         ));
     }
 
-    public function groupSignAction(Request $request,$groupId)
-    {
-        $user=$this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
-        }
-
-        
-        return $this->createJsonResponse('success');
-    }
-
     private function getThreadSearchFilters($request)
     {
         $filters = array();
