@@ -111,7 +111,6 @@ class UserController extends BaseController
     public function followingAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
-        $this->getUserService()->findUserFollowingCount($user['id']);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -135,12 +134,10 @@ class UserController extends BaseController
     public function followerAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
-        $this->getUserService()->findUserFollowerCount($user['id']);
 
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->findUserFollowerCount($user['id']),
-            10
         );
 
         $followers = $this->getUserService()->findUserFollowers(
