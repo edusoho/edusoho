@@ -2019,7 +2019,7 @@ CREATE TABLE `knowledge` (
  `createdTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
  `description` text COMMENT '描述',
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `edu_material`;
 
@@ -2030,4 +2030,4 @@ CREATE TABLE `edu_material` (
  `materialId` int(11) NOT NULL COMMENT '教材',
  `materialName` varchar(255) NOT NULL COMMENT '教材名称',
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
