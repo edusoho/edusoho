@@ -155,11 +155,12 @@ class CourseLessonController extends BaseController
         $json['courseId'] = $lesson['courseId'];
         $json['videoWatermarkEmbedded'] = 0;
 
-        try{
+        $app = $this->getAppService()->findInstallApp('Homework');
+        if(!empty($app)){
             $homework = $this->getHomeworkService()->getHomeworkByLessonId($lesson['id']);
             $exercise = $this->getExerciseService()->getExerciseByLessonId($lesson['id']);
             $json['homeworkOrExerciseNum'] = $homework['itemCount'] + $exercise['itemCount'];
-        }catch (Exception $e) { 
+        }else{ 
             $json['homeworkOrExerciseNum'] = 0;
         }
 
@@ -564,6 +565,11 @@ class CourseLessonController extends BaseController
     private function getExerciseService()
     {
         return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
 }
