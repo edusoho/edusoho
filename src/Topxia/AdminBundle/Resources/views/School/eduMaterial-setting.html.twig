@@ -8,19 +8,23 @@
 {% block main %}
   <div class="page-header"><h1>教材设置</h1></div>
   <div class="panel-body">
-    <ul class="nav nav-tabs">
-      {% if school.primarySchool|default('') %}
-        <li class="{% if schoolType == 'primarySchool' %}active{% endif %}"><a href="{{ path('admin_school_eduMaterial_setting',{schoolType:'primarySchool'}) }}">小学</a></li>
-      {% endif %}
-      {% if school.middleSchool|default('') %}
-        <li class="{% if schoolType == 'middleSchool' %}active{% endif %}"><a href="{{ path('admin_school_eduMaterial_setting',{schoolType:'middleSchool'}) }}">初中</a></li>
-      {% endif %}
-      {% if school.highSchool|default('') %}
-        <li class="{% if schoolType == 'highSchool' %}active{% endif %}"><a href="{{ path('admin_school_eduMaterial_setting',{schoolType:'highSchool'}) }}">高中</a></li>
-      {% endif %}
-    
-    </ul>
-    <br>
-    {% include 'TopxiaAdminBundle:School:eduMaterial-table.html.twig' %}
+    {% if schoolType!='all' %}
+      <ul class="nav nav-tabs">
+        {% if school.primarySchool|default('') %}
+          <li class="{% if schoolType == 'primarySchool' %}active{% endif %}"><a href="{{ path('admin_school_eduMaterial_setting',{schoolType:'primarySchool'}) }}">小学</a></li>
+        {% endif %}
+        {% if school.middleSchool|default('') %}
+          <li class="{% if schoolType == 'middleSchool' %}active{% endif %}"><a href="{{ path('admin_school_eduMaterial_setting',{schoolType:'middleSchool'}) }}">初中</a></li>
+        {% endif %}
+        {% if school.highSchool|default('') %}
+          <li class="{% if schoolType == 'highSchool' %}active{% endif %}"><a href="{{ path('admin_school_eduMaterial_setting',{schoolType:'highSchool'}) }}">高中</a></li>
+        {% endif %}
+      
+      </ul>
+      <br>
+      {% include 'TopxiaAdminBundle:School:eduMaterial-table.html.twig' %}
+    {% else %}
+      <div class="empty">尚未设置启用年级</div>
+    {% endif %}
   </div>
 {% endblock %}
