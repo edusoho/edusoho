@@ -324,3 +324,54 @@ input.LargeInput {width: 600px;}
   height: 210px; 
   padding: 8px;
 }
+
+  #tag-chooser {
+    position: relative;
+  }
+  .tag-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+  }
+
+  .tag-overlay .panel-footer {
+    text-align: right;
+  }
+
+  .tag-overlay .tag-item {
+    font-size: 12px;
+    padding: 2px 3px;
+    border-radius: 3px;
+    margin-bottom: 3px;
+    display: inline-block;
+    text-decoration: none;
+  }
+
+  .tag-overlay .tag-item-choosed {
+    background: #5bc0de;
+    color: #fff;
+  }
+
+  .tags-choosed {
+    margin-bottom: 10px;
+  }
+
+
+  .choosed-tag {
+    margin: 0 10px 10px 0;
+  }
+
+  .choosed-tag .disabled {
+    color: #444;
+    opacity: 1;
+  }
+
+  .choosed-tag .glyphicon-remove {
+    color: #666;
+    font-size: 10px;
+  }
+
+  .choosed-tag-template {
+    display: none;
+  }

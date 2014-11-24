@@ -1,0 +1,45 @@
+<div id="tag-modal-chooser" style="width:400px;">
+
+  <div class="btn-group choosed-tag choosed-tag-template">
+    <button type="button" class="btn btn-xs btn-default disabled"><span class="tag-name-placeholder"></span></button>
+    <button type="button" class="btn btn-xs btn-default">
+      <span class="glyphicon glyphicon-remove tag-remove"></span>
+    </button>
+  </div>
+  <div class="tags-choosed"></div>
+
+  <div class="input-group">
+    <input type="text" class="form-control" input class="form-control" id="courseware-tag-field" type="text" name="tagIds" value="{{ courseware.tagIds|default(null) }}" data-url="#" tabindex="3">
+    <div class="input-group-btn">
+      <button type="button" class="btn btn-default dropdown" tabindex="-1">
+        <span class="caret"></span>
+      </button>
+    </div>
+  </div>
+  <div class="tag-overlay">
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row">
+          {% for tagGroup in tagGroups %}
+          {% set tag = tags[tagGroup.id]|default(null)  %}
+            <div class="col-xs-3">{{ tagGroup.name }}</div>
+            <div class="col-xs-9">
+              <div class="row">
+                {% for result in tag %}
+                  <div class="col-xs-4"><a class="tag-item tag-item-{{ result.id }}" href="javascript:;" data-id="{{ result.id }}" data-name="{{ result.name }}">{{ result.name }}</a></div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="panel-footer">
+        <button type="button" class="btn btn-link btn-xs tag-cancel">取消</button>
+        <button type="button" class="btn btn-primary btn-xs tag-confirm">确定</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

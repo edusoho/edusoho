@@ -2,6 +2,8 @@ define(function(require, exports, module){
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
+    var TagChooser = require('../../../../topxiaweb/js/controller/widget/tag-chooser/tag-chooser');
+
     exports.run = function(){
         var $form = $("#courseware-form");
         $modal = $form.parents('.modal');
@@ -63,5 +65,20 @@ define(function(require, exports, module){
             }
         });
 
+        var tagModalChooser = new TagChooser({
+            element: '#tag-modal-chooser',
+            sourceUrl: 'xxxx',
+            multi: true,
+            items: []
+        });
+
+        tagModalChooser.on('choosed', function(items) {
+            var tagIds = [];
+            for (var i = items.length - 1; i >= 0; i--) {
+                tagIds[i] = items[i]['id'];
+                console.log(items[i]['id']);
+            };
+            $('#courseware-tag-field').val(tagIds);
+        });
     }
 });

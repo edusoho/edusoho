@@ -11,7 +11,7 @@ class CoursewareController extends BaseController
     public function manageAction(Request $request, $categoryId, $type)
     {
         $method = $request->query->get('method');
-        $knowledgeId = $request->query->get('knowledgeId');
+        $knowledgeIds = $request->query->get('knowledgeIds');
         $tagIds = $request->query->get('tagIds');
         $title = $request->query->get('title');
 
@@ -20,13 +20,13 @@ class CoursewareController extends BaseController
         } elseif($method == 'tag'){
             $conditions = array(
                 'tagIds' => $tagIds,
-                'knowledgeId' => $knowledgeId,
+                'knowledgeIds' => $knowledgeIds,
                 'categoryId' => $categoryId
             );
         } else {
             $conditions = array(
                 'title' => $title,
-                'knowledgeId' => $knowledgeId,
+                'knowledgeIds' => $knowledgeIds,
                 'categoryId' => $categoryId
             );
         }
@@ -53,7 +53,7 @@ class CoursewareController extends BaseController
             'paginator' => $paginator,
             'knowledges' => $knowledges,
             'coursewaresCount' => $coursewaresCount,
-            'method' => $method
+            'method' => $method,
         ));
     }
 
@@ -75,8 +75,27 @@ class CoursewareController extends BaseController
             return $this->redirect($this->generateUrl('admin_courseware_manage',array('categoryId'=>$categoryId)));
         }
 
+        $tagGroupCount = $this->getTagService()->getAll2GroupCount();
+
+        $paginator = new Paginator(
+            $request, 
+            $tagGroupCount, 
+            20
+        );
+
+        $tagGroups = $this->getTagService()->findAllTag2Groups(
+            $paginator->getOffsetCount(), $paginator->getPerPageCount()
+        );
+
+        $tagGroupIds = ArrayToolkit::column($tagGroups,'id');
+        $tags = $this->getTagService()->findTagsByTagGroupIds($tagGroupIds);
+        $tags = ArrayToolkit::group($tags,'groupId');
+
         return $this->render('TopxiaAdminBundle:Courseware:modal.html.twig',array(
-            'category' => $category
+            'category' => $category,
+            'tagGroups' => $tagGroups,
+            'tags' => $tags,
+            'paginator' => $paginator
         ));
     }
 
@@ -205,5 +224,10 @@ class CoursewareController extends BaseController
     private function getKnowledgeService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.KnowledgeService');
+    }
+
+    private function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Tag.TagService');
     }
 }

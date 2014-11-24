@@ -39,10 +39,6 @@ define(function(require, exports, module) {
             overlay._blurHide([overlay.element, this.$('.dropdown')]);
 
             this._tagOverlay = overlay;
-
-            // overlay.show();
-
-
         },
 
         onDropdown: function(e) {
@@ -106,7 +102,6 @@ define(function(require, exports, module) {
                 $tag.data(tag);
                 $tag.find('.tag-name-placeholder').html(tag.name);
                 $tags.append($tag);
-                console.log($tag);
             });
         },
 

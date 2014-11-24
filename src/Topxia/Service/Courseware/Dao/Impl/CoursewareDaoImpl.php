@@ -83,22 +83,12 @@ class CoursewareDaoImpl extends BaseDao implements CoursewareDao
             if (!empty($tagIds[0])) {
                 foreach ($tagIds as $tagId) {
                     $id = "\"".$tagId."\"";
-                    $conditions['tagsLike'] .= "{$id},";
+                    $conditions['tagsLike'] .= "{$id}*";
                 }
             }
-            $conditions['tagsLike'] = rtrim(trim($conditions['tagsLike']), ',' );
+            $conditions['tagsLike'] = rtrim(trim($conditions['tagsLike']), '*' );
             $conditions['tagsLike'] .= "%";
             unset($conditions['tagIds']);
-        }
-
-        if (isset($conditions['knowledgeId'])) {
-            $knowledgeId = $conditions['knowledgeId'];
-            $conditions['knowledgesLike'] = "%";
-            if (!empty($knowledgeId)) {
-                $conditions['knowledgesLike'] .= "\"".$conditions['knowledgeId']."\"";
-            }
-            $conditions['knowledgesLike'] .= "%";
-            unset($conditions['knowledgeIds']);
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -108,10 +98,23 @@ class CoursewareDaoImpl extends BaseDao implements CoursewareDao
             ->andWhere('userId = :userId')
             ->andWhere('categoryId = :categoryId')
             ->andWhere('tagIds LIKE :tagsLike')
-            ->andWhere('knowledgeIds LIKE :knowledgesLike')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime');
 
+        if(isset($conditions['knowledgeIds'])) {
+            if (!empty($conditions['knowledgeIds'])) {
+                foreach ($conditions['knowledgeIds'] as $key => $knowledgeId) {
+                    $id = "\"".$knowledgeId."\"";
+                    if ($key > 0 ) {
+                        $conditions['knowledgeIdsSql'] .= "OR knowledgeIds LIKE '%$id%'";
+                    } else {
+                        $conditions['knowledgeIdsSql'] = " knowledgeIds LIKE '%$id%' ";
+                    }
+                }
+                $builder->andStaticWhere($conditions['knowledgeIdsSql']);
+            }
+            unset($conditions['knowledgeIds']);
+        }
         return $builder;
     }
 }

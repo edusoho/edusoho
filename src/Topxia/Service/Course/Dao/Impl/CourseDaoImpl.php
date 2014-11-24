@@ -69,7 +69,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $sql .= " ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
         
         return $this->getConnection()->fetchAll($sql, array($status));
-
     }
 
     public function searchCourses($conditions, $orderBy, $start, $limit)

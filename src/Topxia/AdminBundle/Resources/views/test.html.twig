@@ -1,0 +1,107 @@
+
+<style>
+  #tag-chooser {
+    position: relative;
+  }
+  .tag-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+  }
+
+  .tag-overlay .panel-footer {
+    text-align: right;
+  }
+
+  .tag-overlay .tag-item {
+    font-size: 12px;
+    padding: 2px 3px;
+    border-radius: 3px;
+    margin-bottom: 3px;
+    display: inline-block;
+    text-decoration: none;
+  }
+
+  .tag-overlay .tag-item-choosed {
+    background: #5bc0de;
+    color: #fff;
+  }
+
+  .tags-choosed {
+    margin-bottom: 10px;
+  }
+
+
+  .choosed-tag {
+    margin: 0 10px 10px 0;
+  }
+
+  .choosed-tag .disabled {
+    color: #444;
+    opacity: 1;
+  }
+
+  .choosed-tag .glyphicon-remove {
+    color: #666;
+    font-size: 10px;
+  }
+
+  .choosed-tag-template {
+    display: none;
+  }
+
+</style>
+
+<div style="background:#fff;width:800px;height:1000px;padding:50px;">
+
+  <div id="tag-chooser" style="width:400px;">
+
+    <div class="btn-group choosed-tag choosed-tag-template">
+      <button type="button" class="btn btn-xs btn-default disabled"><span class="tag-name-placeholder"></span></button>
+      <button type="button" class="btn btn-xs btn-default">
+        <span class="glyphicon glyphicon-remove tag-remove"></span>
+      </button>
+    </div>
+    <div class="tags-choosed"></div>
+
+    <div class="input-group">
+      <input type="text" class="form-control">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default dropdown" tabindex="-1">
+          <span class="caret"></span>
+        </button>
+      </div>
+    </div>
+    <div class="tag-overlay">
+
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-3">数学</div>
+            <div class="col-xs-9">
+              <div class="row">
+                <div class="col-xs-4"><a class="tag-item tag-item-1" href="javascript:;" data-id="1" data-name="知识点A">三角函数</a></div>
+                <div class="col-xs-4"><a class="tag-item tag-item-2" href="javascript:;" data-id="2" data-name="几何">几何</a></div>
+                <div class="col-xs-4"><a class="tag-item tag-item-3" href="javascript:;" data-id="3" data-name="数列">数列</a></div>
+                <div class="col-xs-4"><a class="tag-item tag-item-4" href="javascript:;" data-id="4" data-name="函数">函数</a> </div>
+                <div class="col-xs-4"><a class="tag-item tag-item-5" href="javascript:;" data-id="5" data-name="三角形">三角形</a> </div>
+                <div class="col-xs-4"><a class="tag-item tag-item-6" href="javascript:;" data-id="6" data-name="面积">面积</a> </div>
+                <div class="col-xs-4"><a class="tag-item tag-item-7" href="javascript:;" data-id="7" data-name="多边行">多边行</a> </div>
+              </div>
+            </div>
+          </div>
+         
+
+        </div>
+        <div class="panel-footer">
+          <button type="button" class="btn btn-link btn-xs tag-cancel">取消</button>
+          <button type="button" class="btn btn-primary btn-xs tag-confirm">确定</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
