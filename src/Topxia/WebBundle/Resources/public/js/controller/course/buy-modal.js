@@ -129,7 +129,7 @@ define(function(require, exports, module) {
                     rule: 'remote'
                 });
 
-                if (parseInt($("#leftMoney").html()) <  parseInt($("#neededMoney").html())){
+                if (parseFloat($("#leftMoney").html()) <  parseFloat($("#neededMoney").html())){
                         $("#notify").show();
                         $modal.find('[type=submit]').addClass('disabled');
                  }
