@@ -95,6 +95,9 @@
                   {% else %}
                     <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
                   {% endif %}
+                  {% if app.user.isStudent() %}
+                     <li><a href="{{ path('my_courses_learning', {id:app.user.id}) }}"><i class="glyphicon glyphicon-user"></i> 个人中心</a></li>
+                  {% endif %}
                   <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 帐号设置</a></li>
                   <li class="divider"></li>
                   {% if is_granted('ROLE_BACKEND') %}

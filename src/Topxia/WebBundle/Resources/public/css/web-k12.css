@@ -1225,3 +1225,11 @@ ul.schedule-lesson-list .item-div .finished-icon .text-success{
 .testpaper-card .btn-index.active {
     color: #333;
 }
+
+.group-btn {
+    color: #fff;
+}
+
+.group-btn.active{
+    color: #fff;
+}
