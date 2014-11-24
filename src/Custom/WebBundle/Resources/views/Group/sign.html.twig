@@ -1,41 +1,83 @@
+<style>
+.class-sign {
+    cursor: pointer;
+    display: inline-block;
+    margin: 20px 13px;
+    border: 1px solid #ddd;
+    background-color: #edfaeb;
+    border-radius: 5px;
+}
+
+.class-sign .date-col {
+    float: left;
+    width: 150px;
+    padding-bottom: 10px;
+    text-align: center; 
+    color: #57c332;
+    font-size: 14px;
+}
+
+.class-sign .date-col .week {
+    margin-top: -15px;
+}
+
+.class-sign .date-col .day {
+    font-size: 60px;
+}
+
+.class-sign .action-col {
+    float: left;
+    margin: 30px 0;
+    width: 150px;
+}
+
+.class-sign .action-col .sign-area {
+    font-size: 18px;
+    color: #fff;
+    line-height: 55px;
+    text-align: center;
+    width: 100px;
+    background-color: #57c332;
+}</style>
 <div class="panel panel-default">
   <div class="panel-body">
-    <div class="media" id="group-sign" data-signurl="{{path('group_sign',{groupId:groupinfo.id})}}">
+{#     <div class="media" id="group-sign" data-signurl="{{path('group_sign',{groupId:groupinfo.id})}}">
      
         <a class="btn btn-info btn-lg pull-left" style="width:100px;font-size:25px;" data-role="sign" > 签 到 </a>
-{# <a class="btn btn-info btn-lg pull-left" style="width:100px;font-size:12px;text-align:left;">已签到 
-  <br>连续41天</a> #}
+<a class="btn btn-info btn-lg pull-left" style="width:100px;font-size:12px;text-align:left;">已签到 
+  <br>连续41天</a>
    
     <div class="media-body pll">
       <h4 class="media-heading pts">{{ 'now' | date('m') }}月{{ 'now' | date('d') }}号</h4>
       漏签<span style="color:red;">10</span>天
     </div>
-  </div>
+  </div> #}
 
-  </div>
-</div>
- 
+<div class="row col-md-12">
 
-<div class="class-sign class-sign-finished row">
-  <div class="date-col col-md-6">
-    <div class="date-area">
-      <div class="day">{{ 'now' | date('d') }}</div>
-  
-      <div class="yearMonth">{{ 'now'|date('Y.m') }}</div>
-    </div>
-  </div>
-
-  <div class="action-col  col-md-6">
   <div id="class-sign"  data-records="{{ path('signed_records', {'groupId':groupinfo.id})}}" data-signurl="{{path('group_sign',{groupId:groupinfo.id})}}" >
-  <div  class="sign-area" {% if not isSignedToday %} data-role="sign" {% else %} data-role="signed" onclick="return false;" {% endif %} >
+{#   <div  class="sign-area" {% if not isSignedToday %} data-role="sign" {% else %} data-role="signed" onclick="return false;" {% endif %} >
  
     {% if not isSignedToday %}
       <span class="sign-text">签到</span>
     {% else %}
       <span class="sign-text">已签</span>
     {% endif %}
+  </div> #}
+      <div class="media" id="group-sign" data-signurl="{{path('group_sign',{groupId:groupinfo.id})}}">
+     {% if not isSignedToday %}
+        <a class="btn btn-info btn-lg pull-left" style="width:100px;font-size:25px;" data-role="sign" > 签 到 </a>
+      {% else %}
+      <a class="btn btn-info btn-lg pull-left disabled" style="width:100px;font-size:12px;text-align:left;">已签到 
+      <br>连续41天</a>
+      <div class="media-body pll">
+      <h4 class="media-heading pts">{{ 'now' | date('m') }}月{{ 'now' | date('d') }}号</h4>
+      漏签<span style="color:red;">10</span>天
+    </div>
+    {% endif %}
+   
+
   </div>
-  
   <div class="sign_main" style="display:none">
     <div class="">
       <div class="calendar_title_month clearfix">
@@ -69,6 +111,9 @@
     </div>
   </div>
 </div>
+  </div>
+
+ 
   </div>
 </div>
  
