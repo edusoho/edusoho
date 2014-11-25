@@ -64,7 +64,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $controller = $this->controller;
         $messages = array_map(function($message) use ($controller){
-            $message['createdTime'] = date('c',$conversations['createdTime']);
+            $message['createdTime'] = date('c',$message['createdTime']);
             $message["createdUser"] = $controller->filterUser($message["createdUser"]);
             return $message;
         }, $messages);
@@ -98,6 +98,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $this->getMessageService()->clearUserNewMessageCounter($user['id']);
 
         $conversations = array_map(function($conversation) use ($users){
+            $conversation['createdTime'] = date('c',$conversation['createdTime']);
             $conversation['user'] = $users[$conversation['fromId']];
             return $conversation;
         }, $conversations);
