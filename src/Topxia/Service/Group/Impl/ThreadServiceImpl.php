@@ -15,11 +15,86 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadDao()->getThread($id);
     }
 
+    public function getUser($id, $lock = false)
+    {
+        $user = $this->getUserDao()->getUser($id, $lock);
+        if(!$user){
+            return null;
+        } else {
+            return UserSerialize::unserialize($user);
+        }
+    }
+
+     public function isFollowed($userId, $threadId)
+    {
+        $fromUser = $this->getUser($userId);
+        $toThread= $this->getThread($threadId);
+        // if(empty($fromUser)) {
+        //     throw $this->createServiceException('用户不存在，检测收藏状态失败！');
+        // }
+
+        if(empty($toThread)) {
+            throw $this->createServiceException('被关注话题不存在，检测收藏状态失败！');
+        }
+
+        $thread = $this->getThreadCollectDao()->getThreadByFromIdAndToId($userId, $threadId);
+        if(empty($thread)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function getThreadsByIds($ids)
     {
         $threads=$this->getThreadDao()->getThreadsByIds($ids);
         return ArrayToolkit::index($threads, 'id');
     }
+
+    public function getThreadsByUserId($userId)
+    {
+       return $this->getThreadDao()->getThreadsByUserId($userId);
+    }
+
+    public function follow($userId,$userThreadId, $threadId)
+    {
+        $fromThread = $this->getThread($userThreadId);
+        $toThread = $this->getThread($threadId);
+        if(empty($toThread)) {
+            throw $this->createServiceException('话题不存在，收藏失败！');
+        }
+        if($fromThread == $toThread) {
+            throw $this->createServiceException('不能收藏自己的话题！');
+        }
+        $collectThread =  $this->getThreadCollectDao()->getThreadByFromIdAndToId($fromThread['userId'], $threadId);
+        if(!empty($collectThread)) {
+            throw $this->createServiceException('不允许重复收藏!');
+        }
+        return $this->getThreadCollectDao()->addCollect(array(
+            "userId"=>$userId,
+            "threadId"=>$threadId,
+            "createdTime"=>time()));
+    }
+
+    public function unFollow($userId,$userThreadId, $threadId)
+    {
+        $fromThread = $this->getThread($userThreadId);
+        $toThread = $this->getThread($threadId);
+        if(empty($toThread)) {
+            throw $this->createServiceException('话题不存在，取消收藏失败！');
+        }
+        $collectThread =  $this->getThreadCollectDao()->getThreadByFromIdAndToId($fromThread['userId'], $threadId);
+        if(empty($collectThread)) {
+            throw $this->createServiceException('不存在此收藏关系，取消收藏失败！');
+        }
+        return $this->getThreadCollectDao()->deleteCollect($userId,$threadId);
+    }
+
+    public function searchCollectThreadIdsCount($conditions)
+    {
+        return $this->getThreadCollectDao()->searchCollectThreadIdsCount($conditions);
+    }
+
 
     public function searchThreadsCount($conditions)
     {
@@ -31,6 +106,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     public function searchPostsThreadIds($conditions,$orderBy,$start,$limit)
     {
         return $this->getThreadPostDao()->searchPostsThreadIds($conditions,$orderBy,$start,$limit);
+    }
+
+    public function searchCollectThreads($conditions,$orderBy,$start,$limit)
+    {
+        return $this->getThreadCollectDao()->searchCollectThreads($conditions,$orderBy,$start,$limit);
     }
 
     public function searchPostsThreadIdsCount($conditions)
@@ -253,8 +333,41 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     {
         return $this->createDao('Group.ThreadPostDao');
     }
+    private function getThreadCollectDao()
+    {
+        return $this->createDao('Group.ThreadCollectDao');
+    }
     private function getMessageService() 
     {
         return $this->createService('User.MessageService');
+    }
+    private function getUserDao()
+    {
+        return $this->createDao('User.UserDao');
+    }
+}
+
+class UserSerialize
+{
+    public static function serialize(array $user)
+    {
+        $user['roles'] = empty($user['roles']) ? '' :  '|' . implode('|', $user['roles']) . '|';
+        return $user;
+    }
+
+    public static function unserialize(array $user = null)
+    {
+        if (empty($user)) {
+            return null;
+        }
+        $user['roles'] = empty($user['roles']) ? array() : explode('|', trim($user['roles'], '|')) ;
+        return $user;
+    }
+
+    public static function unserializes(array $users)
+    {
+        return array_map(function($user) {
+            return UserSerialize::unserialize($user);
+        }, $users);
     }
 }

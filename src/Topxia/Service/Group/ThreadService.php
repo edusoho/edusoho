@@ -6,8 +6,18 @@ interface ThreadService
 {
     public function getThread($id);
 
+    public function isFollowed($userId, $threadId);
+
+    public function follow($userId,$userThreadId, $threadId);
+    
+    public function unfollow($userId,$userThreadId, $threadId);
+
+    public function searchCollectThreadIdsCount($conditions);
+
     public function getThreadsByIds($ids);
     
+    public function getThreadsByUserId($userId);
+
     public function addThread($thread);
 
     public function updateThread($id,$fields);
@@ -21,6 +31,8 @@ interface ThreadService
     public function searchThreadsCount($conditions);
 
     public function searchPostsThreadIds($conditions,$orderBy,$start,$limit);
+    
+    public function searchCollectThreads($conditions,$orderBy,$start,$limit);
 
     public function searchPostsThreadIdsCount($conditions);
 

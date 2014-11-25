@@ -4,6 +4,7 @@
 {% block keywords %}{{threadMain.title|plain_text(15)}} {{ setting('site.name') }} {% endblock %}
 {% block description %}{{threadMain.content|plain_text(150)}}{% endblock %}
 {% block group_main %}
+
   <div class="panel panel-default group-thread">
     <div class="panel-heading">
       <h2>
@@ -14,6 +15,14 @@
         {% if threadMain.isStick %}
         <span class="label label-danger">置顶</span>
       {% endif %}
+  {# <span style="float: right;" class="label label-danger">置顶</span> #}
+{# {{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestionsBlock')) }} #}
+      <div class="actions" style="float: right;" id="thread-list">
+            {% if threadMain.userId != user.id %}
+              <button class="btn btn-success btn-xs unfollow-btn" data-url="{{ path('group_uncollect', {threadId:threadMain.id}) }}" {% if isFollowed == false %} style="display:none;"{% endif %}>已收藏</button>
+              <button class="btn btn-primary btn-xs follow-btn" data-url="{{ path('group_collect', {threadId:threadMain.id}) }}" {% if isFollowed == true %} style="display:none;"{% endif %}>收藏</button>
+            {% endif %}
+      </div>
       </h2>
       <div class="metas">
         发表于 {{ threadMain.createdTime|smart_time }}

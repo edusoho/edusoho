@@ -118,6 +118,28 @@ class GroupController extends BaseController
         $threadsCount=$this->getThreadService()->searchThreadsCount(array('userId'=>$user['id']));
         $groupsAsOwnThreads=$this->getGroupService()->getGroupsByids($groupIds);
 
+        
+        $userIds = ArrayToolkit::column($ownThreads, 'lastPostMemberId');
+        $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
+        $collectThreadsIds=$this->getThreadService()->searchCollectThreads(array('userId'=>$user['id']),array('id',"DESC"), 0,10);
+        $collectThreads = array();
+        foreach ($collectThreadsIds as $collectThreadsId) {
+            $collectThreads[]=$this->getThreadService()->getThread($collectThreadsId['threadId']);  
+        }
+        $collectCount=$this->getThreadService()->searchCollectThreadIdsCount(array('userId'=>$user['id']));
+        
+        $groupIdsAsCollectThreads = ArrayToolkit::column($collectThreads, 'groupId');
+        $groupsAsCollectThreads=$this->getGroupService()->getGroupsByids($groupIdsAsCollectThreads);
+
+        $userIds =  ArrayToolkit::column($collectThreads, 'lastPostMemberId');
+        $collectLastPostMembers=$this->getUserService()->findUsersByIds($userIds);
+        // $groupIdsAsPostThreads = ArrayToolkit::column($threads, 'groupId');
+        // $groupsAsPostThreads=$this->getGroupService()->getGroupsByids($groupIdsAsPostThreads);
+
+        // $userIds =  ArrayToolkit::column($ownThreads, 'lastPostMemberId');
+        // $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
+
+
         $userIds = ArrayToolkit::column($ownThreads, 'lastPostMemberId');
         $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
 
@@ -130,6 +152,7 @@ class GroupController extends BaseController
         }
 
         $postsCount=$this->getThreadService()->searchPostsThreadIdsCount(array('userId'=>$user['id']));
+            
 
         $groupIdsAsPostThreads = ArrayToolkit::column($threads, 'groupId');
         $groupsAsPostThreads=$this->getGroupService()->getGroupsByids($groupIdsAsPostThreads);
@@ -143,6 +166,10 @@ class GroupController extends BaseController
             'threads'=>$threads,
             'threadsCount'=>$threadsCount,
             'postsCount'=>$postsCount,
+            'collectCount'=>$collectCount,
+            'groupsAsCollectThreads'=>$groupsAsCollectThreads,
+            'collectLastPostMembers'=>$collectLastPostMembers,
+            'collectThreads'=>$collectThreads,
             'postLastPostMembers'=>$postLastPostMembers,
             'groupsAsPostThreads'=>$groupsAsPostThreads,
             'lastPostMembers'=>$lastPostMembers,
@@ -269,6 +296,42 @@ class GroupController extends BaseController
             'groups'=>$groupsAsPostThreads,
             ));
 
+    }
+
+    public function collectingAction()
+    {
+        $user=$this->getCurrentUser();
+        // $threadMain=$this->getThreadService()->getThread($threadId);
+        $threads=array();
+        $paginator=new Paginator(
+            $this->get('request'),
+            $this->getThreadService()->searchCollectThreadIdsCount(array('userId'=>$user['id'])),
+            12
+            );
+
+        $collectThreadsIds=$this->getThreadService()->searchCollectThreads(
+            array('userId'=>$user['id']),
+            array('id',"DESC"),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+            );
+// var_dump($collectThreadsIds);exit();
+        foreach ($collectThreadsIds as $collectThreadsId) {
+            $threads[]=$this->getThreadService()->getThread($collectThreadsId['threadId']);  
+        }
+        
+        $groupIdsAsPostThreads = ArrayToolkit::column($threads, 'groupId');
+        $groupsAsPostThreads=$this->getGroupService()->getGroupsByids($groupIdsAsPostThreads);
+
+        $userIds =  ArrayToolkit::column($threads, 'lastPostMemberId');
+        $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
+        return $this->render("TopxiaWebBundle:Group:group-member-collect.html.twig",array(
+            'user'=>$user,
+            'paginator'=>$paginator,
+            'threads'=>$threads,
+            'lastPostMembers'=>$lastPostMembers,
+            'groups'=>$groupsAsPostThreads,
+            ));
     }
 
     public function groupIndexAction(Request $request,$id) 

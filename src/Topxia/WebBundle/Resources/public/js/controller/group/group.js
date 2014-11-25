@@ -12,7 +12,20 @@
         return hrefArray[1];
     }
     exports.run = function() {
-        
+
+        $("#thread-list").on('click', '.unfollow-btn, .follow-btn', function() {
+            var $this = $(this);
+
+            $.post($this.data('url'), function(){
+                $this.hide();
+                if ($this.hasClass('follow-btn')) {
+                    $this.parent().find('.unfollow-btn').show();
+                } else {
+                    $this.parent().find('.follow-btn').show();
+                }
+            });
+        });
+
         if($('#thread_content').length>0){
             var editor_thread = EditorFactory.create('#thread_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
             var validator_thread = new Validator({

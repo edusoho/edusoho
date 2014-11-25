@@ -29,6 +29,12 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function getThreadsByUserId($userId)
+    {
+        $sql ="SELECT * FROM {$this->table} WHERE userId= ?";
+        return $this->getConnection()->fetchAssoc($sql,array($userId)) ? : null;
+    }
+
     public function addThread($thread)
     {
     	$thread = $this->createSerializer()->serialize($thread, $this->serializeFields);

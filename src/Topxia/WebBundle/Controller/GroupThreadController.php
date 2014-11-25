@@ -114,6 +114,43 @@ class GroupThreadController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function collectAction(Request $request, $threadId)
+    {
+        $user = $this->getCurrentUser();
+
+        $thread=$this->getThreadService()->getThreadsByUserId($user['id']);
+
+        $threadMain=$this->getThreadService()->getThread($threadId);
+        
+        $isSetThread=$this->getThreadService()->follow($user['id'],$thread['id'], $threadId);
+        
+        $userShowUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
+        $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$threadMain['groupId'],'threadId'=>$threadMain['id']), true);
+
+        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>已经收藏了你的话题<a href='{$threadUrl}' target='_blank'><strong>“{$threadMain['title']}”</strong></a>！";
+        $this->getNotificationService()->notify($threadMain['userId'], 'default', $message);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function uncollectAction(Request $request, $threadId)
+    {
+        $user = $this->getCurrentUser();
+        $thread=$this->getThreadService()->getThreadsByUserId($user['id']);
+
+        $threadMain=$this->getThreadService()->getThread($threadId);
+        
+        $isSetThread=$this->getThreadService()->unfollow($user['id'],$thread['id'], $threadId);
+        
+        $userShowUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
+        $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$threadMain['groupId'],'threadId'=>$threadMain['id']), true);
+
+        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>已经取消收藏你的话题<a href='{$threadUrl}' target='_blank'><strong>“{$threadMain['title']}”</strong></a>！";
+        $this->getNotificationService()->notify($threadMain['userId'], 'default', $message);
+
+        return $this->createJsonResponse(true);    
+    }
+
     public function groupThreadIndexAction(Request $request,$id,$threadId)
     {  
         $group = $this->getGroupService()->getGroup($id);
@@ -124,7 +161,7 @@ class GroupThreadController extends BaseController
         $user=$this->getCurrentUser();
 
         $threadMain=$this->getThreadService()->getThread($threadId);
-
+        // var_dump($threadMain);exit();
         if (empty($threadMain)) {
             return $this->createMessageResponse('info','该话题已被管理员删除');
         }
@@ -133,6 +170,12 @@ class GroupThreadController extends BaseController
             return $this->createMessageResponse('info','该话题已被关闭');
         }
 
+         if ($threadMain['status']!="close") {
+            $isFollowed = $this->getThreadService()->isFollowed($this->getCurrentUser()->id, $threadMain['id']);
+        } else {
+            $isFollowed = false;
+        }
+        
         $this->getThreadService()->waveHitNum($threadId);
 
         if($request->query->get('post'))
@@ -207,9 +250,10 @@ class GroupThreadController extends BaseController
             $groupShareContent = str_replace("{{groupname}}", $group['title'], $defaultSetting['groupShareContent']);
             $groupShareContent = str_replace("{{threadname}}", $threadMain['title'], $groupShareContent);
         }
-        
+
         return $this->render('TopxiaWebBundle:Group:thread.html.twig',array(
             'groupinfo' => $group,
+            'isFollowed' => $isFollowed,
             'groupShareContent'=>$groupShareContent,
             'threadMain'=>$threadMain,
             'user'=>$user,
@@ -504,6 +548,11 @@ class GroupThreadController extends BaseController
     }
 
     private function getNotifiactionService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+        protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
