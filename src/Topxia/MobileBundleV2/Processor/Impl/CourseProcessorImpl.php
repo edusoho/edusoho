@@ -132,7 +132,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	}
 
 	/**
-	* add need param (courseId, lessonId, title, content, type)
+	* add need param (courseId, lessonId, title, content, type="question")
 	* update need param (courseId, threadId, title, content, type)
 	*/
 	public function updateThread(){
