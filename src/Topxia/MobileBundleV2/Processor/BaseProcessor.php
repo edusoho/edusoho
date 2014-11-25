@@ -101,6 +101,11 @@ class BaseProcessor {
         return $this->controller->getService('Util.MobileDeviceService');
     }
 
+    protected function getArticleService()
+    {
+        return $this->controller->getService('Article.ArticleService');
+    }
+
     protected function getOrderService()
     {
         return $this->controller->getService('Order.OrderService');
