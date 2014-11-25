@@ -64,18 +64,17 @@
 							<span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
 							<span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
 						{% else %}
-						<span class="course-price" {% if setting('coin.coin_price_enabled') %} style="display:none;"  {% else %}  style="display:block " {% endif %}>
+						<span class="course-price" {% if setting('coin.coin_price_enabled') %} style="display:none;"  {% else %}  style="display:inline " {% endif %}>
 							<span class="money-num">{{ course.price }}</span>
 							<span class="money-text">元</span>
 						</span>
 
-							&nbsp;&nbsp;&nbsp;
 						 {% if setting('coin.coin_enabled') %}
 						 {% if course.coinPrice > 0 %}
-						 <span class="course-price"{% if setting('coin.coin_price_enabled') %} style="display:block " {% else %} style="display:none;"   {% endif %} >
+						 <nobr class="course-price"{% if setting('coin.coin_price_enabled') %} style="display:inline " {% else %} style="display:none;"   {% endif %} >
 							<span class="money-num">{{ course.coinPrice }}</span>
 							<span class="money-text" > {{setting('coin.coin_name')}}</span>
-						</span>
+						</nobr>
 						{% endif %}  
 						{% endif %}  
 
