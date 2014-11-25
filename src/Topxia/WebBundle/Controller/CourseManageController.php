@@ -169,8 +169,17 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
         
+
         $code = 'ChargeCoin';
         $ChargeCoin = $this->getAppService()->findInstallApp($code);
+        if($ChargeCoin){
+            $coinSetting=$this->getSettingService()->get('coin',array());
+            if(isset($coinSetting['cash_rate'])){
+                $cashRate=$coinSetting['cash_rate'];
+            }else{
+                $cashRate=1;
+            }
+        }
         
         $canModifyPrice = true;
         $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
@@ -205,7 +214,8 @@ class CourseManageController extends BaseController
             'course' => $course,
             'canModifyPrice' => $canModifyPrice,
             'levels' => $this->makeLevelChoices($levels),
-            'ChargeCoin'=> $ChargeCoin
+            'ChargeCoin'=> $ChargeCoin,
+            'cashRate'=>$cashRate
         ));
     }
 

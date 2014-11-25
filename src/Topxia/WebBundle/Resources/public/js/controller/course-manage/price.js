@@ -11,6 +11,20 @@ define(function(require, exports, module) {
     
         require('./header').run();
 
+        $("input[name='price']").on('input',function(){
+            var element = $(this);
+            var cash_rate= element.data("cashrate");
+            var price = element.val();
+            $("input[name='coinPrice']").attr('value',parseFloat(price)/parseFloat(cash_rate));
+        });
+
+        $("input[name='coinPrice']").on('input',function(){
+            var element = $(this);
+            var cash_rate= element.data("cashrate");
+            var price = element.val();
+            $("input[name='price']").attr('value',parseFloat(price)*parseFloat(cash_rate));
+        });
+
         var validator = new Validator({
             element: '#price-form',
             failSilently: true,
@@ -21,6 +35,8 @@ define(function(require, exports, module) {
                     return false;
                 }
                 $form = $('#price-form');
+
+
                 if($('#freeStartTime').length > 0){
                     var startTime = $('#freeStartTime').val();
                     startTime = startTime.replace(/-/g,"/");
@@ -38,6 +54,23 @@ define(function(require, exports, module) {
                 }   
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
+                    var price =$("input[name='price']").val();
+                    var coinPrice=$("input[name='coinPrice']").val();
+                    var cash_rate= $form.data("cashrate");
+                    var priceDisabled= $form.find('[name=price]').attr("disabled");
+                    var coinPriceDisabled= $form.find('[name=price]').attr("disabled");
+                    if(priceDisabled="disabled"){
+                        var turePrice=parseFloat(coinPrice)*parseFloat(cash_rate);
+                        if(price!=turePrice){
+                            return false;
+                        }
+                    }
+                    if(coinPriceDisabled="disabled"){
+                        var turePrice=parseFloat(price)/parseFloat(cash_rate);
+                        if(coinPrice!=turePrice){
+                            return false;
+                        }
+                    }
                     Notify.success('课程价格已经修改成功');
                 }).error(function(){
                     Notify.danger('操作失败');
