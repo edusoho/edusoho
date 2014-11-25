@@ -1,0 +1,24 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}文章素材预览{% endblock %}
+
+{% block body %}
+  <div>
+    主知识点：{{ mainKnowledge.name }}
+  </div>
+  <div>
+    关联知识点：{% for relatedKnowledge in relatedKnowledges %}{{ relatedKnowledge.name }} {% endfor %}
+  </div>
+  <div>
+    标签：{% for tag in tags %}{{ tag.name }} {% endfor %}
+  </div>
+  <div>
+    {{ articleMaterial.content|raw }}
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+{% endblock %}

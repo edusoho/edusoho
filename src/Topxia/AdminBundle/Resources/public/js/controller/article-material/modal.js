@@ -2,10 +2,20 @@ define(function(require, exports, module){
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
+    var EditorFactory = require('common/kindeditor-factory');
     exports.run = function(){
         var $form = $("#article-material-form");
         $modal = $form.parents('.modal');
         var validator = _initValidator($form, $modal);
+        var $editor = _initEditorFields($form, validator);
+
+        function _initEditorFields($form, validator) {
+            var editor = EditorFactory.create('#richeditor-content-field', 'simple');
+            validator.on('formValidate', function(elemetn, event) {
+                editor.sync();
+            });
+            return editor;
+        }
 
         function _initValidator($form, $modal) {
                 var validator = new Validator({
@@ -29,11 +39,6 @@ define(function(require, exports, module){
 
             validator.addItem({
                 element: '[name=mainKnowledgeId]',
-                required: true
-            });
-
-            validator.addItem({
-                element: '[name=relatedKnowledgeIds]',
                 required: true
             });
 

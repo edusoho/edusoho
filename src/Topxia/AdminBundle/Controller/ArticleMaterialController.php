@@ -65,6 +65,7 @@ class ArticleMaterialController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $articleMaterial = $request->request->all();
+            $articleMaterial = $this->filterArticleMaterial($articleMaterial);
             $articleMaterial['categoryId'] = $categoryId;
             $articleMaterial = $this->getArticleMaterialService()->createArticleMaterial($articleMaterial);
 
@@ -107,14 +108,11 @@ class ArticleMaterialController extends BaseController
         }
 
         $articleMaterial['relatedKnowledgeIds'] = implode(",", $articleMaterial['relatedKnowledgeIds']);
-        if (!empty($articleMaterial['tagIds'])) {
-            $articleMaterial['tagIds'] = implode(",", $articleMaterial['tagIds']);
-        }
+        $articleMaterial['tagIds'] = implode(",", $articleMaterial['tagIds']);
 
         if ($request->getMethod() == 'POST') {
             $articleMaterial = $request->request->all();
-            $videoMeta = $this->getVideoMeta($articleMaterial['url']);
-            $articleMaterial = $this->filterVideoField($videoMeta,$articleMaterial);
+            $articleMaterial = $this->filterArticleMaterial($articleMaterial);
             $articleMaterial = $this->getArticleMaterialService()->updateArticleMaterial($id,$articleMaterial);
 
             return $this->redirect($this->generateUrl('admin_article_material_manage',array('categoryId'=>$categoryId)));
@@ -128,6 +126,45 @@ class ArticleMaterialController extends BaseController
         );
     }
 
+    public function previewAction(Request $request, $categoryId, $id)
+    {
+        $category = $this->getCategoryService()->getCategory($categoryId);
+        if (empty($category)) {
+            throw $this->createNotFoundException("分类(#{$categoryId})不存在，编辑文章素材失败！");
+        }
+
+        $articleMaterial = $this->getArticleMaterialService()->getArticleMaterial($id);
+        if (empty($articleMaterial)) {
+            throw $this->createNotFoundException('文章素材已经删除或者不存在.');
+        }
+        $mainKnowledge = $this->getKnowledgeService()->getKnowledge($articleMaterial['mainKnowledgeId']);
+        $relatedKnowledges = array();
+        foreach ($articleMaterial['relatedKnowledgeIds'] as $relatedKnowledgeId) {
+            $relatedKnowledges[] = $this->getKnowledgeService()->getKnowledge($relatedKnowledgeId);
+        }
+
+        $tags = array();
+        foreach ($articleMaterial['tagIds'] as $tagId) {
+            $tags[] = $this->getTagService()->getTag($tagId);
+        }
+
+        return $this->render('TopxiaAdminBundle:ArticleMaterial:preview.html.twig',array(
+            'articleMaterial' => $articleMaterial,
+            'mainKnowledge' => $mainKnowledge,
+            'relatedKnowledges' => $relatedKnowledges,
+            'tags' => $tags
+        ));
+    }
+
+    private function filterArticleMaterial($articleMaterial)
+    {
+        $articleMaterial['knowledgeIds'] = $articleMaterial['relatedKnowledgeIds'].",".$articleMaterial['mainKnowledgeId'];
+        $articleMaterial['knowledgeIds'] = array_filter(explode(',', $articleMaterial['knowledgeIds']));
+        $articleMaterial['relatedKnowledgeIds'] = array_filter(explode(',', $articleMaterial['relatedKnowledgeIds']));
+        $articleMaterial['tagIds'] = array_filter(explode(',', $articleMaterial['tagIds']));
+
+        return $articleMaterial;
+    }
 
     private function getArticleMaterialService()
     {
@@ -142,5 +179,10 @@ class ArticleMaterialController extends BaseController
     private function getKnowledgeService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.KnowledgeService');
+    }
+
+    private function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Tag.TagService');
     }
 }

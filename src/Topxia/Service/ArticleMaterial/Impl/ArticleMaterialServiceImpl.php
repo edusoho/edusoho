@@ -81,13 +81,14 @@ class ArticleMaterialServiceImpl extends BaseService implements ArticleMaterialS
         $articleMaterial['userId'] = $this->getCurrentUser()->id;
         $articleMaterial['createdTime'] = time();
 
-        $articleMaterial['knowledgeIds'] = $articleMaterial['relatedKnowledgeIds'].",".$articleMaterial['mainKnowledgeId'];
         if (empty($articleMaterial['relatedKnowledgeIds'])) {
             $articleMaterial['knowledgeIds'] = $articleMaterial['mainKnowledgeId'];
+        } else {
+            $articleMaterial['knowledgeIds'] = $articleMaterial['relatedKnowledgeIds'].",".$articleMaterial['mainKnowledgeId'];
+            $articleMaterial['relatedKnowledgeIds'] = array_filter(explode(',', $articleMaterial['relatedKnowledgeIds']));
         }
 
         $articleMaterial['knowledgeIds'] = array_filter(explode(',', $articleMaterial['knowledgeIds']));
-        $articleMaterial['relatedKnowledgeIds'] = array_filter(explode(',', $articleMaterial['relatedKnowledgeIds']));
         return $articleMaterial;
     }
 

@@ -7,6 +7,10 @@
         <span class="glyphicon glyphicon-pencil"></span>
     </a>
 
+    <a class="btn btn-link preview-courseware-btn" data-url="{{ path('admin_article_material_preview',{categoryId:category.id,id:articleMaterial.id}) }}" data-toggle="modal" data-target="#modal" data-toggle="tooltip" data-placement="bottom" title="预览">
+        <span class="glyphicon glyphicon-eye-open"></span>
+    </a>
+
     <a class="btn btn-link delete-articleMaterial-btn" data-url="{{ path('admin_article_material_delete',{id:articleMaterial.id}) }}" data-toggle="tooltip" data-placement="bottom" title="删除">
         <span class="glyphicon glyphicon-trash"></span>
     </a>
