@@ -660,7 +660,6 @@ EOD;
 		$grades=DataDict::dict('gradeName');
 		$mappingData = include(__DIR__ . '/../../src/Topxia/Service/Taxonomy/MaterialMappingData.php');
 
-		$this->getEduMaterialService()->deleteAllEduMaterials();
 		foreach ($mappingData as $subjectCode => $materialCode) {
 			foreach ($grades as $gradeId=>$grade) {
 				$eduMaterial['gradeId']=$gradeId;

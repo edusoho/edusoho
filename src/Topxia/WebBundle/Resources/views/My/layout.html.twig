@@ -56,39 +56,60 @@
                   <span class="myteaching-text">试卷批阅</span>
                 </a>
 
+                <a class="myteaching-menu list-group-item
+                  {% if side_nav == 'my-group' %} active {% endif %}" 
+                  href="{{path('group_member_center')}}">
+                  <span class="k12-iconfont icon-group"></span>
+                  <span class="myteaching-text">我的小组</span>
+                </a>
               </ul>
             </div>
           {% else %}
 
           <div class="list-group-panel">
-            <div class="list-group-heading">我的学习</div>
             <ul class="list-group">
-               <a class="list-group-item
+               <a class="myteaching-menu list-group-item
                {% if side_nav == 'my-learning' %} active {% endif %}" 
-               href="{{path('my_courses_learning')}}">我的课程</a>
-               {% if setting('course.live_course_enabled') %}
-               <a class="list-group-item
-               {% if side_nav == 'my-learning-live' %} active {% endif %}" 
-               href="{{path('my_live_courses_learning')}}">我的直播课表</a>
-               {% endif %}
-               <a class="list-group-item
-               {% if side_nav == 'my-questions' %} active {% endif %}" 
-              href="{{path('my_questions')}}">我的问答</a>
-               <a class="list-group-item
-               {% if side_nav == 'my-discussions' %} active {% endif %}" 
-              href="{{path('my_discussions')}}">我的话题</a>
-               <a class="list-group-item
-               {% if side_nav == 'my-notes' %} active {% endif %}" 
-                href="{{path('my_notebooks')}}">我的笔记</a>
+               href="{{path('my_courses_learning')}}">
+               <span class="k12-iconfont icon-book"></span>
+               <span class="myteaching-text">我的课程</span>
+              </a>
+                <a class="myteaching-menu list-group-item
+                {% if side_nav == 'my-questions' %} active {% endif %}" 
+                href="{{path('my_questions')}}">
+                <span class="k12-iconfont icon-huida"></span>
+                <span class="myteaching-text">我的问答</span>
+                </a>
+                <a class="myteaching-menu list-group-item
+                {% if side_nav == 'my-discussions' %} active {% endif %}" 
+                href="{{path('my_discussions')}}">
+                <span class="k12-iconfont icon-taolun"></span>
+                <span class="myteaching-text">我的话题</span>
+                </a>
+                <a class="myteaching-menu list-group-item
+                  {% if side_nav == 'my-notes' %} active {% endif %}" 
+                  href="{{path('my_notebooks')}}">
+                  <span class="k12-iconfont icon-biji"></span>
+                  <span class="myteaching-text">我的笔记</span>
+                </a>
                {% if is_plugin_installed('Homework') %}
-                 <a class="list-group-item {% if side_nav == 'my-homeworks' %} active {% endif %}" href="{{ path('my_homework_list') }}">我的作业</a>
+                <a class="myteaching-menu list-group-item {% if side_nav == 'my-homeworks' %} active {% endif %}" href="{{ path('my_homework_list') }}">
+                  <span class="k12-iconfont icon-zaixue"></span>
+                  <span class="myteaching-text">我的作业</span>
+                </a>
                {% endif %}
-               <a class="list-group-item
-               {% if side_nav == 'my-quiz' %} active {% endif %}" 
-                href="{{path('my_quiz')}}">我的考试</a>
-               <a class="list-group-item
-               {% if side_nav == 'my-group' %} active {% endif %}" 
-               href="{{path('group_member_center')}}">我的小组</a>
+                <a class="myteaching-menu list-group-item
+                  {% if side_nav == 'my-quiz' %} active {% endif %}" 
+                  href="{{path('my_quiz')}}">
+                  <span class="k12-iconfont icon-shijuan"></span>
+                  <span class="myteaching-text">我的考试</span>
+                </a>
+                <a class="myteaching-menu list-group-item
+                  {% if side_nav == 'my-group' %} active {% endif %}" 
+                  href="{{path('group_member_center')}}">
+                  <span class="k12-iconfont icon-group"></span>
+                  <span class="myteaching-text">我的小组</span>
+                </a>
             </ul>
           </div>
           {% endif %}

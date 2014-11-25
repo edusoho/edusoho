@@ -6,7 +6,7 @@
   <div class="table-responsive">
         <table class="table table-bordered" style="word-break:break-all;text-align:center;">
           <tr class="active">
-            <td>用户名</td>
+            <td>姓名</td>
             <td>加入课程时间</td>
             <td>完成课程时间</td>
             <td>课程学习天数</td>
@@ -18,7 +18,7 @@
           {% if students %}
             {% for student in students %}
             <tr>
-            <td>{{student.nickname}}</td>
+            <td>{{student.truename}}</td>
             <td>{{student.createdTime|date('Y-m-d H:i:s')}}</td>
             <td>{% if student.fininshTime|default(null) %}{{student.fininshTime|date('Y-m-d H:i:s')}}{% else %}----{% endif %}</td>
             <td>{{student.fininshDay}}</td>

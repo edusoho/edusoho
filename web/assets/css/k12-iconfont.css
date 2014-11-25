@@ -15,11 +15,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-group:before { content: "\e60a"; }
+
+.icon-zuoyeicon:before { content: "\e60b"; }
+
 .icon-f12:before { content: "\e602"; }
+
+.icon-daguimo:before { content: "\e608"; }
 
 .icon-book:before { content: "\e600"; }
 
 .icon-zaixue:before { content: "\e601"; }
+
+.icon-biji:before { content: "\e607"; }
+
+.icon-kaoshi:before { content: "\e609"; }
 
 .icon-taolun:before { content: "\e603"; }
 
@@ -28,3 +38,4 @@
 .icon-shijuan:before { content: "\e605"; }
 
 .icon-chart-icon:before { content: "\e606"; }
+

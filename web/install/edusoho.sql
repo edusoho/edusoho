@@ -2010,7 +2010,7 @@ CREATE TABLE `knowledge` (
  `name` varchar(255) NOT NULL COMMENT '知识点名字',
  `weight` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '知识点顺序',
  `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '知识点父Id',
- `term` enum('first','second') CHARACTER SET utf32 NOT NULL DEFAULT 'first' COMMENT '学期',
+ `term` enum('first','second') NOT NULL DEFAULT 'first' COMMENT '学期',
  `materialId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '教材id',
  `gradeId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '年级id',
  `subjectId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '科目id',
@@ -2019,7 +2019,7 @@ CREATE TABLE `knowledge` (
  `createdTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
  `description` text COMMENT '描述',
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2498 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `edu_material`;
 
@@ -2030,4 +2030,4 @@ CREATE TABLE `edu_material` (
  `materialId` int(11) NOT NULL COMMENT '教材',
  `materialName` varchar(255) NOT NULL COMMENT '教材名称',
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3853 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

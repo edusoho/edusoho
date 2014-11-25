@@ -582,7 +582,7 @@ class CourseController extends BaseController
             
             $user=$this->getUserService()->getUser($student['userId']);
             $students[$key]['nickname']=$user['nickname'];
-
+            $students[$key]['truename']=$user['truename'];
             $questionCount=$this->getThreadService()->searchThreadCount(array('courseId'=>$id,'type'=>'question','userId'=>$user['id']));
             $students[$key]['questionCount']=$questionCount;
 

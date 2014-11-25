@@ -53,9 +53,9 @@
                  {{ web_macro.user_avatar(user, ' pull-left media-object media-object-small') }}
                     <div class="media-body">
                         <p >{{ web_macro.user_link(user , 'link-muted') }}</p>
-                        <a href="{{ path ('group_member_center') }}" class="btn btn-primary btn-xs btn-default active" role="button">我的小组主页</a>
+                        <a href="{{ path ('group_member_center') }}" class="btn btn-primary btn-xs btn-default active group-btn" role="button">我的小组主页</a>
                         {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path ('group_add') }}" class="btn btn-primary btn-xs btn-default active" role="button">创建小组</a>
+                        <a href="{{ path ('group_add') }}" class="btn btn-primary btn-xs btn-default active group-btn" role="button">创建小组</a>
                         {% endif %}
                     </div>
                 </div>
