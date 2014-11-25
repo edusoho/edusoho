@@ -1358,6 +1358,10 @@ group_thread_post_reply:
     pattern:  /group/post/{postId}/reply
     defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
 
+order_create:
+    pattern:  /order/create
+    defaults: { _controller: TopxiaWebBundle:Order:create }
+
 my_coin:
     path:     /my/coin
     defaults: { _controller: TopxiaWebBundle:Coin:index }

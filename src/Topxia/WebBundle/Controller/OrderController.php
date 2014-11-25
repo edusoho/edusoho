@@ -8,6 +8,10 @@ use Topxia\Component\Payment\Payment;
 
 class OrderController extends BaseController
 {
+    public function createAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Order:order-create.html.twig', array());
+    }
 
     public function submitPayRequestAction(Request $request , $order, $requestParams)
     {
