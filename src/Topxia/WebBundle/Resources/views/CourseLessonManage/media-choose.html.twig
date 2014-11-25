@@ -15,13 +15,11 @@
     <div class="file-chooser-main">
       <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
         <li class="active"><a class="file-chooser-uploader-tab" href="#video-chooser-upload-pane" data-toggle="tab">上传视频</a></li>
-        <li><a href="#video-chooser-disk-pane" data-toggle="tab">
-						{% if is_plugin_installed('MaterialLib') %}
-        					从视频素材库中选择
-        		{% else %}
-        					从视频库中选择
-        		{% endif %}
-        </a></li>
+        <li>
+          <a href="#video-chooser-disk-pane" data-toggle="tab">
+  					从视频库中选择
+          </a>
+        </li>
         <li><a href="#video-chooser-import-pane" data-toggle="tab">导入网络视频</a></li>
       </ul>
       <div class="tab-content">
@@ -167,12 +165,7 @@
       <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
         <li class="active"><a class="file-chooser-uploader-tab" href="#audio-chooser-upload-pane" data-toggle="tab">上传音频</a></li>
         <li><a href="#audio-chooser-disk-pane" data-toggle="tab">
-						{% if is_plugin_installed('MaterialLib') %}
-        					从音频素材库中选择
-        		{% else %}
-        					从音频库中选择
-        		{% endif %}
-        
+    					从音频库中选择
         </a></li>
       </ul>
       <div class="tab-content">
@@ -258,11 +251,7 @@
       <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
         <li class="active"><a class="file-chooser-uploader-tab" href="#ppt-chooser-upload-pane" data-toggle="tab">上传PPT</a></li>
         <li><a href="#ppt-chooser-disk-pane" data-toggle="tab">
-						{% if is_plugin_installed('MaterialLib') %}
-        					从PPT素材库中选择
-        		{% else %}
-        					从PPT库中选择
-        		{% endif %}
+    					从PPT库中选择
         </a></li>
       </ul>
       <div class="tab-content">
