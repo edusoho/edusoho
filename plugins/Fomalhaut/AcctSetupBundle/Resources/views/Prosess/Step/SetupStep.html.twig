@@ -1,5 +1,7 @@
 {% extends 'AcctSetupBundle:Prosess/Step:layout.html.twig' %}
 
+{% set script_controller = 'step/setup' %}
+
 {% block main %}
     <div class="panel panel-default panel-col">
         <div class="panel-heading">设置公众号信息</div>
@@ -22,6 +24,7 @@
                 </div>
             </div>
 
+            {% form_theme form 'AcctSetupBundle:Form:fields.html.twig' %}
             <div class="form-group">
                 {{ form_label(form.level, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
                 <div class="col-md-8 controls radios">
@@ -30,19 +33,21 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                {{ form_label(form.key, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
-                <div class="col-md-8 controls">
-                    {{ form_widget(form.key, {'attr': {'class': 'form-control'}}) }}
-                    <div class="help-block" style="display:none;"></div>
+            <div id="adv" >
+                <div class="form-group">
+                    {{ form_label(form.key, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                    <div class="col-md-8 controls">
+                        {{ form_widget(form.key, {'attr': {'class': 'form-control'}}) }}
+                        <div class="help-block" style="display:none;"></div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                {{ form_label(form.secret, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
-                <div class="col-md-8 controls">
-                    {{ form_widget(form.secret, {'attr': {'class': 'form-control'}}) }}
-                    <div class="help-block" style="display:none;"></div>
+                <div class="form-group">
+                    {{ form_label(form.secret, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                    <div class="col-md-8 controls">
+                        {{ form_widget(form.secret, {'attr': {'class': 'form-control'}}) }}
+                        <div class="help-block" style="display:none;"></div>
+                    </div>
                 </div>
             </div>
 
