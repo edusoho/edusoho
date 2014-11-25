@@ -58,14 +58,15 @@ define(function(require, exports, module) {
                     var coinPrice=$("input[name='coinPrice']").val();
                     var cash_rate= $form.data("cashrate");
                     var priceDisabled= $form.find('[name=price]').attr("disabled");
-                    var coinPriceDisabled= $form.find('[name=price]').attr("disabled");
-                    if(priceDisabled="disabled"){
+                    var coinPriceDisabled= $form.find('[name=coinPrice]').attr("disabled");
+                    console.log(coinPriceDisabled);
+                    if(priceDisabled == "disabled"){
                         var turePrice=parseFloat(coinPrice)*parseFloat(cash_rate);
                         if(price!=turePrice){
                             return false;
                         }
                     }
-                    if(coinPriceDisabled="disabled"){
+                    if(coinPriceDisabled == "disabled"){
                         var turePrice=parseFloat(price)/parseFloat(cash_rate);
                         if(coinPrice!=turePrice){
                             return false;

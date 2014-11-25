@@ -197,6 +197,8 @@ class CourseManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
+            //         $name = $request->request->get('price');
+            // var_dump($name);exit();
             if(isset($fields['freeStartTime'])){
                 $fields['freeStartTime'] = strtotime($fields['freeStartTime']);
                 $fields['freeEndTime'] = strtotime($fields['freeEndTime']);
