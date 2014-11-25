@@ -102,7 +102,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $conversation['user'] = $users[$conversation['fromId']];
             return $conversation;
         }, $conversations);
-        $conversations['createdTime'] = date('c',$conversations['createdTime']);
         return $conversations;
     }
 
