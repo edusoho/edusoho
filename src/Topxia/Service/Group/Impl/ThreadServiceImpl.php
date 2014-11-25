@@ -17,8 +17,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
      public function isCollected($userId, $threadId)
     {
-        $toThread= $this->getThread($threadId);
-
         $thread = $this->getThreadCollectDao()->getThreadByUserIdAndThreadId($userId, $threadId);
         if(empty($thread)) {
             return false;
@@ -315,9 +313,5 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     private function getMessageService() 
     {
         return $this->createService('User.MessageService');
-    }
-    private function getUserDao()
-    {
-        return $this->createDao('User.UserDao');
     }
 }
