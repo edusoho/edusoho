@@ -22,7 +22,6 @@ class ArticleProcessorImpl extends BaseProcessor implements ArticleProcessor
             $setting = array('name' => '资讯频道', 'pageNums' => 20);
         }
 
-        $categoryTree = $this->getCategoryService()->getCategoryTree();
         $conditions = array('status' => 'published');
         $paginator = new Paginator($this->get('request'), $this->getArticleService()->searchArticlesCount($conditions), $setting['pageNums']);
 
