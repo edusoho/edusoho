@@ -699,12 +699,16 @@ admin_article_material_manage:
     defaults: { _controller: TopxiaAdminBundle:ArticleMaterial:manage }
 
 admin_article_material_create:
-    pattern: /category/{categoryId}/create/articel_material
+    pattern: /category/{categoryId}/create/articel/material
     defaults: { _controller: TopxiaAdminBundle:ArticleMaterial:create }
 
 admin_article_material_edit:
-    pattern: /category/{categoryId}/edit/articel_material/{id}
+    pattern: /category/{categoryId}/edit/{id}/articel/material
     defaults: { _controller: TopxiaAdminBundle:ArticleMaterial:edit }
+
+admin_article_material_delete:
+    pattern: /article/material/delete
+    defaults: { _controller: TopxiaAdminBundle:ArticleMaterial:delete }
 
 admin_category_knowledge:
     pattern: /category/{categoryId}/manage/knowledge

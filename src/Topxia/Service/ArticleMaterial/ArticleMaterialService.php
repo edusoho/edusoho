@@ -3,17 +3,17 @@ namespace Topxia\Service\ArticleMaterial;
 
 interface ArticleMaterialService
 {
-    public function getArticleMarerial($id);
+    public function getArticleMaterial($id);
 
-    public function searchArticleMarerials(array $conditions, $orderBy, $start, $limit);
+    public function searchArticleMaterials(array $conditions, $orderBy, $start, $limit);
 
-    public function searchArticleMarerialsCount($conditions);
+    public function searchArticleMaterialsCount($conditions);
 
-    public function createArticleMarerial($articleMarerial);
+    public function createArticleMaterial($articleMaterial);
 
-    public function updateArticleMarerial($id,$articleMarerial);
+    public function updateArticleMaterial($id,$articleMaterial);
 
-    public function deleteArticleMarerial($id);
+    public function deleteArticleMaterial($id);
 
-    public function deleteArticleMarerialsByIds($ids);
+    public function deleteArticleMaterialsByIds($ids);
 }

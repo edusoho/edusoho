@@ -26,25 +26,24 @@ class ArticleMaterialServiceImpl extends BaseService implements ArticleMaterialS
 
     public function createArticleMaterial($articleMaterial)
     {
-        if (empty($ArticleMaterial)) {
+        if (empty($articleMaterial)) {
             $this->createServiceException("课件内容为空，创建课件失败！");
         }
+        $articleMaterial = $this->filterArticleMaterialFields($articleMaterial);
+        $articleMaterial = $this->getArticleMaterialDao()->addArticleMaterial($articleMaterial);
 
-        $ArticleMaterial = $this->filterArticleMaterialFields($ArticleMaterial);
-        $ArticleMaterial = $this->getArticleMaterialDao()->addArticleMaterial($ArticleMaterial);
-
-        $this->getLogService()->info('ArticleMaterial', 'create', "创建课件《({$ArticleMaterial['title']})》({$ArticleMaterial['id']})");
+        $this->getLogService()->info('articleMaterial', 'create', "创建课件《({$articleMaterial['title']})》({$articleMaterial['id']})");
         
-        return $ArticleMaterial;
+        return $articleMaterial;
     }
 
     public function updateArticleMaterial($id,$articleMaterial)
     {
-        $ArticleMaterial = $this->filterArticleMaterialFields($ArticleMaterial);
+        $articleMaterial = $this->filterArticleMaterialFields($articleMaterial);
 
-        $this->getLogService()->info('ArticleMaterial', 'update', "更新课件《({$ArticleMaterial['title']})》({$id})");
+        $this->getLogService()->info('articleMaterial', 'update', "更新课件《({$articleMaterial['title']})》({$id})");
 
-        return $this->getArticleMaterialDao()->updateArticleMaterial($id,$ArticleMaterial);
+        return $this->getArticleMaterialDao()->updateArticleMaterial($id,$articleMaterial);
     }
 
     public function deleteArticleMaterial($id)
@@ -78,11 +77,10 @@ class ArticleMaterialServiceImpl extends BaseService implements ArticleMaterialS
 
     private function filterArticleMaterialFields($articleMaterial)
     {
-        $ArticleMaterial = ArrayToolkit::parts($articleMaterial,array('knowledgeIds','mainKnowledgeId','relatedKnowledgeIds','tagIds','source','title','image','categoryId','url'));
-        $ArticleMaterial['type'] = 'video';
-        $ArticleMaterial['userId'] = $this->getCurrentUser()->id;
-        $ArticleMaterial['createdTime'] = time();
-        return $ArticleMaterial;
+        $articleMaterial = ArrayToolkit::parts($articleMaterial,array('content','knowledgeIds','mainKnowledgeId','relatedKnowledgeIds','tagIds','title','categoryId'));
+        $articleMaterial['userId'] = $this->getCurrentUser()->id;
+        $articleMaterial['createdTime'] = time();
+        return $articleMaterial;
     }
 
     private function getLogService()

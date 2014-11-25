@@ -2,13 +2,15 @@
 {% set nav = 'course' %}
 {% set side_nav = 'articleMaterial' %}
 
+{% set script_controller = 'article-material/main' %}
+
 {% block main %}
 
 	<div class="page-header clearfix">
   <h1 class="pull-left">文章素材</h1>
     <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_article_material_create', {categoryId:category.id}) }}">添加素材</button>
 </div>
-  {# <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+  <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
     <div class="form-group">
       <input class="form-control" type="text" placeholder="知识点搜索" name="knowledgeId" value="{{ app.request.get('knowledgeId') }}">
@@ -35,14 +37,34 @@
 
   </form>
 <div class="courseware-list">
-  {% block list %}{% endblock %}
+
+  <div id="aticle-table-container">
+    <table class="table table-hover table-striped" id="courseware-item-list">
+      <thead>
+        <tr>
+          <th width="5%"><input type="checkbox"  data-role="batch-select"></th>
+          <th width="">文件名</th>
+          <th width="">知识点</th>
+          <th width="20%">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for articleMaterial in articleMaterials %}
+        {% set knowledge = knowledges[articleMaterial.mainKnowledgeId]|default(null) %}
+          {% include 'TopxiaAdminBundle:ArticleMaterial:list-view-tr.html.twig' %}
+        {% else %}
+          <tr class="empty"><td colspan="20">无文件记录</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
   {{ web_macro.paginator(paginator) }}
 
       <div>
         <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
         <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete" data-url="{{ path('admin_courseware_delete')}}">删除</button>
-      </div> #}
+      </div>
 </div>
 
 {% endblock %}
