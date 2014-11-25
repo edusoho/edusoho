@@ -161,7 +161,7 @@ class GroupThreadController extends BaseController
         $user=$this->getCurrentUser();
 
         $threadMain=$this->getThreadService()->getThread($threadId);
-        // var_dump($threadMain);exit();
+
         if (empty($threadMain)) {
             return $this->createMessageResponse('info','该话题已被管理员删除');
         }

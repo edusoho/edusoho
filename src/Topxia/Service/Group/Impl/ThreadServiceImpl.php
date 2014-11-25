@@ -29,9 +29,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     {
         $fromUser = $this->getUser($userId);
         $toThread= $this->getThread($threadId);
-        // if(empty($fromUser)) {
-        //     throw $this->createServiceException('用户不存在，检测收藏状态失败！');
-        // }
 
         if(empty($toThread)) {
             throw $this->createServiceException('被关注话题不存在，检测收藏状态失败！');
