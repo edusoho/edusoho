@@ -156,9 +156,9 @@ class CourseFileManageController extends BaseController
     
     public function deleteCourseFilesAction(Request $request, $id, $type)
     {
-    		if(!empty($id)){
-        $course = $this->getCourseService()->tryManageCourse($id);
-    		}
+    	if(!empty($id)){
+            $course = $this->getCourseService()->tryManageCourse($id);
+    	}
 
         $ids = $request->request->get('ids', array());
 
