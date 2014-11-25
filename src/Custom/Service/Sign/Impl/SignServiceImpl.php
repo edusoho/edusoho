@@ -42,6 +42,103 @@ class SignServiceImpl extends BaseService implements SignService
             $this->getCashService()->reWard($set['daySign'],"每日签到奖励",$user['id']);
         }
 
+        if($vip){
+
+            $level=$this->getLevelService()->getLevel($vip['levelId']);
+
+            if($level && $this->getVipService()->checkUserInMemberLevel($user['id'],$vip['levelId'])=="ok"){
+                
+                if($statistics['keepDays']%7 == 0)
+
+                    if($level['signReward']>0){
+
+                    $this->getCashService()->reWard($level['signReward'],"连续签到奖励",$user['id']);
+                
+                    }
+
+                $card=$this->getSignCardDao()->getSignCardByUserId($user['id']);
+
+                if(empty($card)){
+
+                    $signCard=array(
+                        'userId'=>$user['id'],
+                        'cardNum'=>$level['signInCards'],
+                        'useTime'=>time(),
+                        );
+                    $card=$this->getSignCardDao()->addSignCard($signCard);
+                }
+
+                $now=date('Y-m',time());
+
+                if(strtotime($now)>$card['useTime']){
+
+                    $this->getSignCardDao()->updateSignCard($card['id'],array(
+                        'cardNum'=>$level['signInCards']));
+                }
+
+            }
+        }
+
+        return $sign;
+    }
+
+    public function getSignCardByUserId($userId)
+    {
+        return $this->getSignCardDao()->getSignCardByUserId($userId);
+    }
+
+    public function repairSign($userId, $targetType, $targetId,$date)
+    {
+        $user = $this->getUserService()->getUser($userId);
+
+        $day=strtotime($date);
+
+        if(date('Y-m',$day) != date('Y-m',time()) || date('Y-m-d',$day) > date('Y-m-d',time())){
+
+            throw $this->createServiceException('只能补签本月!', 403);
+
+        }
+
+        $startTimeToday = strtotime(date('Y-m-d',$day).' 0:0:0');
+        $endTimeToday = strtotime(date('Y-m-d',$day).' 23:59:59');
+        $signs = $this->getSignUserLogDao()->
+            findSignLogByPeriod($userId, $targetType, $targetId, $startTimeToday, $endTimeToday);
+
+        if($signs){
+
+            throw $this->createServiceException('改日已签到!', 403);
+        }
+
+        $card=$this->getSignCardDao()->getSignCardByUserId($user['id']);
+
+        if(empty($card) || $card['cardNum'] == 0 ){
+
+            throw $this->createServiceException('补签卡不足!', 403);
+        }
+
+        $this->getSignCardDao()->waveCrad($card['id'],1);
+
+        $sign = array();
+        $sign['userId'] = $userId;
+        $sign['targetId'] = $targetId;
+        $sign['targetType'] = $targetType;
+        $sign['createdTime'] = $day;
+
+        $sign = $this->getSignUserLogDao()->addSignLog($sign);
+        $statistics = $this->targetSignedNumIncrease($targetType, $targetId, date('Ymd', $day));
+
+
+
+        //wave  keepdays
+
+$statistics['keepDays']=1;
+
+        $vip=$this->getVipService()->getMemberByUserId($user['id']);
+        $set=$this->getSettingService()->get('group',array());
+
+        if($set){
+            $this->getCashService()->reWard($set['daySign'],"每日签到奖励",$user['id']);
+        }
 
         if($vip){
 
@@ -55,7 +152,7 @@ class SignServiceImpl extends BaseService implements SignService
             }
         }
 
-        return $sign;
+        $this->getDispatcher()->dispatch('group.repairSign', new ServiceEvent());
     }
 
     public function isSignedToday($userId, $targetType, $targetId)
@@ -151,6 +248,11 @@ class SignServiceImpl extends BaseService implements SignService
     private function getSignUserLogDao()
     {
         return $this->createDao('Custom:Sign.SignUserLogDao');
+    }
+
+    private function getSignCardDao()
+    {
+        return $this->createDao('Custom:Sign.SignCardDao');
     }
 
     private function getSignUserStatisticsDao()

@@ -35,3 +35,7 @@ signed_records:
     pattern:  /sign/{groupId}/records
     defaults: { _controller: CustomWebBundle:Sign:getSignedRecordsByPeriod }
 
+sign_repair:
+    pattern:  /sign/{groupId}/repair
+    defaults: { _controller: CustomWebBundle:Sign:signRepair }
+

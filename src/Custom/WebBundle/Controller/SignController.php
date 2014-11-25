@@ -24,6 +24,26 @@ class SignController extends BaseController
         return $this->createJsonResponse('success');
     }
 
+    public function signRepairAction(Request $request, $groupId)
+    {   
+        $user=$this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if(!$this->getGroupMemberRole($groupId)){
+            $this->getGroupService()->joinGroup($user,$groupId);
+        }
+
+        $date=$request->query->get('day');
+        
+        $userId=$user['id'];
+        $this->getSignService()->repairSign($userId, 'group_sign', $groupId,$date);
+        
+        return $this->createJsonResponse('success');
+    }
+
     public function getSignedRecordsByPeriodAction(Request $request, $groupId)
     {   
         $user=$this->getCurrentUser();

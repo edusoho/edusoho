@@ -21,8 +21,27 @@
 
 
             $('#group-sign').on('click','.day',function(){
-                
-                console.log($(this).html());
+            var currentDate = userSign.selectedDate;
+            currentDate = currentDate.split('/');
+            var currentYear = parseInt(currentDate[0]);
+            var currentMonth =  parseInt(currentDate[1]);
+            var day=$(this).html();
+
+            if(day !=""){
+                currentDate=currentYear+'-'+currentMonth+'-'+day;
+                $.ajax({
+                url:$('#group-sign').attr('data-repairSignUrl'),
+                dataType: 'json',
+                data:"day="+currentDate,
+                success: function(data){
+                    window.location.reload();
+                },
+                error: function(xhr){
+                }
+                });
+            }
+         
+           
             });
         }
 
