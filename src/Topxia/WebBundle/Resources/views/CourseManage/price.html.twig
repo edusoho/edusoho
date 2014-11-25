@@ -13,6 +13,7 @@
 		{{ web_macro.flash_messages() }}
 
 		{% if canModifyPrice %}
+		{% if setting('coin.coin_price_enabled') %}
 		
 			<form class="form-horizontal" id="price-form" method="post" action="{{path('course_manage_price',{id:course.id})}}">
 
@@ -25,7 +26,7 @@
 						<div class="help-block" style="display:none;"></div>
 					</div>
 				</div>
-				
+				{% else %}
 				{% if setting('coin.coin_enabled') %}
 				<div class="form-group">
 					<div class="col-md-2 control-label">
@@ -36,6 +37,7 @@
 						<div class="help-block" style="display:none;"></div>
 					</div>
 				</div>
+				{% endif %}
 				{% endif %}
 
 				{% if is_feature_enabled('free_limit') %}

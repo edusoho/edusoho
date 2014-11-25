@@ -19,6 +19,7 @@ class CoinController extends BaseController
         $coinSettingsSaved = $coinSettingsPosted;
         $default = array(
           'coin_enabled' => 0,
+          'coin_price_enabled'=>1,
           'coin_name' => '虚拟币',
           'cash_rate' => 10,
           'coin_consume_range_and_present' => array(array(0,0))
@@ -29,6 +30,7 @@ class CoinController extends BaseController
         $coinSettingsPosted = null;
 
         $coinSettingsPosted['coin_enabled'] = $request->request->get("coin_enabled");
+        $coinSettingsPosted['coin_price_enabled'] = $request->request->get("coin_price_enabled");
         $coinSettingsPosted['coin_name'] = $request->request->get("coin_name");
         $this->getSettingService()->set('coin', $coinSettingsPosted);
         $this->getLogService()->info('system', 'update_settings', "更新Coin虚拟币设置", $coinSettingsPosted);

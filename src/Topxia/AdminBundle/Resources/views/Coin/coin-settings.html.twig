@@ -14,6 +14,7 @@
   <form class="form-horizontal" method="post" id="coin-settings-form">
     <fieldset>
       <legend>虚拟币设置</legend>
+
     	<div class="form-group">
       	<div class="col-md-3 control-label">
         	<label>网校虚拟币</label>
@@ -23,6 +24,16 @@
         	<div class="help-block">开启后网校支付将通过虚拟币支付</div>
       	</div>
     	</div>  	
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>课程价格显示</label>
+        </div>
+        <div class="controls col-md-4 radios">
+          {{ radios('coin_price_enabled', {'1':'RMB', '0':'虚拟币'},coin_settings_posted.coin_price_enabled) }} 
+        </div>
+      </div>    
+
       <div class="form-group">
     		<div class="col-md-3 control-label">
     			<label for="coin_name">虚拟币名称</label>
