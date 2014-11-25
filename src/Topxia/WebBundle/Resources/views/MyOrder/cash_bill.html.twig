@@ -41,7 +41,7 @@
             {% if order.payment == 'coin'%}
               <td>{{ order.amount }} {{setting('coin.coin_name')}}</td>
                 {% else %}
-            <td><code>{{ order.amount }}</code>元</td>
+            <td class="text-danger">{{ order.amount }}元</td>
                 {% endif %}
             <td>
               {{ order.payment }}
