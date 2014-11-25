@@ -64,6 +64,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $controller = $this->controller;
         $messages = array_map(function($message) use ($controller){
+            $message['createdTime'] = date('c',$conversations['createdTime']);
             $message["createdUser"] = $controller->filterUser($message["createdUser"]);
             return $message;
         }, $messages);
