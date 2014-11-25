@@ -51,6 +51,29 @@
           {% if course.price > 0 and free_limit_type(course) == 'free_now' %}
             <span class="free-money-text"><del>{{ course.price }}</del></span>
           {% endif %}
+          {% if course.coinPrice > 0 and free_limit_type(course) == 'free_now' %}
+            <span class="free-money-text"><del>{{ course.coinPrice }}</del></span>
+          {% endif %}
+          {% if setting('coin.coin_enabled') %}
+          <span class="course-price"{% if setting('coin.coin_price_enabled') %} style="display:none;"  {% else %}  style="display:inline " {% endif %}>
+            {% if course.price > 0 %}
+              {% if free_limit_type(course) == 'free_now' %}
+                0.00 元
+              {% else %}
+               价格： {{ course.price }}元
+              {% endif %}  
+            {% else %}免费{% endif %}
+          </span>
+          <span class="course-price"{% if setting('coin.coin_price_enabled') %} style="display:inline " {% else %} style="display:none;"   {% endif %} >
+            {% if course.coinPrice > 0 %}
+              {% if free_limit_type(course) == 'free_now' %}
+                0.00 元
+              {% else %}
+               价格： {{ course.coinPrice }}{{setting('coin.coin_name')}}
+              {% endif %}  
+            {% else %}免费{% endif %}
+          </span>
+          {% else %}
           <span class="course-price">
             {% if course.price > 0 %}
               {% if free_limit_type(course) == 'free_now' %}
@@ -60,6 +83,7 @@
               {% endif %}  
             {% else %}免费{% endif %}
           </span>
+          {% endif %}
           <div class="countdown-list">
             {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}
           </div>

@@ -71,10 +71,10 @@
 
 						 {% if setting('coin.coin_enabled') %}
 						 {% if course.coinPrice > 0 %}
-						 <nobr class="course-price"{% if setting('coin.coin_price_enabled') %} style="display:inline " {% else %} style="display:none;"   {% endif %} >
+						 <span class="course-price"{% if setting('coin.coin_price_enabled') %} style="display:inline " {% else %} style="display:none;"   {% endif %} >
 							<span class="money-num">{{ course.coinPrice }}</span>
 							<span class="money-text" > {{setting('coin.coin_name')}}</span>
-						</nobr>
+						</span>
 						{% endif %}  
 						{% endif %}  
 
