@@ -15,37 +15,6 @@ use Imagine\Image\ImageInterface;
 
 class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 {
-	// public function createCourse($course)
-	// {
-	// 	if (!ArrayToolkit::requireds($course, array('title'))) {
-	// 		throw $this->createServiceException('缺少必要字段，创建课程失败！');
-	// 	}
-
-	// 	$course = ArrayToolkit::parts($course, array('title', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
-
-	// 	$course['status'] = 'draft';
- //        		$course['about'] = !empty($course['about']) ? $this->getHtmlPurifier()->purify($course['about']) : '';
- //        		$course['tags'] = !empty($course['tags']) ? $course['tags'] : '';
-	// 	$course['userId'] = $this->getCurrentUser()->id;
-	// 	$course['createdTime'] = time();
-	// 	$course['teacherIds'] = array($course['userId']);
-	// 	$course = $this->getCourseDao()->addCourse(CourseSerialize::serialize($course));
-		
-	// 	$member = array(
-	// 		'courseId' => $course['id'],
-	// 		'userId' => $course['userId'],
-	// 		'role' => 'teacher',
-	// 		'createdTime' => time(),
-	// 	);
-
-	// 	$this->getMemberDao()->addMember($member);
-
-	// 	$course = $this->getCourse($course['id']);
-
-	// 	$this->getLogService()->info('course', 'create', "创建课程《{$course['title']}》(#{$course['id']})");
-
-	// 	return $course;
-	// }
 
 	public function updateCourse($id, $fields)
 	{
@@ -65,6 +34,55 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 		);
 	}
 
+	public function favoriteCourse($courseId)
+	{
+		$user = $this->getCurrentUser();
+		if (empty($user['id'])) {
+			throw $this->createAccessDeniedException();
+		}
+
+		$course = $this->getCourse($courseId);
+		if($course['status']!='published'){
+			throw $this->createServiceException('不能收藏未发布课程');
+		}
+
+		if (empty($course)) {
+			throw $this->createServiceException("该课程不存在,收藏失败!");
+		}
+
+		$favorite = $this->getFavoriteDao()->getFavoriteByUserIdAndCourseId($user['id'], $course['id']);
+		if($favorite){
+			throw $this->createServiceException("该收藏已经存在，请不要重复收藏!");
+		}
+
+		$this->getFavoriteDao()->addFavorite(array(
+			'courseId'=>$course['id'],
+			'userId'=>$user['id'], 
+			'createdTime'=>time()
+		));
+		//添加动态
+		$this->getStatusService()->publishStatus(array(
+			'type' => 'favorite_course',
+			'objectType' => 'course',
+			'objectId' => $courseId,
+			'properties' => array(
+				'course' => $this->simplifyCousrse($course),
+			)
+		));
+		return true;
+	}
+	private function simplifyCousrse($course)
+	{
+		return array(
+			'id' => $course['id'],
+			'title' => $course['title'],
+			'picture' => $course['middlePicture'],
+			'type' => $course['type'],
+			'rating' => $course['rating'],
+			'about' => StringToolkit::plain($course['about'], 100),
+			'price' => $course['price'],
+		);
+	}
 
 	private function _filterCourseFields($fields)
 	{
@@ -119,6 +137,14 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
        private function getTagService()
     {
         return $this->createService('Taxonomy.TagService');
+    }
+     private function getFavoriteDao ()
+    {
+        return $this->createDao('Course.FavoriteDao');
+    }
+     private function getStatusService()
+    {
+        return $this->createService('User.StatusService');
     }
 }
 

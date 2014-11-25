@@ -8,8 +8,9 @@ framework:
     profiler: { only_exceptions: true }
 
 web_profiler:
-    toolbar: false
+    toolbar: true
     intercept_redirects: false
+
 
 twig:
     globals:
