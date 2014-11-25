@@ -1276,7 +1276,7 @@ group_member_threads:
 group_member_posts:
     pattern:  /my/group/posts
     defaults: { _controller: TopxiaWebBundle:Group:memberPosts}
-group_collecting:
+group_thread_collecting:
     pattern:  /my/group/collecting
     defaults: { _controller: TopxiaWebBundle:Group:collecting }
 group_show:
