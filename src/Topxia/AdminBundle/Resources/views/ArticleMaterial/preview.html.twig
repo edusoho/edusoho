@@ -5,15 +5,19 @@
 {% block title %}文章素材预览{% endblock %}
 
 {% block body %}
+  {% if mainKnowledge %}
   <div>
     主知识点：{{ mainKnowledge.name }}
   </div>
+  {% endif %}{% if relatedKnowledges %}
   <div>
-    关联知识点：{% for relatedKnowledge in relatedKnowledges %}{{ relatedKnowledge.name }} {% endfor %}
+    关联知识点：{% for relatedKnowledge in relatedKnowledges %}{{ relatedKnowledge.name|default(null) }} {% endfor %}
   </div>
+  {% endif %} {% if tags %}
   <div>
-    标签：{% for tag in tags %}{{ tag.name }} {% endfor %}
+    标签：{% for tag in tags %}{{ tag.name|default(null) }} {% endfor %}
   </div>
+  {% endif %}
   <div>
     {{ articleMaterial.content|raw }}
   </div>
