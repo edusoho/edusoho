@@ -24,6 +24,9 @@ class ArticleProcessorImpl extends BaseProcessor implements ArticleProcessor
 
         $conditions = array('status' => 'published');
         $latestArticles = $this->getArticleService()->searchArticles($conditions, 'published', $start, $limit);
-        return $latestArticles;
+
+        return $this->controller->render('TopxiaMobileBundleV2:Article:list.html.twig', array(
+            'latestArticles' => $latestArticles
+        ));
     }
 }
