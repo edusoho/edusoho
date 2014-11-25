@@ -2,11 +2,11 @@
 
 {% set script_controller = 'my/orders' %}
 
-{% set main_nav = 'my-bill' %}
+{% set side_nav = 'my-bill' %}
 
 {% block main %}
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">我的消费账单</div>
+  <div class="panel-heading">我的现金消费账单</div>
     <div class="panel-body">
 
 
@@ -14,8 +14,7 @@
       <thead>
         <th>名称</th>
         <th>成交时间</th>
-        <th>价格</th>
-        <th>状态</th>
+        <th>消费金额</th>
         <th>付款方式</th>
       </thead>
       <tbody>
@@ -42,11 +41,8 @@
             {% if order.payment == 'coin'%}
               <td>{{ order.amount }} {{setting('coin.coin_name')}}</td>
                 {% else %}
-            <td>{{ order.amount }}元</td>
+            <td><code>{{ order.amount }}</code>元</td>
                 {% endif %}
-            <td>
-              {{ dict_text('orderStatus:html', order.status) }}
-            </td>
             <td>
               {{ order.payment }}
             </td>
