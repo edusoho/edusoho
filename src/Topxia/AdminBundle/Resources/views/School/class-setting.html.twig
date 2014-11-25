@@ -38,6 +38,8 @@
 <div class="row class-list">
   {% for class in classes %}
     {% include 'TopxiaAdminBundle:School:class-table-tr.html.twig' with {class:class} %}
+  {% else %}
+    <div class="empty">尚未添加班级</div>
   {% endfor %}
 </div>
 
