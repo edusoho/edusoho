@@ -1,0 +1,26 @@
+post-card {
+      display: block;
+      position: relative;
+      background-color: white;
+      padding: 20px;
+      
+      font-size: 1.2rem;
+      font-weight: 300;
+      margin-bottom: 30px;
+    }
+    .card-header {
+      margin-bottom: 10px;
+    }
+    polyfill-next-selector { content: '.card-header h2'; }
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 300;
+    }
+    polyfill-next-selector { content: '.card-header img'; }
+    .card-header  img {
+      width: 70px;
+      height:70px;
+      border-radius: 50%;
+      margin: 10px;
+    }
