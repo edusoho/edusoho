@@ -29,6 +29,7 @@ class SetupType extends AbstractType
                 'choice',
                 array(
                     'label' => 'form.setup.level',
+                    'expanded' => true,
                     'required' => false,
                     'choices' => array(
                         'level_ordinsub' => 'form.setup.level.ordinary_subscription',

@@ -22,8 +22,13 @@
                 </div>
             </div>
 
-                <h4>级别</h4>
-                <div>{{ form_widget(form.level) }}</div>
+            <div class="form-group">
+                {{ form_label(form.level, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls radios">
+                    {{ form_widget(form.level) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
 
             <div class="form-group">
                 {{ form_label(form.key, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
