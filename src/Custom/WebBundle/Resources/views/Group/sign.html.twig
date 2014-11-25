@@ -227,7 +227,7 @@
 
         <div class="mtl mbl">
         {% for vipLevel in vipLevels %}
-        <span style="color:red;">{{vipLevel.name}}</span>:每月<span style="color:red;">{{vipLevel.signInCards|default(0)}}</span>张补签卡,连续签到一周奖励<span style="color:red;">{{vipLevel.signReward}}</span>{{setting('coin').coin_name}}<br>
+        <span style="color:red;">{{vipLevel.name}}</span>:每月<span style="color:red;">{{vipLevel.signInCards|default(0)}}</span>张补签卡,连续签到一周奖励<span style="color:red;">{{vipLevel.signReward|default(0)}}</span>{{setting('coin').coin_name}}<br>
         {% endfor %}
         </div>
 
