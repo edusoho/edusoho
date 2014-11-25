@@ -28,17 +28,25 @@
             var day=$(this).html();
 
             if(day !=""){
-                currentDate=currentYear+'-'+currentMonth+'-'+day;
-                $.ajax({
-                url:$('#group-sign').attr('data-repairSignUrl'),
-                dataType: 'json',
-                data:"day="+currentDate,
-                success: function(data){
-                    window.location.reload();
-                },
-                error: function(xhr){
+                var now=$('#title-month').data('time');
+                now = now.split('/');
+                var nowYear = parseInt(now[0]);
+                var nowMonth =  parseInt(now[1]);
+
+                if(nowYear == currentYear && nowMonth == currentMonth){
+                    currentDate=currentYear+'-'+currentMonth+'-'+day;
+                    $.ajax({
+                    url:$('#group-sign').attr('data-repairSignUrl'),
+                    dataType: 'json',
+                    data:"day="+currentDate,
+                    success: function(data){
+                        window.location.reload();
+                    },
+                    error: function(xhr){
+                    }
+                    });
                 }
-                });
+
             }
          
            
