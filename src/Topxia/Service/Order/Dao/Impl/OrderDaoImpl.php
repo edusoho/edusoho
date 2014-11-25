@@ -71,6 +71,18 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->createSerializer()->unserializes($orders, $this->serializeFields);
     }
 
+    public function searchBill($conditions, $orderBy, $start, $limit)
+    {
+         $sql = "SELECT * FROM {$this->table} WHERE userId = {$conditions['userId']} and (not(`payment` in ('none','coin'))) and `status` = 'paid' ORDER BY {$orderBy[0]} {$orderBy[1]}  Limit {$start}, {$limit}";
+         return $this->getConnection()->fetchAll($sql, array());
+    }
+
+    public function countUserBillNum($conditions)
+    {
+         $sql = "SELECT count(*) FROM {$this->table} WHERE userId = {$conditions['userId']} and (not(`payment` in ('none','coin'))) and `status` = 'paid' ";
+         return $this->getConnection()->fetchColumn($sql, array());
+    }    
+
     public function searchOrderCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)

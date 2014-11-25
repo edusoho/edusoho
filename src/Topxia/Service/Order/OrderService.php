@@ -12,6 +12,10 @@ interface OrderService
 
     public function searchOrders($conditions, $sort = 'latest', $start, $limit);
     
+    public function searchBill($conditions, $sort = 'latest', $start, $limit);
+
+    public function countUserBillNum($conditions);
+    
     public function sumOrderAmounts($startTime,$endTime,array $courseId);
 
     public function searchOrderCount($conditions);

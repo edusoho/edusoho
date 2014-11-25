@@ -35,6 +35,34 @@ class MyOrderController extends BaseController
         ));   
     }
 
+    public function cashBillAction (Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $conditions = array(
+            'userId' => $user['id']
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->countUserBillNum($conditions),
+            20
+        );
+
+        $orders = $this->getOrderService()->searchBill(
+            $conditions,
+            'latest',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+
+        return $this->render('TopxiaWebBundle:MyOrder:cash_bill.html.twig',array(
+            'orders' => $orders,
+            'paginator' => $paginator
+        ));   
+    }
+
     public function refundsAction(Request $request)
     {
     	$user = $this->getCurrentUser();

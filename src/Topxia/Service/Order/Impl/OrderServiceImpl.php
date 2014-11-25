@@ -426,6 +426,29 @@ class OrderServiceImpl extends BaseService implements OrderService
         return ArrayToolkit::index($orders, 'id');
     }
 
+    public function searchBill($conditions, $sort = 'latest', $start, $limit)
+    {
+        $orderBy = array();
+        if ($sort == 'latest') {
+            $orderBy =  array('createdTime', 'DESC');
+        }  elseif ($sort == 'early') {
+            $orderBy =  array('createdTime', 'ASC');
+        } else {
+            $orderBy = array('createdTime', 'DESC');
+        }
+
+        $conditions = $this->_prepareSearchConditions($conditions);
+        $orders = $this->getOrderDao()->searchBill($conditions, $orderBy, $start, $limit);
+
+        return ArrayToolkit::index($orders, 'id');
+    }
+
+    public function countUserBillNum($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->countUserBillNum($conditions);
+    }
+
     public function sumOrderAmounts($startTime,$endTime,array $courseId)
     {
         return $this->getOrderDao()->sumOrderAmounts($startTime,$endTime,$courseId);

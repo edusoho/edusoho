@@ -1037,6 +1037,10 @@ my_orders:
     pattern: /my/orders
     defaults: { _controller: TopxiaWebBundle:MyOrder:index }
 
+my_bill:
+    pattern: /my/bill
+    defaults: { _controller: TopxiaWebBundle:MyOrder:cashBill }
+
 my_order_cancel:
     pattern: /my/order/{id}/cancel
     defaults: { _controller: TopxiaWebBundle:MyOrder:cancel }
