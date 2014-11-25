@@ -56,7 +56,7 @@
                   <core-icon-button id="favicon" icon="favorite">
                     {{ latestArticle.publishedTime|date('Y-m-d H:i') }}
                   </core-icon-button>
-                    <h2>{{ latestArticle.title}}</h2>
+                    <h3>{{ latestArticle.title}}</h3>
                     <p>{{ latestArticle.body | plain_text(150)}}</p>
                   </post-card>
         {% endfor %}
