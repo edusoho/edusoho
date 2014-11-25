@@ -1,8 +1,9 @@
 <?php
 namespace Custom\Service\Course\Impl;
+use Custom\Service\Course\CourseSearchService;
 use Topxia\Service\Common\BaseService;
 
-class CourseServiceImpl extends BaseService implements CourseService
+class CourseSearchServiceImpl extends BaseService implements CourseSearchService
 {
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
 	{

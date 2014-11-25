@@ -2,7 +2,7 @@
 namespace Custom\Service\Course\Dao\Impl;
 use Topxia\Service\Common\BaseDao;
 use Custom\Service\Course\Dao\CourseSearchDao;
-class CourseSearchDao extends BaseDao implements CourseSearchDao
+class CourseSearchDaoImpl extends BaseDao implements CourseSearchDao
 {
 	 protected $table = 'course';
 	public function searchCourses($conditions, $orderBy, $start, $limit)
