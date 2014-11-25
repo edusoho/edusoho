@@ -360,11 +360,11 @@
 }
 
 .sign_main .signed_day{
-    background: url(http://tb2.bdstatic.com/tb/static-frs/img/balv/sign_have.gif?v=1.0) center no-repeat;
+    background: url(../img/sign/sign_have.gif) center no-repeat;
 }
 
 .sign_main .signed_anime_day{
-    background: url(http://tb2.bdstatic.com/tb/static-frs/img/balv/sign_have_anime.gif?v=3.0) center no-repeat;
+    background: url(../img/sign/sign_have_anime.gif) center no-repeat;
 }
 
 .class-sign {
