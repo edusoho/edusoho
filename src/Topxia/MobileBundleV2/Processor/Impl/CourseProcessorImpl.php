@@ -73,7 +73,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
 		$user = $this->controller->getUserByToken($this->request);
 		if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录，不能评价课程！");
+            return $this->createErrorResponse('not_login', "您尚未登录，不能回复！");
         }
         $thread = $this->controller->getThreadService()->getThread($courseId, $threadId);
         if (empty($thread)) {
@@ -458,7 +458,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 			"limit"=>$limit,
 			"total"=>$total,
 			"data"=>$this->filterPosts($posts, $this->controller->filterUsers($users))
-			);
+			);			
 	}
 
 	public function getThread()
