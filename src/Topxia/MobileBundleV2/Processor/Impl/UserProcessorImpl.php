@@ -98,6 +98,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $this->getMessageService()->clearUserNewMessageCounter($user['id']);
 
         $conversations = array_map(function($conversation) use ($users){
+            $conversation['latestMessageTime'] = date('c',$conversation['latestMessageTime']);
             $conversation['createdTime'] = date('c',$conversation['createdTime']);
             $conversation['user'] = $users[$conversation['fromId']];
             return $conversation;
