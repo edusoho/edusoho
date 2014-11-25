@@ -111,18 +111,7 @@ class UserController extends BaseController
     public function followingAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
-        $this->getUserService()->findUserFollowingCount($user['id']);
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getUserService()->findUserFollowingCount($user['id'])
-        );
-
-        $followings = $this->getUserService()->findUserFollowing(
-            $user['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        $followings = $this->getUserService()->findAllUserFollowing($user['id']);
 
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
             'user' => $user,
@@ -135,19 +124,7 @@ class UserController extends BaseController
     public function followerAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
-        $this->getUserService()->findUserFollowerCount($user['id']);
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getUserService()->findUserFollowerCount($user['id']),
-            10
-        );
-
-        $followers = $this->getUserService()->findUserFollowers(
-            $user['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        $followers=$this->getUserService()->findAllUserFollower($user['id']);
 
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
             'user' => $user,
