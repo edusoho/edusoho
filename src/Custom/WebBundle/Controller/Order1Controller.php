@@ -24,7 +24,7 @@ class Order1Controller extends OrderController
 
             $level=$this->getLevelService()->getLevel($vip['levelId']);
 
-            if($level){
+            if($level && $this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId'])=="ok"){
                 
                 $amount=$couponInfo['afterAmount'];
                 $couponInfo['afterAmount']=$couponInfo['afterAmount']*0.1*$level['courseDiscount'];

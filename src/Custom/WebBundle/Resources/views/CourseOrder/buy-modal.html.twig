@@ -23,10 +23,10 @@
     <div class="form-group">
       <div class="col-md-3 control-label">价格</div>
       <div class="col-md-9 controls money-text">
-        <span class="control-text"><strong class="money" {% if level.courseDiscount < 10 %}style="text-decoration: line-through;"{% endif %}>{{ course.price }}</strong>
+        <span class="control-text"><strong class="money" {% if level.courseDiscount < 10 and status=="ok" %}style="text-decoration: line-through;"{% endif %}>{{ course.price }}</strong>
             <span class="text-muted">{% if level.courseDiscount < 10 %}{% else %}元{% endif %}</span>
         </span>
-        {% if level.courseDiscount < 10 %}
+        {% if level.courseDiscount < 10  and status=="ok" %}
         <span class="control-text"><strong class="money">{{ vipPrice }}</strong>
             <span class="text-muted">元</span>
         </span>

@@ -18,6 +18,12 @@
             var userSign = new UserSign({
             element: '#group-sign',
             });
+
+
+            $('#group-sign').on('click','.day',function(){
+                
+                console.log($(this).html());
+            });
         }
 
         if($('#thread_content').length>0){

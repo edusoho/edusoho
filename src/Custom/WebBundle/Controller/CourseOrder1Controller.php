@@ -63,12 +63,14 @@ class CourseOrder1Controller extends CourseOrderController
         $vip=$this->getVipService()->getMemberByUserId($user->id);
         $level=array();
         $vipPrice=$course['price'];
+        $status="false";
         if($vip){
 
             $level=$this->getLevelService()->getLevel($vip['levelId']);
 
-            if($level){
-                 
+            if($level && $this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId'])=="ok"){
+                
+                $status=$this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId']);
                 $vipPrice=$course['price']*0.1*$level['courseDiscount'];
                 $vipPrice=sprintf("%.2f", $vipPrice);
 
@@ -94,6 +96,7 @@ class CourseOrder1Controller extends CourseOrderController
             'member' => $member,
             'userFields'=>$userFields,
             'level'=>$level,
+            'status'=>$status,
             'vipPrice'=>$vipPrice,
         ));
     }
@@ -110,7 +113,7 @@ class CourseOrder1Controller extends CourseOrderController
 
             $level=$this->getLevelService()->getLevel($vip['levelId']);
 
-            if($level){
+            if($level && $this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId'])=="ok"){
                  
                 $order['amount']=$order['amount']/$level['courseDiscount']*10;
                 
@@ -142,7 +145,7 @@ class CourseOrder1Controller extends CourseOrderController
 
             $level=$this->getLevelService()->getLevel($vip['levelId']);
 
-            if($level){
+            if($level && $this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId'])=="ok"){
                  
                 $order['amount']=$order['amount']*$level['courseDiscount']*0.1;
                 

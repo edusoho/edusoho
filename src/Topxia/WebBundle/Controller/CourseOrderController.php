@@ -119,7 +119,7 @@ class CourseOrderController extends OrderController
 
     public function payAction(Request $request)
     {
-        $formData = $request->request->all();
+        $formData = $request->request->all(); 
         $user = $this->getCurrentUser();
         if (empty($user)) {
             return $this->createMessageResponse('error', '用户未登录，创建课程订单失败。');
@@ -144,7 +144,7 @@ class CourseOrderController extends OrderController
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         $order = $this->getCourseOrderService()->createOrder($formData);
-
+       
         if ($order['status'] == 'paid') {
             return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
         } else {

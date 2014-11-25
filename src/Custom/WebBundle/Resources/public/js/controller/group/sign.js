@@ -17,8 +17,9 @@ define(function(require, exports, module) {
             "mouseenter .sign_main": "keep",
             "mouseleave .sign_main": "remove",
             "click [data-role=previous]": "previousMonth",
-            "click [data-role=next]": "nextMonth"
+            "click [data-role=next]": "nextMonth",
         },
+
         setup: function() {
             var selectedDate = this.element.find('#title-month').data('time');
             var signedRecordsUrl = this.element.data('records');
@@ -92,7 +93,7 @@ define(function(require, exports, module) {
             var month =  parseInt(selectedDate[1]);
             var days = this.getDaysInMonth(month - 1, year);
             var $tbody = this.element.find('tbody');
-            var newtr = "<tr><td class='t-1-0 '></td><td class='t-1-1 '></td><td class='t-1-2 '></td><td class='t-1-3 '></td><td class='t-1-4 '></td><td class='t-1-5 '></td><td class='t-1-6 '></td></tr>";
+            var newtr = "<tr><td class='day t-1-0 '></td><td class='day t-1-1 '></td><td class='day t-1-2 '></td><td class='day t-1-3 '></td><td class='day t-1-4 '></td><td class='day t-1-5 '></td><td class='day t-1-6 '></td></tr>";
 
             var self = this;
             var url = this.get('signedRecordsUrl') + '?startDay=' + year + '-' + month + '-1' + '&endDay='+ year + '-' + month+'-'+days;
@@ -108,7 +109,7 @@ define(function(require, exports, module) {
               
                 if(week == 6 && day != days) {
                     row++;
-                    newtr = '<tr><td class="t-' + row + '-0 "></td><td class="t-' + row + '-1 "></td><td class="t-' + row + '-2 "></td><td class="t-' + row + '-3 "></td><td class="t-' + row + '-4 "></td><td class="t-' + row + '-5 "></td><td class="t-' + row + '-6 "></td></tr>';
+                    newtr = '<tr><td class="day t-' + row + '-0 "></td><td class="day t-' + row + '-1 "></td><td class="day t-' + row + '-2 "></td><td class="day t-' + row + '-3 "></td><td class="day t-' + row + '-4 "></td><td class="day t-' + row + '-5 "></td><td class="day t-' + row + '-6 "></td></tr>';
                     $tbody.append(newtr);
                 }
             }
@@ -189,7 +190,7 @@ define(function(require, exports, module) {
             this.element.find('tbody').html('');
             this.element.find('#title-month').html(nextYear + '年' + nextMonth + '月');
             this.initTable();
-        }
+        },
 
     });
 

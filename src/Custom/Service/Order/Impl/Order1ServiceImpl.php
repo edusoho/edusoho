@@ -53,7 +53,7 @@ class Order1ServiceImpl extends OrderServiceImpl implements Order1Service
 
             $level=$this->getLevelService()->getLevel($vip['levelId']);
 
-            if($level){
+            if($level && $this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId'])=="ok"){
                 
                 $order['amount']=$order['amount']*0.1*$level['courseDiscount'];
 

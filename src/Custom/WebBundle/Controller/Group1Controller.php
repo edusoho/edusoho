@@ -122,6 +122,15 @@ class Group1Controller extends GroupController
 
         $week=array('日','一','二','三','四','五','六');
 
+        $userSignStatistics = $this->getSignService()->getSignUserStatistics($user->id, 'group_sign', $group['id']);
+
+        $day=date('d',time());
+  
+        $signDay=$this->getSignService()->getSignRecordsByPeriod($user->id, 'group_sign', $group['id'], date('Y-m',time()), date('Y-m-d',time()+3600));
+        $notSign=$day-count($signDay);
+        
+        $userVip =  $user->isLogin() ? $this->getVipService()->getMemberByUserId($user['id']) : null;
+        print_r($userVip);
         return $this->render("CustomWebBundle:Group:groupindex.html.twig", array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
@@ -136,7 +145,10 @@ class Group1Controller extends GroupController
             'lastPostMembers'=>$lastPostMembers,
             'userIsGroupMember'=>$userIsGroupMember,
             'members'=>$recentlyMembers,
+            'userSignStatistics'=>$userSignStatistics,
             'now'=>time(),
+            'notSign'=>$notSign,
+            'signDay'=>count($signDay),
             'week'=>$week[date('w',time())],
             'isSignedToday'=>$isSignedToday,
                    
@@ -199,6 +211,11 @@ class Group1Controller extends GroupController
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
+
+    public function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }   
 
     private function getGroupMemberRole($userId)
     {
