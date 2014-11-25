@@ -42,7 +42,7 @@
               <label>{{vipLevel.name}}</label>
               </div>
               <div class="col-md-3 controls">
-                <input type="text" class="form-control" name="reward[{{vipLevel.id}}][]" value="{{vipLevel.signReward}}"/>
+                <input type="text" class="form-control" name="reward[{{vipLevel.id}}][]" value="{{vipLevel.signReward|default(0)}}"/>
               </div>
               <div class="col-md-1 control-label">
                 {{setting('coin').coin_name}}
