@@ -58,6 +58,7 @@ define(function(require, exports, module) {
                     self.element.find('.d-' + today).addClass('signed_anime_day');*/
                 },
                 error: function(xhr){
+                    window.location.reload();
                 }
             });
         },

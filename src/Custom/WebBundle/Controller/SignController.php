@@ -15,6 +15,10 @@ class SignController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        if(!$this->getGroupMemberRole($groupId)){
+            $this->getGroupService()->joinGroup($user,$groupId);
+        }
+        
         $userId=$user['id'];
         $this->getSignService()->userSign($userId, 'group_sign', $groupId);
         return $this->createJsonResponse('success');
@@ -59,4 +63,23 @@ class SignController extends BaseController
         return $this->getServiceKernel()->createService('Custom:Sign.SignService');
     }
 
+    private function getGroupMemberRole($userId)
+    {
+       $user = $this->getCurrentUser();
+
+       if (!$user['id']) return 0;
+
+       if ($this->getGroupService()->isOwner($userId, $user['id'])) return 2;
+
+       if ($this->getGroupService()->isAdmin($userId, $user['id'])) return 3;
+
+       if ($this->getGroupService()->isMember($userId, $user['id'])) return 1;
+
+       return 0;
+    }
+
+    private function getGroupService() 
+    {
+        return $this->getServiceKernel()->createService('Group.GroupService');
+    }
 }

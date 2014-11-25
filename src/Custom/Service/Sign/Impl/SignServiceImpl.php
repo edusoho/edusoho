@@ -15,6 +15,8 @@ class SignServiceImpl extends BaseService implements SignService
             throw $this->createNotFoundException(sprintf('用户不存在.'), 404);
         }
 
+        $vip=$this->getVipService()->getMemberByUserId($user['id']);
+
         $isSignedToday = $this->isSignedToday($userId, $targetType, $targetId); 
         if($isSignedToday) {
             throw $this->createServiceException('今日已签到!', 403);
@@ -30,9 +32,28 @@ class SignServiceImpl extends BaseService implements SignService
         $statistics = $this->targetSignedNumIncrease($targetType, $targetId, date('Ymd', time()));
         $this->getSignUserLogDao()
             ->updateSignLog($sign['id'], array('rank' => $statistics['signedNum']));
-        $this->refreshKeepDays($userId, $targetType, $targetId);
+        $statistics=$this->refreshKeepDays($userId, $targetType, $targetId);
 
-        $this->getDispatcher()->dispatch('class.signed', new ServiceEvent());
+        $this->getDispatcher()->dispatch('group.signed', new ServiceEvent());
+
+        $set=$this->getSettingService()->get('group',array());
+
+        if($set){
+            $this->getCashService()->reWard($set['daySign'],"每日签到奖励",$user['id']);
+        }
+
+
+        if($vip){
+
+            $level=$this->getLevelService()->getLevel($vip['levelId']);
+
+            if($level && $this->getVipService()->checkUserInMemberLevel($user['id'],$vip['levelId'])=="ok"){
+                
+                if($statistics['keepDays']%7 == 0)
+                $this->getCashService()->reWard($level['signReward'],"连续签到奖励",$user['id']);
+       
+            }
+        }
 
         return $sign;
     }
@@ -145,6 +166,26 @@ class SignServiceImpl extends BaseService implements SignService
     private function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System.SettingService');
+    }
+
+    protected function getCashService(){
+      
+        return $this->createService('Coin:Cash.CashService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->createService('Vip:Vip.VipService');
+    } 
+
+    protected function getLevelService()
+    {
+        return $this->createService('Vip:Vip.LevelService');
     }
 }
 

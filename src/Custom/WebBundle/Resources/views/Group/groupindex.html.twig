@@ -99,7 +99,11 @@
 
               {% if is_groupmember==3%} 
               <span class="label label-info">副组长</span>  
-              {% endif %}  
+              {% endif %} 
+
+              {% if userLevel %} 
+              <span class="label label-danger">{{userLevel.name}}</span>  
+              {% endif %} 
             </p>
 
             <p class="text-muted fsn">

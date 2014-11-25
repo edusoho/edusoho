@@ -71,11 +71,11 @@
 }
 
 .sign_main .signed_day{
-    background: url(http://tb2.bdstatic.com/tb/static-frs/img/balv/sign_have.gif?v=1.0) center no-repeat;
+    background: url({{file_path('','sign_have_anime.gif')}}) center no-repeat;
 }
 
 .sign_main .signed_anime_day{
-    background: url(http://tb2.bdstatic.com/tb/static-frs/img/balv/sign_have_anime.gif?v=3.0) center no-repeat;
+    background: url({{file_path('','sign_have_anime.gif')}}) center no-repeat;
 }
 .group-sign {
     cursor: pointer;
@@ -151,8 +151,8 @@
   <div id="group-sign"  data-records="{{ path('signed_records', {'groupId':groupinfo.id})}}" data-signurl="{{path('group_sign',{groupId:groupinfo.id})}}" >
 
       <div class="media" id="group-sign" data-signurl="{{path('group_sign',{groupId:groupinfo.id})}}">
-        <div  class="sign-area" {% if not isSignedToday %} data-role="sign" {% else %} data-role="signed" onclick="return false;" {% endif %} >
-     {% if not isSignedToday %}
+        <div  class="sign-area" {% if not isSignedToday or is_groupmember == 0 %} data-role="sign" {% else %} data-role="signed" onclick="return false;" {% endif %} >
+     {% if not isSignedToday or is_groupmember == 0 %}
         <a class="btn btn-info btn-lg pull-left" style="width:100px;font-size:25px;" > 签 到 </a>
         <div class="media-body pll">
         <h4 class="media-heading pts">{{ 'now' | date('m') }}月{{ 'now' | date('d') }}号</h4>
@@ -206,12 +206,13 @@
     </div>
     <div class="aside col-xs-6">
 
-        <div class="text-left mtm" >亲爱的{{ web_macro.user_link(groupOwner, 'link-muted ') }}:
+        <div class="text-left mtm" >亲爱的{{ web_macro.user_link(app.user, 'link-muted ') }}:
+          <span class="pull-right">每日签到奖励<span style="color:red;">{{setting('group').daySign|default(0)}}</span>{{setting('coin').coin_name}}</span>
         </div>
         <hr>
         <div class="mtl mbl">本月漏签:<span style="color:red;">{{notSign}}</span>天
         <a class="card" ><span class="sign_num"><span class="j_rpln_card_count"></span></span></a>
-        <div class="sign_tip">本月补签卡:<span style="color:red;">14</span>张
+        <div class="sign_tip">本月补签卡:<span style="color:red;">{{userLevel.signInCards|default(0)}}</span>张
           <br>已使用:<span style="color:red;">0</span>张
         </div>
 
@@ -225,14 +226,14 @@
         </div>
 
         <div class="mtl mbl">
-        VIP1：每月5张补签卡，连续签到一周奖励5泰课币<br>
-        VIP1：每月5张补签卡，连续签到一周奖励5泰课币<br>
-        VIP1：每月5张补签卡，连续签到一周奖励5泰课币<br>
+        {% for vipLevel in vipLevels %}
+        <span style="color:red;">{{vipLevel.name}}</span>:每月<span style="color:red;">{{vipLevel.signInCards|default(0)}}</span>张补签卡,连续签到一周奖励<span style="color:red;">{{vipLevel.signReward}}</span>{{setting('coin').coin_name}}<br>
+        {% endfor %}
         </div>
 
         <div class="buy mbl">
         <a href="#" >查看详细规则</a>
-        <a href="#" class="pull-right">升级会员</a>
+        <a href="{{path('vip')}}" class="pull-right" target="blank">{% if status == "false" %}购买会员{% else %}升级会员{% endif %}</a>
  
         </div>
     </div>

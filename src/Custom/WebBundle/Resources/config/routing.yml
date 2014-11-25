@@ -34,3 +34,4 @@ group_sign:
 signed_records:
     pattern:  /sign/{groupId}/records
     defaults: { _controller: CustomWebBundle:Sign:getSignedRecordsByPeriod }
+

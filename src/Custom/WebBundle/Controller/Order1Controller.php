@@ -21,22 +21,22 @@ class Order1Controller extends OrderController
             $level=array();
 
             if($vip){
-
+     
             $level=$this->getLevelService()->getLevel($vip['levelId']);
 
-            if($level && $this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId'])=="ok"){
-                
-                $amount=$couponInfo['afterAmount'];
-                $couponInfo['afterAmount']=$couponInfo['afterAmount']*0.1*$level['courseDiscount'];
+                if($level && $this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId'])=="ok"){
+                    
+                    $amount=$couponInfo['afterAmount'];
+                    $couponInfo['afterAmount']=$couponInfo['afterAmount']*0.1*$level['courseDiscount'];
 
-                $couponInfo['afterAmount']=sprintf("%.2f", $couponInfo['afterAmount']);
+                    $couponInfo['afterAmount']=sprintf("%.2f", $couponInfo['afterAmount']);
 
-                $cut=$amount-$couponInfo['afterAmount'];
+                    $cut=$amount-$couponInfo['afterAmount'];
 
-                $couponInfo['decreaseAmount']=$couponInfo['decreaseAmount']+$cut;
+                    $couponInfo['decreaseAmount']=($couponInfo['decreaseAmount']+$cut);
 
+                }
             }
-        }
             
             return $this->createJsonResponse($couponInfo);
         }

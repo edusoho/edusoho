@@ -129,8 +129,24 @@ class Group1Controller extends GroupController
         $signDay=$this->getSignService()->getSignRecordsByPeriod($user->id, 'group_sign', $group['id'], date('Y-m',time()), date('Y-m-d',time()+3600));
         $notSign=$day-count($signDay);
         
-        $userVip =  $user->isLogin() ? $this->getVipService()->getMemberByUserId($user['id']) : null;
-        print_r($userVip);
+        $vip =  $user->isLogin() ? $this->getVipService()->getMemberByUserId($user['id']) : null;
+        $userLevel=array();
+        $status="false";
+        if($vip){
+
+            $level=$this->getLevelService()->getLevel($vip['levelId']);
+
+            if($level && $this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId'])=="ok"){
+                
+                $userLevel=$level;
+
+                $status=$this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId']);
+
+            }
+        }
+        
+        $vipLevels=$this->getLevelService()->searchLevels(array(),0,1000);  
+
         return $this->render("CustomWebBundle:Group:groupindex.html.twig", array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
@@ -151,6 +167,9 @@ class Group1Controller extends GroupController
             'signDay'=>count($signDay),
             'week'=>$week[date('w',time())],
             'isSignedToday'=>$isSignedToday,
+            'status'=>$status,
+            'userLevel'=>$userLevel,
+            'vipLevels'=>$vipLevels,
                    
         ));
     }
@@ -194,17 +213,24 @@ class Group1Controller extends GroupController
         return $conditions;
     }
 
-    public function getThreadService()
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Group.ThreadService');
     }
-    public function getUserService()
+    
+    protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
-    public function getGroupService() 
+
+    protected function getGroupService() 
     {
         return $this->getServiceKernel()->createService('Group.GroupService');
+    }
+
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 
     public function getNotifiactionService()
