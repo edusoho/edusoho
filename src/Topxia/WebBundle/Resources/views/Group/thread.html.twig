@@ -17,8 +17,8 @@
       {% endif %}
       <div class="actions" style="float: right;" id="thread-list">
             {% if threadMain.userId != user.id %}
-              <button class="btn btn-success btn-xs unfollow-btn" data-url="{{ path('group_uncollect', {threadId:threadMain.id}) }}" {% if isFollowed == false %} style="display:none;"{% endif %}>已收藏</button>
-              <button class="btn btn-primary btn-xs follow-btn" data-url="{{ path('group_collect', {threadId:threadMain.id}) }}" {% if isFollowed == true %} style="display:none;"{% endif %}>收藏</button>
+              <a class="btn btn-link btn-xs unfollow-btn" data-url="{{ path('group_uncollect', {threadId:threadMain.id}) }}" {% if isFollowed == false %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star"></i> 已收藏</a>
+              <a class="btn btn-link btn-xs follow-btn" data-url="{{ path('group_collect', {threadId:threadMain.id}) }}" {% if isFollowed == true %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star-empty"></i>收藏</a>
             {% endif %}
       </div>
       </h2>

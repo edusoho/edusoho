@@ -117,7 +117,9 @@ class GroupThreadController extends BaseController
     public function collectAction(Request $request, $threadId)
     {
         $user = $this->getCurrentUser();
-
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能收藏话题！");
+        }
         $thread=$this->getThreadService()->getThreadsByUserId($user['id']);
 
         $threadMain=$this->getThreadService()->getThread($threadId);
@@ -136,6 +138,9 @@ class GroupThreadController extends BaseController
     public function uncollectAction(Request $request, $threadId)
     {
         $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能收藏话题！");
+        }
         $thread=$this->getThreadService()->getThreadsByUserId($user['id']);
 
         $threadMain=$this->getThreadService()->getThread($threadId);
