@@ -23,8 +23,6 @@ class ArticleProcessorImpl extends BaseProcessor implements ArticleProcessor
         }
 
         $conditions = array('status' => 'published');
-        $paginator = new Paginator($this->get('request'), $this->getArticleService()->searchArticlesCount($conditions), $setting['pageNums']);
-
         $latestArticles = $this->getArticleService()->searchArticles($conditions, 'published', $start, $limit);
         return $latestArticles;
     }
