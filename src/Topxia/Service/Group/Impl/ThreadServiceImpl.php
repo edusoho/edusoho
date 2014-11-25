@@ -15,26 +15,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadDao()->getThread($id);
     }
 
-    public function getUser($id, $lock = false)
+     public function isCollected($userId, $threadId)
     {
-        $user = $this->getUserDao()->getUser($id, $lock);
-        if(!$user){
-            return null;
-        } else {
-            return UserSerialize::unserialize($user);
-        }
-    }
-
-     public function isFollowed($userId, $threadId)
-    {
-        $fromUser = $this->getUser($userId);
         $toThread= $this->getThread($threadId);
 
-        if(empty($toThread)) {
-            throw $this->createServiceException('被关注话题不存在，检测收藏状态失败！');
-        }
-
-        $thread = $this->getThreadCollectDao()->getThreadByFromIdAndToId($userId, $threadId);
+        $thread = $this->getThreadCollectDao()->getThreadByUserIdAndThreadId($userId, $threadId);
         if(empty($thread)) {
             return false;
         } else {
@@ -48,48 +33,41 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return ArrayToolkit::index($threads, 'id');
     }
 
-    public function getThreadsByUserId($userId)
+    public function threadCollect($userId,$threadId)
     {
-       return $this->getThreadDao()->getThreadsByUserId($userId);
-    }
-
-    public function follow($userId,$userThreadId, $threadId)
-    {
-        $fromThread = $this->getThread($userThreadId);
-        $toThread = $this->getThread($threadId);
-        if(empty($toThread)) {
+        $thread = $this->getThread($threadId);
+        if(empty($thread)) {
             throw $this->createServiceException('话题不存在，收藏失败！');
         }
-        if($fromThread == $toThread) {
+        if($userId == $thread['userId']) {
             throw $this->createServiceException('不能收藏自己的话题！');
         }
-        $collectThread =  $this->getThreadCollectDao()->getThreadByFromIdAndToId($fromThread['userId'], $threadId);
+        $collectThread =  $this->getThreadCollectDao()->getThreadByUserIdAndThreadId($userId, $threadId);
         if(!empty($collectThread)) {
             throw $this->createServiceException('不允许重复收藏!');
         }
-        return $this->getThreadCollectDao()->addCollect(array(
+        return $this->getThreadCollectDao()->addThreadCollect(array(
             "userId"=>$userId,
             "threadId"=>$threadId,
             "createdTime"=>time()));
     }
 
-    public function unFollow($userId,$userThreadId, $threadId)
+    public function unThreadCollect($userId,$threadId)
     {
-        $fromThread = $this->getThread($userThreadId);
-        $toThread = $this->getThread($threadId);
-        if(empty($toThread)) {
+        $thread = $this->getThread($threadId);
+        if(empty($thread)) {
             throw $this->createServiceException('话题不存在，取消收藏失败！');
         }
-        $collectThread =  $this->getThreadCollectDao()->getThreadByFromIdAndToId($fromThread['userId'], $threadId);
+        $collectThread =  $this->getThreadCollectDao()->getThreadByUserIdAndThreadId($userId, $threadId);
         if(empty($collectThread)) {
             throw $this->createServiceException('不存在此收藏关系，取消收藏失败！');
         }
-        return $this->getThreadCollectDao()->deleteCollect($userId,$threadId);
+        return $this->getThreadCollectDao()->deleteThreadCollectByUserIdAndThreadId($userId,$threadId);
     }
 
-    public function searchCollectThreadIdsCount($conditions)
+    public function searchThreadCollectCount($conditions)
     {
-        return $this->getThreadCollectDao()->searchCollectThreadIdsCount($conditions);
+        return $this->getThreadCollectDao()->searchThreadCollectCount($conditions);
     }
 
 
@@ -105,9 +83,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadPostDao()->searchPostsThreadIds($conditions,$orderBy,$start,$limit);
     }
 
-    public function searchCollectThreads($conditions,$orderBy,$start,$limit)
+    public function searchThreadCollects($conditions,$orderBy,$start,$limit)
     {
-        return $this->getThreadCollectDao()->searchCollectThreads($conditions,$orderBy,$start,$limit);
+        return $this->getThreadCollectDao()->searchThreadCollects($conditions,$orderBy,$start,$limit);
     }
 
     public function searchPostsThreadIdsCount($conditions)
@@ -341,30 +319,5 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     private function getUserDao()
     {
         return $this->createDao('User.UserDao');
-    }
-}
-
-class UserSerialize
-{
-    public static function serialize(array $user)
-    {
-        $user['roles'] = empty($user['roles']) ? '' :  '|' . implode('|', $user['roles']) . '|';
-        return $user;
-    }
-
-    public static function unserialize(array $user = null)
-    {
-        if (empty($user)) {
-            return null;
-        }
-        $user['roles'] = empty($user['roles']) ? array() : explode('|', trim($user['roles'], '|')) ;
-        return $user;
-    }
-
-    public static function unserializes(array $users)
-    {
-        return array_map(function($user) {
-            return UserSerialize::unserialize($user);
-        }, $users);
     }
 }

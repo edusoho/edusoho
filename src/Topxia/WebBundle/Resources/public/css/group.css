@@ -144,6 +144,11 @@
     margin: 10px 0;
 }
 
+.group-thread .panel-heading .thread-list  {
+    float: right;
+    margin-top:-9px;
+}
+
 .group-thread .panel-heading .metas {
     font-size: 12px;
     color: #888;

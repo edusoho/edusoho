@@ -16,10 +16,10 @@
         <span class="label label-danger">置顶</span>
       {% endif %}
       </h2>
-      <div class="actions" style="float: right;margin-top:-9px;" id="thread-list" class="thread-list">
+      <div class="actions thread-list" id="thread-list" >
             {% if threadMain.userId != user.id %}
-              <a class="btn btn-link unfollow-btn" data-url="{{ path('group_uncollect', {threadId:threadMain.id}) }}" {% if isFollowed == false %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star"></i> 已收藏</a>
-              <a class="btn btn-link  follow-btn" data-url="{{ path('group_collect', {threadId:threadMain.id}) }}" {% if isFollowed == true %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star-empty"></i>收藏</a>
+              <a class="btn btn-link uncollect-btn" data-url="{{ path('group_uncollect', {threadId:threadMain.id}) }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star"></i> 已收藏</a>
+              <a class="btn btn-link  collect-btn" data-url="{{ path('group_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star-empty"></i>收藏</a>
             {% endif %}
       </div>
       <div class="metas">

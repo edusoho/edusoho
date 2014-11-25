@@ -120,11 +120,10 @@ class GroupThreadController extends BaseController
         if (!$user->isLogin()) {
             return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能收藏话题！");
         }
-        $thread=$this->getThreadService()->getThreadsByUserId($user['id']);
 
         $threadMain=$this->getThreadService()->getThread($threadId);
         
-        $isSetThread=$this->getThreadService()->follow($user['id'],$thread['id'], $threadId);
+        $isSetThread=$this->getThreadService()->threadCollect($user['id'],$threadId);
         
         $userShowUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
         $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$threadMain['groupId'],'threadId'=>$threadMain['id']), true);
@@ -141,11 +140,10 @@ class GroupThreadController extends BaseController
         if (!$user->isLogin()) {
             return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能收藏话题！");
         }
-        $thread=$this->getThreadService()->getThreadsByUserId($user['id']);
 
         $threadMain=$this->getThreadService()->getThread($threadId);
         
-        $isSetThread=$this->getThreadService()->unfollow($user['id'],$thread['id'], $threadId);
+        $isSetThread=$this->getThreadService()->unThreadCollect($user['id'], $threadId);
         
         $userShowUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
         $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$threadMain['groupId'],'threadId'=>$threadMain['id']), true);
@@ -176,9 +174,9 @@ class GroupThreadController extends BaseController
         }
 
          if ($threadMain['status']!="close") {
-            $isFollowed = $this->getThreadService()->isFollowed($this->getCurrentUser()->id, $threadMain['id']);
+            $isCollected = $this->getThreadService()->isCollected($this->getCurrentUser()->id, $threadMain['id']);
         } else {
-            $isFollowed = false;
+            $isCollected = false;
         }
         
         $this->getThreadService()->waveHitNum($threadId);
@@ -258,7 +256,7 @@ class GroupThreadController extends BaseController
 
         return $this->render('TopxiaWebBundle:Group:thread.html.twig',array(
             'groupinfo' => $group,
-            'isFollowed' => $isFollowed,
+            'isCollected' => $isCollected,
             'groupShareContent'=>$groupShareContent,
             'threadMain'=>$threadMain,
             'user'=>$user,

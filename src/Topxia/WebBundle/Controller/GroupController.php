@@ -120,12 +120,12 @@ class GroupController extends BaseController
         
         $userIds = ArrayToolkit::column($ownThreads, 'lastPostMemberId');
         $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
-        $collectThreadsIds=$this->getThreadService()->searchCollectThreads(array('userId'=>$user['id']),array('id',"DESC"), 0,10);
+        $collectThreadsIds=$this->getThreadService()->searchThreadCollects(array('userId'=>$user['id']),array('id',"DESC"), 0,10);
         $collectThreads = array();
         foreach ($collectThreadsIds as $collectThreadsId) {
             $collectThreads[]=$this->getThreadService()->getThread($collectThreadsId['threadId']);  
         }
-        $collectCount=$this->getThreadService()->searchCollectThreadIdsCount(array('userId'=>$user['id']));
+        $collectCount=$this->getThreadService()->searchThreadCollectCount(array('userId'=>$user['id']));
         
         $groupIdsAsCollectThreads = ArrayToolkit::column($collectThreads, 'groupId');
         $groupsAsCollectThreads=$this->getGroupService()->getGroupsByids($groupIdsAsCollectThreads);
@@ -298,11 +298,11 @@ class GroupController extends BaseController
         $threads=array();
         $paginator=new Paginator(
             $this->get('request'),
-            $this->getThreadService()->searchCollectThreadIdsCount(array('userId'=>$user['id'])),
+            $this->getThreadService()->searchThreadCollectCount(array('userId'=>$user['id'])),
             12
             );
 
-        $collectThreadsIds=$this->getThreadService()->searchCollectThreads(
+        $collectThreadsIds=$this->getThreadService()->searchThreadCollects(
             array('userId'=>$user['id']),
             array('id',"DESC"),
             $paginator->getOffsetCount(),

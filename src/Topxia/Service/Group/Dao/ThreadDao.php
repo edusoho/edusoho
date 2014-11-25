@@ -9,8 +9,6 @@ interface ThreadDao
 
     public function getThreadsByIds($ids);
     
-    public function getThreadsByUserId($userId);
-
     public function searchThreads($conditions,$orderBy,$start, $limit);
 
     public function searchThreadsCount($conditions);

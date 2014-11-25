@@ -12,28 +12,28 @@ class ThreadCollectDaoImpl extends BaseDao implements ThreadCollectDao
         'tagIds' => 'json',
     );
 
-    public function getCollectThread($id)
+    public function getThreadCollect($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function getThreadByFromIdAndToId($userId, $threadId)
+    public function getThreadByUserIdAndThreadId($userId, $threadId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND threadId = ?";
         return $this->getConnection()->fetchAssoc($sql, array($userId, $threadId));
     }
 
-    public function addCollect($collectThread)
+    public function addThreadCollect($collectThread)
     {
         $affected = $this->getConnection()->insert($this->table, $collectThread);
         if ($affected <= 0) {
-            throw $this->createDaoException('Insert collectThread error.');
+            throw $this->createDaoException('Insert threadCollect error.');
         }
-        return $this->getCollectThread($this->getConnection()->lastInsertId());
+        return $this->getThreadCollect($this->getConnection()->lastInsertId());
     }
 
-    public function deleteCollect($userId,$threadId)
+    public function deleteThreadCollectByUserIdAndThreadId($userId,$threadId)
     {
        $sql = "DELETE FROM {$this->table} WHERE userId = ? AND threadId = ?";
         return $this->getConnection()->executeUpdate($sql, array($userId, $threadId));
@@ -45,15 +45,15 @@ class ThreadCollectDaoImpl extends BaseDao implements ThreadCollectDao
         return $this->getConnection()->fetchColumn($sql, array($userId, $threadId));
     }
 
-    public function searchCollectThreadIdsCount($conditions)
+    public function searchThreadCollectCount($conditions)
     {
-        $builder = $this->_createThreadSearchBuilder($conditions)
+        $builder = $this->_createThreadCollectSearchBuilder($conditions)
                          ->select('count(distinct threadId)');
 
         return $builder->execute()->fetchColumn(0); 
     }
 
-    private function _createThreadSearchBuilder($conditions)
+    private function _createThreadCollectSearchBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table,$this->table)
@@ -62,9 +62,9 @@ class ThreadCollectDaoImpl extends BaseDao implements ThreadCollectDao
         return $builder;
     }
 
-    public function searchCollectThreads($conditions,$orderBy,$start,$limit)
+    public function searchThreadCollects($conditions,$orderBy,$start,$limit)
     {
-        $builder=$this->_createThreadSearchBuilder($conditions)
+        $builder=$this->_createThreadCollectSearchBuilder($conditions)
         ->select('distinct threadId')
         ->setFirstResult($start)
         ->setMaxResults($limit)

@@ -13,15 +13,15 @@
     }
     exports.run = function() {
 
-        $("#thread-list").on('click', '.unfollow-btn, .follow-btn', function() {
+        $("#thread-list").on('click', '.uncollect-btn, .collect-btn', function() {
             var $this = $(this);
 
             $.post($this.data('url'), function(){
                 $this.hide();
-                if ($this.hasClass('follow-btn')) {
-                    $this.parent().find('.unfollow-btn').show();
+                if ($this.hasClass('collect-btn')) {
+                    $this.parent().find('.uncollect-btn').show();
                 } else {
-                    $this.parent().find('.follow-btn').show();
+                    $this.parent().find('.collect-btn').show();
                 }
             });
         });

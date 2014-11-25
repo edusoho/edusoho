@@ -4,16 +4,16 @@ namespace Topxia\Service\Group\Dao;
 
 interface ThreadCollectDao
 {
-    public function getThreadByFromIdAndToId($userId, $threadId);
+    public function getThreadByUserIdAndThreadId($userId, $threadId);
 
-    public function addCollect($collectThread);
+    public function addThreadCollect($collectThread);
     
-    public function deleteCollect($userId,$threadId);
+    public function deleteThreadCollectByUserIdAndThreadId($userId,$threadId);
 
-    public function getCollectThread($id);
+    public function getThreadCollect($id);
 
-    public function searchCollectThreadIdsCount($conditions);
+    public function searchThreadCollectCount($conditions);
 
-    public function searchCollectThreads($conditions,$orderBy,$start,$limit);
+    public function searchThreadCollects($conditions,$orderBy,$start,$limit);
 
 }
