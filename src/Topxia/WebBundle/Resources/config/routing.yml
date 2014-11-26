@@ -1373,6 +1373,9 @@ coin_order_pay_notify:
 coin_change:
     path:     /coin/change
     defaults: { _controller: TopxiaWebBundle:Coin:change }
+coin_show:
+    path:     /coin/show
+    defaults: { _controller: TopxiaWebBundle:Coin:show }
 
 user_password_check:
     path:   /user/password/check

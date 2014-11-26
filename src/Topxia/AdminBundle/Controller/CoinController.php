@@ -21,6 +21,7 @@ class CoinController extends BaseController
           'coin_enabled' => 0,
           'coin_price_enabled'=>0,
           'coin_name' => '虚拟币',
+          'coin_content' => '当前页面尚未编辑内容，请编辑。',
           'cash_rate' => 1,
           'coin_consume_range_and_present' => array(array(0,0))
         );
@@ -32,6 +33,7 @@ class CoinController extends BaseController
         $coinSettingsPosted['coin_enabled'] = $request->request->get("coin_enabled");
         $coinSettingsPosted['coin_price_enabled'] = $request->request->get("coin_price_enabled");
         $coinSettingsPosted['coin_name'] = $request->request->get("coin_name");
+        $coinSettingsPosted['coin_content'] = $request->request->get("coin_content");
         $this->getSettingService()->set('coin', $coinSettingsPosted);
         $this->getLogService()->info('system', 'update_settings', "更新Coin虚拟币设置", $coinSettingsPosted);
         $this->setFlashMessage('success', '虚拟币设置已保存！');      

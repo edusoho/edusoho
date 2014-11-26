@@ -103,6 +103,17 @@ class CoinController extends BaseController
             ));
     }
 
+    public function showAction(Request $request)
+    {
+        $coinSetting=$this->getSettingService()->get('coin',array());
+        $content=$coinSetting['coin_content'];
+
+        return $this->render('TopxiaWebBundle:Coin:coin-content-show.html.twig', array(
+            'content'=>$content,
+            'coinSetting'=>$coinSetting
+            ));
+    }
+
     private function caculate($amount,$canChange,$data)
     {
         $coinSetting= $this->getSettingService()->get('coin',array());
