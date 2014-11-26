@@ -9,7 +9,10 @@ class DataDict
 			'published' => '已发布',
 			'closed' => '已关闭'
 		),
-
+		'essayStatus' => array(
+			'published' => '已发布',
+			'unpublished' => '未发布'
+		),
 		'courseStatus:html' => array(
 			'draft' => '<span class="text-muted">未发布</span>',
 			'published' => '<span class="text-success">已发布</span>',
@@ -118,6 +121,10 @@ class DataDict
             'unpublished' => '<span class="text-muted">未发布</span>',
             'trash' => '<span class="text-warning">回收站</span>',
     	),
+	    'essayStatus:html' => array(
+	        'published' => '<span class="text-success">已发布</span>',
+	        'unpublished' => '<span class="text-muted">未发布</span>',
+		),
     	'lessonType'=> array(
     		'video' => '视频',
     		'audio' => '音频',
