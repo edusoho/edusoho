@@ -7,42 +7,42 @@
 
 {% block main %}
 
-<div class="panel panel-default panel-col lesson-manage-panel">
-  <div class="panel-heading">
-    <div class="pull-right">
-      <button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{# {% if course.type == 'normal' %}{{ path('course_manage_lesson_create', {id:course.id}) }}{% else %}{{ path('live_course_manage_lesson_create', {id:course.id}) }}{% endif %} #}"><i class="glyphicon glyphicon-plus"></i>内容</button>
-      <div class="btn-group">
-        <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
-          <i class="glyphicon glyphicon-plus"></i>章节<span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-          <li>
-            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{# {{ path('course_manage_chapter_create', {id:course.id}) }} #}"><i class="glyphicon glyphicon-plus"></i> 添加 章</a>
-          </li>
-          <li>
-            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{# {{ path('course_manage_chapter_create', {id:course.id, type:'unit'}) }} #}"><i class="glyphicon glyphicon-plus"></i> 添加 小节</a>
-          </li>
-        </ul>
-      </div>
+<div class="page-header clearfix">
+  <h1 class="pull-left">文章内容管理</h1>
+  <div class="pull-right">
+    <button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{# {% if course.type == 'normal' %}{{ path('course_manage_lesson_create', {id:course.id}) }}{% else %}{{ path('live_course_manage_lesson_create', {id:course.id}) }}{% endif %} #}"><i class="glyphicon glyphicon-plus"></i>内容</button>
+    
+    <div class="btn-group">
+      <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
+        <i class="glyphicon glyphicon-plus"></i>章节<span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_chapter_create', {articleId:articleId}) }}"><i class="glyphicon glyphicon-plus"></i> 添加 章</a>
+        </li>
+        <li>
+          <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_chapter_create', {articleId:articleId, type:'unit'}) }} "><i class="glyphicon glyphicon-plus"></i> 添加 小节</a>
+        </li>
+      </ul>
     </div>
-    课时管理
   </div>
-
-{#   {% if items is empty %}
-    <div class="empty">暂无课时内容！</div>
-  {% endif %} #}
-
-  {# <div class="panel-body">
-    <ul class="lesson-list sortable-list" id="course-item-list" data-sort-url="{{ path('course_manage_lesson_sort', {id:course.id}) }}">
-      {% for id, item in items %}
-        {% if 'chapter' in id %}
-          {% include 'TopxiaAdminBundle:EssayContent:list-chapter-tr.html.twig' with {chapter: item} %}
-        {% elseif 'lesson' in id %}
-          {% include 'TopxiaAdminBundle:EssayContent:list-content-tr.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
-        {% endif %}
-      {% endfor %}
-    </ul>
-  </div> #}
 </div>
+
+{% if items is empty %}
+  <div class="empty">暂无课时内容！</div>
+{% endif %}
+
+<div class="panel-body">
+  <ul class="content-list sortable-list" id="course-item-list" data-sort-url="{# {{ path('course_manage_lesson_sort', {id:course.id}) }} #}">
+    {% for id, item in items %}
+      {% if 'chapter' in id %}
+        {% include 'TopxiaAdminBundle:EssayContent:list-chapter-tr.html.twig' with {chapter: item} %}
+      {% elseif 'content' in id %}
+        {% include 'TopxiaAdminBundle:EssayContent:list-content-tr.html.twig' with {content: item, file: files[item.mediaId]|default(null)} %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+
 
 {% endblock %}
