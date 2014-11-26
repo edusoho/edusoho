@@ -206,7 +206,6 @@ class CourseManageController extends BaseController
             if($coinPrice == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['coin_price_enabled'] ==0){
                 $fields['coinPrice'] = floatval($price)/floatval($cashRate);
             }
-            // var_dump($coinSetting['coin_enabled'] ==1);exit();
 
             if(isset($fields['freeStartTime'])){
                 $fields['freeStartTime'] = strtotime($fields['freeStartTime']);
