@@ -16,7 +16,7 @@
   <div class="row row-9-3">
 
     <div class="col-md-9">
-      {% if courses %}
+     
         <div class="es-box">
           <div class="es-box-heading">
             <h2>课程</h2>
@@ -26,7 +26,7 @@
               {{ _self.course_lists(data('LatestCourses',{ count:5 })) }}
           </div>
         </div>
-      {% endif %} 
+    
 
       {% if setting('course.live_course_enabled') %}
 

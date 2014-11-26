@@ -8,7 +8,7 @@
     </div>
     <div class="modal-body">
 
-    <form id="avatar-crop-form" method="post" action="{{ path('admin_tag_avatar_crop', {id:tag.id, filename:filename}) }}" enctype="multipart/form-data">
+    <form id="avatar-crop-form" method="post" action="{{ path('admin_column_avatar_crop', {id:column.id, filename:filename}) }}" enctype="multipart/form-data">
      
       <div class="form-group clearfix">
         <div class="col-md-offset-2 col-md-8 controls">
@@ -23,7 +23,7 @@
           <input type="hidden" name="y">
           <input type="hidden" name="width">
           <input type="hidden" name="height">
-          <a class="btn btn-fat btn-primary" id="upload-picture-btn" data-goto="{{ path('admin_tag_avatar', {id: tag.id}) }}">保存</a>
+          <a class="btn btn-fat btn-primary" id="upload-picture-btn" data-goto="{{ path('admin_column_avatar', {id: column.id}) }}">保存</a>
         </div>
       </div>
 

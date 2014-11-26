@@ -1,0 +1,33 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set column = column|default(null) %}
+
+{% block title %}
+{% if column.id %}编辑{% else %}新增{% endif %}专栏
+{% endblock %}
+{% block body %}
+  <form class="form-horizontal" id="column-form" action="{% if column.id %}{{ path('admin_column_update', {id:column.id}) }}{% else %}{{ path('admin_column_create') }}{% endif %}" method="post">
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="column-name-field">专栏名称</label>
+        <div class="col-md-6 controls">
+          <input class="form-control" id="column-name-field" type="text" name="name" value="{{ column.name }}" data-url="{{ path('admin_column_checkname', {exclude:column.name}) }}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="column-name-field">专栏描述</label>
+        <div class="col-md-6 controls">
+            <textarea class="form-control" id="category-description-field" style="height:100px;" name="description">{{column.description}}</textarea>
+        </div>
+   </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  <script type="text/javascript">app.load('customadminbundle/controller/column/save-modal')</script>
+{% endblock %}
+
+{% block footer %}
+  {% if column.id %}
+    <button class="btn btn-default pull-left delete-column" data-url="{{ path('admin_column_delete', {id:column.id}) }}" data-target="{{ column.id }}" data-column-id="{{ column.id }}"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+  {% endif %}
+
+  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+  <button id="column-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#column-form">保存</button>
+{% endblock %}

@@ -19,3 +19,29 @@ admin_tag_avatar_crop:
 # admin_user_avatar:
 #     pattern:  /user/{id}/avatar
 #     defaults: { _controller: TopxiaAdminBundle:User:avatar }
+admin_column:
+    pattern:  /column
+    defaults: { _controller: CustomAdminBundle:Column:index }
+
+admin_column_create:
+    pattern:  /column/create
+    defaults: { _controller: CustomAdminBundle:Column:create }
+
+admin_column_checkname:
+    pattern:  /column/checkname
+    defaults: { _controller: CustomAdminBundle:Column:checkName}
+
+admin_column_update:
+    pattern:  /column/{id}/update
+    defaults: { _controller: CustomAdminBundle:Column:update }
+
+admin_column_delete:
+    pattern:  /column/{id}/delete
+    defaults: { _controller: CustomAdminBundle:Column:delete }
+    methods:  [POST]
+admin_column_avatar:
+     pattern: /column/{id}/avatar
+     defaults: {_controller: CustomAdminBundle:Column:avatar}
+admin_column_avatar_crop:
+    pattern: /column/{id}/avatar/crop
+    defaults: {_controller: CustomAdminBundle:Column:avatarCrop}
