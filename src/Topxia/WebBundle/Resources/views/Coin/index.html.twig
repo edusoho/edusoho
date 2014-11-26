@@ -1,7 +1,7 @@
 {#% extends 'TopxiaWebBundle:My:layout.html.twig' %#}
 {% extends 'TopxiaWebBundle:Settings:layout.html.twig' %}
 {# {% block title %}我的{{setting('coin.coin_name')}} - {{ parent() }}{% endblock %} #}
-{% block title %}我的虚拟币 - {{ parent() }}{% endblock %}
+{% block title %}我的{#虚拟币#}{{setting('coin.coin_name')}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-coin' %}
 
@@ -9,7 +9,7 @@
 {# <div class="panel panel-default panel-col"> #}
 <div class="panel panel-default panel-col lesson-manage-panel">
   <div class="panel-heading">
-    我的虚拟币
+    我的{{setting('coin.coin_name')}}
     {# 我的{{setting('coin.coin_name')}} #}
   </div>
   <div class="panel-heading" style="font-weight:normal;">
@@ -40,18 +40,18 @@
       <table class="table table-striped">
         {% if cashes %}
         <tr>
-          <th>名称</th>
           <th>流水号</th>
+          <th>名称</th>          
           <th>成交时间</th>
           <th>收支</th>
         </tr>
         {% for cash in cashes %}
            <tr>
-            <td>{{cash.name}}<br>
-                <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span></td>
             <td>{{cash.sn}}</td>
+            <td>{{cash.name}}<br>
+                <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span></td>            
             <td>{{cash.createdTime|date('Y-m-d H:i:s')}}</td>
-            <td>{% if cash.type =="outflow" %}-{% endif %}{{cash.amount|score_text}}</td>
+            <td>{% if cash.type =="outflow" %}-{% endif %}{{cash.amount|score_text}} {{setting('coin.coin_name')}}</td>
           </tr>
         {% endfor %}
         {% else %}
