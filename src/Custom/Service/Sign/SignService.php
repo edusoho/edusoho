@@ -20,4 +20,5 @@ interface SignService
     public function getTodayRank($userId, $targetType, $targetId);
 
     public function getSignCardByUserId($userId);
+
 }

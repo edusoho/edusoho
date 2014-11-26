@@ -122,7 +122,7 @@ define(function(require, exports, module) {
                 success: function(data){
                     for(var i=0;i<data.records.length;i++){ 
                         var day = parseInt(data.records[i]['day']);
-                        $tbody.find(".d-" + day).addClass('signed_day').attr('title', '于'+ data.records[i]['time'] + '签到,第'+ data.records[i]['rank']+'个签到.');
+                        $tbody.find(".d-" + day).addClass('signed_day');
                     }
                     
                     self.element.find('.today-rank').html(data.todayRank);
