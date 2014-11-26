@@ -24,7 +24,7 @@
             {% endif %}
 
             <div class="order-item row">
-            	<h4 class="total-price">总金额：￥{{totalPrice}}</h4>
+            	<h4 class="total-price">应付金额：￥<span role="total-price">{{totalPrice}}</span></h4>
             </div>
             
             {% if couponApp|default(null) and cashAccount|default(null)%}
@@ -36,7 +36,7 @@
             {% endif %}
 
             <div class="order-item row">
-            	<h4 class="total-price">支付：￥<span role="pay-amount">{{shouldPayPrice}}</span></h4>
+            	<h4 class="total-price">实际支付：￥<span role="pay-amount">{{shouldPayPrice}}</span></h4>
             </div>
 
             <div class="form-group pay">

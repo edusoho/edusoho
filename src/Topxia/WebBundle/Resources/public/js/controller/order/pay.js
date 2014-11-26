@@ -1,6 +1,17 @@
 define(function(require, exports, module) {
 
 	exports.run = function() {
+		function conculatePrice(){
+			var totalPrice = parseFloat($('[role="total-price"]').text());
+			var couponAmount = parseFloat($('[role="coupon-price"]').find(".price_r_num").text());
+			var coinAmount = parseFloat($('[role="cash-discount"]').text());
+			var activeAmount = totalPrice-couponAmount-coinAmount;
+			if(activeAmount<0){
+				activeAmount=0;
+			}
+			$('[role="pay-amount"]').text(activeAmount);
+		}
+
 		$('[role="coinNum"]').blur(function(e){
 			var cashRate = $('[role="cash-rate"]').val();
 			var coin = $(this).val();
@@ -19,7 +30,7 @@ define(function(require, exports, module) {
 				discount = coin/cashRate;
 			}
 			$('[role="cash-discount"]').text(discount);
-
+			conculatePrice();
 		});
 
 		$("#add_card").click(function(e){
@@ -39,6 +50,7 @@ define(function(require, exports, module) {
 			$('[role="code-notify"]').text("");
 			$('[role="coupon-code"]').val("");
 			$(this).hide();
+			conculatePrice();
 		});
 
 		$('[role="coupon-code"]').blur(function(e){
@@ -58,6 +70,7 @@ define(function(require, exports, module) {
 					$('[role="code-notify"]').css("color","green").text("优惠码可用");
 					$('[role="coupon-price"]').find(".price_r_num").text(data.decreaseAmount);
 				}
+				conculatePrice();
 			})
 		})
 
