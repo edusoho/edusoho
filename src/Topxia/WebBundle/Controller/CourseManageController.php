@@ -180,7 +180,7 @@ class CourseManageController extends BaseController
                 $cashRate=1;
             }
         }
-        
+
         $canModifyPrice = true;
         $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
         if ($this->setting('vip.enabled')) {
@@ -197,8 +197,17 @@ class CourseManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            //         $name = $request->request->get('price');
-            // var_dump($name);exit();
+            $price = $request->request->get('price');
+            $coinPrice = $request->request->get('coinPrice');
+            if($price == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['coin_price_enabled'] == 1){
+                $fields['price'] = floatval($coinPrice)*floatval($cashRate);
+            }
+
+            if($coinPrice == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['coin_price_enabled'] ==0){
+                $fields['coinPrice'] = floatval($price)/floatval($cashRate);
+            }
+            // var_dump($coinSetting['coin_enabled'] ==1);exit();
+
             if(isset($fields['freeStartTime'])){
                 $fields['freeStartTime'] = strtotime($fields['freeStartTime']);
                 $fields['freeEndTime'] = strtotime($fields['freeEndTime']);
