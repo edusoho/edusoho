@@ -1,0 +1,20 @@
+<li class="item-lesson clearfix" id="lesson-{{ lesson.id }}"style="word-break: break-all;" >
+  <div class="item-line"></div>
+  <div class="item-content">
+    {% set mediaStatus = lesson.mediaStatus|default(null) %}
+      课时 <span class="number">{{ lesson.number }}</span>：{% if lesson.free == 1 %}<span class="label label-danger">免费</span>{% endif %}
+    {% if lesson.status == 'unpublished' %}
+      <span class="text-warning">(未发布)</span>
+    {% endif %}
+  </div>
+
+  <div class="item-actions">
+    <a class="btn btn-link" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_lesson_edit_testpaper', {courseId:course.id, lessonId:lesson.id}) }}">
+      <span class="glyphicon glyphicon-edit prs"></span>编辑
+    </a>
+      <a class="btn btn-link" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open prs"></span>预览</a>
+      <a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-trash prs"></span>删除</a>
+      </ul>
+    </span>
+  </div>
+</li>
