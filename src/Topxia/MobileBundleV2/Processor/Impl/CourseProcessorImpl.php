@@ -323,17 +323,21 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	        		if (empty($noteNum)) {
 	        			continue;
 	        		}
-	        		
 	        		$noteListByOneCourse = $this->controller->getNoteService()->findUserCourseNotes($user['id'],$courseMember['courseId']);
-	        		
-	        		var_dump($noteListByOneCourse);
-	        		$noteInfos[] = array(
-	        			"coursesId"=>$courseMember['courseId'],
-	        			"courseTitle"=>$course['title'],
-	        			"noteLastUpdateTime"=>$courseMember['noteLastUpdateTime'],
-	        			"noteNum"=>$noteNum,
-	        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png')
-	        			);
+	        		foreach ($noteListByOneCourse as $value) {
+	        			$lessonInfo = $this->controller->getCourseService()->getCourseLesson($value['courseId'],$value['lessonId']);
+	        			$noteInfos[] = array(
+		        			"coursesId"=>$courseMember['courseId'],
+		        			"courseTitle"=>$course['title'],
+		        			"noteLastUpdateTime"=>$courseMember['noteLastUpdateTime'],
+		        			"lessonTitle"->$lessonInfo['title'],
+		        			"content"=>$value['content'],
+		        			"createdTime"=>$value['createdTime'],
+		        			"noteNum"=>$noteNum,
+		        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png')
+		        			);
+	        		}
+
 	        	}
 	        	/*
 	    	$noteList = array();
