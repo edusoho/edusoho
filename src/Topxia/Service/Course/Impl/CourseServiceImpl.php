@@ -529,6 +529,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if($favorite){
 			throw $this->createServiceException("该收藏已经存在，请不要重复收藏!");
 		}
+		//添加动态
+		$this->getStatusService()->publishStatus(array(
+			'type' => 'favorite_course',
+			'objectType' => 'course',
+			'objectId' => $courseId,
+			'properties' => array(
+				'course' => $this->simplifyCousrse($course),
+			)
+		));
 
 		$this->getFavoriteDao()->addFavorite(array(
 			'courseId'=>$course['id'],
@@ -1108,6 +1117,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$user = $this->getCurrentUser();
 
 		$lesson = $this->getCourseLesson($courseId, $lessonId);
+
+	$this->getStatusService()->publishStatus(array(
+		'type' => 'start_learn_lesson',
+		'objectType' => 'lesson',
+		'objectId' => $lessonId,
+		'properties' => array(
+			'course' => $this->simplifyCousrse($course),
+			'lesson' => $this->simplifyLesson($lesson),
+		)
+	));
 
 		if (!empty($lesson) && $lesson['type'] != 'video') {
 
