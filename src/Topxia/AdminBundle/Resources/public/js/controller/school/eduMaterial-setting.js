@@ -42,7 +42,7 @@ define(function(require, exports, module) {
             );
         });
 
-        $('.eduMaterial-table').on('show.bs.popover', function (a,b,c) {
+        $('body').on('click', function () {
             var pops=$table.find('.popover');
             if(pops.length>0){
                 pops.parent().find('.material-selector').popover('hide');
