@@ -32,6 +32,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsbyTypes($types, $start, $limit); 
     }
 
+    public function findQuestionsByTypesAndExcludeUnvalidatedMaterial($types, $start, $limit)
+    {
+        return $this->getQuestionDao()->findQuestionsByTypesAndExcludeUnvalidatedMaterial($types, $start, $limit);
+    }
+
     public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId)
     {
         return $this->getQuestionDao()->findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId); 
