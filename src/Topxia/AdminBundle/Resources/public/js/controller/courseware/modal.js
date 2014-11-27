@@ -2,6 +2,18 @@ define(function(require, exports, module){
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
+    var TagChooser = require('../tag2/tag-chooser');
+
+    var chooser = new TagChooser({
+        element: '#tag-chooser',
+        sourceUrl: '/admin/knowledge/match',
+        // sourceUrl: '/admin/tagset/match',
+        // multi: true,
+        multi: true,
+        type: 'knowledge',
+        items: []
+    });
+
     exports.run = function(){
         var $form = $("#courseware-form");
         $modal = $form.parents('.modal');

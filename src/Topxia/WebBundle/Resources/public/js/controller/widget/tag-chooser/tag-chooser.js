@@ -26,6 +26,7 @@ define(function(require, exports, module) {
             'click .tag-cancel': 'onTagCancel',
             'click .tag-confirm': 'onTagConfirm',
             'click .tag-item': 'onTagItem',
+            'click .tag-node': 'onTagNode',
             'click .tag-remove': 'onTagRemove'
         },
 
@@ -53,6 +54,7 @@ define(function(require, exports, module) {
 
             var autocomplete = new AutoComplete({
                 trigger: '#tags-input',
+                multi: this.get('multi'),
                 dataSource: $('#tags-input').data('url'),
                 filter: {
                     name: 'stringMatch',
@@ -84,14 +86,20 @@ define(function(require, exports, module) {
                 if (error) {
                     Notify.danger(error);
                 } else {
-                    $tag.find('.tag-name-placeholder').attr("data-id",data.id)
-                    $tag.find('.tag-name-placeholder').attr("data-name",data.name)
-                    $tags.append($tag);
+                    $tag.find('.tag-name-placeholder').attr("data-id",data.id);
+                    $tag.find('.tag-name-placeholder').attr("data-name",data.name);
+                    console.log(this.get('multi'))
+                    if (this.get('multi') == false) {
+                        $tags.html($tag);
+                    } else {
+                        $tags.append($tag);
+                    }
                 }
             });
 
             var setting = {
                 type:this.get('type'),
+                multi:this.get('multi'),
                 async: {
                     enable: true,
                     url:$tree.data('url'),
@@ -156,9 +164,18 @@ define(function(require, exports, module) {
         },
 
         _addDiyDom:function(treeId, treeNode) {
+            tree = $.fn.zTree.getZTreeObj(treeId);
             var html = '<div class="actions ">';
-            html += '<span class="btn btn-link btn-sm "    id="checkBtn_'+treeNode.tId+'"><label><input class="knowledge-checkbox tag-item-'+treeNode.id+'" data-id="'+treeNode.id+'" data-name="'+treeNode.name+'" type="checkbox"></label></span>';
-            html += '</div>';
+            if (tree.setting.multi == true) {
+                html += '<span class="btn btn-link btn-sm "    id="checkBtn_'+treeNode.tId+'"><label><input class="knowledge-checkbox tag-item-'+treeNode.id+'" data-id="'+treeNode.id+'" data-name="'+treeNode.name+'" type="checkbox"></label></span>';
+                html += '</div>';
+            } else {
+                $('.tag-overlay').find('.panel-footer').hide();
+                $('#' + treeNode.tId + '_a').addClass('tag-node');
+                $('#' + treeNode.tId + '_a').attr("data-id",treeNode.id);
+                $('#' + treeNode.tId + '_a').attr("data-name",treeNode.name);
+                html += '</div>';
+            }
             $('#' + treeNode.tId + '_a').after(html);
             $('#knowledge-tree_1_switch').click();
             $('#knowledge-tree_2_switch').click();
@@ -203,6 +220,21 @@ define(function(require, exports, module) {
             this.$('.tags-choosed').find('.choosed-tag').each(function(index, item) {
                 choosedTags.push($(item).data());
             });
+        },
+
+        onTagNode: function(e) {
+            var $item = $(e.currentTarget);
+            var $tagsChoosed = $('.tags-choosed');
+            var $tagTemplate = $('.choosed-tag-template');
+            var $tag = $tagTemplate.clone().removeClass('choosed-tag-template');
+            var $tagNamePlaceholder = $tag.find('.tag-name-placeholder');
+
+            $tagNamePlaceholder.html($item.data('name'));
+            $tagsChoosed.html($tag);
+            $tagNamePlaceholder.attr('data-id',$item.data('id'));
+            $tagNamePlaceholder.attr('data-name',$item.data('name'));
+
+            this._tagOverlay.hide();
         },
 
         onTagItem: function(e) {

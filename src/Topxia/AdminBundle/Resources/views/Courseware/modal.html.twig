@@ -1,6 +1,83 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% block title %}{% if courseware|default(null) %}编辑{% else %}添加{% endif %}课件{% endblock %}
 {% block body %}
+	<style>
+	  #tag-chooser {
+	    position: relative;
+	  }
+	  .tag-overlay {
+	    position: absolute;
+	    left: 0;
+	    top: 0;
+	    display: none;
+	  }
+
+	  .tag-overlay .panel-footer {
+	    text-align: right;
+	  }
+
+	  .tag-overlay .tag-item {
+	    font-size: 12px;
+	    padding: 2px 3px;
+	    border-radius: 3px;
+	    margin-bottom: 3px;
+	    display: inline-block;
+	    text-decoration: none;
+	  }
+
+	  .tag-overlay .tag-item-choosed {
+	    background: #5bc0de;
+	    color: #fff;
+	  }
+
+	  .tags-choosed {
+	    margin-bottom: 10px;
+	  }
+
+
+	  .choosed-tag {
+	    margin: 0 10px 10px 0;
+	  }
+
+	  .choosed-tag .disabled {
+	    color: #444;
+	    opacity: 1;
+	  }
+
+	  .choosed-tag .glyphicon-remove {
+	    color: #666;
+	    font-size: 10px;
+	  }
+
+	  .choosed-tag-template {
+	    display: none;
+	  }
+
+	  .ui-autocomplete {
+	    border:1px solid #ccc;
+	    background-color: #FFFFFF;
+	    box-shadow: 2px 2px 3px #EEEEEE;
+	}
+	.ui-autocomplete-ctn{
+	    margin:0;
+	    padding:0;
+	}
+	.ui-autocomplete-item {
+	    width: 180px;
+	    overflow:hidden;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	    line-height: 30px;
+	    padding:0 10px 0 10px;
+	    cursor: default;
+	}
+	.ui-autocomplete-item-hover {
+	    background:#f2f2f2;
+	}
+	.ui-autocomplete-item-hl {
+	    background:#F6FF94;
+	}
+	</style>
 	<div id="courseware-creater-widget">
 	<form id="courseware-form" class="form-horizontal" action="{% if courseware|default(null) %}{{ path('admin_courseware_edit',{categoryId:category.id,id:courseware.id}) }}{% else %}{{ path('admin_courseware_create',{categoryId:category.id}) }} {% endif %}" method="post">
 		<div class="form-group">
@@ -23,7 +100,6 @@
 				<div class="help-block"></div>
 			</div>
 		</div>
-
 		<div class="form-group">
 			<label class="col-md-3 control-label" for="courseware-relatedKnowledgeIds-field">
 				关联知识点
@@ -31,6 +107,55 @@
 			<div class="col-md-7 controls">
 				<input class="form-control" id="courseware-relatedKnowledgeIds-field" type="text" name="relatedKnowledgeIds" value="{{ courseware.relatedKnowledgeIds|default(null) }}" >
 			</div>
+		</div>
+
+
+
+          <div class="form-group">
+          	<label class="col-md-3 control-label" for="courseware-relatedKnowledgeIds-field">
+          		关联知识点
+          	</label>
+
+      	<div class="col-md-7 controls">
+		  <div id="tag-chooser"  >
+
+		    <div class="btn-group choosed-tag choosed-tag-template">
+		      <button type="button" class="btn btn-xs btn-default disabled"><span class="tag-name-placeholder"></span></button>
+		      <button type="button" class="btn btn-xs btn-default">
+		        <span class="glyphicon glyphicon-remove tag-remove"></span>
+		      </button>
+		    </div>
+		    <div class="tags-choosed"></div>
+		    <div class="input-group">
+		      <input type="text" class="form-control" id="tags-input" name="keywords" >
+		      <div class="input-group-btn">
+		        <button type="button" class="btn btn-default dropdown" tabindex="-1">
+		          <span class="caret"></span>
+		        </button>
+		      </div>
+		    </div>
+		    <div class="tag-overlay">
+
+		      <div class="panel panel-default">
+		        <div class="panel-body" style="height:250px;overflow-y:scroll;">
+		          <div data-role="knowledge-list" style="dispaly:none">
+		              {{ render(controller('TopxiaAdminBundle:Knowledge:getTree',{categoryId:4})) }}
+		          </div>
+		          <div data-role="tags-list" style="dispaly:none">
+		              {{ render(controller('TopxiaAdminBundle:Tag2:getTagset')) }}
+		          </div>
+		        </div>
+
+		        <div class="panel-footer">
+		          <button type="button" class="btn btn-link btn-xs tag-cancel">取消</button>
+		          <button type="button" class="btn btn-primary btn-xs tag-confirm">确定</button>
+		        </div>
+		      </div>
+
+		    </div>
+
+		  </div>
+		</div>
 		</div>
 
 		<div class="form-group">

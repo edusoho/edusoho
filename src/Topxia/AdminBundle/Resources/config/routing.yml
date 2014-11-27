@@ -91,6 +91,10 @@ admin_blockhistory_preview:
     pattern:  /blockhistory/{id}/preview
     defaults: { _controller: TopxiaAdminBundle:Block:preview }
 
+admin_tag_chooser_twig:
+    pattern:  /tag/chooserTwig
+    defaults: { _controller: TopxiaAdminBundle:Tag2:chooserTwig }
+
 admin_tag:
     pattern:  /tag/group
     defaults: { _controller: TopxiaAdminBundle:Tag2:index }
