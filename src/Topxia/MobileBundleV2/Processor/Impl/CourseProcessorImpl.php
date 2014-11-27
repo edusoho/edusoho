@@ -315,6 +315,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
 	        	$courseMembers = $this->controller->getCourseService()->searchMember($conditions,$start,$limit);
 	        	$courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
+	        	var_dump($courses);
 	        	$noteInfos = array();
 	        	for ($i=0; $i < count($courseMembers); $i++) { 
 	        		$courseMember = $courseMembers[$i];
@@ -323,7 +324,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	        		if (empty($noteNum)) {
 	        			continue;
 	        		}
-	        		var_dump($course);
+	        		
 	        		//$noteListByOneCourse = $this->controller->getNoteService()->findUserCourseNotes($user['id'],ArrayToolkit::column($courseMembers, 'courseId'));
 	        		//var_dump($noteListByOneCourse);
 	        		$noteInfos[] = array(
