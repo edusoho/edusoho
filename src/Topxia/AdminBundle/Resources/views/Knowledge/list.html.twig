@@ -20,7 +20,10 @@
 
 {% if not setting('school.primarySchool') and not setting('school.middleSchool') and not setting('school.highSchool') %}
   <div class="empty">尚未设置启用年级</div>
-{% else %}
+  {% set hidden = true %}
+{% endif %}
+
+<div class="{% if hidden|default(false) %} hidden {% endif %}">
   <div class="container select-section" data-url="{{ path('get_material') }}">
     <div class="row">
       <div class="col-md-2 form-group">
@@ -43,10 +46,9 @@
       </div>
     </div>
   </div>
-{% endif %}
+  <div class="knowledge-list">
+    <ul id="knowledge-tree" class="ztree" data-url="{{ path('admin_knowledge_getNodes')}}" data-durl="{{ path('admin_knowledge_delete')}}" data-surl="{{ path('admin_knowledge_sort') }}"></ul>
+  </div>
+</div>
 
-
-<div class="knowledge-list">
-  <ul id="knowledge-tree" class="ztree" data-url="{{ path('admin_knowledge_getNodes')}}" data-durl="{{ path('admin_knowledge_delete')}}" data-surl="{{ path('admin_knowledge_sort') }}"></ul>
-<div>
 {% endblock %}
