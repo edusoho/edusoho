@@ -47,6 +47,15 @@ define(function(require, exports, module) {
             autocomplete.setInputValue(value);
         });
 
+        dynamicCollection.on('onDeleteItem', function(e){
+        	var teacherCounts=$("#teacher-list-group").children("li").length;
+            if(teacherCounts <= 1){
+                Notify.danger("课程至少需要一个教师！");
+                return false;
+            }
+            return true;
+        })
+
 		$(".teacher-list-group").sortable({
 			'distance':20
 		});
