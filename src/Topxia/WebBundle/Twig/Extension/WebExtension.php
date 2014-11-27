@@ -389,6 +389,9 @@ class WebExtension extends \Twig_Extension
     {
         $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
+
+        $cdn = ServiceKernel::instance()->createService('System.SettingService')->get('cdn',array());
+        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
         
         if (empty($uri)) {
             $publicUrlpath = 'assets/img/default/';
@@ -420,8 +423,12 @@ class WebExtension extends \Twig_Extension
             $url = ltrim($url, ' /');
             $url = $assets->getUrl($url);
 
-            if ($absolute) {
-                $url = $request->getSchemeAndHttpHost() . $url;
+            if ($cdnUrl) {
+                $url = $cdnUrl . $url;
+            } else {
+                if ($absolute) {
+                    $url = $request->getSchemeAndHttpHost() . $url;
+                }
             }
 
             return $url;
