@@ -509,6 +509,12 @@ EOD;
 			'public' => 0,
 		));
 
+		$this->getFileService()->addFileGroup(array(
+		    'name' => '资讯',
+		    'code' => 'article',
+		    'public' => 1,
+		));
+		
         $directory = $this->getContainer()->getParameter('topxia.disk.local_directory');
         chmod($directory, 0777);
 
