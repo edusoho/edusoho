@@ -19,14 +19,14 @@ define(function(require, exports, module) {
 
         $table.on('click','.material-name',function(){
             if($(this).closest('.materialTd').find('.eduMaterial-name').html()==$(this).html()){
-                $table.find('.popover').hide();
+                $table.find('.popover').parent().find('.material-selector').popover('hide');
                 return;
             }
             if (!confirm('确认更改教材为'+$(this).html()+'？')) {
                 return ;
             }
             $(this).closest('.materialTd').find('.eduMaterial-name').html($(this).html());
-            $table.find('.popover').hide();
+            $table.find('.popover').parent().find('.material-selector').popover('hide');
             $.post(
                 $(this).data('url'),
                 { eduMaterialId:$(this).data('edumaterialid'),
@@ -42,12 +42,13 @@ define(function(require, exports, module) {
             );
         });
 
-        $(document).click(function(){
+        $('.eduMaterial-table').on('show.bs.popover', function (a,b,c) {
             var pops=$table.find('.popover');
             if(pops.length>0){
-                $table.find('.popover').hide();
+                pops.parent().find('.material-selector').popover('hide');
             }
         });
+
 
     }
 });
