@@ -18,7 +18,7 @@
           {% if students %}
             {% for student in students %}
             <tr>
-            <td>{{student.nickname}}</td>
+            <td>{{student.truename}}</td>
             <td>{{student.startTime|date('Y-m-d H:i:s')}}</td>
             <td>{% if student.finishedTime %}{{student.finishedTime|date('Y-m-d H:i:s')}}{% else %}----{% endif %}</td>
             <td>{{student.learnTime}}</td>

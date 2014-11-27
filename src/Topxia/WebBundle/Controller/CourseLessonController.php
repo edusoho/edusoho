@@ -282,6 +282,7 @@ class CourseLessonController extends BaseController
             
             $user=$this->getUserService()->getUser($learn['userId']);
             $students[$key]['nickname']=$user['nickname'];
+            $students[$key]['truename']=$user['truename'];
             $students[$key]['startTime']=$learn['startTime'];
             $students[$key]['finishedTime']=$learn['finishedTime'];
             $students[$key]['learnTime']=$learn['learnTime'];
