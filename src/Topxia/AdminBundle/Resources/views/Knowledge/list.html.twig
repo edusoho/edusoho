@@ -8,34 +8,43 @@
 {% block main %}
 
 <div class="page-header clearfix">
-  <button class="btn btn-sm btn-info pull-right add-category" id="add-knowledge-fake">添加知识点</button>
+  {% if not setting('school.primarySchool') and not setting('school.middleSchool') and not setting('school.highSchool') %}
+  {% else %}
+    <button class="btn btn-sm btn-info pull-right add-category" id="add-knowledge-fake">添加知识点</button>
+  {% endif %}
+
   <button class="btn btn-sm btn-info pull-right add-category hidden" id="add-knowledge" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_knowledge_create') }}" data-turl="{{ path('admin_knowledge_create') }}">添加知识点</button>
   <button class="btn btn-sm btn-info pull-right add-category hidden" id="edit-knowledge" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_knowledge_edit') }}" data-turl="{{ path('admin_knowledge_edit') }}">编辑知识点</button>
   <h1 class="pull-left">知识点管理</h1>
 </div>
 
-<div class="container select-section" data-url="{{ path('get_material') }}">
-  <div class="row">
-    <div class="col-md-2 form-group">
-      <select class="form-control" id="gradeId" name="gradeId" data-url="{{ path('get_subjects') }}">
-        {{ select_options_for_grade('') }}
-      </select>
-    </div>
-    <div class="col-md-2 form-group">
-      <select class="form-control" id="term" name="term">
-        {{ select_options({'first':'一学期', 'second':'二学期'}, app.request.query.get('gradeId')) }}
-      </select>
-    </div>
-    <div class="col-md-2 form-group">
-      <select class="form-control" id="subjectId" name="subjectId">
-      </select>
-    </div>
-    <div class="col-md-2 form-group">
-      <input type="text" class="hidden" name="materialId" value="" id="materialId" readonly>
-      <input type="text" class="form-control" value=""  id="material" readonly>
+{% if not setting('school.primarySchool') and not setting('school.middleSchool') and not setting('school.highSchool') %}
+  <div class="empty">尚未设置启用年级</div>
+{% else %}
+  <div class="container select-section" data-url="{{ path('get_material') }}">
+    <div class="row">
+      <div class="col-md-2 form-group">
+        <select class="form-control" id="gradeId" name="gradeId" data-url="{{ path('get_subjects') }}">
+          {{ select_options_for_grade('') }}
+        </select>
+      </div>
+      <div class="col-md-2 form-group">
+        <select class="form-control" id="term" name="term">
+          {{ select_options({'first':'一学期', 'second':'二学期'}, app.request.query.get('gradeId')) }}
+        </select>
+      </div>
+      <div class="col-md-2 form-group">
+        <select class="form-control" id="subjectId" name="subjectId">
+        </select>
+      </div>
+      <div class="col-md-2 form-group">
+        <input type="text" class="hidden" name="materialId" value="" id="materialId" readonly>
+        <input type="text" class="form-control" value=""  id="material" readonly>
+      </div>
     </div>
   </div>
-</div>
+{% endif %}
+
 
 <div class="knowledge-list">
   <ul id="knowledge-tree" class="ztree" data-url="{{ path('admin_knowledge_getNodes')}}" data-durl="{{ path('admin_knowledge_delete')}}" data-surl="{{ path('admin_knowledge_sort') }}"></ul>
