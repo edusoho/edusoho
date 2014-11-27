@@ -1,0 +1,14 @@
+{% for tagSet in tagSets %}
+  <div class="row">
+  	{% if tagSet.subitems|default(null) %}
+  		    <div class="col-xs-3">{{tagSet.name}}</div>
+  	{% endif %}
+    <div class="col-xs-9">
+      <div class="row">
+        {% for item in tagSet.subitems %}
+        <div class="col-xs-4"><a class="tag-item tag-item-{{ item.id }}" href="javascript:;" data-id="{{ item.id }}" data-name="{{ item.name }}">{{ item.name }}</a></div>
+        {% endfor %}
+      </div>
+    </div>
+</div>
+{% endfor %}

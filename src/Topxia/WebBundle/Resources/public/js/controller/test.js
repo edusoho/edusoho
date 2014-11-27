@@ -4,8 +4,11 @@ define(function(require, exports, module) {
 
     var chooser = new TagChooser({
         element: '#tag-chooser',
-        sourceUrl: 'xxxx',
+        sourceUrl: '/admin/knowledge/match',
+        // sourceUrl: '/admin/tagset/match',
+        // multi: true,
         multi: true,
+        type: 'knowledge',
         items: []
     });
 

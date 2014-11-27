@@ -27,9 +27,9 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTag2GroupDao()->getTag2GroupByName($name);
     }
 
-    public function getTagByLikeName($name)
+    public function getTag2ByLikeName($name)
     {
-        return $this->getTag2Dao()->getTagByLikeName($name);
+        return $this->getTag2Dao()->getTag2ByLikeName($name);
     }
 
     public function findAllTag2Groups($start, $limit)
@@ -40,6 +40,16 @@ class TagServiceImpl extends BaseService implements TagService
     public function getAll2GroupCount()
     {
         return $this->getTag2GroupDao()->findAllTag2GroupsCount();
+    }
+
+    public function findAllTags()
+    {
+        return $this->getTag2Dao()->findAllTags();
+    }
+
+    public function findAllTagGroups()
+    {
+        return $this->getTag2GroupDao()->findAllTagGroups();
     }
 
     public function findTagsByIds(array $ids)

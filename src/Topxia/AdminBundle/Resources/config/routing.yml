@@ -99,6 +99,14 @@ admin_tag_list:
     pattern:  /tag/{id}/list
     defaults: { _controller: TopxiaAdminBundle:Tag2:list }
 
+admin_tag_all_get:
+    pattern:  /tagset/get
+    defaults: { _controller: TopxiaAdminBundle:Tag2:getTagset }
+
+admin_tag_match:
+    pattern:  /tagset/match
+    defaults: { _controller: TopxiaAdminBundle:Tag2:tagsetMatch }
+
 admin_tag_group_create:
     pattern:  /tag/group/create
     defaults: { _controller: TopxiaAdminBundle:Tag2:groupCreate }
@@ -726,6 +734,10 @@ admin_knowledge_create:
     pattern: /category/{categoryId}/manage/knowledge/create
     defaults: { _controller: TopxiaAdminBundle:Knowledge:create }
 
+admin_knowledge_match:
+    pattern: knowledge/match
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:match }
+
 admin_knowledge_delete:
     pattern: /knowledge/delete
     defaults: { _controller: TopxiaAdminBundle:Knowledge:delete }
@@ -743,6 +755,10 @@ admin_knowledge_getNodes:
 admin_knowledge_sort:
     pattern:  /knowledge/sort
     defaults: { _controller: TopxiaAdminBundle:Knowledge:sort }
+
+admin_knowledge_list:
+    pattern:  /knowledge/getTree
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:getTree }
 
 admin_file:
     pattern:  /file

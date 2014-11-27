@@ -132,6 +132,19 @@ class KnowledgeController extends BaseController
         return $this->createJsonResponse($knowledges);
     }
 
+    public function getTreeAction(Request $request,$categoryId)
+    {
+        return $this->render('TopxiaAdminBundle:Knowledge:tree.html.twig',array('categoryId' => $categoryId));
+    }
+
+    public function matchAction(Request $request)
+    {
+        $likeString = $request->query->get('q');
+
+        $knowledges = $this->getKnowledgeService()->searchKnowledge(array('keywords'=>$likeString),array('createdTime', 'DESC'), 0, 10);
+        return $this->createJsonResponse($knowledges);
+    }
+
     public function sortAction(Request $request)
     {
         $id = $request->request->get('id');

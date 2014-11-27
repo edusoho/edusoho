@@ -44,6 +44,24 @@ class Tag2Controller extends BaseController
         ));
     }
 
+    public function getTagsetAction(Request $request)
+    {
+        $tags = $this->getTagService()->findAllTags();
+        $tagGroups = $this->getTagService()->findAllTagGroups();
+        $tagSets = $this->getTagSets($tagGroups,$tags);
+        return $this->render('TopxiaAdminBundle:Tag2:tag-set.html.twig',array(
+            'tagSets' => $tagSets
+        ));
+    }
+
+    public function tagsetMatchAction(Request $request)
+    {
+        $likeString = $request->query->get('q');
+
+        $tags = $this->getTagService()->getTag2ByLikeName($likeString);
+        return $this->createJsonResponse($tags);
+    }
+
     public function createAction(Request $request,$id)
     {
         if ('POST' == $request->getMethod()){
@@ -163,6 +181,24 @@ class Tag2Controller extends BaseController
         }
 
         return $this->createJsonResponse($response);
+    }
+
+    private function getTagSets($tagGroups,$tags)
+    {
+        $tagSet = array();
+
+        foreach ($tagGroups as $groupkey => $tagGroup) {
+            $tagSet[$groupkey] = $tagGroup;
+            $tagSet[$groupkey]['subitems'] = array();
+
+            foreach ($tags as $tagkey => $tag) {
+                if ($tag['groupId'] == $tagGroup['id']) {
+                    $tagSet[$groupkey]['subitems'][] = $tag;
+                }
+            }
+        }
+
+        return $tagSet;
     }
 
     private function getTagService()

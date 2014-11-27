@@ -6,20 +6,14 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Ztree = require('ztree');
     require('ztree-css');
-
     var TagChooser = Widget.extend({
         attrs: {
             multi: true,
             type:'knowledge',
-            sourceUrl:'',
             choosedTags: []
         },
 
         _tagOverlay: null,
-        _addDiyDom:null,
-        _zTreeOnNodeCreated:null,
-        _init:null,
-        _initItemsCheck:null,
 
         events: {
             'click .dropdown' : 'onDropdown',
@@ -31,8 +25,8 @@ define(function(require, exports, module) {
 
         setup: function() {
 
-            this._init();
             var $tree = $('#knowledge-tree');
+
             var overlayY = this.$('.input-group').height();
             var overlayWidth = this.$('.input-group').width();
 
@@ -64,12 +58,16 @@ define(function(require, exports, module) {
                 selectFirst: true
             }).render();
 
+
+
             autocomplete.on('itemSelect', function(data){
 
                 $('#tags-input').val('');
 
                 var $tags = $('.tags-choosed');
+
                 var error = "";
+
                 var $tagTemplate = $('.choosed-tag-template');
                 var $tag = $tagTemplate.clone().removeClass('choosed-tag-template');
                 var choosedTags = [];
@@ -97,13 +95,14 @@ define(function(require, exports, module) {
                     url:$tree.data('url'),
                     autoParam:["id"],
                     otherParam:{"categoryId":$tree.data('cid')}
+                    //dataFilter: filter
                 },
                 view: {
                     expandSpeed:"",
                     selectedMulti: false,
                     showLine: false,
                     showIcon: false,
-                    addDiyDom: this._addDiyDom
+                    addDiyDom: addDiyDom
                 },
                 edit: {
                     enable: true,
@@ -118,50 +117,37 @@ define(function(require, exports, module) {
                     }
                 },
                 callback: {
-                    onNodeCreated: this._zTreeOnNodeCreated
+                    onNodeCreated: zTreeOnNodeCreated
                 }
             };
 
-            $.fn.zTree.init($("#knowledge-tree"), setting);
 
-        },
-
-        _init:function()
-        {
-            $('#tags-input').data("url",this.get('sourceUrl')+'?q={{query}}');
-            var $tagOverlay = this.$('.tag-overlay');
-            var $knowledgeList = $tagOverlay.find('[data-role=knowledge-list]');
-            var $tagList = $tagOverlay.find('[data-role=tags-list]');
-            if (this.get('type') == 'knowledge') {
-                $knowledgeList.show();
-                $tagList.hide();
-            } else {
-                $knowledgeList.hide();
-                $tagList.show();
-            }
-        },
-
-        _zTreeOnNodeCreated:function(event, treeId, treeNode)
-        {
+        function zTreeOnNodeCreated(event, treeId, treeNode) {
             var self = this;
             var tree = $.fn.zTree.getZTreeObj(treeId);
             $('.choosed-tag').each(function(index,item){
                 var itemId = $(item).find('.tag-name-placeholder').data('id');
                 if (tree.setting.type == "knowledge") {
+                    // console.log($('#tag-item-'+itemId).parent())
+                    // $('#tag-item-'+itemId).parent();
                     $('.tag-overlay').find('.tag-item-' + itemId).prop('checked', true);
                 } else {
                     $('.tag-overlay').find('.tag-item-' + itemId).addClass('tag-item-choosed');
                 }
             });
-        },
+        };
 
-        _addDiyDom:function(treeId, treeNode) {
+        function addDiyDom(treeId, treeNode) {
             var html = '<div class="actions ">';
             html += '<span class="btn btn-link btn-sm "    id="checkBtn_'+treeNode.tId+'"><label><input class="knowledge-checkbox tag-item-'+treeNode.id+'" data-id="'+treeNode.id+'" data-name="'+treeNode.name+'" type="checkbox"></label></span>';
             html += '</div>';
             $('#' + treeNode.tId + '_a').after(html);
             $('#knowledge-tree_1_switch').click();
             $('#knowledge-tree_2_switch').click();
+        };
+
+            $.fn.zTree.init($("#knowledge-tree"), setting);
+
         },
 
         onDropdown: function(e) {
@@ -203,6 +189,7 @@ define(function(require, exports, module) {
             this.$('.tags-choosed').find('.choosed-tag').each(function(index, item) {
                 choosedTags.push($(item).data());
             });
+            // this.set('choosedTags', choosedTags);
         },
 
         onTagItem: function(e) {
@@ -215,7 +202,7 @@ define(function(require, exports, module) {
                     $item.addClass('tag-item-choosed');
                 }
             } else {
-                this.element.find('.tag-item-choosed').removeClass('tag-item-choosed');
+                // this.element.find('.tag-item-choosed').removeClass('tag-item-choosed');
                 $item.addClass('tag-item-choosed');
             }
 
@@ -229,25 +216,11 @@ define(function(require, exports, module) {
             $.each(tags, function(index, tag) {
                 var $tag = $tagTemplate.clone().removeClass('choosed-tag-template');
                 $tag.data(tag);
+                $tag.find('.tag-name-placeholder').attr("data-id",tag.id)
+                $tag.find('.tag-name-placeholder').attr("data-name",tag.name)
 
-                $tagNamePlaceholder = $tag.find('.tag-name-placeholder');
-                $tagNamePlaceholder.attr("data-id",tag.id)
-                $tagNamePlaceholder.attr("data-name",tag.name)
-                $tagNamePlaceholder.html(tag.name);
-
+                $tag.find('.tag-name-placeholder').html(tag.name);
                 $tags.append($tag);
-            });
-        },
-
-        _initItemsCheck:function($type)
-        {
-            $('.choosed-tag').each(function(index,item){
-                var itemId = $(item).find('.tag-name-placeholder').data('id');
-                if ($type == "knowledge") {
-                    $('.tag-overlay').find('.tag-item-' + itemId).prop('checked', true);
-                } else {
-                    $('.tag-overlay').find('.tag-item-' + itemId).addClass('tag-item-choosed');
-                }
             });
         },
 
@@ -258,7 +231,24 @@ define(function(require, exports, module) {
                 self.$('.tag-overlay').find('.knowledge-checkbox').attr("checked",false);
             }
 
-            this._initItemsCheck(self.get('type'));
+            $('.choosed-tag').each(function(index,item){
+                var itemId = $(item).find('.tag-name-placeholder').data('id');
+                if (self.get('type') == "knowledge") {
+                    console.log($('#tag-item-'+itemId).parent())
+                    // $('#tag-item-'+itemId).parent();
+                    self.$('.tag-overlay').find('.tag-item-' + itemId).prop('checked', true);
+                } else {
+                    self.$('.tag-overlay').find('.tag-item-' + itemId).addClass('tag-item-choosed');
+                }
+            });
+
+            // $.each(self.get('choosedTags'), function(index, tag) {
+            //     if (self.get('type') == "knowledge") {
+            //         self.$('.tag-overlay').find('.tag-item-' + tag.id).prop('checked', true);
+            //     } else {
+            //         self.$('.tag-overlay').find('.tag-item-' + tag.id).addClass('tag-item-choosed');
+            //     }
+            // });
         }
 
     });

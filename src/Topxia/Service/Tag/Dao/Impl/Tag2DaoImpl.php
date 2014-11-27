@@ -54,6 +54,12 @@ class Tag2DaoImpl extends BaseDao implements Tag2Dao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findAllTags()
+    {
+        $sql ="SELECT * FROM {$this->table} WHERE `disabled` = 0";
+        return $this->getConnection()->fetchAll($sql);
+    }
+
     public function findTag2sByNames(array $names)
     {
         if(empty($names)){ return array(); }
@@ -85,7 +91,7 @@ class Tag2DaoImpl extends BaseDao implements Tag2Dao
     public function getTag2ByLikeName($name)
     {
         $name = "%{$name}%";
-        $sql = "SELECT * FROM {$this->table} WHERE name LIKE ?";
+        $sql = "SELECT * FROM {$this->table} WHERE name LIKE ? AND disabled = 0";
         return $this->getConnection()->fetchAll($sql, array($name));
     }
 
