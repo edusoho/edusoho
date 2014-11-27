@@ -1339,11 +1339,11 @@ group_thread_check_user:
 group_thread_show:
     pattern:  /group/{id}/thread/{threadId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:groupThreadIndex }
-group_collect:
+group_thread_collect:
     pattern:  /group/thread/{threadId}/collect
     defaults: { _controller: TopxiaWebBundle:GroupThread:collect }
     methods: [POST]
-group_uncollect:
+group_thread_uncollect:
     pattern:  /group/thread/{threadId}/uncollect
     defaults: { _controller: TopxiaWebBundle:GroupThread:uncollect }
     methods: [POST]
