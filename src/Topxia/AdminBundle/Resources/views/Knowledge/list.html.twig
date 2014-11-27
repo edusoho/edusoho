@@ -15,7 +15,7 @@
 
   <button class="btn btn-sm btn-info pull-right add-category hidden" id="add-knowledge" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_knowledge_create') }}" data-turl="{{ path('admin_knowledge_create') }}">添加知识点</button>
   <button class="btn btn-sm btn-info pull-right add-category hidden" id="edit-knowledge" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_knowledge_edit') }}" data-turl="{{ path('admin_knowledge_edit') }}">编辑知识点</button>
-  <h1 class="pull-left">知识点管理</h1>
+  <h1 class="pull-left">知识点管理</h1> 
 </div>
 
 {% if not setting('school.primarySchool') and not setting('school.middleSchool') and not setting('school.highSchool') %}
@@ -49,6 +49,7 @@
   <div class="knowledge-list">
     <ul id="knowledge-tree" class="ztree" data-url="{{ path('admin_knowledge_getNodes')}}" data-durl="{{ path('admin_knowledge_delete')}}" data-surl="{{ path('admin_knowledge_sort') }}"></ul>
   </div>
+ <span class="text-muted">*鼠标点住知识点文字拖动，即可调整知识点顺序</span>
 </div>
 
 {% endblock %}
