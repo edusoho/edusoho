@@ -51,6 +51,8 @@ interface TestpaperService
 
     public function findAllTestpapersByTarget ($id);
 
+    public function findAllTestpapersByTargets(array $ids);
+
     /**
      * 开始做试卷
      * 
