@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-
+    var userSelect = require('../../../../topxiaweb/js/controller/widget/user-select');
 	exports.run = function() {
 		var $table=$('#group-table');
 
@@ -43,11 +43,15 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="user[nickname]"]',
+            element: '#username',
             required: true,
-            rule: 'remote'
+            errormessage: '请选择一个用户'
         });
 
+        var userselect = new userSelect({
+            element: '#username',
+            placeholder: '请选择转移的用户'
+        });
 	}
 	
 });

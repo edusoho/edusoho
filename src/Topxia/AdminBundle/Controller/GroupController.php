@@ -134,7 +134,7 @@ class GroupController extends BaseController
     {
         $data=$request->request->all();
 
-        $user=$this->getUserService()->getUserByNickname($data['user']['nickname']);
+        $user=$this->getUserService()->getUser($data['userId']);
 
         $group=$this->getGroupService()->getGroup($groupId);
 

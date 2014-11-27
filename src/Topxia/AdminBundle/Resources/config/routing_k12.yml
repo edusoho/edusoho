@@ -193,6 +193,11 @@ admin_user_lock:
     defaults: { _controller: TopxiaAdminBundle:User:lock }
     methods:  [POST]
 
+admin_user_select:
+    pattern:  /select/user
+    defaults: { _controller: TopxiaAdminBundle:User:select }
+    methods:  [GET]
+
 admin_user_unlock:
     pattern:  /user/{id}/unlock
     defaults: { _controller: TopxiaAdminBundle:User:unlock }

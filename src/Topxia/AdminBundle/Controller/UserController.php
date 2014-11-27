@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
@@ -364,6 +365,29 @@ class UserController extends BaseController
     {
         $this->getUserService()->unlockUser($id);
         return $this->renderPage($id);
+    }
+
+    public function selectAction(Request $request)
+    {
+        $truename = $request->query->get('q');
+        $limit = $request->query->get('page_limit');
+        $conditions = array(
+            'truename'=> $truename,
+        );
+        $users = $this->getUserService()->searchUsers(
+            $conditions,
+            array('truename','ASC'),
+            0,
+            $limit);
+
+        $response = array();
+        foreach ($users as $key => $user) {
+            $temp = array();
+            $temp['id'] = $user['id'];
+            $temp['name'] = $user['truename'];
+            $response[] = $temp;
+        }
+        return new Response(json_encode($response)); 
     }
 
     private function renderPage($id){
