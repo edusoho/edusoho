@@ -26,15 +26,17 @@ class CourseManageController extends BaseController
         public function baseAction(Request $request, $id)
         {
 	$course = $this->getCourseService()->tryManageCourse($id);
-              $courseSetting = $this->getSettingService()->get('course', array());
+            //把专栏的空字符处理成数组
+            $course['columns'] = empty($course['columns']) ? array() : explode('|', trim($course['columns'], '|'));
+            $courseSetting = $this->getSettingService()->get('course', array());
               if($request->getMethod() == 'POST'){
                     $data = $request->request->all();
                     $this->getCustomCourseService()->updateCourse($id, $data);
                     $this->setFlashMessage('success', '课程基本信息已保存！');
                     return $this->redirect($this->generateUrl('course_manage_base',array('id' => $id))); 
               }
-
             $tags = $this->getTagService()->findTagsByIds($course['tags']);
+            $columns = $this->getColumnService()->findColumnsByIds($course['columns']);
             if ($course['type'] == 'live') {
                 $client = LiveClientFactory::createClient();
                 $liveCapacity = $client->getCapacity();
@@ -42,10 +44,11 @@ class CourseManageController extends BaseController
                 $liveCapacity = null;
             }
             return $this->render('CustomWebBundle:CourseManage:base.html.twig', array(
-    			'course' => $course,
+    	  'course' => $course,
                 'tags' => ArrayToolkit::column($tags, 'name'),
+                'columns'=>ArrayToolkit::column($columns,'name'),
                 'liveCapacity' => empty($liveCapacity['capacity']) ? 0 : $liveCapacity['capacity'],
-                'liveProvider' => empty($liveCapacity['code']) ? 0 : $liveCapacity['code'],
+                'liveProvider' => empty($liveCapacity['code']) ? 0 : $liveCapacity['code']
     		));
        }
 
@@ -153,5 +156,9 @@ class CourseManageController extends BaseController
     private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+   private function getColumnService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Taxonomy.ColumnService');
     }
 }

@@ -7,13 +7,13 @@ interface ColumnService
 
         public function getColumnByName($name);
 
-        // public function getTagByLikeName($name);
+        public function getColumnByLikeName($name);
 
         public function findAllColumns($start, $limit);
 
         public function getAllColumnCount();
 
-        // public function findTagsByIds(array $ids);
+        public function findColumnsByIds(array $ids);
 
         public function findColumnsByNames(array $names);
 

@@ -111,7 +111,8 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 			'complexity'=>'',
 			'originalPrice'=>'',
 			'isFree'=>'none',
-			'discount'=>'0.0'
+			'discount'=>'0.0',
+			'columns'=>''
 
 		));
 		
@@ -123,6 +124,13 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 			$fields['tags'] = explode(',', $fields['tags']);
 			$fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
 			array_walk($fields['tags'], function(&$item, $key) {
+				$item = (int) $item['id'];
+			});
+		}
+		if (!empty($fields['columns'])) {
+			$fields['columns'] = explode(',', $fields['columns']);
+			$fields['columns'] = $this->getColumnService()->findColumnsByNames($fields['columns']);
+			array_walk($fields['columns'], function(&$item, $key) {
 				$item = (int) $item['id'];
 			});
 		}
@@ -145,6 +153,10 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
      private function getStatusService()
     {
         return $this->createService('User.StatusService');
+    }
+    private function getColumnService()
+    {
+        return $this->createService('Custom:Taxonomy.ColumnService');
     }
 }
 
@@ -183,6 +195,13 @@ class CourseSerialize
     			$course['teacherIds'] = null;
     		}
     	}
+    	if (isset($course['columns'])) {
+    		if (is_array($course['columns']) and !empty($course['columns'])) {
+    			$course['columns'] = '|' . implode('|', $course['columns']) . '|';
+    		} else {
+    			$course['columns'] = null;
+    		}
+    	}
         return $course;
     }
 
@@ -194,6 +213,7 @@ class CourseSerialize
     	}
 
 		$course['tags'] = empty($course['tags']) ? array() : explode('|', trim($course['tags'], '|'));
+		$course['columns'] = empty($course['columns']) ? array() : explode('|', trim($course['columns'], '|'));
 
 		if(empty($course['goals'] )) {
 			$course['goals'] = array();

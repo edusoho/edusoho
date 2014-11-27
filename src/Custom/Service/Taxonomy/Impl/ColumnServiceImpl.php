@@ -25,10 +25,10 @@ class ColumnServiceImpl extends BaseService implements ColumnService
     }
     
 
-    // public function getTagByLikeName($name)
-    // {
-    //     return $this->getTagDao()->getTagByLikeName($name);
-    // }
+    public function getColumnByLikeName($name)
+    {
+        return $this->getColumnDao()->getColumnByLikeName($name);
+    }
 
     public function findAllColumns($start, $limit)
     {
