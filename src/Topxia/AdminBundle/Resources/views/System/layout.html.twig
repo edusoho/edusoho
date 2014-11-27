@@ -16,7 +16,6 @@
         <a href="{{ url('admin_setting_ip_blacklist') }}" class="list-group-item {% if menu == 'ip_blacklist' %}active{% endif %}">IP黑名单</a>
 
         <a href="{{ url('admin_optimize') }}" class="list-group-item {% if menu == 'optimize' %}active{% endif %}">优化和备份</a>   
-
        {% if setting('storage.upload_mode') == 'cloud' %}
         <a href="{{ url('admin_cloud_bill') }}" class="list-group-item {% if menu == 'bill' %}active{% endif %}">云视频账单</a>
        {% endif %}
