@@ -25,10 +25,10 @@ class StatusServiceImpl extends BaseService implements StatusService
         return $this->getStatusDao()->addStatus($status);
     }
 
-    public function  deleteOldStatus($status)
+    private function  deleteOldStatus($status)
     {
         if(!empty($status['userId']) && !empty($status['type']) && !empty($status['objectType']) && !empty($status['objectId'])){
-            return $this->getStatusDao()->deleteOldStatus($status);
+            return $this->getStatusDao()->deleteStatusesByUserIdAndTypeAndObject($status['userId'], $status['type'], $status['objectType'], $status['objectId']);
         }
     }
 

@@ -92,13 +92,13 @@ class StatusDaoImpl extends BaseDao implements StatusDao
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
-   public function deleteOldStatus($status)
+   public function deleteStatusesByUserIdAndTypeAndObject($userId, $type, $objectType, $objectId)
     {
         return $this->getConnection()->delete($this->table, array(
-            'userId' => $status['userId'],
-            'type' =>$status['type'],
-            'objectType'=>$status['objectType'],
-            'objectId'=>$status['objectId']
+            'userId' => $userId,
+            'type' =>$type,
+            'objectType'=>$objectType,
+            'objectId'=>$objectId
             ));
     }
 }

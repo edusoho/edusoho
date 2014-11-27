@@ -9,5 +9,4 @@ interface StatusService
 
     public function searchStatuses($conditions, $sort, $start, $limit);
 
-    public function deleteOldStatus($status);
 }
