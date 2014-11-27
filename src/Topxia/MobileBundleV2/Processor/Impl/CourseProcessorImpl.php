@@ -360,7 +360,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     		return $noteInfos;
     	}
 
-    public function(){
+    public function AddNote(){
     	$courseId = $this->getParam("courseId", 0);
     	$lessonId = $this->getParam("lessonId", 0);
     	$content = $this->getParam("content", "");
