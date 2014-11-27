@@ -6,6 +6,7 @@ use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ConvertIpToolkit;
+use Topxia\Service\Util\HTMLPurifierFactory;
 
 class WebExtension extends \Twig_Extension
 {
@@ -36,7 +37,8 @@ class WebExtension extends \Twig_Extension
             'score_text' => new \Twig_Filter_Method($this, 'scoreTextFilter'),
             'fill_question_stem_text' =>new \Twig_Filter_Method($this, 'fillQuestionStemTextFilter'),
             'fill_question_stem_html' =>new \Twig_Filter_Method($this, 'fillQuestionStemHtmlFilter'),
-            'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter')
+            'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter'),
+            'purify_html' => new \Twig_Filter_Method($this, 'getPurifyHtml'),
         );
     }
 
@@ -595,6 +597,24 @@ class WebExtension extends \Twig_Extension
         $target = explode('-', $target[0]);
         return $target[1];
     }
+
+
+    public function getPurifyHtml($html,$trusted=false)
+    {error_log("ttt\n",3,'/var/tmp/mylogs.log');
+        if (empty($html)) {
+            return '';
+        }
+
+        $config = array(
+            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir') .  '/htmlpurifier'
+        );
+
+        $factory = new HTMLPurifierFactory($config);
+        $purifier = $factory->create($trusted);
+
+        return $purifier->purify($html);
+    }
+
 
     public function getSetting($name, $default = null)
     {
