@@ -4,7 +4,7 @@
   </div>
   <div class="media-body">
     <div class="notification-body">
-      {{ notification.content.message|raw }}
+      {{ notification.content.message|raw|purify_html  }}
     </div>
     <div class="notification-footer">
       {{ notification.createdTime | date('Y-n-d H:i:s') }}

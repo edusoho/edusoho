@@ -138,13 +138,18 @@ define(function(require, exports, module) {
 				}
 			}
 		},
+
 		_onChangeLesson: function(lesson){
 			for(item in this.get('plugins')){
 				var plugin = this.get('plugins')[item];
 				if (plugin.onChangeMeta) {
 					plugin.onChangeMeta(lesson);
-				}			
-			}
+				}	
+				if (plugin.onChangeHomeworkOrExercise){
+					plugin.onChangeHomeworkOrExercise(lesson);
+				}		
+			}						
+		
 		}
 	});
 

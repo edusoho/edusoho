@@ -1276,6 +1276,9 @@ group_member_threads:
 group_member_posts:
     pattern:  /my/group/posts
     defaults: { _controller: TopxiaWebBundle:Group:memberPosts}
+group_thread_collecting:
+    pattern:  /my/group/collecting
+    defaults: { _controller: TopxiaWebBundle:Group:collecting }
 group_show:
     pattern:  /group/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupIndex }
@@ -1336,6 +1339,14 @@ group_thread_check_user:
 group_thread_show:
     pattern:  /group/{id}/thread/{threadId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:groupThreadIndex }
+group_thread_collect:
+    pattern:  /group/thread/{threadId}/collect
+    defaults: { _controller: TopxiaWebBundle:GroupThread:collect }
+    methods: [POST]
+group_thread_uncollect:
+    pattern:  /group/thread/{threadId}/uncollect
+    defaults: { _controller: TopxiaWebBundle:GroupThread:uncollect }
+    methods: [POST]
 group_thread_setElite:
     pattern:  /group/thread/{threadId}/setElite
     defaults: { _controller: TopxiaWebBundle:GroupThread:setElite }
@@ -1357,6 +1368,7 @@ group_thread_deletePost:
 group_thread_post_reply:
     pattern:  /group/post/{postId}/reply
     defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
+
 
 my_coin:
     path:     /my/coin

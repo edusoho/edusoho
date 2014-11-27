@@ -1139,3 +1139,12 @@ CREATE TABLE `cash_flow` (
   UNIQUE KEY `tradeNo` (`sn`),
   UNIQUE KEY `orderSn` (`orderSn`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='帐目流水' AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS `groups_thread_collect`;
+CREATE TABLE `groups_thread_collect` (
+  `id` int(10) unsigned NOT NULL auto_increment COMMENT 'id主键',
+  `threadId` int(11) unsigned NOT NULL COMMENT '收藏的话题id',
+  `userId` int(10) unsigned NOT NULL COMMENT '收藏人id',
+  `createdTime` int(10) unsigned NOT NULL COMMENT '收藏时间',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
