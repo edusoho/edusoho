@@ -24,7 +24,7 @@
                     obj: null,  //jq对象，要在那个html标签上显示
                     str: "+1",  //字符串，要显示的内容;也可以传一段html，如: "<b style='font-family:Microsoft YaHei;'>+1</b>"
                     startSize: "22px",  //动画开始的文字大小
-                    endSize: "55px",    //动画结束的文字大小
+                    endSize: "45px",    //动画结束的文字大小
                     interval: 1000,  //动画时间间隔
                     color: "red",    //文字颜色
                     callback: function() {}    //回调函数
@@ -59,7 +59,7 @@
             var currentYear = parseInt(currentDate[0]);
             var currentMonth =  parseInt(currentDate[1]);
             var day=$(this).html();
-            self=$(this);
+            var self=$(this);
 
             if(day !=""){
                 var now=$('#title-month').data('time');
