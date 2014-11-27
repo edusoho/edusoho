@@ -52,13 +52,29 @@ define(function(require, exports, module) {
                 url:this.get('signUrl'),
                 dataType: 'json',
                 success: function(data){
-                    window.location.reload();
+
+                if($('#sign-coin').length>0){
+
+                    var num=$('#sign-coin').attr('data-num');
+
+                    if(num>0){
+                            $.tipsBox({
+                            obj: $('#sign-btn'),
+                            str:"<b>+"+num+"</b>",
+                            callback: function() {        
+                               
+                            }
+                        }); 
+                    }
+                }
+                
+                setTimeout("window.location.reload()",1000);
 /*                    self.showSignTable();
                     self.initTable(true);
                     self.element.find('.d-' + today).addClass('signed_anime_day');*/
                 },
                 error: function(xhr){
-                    window.location.reload();
+                    /*window.location.reload();*/
                 }
             });
         },

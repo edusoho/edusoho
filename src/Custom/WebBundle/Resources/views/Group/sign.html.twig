@@ -142,6 +142,8 @@
 .buy a{
   color: #428bca;
 }
+
+
 </style>
 <div class="panel panel-default">
   <div class="panel-body">
@@ -153,7 +155,7 @@
       <div class="media" id="group-sign" data-signurl="{{path('group_sign',{groupId:groupinfo.id})}}">
         <div  class="sign-area" {% if not isSignedToday or is_groupmember == 0 %} data-role="sign" {% else %} data-role="signed" onclick="return false;" {% endif %} >
      {% if not isSignedToday or is_groupmember == 0 %}
-        <a class="btn btn-info btn-lg pull-left" style="width:100px;font-size:25px;" > 签 到 </a>
+        <a class="btn btn-info btn-lg pull-left" style="width:100px;font-size:25px;" id="sign-btn" > 签 到 </a>
         <div class="media-body pll">
         <h4 class="media-heading pts">{{ 'now' | date('m') }}月{{ 'now' | date('d') }}号</h4>
          星期{{week}}
@@ -167,7 +169,9 @@
     </div>
     {% endif %}
   </div>
-   
+   {% if setting('group').daySign|default(0) > 0 %}<input type="hidden" id="sign-coin" data-num="{{setting('group').daySign|default(0)}}">
+         
+    {% endif %}
 
   </div>
   {% if isSignedToday %}
@@ -210,7 +214,8 @@
     <div class="aside col-xs-6">
 
         <div class="text-left mtm" >亲爱的{{ web_macro.user_link(app.user, 'link-muted ') }}:
-          {% if setting('group').daySign|default(0) > 0 %}<span class="pull-right">每日签到奖励<span style="color:red;">{{setting('group').daySign|default(0)}}</span>{{setting('coin').coin_name}}</span>
+          {% if setting('group').daySign|default(0) > 0 %}<span class="pull-right">每日签到奖励<span style="color:red;" >{{setting('group').daySign|default(0)}}</span>{{setting('coin').coin_name}}</span>
+         
           {% endif %}
         </div>
         <hr>
