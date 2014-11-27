@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}虚拟币说明 - {{ parent() }}{% endblock %}
+{% block title %}{{setting('coin.coin_name')}}说明 - {{ parent() }}{% endblock %}
 {% block description %}{{ coinSetting.coin_content|plain_text(100) }}{% endblock %}
 
 
@@ -9,7 +9,7 @@
 <div class="es-row-wrap container-gap">
   <div class="row">
     <div class="col-md-12">
-      <div class="page-header"><h1>虚拟币说明</h1></div>
+      <div class="page-header"><h1>{{setting('coin.coin_name')}}说明</h1></div>
     </div>
   </div>
 

@@ -21,9 +21,8 @@ class CoinController extends BaseController
           'coin_enabled' => 0,
           'coin_price_enabled'=>0,
           'coin_name' => '虚拟币',
-          'coin_content' => '当前尚未编辑内容，请编辑。',
+          'coin_content' => '',
           'cash_rate' => 1,
-          'coin_consume_range_and_present' => array(array(0,0))
         );
         $coinSettingsPosted = array_merge($default, $coinSettingsPosted);
       
