@@ -8,12 +8,6 @@ use Topxia\Service\File\Dao\UploadFileShareDao;
 class UploadFileShareDaoImpl extends BaseDao implements UploadFileShareDao {
 	protected $table = 'upload_files_share';
 	
-	public function findRecentContacts($sourceUserId){
-		$sql = "SELECT DISTINCT targetUserId FROM {$this->table} WHERE sourceUserId = ? ORDER BY updatedTime DESC LIMIT 5;";
-		$result = $this->getConnection()->fetchAll($sql, array($sourceUserId)) ? : null;
-		return $result;
-	}
-	
 	public function findMySharingContacts($targetUserId){
 		$sql = "SELECT DISTINCT sourceUserId FROM {$this->table} WHERE targetUserId = ? and isActive = 1;";
 		$result = $this->getConnection()->fetchAll($sql, array($targetUserId)) ? : null;

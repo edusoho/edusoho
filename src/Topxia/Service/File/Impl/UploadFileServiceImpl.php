@@ -370,16 +370,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         return $this->getUploadFileDao()->getFileByTargetType($targetType);
     }
-    
-    public function findRecentContacts($sourceUserId){
-    	$userIds = $this->getUploadFileShareDao()->findRecentContacts($sourceUserId);
-    	
-    	if(!empty($userIds)){
-    		return $this->getUserService()->findUsersByIds ( ArrayToolkit::column ( $userIds, 'targetUserId' ) );
-    	}else{
-    			return null;
-    	}
-	}
 	
 	public function findMySharingContacts($targetUserId){
 		$userIds = $this->getUploadFileShareDao()->findMySharingContacts($targetUserId);
