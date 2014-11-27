@@ -55,9 +55,10 @@ define(function(require, exports, module) {
         },
 
         deleteItem: function(e) {
-            
-            var result = this.trigger("onDeleteItem", e);
-            alert(result);
+            var beforeDeleteItem = this.get("beforeDeleteItem");          
+            if(beforeDeleteItem && !beforeDeleteItem()){
+                return;
+            }
             $(e.currentTarget).parents('[data-role=item]').remove();
             this._toggleList();
         },
