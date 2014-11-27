@@ -13,8 +13,9 @@ class Version20141028195545 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-		$this->addSql("ALTER TABLE upload_files MODIFY targetId INT(11);
-    		                      ALTER TABLE upload_files CHANGE targetType targetType VARCHAR(64) NULL");
+		$this->addSql("ALTER TABLE upload_files MODIFY targetId INT(11);");
+    	$this->addSql("ALTER TABLE upload_files CHANGE targetType targetType VARCHAR(64) NULL");
+        $this->addSql("ALTER TABLE upload_files ADD linkCount int(10) unsigned NOT NULL DEFAULT 0 AFTER `canDownload`;");
 		$this->addSql("CREATE TABLE `course_file` (
                                                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                                                 `fileId` int(10) unsigned NOT NULL COMMENT '文件ID',

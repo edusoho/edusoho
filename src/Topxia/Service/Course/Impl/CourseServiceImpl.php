@@ -2250,11 +2250,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createDao('Course.CourseDao');
     }
-    
-    private function getCourseFileDao ()
-    {
-    	return $this->createDao('Course.CourseFileDao');
-    }
 
     private function getOrderDao ()
     {

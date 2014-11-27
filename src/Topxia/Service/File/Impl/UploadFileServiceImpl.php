@@ -453,11 +453,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->createDao('File.UploadFileDao');
     }
     
-//     private function getCourseFileDao ()
-//     {
-//     	return $this->createDao('Course.CourseFileDao');
-//     }
-    
     private function getUploadFileShareDao(){
     	return $this->createDao('File.UploadFileShareDao');
     }
