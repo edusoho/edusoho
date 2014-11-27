@@ -330,7 +330,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		        			"coursesId"=>$courseMember['courseId'],
 		        			"courseTitle"=>$course['title'],
 		        			"noteLastUpdateTime"=>$courseMember['noteLastUpdateTime'],
-		        			"lessonTitle"->$lessonInfo['title'],
+		        			"lessonTitle"=>lessonInfo['title'],
 		        			"content"=>$value['content'],
 		        			"createdTime"=>$value['createdTime'],
 		        			"noteNum"=>$noteNum,
