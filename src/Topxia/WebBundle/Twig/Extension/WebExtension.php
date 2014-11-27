@@ -600,7 +600,7 @@ class WebExtension extends \Twig_Extension
 
 
     public function getPurifyHtml($html,$trusted=false)
-    {error_log("ttt\n",3,'/var/tmp/mylogs.log');
+    {
         if (empty($html)) {
             return '';
         }
