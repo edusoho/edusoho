@@ -77,6 +77,12 @@ class CourseOrder1Controller extends CourseOrderController
                 $order['amount']=$order['amount']/$level['courseDiscount']*10;
                 
                 $order['amount']=sprintf("%.2f", $order['amount']);
+
+                if(isset($course['coinPrice'])){
+
+                    $course['vipCoinPrice']=$course['coinPrice']*0.1*$level['courseDiscount'];
+                    $course['vipCoinPrice']=sprintf("%.2f", $course['vipCoinPrice']);
+                }
             }
         }
 
@@ -86,6 +92,15 @@ class CourseOrder1Controller extends CourseOrderController
                 'order' => $order,
             ));
         }
+
+        $account=$this->getCashService()->getAccountByUserId($user['id'],false);
+        
+        if(empty($account)){
+            $this->getCashService()->createAccount($user['id']);
+        }
+
+        if(isset($account['cash']))
+        $account['cash']=intval($account['cash']);
 
         return $this->render('CustomWebBundle:CourseOrder:buy-modal.html.twig', array(
             'course' => $course,
@@ -98,6 +113,7 @@ class CourseOrder1Controller extends CourseOrderController
             'level'=>$level,
             'status'=>$status,
             'vipPrice'=>$vipPrice,
+            'account'=>$account,
         ));
     }
     
@@ -192,6 +208,12 @@ class CourseOrder1Controller extends CourseOrderController
             return ;
         });
     }
+
+    protected function getCashService(){
+      
+        return $this->getServiceKernel()->createService('Coin:Cash.CashService');
+    }
+
 
     private function getNotificationService()
     {

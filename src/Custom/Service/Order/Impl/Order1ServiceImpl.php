@@ -22,7 +22,7 @@ class Order1ServiceImpl extends OrderServiceImpl implements Order1Service
             throw $this->createServiceException("订单用户(#{$order['userId']})不存在，不能创建订单。");
         }
 
-        if (!in_array($order['payment'], array('none', 'alipay', 'alipaydouble', 'tenpay'))) {
+        if (!in_array($order['payment'], array('none', 'alipay', 'alipaydouble', 'tenpay','coin'))) {
             throw $this->createServiceException('创建订单失败：payment取值不正确。');
         }
 

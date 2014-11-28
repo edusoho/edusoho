@@ -174,9 +174,7 @@ class CourseOrderController extends OrderController
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         $order = $this->getCourseOrderService()->createOrder($formData);
-<<<<<<< HEAD
-       
-=======
+
         if($order['payment'] == 'coin') {
             $password = $request->request->get('password');
 
@@ -186,8 +184,6 @@ class CourseOrderController extends OrderController
             $order = $this->getCourseOrderService()->paymentByCoin($order['id']);
         }
 
-
->>>>>>> master
         if ($order['status'] == 'paid') {
             return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
         } else {

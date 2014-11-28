@@ -65,12 +65,55 @@
           <div class="col-md-3 control-label">选择支付方式</div>
           <div class="col-md-9 controls">
             {% for payment, options in payments %}
-                <input type="radio" checked="checked" />
-                <img src="{{ asset('assets/img/order/alipay.gif') }}" />
-            {% endfor %}
-          </div>
+        <input type="radio"  role="payTypeChoices" name="payTypeChoices" id="zhiFuBao" value="zhiFuBao" checked="checked"/>              
+   
+        <img src="{{ asset('assets/img/order/alipay.gif') }}" /></br></br>
+
+      {% if setting('coin.coin_enabled') and course.coinPrice|default(0) > 0 %}
+      <input type="radio" name="payTypeChoices" id="chargeCoin" 
+         value="chargeCoin"  role="payTypeChoices" > 使用虚拟币购买
+
+      <div class="form-group" id="chargeCoin" name="chargeCoin"  >
+      <div class="col-md-3 control-label">购买金额：</div>
+      <div class="col-md-9 controls">
+        <span class="control-text"><strong class="money" id="neededMoney" {% if status=="ok" and level.courseDiscount|default(10) < 10 %}style="text-decoration: line-through;"{% endif %}>{{ course.coinPrice }}</strong>
+          <span class="text-muted" >{% if level.courseDiscount|default(10) < 10 %}{% else %}{{setting('coin.coin_name')}}{% endif %}</span>
+        {% if level.courseDiscount|default(10) < 10  and status=="ok" %}
+        <span class="control-text"><strong class="money">{{ course.vipCoinPrice }}</strong>
+            <span class="text-muted">{{setting('coin.coin_name')}}</span>
+        </span>
+           <div class="money">(VIP折扣价 {{level.courseDiscount}}折)</div>
+      {% endif %}
+        </span>
+     
+      </div>
+      <div class="col-md-3 control-label">账户余额：</div>
+      <div class="col-md-9 controls"> 
+        <span class="control-text"><strong class="money" id="leftMoney">{{account.cash|default(0)}}</strong>
+          <span class="text-muted">{{setting('coin.coin_name')}}</span>
+        </span>
+        {% if account.cash <  course.coinPrice and setting('coin.coin_enabled') and setting('coin.charge_coin_enabled') %}
+            <a href="{{path('my_coin_buy')}}" class="mll" style="color: #428bca;">充值</a>
+        {% endif %}
+        </div>
+        
         </div>
 
+        <div class="col-md-12">
+            <strong class="danger"  id="notify" name="notify"  style="display:none">账户余额小于课程购买金额，请充值后购买！</strong>
+        </div>
+       {% endif %}
+      {% endfor %}
+          </div>
+        </div>
+      <div id="screct" class="row form-group" style="display:none" >
+          <div class="col-md-3 control-label" >
+            <label for="password">登入密码</label>
+          </div>
+          <div class="col-md-5 controls"> 
+            <input id="password" type="" name="password" placeholder="使用登入密码支付" class="form-control" data-url="{{path('user_password_check')}}" autocomplete="off"/>
+          </div>
+       </div>
         {% if payments.alipay.type|default(null) == 'dualfun' %}
         <div class="row">
           <div class="col-md-12">
