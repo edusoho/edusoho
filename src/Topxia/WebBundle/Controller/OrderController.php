@@ -48,16 +48,23 @@ class OrderController extends BaseController
         $coinPrice = $coinCash/$coinSetting["cash_rate"];
 
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
-        
+        $vipApp = $this->getAppService()->findInstallApp("Vip");
+
+        if(!empty($vipApp)) {
+            $vip = $this->getVipService()->getMemberByUserId($user["id"]);
+        }
+
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', array(
             'courses' => empty($course) ? null : array($course),
             'users' => empty($users) ? null : $users,
             'cashAccount' => $cashAccount,
             'couponApp' => $couponApp,
+            'vipApp' => $vipApp,
             'totalPrice' => $totalPrice,
             'shouldPayPrice' => $shouldPayPrice,
             'coinCash' => $coinCash,
-            'coinPrice' => $coinPrice
+            'coinPrice' => $coinPrice,
+            'vip' => empty($vip) ? null : array($vip)
         ));
     }
 
@@ -204,6 +211,11 @@ class OrderController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 
     protected function getCourseService()
