@@ -24,7 +24,6 @@ class CourseOrderController extends OrderController
         }
 
         $remainingStudentNum = $this->getRemainStudentNum($course);
-
         $previewAs = $request->query->get('previewAs');
 
         $payTypeChoices = $request->query->get('payTypeChoices');
@@ -53,7 +52,14 @@ class CourseOrderController extends OrderController
         $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         
         $course = $this->getCourseService()->getCourse($id);
-       
+
+        $coursesPrice=$courseSetting['coursesPrice'];
+
+        if($coursesPrice == 1){
+            $course['price'] =0;
+            $course['coinPrice'] =0;
+        }
+
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
         for($i=0;$i<count($userFields);$i++){
@@ -141,7 +147,6 @@ class CourseOrderController extends OrderController
 
     public function payAction(Request $request)
     {
-
         $formData = $request->request->all();
 
         if(isset($formData['payTypeChoices']))

@@ -214,6 +214,9 @@ class CourseController extends BaseController
         $code = 'ChargeCoin';
         $ChargeCoin = $this->getAppService()->findInstallApp($code);
         
+        $courseSetting=$this->getSettingService()->get('course',array());
+        $coursesPrice=$courseSetting['coursesPrice'];
+
         $defaultSetting = $this->getSettingService()->get('default', array());
 
         if (isset($defaultSetting['courseShareContent'])){
@@ -281,7 +284,10 @@ class CourseController extends BaseController
 			if( $member['deadline'] < time() && !empty($course['freeStartTime']) && !empty($course['freeEndTime']) && $course['freeEndTime'] >= time()) {
 				$member = $this->getCourseService()->updateCourseMember($member['id'], array('deadline'=>$course['freeEndTime']));
 			}
-
+			if($coursesPrice ==1){
+				$course['price'] =0;
+				$course['coinPrice'] =0;
+			}
 			return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
 				'course' => $course,
 				'type' => $course['type'],
@@ -313,6 +319,12 @@ class CourseController extends BaseController
 
 		$freeLesson=$this->getCourseService()->searchLessons(array('courseId'=>$id,'type'=>'video','status'=>'published','free'=>'1'),array('createdTime','ASC'),0,1);
 		if($freeLesson)$freeLesson=$freeLesson[0];
+		
+		if($coursesPrice == 1){
+			$course['price'] =0;
+			$course['coinPrice'] =0;
+		}
+
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
 			'course' => $course,
 			'member' => $member,

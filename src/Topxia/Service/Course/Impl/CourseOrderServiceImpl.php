@@ -72,10 +72,18 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order['targetType'] = 'course';
             $order['targetId'] = $course['id'];
             $order['payment'] = $info['payment'];
-            if($info['payment'] == 'alipay'){
-                $order['amount'] = $course['price'];
+
+            $courseSetting=$this->getSettingService()->get('course',array());
+            $coursesPrice=$courseSetting['coursesPrice'];
+
+            if($coursesPrice == 1){
+                $order['amount'] = 0;
             }else{
-                $order['amount'] = $course['coinPrice'];
+                if($info['payment'] == 'alipay'){
+                    $order['amount'] = $course['price'];
+                }else{
+                    $order['amount'] = $course['coinPrice'];
+                }
             }
             
             if($order['amount'] > 0){
