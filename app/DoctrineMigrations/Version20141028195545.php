@@ -16,6 +16,20 @@ class Version20141028195545 extends AbstractMigration
 		$this->addSql("ALTER TABLE upload_files MODIFY targetId INT(11);");
     	$this->addSql("ALTER TABLE upload_files CHANGE targetType targetType VARCHAR(64) NULL");
         $this->addSql("ALTER TABLE upload_files ADD usedCount int(10) unsigned NOT NULL DEFAULT 0 AFTER `canDownload`;");
+        $this->addSql("
+        	update upload_files files, 
+(select count(*) as co,mediaId from course_lesson where type in ('video','audio','ppt') group by mediaId) filesUsedCount 
+set files.usedCount = files.usedCount+filesUsedCount.co 
+where files.id=filesUsedCount.mediaId;
+        ");
+
+        $this->addSql("
+        	update upload_files files, 
+(select count(*) as co,fileId from course_material group by fileId) filesUsedCount 
+set files.usedCount = files.usedCount+filesUsedCount.co 
+where files.id=filesUsedCount.fileId;
+        ");
+
 		$this->addSql ( "CREATE TABLE `upload_files_share` (
 						`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 						`sourceUserId` int(10) unsigned NOT NULL COMMENT '上传文件的用户ID',
