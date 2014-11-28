@@ -1,6 +1,6 @@
 {% extends 'AcctSetupBundle:Prosess/Step:layout.html.twig' %}
 
-{% set script_controller = 'bundle/setup' %}
+{% set script_controller = 'step/setup' %}
 
 {% block main %}
     <div class="panel panel-default panel-col">
@@ -33,7 +33,7 @@
                 </div>
             </div>
 
-            <div id="adv" >
+            <div id="adv" style="display:none">
                 <div class="form-group">
                     {{ form_label(form.key, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
                     <div class="col-md-8 controls">

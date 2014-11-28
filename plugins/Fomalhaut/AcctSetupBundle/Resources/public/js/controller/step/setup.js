@@ -8,7 +8,7 @@ define(function(require, exports, module) {
                 $("#adv").show();
             } else {
                 $("#adv").hide();
-            }
-        })/**/
-    };
-}
+        }/**/
+    });
+};
+});

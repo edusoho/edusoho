@@ -1,1 +1,35 @@
-{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{#  extends 'TopxiaAdminBundle::layout.html.twig'  #}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信管理后台</title>
+    <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/common.css') }}" rel="stylesheet" />
+    <link href="{{ asset('bundles/topxiaadmin/css/admin.css') }}" rel="stylesheet" />
+    <link href="{{ asset('bundles/topxiaadmin/css/admin_v2.css') }}" rel="stylesheet" />
+    {% block javascripts %}{% endblock %}
+    <!--[if lt IE 9]>
+    <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
+    <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">{% block content %}{% endblock %}</div>
+    </div>
+    {% block footer %}{% endblock %}
+
+    {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/acctsetup/js/app.js')} %}
+
+    <div id="modal" class="modal" ></div>
+
+</body>
+</html>
+
