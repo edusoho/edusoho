@@ -329,7 +329,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	        			$noteInfos[] = array(
 		        			"coursesId"=>$courseMember['courseId'],
 		        			"courseTitle"=>$course['title'],
-		        			"noteLastUpdateTime"=>$courseMember['noteLastUpdateTime'],
+		        			"noteLastUpdateTime"=>date('c',$courseMember['noteLastUpdateTime']),
 		        			"lessonTitle"=>$lessonInfo['title'],
 		        			"content"=>$this->controller->convertAbsoluteUrl($this->request, $value['content']),
 		        			"createdTime"=>date('c', $value['createdTime']),
