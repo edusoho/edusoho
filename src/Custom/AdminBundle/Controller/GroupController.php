@@ -26,7 +26,18 @@ class GroupController extends BaseController
             $this->getSettingService()->set('group',$set);
 
             foreach ($data['reward'] as $key => $value) {
-         
+                
+                if(!is_numeric($value[0])){
+
+                    $this->setFlashMessage('danger',"奖励必须为正整数！");
+
+                    $vipLevels=$this->getLevelService()->searchLevels(array(),0,1000);
+        
+                    return $this->render('CustomAdminBundle:Group:set.html.twig', array(
+                        'vipLevels'=>$vipLevels,
+                        ));
+                }
+
                 $this->getLevelService()->updateLevel($key,array('signReward'=>$value[0]));
             }
 

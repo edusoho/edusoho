@@ -1,6 +1,6 @@
 
 {% extends 'TopxiaAdminBundle:Group:layout.html.twig' %}
-
+{% set script_controller = 'customadminbundle/controller/group/group' %}
 {% block title %}小组签到设置 - {{ parent() }}{% endblock %}
 
 {% set menu = 'sign' %}
@@ -11,15 +11,15 @@
       <h1 class="pull-left">小组签到设置</h1>
   </div>
   {{ web_macro.flash_messages() }}
-  <form class="form-horizontal" method="post" id="coin-settings-form">
+  <form class="form-horizontal" method="post" id="group-settings-form">
     <fieldset>
       <legend>每日签到奖励</legend>
         <div class="form-group">
         <div class="col-md-3 control-label">
-            <label>用户{{setting('coin').coin_name}}奖励</label>
+            <label for="daySign">用户{{setting('coin').coin_name}}奖励</label>
         </div>
         <div class="col-md-3 controls">
-            <input type="text" class="form-control" name="daySign" value="{{setting('group').daySign|default(0)}}"/>
+            <input type="text" class="form-control" name="daySign" id="daySign" value="{{setting('group').daySign|default(0)}}"/>
         </div>
         <div class="col-md-1 control-label">
             {{setting('coin').coin_name}}
@@ -39,10 +39,10 @@
           {% for vipLevel in vipLevels %}
             <div class="form-group">
               <div class="col-md-3 control-label">
-              <label>{{vipLevel.name}}</label>
+              <label for="{{vipLevel.name}}">{{vipLevel.name}}</label>
               </div>
               <div class="col-md-3 controls">
-                <input type="text" class="form-control" name="reward[{{vipLevel.id}}][]" value="{{vipLevel.signReward|default(0)}}"/>
+                <input type="text" class="form-control recharge" id="{{vipLevel.name}}" name="reward[{{vipLevel.id}}][]" value="{{vipLevel.signReward|default(0)}}"/>
               </div>
               <div class="col-md-1 control-label">
                 {{setting('coin').coin_name}}
@@ -55,7 +55,7 @@
     <div class="row form-group">
         <div class="col-md-3 control-label"></div>
         <div class="controls col-md-8">
-          <button type="submit" class="btn btn-primary">提交</button>  
+          <button type="submit" class="btn btn-primary" id="push">提交</button>  
         </div>
     </div>
 
