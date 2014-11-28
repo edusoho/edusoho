@@ -430,12 +430,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 		}
 	}
 
-    public function increaseFileLinkCount($fileIds){
-        $this->getUploadFileDao()->updateFileLinkCount($fileIds, 1);
+    public function increaseFileUsedCount($fileIds){
+        $this->getUploadFileDao()->updateFileUsedCount($fileIds, 1);
     }
 
-    public function decreaseFileLinkCount($fileIds){
-        $this->getUploadFileDao()->updateFileLinkCount($fileIds, -1);
+    public function decreaseFileUsedCount($fileIds){
+        $this->getUploadFileDao()->updateFileUsedCount($fileIds, -1);
     }
 
     private function generateKey ($length = 0 )

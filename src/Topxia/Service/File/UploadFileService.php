@@ -50,7 +50,7 @@ interface UploadFileService
     
     public function cancelShareFile($sourceUserId, $targetUserId);
 
-    public function increaseFileLinkCount($fileId);
+    public function increaseFileUsedCount($fileId);
 
-    public function decreaseFileLinkCount($fileId);
+    public function decreaseFileUsedCount($fileId);
 }
