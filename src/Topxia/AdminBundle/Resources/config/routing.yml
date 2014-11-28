@@ -538,6 +538,10 @@ admin_setting_developer:
     pattern:  /setting/developer
     defaults: { _controller: TopxiaAdminBundle:Setting:developer }
 
+admin_setting_cdn:
+    pattern:  /setting/cdn
+    defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
+
 admin_optimize:
     pattern:  /optimize
     defaults: { _controller: TopxiaAdminBundle:Optimize:index }
