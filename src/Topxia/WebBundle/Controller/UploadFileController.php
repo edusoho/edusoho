@@ -32,8 +32,8 @@ class UploadFileController extends BaseController
 
         $originalFile = $this->get('request')->files->get('file');
 
-        $file = $this->getUploadFileService()->addFile($targetType, $targetId, array(), 'local', $originalFile);
-        return $this->createJsonResponse($file);
+        $file = $this->getCourseService()->uploadCourseFile($targetType, $targetId, array(), 'local', $originalFile);
+    	return $this->createJsonResponse($file);
     }
 
     public function browserAction(Request $request)
@@ -45,6 +45,8 @@ class UploadFileController extends BaseController
 
         $conditions = $request->query->all();
 
+        $conditions['currentUserId'] = $user['id'];
+        
         $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 1000);
         
         return $this->createFilesJsonResponse($files);
@@ -60,7 +62,7 @@ class UploadFileController extends BaseController
         $params = $request->query->all();
 
         $params['user'] = $user->id;
-        $params['defaultUploadUrl'] = $this->generateUrl('uploadfile_upload', array('targetType' => $params['targetType'], 'targetId' => $params['targetId']));
+        $params['defaultUploadUrl'] = $this->generateUrl('uploadfile_upload', array('targetType' => $params['targetType'], 'targetId' => $params['targetId'] ?: '0' ));
 
         if (empty($params['lazyConvert'])) {
             $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true);

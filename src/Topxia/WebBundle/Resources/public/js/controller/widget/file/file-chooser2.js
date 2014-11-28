@@ -2,9 +2,14 @@ define(function(require, exports, module) {
 
     var plupload = require('plupload');
     var Widget = require('widget');
-    var FileBrowser = require('./file-browser');
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
+    
+	if ($("div .file-browser-list-container").length > 0) {
+	    var FileBrowser = require('./file-browser-material-lib');
+    }else{
+	    var FileBrowser = require('./file-browser');
+    	}
 
     var FileChooser = Widget.extend({
         attrs: {
