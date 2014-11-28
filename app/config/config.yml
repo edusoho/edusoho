@@ -141,3 +141,23 @@ services:
         arguments:    [@service_container]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onGetUserLoginListener}
+
+hwi_oauth:
+    firewall_name: secured_area
+    resource_owners:
+        facebook:
+            type:                facebook
+            client_id:           <client_id>
+            client_secret:       <client_secret>
+
+wechat:
+    debug: true
+    clients:
+        demo1:
+            token: ilovejack
+            appid: wechatappid
+            appsecret: wechatsecret
+        demo2:
+            token: ilovejack
+            appid: wechatappid
+            appsecret: wechatsecret          

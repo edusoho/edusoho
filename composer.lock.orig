@@ -4,7 +4,11 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
+    "hash": "33624b8a1e3cf436e152a1cf8d7104a7",
+=======
     "hash": "439e9d5b6a7eabec101162a2916f9c60",
+>>>>>>> origin/master
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -12,6 +16,9 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
+<<<<<<< HEAD
+                "reference": "6a6bec0670bb6e71a263b08bc1b98ea242928633"
+=======
                 "reference": "6a6bec0670bb6e71a263b08bc1b98ea242928633",
                 "mirrors": [
                     {
@@ -19,11 +26,15 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/annotations/zipball/6a6bec0670bb6e71a263b08bc1b98ea242928633",
                 "reference": "6a6bec0670bb6e71a263b08bc1b98ea242928633",
+<<<<<<< HEAD
+                "shasum": ""
+=======
                 "shasum": "",
                 "mirrors": [
                     {
@@ -31,6 +42,7 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "require": {
                 "doctrine/lexer": "1.*",
@@ -92,6 +104,9 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
+<<<<<<< HEAD
+                "reference": "cf483685798a72c93bf4206e3dd6358ea07d64e7"
+=======
                 "reference": "cf483685798a72c93bf4206e3dd6358ea07d64e7",
                 "mirrors": [
                     {
@@ -99,11 +114,15 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/cache/zipball/cf483685798a72c93bf4206e3dd6358ea07d64e7",
                 "reference": "cf483685798a72c93bf4206e3dd6358ea07d64e7",
+<<<<<<< HEAD
+                "shasum": ""
+=======
                 "shasum": "",
                 "mirrors": [
                     {
@@ -111,6 +130,7 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "require": {
                 "php": ">=5.3.2"
@@ -319,6 +339,9 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
+<<<<<<< HEAD
+                "reference": "d5067b0b7e5ef59ba165dcc116c539400bf957ff"
+=======
                 "reference": "d5067b0b7e5ef59ba165dcc116c539400bf957ff",
                 "mirrors": [
                     {
@@ -326,11 +349,15 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/dbal/zipball/d5067b0b7e5ef59ba165dcc116c539400bf957ff",
                 "reference": "d5067b0b7e5ef59ba165dcc116c539400bf957ff",
+<<<<<<< HEAD
+                "shasum": ""
+=======
                 "shasum": "",
                 "mirrors": [
                     {
@@ -338,6 +365,7 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "require": {
                 "doctrine/common": ">=2.3.0,<2.5-dev",
@@ -878,67 +906,7 @@
             "time": "2013-02-18 00:04:08"
         },
         {
-            "name": "gregwar/captcha",
-            "version": "v1.0.11",
-            "target-dir": "Gregwar/Captcha",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Gregwar/Captcha.git",
-                "reference": "68c27a070922cf306984dc04a92a27525e534e83",
-                "mirrors": [
-                    {
-                        "url": "/%package%/%normalizedUrl%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Gregwar/Captcha/zipball/68c27a070922cf306984dc04a92a27525e534e83",
-                "reference": "68c27a070922cf306984dc04a92a27525e534e83",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "ext-gd": "*",
-                "php": ">=5.3.0"
-            },
-            "type": "captcha",
-            "autoload": {
-                "psr-0": {
-                    "Gregwar\\Captcha": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Grégoire Passault",
-                    "email": "g.passault@gmail.com",
-                    "homepage": "http://www.gregwar.com/"
-                },
-                {
-                    "name": "Jeremy Livingston",
-                    "email": "jeremy.j.livingston@gmail.com"
-                }
-            ],
-            "description": "Captcha generator",
-            "homepage": "https://github.com/Gregwar/Captcha",
-            "keywords": [
-                "bot",
-                "captcha",
-                "spam"
-            ],
-            "time": "2014-03-19 15:13:34"
-        },
-        {
+<<<<<<< HEAD
             "name": "hwi/oauth-bundle",
             "version": "dev-master",
             "target-dir": "HWI/Bundle/OAuthBundle",
@@ -980,6 +948,42 @@
             "autoload": {
                 "psr-0": {
                     "HWI\\Bundle\\OAuthBundle\\": ""
+=======
+            "name": "gregwar/captcha",
+            "version": "v1.0.11",
+            "target-dir": "Gregwar/Captcha",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Gregwar/Captcha.git",
+                "reference": "68c27a070922cf306984dc04a92a27525e534e83",
+                "mirrors": [
+                    {
+                        "url": "/%package%/%normalizedUrl%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Gregwar/Captcha/zipball/68c27a070922cf306984dc04a92a27525e534e83",
+                "reference": "68c27a070922cf306984dc04a92a27525e534e83",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "captcha",
+            "autoload": {
+                "psr-0": {
+                    "Gregwar\\Captcha": ""
+>>>>>>> origin/master
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -988,6 +992,7 @@
             ],
             "authors": [
                 {
+<<<<<<< HEAD
                     "name": "Contributors",
                     "homepage": "https://github.com/hwi/HWIOAuthBundle/contributors"
                 },
@@ -1050,6 +1055,25 @@
                 "yandex"
             ],
             "time": "2014-07-30 11:47:22"
+=======
+                    "name": "Grégoire Passault",
+                    "email": "g.passault@gmail.com",
+                    "homepage": "http://www.gregwar.com/"
+                },
+                {
+                    "name": "Jeremy Livingston",
+                    "email": "jeremy.j.livingston@gmail.com"
+                }
+            ],
+            "description": "Captcha generator",
+            "homepage": "https://github.com/Gregwar/Captcha",
+            "keywords": [
+                "bot",
+                "captcha",
+                "spam"
+            ],
+            "time": "2014-03-19 15:13:34"
+>>>>>>> origin/master
         },
         {
             "name": "imagine/imagine",
@@ -1330,6 +1354,9 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
+<<<<<<< HEAD
+                "reference": "ec3961874c43840e96da3a8a1ed20d8c73d7e5aa"
+=======
                 "reference": "ec3961874c43840e96da3a8a1ed20d8c73d7e5aa",
                 "mirrors": [
                     {
@@ -1337,11 +1364,15 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/Seldaek/monolog/zipball/ec3961874c43840e96da3a8a1ed20d8c73d7e5aa",
                 "reference": "ec3961874c43840e96da3a8a1ed20d8c73d7e5aa",
+<<<<<<< HEAD
+                "shasum": ""
+=======
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1349,6 +1380,7 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "require": {
                 "php": ">=5.3.0",
@@ -1510,6 +1542,9 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
+<<<<<<< HEAD
+                "reference": "715fcb65f9a4841ffaf40c0bf050329d74c84cad"
+=======
                 "reference": "715fcb65f9a4841ffaf40c0bf050329d74c84cad",
                 "mirrors": [
                     {
@@ -1517,11 +1552,15 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/715fcb65f9a4841ffaf40c0bf050329d74c84cad",
                 "reference": "715fcb65f9a4841ffaf40c0bf050329d74c84cad",
+<<<<<<< HEAD
+                "shasum": ""
+=======
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1529,6 +1568,7 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "require": {
                 "symfony/framework-bundle": "~2.2"
@@ -1664,6 +1704,9 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
+<<<<<<< HEAD
+                "reference": "b86b927dfefdb56ab0b22d1350033d9a38e9f205"
+=======
                 "reference": "b86b927dfefdb56ab0b22d1350033d9a38e9f205",
                 "mirrors": [
                     {
@@ -1671,11 +1714,15 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/b86b927dfefdb56ab0b22d1350033d9a38e9f205",
                 "reference": "b86b927dfefdb56ab0b22d1350033d9a38e9f205",
+<<<<<<< HEAD
+                "shasum": ""
+=======
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1683,6 +1730,7 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1721,6 +1769,7 @@
                 "mailer"
             ],
             "time": "2014-10-04 05:53:18"
+<<<<<<< HEAD
         },
         {
             "name": "sylius/flow-bundle",
@@ -1781,6 +1830,8 @@
                 "steps"
             ],
             "time": "2014-10-27 21:29:59"
+=======
+>>>>>>> origin/master
         },
         {
             "name": "symfony/assetic-bundle",
@@ -1789,18 +1840,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/AsseticBundle.git",
-                "reference": "146dd3cb46b302bd471560471c6aaa930483dac1"
+<<<<<<< HEAD
+                "reference": "099e0bb5d80e7039af20db384a41017fde521f21"
+=======
+                "reference": "099e0bb5d80e7039af20db384a41017fde521f21",
                 "mirrors": [
                     {
                         "url": "/%package%/%normalizedUrl%.%type%",
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/AsseticBundle/zipball/099e0bb5d80e7039af20db384a41017fde521f21",
                 "reference": "099e0bb5d80e7039af20db384a41017fde521f21",
+<<<<<<< HEAD
+                "shasum": ""
+=======
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1808,6 +1866,7 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "require": {
                 "kriswallsmith/assetic": "1.1.x",
@@ -2185,6 +2244,16 @@
             "version": "v1.16.2",
             "source": {
                 "type": "git",
+<<<<<<< HEAD
+                "url": "https://github.com/fabpot/Twig.git",
+                "reference": "42f758d9fe2146d1f0470604fc05ee43580873fc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/42f758d9fe2146d1f0470604fc05ee43580873fc",
+                "reference": "42f758d9fe2146d1f0470604fc05ee43580873fc",
+                "shasum": ""
+=======
                 "url": "https://github.com/twigphp/Twig.git",
                 "reference": "42f758d9fe2146d1f0470604fc05ee43580873fc",
                 "mirrors": [
@@ -2196,7 +2265,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/8ce37115802e257a984a82d38254884085060024",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/42f758d9fe2146d1f0470604fc05ee43580873fc",
                 "reference": "42f758d9fe2146d1f0470604fc05ee43580873fc",
                 "shasum": "",
                 "mirrors": [
@@ -2205,6 +2274,7 @@
                         "preferred": true
                     }
                 ]
+>>>>>>> origin/master
             },
             "require": {
                 "php": ">=5.2.4"

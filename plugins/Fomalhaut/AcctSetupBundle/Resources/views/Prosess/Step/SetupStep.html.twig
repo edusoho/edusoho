@@ -1,0 +1,109 @@
+{% extends 'AcctSetupBundle:Prosess/Step:layout.html.twig' %}
+
+{% set script_controller = 'step/setup' %}
+
+{% block main %}
+    <div class="panel panel-default panel-col">
+        <div class="panel-heading">设置公众号信息</div>
+        <div class="panel-body">
+        <form action="{{ path('sylius_flow_forward', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'setup'}) }}" class="form-horizontal" method="post">
+
+            <div class="form-group">
+                {{ form_label(form.name, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls">
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.account, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls">
+                    {{ form_widget(form.account, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
+
+            {% form_theme form 'AcctSetupBundle:Form:fields.html.twig' %}
+            <div class="form-group">
+                {{ form_label(form.level, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls radios">
+                    {{ form_widget(form.level) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
+
+            <div id="adv" style="display:none">
+                <div class="form-group">
+                    {{ form_label(form.key, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                    <div class="col-md-8 controls">
+                        {{ form_widget(form.key, {'attr': {'class': 'form-control'}}) }}
+                        <div class="help-block" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.secret, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                    <div class="col-md-8 controls">
+                        {{ form_widget(form.secret, {'attr': {'class': 'form-control'}}) }}
+                        <div class="help-block" style="display:none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.interfaceaddr, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls">
+                    {{ form_widget(form.interfaceaddr, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                {{ form_label(form.token, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls">
+                    {{ form_widget(form.token, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.encodingaeskey, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls">
+                    {{ form_widget(form.encodingaeskey, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.qrcode, null, {'label_attr': {'class': 'col-xs-12 col-sm-3 col-md-2 control-label'}}) }}
+                <div class="col-sm-9">
+                    {{ form_widget(form.qrcode) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.headimg, null, {'label_attr': {'class': 'col-xs-12 col-sm-3 col-md-2 control-label'}}) }}
+                <div class="col-sm-9">
+                    {{ form_widget(form.headimg) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
+
+            {{ form_rest(form) }}
+
+            <div>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+                <button class="btn btn-fat btn-primary" type="submit">
+                    <i></i> 下一步
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+{% endblock %}

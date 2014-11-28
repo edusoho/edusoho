@@ -1,0 +1,38 @@
+{% block choice_widget_expanded %}
+{% spaceless %}
+<div {{ block('widget_container_attributes') }}>
+    {% for child in form %}
+    {% if multiple %}
+    <div class="checkbox">
+        {% else %}
+        <div class="radio">
+            {% endif %}
+
+            {{ form_widget(child) }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endspaceless %}
+    {% endblock choice_widget_expanded %}
+
+    {% block checkbox_widget %}
+        {% spaceless %}
+            {% if label is empty %}
+                {% set label = name|humanize %}
+            {% endif %}
+            <label  for="{{ id }}">
+                <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />{{ label|trans({}, translation_domain) }}
+            </label>
+        {% endspaceless %}
+    {% endblock checkbox_widget %}
+
+    {% block radio_widget %}
+        {% spaceless %}
+            {% if label is empty %}
+                {% set label = name|humanize %}
+            {% endif %}
+            <label  for="{{ id }}">
+                <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />{{ label|trans({}, translation_domain) }}
+            </label>
+        {% endspaceless %}
+    {% endblock radio_widget %}

@@ -38,5 +38,8 @@ app/data/plugin_installed.php
 !/web/themes/default
 !/web/themes/default-b
 edusoho.komodoproject
+<<<<<<< HEAD
 /.idea/
+=======
 .publish
+>>>>>>> origin/master

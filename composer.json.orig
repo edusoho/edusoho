@@ -24,9 +24,12 @@
         "ezyang/htmlpurifier": "v4.5.0",
         "endroid/qrcode": "1.2.4",
         "phpoffice/phpexcel": "1.8.0",
+<<<<<<< HEAD
         "hwi/oauth-bundle": "0.4.*@dev",
         "sylius/flow-bundle": "~0.12@dev"
-	"gregwar/captcha":"v1.0.11"
+=======
+        "gregwar/captcha":"v1.0.11"
+>>>>>>> origin/master
     },
     "scripts": {
         "post-install-cmd": [

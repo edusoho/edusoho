@@ -1,0 +1,49 @@
+{% extends 'AcctSetupBundle:Prosess/Step:layout.html.twig' %}
+
+{% block main %}
+    <div class="panel panel-default panel-col">
+        <div class="panel-heading">一键获取公众号信息</div>
+        <div class="panel-body">
+        <form action="{{ path('sylius_flow_forward', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'oneclick'}) }}" class="form-horizontal" method="post">
+
+            <div class="form-group">
+                {{ form_label(form.wxusername, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls">
+                {{ form_widget(form.wxusername, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.wxpassword, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls">
+                    {{ form_widget(form.wxpassword, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.imgcode, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls">
+                    {{ form_widget(form.imgcode, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            <div>
+                <a href="{{ path('sylius_flow_display', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'baseinfo'}) }}" >
+                    <i></i>
+                    返回
+                </a> &nbsp;
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+                <button class="btn btn-fat btn-primary" type="submit">
+                    <i></i> 下一步
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

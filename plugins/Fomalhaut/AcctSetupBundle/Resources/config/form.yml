@@ -1,0 +1,20 @@
+parameters:
+    fomalhaut_acctsetup.form.type.baseinfo.class: Fomalhaut\AcctSetupBundle\Form\Type\BaseinfoType
+    fomalhaut_acctsetup.form.type.oneclick.class: Fomalhaut\AcctSetupBundle\Form\Type\OneclickType
+    fomalhaut_acctsetup.form.type.setup.class: Fomalhaut\AcctSetupBundle\Form\Type\SetupType
+
+services:
+    fomalhaut_acctsetup.form.type.baseinfo:
+        class: %fomalhaut_acctsetup.form.type.baseinfo.class%
+        tags:
+            - { name: form.type, alias: wechat_acctsetup_baseinfo }
+
+    fomalhaut_acctsetup.form.type.oneclick:
+        class: %fomalhaut_acctsetup.form.type.oneclick.class%
+        tags:
+            - { name: form.type, alias: wechat_acctsetup_oneclick }
+
+    fomalhaut_acctsetup.form.type.setup:
+        class: %fomalhaut_acctsetup.form.type.setup.class%
+        tags:
+            - { name: form.type, alias: wechat_acctsetup_setup }

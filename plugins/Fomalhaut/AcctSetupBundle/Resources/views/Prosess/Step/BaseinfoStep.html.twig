@@ -1,0 +1,34 @@
+{% extends 'AcctSetupBundle:Prosess/Step:layout.html.twig' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+    <div class="panel-heading">微信账号基本信息</div>
+    <div class="panel-body">
+        <form action="{{ path('sylius_flow_forward', {'scenarioAlias': 'wechat_acctsetup', 'stepName': 'baseinfo'}) }}" class="form-horizontal" method="post">
+
+            <div class="form-group">
+                {{ form_label(form.acctname, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls">
+                   {{ form_widget(form.acctname, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(form.description, null, {'label_attr': {'class': 'col-md-2 control-label'}}) }}
+                <div class="col-md-8 controls">
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block" style="display:none;"></div>
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            <div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+                <button class="btn btn-fat btn-primary" type="submit">
+                    下一步<i></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
