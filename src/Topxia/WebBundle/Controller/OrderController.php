@@ -10,6 +10,15 @@ class OrderController extends BaseController
 {
     public function createAction(Request $request)
     {
+
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
+
+
+
+            return $this->redirect($this->generateUrl('admin_user'));
+        }
+
         $fields = $request->query->all();
 
         $totalPrice = 0;
@@ -27,7 +36,6 @@ class OrderController extends BaseController
 
         $user = $this->getCurrentUser();
         $cashAccount = $this->getCashService()->getAccountByUserId($user["id"]);
-        $couponApp = $this->getAppService()->findInstallApp("Coupon");
 
         $coinSetting = $this->getSettingService()->get("coin");
         if($totalPrice*100 > $cashAccount["cash"]/$coinSetting["cash_rate"]*100) {
@@ -39,6 +47,8 @@ class OrderController extends BaseController
 
         $coinPrice = $coinCash/$coinSetting["cash_rate"];
 
+        $couponApp = $this->getAppService()->findInstallApp("Coupon");
+        
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', array(
             'courses' => empty($course) ? null : array($course),
             'users' => empty($users) ? null : $users,
