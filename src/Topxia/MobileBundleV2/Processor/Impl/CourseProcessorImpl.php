@@ -284,7 +284,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	    		$lesson = $lessons[$courseNote['lessonId']];
 	    		$courseNote['lessonTitle'] = $lesson['title'];
 	    		$courseNote['lessonNum'] = $lesson['number'];
-	    		$content = $this->controller->convertAbsoluteUrl($this->request, $courseNote['content']);;
+	    		$content = $this->controller->convertAbsoluteUrl($this->request, $courseNote['content']);
 	    		$content = $this->filterNote($content);
 	    		$courseNote['content'] = $content;
 	    		$courseNotes[$i] = $courseNote;
@@ -331,7 +331,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		        			"courseTitle"=>$course['title'],
 		        			"noteLastUpdateTime"=>$courseMember['noteLastUpdateTime'],
 		        			"lessonTitle"=>$lessonInfo['title'],
-		        			"content"=>$value['content'],
+		        			"content"=>$this->controller->convertAbsoluteUrl($this->request, $value['content']);
 		        			"createdTime"=>date('c', $value['createdTime']),
 		        			"noteNum"=>$noteNum,
 		        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png')
