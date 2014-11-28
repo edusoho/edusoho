@@ -159,4 +159,9 @@ class EssayContentController extends BaseController
         return $this->getServiceKernel()->createService('Taxonomy.KnowledgeService');
     }
 
+    private function getArticleMaterialService()
+    {
+        return $this->getServiceKernel()->createService('ArticleMaterial.ArticleMaterialService');
+    }
+
 }
