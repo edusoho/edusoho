@@ -429,7 +429,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 			$this->getUploadFileShareDao ()->updateShare ( $shareHistory ['id'], $fileShareFields );
 		}
 	}
-    
+
+    public function increaseFileLinkCount($fileIds){
+        $this->getUploadFileDao()->updateFileLinkCount($fileIds, 1);
+    }
+
+    public function decreaseFileLinkCount($fileIds){
+        $this->getUploadFileDao()->updateFileLinkCount($fileIds, -1);
+    }
 
     private function generateKey ($length = 0 )
     {

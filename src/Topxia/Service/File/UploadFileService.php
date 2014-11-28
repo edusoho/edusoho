@@ -49,4 +49,8 @@ interface UploadFileService
     public function findShareHistory($sourceUserId);
     
     public function cancelShareFile($sourceUserId, $targetUserId);
+
+    public function increaseFileLinkCount($fileId);
+
+    public function decreaseFileLinkCount($fileId);
 }

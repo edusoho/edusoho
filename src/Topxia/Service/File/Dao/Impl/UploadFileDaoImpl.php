@@ -85,6 +85,13 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getFile($id);
     }
 
+    public function updateFileLinkCount($fileIds, $offset){
+        $fileIdsCollection = "'" . implode("', '", $fileIds) . "'";
+        $sql = "UPDATE {$this->table} SET linkCount = linkCount + ? where id in ({$fileIdsCollection})";
+
+        return $this->getConnection()->executeUpdate($sql, array($offset));
+    }
+
     public function getFileByTargetType($targetType)
     {
         $sql = "SELECT * FROM {$this->table} WHERE targetType = ? LIMIT 1";

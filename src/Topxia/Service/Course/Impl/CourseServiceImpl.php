@@ -481,6 +481,21 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$course = $this->tryAdminCourse($id);
 
+		// Decrease the course lesson files usage counts, if there are files used by the course lessons.
+		$lessons = $this->getLessonDao()->findLessonsByCourseId($id);
+
+		if(!empty($lessons)){
+			$fileIds = ArrayToolkit::column($lessons, "mediaId");
+
+			if(!empty($fileIds)){
+				$this->getUploadFileService()->decreaseFileLinkCount($fileIds);
+			}
+		}
+
+		// Delete all linked course materials (the linkCount of each material file will also be decreaased.)
+		$this->getCourseMaterialService()->deleteMaterialsByCourseId($id);
+
+		// Delete course related data
 		$this->getMemberDao()->deleteMembersByCourseId($id);
 		$this->getLessonDao()->deleteLessonsByCourseId($id);
 		$this->getChapterDao()->deleteChaptersByCourseId($id);
@@ -787,6 +802,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			LessonSerialize::serialize($lesson)
 		);
 
+		// Increase the linked file usage count, if there's a linked file used by this lesson.
+		if(!empty($lesson['mediaId'])){
+			$this->getUploadFileService()->increaseFileLinkCount(array($lesson['mediaId']));
+		}
+
 		$this->updateCourseCounter($course['id'], array(
 			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id']),
 			'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id']),
@@ -966,7 +986,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
 		));
 		// [END] 更新课时序号
-		
+
+		// Decrease the course lesson file usage count, if there's a linked file used by this lesson.
+		if(!empty($lesson['mediaId'])){
+			$this->getUploadFileService()->decreaseFileLinkCount(array($lesson['mediaId']));
+		}
+
+		// Delete all linked course materials (the linkCount of each material file will also be decreaased.)
+		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
+
 		$this->getLogService()->info('lesson', 'delete', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
 
 		// $this->autosetCourseFields($courseId);
@@ -2363,6 +2391,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getStatusService()
     {
         return $this->createService('User.StatusService');
+    }
+
+    private function getCourseMaterialService()
+    {
+        return $this->createService('Course.MaterialService');
     }
 
 }
