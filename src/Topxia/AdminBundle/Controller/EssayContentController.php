@@ -23,10 +23,47 @@ class EssayContentController extends BaseController
 
     public function createAction(Request $request, $articleId)
     {
+        $categoryId = '3';
         $parentId = $request->query->get('parentId');
-        $method = '';
+        $method = $request->query->get('method');
+        if (empty($method)){
+            $conditions = array('categoryId' => $categoryId);
+        } elseif($method == 'tag'){
+            $conditions = array(
+                'tagIds' => $tagIds,
+                'knowledgeId' => $knowledgeId,
+                'categoryId' => $categoryId
+            );
+        } else {
+            $conditions = array(
+                'title' => $title,
+                'knowledgeId' => $knowledgeId,
+                'categoryId' => $categoryId
+            );
+        }
+
+        $articleMaterialsCount = $this->getArticleMaterialService()->searchArticleMaterialsCount($conditions);
+
+        $paginator = new Paginator($this->get('request'), $articleMaterialsCount, 8);
+
+        $articleMaterials = $this->getArticleMaterialService()->searchArticleMaterials(
+            $conditions, 
+            array('createdTime','desc'),
+            $paginator->getOffsetCount(),  
+            $paginator->getPerPageCount()
+        );
+
+        $category = $this->getCategoryService()->getCategory($categoryId);
+
+        $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($articleMaterials,'mainKnowledgeId'));
+        $knowledges = ArrayToolkit::index($knowledges, 'id');
         
         return $this->render('TopxiaAdminBundle:EssayContent:content-modal.html.twig',array(
+            'category' => $category,
+            'articleMaterials' => $articleMaterials,
+            'paginator' => $paginator,
+            'knowledges' => $knowledges,
+            'articleMaterialsCount' => $articleMaterialsCount,
             'method' => $method
         ));
     }
@@ -115,6 +152,11 @@ class EssayContentController extends BaseController
     private function getEssayService($value='')
     {
         return $this->getServiceKernel()->createService('Essay.EssayService');
+    }
+
+    private function getKnowledgeService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.KnowledgeService');
     }
 
 }
