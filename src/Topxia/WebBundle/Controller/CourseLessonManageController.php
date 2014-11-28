@@ -443,7 +443,7 @@ class CourseLessonManageController extends BaseController
     }
     
     private function getAppService(){
-			return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+		return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
     
     private function getTestpaperService()
