@@ -936,7 +936,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		
 		$this->fillLessonMediaFields($fields);
 		
-		$lesson = LessonSerialize::unserialize(
+		$updatedLesson = LessonSerialize::unserialize(
 			$this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))
 		);
 
@@ -944,9 +944,22 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id']),
 		));
 
-		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$lesson['title']}》({$lesson['id']})", $lesson);
+		// Update link count of the course lesson file, if the lesson file is changed
+		if($fields['mediaId'] != $lesson['mediaId']){
+			// Incease the link count of the new selected lesson file
+			if(!empty($fields['mediaId'])){
+				$this->getUploadFileService()->increaseFileLinkCount(array($fields['mediaId']));
+			}
 
-		return $lesson;
+			// Decrease the link count of the original lesson file
+			if(!empty($lesson['mediaId'])){
+				$this->getUploadFileService()->decreaseFileLinkCount(array($lesson['mediaId']));
+			}
+		}
+
+		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
+
+		return $updatedLesson;
 	}
 
 	public function deleteLesson($courseId, $lessonId)
