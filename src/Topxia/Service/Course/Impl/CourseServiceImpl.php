@@ -353,6 +353,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'audiences' => array(),
 			'tags' => '',
 			'price' => 0.00,
+			'coinPrice'=>0.00,
 			'startTime' => 0,
 			'endTime'  => 0,
 			'locationId' => 0,

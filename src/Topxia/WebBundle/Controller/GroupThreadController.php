@@ -40,6 +40,7 @@ class GroupThreadController extends BaseController
                 'content'=>$thread['thread']['content'],
                 'groupId'=>$id,
                 'userId'=>$user['id']);
+            
             $thread=$this->getThreadService()->addThread($info);
                 
             return $this->redirect($this->generateUrl('group_thread_show', array(
@@ -113,6 +114,46 @@ class GroupThreadController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function collectAction(Request $request, $threadId)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能收藏话题！");
+        }
+
+        $threadMain=$this->getThreadService()->getThread($threadId);
+        
+        $isSetThread=$this->getThreadService()->threadCollect($user['id'],$threadId);
+        
+        $userShowUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
+        $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$threadMain['groupId'],'threadId'=>$threadMain['id']), true);
+
+        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>已经收藏了你的话题<a href='{$threadUrl}' target='_blank'><strong>“{$threadMain['title']}”</strong></a>！";
+        $this->getNotificationService()->notify($threadMain['userId'], 'default', $message);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function uncollectAction(Request $request, $threadId)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能收藏话题！");
+        }
+
+        $threadMain=$this->getThreadService()->getThread($threadId);
+        
+        $isSetThread=$this->getThreadService()->unThreadCollect($user['id'], $threadId);
+        
+        $userShowUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
+        $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$threadMain['groupId'],'threadId'=>$threadMain['id']), true);
+
+        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>已经取消收藏你的话题<a href='{$threadUrl}' target='_blank'><strong>“{$threadMain['title']}”</strong></a>！";
+        $this->getNotificationService()->notify($threadMain['userId'], 'default', $message);
+
+        return $this->createJsonResponse(true);    
+    }
+
     public function groupThreadIndexAction(Request $request,$id,$threadId)
     {  
         $group = $this->getGroupService()->getGroup($id);
@@ -132,6 +173,12 @@ class GroupThreadController extends BaseController
             return $this->createMessageResponse('info','该话题已被关闭');
         }
 
+         if ($threadMain['status']!="close") {
+            $isCollected = $this->getThreadService()->isCollected($this->getCurrentUser()->id, $threadMain['id']);
+        } else {
+            $isCollected = false;
+        }
+        
         $this->getThreadService()->waveHitNum($threadId);
 
         if($request->query->get('post'))
@@ -206,9 +253,10 @@ class GroupThreadController extends BaseController
             $groupShareContent = str_replace("{{groupname}}", $group['title'], $defaultSetting['groupShareContent']);
             $groupShareContent = str_replace("{{threadname}}", $threadMain['title'], $groupShareContent);
         }
-        
+
         return $this->render('TopxiaWebBundle:Group:thread.html.twig',array(
             'groupinfo' => $group,
+            'isCollected' => $isCollected,
             'groupShareContent'=>$groupShareContent,
             'threadMain'=>$threadMain,
             'user'=>$user,
@@ -503,6 +551,11 @@ class GroupThreadController extends BaseController
     }
 
     private function getNotifiactionService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+        protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
