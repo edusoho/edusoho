@@ -477,7 +477,7 @@ class CourseLessonController extends BaseController
         if ($mimeType) {
             $response->headers->set('Content-Type', $mimeType);
         }
-		return $response;
+        return $response;
     }
 
     private function isMobile() {

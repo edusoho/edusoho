@@ -65,9 +65,9 @@ class CourseFileManageController extends BaseController
 
     public function showAction(Request $request, $id, $fileId)
     {
-			if($id != 0){
+        if($id != 0){
 	        $course = $this->getCourseService()->tryManageCourse($id);
-			}
+        }
 
         $file = $this->getUploadFileService()->getFile($fileId);
 

@@ -26,7 +26,7 @@ class UploadFileShareDaoImpl extends BaseDao implements UploadFileShareDao {
 		return $result;
 	}
 	
-	public function createShare($share){
+	public function addShare($share){
 		$affected = $this->getConnection()->insert($this->table, $share);
 		if ($affected <= 0) {
 			throw $this->createDaoException('Insert file share error.');
