@@ -13,14 +13,14 @@ class BaseinfoType extends AbstractType
                 'acctname',
                 'text',
                 array(
-                    'label' => 'form.baseinfo.acctname',
+                    'label' => '名称',//form.baseinfo.acctname
                 )
             )
             ->add(
                 'description',
                 'textarea',
                 array(
-                    'label' => 'form.baseinfo.description',
+                    'label' => '描述',//form.baseinfo.description
                     'required' => false,
                 )
             );

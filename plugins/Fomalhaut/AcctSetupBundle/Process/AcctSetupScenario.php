@@ -17,7 +17,7 @@ class AcctSetupScenario extends ContainerAware implements ProcessScenarioInterfa
             ->add('oneclick', new Step\OneclickStep())
             ->add('setup', new Step\SetupStep())
             //->add('advanced', new Step\AdvancedStep())
-            //->add('guide', new Step\GuideStep())
+            ->add('guide', new Step\GuideStep())
             //->setRedirect('homepage')
         ;
     }

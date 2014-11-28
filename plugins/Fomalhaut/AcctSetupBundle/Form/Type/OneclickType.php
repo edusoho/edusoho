@@ -14,21 +14,21 @@ class OneclickType extends AbstractType
                 'wxusername',
                 'text',
                 array(
-                    'label' => 'form.oneclick.wxusername',
+                    'label' => '微信公众号用户名',//form.oneclick.wxusername
                 )
             )
             ->add(
                 'wxpassword',
                 'password',
                 array(
-                    'label' => 'form.oneclick.wxpassword',
+                    'label' => '微信公众号密码',//form.oneclick.wxpassword
                 )
             )
             ->add(
                 'imgcode',
                 'text',
                 array(
-                    'label' => 'form.oneclick.imgcode',
+                    'label' => '验证码',//form.oneclick.imgcode
                 )
             );
     }
