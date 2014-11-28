@@ -72,47 +72,47 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 break;
             case 'sizeDesc':
                 $orderBy =  array('size',
-						'DESC' 
-				);
-				break;
+                    'DESC' 
+                );
+                break;
 			default :
-				throw $this->createServiceException ( '参数sort不正确。' );
+                throw $this->createServiceException ( '参数sort不正确。' );
 		}
 		
-		if (array_key_exists ('source', $conditions ) && $conditions ['source'] == 'shared') {
+		if (array_key_exists('source', $conditions) && $conditions['source'] == 'shared') {
 			//Find all the users who is sharing with current user.
-			$myFriends = $this->getUploadFileShareDao ()->findMySharingContacts ( $conditions ['currentUserId'] );
+            $myFriends = $this->getUploadFileShareDao ()->findMySharingContacts ($conditions ['currentUserId']);
 			
-			if (isset ( $myFriends )) {
-				$createdUserIds = "'" . implode ( "','", ArrayToolkit::column ( $myFriends, "sourceUserId" ) ) . "'";
+            if(isset($myFriends)) {
+				$createdUserIds = "'" . implode("','", ArrayToolkit::column ($myFriends, "sourceUserId" )) . "'";
 			}else{
 				//Browsing shared files, but nobody is sharing with current user.
 				return array();
 			}
 			
 		} elseif (isset($conditions['currentUserId'] )) {
-			$createdUserIds = $conditions ['currentUserId'];
+			$createdUserIds = $conditions['currentUserId'];
 		}
 		
 		if(isset($createdUserIds)){
-			$conditions ['createdUserIds'] = $createdUserIds;
+			$conditions['createdUserIds'] = $createdUserIds;
 		}
 		
-		return $this->getUploadFileDao ()->searchFiles ( $conditions, $orderBy, $start, $limit );
+		return $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
     }
 
     public function searchFileCount($conditions)
     {
     	
-    	if (array_key_exists ('source', $conditions ) && $conditions ['source'] == 'shared') {
+    	if (array_key_exists('source', $conditions) && $conditions['source'] == 'shared') {
     		//Find all the users who is sharing with current user.
-    		$myFriends = $this->getUploadFileShareDao ()->findMySharingContacts ( $conditions ['currentUserId'] );
+    		$myFriends = $this->getUploadFileShareDao ()->findMySharingContacts($conditions['currentUserId']);
     			
-    		if (isset ( $myFriends )) {
-    			$createdUserIds = implode ( ",", ArrayToolkit::column ( $myFriends, "sourceUserId" ) );
+    		if (isset($myFriends)) {
+                $createdUserIds = implode(",", ArrayToolkit::column($myFriends, "sourceUserId"));
     		}else{
     			//Browsing shared files, but nobody is sharing with current user.
-    			return 0;
+                return 0;
     		}
     			
     	} elseif (isset($conditions['currentUserId'] )) {
@@ -120,7 +120,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     	}
     	
     	if(isset($createdUserIds)){
-    		$conditions ['createdUserIds'] = $createdUserIds;
+    		$conditions['createdUserIds'] = $createdUserIds;
     	}
     	
         return $this->getUploadFileDao()->searchFileCount($conditions);
