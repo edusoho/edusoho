@@ -411,7 +411,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 							'updatedTime' => time () 
 					);
 					
-					$this->getUploadFileShareDao()->createShare($fileShareFields);
+					$this->getUploadFileShareDao()->addShare($fileShareFields);
 				}
 			}
 		}

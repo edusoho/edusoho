@@ -7,7 +7,7 @@ interface UploadFileShareDao {
 	
 	public function findShareHistory($sourceUserId, $targetUserId);
 	
-	public function createShare($share);
+	public function addShare($share);
 	
 	public function updateShare($id, $share);
 }
