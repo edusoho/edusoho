@@ -7,19 +7,19 @@
 {% endblock %}
 {% block body %}
 
-<form id="course-chapter-form" class="form-horizontal" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
+<form id="essay-content-chapter-form" class="form-horizontal" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   {% if chapter %}
-	  action="{{ path('course_manage_chapter_edit', {courseId:course.id, chapterId:chapter.id}) }}"
+	  action="{{ path('admin_essay_content_chapter_edit', {articleId:articleId, chapterId:chapter.id}) }}"
 	{% else %}
-	  action="{{ path('course_manage_chapter_create', {id:course.id}) }}"
+	  action="{{ path('admin_essay_content_chapter_create', {articleId:articleId}) }}"
   {% endif %}
   >
   <div class="row form-group">
     <div class="col-md-3 control-label">
       {% if type == 'unit' %}
-        <label for="chapter-title-field">小节标题</label>
+        <label for="essay-content-title-field">小节标题</label>
       {% else %}
-        <label for="chapter-title-field">章标题</label>
+        <label for="essay-content-title-field">章标题</label>
         {% endif %}
     </div>
     <div class="col-md-8 controls"><input id="chapter-title-field" type="text" name="title" value="{{ field_value(chapter, 'title') }}" class="form-control"></div>
@@ -27,13 +27,13 @@
   <input type="hidden" name="type" value="{{ type }}">
 </form>
 
-<script>app.load('course-manage/chapter-modal')</script>
+<script>app.load('essay-content/chapter-modal')</script>
 
 {% endblock %}
 
 {% block footer %}
     <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-    <button id="course-chapter-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form">{% if chapter %}保存{% else %}添加{% endif %}</button>
+    <button id="essay-content-chapter-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#essay-content-chapter-form">{% if chapter %}保存{% else %}添加{% endif %}</button>
 {% endblock %}
 
 {% set hideFooter = true %}

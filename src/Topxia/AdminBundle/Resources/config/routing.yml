@@ -715,12 +715,29 @@ admin_article_material_preview:
     defaults: { _controller: TopxiaAdminBundle:ArticleMaterial:preview }
 
 admin_essay_content_index:
-    pattern: /category/{categoryId}/essay/content/index
+    pattern: /category/{articleId}/essay/content/index
     defaults: { _controller: TopxiaAdminBundle:EssayContent:index }
 
 admin_essay_content_chapter_create:
     pattern: /category/{articleId}/essay/chapter/create
     defaults: { _controller: TopxiaAdminBundle:EssayContent:chapterCreate }
+
+admin_essay_content_sort:
+    pattern:  /category/{articleId}/essay/content/sort
+    defaults: { _controller: TopxiaAdminBundle:EssayContent:sort }
+    methods: [POST]
+
+admin_essay_content_chapter_edit:
+    pattern:  /category/{articleId}/essay/chapter/{chapterId}/edit
+    defaults: { _controller: TopxiaAdminBundle:EssayContent:chapterEdit }
+
+admin_essay_content_chapter_delete:
+    pattern:  /category/{articleId}/essay/chapter/{chapterId}/delete
+    defaults: { _controller: TopxiaAdminBundle:EssayContent:chapterDelete }
+
+admin_essay_content_create:
+    pattern:  /category/{articleId}/essay/content/create
+    defaults: { _controller: TopxiaAdminBundle:EssayContent:create }
 
 admin_category_knowledge:
     pattern: /category/{categoryId}/manage/knowledge

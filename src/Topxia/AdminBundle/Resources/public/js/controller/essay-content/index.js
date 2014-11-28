@@ -39,7 +39,7 @@ define(function(require, exports, module) {
             });
         };
 
-        var $list = $("#course-item-list").sortable({
+        var $list = $("#essay-item-list").sortable({
             distance: 20,
             onDrop: function (item, container, _super) {
                 _super(item, container);
@@ -112,7 +112,6 @@ define(function(require, exports, module) {
         $('.dropdown-menu').parent().on('hide.bs.dropdown',function() {
             $(this).find('.dropdown-menu-more').show();
         });
-
     };
 
 });

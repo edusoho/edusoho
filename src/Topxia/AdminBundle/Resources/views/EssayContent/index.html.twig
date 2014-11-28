@@ -10,7 +10,7 @@
 <div class="page-header clearfix">
   <h1 class="pull-left">文章内容管理</h1>
   <div class="pull-right">
-    <button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{# {% if course.type == 'normal' %}{{ path('course_manage_lesson_create', {id:course.id}) }}{% else %}{{ path('live_course_manage_lesson_create', {id:course.id}) }}{% endif %} #}"><i class="glyphicon glyphicon-plus"></i>内容</button>
+    <button class="btn btn-info btn-sm" id="content-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_create', {articleId:articleId}) }}"><i class="glyphicon glyphicon-plus"></i>内容</button>
     
     <div class="btn-group">
       <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
@@ -21,7 +21,7 @@
           <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_chapter_create', {articleId:articleId}) }}"><i class="glyphicon glyphicon-plus"></i> 添加 章</a>
         </li>
         <li>
-          <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_chapter_create', {articleId:articleId, type:'unit'}) }} "><i class="glyphicon glyphicon-plus"></i> 添加 小节</a>
+          <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_chapter_create', {articleId:articleId, type:'unit'}) }}"><i class="glyphicon glyphicon-plus"></i> 添加 小节</a>
         </li>
       </ul>
     </div>
@@ -33,7 +33,7 @@
 {% endif %}
 
 <div class="panel-body">
-  <ul class="content-list sortable-list" id="course-item-list" data-sort-url="{# {{ path('course_manage_lesson_sort', {id:course.id}) }} #}">
+  <ul class="content-list sortable-list" id="essay-item-list" data-sort-url="{{ path('admin_essay_content_sort', {articleId:articleId}) }}">
     {% for id, item in items %}
       {% if 'chapter' in id %}
         {% include 'TopxiaAdminBundle:EssayContent:list-chapter-tr.html.twig' with {chapter: item} %}
@@ -42,7 +42,4 @@
       {% endif %}
     {% endfor %}
   </ul>
-</div>
-
-
 {% endblock %}
