@@ -16,19 +16,8 @@ class Version20141028195545 extends AbstractMigration
 		$this->addSql("ALTER TABLE upload_files MODIFY targetId INT(11);");
     	$this->addSql("ALTER TABLE upload_files CHANGE targetType targetType VARCHAR(64) NULL");
         $this->addSql("ALTER TABLE upload_files ADD usedCount int(10) unsigned NOT NULL DEFAULT 0 AFTER `canDownload`;");
-        $this->addSql("
-        	update upload_files files, 
-(select count(*) as co,mediaId from course_lesson where type in ('video','audio','ppt') group by mediaId) filesUsedCount 
-set files.usedCount = files.usedCount+filesUsedCount.co 
-where files.id=filesUsedCount.mediaId;
-        ");
-
-        $this->addSql("
-        	update upload_files files, 
-(select count(*) as co,fileId from course_material group by fileId) filesUsedCount 
-set files.usedCount = files.usedCount+filesUsedCount.co 
-where files.id=filesUsedCount.fileId;
-        ");
+        $this->addSql("UPDATE upload_files files, (SELECT count(*) AS co,mediaId FROM course_lesson WHERE type IN ('video','audio','ppt') GROUP BY mediaId) filesUsedCount SET files.usedCount = files.usedCount+filesUsedCount.co WHERE files.id=filesUsedCount.mediaId;");
+        $this->addSql("UPDATE upload_files files,(SELECT count(*) AS co,fileId FROM course_material GROUP BY fileId) filesUsedCount SET files.usedCount = files.usedCount+filesUsedCount.co WHERE files.id=filesUsedCount.fileId;");
 
 		$this->addSql ( "CREATE TABLE `upload_files_share` (
 						`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
