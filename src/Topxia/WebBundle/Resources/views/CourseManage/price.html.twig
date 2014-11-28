@@ -15,7 +15,7 @@
 		{% if canModifyPrice %}
 		
 			<form class="form-horizontal" id="price-form" method="post" action="{{path('course_manage_price',{id:course.id})}}" data-cashrate="{{cashRate}}">
-
+   			{% if setting('course.coursesPrice') == 0 %}
 				{% if setting('coin.coin_enabled') %}
 
 				<div class="form-group" >
@@ -48,6 +48,7 @@
 						<div class="help-block" style="display:none;"></div>
 					</div>
 				</div>
+				{% endif %}
 				{% endif %}
 
 				{% if is_feature_enabled('free_limit') %}

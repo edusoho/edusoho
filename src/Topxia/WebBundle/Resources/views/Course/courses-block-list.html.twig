@@ -48,6 +48,7 @@
           {% if course.showStudentNumType == 'opened' %}
           <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学员</span>
           {% endif %}
+          {% if setting('course.coursesPrice') == 0 %}
           {% if course.price > 0 and free_limit_type(course) == 'free_now' %}
             <span class="free-money-text"><del>{{ course.price }}</del></span>
           {% endif %}
@@ -83,6 +84,7 @@
               {% endif %}  
             {% else %}免费{% endif %}
           </span>
+          {% endif %}
           {% endif %}
           <div class="countdown-list">
             {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}

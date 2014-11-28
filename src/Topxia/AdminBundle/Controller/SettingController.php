@@ -658,6 +658,7 @@ class SettingController extends BaseController
             'student_download_media' => '0',
             'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
+            'coursesPrice' => '0',
             'allowAnonymousPreview' => '1',
             'live_course_enabled' => '0',
             'userinfoFields'=>array(),

@@ -398,6 +398,7 @@
             {% endif %}
 
             <span class="metas clearfix">
+              {% if setting('course.coursesPrice') == 0 %}
               <span class="price-col">
                 <span class="meta-label">价格</span>
             
@@ -408,6 +409,7 @@
             <span class="price-num">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
             {% endif %}
               </span>
+            {% endif %}
 
               {% if course.showStudentNumType == 'opened' %}
               <span class="student-col">

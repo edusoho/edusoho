@@ -55,6 +55,7 @@
 			<h1 class="title">{{ course.title }}</h1>
 			<div class="subtitle">{{ course.subtitle }}</div>
 			<div class="stats">
+			{% if setting('course.coursesPrice') == 0 %}
 				<p>
 					价　格：
 					{% if setting('coin.coin_enabled') %}
@@ -71,7 +72,6 @@
 							<span class="money-text">元</span>
 						</span>
 
-						 {# {% if setting('coin.coin_enabled') %} #}
 						 {% if course.coinPrice > 0 %}
 						 <span class="course-price"{% if setting('coin.coin_price_enabled') %} style="display:inline " {% else %} style="display:none;"   {% endif %} >
 							<span class="money-num">{{ course.coinPrice }}</span>
@@ -80,7 +80,6 @@
 						{% endif %}  
 						{% endif %}  
 
-						{# {% endif %}   #}
 					{% else %}
 						<span class="money-num" style="font-size:16px;">免费</span>
 					{% endif %}
@@ -106,6 +105,7 @@
 					{% endif %}
 
 				</p>
+					{% endif %}
 								
 				<p>
 					评　价：
