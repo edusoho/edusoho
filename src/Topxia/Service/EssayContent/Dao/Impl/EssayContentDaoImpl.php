@@ -53,4 +53,9 @@ class EssayContentDaoImpl extends BaseDao implements EssayContentDao
         return $this->getContent($this->getConnection()->lastInsertId());
     }
 
+    public function deleteContent($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
 }

@@ -40,11 +40,24 @@ class EssayContentServiceImpl extends BaseService implements EssayContentService
         return $chapter;
     }
 
+    public function getContent($articleId, $contentId)
+    {
+        $content = $this->getEssayContentDao()->getContent($contentId);
+        if (empty($content) or $content['articleId'] != $articleId) {
+            return null;
+        }
+        return $content;
+    }
+
     public function getArticleChapters($articleId)
     {
         return $this->getEssayChapterDao()->findChaptersByArticleId($articleId);
     }
 
+    public function getArticleContents($articleId)
+    {
+        return $this->getEssayContentDao()->findContentsByArticleId($articleId);
+    }
 
     public function createChapter($chapter)
     {
@@ -168,25 +181,20 @@ class EssayContentServiceImpl extends BaseService implements EssayContentService
         }
     }
 
-    public function deletecontent($articleId, $contentId)
+    public function deleteContent($articleId, $contentId)
     {
-        $deletedcontent = $this->getcontent($articleId, $contentId);
-        if (empty($deletedcontent)) {
-            throw $this->createServiceException(sprintf('章节(ID:%s)不存在，删除失败！', $contentId));
+        $deletedContent = $this->getContent($articleId, $contentId);
+        if (empty($deletedContent)) {
+            throw $this->createServiceException(sprintf('素材(ID:%s)不存在，删除失败！', $contentId));
         }
 
-        $this->getEssaycontentDao()->deletecontent($deletedcontent['id']);
-
-        $prevcontent = array('id' => 0);
-        foreach ($this->getArticlecontents($articleId) as $content) {
-            if ($content['number'] < $deletedcontent['number']) {
-                $prevcontent = $content;
+        $this->getEssayContentDao()->deleteContent($deletedContent['id']);
+        $prevContent = array('id' => 0);
+        foreach ($this->getArticleContents($articleId) as $content) {
+            if ($content['number'] < $deletedContent['number']) {
+                $prevContent = $content;
+                $this->getEssayContentDao()->updateContent($content['id'], array('number' => $prevContent['number']));
             }
-        }
-
-        $contents = $this->getEssayContentDao()->findContentsBycontentId($deletedcontent['id']);
-        foreach ($contents as $content) {
-            $this->getEssayContentDao()->updateContent($content['id'], array('contentId' => $prevChapter['id']));
         }
     }
 
