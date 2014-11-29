@@ -36,9 +36,8 @@
         {% set latestCourses = data('LatestCourses', {count:6}) %}
         {% if latestCourses %}
           <div class="es-box">
-            <div class="es-box-heading">
-              <h2>最新课程</h2>
-              <div style="float:right" href="{{ path('course_explore') }}">更多&gt;</div>
+            <div class="es-box-heading"><h2>最新课程</h2>
+              <a class="pull-right" href="{{ path('course_explore') }}">更多&gt;</a>
             </div>
             <div class="es-box-body">
               {{ _self.course_grids(data('LatestCourses',{ count:6 })) }}            
