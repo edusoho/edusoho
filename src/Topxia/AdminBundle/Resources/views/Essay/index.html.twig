@@ -1,0 +1,59 @@
+{% extends 'TopxiaAdminBundle:CategoryManage:layout.html.twig' %}
+{% block title %}文章管理 - {{ parent() }}{% endblock %}
+{% set nav = 'course' %}
+{% set side_nav = 'essay_manage' %}
+{% set script_controller = 'essay/index' %}
+
+{% block main %}
+<div class="page-header clearfix">
+  <h1 class="pull-left">文章管理</h1>
+    <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_essay_create', {categoryId:category.id}) }}"><i class="glyphicon glyphicon-plus"></i>文章</button>
+</div>
+
+ <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+
+    <div class="form-group">
+      <select class="form-control method-form-group" name="status">
+        {{ select_options(dict('essayStatus'), app.request.query.get('status'),'--发布状态--') }}
+      </select>
+    </div>
+
+    <div class="form-group title-form-group">
+
+      <input class="form-control" type="text" placeholder="标题关键词搜索" name="title" value="{{ app.request.get('title') }}">
+    </div>
+
+    <button class="btn btn-primary">搜索</button>
+
+  </form>
+<div class="essay-list">
+		<table class="table table-hover table-striped" id="essay-table">
+			<thead>
+				<tr>
+					<th width="10%"><input type="checkbox"  data-role="batch-select-all"></th>
+					<th width="20%">文章标题</th>
+					<th width="18%">状态</th>
+					<th width="18%">创建人</th>
+					<th width="20%">创建时间</th>
+					<th width="">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% if essays|default(null) %}
+					{% for essay in essays %}
+						{% set user = users[essay.userId] %}
+					  {% include 'TopxiaAdminBundle:Essay:tr.html.twig' %}
+					{% endfor %}
+				{% else %}
+					<tr><td colspan="20"><div class="empty">暂无页面记录</div></td></tr>
+				{% endif %}
+			</tbody>
+		</table>
+
+		<label class="checkbox-inline"><input type="checkbox" data-role="batch-select-all"> 全选</label>
+        <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-all-btn" data-url="{{ path('admin_essay_delete')}}">删除</button>
+  </div>
+  {{ web_macro.paginator(paginator) }}
+</div>
+
+{% endblock %}

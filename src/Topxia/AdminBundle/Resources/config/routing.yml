@@ -775,6 +775,40 @@ admin_courseware_preview:
     pattern: /category/{categoryId}/preview/courseware/{id}
     defaults: { _controller: TopxiaAdminBundle:Courseware:preview }
 
+admin_essay_manage:
+    pattern: /category/{categoryId}/essay/manage
+    defaults: { _controller: TopxiaAdminBundle:Essay:index }
+
+admin_essay_create:
+    pattern: /category/{categoryId}/essay/create
+    defaults: { _controller: TopxiaAdminBundle:Essay:create }
+
+admin_essay_edit:
+    pattern: /category/{categoryId}/essay/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:Essay:edit }
+
+admin_essay_detail:
+    pattern: /essay/{id}/detail
+    defaults: { _controller: TopxiaAdminBundle:Essay:detail }
+
+admin_essay_preview:
+    pattern: /essay/{id}/preview
+    defaults: { _controller: TopxiaAdminBundle:Essay:preview }
+
+admin_essay_delete:
+    pattern: /essay/delete
+    defaults: { _controller: TopxiaAdminBundle:Essay:delete }
+
+admin_essay_publish:
+    pattern:  /essay/{id}/publish
+    defaults: { _controller: TopxiaAdminBundle:Essay:publish }
+    methods:  [POST]
+
+admin_essay_unpublish:
+    pattern:  /essay/{id}/unpublish
+    defaults: { _controller: TopxiaAdminBundle:Essay:unpublish }
+    methods:  [POST]
+
 admin_knowledge_edit:
     pattern: /knowledge/edit
     defaults: { _controller: TopxiaAdminBundle:Knowledge:edit }
