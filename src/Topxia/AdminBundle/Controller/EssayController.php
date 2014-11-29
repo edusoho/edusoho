@@ -117,11 +117,6 @@ class  EssayController extends BaseController
         }
     }
 
-    public function previewAction(Request $request,$id)
-    {
-        # code...
-    }
-
     public function showAction(Request $request, $id)
     {
         $essay = $this->getEssayService()->getEssay($id);

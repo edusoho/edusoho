@@ -27,7 +27,7 @@
       <input class="form-control" type="text" placeholder="标题关键词搜索" name="title" value="{{ app.request.get('title') }}">
     </div>
 
-    <button id="article-material-search" class="btn btn-primary" data-url="{{ path('admin_essay_content_create',{articleId:articleId})}}">搜索</button>
+    <button id="article-material-search" class="btn btn-primary" data-url="{{ path('admin_essay_content_create',{essayId:essayId})}}">搜索</button>
   </form>
 
 
@@ -42,7 +42,7 @@
         <tbody>
           {% for articleMaterial in articleMaterials %}
           {% set knowledge = knowledges[articleMaterial.mainKnowledgeId]|default(null) %}
-            <tr class="content-edit" data-url="{{ path('admin_essay_content_edit', {contentId:contentId, articleId:articleId }) }}" data-article-material-id="{{ articleMaterial.id }}">
+            <tr class="content-edit" data-url="{{ path('admin_essay_content_edit', {contentId:contentId, essayId:essayId }) }}" data-article-material-id="{{ articleMaterial.id }}">
               <td>{{ articleMaterial.title }}</td>
               <td>{{ knowledge.name|default(null) }}</td>
             </tr>

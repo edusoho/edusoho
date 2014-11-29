@@ -14,40 +14,40 @@ class EssayChapterDaoImpl extends BaseDao implements EssayChapterDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function findChaptersByArticleId($articleId)
+    public function findChaptersByArticleId($essayId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE articleId = ? ORDER BY createdTime ASC";
-        return $this->getConnection()->fetchAll($sql, array($articleId));
+        return $this->getConnection()->fetchAll($sql, array($essayId));
     }
 
-    public function getChapterMaxSeqByArticleId($articleId)
+    public function getChapterMaxSeqByArticleId($essayId)
     {
         $sql = "SELECT MAX(seq) FROM {$this->table} WHERE  articleId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($articleId));
+        return $this->getConnection()->fetchColumn($sql, array($essayId));
     }
 
-    public function getChapterCountByArticleIdAndType($articleId, $type)
+    public function getChapterCountByArticleIdAndType($essayId, $type)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  articleId = ? AND type = ?";
-        return $this->getConnection()->fetchColumn($sql, array($articleId, $type));
+        return $this->getConnection()->fetchColumn($sql, array($essayId, $type));
     }
 
-    public function getChapterCountByArticleIdAndTypeAndParentId($articleId, $type, $parentId)
+    public function getChapterCountByArticleIdAndTypeAndParentId($essayId, $type, $parentId)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  articleId = ? AND type = ? AND parentId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($articleId, $type, $parentId));
+        return $this->getConnection()->fetchColumn($sql, array($essayId, $type, $parentId));
     }
 
-    public function getLastChapterByArticleIdAndType($articleId, $type)
+    public function getLastChapterByArticleIdAndType($essayId, $type)
     {
         $sql = "SELECT * FROM {$this->table} WHERE  articleId = ? AND type = ? ORDER BY seq DESC LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($articleId, $type)) ? : null;
+        return $this->getConnection()->fetchAssoc($sql, array($essayId, $type)) ? : null;
     }
 
-    public function getLastChapterByArticleId($articleId)
+    public function getLastChapterByArticleId($essayId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE  articleId = ? ORDER BY seq DESC LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($articleId)) ? : null;
+        return $this->getConnection()->fetchAssoc($sql, array($essayId)) ? : null;
     }
 
     public function addChapter(array $chapter)

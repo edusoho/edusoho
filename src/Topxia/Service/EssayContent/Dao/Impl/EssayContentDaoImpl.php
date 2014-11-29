@@ -14,10 +14,10 @@ class EssayContentDaoImpl extends BaseDao implements EssayContentDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function findContentsByArticleId($articleId)
+    public function findContentsByArticleId($essayId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE articleId = ? ORDER BY createdTime ASC";
-        return $this->getConnection()->fetchAll($sql, array($articleId));
+        return $this->getConnection()->fetchAll($sql, array($essayId));
     }
 
     public function findContentsByChapterId($chapterId)
@@ -26,10 +26,10 @@ class EssayContentDaoImpl extends BaseDao implements EssayContentDao
         return $this->getConnection()->fetchAll($sql, array($chapterId));
     }
     
-    public function getContentMaxSeqByArticleId($articleId)
+    public function getContentMaxSeqByArticleId($essayId)
     {
         $sql = "SELECT MAX(seq) FROM {$this->table} WHERE  articleId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($articleId));
+        return $this->getConnection()->fetchColumn($sql, array($essayId));
     }
 
     public function updateContent($id, array $fields)
@@ -38,10 +38,10 @@ class EssayContentDaoImpl extends BaseDao implements EssayContentDao
         return $this->getContent($id);
     }
 
-    public function getContentCountByArticleId($articleId)
+    public function getContentCountByArticleId($essayId)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE articleId = ? ";
-        return $this->getConnection()->fetchColumn($sql, array($articleId));
+        return $this->getConnection()->fetchColumn($sql, array($essayId));
     }
 
     public function addContent($content)

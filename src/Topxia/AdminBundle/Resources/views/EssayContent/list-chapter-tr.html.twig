@@ -6,24 +6,24 @@
     {% if chapter.type == 'unit' %}
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_list', {articleId:articleId, parentId:'chapter-'~chapter.id}) }}"><i class="glyphicon glyphicon-plus"></i>内容</a>
+          <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_list', {essayId:essayId, parentId:'chapter-'~chapter.id}) }}"><i class="glyphicon glyphicon-plus"></i>内容</a>
         </li>
       </ul>
     {% else %}
         <ul class="dropdown-menu" role="menu">
           <li>
-            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_chapter_create', {articleId:articleId, type:'unit', parentId:'chapter-'~chapter.id}) }}"><i class="glyphicon glyphicon-plus"></i>小节</a>
+            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_chapter_create', {essayId:essayId, type:'unit', parentId:'chapter-'~chapter.id}) }}"><i class="glyphicon glyphicon-plus"></i>小节</a>
           </li>
          <li>
-            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_list', {articleId:articleId, parentId:'chapter-'~chapter.id}) }}"><i class="glyphicon glyphicon-plus"></i>内容</a>
+            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_list', {essayId:essayId, parentId:'chapter-'~chapter.id}) }}"><i class="glyphicon glyphicon-plus"></i>内容</a>
           </li>
       </ul>
     {% endif %} 
     </div>
 
-    <button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="{{ path('admin_essay_content_chapter_edit', {articleId:articleId, chapterId:chapter.id}) }}"><i class="glyphicon glyphicon-edit"></i></button>
+    <button class="btn btn-link" title="编辑" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="{{ path('admin_essay_content_chapter_edit', {essayId:essayId, chapterId:chapter.id}) }}"><i class="glyphicon glyphicon-edit"></i></button>
 
-    <button class="btn btn-link delete-chapter-btn" title="删除" data-url="{{ path('admin_essay_content_chapter_delete', {articleId:articleId, chapterId:chapter.id}) }}"><i class="glyphicon glyphicon-trash"></i></button>
+    <button class="btn btn-link delete-chapter-btn" title="删除" data-url="{{ path('admin_essay_content_chapter_delete', {essayId:essayId, chapterId:chapter.id}) }}"><i class="glyphicon glyphicon-trash"></i></button>
   </div>
 
 </li>

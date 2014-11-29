@@ -7,7 +7,7 @@ use Topxia\Common\ArrayToolkit;
 
 class EssayServiceImpl extends BaseService  implements EssayService
 {
-    public function getEssay ($id)
+    public function getEssay($id)
     {
         return $this->getEssayDao()->getEssay($id);
     }

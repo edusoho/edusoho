@@ -8,22 +8,23 @@ use Topxia\Common\Paginator;
 
 class EssayContentController extends BaseController
 {
-    public function indexAction(Request $request, $articleId)
+    public function indexAction(Request $request, $essayId)
     {
-        $categoryId='3';
-        $category = $this->getCategoryService()->getCategory($categoryId);
-        $essayContentItems = $this->getEssayContentService()->getEssayItems($articleId);
+        $essay = $this->getEssayService()->getEssay($essayId);
+        $category = $this->getCategoryService()->getCategory($essay['categoryId']);
+        $essayContentItems = $this->getEssayContentService()->getEssayItems($essayId);
 
         return $this->render('TopxiaAdminBundle:EssayContent:index.html.twig', array(
             'category' => $category,
             'items' =>$essayContentItems,
-            'articleId' => $articleId
+            'essayId' => $essayId
         ));
     }
 
-    public function listAction(Request $request, $articleId)
+    public function listAction(Request $request, $essayId)
     {
-        $categoryId = '3';
+        $essay = $this->getEssayService()->getEssay($essayId);
+        $category = $this->getCategoryService()->getCategory($essay['categoryId']);
         $parentId = $request->query->get('parentId');
         $method = $request->query->get('method');
         $knowledgeId = $request->query->get('knowledgeId');
@@ -57,14 +58,13 @@ class EssayContentController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $category = $this->getCategoryService()->getCategory($categoryId);
-
         $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($articleMaterials,'mainKnowledgeId'));
         $knowledges = ArrayToolkit::index($knowledges, 'id');
 
         return $this->render('TopxiaAdminBundle:EssayContent:content-modal.html.twig',array(
+            'category' => $category,
             'parentId' => $parentId,
-            'articleId' => $articleId,
+            'essayId' => $essayId,
             'articleMaterials' => $articleMaterials,
             'paginator' => $paginator,
             'knowledges' => $knowledges,
@@ -73,16 +73,15 @@ class EssayContentController extends BaseController
         ));
     }
 
-    public function createAction(Request $request, $articleId)
+    public function createAction(Request $request, $essayId)
     {
-        $categoryId='3';
         $materialIds = $request->request->get('materialIds');
         $chapterId = $request->request->get('chapterId');
         $chapterId = empty($chapterId)? '0' :substr($chapterId,'8');
 
         foreach ($materialIds as $materialId) {
             $fields = array(
-                'articleId' => $articleId,
+                'essayId' => $essayId,
                 'chapterId' => $chapterId,
                 'materialId' => $materialId,
             );
@@ -91,38 +90,38 @@ class EssayContentController extends BaseController
         }
 
         return $this->redirect($this->generateUrl('admin_essay_content_index', array(
-                     'articleId' => $articleId,
+                     'essayId' => $essayId,
                  )));
     }
 
-    public function chapterCreateAction(Request $request, $articleId)
+    public function chapterCreateAction(Request $request, $essayId)
     {
-        $categoryId='3';
-        $category = $this->getCategoryService()->getCategory($categoryId);
+        $essay = $this->getEssayService()->getEssay($essayId);
+        $category = $this->getCategoryService()->getCategory($essay['categoryId']);
         $type = $request->query->get('type');
         $parentId = $request->query->get('parentId');
         $type = in_array($type, array('chapter', 'unit')) ? $type : 'chapter';
 
         if($request->getMethod() == 'POST'){
             $chapter = $request->request->all();
-            $chapter['articleId'] = $articleId;
+            $chapter['essayId'] = $essayId;
             $chapter = $this->getEssayContentService()->createChapter($chapter);
             return $this->render('TopxiaAdminBundle:EssayContent:list-chapter-tr.html.twig', array(
                 'category' => $category,
-                'articleId' => $articleId,
+                'essayId' => $essayId,
                 'chapter' => $chapter,
             ));
         }
 
         return $this->render('TopxiaAdminBundle:EssayContent:chapter-modal.html.twig', array(
             'category' => $category,
-            'articleId' => $articleId,
+            'essayId' => $essayId,
             'type' => $type,
             'parentId' => $parentId
         ));
     }
 
-    public function editAction(Request $request, $contentId, $articleId)
+    public function editAction(Request $request, $contentId, $essayId)
     {
         if($request->getMethod() == 'POST'){
             $materialId = $request->request->all();
@@ -130,7 +129,8 @@ class EssayContentController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $categoryId = '3';
+        $essay = $this->getEssayService()->getEssay($essayId);
+        $category = $this->getCategoryService()->getCategory($essay['categoryId']);
         $method = $request->query->get('method');
         $knowledgeId = $request->query->get('knowledgeId');
         $tagIds = $request->query->get('tagIds');
@@ -163,13 +163,11 @@ class EssayContentController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $category = $this->getCategoryService()->getCategory($categoryId);
-
         $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($articleMaterials,'mainKnowledgeId'));
         $knowledges = ArrayToolkit::index($knowledges, 'id');
 
         return $this->render('TopxiaAdminBundle:EssayContent:content-edit-modal.html.twig',array(
-            'articleId' => $articleId,
+            'essayId' => $essayId,
             'articleMaterials' => $articleMaterials,
             'paginator' => $paginator,
             'knowledges' => $knowledges,
@@ -179,51 +177,51 @@ class EssayContentController extends BaseController
         ));
     }
 
-    public function chapterEditAction(Request $request, $articleId, $chapterId)
+    public function chapterEditAction(Request $request, $essayId, $chapterId)
     {
-        $categoryId='3';
-        $category = $this->getCategoryService()->getCategory($categoryId);
-        $chapter = $this->getEssayContentService()->getChapter($articleId, $chapterId);
+        $essay = $this->getEssayService()->getEssay($essayId);
+        $category = $this->getCategoryService()->getCategory($essay['categoryId']);
+        $chapter = $this->getEssayContentService()->getChapter($essayId, $chapterId);
         if (empty($chapter)) {
             throw $this->createNotFoundException("章节(#{$chapterId})不存在！");
         }
 
         if($request->getMethod() == 'POST'){
             $fields = $request->request->all();
-            $fields['articleId'] = $articleId;
-            $chapter = $this->getEssayContentService()->updateChapter($articleId, $chapterId, $fields);
+            $fields['essayId'] = $essayId;
+            $chapter = $this->getEssayContentService()->updateChapter($essayId, $chapterId, $fields);
             return $this->render('TopxiaAdminBundle:EssayContent:list-chapter-tr.html.twig', array(
                 'category' => $category,
-                'articleId' => $articleId,
+                'essayId' => $essayId,
                 'chapter' => $chapter,
             ));
         }
 
         return $this->render('TopxiaAdminBundle:EssayContent:chapter-modal.html.twig', array(
             'category' => $category,
-            'articleId' => $articleId,
+            'essayId' => $essayId,
             'chapter' => $chapter,
             'type' => $chapter['type'],
         )); 
     }
 
-    public function chapterDeleteAction(Request $request, $articleId, $chapterId)
+    public function chapterDeleteAction(Request $request, $essayId, $chapterId)
     {
-        $this->getEssayContentService()->deleteChapter($articleId, $chapterId);
+        $this->getEssayContentService()->deleteChapter($essayId, $chapterId);
         return $this->createJsonResponse(true);
     }
 
-    public function deleteAction(Request $request, $articleId, $contentId)
+    public function deleteAction(Request $request, $essayId, $contentId)
     {
-        $this->getEssayContentService()->deleteContent($articleId, $contentId);
+        $this->getEssayContentService()->deleteContent($essayId, $contentId);
         return $this->createJsonResponse(true);
     }
 
-    public function sortAction(Request $request, $articleId)
+    public function sortAction(Request $request, $essayId)
     {
         $ids = $request->request->get('ids');
         if(!empty($ids)){
-            $this->getEssayContentService()->sortEssayItems($articleId, $request->request->get('ids'));
+            $this->getEssayContentService()->sortEssayItems($essayId, $request->request->get('ids'));
         }
         return $this->createJsonResponse(true);
     }
@@ -233,14 +231,9 @@ class EssayContentController extends BaseController
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
-    private function getEssayContentService($value='')
+    private function getEssayContentService()
     {
         return $this->getServiceKernel()->createService('EssayContent.EssayContentService');
-    }
-
-    private function getEssayService($value='')
-    {
-        return $this->getServiceKernel()->createService('Essay.EssayService');
     }
 
     private function getKnowledgeService()
@@ -253,4 +246,8 @@ class EssayContentController extends BaseController
         return $this->getServiceKernel()->createService('ArticleMaterial.ArticleMaterialService');
     }
 
+    private function getEssayService()
+    {
+        return $this->getServiceKernel()->createService('Essay.EssayService');
+    }
 }

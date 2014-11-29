@@ -7,10 +7,10 @@ use Topxia\Common\ArrayToolkit;
 
 class EssayContentServiceImpl extends BaseService implements EssayContentService
 {
-    public function getEssayItems($articleId)
+    public function getEssayItems($essayId)
     {
-        $contents = $this->getEssayContentDao()->findContentsByArticleId($articleId);
-        $chapters = $this->getEssayChapterDao()->findChaptersByArticleId($articleId);
+        $contents = $this->getEssayContentDao()->findContentsByArticleId($essayId);
+        $chapters = $this->getEssayChapterDao()->findChaptersByArticleId($essayId);
 
         $items = array();
         foreach ($contents as $content) {
@@ -31,32 +31,32 @@ class EssayContentServiceImpl extends BaseService implements EssayContentService
         return $items;
     }
 
-    public function getChapter($articleId, $chapterId)
+    public function getChapter($essayId, $chapterId)
     {
         $chapter = $this->getEssayChapterDao()->getChapter($chapterId);
-        if (empty($chapter) or $chapter['articleId'] != $articleId) {
+        if (empty($chapter) or $chapter['articleId'] != $essayId) {
             return null;
         }
         return $chapter;
     }
 
-    public function getContent($articleId, $contentId)
+    public function getContent($essayId, $contentId)
     {
         $content = $this->getEssayContentDao()->getContent($contentId);
-        if (empty($content) or $content['articleId'] != $articleId) {
+        if (empty($content) or $content['articleId'] != $essayId) {
             return null;
         }
         return $content;
     }
 
-    public function getArticleChapters($articleId)
+    public function getArticleChapters($essayId)
     {
-        return $this->getEssayChapterDao()->findChaptersByArticleId($articleId);
+        return $this->getEssayChapterDao()->findChaptersByArticleId($essayId);
     }
 
-    public function getArticleContents($articleId)
+    public function getArticleContents($essayId)
     {
-        return $this->getEssayContentDao()->findContentsByArticleId($articleId);
+        return $this->getEssayContentDao()->findContentsByArticleId($essayId);
     }
 
     public function createChapter($chapter)
@@ -96,9 +96,9 @@ class EssayContentServiceImpl extends BaseService implements EssayContentService
         $content = $this->getEssayContentDao()->addContent($content);
     }
 
-    public function sortEssayItems($articleId, array $itemIds)
+    public function sortEssayItems($essayId, array $itemIds)
     {
-        $items = $this->getEssayItems($articleId);
+        $items = $this->getEssayItems($essayId);
         $existedItemIds = array_keys($items);
 
         if (count($itemIds) != count($existedItemIds)) {
@@ -144,9 +144,9 @@ class EssayContentServiceImpl extends BaseService implements EssayContentService
         }
     }
 
-    public function updateChapter($articleId, $chapterId, $fields)
+    public function updateChapter($essayId, $chapterId, $fields)
     {
-        $chapter = $this->getChapter($articleId, $chapterId);
+        $chapter = $this->getChapter($essayId, $chapterId);
         if (empty($chapter)) {
             throw $this->createServiceException("章节#{$chapterId}不存在！");
         }
@@ -159,9 +159,9 @@ class EssayContentServiceImpl extends BaseService implements EssayContentService
         return $this->getEssayContentDao()->updateContent($contentId, $materialId);
     }
 
-    public function deleteChapter($articleId, $chapterId)
+    public function deleteChapter($essayId, $chapterId)
     {
-        $deletedChapter = $this->getChapter($articleId, $chapterId);
+        $deletedChapter = $this->getChapter($essayId, $chapterId);
         if (empty($deletedChapter)) {
             throw $this->createServiceException(sprintf('章节(ID:%s)不存在，删除失败！', $chapterId));
         }
@@ -169,7 +169,7 @@ class EssayContentServiceImpl extends BaseService implements EssayContentService
         $this->getEssayChapterDao()->deleteChapter($deletedChapter['id']);
 
         $prevChapter = array('id' => 0);
-        foreach ($this->getArticleChapters($articleId) as $chapter) {
+        foreach ($this->getArticleChapters($essayId) as $chapter) {
             if ($chapter['number'] < $deletedChapter['number']) {
                 $prevChapter = $chapter;
             }
@@ -181,49 +181,49 @@ class EssayContentServiceImpl extends BaseService implements EssayContentService
         }
     }
 
-    public function deleteContent($articleId, $contentId)
+    public function deleteContent($essayId, $contentId)
     {
-        $deletedContent = $this->getContent($articleId, $contentId);
+        $deletedContent = $this->getContent($essayId, $contentId);
         if (empty($deletedContent)) {
             throw $this->createServiceException(sprintf('素材(ID:%s)不存在，删除失败！', $contentId));
         }
 
         $this->getEssayContentDao()->deleteContent($deletedContent['id']);
         $prevContent = array('id' => 0);
-        foreach ($this->getArticleContents($articleId) as $content) {
-            if ($content['number'] < $deletedContent['number']) {
+        foreach ($this->getArticleContents($essayId) as $content) {
+            if ($content['number'] > $deletedContent['number']) {
                 $prevContent = $content;
-                $this->getEssayContentDao()->updateContent($content['id'], array('number' => $prevContent['number']));
+                $this->getEssayContentDao()->updateContent($content['id'], array('number' => $prevContent['number']-1));
             }
         }
     }
 
-    public function getNextChapterNumber($articleId)
+    public function getNextChapterNumber($essayId)
     {
-        $counter = $this->getEssayChapterDao()->getChapterCountByArticleIdAndType($articleId, 'chapter');
+        $counter = $this->getEssayChapterDao()->getChapterCountByArticleIdAndType($essayId, 'chapter');
         return $counter + 1;
     }
 
-    public function getNextContentNumber($articleId)
+    public function getNextContentNumber($essayId)
     {
-        return $this->getEssayContentDao()->getContentCountByArticleId($articleId) + 1;
+        return $this->getEssayContentDao()->getContentCountByArticleId($essayId) + 1;
     }
 
-    public function getNextUnitNumberAndParentId($articleId)
+    public function getNextUnitNumberAndParentId($essayId)
     {
-        $lastChapter = $this->getEssayChapterDao()->getLastChapterByArticleIdAndType($articleId, 'chapter');
+        $lastChapter = $this->getEssayChapterDao()->getLastChapterByArticleIdAndType($essayId, 'chapter');
 
         $parentId = empty($lastChapter) ? 0 : $lastChapter['id'];
 
-        $unitNum = 1 + $this->getEssayChapterDao()->getChapterCountByArticleIdAndTypeAndParentId($articleId, 'unit', $parentId);
+        $unitNum = 1 + $this->getEssayChapterDao()->getChapterCountByArticleIdAndTypeAndParentId($essayId, 'unit', $parentId);
 
         return array($unitNum, $parentId);
     }
 
-    private function getNextArticleItemSeq($articleId)
+    private function getNextArticleItemSeq($essayId)
     {
-        $chapterMaxSeq = $this->getEssayChapterDao()->getChapterMaxSeqByArticleId($articleId);
-        $contentMaxSeq = $this->getEssayContentDao()->getContentMaxSeqByArticleId($articleId);
+        $chapterMaxSeq = $this->getEssayChapterDao()->getChapterMaxSeqByArticleId($essayId);
+        $contentMaxSeq = $this->getEssayContentDao()->getContentMaxSeqByArticleId($essayId);
         return ($chapterMaxSeq > $contentMaxSeq ? $chapterMaxSeq : $contentMaxSeq) + 1;
     }
 
