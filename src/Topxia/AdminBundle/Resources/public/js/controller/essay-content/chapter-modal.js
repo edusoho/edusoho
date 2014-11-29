@@ -78,6 +78,7 @@ define(function(require, exports, module) {
               }
               $(id).find('.btn-link').tooltip();
               $form.parents('.modal').modal('hide');
+              window.location.reload();
           });
 
         });

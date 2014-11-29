@@ -81,7 +81,7 @@ class EssayContentController extends BaseController
 
         foreach ($materialIds as $materialId) {
             $fields = array(
-                'essayId' => $essayId,
+                'articleId' => $essayId,
                 'chapterId' => $chapterId,
                 'materialId' => $materialId,
             );

@@ -23,6 +23,9 @@ define(function(require, exports, module) {
 
         $('#content-edit-item-list').on('click','.content-edit',function(){
             var self = $(this);
+            if (!confirm('您真的要替换该素材吗？')) {
+                return ;
+            }
             $.post(self.data('url'),{ materialId:self.data('articleMaterialId') },function(){
                 Notify.success('替换成功！');
                 window.location.reload();
