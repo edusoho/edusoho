@@ -27,7 +27,7 @@
       <input class="form-control" type="text" placeholder="标题关键词搜索" name="title" value="{{ app.request.get('title') }}">
     </div>
 
-    <button id="article-material-search" class="btn btn-primary" data-url="{{ path('admin_essay_content_create',{essayId:essayId})}}">搜索</button>
+    <button id="article-material-search" class="btn btn-primary" data-url="{{ path('admin_essay_content_create',{essayId:essay.id})}}">搜索</button>
   </form>
 
   <div class="courseware-list">
@@ -57,7 +57,7 @@
     {{ web_macro.paginator(paginator) }}
   <div>
     <label class="checkbox-inline"><input type="checkbox" data-role="batch-select" tabindex="4"> 全选</label>
-    <button type="submit" id="essay-content-creat-btn" class="btn btn-primary" data-loading-text="正在提交" data-role="batch-delete" data-url="{{ path('admin_essay_content_create', {essayId:essayId }) }}" data-id="{{ parentId|default(null) }}"tabindex="5">添加</button>
+    <button type="submit" id="essay-content-creat-btn" class="btn btn-primary" data-loading-text="正在提交" data-role="batch-delete" data-url="{{ path('admin_essay_content_create', {essayId:essay.id }) }}" data-id="{{ parentId|default(null) }}"tabindex="5">添加</button>
     <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
   </div>
 </div>

@@ -64,7 +64,7 @@ class EssayContentController extends BaseController
         return $this->render('TopxiaAdminBundle:EssayContent:content-modal.html.twig',array(
             'category' => $category,
             'parentId' => $parentId,
-            'essayId' => $essayId,
+            'essay' => $essay,
             'articleMaterials' => $articleMaterials,
             'paginator' => $paginator,
             'knowledges' => $knowledges,
@@ -89,9 +89,7 @@ class EssayContentController extends BaseController
             $this->getEssayContentService()->createContent($fields);
         }
 
-        return $this->redirect($this->generateUrl('admin_essay_content_index', array(
-                     'essayId' => $essayId,
-                 )));
+        return $this->createJsonResponse(true);
     }
 
     public function chapterCreateAction(Request $request, $essayId)
@@ -108,14 +106,14 @@ class EssayContentController extends BaseController
             $chapter = $this->getEssayContentService()->createChapter($chapter);
             return $this->render('TopxiaAdminBundle:EssayContent:list-chapter-tr.html.twig', array(
                 'category' => $category,
-                'essayId' => $essayId,
+                'essay' => $essay,
                 'chapter' => $chapter,
             ));
         }
 
         return $this->render('TopxiaAdminBundle:EssayContent:chapter-modal.html.twig', array(
             'category' => $category,
-            'essayId' => $essayId,
+            'essay' => $essay,
             'type' => $type,
             'parentId' => $parentId
         ));
@@ -167,7 +165,7 @@ class EssayContentController extends BaseController
         $knowledges = ArrayToolkit::index($knowledges, 'id');
 
         return $this->render('TopxiaAdminBundle:EssayContent:content-edit-modal.html.twig',array(
-            'essayId' => $essayId,
+            'essay' => $essay,
             'articleMaterials' => $articleMaterials,
             'paginator' => $paginator,
             'knowledges' => $knowledges,
@@ -192,14 +190,14 @@ class EssayContentController extends BaseController
             $chapter = $this->getEssayContentService()->updateChapter($essayId, $chapterId, $fields);
             return $this->render('TopxiaAdminBundle:EssayContent:list-chapter-tr.html.twig', array(
                 'category' => $category,
-                'essayId' => $essayId,
+                'essay' => $essay,
                 'chapter' => $chapter,
             ));
         }
 
         return $this->render('TopxiaAdminBundle:EssayContent:chapter-modal.html.twig', array(
             'category' => $category,
-            'essayId' => $essayId,
+            'essay' => $essay,
             'chapter' => $chapter,
             'type' => $chapter['type'],
         )); 

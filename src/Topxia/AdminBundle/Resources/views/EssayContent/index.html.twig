@@ -10,13 +10,13 @@
   <div class="page-header clearfix">
     <h1 class="pull-left">文章内容管理</h1>
     <div class="pull-right">
-    {% if essay.status != 'published' %}
-      <button class="btn btn-info btn-sm" data-role="publish-item" data-url="{{ path('admin_essay_publish', {id:essay.id}) }}">发布</button>
-    {% else %}
-      <button class="btn btn-info btn-sm" data-role="unpublish-item" data-url="{{ path('admin_essay_unpublish', {id:essay.id}) }}">取消发布</button>
-    {% endif %}
-
       <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_preview', {id:essay.id}) }}">预览</button>
+
+      {% if essay.status != 'published' %}
+        <button class="btn btn-info btn-sm" data-role="publish-item" data-url="{{ path('admin_essay_publish', {id:essay.id}) }}">发布</button>
+      {% else %}
+        <button class="btn btn-info btn-sm" data-role="unpublish-item" data-url="{{ path('admin_essay_unpublish', {id:essay.id}) }}">取消发布</button>
+      {% endif %}
 
       <button class="btn btn-info btn-sm" id="content-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_list', {essayId:essay.id}) }}"><i class="glyphicon glyphicon-plus"></i>内容</button>
 

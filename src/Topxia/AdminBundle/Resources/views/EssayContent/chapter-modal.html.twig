@@ -9,9 +9,9 @@
 
 <form id="essay-content-chapter-form" class="form-horizontal" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   {% if chapter %}
-	  action="{{ path('admin_essay_content_chapter_edit', {essayId:essayId, chapterId:chapter.id}) }}"
+	  action="{{ path('admin_essay_content_chapter_edit', {essayId:essay.id, chapterId:chapter.id}) }}"
 	{% else %}
-	  action="{{ path('admin_essay_content_chapter_create', {essayId:essayId}) }}"
+	  action="{{ path('admin_essay_content_chapter_create', {essayId:essay.id}) }}"
   {% endif %}
   >
   <div class="row form-group">
