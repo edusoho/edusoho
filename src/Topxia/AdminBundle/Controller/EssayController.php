@@ -117,6 +117,18 @@ class  EssayController extends BaseController
         }
     }
 
+    public function previewAction(Request $request,$id)
+    {
+        $essay = $this->getEssayService()->getEssay($id);
+        $category = $this->getCategoryService()->getCategory($essay['categoryId']);
+        $essayContentItems = $this->getEssayContentService()->getEssayItems($id);        
+
+        return $this->render('TopxiaAdminBundle:Essay:preview-modal.html.twig',array(
+            'essay' => $essay,
+            'items' =>$essayContentItems,
+        ));
+    }
+
     public function showAction(Request $request, $id)
     {
         $essay = $this->getEssayService()->getEssay($id);
@@ -133,5 +145,10 @@ class  EssayController extends BaseController
     private function getEssayService()
     {
         return $this->getServiceKernel()->createService('Essay.EssayService');
+    }
+
+    private function getEssayContentService()
+    {
+        return $this->getServiceKernel()->createService('EssayContent.EssayContentService');
     }
 }

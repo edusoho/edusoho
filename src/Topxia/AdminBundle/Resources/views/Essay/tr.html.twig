@@ -16,7 +16,7 @@
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li><a href="javascript:" data-role="publish-item" data-url="{{ path('admin_essay_preview', {id:essay.id}) }}">预览</a></li>
+            <li><a class="btn-link" data-role="preview-item" data-url="{{ path('admin_essay_preview', {id:essay.id}) }}" data-toggle="modal" data-target="#modal" data-toggle="tooltip" data-placement="bottom">预览</a></li>
 
             {% if essay.status != 'published' %}
                 <li><a href="javascript:;" data-role="publish-item" data-url="{{ path('admin_essay_publish', {id:essay.id}) }}">发布</a></li>

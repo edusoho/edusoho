@@ -17,7 +17,7 @@ class EssayContentController extends BaseController
         return $this->render('TopxiaAdminBundle:EssayContent:index.html.twig', array(
             'category' => $category,
             'items' =>$essayContentItems,
-            'essayId' => $essayId
+            'essay' => $essay
         ));
     }
 

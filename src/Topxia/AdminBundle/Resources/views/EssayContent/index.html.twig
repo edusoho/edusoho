@@ -10,7 +10,15 @@
   <div class="page-header clearfix">
     <h1 class="pull-left">文章内容管理</h1>
     <div class="pull-right">
-      <button class="btn btn-info btn-sm" id="content-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_list', {essayId:essayId}) }}"><i class="glyphicon glyphicon-plus"></i>内容</button>
+    {% if essay.status != 'published' %}
+      <button class="btn btn-info btn-sm" data-role="publish-item" data-url="{{ path('admin_essay_publish', {id:essay.id}) }}">发布</button>
+    {% else %}
+      <button class="btn btn-info btn-sm" data-role="unpublish-item" data-url="{{ path('admin_essay_unpublish', {id:essay.id}) }}">取消发布</button>
+    {% endif %}
+
+      <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_preview', {id:essay.id}) }}">预览</button>
+
+      <button class="btn btn-info btn-sm" id="content-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_list', {essayId:essay.id}) }}"><i class="glyphicon glyphicon-plus"></i>内容</button>
 
       <div class="btn-group">
         <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
@@ -18,10 +26,10 @@
         </button>
         <ul class="dropdown-menu" role="menu">
           <li>
-            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_chapter_create', {essayId:essayId}) }}"><i class="glyphicon glyphicon-plus"></i> 添加 章</a>
+            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_chapter_create', {essayId:essay.id}) }}"><i class="glyphicon glyphicon-plus"></i> 添加 章</a>
           </li>
           <li>
-            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_chapter_create', {essayId:essayId, type:'unit'}) }}"><i class="glyphicon glyphicon-plus"></i> 添加 小节</a>
+            <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('admin_essay_content_chapter_create', {essayId:essay.id, type:'unit'}) }}"><i class="glyphicon glyphicon-plus"></i> 添加 小节</a>
           </li>
         </ul>
       </div>
@@ -33,7 +41,7 @@
   {% endif %}
 
   <div class="panel-body">
-    <ul class="content-list sortable-list" id="essay-item-list" data-sort-url="{{ path('admin_essay_content_sort', {essayId:essayId}) }}">
+    <ul class="content-list sortable-list" id="essay-item-list" data-sort-url="{{ path('admin_essay_content_sort', {essayId:essay.id}) }}">
       {% for id, item in items %}
         {% if 'chapter' in id %}
           {% include 'TopxiaAdminBundle:EssayContent:list-chapter-tr.html.twig' with {chapter: item} %}

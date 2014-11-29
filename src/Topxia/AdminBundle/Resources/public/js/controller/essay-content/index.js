@@ -5,7 +5,17 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
-        $('.course-publish-btn').click(function() {
+        $('[data-role=unpublish-item]').click(function() {
+            if (!confirm('您真的要取消发布该文章吗？')) {
+                return ;
+            }
+
+            $.post($(this).data('url'), function() {
+                window.location.reload();
+            });
+        });
+
+        $('[data-role=publish-item]').click(function() {
             if (!confirm('您真的要发布该文章吗？')) {
                 return ;
             }

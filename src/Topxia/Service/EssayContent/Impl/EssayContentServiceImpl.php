@@ -17,6 +17,7 @@ class EssayContentServiceImpl extends BaseService implements EssayContentService
             $content['itemType'] = 'content';
             $articleMaterial = $this->getArticleMaterialDao()->getArticleMaterial($content['materialId']);
             $content['title'] = $articleMaterial['title'];
+            $content['content'] = $articleMaterial['content'];
             $items["content-{$content['id']}"] = $content;
         }
 

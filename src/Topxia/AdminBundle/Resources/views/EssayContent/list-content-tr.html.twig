@@ -5,10 +5,10 @@
   </div>
 
   <div class="item-actions">
-    <button class="btn btn-link" title="替换" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="{{ path('admin_essay_content_edit', {contentId:content.id, essayId:essayId}) }}"><i class="glyphicon glyphicon-refresh"></i></button>
+    <button class="btn btn-link" title="替换" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="{{ path('admin_essay_content_edit', {essayId:essay.id, contentId:content.id}) }}"><i class="glyphicon glyphicon-refresh"></i></button>
 
     <a class="btn btn-link" data-url="{{ path('admin_article_material_preview', {categoryId:category.id, id:content.materialId}) }}" data-toggle="modal" data-target="#modal" data-toggle="tooltip" data-placement="bottom" title="预览"><span class="glyphicon glyphicon-eye-open prs"></span></a>
 
-    <button class="btn btn-link delete-content-btn" title="删除" data-url="{{ path('admin_essay_content_delete', {essayId:essayId, contentId:content.id}) }}"><i class="glyphicon glyphicon-trash"></i></button>
+    <button class="btn btn-link delete-content-btn" title="删除" data-url="{{ path('admin_essay_content_delete', {essayId:essay.id, contentId:content.id}) }}"><i class="glyphicon glyphicon-trash"></i></button>
   </div>
 </li>

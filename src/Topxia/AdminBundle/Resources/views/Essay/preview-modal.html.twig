@@ -1,0 +1,27 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}文章预览:{{ essay.title }} {% endblock %}
+
+{% block body %}
+
+<div class="panel-body">
+  {% for id, item in items %}
+    {% if 'chapter' in id %}
+      <div>
+        第 <span class="number">{{ item.number }}</span> {% if item.type == 'unit' %}节{% else %}章{% endif %}： {{ item.title }}
+        }
+      </div>
+    {% elseif 'content' in id %}
+      <div>{{ item.title }}</div>
+      <div>{{ item.content|raw }}</div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+{% endblock %}
