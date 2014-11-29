@@ -23,8 +23,15 @@
         {% set recommendCourses = data('RecommendCourses', {count:3}) %}
         {% if recommendCourses %}
           <div class="es-box">
-            <div class="es-box-heading"><h2>推荐课程</h2>
-              <a class="pull-right" href="{{ path('course_explore', {sort:'recommendedSeq'}) }}">更多&gt;</a>
+            <div class="es-box-heading">
+              <div class="row">
+                <div class="pull-left">
+                  <h2>推荐课程</h2>
+                </div>
+                <div class="pull-right">
+                  <a href="{{ path('course_explore', {sort:'recommendedSeq'}) }}">更多&gt;</a>
+                </div>
+              </div>
             </div>
             <div class="es-box-body">
               {{ _self.course_grids(data('RecommendCourses',{ count:3 })) }}            
@@ -58,8 +65,14 @@
           {% if recentLiveCourses %}
             <div class="es-box">
               <div class="es-box-heading">
-                <h2>最新直播</h2>
-                <a class="pull-right" href="{{ path('live_course_explore') }}">更多&gt;</a>
+                <div class="row">
+                  <div class="pull-left">
+                    <h2>最新直播</h2>
+                  </div>
+                  <div class="pull-right">
+                    <a href="{{ path('live_course_explore') }}">更多&gt;</a>
+                  </div>
+                </div>
               </div>
               <div class="es-box-body">
                 {{ _self.course_grids(data('RecentLiveCourses',{ count:3 })) }}
@@ -73,8 +86,15 @@
         {% if articles %}
           <div class="es-box news">
             <div class="es-box-heading">
-              <h2>最新资讯</h2>
-              <a class="pull-right" href="{{ path('article_show') }}">更多&gt;</a>
+              <div class="row">
+                <div class="pull-left">
+                  <h2>最新资讯</h2>
+                </div>
+                <div class="pull-right">
+                  <a href="{{ path('article_show') }}">更多&gt;</a>
+                </div>
+              </div>
+
             </div>
             <div class="es-box-body">
               <ul class="row">
@@ -134,8 +154,14 @@
         {% if teachers %}
           <div class="es-box teachers">
             <div class="es-box-heading">
-              <h2>讲师团</h2>
-              <a class="pull-right" href="{{ path('teacher') }}">更多&gt;</a>
+              <div class="row">
+                <div class="pull-left">
+                  <h2>讲师团</h2>
+                </div>
+                <div class="pull-right">
+                  <a href="{{ path('teacher') }}">更多&gt;</a>
+                </div>
+              </div>
             </div>
             <div class="es-box-body">
               <ul class="row teacher-grids">
@@ -165,8 +191,14 @@
           {% if levels %}
             <div class="es-box vip">
               <div class="es-box-heading">
-                <h2>会员专区</h2>
-                <a class="pull-right" href="{{ path('vip') }}">更多&gt;</a>
+                <div class="row">
+                  <div class="pull-left">
+                    <h2>会员专区</h2>
+                  </div>
+                  <div class="pull-right">
+                    <a href="{{ path('vip') }}">更多&gt;</a>
+                  </div>
+                </div>
               </div>
               <div class="es-box-body">
                 <ul class="row vip-lists">
@@ -204,7 +236,16 @@
           {% set groups = data('HotGroup', {'count':15}) %}
           {% if groups %}
             <div class="es-box hot-group">
-              <div class="es-box-heading"><h2>最热小组</h2><a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a></div>
+              <div class="es-box-heading">
+                <div class="row">
+                  <div class="pull-left">
+                    <h2>最热小组</h2>
+                  </div>
+                  <div class="pull-right">
+                    <a href="{{path('group_search_group')}}">更多&gt;</a>
+                  </div>
+                </div>
+              </div>
               <div class="es-box-body">
                  <ul class="list-unstyled">
                   {% for group in groups %}
