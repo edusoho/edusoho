@@ -13,7 +13,7 @@ class Version20141128154557 extends AbstractMigration
     public function up(Schema $schema)
     {
         $this->addSql("
-            ALTER TABLE `essay_relation` ADD `number` INT NOT NULL AFTER `materialIds`;
+            ALTER TABLE `essay_relation` ADD `number` INT NOT NULL AFTER `materialId`;
             ALTER TABLE `essay_relation` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id';
         ");
     }
