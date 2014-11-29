@@ -3,7 +3,7 @@
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}
-  创建文章
+  替换素材
 {% endblock %}
 {% block body %}
 <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
@@ -30,12 +30,11 @@
     <button id="article-material-search" class="btn btn-primary" data-url="{{ path('admin_essay_content_create',{articleId:articleId})}}">搜索</button>
   </form>
 
-  <div class="courseware-list">
-    <div id="aticle-table-container">
-      <table class="table table-hover table-striped" id="courseware-item-list">
+
+    <div>
+      <table class="table table-hover table-striped" id="content-edit-item-list">
         <thead>
           <tr>
-            <th width="5%"></th>
             <th width="70%">文章素材标题</th>
             <th width="">知识点</th>
           </tr>
@@ -43,8 +42,7 @@
         <tbody>
           {% for articleMaterial in articleMaterials %}
           {% set knowledge = knowledges[articleMaterial.mainKnowledgeId]|default(null) %}
-            <tr>
-              <td><input type="checkbox"  data-role="single-select" data-article-material-id="{{articleMaterial.id}}"></td>
+            <tr class="content-edit" data-url="{{ path('admin_essay_content_edit', {contentId:contentId, articleId:articleId }) }}" data-article-material-id="{{ articleMaterial.id }}">
               <td>{{ articleMaterial.title }}</td>
               <td>{{ knowledge.name|default(null) }}</td>
             </tr>
@@ -55,11 +53,6 @@
       </table>
     </div>
     {{ web_macro.paginator(paginator) }}
-  <div>
-    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select" tabindex="4"> 全选</label>
-    <button type="submit" id="essay-content-creat-btn" class="btn btn-primary" data-loading-text="正在提交" data-role="batch-delete" data-url="{{ path('admin_essay_content_create', {articleId:articleId }) }}" data-id="{{ parentId|default(null) }}"tabindex="5">添加</button>
-    <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
   </div>
-</div>
-<script type="text/javascript">app.load('essay-content/content-modal')</script>
+<script type="text/javascript">app.load('essay-content/content-edit-modal')</script>
 {% endblock %}

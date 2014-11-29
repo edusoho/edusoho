@@ -44,6 +44,12 @@ class EssayChapterDaoImpl extends BaseDao implements EssayChapterDao
         return $this->getConnection()->fetchAssoc($sql, array($articleId, $type)) ? : null;
     }
 
+    public function getLastChapterByArticleId($articleId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE  articleId = ? ORDER BY seq DESC LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($articleId)) ? : null;
+    }
+
     public function addChapter(array $chapter)
     {
         $affected = $this->getConnection()->insert($this->table, $chapter);

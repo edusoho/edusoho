@@ -1,20 +1,14 @@
 <li class="item-essay-content clearfix" id="content-{{ content.id }}"style="word-break: break-all;" >
   <div class="item-line"></div>
   <div class="item-content">
-    {% set mediaStatus = content.mediaStatus|default(null) %}
-      课时 <span class="number">{{ content.number }}</span>：{% if content.free == 1 %}<span class="label label-danger">免费</span>{% endif %}
-    {% if content.status == 'unpublished' %}
-      <span class="text-warning">(未发布)</span>
-    {% endif %}
+    素材<span class="number">{{ content.number }}</span> {{ content.title }}
   </div>
 
   <div class="item-actions">
-    <a class="btn btn-link" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_content_edit_testpaper', {courseId:course.id, contentId:content.id}) }}">
-      <span class="glyphicon glyphicon-edit prs"></span>编辑
-    </a>
-      <a class="btn btn-link" href="{{ path('course_learn', {id:course.id, preview:1}) }}#content/{{ content.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open prs"></span>预览</a>
-      <a href="javascript:;" class="delete-content-btn" data-url="{{ path('course_manage_content_delete', {courseId:course.id, contentId:content.id}) }}"><span class="glyphicon glyphicon-trash prs"></span>删除</a>
-      </ul>
-    </span>
+    <button class="btn btn-link" title="替换" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="{{ path('admin_essay_content_edit', {contentId:content.id, articleId:articleId}) }}"><i class="glyphicon glyphicon-refresh"></i></button>
+
+    <button class="btn btn-link" title="预览" href="{# {{ path('course_learn', {id:course.id, preview:1}) }}#content/{{ content.id }} #}" target="_blank"><span class="glyphicon glyphicon-eye-open prs"></span></button>
+
+    <button class="btn btn-link delete-chapter-btn" title="删除" data-url="{{ path('admin_essay_content_delete', {articleId:articleId, contentId:content.id}) }}"><i class="glyphicon glyphicon-trash"></i></button>
   </div>
 </li>

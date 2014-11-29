@@ -735,9 +735,21 @@ admin_essay_content_chapter_delete:
     pattern:  /category/{articleId}/essay/chapter/{chapterId}/delete
     defaults: { _controller: TopxiaAdminBundle:EssayContent:chapterDelete }
 
+admin_essay_content_list:
+    pattern:  /category/{articleId}/essay/content/list
+    defaults: { _controller: TopxiaAdminBundle:EssayContent:list }
+
 admin_essay_content_create:
     pattern:  /category/{articleId}/essay/content/create
     defaults: { _controller: TopxiaAdminBundle:EssayContent:create }
+
+admin_essay_content_edit:
+    pattern:  /category/{articleId}/essay/content/{contentId}/edit
+    defaults: { _controller: TopxiaAdminBundle:EssayContent:edit }
+
+admin_essay_content_delete:
+    pattern:  /category/{articleId}/essay/content/{contentId}/delete
+    defaults: { _controller: TopxiaAdminBundle:EssayContent:delete }
 
 admin_category_knowledge:
     pattern: /category/{categoryId}/manage/knowledge

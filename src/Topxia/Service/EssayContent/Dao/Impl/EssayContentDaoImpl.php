@@ -38,4 +38,19 @@ class EssayContentDaoImpl extends BaseDao implements EssayContentDao
         return $this->getContent($id);
     }
 
+    public function getContentCountByArticleId($articleId)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE articleId = ? ";
+        return $this->getConnection()->fetchColumn($sql, array($articleId));
+    }
+
+    public function addContent($content)
+    {
+        $affected = $this->getConnection()->insert($this->table, $content);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert essay content error.');
+        }
+        return $this->getContent($this->getConnection()->lastInsertId());
+    }
+
 }

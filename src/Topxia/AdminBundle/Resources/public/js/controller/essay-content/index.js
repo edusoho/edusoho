@@ -6,26 +6,25 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         $('.course-publish-btn').click(function() {
-            if (!confirm('您真的要发布该课程吗？')) {
+            if (!confirm('您真的要发布该文章吗？')) {
                 return ;
             }
 
             $.post($(this).data('url'), function() {
                 window.location.reload();
             });
-
         });
 
         var sortList = function($list) {
             var data = $list.sortable("serialize").get();
             $.post($list.data('sortUrl'), {ids:data}, function(response){
-                var lessonNum = chapterNum = unitNum = 0;
+                var contentNum = chapterNum = unitNum = 0;
 
-                $list.find('.item-lesson, .item-chapter').each(function() {
+                $list.find('.item-essay-content, .item-chapter').each(function() {
                     var $item = $(this);
-                    if ($item.hasClass('item-lesson')) {
-                        lessonNum ++;
-                        $item.find('.number').text(lessonNum);
+                    if ($item.hasClass('item-essay-content')) {
+                        contentNum ++;
+                        $item.find('.number').text(contentNum);
                     } else if ($item.hasClass('item-chapter-unit')) {
                         unitNum ++;
                         $item.find('.number').text(unitNum);
@@ -63,27 +62,7 @@ define(function(require, exports, module) {
             }, 'json');
         });
 
-        $list.on('click', '.publish-lesson-btn', function(e) {
-            var $btn = $(e.currentTarget);
-            $.post($(this).data('url'), function(html) {
-                var id = '#' + $(html).attr('id');
-                $(id).replaceWith(html);
-                $(id).find('.btn-link').tooltip();
-                Notify.success('课时发布成功！');
-            });
-        });
-
-        $list.on('click', '.unpublish-lesson-btn', function(e) {
-            var $btn = $(e.currentTarget);
-            $.post($(this).data('url'), function(html) {
-                var id = '#' + $(html).attr('id');
-                $(id).replaceWith(html);
-                $(id).find('.btn-link').tooltip();
-                Notify.success('课时已取消发布！');
-            });
-        });
-
-        Sticky('.lesson-manage-panel .panel-heading', 0, function(status){
+        Sticky('.essay-content-panel .panel-heading', 0, function(status){
             if (status) {
                 var $elem = this.elem;
                 $elem.addClass('sticky');
