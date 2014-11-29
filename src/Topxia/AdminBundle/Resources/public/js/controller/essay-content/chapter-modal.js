@@ -77,8 +77,11 @@ define(function(require, exports, module) {
                   Notify.success('章节添加成功');
               }
               $(id).find('.btn-link').tooltip();
+              var emptyDiv = $("#essay-item-list").parent().prev('div');
+              if(emptyDiv.hasClass('empty')){
+                  emptyDiv.remove();
+              }
               $form.parents('.modal').modal('hide');
-              window.location.reload();
           });
 
         });
