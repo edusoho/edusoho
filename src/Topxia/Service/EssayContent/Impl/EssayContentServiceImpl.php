@@ -64,7 +64,7 @@ class EssayContentServiceImpl extends BaseService implements EssayContentService
         if (!in_array($chapter['type'], array('chapter', 'unit'))) {
             throw $this->createServiceException("章节类型不正确，添加失败！");
         }
-
+        
         if ($chapter['type'] == 'unit') {
             list($chapter['number'], $chapter['parentId']) = $this->getNextUnitNumberAndParentId($chapter['articleId']);
         } else {

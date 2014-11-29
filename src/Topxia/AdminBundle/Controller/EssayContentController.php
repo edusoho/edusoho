@@ -32,18 +32,18 @@ class EssayContentController extends BaseController
         $title = $request->query->get('title');
 
         if (empty($method)){
-            $conditions = array('categoryId' => $categoryId);
+            $conditions = array('categoryId' => $category['id']);
         } elseif($method == 'tag'){
             $conditions = array(
                 'tagIds' => $tagIds,
                 'knowledgeId' => $knowledgeId,
-                'categoryId' => $categoryId
+                'categoryId' => $category['id']
             );
         } else {
             $conditions = array(
                 'title' => $title,
                 'knowledgeId' => $knowledgeId,
-                'categoryId' => $categoryId
+                'categoryId' => $category['id']
             );
         }
 
@@ -104,7 +104,7 @@ class EssayContentController extends BaseController
 
         if($request->getMethod() == 'POST'){
             $chapter = $request->request->all();
-            $chapter['essayId'] = $essayId;
+            $chapter['articleId'] = $essayId;
             $chapter = $this->getEssayContentService()->createChapter($chapter);
             return $this->render('TopxiaAdminBundle:EssayContent:list-chapter-tr.html.twig', array(
                 'category' => $category,
@@ -137,18 +137,18 @@ class EssayContentController extends BaseController
         $title = $request->query->get('title');
 
         if (empty($method)){
-            $conditions = array('categoryId' => $categoryId);
+            $conditions = array('categoryId' => $category['id']);
         } elseif($method == 'tag'){
             $conditions = array(
                 'tagIds' => $tagIds,
                 'knowledgeId' => $knowledgeId,
-                'categoryId' => $categoryId
+                'categoryId' => $category['id']
             );
         } else {
             $conditions = array(
                 'title' => $title,
                 'knowledgeId' => $knowledgeId,
-                'categoryId' => $categoryId
+                'categoryId' => $category['id']
             );
         }
 
