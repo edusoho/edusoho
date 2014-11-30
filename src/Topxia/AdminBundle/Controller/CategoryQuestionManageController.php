@@ -15,7 +15,7 @@ class CategoryQuestionManageController extends BaseController
         $category = $this->getCategoryService()->getCategory($categoryId);
         
         $conditions = $request->query->all();
-
+ 
         $conditions['categoryId'] = $category['id'];
         if (!empty($conditions['keyword'])) {
             $conditions['stem'] = $conditions['keyword'];
