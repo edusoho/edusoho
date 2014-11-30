@@ -65,6 +65,7 @@ class ArticleMaterialController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $articleMaterial = $request->request->all();
+            var_dump($articleMaterial);exit();
             $articleMaterial = $this->filterArticleMaterial($articleMaterial);
             $articleMaterial['categoryId'] = $categoryId;
             $articleMaterial = $this->getArticleMaterialService()->createArticleMaterial($articleMaterial);
@@ -158,9 +159,12 @@ class ArticleMaterialController extends BaseController
 
     private function filterArticleMaterial($articleMaterial)
     {
-        $articleMaterial['knowledgeIds'] = $articleMaterial['relatedKnowledgeIds'].",".$articleMaterial['mainKnowledgeId'];
+        $articleMaterial['knowledgeIds'] = $articleMaterial['mainKnowledgeId'];
+        if (!empty($articleMaterial['relatedKnowledgeIds'])){
+            $articleMaterial['relatedKnowledgeIds'] = array_filter(explode(',', $articleMaterial['relatedKnowledgeIds']));
+            $articleMaterial['knowledgeIds'] = $articleMaterial['relatedKnowledgeIds'].",".$articleMaterial['mainKnowledgeId'];
+        }
         $articleMaterial['knowledgeIds'] = array_filter(explode(',', $articleMaterial['knowledgeIds']));
-        $articleMaterial['relatedKnowledgeIds'] = array_filter(explode(',', $articleMaterial['relatedKnowledgeIds']));
         $articleMaterial['tagIds'] = array_filter(explode(',', $articleMaterial['tagIds']));
 
         return $articleMaterial;
