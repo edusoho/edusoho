@@ -7,7 +7,7 @@ admin_popular_courses:
     defaults: { _controller: TopxiaAdminBundle:Default:popularCourses }
 
 admin_question_remind_teachers:
-    pattern: /course/{courseId}/question/{questionId}/remindTeachers
+    pattern: /category/{categoryId}/question/{questionId}/remindTeachers
     defaults: { _controller: TopxiaAdminBundle:Default:questionRemindTeachers }
     methods:  [POST]
 
@@ -1076,3 +1076,56 @@ admin_official_messages:
 admin_uploadfile_head_leader_params:
     pattern: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
+
+admin_category_manage_question:
+    pattern: /category/{categoryId}/manage/question
+    defaults: { _controller: TopxiaAdminBundle:CategoryQuestionManage:index }
+
+admin_category_manage_question_create:
+    pattern: /category/{categoryId}/manage/question/create/{type}
+    defaults: { _controller: TopxiaAdminBundle:CategoryQuestionManage:create }
+
+admin_category_manage_question_update:
+    pattern: /category/{categoryId}/manage/question/{id}/update
+    defaults: { _controller: TopxiaAdminBundle:CategoryQuestionManage:update }
+
+admin_category_manage_question_delete:
+    pattern: /category/{categoryId}/manage/question/delete/{id}
+    defaults: { _controller: TopxiaAdminBundle:CategoryQuestionManage:delete }
+    methods: [POST]
+
+admin_category_manage_question_deletes:
+    pattern: /category/{categoryId}/manage/question/deletes
+    defaults: { _controller: TopxiaAdminBundle:CategoryQuestionManage:deletes }
+    methods: [POST]
+
+admin_category_manage_question_preview:
+    pattern: /category/{categoryId}/manage/question/{id}/preview
+    defaults: { _controller: TopxiaAdminBundle:CategoryQuestionManage:preview }
+
+admin_category_manage_question_upload:
+    pattern: /category/{categoryId}/manage/question/uploadfile/{type}
+    defaults: { _controller: TopxiaAdminBundle:CategoryQuestionManage:uploadFile }
+    methods: [POST]
+
+admin_category_manage_question_category:
+    pattern: /category/{categoryId}/manage/question/category
+    defaults: { _controller: TopxiaAdminBundle:CourseQuestionCategoryManage:index }
+
+admin_category_manage_question_category_create:
+    pattern: /category/{categoryId}/manage/question/category/create
+    defaults: { _controller: TopxiaAdminBundle:CourseQuestionCategoryManage:create }
+
+admin_category_manage_question_category_update:
+    pattern: /category/{categoryId}/manage/question/category/{id}/update
+    defaults: { _controller: TopxiaAdminBundle:CourseQuestionCategoryManage:update }
+
+admin_category_manage_question_category_delete:
+    pattern: /category/{categoryId}/manage/question/category/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:CourseQuestionCategoryManage:delete }
+    methods: [POST]
+
+admin_category_manage_question_category_sort:
+    pattern: /category/{categoryId}/manage/question/category/sort
+    defaults: { _controller: TopxiaAdminBundle:CourseQuestionCategoryManage:sort }
+    methods: [POST]

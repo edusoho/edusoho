@@ -1,0 +1,55 @@
+{% if  ((paperResult|default(null) and paperResult.status|default(null) in ['finished','reviewing'] ) and not app.user.isTeacher() and setting('questions.testpaper_answers_show_mode','submitted') == 'hide') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' and paperResult.status|default(null) == 'reviewing' and not app.user.isTeacher() )  %}
+{% else %}
+
+{# {% if showTestpaperNavbar|default('on') == 'off' %} #}
+	<form id='teacherCheckForm' autocomplete="off">
+{# {% endif %} #}
+
+
+
+{% for type in types|default(paper.metas.question_type_seq) %}
+
+{% if items[type] != [] %}
+
+<div class="panel panel-default testpaper-question-block" id="testpaper-questions-{{ type }}">
+  <div class="panel-heading"><strong class="">{{dict('questionType')[type]}}</strong>
+  	<small class="text-muted">共{{ total[type].number }}题，共{{ total[type].score }}分{% if total[type].missScore > 0 %}，漏选得{{ total[type].missScore }}分{% endif %}</small>
+  </div>
+  <div class="panel-body">
+
+		{% for item in items[type] %}
+
+			{% if item.question.isDeleted|default(null) %}
+				<div class="testpaper-question testpaper-question-choice" id="question{{ item.questionId }}">
+					<div class="testpaper-question-body">
+						{% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
+					</div>
+				</div>
+			{% else %}
+
+				{% if type in ['single_choice', 'choice', 'uncertain_choice'] %}
+					{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
+
+				{% else %}
+
+					{% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
+
+				{% endif %}
+
+			{% endif %}
+		{% endfor %}
+  </div>
+</div>
+
+{% endif %}
+
+{% endfor %}
+
+{% if showTestpaperNavbar|default('on') == 'off' %}
+<textarea name="teacherSay" id="teacherSay" style="display:none"></textarea>
+{% endif %}
+
+
+</form>
+
+{% endif %}

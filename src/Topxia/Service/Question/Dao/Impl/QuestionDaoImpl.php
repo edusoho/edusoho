@@ -176,6 +176,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
 
         $builder->andWhere('parentId = :parentId')
             ->andWhere('difficulty = :difficulty')
+            ->andWhere('categoryId = :categoryId')
             ->andWhere('type = :type')
             ->andWhere('stem LIKE :stem');
 

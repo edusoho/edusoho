@@ -1,0 +1,27 @@
+{% extends 'TopxiaWebBundle:QuizQuestionTest:testpaper-layout.html.twig' %}
+
+{% block testpaper_heading_status %}
+  {% if isPreview|default(false) %}
+    <div class="label label-warning">试卷预览中</div>
+  {% else %}
+    {% if paperResult.status|default(null) == 'doing' %}
+      <div class="label label-primary testpaper-status-doing">答题中</div>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block testpaper_heading_content %}
+  <div class="testpaper-description">{{ paper.description|bbCode2Html|raw }}</div>
+  <div class="testpaper-metas">
+    共 {{ paper.itemCount }} 题，总分 {{ paper.score }} 分
+    {% if paper.passedScore > 0 %}，及格为 {{ paper.passedScore }} 分{% endif %}
+    {% if paper.limitedTime >0 %}，请在 {{ paper.limitedTime }} 分钟内作答{% endif %}
+    。
+  </div>
+{% endblock %}
+
+{% block testpaper_body_sidebar %}
+  <div class="testpaper-card" data-spy="affix" data-offset-top="200">
+    {% include 'TopxiaWebBundle:QuizQuestionTest:test-paper-card.html.twig' %}
+  </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		{% if limitTime != 0 %}
+			<span class="{{ isPreview|default('') }} testpaper-card-timer" id="time_show" data-time="{% if paperResult.usedTime|default(0) == 0 %}{{ limitTime }}{% else %}{{ limitTime - paperResult.usedTime }}{% endif %}">00:00</span>
+			<button class="btn btn-sm btn-default pull-right"{% if id > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:id}) }}" data-goto="{{ path('my_quiz') }}"{% endif %}>下次再做</button>
+			<button id="pause" class="btn btn-sm btn-default pull-right"{% if id > 0 %} data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}"{% endif %}>暂停</button>
+		{% else %}
+		  <span class="testpaper-card-timer"><small class="text-muted" style="font-size:14px;">时间不限</small></span>
+			<button class="btn btn-sm btn-default pull-right"{% if id > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:id}) }}" data-goto="{{ path('my_quiz') }}"{% endif %}>下次再做</button>
+		{% endif %}
+	</div>
+	<div class="panel-body">
+
+		{% for type in paper.metas.question_type_seq %}
+
+			{% for item in items[type] %}
+				{% if item.questionType != 'material' %}
+					<a href="javascript:;" data-anchor="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if item.question.testResult|default(null) %}active{% endif %}">{{ item.seq }}</a>
+				{% else %}
+					{% for item in item.items|default([]) %}
+						<a href="javascript:;" data-anchor="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if item.question.testResult|default(null) %}active{% endif %}">{{ item.seq }}</a>
+					{% endfor %}
+				{% endif %}
+				
+			{% endfor %}
+
+			<div class="clearfix mtm mbm"></div>
+
+		{% endfor %}
+
+	</div>
+	<div class="panel-footer">
+		{% if id > 0 %}
+		<button class="btn btn-success btn-block do-test" id="finishPaper" data-ajax="{{ path('course_manage_submit_test', { id: id }) }}" data-url="{{ path('course_manage_finish_test', { id: id }) }}" data-goto="{{ path('course_manage_test_results', { id: id }) }}">我要交卷</button>
+		{% else %}
+		<button class="btn btn-success btn-block">我要交卷</button>
+		{% endif %}
+	</div>
+</div>

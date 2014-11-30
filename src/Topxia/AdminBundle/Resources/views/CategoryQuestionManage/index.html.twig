@@ -1,0 +1,16 @@
+{% extends 'TopxiaAdminBundle:CategoryManage:layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+
+{% block title %}题目管理 - {{ parent() }}{% endblock %}
+
+{% set parentId = parentQuestion.id|default(0) %}
+{% set nav = 'course' %}
+{% set side_nav = 'question' %}
+{% set script_controller = 'category-manage/list' %}
+
+{% block main %}
+  {% include 'TopxiaAdminBundle:CategoryQuestionManage:question-main.html.twig' %}
+{% endblock %}
+
+
+

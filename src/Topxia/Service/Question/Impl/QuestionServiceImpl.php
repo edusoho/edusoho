@@ -65,7 +65,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             if (empty($parentQuestion)) {
                 $fields['parentId'] = 0;
             } else {
-                $fields['target'] = $parentQuestion['target'];
+                $fields['categoryId'] = $parentQuestion['categoryId'];
             }
         }
 
