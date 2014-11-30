@@ -9,7 +9,6 @@ define(function(require, exports, module) {
         var sortList = function($list) {
 
             var data = $list.sortable("serialize").get();
-            console.log(data);
             $.post($list.data('sortUrl'), {ids:data}, function(response){
                 var lessonNum = chapterNum = unitNum = 0;
 

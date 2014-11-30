@@ -4,11 +4,10 @@ define(function(require, exports, module) {
        var Notify = require('common/bootstrap-notify');
        require('jquery.sortable');
 
-    exports.run = function() { console.log( $("#course-item-list").sortable("serialize").get());
+    exports.run = function() {
         var sortList = function($list) {
 
             var data = $list.sortable("serialize").get();
-            console.log(data);
             $.post($list.data('sortUrl'), {ids:data}, function(response){
                 var lessonNum = chapterNum = unitNum = 0;
 
