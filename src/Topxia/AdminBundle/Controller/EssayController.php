@@ -55,9 +55,9 @@ class  EssayController extends BaseController
 
             $formData = $request->request->all();
             $formData['categoryId'] = $categoryId;
-            $this->getEssayService()->createEssay($formData);
+            $article = $this->getEssayService()->createEssay($formData);
 
-            return $this->redirect($this->generateUrl('admin_essay_manage',array('categoryId'=>$categoryId)));
+            return $this->redirect($this->generateUrl('admin_essay_content_index',array('essayId'=>$article['id'])));
         }
         return $this->render('TopxiaAdminBundle:Essay:modal.html.twig',array(
             'category' => $category
