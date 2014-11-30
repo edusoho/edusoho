@@ -64,7 +64,7 @@ define(function(require, exports, module) {
               choosedTags: $mainKnowledgeId
             });
             chooserTreeForMainKnowlege.on('change', function(tags) {
-              var temp = {};
+              var temp = [];
               $.each(tags,function(i,item){
                 temp = item.id;
               });
