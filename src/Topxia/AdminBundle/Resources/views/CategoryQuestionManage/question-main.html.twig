@@ -37,43 +37,19 @@
     {% if not parentQuestion %}
       <form class="form-inline well well-sm" action="" method="get" novalidate>
         
-        <div class="form-group">
+{#         <div class="form-group">
           <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
 
-        </div>
+        </div> #}
 
         <div class="form-group">
-          <div id="tagchooser" class="tagchooser" data-query="{{ path('admin_category_question_tags', {categoryId:category.id} )}}" data-source="{{ path('admin_tag_source') }}" style="width:200px;">
-
-            <div class="tagchooser-choosed"></div>
-            <div class="tagchooser-input">
-              <div class="input-group">
-                <input type="text" class="form-control" name="keywords" data-role="tag-input">
-                <div class="input-group-btn">
-                  <button type="button" class="btn btn-default" data-role="dropdown-trigger" tabindex="-1">
-                    <span class="caret"></span>
-                  </button>
-                </div>
-              </div>
-              <div class="help-block hide" data-role="input-error"></div>
-            </div><!-- /.tagchooser-input -->
-
-            <div class="tagchooser-dropdown">
-              <div class="panel panel-default">
-                <div class="panel-body">
-                  <div data-role="dropdown-content"></div>
-                  <div class="help-block pull-left hide" data-role="dropdown-error"></div>
-                </div>
-              </div>
-            </div><!-- /.tagchooser-dropdown -->
-
-            <div class="btn-group choosed-tag choosed-tag-template">
-              <button type="button" class="btn btn-xs btn-default disabled"><span class="tag-name-placeholder"></span></button>
-              <button type="button" class="btn btn-xs btn-default" data-role="tag-remove">
-                <span class="glyphicon glyphicon-remove"></span>
-              </button>
-            </div>
-
+          <div class="controls" style="width:300px;">
+            {% include('TopxiaWebBundle:TagChooser:tag-chooser-tree-main-knowledge.html.twig') %}
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="controls" style="width:300px;">
+            {% include('TopxiaWebBundle:TagChooser:tag-chooser.html.twig') %}
           </div>
         </div>
         <button class="btn btn-primary btn-sm">搜索</button>
@@ -106,7 +82,9 @@
           </div>
         
         </div>
-
+        <input type="hidden" data-role='tag-ids' name="tag-ids" value="{{ app.request.query.get('tag-ids') }}">
+        <input type="hidden" data-role='main-knowledge-ids' name="main-knowledge-ids" value="{{ app.request.query.get('main-knowledge-ids') }}">
+        <input type="hidden" data-role='categoryId' value="{{ category.id }}">
       </form>
     {% endif %}
 

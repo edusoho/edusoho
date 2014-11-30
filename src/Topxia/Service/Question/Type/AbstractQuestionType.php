@@ -36,6 +36,9 @@ abstract class AbstractQuestionType extends BaseService
         $filtered['score'] = empty($fields['score'])? 0 : $fields['score'];
         $filtered['categoryId'] = empty($fields['categoryId']) ? 0 : (int) $fields['categoryId'];
         $filtered['parentId'] = empty($fields['parentId']) ? 0 : (int)$fields['parentId'];
+        $filtered['mainKnowledgeId'] = empty($fields['mainKnowledgeId']) ? 0 : (int)$fields['mainKnowledgeId'];
+        $filtered['relatedKnowledgeIds'] =empty($fields['relatedKnowledgeIds']) ? '' : $fields['relatedKnowledgeIds'];
+        $filtered['tagIds'] =empty($fields['tagIds']) ? '' : $fields['tagIds'];
         if ($mode == 'update') {
             unset($filtered['parentId']);
         }
