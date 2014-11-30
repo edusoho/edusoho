@@ -15,8 +15,11 @@ class CategoryQuestionManageController extends BaseController
         $category = $this->getCategoryService()->getCategory($categoryId);
         
         $conditions = $request->query->all();
- 
-        $conditions['categoryId'] = $category['id'];
+
+        if (empty($conditions['target'])) {
+            $conditions['targetPrefix'] = "subject-{$categoryId}";
+        }
+
         if (!empty($conditions['keyword'])) {
             $conditions['stem'] = $conditions['keyword'];
         }
@@ -70,7 +73,7 @@ class CategoryQuestionManageController extends BaseController
         $category = $this->getCategoryService()->getCategory($categoryId);
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            $data['categoryId'] = $categoryId;
+            $data['target'] = "subject-{$categoryId}/";
             $question = $this->getQuestionService()->createQuestion($data);
 
             if ($data['submission'] == 'continue') {
