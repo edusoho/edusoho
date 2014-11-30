@@ -1,0 +1,69 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% block title %}{% if articleMaterial|default(null) %}编辑{% else %}添加{% endif %}素材{% endblock %}
+
+{% block body %}
+	<div id="article-material-creater-widget">
+	<form id="article-material-form" class="form-horizontal" action="{% if articleMaterial|default(null) %}{{ path('admin_article_material_edit',{categoryId:category.id,id:articleMaterial.id}) }}{% else %}{{ path('admin_article_material_create',{categoryId:category.id}) }} {% endif %}" method="post">
+
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="article-material-title-field">
+				标题
+			</label>
+			<div class="col-md-7 controls">
+				<input class="form-control" id="article-material-title-field" type="text" name="title" value="{{ articleMaterial.title|default(null) }}" >
+				<div class="help-block"></div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="article-material-content-field">
+				内容
+			</label>
+			<div class="col-md-7 controls">
+				<textarea class="form-control" id="richeditor-content-field" rows="5" name="content">{{ articleMaterial.content|default(null) }}</textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="article-material-mainKnowledgeId-field">
+				主知识点
+			</label>
+			<div class="col-md-7 controls">
+				<input class="form-control" id="article-material-mainKnowledgeId-field" type="text" name="mainKnowledgeId" value="{{ articleMaterial.mainKnowledgeId|default(null) }}" >
+				<div class="help-block"></div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="article-material-relatedKnowledgeIds-field">
+				关联知识点
+			</label>
+			<div class="col-md-7 controls">
+				<input class="form-control" id="article-material-relatedKnowledgeIds-field" type="text" name="relatedKnowledgeIds" value="{{ articleMaterial.relatedKnowledgeIds|default(null) }}" >
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="article-material-relatedKnowledgeIds-field">
+				标签
+			</label>
+			<div class="col-md-7 controls">
+				<input class="form-control" id="article-material-tagIds-field" type="text" name="tagIds" value="{{ articleMaterial.tagIds|default(null) }}" >
+			</div>
+		</div>
+
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+
+</div>
+<script type="text/javascript">
+app.load('article-material/modal')
+</script>
+{% endblock %}
+
+{% block footer %}
+
+	<button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
+	<button id="article-material-operate-btn" data-loading-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#article-material-form" tabindex="5" data-url="{% if articleMaterial|default(null) %}{{ path('admin_article_material_edit',{categoryId:category.id,id:articleMaterial.id}) }}{% else %}{{ path('admin_article_material_create',{categoryId:category.id}) }} {% endif %}">保存</button>
+
+{% endblock %}

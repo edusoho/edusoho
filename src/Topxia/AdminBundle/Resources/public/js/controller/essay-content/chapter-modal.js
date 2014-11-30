@@ -1,19 +1,20 @@
 define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
-       var Notify = require('common/bootstrap-notify');
-       require('jquery.sortable');
+           var Notify = require('common/bootstrap-notify');
+           require('jquery.sortable');
 
-    exports.run = function() {
+    exports.run = function() { 
+
         var sortList = function($list) {
 
             var data = $list.sortable("serialize").get();
             $.post($list.data('sortUrl'), {ids:data}, function(response){
                 var lessonNum = chapterNum = unitNum = 0;
 
-                $list.find('.item-lesson, .item-chapter').each(function() {
+                $list.find('.item-essay-content, .item-chapter').each(function() {
                     var $item = $(this);
-                    if ($item.hasClass('item-lesson')) {
+                    if ($item.hasClass('item-essay-content')) {
                         lessonNum ++;
                         $item.find('.number').text(lessonNum);
                     } else if ($item.hasClass('item-chapter-unit')) {
@@ -29,7 +30,7 @@ define(function(require, exports, module) {
         };
 
         var validator = new Validator({
-            element: '#course-chapter-form',
+            element: '#essay-content-chapter-form',
             autoSubmit: false
         });
 
@@ -42,7 +43,7 @@ define(function(require, exports, module) {
           if (error) {
               return ;
           }
-          $('#course-chapter-btn').button('submiting').addClass('disabled');
+          $('#essay-content-chapter-btn').button('submiting').addClass('disabled');
 
           $.post($form.attr('action'), $form.serialize(), function(html) {
               var id = '#' + $(html).attr('id'),
@@ -63,25 +64,26 @@ define(function(require, exports, module) {
                      
                   });
                      if(add != 1 )
-                        $("#course-item-list").append(html);
+                        $("#essay-item-list").append(html);
                    
-                    var $list = $("#course-item-list");
+                    var $list = $("#essay-item-list");
                     sortList($list);
                    
                  }else{
-                    $("#course-item-list").append(html);
+                    $("#essay-item-list").append(html);
                  }
                     
                   Notify.success('章节添加成功');
               }
               $(id).find('.btn-link').tooltip();
+              var emptyDiv = $("#essay-item-list").parent().prev('div');
+              if(emptyDiv.hasClass('empty')){
+                  emptyDiv.remove();
+              }
               $form.parents('.modal').modal('hide');
           });
 
         });
 
-	};
-
-
-
+  };
 });

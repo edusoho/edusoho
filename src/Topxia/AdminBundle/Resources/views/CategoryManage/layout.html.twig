@@ -30,8 +30,8 @@
       <div class="list-group-panel">
         <div class="list-group-heading">文库</div>
         <div class="list-group">
-          <a class="list-group-item {% if side_nav == 'article_material' %}active{% endif %}" href="#">文章素材</a>
-          <a class="list-group-item {% if side_nav == ' article_manage' %}active{% endif %}" href="#">文章管理</a>
+          <a class="list-group-item {% if side_nav == 'article_material' %}active{% endif %}" href="{{ path('admin_article_material_manage',{categoryId:category.id}) }}">文章素材</a>
+          <a class="list-group-item {% if side_nav == 'essay_manage' %}active{% endif %}" href="{{ path('admin_essay_manage',{categoryId:category.id}) }}">文章管理</a>
         </div>
       </div>
 

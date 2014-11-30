@@ -1,0 +1,65 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}
+  创建文章
+{% endblock %}
+{% block body %}
+<form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="知识点搜索" name="knowledgeIds[]" value="{{ app.request.get('knowledgeIds[]') }}">
+      <span class="glyphicon glyphicon-tasks"></span>
+    </div>
+
+    <div class="form-group">
+      <select class="form-control method-form-group" name="method">
+        {{ select_options(dict('courseware'), app.request.query.get('method')) }}
+      </select>
+    </div>
+
+    <div class="form-group tagIds-form-group {% if method == 'title' %}hide{% endif %}">
+    </div>
+
+    <div class="form-group title-form-group {% if method != 'title' %}hide{% endif %}">
+
+      <input class="form-control" type="text" placeholder="标题关键词搜索" name="title" value="{{ app.request.get('title') }}">
+    </div>
+
+    <button id="article-material-search" class="btn btn-primary" data-url="{{ path('admin_essay_content_create',{essayId:essay.id})}}">搜索</button>
+  </form>
+
+  <div class="courseware-list">
+    <div id="aticle-table-container">
+      <table class="table table-hover table-striped" id="courseware-item-list">
+        <thead>
+          <tr>
+            <th width="5%"></th>
+            <th width="70%">文章素材标题</th>
+            <th width="">知识点</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for articleMaterial in articleMaterials %}
+          {% set knowledge = knowledges[articleMaterial.mainKnowledgeId]|default(null) %}
+            <tr>
+              <td><input type="checkbox"  data-role="single-select" data-article-material-id="{{articleMaterial.id}}"></td>
+              <td>{{ articleMaterial.title }}</td>
+              <td>{{ knowledge.name|default(null) }}</td>
+            </tr>
+          {% else %}
+            <tr class="empty"><td colspan="20">无文件记录</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {{ web_macro.paginator(paginator) }}
+  <div>
+    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select" tabindex="4"> 全选</label>
+    <button type="submit" id="essay-content-creat-btn" class="btn btn-primary" data-loading-text="正在提交" data-role="batch-delete" data-url="{{ path('admin_essay_content_create', {essayId:essay.id }) }}" data-id="{{ parentId|default(null) }}"tabindex="5">添加</button>
+    <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
+  </div>
+</div>
+<script type="text/javascript">app.load('essay-content/content-modal')</script>
+{% endblock %}

@@ -325,53 +325,143 @@ input.LargeInput {width: 600px;}
   padding: 8px;
 }
 
-  #tag-chooser {
-    position: relative;
-  }
-  .tag-overlay {
-    position: absolute;
-    left: 0;
-    top: 0;
-    display: none;
-  }
+#tag-chooser {
+  position: relative;
+}
+.tag-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: none;
+}
 
-  .tag-overlay .panel-footer {
-    text-align: right;
-  }
+.tag-overlay .panel-footer {
+  text-align: right;
+}
 
-  .tag-overlay .tag-item {
-    font-size: 12px;
-    padding: 2px 3px;
-    border-radius: 3px;
-    margin-bottom: 3px;
-    display: inline-block;
-    text-decoration: none;
-  }
+.tag-overlay .tag-item {
+  font-size: 12px;
+  padding: 2px 3px;
+  border-radius: 3px;
+  margin-bottom: 3px;
+  display: inline-block;
+  text-decoration: none;
+}
 
-  .tag-overlay .tag-item-choosed {
-    background: #5bc0de;
-    color: #fff;
-  }
+.tag-overlay .tag-item-choosed {
+  background: #5bc0de;
+  color: #fff;
+}
 
-  .tags-choosed {
-    margin-bottom: 10px;
-  }
+.tags-choosed {
+  margin-bottom: 10px;
+}
 
 
-  .choosed-tag {
-    margin: 0 10px 10px 0;
-  }
+.choosed-tag {
+  margin: 0 10px 10px 0;
+}
 
-  .choosed-tag .disabled {
-    color: #444;
-    opacity: 1;
-  }
+.choosed-tag .disabled {
+  color: #444;
+  opacity: 1;
+}
 
-  .choosed-tag .glyphicon-remove {
-    color: #666;
-    font-size: 10px;
-  }
+.choosed-tag .glyphicon-remove {
+  color: #666;
+  font-size: 10px;
+}
 
-  .choosed-tag-template {
-    display: none;
-  }
+.choosed-tag-template {
+  display: none;
+}
+
+
+.content-list {
+  margin: 0 10px 0 40px;
+  padding: 0;
+  list-style: none;
+  border-left: 2px solid #ccc;
+}
+
+.content-list .item-chapter, .content-list .item-content  {
+  border: 1px solid #ccc;
+  background: #fff;
+  line-height: 40px;
+  margin-bottom: 15px;
+}
+
+.content-list .item-chapter {
+  margin-left: -30px;
+}
+
+.content-list .item-chapter-unit {
+  margin-left: -15px;
+}
+
+.content-list .item-content {
+  margin-left: 20px;
+}
+
+.content-list .item-line {
+  border-bottom: 2px solid #ccc;
+  vertical-align: top;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  margin-left: -21px;
+  float: left;
+}
+
+.content-list .item-content {
+  margin-left: 10px;
+  overflow: hidden;
+  height: 40px;
+  line-height: 40px;
+  float: left;
+  border: 0px;
+  margin-bottom: 0px;
+}
+
+.content-list .item-actions {
+  visibility: hidden;
+  background: #f3f3f3;
+  border-left: 1px solid #ddd;
+  margin-left: 10px;
+  position: absolute;
+  float: right;
+  right: 50px;
+}
+
+.content-list .item-actions a.dropdown-toggle:hover,
+.content-list .item-actions a.dropdown-toggle:focus,
+.content-list .item-actions .btn-link:hover,
+.content-list .item-actions .btn-link:hover {
+  text-decoration: none;
+}
+
+.content-list .item-chapter:hover .item-actions, .content-list .item-essay-content:hover .item-actions  {
+  visibility: visible;
+}
+
+.content-list .item-chapter:hover, .content-list .item-content:hover {
+  background: #f3f3f3;
+}
+
+.content-list .item-chapter, .content-list .item-essay-content  {
+  border: 1px solid #ccc;
+  background: #fff;
+  line-height: 40px;
+  margin-bottom: 15px;
+}
+
+.content-list .item-essay-content {
+  margin-left: 20px;
+}
+
+.essay-content-panel .panel-heading .sticky {
+  margin: 0;
+  background: #fff;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+}
