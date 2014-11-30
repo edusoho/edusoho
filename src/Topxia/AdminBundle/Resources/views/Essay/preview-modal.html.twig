@@ -11,7 +11,6 @@
     {% if 'chapter' in id %}
       <div>
         第 <span class="number">{{ item.number }}</span> {% if item.type == 'unit' %}节{% else %}章{% endif %}： {{ item.title }}
-        }
       </div>
     {% elseif 'content' in id %}
       <div>{{ item.title }}</div>
