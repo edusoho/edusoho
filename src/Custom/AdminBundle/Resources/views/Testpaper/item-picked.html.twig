@@ -1,0 +1,6 @@
+<table class="picked-items">
+{% include 'CustomAdminBundle:Testpaper:item-tr.html.twig' %}
+{% for question in subQuestions %}
+  {% include 'CustomAdminBundle:Testpaper:item-tr.html.twig' %}
+{% endfor %}
+</table>

@@ -1,0 +1,14 @@
+<tr>
+  <td>
+    {{ question.stem|fill_question_stem_text|plain_text(40) }}
+    {% if question.type == 'material' %}
+      <small class="text-muted">({{ question.subCount}}子题)</small>
+    {% endif %}
+  </td>
+  <td>{{ dict_text('questionType', question.type) }}</td>
+  <td>{{question.score }}</td>
+  <td>
+    <button data-url="{{ path('admin_question_preview', {id:question.id }) }}" class="btn btn-default btn-sm newWindowPreview">预览</button>
+    <button type="button" class="btn btn-primary btn-sm" data-role="picked-item" data-replace="{{ replace|default('') }}" data-url="{{ path('admin_testpaper_item_picked', {id:testpaper.id, questionId:question.id }) }}">{% if replace %}替换{% else %}选择{% endif %}</button>
+  </td>
+</tr>

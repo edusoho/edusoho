@@ -1,3 +1,61 @@
-custom_admin_homepage:
+admin_homepage:
     pattern:  /hello/{name}
     defaults: { _controller: CustomAdminBundle:Default:index }
+
+
+admin_testpaper:
+    pattern: /testpaper
+    defaults: { _controller: CustomAdminBundle:Testpaper:index }
+
+admin_testpaper_create:
+    pattern: /testpaper/create
+    defaults: { _controller: CustomAdminBundle:Testpaper:create }
+
+admin_testpaper_build_check:
+    pattern: /testpaper/build_check
+    defaults: { _controller: CustomAdminBundle:Testpaper:buildCheck }
+
+admin_testpaper_deletes:
+    pattern: /testpaper/deletes
+    defaults: { _controller: CustomAdminBundle:Testpaper:deletes }
+
+admin_testpaper_update:
+    pattern: /testpaper/{id}/update
+    defaults: { _controller: CustomAdminBundle:Testpaper:update }
+
+admin_testpaper_delete:
+    pattern: /testpaper/{id}/delete
+    defaults: { _controller: CustomAdminBundle:Testpaper:delete }
+
+admin_testpaper_publish:
+    pattern: /testpaper/{id}/publish
+    defaults: { _controller: CustomAdminBundle:Testpaper:publish }
+
+admin_testpaper_close:
+    pattern: /testpaper/{id}/close
+    defaults: { _controller: CustomAdminBundle:Testpaper:close }
+
+admin_testpaper_preview:
+    pattern: /testpaper/{id}/preview
+    defaults: { _controller: CustomAdminBundle:Testpaper:preview }
+
+
+admin_testpaper_items:
+    pattern: /testpaper/{id}/items
+    defaults: { _controller: CustomAdminBundle:Testpaper:items }
+
+admin_testpaper_items_reset:
+    pattern: /testpaper/{id}/items_reset
+    defaults: { _controller: CustomAdminBundle:Testpaper:itemsReset }
+
+admin_testpaper_item_picker:
+    pattern: /testpaper/{id}/item_picker
+    defaults: { _controller: CustomAdminBundle:Testpaper:itemPicker }
+
+admin_testpaper_item_picked:
+    pattern: /testpaper/{id}/item_picked
+    defaults: { _controller: CustomAdminBundle:Testpaper:itemPicked }
+
+admin_question_preview:
+    pattern: /question/{id}/preview
+    defaults: { _controller: CustomAdminBundle:Testpaper:preview }
