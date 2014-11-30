@@ -144,6 +144,10 @@ admin_tag_group_delete:
     defaults: { _controller: TopxiaAdminBundle:Tag2:groupDelete }
     methods:  [POST]
 
+admin_tag_source:
+    pattern:  /tag/course
+    defaults: { _controller: TopxiaAdminBundle:Tag2:sourceTags }
+
 admin_tag_delete:
     pattern:  /tag/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Tag2:delete }
@@ -1161,3 +1165,7 @@ admin_category_manage_question_category_sort:
     pattern: /category/{categoryId}/manage/question/category/sort
     defaults: { _controller: TopxiaAdminBundle:CourseQuestionCategoryManage:sort }
     methods: [POST]
+
+admin_category_question_tags:
+    pattern: /category/{categoryId}/question/tags
+    defaults: { _controller: TopxiaAdminBundle:CategoryQuestionManage:tags }

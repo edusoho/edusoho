@@ -245,6 +245,11 @@ class CategoryQuestionManageController extends BaseController
         ));
     }
 
+    public function tagsAction(Request $request, $categoryId)
+    {
+        $tagIds = $this->getQuestionService()->getQuestion();
+    }
+
     private function getQuestionTargetChoices($course)
     {
         $lessons = $this->getCourseService()->getCourseLessons($course['id']);
