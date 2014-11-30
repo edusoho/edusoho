@@ -63,12 +63,12 @@ define(function(require, exports, module) {
               maxTagNum: 1,
               choosedTags: $mainKnowledgeId
             });
-
             chooserTreeForMainKnowlege.on('change', function(tags) {
+              var temp = {};
               $.each(tags,function(i,item){
-                mainKnowledgeId = item.id;
+                temp = item.id;
               });
-              $('[data-role=main-knowledge-ids]').val(mainKnowledgeId);
+              $('[data-role=main-knowledge-ids]').val(temp);
             });
 
             chooserTreeForMainKnowlege.on('existed', function(existTag){
