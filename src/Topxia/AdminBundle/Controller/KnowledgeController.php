@@ -103,6 +103,13 @@ class KnowledgeController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function chooseredAction(Request $request)
+    {
+        $ids = $request->query->get('ids');
+        $knowledges = $this->getKnowledgeService()->findKnowledgeByIds($ids);
+        return $this->createJsonResponse($knowledges);
+    }
+
     public function checkCodeAction(Request $request)
     {
         $code = $request->query->get('value');
@@ -129,6 +136,56 @@ class KnowledgeController extends BaseController
         } else {
             $knowledges = $this->getKnowledgeService()->findNodesData($query['categoryId'], $parentId);
         }
+        return $this->createJsonResponse($knowledges);
+    }
+
+    public function getTreeAction(Request $request,$categoryId)
+    {
+        return $this->render('TopxiaAdminBundle:Knowledge:tree.html.twig',array('categoryId' => $categoryId));
+    }
+
+    public function getTreeListAction(Request $request)
+    {
+        $categoryId = $request->query->get('categoryId');
+        $parentId = $request->query->get('parentId');
+        $knowledges = $this->getKnowledgeService()->findKnowledgeByCategoryId($categoryId);
+        $childrenknowledges = $this->getKnowledgeService()->findChildrenKnowledgeByCategoryId($categoryId);
+        if (!empty($parentId)) {
+            $knowledges = $this->getKnowledgeService()->findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
+            $childrenknowledges = array();
+        }
+        $knowledges = $this->filterKnowledgeData($knowledges,$childrenknowledges);
+        return $this->createJsonResponse($knowledges);
+    }
+
+    private function filterKnowledgeData($knowledges,$childrenknowledges)
+    {
+        $array = array();
+
+        if (!empty($childrenknowledges)) {
+            $parentIds = ArrayToolkit::column($childrenknowledges,'parentId');
+        }
+        foreach ($knowledges as $key => $knowledge) {
+            $array[$key]['id'] = $knowledge['id'];
+            $array[$key]['name'] = $knowledge['name'];
+            if ($knowledge['parentId'] > 0) {
+                $array[$key]['isParent'] = false;
+            } else {
+                if (in_array($knowledge['id'], $parentIds)) {
+                    $array[$key]['isParent'] = true;
+                } else {
+                    $array[$key]['isParent'] = false;
+                }
+            }
+        }
+        return $array;
+    }
+
+    public function matchAction(Request $request)
+    {
+        $likeString = $request->query->get('q');
+
+        $knowledges = $this->getKnowledgeService()->searchKnowledge(array('keywords'=>$likeString),array('createdTime', 'DESC'), 0, 10);
         return $this->createJsonResponse($knowledges);
     }
 

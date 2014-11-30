@@ -91,6 +91,14 @@ admin_blockhistory_preview:
     pattern:  /blockhistory/{id}/preview
     defaults: { _controller: TopxiaAdminBundle:Block:preview }
 
+admin_tag_chooser_twig:
+    pattern:  /tag/chooserTwig
+    defaults: { _controller: TopxiaAdminBundle:Tag2:chooserTwig }
+
+admin_tags_choosered:
+    pattern:  /tags/Choosered
+    defaults: { _controller: TopxiaAdminBundle:Tag2:tagsChoosered }
+
 admin_tag:
     pattern:  /tag/group
     defaults: { _controller: TopxiaAdminBundle:Tag2:index }
@@ -98,6 +106,14 @@ admin_tag:
 admin_tag_list:
     pattern:  /tag/{id}/list
     defaults: { _controller: TopxiaAdminBundle:Tag2:list }
+
+admin_tag_all_get:
+    pattern:  /tagset/get
+    defaults: { _controller: TopxiaAdminBundle:Tag2:getTagset }
+
+admin_tag_match:
+    pattern:  /tagset/match
+    defaults: { _controller: TopxiaAdminBundle:Tag2:tagsetMatch }
 
 admin_tag_group_create:
     pattern:  /tag/group/create
@@ -726,6 +742,14 @@ admin_knowledge_create:
     pattern: /category/{categoryId}/manage/knowledge/create
     defaults: { _controller: TopxiaAdminBundle:Knowledge:create }
 
+admin_knowledge_match:
+    pattern: knowledge/match
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:match }
+
+admin_knowledge_choosered:
+    pattern: knowledge/choosered
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:choosered }
+
 admin_knowledge_delete:
     pattern: /knowledge/delete
     defaults: { _controller: TopxiaAdminBundle:Knowledge:delete }
@@ -743,6 +767,14 @@ admin_knowledge_getNodes:
 admin_knowledge_sort:
     pattern:  /knowledge/sort
     defaults: { _controller: TopxiaAdminBundle:Knowledge:sort }
+
+admin_knowledge_list:
+    pattern:  /knowledge/getTree
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:getTree }
+
+admin_knowledge_tree_list:
+    pattern:  /knowledge/getTreeList
+    defaults: { _controller: TopxiaAdminBundle:Knowledge:getTreeList }
 
 admin_file:
     pattern:  /file

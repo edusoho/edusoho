@@ -99,6 +99,13 @@ class CoursewareController extends BaseController
         ));
     }
 
+    public function tagsChooseredAction(Request $request,$id)
+    {
+        $courseware = $this->getCoursewareService()->getCourseware($id);
+
+        return $this->createJsonResponse($courseware);
+    }
+
     public function deleteAction(Request $request)
     {
         $ids = $request->request->get('ids', array());

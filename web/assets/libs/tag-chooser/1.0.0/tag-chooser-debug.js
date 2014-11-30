@@ -18,9 +18,9 @@ define("tag-chooser/1.0.0/tag-chooser-debug", ["jquery"], function(require, expo
     _tagOverlay: null,
     _autocomplete: null,
     events: {
+      'click .dropdown': '_onClickDropdown',
       'click .tag-item': '_onClickTagItem',
-      'click [data-role=dropdown-trigger]': '_onClickDropdown',
-      'click [data-role=tag-remove]': '_onClickTagRemove',
+      'click .tag-remove': '_onClickTagRemove',
       'blur [data-role=tag-input]': '_onBlurTagInput'
     },
     setup: function() {
@@ -44,7 +44,7 @@ define("tag-chooser/1.0.0/tag-chooser-debug", ["jquery"], function(require, expo
         return;
       }
       $.get(this.get('sourceUrl'), function(html) {
-        self.$('[data-role=dropdown-content]').html(html);
+        self.$('[data-role=tags-list]').html(html);
         self._refreshDropdownChoosedTags();
         self._sourceDataInited = true;
       });
@@ -73,7 +73,7 @@ define("tag-chooser/1.0.0/tag-chooser-debug", ["jquery"], function(require, expo
       var $newTag = this.$('.choosed-tag-template').clone().removeClass('choosed-tag-template');
       $newTag.data(newTag).addClass('choosed-tag-' + newTag.id);
       $newTag.find('.tag-name-placeholder').html(newTag.name);
-      this.$('.tagchooser-choosed').append($newTag).show();
+      this.$('.tags-choosed').append($newTag);
       this._renderAddTagDropdownView(newTag);
       // 插入标签后，重新计算浮层的位置。
       if (this._tagOverlay.get('visible')) {
@@ -85,7 +85,7 @@ define("tag-chooser/1.0.0/tag-chooser-debug", ["jquery"], function(require, expo
       return !!(this.get('choosedTags')[id]);
     },
     getHeight: function() {
-      return this.element.height() + this.$('.tagchooser-dropdown').height();
+      return this.element.height() + this.$('.tag-overlay').height();
     },
     _onClickTagRemove: function(e) {
       this.removeTag($(e.currentTarget).parents('.choosed-tag').data('id'));
@@ -114,6 +114,7 @@ define("tag-chooser/1.0.0/tag-chooser-debug", ["jquery"], function(require, expo
         trigger: this.$('[data-role=tag-input]'),
         dataSource: this.get('matchUrl'),
         width: this.$('[data-role=tag-input]').width(),
+        zIndex: 2000,
         selectFirst: true
       }).render();
       var self = this;
@@ -139,7 +140,7 @@ define("tag-chooser/1.0.0/tag-chooser-debug", ["jquery"], function(require, expo
       var self = this;
       message = '<span class="text-danger">' + message + '</span>';
       if (this._tagOverlay.get('visible')) {
-        this.element.find('[data-role=dropdown-error]').html(message).removeClass('hide');
+        this.element.find('[data-role=overlay-error]').html(message).removeClass('hide');
       } else {
         this.element.find('[data-role=input-error]').html(message).removeClass('hide');
       }
@@ -148,14 +149,14 @@ define("tag-chooser/1.0.0/tag-chooser-debug", ["jquery"], function(require, expo
       }, 3000);
     },
     _hideError: function() {
-      this.element.find('[data-role=dropdown-error]').html('').addClass('hide');
+      this.element.find('[data-role=overlay-error]').html('').addClass('hide');
       this.element.find('[data-role=input-error]').html('').addClass('hide');
     },
     _initDorpdownOverlay: function() {
       var overlayY = this.$('.input-group').height();
       var overlayWidth = this.$('.input-group').width();
       var overlay = new Overlay({
-        element: this.$('.tagchooser-dropdown'),
+        element: this.$('.tag-overlay'),
         width: overlayWidth,
         align: {
           baseElement: this.$('.input-group'),
@@ -164,9 +165,9 @@ define("tag-chooser/1.0.0/tag-chooser-debug", ["jquery"], function(require, expo
       });
       this._tagOverlay = overlay;
       if (!this.get('alwaysShow')) {
-        overlay._blurHide([overlay.element, this.$('[data-role=dropdown-trigger]')]);
+        overlay._blurHide([overlay.element, this.$('.dropdown')]);
       } else {
-        this.$('[data-role=dropdown-trigger]').click();
+        this.$('.dropdown').click();
       }
     },
     _initChoosedTags: function() {
@@ -187,17 +188,14 @@ define("tag-chooser/1.0.0/tag-chooser-debug", ["jquery"], function(require, expo
     _refreshDropdownChoosedTags: function() {
       var self = this;
       $.each(this.get('choosedTags'), function(i, tag) {
-        self.$('.tagchooser-dropdown').find('.tag-item-' + tag.id).addClass('tag-item-choosed');
+        self.$('.tag-overlay').find('.tag-item-' + tag.id).addClass('tag-item-choosed');
       });
     },
     // 移除Tag，但不发送change事件
     _removeTag: function(id) {
       delete this.get('choosedTags')[id];
       this._choosedTagsNum--;
-      this.$('.tagchooser-choosed').find('.choosed-tag-' + id).remove();
-      if (this._choosedTagsNum == 0) {
-        this.$('.tagchooser-choosed').hide();
-      }
+      this.$('.tags-choosed').find('.choosed-tag-' + id).remove();
       this._renderRemoveTagDropdownView(id);
       if (this._tagOverlay.get('visible')) {
         this._tagOverlay._setPosition();
@@ -205,10 +203,10 @@ define("tag-chooser/1.0.0/tag-chooser-debug", ["jquery"], function(require, expo
     },
     _renderAddTagDropdownView: function(newTag) {
       // 更新下拉框中的选中状态
-      this.$('.tagchooser-dropdown').find('.tag-item-' + newTag.id).addClass('tag-item-choosed');
+      this.$('.tag-overlay').find('.tag-item-' + newTag.id).addClass('tag-item-choosed');
     },
     _renderRemoveTagDropdownView: function(id) {
-      this.$('.tagchooser-dropdown').find('.tag-item-' + id).removeClass('tag-item-choosed');
+      this.$('.tag-overlay').find('.tag-item-' + id).removeClass('tag-item-choosed');
     }
   });
   module.exports = TagChooser;
