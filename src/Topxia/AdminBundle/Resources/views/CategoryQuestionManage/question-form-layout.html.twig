@@ -144,7 +144,8 @@
           <input type="hidden" data-role='main-knowledge-ids' name="mainKnowledgeId" value="{{ question.mainKnowledgeId|default('') }}">
           <input type="hidden" data-role='related-knowledge-ids' name="relatedKnowledgeIds"value="{{ question.relatedKnowledgeIds|default('') }}">
 
-        <input type="hidden" data-role='categoryId' value="{{category.id}}">
+        <input type="hidden" data-role='categoryId' value="{{ category.id }}">
+        <input type="hidden" name="target" value="{{ question.target|default('') }}">
         <input type="hidden" name="submission">
         <input type="hidden" name="type" value="{{ question.type }}">
         <input type="hidden" name="parentId" value="{{ parentQuestion.id|default(0) }}">
