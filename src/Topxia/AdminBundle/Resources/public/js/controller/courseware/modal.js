@@ -35,13 +35,11 @@ define(function(require, exports, module){
                   sourceUrl: '/admin/tagset/get',
                   queryUrl: '/admin/tags/Choosered',
                   matchUrl: '/admin/tagset/match?q={{query}}',
-                  maxTagNum: 3,
+                  maxTagNum: 15,
                   choosedTags: $tagIds
                 });
 
                 chooser.on('change', function(tags) {
-
-                  console.log('change tags', tags);
                   var tagIdsTemp = [];
                   $.each(tags,function(i,item){
                       tagIdsTemp.push(item.id)
@@ -50,7 +48,6 @@ define(function(require, exports, module){
                 });
 
                 chooser.on('existed', function(existTag){
-                  console.log('existed');
                 });
             }
 
@@ -73,7 +70,6 @@ define(function(require, exports, module){
 
                 chooserTreeForMainKnowlege.on('change', function(tags) {
 
-                  console.log('change tags', tags);
                   $.each(tags,function(i,item){
                     mainKnowledgeId = item.id;
                   });
@@ -81,7 +77,6 @@ define(function(require, exports, module){
                 });
 
                 chooserTreeForMainKnowlege.on('existed', function(existTag){
-                  console.log('existed');
                 });
             }
          
@@ -103,8 +98,6 @@ define(function(require, exports, module){
 
             chooserTreeForRelatedKnowlege.on('change', function(tags) {
 
-              console.log('change tags', tags);
-
               var relatedKnowledgeIdsTemp = [];
               $.each(tags,function(i,item){
                   relatedKnowledgeIdsTemp.push(item.id)
@@ -114,7 +107,6 @@ define(function(require, exports, module){
             });
 
             chooserTreeForRelatedKnowlege.on('existed', function(existTag){
-              console.log('existed');
             });
          }
 
@@ -182,7 +174,7 @@ define(function(require, exports, module){
         });
 
         var tagModalChooser = new TagChooser({
-            element: '#tag-modal-chooser',
+            element: '#tag-chooser',
             sourceUrl: 'xxxx',
             multi: true,
             items: []
@@ -192,7 +184,6 @@ define(function(require, exports, module){
             var tagIds = [];
             for (var i = items.length - 1; i >= 0; i--) {
                 tagIds[i] = items[i]['id'];
-                console.log(items[i]['id']);
             };
             $('#courseware-tag-field').val(tagIds);
         });

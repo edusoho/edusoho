@@ -36,7 +36,6 @@ define(function(require, exports, module) {
 
             chooser.on('change', function(tags) {
 
-              console.log('change tags', tags);
               var tagIdsTemp = [];
               $.each(tags,function(i,item){
                   tagIdsTemp.push(item.id)
@@ -45,7 +44,6 @@ define(function(require, exports, module) {
             });
 
             chooser.on('existed', function(existTag){
-              console.log('existed');
             });
         }
 
@@ -67,8 +65,6 @@ define(function(require, exports, module) {
             });
 
             chooserTreeForMainKnowlege.on('change', function(tags) {
-
-              console.log('change tags', tags);
               $.each(tags,function(i,item){
                 mainKnowledgeId = item.id;
               });
@@ -76,7 +72,6 @@ define(function(require, exports, module) {
             });
 
             chooserTreeForMainKnowlege.on('existed', function(existTag){
-              console.log('existed');
             });
         }
 

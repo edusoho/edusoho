@@ -51,10 +51,8 @@ define("tag-chooser/1.0.0/tag-tree-chooser-debug", ["jquery"], function(require,
                 id: treeNode.id,
                 name: treeNode.name
               });
-              console.log('on added:', self.get('choosedTags'));
             } else {
               self.removeTag(treeNode.id);
-              console.log('on remove:', self.get('choosedTags'));
             }
           },
           beforeCheck: function(treeId, treeNode) {
