@@ -1,13 +1,12 @@
 define(function(require, exports, module) {
 
-	var Validator = require('bootstrap.validator');
+    var Validator = require('bootstrap.validator');
        var Notify = require('common/bootstrap-notify');
        require('jquery.sortable');
 
-	exports.run = function() {
-        
+    exports.run = function() {
+        var sortList = function($list) {
 
-      var sortList = function($list) {
             var data = $list.sortable("serialize").get();
             $.post($list.data('sortUrl'), {ids:data}, function(response){
                 var lessonNum = chapterNum = unitNum = 0;
@@ -25,7 +24,6 @@ define(function(require, exports, module) {
                         unitNum = 0;
                         $item.find('.number').text(chapterNum);
                     }
-
                 });
             });
         };

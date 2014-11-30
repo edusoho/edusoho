@@ -204,6 +204,25 @@ class Tag2Controller extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function sourceTagsAction(Request $request)
+    {
+
+        $tagGroupCount = $this->getTagService()->getAll2GroupCount();
+
+        $tagGroups = $this->getTagService()->findAllTag2Groups(
+            $tagGroupCount , $tagGroupCount 
+        );
+
+        $tagGroupIds = ArrayToolkit::column($tagGroups,'id');
+        $tags = $this->getTagService()->findTagsByTagGroupIds($tagGroupIds);
+        $tags = ArrayToolkit::group($tags,'groupId');
+
+        return $this->render('TopxiaAdminBundle:Tag2:tag-source.html.twig', array(
+            'tagGroups' => $tagGroups,
+            'tags' => $tags,
+        ));
+    }
+
     private function getTagSets($tagGroups,$tags)
     {
         $tagSet = array();

@@ -25,7 +25,6 @@ define(function(require, exports, module) {
         if($.isEmptyObject(tmp)){
             return false;
         }
-        console.log(local);
         for(var key in tmp){
             if(key!="courseId" 
                 && key!="lessonId" 

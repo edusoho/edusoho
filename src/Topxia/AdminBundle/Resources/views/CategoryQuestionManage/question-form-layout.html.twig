@@ -6,7 +6,8 @@
 {% set script_controller = 'quiz-question/create' %}
 
 {% block main %}
-
+<link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
+<link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser.css') }}" />
 {% set parentQuestion = parentQuestion|default(null) %}
 
 <div class="panel panel-default panel-col">
@@ -45,6 +46,36 @@
           </div>
         </div>
         {% endif %} #}
+            <div class="form-group">
+              <label class="col-md-2 control-label" for="courseware-mainKnowledgeId-field">
+                主知识点
+              </label>
+
+                  <div class="col-md-6 controls">
+                    {% include('TopxiaWebBundle:TagChooser:tag-chooser-tree-main-knowledge.html.twig') %}
+              </div>
+
+            </div>
+            <div class="form-group">
+              <label class="col-md-2 control-label" for="courseware-relatedKnowledgeIds-field">
+                关联知识点
+              </label>
+              <div class="col-md-6 controls">
+                {% include('TopxiaWebBundle:TagChooser:tag-chooser-tree-related-knowledge.html.twig') %}
+                
+              {#  <input class="form-control" id="courseware-relatedKnowledgeIds-field" type="text" name="relatedKnowledgeIds" value="{{ courseware.relatedKnowledgeIds|default(null) }}" > #}
+              </div>
+            </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="courseware-relatedKnowledgeIds-field">
+                      标签
+                    </label>
+
+                  <div class="col-md-6 controls">
+                    {% include('TopxiaWebBundle:TagChooser:tag-chooser.html.twig') %}
+              </div>
+            </div>
 
         <div class="form-group">
           <div class="col-md-2 control-label"><label>难度</label></div>
@@ -108,6 +139,13 @@
           </div>
         </div>
 
+ 
+          <input type="hidden" data-role='tag-ids' name="tagIds" value="{{ question.tagIds|default('') }}">
+          <input type="hidden" data-role='main-knowledge-ids' name="mainKnowledgeId" value="{{ question.mainKnowledgeId|default('') }}">
+          <input type="hidden" data-role='related-knowledge-ids' name="relatedKnowledgeIds"value="{{ question.relatedKnowledgeIds|default('') }}">
+
+        <input type="hidden" data-role='categoryId' value="{{ category.id }}">
+        <input type="hidden" name="target" value="{{ question.target|default('') }}">
         <input type="hidden" name="submission">
         <input type="hidden" name="type" value="{{ question.type }}">
         <input type="hidden" name="parentId" value="{{ parentQuestion.id|default(0) }}">

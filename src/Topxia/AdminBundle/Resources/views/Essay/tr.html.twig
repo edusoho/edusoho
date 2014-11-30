@@ -1,0 +1,31 @@
+{% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
+<tr id="essay-{{ essay.id }}">
+    <td><input value="{{essay.id}}" type="checkbox" data-role="batch-item" ></td>
+    <td>
+            <span class="text-muted">{{ essay.title | slice(0,22) }}{% if essay.title|length >22 %}...{% endif %}</span>
+    </td>
+    <td>{{ dict_text('essayStatus:html', essay.status) }}</td>
+    <td>{{ admin_macro.user_link(user) }}</td>
+    <td>{{ essay.createdTime|date('Y-n-d H:i') }}</td>
+
+    <td>
+          <a data-url="{{ path('admin_essay_edit',{categoryId:category.id,id:essay.id}) }}" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" >编辑</a>
+        <div class="btn-group">
+          <a href="{{ path('admin_essay_content_index', {essayId:essay.id}) }}" type="button" class="btn btn-default btn-sm">管理</a>          
+          <a href="#" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="btn-link" data-role="preview-item" data-url="{{ path('admin_essay_preview', {id:essay.id}) }}" data-toggle="modal" data-target="#modal" data-toggle="tooltip" data-placement="bottom">预览</a></li>
+
+            {% if essay.status != 'published' %}
+                <li><a href="javascript:;" data-role="publish-item" data-url="{{ path('admin_essay_publish', {id:essay.id}) }}">发布</a></li>
+            {% endif %}
+            {% if essay.status == 'published' %}
+                <li><a href="javascript:;" data-role="unpublish-item" data-url="{{ path('admin_essay_unpublish', {id:essay.id}) }}">取消发布</a></li>
+            {% endif %}
+            <li><a href="javascript:;" data-role="delete-item" data-id="{{ essay.id }}" data-url="{{ path('admin_essay_delete') }}">删除</a></li>
+          </ul>
+        </div>
+    </td>
+</tr>

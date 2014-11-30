@@ -146,15 +146,9 @@ class KnowledgeController extends BaseController
 
     public function getTreeListAction(Request $request)
     {
-        $categoryId = $request->query->get('categoryId');
-        $parentId = $request->query->get('parentId');
-        $knowledges = $this->getKnowledgeService()->findKnowledgeByCategoryId($categoryId);
-        $childrenknowledges = $this->getKnowledgeService()->findChildrenKnowledgeByCategoryId($categoryId);
-        if (!empty($parentId)) {
-            $knowledges = $this->getKnowledgeService()->findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
-            $childrenknowledges = array();
-        }
-        $knowledges = $this->filterKnowledgeData($knowledges,$childrenknowledges);
+        $query = $request->query->all();
+        $parentId = empty($query['id']) ? 0 : $query['id'];
+        $knowledges = $this->getKnowledgeService()->findAllNodesData($query['categoryId'], $parentId);
         return $this->createJsonResponse($knowledges);
     }
 

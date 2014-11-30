@@ -178,6 +178,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             ->andWhere('difficulty = :difficulty')
             ->andWhere('categoryId = :categoryId')
             ->andWhere('type = :type')
+            ->andWhere('mainKnowledgeId = :mainKnowledgeId')
             ->andWhere('stem LIKE :stem');
 
         if (isset($conditions['types'])) {  
@@ -207,6 +208,18 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             }
         }
 
+        if (isset($conditions['tagIds'])) {
+
+            $tagIds = $conditions['tagIds'];
+            $tagIds = explode(',', $tagIds);
+            foreach ($tagIds as $key => $tagId) {
+                if (preg_match('/^[0-9]+$/', $tagId)) {
+
+                    $builder->andStaticWhere("tagIds LIKE '%{$tagId}%'");
+                }
+            }
+
+        }
         return $builder;
     }
 

@@ -36,16 +36,22 @@
 
     {% if not parentQuestion %}
       <form class="form-inline well well-sm" action="" method="get" novalidate>
+        
 {#         <div class="form-group">
-          <select class="form-control" name="type">
-            {{ select_options(dict('questionType'), app.request.query.get('type'), '--按题型--') }}
-          </select>
-        </div> #}
- 
-        <div class="form-group">
           <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
-        </div>
 
+        </div> #}
+
+        <div class="form-group">
+          <div class="controls" style="width:300px;">
+            {% include('TopxiaWebBundle:TagChooser:tag-chooser-tree-main-knowledge.html.twig') %}
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="controls" style="width:300px;">
+            {% include('TopxiaWebBundle:TagChooser:tag-chooser.html.twig') %}
+          </div>
+        </div>
         <button class="btn btn-primary btn-sm">搜索</button>
         <br>
 
@@ -76,7 +82,9 @@
           </div>
         
         </div>
-
+        <input type="hidden" data-role='tag-ids' name="tagIds" value="{{ app.request.query.get('tagIds') }}">
+        <input type="hidden" data-role='main-knowledge-ids' name="mainKnowledgeId" value="{{ app.request.query.get('mainKnowledgeId') }}">
+        <input type="hidden" data-role='categoryId' value="{{ category.id }}">
       </form>
     {% endif %}
 

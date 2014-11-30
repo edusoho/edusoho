@@ -1,0 +1,16 @@
+<div class="row">
+  {% for tagGroup in tagGroups %}
+    <div class="col-xs-3">{{ tagGroup.name }}</div>
+    <div class="col-xs-9">
+      <div class="row">
+        {% for tag in tags[tagGroup.id] %}
+        <div class="col-xs-4">
+          <a class="tag-item tag-item-1" href="javascript:;" data-id="{{ tag.id }}" data-name="{{ tag.name }}">
+            {{ tag.name }}
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>

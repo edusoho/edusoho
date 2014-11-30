@@ -9,7 +9,7 @@ use Topxia\Service\Question\QuestionService;
 
 class CategoryQuestionManageController extends BaseController
 {
-
+    /* @to-do 权限判断 */
     public function indexAction(Request $request, $categoryId)
     {
         $category = $this->getCategoryService()->getCategory($categoryId);
@@ -130,7 +130,7 @@ class CategoryQuestionManageController extends BaseController
 
     public function updateAction(Request $request, $categoryId, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($categoryId);
+        $category = $this->getCategoryService()->getCategory($categoryId);
 
         if ($request->getMethod() == 'POST') {
             $question = $request->request->all();
@@ -139,7 +139,7 @@ class CategoryQuestionManageController extends BaseController
 
             $this->setFlashMessage('success', '题目修改成功！');
 
-            return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_question',array('categoryId' => $categoryId,'parentId' => $question['parentId']))));
+            return $this->redirect($request->query->get('goto', $this->generateUrl('admin_category_manage_question',array('categoryId' => $categoryId,'parentId' => $question['parentId']))));
         }
 
         $question = $this->getQuestionService()->getQuestion($id);
@@ -150,18 +150,17 @@ class CategoryQuestionManageController extends BaseController
         }
 
         return $this->render("TopxiaAdminBundle:CategoryQuestionManage:question-form-{$question['type']}.html.twig", array(
-            'course' => $course,
+            'category' => $category,
             'question' => $question,
             'parentQuestion' => $parentQuestion,
-            'targetsChoices' => $this->getQuestionTargetChoices($course),
-            'categoryChoices' => $this->getQuestionCategoryChoices($course),
+/*            'targetsChoices' => $this->getQuestionTargetChoices($course),
+            'categoryChoices' => $this->getQuestionCategoryChoices($course),*/
         ));
 
     }
 
     public function deleteAction(Request $request, $categoryId, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($categoryId);
         $question = $this->getQuestionService()->getQuestion($id);
         $this->getQuestionService()->deleteQuestion($id);
         
@@ -170,8 +169,6 @@ class CategoryQuestionManageController extends BaseController
 
     public function deletesAction(Request $request, $categoryId)
     {   
-        $course = $this->getCourseService()->tryManageCourse($categoryId);
-
         $ids = $request->request->get('ids');
         foreach ($ids ? : array() as $id) {
             $this->getQuestionService()->deleteQuestion($id);
@@ -243,6 +240,11 @@ class CategoryQuestionManageController extends BaseController
             'type' => $type,
             'questionPreview' => $questionPreview
         ));
+    }
+
+    public function tagsAction(Request $request, $categoryId)
+    {
+        $tagIds = $this->getQuestionService()->getQuestion();
     }
 
     private function getQuestionTargetChoices($course)
