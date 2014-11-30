@@ -68,7 +68,7 @@ define(function(require, exports, module){
             chooserTreeForMainKnowlege.on('change', function(tags) {
 
               $.each(tags,function(i,item){
-                mainKnowledgeId = item.id;
+                mainKnowledgeId = [item.id];
               });
 
             });
@@ -125,12 +125,21 @@ define(function(require, exports, module){
                 element: '#article-material-form',
                 failSilently: true,
                 triggerType: 'change',
+                autoSubmit: false,
                 onFormValidated: function(error, results, $form) {
                     if (error) {
                         return false;
                     }
-                    $('#article-material-operate-btn').button('loading').addClass('disabled');
-                    Notify.success('操作成功！');
+
+                    $('#article-material-operate-btn').button('submiting').button('loading').addClass('disabled');
+                    tagIds = tagIds.join(",");
+                    relatedKnowledgeIds = relatedKnowledgeIds.join(",");
+
+                    $.post($form.attr('action'), $form.serialize()+'&tagIds='+tagIds+'&mainKnowledgeId='+mainKnowledgeId+'&relatedKnowledgeIds='+relatedKnowledgeIds, function(html) {
+                        Notify.success('操作成功！');
+                        window.location.reload();
+                    });
+
                 }
             });
 

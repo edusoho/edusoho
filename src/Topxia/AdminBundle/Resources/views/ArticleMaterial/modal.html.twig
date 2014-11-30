@@ -2,6 +2,10 @@
 {% block title %}{% if articleMaterial|default(null) %}编辑{% else %}添加{% endif %}素材{% endblock %}
 
 {% block body %}
+
+	<link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
+	<link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser.css') }}" />
+
 	<div id="article-material-creater-widget">
 	<form id="article-material-form" class="form-horizontal" action="{% if articleMaterial|default(null) %}{{ path('admin_article_material_edit',{categoryId:category.id,id:articleMaterial.id}) }}{% else %}{{ path('admin_article_material_create',{categoryId:category.id}) }} {% endif %}" method="post">
 

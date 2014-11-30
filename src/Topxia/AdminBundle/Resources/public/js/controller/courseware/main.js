@@ -1,11 +1,65 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var TagChooser = require("tag-chooser");
-          require("widget");
-    var Overlay = require("overlay");
-          require("autocomplete");
+    var Overlay = require("arale-overlay");
 
     exports.run = function() {
+
+
+        var overlay = new Overlay({
+          element: $('.tagchooser-overlay'),
+          width: 400,
+          align: {
+            baseElement: $('.tag-search-group'),
+            baseXY: [0, 36]
+          }
+        });
+
+        var chooser;
+
+        $('.tag-search-trigger').click(function() {
+          overlay.show();
+
+          // if (chooser) {
+          //   return ;
+          // }
+
+          chooser = new TagChooser({
+            element: '#tagchooser-example-3',
+            sourceUrl: '/admin/tagset/get',
+            queryUrl: '/admin/tags/Choosered',
+            matchUrl: '/admin/tagset/match?q={{query}}',
+            maxTagNum: 4,
+            choosedTags: [1, 2, 3],
+            alwaysShow: true
+          });
+
+          // chooser.on('change', function(tags) {
+          //   overlay.set('height', this.getHeight() + 70);
+          // });
+
+          // chooser.on('existed', function(existTag){
+          //   console.log('existed');
+          // });
+
+
+        });
+
+        $('.tag-search-confrim').click(function() {
+          overlay.hide();
+          var tags = chooser.get('choosedTags');
+          var tagNames = [];
+          $.each(tags, function(i, tag) {
+            tagNames.push(tag.name);
+          });
+          var btnText = tagNames.length >0 ? tagNames.join(',') : '全选';
+          $('.tag-search-trigger').text(btnText);
+        });
+
+        $('.tag-search-cancel').click(function(){
+          overlay.hide();
+        });
+
         $('.method-form-group').on('change',function(){
             if ($('.title-form-group').hasClass('hide')){
                 $('.tagIds-form-group').addClass('hide');
@@ -73,58 +127,6 @@ define(function(require, exports, module) {
         }).on('mouseleave','.item-courseware',function(){
             $(this).find('.courseware-thumb-title').removeClass('hide');
             $(this).find('.courseware-thumb-btn').addClass('hide');
-        });
-
-        var overlay = new Overlay({
-              element: $('.tagchooser-overlay'),
-              width: 400,
-              align: {
-                baseElement: $('.tag-search-group'),
-                baseXY: [0, 36]
-              }
-        });
-
-        var chooser;
-
-        $('.tag-search-trigger').click(function() {
-          overlay.show();
-
-          if (chooser) {
-            return ;
-          }
-
-        chooser = new TagChooser({
-            element: '#tagchooser-example-3',
-            sourceUrl: 'data-source-tags.html',
-            queryUrl: 'data-choosed-tags.json',
-            matchUrl: 'data-match-tags.json?q={{query}}',
-            maxTagNum: 4,
-            choosedTags: [1, 2, 3],
-            alwaysShow: true
-        });
-
-            chooser.on('change', function(tags) {
-                overlay.set('height', this.getHeight() + 70);
-            });
-
-            chooser.on('existed', function(existTag){
-                console.log('existed');
-            });
-        });
-
-        $('.tag-search-confrim').click(function() {
-            overlay.hide();
-            var tags = chooser.get('choosedTags');
-            var tagNames = [];
-            $.each(tags, function(i, tag) {
-            tagNames.push(tag.name);
-            });
-            var btnText = tagNames.length >0 ? tagNames.join(',') : '全选';
-            $('.tag-search-trigger').text(btnText);
-        });
-
-        $('.tag-search-cancel').click(function(){
-            overlay.hide();
         });
 
     };

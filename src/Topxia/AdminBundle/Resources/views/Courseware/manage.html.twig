@@ -7,8 +7,8 @@
 {% set script_controller = 'courseware/main' %}
 
 {% block main %}
-  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser.css') }}" />
-
+ <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser2.css') }}" />
 <div class="page-header clearfix">
   <h1 class="pull-left">课件管理</h1>
     <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_courseware_create', {categoryId:category.id}) }}">添加课件</button>
@@ -20,12 +20,12 @@
       <span class="glyphicon glyphicon-tasks"></span>
     </div>
 
-    <div class="form-group">
+{#     <div class="form-group">
       <select class="form-control method-form-group" name="method">
         {{ select_options(dict('courseware'), app.request.query.get('method')) }}
       </select>
     </div>
-
+ #}
     <div class="form-group tagIds-form-group {% if method == 'title' %}hide{% endif %}">
 {#       {% set tagIds = app.request.get('tagIds') %}
       {% include 'TopxiaAdminBundle:Courseware:tag-widget.html.twig' %} #}
@@ -35,13 +35,13 @@
 
       <input class="form-control" type="text" placeholder="标题关键词搜索" name="title" value="{{ app.request.get('title') }}">
     </div>
-    <div class="form-group">
-      {% include('TopxiaWebBundle:TagChooser:form-search.html.twig') %}
-    </div>
 
     <button class="btn btn-primary">搜索</button>
 
   </form>
+    <div class="form-group">
+      {% include('TopxiaWebBundle:TagChooser:form-search.html.twig') %}
+    </div>
 <div class="courseware-list">
   {% block list %}{% endblock %}
 
