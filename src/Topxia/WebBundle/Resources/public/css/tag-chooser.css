@@ -1,0 +1,61 @@
+	#tag-chooser {
+	  position: relative;
+	}
+
+	.tag-overlay {
+	  position: absolute;
+	  left: 0;
+	  top: 0;
+	  display: none;
+	}
+
+	.tag-overlay .panel-footer {
+	  text-align: right;
+	}
+
+	.tag-overlay .tag-item {
+	  font-size: 12px;
+	  padding: 2px 3px;
+	  border-radius: 3px;
+	  margin-bottom: 3px;
+	  display: inline-block;
+	  text-decoration: none;
+	}
+
+	.tag-overlay .tag-item-choosed {
+	  background: #5bc0de;
+	  color: #fff;
+	}
+
+	.choosed-tag {
+	  margin: 0 10px 10px 0;
+	}
+
+	.choosed-tag .disabled {
+	  color: #444;
+	  opacity: 1;
+	}
+
+	.choosed-tag .glyphicon-remove {
+	  color: #666;
+	  font-size: 10px;
+	}
+
+	.choosed-tag-template {
+	  display: none;
+	}
+	  .ui-select a,
+	  .ui-select-trigger{color:#7d7d7d;font-size:14px;text-decoration:none}
+	  .ui-select a:hover,.ui-select-trigger:hover{text-decoration:none}
+	  .ui-select{display:inline-block;*display:inline;*zoom:1;background:#fff;color:#7d7d7d;font-size:14px}
+	  .ui-select-content{margin:-1px 0 0;padding:0;overflow:auto;height:100%;list-style:none;border:1px solid #ccc}
+	  .ui-select-content ul{list-style:none;padding:0;margin:0}
+	  .ui-select-item{display:block;padding:10px 15px;cursor:pointer;overflow:hidden;white-space:nowrap}
+	  .ui-select-item:hover,.ui-select-item-hover{background:#f2f2f2}
+	  .ui-select-item-disabled,.ui-select-item-disabled a{cursor:not-allowed;color:#ccc}
+	  .ui-select-item-disabled:hover,.ui-select-item-disabled a:hover{background:#fff}
+	  .ui-select-trigger{position:relative;display:inline-block;*display:inline;*zoom:1;border:1px solid #ccc;height:30px;line-height:30px;text-indent:15px;background:-webkit-linear-gradient(top,#fbfbfb,#f3f3f3);background:-moz-linear-gradient(top,#fbfbfb,#f3f3f3);filter:progid:DXImageTransform.Microsoft.Gradient(startColorstr=#fbfbfb, endColorstr=#f3f3f3)}
+	  .ui-select-trigger i{position:absolute;top:0;right:15px;line-height:28px;text-indent:0;font-size:14px;cursor:pointer}
+	  .ui-select-trigger:hover{border:1px solid #999}
+	  .ui-select .ui-select-trigger{display:block}
+	  .ui-select-disabled,.ui-select .ui-select-disabled{color:#aaa;cursor:not-allowed}

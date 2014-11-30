@@ -43,6 +43,8 @@ seajs.config({
 		'ztree': 'gallery/ztree/3.5.14/ztree.js',
 		'ztree-css': 'gallery/ztree/3.5.14/ztree.css',
 		'video-js': 'gallery2/video-js/4.2.1/video-js',
+		'tag-chooser': 'tag-chooser/1.0.0/tag-chooser-debug.js',
+		'tag-tree-chooser': 'tag-chooser/1.0.0/tag-tree-chooser-debug.js',
 		'swfupload': 'gallery2/swfupload/2.2.0/swfupload',
 		'webuploader': 'gallery2/webuploader/0.1.2/webuploader',
 		'screenfull': 'gallery2/screenfull/1.1.1/screenfull',

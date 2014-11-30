@@ -44,9 +44,46 @@ class KnowledgeDaoImpl extends BaseDao implements KnowledgeDao
         return $this->getConnection()->fetchAll($sql, $ids) ? : array();
     }
 
+    public function searchKnowledge($conditions, $orderBys, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBys[0], $orderBys[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ? : array();
+    }
+
+    private function _createSearchQueryBuilder($conditions)
+    {
+        if(isset($conditions['keywords'])){
+            $conditions['keywords'] = "%{$conditions['keywords']}%";
+        }
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'knowledge')
+            ->andWhere('name LIKE :keywords');
+
+            return $builder;
+    }
+
     public function findKnowledgeByCategoryId($categoryId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE categoryId = ? ORDER BY sequence ASC";
+        return $this->getConnection()->fetchAll($sql, array($categoryId)) ? : array();
+    }
+
+    public function findParentKnowledgeByCategoryId($categoryId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE categoryId = ? AND `parentId` = 0 ORDER BY sequence ASC";
+        return $this->getConnection()->fetchAll($sql, array($categoryId)) ? : array();
+    }
+
+    public function findChildrenKnowledgeByCategoryId($categoryId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE categoryId = ? AND `parentId` > 0 ORDER BY sequence ASC";
         return $this->getConnection()->fetchAll($sql, array($categoryId)) ? : array();
     }
 
