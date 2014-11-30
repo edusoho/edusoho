@@ -1257,6 +1257,3 @@ admin_category_manage_question_category_sort:
     defaults: { _controller: TopxiaAdminBundle:CourseQuestionCategoryManage:sort }
     methods: [POST]
 
-admin_category_question_tags:
-    pattern: /category/{categoryId}/question/tags
-    defaults: { _controller: TopxiaAdminBundle:CategoryQuestionManage:tags }
