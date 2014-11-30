@@ -106,6 +106,7 @@ class KnowledgeController extends BaseController
     public function chooseredAction(Request $request)
     {
         $ids = $request->query->get('ids');
+
         $knowledges = $this->getKnowledgeService()->findKnowledgeByIds($ids);
         return $this->createJsonResponse($knowledges);
     }
