@@ -135,9 +135,14 @@ define(function(require, exports, module){
                     tagIds = tagIds.join(",");
                     relatedKnowledgeIds = relatedKnowledgeIds.join(",");
 
-                    $.post($form.attr('action'), $form.serialize()+'&tagIds='+tagIds+'&mainKnowledgeId='+mainKnowledgeId+'&relatedKnowledgeIds='+relatedKnowledgeIds, function(html) {
-                        Notify.success('操作成功！');
-                        window.location.reload();
+                    $.post($form.attr('action'), $form.serialize()+'&tagIds='+tagIds+'&mainKnowledgeId='+mainKnowledgeId+'&relatedKnowledgeIds='+relatedKnowledgeIds, function(response) {
+                        console.log(response)
+                        if (response.error){
+                            Notify.danger(response.message);
+                        } else {
+                            Notify.success('操作成功！');
+                            window.location.reload();                            
+                        }
                     });
 
                 }

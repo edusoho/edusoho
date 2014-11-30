@@ -124,9 +124,13 @@ define(function(require, exports, module){
                     $('#courseware-operate-btn').button('submiting').button('loading').addClass('disabled');
                     tagIds = tagIds.join(",");
                     relatedKnowledgeIds = relatedKnowledgeIds.join(",");
-                    $.post($form.attr('action'), $form.serialize()+'&tagIds='+tagIds+'&mainKnowledgeId='+mainKnowledgeId+'&relatedKnowledgeIds='+relatedKnowledgeIds, function(html) {
-                        Notify.success('操作成功！');
-                        window.location.reload();
+                    $.post($form.attr('action'), $form.serialize()+'&tagIds='+tagIds+'&mainKnowledgeId='+mainKnowledgeId+'&relatedKnowledgeIds='+relatedKnowledgeIds, function(response) {
+                        if (response.error){
+                            Notify.danger(response.message);
+                        } else {
+                            Notify.success('操作成功！');
+                            window.location.reload();
+                        }                      
                     });
                 }
             });

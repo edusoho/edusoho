@@ -65,7 +65,13 @@ class ArticleMaterialController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $articleMaterial = $request->request->all();
-            var_dump($articleMaterial);exit();
+            if (empty($courseware['mainKnowledgeId'])){
+                return $this->createJsonResponse(array('error' => true,'message'=>'主知识点不能为空'));
+            }
+            if (empty($courseware['tagIds'])){
+                return $this->createJsonResponse(array('error' => true,'message'=>'标签不能为空'));
+            }
+
             $articleMaterial = $this->filterArticleMaterial($articleMaterial);
             $articleMaterial['categoryId'] = $categoryId;
             $articleMaterial = $this->getArticleMaterialService()->createArticleMaterial($articleMaterial);
@@ -113,6 +119,13 @@ class ArticleMaterialController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $articleMaterial = $request->request->all();
+            if (empty($courseware['mainKnowledgeId'])){
+                return $this->createJsonResponse(array('error' => true,'message'=>'主知识点不能为空'));
+            }
+            if (empty($courseware['tagIds'])){
+                return $this->createJsonResponse(array('error' => true,'message'=>'标签不能为空'));
+            }
+
             $articleMaterial = $this->filterArticleMaterial($articleMaterial);
             $articleMaterial = $this->getArticleMaterialService()->updateArticleMaterial($id,$articleMaterial);
 
@@ -161,8 +174,8 @@ class ArticleMaterialController extends BaseController
     {
         $articleMaterial['knowledgeIds'] = $articleMaterial['mainKnowledgeId'];
         if (!empty($articleMaterial['relatedKnowledgeIds'])){
-            $articleMaterial['relatedKnowledgeIds'] = array_filter(explode(',', $articleMaterial['relatedKnowledgeIds']));
             $articleMaterial['knowledgeIds'] = $articleMaterial['relatedKnowledgeIds'].",".$articleMaterial['mainKnowledgeId'];
+            $articleMaterial['relatedKnowledgeIds'] = array_filter(explode(',', $articleMaterial['relatedKnowledgeIds']));
         }
         $articleMaterial['knowledgeIds'] = array_filter(explode(',', $articleMaterial['knowledgeIds']));
         $articleMaterial['tagIds'] = array_filter(explode(',', $articleMaterial['tagIds']));

@@ -67,6 +67,13 @@ class CoursewareController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $courseware = $request->request->all();
+            if (empty($courseware['mainKnowledgeId'])){
+                return $this->createJsonResponse(array('error' => true,'message'=>'主知识点不能为空'));
+            }
+            if (empty($courseware['tagIds'])){
+                return $this->createJsonResponse(array('error' => true,'message'=>'标签不能为空'));
+            }
+
             $videoMeta = $this->getVideoMeta($courseware['url']);
             $courseware = $this->filterVideoField($videoMeta,$courseware);
             $courseware['categoryId'] = $categoryId;
@@ -141,6 +148,13 @@ class CoursewareController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $courseware = $request->request->all();
+            if (empty($courseware['mainKnowledgeId'])){
+                return $this->createJsonResponse(array('error' => true,'message'=>'主知识点不能为空'));
+            }
+            if (empty($courseware['tagIds'])){
+                return $this->createJsonResponse(array('error' => true,'message'=>'标签不能为空'));
+            }
+
             $videoMeta = $this->getVideoMeta($courseware['url']);
             $courseware = $this->filterVideoField($videoMeta,$courseware);
             $courseware = $this->getCoursewareService()->updateCourseware($id,$courseware);
@@ -175,9 +189,12 @@ class CoursewareController extends BaseController
     {
         $courseware['title'] = $videoMeta['title'];
         $courseware['image'] = $videoMeta['image'];
-        $courseware['knowledgeIds'] = $courseware['relatedKnowledgeIds'].",".$courseware['mainKnowledgeId'];
+        $courseware['knowledgeIds'] = $courseware['mainKnowledgeId'];
+        if (!empty($courseware['relatedKnowledgeIds'])){
+            $courseware['knowledgeIds'] = $courseware['relatedKnowledgeIds'].",".$courseware['mainKnowledgeId'];
+            $courseware['relatedKnowledgeIds'] = array_filter(explode(',', $courseware['relatedKnowledgeIds']));
+        }
         $courseware['knowledgeIds'] = array_filter(explode(',', $courseware['knowledgeIds']));
-        $courseware['relatedKnowledgeIds'] = array_filter(explode(',', $courseware['relatedKnowledgeIds']));
         $courseware['tagIds'] = array_filter(explode(',', $courseware['tagIds']));
         return $courseware;
     }
