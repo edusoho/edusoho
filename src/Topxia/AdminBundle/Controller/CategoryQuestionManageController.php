@@ -9,7 +9,7 @@ use Topxia\Service\Question\QuestionService;
 
 class CategoryQuestionManageController extends BaseController
 {
-
+    /* @to-do 权限判断 */
     public function indexAction(Request $request, $categoryId)
     {
         $category = $this->getCategoryService()->getCategory($categoryId);
@@ -169,8 +169,6 @@ class CategoryQuestionManageController extends BaseController
 
     public function deletesAction(Request $request, $categoryId)
     {   
-        $course = $this->getCourseService()->tryManageCourse($categoryId);
-
         $ids = $request->request->get('ids');
         foreach ($ids ? : array() as $id) {
             $this->getQuestionService()->deleteQuestion($id);
