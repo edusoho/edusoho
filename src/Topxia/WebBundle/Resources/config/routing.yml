@@ -575,6 +575,10 @@ courseware_info_get:
     pattern: /courseware/getVideoInfo
     defaults: { _controller: TopxiaWebBundle:Courseware:getVideoInfo }
 
+courseware_tags_choosered:
+    pattern: /courseware/{id}/tagsChoosered
+    defaults: { _controller: TopxiaWebBundle:Courseware:tagsChoosered }
+
 courseware_knowledgeMatch:
     pattern: /knowledgeMatch
     defaults: { _controller: TopxiaWebBundle:Courseware:knowledgeMatch }

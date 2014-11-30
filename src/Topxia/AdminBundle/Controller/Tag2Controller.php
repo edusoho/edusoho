@@ -54,12 +54,33 @@ class Tag2Controller extends BaseController
         ));
     }
 
+    public function tagsChooseredAction(Request $request)
+    {
+        $ids = $request->query->get('ids');
+        $ids = explode(',', $ids[0]);
+        $tags = $this->getTagService()->findTagsByIds($ids);
+        return $this->createJsonResponse($tags);
+    }
+
     public function tagsetMatchAction(Request $request)
     {
         $likeString = $request->query->get('q');
 
         $tags = $this->getTagService()->getTag2ByLikeName($likeString);
+        $tags = $this->getIdsAndNames($tags);
+
         return $this->createJsonResponse($tags);
+    }
+
+    private function getIdsAndNames($tags)
+    {
+        $array = array();
+        foreach ($tags as $key => $tag) {
+            $array[$key]['value'] = $tag['id'];
+            $array[$key]['label'] = $tag['name'];
+        }
+
+        return $array;
     }
 
     public function createAction(Request $request,$id)

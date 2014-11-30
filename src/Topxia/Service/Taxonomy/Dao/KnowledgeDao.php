@@ -18,6 +18,10 @@ interface KnowledgeDao
 
 	public function findKnowledgeByCategoryId($categoryId);
 
+	public function findParentKnowledgeByCategoryId($categoryId);
+
+	public function findChildrenKnowledgeByCategoryId($categoryId);
+
 	public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId);
 
 	public function findKnowledgeByCode($code);

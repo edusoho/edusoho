@@ -75,6 +75,18 @@ class KnowledgeDaoImpl extends BaseDao implements KnowledgeDao
         return $this->getConnection()->fetchAll($sql, array($categoryId)) ? : array();
     }
 
+    public function findParentKnowledgeByCategoryId($categoryId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE categoryId = ? AND `parentId` = 0 ORDER BY sequence ASC";
+        return $this->getConnection()->fetchAll($sql, array($categoryId)) ? : array();
+    }
+
+    public function findChildrenKnowledgeByCategoryId($categoryId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE categoryId = ? AND `parentId` > 0 ORDER BY sequence ASC";
+        return $this->getConnection()->fetchAll($sql, array($categoryId)) ? : array();
+    }
+
     public function findKnowledgeByCategoryIdAndParentId($categoryId, $parentId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE categoryId = ? AND parentId = ? AND isHidden = ? ORDER BY sequence ASC";

@@ -39,6 +39,11 @@ class CoursewareController extends BaseController
         return $this->getServiceKernel()->createService('Taxonomy.KnowledgeService');
     }
 
+    private function getCoursewareService()
+    {
+        return $this->getServiceKernel()->createService('Courseware.CoursewareService');
+    }
+
     private function convertUrlQuery($query)
     {
         $queryParts = explode('&', $query);

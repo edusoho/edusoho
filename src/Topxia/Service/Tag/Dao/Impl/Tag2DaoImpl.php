@@ -46,7 +46,7 @@ class Tag2DaoImpl extends BaseDao implements Tag2Dao
         $this->getConnection()->update($this->table, array('disabled' => 1), array('groupId' => $groupId));
     }
 
-    public function findTag2sByIds(array $ids)
+    public function findTagsByIds(array $ids)
     {
         if(empty($ids)){ return array(); }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
