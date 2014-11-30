@@ -89,7 +89,7 @@ define(function(require, exports, module){
                 sourceUrl: "/admin/knowledge/getTreeList?categoryId="+$categoryId,
                 queryUrl: '/admin/knowledge/choosered',
                 matchUrl: '/admin/tagset/match?q={{query}}',
-                maxTagNum: 3,
+                maxTagNum: 15,
                 choosedTags: $relatedKnowledgeIds
             });
 
