@@ -65,10 +65,10 @@ class ArticleMaterialController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $articleMaterial = $request->request->all();
-            if (empty($courseware['mainKnowledgeId'])){
+            if (empty($articleMaterial['mainKnowledgeId'])){
                 return $this->createJsonResponse(array('error' => true,'message'=>'主知识点不能为空'));
             }
-            if (empty($courseware['tagIds'])){
+            if (empty($articleMaterial['tagIds'])){
                 return $this->createJsonResponse(array('error' => true,'message'=>'标签不能为空'));
             }
 
@@ -119,10 +119,10 @@ class ArticleMaterialController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $articleMaterial = $request->request->all();
-            if (empty($courseware['mainKnowledgeId'])){
+            if (empty($articleMaterial['mainKnowledgeId'])){
                 return $this->createJsonResponse(array('error' => true,'message'=>'主知识点不能为空'));
             }
-            if (empty($courseware['tagIds'])){
+            if (empty($articleMaterial['tagIds'])){
                 return $this->createJsonResponse(array('error' => true,'message'=>'标签不能为空'));
             }
 

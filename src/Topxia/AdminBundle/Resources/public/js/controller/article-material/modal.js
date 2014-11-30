@@ -139,6 +139,7 @@ define(function(require, exports, module){
                         console.log(response)
                         if (response.error){
                             Notify.danger(response.message);
+                            $('#article-material-operate-btn').removeClass('disabled');
                         } else {
                             Notify.success('操作成功！');
                             window.location.reload();                            
