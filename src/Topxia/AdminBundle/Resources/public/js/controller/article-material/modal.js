@@ -158,20 +158,5 @@ define(function(require, exports, module){
             return validator;
         }
 
-        var tagModalChooser = new TagChooser({
-            element: '#tag-chooser',
-            sourceUrl: 'xxxx',
-            multi: true,
-            items: []
-        });
-
-        tagModalChooser.on('choosed', function(items) {
-            var tagIds = [];
-            for (var i = items.length - 1; i >= 0; i--) {
-                tagIds[i] = items[i]['id'];
-            };
-            $('#article-material-tag-field').val(tagIds);
-        });
-
     }
 });
