@@ -312,29 +312,13 @@
                       加入了课程 {{learn.properties.course.title|plain_text(15)}}
                       {% elseif learn.type == "learned_lesson" %}
                       完成了课时 {{learn.properties.lesson.title|plain_text(15)}}
+                      {% elseif learn.type == "favorite_course" %}
+                      收藏了课程 {{learn.properties.course.title|plain_text(15)}}
+                      {% elseif learn.type == "start_learn_lesson" %}
+                      开始学习课时 {{learn.properties.lesson.title|plain_text(15)}}
                       {% endif %}
                     </div>
                   </li>
-                  {% elseif learn.type == "favorite_course" %}
-                    <li class="media">
-                      <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                      </a>
-                      <div class="media-body">
-                        <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                        收藏了课程 {{learn.properties.course.title|plain_text(15)}}
-                      </div>
-                    </li>
-                    {% elseif learn.type == "start_learn_lesson" %}
-                    <li class="media">
-                      <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                      </a>
-                      <div class="media-body">
-                        <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                        开始学习课时 {{learn.properties.lesson.title|plain_text(15)}}
-                      </div>
-                    </li>
                 {% endfor %}
               </ul>
             </div>
