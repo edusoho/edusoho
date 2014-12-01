@@ -25,7 +25,7 @@ class JsonTagsController extends BaseController
     {
         $likeString = $request->query->get('q');
 
-        $tags = $this->getTagService()->getTag2ByLikeName($likeString);
+        $tags = $this->getTagService()->getTagByLikeName($likeString);
         $tags = $this->getIdsAndNames($tags);
 
         return $this->createJsonResponse($tags);
@@ -48,6 +48,24 @@ class JsonTagsController extends BaseController
         }
 
         return $array;
+    }
+
+    private function getTagSets($tagGroups,$tags)
+    {
+        $tagSet = array();
+
+        foreach ($tagGroups as $groupkey => $tagGroup) {
+            $tagSet[$groupkey] = $tagGroup;
+            $tagSet[$groupkey]['subitems'] = array();
+
+            foreach ($tags as $tagkey => $tag) {
+                if ($tag['groupId'] == $tagGroup['id']) {
+                    $tagSet[$groupkey]['subitems'][] = $tag;
+                }
+            }
+        }
+
+        return $tagSet;
     }
 
     private function getTagService()

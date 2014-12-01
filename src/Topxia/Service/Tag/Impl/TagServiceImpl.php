@@ -9,62 +9,62 @@ class TagServiceImpl extends BaseService implements TagService
 {
     public function getTag($id)
     {
-        return $this->getTag2Dao()->getTag2($id);
+        return $this->getTagDao()->getTag($id);
     }
 
     public function getTagGroup($id)
     {
-        return $this->getTag2GroupDao()->getTag2Group($id);
+        return $this->getTagGroupDao()->getTagGroup($id);
     }
 
     public function getTagByName($name)
     {
-        return $this->getTag2Dao()->getTag2ByName($name);
+        return $this->getTagDao()->getTagByName($name);
     }
 
     public function getTagGroupByName($name)
     {
-        return $this->getTag2GroupDao()->getTag2GroupByName($name);
+        return $this->getTagGroupDao()->getTagGroupByName($name);
     }
 
-    public function getTag2ByLikeName($name)
+    public function getTagByLikeName($name)
     {
-        return $this->getTag2Dao()->getTag2ByLikeName($name);
+        return $this->getTagDao()->getTagByLikeName($name);
     }
 
-    public function findAllTag2Groups($start, $limit)
+    public function findAllTagGroupsByCount($start, $limit)
     {
-        return $this->getTag2GroupDao()->findAllTag2Groups($start, $limit);
+        return $this->getTagGroupDao()->findAllTagGroupsByCount($start, $limit);
     }
 
-    public function getAll2GroupCount()
+    public function getAllGroupCount()
     {
-        return $this->getTag2GroupDao()->findAllTag2GroupsCount();
+        return $this->getTagGroupDao()->findAllTagGroupsCount();
     }
 
     public function findAllTags()
     {
-        return $this->getTag2Dao()->findAllTags();
+        return $this->getTagDao()->findAllTags();
     }
 
     public function findAllTagGroups()
     {
-        return $this->getTag2GroupDao()->findAllTagGroups();
+        return $this->getTagGroupDao()->findAllTagGroups();
     }
 
     public function findTagGroupsByTypes(array $types)
     {
-        return $this->getTag2GroupDao()->findTagGroupsByType($types);
+        return $this->getTagGroupDao()->findTagGroupsByTypes($types);
     }
 
     public function findTagsByIds(array $ids)
     {
-        return $this->getTag2Dao()->findTagsByIds($ids);
+        return $this->getTagDao()->findTagsByIds($ids);
     }
 
     public function findTagsByNames(array $names)
     {
-        return $this->getTag2Dao()->findTagsByNames($names);
+        return $this->getTagDao()->findTagsByNames($names);
     }
 
     public function isTagNameAvalieable($name, $exclude=null)
@@ -102,7 +102,7 @@ class TagServiceImpl extends BaseService implements TagService
         $tagGroup = ArrayToolkit::parts($tagGroup, array('type','name'));
 
         $this->filterTagGroupFields($tagGroup);
-        $disabledTagGroup = $this->getTag2GroupDao()->getDisabledTag2GroupByName($tagGroup['name']);
+        $disabledTagGroup = $this->getTagGroupDao()->getDisabledTagGroupByName($tagGroup['name']);
 
         if(!empty($disabledTagGroup)) {
             $fields = array (
@@ -111,10 +111,10 @@ class TagServiceImpl extends BaseService implements TagService
                 'disabled' => '0',
                 'createdTime' => time()
             );
-            $tagGroup = $this->getTag2GroupDao()->updateTag2Group($disabledTagGroup['id'], $fields);
+            $tagGroup = $this->getTagGroupDao()->updateTagGroup($disabledTagGroup['id'], $fields);
         } else {
             $tagGroup['createdTime'] = time();
-            $tagGroup = $this->getTag2GroupDao()->addTag2Group($tagGroup);
+            $tagGroup = $this->getTagGroupDao()->addTagGroup($tagGroup);
         }
 
         $this->getLogService()->info('tagGroup', 'create', "添加标签组{$tagGroup['name']}(#{$tagGroup['id']})");
@@ -124,7 +124,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function addTag($tag,$groupId)
     {
-        $disabledTag = $this->getTag2Dao()->getDisabledTag2ByName($tag);
+        $disabledTag = $this->getTagDao()->getDisabledTagByName($tag);
         if(!empty($disabledTag)){
             $fields = array (
                 'name' => $disabledTag['name'],
@@ -132,21 +132,21 @@ class TagServiceImpl extends BaseService implements TagService
                 'disabled' => '0',
                 'createdTime' => time()
             );
-            $tag = $this->getTag2Dao()->updateTag2($disabledTag['id'], $fields);
+            $tag = $this->getTagDao()->updateTag($disabledTag['id'], $fields);
         } else {
              $fields = array (
                 'name' => $tag,
                 'groupId' => $groupId,
                 'createdTime' => time()
             );
-            $tag = $this->getTag2Dao()->addTag2($fields);
+            $tag = $this->getTagDao()->addTag($fields);
         }
         return $tag;
     }
 
     public function findTagsByTagGroupIds($tagGroupIds)
     {
-        return $this->getTag2Dao()->findTagsByTagGroupIds($tagGroupIds);
+        return $this->getTagDao()->findTagsByTagGroupIds($tagGroupIds);
     }
 
     public function updateTagGroup($id, array $fields)
@@ -156,7 +156,7 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException("标签组(#{$id})不存在，更新失败！");
         }
 
-        $disabledTagGroup = $this->getTag2GroupDao()->getDisabledTag2GroupByName($fields['name']);
+        $disabledTagGroup = $this->getTagGroupDao()->getDisabledTagGroupByName($fields['name']);
 
         if(!empty($disabledTagGroup)) {
             $fields = array (
@@ -165,12 +165,12 @@ class TagServiceImpl extends BaseService implements TagService
                 'disabled' => '0',
                 'createdTime' => $tagGroup['createdTime']
             );
-            $this->getTag2GroupDao()->updateTagGroupToDisabled($tagGroup['id']);
-            $this->getTag2Dao()->updateTag2sByGroupId($tagGroup['id'],$disabledTagGroup['id']);
-            $tagGroup = $this->getTag2GroupDao()->updateTag2Group($disabledTagGroup['id'], $fields);
+            $this->getTagGroupDao()->updateTagGroupToDisabled($tagGroup['id']);
+            $this->getTagDao()->updateTagsByGroupId($tagGroup['id'],$disabledTagGroup['id']);
+            $tagGroup = $this->getTagGroupDao()->updateTagGroup($disabledTagGroup['id'], $fields);
         } else {
             $fields = ArrayToolkit::parts($fields, array('name','type'));
-            $tagGroup = $this->getTag2GroupDao()->updateTag2Group($id, $fields);
+            $tagGroup = $this->getTagGroupDao()->updateTagGroup($id, $fields);
         }
         $this->getLogService()->info('tagGroup', 'update', "编辑标签组{$fields['name']}(#{$id})");
 
@@ -184,7 +184,7 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException("标签(#{$id})不存在，更新失败！");
         }
 
-        $disabledTag = $this->getTag2Dao()->getDisabledTag2ByName($fields['name']);
+        $disabledTag = $this->getTagDao()->getDisabledTagByName($fields['name']);
 
         if(!empty($disabledTag)){
             $fields = array (
@@ -193,11 +193,11 @@ class TagServiceImpl extends BaseService implements TagService
                 'disabled' => '0',
                 'createdTime' => $tag['createdTime']
             );
-            $this->getTag2Dao()->updateTagToDisabled($id);
-            $tag = $this->getTag2Dao()->updateTag2($disabledTag['id'], $fields);
+            $this->getTagDao()->updateTagToDisabled($id);
+            $tag = $this->getTagDao()->updateTag($disabledTag['id'], $fields);
         } else {
             $fields = ArrayToolkit::parts($fields, array('name'));
-            $tag = $this->getTag2Dao()->updateTag2($id, $fields);
+            $tag = $this->getTagDao()->updateTag($id, $fields);
         }
 
         $this->getLogService()->info('tag', 'update', "编辑标签{$fields['name']}(#{$id})");
@@ -207,15 +207,15 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function deleteTagGroup($id)
     {
-        $this->getTag2GroupDao()->updateTagGroupToDisabled($id);
-        $this->getTag2Dao()->updateTagToDisabledByGroupId($id);
+        $this->getTagGroupDao()->updateTagGroupToDisabled($id);
+        $this->getTagDao()->updateTagToDisabledByGroupId($id);
 
         $this->getLogService()->info('tagGroup', 'delete', "删除标签组#{$id}");
     }
 
     public function deleteTag($id)
     {
-        $this->getTag2Dao()->updateTagToDisabled($id);
+        $this->getTagDao()->updateTagToDisabled($id);
         $this->getLogService()->info('tag', 'delete', "删除标签#{$id}");
     }
 
@@ -235,14 +235,14 @@ class TagServiceImpl extends BaseService implements TagService
         return $tagGroup;
     }
 
-    private function getTag2Dao()
+    private function getTagDao()
     {
-        return $this->createDao('Tag.Tag2Dao');
+        return $this->createDao('Tag.TagDao');
     }
 
-    private function getTag2GroupDao()
+    private function getTagGroupDao()
     {
-        return $this->createDao('Tag.Tag2GroupDao');
+        return $this->createDao('Tag.TagGroupDao');
     }
 
     private function getLogService()

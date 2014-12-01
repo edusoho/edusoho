@@ -18,7 +18,7 @@ class Tag2Controller extends BaseController
             20
         );
 
-        $tagGroups = $this->getTagService()->findAllTag2Groups(
+        $tagGroups = $this->getTagService()->findAllTagGroupsByCount(
             $paginator->getOffsetCount(), $paginator->getPerPageCount()
         );
 
@@ -66,7 +66,7 @@ class Tag2Controller extends BaseController
     {
         $likeString = $request->query->get('q');
 
-        $tags = $this->getTagService()->getTag2ByLikeName($likeString);
+        $tags = $this->getTagService()->getTagByLikeName($likeString);
         $tags = $this->getIdsAndNames($tags);
 
         return $this->createJsonResponse($tags);
@@ -207,9 +207,9 @@ class Tag2Controller extends BaseController
     public function sourceTagsAction(Request $request)
     {
 
-        $tagGroupCount = $this->getTagService()->getAll2GroupCount();
+        $tagGroupCount = $this->getTagService()->getAllGroupCount();
 
-        $tagGroups = $this->getTagService()->findAllTag2Groups(
+        $tagGroups = $this->getTagService()->findAllTagGroupsByCount(
             $tagGroupCount , $tagGroupCount 
         );
 

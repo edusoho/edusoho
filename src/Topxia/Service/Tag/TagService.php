@@ -11,11 +11,11 @@ interface TagService
 
     public function getTagGroupByName($name);
 
-    public function getTag2ByLikeName($name);
+    public function getTagByLikeName($name);
 
-    public function findAllTag2Groups($start, $limit);
+    public function findAllTagGroupsByCount($start, $limit);
 
-    public function getAll2GroupCount();
+    public function getAllGroupCount();
 
     public function findAllTags();
 

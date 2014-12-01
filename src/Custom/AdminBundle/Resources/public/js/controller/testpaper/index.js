@@ -125,7 +125,7 @@ define(function(require, exports, module) {
                 queryUrl: $('#tags-search').data('queryUrl'),
                 matchUrl: $('#tags-search').data('matchUrl'),
             maxTagNum: 4,
-            choosedTags: $("#testpaper-search-form").find('input[name=tagIds]').val().split(','),
+            // choosedTags: $("#testpaper-search-form").find('input[name=tagIds]').val().split(','),
             alwaysShow: true
           });
 

@@ -3,40 +3,40 @@
 namespace Topxia\Service\Tag\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Tag\Dao\Tag2GroupDao;
+use Topxia\Service\Tag\Dao\TagGroupDao;
 
-class Tag2GroupDaoImpl extends BaseDao implements Tag2GroupDao
+class TagGroupDaoImpl extends BaseDao implements TagGroupDao
 {
     protected $table = 'tag_group';
 
-    public function getTag2Group($id)
+    public function getTagGroup($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id));
     }
 
-    public function addTag2Group(array $tag)
+    public function addTagGroup(array $tag)
     {
         $affected = $this->getConnection()->insert($this->table, $tag);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert tag error.');
         }
-        return $this->getTag2Group($this->getConnection()->lastInsertId());
+        return $this->getTagGroup($this->getConnection()->lastInsertId());
     }
 
-    public function updateTag2Group($id, array $fields)
+    public function updateTagGroup($id, array $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getTag2Group($id);
+        return $this->getTagGroup($id);
     }
 
     public function updateTagGroupToDisabled($id)
     {
         $this->getConnection()->update($this->table, array('disabled' => 1), array('id' => $id));
-        return $this->getTag2Group($id);
+        return $this->getTagGroup($id);
     }
 
-    public function findTag2GroupsByIds(array $ids)
+    public function findTagGroupsByIds(array $ids)
     {
         if(empty($ids)){ return array(); }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
@@ -44,7 +44,7 @@ class Tag2GroupDaoImpl extends BaseDao implements Tag2GroupDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function findTag2GroupsByNames(array $names)
+    public function findTagGroupsByNames(array $names)
     {
         if(empty($names)){ return array(); }
         $marks = str_repeat('?,', count($names) - 1) . '?';
@@ -52,7 +52,7 @@ class Tag2GroupDaoImpl extends BaseDao implements Tag2GroupDao
         return $this->getConnection()->fetchAll($sql, $names);
     }
 
-    public function findTag2GroupsByTypes(array $types)
+    public function findTagGroupsByTypes(array $types)
     {
         if(empty($types)){ return array(); }
         $marks = str_repeat('?,', count($types) - 1) . '?';
@@ -66,34 +66,34 @@ class Tag2GroupDaoImpl extends BaseDao implements Tag2GroupDao
         return $this->getConnection()->fetchAll($sql);
     }
 
-    public function findAllTag2Groups($start, $limit)
+    public function findAllTagGroupsByCount($start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table}  WHERE disabled = 0 ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
     }
 
-    public function getTag2GroupByName($name)
+    public function getTagGroupByName($name)
     {
         $sql = "SELECT * FROM {$this->table} WHERE name = ? AND disabled = 0 LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($name));
     }
 
-    public function getDisabledTag2GroupByName($name)
+    public function getDisabledTagGroupByName($name)
     {
         $sql = "SELECT * FROM {$this->table} WHERE name = ? AND disabled = 1 LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($name));
     }
 
 
-    public function getTag2GroupByLikeName($name)
+    public function getTagGroupByLikeName($name)
     {
         $name = "%{$name}%";
         $sql = "SELECT * FROM {$this->table} WHERE name LIKE ? AND disabled = 0";
         return $this->getConnection()->fetchAll($sql, array($name));
     }
 
-    public function findAllTag2GroupsCount()
+    public function findAllTagGroupsCount()
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE disabled = 0";
         return $this->getConnection()->fetchColumn($sql, array());
