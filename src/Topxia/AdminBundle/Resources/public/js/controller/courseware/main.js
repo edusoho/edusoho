@@ -1,74 +1,13 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
-    var TagChooser = require("tag-chooser");
     var Overlay = require("arale-overlay");
+        require("$");
+    var TagTreeChooser = require('tag-tree-chooser2');
+    var TagChooser = require('tag-chooser2');
 
     exports.run = function() {
 
 
-        var overlay = new Overlay({
-          element: $('.tagchooser-overlay'),
-          width: 400,
-          align: {
-            baseElement: $('.tag-search-group'),
-            baseXY: [0, 36]
-          }
-        });
-
-        var chooser;
-
-        $('.tag-search-trigger').click(function() {
-          overlay.show();
-
-          // if (chooser) {
-          //   return ;
-          // }
-
-          chooser = new TagChooser({
-            element: '#tagchooser-example-3',
-            sourceUrl: '/admin/tagset/get',
-            queryUrl: '/admin/tags/Choosered',
-            matchUrl: '/admin/tagset/match?q={{query}}',
-            maxTagNum: 4,
-            choosedTags: [1, 2, 3],
-            alwaysShow: true
-          });
-
-          // chooser.on('change', function(tags) {
-          //   overlay.set('height', this.getHeight() + 70);
-          // });
-
-          // chooser.on('existed', function(existTag){
-          //   console.log('existed');
-          // });
-
-
-        });
-
-        $('.tag-search-confrim').click(function() {
-          overlay.hide();
-          var tags = chooser.get('choosedTags');
-          var tagNames = [];
-          $.each(tags, function(i, tag) {
-            tagNames.push(tag.name);
-          });
-          var btnText = tagNames.length >0 ? tagNames.join(',') : '全选';
-          $('.tag-search-trigger').text(btnText);
-        });
-
-        $('.tag-search-cancel').click(function(){
-          overlay.hide();
-        });
-
-        $('.method-form-group').on('change',function(){
-            if ($('.title-form-group').hasClass('hide')){
-                $('.tagIds-form-group').addClass('hide');
-                $('.title-form-group').removeClass('hide');
-            } else {
-                $('.tagIds-form-group').removeClass('hide');
-                $('.title-form-group').addClass('hide');
-            }
-        });
 
         $('.delete-courseware-btn').click(function(){
 

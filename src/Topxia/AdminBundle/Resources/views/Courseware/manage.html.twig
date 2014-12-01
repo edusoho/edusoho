@@ -14,25 +14,80 @@
     <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_courseware_create', {categoryId:category.id}) }}">添加课件</button>
 </div>
 <div class="well well-sm">
-  <form class="form-inline" id="message-search-form" role="form" style="position: relative;">
-    <div class="form-group">
-      <input class="form-control" type="text" placeholder="知识点搜索" name="knowledgeIds[]" value="{{ app.request.get('knowledgeIds[]') }}">
-      <span class="glyphicon glyphicon-tasks"></span>
-    </div>
+  <form class="form-inline" id="testpaper-search-form">
+  <input type="hidden" name="categoryId" value="{{ category.id }}">
+  <div class="form-group mrl" id="tags-search-group">
+    <label>标签：</label>
+      <a href="#" class="tag-search-trigger">
+        {% for tag in tags %}
+          {{tag.name}}
+        {% else %}
+          选择
+        {% endfor %}
+      </a>
+  </div>
+  <div class="form-group mrl" id="knowledges-search-group">
+    <label>知识点：</label>
+    <a href="#" class="knowledge-search-trigger">
+      {% for knowledge in knowledges %}
+        {{knowledge.name}}
+      {% else %}
+        选择
+      {% endfor %}
+    </a>
+  </div>
+
+  <div class="form-group mrl">
+  </div>
 
 
-    <div class="form-group title-form-group">
-      <input class="form-control" type="text" placeholder="标题关键词搜索" name="title" value="{{ app.request.get('title') }}">
+  <button type="submit" class="btn btn-sm btn-primary">搜索</button>
+  <div id="tags-search-overlay" class="tagchooser-overlay">
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div id="tags-search"
+          data-source-url="/admin/tagset/get"
+          data-query-url="/admin/tags/Choosered"
+          data-match-url="/admin/tagset/match?q={% verbatim %}{{query}}{% endverbatim %}"
+        >
+        {% include('TopxiaWebBundle:TagChooser:tag-chooser2.html.twig') %}
+      </div>
+
+      <div class="panel-footer">
+        <button type="button" class="btn btn-primary btn-xs pull-right tag-search-confrim">确定</button>
+        <button type="button" class="btn btn-link btn-xs pull-right tag-search-cancel">取消</button>
+      </div>
+
     </div>
 
-        <div class="form-group tag-search-group">
-          标签：<a href="#" class="tag-search-trigger">选择</a>
-        </div>
-      {% include('TopxiaWebBundle:TagChooser:tag-form-search.html.twig') %}
-    <div class="form-group">
-      <button class="btn btn-primary">搜索</button>
     </div>
-  </form>
+  </div>
+
+  <div id="knowledges-search-overlay" class="tagchooser-overlay">
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div id="knowledges-search"
+          data-source-url="/admin/knowledge/getTreeList?categoryId={{ category.id }}"
+          data-query-url="/admin/knowledge/choosered"
+          data-match-url="/admin/tagset/match?q={% verbatim %}{{query}}{% endverbatim %}"
+        >
+        {% include('TopxiaWebBundle:TagChooser:tag-chooser2.html.twig') %}
+      </div>
+
+      <div class="panel-footer">
+        <button type="button" class="btn btn-primary btn-xs pull-right tag-search-confrim">确定</button>
+        <button type="button" class="btn btn-link btn-xs pull-right tag-search-cancel">取消</button>
+      </div>
+
+    </div>
+
+    </div>
+  </div>
+  <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds')|default('') }}">
+  <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds')|default('') }}">
+</form>
 </div>
 <div class="courseware-list">
   {% block list %}{% endblock %}

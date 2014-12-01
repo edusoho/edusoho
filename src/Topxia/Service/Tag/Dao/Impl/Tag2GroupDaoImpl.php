@@ -52,6 +52,14 @@ class Tag2GroupDaoImpl extends BaseDao implements Tag2GroupDao
         return $this->getConnection()->fetchAll($sql, $names);
     }
 
+    public function findTag2GroupsByTypes(array $types)
+    {
+        if(empty($types)){ return array(); }
+        $marks = str_repeat('?,', count($types) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE type IN ({$marks}) AND disabled = 0;";
+        return $this->getConnection()->fetchAll($sql, $types);
+    }
+
     public function findAllTagGroups()
     {
         $sql ="SELECT * FROM {$this->table} WHERE `disabled` = 0";

@@ -52,6 +52,11 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTag2GroupDao()->findAllTagGroups();
     }
 
+    public function findTagGroupsByTypes(array $types)
+    {
+        return $this->getTag2GroupDao()->findTagGroupsByType($types);
+    }
+
     public function findTagsByIds(array $ids)
     {
         return $this->getTag2Dao()->findTagsByIds($ids);

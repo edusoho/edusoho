@@ -11,18 +11,48 @@ class JsonTagsController extends BaseController
 {
     public function searchAction(Request $request)
     {
-
+        $type = $request->query->get('type');
+        $tags = $this->getTagService()->findAllTags();
+        $types = array($type,'public');
+        $tagGroups = $this->getTagService()->findTagGroupsByTypes($types);
+        $tagSets = $this->getTagSets($tagGroups,$tags);
+        return $this->render('TopxiaAdminBundle:Tag2:tag-set.html.twig',array(
+            'tagSets' => $tagSets
+        ));
     }
 
     public function matchAction(Request $request)
     {
+        $likeString = $request->query->get('q');
 
+        $tags = $this->getTagService()->getTag2ByLikeName($likeString);
+        $tags = $this->getIdsAndNames($tags);
+
+        return $this->createJsonResponse($tags);
     }
 
     public function queryAction(Request $request)
     {
-
+        $ids = $request->query->get('ids');
+        $ids = explode(',', $ids[0]);
+        $tags = $this->getTagService()->findTagsByIds($ids);
+        return $this->createJsonResponse($tags);
     }
 
+    private function getIdsAndNames($tags)
+    {
+        $array = array();
+        foreach ($tags as $key => $tag) {
+            $array[$key]['value'] = $tag['id'];
+            $array[$key]['label'] = $tag['name'];
+        }
+
+        return $array;
+    }
+
+    private function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Tag.TagService');
+    }
 
 }
