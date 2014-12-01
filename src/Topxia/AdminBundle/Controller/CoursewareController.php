@@ -14,7 +14,6 @@ class CoursewareController extends BaseController
         $knowledgeIds = $request->query->get('knowledgeIds');
         $tagIds = $request->query->get('tagIds');
         $title = $request->query->get('title');
-// var_dump($knowledgeIds);exit();
         if (empty($method)){
             $conditions = array('categoryId' => $categoryId);
         } elseif($method == 'tag'){
