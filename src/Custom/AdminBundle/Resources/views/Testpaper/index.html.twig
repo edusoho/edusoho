@@ -48,45 +48,16 @@
         </div>
 
         <div class="form-group mrl">
+          <input class="form-control" type="text" name="keyword" value="{{ app.request.query.get('keyword') }}" placeholder="标题关键词">
         </div>
-
 
         <button type="submit" class="btn btn-sm btn-primary">搜索</button>
-        <div id="tags-search-overlay" class="tagchooser-overlay">
+        {% include 'CustomWebBundle:Tag:tagchooser-overlay.html.twig' with {id: 'tags-search', type: 'question'} %}
+        {% include 'CustomWebBundle:Tag:tagchooser-knowledge-overlay.html.twig' with {id: 'knowledges-search', categoryId: category.id} %}
+        <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
+        <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">
 
-          <div class="panel panel-default">
-            <div class="panel-body">
-              {% include 'CustomWebBundle:Tag:tagchooser.html.twig' with {id: 'tags-search', type: 'question'} %}
-              <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
-            </div>
 
-            <div class="panel-footer">
-              <button type="button" class="btn btn-primary btn-xs pull-right tag-search-confrim">确定</button>
-              <button type="button" class="btn btn-link btn-xs pull-right tag-search-cancel">取消</button>
-            </div>
-
-          </div>
-
-          </div>
-        </div>
-
-        <div id="knowledges-search-overlay" class="tagchooser-overlay">
-
-          <div class="panel panel-default">
-            <div class="panel-body">
-              {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'knowledges-search', categoryId: category.id} %}
-              <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">
-            </div>
-
-            <div class="panel-footer">
-              <button type="button" class="btn btn-primary btn-xs pull-right tag-search-confrim">确定</button>
-              <button type="button" class="btn btn-link btn-xs pull-right tag-search-cancel">取消</button>
-            </div>
-
-          </div>
-
-          </div>
-        </div>
       </form>
       
     </div>
