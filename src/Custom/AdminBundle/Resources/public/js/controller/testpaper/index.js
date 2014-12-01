@@ -65,14 +65,13 @@ define(function(require, exports, module) {
           if (chooser) {
             return ;
           }
-
           chooser = new TagTreeChooser({
             element: '#knowledges-search',
                 sourceUrl: $('#knowledges-search').data('sourceUrl'),
                 queryUrl: $('#knowledges-search').data('queryUrl'),
                 matchUrl: $('#knowledges-search').data('matchUrl'),
             maxTagNum: 4,
-            choosedTags: $("#testpaper-search-form").find('input[name=knowledgeIds]').val().split(','),
+            // choosedTags: $("#testpaper-search-form").find('input[name=knowledgeIds]').val().split(','),
             alwaysShow: true
           });
 
