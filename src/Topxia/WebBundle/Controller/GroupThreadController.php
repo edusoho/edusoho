@@ -555,7 +555,7 @@ class GroupThreadController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-        protected function getNotificationService()
+    protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }

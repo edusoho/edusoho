@@ -92,9 +92,8 @@
         <span class="control-text"><strong class="money" id="leftMoney">{{account.cash|default(0)}}</strong>
           <span class="text-muted">{{setting('coin.coin_name')}}</span>
         </span>
-        {% if account.cash <  course.coinPrice and setting('coin.coin_enabled') and setting('coin.charge_coin_enabled') %}
             <a href="{{path('my_coin_buy')}}" class="mll" style="color: #428bca;">充值</a>
-        {% endif %}
+
         </div>
         
         </div>

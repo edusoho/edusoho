@@ -1021,38 +1021,38 @@ admin_uploadfile_head_leader_params:
     pattern: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
 
-coin_settings_avatar:
-    pattern:  /coin/settings/avatar
-    defaults: { _controller: TopxiaWebBundle:Coin:avatar }
+# coin_settings_avatar:
+#     pattern:  /coin/settings/avatar
+#     defaults: { _controller: TopxiaWebBundle:Coin:avatar }
 
-coin_settings_avatar_crop:
-    pattern:  /coin/settings/avatar/crop
-    defaults: { _controller: TopxiaWebBundle:Coin:avatarCrop }
+# coin_settings_avatar_crop:
+#     pattern:  /coin/settings/avatar/crop
+#     defaults: { _controller: TopxiaWebBundle:Coin:avatarCrop }
 
-admin_coin_settings:
-    path:     /coin/settings
-    defaults: { _controller: TopxiaAdminBundle:Coin:settings }
-admin_coin_records:
-    path:     /coin/records
-    defaults: { _controller: TopxiaAdminBundle:Coin:records }
-admin_coin_orders:
-    path:     /coin/orders
-    defaults: { _controller: TopxiaAdminBundle:Coin:orders }
-admin_coin_orders_log:
-    path:     /coin/orders/log/{id}
-    defaults: { _controller: TopxiaAdminBundle:Coin:logs }
-# admin_coin_admin:
-#     path:     /coin/admin
-#     defaults: { _controller: TopxiaAdminBundle:Coin:admin }
-admin_coin_admin_edit:
-    path:     /coin/admin/edit/{id}
-    defaults: { _controller: TopxiaAdminBundle:Coin:edit }
+# admin_coin_settings:
+#     path:     /coin/settings
+#     defaults: { _controller: TopxiaAdminBundle:Coin:settings }
+# admin_coin_records:
+#     path:     /coin/records
+#     defaults: { _controller: TopxiaAdminBundle:Coin:records }
+# admin_coin_orders:
+#     path:     /coin/orders
+#     defaults: { _controller: TopxiaAdminBundle:Coin:orders }
+# admin_coin_orders_log:
+#     path:     /coin/orders/log/{id}
+#     defaults: { _controller: TopxiaAdminBundle:Coin:logs }
+# # admin_coin_admin:
+# #     path:     /coin/admin
+# #     defaults: { _controller: TopxiaAdminBundle:Coin:admin }
+# admin_coin_admin_edit:
+#     path:     /coin/admin/edit/{id}
+#     defaults: { _controller: TopxiaAdminBundle:Coin:edit }
 
-admin_coin_give:
-    path:     /coin/give
-    defaults: { _controller: TopxiaAdminBundle:Coin:giveCoin }
+# admin_coin_give:
+#     path:     /coin/give
+#     defaults: { _controller: TopxiaAdminBundle:Coin:giveCoin }
 
-admin_coin_give_check_nickname:
-    path:     /coin/give/check_nickname
-    defaults: { _controller: TopxiaAdminBundle:Coin:checkNickname }
+# admin_coin_give_check_nickname:
+#     path:     /coin/give/check_nickname
+#     defaults: { _controller: TopxiaAdminBundle:Coin:checkNickname }
 
