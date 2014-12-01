@@ -43,6 +43,10 @@
             {{ dict_text('orderStatus:html', order.status) }}
           </td>
           <td>
+             {# to see details #}
+                         <a data-role="selectCourse" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search_to_fill_banner')}}" >
+                            xx
+                          </a>
              <div class="actions">
               {% if order.status == 'refunding' %}
                 <a href="javascript:;" class="text-sm cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">取消退款</a>
