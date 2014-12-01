@@ -60,6 +60,171 @@ class GroupThread1Controller extends GroupThreadController
         )));
     }
 
+    public function groupThreadIndexAction(Request $request,$id,$threadId)
+    {  
+        $group = $this->getGroupService()->getGroup($id);
+        if($group['status']=="close"){
+            return $this->createMessageResponse('info','该小组已被关闭');
+        }
+
+        $user=$this->getCurrentUser();
+
+        $threadMain=$this->getThreadService()->getThread($threadId);
+
+        if (empty($threadMain)) {
+            return $this->createMessageResponse('info','该话题已被管理员删除');
+        }
+
+        if($threadMain['status']=="close"){
+            return $this->createMessageResponse('info','该话题已被关闭');
+        }
+
+         if ($threadMain['status']!="close") {
+            $isCollected = $this->getThreadService()->isCollected($this->getCurrentUser()->id, $threadMain['id']);
+        } else {
+            $isCollected = false;
+        }
+        
+        $this->getThreadService()->waveHitNum($threadId);
+
+        if($request->query->get('post'))
+        {   
+            $url=$this->getPost($request->query->get('post'),$threadId,$id);
+            
+            return $this->redirect($url);
+        }
+
+        $owner=$this->getUserService()->getUser($threadMain['userId']);
+
+        $filters=$this->getPostSearchFilters($request);
+
+        $condition=$this->getPostCondition($filters['type'],$threadMain['userId'],$threadId);
+
+        $sort=$this->getPostOrderBy($filters['sort']);
+
+        $postCount=$this->getThreadService()->searchPostsCount($condition);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $postCount,
+            30  
+        );
+
+        $post=$this->getThreadService()->searchPosts($condition,$sort,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount());
+
+        $postMemberIds = ArrayToolkit::column($post, 'userId');
+
+        $postId=ArrayToolkit::column($post, 'id');
+
+        $postReplyAll=array();
+        $postReply=array();
+        $postReplyCount=array();
+        $postReplyPaginator=array();
+        foreach ($postId as $key => $value) {
+
+            $replyCount=$this->getThreadService()->searchPostsCount(array('postId'=>$value));
+            $replyPaginator = new Paginator(
+                $this->get('request'),
+                $replyCount,
+                10  
+            );
+
+            $reply=$this->getThreadService()->searchPosts(array('postId'=>$value),array('createdTime','asc'),
+                $replyPaginator->getOffsetCount(),
+                $replyPaginator->getPerPageCount());
+
+            $postReplyCount[$value]=$replyCount;
+            $postReply[$value]=$reply;
+            $postReplyPaginator[$value]=$replyPaginator;
+
+            if($reply){
+                $postReplyAll=array_merge($postReplyAll,ArrayToolkit::column($reply, 'userId'));
+            }
+        }
+
+        $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
+        $postMember=$this->getUserService()->findUsersByIds($postMemberIds);
+
+        $activeMembers=$this->getGroupService()->searchMembers(array('groupId'=>$id),
+            array('postNum','DESC'),0,12);
+
+        $memberIds = ArrayToolkit::column($activeMembers, 'userId');
+        $members=$this->getUserService()->findUsersByIds($memberIds);
+
+        $groupShareContent="";
+        $defaultSetting = $this->getSettingService()->get('default', array());
+        if(isset($defaultSetting['groupShareContent'])){
+            $groupShareContent = str_replace("{{groupname}}", $group['title'], $defaultSetting['groupShareContent']);
+            $groupShareContent = str_replace("{{threadname}}", $threadMain['title'], $groupShareContent);
+        }
+
+        return $this->render('CustomWebBundle:Group:thread.html.twig',array(
+            'groupinfo' => $group,
+            'isCollected' => $isCollected,
+            'groupShareContent'=>$groupShareContent,
+            'threadMain'=>$threadMain,
+            'user'=>$user,
+            'owner'=>$owner,
+            'post'=>$post,
+            'paginator'=>$paginator,
+            'postMember'=>$postMember,
+            'filters'=>$filters,
+            'postCount'=>$postCount,
+            'postReply'=>$postReply,
+            'activeMembers'=>$activeMembers,
+            'postReplyMembers'=>$postReplyMembers,
+            'members'=>$members,
+            'postReplyCount'=>$postReplyCount,
+            'postReplyPaginator'=>$postReplyPaginator,
+            'is_groupmember' => $this->getGroupMemberRole($id)));
+    }
+
+    public function rewardAction()
+    {   
+        
+        return $this->render('CustomWebBundle:Group:reward-modal.html.twig',array());
+    }
+
+    private function getPostOrderBy($sort)
+    {
+        if($sort=='asc') return array('createdTime','asc');
+
+        if($sort=='desc') return array('createdTime','desc');
+    }
+
+    private function getPostCondition($filters,$ownId,$threadId)
+    {
+        if($filters=='all') return array('threadId'=>$threadId,'status'=>'open','postId'=>0);
+
+        if($filters=='onlyOwner') return array('threadId'=>$threadId,'status'=>'open','userId'=>$ownId,'postId'=>0);
+
+        return false;
+
+    }
+
+    private function getPostSearchFilters($request)
+    {
+        $filters=array();
+
+        $filters['type']=$request->query->get('type');
+
+        if(!in_array($filters['type'], array('all','onlyOwner'))){
+
+            $filters['type']='all';
+        }
+
+        $filters['sort']=$request->query->get('sort');
+
+        if(!in_array($filters['sort'], array('asc','desc'))){
+
+            $filters['sort']='asc';
+        }
+
+        return $filters;
+    }
+
     private function getGroupMemberRole($userId)
     {
        $user = $this->getCurrentUser();

@@ -1,0 +1,30 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+{% block title %}悬赏{% endblock %}
+{% block body %}
+
+<form id="change-form" class="form-horizontal" method="post" action="{{path('coin_change')}}">
+
+  <div class="row form-group">
+    <div class="col-md-3 col-md-offset-2 control">
+      <label for="amount" class="control-label"> 请输入悬赏额:</label>
+    </div>
+    <div class="col-md-3 controls">
+       <input name="amount" class="form-control" tyoe="text"/>
+    </div>
+
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+{% endblock %}
+
+{% block footer %}
+  <script>
+    app.load('customwebbundle/controller/group/reward-modal');
+  </script>
+  <button id="create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#change-form">提交</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+{% endblock %}

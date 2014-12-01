@@ -39,9 +39,15 @@ sign_repair:
     pattern:  /sign/{groupId}/repair
     defaults: { _controller: CustomWebBundle:Sign:signRepair }
 
-group_thread_setElite:
-    pattern:  /group/thread/{threadId}/setElite
-    defaults: { _controller: CustomWebBundle:GroupThread1:setElite }
-group_thread_removeElite:
-    pattern:  /group/thread/{threadId}/removeElite
-    defaults: { _controller: CustomWebBundle:GroupThread1:removeElite }
+# group_thread_setElite:
+#     pattern:  /group/thread/{threadId}/setElite
+#     defaults: { _controller: CustomWebBundle:GroupThread1:setElite }
+# group_thread_removeElite:
+#     pattern:  /group/thread/{threadId}/removeElite
+#     defaults: { _controller: CustomWebBundle:GroupThread1:removeElite }
+# group_thread_show:
+#     pattern:  /group/{id}/thread/{threadId}
+#     defaults: { _controller: CustomWebBundle:GroupThread1:groupThreadIndex }
+# group_thread_reward:
+#     pattern:  /thread/{threadId}/reward
+#     defaults: { _controller: CustomWebBundle:GroupThread1:reward }

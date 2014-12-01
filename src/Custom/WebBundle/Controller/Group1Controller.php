@@ -148,7 +148,7 @@ class Group1Controller extends GroupController
         $vipLevels=$this->getLevelService()->searchLevels(array(),0,1000);  
         
         $canUseCard=$this->getSignService()->getSignCardByUserId($user->id);
-     print_r($canUseCard);
+
         return $this->render("CustomWebBundle:Group:groupindex.html.twig", array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),

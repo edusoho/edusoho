@@ -26,8 +26,9 @@ class CourseOrder1ServiceImpl extends CourseOrderServiceImpl implements CourseOr
 
         if (!$this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
             $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-    
-            $log=array(
+            
+            if($order['payment']=="alipay"){
+                $log=array(
                     'title'=>$order['title'],
                     'userId'=>$order['userId'],
                     'type'=>'in',
@@ -36,7 +37,9 @@ class CourseOrder1ServiceImpl extends CourseOrderServiceImpl implements CourseOr
                     'amount'=>$order['amount'],
                     );
 
-            $this->getVipService()->addPointLog($log);
+                $this->getVipService()->addPointLog($log);
+            }
+
         }
 
         return ;
