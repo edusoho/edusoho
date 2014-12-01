@@ -333,12 +333,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		        			"noteLastUpdateTime"=>date('c',$courseMember['noteLastUpdateTime']),
 		        			"lessonId"=>$lessonInfo['id'],
 		        			"lessonTitle"=>$lessonInfo['title'],
-		        			"learnStatuses"=>$lessonStatus,
+		        			"learnStatus"=>$lessonStatus,
 		        			"content"=>$this->controller->convertAbsoluteUrl($this->request, $value['content']),
 		        			"createdTime"=>date('c', $value['createdTime']),
 		        			"noteNum"=>$noteNum,
 		        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png'),
-		        			;
+		        			);
 	        		}
 	        	}
 	        	/*
