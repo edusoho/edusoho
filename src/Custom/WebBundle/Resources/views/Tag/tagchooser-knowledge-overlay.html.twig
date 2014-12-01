@@ -1,0 +1,16 @@
+<div id="{{ id }}-overlay" class="tagchooser-overlay">
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+      {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: id, categoryId: categoryId} %}
+    </div>
+
+    <div class="panel-footer">
+      <button type="button" class="btn btn-primary btn-xs pull-right tag-search-confrim">确定</button>
+      <button type="button" class="btn btn-link btn-xs pull-right tag-search-cancel">取消</button>
+    </div>
+
+  </div>
+
+  </div>
+</div>
