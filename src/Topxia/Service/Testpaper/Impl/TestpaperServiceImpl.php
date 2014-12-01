@@ -54,6 +54,19 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return array($testpaper, $items);
     }
 
+    public function createTestpaperAdvanced($fields)
+    {
+        $fields['score'] = 0;
+        $fields['itemCount'] = 0;
+        $parts = $fields['metas']['parts'];
+        foreach ($parts as $part) {
+            $fields['score'] += $part['score'] * $part['count'];
+            $fields['itemCount'] += $part['count'];
+        }
+
+        return $this->getTestpaperDao()->addTestpaper($this->filterTestpaperFields($fields, 'create'));
+    }
+
     public function updateTestpaper($id, $fields)
     {
         $testpaper = $this->getTestpaperDao()->getTestpaper($id);
@@ -77,6 +90,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $filtedFields['target'] = $fields['target'];
             $filtedFields['pattern'] = $fields['pattern'];
             $filtedFields['description']   = empty($fields['description'])? '' : $fields['description'];
+            $filtedFields['score']   = empty($fields['score'])? '' : $fields['score'];
+            $filtedFields['itemCount']   = empty($fields['itemCount'])? '' : $fields['itemCount'];
             $filtedFields['limitedTime']   = empty($fields['limitedTime']) ? 0 : (int) $fields['limitedTime'];
             $filtedFields['metas']   = empty($fields['metas'])? array() : $fields['metas'];
             $filtedFields['status'] = 'draft';

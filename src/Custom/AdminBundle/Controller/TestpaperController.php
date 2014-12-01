@@ -70,6 +70,37 @@ class TestpaperController extends BaseController
         ));
     }
 
+    public function createAdvancedAction(Request $request)
+    {
+        $category = $this->getCategoryService()->getCategory($request->query->get('categoryId'));
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $fields['target'] = "category-{$category['id']}";
+            $fields['pattern'] = 'Part';
+            $fields['metas'] = array('parts' => json_decode($fields['parts'], true));
+            unset($fields['parts']);
+            $testpaper= $this->getTestpaperService()->createTestpaperAdvanced($fields);
+            return $this->redirect($this->generateUrl('admin_testpaper',array('categoryId' => $category['id'])));
+        }
+
+        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $types = array();
+        foreach ($typeNames as $type => $name) {
+            $typeObj = QuestionTypeFactory::create($type);
+            $types[] = array(
+                'key' => $type,
+                'name' => $name,
+                'hasMissScore' => $typeObj->hasMissScore(),
+            );
+        }
+
+        return $this->render('CustomAdminBundle:Testpaper:create-advanced.html.twig', array(
+            'category'    => $category,
+            'types' => $types,
+        ));
+    }
+
     public function buildCheckAction(Request $request)
     {
         $category = $this->getCategoryService()->getCategory($request->query->get('categoryId'));

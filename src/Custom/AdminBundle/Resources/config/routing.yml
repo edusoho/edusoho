@@ -11,6 +11,10 @@ admin_testpaper_create:
     pattern: /testpaper/create
     defaults: { _controller: CustomAdminBundle:Testpaper:create }
 
+admin_testpaper_create_advanced:
+    pattern: /testpaper/create-advanced
+    defaults: { _controller: CustomAdminBundle:Testpaper:createAdvanced }
+
 admin_testpaper_build_check:
     pattern: /testpaper/build_check
     defaults: { _controller: CustomAdminBundle:Testpaper:buildCheck }

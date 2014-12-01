@@ -41,7 +41,7 @@
           <div class="list-group">
             <a class="list-group-item {% if side_nav == 'question' %}active{% endif %}" href="{{ path('admin_category_manage_question', {categoryId:category.id}) }}">题目管理</a>
             <a class="list-group-item {% if side_nav == 'question_plumber' %}active{% endif %}" href="#">题目导入/导出</a>
-            <a class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}" href="#">试卷管理</a>
+            <a class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}" href="{{ path('admin_testpaper', {categoryId:category.id}) }}">试卷管理</a>
           </div>
         </div>
       </div>
