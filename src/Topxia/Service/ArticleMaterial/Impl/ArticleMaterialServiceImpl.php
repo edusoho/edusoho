@@ -80,12 +80,11 @@ class ArticleMaterialServiceImpl extends BaseService implements ArticleMaterialS
         $articleMaterial = ArrayToolkit::parts($articleMaterial,array('content','knowledgeIds','mainKnowledgeId','relatedKnowledgeIds','tagIds','title','categoryId'));
         $articleMaterial['userId'] = $this->getCurrentUser()->id;
         $articleMaterial['createdTime'] = time();
-
         if (empty($articleMaterial['relatedKnowledgeIds'])) {
             $articleMaterial['knowledgeIds'] = $articleMaterial['mainKnowledgeId'];
         } else {
-            $articleMaterial['knowledgeIds'] = $articleMaterial['relatedKnowledgeIds'].",".$articleMaterial['mainKnowledgeId'];
-            $articleMaterial['relatedKnowledgeIds'] = array_filter(explode(',', $articleMaterial['relatedKnowledgeIds']));
+            $articleMaterial['knowledgeIds'] = implode(",", $articleMaterial['relatedKnowledgeIds']).",".$articleMaterial['mainKnowledgeId'];
+            $articleMaterial['relatedKnowledgeIds'] = $articleMaterial['relatedKnowledgeIds'];
         }
 
         $articleMaterial['knowledgeIds'] = array_filter(explode(',', $articleMaterial['knowledgeIds']));

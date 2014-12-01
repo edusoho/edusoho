@@ -11,6 +11,7 @@
 
 {% block body %}
   <div style="padding:20px;">
+  	{% include 'TopxiaAdminBundle:QuizQuestionTest:do-test-header.html.twig' %}
   {% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
   </div>
 {% endblock %}

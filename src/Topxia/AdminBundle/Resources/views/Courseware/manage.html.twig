@@ -7,36 +7,33 @@
 {% set script_controller = 'courseware/main' %}
 
 {% block main %}
+ <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser2.css') }}" />
 <div class="page-header clearfix">
   <h1 class="pull-left">课件管理</h1>
     <button class="btn btn-sm btn-info pull-right add-category" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_courseware_create', {categoryId:category.id}) }}">添加课件</button>
 </div>
-  <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
-
+<div class="well well-sm">
+  <form class="form-inline" id="message-search-form" role="form" style="position: relative;">
     <div class="form-group">
       <input class="form-control" type="text" placeholder="知识点搜索" name="knowledgeIds[]" value="{{ app.request.get('knowledgeIds[]') }}">
       <span class="glyphicon glyphicon-tasks"></span>
     </div>
 
-    <div class="form-group">
-      <select class="form-control method-form-group" name="method">
-        {{ select_options(dict('courseware'), app.request.query.get('method')) }}
-      </select>
-    </div>
 
-    <div class="form-group tagIds-form-group {% if method == 'title' %}hide{% endif %}">
-{#       {% set tagIds = app.request.get('tagIds') %}
-      {% include 'TopxiaAdminBundle:Courseware:tag-widget.html.twig' %} #}
-    </div>
-
-    <div class="form-group title-form-group {% if method != 'title' %}hide{% endif %}">
-
+    <div class="form-group title-form-group">
       <input class="form-control" type="text" placeholder="标题关键词搜索" name="title" value="{{ app.request.get('title') }}">
     </div>
 
-    <button class="btn btn-primary">搜索</button>
-
+        <div class="form-group tag-search-group">
+          标签：<a href="#" class="tag-search-trigger">选择</a>
+        </div>
+      {% include('TopxiaWebBundle:TagChooser:tag-form-search.html.twig') %}
+    <div class="form-group">
+      <button class="btn btn-primary">搜索</button>
+    </div>
   </form>
+</div>
 <div class="courseware-list">
   {% block list %}{% endblock %}
 

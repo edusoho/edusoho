@@ -35,13 +35,11 @@ define(function(require, exports, module){
                   sourceUrl: '/admin/tagset/get',
                   queryUrl: '/admin/tags/Choosered',
                   matchUrl: '/admin/tagset/match?q={{query}}',
-                  maxTagNum: 3,
+                  maxTagNum: 15,
                   choosedTags: $tagIds
                 });
 
                 chooser.on('change', function(tags) {
-
-                  console.log('change tags', tags);
                   var tagIdsTemp = [];
                   $.each(tags,function(i,item){
                       tagIdsTemp.push(item.id)
@@ -50,7 +48,6 @@ define(function(require, exports, module){
                 });
 
                 chooser.on('existed', function(existTag){
-                  console.log('existed');
                 });
             }
 
@@ -73,7 +70,6 @@ define(function(require, exports, module){
 
                 chooserTreeForMainKnowlege.on('change', function(tags) {
 
-                  console.log('change tags', tags);
                   $.each(tags,function(i,item){
                     mainKnowledgeId = item.id;
                   });
@@ -81,7 +77,6 @@ define(function(require, exports, module){
                 });
 
                 chooserTreeForMainKnowlege.on('existed', function(existTag){
-                  console.log('existed');
                 });
             }
          
@@ -97,13 +92,11 @@ define(function(require, exports, module){
               sourceUrl: "/admin/knowledge/getTreeList?categoryId="+$categoryId,
               queryUrl: '/admin/knowledge/choosered',
               matchUrl: '/admin/tagset/match?q={{query}}',
-              maxTagNum: 3,
+              maxTagNum: 15,
               choosedTags: $relatedKnowledgeIds
             });
 
             chooserTreeForRelatedKnowlege.on('change', function(tags) {
-
-              console.log('change tags', tags);
 
               var relatedKnowledgeIdsTemp = [];
               $.each(tags,function(i,item){
@@ -114,7 +107,6 @@ define(function(require, exports, module){
             });
 
             chooserTreeForRelatedKnowlege.on('existed', function(existTag){
-              console.log('existed');
             });
          }
 
@@ -132,9 +124,14 @@ define(function(require, exports, module){
                     $('#courseware-operate-btn').button('submiting').button('loading').addClass('disabled');
                     tagIds = tagIds.join(",");
                     relatedKnowledgeIds = relatedKnowledgeIds.join(",");
-                    $.post($form.attr('action'), $form.serialize()+'&tagIds='+tagIds+'&mainKnowledgeId='+mainKnowledgeId+'&relatedKnowledgeIds='+relatedKnowledgeIds, function(html) {
-                        Notify.success('操作成功！');
-                        window.location.reload();
+                    $.post($form.attr('action'), $form.serialize()+'&tagIds='+tagIds+'&mainKnowledgeId='+mainKnowledgeId+'&relatedKnowledgeIds='+relatedKnowledgeIds, function(response) {
+                        if (response.error){
+                            Notify.danger(response.message);
+                            $('#courseware-operate-btn').removeClass('disabled');
+                        } else {
+                            Notify.success('操作成功！');
+                            window.location.reload();
+                        }                      
                     });
                 }
             });
@@ -181,20 +178,5 @@ define(function(require, exports, module){
             }
         });
 
-        var tagModalChooser = new TagChooser({
-            element: '#tag-modal-chooser',
-            sourceUrl: 'xxxx',
-            multi: true,
-            items: []
-        });
-
-        tagModalChooser.on('choosed', function(items) {
-            var tagIds = [];
-            for (var i = items.length - 1; i >= 0; i--) {
-                tagIds[i] = items[i]['id'];
-                console.log(items[i]['id']);
-            };
-            $('#courseware-tag-field').val(tagIds);
-        });
     }
 });

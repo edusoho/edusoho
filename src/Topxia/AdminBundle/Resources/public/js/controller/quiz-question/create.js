@@ -110,7 +110,7 @@ define(function(require, exports, module) {
         {
            if ($('[data-role=related-knowledge-ids]').length > 0) {
                $relatedKnowledgeIds = $('[data-role=related-knowledge-ids]').val();
-               $relatedKnowledgeIds = [$relatedKnowledgeIds];
+               $relatedKnowledgeIds = $relatedKnowledgeIds.split(",");
            };
 
            var chooserTreeForRelatedKnowlege = new TagTreeChooser({

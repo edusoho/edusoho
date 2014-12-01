@@ -5,11 +5,14 @@
 {% set modal_class = 'modal-lg' %}
 
 {% block body %}
+	
+	{% include 'TopxiaAdminBundle:QuizQuestionTest:do-test-header.html.twig' %}
 
-  {% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
+  {% include 'TopxiaAdminBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
 
 {% endblock %}
 {% block footer %}
+  <link href="{{ asset('bundles/topxiaweb/css/web.css') }}" rel="stylesheet" />
   <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
   <script>app.load('quiz-question/preview');</script>
 {% endblock %}

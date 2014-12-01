@@ -2,6 +2,10 @@
 {% block title %}{% if articleMaterial|default(null) %}编辑{% else %}添加{% endif %}素材{% endblock %}
 
 {% block body %}
+
+	<link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
+	<link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser.css') }}" />
+
 	<div id="article-material-creater-widget">
 	<form id="article-material-form" class="form-horizontal" action="{% if articleMaterial|default(null) %}{{ path('admin_article_material_edit',{categoryId:category.id,id:articleMaterial.id}) }}{% else %}{{ path('admin_article_material_create',{categoryId:category.id}) }} {% endif %}" method="post">
 
@@ -28,10 +32,10 @@
 			<label class="col-md-3 control-label" for="article-material-mainKnowledgeId-field">
 				主知识点
 			</label>
-			<div class="col-md-7 controls">
-				<input class="form-control" id="article-material-mainKnowledgeId-field" type="text" name="mainKnowledgeId" value="{{ articleMaterial.mainKnowledgeId|default(null) }}" >
-				<div class="help-block"></div>
+	      	<div class="col-md-7 controls">
+	      		{% include('TopxiaWebBundle:TagChooser:tag-chooser-tree-main-knowledge.html.twig') %}
 			</div>
+
 		</div>
 
 		<div class="form-group">
@@ -39,20 +43,26 @@
 				关联知识点
 			</label>
 			<div class="col-md-7 controls">
-				<input class="form-control" id="article-material-relatedKnowledgeIds-field" type="text" name="relatedKnowledgeIds" value="{{ articleMaterial.relatedKnowledgeIds|default(null) }}" >
+				{% include('TopxiaWebBundle:TagChooser:tag-chooser-tree-related-knowledge.html.twig') %}
 			</div>
 		</div>
 
 		<div class="form-group">
-			<label class="col-md-3 control-label" for="article-material-relatedKnowledgeIds-field">
+			<label class="col-md-3 control-label" for="article-material-tag-field">
 				标签
 			</label>
-			<div class="col-md-7 controls">
-				<input class="form-control" id="article-material-tagIds-field" type="text" name="tagIds" value="{{ articleMaterial.tagIds|default(null) }}" >
+	      	<div class="col-md-7 controls">
+	      		{% include('TopxiaWebBundle:TagChooser:tag-chooser.html.twig') %}
 			</div>
 		</div>
 
+		{% if articleMaterial|default(null) %}
+			<input type="hidden" data-role='tag-ids' value="{{articleMaterial.tagIds}}">
+			<input type="hidden" data-role='main-knowledge-ids' value="{{articleMaterial.mainKnowledgeId}}">
+			<input type="hidden" data-role='related-knowledge-ids' value="{{articleMaterial.relatedKnowledgeIds}}">
+		{% endif %}
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+		<input type="hidden" data-role='categoryId' value="{{category.id}}">
 	</form>
 
 </div>

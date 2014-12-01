@@ -227,10 +227,19 @@ class CategoryQuestionManageController extends BaseController
         $type = in_array($question['type'], array('single_choice', 'uncertain_choice')) ? 'choice' : $question['type'];
         $questionPreview = true;
 
+        $mainKnowledge = $this->getKnowledgeService()->getKnowledge($question['mainKnowledgeId']);
+        $tagIds = explode(',', $question['tagIds']);
+        $tags = $this->getTagService()->findTagsByIds($tagIds);
+        $kids = explode(',', $question['relatedKnowledgeIds']);
+        $relatedKnowledges = $this->getKnowledgeService()->findKnowledgeByIds($kids);
+
         if($isNewWindow){
             return $this->render('TopxiaAdminBundle:QuizQuestionTest:question-preview.html.twig', array(
                 'item' => $item,
                 'type' => $type,
+                'mainKnowledge' => $mainKnowledge,
+                'relatedKnowledges' => $relatedKnowledges,
+                'tags' => $tags,
                 'questionPreview' => $questionPreview
             ));
         }
@@ -238,13 +247,11 @@ class CategoryQuestionManageController extends BaseController
         return $this->render('TopxiaAdminBundle:QuizQuestionTest:question-preview-modal.html.twig', array(
             'item' => $item,
             'type' => $type,
+            'mainKnowledge' => $mainKnowledge,
+            'relatedKnowledges' => $relatedKnowledges,
+            'tags' => $tags,
             'questionPreview' => $questionPreview
         ));
-    }
-
-    public function tagsAction(Request $request, $categoryId)
-    {
-        $tagIds = $this->getQuestionService()->getQuestion();
     }
 
     private function getQuestionTargetChoices($course)
@@ -289,6 +296,16 @@ class CategoryQuestionManageController extends BaseController
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    private function getKnowledgeService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.KnowledgeService');
+    }
+
+    private function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Tag.TagService');
     }
 
 }
