@@ -326,16 +326,19 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	        		$noteListByOneCourse = $this->controller->getNoteService()->findUserCourseNotes($user['id'],$courseMember['courseId']);
 	        		foreach ($noteListByOneCourse as $value) {
 	        			$lessonInfo = $this->controller->getCourseService()->getCourseLesson($value['courseId'],$value['lessonId']);
+	        			$lessonStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $value['courseId'],$value['lessonId']);
 	        			$noteInfos[] = array(
 		        			"coursesId"=>$courseMember['courseId'],
 		        			"courseTitle"=>$course['title'],
 		        			"noteLastUpdateTime"=>date('c',$courseMember['noteLastUpdateTime']),
+		        			"lessonId"=>$lessonInfo['id'],
 		        			"lessonTitle"=>$lessonInfo['title'],
+		        			"learnStatuses"=>$lessonStatus,
 		        			"content"=>$this->controller->convertAbsoluteUrl($this->request, $value['content']),
 		        			"createdTime"=>date('c', $value['createdTime']),
 		        			"noteNum"=>$noteNum,
-		        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png')
-		        			);
+		        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png'),
+		        			;
 	        		}
 	        	}
 	        	/*
