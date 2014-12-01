@@ -218,7 +218,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
             );
         }
-
+                
         $tokenAndUrl = $this->getCloudClient()->makeUploadParams($rawUploadParams);
 
         $key = null;
@@ -226,11 +226,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $key = $rawParams['key'];
         }
 
-        if (!empty($rawParams['targetType']) && !empty($rawParams['targetId'])) {
+        if (!empty($rawParams['targetType']) && isset($rawParams['targetId'])) {
             $keySuffix = date('Ymdhis') . '-' . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
             $key = "{$rawParams['targetType']}-{$rawParams['targetId']}/{$keySuffix}";
         }
-
+        
         if (empty($key)) {
             throw $this->createServiceException("key error.");
         }

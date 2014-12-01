@@ -74,9 +74,9 @@ class UserServiceImpl extends BaseService implements UserService
         return  ArrayToolkit::index($userProfiles, 'id');
     }
 
-    public function searchUsers(array $conditions, array $oderBy, $start, $limit)
+    public function searchUsers(array $conditions, array $orderBy, $start, $limit)
     {
-        $users = $this->getUserDao()->searchUsers($conditions, $oderBy, $start, $limit);
+        $users = $this->getUserDao()->searchUsers($conditions, $orderBy, $start, $limit);
         return UserSerialize::unserializes($users);
     }
 

@@ -15,7 +15,11 @@
     <div class="file-chooser-main">
       <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
         <li class="active"><a class="file-chooser-uploader-tab" href="#video-chooser-upload-pane" data-toggle="tab">上传视频</a></li>
-        <li><a href="#video-chooser-disk-pane" data-toggle="tab">从视频库中选择</a></li>
+        <li>
+          <a href="#video-chooser-disk-pane" data-toggle="tab">
+  					从视频库中选择
+          </a>
+        </li>
         <li><a href="#video-chooser-import-pane" data-toggle="tab">导入网络视频</a></li>
       </ul>
       <div class="tab-content">
@@ -118,10 +122,20 @@
 
         </div>
         <div class="tab-pane" id="video-chooser-disk-pane">
+					{% if is_plugin_installed('MaterialLib') %}
+            <div id="file-browser-video" data-role="file-browser"
+            data-base-url="{{ path('uploadfile_browser', {type:'video'}) }}" 
+            data-default-url="{{ path('uploadfile_browser', {type:'video', source:'upload'}) }}" 
+            data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+            data-empty="暂无视频文件，请先上传。">
+            	<div class="file-browser-list-container"></div>
+            </div>
+          {% else %}
             <div id="file-browser-video" data-role="file-browser"
             data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'video'}) }}" 
             data-empty="暂无视频文件，请先上传。">
             </div>
+          {% endif %}
         </div>
         <div class="tab-pane" id="video-chooser-import-pane">
           <div class="input-group">
@@ -150,7 +164,9 @@
     <div class="file-chooser-main">
       <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
         <li class="active"><a class="file-chooser-uploader-tab" href="#audio-chooser-upload-pane" data-toggle="tab">上传音频</a></li>
-        <li><a href="#audio-chooser-disk-pane" data-toggle="tab">从音频库中选择</a></li>
+        <li><a href="#audio-chooser-disk-pane" data-toggle="tab">
+    					从音频库中选择
+        </a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="audio-chooser-upload-pane">
@@ -200,8 +216,18 @@
 
         </div>
         <div class="tab-pane" id="audio-chooser-disk-pane">
+					{% if is_plugin_installed('MaterialLib') %}
+          <div id="file-browser-audio" data-role="file-browser"
+          		data-base-url="{{ path('uploadfile_browser', {type:'audio'}) }}" 
+            data-default-url="{{ path('uploadfile_browser', {type:'audio', source:'upload'}) }}" 
+            data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+            data-empty="暂无音频文件，请先上传。">
+          		<div class="file-browser-list-container"></div>
+          </div>
+        {% else %}
           <div id="file-browser-audio" data-role="file-browser"
           data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'audio'}) }}" data-empty="暂无音频文件，请先上传。"></div>
+        {% endif %}
         </div>
       </div>
     </div>
@@ -224,7 +250,9 @@
     <div class="file-chooser-main">
       <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
         <li class="active"><a class="file-chooser-uploader-tab" href="#ppt-chooser-upload-pane" data-toggle="tab">上传PPT</a></li>
-        <li><a href="#ppt-chooser-disk-pane" data-toggle="tab">从PPT库中选择</a></li>
+        <li><a href="#ppt-chooser-disk-pane" data-toggle="tab">
+    					从PPT库中选择
+        </a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="ppt-chooser-upload-pane">
@@ -261,8 +289,19 @@
 
         </div>
         <div class="tab-pane" id="ppt-chooser-disk-pane">
+						{% if is_plugin_installed('MaterialLib') %}
           <div id="file-browser-ppt" data-role="file-browser"
-          data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。"></div>
+          		data-base-url="{{ path('uploadfile_browser', {type:'ppt'}) }}" 
+            data-default-url="{{ path('uploadfile_browser', {type:'ppt', source:'upload'}) }}" 
+            data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+          		data-empty="暂无PPT文件，请先上传。">
+          	<div class="file-browser-list-container"></div>
+          </div>
+          {% else %}
+          	<div id="file-browser-ppt" data-role="file-browser"
+          	data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。"></div>
+          
+          {% endif %}
         </div>
       </div>
     </div>
