@@ -3,8 +3,8 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Overlay = require('overlay');
     require("$");
-    var TagTreeChooser = require('tag-tree-chooser2');
-    var TagChooser = require('tag-chooser2');
+    var TagTreeChooser = require('tag-tree-chooser');
+    var TagChooser = require('tag-chooser');
     
     exports.run = function() {
 

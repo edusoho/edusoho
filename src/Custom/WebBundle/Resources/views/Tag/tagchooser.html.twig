@@ -1,0 +1,9 @@
+<div 
+  id="{{ id }}"
+  class="tagchooser"
+  data-source-url="{{ path('json_tags_search', {type: type}) }}"
+  data-query-url="{{ path('json_tags_query') }}"
+  data-match-url="{{ path('json_tags_match') }}?q={% verbatim %}{{query}}{% endverbatim %}"
+  >
+  {% include 'CustomWebBundle:Tag:tagchooser-base.html.twig' %}
+</div>

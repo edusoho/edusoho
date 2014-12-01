@@ -1,3 +1,23 @@
-test_index:
-    pattern:  /test/index
-    defaults: { _controller: CustomWebBundle:Default:index }
+json_tags_search:
+    pattern:  /json/tags/search
+    defaults: { _controller: CustomWebBundle:JsonTags:search }
+
+json_tags_match:
+    pattern:  /json/tags/match
+    defaults: { _controller: CustomWebBundle:JsonTags:match }
+
+json_tags_query:
+    pattern:  /json/tags/query
+    defaults: { _controller: CustomWebBundle:JsonTags:query }
+
+json_knowledges_search:
+    pattern:  /json/Knowledges/search
+    defaults: { _controller: CustomWebBundle:JsonKnowledges:search }
+
+json_knowledges_match:
+    pattern:  /json/Knowledges/match
+    defaults: { _controller: CustomWebBundle:JsonKnowledges:match }
+
+json_knowledges_query:
+    pattern:  /json/Knowledges/query
+    defaults: { _controller: CustomWebBundle:JsonKnowledges:query }

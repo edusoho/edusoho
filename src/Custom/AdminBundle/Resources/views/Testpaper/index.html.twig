@@ -56,12 +56,8 @@
 
           <div class="panel panel-default">
             <div class="panel-body">
-              <div id="tags-search"
-                data-source-url="/admin/tagset/get"
-                data-query-url="/admin/tags/Choosered"
-                data-match-url="/admin/tagset/match?q={% verbatim %}{{query}}{% endverbatim %}"
-              >
-              {% include('TopxiaWebBundle:TagChooser:tag-chooser2.html.twig') %}
+              {% include 'CustomWebBundle:Tag:tagchooser.html.twig' with {id: 'tags-search', type: 'question'} %}
+              <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
             </div>
 
             <div class="panel-footer">
@@ -78,12 +74,8 @@
 
           <div class="panel panel-default">
             <div class="panel-body">
-              <div id="knowledges-search"
-                data-source-url="/admin/knowledge/getTreeList?categoryId={{ category.id }}"
-                data-query-url="/admin/knowledge/choosered"
-                data-match-url="/admin/tagset/match?q={% verbatim %}{{query}}{% endverbatim %}"
-              >
-              {% include('TopxiaWebBundle:TagChooser:tag-chooser2.html.twig') %}
+              {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'knowledges-search', categoryId: category.id} %}
+              <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">
             </div>
 
             <div class="panel-footer">
@@ -95,8 +87,6 @@
 
           </div>
         </div>
-        <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds')|default('') }}">
-        <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds')|default('') }}">
       </form>
       
     </div>
