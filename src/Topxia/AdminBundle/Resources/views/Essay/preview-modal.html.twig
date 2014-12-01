@@ -11,13 +11,12 @@
     {% if 'chapter' in id %}
       <div>
         {% if item.type == 'unit' %}
-          &nbsp;&nbsp;第 <span class="number">{{ item.number }}</span>节： {{ item.title }}
+          <h4>&nbsp;&nbsp;第{{ item.number }}节： {{ item.title }}</h4>
         {% else %}
-          第 <span class="number">{{ item.number }}</span> 章： {{ item.title }}
+        <h4><strong>第{{ item.number }}章： {{ item.title }}</strong></h4>
         {% endif %}
       </div>
     {% elseif 'content' in id %}
-      <div>&nbsp;&nbsp;&nbsp;&nbsp;{{ item.title }}</div>
       <div>    {{ item.content|raw }}</div>
     {% endif %}
   {% endfor %}
