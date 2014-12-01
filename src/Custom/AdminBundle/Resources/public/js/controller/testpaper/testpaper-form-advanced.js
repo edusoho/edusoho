@@ -6,6 +6,8 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     require('jquery.sortable');
+    var TagTreeChooser = require('tag-tree-chooser2');
+    var TagChooser = require('tag-chooser2');
 
     var TestpaperForm = Widget.extend({
 
@@ -94,7 +96,26 @@ define(function(require, exports, module) {
                     $missScoreFormGroup.show();
                 }
 
-                console.log(values);
+            });
+
+            $modal.on('shown.bs.modal', function(e) {
+                var tagPartChooser = new TagChooser({
+                    element: '#testpaper-part-tags',
+                    sourceUrl: $('#testpaper-tags').data('sourceUrl'),
+                    queryUrl: $('#testpaper-tags').data('queryUrl'),
+                    matchUrl: $('#testpaper-tags').data('matchUrl'),
+                    maxTagNum: 15
+                });
+
+                var $partForm = $('.testpaper-part-form');
+                tagPartChooser.on('change', function(tags) {
+                    var ids = [];
+                    $.each(tags, function(i, tag) {
+                        ids.push(tag.id);
+                    });
+                    $partForm.find('[name=tagIds]').val(ids.join(','));
+                });
+
             });
 
 
@@ -124,6 +145,8 @@ define(function(require, exports, module) {
                     return isContainer ? children : parent.attr('id');
                 }
             });
+
+            this._initTagChooser();
 
             this._initPartForm();
 
@@ -223,6 +246,43 @@ define(function(require, exports, module) {
             console.log('parts',parts);
 
             $form.find('input[name=parts]').val(parts);
+        },
+
+        _initTagChooser: function() {
+            var $form = $('#testpaper-form');
+
+            var knowledgeChooser = new TagTreeChooser({
+                element: '#testpaper-knowledges',
+                sourceUrl: $('#testpaper-knowledges').data('sourceUrl'),
+                queryUrl: $('#testpaper-knowledges').data('queryUrl'),
+                matchUrl: $('#testpaper-knowledges').data('matchUrl'),
+                maxTagNum: 15
+            });
+
+            knowledgeChooser.on('change', function(tags) {
+                var ids = [];
+                $.each(tags, function(i, tag) {
+                    ids.push(tag.id);
+                });
+                $form.find('[name=knowledgeIds]').val(ids.join(','));
+            });
+
+            var tagChooser = new TagChooser({
+                element: '#testpaper-tags',
+                sourceUrl: $('#testpaper-tags').data('sourceUrl'),
+                queryUrl: $('#testpaper-tags').data('queryUrl'),
+                matchUrl: $('#testpaper-tags').data('matchUrl'),
+                maxTagNum: 15
+            });
+
+            tagChooser.on('change', function(tags) {
+                var ids = [];
+                $.each(tags, function(i, tag) {
+                    ids.push(tag.id);
+                });
+                $form.find('[name=tagIds]').val(ids.join(','));
+            });
+
         },
 
         createValidator: function() {

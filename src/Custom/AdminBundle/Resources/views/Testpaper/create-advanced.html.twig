@@ -5,6 +5,12 @@
 {% set side_nav = 'testpaper' %}
 {% set script_controller = 'customadminbundle/controller/testpaper/testpaper-form-advanced' %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser-2.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
+{% endblock %}
+
 {% block main %}
 
 <div class="panel panel-default panel-col test-creator">
@@ -57,7 +63,14 @@
             <div class="form-group">
               <label class="col-sm-2 control-label">标签</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control">
+                <div id="testpaper-part-tags"
+                  data-source-url="/admin/tagset/get"
+                  data-query-url="/admin/tags/Choosered"
+                  data-match-url="/admin/tagset/match?q={% verbatim %}{{query}}{% endverbatim %}"
+                >
+                  {% include('TopxiaWebBundle:TagChooser:tag-chooser2.html.twig') %}
+                </div>
+                <input type="hidden" name="tagIds">
               </div>
             </div>
 

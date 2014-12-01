@@ -94,6 +94,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $filtedFields['itemCount']   = empty($fields['itemCount'])? '' : $fields['itemCount'];
             $filtedFields['limitedTime']   = empty($fields['limitedTime']) ? 0 : (int) $fields['limitedTime'];
             $filtedFields['metas']   = empty($fields['metas'])? array() : $fields['metas'];
+            $filtedFields['knowledgeIds']   = empty($fields['knowledgeIds'])? array() : $fields['knowledgeIds'];
+            $filtedFields['tagIds']   = empty($fields['tagIds'])? array() : $fields['tagIds'];
+            
             $filtedFields['status'] = 'draft';
             $filtedFields['createdUserId'] = $this->getCurrentUser()->id;
             $filtedFields['createdTime']   = time();

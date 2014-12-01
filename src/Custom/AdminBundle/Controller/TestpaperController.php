@@ -15,8 +15,23 @@ class TestpaperController extends BaseController
     {
         $category = $this->getCategoryService()->getCategory($request->query->get('categoryId'));
 
-        $conditions = array();
+        $conditions = $request->query->all();
+        if (!empty($conditions['knowledgeIds'])) {
+            $conditions['knowledgeIds'] = explode(',', $conditions['knowledgeIds']);
+            $knowledges = $this->getKnowledgeService()->findKnowledgeByIds($conditions['knowledgeIds']);
+        } else {
+            $knowledges = array();
+        }
+
+        if (!empty($conditions['tagIds'])) {
+            $conditions['tagIds'] = explode(',', $conditions['tagIds']);
+            $tags = $this->getTagService()->findTagsByIds($conditions['tagIds']);
+        } else {
+            $tags = array();
+        }
+
         $conditions['target'] = "category-{$category['id']}";
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getTestpaperService()->searchTestpapersCount($conditions),
@@ -37,6 +52,8 @@ class TestpaperController extends BaseController
             'testpapers' => $testpapers,
             'users' => $users,
             'paginator' => $paginator,
+            'knowledges' => $knowledges,
+            'tags' => $tags,
         ));
     }
 
@@ -79,7 +96,10 @@ class TestpaperController extends BaseController
             $fields['target'] = "category-{$category['id']}";
             $fields['pattern'] = 'Part';
             $fields['metas'] = array('parts' => json_decode($fields['parts'], true));
+            $fields['knowledgeIds'] = explode(',', $fields['knowledgeIds']);
+            $fields['tagIds'] = explode(',', $fields['tagIds']);
             unset($fields['parts']);
+
             $testpaper= $this->getTestpaperService()->createTestpaperAdvanced($fields);
             return $this->redirect($this->generateUrl('admin_testpaper',array('categoryId' => $category['id'])));
         }
@@ -390,6 +410,16 @@ class TestpaperController extends BaseController
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    private function getKnowledgeService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.KnowledgeService');
+    }
+
+    private function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Tag.TagService');
     }
 
 }

@@ -6,6 +6,13 @@
 {% set side_nav = 'testpaper' %}
 {% set script_controller = 'customadminbundle/controller/testpaper/index' %}
 
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser-2.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
+{% endblock %}
+
 {% block main %}
 
 <div class="panel panel-default panel-col" id="testpaper-list">
@@ -15,6 +22,85 @@
     <a href="{{ path('admin_testpaper_create',{categoryId:category.id}) }}" class="btn btn-info btn-xs pull-right mls"><span class="glyphicon glyphicon-plus"></span>快速组卷</a>
   </div>
   <div class="panel-body">
+
+    <div class="well well-sm">
+      <form class="form-inline" id="testpaper-search-form">
+        <input type="hidden" name="categoryId" value="{{ category.id }}">
+        <div class="form-group mrl" id="tags-search-group">
+          <label>标签：</label>
+            <a href="#" class="tag-search-trigger">
+              {% for tag in tags %}
+                {{tag.name}}
+              {% else %}
+                选择
+              {% endfor %}
+            </a>
+        </div>
+        <div class="form-group mrl" id="knowledges-search-group">
+          <label>知识点：</label>
+          <a href="#" class="knowledge-search-trigger">
+            {% for knowledge in knowledges %}
+              {{knowledge.name}}
+            {% else %}
+              选择
+            {% endfor %}
+          </a>
+        </div>
+
+        <div class="form-group mrl">
+        </div>
+
+
+        <button type="submit" class="btn btn-sm btn-primary">搜索</button>
+        <div id="tags-search-overlay" class="tagchooser-overlay">
+
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div id="tags-search"
+                data-source-url="/admin/tagset/get"
+                data-query-url="/admin/tags/Choosered"
+                data-match-url="/admin/tagset/match?q={% verbatim %}{{query}}{% endverbatim %}"
+              >
+              {% include('TopxiaWebBundle:TagChooser:tag-chooser2.html.twig') %}
+            </div>
+
+            <div class="panel-footer">
+              <button type="button" class="btn btn-primary btn-xs pull-right tag-search-confrim">确定</button>
+              <button type="button" class="btn btn-link btn-xs pull-right tag-search-cancel">取消</button>
+            </div>
+
+          </div>
+
+          </div>
+        </div>
+
+        <div id="knowledges-search-overlay" class="tagchooser-overlay">
+
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div id="knowledges-search"
+                data-source-url="/admin/knowledge/getTreeList?categoryId={{ category.id }}"
+                data-query-url="/admin/knowledge/choosered"
+                data-match-url="/admin/tagset/match?q={% verbatim %}{{query}}{% endverbatim %}"
+              >
+              {% include('TopxiaWebBundle:TagChooser:tag-chooser2.html.twig') %}
+            </div>
+
+            <div class="panel-footer">
+              <button type="button" class="btn btn-primary btn-xs pull-right tag-search-confrim">确定</button>
+              <button type="button" class="btn btn-link btn-xs pull-right tag-search-cancel">取消</button>
+            </div>
+
+          </div>
+
+          </div>
+        </div>
+        <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds')|default('') }}">
+        <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds')|default('') }}">
+      </form>
+      
+    </div>
+
     <table class="table table-striped table-hover" id="quiz-table">
       {{ web_macro.flash_messages() }}
         <thead>

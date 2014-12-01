@@ -45,6 +45,8 @@ seajs.config({
 		'video-js': 'gallery2/video-js/4.2.1/video-js',
 		'tag-chooser': 'tag-chooser/1.0.0/tag-chooser-debug.js',
 		'tag-tree-chooser': 'tag-chooser/1.0.0/tag-tree-chooser-debug.js',
+		'tag-chooser2': 'tag-chooser/1.0.1/tag-chooser-debug.js',
+		'tag-tree-chooser2': 'tag-chooser/1.0.1/tag-tree-chooser-debug.js',
 		"arale-widget": "arale-widget/1.2.0/widget-debug.js",
 		"arale-overlay": "arale-overlay/1.2.0/overlay-debug.js",
 		'swfupload': 'gallery2/swfupload/2.2.0/swfupload',
