@@ -42,6 +42,18 @@ class SignServiceImpl extends BaseService implements SignService
             $this->getCashService()->reWard($set['daySign'],"每日签到奖励",$user['id']);
         }
 
+        $card=$this->getSignCardDao()->getSignCardByUserId($user['id']);
+
+        if(empty($card)){
+
+            $signCard=array(
+                'userId'=>$user['id'],
+                'cardNum'=>$level['signInCards'],
+                'useTime'=>time(),
+                );
+            $card=$this->getSignCardDao()->addSignCard($signCard);
+        }
+
         if($vip){
 
             $level=$this->getLevelService()->getLevel($vip['levelId']);
@@ -56,18 +68,6 @@ class SignServiceImpl extends BaseService implements SignService
 
                 if($level['signInCards']>0){
 
-                    $card=$this->getSignCardDao()->getSignCardByUserId($user['id']);
-
-                    if(empty($card)){
-
-                        $signCard=array(
-                            'userId'=>$user['id'],
-                            'cardNum'=>$level['signInCards'],
-                            'useTime'=>time(),
-                            );
-                        $card=$this->getSignCardDao()->addSignCard($signCard);
-                    }
-
                     $now=date('Y-m',time());
 
                     if(strtotime($now)>$card['useTime']){
@@ -77,6 +77,14 @@ class SignServiceImpl extends BaseService implements SignService
                     }
                 }
 
+            }
+        }else{
+            $now=date('Y-m',time());
+
+            if(strtotime($now)>$card['useTime']){
+
+                $this->getSignCardDao()->updateSignCard($card['id'],array(
+                    'cardNum'=>0));
             }
         }
 
@@ -112,6 +120,19 @@ class SignServiceImpl extends BaseService implements SignService
 
         $vip=$this->getVipService()->getMemberByUserId($user['id']);
 
+        $card=$this->getSignCardDao()->getSignCardByUserId($user['id']);
+
+        if(empty($card)){
+
+            $signCard=array(
+                'userId'=>$user['id'],
+                'cardNum'=>$level['signInCards'],
+                'useTime'=>time(),
+                );
+            $card=$this->getSignCardDao()->addSignCard($signCard);
+        }
+                    
+
         if($vip){
 
             $level=$this->getLevelService()->getLevel($vip['levelId']);
@@ -119,18 +140,6 @@ class SignServiceImpl extends BaseService implements SignService
             if($level && $this->getVipService()->checkUserInMemberLevel($user['id'],$vip['levelId'])=="ok"){
 
                 if($level['signInCards']>0){
-
-                    $card=$this->getSignCardDao()->getSignCardByUserId($user['id']);
-
-                    if(empty($card)){
-
-                        $signCard=array(
-                            'userId'=>$user['id'],
-                            'cardNum'=>$level['signInCards'],
-                            'useTime'=>time(),
-                            );
-                        $card=$this->getSignCardDao()->addSignCard($signCard);
-                    }
 
                     $now=date('Y-m',time());
 
@@ -141,6 +150,15 @@ class SignServiceImpl extends BaseService implements SignService
                     }
                 }
 
+            }
+        }else{
+
+            $now=date('Y-m',time());
+
+            if(strtotime($now)>$card['useTime']){
+
+                $this->getSignCardDao()->updateSignCard($card['id'],array(
+                    'cardNum'=>0));
             }
         }
 
