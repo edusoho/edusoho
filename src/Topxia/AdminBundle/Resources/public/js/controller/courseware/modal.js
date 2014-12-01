@@ -79,7 +79,7 @@ define(function(require, exports, module){
                 chooserTreeForMainKnowlege.on('existed', function(existTag){
                 });
             }
-         
+
          function _initRelatedknowledgeTagChooer()
          {
             if ($('[data-role=related-knowledge-ids]').length > 0) {
