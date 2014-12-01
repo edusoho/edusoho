@@ -45,7 +45,11 @@ class UploadFileController extends BaseController
 
         $conditions = $request->query->all();
 
-        $conditions['currentUserId'] = $user['id'];
+        $materialLibApp = $this->getAppService()->findInstallApp('MaterialLib');
+
+        if(!empty($materialLibApp)){
+            $conditions['currentUserId'] = $user['id'];
+        }
         
         $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 1000);
         
@@ -281,6 +285,11 @@ class UploadFileController extends BaseController
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
     private function createFilesJsonResponse($files)
