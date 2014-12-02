@@ -34,7 +34,6 @@ class JsonTagsController extends BaseController
     public function queryAction(Request $request)
     {
         $ids = $request->query->get('ids');
-        $ids = explode(',', $ids[0]);
         $tags = $this->getTagService()->findTagsByIds($ids);
         return $this->createJsonResponse($tags);
     }

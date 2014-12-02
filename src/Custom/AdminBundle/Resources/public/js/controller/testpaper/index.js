@@ -49,7 +49,8 @@ define(function(require, exports, module) {
             align: {
                 baseElement: $('#knowledges-search-group'),
                 baseXY: [0, 36]
-            }
+            },
+            choosedTags: $("#testpaper-search-form").find('input[name=knowledgeIds]').val().split(',')
         });
 
         knowledgeOverlay.on('change', function(tags, tagIds) {
@@ -63,7 +64,8 @@ define(function(require, exports, module) {
             align: {
                 baseElement: $('#tags-search-group'),
                 baseXY: [0, 36]
-            }
+            },
+            choosedTags: $("#testpaper-search-form").find('input[name=tagIds]').val().split(',')
         });
 
         tagOverlay.on('change', function(tags, tagIds) {

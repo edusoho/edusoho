@@ -41,9 +41,10 @@ define("tag-chooser/1.0.1/tag-chooser-debug", ["jquery"], function(require, expo
       var self = this;
       if (self._sourceDataInited) {
         this._hideError();
+        self.trigger('change', self.get('choosedTags'));
         return;
       }
-      $.get(this.get('sourceUrl'), function(html) {
+      $.get(this.get('sourceUrl'),{_t:$.now()}, function(html) {
         self.$('[data-role=dropdown-content]').html(html);
         self._refreshDropdownChoosedTags();
         self._sourceDataInited = true;
