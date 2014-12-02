@@ -33,7 +33,6 @@ class JsonKnowledgesController extends BaseController
     public function queryAction(Request $request)
     {
         $ids = $request->query->get('ids');
-        $ids = explode(",", $ids[0]);
         $knowledges = $this->getKnowledgeService()->findKnowledgeByIds($ids);
         return $this->createJsonResponse($knowledges);
     }

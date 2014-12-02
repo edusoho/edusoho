@@ -12,7 +12,9 @@ class CoursewareController extends BaseController
     {
         $method = $request->query->get('method');
         $knowledgeIds = $request->query->get('knowledgeIds');
+        $knowledgeIds = empty($knowledgeIds) ? array() : explode(',',$knowledgeIds);
         $tagIds = $request->query->get('tagIds');
+        $tagIds = empty($tagIds) ? array() : explode(',',$tagIds);
         $title = $request->query->get('keywords');
 
         $conditions = array(
