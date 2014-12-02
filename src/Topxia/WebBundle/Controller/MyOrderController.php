@@ -81,7 +81,7 @@ class MyOrderController extends BaseController
         ));
     }
 
-    public function cashBillAction (Request $request)
+    public function cashBillAction(Request $request)
     {
         $user = $this->getCurrentUser();
 

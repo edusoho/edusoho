@@ -71,7 +71,9 @@ class CashFlowDaoImpl extends BaseDao implements CashFlowDao
             ->andWhere('category = :category')
             ->andWhere('sn = :sn')
             ->andWhere('name = :name')
-            ->andWhere('orderSn = :orderSn');
+            ->andWhere('orderSn = :orderSn')
+            ->andWhere('createdTime >= :startTime') 
+            ->andWhere('createdTime < :endTime');
     }
 
 }

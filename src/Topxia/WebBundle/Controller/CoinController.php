@@ -39,6 +39,19 @@ class CoinController extends BaseController
         }
 
         $conditions['userId']=$user->id;
+        
+        switch ($request->get('lastHowManyMonths')) { 
+            case 1: 
+                $conditions['startTime'] = time()-30*24*3600; 
+                break; 
+            case 2: 
+                $conditions['startTime'] = time()-60*24*3600; 
+                break; 
+            case 3: 
+                $conditions['startTime'] = time()-90*24*3600;               
+                break;                
+        } 
+        $conditions['endTime'] = time();
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -63,7 +76,8 @@ class CoinController extends BaseController
           'cashes'=>$cashes,
           'paginator'=>$paginator,
           'amount'=>$amount,
-          'ChargeCoin' => $ChargeCoin
+          'ChargeCoin' => $ChargeCoin,
+          'request' => $request
           ));
     }
 
