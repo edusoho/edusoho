@@ -115,7 +115,8 @@ define("tag-chooser/1.0.1/tag-chooser-debug", ["jquery"], function(require, expo
         trigger: this.$('[data-role=tag-input]'),
         dataSource: this.get('matchUrl'),
         width: this.$('[data-role=tag-input]').width(),
-        selectFirst: true
+        selectFirst: true,
+        submitOnEnter: false
       }).render();
       var self = this;
       autocomplete.on('itemSelected', function(data, item) {
