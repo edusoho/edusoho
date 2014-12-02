@@ -19,7 +19,7 @@
   <div class="form-group mrl" id="tags-search-group">
     <label>标签：</label>
       <a href="#" class="tag-search-trigger">
-        {% for tag in tags %}
+        {% for tag in tagSearchs %}
           {{tag.name}}
         {% else %}
           选择
@@ -29,7 +29,7 @@
   <div class="form-group mrl" id="knowledges-search-group">
     <label>知识点：</label>
     <a href="#" class="knowledge-search-trigger">
-      {% for knowledge in knowledges %}
+      {% for knowledge in knowledgeSearchs %}
         {{knowledge.name}}
       {% else %}
         选择

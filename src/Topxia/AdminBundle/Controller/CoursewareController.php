@@ -38,19 +38,17 @@ class CoursewareController extends BaseController
         $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($coursewares,'mainKnowledgeId'));
         $knowledges = ArrayToolkit::index($knowledges, 'id');
 
-        // $knowledgesearchs = $this->getKnowledgeService()->findKnowledgeByIds($knowledgeIds);
-        // $tagsearchs = $this->getTagService()->findTagsByIds($tagIds);
-
-$knowledgesearchs = array();
+        $knowledgeSearchs = !empty($knowledgeIds) ? $this->getKnowledgeService()->findKnowledgeByIds($knowledgeIds):array();
+        $tagSearchs = !empty($tagIds) ? $this->getTagService()->findTagsByIds($tagIds):array();
 
         return $this->render('TopxiaAdminBundle:Courseware:'.$type.'-view.html.twig',array(
             'category' => $category,
             'coursewares' => $coursewares,
             'paginator' => $paginator,
-            'knowledgesearchs' => $knowledgesearchs,
+            'knowledgeSearchs' => $knowledgeSearchs,
+            'tagSearchs' => $tagSearchs,
             'knowledges' => $knowledges,
             'coursewaresCount' => $coursewaresCount,
-            'tags' => $tags,
         ));
     }
 
@@ -79,7 +77,7 @@ $knowledgesearchs = array();
             return $this->redirect($this->generateUrl('admin_courseware_manage',array('categoryId'=>$categoryId)));
         }
 
-        $tagGroupCount = $this->getTagService()->getAll2GroupCount();
+        $tagGroupCount = $this->getTagService()->getAllGroupCount();
 
         $paginator = new Paginator(
             $request, 
@@ -87,7 +85,7 @@ $knowledgesearchs = array();
             20
         );
 
-        $tagGroups = $this->getTagService()->findAllTag2Groups(
+        $tagGroups = $this->getTagService()->findAllTagGroups(
             $paginator->getOffsetCount(), $paginator->getPerPageCount()
         );
 
