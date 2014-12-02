@@ -15,7 +15,7 @@ class CoursewareController extends BaseController
         $knowledgeIds = empty($knowledgeIds) ? array() : explode(',',$knowledgeIds);
         $tagIds = $request->query->get('tagIds');
         $tagIds = empty($tagIds) ? array() : explode(',',$tagIds);
-        $title = $request->query->get('keywords');
+        $title = $request->query->get('keyword');
 
         $conditions = array(
             'tagIds' => $tagIds,
