@@ -7,7 +7,7 @@
 {% set script_controller = 'courseware/main' %}
 
 {% block main %}
- <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
   <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser2.css') }}" />
 <div class="page-header clearfix">
   <h1 class="pull-left">课件管理</h1>
@@ -15,89 +15,49 @@
 </div>
 <div class="well well-sm">
   <form class="form-inline" id="testpaper-search-form">
-  <input type="hidden" name="categoryId" value="{{ category.id }}">
-  <div class="form-group mrl" id="tags-search-group">
-    <label>标签：</label>
-      <a href="#" class="tag-search-trigger">
-        {% for tag in tagSearchs %}
-          {{tag.name}}
+    <input type="hidden" name="categoryId" value="{{ category.id }}">
+    <div class="form-group mrl" id="tags-search-group">
+      <label>标签：</label>
+        <a href="javascript:;" class="tag-search-trigger">
+          {% for tag in tagSearchs %}
+            {{tag.name}}
+          {% else %}
+            选择
+          {% endfor %}
+        </a>
+    </div>
+    <div class="form-group mrl" id="knowledges-search-group">
+      <label>知识点：</label>
+      <a href="javascript:;" class="knowledge-search-trigger">
+        {% for knowledge in knowledgeSearchs %}
+          {{knowledge.name}}
         {% else %}
           选择
         {% endfor %}
       </a>
-  </div>
-  <div class="form-group mrl" id="knowledges-search-group">
-    <label>知识点：</label>
-    <a href="#" class="knowledge-search-trigger">
-      {% for knowledge in knowledgeSearchs %}
-        {{knowledge.name}}
-      {% else %}
-        选择
-      {% endfor %}
-    </a>
-  </div>
-
-  <div class="form-group mrl">
-    <input class="form-control" type="text" name="keyword" value="{{ app.request.query.get('keyword') }}" placeholder="标题关键词">
-  </div>
-
-  <button type="submit" class="btn btn-sm btn-primary">搜索</button>
-  <div id="tags-search-overlay" class="tagchooser-overlay">
-
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div id="tags-search"
-          data-source-url="/admin/tagset/get"
-          data-query-url="/admin/tags/Choosered"
-          data-match-url="/admin/tagset/match?q={% verbatim %}{{query}}{% endverbatim %}"
-        >
-{#         {% include('TopxiaWebBundle:TagChooser:tag-chooser2.html.twig') %} #}
-      </div>
-
-      <div class="panel-footer">
-        <button type="button" class="btn btn-primary btn-xs pull-right tag-search-confrim">确定</button>
-        <button type="button" class="btn btn-link btn-xs pull-right tag-search-cancel">取消</button>
-      </div>
-
     </div>
 
-    </div>
-  </div>
-
-  <div id="knowledges-search-overlay" class="tagchooser-overlay">
-
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div id="knowledges-search"
-          data-source-url="/admin/knowledge/getTreeList?categoryId={{ category.id }}"
-          data-query-url="/admin/knowledge/choosered"
-          data-match-url="/admin/tagset/match?q={% verbatim %}{{query}}{% endverbatim %}"
-        >
-{#         {% include('TopxiaWebBundle:TagChooser:tag-chooser2.html.twig') %} #}
-      </div>
-
-      <div class="panel-footer">
-        <button type="button" class="btn btn-primary btn-xs pull-right tag-search-confrim">确定</button>
-        <button type="button" class="btn btn-link btn-xs pull-right tag-search-cancel">取消</button>
-      </div>
-
+    <div class="form-group mrl">
+      <input class="form-control" type="text" name="keyword" value="{{ app.request.query.get('keyword') }}" placeholder="标题关键词">
     </div>
 
-    </div>
-  </div>
-  <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds')|default('') }}">
-  <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds')|default('') }}">
-</form>
+    <button type="submit" class="btn btn-sm btn-primary">搜索</button>
+
+    <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
+    <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">
+  </form>
+    {% include 'CustomWebBundle:Tag:tagchooser-overlay.html.twig' with {id: 'tags-search', type: 'question'} %}
+  {% include 'CustomWebBundle:Tag:tagchooser-knowledge-overlay.html.twig' with {id: 'knowledges-search', categoryId: category.id} %}
 </div>
 <div class="courseware-list">
   {% block list %}{% endblock %}
 
   {{ web_macro.paginator(paginator) }}
 
-      <div>
-        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
-        <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete" data-url="{{ path('admin_courseware_delete')}}">删除</button>
-      </div>
+  <div>
+    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+    <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete" data-url="{{ path('admin_courseware_delete')}}">删除</button>
+  </div>
 </div>
 
 {% endblock %}
