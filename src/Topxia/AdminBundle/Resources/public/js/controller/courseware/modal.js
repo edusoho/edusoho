@@ -26,25 +26,25 @@ define(function(require, exports, module){
             function _initTagChooer()
             {
                 if ($('[data-role=tag-ids]').length > 0) {
-                    $tagIds = $('[data-role=tag-ids]').val();
-                    $tagIds = [$tagIds];
+                  $tagIds = $('[data-role=tag-ids]').val();
+                  $tagIds = [$tagIds];
                 }; 
 
                 var chooser = new TagChooser({
-                  element: '#tag-chooser',
-                  sourceUrl: '/admin/tagset/get',
-                  queryUrl: '/admin/tags/Choosered',
-                  matchUrl: '/admin/tagset/match?q={{query}}',
-                  maxTagNum: 15,
-                  choosedTags: $tagIds
+                    element: '#tag-chooser',
+                    sourceUrl: $('#tag-chooser').data('sourceUrl'),
+                    queryUrl: $('#tag-chooser').data('queryUrl'),
+                    matchUrl: $('#tag-chooser').data('matchUrl'),
+                    maxTagNum: 15,
+                    choosedTags: $tagIds
                 });
 
                 chooser.on('change', function(tags) {
-                  var tagIdsTemp = [];
-                  $.each(tags,function(i,item){
-                      tagIdsTemp.push(item.id)
-                  })
-                  tagIds = tagIdsTemp;
+                var tagIdsTemp = [];
+                $.each(tags,function(i,item){
+                    tagIdsTemp.push(item.id)
+                })
+                tagIds = tagIdsTemp;
                 });
 
                 chooser.on('existed', function(existTag){
@@ -61,9 +61,9 @@ define(function(require, exports, module){
 
                 var chooserTreeForMainKnowlege = new TagTreeChooser({
                   element: '#mainknowledge-chooser',
-                  sourceUrl: "/admin/knowledge/getTreeList?categoryId="+$categoryId,
-                  queryUrl: '/admin/knowledge/choosered',
-                  matchUrl: '/admin/tagset/match?q={{query}}',
+                  sourceUrl: $('#knowledges-search').data('sourceUrl'),
+                  queryUrl: $('#knowledges-search').data('queryUrl'),
+                  matchUrl: $('#knowledges-search').data('matchUrl'),
                   maxTagNum: 1,
                   choosedTags: $mainKnowledgeId
                 });
@@ -89,9 +89,9 @@ define(function(require, exports, module){
 
             var chooserTreeForRelatedKnowlege = new TagTreeChooser({
               element: '#relatedknowledges-chooser',
-              sourceUrl: "/admin/knowledge/getTreeList?categoryId="+$categoryId,
-              queryUrl: '/admin/knowledge/choosered',
-              matchUrl: '/admin/tagset/match?q={{query}}',
+              sourceUrl: $('#knowledges-search').data('sourceUrl'),
+              queryUrl: $('#knowledges-search').data('queryUrl'),
+              matchUrl: $('#knowledges-search').data('matchUrl'),
               maxTagNum: 15,
               choosedTags: $relatedKnowledgeIds
             });

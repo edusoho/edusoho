@@ -12,8 +12,8 @@
       <div class="col-md-7 controls">
         <input class="form-control" id="courseware-url-field" type="text" name="url" value="http://p.bokecc.com/flash/player.swf?videoID=76A6B883B61A292D_95A35478453CCA9E9C33DC5901307461&autoStart=false&playerid=882520FEC68147E4&playertype=1&htwxpara={'lessonid':46952}" placeholder= "输入网络文件的URL地址">
       <div class="help-block" data-role="courseware-title"></div>
-      </div class="col-md-2 controls">
-      <div>
+      </div>
+      <div class="col-md-2 controls">
         <div class="btn btn-primary" id="import-courseware-url" data-url="{{ path('courseware_info_get') }}" data-loading-text="正在导入..." autocomplete="off">导入</div>
       </div>
     </div>
@@ -22,29 +22,26 @@
       <label class="col-md-3 control-label" for="courseware-mainKnowledgeId-field">
         主知识点
       </label>
-
-          <div class="col-md-7 controls">
+      <div class="col-md-7 controls">
         {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'mainknowledge-chooser', categoryId: category.id} %}
       </div>
-
     </div>
+
     <div class="form-group">
       <label class="col-md-3 control-label" for="courseware-relatedKnowledgeIds-field">
         关联知识点
       </label>
       <div class="col-md-7 controls">
         {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'relatedknowledges-chooser', categoryId: category.id} %}
-
       </div>
     </div>
 
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="courseware-relatedKnowledgeIds-field">
-              标签
-            </label>
-
-          <div class="col-md-7 controls">
-          {% include 'CustomWebBundle:Tag:tagchooser.html.twig' with {id: 'tag-chooser', type: 'coourseware'} %}
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="courseware-relatedKnowledgeIds-field">
+        标签
+      </label>
+      <div class="col-md-7 controls">
+        {% include 'CustomWebBundle:Tag:tagchooser.html.twig' with {id: 'tag-chooser', type: 'coourseware'} %}
       </div>
     </div>
 
