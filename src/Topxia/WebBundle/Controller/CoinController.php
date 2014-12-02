@@ -39,19 +39,27 @@ class CoinController extends BaseController
         }
 
         $conditions['userId']=$user->id;
-        
-        switch ($request->get('lastHowManyMonths')) { 
-            case 1: 
-                $conditions['startTime'] = time()-30*24*3600; 
-                break; 
-            case 2: 
-                $conditions['startTime'] = time()-60*24*3600; 
-                break; 
-            case 3: 
-                $conditions['startTime'] = time()-90*24*3600;               
-                break;                
-        } 
+
+        $conditions['startTime'] = 0; 
         $conditions['endTime'] = time();
+        switch ($request->get('lastHowManyMonths')) { 
+            case 'oneWeek': 
+                $conditions['startTime'] = $conditions['endTime']-7*24*3600; 
+                break; 
+            case 'twoWeeks': 
+                $conditions['startTime'] = $conditions['endTime']-14*24*3600; 
+                break; 
+            case 'oneMonth': 
+                $conditions['startTime'] = $conditions['endTime']-30*24*3600;               
+                break;     
+            case 'twoMonths': 
+                $conditions['startTime'] = $conditions['endTime']-60*24*3600;               
+                break;   
+            case 'threeMonths': 
+                $conditions['startTime'] = $conditions['endTime']-90*24*3600;               
+                break;  
+        } 
+        
 
         $paginator = new Paginator(
             $this->get('request'),

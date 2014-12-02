@@ -40,13 +40,13 @@
     <br>
       <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
         <div class="form-group"> 
-          <select class="form-control" name="lastHowManyMonths"> 
-            {% set options = {1:'最近一个月',2:'最近两个月',3:'最近三个月',0:'全部记录'} %} 
+          <select class="form-control" name="lastHowManyMonths" onchange="submit();"> 
+               {% set options = {'oneWeek':'最近一周','twoWeeks':'最近两周','oneMonth':'最近一个月','twoMonths':'最近两个月','threeMonths':'最近三个月',0:'全部记录'} %}
             {{ select_options(options, request.get('lastHowManyMonths')) }} 
           </select> 
         </div> 
 
-        <button class="btn btn-primary">搜索</button> 
+       {# <button class="btn btn-primary">搜索</button>#}
 
       </form>
    {% endif %}
