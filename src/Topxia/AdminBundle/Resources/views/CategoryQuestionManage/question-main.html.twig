@@ -1,5 +1,5 @@
-<div class="panel panel-default panel-col">
-  <div class="panel-heading">
+<div class="page-header clearfix">
+  <h1 class="pull-left">题目管理</h1>
     <div class="pull-right">
       <a href="{{ path('admin_category_manage_question_create',{categoryId:category.id,type:'choice',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 选择题</a>
       <a href="{{ path('admin_category_manage_question_create',{categoryId:category.id,type:'fill',parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 填空题</a>
@@ -9,97 +9,95 @@
         <a href="{{ path('admin_category_manage_question_create',{categoryId:category.id,type:'material'}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 材料题</a>
       {% endif %}
     </div>
-    题目管理
-  </div>
+</div>
 
+  {% if parentQuestion %}
   <div class="panel-body " id="quiz-table-container">
 
-    {% if parentQuestion %}
-      <ol class="breadcrumb">
-        <li><a href="{{ path('admin_category_manage_question',{categoryId:category.id}) }}">题目管理</a></li>
-        <li class="active">材料题</li>
-      </ol>
-    {% endif %}
+    <ol class="breadcrumb">
+      <li><a href="{{ path('admin_category_manage_question',{categoryId:category.id}) }}">题目管理</a></li>
+      <li class="active">材料题</li>
+    </ol>
 
-    {{ web_macro.flash_messages() }}
 
-    {% if parentQuestion %}
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="well well-sm short-long-text">
-            <div class="short-text">{{ parentQuestion.stem|plain_text(100) }} <span class="trigger">(展开)</span></div>
-            <div class="long-text">{{ parentQuestion.stem|raw }} <span class="trigger">(收起)</span></div>
-          </div>
+  {{ web_macro.flash_messages() }}
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="well well-sm short-long-text">
+          <div class="short-text">{{ parentQuestion.stem|plain_text(100) }} <span class="trigger">(展开)</span></div>
+          <div class="long-text">{{ parentQuestion.stem|raw }} <span class="trigger">(收起)</span></div>
         </div>
       </div>
-    {% endif %}
-
-    {% if not parentQuestion %}
-<div class="well well-sm">
-  <form id="question-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
-    <input type="hidden" name="categoryId" value="{{ category.id }}">
-      <div class="form-group mrl" id="tags-search-group">
-        <label>标签：</label>
-          <a href="javascript:;" class="tag-search-trigger">
-            {% for tag in tagSearchs %}
-              {{tag.name}}
+    </div>
+  </div>
+  {% endif %}
+{% if not parentQuestion %}
+  <div class="well well-sm">
+    <form id="question-search-form" class="form-inline" action="" method="get" novalidate>
+      <input type="hidden" name="categoryId" value="{{ category.id }}">
+        <div class="form-group mrl" id="tags-search-group">
+          <label>标签：</label>
+            <a href="javascript:;" class="tag-search-trigger">
+              {% for tag in tagSearchs %}
+                {{tag.name}}
+              {% else %}
+                选择
+              {% endfor %}
+            </a>
+        </div>
+        <div class="form-group mrl" id="knowledges-search-group">
+          <label>知识点：</label>
+          <a href="javascript:;" class="knowledge-search-trigger">
+            {% for knowledge in knowledgeSearchs %}
+              {{knowledge.name}}
             {% else %}
               选择
             {% endfor %}
           </a>
-      </div>
-      <div class="form-group mrl" id="knowledges-search-group">
-        <label>知识点：</label>
-        <a href="javascript:;" class="knowledge-search-trigger">
-          {% for knowledge in knowledgeSearchs %}
-            {{knowledge.name}}
-          {% else %}
-            选择
-          {% endfor %}
-        </a>
-      </div>
-
-      <div class="form-group mrl">
-        <input class="form-control" type="text" name="keywords" value="{{ app.request.query.get('keyword') }}" placeholder="标题关键词">
-      </div>
-
-      <button id="article-material-search" data-url="{# {{ path('admin_essay_content_list',{essayId:essay.id})}} #}" type="submit" class="btn btn-sm btn-primary">搜索</button>
-
-
-        <div class="row">
-          <div class="col-md-1"><span>题型</span></div>
-          <div class="col-md-11">
-            <label class="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox1" name="types[single_choice]" value="single_choice" {% if app.request.query.get('types').single_choice|default('') %} checked {% endif %}>单选题
-            </label>
-            <label class="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox2" name="types[choice]" value="choice" {% if app.request.query.get('types').choice|default('') %} checked {% endif %}>多选题
-            </label>
-            <label class="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox3" name="types[uncertain_choice]" value="uncertain_choice"  {% if app.request.query.get('types').uncertain_choice|default('') %} checked {% endif %}>不定型选择题
-            </label>
-            <label class="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox1" name="types[fill]" value="fill"  {% if app.request.query.get('types').fill|default('') %} checked {% endif %}>填空题
-            </label>
-            <label class="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox2" name="types[determine]" value="determine"  {% if app.request.query.get('types').determine|default('') %} checked {% endif %}>判断题
-            </label>
-            <label class="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox3" name="types[essay]" value="essay"  {% if app.request.query.get('types').essay|default('') %} checked {% endif %}>问答题
-            </label>
-            <label class="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox3" name="types[material]" value="material"  {% if app.request.query.get('types').material|default('') %} checked {% endif %}>材料题
-            </label>
-          </div>
-        
         </div>
-      <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
-      <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">
+
+        <div class="form-group mrl">
+          <input class="form-control" type="text" name="keywords" value="{{ app.request.query.get('keyword') }}" placeholder="标题关键词">
+        </div>
+
+        <button id="article-material-search" data-url="{# {{ path('admin_essay_content_list',{essayId:essay.id})}} #}" type="submit" class="btn btn-sm btn-primary">搜索</button>
+
+
+          <div class="row">
+            <div class="col-md-1"><span>题型</span></div>
+            <div class="col-md-11">
+              <label class="checkbox-inline">
+                <input type="checkbox" id="inlineCheckbox1" name="types[single_choice]" value="single_choice" {% if app.request.query.get('types').single_choice|default('') %} checked {% endif %}>单选题
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" id="inlineCheckbox2" name="types[choice]" value="choice" {% if app.request.query.get('types').choice|default('') %} checked {% endif %}>多选题
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" id="inlineCheckbox3" name="types[uncertain_choice]" value="uncertain_choice"  {% if app.request.query.get('types').uncertain_choice|default('') %} checked {% endif %}>不定型选择题
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" id="inlineCheckbox1" name="types[fill]" value="fill"  {% if app.request.query.get('types').fill|default('') %} checked {% endif %}>填空题
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" id="inlineCheckbox2" name="types[determine]" value="determine"  {% if app.request.query.get('types').determine|default('') %} checked {% endif %}>判断题
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" id="inlineCheckbox3" name="types[essay]" value="essay"  {% if app.request.query.get('types').essay|default('') %} checked {% endif %}>问答题
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" id="inlineCheckbox3" name="types[material]" value="material"  {% if app.request.query.get('types').material|default('') %} checked {% endif %}>材料题
+              </label>
+            </div>
+          
+          </div>
+        <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
+        <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">
     </form>
-    {% include 'CustomWebBundle:Tag:tagchooser-overlay.html.twig' with {id: 'tags-search', type: 'question'} %}
-    {% include 'CustomWebBundle:Tag:tagchooser-knowledge-overlay.html.twig' with {id: 'knowledges-search', categoryId: category.id} %}
+      {% include 'CustomWebBundle:Tag:tagchooser-overlay.html.twig' with {id: 'tags-search', type: 'question'} %}
+      {% include 'CustomWebBundle:Tag:tagchooser-knowledge-overlay.html.twig' with {id: 'knowledges-search', categoryId: category.id} %}
   </div>
-    {% endif %}
+{% endif %}
 
 
     <table class="table table-striped table-hover" id="quiz-table">
@@ -128,5 +126,3 @@
       <span class="pull-right text-muted">共{{ paginator.getItemCount() }}题</span>
     </div>
     {{ web_macro.paginator(paginator) }}
-  </div>
-</div>
