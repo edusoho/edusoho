@@ -28,10 +28,10 @@ define(function(require, exports, module){
             }; 
 
             var chooser = new TagChooser({
-              element: '#tag-chooser',
-              sourceUrl: '/admin/tagset/get',
-              queryUrl: '/admin/tags/Choosered',
-              matchUrl: '/admin/tagset/match?q={{query}}',
+              element: '#tagchooser',
+              sourceUrl: $('#tagchooser').data('sourceUrl'),
+              queryUrl: $('#tagchooser').data('queryUrl'),
+              matchUrl: $('#tagchooser').data('matchUrl'),
               maxTagNum: 15,
               choosedTags: $tagIds
             });
@@ -57,10 +57,10 @@ define(function(require, exports, module){
             $categoryId = $('[data-role=categoryId]').val();
 
             var chooserTreeForMainKnowlege = new TagTreeChooser({
-              element: '#tag-main-knowlege-tree-chooser',
-              sourceUrl: "/admin/knowledge/getTreeList?categoryId="+$categoryId,
-              queryUrl: '/admin/knowledge/choosered',
-              matchUrl: '/admin/tagset/match?q={{query}}',
+              element: '#main-knowledges',
+              sourceUrl: $('#main-knowledges').data('sourceUrl'),
+              queryUrl: $('#main-knowledges').data('queryUrl'),
+              matchUrl: $('#main-knowledges').data('matchUrl'),
               maxTagNum: 1,
               choosedTags: $mainKnowledgeId
             });
@@ -85,10 +85,10 @@ define(function(require, exports, module){
             };
 
             var chooserTreeForRelatedKnowlege = new TagTreeChooser({
-                element: '#tag-releated-knowlege-tree-chooser',
-                sourceUrl: "/admin/knowledge/getTreeList?categoryId="+$categoryId,
-                queryUrl: '/admin/knowledge/choosered',
-                matchUrl: '/admin/tagset/match?q={{query}}',
+                element: '#related-knowledges',
+                sourceUrl: $('#related-knowledges').data('sourceUrl'),
+                queryUrl: $('#related-knowledges').data('queryUrl'),
+                matchUrl: $('#related-knowledges').data('matchUrl'),
                 maxTagNum: 15,
                 choosedTags: $relatedKnowledgeIds
             });
