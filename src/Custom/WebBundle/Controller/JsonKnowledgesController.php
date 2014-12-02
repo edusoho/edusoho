@@ -25,6 +25,8 @@ class JsonKnowledgesController extends BaseController
         $likeString = $request->query->get('q');
 
         $knowledges = $this->getKnowledgeService()->searchKnowledge(array('keywords'=>$likeString),array('createdTime', 'DESC'), 0, 10);
+        $knowledges = $this->filterKnowledges($knowledges);
+
         return $this->createJsonResponse($knowledges);
     }
 
@@ -34,6 +36,17 @@ class JsonKnowledgesController extends BaseController
         $ids = explode(",", $ids[0]);
         $knowledges = $this->getKnowledgeService()->findKnowledgeByIds($ids);
         return $this->createJsonResponse($knowledges);
+    }
+
+    private function filterKnowledges($knowledges)
+    {
+        $array = array();
+        foreach ($knowledges as $key => $knowledge) {
+            $array[$key]['value'] = $knowledge['id'];
+            $array[$key]['label'] = $knowledge['name'];
+        }
+
+        return $array;
     }
 
     private function getKnowledgeService()
