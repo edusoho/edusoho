@@ -56,4 +56,6 @@ interface ThreadService
 
     public function waveHitNum($threadId);
 
+    public function updatePost($id,$fields);
+
 }

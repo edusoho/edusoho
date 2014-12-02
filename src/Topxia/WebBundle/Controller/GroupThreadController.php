@@ -254,6 +254,9 @@ class GroupThreadController extends BaseController
             $groupShareContent = str_replace("{{threadname}}", $threadMain['title'], $groupShareContent);
         }
 
+        $isAdopt=$this->getThreadService()->searchPosts(array('adopt'=>1,'threadId'=>$threadId),array('createdTime','desc'),0,1);
+
+
         return $this->render('TopxiaWebBundle:Group:thread.html.twig',array(
             'groupinfo' => $group,
             'isCollected' => $isCollected,
@@ -272,6 +275,7 @@ class GroupThreadController extends BaseController
             'members'=>$members,
             'postReplyCount'=>$postReplyCount,
             'postReplyPaginator'=>$postReplyPaginator,
+            'isAdopt'=>$isAdopt,
             'is_groupmember' => $this->getGroupMemberRole($id)));
     }
 
@@ -451,7 +455,112 @@ class GroupThreadController extends BaseController
         ))); 
 
     }
+
+    public function rewardAction(Request $request,$threadId)
+    {   
+        $user=$this->getCurrentUser();
+        $account=$this->getCashService()->getAccountByUserId($user->id,true);
+
+        if(isset($account['cash']))
+            $account['cash']=intval($account['cash']);
+
+        if($request->getMethod()=="POST"){
+
+            $thread=$this->getThreadService()->getThread($threadId);
+            $groupMemberRole=$this->getGroupMemberRole($thread['groupId']);
+
+            if($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true){
+                $amount=$request->request->get('amount');
+
+                if(!isset($account['cash']) || $account['cash'] <  $amount ){
+
+                    return $this->createMessageResponse('info','虚拟币余额不足!');
+                    
+                }
+
+                $account=$this->getCashService()->getAccountByUserId($user->id);
+
+                $this->getCashService()->waveDownCashField($account['id'],$amount);
+
+                $thread['type']='reward';
+                $thread['rewardCoin']=$amount;
+                $this->getThreadService()->updateThread($threadId,$thread);
+
+            }
+
+        }
+
+        return $this->render('TopxiaWebBundle:Group:reward-modal.html.twig',array(
+            'account'=>$account,
+            'threadId'=>$threadId,
+            ));
+    }
+
+    public function cancelRewardAction($threadId)
+    {   
+        $user=$this->getCurrentUser();
+        $thread=$this->getThreadService()->getThread($threadId);
+        $groupMemberRole=$this->getGroupMemberRole($thread['groupId']);
+
+        $post=$this->getThreadService()->searchPosts(array('adopt'=>1,'threadId'=>$threadId),array('createdTime','desc'),0,1);
+
+        if($post){
+
+            goto response;
+        }
+
+        if($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true){
+        
+            $account=$this->getCashService()->getAccountByUserId($user->id);
+
+            $this->getCashService()->waveCashField($account['id'],$thread['rewardCoin']);
+
+            $thread['type']='default';
+            $thread['rewardCoin']=0;
+            $this->getThreadService()->updateThread($threadId,$thread);
+
+        }
+
+        response:
+        return new Response($this->generateUrl('group_thread_show', array(
+            'id'=>$thread['groupId'],
+            'threadId'=>$threadId,
+        )));
+    }
     
+    public function adoptAction($postId)
+    {   
+
+        $post=$this->getThreadService()->getPost($postId);
+
+        $thread=$this->getThreadService()->getThread($post['threadId']);
+
+        $groupMemberRole=$this->getGroupMemberRole($thread['groupId']);
+
+        $user=$this->getCurrentUser();
+
+        $isAdopt=$this->getThreadService()->searchPosts(array('adopt'=>1,'threadId'=>$post['threadId']),array('createdTime','desc'),0,1);
+
+        if($isAdopt){
+
+            goto response;
+        }
+
+        if($groupMemberRole==2 || $groupMemberRole==3 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true){
+
+            $post=$this->getThreadService()->updatePost($post['id'],array('adopt'=>1));
+
+            $account=$this->getCashService()->getAccountByUserId($post['userId']);
+
+            $this->getCashService()->waveCashField($account['id'],$thread['rewardCoin']);
+        }
+
+        response:
+        return new Response($this->generateUrl('group_thread_show', array(
+            'id'=>$thread['groupId'],'threadId'=>$post['threadId'],
+        ))); 
+    } 
+
     private function postAction($threadId,$action)
     {
         $thread=$this->getThreadService()->getThread($threadId);
@@ -624,6 +733,11 @@ class GroupThreadController extends BaseController
         if($this->getGroupService()->isAdmin($id, $user['id'])) return true;
         if($thread['userId']==$user['id']) return true;
         return false;
+    }
+
+    private function getCashService(){
+      
+        return $this->getServiceKernel()->createService('Cash.CashService');
     }
 
 }

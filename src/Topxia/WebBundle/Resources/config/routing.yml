@@ -1372,7 +1372,15 @@ group_thread_deletePost:
 group_thread_post_reply:
     pattern:  /group/post/{postId}/reply
     defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
-
+group_thread_reward:
+    pattern:  /thread/{threadId}/reward
+    defaults: { _controller: TopxiaWebBundle:GroupThread:reward }
+group_thread_cancel_reward:
+    pattern:  /thread/{threadId}/reward/cancel
+    defaults: { _controller: TopxiaWebBundle:GroupThread:cancelReward }
+group_thread_adopt:
+    pattern:  /thread/{postId}/adopt
+    defaults: { _controller: TopxiaWebBundle:GroupThread:adopt }
 
 my_coin:
     path:     /my/coin

@@ -1,7 +1,14 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% set script_controller = 'group/group' %}
 {% block group_body %}
-
+<style>
+.ke-icon-hidden {
+        background-image: url('{{default_path("iconfont-hide.png")}}');
+        background-position:center;
+        width: 16px;
+        height: 16px;
+}
+</style>
   <div class="panel panel-default">
     <div class="panel-heading">
       {% if thread|default(null) %}
@@ -43,4 +50,45 @@
       
     </div>
   </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">插入隐藏内容</h4>
+      </div>
+      <div class="modal-body">
+          
+      <form  class="form-horizontal" method="post" >
+
+        <div class="row form-group">
+          <div class="col-md-4 control">
+            <label class="control-label"> 请输入要隐藏的内容:</label>
+          </div>
+          <div class="col-md-7 controls">
+            <textarea class="form-control" rows="3"> </textarea>
+          </div>
+
+        </div>
+
+        <div class="row form-group">
+          <div class="col-md-4 control">
+            <label for="amount" class="control-label"> 查看所需{{setting('coin').coin_name}}:</label>
+          </div>
+          <div class="col-md-3 controls">
+             <input name="amount" class="form-control" tyoe="text" id="amount"/>
+          </div>
+
+        </div>
+
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary">插入</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

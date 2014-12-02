@@ -223,6 +223,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     }
 
+    public function updatePost($id,$fields)
+    {
+        return $this->getThreadPostDao()->updatePost($id,$fields);
+    }
+
     public function deletePost($postId)
     {
         $post=$this->getThreadPostDao()->getPost($postId);

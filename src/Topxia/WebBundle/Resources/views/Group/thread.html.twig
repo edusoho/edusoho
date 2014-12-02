@@ -15,6 +15,13 @@
         {% if threadMain.isStick %}
         <span class="label label-danger">置顶</span>
       {% endif %}
+
+      {% if is_feature_enabled('group_reward') %}
+        {% if threadMain.type == 'reward' and threadMain.rewardCoin > 0 %}
+          <span class="label label-danger">奖</span>
+          <span style="color:#d9534f;" class="mll"> 悬赏:{{threadMain.rewardCoin}}{{setting('coin').coin_name}}</span>
+        {% endif %}
+      {% endif %}
       </h2>
       <div class="actions thread-list" id="thread-list" >
             {% if threadMain.userId != user.id %}
@@ -46,7 +53,7 @@
         {% endif %}
 
         
-        {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3%}
+        {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
           <a class="btn btn-link" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
         {% endif %}
 
@@ -67,7 +74,22 @@
             <a id="stick"  title="置顶" class="btn btn-link"
             href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-circle-arrow-up"></span>  置顶</a>
           {% endif %}
-          
+
+          {% if is_feature_enabled('group_reward') %}
+            {% if is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
+              {% if threadMain.type == 'reward' and  threadMain.rewardCoin > 0 %}
+                  {% if not isAdopt %}
+                  <a id="cancelReward" title="取消悬赏" class="btn btn-link"
+                href="javascript:" data-url="{{path('group_thread_cancel_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-ban-circle"></span> 取消悬赏</a>
+                  {% endif %}
+              {% else %}
+                  {% if threadMain.type == 'default' %}
+                  <a id="rewardCoin"  title="悬赏" class="btn btn-link"
+                  href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-usd"></span>  悬赏</a>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          {% endif %}
 {# 
           <a id="closeThread"  title="一但关闭话题将删除！确定关闭话题" class="btn btn-link"
           href="javascript:" data-url="{{path('group_thread_closeThread',{threadId:threadMain.id,memberId:user.id})}}">
@@ -78,6 +100,34 @@
       </div>
     </div>
   </div>
+
+  {% if is_feature_enabled('group_reward') %}
+      {% if isAdopt %}
+      <div class="panel panel-default group-post-list">
+        <div class="panel-heading" style="color:#d9534f;">
+          最佳回答
+        </div>
+        <div class="panel-body">
+            <ul class="media-list">
+              <li class="media">
+                <a href="{{ path('user_show', {id:isAdopt[0].userId}) }}" class="pull-left"><img src="{{ default_path('avatar', postMember[isAdopt[0].userId].smallAvatar, '') }}" class="media-object"></a>
+                <div class="media-body">
+                   <img class="pull-right" style="" src="{{default_path('adopt.gif')}}">
+                    <div class="metas">
+                      <strong>{{ web_macro.user_link(postMember[isAdopt[0].userId]) }}</strong>
+                      <span class="mhm">{{isAdopt[0].createdTime|smart_time}} </span>
+                    </div>
+
+                    <div class="content">
+                      {{isAdopt[0].content|raw}}
+                    </div>
+                </div>
+              </li>
+            </ul>
+        </div>
+      </div>
+      {% endif %}
+  {% endif %}
   {% if threadMain.postNum %}
   <div class="panel panel-default group-post-list">
     <div class="panel-heading">
@@ -111,7 +161,15 @@
                 {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
                   <a title="确定删除这条回复" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">删除</a>
                 {% endif %}
-   
+                
+                {% if is_feature_enabled('group_reward') %}
+                  {% if not isAdopt and threadMain.type == "reward" %}
+                    {% if is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
+                      <a title="确定采纳这条回复" class="mhm post-adopt-btn" href="javascript:" data-url="{{path('group_thread_adopt',{postId:post.id})}}">采纳</a>
+                    {% endif %}
+                  {% endif %}
+                {% endif %}
+
                 {% if not subPosts %}
                   <a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}">回复</a>
                   <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">收起</a>

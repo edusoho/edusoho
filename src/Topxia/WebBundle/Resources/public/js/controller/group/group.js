@@ -27,7 +27,7 @@
         });
 
         if($('#thread_content').length>0){
-            var editor_thread = EditorFactory.create('#thread_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+            var editor_thread = EditorFactory.create('#thread_content', 'haveHidden', {extraFileUploadParams:{group:'user'}});
             var validator_thread = new Validator({
             element: '#user-thread-form',
             failSilently: true,
@@ -252,7 +252,7 @@
                 });
             })
 
-            $('#post-action').on('click','#elite,#stick',function(){
+            $('#post-action').on('click','#elite,#stick,#cancelReward',function(){
            
                 var $trigger = $(this);
                 
@@ -272,7 +272,7 @@
         }
         if($('.actions').length>0){
        
-            $('.actions').on('click','.post-delete-btn',function(){
+            $('.actions').on('click','.post-delete-btn,.post-adopt-btn',function(){
                 
                 var $trigger = $(this);
                  if (!confirm($trigger.attr('title') + '？')) {

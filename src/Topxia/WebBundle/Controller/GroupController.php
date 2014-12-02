@@ -862,7 +862,7 @@ class GroupController extends BaseController
     {
         $filters = array();
         $filters['type'] = $request->query->get('type');
-        if (!in_array($filters['type'], array('all','elite'))) {
+        if (!in_array($filters['type'], array('all','elite','reward'))) {
             $filters['type'] = 'all';
         }
         $filters['sort'] = $request->query->get('sort');
@@ -884,6 +884,9 @@ class GroupController extends BaseController
         switch ($filters['type']) {
             case 'elite':
                 $conditions['isElite'] = 1;
+                break;
+            case 'reward':
+                $conditions['type'] = 'reward';
                 break;
             default:
                 break;
