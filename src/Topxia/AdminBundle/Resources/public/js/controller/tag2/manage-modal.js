@@ -16,6 +16,9 @@ define(function(require, exports, module) {
                 }
                 $.post($('#tag-create-btn').data('url'), $('#tag-create-form').serialize(),function(html) {
                     $('#tag').val('');
+                    if ($('tbody').find('div').hasClass('empty')){
+                        $('tbody').find('div').remove()
+                    }
                     $table.find('tbody').prepend(html);
                     Notify.success('标签添加成功！');
                 });
@@ -41,6 +44,7 @@ define(function(require, exports, module) {
                     $btn.parent().parent('tr').remove();
                     $table.find('tbody').prepend(response);
                     Notify.success('标签更新成功！');
+
                 }
             });
 
