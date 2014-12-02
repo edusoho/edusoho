@@ -393,6 +393,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		$noteInfo['content'] = $content;
 
     	$result = $this->controller->getNoteService()->saveNote($noteInfo);
+    	$result['createdTime'] = date('c',$result['createdTime']);
+    	$result['updatedTime'] = date('c',$result['updatedTime']);
 
     	return $result;
     }
