@@ -13,22 +13,14 @@ class CoursewareController extends BaseController
         $method = $request->query->get('method');
         $knowledgeIds = $request->query->get('knowledgeIds');
         $tagIds = $request->query->get('tagIds');
-        $title = $request->query->get('title');
-        if (empty($method)){
-            $conditions = array('categoryId' => $categoryId);
-        } elseif($method == 'tag'){
-            $conditions = array(
-                'tagIds' => $tagIds,
-                'knowledgeIds' => $knowledgeIds,
-                'categoryId' => $categoryId
-            );
-        } else {
-            $conditions = array(
-                'title' => $title,
-                'knowledgeIds' => $knowledgeIds,
-                'categoryId' => $categoryId
-            );
-        }
+        $title = $request->query->get('keywords');
+
+        $conditions = array(
+            'tagIds' => $tagIds,
+            'knowledgeIds' => $knowledgeIds,
+            'categoryId' => $categoryId,
+            'title' => $title,
+        );
 
         $coursewaresCount = $this->getCoursewareService()->searchCoursewaresCount($conditions);
 
@@ -46,13 +38,17 @@ class CoursewareController extends BaseController
         $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($coursewares,'mainKnowledgeId'));
         $knowledges = ArrayToolkit::index($knowledges, 'id');
 
+        $knowledgeSearchs = !empty($knowledgeIds) ? $this->getKnowledgeService()->findKnowledgeByIds($knowledgeIds):array();
+        $tagSearchs = !empty($tagIds) ? $this->getTagService()->findTagsByIds($tagIds):array();
+
         return $this->render('TopxiaAdminBundle:Courseware:'.$type.'-view.html.twig',array(
             'category' => $category,
             'coursewares' => $coursewares,
             'paginator' => $paginator,
+            'knowledgeSearchs' => $knowledgeSearchs,
+            'tagSearchs' => $tagSearchs,
             'knowledges' => $knowledges,
             'coursewaresCount' => $coursewaresCount,
-            'method' => $method,
         ));
     }
 
@@ -81,7 +77,7 @@ class CoursewareController extends BaseController
             return $this->redirect($this->generateUrl('admin_courseware_manage',array('categoryId'=>$categoryId)));
         }
 
-        $tagGroupCount = $this->getTagService()->getAll2GroupCount();
+        $tagGroupCount = $this->getTagService()->getAllGroupCount();
 
         $paginator = new Paginator(
             $request, 
@@ -89,7 +85,7 @@ class CoursewareController extends BaseController
             20
         );
 
-        $tagGroups = $this->getTagService()->findAllTag2Groups(
+        $tagGroups = $this->getTagService()->findAllTagGroups(
             $paginator->getOffsetCount(), $paginator->getPerPageCount()
         );
 

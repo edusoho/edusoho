@@ -10,7 +10,7 @@ class Tag2Controller extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $tagGroupCount = $this->getTagService()->getAll2GroupCount();
+        $tagGroupCount = $this->getTagService()->getAllGroupCount();
 
         $paginator = new Paginator(
             $request, 

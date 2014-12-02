@@ -1578,7 +1578,7 @@ define("arale-overlay/1.2.0/src/overlay-debug", ["jquery"], function(require, ex
       // 基本属性
       width: null,
       height: null,
-      zIndex: 99,
+      zIndex: 2000,
       visible: false,
       // 定位配置
       align: {

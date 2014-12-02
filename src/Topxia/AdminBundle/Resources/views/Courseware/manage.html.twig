@@ -19,7 +19,7 @@
   <div class="form-group mrl" id="tags-search-group">
     <label>标签：</label>
       <a href="#" class="tag-search-trigger">
-        {% for tag in tags %}
+        {% for tag in tagSearchs %}
           {{tag.name}}
         {% else %}
           选择
@@ -29,7 +29,7 @@
   <div class="form-group mrl" id="knowledges-search-group">
     <label>知识点：</label>
     <a href="#" class="knowledge-search-trigger">
-      {% for knowledge in knowledges %}
+      {% for knowledge in knowledgeSearchs %}
         {{knowledge.name}}
       {% else %}
         选择
@@ -51,7 +51,7 @@
           data-query-url="/admin/tags/Choosered"
           data-match-url="/admin/tagset/match?q={% verbatim %}{{query}}{% endverbatim %}"
         >
-        {% include('TopxiaWebBundle:TagChooser:tag-chooser2.html.twig') %}
+{#         {% include('TopxiaWebBundle:TagChooser:tag-chooser2.html.twig') %} #}
       </div>
 
       <div class="panel-footer">
@@ -73,7 +73,7 @@
           data-query-url="/admin/knowledge/choosered"
           data-match-url="/admin/tagset/match?q={% verbatim %}{{query}}{% endverbatim %}"
         >
-        {% include('TopxiaWebBundle:TagChooser:tag-chooser2.html.twig') %}
+{#         {% include('TopxiaWebBundle:TagChooser:tag-chooser2.html.twig') %} #}
       </div>
 
       <div class="panel-footer">
