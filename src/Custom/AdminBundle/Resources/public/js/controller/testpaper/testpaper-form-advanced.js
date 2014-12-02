@@ -6,8 +6,8 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     require('jquery.sortable');
-    var TagTreeChooser = require('tag-tree-chooser2');
-    var TagChooser = require('tag-chooser2');
+    var TagTreeChooser = require('tag-tree-chooser');
+    var TagChooser = require('tag-chooser');
 
     var TestpaperForm = Widget.extend({
 
@@ -100,10 +100,10 @@ define(function(require, exports, module) {
 
             $modal.on('shown.bs.modal', function(e) {
                 var tagPartChooser = new TagChooser({
-                    element: '#testpaper-part-tags',
-                    sourceUrl: $('#testpaper-tags').data('sourceUrl'),
-                    queryUrl: $('#testpaper-tags').data('queryUrl'),
-                    matchUrl: $('#testpaper-tags').data('matchUrl'),
+                    element: '#part-tag-chooser',
+                    sourceUrl: $('#part-tag-chooser').data('sourceUrl'),
+                    queryUrl: $('#part-tag-chooser').data('queryUrl'),
+                    matchUrl: $('#part-tag-chooser').data('matchUrl'),
                     maxTagNum: 15
                 });
 
@@ -252,10 +252,10 @@ define(function(require, exports, module) {
             var $form = $('#testpaper-form');
 
             var knowledgeChooser = new TagTreeChooser({
-                element: '#testpaper-knowledges',
-                sourceUrl: $('#testpaper-knowledges').data('sourceUrl'),
-                queryUrl: $('#testpaper-knowledges').data('queryUrl'),
-                matchUrl: $('#testpaper-knowledges').data('matchUrl'),
+                element: '#testpaper-knowledge-chooser',
+                sourceUrl: $('#testpaper-knowledge-chooser').data('sourceUrl'),
+                queryUrl: $('#testpaper-knowledge-chooser').data('queryUrl'),
+                matchUrl: $('#testpaper-knowledge-chooser').data('matchUrl'),
                 maxTagNum: 15
             });
 
@@ -268,10 +268,10 @@ define(function(require, exports, module) {
             });
 
             var tagChooser = new TagChooser({
-                element: '#testpaper-tags',
-                sourceUrl: $('#testpaper-tags').data('sourceUrl'),
-                queryUrl: $('#testpaper-tags').data('queryUrl'),
-                matchUrl: $('#testpaper-tags').data('matchUrl'),
+                element: '#testpaper-tag-chooser',
+                sourceUrl: $('#testpaper-tag-chooser').data('sourceUrl'),
+                queryUrl: $('#testpaper-tag-chooser').data('queryUrl'),
+                matchUrl: $('#testpaper-tag-chooser').data('matchUrl'),
                 maxTagNum: 15
             });
 
