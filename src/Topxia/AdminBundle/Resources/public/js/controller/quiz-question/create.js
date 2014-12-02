@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     var Fill = require('./creator/question-fill');
     var TagChooser = require('tag-chooser');
     var TagTreeChooser = require('tag-tree-chooser');
+    
     exports.run = function() {
         var type = $('#question-creator-widget').find('[name=type]').val().replace(/\_/g, "-");
         var QuestionCreator;
