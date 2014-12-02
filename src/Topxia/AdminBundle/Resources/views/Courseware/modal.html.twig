@@ -24,7 +24,7 @@
       </label>
 
           <div class="col-md-7 controls">
-            {% include('TopxiaWebBundle:TagChooser:tag-chooser-tree-main-knowledge.html.twig') %}
+        {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'mainknowledge-chooser', categoryId: category.id} %}
       </div>
 
     </div>
@@ -33,8 +33,8 @@
         关联知识点
       </label>
       <div class="col-md-7 controls">
-        {% include('TopxiaWebBundle:TagChooser:tag-chooser-tree-related-knowledge.html.twig') %}
-      {#  <input class="form-control" id="courseware-relatedKnowledgeIds-field" type="text" name="relatedKnowledgeIds" value="{{ courseware.relatedKnowledgeIds|default(null) }}" > #}
+{#         {% include('TopxiaWebBundle:TagChooser:tag-chooser-tree-related-knowledge.html.twig') %} #}
+
       </div>
     </div>
 
@@ -44,7 +44,7 @@
             </label>
 
           <div class="col-md-7 controls">
-            {% include('TopxiaWebBundle:TagChooser:tag-chooser.html.twig') %}
+          {% include 'CustomWebBundle:Tag:tagchooser.html.twig' with {id: 'tag-chooser', type: 'coourseware'} %}
       </div>
     </div>
 

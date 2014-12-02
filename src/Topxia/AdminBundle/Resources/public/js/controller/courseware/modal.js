@@ -60,7 +60,7 @@ define(function(require, exports, module){
                 $categoryId = $('[data-role=categoryId]').val();
 
                 var chooserTreeForMainKnowlege = new TagTreeChooser({
-                  element: '#tag-main-knowlege-tree-chooser',
+                  element: '#mainknowledge-chooser',
                   sourceUrl: "/admin/knowledge/getTreeList?categoryId="+$categoryId,
                   queryUrl: '/admin/knowledge/choosered',
                   matchUrl: '/admin/tagset/match?q={{query}}',

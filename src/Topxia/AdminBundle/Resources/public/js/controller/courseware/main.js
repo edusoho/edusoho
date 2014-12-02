@@ -7,7 +7,7 @@ define(function(require, exports, module) {
     exports.run = function() {
         
         _initTagSearch();
-        _initKnowledgeSearch();
+        // _initKnowledgeSearch();
         
         $('.delete-courseware-btn').click(function(){
 
