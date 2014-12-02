@@ -28,7 +28,7 @@
         <input type="hidden" name="categoryId" value="{{ category.id }}">
         <div class="form-group mrl" id="tags-search-group">
           <label>标签：</label>
-            <a href="#" class="tag-search-trigger">
+            <a href="javascript:;" class="tag-search-trigger">
               {% for tag in tags %}
                 {{tag.name}}
               {% else %}
@@ -38,7 +38,7 @@
         </div>
         <div class="form-group mrl" id="knowledges-search-group">
           <label>知识点：</label>
-          <a href="#" class="knowledge-search-trigger">
+          <a href="javascript:;" class="knowledge-search-trigger">
             {% for knowledge in knowledges %}
               {{knowledge.name}}
             {% else %}
@@ -52,14 +52,14 @@
         </div>
 
         <button type="submit" class="btn btn-sm btn-primary">搜索</button>
-        {% include 'CustomWebBundle:Tag:tagchooser-overlay.html.twig' with {id: 'tags-search', type: 'question'} %}
-        {% include 'CustomWebBundle:Tag:tagchooser-knowledge-overlay.html.twig' with {id: 'knowledges-search', categoryId: category.id} %}
+
         <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
         <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">
-
-
       </form>
-      
+      {% include 'CustomWebBundle:Tag:tagchooser-overlay.html.twig' with {id: 'tags-search', type: 'question'} %}
+      {% include 'CustomWebBundle:Tag:tagchooser-knowledge-overlay.html.twig' with {id: 'knowledges-search', categoryId: category.id} %}
+
+
     </div>
 
     <table class="table table-striped table-hover" id="quiz-table">
@@ -95,6 +95,3 @@
 </div>
 
 {% endblock %}
-
-
-
