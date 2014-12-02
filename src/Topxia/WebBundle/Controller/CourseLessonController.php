@@ -155,6 +155,15 @@ class CourseLessonController extends BaseController
         $json['courseId'] = $lesson['courseId'];
         $json['videoWatermarkEmbedded'] = 0;
 
+        $app = $this->getAppService()->findInstallApp('Homework');
+        if(!empty($app)){
+            $homework = $this->getHomeworkService()->getHomeworkByLessonId($lesson['id']);
+            $exercise = $this->getExerciseService()->getExerciseByLessonId($lesson['id']);
+            $json['homeworkOrExerciseNum'] = $homework['itemCount'] + $exercise['itemCount'];
+        }else{ 
+            $json['homeworkOrExerciseNum'] = 0;
+        }
+
         $json['isTeacher'] = $this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
         if($lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated') {
             $json['replays'] = $this->getCourseService()->getCourseLessonReplayByLessonId($lesson['id']);
@@ -387,12 +396,13 @@ class CourseLessonController extends BaseController
 
             $factory = new CloudClientFactory();
             $client = $factory->createClient();
-
+            
             if ($isDownload) {
                 $client->download($client->getBucket(), $key, 3600, $file['filename']);
             } else {
                 $client->download($client->getBucket(), $key);
             }
+            
         }
 
         return $this->createLocalMediaResponse($request, $file, $isDownload);
@@ -476,7 +486,6 @@ class CourseLessonController extends BaseController
         if ($mimeType) {
             $response->headers->set('Content-Type', $mimeType);
         }
-
         return $response;
     }
 
@@ -546,4 +555,21 @@ class CourseLessonController extends BaseController
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
+
+    //Homework plugins(contains Exercise)
+    private function getHomeworkService()
+    {
+        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+    } 
+
+    private function getExerciseService()
+    {
+        return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
 }

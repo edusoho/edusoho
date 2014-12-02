@@ -36,7 +36,7 @@ define(function(require, exports, module) {
         var targetType = self.element.data('targetType');
 		var uploadMode = self.element.data('uploadMode');
 		var hlsEncrypted = self.element.data('hlsEncrypted');
-		if (targetType == 'courselesson' && uploadMode == 'cloud') {
+		if ((targetType == 'courselesson' || targetType == 'materiallib') && uploadMode == 'cloud') {
 			if (file.type == 'audio/mpeg') {
 				data.convertor = '';
 			} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
@@ -55,6 +55,7 @@ define(function(require, exports, module) {
 				}
 			}
 		}
+		
         $.ajax({
             url: self.element.data('paramsUrl'),
             async: false,

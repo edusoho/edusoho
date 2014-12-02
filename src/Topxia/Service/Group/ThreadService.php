@@ -6,6 +6,14 @@ interface ThreadService
 {
     public function getThread($id);
 
+    public function isCollected($userId, $threadId);
+
+    public function threadCollect($userId, $threadId);
+    
+    public function unThreadCollect($userId, $threadId);
+
+    public function searchThreadCollectCount($conditions);
+
     public function getThreadsByIds($ids);
     
     public function addThread($thread);
@@ -21,6 +29,8 @@ interface ThreadService
     public function searchThreadsCount($conditions);
 
     public function searchPostsThreadIds($conditions,$orderBy,$start,$limit);
+    
+    public function searchThreadCollects($conditions,$orderBy,$start,$limit);
 
     public function searchPostsThreadIdsCount($conditions);
 

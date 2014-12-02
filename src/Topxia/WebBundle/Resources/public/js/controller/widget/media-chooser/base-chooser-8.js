@@ -1,9 +1,14 @@
 define(function(require, exports, module) {
 
     var Widget = require('widget');
-    var FileBrowser = require('../file/file-browser');
     var UploadPanel = require('edusoho.uploadpanel');
     var Notify = require('common/bootstrap-notify');
+    
+	if ($("div .file-browser-list-container").length > 0) {
+		var FileBrowser = require('../file/file-browser-material-lib');
+	} else {
+		var FileBrowser = require('../file/file-browser');
+	}
 
     var BaseChooser = Widget.extend({
         attrs: {

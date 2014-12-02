@@ -12,6 +12,7 @@ use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -353,6 +354,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'audiences' => array(),
 			'tags' => '',
 			'price' => 0.00,
+			'coinPrice'=>0.00,
 			'startTime' => 0,
 			'endTime'  => 0,
 			'locationId' => 0,
@@ -479,6 +481,21 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$course = $this->tryAdminCourse($id);
 
+		// Decrease the course lesson files usage counts, if there are files used by the course lessons.
+		$lessons = $this->getLessonDao()->findLessonsByCourseId($id);
+
+		if(!empty($lessons)){
+			$fileIds = ArrayToolkit::column($lessons, "mediaId");
+
+			if(!empty($fileIds)){
+				$this->getUploadFileService()->decreaseFileUsedCount($fileIds);
+			}
+		}
+
+		// Delete all linked course materials (the UsedCount of each material file will also be decreaased.)
+		$this->getCourseMaterialService()->deleteMaterialsByCourseId($id);
+
+		// Delete course related data
 		$this->getMemberDao()->deleteMembersByCourseId($id);
 		$this->getLessonDao()->deleteLessonsByCourseId($id);
 		$this->getChapterDao()->deleteChaptersByCourseId($id);
@@ -528,6 +545,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if($favorite){
 			throw $this->createServiceException("该收藏已经存在，请不要重复收藏!");
 		}
+		//添加动态
+		$this->getStatusService()->publishStatus(array(
+			'type' => 'favorite_course',
+			'objectType' => 'course',
+			'objectId' => $courseId,
+			'properties' => array(
+				'course' => $this->simplifyCousrse($course),
+			)
+		));
 
 		$this->getFavoriteDao()->addFavorite(array(
 			'courseId'=>$course['id'],
@@ -619,6 +645,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 				'videoStatus' => 'paused',
 		));
 	}
+
+	public function uploadCourseFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null)
+	{
+		return $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, $implemtor, $originalFile);
+	}
+
 
 	private function autosetCourseFields($courseId)
 	{
@@ -779,6 +811,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			LessonSerialize::serialize($lesson)
 		);
 
+		// Increase the linked file usage count, if there's a linked file used by this lesson.
+		if(!empty($lesson['mediaId'])){
+			$this->getUploadFileService()->increaseFileUsedCount(array($lesson['mediaId']));
+		}
+
 		$this->updateCourseCounter($course['id'], array(
 			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id']),
 			'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id']),
@@ -908,7 +945,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		
 		$this->fillLessonMediaFields($fields);
 		
-		$lesson = LessonSerialize::unserialize(
+		$updatedLesson = LessonSerialize::unserialize(
 			$this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))
 		);
 
@@ -916,9 +953,22 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id']),
 		));
 
-		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$lesson['title']}》({$lesson['id']})", $lesson);
+		// Update link count of the course lesson file, if the lesson file is changed
+		if($fields['mediaId'] != $lesson['mediaId']){
+			// Incease the link count of the new selected lesson file
+			if(!empty($fields['mediaId'])){
+				$this->getUploadFileService()->increaseFileLinkCount(array($fields['mediaId']));
+			}
 
-		return $lesson;
+			// Decrease the link count of the original lesson file
+			if(!empty($lesson['mediaId'])){
+				$this->getUploadFileService()->decreaseFileLinkCount(array($lesson['mediaId']));
+			}
+		}
+
+		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
+
+		return $updatedLesson;
 	}
 
 	public function deleteLesson($courseId, $lessonId)
@@ -958,7 +1008,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
 		));
 		// [END] 更新课时序号
-		
+
+		// Decrease the course lesson file usage count, if there's a linked file used by this lesson.
+		if(!empty($lesson['mediaId'])){
+			$this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
+		}
+
+		// Delete all linked course materials (the UsedCount of each material file will also be decreaased.)
+		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
+
 		$this->getLogService()->info('lesson', 'delete', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
 
 		// $this->autosetCourseFields($courseId);
@@ -1107,6 +1165,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$user = $this->getCurrentUser();
 
 		$lesson = $this->getCourseLesson($courseId, $lessonId);
+
+	$this->getStatusService()->publishStatus(array(
+		'type' => 'start_learn_lesson',
+		'objectType' => 'lesson',
+		'objectId' => $lessonId,
+		'properties' => array(
+			'course' => $this->simplifyCousrse($course),
+			'lesson' => $this->simplifyLesson($lesson),
+		)
+	));
 
 		if (!empty($lesson) && $lesson['type'] != 'video') {
 
@@ -2355,6 +2423,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getStatusService()
     {
         return $this->createService('User.StatusService');
+    }
+
+    private function getCourseMaterialService()
+    {
+        return $this->createService('Course.MaterialService');
     }
 
 }

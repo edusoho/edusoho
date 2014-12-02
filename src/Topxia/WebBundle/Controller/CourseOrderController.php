@@ -7,6 +7,7 @@ use Topxia\Common\StringToolkit;
 use Topxia\Component\Payment\Payment;
 use Topxia\WebBundle\Util\AvatarAlert;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\SecurityContext;
 
 class CourseOrderController extends OrderController
 {
@@ -26,6 +27,8 @@ class CourseOrderController extends OrderController
 
         $previewAs = $request->query->get('previewAs');
 
+        $payTypeChoices = $request->query->get('payTypeChoices');
+        
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
         $member = $this->previewAsMember($previewAs, $member, $course);
 
@@ -33,7 +36,22 @@ class CourseOrderController extends OrderController
 
         $userInfo = $this->getUserService()->getUserProfile($user['id']);
         $userInfo['approvalStatus'] = $user['approvalStatus'];
+        
+        $code = 'ChargeCoin';
+        $ChargeCoin = $this->getAppService()->findInstallApp($code);
 
+        $account=$this->getCashService()->getAccountByUserId($user['id'],true);
+        
+         if(empty($account)){
+        $this->getCashService()->createAccount($user['id']);
+        }
+
+        if(isset($account['cash']))
+        $account['cash']=intval($account['cash']);
+    
+        $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        
         $course = $this->getCourseService()->getCourse($id);
        
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
@@ -77,6 +95,10 @@ class CourseOrderController extends OrderController
             'courseSetting' => $courseSetting,
             'member' => $member,
             'userFields'=>$userFields,
+            'payTypeChoices'=>$payTypeChoices,
+            'account'=>$account,
+            'amount'=>$amount,
+            'ChargeCoin'=> $ChargeCoin
         ));
     }
 
@@ -119,7 +141,16 @@ class CourseOrderController extends OrderController
 
     public function payAction(Request $request)
     {
+
         $formData = $request->request->all();
+
+        if(isset($formData['payTypeChoices']))
+        {
+            if($formData['payTypeChoices'] == "chargeCoin"){
+               $formData['payment'] = 'coin';
+            }
+        }
+
         $user = $this->getCurrentUser();
         if (empty($user)) {
             return $this->createMessageResponse('error', '用户未登录，创建课程订单失败。');
@@ -144,6 +175,15 @@ class CourseOrderController extends OrderController
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         $order = $this->getCourseOrderService()->createOrder($formData);
+        if($order['payment'] == 'coin') {
+            $password = $request->request->get('password');
+
+            if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
+                return $this->createMessageResponse('error', '密码错误。');
+            }
+            $order = $this->getCourseOrderService()->paymentByCoin($order['id']);
+        }
+
 
         if ($order['status'] == 'paid') {
             return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
@@ -353,8 +393,24 @@ class CourseOrderController extends OrderController
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
     }
+
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getCashService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    protected function getCashOrdersService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 }

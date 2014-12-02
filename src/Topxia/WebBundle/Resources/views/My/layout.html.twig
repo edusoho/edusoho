@@ -25,11 +25,18 @@
                 href="{{path('my_teaching_threads', {type:'question'}) }}">学员问答</a>
                <a class="list-group-item {% if side_nav == 'my-teaching-discussions' %} active {% endif %}"
                 href="{{path('my_teaching_threads', {type:'discussion'}) }}">学员话题</a>
+               
+               <a class="list-group-item {% if side_nav == 'my-teaching-check' %} active {% endif %}"
+                href="{{path('course_manage_list_teacher_test_reviewing') }}">试卷批阅</a>
+               
                {% if is_plugin_installed('Homework') %}
                  <a class="list-group-item {% if side_nav == 'my-teaching-homework-check' %} active {% endif %}" href="{{path('my_teaching_homework_list') }}">作业批改</a>
                {% endif %}
-               <a class="list-group-item {% if side_nav == 'my-teaching-check' %} active {% endif %}"
-                href="{{path('course_manage_list_teacher_test_reviewing') }}">试卷批阅</a>
+
+               {% if is_plugin_installed('MaterialLib') %}
+               <a class="list-group-item {% if side_nav == 'material-lib' %} active {% endif %}"
+                href="{{path('material_lib_browsing') }}">教学资料库</a>
+               {% endif %}
               </ul>
             </div>
           {% endif %}
@@ -67,8 +74,15 @@
           </div>
 
           <div class="list-group-panel">
+
+               
             <div class="list-group-heading">订单</div>
             <ul class="list-group">
+           {% if setting('coin.coin_enabled') %}
+                <a class="list-group-item 
+                {% if side_nav == 'my-coin' %} active {% endif %} " 
+                href="{{path('my_coin')}}">我的账户{# 我的{{setting('coin.coin_name')}} #}</a>
+               {% endif %}
               <a class="list-group-item 
                {% if side_nav == 'my-orders' %} active {% endif %} " 
                href="{{path('my_orders')}}">我的订单</a>

@@ -4,6 +4,7 @@
 {% block keywords %}{{threadMain.title|plain_text(15)}} {{ setting('site.name') }} {% endblock %}
 {% block description %}{{threadMain.content|plain_text(150)}}{% endblock %}
 {% block group_main %}
+
   <div class="panel panel-default group-thread">
     <div class="panel-heading">
       <h2>
@@ -15,6 +16,12 @@
         <span class="label label-danger">置顶</span>
       {% endif %}
       </h2>
+      <div class="actions thread-list" id="thread-list" >
+            {% if threadMain.userId != user.id %}
+              <a class="btn btn-link uncollect-btn" data-url="{{ path('group_thread_uncollect', {threadId:threadMain.id}) }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star"></i> 已收藏</a>
+              <a class="btn btn-link  collect-btn" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star-empty"></i>收藏</a>
+            {% endif %}
+      </div>
       <div class="metas">
         发表于 {{ threadMain.createdTime|smart_time }}
         <span class="divider">•</span>
