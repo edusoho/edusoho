@@ -15,6 +15,10 @@
         {% if threadMain.isStick %}
         <span class="label label-danger">置顶</span>
       {% endif %}
+      {% if threadMain.rewardCoin > 0 %}
+        <span class="label label-danger">奖</span>
+        <span style="color:#d9534f;" class="mll"> 悬赏:{{threadMain.rewardCoin}}{{setting('coin').coin_name}}</span>
+      {% endif %}
       </h2>
       <div class="actions thread-list" id="thread-list" >
             {% if threadMain.userId != user.id %}
