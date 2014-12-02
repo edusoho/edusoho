@@ -34,7 +34,7 @@
       </div>
 
       <div class="form-group mrl">
-        <input class="form-control" type="text" name="keyword" value="{{ app.request.query.get('keyword') }}" placeholder="标题关键词">
+        <input class="form-control" type="text" name="keywords" value="{{ app.request.query.get('keyword') }}" placeholder="标题关键词">
       </div>
 
       <button id="article-material-search" data-url="{{ path('admin_essay_content_list',{essayId:essay.id})}}" type="submit" class="btn btn-sm btn-primary">搜索</button>
