@@ -45,3 +45,6 @@ admin_column_avatar:
 admin_column_avatar_crop:
     pattern: /column/{id}/avatar/crop
     defaults: {_controller: CustomAdminBundle:Column:avatarCrop}
+admin_setting_course_setting:
+    pattern:  /setting/course-setting
+    defaults: { _controller: CustomAdminBundle:Setting:courseSetting }
