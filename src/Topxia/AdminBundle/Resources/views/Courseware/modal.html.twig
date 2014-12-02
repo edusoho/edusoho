@@ -3,7 +3,7 @@
 
 {% block body %}
   <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
-  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser-2.css') }}" />
 
   <div id="courseware-creater-widget">
   <form id="courseware-form" class="form-horizontal" action="{% if courseware|default(null) %}{{ path('admin_courseware_edit',{categoryId:category.id,id:courseware.id}) }}{% else %}{{ path('admin_courseware_create',{categoryId:category.id}) }} {% endif %}" method="post">

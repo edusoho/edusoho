@@ -9,25 +9,27 @@ class ArticleMaterialController extends BaseController
 {
     public function manageAction(Request $request, $categoryId)
     {
-        $method = $request->query->get('method');
-        $knowledgeId = $request->query->get('knowledgeId');
-        $tagIds = $request->query->get('tagIds');
-        $title = $request->query->get('title');
-
-        if (empty($method)){
+        $conditions = $request->query->all();
+        if (empty($conditions)) {
             $conditions = array('categoryId' => $categoryId);
-        } elseif($method == 'tag'){
-            $conditions = array(
-                'tagIds' => $tagIds,
-                'knowledgeId' => $knowledgeId,
-                'categoryId' => $categoryId
-            );
+        }
+
+        if (!empty($conditions['keyword'])) {
+            $conditions['title'] = $conditions['keyword'];
+        }
+
+        if (!empty($conditions['tagIds'])) {
+            $conditions['tagIds'] = explode(',', $conditions['tagIds']);
+            $tags = $this->getTagService()->findTagsByIds($conditions['tagIds']);
         } else {
-            $conditions = array(
-                'title' => $title,
-                'knowledgeId' => $knowledgeId,
-                'categoryId' => $categoryId
-            );
+            $tags = array();
+        }
+
+        if (!empty($conditions['knowledgeIds'])) {
+            $conditions['knowledgeIds'] = explode(',', $conditions['knowledgeIds']);
+            $searchknowledges = $this->getKnowledgeService()->findKnowledgeByIds($conditions['knowledgeIds']);
+        } else {
+            $searchknowledges = array();
         }
 
         $articleMaterialsCount = $this->getArticleMaterialService()->searchArticleMaterialsCount($conditions);
@@ -40,7 +42,6 @@ class ArticleMaterialController extends BaseController
             $paginator->getOffsetCount(),  
             $paginator->getPerPageCount()
         );
-
         $category = $this->getCategoryService()->getCategory($categoryId);
 
         $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($articleMaterials,'mainKnowledgeId'));
@@ -51,8 +52,9 @@ class ArticleMaterialController extends BaseController
             'articleMaterials' => $articleMaterials,
             'paginator' => $paginator,
             'knowledges' => $knowledges,
+            'searchknowledges' => $searchknowledges,
             'articleMaterialsCount' => $articleMaterialsCount,
-            'method' => $method
+            'tags' => $tags
         ));
     }
 

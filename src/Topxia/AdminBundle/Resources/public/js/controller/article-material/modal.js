@@ -70,7 +70,6 @@ define(function(require, exports, module){
               $.each(tags,function(i,item){
                 mainKnowledgeId = [item.id];
               });
-
             });
 
             chooserTreeForMainKnowlege.on('existed', function(existTag){
@@ -134,7 +133,6 @@ define(function(require, exports, module){
                     $('#article-material-operate-btn').button('submiting').button('loading').addClass('disabled');
                     tagIds = tagIds.join(",");
                     relatedKnowledgeIds = relatedKnowledgeIds.join(",");
-
                     $.post($form.attr('action'), $form.serialize()+'&tagIds='+tagIds+'&mainKnowledgeId='+mainKnowledgeId+'&relatedKnowledgeIds='+relatedKnowledgeIds, function(response) {
                         console.log(response)
                         if (response.error){
@@ -161,7 +159,7 @@ define(function(require, exports, module){
             });
 
             validator.addItem({
-                element: '[name=tagIds]',
+                element: '[name=title]',
                 required: true
             });
 
