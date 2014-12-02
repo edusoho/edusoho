@@ -1,13 +1,13 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
-    var Overlay = require("arale-overlay");
+    var Overlay = require('overlay');
+    var Widget = require('widget');
     var TagTreeChooser = require('tag-tree-chooser');
     var TagChooser = require('tag-chooser');
+    var TagChooserOverlay = require('tag-chooser-overlay');
+    var TagTreeChooserOverlay = require('tag-tree-chooser-overlay');
 
     exports.run = function() {
-        
-        _initTagSearch();
-        // _initKnowledgeSearch();
         
         $('.delete-courseware-btn').click(function(){
 
@@ -68,122 +68,34 @@ define(function(require, exports, module) {
             $(this).find('.courseware-thumb-btn').addClass('hide');
         });
 
-    };
+        var knowledgeOverlay = new TagTreeChooserOverlay({
+            trigger: '.knowledge-search-trigger',
+            element: $('#knowledges-search-overlay'),
+            width: 400,
+            align: {
+                baseElement: $('#knowledges-search-group'),
+                baseXY: [0, 36]
+            },
+            choosedTags: $("#testpaper-search-form").find('input[name=knowledgeIds]').val().split(',')
+        });
 
-    var TagChooserOverlay = Overlay.extend({
-
-        _chooser: null,
-
-        events: {
-            'click .tag-search-confrim': '_onClickConfirm',
-            'click .tag-search-cancel': '_onClickCancel'
-        },
-
-        show: function() {
-            var overlay = this;
-            TagChooserOverlay.superclass.setup.call(this);
-            if (this._chooser) {
-                return ;
-            }
-            chooser = new TagTreeChooser({
-                element: '#knowledges-search',
-                sourceUrl: $('#knowledges-search').data('sourceUrl'),
-                queryUrl: $('#knowledges-search').data('queryUrl'),
-                matchUrl: $('#knowledges-search').data('matchUrl'),
-                maxTagNum: 4,
-                // choosedTags: $("#testpaper-search-form").find('input[name=knowledgeIds]').val().split(','),
-                alwaysShow: true
-            });
-
-            chooser.on('change', function(tags) {
-                overlay.set('height', this.getHeight() + 70);
-            });
-        },
-
-        _onClickConfirm: function() {
-            this.hide();
-            var tags = this._chooser.get('choosedTags');
-            var tagNames = [];
-            var tagIds = [];
-            $.each(tags, function(i, tag) {
-                tagNames.push(tag.name);
-                tagIds.push(tag.id);
-            });
-            var btnText = tagNames.length >0 ? tagNames.join(' ') : '全选';
-            $('.knowledge-search-trigger').text(btnText);
+        knowledgeOverlay.on('change', function(tags, tagIds) {
             $("#testpaper-search-form").find('input[name=knowledgeIds]').val(tagIds.join(','));
-        },
-
-        _onClickCancel: function() {
-            this.hide();
-        }
-
-
-    });
-
-    var tagOverlay = new TagChooserOverlay({
-        trigger: '.knowledge-search-trigger',
-        element: $('#knowledges-search-overlay'),
-        width: 400,
-        align: {
-            baseElement: $('#knowledges-search-group'),
-            baseXY: [0, 36]
-        }
-    });
-
-    function _initTagSearch() {
-        var overlay = new Overlay({
-          element: $('#tags-search-overlay'),
-          width: 400,
-          align: {
-            baseElement: $('#tags-search-group'),
-            baseXY: [0, 36]
-          }
         });
 
-        var chooser;
-
-        $('.tag-search-trigger').click(function() {
-          overlay.show();
-
-          if (chooser) {
-            return ;
-          }
-
-          chooser = new TagChooser({
-            element: '#tags-search',
-                sourceUrl: $('#tags-search').data('sourceUrl'),
-                queryUrl: $('#tags-search').data('queryUrl'),
-                matchUrl: $('#tags-search').data('matchUrl'),
-            maxTagNum: 4,
-            // choosedTags: $("#testpaper-search-form").find('input[name=tagIds]').val().split(','),
-            alwaysShow: true
-          });
-
-          chooser.on('change', function(tags) {
-            overlay.set('height', this.getHeight() + 70);
-          });
-
-          overlay.set('height', chooser.getHeight() + 70);
-
+        var tagOverlay = new TagChooserOverlay({
+            trigger: '.tag-search-trigger',
+            element: $('#tags-search-overlay'),
+            width: 400,
+            align: {
+                baseElement: $('#tags-search-group'),
+                baseXY: [0, 36]
+            },
+            choosedTags: $("#testpaper-search-form").find('input[name=tagIds]').val().split(',')
         });
 
-        overlay.$('.tag-search-confrim').click(function() {
-          overlay.hide();
-          var tags = chooser.get('choosedTags');
-          var tagNames = [];
-          var tagIds = [];
-          $.each(tags, function(i, tag) {
-            tagNames.push(tag.name);
-            tagIds.push(tag.id);
-          });
-          var btnText = tagNames.length >0 ? tagNames.join(' ') : '全选';
-          $('.tag-search-trigger').text(btnText);
-          $("#testpaper-search-form").find('input[name=tagIds]').val(tagIds.join(','));
-        });
-
-        overlay.$('.tag-search-cancel').click(function(){
-          overlay.hide();
+        tagOverlay.on('change', function(tags, tagIds) {
+            $("#testpaper-search-form").find('input[name=tagIds]').val(tagIds.join(','));
         });
     }
 });
