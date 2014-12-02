@@ -88,7 +88,7 @@ define(function(require, exports, module){
             };
 
             var chooserTreeForRelatedKnowlege = new TagTreeChooser({
-              element: '#tag-releated-knowlege-tree-chooser',
+              element: '#relatedknowledges-chooser',
               sourceUrl: "/admin/knowledge/getTreeList?categoryId="+$categoryId,
               queryUrl: '/admin/knowledge/choosered',
               matchUrl: '/admin/tagset/match?q={{query}}',

@@ -33,7 +33,7 @@
         关联知识点
       </label>
       <div class="col-md-7 controls">
-{#         {% include('TopxiaWebBundle:TagChooser:tag-chooser-tree-related-knowledge.html.twig') %} #}
+        {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'relatedknowledges-chooser', categoryId: category.id} %}
 
       </div>
     </div>
