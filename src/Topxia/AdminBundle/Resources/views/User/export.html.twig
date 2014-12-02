@@ -1,0 +1,129 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+
+{% set modalSize = 'large' %}
+
+{% block title %}用户导出{% endblock %}
+{% block body %}
+
+<form id="user-create-form" class="form-horizontal" method="post" action="{{ path('admin_user_export')}}">
+
+
+<div class="row">
+          <form method="post" enctype="multipart/form-data">
+          <div class="col-md-3 col-md-offset-1">
+            <br>
+          <b>默认字段选择:</b>
+          </div>
+          <div class="col-md-8" style="margin-top: -25px;">            <br>
+
+<fieldset id="favoritecolor">
+ <div>
+ <label class="checkbox inline">  
+ <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+用户名</label>
+ </p>
+ <label class="checkbox inline">  
+  <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+手机号</label>
+ </p>
+ <label class="checkbox inline">  
+  <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+微博</label>
+ </p>
+ <label class="checkbox inline">  
+ <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+职业</label>
+ </p>
+</div>
+
+ <div>
+ <label class="checkbox inline">  
+ <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+姓名</label>
+ </p>
+ <label class="checkbox inline">  
+  <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+ＱＱ</label>
+ </p>
+ <label class="checkbox inline">  
+  <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+个人网站</label>
+ </p>
+  <label class="checkbox inline">  
+  <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+头衔</label>
+ </p>
+</div>
+
+ <div>
+ <label class="checkbox inline">  
+<p><input class="checkbox" id="orange" name="orange" type="checkbox" value="orange" />
+Email</label>
+</p>
+<label class="checkbox inline">  
+<p><input class="checkbox" id="orange" name="orange" type="checkbox" value="orange" />
+微信</label>
+</p>
+<label class="checkbox inline">  
+<p><input class="checkbox" id="orange" name="orange" type="checkbox" value="orange" />
+公司</label>
+</p>
+ </div>
+
+ <br class="clear">
+</fieldset>
+      </div>
+
+   {% if fields %}
+          <div class="col-md-12"><br></div>
+          <hr style="filter:progid:DXImageTransform.Microsoft.Glow(color=#FF0000,strength=10)" width="100%" color="#FF0000" size="1" />
+          <div class="col-md-3 col-md-offset-1">
+          <b>自定义字段选择：</b>
+          </div>
+          <div class="col-md-8 " >
+	<table>
+	  {% for field in fields %}
+	        <td><input type="checkbox"/>{{field.title}}
+	        </td>
+	  {% endfor %}
+	  </table>
+          </div>
+   {% endif %}
+   
+      </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button id="user-create-btn" data-submiting-text="正在导出" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-create-form">导出</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('user/create-modal')</script>
+
+<style>
+fieldset#favoritecolor{
+margin:0;
+padding:0;
+border:none;
+background:transparent;
+}
+#favoritecolor div{
+width:8em;
+float:left;
+}
+ #favoritecolor label
+ {
+width:3em;
+ float:none;
+ display:inline;
+ }
+#favoritecolor p{
+margin:0.3em 0;
+}
+
+</style>
+
+{% endblock %}

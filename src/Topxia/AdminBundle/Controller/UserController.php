@@ -22,6 +22,8 @@ class UserController extends BaseController
     public function indexAction (Request $request)
     {
         $fields = $request->query->all();
+        var_dump($fields);
+
         $conditions = array(
             'roles'=>'',
             'keywordType'=>'',
@@ -48,6 +50,58 @@ class UserController extends BaseController
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
             'paginator' => $paginator,
+        ));
+    }
+
+    public function exportAction (Request $request)
+    {
+        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN') ){
+            throw $this->createAccessDeniedException();
+        }
+        $user=$this->getCurrentUser();
+
+        if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
+
+        $fields = $request->query->all();
+        var_dump($fields);
+        $conditions = array(
+            'roles'=>'',
+            'keywordType'=>'',
+            'keyword'=>''
+        );
+
+        if(!empty($fields)){
+            $conditions =$fields;
+        }
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getUserService()->searchUserCount($conditions),
+            20
+        );
+
+        $users = $this->getUserService()->searchUsers(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $profile['title'] = $user['title'];
+        $fields=$this->getFields();
+        }else{
+             throw $this->createAccessDeniedException();
+        }
+
+       
+        return $this->render('TopxiaAdminBundle:User:export.html.twig', array(
+            'users' => $users ,
+            'paginator' => $paginator,
+            'user'=>$user,
+            'fields'=> $fields,
+            'profile'=>$profile
         ));
     }
 
