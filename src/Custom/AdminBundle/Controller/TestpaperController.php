@@ -45,8 +45,8 @@ class TestpaperController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($testpapers, 'updatedUserId')); 
-        
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($testpapers, 'updatedUserId'));
+
         return $this->render('CustomAdminBundle:Testpaper:index.html.twig', array(
             'category' => $category,
             'testpapers' => $testpapers,
@@ -162,7 +162,7 @@ class TestpaperController extends BaseController
     }
 
     public function deletesAction(Request $request)
-    {   
+    {
         $ids = $request->request->get('ids');
 
         foreach (is_array($ids) ? $ids : array() as $id) {
@@ -333,7 +333,7 @@ class TestpaperController extends BaseController
 
 
         $replace = empty($conditions['replace']) ? '' : $conditions['replace'];
-        
+
         $paginator = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),
@@ -341,8 +341,8 @@ class TestpaperController extends BaseController
         );
 
         $questions = $this->getQuestionService()->searchQuestions(
-                $conditions, 
-                array('createdTime' ,'DESC'), 
+                $conditions,
+                array('createdTime' ,'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
         );
@@ -355,7 +355,7 @@ class TestpaperController extends BaseController
             'paginator' => $paginator,
             'conditions' => $conditions,
         ));
-        
+
     }
 
     public function itemPickedAction(Request $request, $id)

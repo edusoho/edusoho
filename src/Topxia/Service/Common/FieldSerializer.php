@@ -95,3 +95,22 @@ class PhpserializeSerializeAlgorithm implements SerializeAlgorithm
         return unserialize($value);
     }
 }
+
+class IdsSerializeAlgorithm implements SerializeAlgorithm
+{
+    public function serialize($value)
+    {
+        if (empty($value)) {
+            return '';
+        }
+        return '|' . implode('|', $value) . '|';
+    }
+
+    public function unserialize($value)
+    {
+        if (empty($value)) {
+            return array();
+        }
+        return explode('|', trim($value, '|'));
+    }
+}

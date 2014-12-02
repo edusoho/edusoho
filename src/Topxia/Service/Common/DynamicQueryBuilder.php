@@ -14,16 +14,24 @@ class DynamicQueryBuilder extends QueryBuilder
     	$this->conditions = $conditions;
     }
 
-    public function where($where)
+    public function where($where, $dynamic = true)
     {
+        if (!$dynamic) {
+            return parent::where($where);
+        }
+
     	if (!$this->isWhereInConditions($where)) {
     		return $this;
     	}
     	return parent::where($where);
     }
 
-    public function andWhere($where)
+    public function andWhere($where, $dynamic = true)
     {
+        if (!$dynamic) {
+            return parent::andWhere($where);
+        }
+        
     	if (!$this->isWhereInConditions($where)) {
     		return $this;
     	}
@@ -33,6 +41,19 @@ class DynamicQueryBuilder extends QueryBuilder
     public function andStaticWhere($where)
     {
     	return parent::andWhere($where);
+    }
+
+    public function orWhere($where, $dynamic = true)
+    {
+        if (!$dynamic) {
+            return parent::orWhere($where);
+        }
+
+        if (!$this->isWhereInConditions($where)) {
+            return $this;
+        }
+
+        return parent::orWhere($where);
     }
 
     public function execute()

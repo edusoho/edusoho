@@ -10,8 +10,8 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
 
     private $serializeFields = array(
             'metas' => 'json',
-            'knowledgeIds' => 'json',
-            'tagIds' => 'json'
+            'knowledgeIds' => 'ids',
+            'tagIds' => 'ids'
     );
 
     public function getTestpaper($id)
@@ -23,8 +23,8 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
 
     public function findTestpapersByIds(array $ids)
     {
-        if(empty($ids)){ 
-            return array(); 
+        if(empty($ids)){
+            return array();
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
@@ -79,8 +79,8 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
 
     public function findTestpaperByTargets(array $targets)
     {
-        if(empty($targets)){ 
-            return array(); 
+        if(empty($targets)){
+            return array();
         }
         $marks = str_repeat('?,', count($targets) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE target IN ({$marks});";
@@ -92,17 +92,43 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
     {
         $conditions = array_filter($conditions);
 
-        if (isset($conditions['targetPrefix'])) {
-            $conditions['targetLike'] = "{$conditions['targetPrefix']}%";
-            unset($conditions['target']);
+        if (isset($conditions['title'])) {
+            $conditions['titleLike'] = "%{$conditions['title']}%";
+            unset($conditions['title']);
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'testpaper')
             ->andWhere('target = :target')
-            ->andWhere('target LIKE :targetLike')
+            ->andWhere('title LIKE :titleLike')
+			->andWhere('tags LIKE :tagsLike')
             ->andWhere('status LIKE :status');
-            
+
+        if (isset($conditions['tagIds'])) {
+            $tagIds = $conditions['tagIds'];
+            foreach ($tagIds as $key => $tagId) {
+                if (preg_match('/^[0-9]+$/', $tagId)) {
+
+                    $builder->andStaticWhere("tagIds LIKE '%|{$tagId}|%'");
+                }
+            }
+            unset($conditions['tagIds']);
+        }
+
+        if (isset($conditions['knowledgeIds'])) {
+            $knowledgeIds = $conditions['knowledgeIds'];
+            $ors = array();
+            foreach (array_values($knowledgeIds) as $i => $knowledgeId) {
+                if (preg_match('/^[0-9]+$/', $knowledgeId)) {
+                    $ors[] = "knowledgeIds LIKE '%|{$knowledgeId}|%'";
+                }
+            }
+
+            $builder->andWhere(call_user_func_array(array($builder->expr(), 'orX'), $ors), false);
+
+            unset($conditions['knowledgeIds']);
+        }
+
 
         return $builder;
     }
