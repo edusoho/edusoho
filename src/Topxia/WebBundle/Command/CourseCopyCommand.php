@@ -82,8 +82,8 @@ class CourseCopyCommand extends BaseCommand
                     'questionId' => empty($newQuestions[$item['questionId']]['id']) ? 0 : $newQuestions[$item['questionId']]['id'],
                     'questionType' => $item['questionType'],
                     'parentId' => empty($newQuestions[$item['parentId']]['id']) ? 0 : $newQuestions[$item['parentId']]['id'],
-                    'score' => 0,
-                    'missScore' => 0,
+                    'score' => $item['score'],
+                    'missScore' => $item['missScore'],
                 );
 
                 $this->getTestpaperItemDao()->addItem($fields);
