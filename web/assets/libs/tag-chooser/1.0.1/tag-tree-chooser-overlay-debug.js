@@ -21,7 +21,7 @@ define(function(require, exports, module) {
                 queryUrl: $chooser.data('queryUrl'),
                 matchUrl: $chooser.data('matchUrl'),
                 maxTagNum: overlay.get('maxTagNum'),
-                // choosedTags: $("#testpaper-search-form").find('input[name=knowledgeIds]').val().split(','),
+                choosedTags: overlay.get('choosedTags'),
                 alwaysShow: true
             });
 
