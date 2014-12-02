@@ -225,7 +225,7 @@ class DataDict
         'tagType' => array(
             'public' => '公共',
             'courseware' => '课件',
-            'libriary' => '文库',
+            'library' => '文库',
             'question' => '题库'
         ),
         'courseware' => array(

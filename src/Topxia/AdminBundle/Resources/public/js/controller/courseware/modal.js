@@ -60,12 +60,12 @@ define(function(require, exports, module){
                 $categoryId = $('[data-role=categoryId]').val();
 
                 var chooserTreeForMainKnowlege = new TagTreeChooser({
-                  element: '#mainknowledge-chooser',
-                  sourceUrl: $('#knowledges-search').data('sourceUrl'),
-                  queryUrl: $('#knowledges-search').data('queryUrl'),
-                  matchUrl: $('#knowledges-search').data('matchUrl'),
-                  maxTagNum: 1,
-                  choosedTags: $mainKnowledgeId
+                    element: '#mainknowledge-chooser',
+                    sourceUrl: $('#knowledges-search').data('sourceUrl'),
+                    queryUrl: $('#knowledges-search').data('queryUrl'),
+                    matchUrl: $('#knowledges-search').data('matchUrl'),
+                    maxTagNum: 1,
+                    choosedTags: $mainKnowledgeId
                 });
 
                 chooserTreeForMainKnowlege.on('change', function(tags) {
@@ -117,7 +117,6 @@ define(function(require, exports, module){
                 triggerType: 'change',
                 autoSubmit: false,
                 onFormValidated: function(error, results, $form) {
-
                     if (error) {
                         return false;
                     }
@@ -131,7 +130,7 @@ define(function(require, exports, module){
                         } else {
                             Notify.success('操作成功！');
                             window.location.reload();
-                        }                      
+                        }
                     });
                 }
             });

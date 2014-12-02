@@ -129,18 +129,16 @@ define(function(require, exports, module){
                     if (error) {
                         return false;
                     }
-
                     $('#article-material-operate-btn').button('submiting').button('loading').addClass('disabled');
                     tagIds = tagIds.join(",");
                     relatedKnowledgeIds = relatedKnowledgeIds.join(",");
                     $.post($form.attr('action'), $form.serialize()+'&tagIds='+tagIds+'&mainKnowledgeId='+mainKnowledgeId+'&relatedKnowledgeIds='+relatedKnowledgeIds, function(response) {
-                        console.log(response)
                         if (response.error){
                             Notify.danger(response.message);
                             $('#article-material-operate-btn').removeClass('disabled');
                         } else {
                             Notify.success('操作成功！');
-                            window.location.reload();                            
+                            window.location.reload();
                         }
                     });
 
