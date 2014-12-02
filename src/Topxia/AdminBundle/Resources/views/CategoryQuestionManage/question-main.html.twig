@@ -35,25 +35,36 @@
     {% endif %}
 
     {% if not parentQuestion %}
-      <form class="form-inline well well-sm" action="" method="get" novalidate>
-        
-{#         <div class="form-group">
-          <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
+<div class="well well-sm">
+  <form id="question-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    <input type="hidden" name="categoryId" value="{{ category.id }}">
+      <div class="form-group mrl" id="tags-search-group">
+        <label>标签：</label>
+          <a href="javascript:;" class="tag-search-trigger">
+            {% for tag in tagSearchs %}
+              {{tag.name}}
+            {% else %}
+              选择
+            {% endfor %}
+          </a>
+      </div>
+      <div class="form-group mrl" id="knowledges-search-group">
+        <label>知识点：</label>
+        <a href="javascript:;" class="knowledge-search-trigger">
+          {% for knowledge in knowledgeSearchs %}
+            {{knowledge.name}}
+          {% else %}
+            选择
+          {% endfor %}
+        </a>
+      </div>
 
-        </div> #}
+      <div class="form-group mrl">
+        <input class="form-control" type="text" name="keywords" value="{{ app.request.query.get('keyword') }}" placeholder="标题关键词">
+      </div>
 
-        <div class="form-group">
-          <div class="controls" style="width:300px;">
-{#             {% include('TopxiaWebBundle:TagChooser:tag-chooser-tree-main-knowledge.html.twig') %} #}
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="controls" style="width:300px;">
-{#             {% include('TopxiaWebBundle:TagChooser:tag-chooser.html.twig') %} #}
-          </div>
-        </div>
-        <button class="btn btn-primary btn-sm">搜索</button>
-        <br>
+      <button id="article-material-search" data-url="{# {{ path('admin_essay_content_list',{essayId:essay.id})}} #}" type="submit" class="btn btn-sm btn-primary">搜索</button>
+
 
         <div class="row">
           <div class="col-md-1"><span>题型</span></div>
@@ -82,10 +93,12 @@
           </div>
         
         </div>
-        <input type="hidden" data-role='tag-ids' name="tagIds" value="{{ app.request.query.get('tagIds') }}">
-        <input type="hidden" data-role='main-knowledge-ids' name="mainKnowledgeId" value="{{ app.request.query.get('mainKnowledgeId') }}">
-        <input type="hidden" data-role='categoryId' value="{{ category.id }}">
-      </form>
+      <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
+      <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">
+    </form>
+    {% include 'CustomWebBundle:Tag:tagchooser-overlay.html.twig' with {id: 'tags-search', type: 'question'} %}
+    {% include 'CustomWebBundle:Tag:tagchooser-knowledge-overlay.html.twig' with {id: 'knowledges-search', categoryId: category.id} %}
+  </div>
     {% endif %}
 
 

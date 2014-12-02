@@ -34,25 +34,13 @@
           action="{% if question.id %}{{ path('admin_category_manage_question_update',{categoryId:category.id, id:question.id, goto:app.request.get('goto')}) }}{% else %}{{ path('admin_category_manage_question_create',{categoryId:category.id, type:question.type, parentId:parentQuestion.id|default(0), goto:app.request.get('goto')}) }}{% endif %}"
           >
         {{ web_macro.flash_messages() }}
-
-{#         {% if not parentQuestion %}
-        <div class="form-group">
-          <div class="col-md-2 control-label"><label>从属</label></div>
-          <div class="col-md-8 controls">
-            <select class="form-control width-input width-input-large" name="target" data-role="target">
-              {{ select_options(targetsChoices, question.target|default(null)) }}
-            </select>
-            <div class="help-block">可以针对本课程或者某个课时出题</div>
-          </div>
-        </div>
-        {% endif %} #}
             <div class="form-group">
               <label class="col-md-2 control-label" for="courseware-mainKnowledgeId-field">
                 主知识点
               </label>
 
-                  <div class="col-md-6 controls">
-                    {% include('TopxiaWebBundle:TagChooser:tag-chooser-tree-main-knowledge.html.twig') %}
+              <div class="col-md-6 controls">
+                {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'mainknowledge-chooser', categoryId: category.id} %}
               </div>
 
             </div>
@@ -61,9 +49,7 @@
                 关联知识点
               </label>
               <div class="col-md-6 controls">
-                {% include('TopxiaWebBundle:TagChooser:tag-chooser-tree-related-knowledge.html.twig') %}
-                
-              {#  <input class="form-control" id="courseware-relatedKnowledgeIds-field" type="text" name="relatedKnowledgeIds" value="{{ courseware.relatedKnowledgeIds|default(null) }}" > #}
+                {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'relatedknowledges-chooser', categoryId: category.id} %}
               </div>
             </div>
 
@@ -72,8 +58,8 @@
                       标签
                     </label>
 
-                  <div class="col-md-6 controls">
-                    {% include('TopxiaWebBundle:TagChooser:tag-chooser.html.twig') %}
+              <div class="col-md-6 controls">
+                {% include 'CustomWebBundle:Tag:tagchooser.html.twig' with {id: 'tag-chooser', type: 'coourseware'} %}
               </div>
             </div>
 
@@ -139,10 +125,11 @@
           </div>
         </div>
 
- 
-          <input type="hidden" data-role='tag-ids' name="tagIds" value="{{ question.tagIds|default('') }}">
-          <input type="hidden" data-role='main-knowledge-ids' name="mainKnowledgeId" value="{{ question.mainKnowledgeId|default('') }}">
-          <input type="hidden" data-role='related-knowledge-ids' name="relatedKnowledgeIds"value="{{ question.relatedKnowledgeIds|default('') }}">
+          {% if question|default(null) %}
+            <input type="hidden" data-role='tag-ids' value="{{question.tagIds}}">
+            <input type="hidden" data-role='main-knowledge-ids' value="{{question.mainKnowledgeId}}">
+            <input type="hidden" data-role='related-knowledge-ids' value="{{question.relatedKnowledgeIds}}">
+          {% endif %}
 
         <input type="hidden" data-role='categoryId' value="{{ category.id }}">
         <input type="hidden" name="target" value="{{ question.target|default('') }}">

@@ -1,11 +1,14 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-    require("jquery.bootstrap-datetimepicker");
-    var TagChooser = require('tag-chooser');
+    var Notify = require('common/bootstrap-notify');
+    var Overlay = require('overlay');
+    var Widget = require('widget');
     var TagTreeChooser = require('tag-tree-chooser');
+    var TagChooser = require('tag-chooser');
+    var TagChooserOverlay = require('tag-chooser-overlay');
+    var TagTreeChooserOverlay = require('tag-tree-chooser-overlay');
 
-    require("$");
     exports.run = function() {
         var $container = $('#quiz-table-container');
         require('../../util/short-long-text')($container);
@@ -13,71 +16,34 @@ define(function(require, exports, module) {
         require('../../util/batch-delete')($container);
         require('../../util/item-delete')($container);
 
-        var $tagIds = [];
-        var $relatedKnowledgeIds = [];
-        var $mainKnowledgeId = [];
-        var queryUrl = "";
-        function _initTagChooer()
-        {
+        var knowledgeOverlay = new TagTreeChooserOverlay({
+            trigger: '.knowledge-search-trigger',
+            element: $('#knowledges-search-overlay'),
+            width: 400,
+            align: {
+                baseElement: $('#knowledges-search-group'),
+                baseXY: [0, 36]
+            },
+            choosedTags: $("#question-search-form").find('input[name=knowledgeIds]').val().split(',')
+        });
 
-            if ($('[data-role=tag-ids]').length > 0) {
-                $tagIds = $('[data-role=tag-ids]').val();
-                $tagIds = [$tagIds];
-            }; 
+        knowledgeOverlay.on('change', function(tags, tagIds) {
+            $("#question-search-form").find('input[name=knowledgeIds]').val(tagIds.join(','));
+        });
 
-            var chooser = new TagChooser({
-              element: '#tag-chooser',
-              sourceUrl: '/admin/tagset/get',
-              queryUrl: '/admin/tags/Choosered',
-              matchUrl: '/admin/tagset/match?q={{query}}',
-              maxTagNum: 4,
-              choosedTags: $tagIds
-            });
+        var tagOverlay = new TagChooserOverlay({
+            trigger: '.tag-search-trigger',
+            element: $('#tags-search-overlay'),
+            width: 400,
+            align: {
+                baseElement: $('#tags-search-group'),
+                baseXY: [0, 36]
+            },
+            choosedTags: $("#question-search-form").find('input[name=tagIds]').val().split(',')
+        });
 
-            chooser.on('change', function(tags) {
-
-              var tagIdsTemp = [];
-              $.each(tags,function(i,item){
-                  tagIdsTemp.push(item.id)
-              })
-              $('[data-role=tag-ids]').val(tagIdsTemp);
-            });
-
-            chooser.on('existed', function(existTag){
-            });
-        }
-
-        function _initMainknowledgeTagChooer()
-        {
-            if ($('[data-role=main-knowledge-ids]').length > 0) {
-                $mainKnowledgeId = $('[data-role=main-knowledge-ids]').val();
-                $mainKnowledgeId = [$mainKnowledgeId];
-            };
-            $categoryId = $('[data-role=categoryId]').val();
-
-            var chooserTreeForMainKnowlege = new TagTreeChooser({
-              element: '#tag-main-knowlege-tree-chooser',
-              sourceUrl: "/admin/knowledge/getTreeList?categoryId="+$categoryId,
-              queryUrl: '/admin/knowledge/choosered',
-              matchUrl: '/admin/tagset/match?q={{query}}',
-              maxTagNum: 1,
-              choosedTags: $mainKnowledgeId
-            });
-            chooserTreeForMainKnowlege.on('change', function(tags) {
-              var temp = [];
-              $.each(tags,function(i,item){
-                temp = item.id;
-              });
-              $('[data-role=main-knowledge-ids]').val(temp);
-            });
-
-            chooserTreeForMainKnowlege.on('existed', function(existTag){
-            });
-        }
-
-        _initMainknowledgeTagChooer();
-        _initTagChooer();
-
-    };
-
+        tagOverlay.on('change', function(tags, tagIds) {
+            $("#question-search-form").find('input[name=tagIds]').val(tagIds.join(','));
+        });
+    }
 });

@@ -10,12 +10,12 @@ class CoursewareController extends BaseController
 {
     public function manageAction(Request $request, $categoryId, $type)
     {
-        $method = $request->query->get('method');
         $knowledgeIds = $request->query->get('knowledgeIds');
-        $knowledgeIds = empty($knowledgeIds) ? array() : explode(',',$knowledgeIds);
         $tagIds = $request->query->get('tagIds');
-        $tagIds = empty($tagIds) ? array() : explode(',',$tagIds);
         $title = $request->query->get('keyword');
+
+        $knowledgeSearchs = empty($knowledgeIds) ? array() : $this->getKnowledgeService()->findKnowledgeByIds(explode(',',$knowledgeIds));
+        $tagSearchs = empty($tagIds) ? array() : $this->getTagService()->findTagsByIds(explode(',',$tagIds));
 
         $conditions = array(
             'tagIds' => $tagIds,
@@ -39,9 +39,6 @@ class CoursewareController extends BaseController
 
         $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($coursewares,'mainKnowledgeId'));
         $knowledges = ArrayToolkit::index($knowledges, 'id');
-
-        $knowledgeSearchs = !empty($knowledgeIds) ? $this->getKnowledgeService()->findKnowledgeByIds($knowledgeIds):array();
-        $tagSearchs = !empty($tagIds) ? $this->getTagService()->findTagsByIds($tagIds):array();
 
         return $this->render('TopxiaAdminBundle:Courseware:'.$type.'-view.html.twig',array(
             'category' => $category,

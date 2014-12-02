@@ -15,13 +15,19 @@ class CategoryQuestionManageController extends BaseController
         $category = $this->getCategoryService()->getCategory($categoryId);
         
         $conditions = $request->query->all();
+        if (!empty($conditions['categoryId'])){
+            unset($conditions['categoryId']);
+        }
+
+        $knowledgeSearchs = empty($conditions['knowledgeIds']) ? array() : $this->getKnowledgeService()->findKnowledgeByIds(explode(',',$conditions['knowledgeIds']));
+        $tagSearchs = empty($conditions['tagIds']) ? array() : $this->getTagService()->findTagsByIds(explode(',',$conditions['tagIds']));
 
         if (empty($conditions['target'])) {
             $conditions['targetPrefix'] = "subject-{$categoryId}";
         }
 
-        if (!empty($conditions['keyword'])) {
-            $conditions['stem'] = $conditions['keyword'];
+        if (!empty($conditions['keywords'])) {
+            $conditions['stem'] = $conditions['keywords'];
         }
 
         if (!empty($conditions['parentId'])) {
@@ -53,17 +59,15 @@ class CategoryQuestionManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
 
-    /*    $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));*/
-
         return $this->render('TopxiaAdminBundle:CategoryQuestionManage:index.html.twig', array(
             'category' => $category,
             'questions' => $questions,
             'users' => $users,
-/*            'targets' => $targets,*/
+            'knowledgeSearchs' => $knowledgeSearchs,
+            'tagSearchs' => $tagSearchs,
             'paginator' => $paginator,
             'parentQuestion' => $parentQuestion,
             'conditions' => $conditions,
- /*           'targetChoices' => $this->getQuestionTargetChoices($course),*/
         ));
     }
 
