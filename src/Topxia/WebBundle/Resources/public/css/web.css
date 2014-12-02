@@ -2451,6 +2451,11 @@ body {
 	margin-bottom: 6px;
 }
 
+.notification-list .notification-body a{
+	color:#428bca;
+}
+
+
 .notification-list .notification-footer {
 	font-size: 12px;
 	color: #999;
