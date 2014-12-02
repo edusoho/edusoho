@@ -40,16 +40,6 @@ define(function(require, exports, module) {
             $("#article-material-search-form").find('input[name=tagIds]').val(tagIds.join(','));
         });
 
-        $('.method-form-group').on('change',function(){
-            if ($('.title-form-group').hasClass('hide')){
-                $('.tagIds-form-group').addClass('hide');
-                $('.title-form-group').removeClass('hide');
-            } else {
-                $('.tagIds-form-group').removeClass('hide');
-                $('.title-form-group').addClass('hide');
-            }
-        });
-
         $('.delete-articleMaterial-btn').click(function(){
 
             if (!confirm('您真的要删除该课件吗？')) {

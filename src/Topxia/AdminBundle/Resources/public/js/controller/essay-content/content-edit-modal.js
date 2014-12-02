@@ -4,16 +4,6 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() { 
-        $('.method-form-group').on('change',function(){
-            if ($('.title-form-group').hasClass('hide')){
-                $('.tagIds-form-group').addClass('hide');
-                $('.title-form-group').removeClass('hide');
-            } else {
-                $('.tagIds-form-group').removeClass('hide');
-                $('.title-form-group').addClass('hide');
-            }
-        });
-
         $('#article-material-search').on('click',function(){
             $.get($('#article-material-search').data('url'), $('#message-search-form').serialize(), function(html) {
                 $('#modal').html(html);
