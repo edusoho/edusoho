@@ -90,8 +90,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $filtedFields['target'] = $fields['target'];
             $filtedFields['pattern'] = $fields['pattern'];
             $filtedFields['description']   = empty($fields['description'])? '' : $fields['description'];
-            $filtedFields['score']   = empty($fields['score'])? '' : $fields['score'];
-            $filtedFields['itemCount']   = empty($fields['itemCount'])? '' : $fields['itemCount'];
+            $filtedFields['score']   = empty($fields['score'])? 0 : $fields['score'];
+            $filtedFields['itemCount']   = empty($fields['itemCount'])? 0 : $fields['itemCount'];
             $filtedFields['limitedTime']   = empty($fields['limitedTime']) ? 0 : (int) $fields['limitedTime'];
             $filtedFields['metas']   = empty($fields['metas'])? array() : $fields['metas'];
             $filtedFields['knowledgeIds']   = empty($fields['knowledgeIds'])? array() : $fields['knowledgeIds'];
