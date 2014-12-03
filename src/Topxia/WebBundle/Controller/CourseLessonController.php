@@ -396,12 +396,13 @@ class CourseLessonController extends BaseController
 
             $factory = new CloudClientFactory();
             $client = $factory->createClient();
-
+            
             if ($isDownload) {
                 $client->download($client->getBucket(), $key, 3600, $file['filename']);
             } else {
                 $client->download($client->getBucket(), $key);
             }
+            
         }
 
         return $this->createLocalMediaResponse($request, $file, $isDownload);
@@ -485,7 +486,6 @@ class CourseLessonController extends BaseController
         if ($mimeType) {
             $response->headers->set('Content-Type', $mimeType);
         }
-
         return $response;
     }
 
