@@ -16,15 +16,7 @@ class  EssayController extends BaseController
             throw $this->createNotFoundException("分类(#{$categoryId})不存在，创建课件失败！");
         }
 
-        $fields = $request->query->all();
-
-        $conditions = array(
-            'title'=>''
-        );
-
-        if(!empty($fields['status'])){
-            $conditions =$fields;
-        }
+        $conditions = $request->query->all();
 
         $paginator = new Paginator(
             $this->get('request'),
