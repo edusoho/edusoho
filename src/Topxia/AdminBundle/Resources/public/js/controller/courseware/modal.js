@@ -27,7 +27,7 @@ define(function(require, exports, module){
             {
                 if ($('[data-role=tag-ids]').length > 0) {
                   $tagIds = $('[data-role=tag-ids]').val();
-                  $tagIds = [$tagIds];
+                  $tagIds = $tagIds.split(',');
                 }; 
 
                 var chooser = new TagChooser({
@@ -84,7 +84,7 @@ define(function(require, exports, module){
          {
             if ($('[data-role=related-knowledge-ids]').length > 0) {
                 $relatedKnowledgeIds = $('[data-role=related-knowledge-ids]').val();
-                $relatedKnowledgeIds = [$relatedKnowledgeIds];
+                $relatedKnowledgeIds = $relatedKnowledgeIds.split(',');
             };
 
             var chooserTreeForRelatedKnowlege = new TagTreeChooser({
@@ -133,27 +133,6 @@ define(function(require, exports, module){
                         }
                     });
                 }
-            });
-
-            validator.addItem({
-                element: '[name=url]',
-                required: true,
-                rule: 'url'
-            });
-
-            validator.addItem({
-                element: '[name=mainKnowledgeId]',
-                required: true
-            });
-
-            validator.addItem({
-                element: '[name=relatedKnowledgeIds]',
-                required: true
-            });
-
-            validator.addItem({
-                element: '[name=tagIds]',
-                required: true
             });
 
             validator.addItem({
