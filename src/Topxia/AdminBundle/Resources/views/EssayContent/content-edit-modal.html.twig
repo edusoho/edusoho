@@ -37,7 +37,7 @@
         <input class="form-control" type="text" name="keywords" value="{{ app.request.query.get('keyword') }}" placeholder="标题关键词">
       </div>
 
-      <button id="article-material-search" data-url="{{ path('admin_essay_content_list',{essayId:essay.id})}}" type="submit" class="btn btn-sm btn-primary">搜索</button>
+      <button id="article-material-search" data-url="{{  path('admin_essay_content_edit', {essayId:essay.id, contentId:contentId}) }}" type="submit" class="btn btn-sm btn-primary">搜索</button>
 
       <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
       <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">

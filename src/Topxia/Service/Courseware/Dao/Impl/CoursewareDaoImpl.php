@@ -82,11 +82,11 @@ class CoursewareDaoImpl extends BaseDao implements CoursewareDao
             ->andWhere('categoryId = :categoryId');
 
         if (isset($conditions['tagIds'])) {
-            $tagIds = $conditions['tagIds'];
-            if(!empty($tagIds)){
-                foreach ($tagIds as $key => $tagId) {
+            if(!empty($conditions['tagIds'])){
+                foreach ($conditions['tagIds'] as $key => $tagId) {
                     if (preg_match('/^[0-9]+$/', $tagId)) {
-                        $builder->andStaticWhere("tagIds LIKE '%|{$tagId}|%'");
+                        $tagId = "\"".$tagId."\"";
+                        $builder->andStaticWhere("tagIds LIKE '%{$tagId}%'");
                     }
                 }
             }
@@ -94,12 +94,12 @@ class CoursewareDaoImpl extends BaseDao implements CoursewareDao
         }
 
         if (isset($conditions['knowledgeIds'])) {
-            $knowledgeIds = $conditions['knowledgeIds'];
             $ors = array();
-            if(!empty($knowledgeIds)){
-                foreach (array_values($knowledgeIds) as $i => $knowledgeId) {
+            if(!empty($conditions['knowledgeIds'])){
+                foreach (array_values($conditions['knowledgeIds']) as $i => $knowledgeId) {
+                    $knowledgeId = "\"".$knowledgeId."\"";
                     if (preg_match('/^[0-9]+$/', $knowledgeId)) {
-                        $ors[] = "knowledgeIds LIKE '%|{$knowledgeId}|%'";
+                        $ors[] = "knowledgeIds LIKE '%{$knowledgeId}%'";
                     }
                 }
                 $builder->andWhere(call_user_func_array(array($builder->expr(), 'orX'), $ors), false);

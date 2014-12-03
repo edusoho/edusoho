@@ -85,8 +85,9 @@ class ArticleMaterialDaoImpl extends BaseDao implements ArticleMaterialDao
             $tagIds = $conditions['tagIds'];
             if(!empty($tagIds)){
                 foreach ($tagIds as $key => $tagId) {
+                    $tagId = "\"".$tagId."\"";
                     if (preg_match('/^[0-9]+$/', $tagId)) {
-                        $builder->andStaticWhere("tagIds LIKE '%|{$tagId}|%'");
+                        $builder->andStaticWhere("tagIds LIKE '%{$tagId}%'");
                     }
                 }
             }
@@ -98,8 +99,9 @@ class ArticleMaterialDaoImpl extends BaseDao implements ArticleMaterialDao
             $ors = array();
             if(!empty($knowledgeIds)){
                 foreach (array_values($knowledgeIds) as $i => $knowledgeId) {
+                    $knowledgeId = "\"".$knowledgeId."\"";
                     if (preg_match('/^[0-9]+$/', $knowledgeId)) {
-                        $ors[] = "knowledgeIds LIKE '%|{$knowledgeId}|%'";
+                        $ors[] = "knowledgeIds LIKE '%{$knowledgeId}%'";
                     }
                 }
                 $builder->andWhere(call_user_func_array(array($builder->expr(), 'orX'), $ors), false);
