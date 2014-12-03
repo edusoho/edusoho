@@ -32,6 +32,8 @@ define(function(require, exports, module) {
             'material' : {name:'材料题', type: 'essay' }
         },
 
+        _tagPartChooser: null,
+
         setup:function() {
             this.createValidator();
             if (this.get('haveBaseFields') === true) {
@@ -45,20 +47,27 @@ define(function(require, exports, module) {
                 if ($trigger.data('mode') == 'update') {
                     var values = $trigger.parents('tr').data();
                     values = $.extend({}, self._defaults[values.type], values);
-                    console.log('udpate', values);
                     $modal.find('.part-save-btn').data('modal', 'update');
                 } else {
                     var values = self._defaults[$trigger.data('type')];
                     $modal.find('.part-save-btn').data('modal', 'create');
+                    $modal.find('[name=description]').val('');
+                    $modal.find('input[name=score]').val('');
+                    $modal.find('input[name=count]').val('');
+                    $modal.find('input[name=mistakeScore]').val('');
+                    $modal.find('input[name=missScore]').val('');
+                    $modal.find('input[name=tagIds]').val('');
                 }
 
                 $modal.find('.modal-title').html(values.name);
                 $modal.find('input[name=name]').val(values.name);
                 $modal.find('input[name=type]').val(values.type);
                 $modal.find('input[name=id]').val(values.id);
+                if (values.tagIds) {
+                    $modal.find('input[name=tagIds]').val(values.tagIds);
+                }
 
                 var mistakeScore = parseInt(values['mistakeScore']);
-                    console.log(mistakeScore);
                 var $mistakeScoreFormGroup = $modal.find('.mistakeScore-form-group')
                 if (isNaN(mistakeScore)) {
                     $mistakeScoreFormGroup.find('input[type=text]').attr('disabled', 'disabled');
@@ -99,22 +108,35 @@ define(function(require, exports, module) {
             });
 
             $modal.on('shown.bs.modal', function(e) {
-                var tagPartChooser = new TagChooser({
-                    element: '#part-tag-chooser',
-                    sourceUrl: $('#part-tag-chooser').data('sourceUrl'),
-                    queryUrl: $('#part-tag-chooser').data('queryUrl'),
-                    matchUrl: $('#part-tag-chooser').data('matchUrl'),
-                    maxTagNum: 15
-                });
-
-                var $partForm = $('.testpaper-part-form');
-                tagPartChooser.on('change', function(tags) {
-                    var ids = [];
-                    $.each(tags, function(i, tag) {
-                        ids.push(tag.id);
+                if (!self._tagPartChooser) {
+                    self._tagPartChooser = new TagChooser({
+                        element: '#part-tag-chooser',
+                        sourceUrl: $('#part-tag-chooser').data('sourceUrl'),
+                        queryUrl: $('#part-tag-chooser').data('queryUrl'),
+                        matchUrl: $('#part-tag-chooser').data('matchUrl'),
+                        maxTagNum: 15
                     });
-                    $partForm.find('[name=tagIds]').val(ids.join(','));
-                });
+
+                    var $partForm = $('.testpaper-part-form');
+                    self._tagPartChooser.on('change', function(tags) {
+                        var ids = [];
+                        $.each(tags, function(i, tag) {
+                            ids.push(tag.id);
+                        });
+                        $partForm.find('[name=tagIds]').val(ids.join(','));
+                    });
+                } else {
+                    var choosedTags = [];
+                    if ($modal.find('input[name=tagIds]').val().length > 0) {
+                        choosedTags = $modal.find('input[name=tagIds]').val().split(',');
+                    }
+
+                    self._tagPartChooser.resetTags(choosedTags);
+                }
+
+
+
+
 
             });
 
@@ -242,8 +264,6 @@ define(function(require, exports, module) {
             });
 
             var parts = JSON.stringify(parts);
-
-            console.log('parts',parts);
 
             $form.find('input[name=parts]').val(parts);
         },
