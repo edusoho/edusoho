@@ -137,7 +137,10 @@ class CoursewareController extends BaseController
             throw $this->createNotFoundException('课件已经删除或者不存在.');
         }
 
-        $courseware['relatedKnowledgeIds'] = implode(",", $courseware['relatedKnowledgeIds']);
+        if (!empty($courseware['relatedKnowledgeIds'])) {
+            $courseware['relatedKnowledgeIds'] = implode(",", $courseware['relatedKnowledgeIds']);
+        }
+
         $courseware['tagIds'] = implode(",", $courseware['tagIds']);
 
         if ($request->getMethod() == 'POST') {

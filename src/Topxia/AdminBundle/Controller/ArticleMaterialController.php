@@ -114,7 +114,11 @@ class ArticleMaterialController extends BaseController
         if (empty($articleMaterial)) {
             throw $this->createNotFoundException('文章素材已经删除或者不存在.');
         }
-        $articleMaterial['relatedKnowledgeIds'] = implode(",", $articleMaterial['relatedKnowledgeIds']);
+
+        if (!empty($articleMaterial['relatedKnowledgeIds'])) {
+            $articleMaterial['relatedKnowledgeIds'] = implode(",", $articleMaterial['relatedKnowledgeIds']);
+        }
+
         $articleMaterial['tagIds'] = implode(",", $articleMaterial['tagIds']);
 
         if ($request->getMethod() == 'POST') {
