@@ -111,7 +111,6 @@ class CoursewareController extends BaseController
     {
         $ids = $request->request->get('ids', array());
         $id = $request->query->get('id', null);
-
         if ($id) {
             array_push($ids, $id);
         }
@@ -127,7 +126,6 @@ class CoursewareController extends BaseController
     public function editAction(Request $request, $categoryId, $id)
     {
         $category = $this->getCategoryService()->getCategory($categoryId);
-
         if (empty($category)) {
             throw $this->createNotFoundException("分类(#{$categoryId})不存在，编辑课件失败！");
         }
