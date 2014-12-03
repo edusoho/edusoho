@@ -112,7 +112,6 @@
               <li class="media">
                 <a href="{{ path('user_show', {id:isAdopt[0].userId}) }}" class="pull-left"><img src="{{ default_path('avatar', postMember[isAdopt[0].userId].smallAvatar, '') }}" class="media-object"></a>
                 <div class="media-body">
-                   <img class="pull-right" style="" src="{{default_path('adopt.gif')}}">
                     <div class="metas">
                       <strong>{{ web_macro.user_link(postMember[isAdopt[0].userId]) }}</strong>
                       <span class="mhm">{{isAdopt[0].createdTime|smart_time}} </span>
