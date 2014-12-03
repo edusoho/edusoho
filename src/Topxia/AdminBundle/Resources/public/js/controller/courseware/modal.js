@@ -130,12 +130,6 @@ define(function(require, exports, module){
                         return;
                     };
 
-
-                    if (relatedKnowledgeIds == "") {
-                        Notify.danger('关联知识点不能为空');
-                        $btn.button('reset');
-                        return;
-                    };
                     if (tagIds == "" || tagIds.length == 0) {
                         Notify.danger('标签不能为空');
                         $btn.button('reset');
