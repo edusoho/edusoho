@@ -24,12 +24,6 @@ class CoursewareController extends BaseController
             'title' => $title,
         );
 
-        // $conditions = array(
-        //     'tagIds' => $tagIds,
-        //     'knowledgeIds' => $knowledgeIds,
-        //     'categoryId' => $categoryId,
-        //     'title' => $title,
-        // );
         $coursewaresCount = $this->getCoursewareService()->searchCoursewaresCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $coursewaresCount, 8);
