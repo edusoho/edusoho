@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
@@ -22,7 +23,6 @@ class UserController extends BaseController
     public function indexAction (Request $request)
     {
         $fields = $request->query->all();
-        var_dump($fields);
 
         $conditions = array(
             'roles'=>'',
@@ -55,54 +55,147 @@ class UserController extends BaseController
 
     public function exportAction (Request $request)
     {
+        $user=$this->getCurrentUser();
+        
+        // $userCount = '' ;
+        // if ($request->getMethod() == 'POST') {
+        // $results = $request->request->all();
+        // $conditions =$results;
+        // var_dump($conditions);
+        // $userCount = $this->getUserService()->searchUserCount($conditions);
+        // var_dump($userCount);
+        // }
+
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $profile['title'] = $user['title'];
+        $fields=$this->getFields();
+       
+        return $this->render('TopxiaAdminBundle:User:export.html.twig', array(
+            'user'=>$user,
+            'fields'=> $fields,
+            'profile'=>$profile,
+            // 'userCount' => $userCount
+        ));
+    }
+
+ public function exportCsvAction (Request $request)
+    {
         if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN') ){
             throw $this->createAccessDeniedException();
         }
         $user=$this->getCurrentUser();
 
         if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
- // if ($request->getMethod() == 'POST') {}
-        $fields = $request->query->all();
-var_dump($fields);
-        $conditions = array(
-            'roles'=>'',
-            'keywordType'=>'',
-            'keyword'=>''
-        );
+        $results = $request->request->all();
 
-        if(!empty($fields)){
-            $conditions =$fields;
+        $conditions =$results;
+        $userCount = $this->getUserService()->searchUserCount($conditions);
+        $users = $this->getUserService()->searchUsers($conditions,array('createdTime', 'DESC'),0, 20000);
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        
+        $fields=array();
+        foreach ($userFields as $userField) {
+            $fields[$userField['fieldName']]=$userField['title'];
+        }
+        // var_dump($fields);exit();
+        $userIds = ArrayToolkit::column($users, 'id');
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = ArrayToolkit::index($users, 'id');
+
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+
+        $profiles = ArrayToolkit::index($profiles, 'id');
+
+        $choices = array(); 
+        foreach ($results as $key => $value) {
+            if($key == 'choices'){
+                $choices = $value; 
+            }
         }
 
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getUserService()->searchUserCount($conditions),
-            20
-        );
+        $str = "";
+        foreach ($choices as $key => $value) {
+            if($key == 0){
+                $str.=$value;
+            }else{
+                $str.=",".$value;
+            }
+        }
+        // $str = "用户名,Email,注册时间,姓名,QQ号,微信号,手机号,公司,职业,头衔";
 
-        $users = $this->getUserService()->searchUsers(
-            $conditions,
-            array('createdTime', 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        // foreach ($fields as $key => $value) {
+        //     $str.=",".$value;
+        //     // var_dump($key);
+        // }
+        $str.="\r\n";
 
+        $exportUsers = array();
+
+        foreach ($users as $user) {
+            $member = "";
+            if (in_array('用户名', $choices)) {
+                $member .= $users[$user['id']]['nickname'].",";
+            }
+            if (in_array('手机号', $choices)) {
+                $member .= $profiles[$user['id']]['mobile'] ? $profiles[$user['id']]['mobile']."," : "-".",";
+            }
+           if (in_array('微博', $choices)) {
+            $member .= $profiles[$user['id']]['weibo'] ? $profiles[$user['id']]['weibo']."," : "-".",";
+            }
+           if (in_array('职业', $choices)) {
+            $member .= $profiles[$user['id']]['job'] ? $profiles[$user['id']]['job']."," : "-".",";
+            }
+            if (in_array('姓名', $choices)) {
+            $member .= $profiles[$user['id']]['truename'] ? $profiles[$user['id']]['truename']."," : "-".",";
+            }
+            if (in_array('qq', $choices)) {
+            $member .= $profiles[$user['id']]['qq'] ? $profiles[$user['id']]['qq']."," : "-".",";
+            }
+            if (in_array('个人网站', $choices)) {
+            $member .= $profiles[$user['id']]['site'] ? $profiles[$user['id']]['site']."," : "-".",";
+            }
+            if (in_array('头衔', $choices)) {
+            $member .= $users[$user['id']]['title'] ? $users[$user['id']]['title']."," : "-".",";
+            }
+            if (in_array('email', $choices)) {
+                $member .= $users[$user['id']]['email'].",";
+            }
+            if (in_array('微信', $choices)) {
+            $member .= $profiles[$user['id']]['weixin'] ? $profiles[$user['id']]['weixin']."," : "-".",";
+            }
+            if (in_array('公司', $choices)) {
+            $member .= $profiles[$user['id']]['company'] ? $profiles[$user['id']]['company']."," : "-".",";
+            }
+            foreach ($fields as $key => $value) {
+               if (in_array($value, $choices)) {
+                    $member.=$profiles[$user['id']][$key] ? $profiles[$user['id']][$key]."," : "-".",";
+                }
+            }
+            $exportUsers[] = $member;   
+        };
+
+        $str .= implode("\r\n",$exportUsers);
+        $str = chr(239) . chr(187) . chr(191) . $str;
+
+        $filename = sprintf("exportUsers-(%s).csv", date('Y-n-d'));
+
+        $userId = $this->getCurrentUser()->id;
         
-        $profile = $this->getUserService()->getUserProfile($user['id']);
-        $profile['title'] = $user['title'];
-        $fields=$this->getFields();
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+        return $response;
+        var_dump($response);exit();
+
         }else{
              throw $this->createAccessDeniedException();
         }
 
-       
-        return $this->render('TopxiaAdminBundle:User:export.html.twig', array(
-            'users' => $users ,
-            'paginator' => $paginator,
-            'user'=>$user,
-            'fields'=> $fields,
-            'profile'=>$profile
-        ));
+        
     }
 
     public function emailCheckAction(Request $request)

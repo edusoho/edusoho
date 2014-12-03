@@ -120,6 +120,10 @@ admin_user_export:
     pattern:  /user/export
     defaults: { _controller: TopxiaAdminBundle:User:export }
 
+admin_user_exportcsv:
+    pattern:  /user/exportcsv
+    defaults: { _controller: TopxiaAdminBundle:User:exportCsv }
+
 admin_user_create:
     pattern:  /user/create
     defaults: { _controller: TopxiaAdminBundle:User:create }

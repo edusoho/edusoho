@@ -6,7 +6,7 @@
 {% block title %}用户导出{% endblock %}
 {% block body %}
 
-<form id="user-export-form" class="form-horizontal" method="post" action="{{ path('admin_user_export')}}">
+<form id="user-export-form" class="form-horizontal" method="post" action="{{ path('admin_user_exportcsv')}}">
 
 
 <div class="row">
@@ -20,57 +20,61 @@
 <fieldset id="favoritecolor">
  <div>
  <label class="checkbox inline">  
- <p><input class="checkbox" id="用户名" name="choices[]" type="checkbox" value="用户名" />
+ <p><input class="checkbox" id="nickname" name="choices[]" type="checkbox" value="用户名" />
 用户名</label>
  </p>
  <label class="checkbox inline">  
-  <p><input class="checkbox" id="手机号" name="choices[]" type="checkbox" value="手机号" />
+  <p><input class="checkbox" id="mobile" name="choices[]" type="checkbox" value="手机号" />
 手机号</label>
  </p>
  <label class="checkbox inline">  
-  <p><input class="checkbox" id="微博" name="choices[]" type="checkbox" value="微博" />
+  <p><input class="checkbox" id="weibo" name="choices[]" type="checkbox" value="微博" />
 微博</label>
  </p>
  <label class="checkbox inline">  
- <p><input class="checkbox" id="职业" name="choices[]" type="checkbox" value="职业" />
+ <p><input class="checkbox" id="job" name="choices[]" type="checkbox" value="职业" />
 职业</label>
  </p>
 </div>
 
  <div>
  <label class="checkbox inline">  
- <p><input class="checkbox" id="姓名" name="choices[]" type="checkbox" value="姓名" />
+ <p><input class="checkbox" id="truename" name="choices[]" type="checkbox" value="姓名" />
 姓名</label>
  </p>
  <label class="checkbox inline">  
-  <p><input class="checkbox" id="ＱＱ" name="choices[]" type="checkbox" value="ＱＱ" />
-ＱＱ</label>
+  <p><input class="checkbox" id="qq" name="choices[]" type="checkbox" value="qq" />
+qq</label>
  </p>
  <label class="checkbox inline">  
-  <p><input class="checkbox" id="个人网站" name="choices[]" type="checkbox" value="个人网站" />
+  <p><input class="checkbox" id="site" name="choices[]" type="checkbox" value="个人网站" />
 个人网站</label>
  </p>
   <label class="checkbox inline">  
-  <p><input class="checkbox" id="头衔" name="choices[]" type="checkbox" value="头衔" />
+  <p><input class="checkbox" id="title" name="choices[]" type="checkbox" value="头衔" />
 头衔</label>
  </p>
 </div>
 
  <div>
  <label class="checkbox inline">  
-<p><input class="checkbox" id="Email" name="choices[]" type="checkbox" value="Email" />
+<p><input class="checkbox" id="email" name="choices[]" type="checkbox" value="email" />
 Email</label>
 </p>
 <label class="checkbox inline">  
-<p><input class="checkbox" id="微信" name="choices[]" type="checkbox" value="微信" />
+<p><input class="checkbox" id="weixin" name="choices[]" type="checkbox" value="微信" />
 微信</label>
 </p>
 <label class="checkbox inline">  
-<p><input class="checkbox" id="公司" name="choices[]" type="checkbox" value="公司" />
+<p><input class="checkbox" id="company" name="choices[]" type="checkbox" value="公司" />
 公司</label>
 </p>
  </div>
 
+  <input type="hidden" name="roles" value="1">
+  <input type="hidden" name="keywordType" value="">
+  <input type="hidden" name="keyword" value="">
+ 
  <br class="clear">
 </fieldset>
       </div>
@@ -94,6 +98,8 @@ Email</label>
       </div>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+ 
+
 
 </form>
 {% endblock %}

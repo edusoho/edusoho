@@ -8,14 +8,16 @@ define(function(require, exports, module) {
         var $modal = $('#user-export-form').parents('.modal');
 
         var $userSearchForm = $('#user-search-form');
-        var $roles = $userSearchForm.find('[name=roles]').val();
-        var $keywordType = $userSearchForm.find('[name=keywordType]').val();
-        var $keyword = $userSearchForm.find('[name=keyword]').val();
+        var roles = $userSearchForm.find('[name=roles]').val(); 
+        var keywordType = $userSearchForm.find('[name=keywordType]').val();
+        var keyword = $userSearchForm.find('[name=keyword]').val();
+        
+        var role=$('input[name="roles"]').attr('value',roles);
+        var keywordTypes=$('input[name="keywordType"]').attr('value',keywordType);
+        var keywords=$('input[name="keyword"]').attr('value',keyword);
 
         var choices=$('input[name="choices[]"]');
         var checkedChoices = new Array();
-        // var checkedChoices = [];
-                       console.log(choices);
 
         var validator = new Validator({
             element: '#user-export-form',
@@ -28,21 +30,21 @@ define(function(require, exports, module) {
                 $('#user-export-btn').button('submiting').addClass('disabled');
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
-                    for(var i=0;i<choices.length;i++){
-                      if(choices[i].checked==true){
-                        alert(choices[i].value);
-                       checkedChoices[i]= choices[i].value;
-                       }
-                    }
-                       console.log(checkedChoices);
+                    // for(var i=0;i<choices.length;i++){
+                    //   if(choices[i].checked==true){
+                    //     alert(choices[i].value);
+                    //    checkedChoices[i]= choices[i].value;
+                    //    }
+                    // }
 
 
                     $modal.modal('hide');
-                    Notify.success('新用户添加成功');
+                    // Notify.success('新用户添加成功');
                     // window.location.reload();
-                }).error(function(){
-                    Notify.danger('新用户添加失败');
                 });
+                // .error(function(){
+                //     Notify.danger('新用户添加失败');
+                // });
 
             }
         });
