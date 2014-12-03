@@ -25,6 +25,7 @@ class CoursewareController extends BaseController
         } else {
             $tagSearchs = array();
         }
+        $conditions['categoryId'] = $categoryId;
 
         $coursewaresCount = $this->getCoursewareService()->searchCoursewaresCount($conditions);
 

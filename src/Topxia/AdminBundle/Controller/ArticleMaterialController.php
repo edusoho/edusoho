@@ -10,6 +10,7 @@ class ArticleMaterialController extends BaseController
     public function manageAction(Request $request, $categoryId)
     {
         $conditions = $request->query->all();
+        $conditions['categoryId'] = $categoryId;
         if (empty($conditions)) {
             $conditions = array('categoryId' => $categoryId);
         }
