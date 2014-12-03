@@ -37,8 +37,9 @@ abstract class AbstractQuestionType extends BaseService
         $filtered['categoryId'] = empty($fields['categoryId']) ? 0 : (int) $fields['categoryId'];
         $filtered['parentId'] = empty($fields['parentId']) ? 0 : (int)$fields['parentId'];
         $filtered['mainKnowledgeId'] = empty($fields['mainKnowledgeId']) ? 0 : (int)$fields['mainKnowledgeId'];
-        $filtered['relatedKnowledgeIds'] =empty($fields['relatedKnowledgeIds']) ? '' : $fields['relatedKnowledgeIds'];
-        $filtered['tagIds'] =empty($fields['tagIds']) ? '' : $fields['tagIds'];
+        $filtered['relatedKnowledgeIds'] =empty($fields['relatedKnowledgeIds']) ? array() : $fields['relatedKnowledgeIds'];
+        $filtered['knowledgeIds'] = array_merge(array($filtered['mainKnowledgeId']), $filtered['relatedKnowledgeIds']);
+        $filtered['tagIds'] =empty($fields['tagIds']) ? array() : $fields['tagIds'];
         if ($mode == 'update') {
             unset($filtered['parentId']);
         }

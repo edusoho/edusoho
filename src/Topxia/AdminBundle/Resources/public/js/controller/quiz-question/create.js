@@ -30,9 +30,9 @@ define(function(require, exports, module) {
                 QuestionCreator = QuestionBase;
         }
 
-        var $tagIds = [];
-        var $mainKnowledgeId = [];
-        var $relatedKnowledgeIds = [];
+        var creator = new QuestionCreator({
+            element: '#question-creator-widget'
+        });
 
         _initTagChooer();
         _initMainknowledgeTagChooer();
@@ -40,10 +40,10 @@ define(function(require, exports, module) {
 
         function _initTagChooer()
         {
-            if ($('[data-role=tag-ids]').length > 0) {
-              $tagIds = $('[data-role=tag-ids]').val();
-              $tagIds = [$tagIds];
-            }; 
+            var choosedTags = [];
+            if (creator.$('input[name=tagIds]').val().length >0) {
+                choosedTags = creator.$('input[name=tagIds]').val().split(',');
+            }
 
             var chooser = new TagChooser({
                 element: '#tag-chooser',
@@ -51,78 +51,71 @@ define(function(require, exports, module) {
                 queryUrl: $('#tag-chooser').data('queryUrl'),
                 matchUrl: $('#tag-chooser').data('matchUrl'),
                 maxTagNum: 15,
-                choosedTags: $tagIds
+                choosedTags: choosedTags
             });
 
             chooser.on('change', function(tags) {
-                var tagIdsTemp = [];
-                $.each(tags,function(i,item){
-                    tagIdsTemp.push(item.id)
-                })
-                tagIds = tagIdsTemp;
-            });
-
-            chooser.on('existed', function(existTag){
+                var tagIds = [];
+                $.each(tags, function(i, tag) {
+                    tagIds.push(tag.id);
+                });
+                creator.$('input[name=tagIds]').val(tagIds.join(','));
             });
         }
 
         function _initMainknowledgeTagChooer()
         {
-            if ($('[data-role=main-knowledge-ids]').length > 0) {
-                $mainKnowledgeId = $('[data-role=main-knowledge-ids]').val();
-                $mainKnowledgeId = [$mainKnowledgeId];
-            };
-            $categoryId = $('[data-role=categoryId]').val();
+            var choosedTags = [];
+            if (creator.$('input[name=mainKnowledgeId]').val().length >0) {
+                choosedTags = creator.$('input[name=mainKnowledgeId]').val().split(',');
+            }
+
 
             var chooserTreeForMainKnowlege = new TagTreeChooser({
               element: '#mainknowledge-chooser',
-              sourceUrl: $('#knowledges-search').data('sourceUrl'),
-              queryUrl: $('#knowledges-search').data('queryUrl'),
-              matchUrl: $('#knowledges-search').data('matchUrl'),
+              sourceUrl: $('#mainknowledge-chooser').data('sourceUrl'),
+              queryUrl: $('#mainknowledge-chooser').data('queryUrl'),
+              matchUrl: $('#mainknowledge-chooser').data('matchUrl'),
               maxTagNum: 1,
-              choosedTags: $mainKnowledgeId
+              choosedTags: choosedTags
             });
 
             chooserTreeForMainKnowlege.on('change', function(tags) {
-
-              $.each(tags,function(i,item){
-                mainKnowledgeId = item.id;
-              });
-
+                var tagIds = [];
+                $.each(tags, function(i, tag) {
+                    tagIds.push(tag.id);
+                });
+                creator.$('input[name=mainKnowledgeId]').val(tagIds.join(','));
             });
 
-            chooserTreeForMainKnowlege.on('existed', function(existTag){
-            });
         }
 
         function _initRelatedknowledgeTagChooer()
         {
-            if ($('[data-role=related-knowledge-ids]').length > 0) {
-              $relatedKnowledgeIds = $('[data-role=related-knowledge-ids]').val();
-              $relatedKnowledgeIds = [$relatedKnowledgeIds];
-            };
+
+            var choosedTags = [];
+            if (creator.$('input[name=relatedKnowledgeIds]').val().length >0) {
+                choosedTags = creator.$('input[name=relatedKnowledgeIds]').val().split(',');
+            }
+
 
             var chooserTreeForRelatedKnowlege = new TagTreeChooser({
                 element: '#relatedknowledges-chooser',
-                sourceUrl: $('#knowledges-search').data('sourceUrl'),
-                queryUrl: $('#knowledges-search').data('queryUrl'),
-                matchUrl: $('#knowledges-search').data('matchUrl'),
+                sourceUrl: $('#relatedknowledges-chooser').data('sourceUrl'),
+                queryUrl: $('#relatedknowledges-chooser').data('queryUrl'),
+                matchUrl: $('#relatedknowledges-chooser').data('matchUrl'),
                 maxTagNum: 15,
-                choosedTags: $relatedKnowledgeIds
+                choosedTags: choosedTags
             });
 
             chooserTreeForRelatedKnowlege.on('change', function(tags) {
-
-            var relatedKnowledgeIdsTemp = [];
-            $.each(tags,function(i,item){
-                relatedKnowledgeIdsTemp.push(item.id)
-            })
-            relatedKnowledgeIds = relatedKnowledgeIdsTemp;
-
+                var tagIds = [];
+                $.each(tags, function(i, tag) {
+                    tagIds.push(tag.id);
+                });
+                creator.$('input[name=relatedKnowledgeIds]').val(tagIds.join(','));
             });
 
-            chooserTreeForRelatedKnowlege.on('existed', function(existTag){
-            });
         }
 
     };

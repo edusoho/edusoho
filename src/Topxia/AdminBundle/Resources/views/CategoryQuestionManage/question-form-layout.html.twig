@@ -125,11 +125,9 @@
           </div>
         </div>
 
-          {% if question|default(null) %}
-            <input type="hidden" data-role='tag-ids' value="{{question.tagIds}}">
-            <input type="hidden" data-role='main-knowledge-ids' value="{{question.mainKnowledgeId}}">
-            <input type="hidden" data-role='related-knowledge-ids' value="{{question.relatedKnowledgeIds}}">
-          {% endif %}
+        <input type="hidden" name="tagIds" data-role='tag-ids' value="{{ question.tagIds|default('')|join(',') }}">
+        <input type="hidden" name="mainKnowledgeId" data-role='main-knowledge-ids' value="{{ question.mainKnowledgeId|default('') }}">
+        <input type="hidden" name="relatedKnowledgeIds" data-role='related-knowledge-ids' value="{{ question.relatedKnowledgeIds|default('')|join(',') }}">
 
         <input type="hidden" data-role='categoryId' value="{{ category.id }}">
         <input type="hidden" name="target" value="{{ question.target|default('') }}">

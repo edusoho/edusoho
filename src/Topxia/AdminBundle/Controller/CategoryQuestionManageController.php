@@ -78,6 +78,9 @@ class CategoryQuestionManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $data['target'] = "subject-{$categoryId}/";
+            $data['tagIds'] = explode(',', $data['tagIds']);
+            $data['relatedKnowledgeIds'] = explode(',', $data['relatedKnowledgeIds']);
+
             $question = $this->getQuestionService()->createQuestion($data);
 
             if ($data['submission'] == 'continue') {
@@ -138,6 +141,9 @@ class CategoryQuestionManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $question = $request->request->all();
+
+            $question['tagIds'] = explode(',', $question['tagIds']);
+            $question['relatedKnowledgeIds'] = explode(',', $question['relatedKnowledgeIds']);
 
             $question = $this->getQuestionService()->updateQuestion($id, $question);
 

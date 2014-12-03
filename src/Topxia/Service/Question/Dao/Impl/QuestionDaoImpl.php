@@ -11,6 +11,9 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
     private $serializeFields = array(
             'answer' => 'json',
             'metas' => 'json',
+            'relatedKnowledgeIds' => 'ids',
+            'knowledgeIds' => 'ids',
+            'tagIds' => 'ids',
     );
 
     public function getQuestion($id)
