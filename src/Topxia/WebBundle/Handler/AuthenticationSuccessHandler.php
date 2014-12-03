@@ -16,6 +16,8 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         // $this->getUserService()->markLoginInfo();
 
         $userId = $token->getUser()->id;
+
+//---------->
         $user = $this->getUserService()->getUser($userId);
         if ($this->getUserService()->isUserTemporaryLockedOrLocked($user)){
             $ex = new LockedException('User account is locked.');  
@@ -24,6 +26,8 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         }
 
         $this->getUserService()->clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId);
+//<----------
+
 
         if ($request->isXmlHttpRequest()) {
             $content = array(

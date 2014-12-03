@@ -17,10 +17,7 @@ class Version20141202141658 extends AbstractMigration
     		ALTER table `user`   
 			Add column `consecutivePasswordErrorTimes` int not null default 0 AFTER `locked`;	
     	");
-    	$this->addSql("	
-			ALTER table `user` 
-			Add column `unlockCode` varchar(255) NOT NULL DEFAULT '' AFTER `locked`;
-    	");
+
     	$this->addSql("	
 			ALTER table `user` 
 			Add column `lockDeadline` int(10) not null default 0 AFTER `locked`;

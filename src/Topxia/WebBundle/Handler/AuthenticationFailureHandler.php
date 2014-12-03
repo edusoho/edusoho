@@ -21,7 +21,7 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         if ($request->isXmlHttpRequest()) {
             $content = array(
                 'success' => false,
-                'message' => $message,
+                'message' => $message, //here to append the ALARM WARNING 
             );
             return new JsonResponse($content, 400);
         }
@@ -30,12 +30,17 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
 
         $username = $request->request->get('_username');
 
+
+//---------->
         $user = $this->getUserService()->getUserByNickname($username);
         if ($user == 0) {
             $user = $this->getUserService()->getUserByEmail($username);
         }
 
-        $this->getUserService()->userLoginFail($user); 
+        $this->getUserService()->userLoginFail($user,$failAllowNum = 3, $temporaryHours = 2); 
+
+//<----------
+
 
         $this->getLogService()->info('user', 'login_fail', "用户名：{$username}，登录失败：{$message}");
         
