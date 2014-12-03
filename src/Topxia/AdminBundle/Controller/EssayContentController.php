@@ -30,13 +30,13 @@ class EssayContentController extends BaseController
         $knowledgeIds = empty($knowledgeIds) ? array() : explode(',',$knowledgeIds);
         $tagIds = $request->query->get('tagIds');
         $tagIds = empty($tagIds) ? array() : explode(',',$tagIds);
-        $title = $request->query->get('keywords');
+        $keyword = $request->query->get('keyword');
 
         $conditions = array(
             'tagIds' => $tagIds,
             'knowledgeIds' => $knowledgeIds,
             'categoryId' => $essay['categoryId'],
-            'title' => $title,
+            'keyword' => $keyword,
         );
 
         $articleMaterialsCount = $this->getArticleMaterialService()->searchArticleMaterialsCount($conditions);
@@ -129,13 +129,13 @@ class EssayContentController extends BaseController
         $knowledgeIds = empty($knowledgeIds) ? array() : explode(',',$knowledgeIds);
         $tagIds = $request->query->get('tagIds');
         $tagIds = empty($tagIds) ? array() : explode(',',$tagIds);
-        $title = $request->query->get('keywords');
+        $keyword = $request->query->get('keyword');
 
         $conditions = array(
             'tagIds' => $tagIds,
             'knowledgeIds' => $knowledgeIds,
             'categoryId' => $essay['categoryId'],
-            'title' => $title,
+            'keyword' => $keyword,
         );
 
         $articleMaterialsCount = $this->getArticleMaterialService()->searchArticleMaterialsCount($conditions);
