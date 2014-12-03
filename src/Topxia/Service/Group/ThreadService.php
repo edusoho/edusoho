@@ -56,4 +56,14 @@ interface ThreadService
 
     public function waveHitNum($threadId);
 
+    public function updatePost($id,$fields);
+
+    public function getBuyHide($id);
+
+    public function addBuyHide($fields);
+
+    public function getCoinByThreadId($id);
+
+    public function getbuyHideByUserIdandThreadId($id,$userId);
+
 }

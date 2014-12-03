@@ -3,6 +3,36 @@ define(function(require, exports, module) {
     require('kindeditor');
 
     KindEditor.lang({insertblank: '插入填空项'});
+    KindEditor.lang({hidden: '插入隐藏内容'});
+
+    KindEditor.plugin('hidden', function(K) {
+        var editor = this, name = 'hidden';
+        
+        editor.clickToolbar(name, function() {
+                
+                $('#myModal').modal('show');
+
+                $('#insert').on('click',function(){
+
+                    var amount= $('#amount').val();
+
+                    amount=parseInt(amount);
+
+                    if(amount > 0){
+                        
+                        var text=$('#text').val();
+                       
+                        var content="&nbsp;[hide=coin"+amount+"]"+text+"[/hide]";
+
+                        editor.insertHtml(content);
+                    }
+                    $('#text').val('');
+                    $('#amount').val('');
+                    $('#myModal').modal('hide');
+                    
+                });
+        });
+    });
 
     var simpleNoImageItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', '|', 'removeformat', 'source'];
 
@@ -38,6 +68,9 @@ define(function(require, exports, module) {
 
     var simpleHaveEmoticonsItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', 'image', '|', 'removeformat', 'source','emoticons'];
 
+    var haveHiddenItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', 'image', '|', 'removeformat', 'source','emoticons','hidden'];
+
+
     var contentCss = [];
     contentCss.push('body {font-size: 14px; line-height: 1.428571429;color: #333333;}');
     contentCss.push('a {color: #428bca;}');
@@ -58,6 +91,7 @@ define(function(require, exports, module) {
     configs.simple_noimage = $.extend({}, defaultConfig, {items:simpleNoImageItems});
     configs.simple = $.extend({}, defaultConfig, {items:simpleItems});
     configs.simpleHaveEmoticons = $.extend({}, defaultConfig, {items:simpleHaveEmoticonsItems});
+    configs.haveHidden = $.extend({}, defaultConfig, {items:haveHiddenItems});
     configs.standard = $.extend({}, defaultConfig, {items:standardItems});
     configs.full = $.extend({}, defaultConfig, {items:fullItems});
     configs.question = $.extend({}, defaultConfig, {items:questionItems});
