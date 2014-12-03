@@ -189,7 +189,6 @@ class UserController extends BaseController
         $response->setContent($str);
 
         return $response;
-        var_dump($response);exit();
 
         }else{
              throw $this->createAccessDeniedException();
