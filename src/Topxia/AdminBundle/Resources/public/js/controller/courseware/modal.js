@@ -120,7 +120,28 @@ define(function(require, exports, module){
                     if (error) {
                         return false;
                     }
-                    $('#courseware-operate-btn').button('submiting').button('loading').addClass('disabled');
+
+                    var $btn = $('#courseware-operate-btn');
+                    $btn.button('submiting').button('loading').addClass('disabled');
+
+                    if (mainKnowledgeId == "") {
+                        Notify.danger('主知识点不能为空');
+                        $btn.button('reset');
+                        return;
+                    };
+
+
+                    if (relatedKnowledgeIds == "") {
+                        Notify.danger('关联知识点不能为空');
+                        $btn.button('reset');
+                        return;
+                    };
+                    if (tagIds == "" || tagIds.length == 0) {
+                        Notify.danger('标签不能为空');
+                        $btn.button('reset');
+                        return;
+                    };
+
                     tagIds = tagIds.join(",");
                     relatedKnowledgeIds = relatedKnowledgeIds.join(",");
                     $.post($form.attr('action'), $form.serialize()+'&tagIds='+tagIds+'&mainKnowledgeId='+mainKnowledgeId+'&relatedKnowledgeIds='+relatedKnowledgeIds, function(response) {
