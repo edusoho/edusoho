@@ -97,8 +97,8 @@ class CoursewareDaoImpl extends BaseDao implements CoursewareDao
             $ors = array();
             if(!empty($conditions['knowledgeIds'])){
                 foreach (array_values($conditions['knowledgeIds']) as $i => $knowledgeId) {
-                    $knowledgeId = "\"".$knowledgeId."\"";
                     if (preg_match('/^[0-9]+$/', $knowledgeId)) {
+                        $knowledgeId = "\"".$knowledgeId."\"";
                         $ors[] = "knowledgeIds LIKE '%{$knowledgeId}%'";
                     }
                 }
