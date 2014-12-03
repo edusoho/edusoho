@@ -38,10 +38,10 @@
     </div>
 
     <div class="form-group mrl">
-      <input class="form-control" type="text" name="keyword" value="{{ app.request.query.get('keyword') }}" placeholder="标题关键词" style="width:400px;">
+      <input class="form-control" type="text" name="keyword" value="{{ app.request.query.get('keyword') }}" placeholder="标题关键词">
     </div>
 
-    <button type="submit" class="btn btn-sm btn-primary pull-right">搜索</button>
+    <button type="submit" class="btn btn-sm btn-primary">搜索</button>
 
     <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
     <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">
