@@ -29,6 +29,14 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         $request->getSession()->set('_target_path',  $request->request->get('_target_path'));
 
         $username = $request->request->get('_username');
+
+        $user = $this->getUserService()->getUserByNickname($username);
+        if ($user == 0) {
+            $user = $this->getUserService()->getUserByEmail($username);
+        }
+
+        $this->getUserService()->userLoginFail($user); 
+
         $this->getLogService()->info('user', 'login_fail', "用户名：{$username}，登录失败：{$message}");
         
         return parent::onAuthenticationFailure($request, $exception);
@@ -42,5 +50,10 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
     private function getLogService()
     {
         return ServiceKernel::instance()->createService('System.LogService');
+    }
+
+    private function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User.UserService');
     }
 }

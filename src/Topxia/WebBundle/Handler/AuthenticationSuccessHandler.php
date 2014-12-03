@@ -7,12 +7,23 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\Security\Core\Exception\LockedException;
 
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
         // $this->getUserService()->markLoginInfo();
+
+        $userId = $token->getUser()->id;
+        $user = $this->getUserService()->getUser($userId);
+        if ($this->getUserService()->isUserTemporaryLockedOrLocked($user)){
+            $ex = new LockedException('User account is locked.');  
+            $ex->setUser($token->getUser());  
+            throw $ex;
+        }
+
+        $this->getUserService()->clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId);
 
         if ($request->isXmlHttpRequest()) {
             $content = array(
@@ -21,7 +32,6 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             return new JsonResponse($content, 200);
         }
 
-        $userId = $token->getUser()->id;
         $sessionId = $request->getSession()->getId();
 
         $this->getUserService()->rememberLoginSessionId($userId, $sessionId);
