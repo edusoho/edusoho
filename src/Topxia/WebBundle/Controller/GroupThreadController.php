@@ -396,6 +396,7 @@ class GroupThreadController extends BaseController
 
     public function setEliteAction($threadId)
     {   
+        $thread=$this->getThreadService()->getThread($threadId);
         $this->getCashService()->reWard(10,"话题被加精",$thread['userId']);
 
         return $this->postAction($threadId,'setElite');
@@ -403,6 +404,7 @@ class GroupThreadController extends BaseController
 
     public function removeEliteAction($threadId)
     {   
+        $thread=$this->getThreadService()->getThread($threadId);
         $this->getCashService()->reWard(10,"话题被取消加精",$thread['userId'],'cut');
 
         return $this->postAction($threadId,'removeElite');
