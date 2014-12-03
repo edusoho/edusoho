@@ -106,7 +106,6 @@ class ArticleMaterialController extends BaseController
     public function editAction(Request $request, $categoryId, $id)
     {
         $category = $this->getCategoryService()->getCategory($categoryId);
-
         if (empty($category)) {
             throw $this->createNotFoundException("分类(#{$categoryId})不存在，编辑文章素材失败！");
         }
@@ -115,7 +114,6 @@ class ArticleMaterialController extends BaseController
         if (empty($articleMaterial)) {
             throw $this->createNotFoundException('文章素材已经删除或者不存在.');
         }
-
         $articleMaterial['relatedKnowledgeIds'] = implode(",", $articleMaterial['relatedKnowledgeIds']);
         $articleMaterial['tagIds'] = implode(",", $articleMaterial['tagIds']);
 
@@ -133,7 +131,6 @@ class ArticleMaterialController extends BaseController
 
             return $this->redirect($this->generateUrl('admin_article_material_manage',array('categoryId'=>$categoryId)));
         }
-
         return $this->render('TopxiaAdminBundle:ArticleMaterial:modal.html.twig',
             array(
                 'articleMaterial' => $articleMaterial,

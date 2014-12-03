@@ -67,7 +67,7 @@ define(function(require, exports, module) {
 
             var ids = [];
             $('[data-role=single-select]:checked').each(function(index,item) {
-                ids.push($(item).data('coursewareId'));
+                ids.push($(item).data('articlematerialId'));
             });
 
             if (ids.length == 0) {
