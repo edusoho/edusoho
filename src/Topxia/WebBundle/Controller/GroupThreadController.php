@@ -593,6 +593,12 @@ class GroupThreadController extends BaseController
             $this->getCashService()->reWard($need,'查看话题隐藏内容',$user->id,'cut');
 
             $this->getThreadService()->addBuyHide(array('threadId'=>$threadId,'userId'=>$user->id,'createdTime'=>time()));
+            
+            $reward=$need*0.2;
+            if(intval($reward)<1)
+            $reward=1;
+
+            $this->getCashService()->reWard(intval($reward),'您发表的话题<'.$thread['title'].'>的隐藏内容被查看！',$thread['userId']);
 
         }
 
