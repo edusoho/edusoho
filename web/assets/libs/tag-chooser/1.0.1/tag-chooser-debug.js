@@ -58,6 +58,23 @@ define("tag-chooser/1.0.1/tag-chooser-debug", ["jquery"], function(require, expo
       this._removeTag(id);
       this.trigger('change', this.get('choosedTags'));
     },
+
+    resetTags: function(ids) {
+      var self = this;
+      $.each(this.get('choosedTags'), function(i, tag) {
+        self.removeTag(tag.id);
+      });
+
+      $.getJSON(this.get('queryUrl'), {
+        ids: ids
+      }, function(tags) {
+        $.each(tags, function(i, tag) {
+          self.addTag(tag);
+        });
+      });
+
+    },
+
     addTag: function(newTag) {
       var maxTagNum = this.get('maxTagNum');
       var choosedTags = this.get('choosedTags');
