@@ -17,17 +17,26 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 
         $userId = $token->getUser()->id;
 
-//---------->
-        $user = $this->getUserService()->getUser($userId);
-        if ($this->getUserService()->isUserTemporaryLockedOrLocked($user)){
-            $ex = new LockedException('User account is locked.');  
-            $ex->setUser($token->getUser());  
-            throw $ex;
+        $auth = $this->getSettingService()->get('auth', array());
+        $default = array(
+            'temporary_lock_enabled' => 0,
+            'temporary_lock_allowed_times' => 3,
+            'temporary_lock_hours' => 2,
+        );
+
+        $auth = array_merge($default, $auth);
+
+        if ($auth['temporary_lock_enabled'] == 1){
+
+            $user = $this->getUserService()->getUser($userId);
+            if ($this->getUserService()->isUserTemporaryLockedOrLocked($user)){
+                $ex = new LockedException('User account is locked.');  
+                $ex->setUser($token->getUser());  
+                throw $ex;
+            }
+
+            $this->getUserService()->clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId);
         }
-
-        $this->getUserService()->clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId);
-//<----------
-
 
         if ($request->isXmlHttpRequest()) {
             $content = array(
@@ -58,5 +67,10 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     private function getAuthService()
     {
         return ServiceKernel::instance()->createService('User.AuthService');
+    }
+
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }
