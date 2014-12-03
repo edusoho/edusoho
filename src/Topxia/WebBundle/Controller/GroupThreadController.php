@@ -42,7 +42,7 @@ class GroupThreadController extends BaseController
                 'userId'=>$user['id']);
             
             $thread=$this->getThreadService()->addThread($info);
-                
+
             return $this->redirect($this->generateUrl('group_thread_show', array(
                 'id'=>$id,
                 'threadId'=>$thread['id'],
@@ -256,7 +256,7 @@ class GroupThreadController extends BaseController
 
         $isAdopt=$this->getThreadService()->searchPosts(array('adopt'=>1,'threadId'=>$threadId),array('createdTime','desc'),0,1);
 
-        $threadMain['title']=$this->hideThings($threadMain['title']);
+        $threadMain=$this->hideThings($threadMain);
 
         return $this->render('TopxiaWebBundle:Group:thread.html.twig',array(
             'groupinfo' => $group,
@@ -553,7 +553,8 @@ class GroupThreadController extends BaseController
 
             $account=$this->getCashService()->getAccountByUserId($post['userId']);
 
-            $this->getCashService()->waveCashField($account['id'],$thread['rewardCoin']);
+            $this->getCashService()->reWard($thread['rewardCoin'],'您的回复被采纳为最佳回答！',$user->id);
+
         }
 
         response:
@@ -561,6 +562,40 @@ class GroupThreadController extends BaseController
             'id'=>$thread['groupId'],'threadId'=>$post['threadId'],
         ))); 
     } 
+
+    public function hideAction($threadId,Request $request)
+    {
+        $user=$this->getCurrentUser();
+        $account=$this->getCashService()->getAccountByUserId($user->id,true);
+
+        if(isset($account['cash']))
+            $account['cash']=intval($account['cash']);
+
+        $need=$this->getThreadService()->getCoinByThreadId($threadId);
+        if($request->getMethod()=="POST"){
+
+            $thread=$this->getThreadService()->getThread($threadId);
+
+            if(!isset($account['cash']) || $account['cash'] <  $need ){
+
+                return $this->createMessageResponse('info','虚拟币余额不足!');
+                
+            }
+
+            $account=$this->getCashService()->getAccountByUserId($user->id);
+
+            $this->getCashService()->reWard($need,'查看话题隐藏内容',$user->id,'cut');
+
+            $this->getThreadService()->addBuyHide(array('threadId'=>$threadId,'userId'=>$user->id,'createdTime'=>time()));
+
+        }
+
+        return $this->render('TopxiaWebBundle:Group:hide-modal.html.twig',array(
+            'account'=>$account,
+            'threadId'=>$threadId,
+            'need'=>$need
+            ));
+    }
 
     private function postAction($threadId,$action)
     {
@@ -606,17 +641,65 @@ class GroupThreadController extends BaseController
         return $url;
     }
 
-    public function hideThings($title)
+    public function hideThings($thread)
     {
-        $data=explode('[/hide]', $title);
-     
+        $data=explode('[/hide]',$thread['content']);
+        
+        $user=$this->getCurrentUser();
+        $role=$this->getGroupMemberRole($user->id);
+        $context="";
+        $count=0;
+
         foreach ($data as $key => $value) {
 
-            sscanf($value,"[hide=coin%s ]%s",$coin,$content);
+            $value=" ".$value;
+            sscanf($value,"%[^[][hide=coin%[^]]]%[^$$]",$content,$coin,$hideContent);
+            
+            $buyHide=$this->getThreadService()->getbuyHideByUserIdandThreadId($thread['id'],$user->id);
+
+            if($role == 2 || $role ==3 || $user['id'] == $thread['userId'] || !empty($buyHide) ){
+
+                if($coin){
+
+                    $context.=$content.$hideContent;
+                    
+                }else{
+
+                    $context.=$content;
+                }
+       
+            }else{
+
+                if($coin){
+
+                    $count=1;
+                    if($user['id']){
+
+                        $context.=$content."<div class=\"hideContent mtl mbl\"><h4> <a href=\"javascript:\" data-toggle=\"modal\" data-target=\"#modal\" data-urL=\"/thread/{$thread['id']}/hide\">点击查看</a>本话题隐藏内容</h4></div>";
+              
+
+                    }else{
+
+                        $context.=$content."<div class=\"hideContent mtl mbl\"><h4> 游客,如果您要查看本话题隐藏内容请先<a href=\"/login\">登录</a>或<a href=\"/register\">注册</a>！</h4></div>";
+              
+                    }
+ 
+                }else{
+
+                    $context.=$content;
+                }
+            }
+
             unset($coin);
             unset($content);
+            unset($hideContent);
         }
+        
+        if($context)
+        $thread['content']=$context;
+        $thread['count']=$count;
 
+        return $thread;
         
     }
 

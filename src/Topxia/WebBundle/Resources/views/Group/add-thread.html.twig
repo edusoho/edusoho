@@ -31,7 +31,11 @@
         <div class="form-group">
           <label class="col-xs-2 control-label" for="thread_content">内容</label>
           <div class="col-xs-7 controls">
+            {% if is_feature_enabled('group_reward') %}
+            <textarea name="thread[content]" rows="10" id="thread_content1" class="form-control">{{thread.content|default('')}}</textarea>
+            {% else %}
             <textarea name="thread[content]" rows="10" id="thread_content" class="form-control">{{thread.content|default('')}}</textarea>
+            {% endif %}
           </div>
         </div>
 

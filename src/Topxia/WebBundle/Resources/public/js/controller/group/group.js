@@ -26,8 +26,15 @@
             });
         });
 
+        if($('#thread_content1').length>0){
+
+            var editor_thread = EditorFactory.create('#thread_content1', 'haveHidden', {extraFileUploadParams:{group:'user'}});
+
+        };
+
         if($('#thread_content').length>0){
-            var editor_thread = EditorFactory.create('#thread_content', 'haveHidden', {extraFileUploadParams:{group:'user'}});
+            var editor_thread = EditorFactory.create('#thread_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+
             var validator_thread = new Validator({
             element: '#user-thread-form',
             failSilently: true,

@@ -19,9 +19,10 @@ define(function(require, exports, module) {
                     amount=parseInt(amount);
 
                     if(amount > 0){
-
+                        
                         var text=$('#text').val();
-                        var content="[hide=coin"+amount+" ]"+text+" [/hide]";
+                       
+                        var content="&nbsp;[hide=coin"+amount+"]"+text+"[/hide]";
 
                         editor.insertHtml(content);
                     }

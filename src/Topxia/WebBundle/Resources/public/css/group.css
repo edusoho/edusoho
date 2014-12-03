@@ -221,3 +221,15 @@
     background-color: rgba(255, 255, 255, 0.70);
     filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#ccffffff,endcolorstr=#ccffffff);
 }
+
+.hideContent{
+
+    border: 1px solid #999;
+    padding: 10px;
+
+}
+.hideContent h4{
+    color:#999;
+    text-align: center;
+    font-size:14px;
+}

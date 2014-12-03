@@ -52,6 +52,15 @@
           <a type="button" class="btn btn-link " href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}"><span class="glyphicon glyphicon-sort"></span> 倒序查看回复</a>
         {% endif %}
 
+        {% if is_feature_enabled('group_reward') and threadMain.count == 1 %}
+          {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
+          {% else %}
+            {% if app.user %}
+            <a class="btn btn-link" href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_hide',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-eye-open"></span> 查看隐藏内容</a>
+            {% endif %}
+          {% endif %}
+          
+        {% endif %}
         
         {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
           <a class="btn btn-link" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"><span class="glyphicon glyphicon-edit"></span> 编辑</a>

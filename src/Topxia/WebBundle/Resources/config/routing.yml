@@ -1381,6 +1381,9 @@ group_thread_cancel_reward:
 group_thread_adopt:
     pattern:  /thread/{postId}/adopt
     defaults: { _controller: TopxiaWebBundle:GroupThread:adopt }
+group_thread_hide:
+    pattern:  /thread/{threadId}/hide
+    defaults: { _controller: TopxiaWebBundle:GroupThread:hide }
 
 my_coin:
     path:     /my/coin
