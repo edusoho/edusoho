@@ -23,7 +23,7 @@ class CategoryQuestionManageController extends BaseController
         $tagSearchs = empty($conditions['tagIds']) ? array() : $this->getTagService()->findTagsByIds(explode(',',$conditions['tagIds']));
 
         if (empty($conditions['target'])) {
-            $conditions['targetPrefix'] = "subject-{$categoryId}";
+            $conditions['targetPrefix'] = "category-{$categoryId}";
         }
 
         if (!empty($conditions['keywords'])) {
@@ -77,7 +77,7 @@ class CategoryQuestionManageController extends BaseController
         $category = $this->getCategoryService()->getCategory($categoryId);
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            $data['target'] = "subject-{$categoryId}/";
+            $data['target'] = "category-{$categoryId}/";
             $data['tagIds'] = explode(',', $data['tagIds']);
             $data['relatedKnowledgeIds'] = explode(',', $data['relatedKnowledgeIds']);
 
