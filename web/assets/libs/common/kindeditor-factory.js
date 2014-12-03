@@ -11,6 +11,25 @@ define(function(require, exports, module) {
         editor.clickToolbar(name, function() {
                 
                 $('#myModal').modal('show');
+
+                $('#insert').on('click',function(){
+
+                    var amount= $('#amount').val();
+
+                    amount=parseInt(amount);
+
+                    if(amount > 0){
+
+                        var text=$('#text').val();
+                        var content="[hide=coin"+amount+" ]"+text+" [/hide]";
+
+                        editor.insertHtml(content);
+                    }
+                    $('#text').val('');
+                    $('#amount').val('');
+                    $('#myModal').modal('hide');
+                    
+                });
         });
     });
 

@@ -256,6 +256,7 @@ class GroupThreadController extends BaseController
 
         $isAdopt=$this->getThreadService()->searchPosts(array('adopt'=>1,'threadId'=>$threadId),array('createdTime','desc'),0,1);
 
+        $threadMain['title']=$this->hideThings($threadMain['title']);
 
         return $this->render('TopxiaWebBundle:Group:thread.html.twig',array(
             'groupinfo' => $group,
@@ -603,6 +604,20 @@ class GroupThreadController extends BaseController
 
         $url=$url."?page=$page#post-$postId";
         return $url;
+    }
+
+    public function hideThings($title)
+    {
+        $data=explode('[/hide]', $title);
+     
+        foreach ($data as $key => $value) {
+
+            sscanf($value,"[hide=coin%s ]%s",$coin,$content);
+            unset($coin);
+            unset($content);
+        }
+
+        
     }
 
     private function getThreadService()
