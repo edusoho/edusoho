@@ -61,9 +61,9 @@ class UserController extends BaseController
         $user=$this->getCurrentUser();
 
         if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
-
+ // if ($request->getMethod() == 'POST') {}
         $fields = $request->query->all();
-        var_dump($fields);
+var_dump($fields);
         $conditions = array(
             'roles'=>'',
             'keywordType'=>'',

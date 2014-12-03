@@ -6,7 +6,7 @@
 {% block title %}用户导出{% endblock %}
 {% block body %}
 
-<form id="user-create-form" class="form-horizontal" method="post" action="{{ path('admin_user_export')}}">
+<form id="user-export-form" class="form-horizontal" method="post" action="{{ path('admin_user_export')}}">
 
 
 <div class="row">
@@ -20,53 +20,53 @@
 <fieldset id="favoritecolor">
  <div>
  <label class="checkbox inline">  
- <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+ <p><input class="checkbox" id="用户名" name="choices[]" type="checkbox" value="用户名" />
 用户名</label>
  </p>
  <label class="checkbox inline">  
-  <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+  <p><input class="checkbox" id="手机号" name="choices[]" type="checkbox" value="手机号" />
 手机号</label>
  </p>
  <label class="checkbox inline">  
-  <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+  <p><input class="checkbox" id="微博" name="choices[]" type="checkbox" value="微博" />
 微博</label>
  </p>
  <label class="checkbox inline">  
- <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+ <p><input class="checkbox" id="职业" name="choices[]" type="checkbox" value="职业" />
 职业</label>
  </p>
 </div>
 
  <div>
  <label class="checkbox inline">  
- <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+ <p><input class="checkbox" id="姓名" name="choices[]" type="checkbox" value="姓名" />
 姓名</label>
  </p>
  <label class="checkbox inline">  
-  <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+  <p><input class="checkbox" id="ＱＱ" name="choices[]" type="checkbox" value="ＱＱ" />
 ＱＱ</label>
  </p>
  <label class="checkbox inline">  
-  <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+  <p><input class="checkbox" id="个人网站" name="choices[]" type="checkbox" value="个人网站" />
 个人网站</label>
  </p>
   <label class="checkbox inline">  
-  <p><input class="checkbox" id="red" name="red" type="checkbox" value="red" />
+  <p><input class="checkbox" id="头衔" name="choices[]" type="checkbox" value="头衔" />
 头衔</label>
  </p>
 </div>
 
  <div>
  <label class="checkbox inline">  
-<p><input class="checkbox" id="orange" name="orange" type="checkbox" value="orange" />
+<p><input class="checkbox" id="Email" name="choices[]" type="checkbox" value="Email" />
 Email</label>
 </p>
 <label class="checkbox inline">  
-<p><input class="checkbox" id="orange" name="orange" type="checkbox" value="orange" />
+<p><input class="checkbox" id="微信" name="choices[]" type="checkbox" value="微信" />
 微信</label>
 </p>
 <label class="checkbox inline">  
-<p><input class="checkbox" id="orange" name="orange" type="checkbox" value="orange" />
+<p><input class="checkbox" id="公司" name="choices[]" type="checkbox" value="公司" />
 公司</label>
 </p>
  </div>
@@ -84,7 +84,7 @@ Email</label>
           <div class="col-md-8 " >
 	<table>
 	  {% for field in fields %}
-	        <td><input type="checkbox"/>{{field.title}}
+	        <td><input type="checkbox" id="{{field.title}}" name="choices[]"  value="{{field.title}}" />{{field.title}}
 	        </td>
 	  {% endfor %}
 	  </table>
@@ -99,9 +99,10 @@ Email</label>
 {% endblock %}
 
 {% block footer %}
-  <button id="user-create-btn" data-submiting-text="正在导出" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-create-form">导出</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-  <script>app.load('user/create-modal')</script>
+  <button id="user-export-btn" data-submiting-text="正在导出" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-export-form">导出用户</button>
+{#   <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('admin_user_export') }}"><i class="glyphicon glyphicon-export"></i> 导出用户</a> #}
+  <script>app.load('user/export-modal')</script>
 
 <style>
 fieldset#favoritecolor{

@@ -33,12 +33,12 @@
 
     <button class="btn btn-primary">搜索</button>
 
-{% if is_granted('ROLE_SUPER_ADMIN') %}
-   {% if is_plugin_installed("UserImporter") and setting("plugin_userImporter_enabled",1) %}
-    <a class="btn btn-primary" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_export')}}"  >导出用户</a>
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+       {% if is_plugin_installed("UserImporter") and setting("plugin_userImporter_enabled",1) %}
+        <a class="btn btn-primary" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_export')}}"  >导出用户</a>
 
+        {% endif %}
     {% endif %}
-{% endif %}
 
   </form>
 
