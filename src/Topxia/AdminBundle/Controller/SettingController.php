@@ -309,6 +309,9 @@ class SettingController extends BaseController
             'registerFieldNameArray'=>array(),
             'registerSort'=>array(0=>"email",1=>"nickname",2=>"password"),
             'captcha_enabled' => 0,
+            'temporary_lock_enabled' => 0,
+            'temporary_lock_allowed_times' => 3,
+            'temporary_lock_hours' => 2,
         );
 
         $auth = array_merge($default, $auth);
