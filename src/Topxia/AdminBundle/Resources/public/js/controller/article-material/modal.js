@@ -129,13 +129,30 @@ define(function(require, exports, module){
                     if (error) {
                         return false;
                     }
-                    $('#article-material-operate-btn').button('submiting').button('loading').addClass('disabled');
+
+                    var $btn = $('#article-material-operate-btn');
+                    $btn.button('submiting').button('loading').addClass('disabled');
+
+                    if (mainKnowledgeId == "") {
+                        Notify.danger('主知识点不能为空');
+                        $btn.button('reset');
+                        return ;
+                    };
+                    if (tagIds == "") {
+                        Notify.danger('标签不能为空');
+                        $btn.button('reset');
+                        return ;
+                    };
+
+                    if (relatedKnowledgeIds) {
+                        relatedKnowledgeIds = relatedKnowledgeIds.join(",");
+                    };
+
                     tagIds = tagIds.join(",");
-                    relatedKnowledgeIds = relatedKnowledgeIds.join(",");
                     $.post($form.attr('action'), $form.serialize()+'&tagIds='+tagIds+'&mainKnowledgeId='+mainKnowledgeId+'&relatedKnowledgeIds='+relatedKnowledgeIds, function(response) {
                         if (response.error){
                             Notify.danger(response.message);
-                            $('#article-material-operate-btn').removeClass('disabled');
+                            $btn.button('reset');
                         } else {
                             Notify.success('操作成功！');
                             window.location.reload();
@@ -149,11 +166,6 @@ define(function(require, exports, module){
                 element: '[name=url]',
                 required: true,
                 rule: 'url'
-            });
-
-            validator.addItem({
-                element: '[name=mainKnowledgeId]',
-                required: true
             });
 
             validator.addItem({

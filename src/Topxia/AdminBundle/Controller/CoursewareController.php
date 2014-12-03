@@ -18,8 +18,8 @@ class CoursewareController extends BaseController
         $tagSearchs = empty($tagIds) ? array() : $this->getTagService()->findTagsByIds(explode(',',$tagIds));
 
         $conditions = array(
-            'tagIds' => $tagIds,
-            'knowledgeIds' => $knowledgeIds,
+            'tagIds' => explode(',',$tagIds),
+            'knowledgeIds' => explode(',',$knowledgeIds),
             'categoryId' => $categoryId,
             'title' => $title,
         );
