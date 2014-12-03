@@ -6,30 +6,45 @@
   替换素材
 {% endblock %}
 {% block body %}
-<form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser2.css') }}" />
 
-    <div class="form-group">
-      <input class="form-control" type="text" placeholder="知识点搜索" name="knowledgeIds[]" value="{{ app.request.get('knowledgeIds[]') }}">
-      <span class="glyphicon glyphicon-tasks"></span>
-    </div>
+<div class="well well-sm">
+  <form id="message-search-form" class="form-inline" action="" method="get" novalidate>
+    <input type="hidden" name="categoryId" value="{{ category.id }}">
+      <div class="form-group mrl" id="tags-search-group">
+        <label>标签：</label>
+          <a href="javascript:;" class="tag-search-trigger">
+            {% for tag in tagSearchs %}
+              {{tag.name}}
+            {% else %}
+              选择
+            {% endfor %}
+          </a>
+      </div>
+      <div class="form-group mrl" id="knowledges-search-group">
+        <label>知识点：</label>
+        <a href="javascript:;" class="knowledge-search-trigger">
+          {% for knowledge in knowledgeSearchs %}
+            {{knowledge.name}}
+          {% else %}
+            选择
+          {% endfor %}
+        </a>
+      </div>
 
-    <div class="form-group">
-      <select class="form-control method-form-group" name="method">
-        {{ select_options(dict('courseware'), app.request.query.get('method')) }}
-      </select>
-    </div>
+      <div class="form-group mrl">
+        <input class="form-control" type="text" name="keywords" value="{{ app.request.query.get('keyword') }}" placeholder="标题关键词">
+      </div>
 
-    <div class="form-group tagIds-form-group {% if method == 'title' %}hide{% endif %}">
-    </div>
+      <button id="article-material-search" data-url="{{ path('admin_essay_content_list',{essayId:essay.id})}}" type="submit" class="btn btn-sm btn-primary">搜索</button>
 
-    <div class="form-group title-form-group {% if method != 'title' %}hide{% endif %}">
-
-      <input class="form-control" type="text" placeholder="标题关键词搜索" name="title" value="{{ app.request.get('title') }}">
-    </div>
-
-    <button id="article-material-search" class="btn btn-primary" data-url="{{ path('admin_essay_content_create',{essayId:essay.id})}}">搜索</button>
+      <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
+      <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">
   </form>
-
+    {% include 'CustomWebBundle:Tag:tagchooser-overlay.html.twig' with {id: 'tags-search', type: 'question'} %}
+    {% include 'CustomWebBundle:Tag:tagchooser-knowledge-overlay.html.twig' with {id: 'knowledges-search', categoryId: category.id} %}
+</div>
 
     <div>
       <table class="table table-hover table-striped" id="content-edit-item-list">

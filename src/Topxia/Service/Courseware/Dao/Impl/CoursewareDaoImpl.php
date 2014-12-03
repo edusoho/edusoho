@@ -71,47 +71,43 @@ class CoursewareDaoImpl extends BaseDao implements CoursewareDao
 
     private function _createSearchQueryBuilder($conditions)
     {
-        if (!empty($conditions['title'])) {
-            $conditions['titleLike'] = "%{$conditions['title']}%";
-            unset($conditions['title']);
+        if (!empty($conditions['keyword'])) {
+            $conditions['titleLike'] = "%{$conditions['keyword']}%";
+            unset($conditions['keyword']);
         }
 
-        if (!empty($conditions['tagIds'])) {
-            $tagIds = $conditions['tagIds'];
-            $conditions['tagsLike'] = "%";
-            if (!empty($tagIds[0])) {
-                foreach ($tagIds as $tagId) {
-                    $id = "\"".$tagId."\"";
-                    $conditions['tagsLike'] .= "{$id}*";
-                }
-            }
-            $conditions['tagsLike'] = rtrim(trim($conditions['tagsLike']), '*' );
-            $conditions['tagsLike'] .= "%";
-            unset($conditions['tagIds']);
-        }
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, $this->table)
-            ->andWhere('type = :type')
+            ->from($this->table, 'courseware')
             ->andWhere('title LIKE :titleLike')
-            ->andWhere('userId = :userId')
-            ->andWhere('categoryId = :categoryId')
-            ->andWhere('tagIds LIKE :tagsLike')
-            ->andWhere('createdTime >= :startTime')
-            ->andWhere('createdTime <= :endTime');
-        if(isset($conditions['knowledgeIds'])) {
-            if (!empty($conditions['knowledgeIds']) && !empty($conditions['knowledgeIds'][0])) {
-                foreach ($conditions['knowledgeIds'] as $key => $knowledgeId) {
-                    $id = "\"".$knowledgeId."\"";
-                    if ($key > 0 ) {
-                        $conditions['knowledgeIdsSql'] .= "OR knowledgeIds LIKE '%$id%'";
-                    } else {
-                        $conditions['knowledgeIdsSql'] = " knowledgeIds LIKE '%$id%' ";
+            ->andWhere('categoryId = :categoryId');
+
+        if (isset($conditions['tagIds'])) {
+            $tagIds = $conditions['tagIds'];
+            if(!empty($tagIds)){
+                foreach ($tagIds as $key => $tagId) {
+                    if (preg_match('/^[0-9]+$/', $tagId)) {
+                        $builder->andStaticWhere("tagIds LIKE '%|{$tagId}|%'");
                     }
                 }
-                $builder->andStaticWhere($conditions['knowledgeIdsSql']);
             }
+            unset($conditions['tagIds']);
+        }
+
+        if (isset($conditions['knowledgeIds'])) {
+            $knowledgeIds = $conditions['knowledgeIds'];
+            $ors = array();
+            if(!empty($knowledgeIds)){
+                foreach (array_values($knowledgeIds) as $i => $knowledgeId) {
+                    if (preg_match('/^[0-9]+$/', $knowledgeId)) {
+                        $ors[] = "knowledgeIds LIKE '%|{$knowledgeId}|%'";
+                    }
+                }
+                $builder->andWhere(call_user_func_array(array($builder->expr(), 'orX'), $ors), false);
+            }
+
             unset($conditions['knowledgeIds']);
         }
+
         return $builder;
     }
 }

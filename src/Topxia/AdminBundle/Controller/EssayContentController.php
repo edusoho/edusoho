@@ -125,26 +125,18 @@ class EssayContentController extends BaseController
 
         $essay = $this->getEssayService()->getEssay($essayId);
         $category = $this->getCategoryService()->getCategory($essay['categoryId']);
-        $method = $request->query->get('method');
-        $knowledgeId = $request->query->get('knowledgeId');
+        $knowledgeIds = $request->query->get('knowledgeIds');
+        $knowledgeIds = empty($knowledgeIds) ? array() : explode(',',$knowledgeIds);
         $tagIds = $request->query->get('tagIds');
-        $title = $request->query->get('title');
+        $tagIds = empty($tagIds) ? array() : explode(',',$tagIds);
+        $title = $request->query->get('keywords');
 
-        if (empty($method)){
-            $conditions = array('categoryId' => $category['id']);
-        } elseif($method == 'tag'){
-            $conditions = array(
-                'tagIds' => $tagIds,
-                'knowledgeId' => $knowledgeId,
-                'categoryId' => $category['id']
-            );
-        } else {
-            $conditions = array(
-                'title' => $title,
-                'knowledgeId' => $knowledgeId,
-                'categoryId' => $category['id']
-            );
-        }
+        $conditions = array(
+            'tagIds' => $tagIds,
+            'knowledgeIds' => $knowledgeIds,
+            'categoryId' => $essay['categoryId'],
+            'title' => $title,
+        );
 
         $articleMaterialsCount = $this->getArticleMaterialService()->searchArticleMaterialsCount($conditions);
 
@@ -160,13 +152,18 @@ class EssayContentController extends BaseController
         $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($articleMaterials,'mainKnowledgeId'));
         $knowledges = ArrayToolkit::index($knowledges, 'id');
 
+        $knowledgeSearchs = !empty($knowledgeIds) ? $this->getKnowledgeService()->findKnowledgeByIds($knowledgeIds):array();
+        $tagSearchs = !empty($tagIds) ? $this->getTagService()->findTagsByIds($tagIds):array();
+
         return $this->render('TopxiaAdminBundle:EssayContent:content-edit-modal.html.twig',array(
+            'category' => $category,
             'essay' => $essay,
             'articleMaterials' => $articleMaterials,
             'paginator' => $paginator,
             'knowledges' => $knowledges,
             'articleMaterialsCount' => $articleMaterialsCount,
-            'method' => $method,
+            'tagSearchs' => $tagSearchs,
+            'knowledgeSearchs' => $knowledgeSearchs,
             'contentId' => $contentId
         ));
     }

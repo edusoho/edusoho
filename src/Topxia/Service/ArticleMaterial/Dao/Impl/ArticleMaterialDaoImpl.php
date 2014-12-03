@@ -71,46 +71,42 @@ class ArticleMaterialDaoImpl extends BaseDao implements ArticleMaterialDao
 
     private function _createSearchQueryBuilder($conditions)
     {
-
-        if (isset($conditions['title'])) {
-            $conditions['titleLike'] = "%{$conditions['title']}%";
-            unset($conditions['title']);
-        }
-
-        if (isset($conditions['tagIds'])) {
-            $tagIds = $conditions['tagIds'];
-            $conditions['tagsLike'] = "%";
-            if (!empty($tagIds[0])) {
-                foreach ($tagIds as $tagId) {
-                    $id = "\"".$tagId."\"";
-                    $conditions['tagsLike'] .= "{$id},";
-                }
-            }
-            $conditions['tagsLike'] = rtrim(trim($conditions['tagsLike']), ',' );
-            $conditions['tagsLike'] .= "%";
-            unset($conditions['tagIds']);
-        }
-
-        if (isset($conditions['knowledgeId'])) {
-            $knowledgeId = $conditions['knowledgeId'];
-            $conditions['knowledgesLike'] = "%";
-            if (!empty($knowledgeId)) {
-                $conditions['knowledgesLike'] .= "\"".$conditions['knowledgeId']."\"";
-            }
-            $conditions['knowledgesLike'] .= "%";
-            unset($conditions['knowledgeIds']);
+        if (!empty($conditions['keyword'])) {
+            $conditions['titleLike'] = "%{$conditions['keyword']}%";
+            unset($conditions['keyword']);
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, $this->table)
-            ->andWhere('type = :type')
+            ->from($this->table, 'article_material')
             ->andWhere('title LIKE :titleLike')
-            ->andWhere('userId = :userId')
-            ->andWhere('categoryId = :categoryId')
-            ->andWhere('tagIds LIKE :tagsLike')
-            ->andWhere('knowledgeIds LIKE :knowledgesLike')
-            ->andWhere('createdTime >= :startTime')
-            ->andWhere('createdTime <= :endTime');
+            ->andWhere('categoryId = :categoryId');
+
+        if (isset($conditions['tagIds'])) {
+            $tagIds = $conditions['tagIds'];
+            if(!empty($tagIds)){
+                foreach ($tagIds as $key => $tagId) {
+                    if (preg_match('/^[0-9]+$/', $tagId)) {
+                        $builder->andStaticWhere("tagIds LIKE '%|{$tagId}|%'");
+                    }
+                }
+            }
+            unset($conditions['tagIds']);
+        }
+
+        if (isset($conditions['knowledgeIds'])) {
+            $knowledgeIds = $conditions['knowledgeIds'];
+            $ors = array();
+            if(!empty($knowledgeIds)){
+                foreach (array_values($knowledgeIds) as $i => $knowledgeId) {
+                    if (preg_match('/^[0-9]+$/', $knowledgeId)) {
+                        $ors[] = "knowledgeIds LIKE '%|{$knowledgeId}|%'";
+                    }
+                }
+                $builder->andWhere(call_user_func_array(array($builder->expr(), 'orX'), $ors), false);
+            }
+
+            unset($conditions['knowledgeIds']);
+        }
 
         return $builder;
     }

@@ -10,19 +10,21 @@ class CoursewareController extends BaseController
 {
     public function manageAction(Request $request, $categoryId, $type)
     {
-        $knowledgeIds = $request->query->get('knowledgeIds');
-        $tagIds = $request->query->get('tagIds');
-        $title = $request->query->get('keyword');
+        $conditions = $request->query->all();
 
-        $knowledgeSearchs = empty($knowledgeIds) ? array() : $this->getKnowledgeService()->findKnowledgeByIds(explode(',',$knowledgeIds));
-        $tagSearchs = empty($tagIds) ? array() : $this->getTagService()->findTagsByIds(explode(',',$tagIds));
+        if (!empty($conditions['knowledgeIds'])) {
+            $conditions['knowledgeIds'] = explode(',', $conditions['knowledgeIds']);
+            $knowledgeSearchs = $this->getKnowledgeService()->findKnowledgeByIds($conditions['knowledgeIds']);
+        } else {
+            $knowledgeSearchs = array();
+        }
 
-        $conditions = array(
-            'tagIds' => explode(',',$tagIds),
-            'knowledgeIds' => explode(',',$knowledgeIds),
-            'categoryId' => $categoryId,
-            'title' => $title,
-        );
+        if (!empty($conditions['tagIds'])) {
+            $conditions['tagIds'] = explode(',', $conditions['tagIds']);
+            $tagSearchs = $this->getTagService()->findTagsByIds($conditions['tagIds']);
+        } else {
+            $tagSearchs = array();
+        }
 
         $coursewaresCount = $this->getCoursewareService()->searchCoursewaresCount($conditions);
 

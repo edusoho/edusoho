@@ -101,7 +101,7 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
             ->from($this->table, 'testpaper')
             ->andWhere('target = :target')
             ->andWhere('title LIKE :titleLike')
-			->andWhere('tags LIKE :tagsLike')
+		  ->andWhere('tags LIKE :tagsLike')
             ->andWhere('status LIKE :status');
 
         if (isset($conditions['tagIds'])) {
@@ -123,7 +123,6 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
                     $ors[] = "knowledgeIds LIKE '%|{$knowledgeId}|%'";
                 }
             }
-
             $builder->andWhere(call_user_func_array(array($builder->expr(), 'orX'), $ors), false);
 
             unset($conditions['knowledgeIds']);
