@@ -102,7 +102,7 @@ class UserController extends BaseController
         $profiles = ArrayToolkit::index($profiles, 'id');
 
         $choices = array(); 
-        foreach ($results as $key => $value) {
+        foreach ($conditions as $key => $value) {
             if($key == 'choices'){
                 $choices = $value; 
             }
