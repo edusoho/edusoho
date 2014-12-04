@@ -198,11 +198,12 @@ class UserServiceImpl extends BaseService implements UserService
 
         $fields = array(
             'salt' => $salt,
-            'password' => $this->getPasswordEncoder()->encodePassword($password, $salt),
-            'lockDeadline' => 0
+            'password' => $this->getPasswordEncoder()->encodePassword($password, $salt)
         );
 
         $this->getUserDao()->updateUser($id, $fields);
+
+        $this->clearUserConsecutivePasswordErrorTimesAndLockDeadline($id);
 
         $this->getLogService()->info('user', 'password-changed', "用户{$user['email']}(ID:{$user['id']})重置密码成功");
 
