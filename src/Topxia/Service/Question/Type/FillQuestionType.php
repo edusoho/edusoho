@@ -36,11 +36,15 @@ class FillQuestionType extends AbstractQuestionType
 
         $rightCount = 0;
         foreach ($questionAnswers as $index => $rightAnswer) {
-            $expectAnswer = trim($rightAnswer);
-            $actualAnswer = trim($answer[$index]);
-            $expectAnswer = preg_replace("/([\s]{2,})/","\\1",$expectAnswer);
-            $actualAnswer = preg_replace("/([\s]{2,})/","\\1",$actualAnswer);
+            $expectAnswer = array();
+            foreach ($rightAnswer as $key => $value) {
+                $value = trim($value);
+                $value = preg_replace("/([\x20\s\t]){2,}/", " ", $value);
+                $expectAnswer[] = $value;
+            }
 
+            $actualAnswer = trim($answer[$index]);
+            $actualAnswer = preg_replace("/([\x20\s\t]){2,}/", " ", $actualAnswer);
             if (in_array($actualAnswer, $expectAnswer)) {
                 $rightCount++;
             }

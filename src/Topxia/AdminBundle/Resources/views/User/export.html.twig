@@ -1,0 +1,138 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+
+{% set modalSize = 'large' %}
+
+{% block title %}用户导出{% endblock %}
+{% block body %}
+
+<form id="user-export-form" class="form-horizontal" method="post" action="{{ path('admin_user_exportcsv')}}">
+
+
+<div class="row">
+          <form method="post" enctype="multipart/form-data">
+          <div class="col-md-3 col-md-offset-1">
+            <br>
+          <b>默认字段选择:</b>
+          </div>
+     <fieldset id="checkboxChoices">
+	<div class="col-md-3" > 
+		 <label class="checkbox inline">  
+		 <p><input class="checkbox" id="nickname" name="choices[]" type="checkbox" value="用户名" checked="checked" />
+		用户名
+		 </p>
+		 </label>
+
+		 <label class="checkbox inline">  
+		  <p><input class="checkbox" id="mobile" name="choices[]" type="checkbox" value="手机号" checked="checked"  />
+		手机号
+		 </p>
+		 </label>
+
+		 <label class="checkbox inline">  
+		  <p><input class="checkbox" id="weibo" name="choices[]" type="checkbox" value="微博" checked="checked" />
+		微博
+		 </p>
+		 </label>
+
+		 <label class="checkbox inline">  
+		 <p><input class="checkbox" id="job" name="choices[]" type="checkbox" value="职业" checked="checked" />
+		职业
+		 </p>
+		 </label>
+	</div>
+
+	<div class="col-md-3" > 
+		 <label class="checkbox inline">  
+		 <p><input class="checkbox" id="truename" name="choices[]" type="checkbox" value="姓名" checked="checked" />
+		姓名
+		 </p>
+		 </label>
+
+		 <label class="checkbox inline">  
+		  <p><input class="checkbox" id="qq" name="choices[]" type="checkbox" value="qq" checked="checked" />
+		qq
+		 </p>
+		 </label>
+
+		 <label class="checkbox inline">  
+		  <p><input class="checkbox" id="site" name="choices[]" type="checkbox" value="个人网站" checked="checked" />
+		个人网站
+		 </p>
+		 </label>
+
+		  <label class="checkbox inline">  
+		  <p><input class="checkbox" id="title" name="choices[]" type="checkbox" value="头衔" checked="checked" />
+		头衔
+		 </p>
+		 </label>
+	</div>
+
+	<div class="col-md-2"> 
+		 <label class="checkbox inline">  
+		<p><input class="checkbox" id="email" name="choices[]" type="checkbox" value="email" checked="checked" />
+		Email
+		</p>
+		</label>
+
+		<label class="checkbox inline">  
+		<p><input class="checkbox" id="weixin" name="choices[]" type="checkbox" value="微信" checked="checked" />
+		微信
+		</p>
+		</label>
+
+		<label class="checkbox inline">  
+		<p><input class="checkbox" id="company" name="choices[]" type="checkbox" value="公司" checked="checked" />
+		公司
+		</p>
+		</label>
+
+	</div>
+
+	  <input type="hidden" name="roles" value="1">
+	  <input type="hidden" name="keywordType" value="">
+	  <input type="hidden" name="keyword" value="">
+	 
+	 <br class="clear">
+      </fieldset>
+
+   {% if fields %}
+          <div class="col-md-12"><br></div>
+          <hr style="filter:progid:DXImageTransform.Microsoft.Glow(color=#FF0000,strength=10)" width="100%" color="#FF0000" size="1" />
+          <div class="col-md-3 col-md-offset-1">
+          <b>自定义字段选择：</b>
+          </div>
+          <div class="col-md-8 choiceFields">
+	<table>
+	  {% for field in fields %}
+	        <td>
+	        <label class="checkbox inline" >  
+	        <input type="checkbox" id="{{field.title}}" name="choices[]"  value="{{field.title}}" checked="checked" />{{field.title}}
+	        </label>
+	        </td>
+	  {% endfor %}
+	  </table>
+          </div>
+   {% endif %}
+   
+      </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+ 
+</form>
+{% endblock %}
+
+{% block footer %}
+    {% if userCount >20000%}
+        <span class="text-warning pull-left " style="font-size:13px;color:red;">
+           您导出的用户数超过20000，不支持导出，请筛选用户数据后再导出
+        </span>
+    {% else %}
+        <span class="text-info pull-left">您导出的用户数为{{userCount}}</span>
+    {% endif %}
+
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <button id="user-export-btn" data-submiting-text="正在导出" type="submit" class="btn btn-info btn-sm pull-right mhs" data-toggle="form-submit" data-target="#user-export-form" data-count="{{userCount}}"><i class="glyphicon glyphicon-export"></i> 导出用户</button>
+  <script>app.load('user/export-modal')</script>
+
+{% endblock %}
