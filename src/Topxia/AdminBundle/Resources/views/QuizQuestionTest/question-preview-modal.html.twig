@@ -6,9 +6,9 @@
 
 {% block body %}
 	
-	{% include 'TopxiaAdminBundle:QuizQuestionTest:do-test-header.html.twig' %}
 
   {% include 'TopxiaAdminBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
+	{% include 'TopxiaAdminBundle:QuizQuestionTest:do-test-header.html.twig' %}
 
 {% endblock %}
 {% block footer %}
