@@ -27,19 +27,16 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
 
         $request->getSession()->set('_target_path',  $request->request->get('_target_path'));
         $username = $request->request->get('_username');
-        if ($loginConnect['temporary_lock_enabled'] == 1){
-
-            $user = $this->getUserService()->getUserByNickname($username);
-            if ($user == 0) {
-                $user = $this->getUserService()->getUserByEmail($username);
-            }
-
-            $this->getUserService()->userLoginFail($user, $loginConnect['temporary_lock_allowed_times'], $loginConnect['temporary_lock_minutes']); 
+        $user = $this->getUserService()->getUserByNickname($username);
+        if ($user == 0) {
+            $user = $this->getUserService()->getUserByEmail($username);
         }
 
         $leftTimes = $loginConnect['temporary_lock_allowed_times']-$user['consecutivePasswordErrorTimes']-1;
         $leftTimesMessage = ($leftTimes != 0)?"还能输入{$leftTimes}次密码.":"用户已经被暂时封禁.";
+        
         if ( $exception->getMessage() == "Bad credentials" && $loginConnect['temporary_lock_enabled'] == 1 ){
+            $this->getUserService()->userLoginFail($user, $loginConnect['temporary_lock_allowed_times'], $loginConnect['temporary_lock_minutes']); 
             $exception = new AuthenticationException("帐号或密码不正确,".$leftTimesMessage." 连续输错{$loginConnect['temporary_lock_allowed_times']}次密码, 会被暂时封禁{$loginConnect['temporary_lock_minutes']}分钟.");
         }
 
