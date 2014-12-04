@@ -40,6 +40,14 @@ define(function(require, exports, module) {
             });
 		});
 
+                var $userSearchForm = $('#user-search-form');
+                var $roles = $userSearchForm.find('[name=roles]').val(); 
+                var $keywordType = $userSearchForm.find('[name=keywordType]').val();
+                var $keyword = $userSearchForm.find('[name=keyword]').val();
+
+                $('#user-export').on('click', function() {
+                   $('#user-export').attr('data-url',"/admin/user/export"+"?roles="+$roles+"&keywordType="+$keywordType+"&keyword="+$keyword);
+                });
 
 	};
 

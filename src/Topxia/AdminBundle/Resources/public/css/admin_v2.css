@@ -319,3 +319,30 @@ tbody.sortable-list tr.placeholder {
   margin-top: 0;
   margin-bottom: 0;
 }  
+fieldset #checkboxChoices{
+  margin:0;
+  padding:0;
+  border:none;
+  background:transparent;
+}
+#checkboxChoices div{
+  margin-top: -10px;
+  width:8em;
+  float:left;
+}
+ #checkboxChoices label
+ {
+  width:3em;
+   float:none;
+   display:inline;
+ }
+#checkboxChoices p{
+  margin:0.3em 0;
+}
+.choiceFields {
+  margin-top: -10px;
+  margin-left: -26px;
+}
+.choiceFields label{
+   margin-left:7px;;
+}
