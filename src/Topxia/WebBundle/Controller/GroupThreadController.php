@@ -673,7 +673,15 @@ class GroupThreadController extends BaseController
 
                 if($coin){
 
-                    $context.=$content.$hideContent;
+                    if($role == 2 || $role ==3 || $user['id'] == $thread['userId']){
+
+                        $context.=$content."<div class=\"hideContent mtl mbl\">".$hideContent."</div>";
+
+                    }else{
+
+                        $context.=$content.$hideContent;
+                    }
+                    
                     
                 }else{
 
