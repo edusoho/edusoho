@@ -47,155 +47,14 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $app = $this->getAppService()->findInstallApp("UserImporter");
+        $showUserExport = version_compare($app['version'], "1.0.2", ">=");
+
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
             'paginator' => $paginator,
+            'showUserExport' => $showUserExport
         ));
-    }
-
-    public function exportAction (Request $request)
-    {
-        $user=$this->getCurrentUser();
-        
-        $fields = $request->query->all();
-        $conditions = array();
-        if(!empty($fields)){
-            $conditions =$fields;
-        }
-        $userCount = $this->getUserService()->searchUserCount($conditions);
-
-        $profile = $this->getUserService()->getUserProfile($user['id']);
-        $profile['title'] = $user['title'];
-        $fields=$this->getFields();
-       
-        return $this->render('TopxiaAdminBundle:User:export.html.twig', array(
-            'user'=>$user,
-            'fields'=> $fields,
-            'profile'=>$profile,
-            'userCount' => $userCount
-        ));
-    }
-
-    private function genCsvString($users,$choices,$fields)
-    {
-        $userIds = ArrayToolkit::column($users, 'id');
-
-        $users = ArrayToolkit::index($users, 'id');
-
-        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
-
-        $profiles = ArrayToolkit::index($profiles, 'id');
-
-        $str = "";
-
-        $exportUsers = array();
-
-        foreach ($users as $user) {
-            $member = "";
-            if (in_array('用户名', $choices)) {
-                $member .= $users[$user['id']]['nickname'].",";
-            }
-            if (in_array('手机号', $choices)) {
-                $member .= $profiles[$user['id']]['mobile'] ? $profiles[$user['id']]['mobile']."," : "-".",";
-            }
-           if (in_array('微博', $choices)) {
-            $member .= $profiles[$user['id']]['weibo'] ? $profiles[$user['id']]['weibo']."," : "-".",";
-            }
-           if (in_array('职业', $choices)) {
-            $member .= $profiles[$user['id']]['job'] ? $profiles[$user['id']]['job']."," : "-".",";
-            }
-            if (in_array('姓名', $choices)) {
-            $member .= $profiles[$user['id']]['truename'] ? $profiles[$user['id']]['truename']."," : "-".",";
-            }
-            if (in_array('qq', $choices)) {
-            $member .= $profiles[$user['id']]['qq'] ? $profiles[$user['id']]['qq']."," : "-".",";
-            }
-            if (in_array('个人网站', $choices)) {
-            $member .= $profiles[$user['id']]['site'] ? $profiles[$user['id']]['site']."," : "-".",";
-            }
-            if (in_array('头衔', $choices)) {
-            $member .= $users[$user['id']]['title'] ? $users[$user['id']]['title']."," : "-".",";
-            }
-            if (in_array('email', $choices)) {
-                $member .= $users[$user['id']]['email'].",";
-            }
-            if (in_array('微信', $choices)) {
-            $member .= $profiles[$user['id']]['weixin'] ? $profiles[$user['id']]['weixin']."," : "-".",";
-            }
-            if (in_array('公司', $choices)) {
-            $member .= $profiles[$user['id']]['company'] ? $profiles[$user['id']]['company']."," : "-".",";
-            }
-            foreach ($fields as $key => $value) {
-               if (in_array($value, $choices)) {
-                    $member.=$profiles[$user['id']][$key] ? $profiles[$user['id']][$key]."," : "-".",";
-                }
-            }
-            $exportUsers[] = $member;   
-        };
-
-        $str .= implode("\r\n",$exportUsers);
-        return $str;
-    }
-
-    public function exportCsvAction (Request $request)
-    {
-        $user=$this->getCurrentUser();
-        if (!in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $conditions = $request->request->all();
-        $choices = array(); 
-        foreach ($conditions as $key => $value) {
-            if($key == 'choices'){
-                $choices = $value; 
-            }
-        }
-
-        $str = "";
-
-        foreach ($choices as $key => $value) {
-             if ($key ==0 ){
-                $str.=$value;
-             }else{
-                $str.=",".$value;
-             }
-        }
-        $str.="\r\n";
-
-        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-        
-        $fields=array();
-        foreach ($userFields as $userField) {
-            $fields[$userField['fieldName']]=$userField['title'];
-        }
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getUserService()->searchUserCount($conditions),
-            1000
-        );
-
-        $totalPage = $paginator->getLastPage();
-        for($i = 1 ;$i <= $totalPage; $i++) {
-            $users = $this->getUserService()->searchUsers($conditions,array('createdTime', 'DESC'),($i-1)*1000, 1000);
-            $str.=$this->genCsvString($users,$choices,$fields);
-        }
-
-        $str = chr(239) . chr(187) . chr(191) . $str;
-
-        $filename = sprintf("exportUsers-(%s).csv", date('Y-n-d'));
-
-        $userId = $this->getCurrentUser()->id;
-        
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
-
-        return $response;
-        
     }
 
     public function emailCheckAction(Request $request)
@@ -569,6 +428,11 @@ class UserController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
     protected function getUserFieldService()
