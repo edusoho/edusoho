@@ -238,10 +238,8 @@ class CategoryQuestionManageController extends BaseController
         $questionPreview = true;
 
         $mainKnowledge = $this->getKnowledgeService()->getKnowledge($question['mainKnowledgeId']);
-        $tagIds = explode(',', $question['tagIds']);
-        $tags = $this->getTagService()->findTagsByIds($tagIds);
-        $kids = explode(',', $question['relatedKnowledgeIds']);
-        $relatedKnowledges = $this->getKnowledgeService()->findKnowledgeByIds($kids);
+        $tags = $this->getTagService()->findTagsByIds($question['tagIds']);
+        $relatedKnowledges = $this->getKnowledgeService()->findKnowledgeByIds($question['relatedKnowledgeIds']);
 
         if($isNewWindow){
             return $this->render('TopxiaAdminBundle:QuizQuestionTest:question-preview.html.twig', array(
