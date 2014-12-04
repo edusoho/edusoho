@@ -47,9 +47,13 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $app = $this->getAppService()->findInstallApp("UserImporter");
+        $showUserExport = version_compare($app['version'], "1.0.2", ">=");
+
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
             'paginator' => $paginator,
+            'showUserExport' => $showUserExport
         ));
     }
 
@@ -424,6 +428,11 @@ class UserController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
     protected function getUserFieldService()
