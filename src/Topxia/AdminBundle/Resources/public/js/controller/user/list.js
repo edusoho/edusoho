@@ -46,7 +46,8 @@ define(function(require, exports, module) {
                 var $keyword = $userSearchForm.find('[name=keyword]').val();
 
                 $('#user-export').on('click', function() {
-                   $('#user-export').attr('data-url',"/admin/user/export"+"?roles="+$roles+"&keywordType="+$keywordType+"&keyword="+$keyword);
+                   var self = $(this);
+                   self.attr('data-url', self.attr('data-url')+"?roles="+$roles+"&keywordType="+$keywordType+"&keyword="+$keyword);
                 });
 
 	};
