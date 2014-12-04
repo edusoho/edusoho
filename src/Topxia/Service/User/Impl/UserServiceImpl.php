@@ -954,7 +954,24 @@ class UserServiceImpl extends BaseService implements UserService
         return new MessageDigestPasswordEncoder('sha256');
     }
 
+    public function userLoginFail($user,$failAllowNum = 3,$temporaryMinutes = 20)
+    {
+        if ($user['consecutivePasswordErrorTimes'] >= $failAllowNum-1){
+            $this->getUserDao()->updateUser($user['id'], array('lockDeadline' => time()+$temporaryMinutes*60));
+        } else {
+            $this->getUserDao()->updateUser($user['id'], array('consecutivePasswordErrorTimes' => $user['consecutivePasswordErrorTimes']+1));
+        }
+    }
 
+    public function isUserTemporaryLockedOrLocked($user)
+    {
+        return ( $user['locked'] == 1 )||( $user['lockDeadline'] > time() );
+    }
+
+    public function clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId)
+    {
+        $this->getUserDao()->updateUser($userId, array('lockDeadline' => 0, 'consecutivePasswordErrorTimes' => 0));
+    }
 }
 
 class UserSerialize
@@ -980,5 +997,4 @@ class UserSerialize
             return UserSerialize::unserialize($user);
         }, $users);
     }
-
 }

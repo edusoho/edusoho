@@ -306,3 +306,16 @@ tbody.sortable-list tr.placeholder {
 #changeButton {
   margin-left: 96px;
 }
+
+.lock-user-text-left{
+  text-align: left;
+  padding-top: 7px;
+  margin-top: 0;
+  margin-bottom: 0;
+}  
+.lock-user-text-right{
+  /*text-align: right;*/
+  padding-top: 7px;
+  margin-top: 0;
+  margin-bottom: 0;
+}  
