@@ -76,8 +76,8 @@ class UserController extends BaseController
         ));
     }
 
-private function genCsvString($users,$choices,$fields)
-{
+    private function genCsvString($users,$choices,$fields)
+    {
         $userIds = ArrayToolkit::column($users, 'id');
 
         $users = ArrayToolkit::index($users, 'id');
@@ -135,7 +135,7 @@ private function genCsvString($users,$choices,$fields)
 
         $str .= implode("\r\n",$exportUsers);
         return $str;
-}
+    }
 
     public function exportCsvAction (Request $request)
     {

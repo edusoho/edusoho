@@ -8,7 +8,6 @@ define(function(require, exports, module) {
         if($('#user-export-btn').data('count') > 20000){
             $('#user-export-btn').addClass('disabled');
         }
-
         var $modal = $('#user-export-form').parents('.modal');
 
         var $userSearchForm = $('#user-search-form');
@@ -30,10 +29,10 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-            // $('#user-export-form').submit();
             // $('#user-export-btn').on('click',function(){
             //     $('#user-export-btn').button('submiting').addClass('disabled');
             // });
+            //     $('#user-export-btn').submit();
             document.getElementById("user-export-form").submit();
             $modal.modal('hide');
             }
