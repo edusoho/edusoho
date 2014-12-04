@@ -48,7 +48,10 @@ class UserController extends BaseController
         );
 
         $app = $this->getAppService()->findInstallApp("UserImporter");
-        $showUserExport = version_compare($app['version'], "1.0.2", ">=");
+        $showUserExport = false;
+        if(!empty($app) && array_key_exists('version', $app)){
+            $showUserExport = version_compare($app['version'], "1.0.2", ">=");
+        }
 
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
