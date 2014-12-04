@@ -204,7 +204,7 @@ class BaseProcessor {
             'splashs' => $splashs,
             'apiVersionRange' => array(
                 "min" => "1.0.0",
-                "max" => "2.1.0"
+                "max" => "2.3.0"
             ) ,
         );
     }
