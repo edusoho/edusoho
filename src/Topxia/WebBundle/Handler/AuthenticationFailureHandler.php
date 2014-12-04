@@ -32,14 +32,17 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
             $user = $this->getUserService()->getUserByEmail($username);
         }
 
-        $leftTimes = $loginConnect['temporary_lock_allowed_times']-$user['consecutivePasswordErrorTimes']-1;
-        $leftTimesMessage = ($leftTimes != 0)?"帐号或密码错误，您还有{$leftTimes}次输入机会":"帐号或密码输入错误已到{$loginConnect['temporary_lock_allowed_times']}次，帐号将会封禁{$loginConnect['temporary_lock_minutes']}分钟";
-        
-        if ( $exception->getMessage() == "Bad credentials" && $loginConnect['temporary_lock_enabled'] == 1 ){
-            $this->getUserService()->userLoginFail($user, $loginConnect['temporary_lock_allowed_times'], $loginConnect['temporary_lock_minutes']); 
-            $exception = new AuthenticationException($leftTimesMessage);
-        }
+        if ($user != 0){ 
 
+            $leftTimes = $loginConnect['temporary_lock_allowed_times']-$user['consecutivePasswordErrorTimes']-1;
+            $leftTimesMessage = ($leftTimes != 0)?"帐号或密码错误，您还有{$leftTimes}次输入机会":"帐号或密码输入错误已到{$loginConnect['temporary_lock_allowed_times']}次，帐号将会封禁{$loginConnect['temporary_lock_minutes']}分钟";
+            
+            if ( $exception->getMessage() == "Bad credentials" && $loginConnect['temporary_lock_enabled'] == 1 ){
+                $this->getUserService()->userLoginFail($user, $loginConnect['temporary_lock_allowed_times'], $loginConnect['temporary_lock_minutes']); 
+                $exception = new AuthenticationException($leftTimesMessage);
+            }
+        }
+        
         $message = $this->translator->trans($exception->getMessage());
         $this->getLogService()->info('user', 'login_fail', "用户名：{$username}，登录失败：{$message}");
 
