@@ -38,6 +38,44 @@
   </fieldset>
 <br>
 
+ <fieldset>
+<div class="form-group">
+      <div class="col-md-3 control-label">
+          <label >是否开启连续登陆密码输错时暂锁用户功能</label>
+      </div>
+      <div class="controls col-md-8 radios">
+          {{ radios('temporary_lock_enabled', {1:'开启', 0:'关闭'}, loginConnect.temporary_lock_enabled) }} 
+          <p class="help-block">开启后，登陆时用户连续多次输入错误密码时暂锁用户</p>
+      </div>
+
+      <div id="times_and_minutes" class="col-md-8 col-md-offset-3">
+        <div class="row">
+          <div class="col-md-4 ">
+            用户连续输入错误密码几次暂锁用户?
+          </div>
+          <div class="controls col-md-2">
+            <input type="text" id="temporary_lock_allowed_times" name="temporary_lock_allowed_times" class="form-control" value="{{loginConnect.temporary_lock_allowed_times}}">
+          </div>
+          <div class="col-md-2 ">
+            次
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-4 ">
+            经过多少分钟后解锁用户？
+          </div>
+          <div class="controls col-md-2">
+            <input type="text" id="temporary_lock_minutes" name="temporary_lock_minutes" class="form-control" value="{{loginConnect.temporary_lock_minutes}}">
+          </div>
+          <div class="col-md-2 ">
+            小时
+          </div>  
+        </div>
+      </div> 
+  </div>
+  </fieldset>
+<br>
 
   <fieldset>
     <legend>微博登录</legend>

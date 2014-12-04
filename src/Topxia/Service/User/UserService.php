@@ -194,7 +194,7 @@ interface UserService
 
     public function dropFieldData($fieldName);
 
-    public function userLoginFail($user,$failAllowNum = 3, $temporaryHours = 2);
+    public function userLoginFail($user,$failAllowNum = 3, $temporaryMinutes = 20);
 
     public function isUserTemporaryLockedOrLocked($user);
 

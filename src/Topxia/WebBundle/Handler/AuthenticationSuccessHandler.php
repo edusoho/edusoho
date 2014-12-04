@@ -17,16 +17,16 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 
         $userId = $token->getUser()->id;
 
-        $auth = $this->getSettingService()->get('auth', array());
+        $loginConnect = $this->getSettingService()->get('login_bind', array());
         $default = array(
             'temporary_lock_enabled' => 0,
             'temporary_lock_allowed_times' => 3,
             'temporary_lock_hours' => 2,
         );
 
-        $auth = array_merge($default, $auth);
+        $loginConnect = array_merge($default, $loginConnect);
 
-        if ($auth['temporary_lock_enabled'] == 1){
+        if ($loginConnect['temporary_lock_enabled'] == 1){
 
             $user = $this->getUserService()->getUser($userId);
             if ($this->getUserService()->isUserTemporaryLockedOrLocked($user)){

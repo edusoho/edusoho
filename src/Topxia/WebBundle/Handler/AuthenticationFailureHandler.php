@@ -16,19 +16,19 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        $auth = $this->getSettingService()->get('auth', array());
+        $loginConnect = $this->getSettingService()->get('login_bind', array());
         $default = array(
             'temporary_lock_enabled' => 0,
             'temporary_lock_allowed_times' => 3,
-            'temporary_lock_hours' => 2,
+            'temporary_lock_minutes' => 20,
         );
 
-        $auth = array_merge($default, $auth);
+        $loginConnect = array_merge($default, $loginConnect);
 
         $message = $this->translator->trans($exception->getMessage());
 
-        if ($auth['temporary_lock_enabled'] == 1){
-            $message .=", 连续输错{$auth['temporary_lock_allowed_times']}次密码, 将被暂锁{$auth['temporary_lock_hours']}小时." ;
+        if ($loginConnect['temporary_lock_enabled'] == 1){
+            $message .=", 连续输错{$loginConnect['temporary_lock_allowed_times']}次密码, 将被暂锁{$loginConnect['temporary_lock_minutes']}分钟." ;
         }
 
         if ($request->isXmlHttpRequest()) {
@@ -43,20 +43,20 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
 
         $username = $request->request->get('_username');
 
-        if ($auth['temporary_lock_enabled'] == 1){
+        if ($loginConnect['temporary_lock_enabled'] == 1){
 
             $user = $this->getUserService()->getUserByNickname($username);
             if ($user == 0) {
                 $user = $this->getUserService()->getUserByEmail($username);
             }
 
-            $this->getUserService()->userLoginFail($user, $auth['temporary_lock_allowed_times'], $auth['temporary_lock_hours']); 
+            $this->getUserService()->userLoginFail($user, $loginConnect['temporary_lock_allowed_times'], $loginConnect['temporary_lock_minutes']); 
         }
 
         $this->getLogService()->info('user', 'login_fail', "用户名：{$username}，登录失败：{$message}");
 
-        if ( $exception->getMessage() == "Bad credentials" && $auth['temporary_lock_enabled'] == 1 ){
-            $exception = new AuthenticationException("帐号或密码不正确, 连续输错{$auth['temporary_lock_allowed_times']}次密码, 将被暂锁{$auth['temporary_lock_hours']}小时.");
+        if ( $exception->getMessage() == "Bad credentials" && $loginConnect['temporary_lock_enabled'] == 1 ){
+            $exception = new AuthenticationException("帐号或密码不正确, 连续输错{$loginConnect['temporary_lock_allowed_times']}次密码, 将被暂锁{$loginConnect['temporary_lock_minutes']}分钟.");
         }
 
         return parent::onAuthenticationFailure($request, $exception);

@@ -309,9 +309,6 @@ class SettingController extends BaseController
             'registerFieldNameArray'=>array(),
             'registerSort'=>array(0=>"email",1=>"nickname",2=>"password"),
             'captcha_enabled' => 0,
-            'temporary_lock_enabled' => 0,
-            'temporary_lock_allowed_times' => 3,
-            'temporary_lock_hours' => 2,
         );
 
         $auth = array_merge($default, $auth);
@@ -391,6 +388,9 @@ class SettingController extends BaseController
             'renren_set_fill_account'=>0,
             'verify_code' => '',
             'captcha_enabled'=>0,
+            'temporary_lock_enabled' => 0,
+            'temporary_lock_allowed_times' => 3,
+            'temporary_lock_minutes' => 20,
         );
 
         $loginConnect = array_merge($default, $loginConnect);

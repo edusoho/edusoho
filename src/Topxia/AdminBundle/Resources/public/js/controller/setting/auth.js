@@ -11,32 +11,6 @@ define(function(require, exports, module) {
 
             editor.sync();
 
-        var validator = new Validator({
-            element: '#auth-form'
-        });
-        
-        validator.addItem({
-            element: '[name=temporary_lock_allowed_times]',
-            rule: 'integer'
-        });
-
-        validator.addItem({
-            element: '[name=temporary_lock_hours]',
-            rule: 'integer'
-        });
-
-        var hideOrShowTimeAndHours = function (){
-          if ( $('[name=temporary_lock_enabled]').filter(':checked').attr("value") == 1 ){
-            $('#times_and_hours').show();
-          }else if ( $('[name=temporary_lock_enabled]').filter(':checked').attr("value") == 0 ){
-            $('#times_and_hours').hide();
-          };
-        };
-        hideOrShowTimeAndHours();
-        $('[name=temporary_lock_enabled]').change(function (){
-           hideOrShowTimeAndHours();
-        });  
-
     	$(".register-list").sortable({
 			'distance':20
               });
