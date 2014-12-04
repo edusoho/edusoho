@@ -76,18 +76,15 @@ class UserController extends BaseController
         ));
     }
 
- public function exportCsvAction (Request $request)
+    public function exportCsvAction (Request $request)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN') ){
+        $user=$this->getCurrentUser();
+        if (!in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
             throw $this->createAccessDeniedException();
         }
-        $user=$this->getCurrentUser();
+        
+        $conditions = $request->request->all();
 
-        if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
-        $results = $request->request->all();
-
-        $conditions =$results;
-        $userCount = $this->getUserService()->searchUserCount($conditions);
         $users = $this->getUserService()->searchUsers($conditions,array('createdTime', 'DESC'),0, 20000);
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         
@@ -180,9 +177,7 @@ class UserController extends BaseController
         $response->setContent($str);
 
         return $response;
-        }else{
-             throw $this->createAccessDeniedException();
-        }
+        
     }
 
     public function emailCheckAction(Request $request)
