@@ -30,11 +30,10 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-
-                    // $('#user-export-form').submit();
-                    document.getElementById("user-export-form").submit();
-                    $modal.modal('hide');
-                     window.location.reload();
+            // $('#user-export-form').submit();
+            document.getElementById("user-export-form").submit();
+            $modal.modal('hide');
+             window.location.reload();
             }
         });
 
