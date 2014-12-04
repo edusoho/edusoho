@@ -11,44 +11,67 @@ define(function(require, exports, module) {
                 Notify.success('提醒教师的通知，发送成功！');
             });
         });
+        $("#popular-courses-type").on('change', step1);
 
         step1();
-
+        step2();
+        step3();
+        step4();
+        step5();
     };
 
     function step1() {
-        $("#popular-courses-type").on('change', function() {
-            $.get($(this).data('url'), {dateType: this.value}, function(html) {
+        $.ajax({
+            url: $(this).data('url'), 
+            data: {dateType: this.value}, 
+            async : false, 
+            success: function(html) {
                 $('#popular-courses-table').html(html);
-                step2();
-            });
-        }).trigger('change');
+            }
+        });
     }
 
     function step2() {
-        $.post($('#operation-analysis-title').data('url'),function(html){
-            $('#operation-analysis-table').html(html);
-            step3();
+        $.ajax({
+            url: $('#operation-analysis-title').data('url'),
+            async : false,
+            type : "post",
+            success: function(html){
+                $('#operation-analysis-table').html(html);
+            }
         });
     }
 
     function step3() {
-        $.post($('#system-status-title').data('url'),function(html){
-            $('#system-status').html(html);
-            step4();
+        $.ajax({
+            url: $('#system-status-title').data('url'),
+            type : "post",
+            async : false,
+            success: function(html){
+                $('#system-status').html(html);
+            }
         });
     }
 
     function step4() {
-        $.post($('#onlineNum').data('url'),function(res){
-            $('#onlineNum').html("当前在线："+res.onlineCount+"人");
-            step5();
+        $.ajax({
+            url: $('#onlineNum').data('url'),
+            type : "post",
+            async : false,
+            success: function(res){
+                $('#onlineNum').html("当前在线："+res.onlineCount+"人");
+            }
         });
     }
 
     function step5() {
-        $.post($('#loginNum').data('url'),function(res){
-            $('#loginNum').html("登录人数："+res.loginCount+"人");
+        $.ajax({
+            url: $('#loginNum').data('url'),
+            type : "post",
+            async : false,
+            success: function(res){
+                $('#loginNum').html("登录人数："+res.loginCount+"人");
+            }
         });
     }
 
