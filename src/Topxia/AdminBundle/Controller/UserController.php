@@ -119,12 +119,12 @@ class UserController extends BaseController
         $str.="\r\n";
 
         $exportUsers = array();
-// var_dump($users);exit();
-      // 计数器
-       $cnt = 0;
-       $limit = 5000;
+// // var_dump($users);exit();
+//       // 计数器
+//        $cnt = 0;
+//        $limit = 5000;
 
-        foreach ($users as $user => $value) {
+        foreach ($users as $user) {
             $member = "";
             if (in_array('用户名', $choices)) {
                 $member .= $users[$user['id']]['nickname'].",";
