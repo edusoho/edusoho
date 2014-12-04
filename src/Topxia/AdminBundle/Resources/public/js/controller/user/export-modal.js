@@ -5,6 +5,10 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+        if($('#user-export-btn').data('count') > 20000){
+            $('#user-export-btn').addClass('disabled');
+        }
+
         var $modal = $('#user-export-form').parents('.modal');
 
         var $userSearchForm = $('#user-search-form');

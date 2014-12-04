@@ -105,8 +105,16 @@ Email</label>
 {% endblock %}
 
 {% block footer %}
+{% if userCount >20000%}
+ <span class="text-warning pull-left " style="font-size:13px;color:red;">
+您导出的用户数超过20000，不支持导出，请筛选用户数据后再导出
+</span>
+{% else %}
+<span class="text-info pull-left">您导出的用户数为{{userCount}}</span>
+{% endif %}
+
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-  <button id="user-export-btn" data-submiting-text="正在导出" type="submit" class="btn btn-info btn-sm pull-right mhs" data-toggle="form-submit" data-target="#user-export-form"><i class="glyphicon glyphicon-export"></i> 导出用户</button>
+  <button id="user-export-btn" data-submiting-text="正在导出" type="submit" class="btn btn-info btn-sm pull-right mhs" data-toggle="form-submit" data-target="#user-export-form" data-count="{{userCount}}"><i class="glyphicon glyphicon-export"></i> 导出用户</button>
 {#   <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('admin_user_export') }}"><i class="glyphicon glyphicon-export"></i> 导出用户</a> #}
   <script>app.load('user/export-modal')</script>
 

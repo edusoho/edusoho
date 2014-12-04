@@ -23,6 +23,7 @@ class UserController extends BaseController
     public function indexAction (Request $request)
     {
         $fields = $request->query->all();
+        var_dump($fields);
 
         $conditions = array(
             'roles'=>'',
@@ -57,14 +58,12 @@ class UserController extends BaseController
     {
         $user=$this->getCurrentUser();
         
-        // $userCount = '' ;
-        // if ($request->getMethod() == 'POST') {
-        // $results = $request->request->all();
-        // $conditions =$results;
-        // var_dump($conditions);
-        // $userCount = $this->getUserService()->searchUserCount($conditions);
-        // var_dump($userCount);
-        // }
+        $fields = $request->query->all();
+        $conditions = array();
+        if(!empty($fields)){
+            $conditions =$fields;
+        }
+        $userCount = $this->getUserService()->searchUserCount($conditions);
 
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
@@ -74,18 +73,18 @@ class UserController extends BaseController
             'user'=>$user,
             'fields'=> $fields,
             'profile'=>$profile,
-            // 'userCount' => $userCount
+            'userCount' => $userCount
         ));
     }
 
  public function exportCsvAction (Request $request)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN') ){
-            throw $this->createAccessDeniedException();
-        }
+        // if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN') ){
+        //     throw $this->createAccessDeniedException();
+        // }
         $user=$this->getCurrentUser();
 
-        if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
+        // if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
         $results = $request->request->all();
 
         $conditions =$results;
@@ -190,9 +189,9 @@ class UserController extends BaseController
 
         return $response;
 
-        }else{
-             throw $this->createAccessDeniedException();
-        }
+        // }else{
+        //      throw $this->createAccessDeniedException();
+        // }
 
         
     }
