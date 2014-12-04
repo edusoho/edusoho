@@ -15,7 +15,7 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name=temporary_lock_hours]',
+            element: '[name=temporary_lock_minutes]',
             rule: 'integer'
         });
 

@@ -21,7 +21,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         $default = array(
             'temporary_lock_enabled' => 0,
             'temporary_lock_allowed_times' => 3,
-            'temporary_lock_hours' => 2,
+            'temporary_lock_minutes' => 20,
         );
 
         $loginConnect = array_merge($default, $loginConnect);
@@ -30,7 +30,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 
             $user = $this->getUserService()->getUser($userId);
             if ($this->getUserService()->isUserTemporaryLockedOrLocked($user)){
-                $ex = new LockedException('User account is locked.');  
+                $ex = new LockedException('User account is temporay locked.');  
                 $ex->setUser($token->getUser());  
                 throw $ex;
             }

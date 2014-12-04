@@ -38,38 +38,53 @@
   </fieldset>
 <br>
 
- <fieldset>
+
+<fieldset>
+<style type="text/css">
+  .text-left{
+    text-align: left;
+    padding-top: 7px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }  
+  .text-right{
+    text-align: right;
+    padding-top: 7px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }  
+</style>
 <div class="form-group">
       <div class="col-md-3 control-label">
-          <label >是否开启连续登陆密码输错时暂锁用户功能</label>
+          <label >用户登陆保护</label>
       </div>
       <div class="controls col-md-8 radios">
           {{ radios('temporary_lock_enabled', {1:'开启', 0:'关闭'}, loginConnect.temporary_lock_enabled) }} 
-          <p class="help-block">开启后，登陆时用户连续多次输入错误密码时暂锁用户</p>
+          <p class="help-block">开启后，登陆时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户</p>
       </div>
 
       <div id="times_and_minutes" class="col-md-8 col-md-offset-3">
         <div class="row">
-          <div class="col-md-4 ">
-            用户连续输入错误密码几次暂锁用户?
+          <div class="col-md-4 text-right">
+            用户连续输入错误密码
           </div>
-          <div class="controls col-md-2">
+          <div class="controls col-md-2 form-group">
             <input type="text" id="temporary_lock_allowed_times" name="temporary_lock_allowed_times" class="form-control" value="{{loginConnect.temporary_lock_allowed_times}}">
           </div>
-          <div class="col-md-2 ">
-            次
+          <div class="col-md-3 text-left">
+            次,将暂时封禁用户
           </div>
         </div>
         <br>
         <div class="row">
-          <div class="col-md-4 ">
-            经过多少分钟后解锁用户？
+          <div class="col-md-4 text-right">
+            经过
           </div>
-          <div class="controls col-md-2">
+          <div class="controls col-md-2 form-group">
             <input type="text" id="temporary_lock_minutes" name="temporary_lock_minutes" class="form-control" value="{{loginConnect.temporary_lock_minutes}}">
           </div>
-          <div class="col-md-2 ">
-            小时
+          <div class="col-md-3 text-left">
+            分钟后解锁用户
           </div>  
         </div>
       </div> 

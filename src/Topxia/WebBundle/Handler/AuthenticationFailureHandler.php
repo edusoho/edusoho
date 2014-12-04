@@ -22,27 +22,11 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
             'temporary_lock_allowed_times' => 3,
             'temporary_lock_minutes' => 20,
         );
-
         $loginConnect = array_merge($default, $loginConnect);
 
-        $message = $this->translator->trans($exception->getMessage());
-
-        if ($loginConnect['temporary_lock_enabled'] == 1){
-            $message .=", 连续输错{$loginConnect['temporary_lock_allowed_times']}次密码, 将被暂锁{$loginConnect['temporary_lock_minutes']}分钟." ;
-        }
-
-        if ($request->isXmlHttpRequest()) {
-            $content = array(
-                'success' => false,
-                'message' => $message,
-            );
-            return new JsonResponse($content, 400);
-        }
 
         $request->getSession()->set('_target_path',  $request->request->get('_target_path'));
-
         $username = $request->request->get('_username');
-
         if ($loginConnect['temporary_lock_enabled'] == 1){
 
             $user = $this->getUserService()->getUserByNickname($username);
@@ -53,10 +37,21 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
             $this->getUserService()->userLoginFail($user, $loginConnect['temporary_lock_allowed_times'], $loginConnect['temporary_lock_minutes']); 
         }
 
+        $leftTimes = $loginConnect['temporary_lock_allowed_times']-$user['consecutivePasswordErrorTimes']-1;
+        $leftTimes = ($leftTimes != 0)?"还能输入{$leftTimes}次密码.":"用户已经被暂时封禁.";
+        if ( $exception->getMessage() == "Bad credentials" && $loginConnect['temporary_lock_enabled'] == 1 ){
+            $exception = new AuthenticationException("帐号或密码不正确,".$leftTimes." 连续输错{$loginConnect['temporary_lock_allowed_times']}次密码, 会被暂时封禁{$loginConnect['temporary_lock_minutes']}分钟.");
+        }
+
+        $message = $this->translator->trans($exception->getMessage());
         $this->getLogService()->info('user', 'login_fail', "用户名：{$username}，登录失败：{$message}");
 
-        if ( $exception->getMessage() == "Bad credentials" && $loginConnect['temporary_lock_enabled'] == 1 ){
-            $exception = new AuthenticationException("帐号或密码不正确, 连续输错{$loginConnect['temporary_lock_allowed_times']}次密码, 将被暂锁{$loginConnect['temporary_lock_minutes']}分钟.");
+        if ($request->isXmlHttpRequest()) {
+            $content = array(
+                'success' => false,
+                'message' => $message,
+            );
+            return new JsonResponse($content, 400);
         }
 
         return parent::onAuthenticationFailure($request, $exception);

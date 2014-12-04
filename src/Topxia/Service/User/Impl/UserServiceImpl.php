@@ -956,7 +956,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function userLoginFail($user,$failAllowNum = 3,$temporaryMinutes = 20)
     {
-        if ($user['consecutivePasswordErrorTimes'] >= $failAllowNum){
+        if ($user['consecutivePasswordErrorTimes'] >= $failAllowNum-1){
             $this->getUserDao()->updateUser($user['id'], array('lockDeadline' => time()+$temporaryMinutes*60));
         } else {
             $this->getUserDao()->updateUser($user['id'], array('consecutivePasswordErrorTimes' => $user['consecutivePasswordErrorTimes']+1));
