@@ -307,14 +307,14 @@ tbody.sortable-list tr.placeholder {
   margin-left: 96px;
 }
 
-.text-left{
+.lock-user-text-left{
   text-align: left;
   padding-top: 7px;
   margin-top: 0;
   margin-bottom: 0;
 }  
-.text-right{
-  text-align: right;
+.lock-user-text-right{
+  /*text-align: right;*/
   padding-top: 7px;
   margin-top: 0;
   margin-bottom: 0;

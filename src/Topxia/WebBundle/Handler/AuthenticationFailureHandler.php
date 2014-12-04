@@ -33,11 +33,11 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         }
 
         $leftTimes = $loginConnect['temporary_lock_allowed_times']-$user['consecutivePasswordErrorTimes']-1;
-        $leftTimesMessage = ($leftTimes != 0)?"还能输入{$leftTimes}次密码.":"用户已经被暂时封禁.";
+        $leftTimesMessage = ($leftTimes != 0)?"帐号或密码错误，您还有{$leftTimes}次输入机会":"帐号或密码输入错误已到{$loginConnect['temporary_lock_allowed_times']}次，帐号将会封禁{$loginConnect['temporary_lock_minutes']}分钟";
         
         if ( $exception->getMessage() == "Bad credentials" && $loginConnect['temporary_lock_enabled'] == 1 ){
             $this->getUserService()->userLoginFail($user, $loginConnect['temporary_lock_allowed_times'], $loginConnect['temporary_lock_minutes']); 
-            $exception = new AuthenticationException("帐号或密码不正确,".$leftTimesMessage." 连续输错{$loginConnect['temporary_lock_allowed_times']}次密码, 会被暂时封禁{$loginConnect['temporary_lock_minutes']}分钟.");
+            $exception = new AuthenticationException($leftTimesMessage);
         }
 
         $message = $this->translator->trans($exception->getMessage());
