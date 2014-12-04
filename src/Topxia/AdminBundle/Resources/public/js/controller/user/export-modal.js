@@ -31,6 +31,9 @@ define(function(require, exports, module) {
                     return false;
                 }
             // $('#user-export-form').submit();
+            // $('#user-export-btn').on('click',function(){
+            //     $('#user-export-btn').button('submiting').addClass('disabled');
+            // });
             document.getElementById("user-export-form").submit();
             $modal.modal('hide');
             }

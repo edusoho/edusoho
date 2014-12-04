@@ -76,56 +76,21 @@ class UserController extends BaseController
         ));
     }
 
-    public function exportCsvAction (Request $request)
-    {
-        $user=$this->getCurrentUser();
-        if (!in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
-            throw $this->createAccessDeniedException();
-        }
-        
-        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-        
-        $fields=array();
-        foreach ($userFields as $userField) {
-            $fields[$userField['fieldName']]=$userField['title'];
-        }
-
-        $conditions = $request->request->all();
-        $users = $this->getUserService()->searchUsers($conditions,array('createdTime', 'DESC'),0, 20000);       
+private function genCsvString($users,$choices,$fields)
+{
         $userIds = ArrayToolkit::column($users, 'id');
 
-       // $users = $this->getUserService()->findUsersByIds($userIds);
         $users = ArrayToolkit::index($users, 'id');
 
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $choices = array(); 
-        foreach ($conditions as $key => $value) {
-            if($key == 'choices'){
-                $choices = $value; 
-            }
-        }
-
         $str = "";
-        foreach ($choices as $key => $value) {
-            if($key == 0){
-                $str.=$value;
-            }else{
-                $str.=",".$value;
-            }
-        }
-        $str.="\r\n";
 
         $exportUsers = array();
-// // var_dump($users);exit();
-//       // 计数器
-//        $cnt = 0;
-//        $limit = 5000;
 
         foreach ($users as $user) {
-            //var_dump($user);exit;
             $member = "";
             if (in_array('用户名', $choices)) {
                 $member .= $users[$user['id']]['nickname'].",";
@@ -169,6 +134,54 @@ class UserController extends BaseController
         };
 
         $str .= implode("\r\n",$exportUsers);
+        return $str;
+}
+
+    public function exportCsvAction (Request $request)
+    {
+        $user=$this->getCurrentUser();
+        if (!in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $conditions = $request->request->all();
+        $choices = array(); 
+        foreach ($conditions as $key => $value) {
+            if($key == 'choices'){
+                $choices = $value; 
+            }
+        }
+
+        $str = "";
+
+        foreach ($choices as $key => $value) {
+             if ($key ==0 ){
+                $str.=$value;
+             }else{
+                $str.=",".$value;
+             }
+        }
+        $str.="\r\n";
+
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        
+        $fields=array();
+        foreach ($userFields as $userField) {
+            $fields[$userField['fieldName']]=$userField['title'];
+        }
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getUserService()->searchUserCount($conditions),
+            1000
+        );
+
+        $totalPage = $paginator->getLastPage();
+        for($i = 1 ;$i <= $totalPage; $i++) {
+            $users = $this->getUserService()->searchUsers($conditions,array('createdTime', 'DESC'),($i-1)*1000, 1000);
+            $str.=$this->genCsvString($users,$choices,$fields);
+        }
+
         $str = chr(239) . chr(187) . chr(191) . $str;
 
         $filename = sprintf("exportUsers-(%s).csv", date('Y-n-d'));
