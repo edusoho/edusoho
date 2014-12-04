@@ -23,7 +23,6 @@ class UserController extends BaseController
     public function indexAction (Request $request)
     {
         $fields = $request->query->all();
-        var_dump($fields);
 
         $conditions = array(
             'roles'=>'',
@@ -79,12 +78,12 @@ class UserController extends BaseController
 
  public function exportCsvAction (Request $request)
     {
-        // if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN') ){
-        //     throw $this->createAccessDeniedException();
-        // }
+        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN') ){
+            throw $this->createAccessDeniedException();
+        }
         $user=$this->getCurrentUser();
 
-        // if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
+        if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
         $results = $request->request->all();
 
         $conditions =$results;
@@ -96,7 +95,6 @@ class UserController extends BaseController
         foreach ($userFields as $userField) {
             $fields[$userField['fieldName']]=$userField['title'];
         }
-        // var_dump($fields);exit();
         $userIds = ArrayToolkit::column($users, 'id');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -121,12 +119,6 @@ class UserController extends BaseController
                 $str.=",".$value;
             }
         }
-        // $str = "用户名,Email,注册时间,姓名,QQ号,微信号,手机号,公司,职业,头衔";
-
-        // foreach ($fields as $key => $value) {
-        //     $str.=",".$value;
-        //     // var_dump($key);
-        // }
         $str.="\r\n";
 
         $exportUsers = array();
@@ -188,12 +180,9 @@ class UserController extends BaseController
         $response->setContent($str);
 
         return $response;
-
-        // }else{
-        //      throw $this->createAccessDeniedException();
-        // }
-
-        
+        }else{
+             throw $this->createAccessDeniedException();
+        }
     }
 
     public function emailCheckAction(Request $request)

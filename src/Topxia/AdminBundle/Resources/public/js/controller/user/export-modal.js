@@ -31,25 +31,10 @@ define(function(require, exports, module) {
                     return false;
                 }
 
-                $('#user-export-btn').button('submiting').addClass('disabled');
-
-                $.post($form.attr('action'), $form.serialize(), function(html) {
-                    // for(var i=0;i<choices.length;i++){
-                    //   if(choices[i].checked==true){
-                    //     alert(choices[i].value);
-                    //    checkedChoices[i]= choices[i].value;
-                    //    }
-                    // }
-
-
+                    // $('#user-export-form').submit();
+                    document.getElementById("user-export-form").submit();
                     $modal.modal('hide');
-                    // Notify.success('新用户添加成功');
-                    // window.location.reload();
-                });
-                // .error(function(){
-                //     Notify.danger('新用户添加失败');
-                // });
-
+                     window.location.reload();
             }
         });
 
