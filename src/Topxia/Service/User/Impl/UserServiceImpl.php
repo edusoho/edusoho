@@ -199,6 +199,7 @@ class UserServiceImpl extends BaseService implements UserService
         $fields = array(
             'salt' => $salt,
             'password' => $this->getPasswordEncoder()->encodePassword($password, $salt),
+            'lockDeadline' => 0
         );
 
         $this->getUserDao()->updateUser($id, $fields);
