@@ -27,6 +27,10 @@ admin_testpaper_update:
     pattern: /testpaper/{id}/update
     defaults: { _controller: CustomAdminBundle:Testpaper:update }
 
+admin_testpaper_update_advanced:
+    pattern: /testpaper/{id}/update-advanced
+    defaults: { _controller: CustomAdminBundle:Testpaper:updateAdvanced }
+
 admin_testpaper_delete:
     pattern: /testpaper/{id}/delete
     defaults: { _controller: CustomAdminBundle:Testpaper:delete }
