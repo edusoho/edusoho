@@ -83,18 +83,18 @@ class UserController extends BaseController
             throw $this->createAccessDeniedException();
         }
         
-        $conditions = $request->request->all();
-
-        $users = $this->getUserService()->searchUsers($conditions,array('createdTime', 'DESC'),0, 20000);
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         
         $fields=array();
         foreach ($userFields as $userField) {
             $fields[$userField['fieldName']]=$userField['title'];
         }
+
+        $conditions = $request->request->all();
+        $users = $this->getUserService()->searchUsers($conditions,array('createdTime', 'DESC'),0, 20000);       
         $userIds = ArrayToolkit::column($users, 'id');
 
-        $users = $this->getUserService()->findUsersByIds($userIds);
+       // $users = $this->getUserService()->findUsersByIds($userIds);
         $users = ArrayToolkit::index($users, 'id');
 
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
@@ -125,6 +125,7 @@ class UserController extends BaseController
 //        $limit = 5000;
 
         foreach ($users as $user) {
+            //var_dump($user);exit;
             $member = "";
             if (in_array('用户名', $choices)) {
                 $member .= $users[$user['id']]['nickname'].",";
