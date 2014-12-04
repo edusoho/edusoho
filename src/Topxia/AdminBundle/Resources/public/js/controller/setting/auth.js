@@ -3,7 +3,6 @@ define(function(require, exports, module) {
     var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('jquery.sortable');
-    require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
 
