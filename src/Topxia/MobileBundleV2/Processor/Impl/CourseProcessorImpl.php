@@ -189,7 +189,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 				return "src=\"$matches[1]\"";
 			}
 			else{
-				return "src=\"{$baseUrl}/{$urlArray[$matches[1]]}\"";
+				return "src=\"{$urlArray[$matches[1]]}\"";
 			}
 		}, $content);
         return $content;
@@ -465,6 +465,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		$total = $this->controller->getThreadService()->getThreadPostCount($courseId, $threadId);
 		$posts = $this->controller->getThreadService()->findThreadPosts($courseId, $threadId, 'elite', $start, $limit);
 		$users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
+
+		$controller = $this;
+		$posts = array_map(function($post) use ($controller) {
+            $post['content'] = $controller->controller->convertAbsoluteUrl($controller->request, $post['content']);
+            return $post;
+        }, $posts);
+
 		return array(
 			"start"=>$start,
 			"limit"=>$limit,
