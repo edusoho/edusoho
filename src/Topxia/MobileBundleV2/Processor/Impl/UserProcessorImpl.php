@@ -5,6 +5,8 @@ use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\UserProcessor;
 use Topxia\Common\SimpleValidator;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
+use Topxia\Common\ArrayToolkit;
+use Topxia\WebBundle\Form\MessageReplyType;
 
 class UserProcessorImpl extends BaseProcessor implements UserProcessor
 {
@@ -14,6 +16,96 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $this->formData;
     }
     
+    public function sendMessage()
+    {
+        $content = $this->getParam("content");
+        $fromId = $this->getParam("fromId");
+        $conversationId = $this->getParam("conversationId");
+
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $message = $this->getMessageService()->sendMessage($user['id'], $fromId, $content);
+        return $message;
+    }
+
+    public function getMessageList()
+    {
+        $start = (int) $this->getParam("start", 0);
+        $limit = (int) $this->getParam("limit", 10);
+        $conversationId = $this->getParam("conversationId");
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+        $conversation = $this->getMessageService()->getConversation($conversationId);
+        if (empty($conversation) or $conversation['toId'] != $user['id']) {
+            var_dump($conversation);
+            throw $this->createNotFoundException('私信会话不存在！');
+        }
+
+        $this->getMessageService()->markConversationRead($conversationId);
+
+        $messages = $this->getMessageService()->findConversationMessages(
+            $conversation['id'], 
+            $start,
+            $limit
+        );
+        usort($messages, function($a, $b){
+            $aId = $a["id"];
+            $bId = $b["id"];
+            if ($aId == $bId) {
+                return 0;
+            }
+            return ($aId > $bId) ? 1 : -1;
+        });
+
+        $controller = $this->controller;
+        $messages = array_map(function($message) use ($controller){
+            $message['createdTime'] = date('c',$message['createdTime']);
+            $message["createdUser"] = $controller->filterUser($message["createdUser"]);
+            return $message;
+        }, $messages);
+        return $messages;
+        return $this->render('TopxiaWebBundle:Message:conversation-show.html.twig',array(
+            'conversation'=>$conversation, 
+            'messages'=>$messages, 
+            'receiver'=>$this->getUserService()->getUser($conversation['fromId']),
+            'form' => $form->createView(),
+            'paginator' => $paginator
+        ));
+    }
+
+    public function getUserMessages()
+    {
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $start = (int) $this->getParam("start", 0);
+        $limit = (int) $this->getParam("limit", 10);
+        $conversations = $this->getMessageService()->findUserConversations(
+            $user->id,
+            $start,
+            $limit
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($conversations, 'fromId'));
+        $users = $this->controller->filterUsers($users);
+        $this->getMessageService()->clearUserNewMessageCounter($user['id']);
+
+        $conversations = array_map(function($conversation) use ($users){
+            $conversation['latestMessageTime'] = date('c',$conversation['latestMessageTime']);
+            $conversation['createdTime'] = date('c',$conversation['createdTime']);
+            $conversation['user'] = $users[$conversation['fromId']];
+            return $conversation;
+        }, $conversations);
+        return $conversations;
+    }
+
     public function getUserLastlearning()
     {
         $user = $this->controller->getUserByToken($this->request);
