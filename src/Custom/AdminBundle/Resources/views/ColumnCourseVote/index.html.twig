@@ -1,0 +1,42 @@
+{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
+
+{% block title %}课程对垒管理 - {{ parent() }}{% endblock %}
+
+{% set menu = 'columnCourseVotes' %}
+{# {% set script_controller = 'customadminbundle/controller/column/list' %} #}
+{% block main %}
+
+<div class="page-header clearfix">
+  <button class="btn btn-info btn-sm pull-right" id="add-course-vote-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_column_course_vote_create') }}">新增课程对垒</button>    
+  <h1 class="pull-left">课程对垒管理</h1>
+</div>
+
+<table id="courseVotes-table" class="table table-striped">
+    <thead>
+        <th width="5%">编号</th>
+        <th width="5%">专栏id</th>
+        <th width="10%">是否显示</th>
+        <th width="10%">总票数</th>
+        <th width="15%">课程A名称</th>
+        <th width="10%">A得票数</th>
+        <th width="15%">课程B名称</th>
+        <th width="10%">B得票数</th>
+        <th width="10%">开始时间</th>
+        <th width="10%">结束时间</th>
+    </thead>
+    <tbody>
+      {% if courseVotes %}
+        {% for courseVote in courseVotes %}
+          {% include 'CustomAdminBundle:ColumnCourseVote:list-tr.html.twig' %}
+        {% endfor %}
+      {% else %}
+       <tr><td colspan="20"><div class="empty">暂无课程对垒记录</div></td></tr>
+      {% endif %}
+
+    </tbody>
+</table>
+
+{{ web_macro.paginator(paginator) }}
+
+
+{% endblock %}

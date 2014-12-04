@@ -20,3 +20,6 @@ column_match:
 course_search_index:
     pattern: /course/search/xxx
     defaults: {_controller: CustomWebBundle:CourseSearch:index }
+vip:
+    pattern: /vip/
+    defaults: { _controller: CustomWebBundle:Vip:index }

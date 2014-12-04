@@ -1,0 +1,72 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set courseVotes = courseVotes|default(null) %}
+
+{% block title %}
+{% if courseVotes.id %}编辑{% else %}新增{% endif %}课程对垒
+{% endblock %}
+{% block body %}
+  <form class="form-horizontal" id="courseVotes-form" action="{% if courseVotes.id %}{{ path('admin_column_update', {id:courseVotes.id}) }}{% else %}{{ path('admin_column_course_vote_create') }}{% endif %}" method="post">
+
+
+  <div class="form-group">
+    <label class="col-md-4
+    control-label">专栏名称</label>
+    <div class="col-md-6 controls">
+    <select id="course_categoryId"
+    name="categoryId" required="required" class="form-control
+    width-input width-input-large">
+    {{
+    select_options(columnOptions,courseVotes.specialColumnId ,
+    '专栏名称') }}
+    </select>
+    </div>
+  </div>
+<div class="form-group">
+        <label class="col-md-4 control-label">是否显示课程对垒</label>
+        <div class="col-md-6 controls radios">
+          {{ radios('none', { 'none':'关闭','active':'开启'}, courseVotes.isShow|default('none') ) }}
+          <div id="courseVotesIsShow" class="help-block">设置系统是否在专栏页面显示课程投票。</div>
+        </div>
+</div>
+<div class="form-group">
+        <label class="col-md-4 control-label">A课程名称</label>
+        <div class="col-md-6 controls">
+          <input type="text" id="courseAName" name="courseAName" required="required" class="form-control" value="{{ courseVotes.courseAName|default('') }}">
+          <div class="help-block">参与课程对垒的A方</div>
+        </div>
+</div>
+<div class="form-group">
+        <label class="col-md-4 control-label">B课程名称</label>
+        <div class="col-md-6 controls">
+          <input type="text" id="courseBName" name="courseBName" required="required" class="form-control" value="{{ courseVotes.courseBName|default('') }}">
+          <div class="help-block">参与课程对垒的B方</div>
+        </div>
+</div>
+<div class="form-group">
+          <div class="col-md-4 control-label">
+            <label for="voteStartTime">投票开始时间</label>
+          </div>
+          <div class="col-md-6 controls">
+            <input type="text" id="voteStartTime" name="voteStartTime" class="form-control" value="{{courseVotes.voteStartTime|default()|data_format('Y-m-d H:i')}}">
+            <div class="help-block">在投票开始和结束时间之内的投票有效</div>
+          </div>
+</div>
+<div class="form-group">
+          <div class="col-md-4 control-label">
+            <label for="voteEndTime">投票结束时间</label>
+          </div>
+          <div class="col-md-6 controls">
+            <input type="text" id="voteEndTime" name="voteEndTime" class="form-control" value="{{courseVotes.voteEndTime|default()|data_format('Y-m-d H:i')}}">
+            <div class="help-block">在投票开始和结束时间之内的投票有效</div>
+          </div>
+</div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  <script type="text/javascript">app.load('customadminbundle/controller/ColumnCourseVote/save-modal')</script>
+{% endblock %}
+
+{% block footer %}
+
+  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+  <button id="courseVotes-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#courseVotes-form">保存</button>
+{% endblock %}

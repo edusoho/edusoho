@@ -13,6 +13,9 @@ topxia_mobile_v2:
     resource: "@TopxiaMobileBundleV2/Resources/config/routing.yml"
     prefix:   /mapi_v2
 
+_plugins:
+    resource: routing_plugins.yml
+    
 custom_web:
     resource: "@CustomWebBundle/Resources/config/routing.yml"
     prefix:   /
@@ -21,8 +24,7 @@ custom_admin:
     resource: "@CustomAdminBundle/Resources/config/routing.yml"
     prefix:   /admin
 
-_plugins:
-    resource: routing_plugins.yml
+
 
 
 # Internal routing configuration to handle ESI

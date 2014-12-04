@@ -1,0 +1,28 @@
+<tr id="column-tr-{{ courseVote.id }}">
+  <td>{{ courseVote.id }}</td>
+  <td>{{ courseVote.specialColumnId }}</td>
+  <td>{{ courseVote.isShow }}</td>
+  <td>{{ courseVote.courseVoteCount  }}</td>
+  <td>{{ courseVote.courseAName }}</td>
+  <td>{{ courseVote.courseACount }}</td>
+  <td>{{ courseVote.courseBName }}</td>
+ <td>{{ courseVote.courseBCount }}</td>
+  
+  <td>{{courseVote.voteStartTime|date('Y-m-d H:i')}}</td>
+  <td>{{ courseVote.voteEndTime|date('Y-m-d H:i') }}</td>
+  <td>
+{#          <div class="btn-group">
+                   <a href="#modal" data-toggle="modal" data-url="{{ path('admin_column_update', {id:column.id}) }}" data-url="" class="btn btn-default btn-sm">编辑</a>
+     	    <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+       	          <span class="caret"></span>
+                 </a>
+	      <ul class="dropdown-menu">
+              <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_column_avatar', {id:column.id}) }}">设置专栏图标</a></li>
+	      </ul>
+        </div> #}
+   </td>
+ </tr>
+    {#      </div>
+    <button class="btn btn-default btn-sm" data-url="{{ path('admin_tag_update', {id:tag.id}) }}" data-toggle="modal" data-target="#modal">编辑</button>
+  </td>
+</tr> #}

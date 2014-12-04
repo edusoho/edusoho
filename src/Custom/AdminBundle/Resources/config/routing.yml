@@ -48,3 +48,11 @@ admin_column_avatar_crop:
 admin_setting_course_setting:
     pattern:  /setting/course-setting
     defaults: { _controller: CustomAdminBundle:Setting:courseSetting }
+admin_column_course_vote:
+    pattern:  /column/course/vote
+    defaults: { _controller: CustomAdminBundle:ColumnCourseVote:index }
+admin_column_course_vote_create:
+    pattern:  /column/course/vote/create
+    defaults: { _controller: CustomAdminBundle:ColumnCourseVote:create }
+
+
