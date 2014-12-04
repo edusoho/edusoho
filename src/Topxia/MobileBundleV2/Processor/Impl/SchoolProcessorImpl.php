@@ -375,7 +375,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         return $banner;
     }
 
-    private function sendRequest($method, $url, $params = array())
+    private function sendRequest($method, $url, $params = array(), $ssl = false)
     {
         $curl = curl_init();
 
@@ -385,6 +385,10 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         curl_setopt($curl, CURLOPT_TIMEOUT, 20);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 0);
+        if ($ssl) {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        }
 
         if (strtoupper($method) == 'POST') {
             curl_setopt($curl, CURLOPT_POST, 1);
