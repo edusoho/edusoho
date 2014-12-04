@@ -189,7 +189,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 				return "src=\"$matches[1]\"";
 			}
 			else{
-				return "src=\"{$baseUrl}/{$urlArray[$matches[1]]}\"";
+				return "src=\"{$urlArray[$matches[1]]}\"";
 			}
 		}, $content);
         return $content;
@@ -284,7 +284,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	    		$lesson = $lessons[$courseNote['lessonId']];
 	    		$courseNote['lessonTitle'] = $lesson['title'];
 	    		$courseNote['lessonNum'] = $lesson['number'];
-	    		$content = $this->controller->convertAbsoluteUrl($this->request, $courseNote['content']);;
+	    		$content = $this->controller->convertAbsoluteUrl($this->request, $courseNote['content']);
 	    		$content = $this->filterNote($content);
 	    		$courseNote['content'] = $content;
 	    		$courseNotes[$i] = $courseNote;
@@ -323,13 +323,23 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	        		if (empty($noteNum)) {
 	        			continue;
 	        		}
-	        		$noteInfos[] = array(
-	        			"coursesId"=>$courseMember['courseId'],
-	        			"courseTitle"=>$course['title'],
-	        			"noteLastUpdateTime"=>$courseMember['noteLastUpdateTime'],
-	        			"noteNum"=>$noteNum,
-	        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png')
-	        			);
+	        		$noteListByOneCourse = $this->controller->getNoteService()->findUserCourseNotes($user['id'],$courseMember['courseId']);
+	        		foreach ($noteListByOneCourse as $value) {
+	        			$lessonInfo = $this->controller->getCourseService()->getCourseLesson($value['courseId'],$value['lessonId']);
+	        			$lessonStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $value['courseId'],$value['lessonId']);
+	        			$noteInfos[] = array(
+		        			"coursesId"=>$courseMember['courseId'],
+		        			"courseTitle"=>$course['title'],
+		        			"noteLastUpdateTime"=>date('c',$courseMember['noteLastUpdateTime']),
+		        			"lessonId"=>$lessonInfo['id'],
+		        			"lessonTitle"=>$lessonInfo['title'],
+		        			"learnStatus"=>$lessonStatus,
+		        			"content"=>$this->controller->convertAbsoluteUrl($this->request, $value['content']),
+		        			"createdTime"=>date('c', $value['createdTime']),
+		        			"noteNum"=>$noteNum,
+		        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png'),
+		        			);
+	        		}
 	        	}
 	        	/*
 	    	$noteList = array();
@@ -383,6 +393,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		$noteInfo['content'] = $content;
 
     	$result = $this->controller->getNoteService()->saveNote($noteInfo);
+    	$result['createdTime'] = date('c',$result['createdTime']);
+    	$result['updatedTime'] = date('c',$result['updatedTime']);
 
     	return $result;
     }
@@ -453,6 +465,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		$total = $this->controller->getThreadService()->getThreadPostCount($courseId, $threadId);
 		$posts = $this->controller->getThreadService()->findThreadPosts($courseId, $threadId, 'elite', $start, $limit);
 		$users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
+
+		$controller = $this;
+		$posts = array_map(function($post) use ($controller) {
+            $post['content'] = $controller->controller->convertAbsoluteUrl($controller->request, $post['content']);
+            return $post;
+        }, $posts);
+
 		return array(
 			"start"=>$start,
 			"limit"=>$limit,

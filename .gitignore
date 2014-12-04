@@ -39,3 +39,6 @@ app/data/plugin_installed.php
 !/web/themes/default
 !/web/themes/default-b
 edusoho.komodoproject
+/web/appwork/*
+/web/test/*
+/app/config/routing.yml
