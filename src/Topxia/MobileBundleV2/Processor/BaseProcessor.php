@@ -237,5 +237,13 @@ class BaseProcessor {
 
         return $response;
     }
+
+    /**
+     *把\t\n转化成空字符串
+    */
+    protected function filterSpace($content){
+        $pattern='[\\n\\t\\s]';
+        return preg_replace($pattern, '', $content);
+    }
 }
 
