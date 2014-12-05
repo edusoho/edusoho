@@ -26,11 +26,11 @@ ajax_categories_search:
     pattern:  /ajax/categories/search
     defaults: { _controller: CustomWebBundle:AajxCategories:search }
 
-ajax_categories_query:
+ajax_categories_match:
     pattern:  /ajax/categories/match
     defaults: { _controller: CustomWebBundle:AajxCategories:match }
 
-ajax_categories_match:
+ajax_categories_query:
     pattern:  /ajax/categories/query
     defaults: { _controller: CustomWebBundle:AajxCategories:query }
 

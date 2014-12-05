@@ -286,7 +286,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('缺少必要字段，创建课程失败！');
 		}
 
-		$course = ArrayToolkit::parts($course, array('title', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address', 'subjectIds'));
+		$course = ArrayToolkit::parts($course, array('title', 'subtitle', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address', 'subjectIds'));
 
 		$course['status'] = 'draft';
         $course['about'] = !empty($course['about']) ? $this->getHtmlPurifier()->purify($course['about']) : '';
@@ -294,6 +294,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$course['userId'] = $this->getCurrentUser()->id;
 		$course['createdTime'] = time();
 		$course['teacherIds'] = array($course['userId']);
+		$course['subjectIds'] = explode(',', $course['subjectIds']);
 		$course = $this->getCourseDao()->addCourse(CourseSerialize::serialize($course));
 		
 		$member = array(
@@ -357,7 +358,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'endTime'  => 0,
 			'locationId' => 0,
 			'subType' => array(),
-			'subjectIds' => '',
+			'subjectIds' => array(),
 			'address' => '',
 			'maxStudentNum' => 0,
 			'freeStartTime' => 0,
@@ -2399,6 +2400,14 @@ class CourseSerialize
     		}
     	}
 
+    	if (isset($course['subType'])) {
+    		if (is_array($course['subType']) and !empty($course['subType'])) {
+    			$course['subType'] = '|' . implode('|', $course['subType']) . '|';
+    		} else {
+    			$course['subType'] = null;
+    		}
+    	}
+
         return $course;
     }
 
@@ -2429,6 +2438,12 @@ class CourseSerialize
 			$course['teacherIds'] = explode('|', trim($course['teacherIds'], '|'));
 		}
 
+		if(empty($course['subjectIds'] )) {
+			$course['subjectIds'] = array();
+		} else {
+			$course['subjectIds'] = explode('|', trim($course['subjectIds'], '|'));
+		}
+
 		$subType = array(
 			'normal' => '',
 			'refund' => '',
@@ -2444,6 +2459,8 @@ class CourseSerialize
 			}
 		}
 		$course['subType'] = $subType;
+
+
 		return $course;
     }
 

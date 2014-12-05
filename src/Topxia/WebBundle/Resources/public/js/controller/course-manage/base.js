@@ -68,7 +68,7 @@ define(function(require, exports, module) {
             },
             maximumSelectionSize: 20
         });
-
+        
         var validator = new Validator({
             element: '#course-form',
             failSilently: true,
@@ -96,8 +96,9 @@ define(function(require, exports, module) {
         });
         validator.addItem({
             element:'input[name=subjectIds]',
-            require: true,
-            rule: 'remote',
+            required: true,
+            display: '学科',
+            rule: 'remote'
         });
 
         validator.addItem({
