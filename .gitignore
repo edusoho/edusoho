@@ -35,6 +35,8 @@ src/Topxia/WebBundle/Resources/views/Test/*
 app/data/install.lock
 app/data/plugin_installed.php
 /web/themes/*
+/web/test/*
+/web/appwork/*
 !/web/themes/autumn
 !/web/themes/default
 !/web/themes/default-b
