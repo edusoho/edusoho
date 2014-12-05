@@ -15,27 +15,57 @@
     			<span class="glyphicon glyphicon-warning-sign text-danger" style="font-size:35px"></span>
     		</div>
 			<div class="col-md-5 progress mtm" style=" padding-left: 0px; padding-right: 0px;">
-			  <div class="progress-bar" role="progressbar"{#  aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"  #}style="width: 60%;"></div>
+			  <div class="progress-bar" role="progressbar"{#  aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"  #}style="width: 30%;"></div>
 			</div>
 			<div class="col-md-4 mtm">
 				安全等级：
 			</div>
 		</div>
 		<hr>
-	    
-	    <form id="settings-password-form" class="form-horizontal" method="post" 
-	    {% if not app.user.password %} style="display:none;"{% endif %}>
 
-	    	{{ web_macro.flash_messages() }}
-	        
-			{#  <div class="form-group">
-				<div class="col-md-2 control-label">{{ form_label(form.currentPassword, '当前密码') }}</div>
-				<div class="controls col-md-8 controls">
-	            	{{ form_widget(form.currentPassword, {attr:{class:'form-control'}}) }}
-				</div>
-				</div> #}
-			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-		</form>
+	    
+		<div class="row">
+			<div class="col-md-1 col-md-offset-1 text-success" style="font-size:20px">
+				<span class="glyphicon glyphicon-ok"></span>
+			</div>
+
+			<span class="col-md-3 " style="margin-top: 5px;" >登录密码</span>
+
+			<span class="col-md-4 " style="margin-top: 5px;" >登录网校时需要输入的密码</span>
+
+			<span class="col-md-2 pull-right " style="margin-top: 5px;" >修改</span>
+		</div>
+		<hr>
+
+	    
+		<div class="row">
+			<div class="col-md-1 col-md-offset-1 text-success" style="font-size:20px">
+				<span class="glyphicon glyphicon-warning-sign text-danger" ></span>
+			</div>
+
+			<span class="col-md-3 " style="margin-top: 5px;" >支付密码</span>
+
+			<span class="col-md-4 " style="margin-top: 5px;" >在网校进行消费行为时需要输入的密码</span>
+
+			<span class="col-md-2 pull-right " style="margin-top: 5px;" >修改</span>
+		</div>
+		<hr>
+
+	    
+		<div class="row">
+			<div class="col-md-1 col-md-offset-1 text-success" style="font-size:20px">
+				<span class="glyphicon glyphicon-warning-sign text-danger" ></span>
+			</div>
+
+			<span class="col-md-3 " style="margin-top: 5px;" >安全问题</span>
+
+			<span class="col-md-4 " style="margin-top: 5px;" >验证后，找回登录密码，支付时收到验证消息</span>
+
+			<span class="col-md-2 pull-right " style="margin-top: 5px;" >修改</span>
+		</div>
+
+
+
 
     {% endblock %}
   {% endembed %}
