@@ -5,7 +5,8 @@ define(function(require, exports, module) {
 
     require('jquery.select2-css');
     require('jquery.select2');
-
+    var TagChooser = require('tag-chooser');
+    var TagTreeChooser = require('tag-tree-chooser');
     exports.run = function() {
 
         require('./header').run();
@@ -67,7 +68,7 @@ define(function(require, exports, module) {
             },
             maximumSelectionSize: 20
         });
-
+        
         var validator = new Validator({
             element: '#course-form',
             failSilently: true,
@@ -92,6 +93,12 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name=daysOfNotifyBeforeDeadline]',
             rule: 'integer'
+        });
+        validator.addItem({
+            element:'input[name=subjectIds]',
+            required: true,
+            display: '学科',
+            rule: 'remote'
         });
 
         validator.addItem({
@@ -129,7 +136,60 @@ define(function(require, exports, module) {
                 $("#courseDaysOfNotifyBeforeDeadline").hide();
                 $("#deadlineNotifyBlock").show();
             }
-        })
+        });
+        _initTagTreeChooser();
+        _initTagChooer();
+        function _initTagChooer()
+        {
+            var choosedTags = [];
+            if ($('input[name=tagIds]').val().length >0) {
+                choosedTags = $('input[name=tagIds]').val().split(',');
+            }
+
+            var chooser = new TagChooser({
+                element: '#tag-chooser',
+                sourceUrl: $('#tag-chooser').data('sourceUrl'),
+                queryUrl: $('#tag-chooser').data('queryUrl'),
+                matchUrl: $('#tag-chooser').data('matchUrl'),
+                maxTagNum: 15,
+                choosedTags: choosedTags
+            });
+
+            chooser.on('change', function(tags) {
+                var tagIds = [];
+                $.each(tags, function(i, tag) {
+                    tagIds.push(tag.id);
+                });
+                $('input[name=tagIds]').val(tagIds);
+            });
+        }
+
+        function _initTagTreeChooser()
+        {
+            var choosedTags = [];
+            if ($('input[name=subjectIds]').val().length >0) {
+                choosedTags = $('input[name=subjectIds]').val().split(',');
+            }
+
+
+            var chooserTreeForCategories = new TagTreeChooser({
+              element: '#categories-chooser',
+              sourceUrl: $('#categories-chooser').data('sourceUrl'),
+              queryUrl: $('#categories-chooser').data('queryUrl'),
+              matchUrl: $('#categories-chooser').data('matchUrl'),
+              maxTagNum: 1,
+              choosedTags: choosedTags
+            });
+
+            chooserTreeForCategories.on('change', function(tags) {
+                var tagIds = [];
+                $.each(tags, function(i, tag) {
+                    tagIds.push(tag.id);
+                });
+                $('input[name=subjectIds]').val(tagIds);
+            });
+
+        }
 
     };
 

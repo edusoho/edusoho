@@ -22,6 +22,23 @@ json_knowledges_query:
     pattern:  /json/Knowledges/query
     defaults: { _controller: CustomWebBundle:JsonKnowledges:query }
 
+ajax_categories_search:
+    pattern:  /ajax/categories/search
+    defaults: { _controller: CustomWebBundle:AajxCategories:search }
+
+ajax_categories_match:
+    pattern:  /ajax/categories/match
+    defaults: { _controller: CustomWebBundle:AajxCategories:match }
+
+ajax_categories_query:
+    pattern:  /ajax/categories/query
+    defaults: { _controller: CustomWebBundle:AajxCategories:query }
+
+ajax_category_isSubject:
+    pattern:  /ajax/categories/check
+    defaults: { _controller: CustomWebBundle:AajxCategories:isSubjct }
+
 course_manage_lecture_note:
     pattern:  /course/{courseId}/manage/{lessonId}/lecture/note
     defaults: { _controller: CustomWebBundle:LectureNote:index }
+

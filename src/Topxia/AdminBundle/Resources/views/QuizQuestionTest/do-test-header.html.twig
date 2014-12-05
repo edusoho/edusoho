@@ -1,21 +1,17 @@
-<div>
-	<div class="row">
-		<div class="col-md-2"><span class="text-muted" style="margin-left:40px">主知识点</span></div>
-		<div class="col-md-3"><span>{{ mainKnowledge.name|default('') }}</span></div>
-	</div>
+<p>
+	<strong>主知识点：</strong> {{ mainKnowledge.name|default('') }}
+</p>
 
-	<div class="row">
-		<div class="col-md-2"><span class="text-muted"  style="margin-left:40px">关联知识点</span></div>
-		{% for related in relatedKnowledges %}
-			<div class="col-md-2"><span>{{ related.name|default('')  }}</span></div>
-		{% endfor %}
-	</div>
+<p>
+	<strong>关联知识点：</strong>
+	{% for related in relatedKnowledges %}
+		<span>{{ related.name|default('')  }}</span>
+	{% endfor %}
+</p>
 
-	<div class="row">
-		<div class="col-md-2"><span  class="text-muted"  style="margin-left:40px">标签</span></div>
-		{% for tag in tags %}
-			<div class="col-md-1"><span>{{ tag.name|default('')  }}</span></div>
-		{% endfor %}
-	</div>
-</div>
-
+<p>
+	<strong>标签：</strong>
+	{% for tag in tags %}
+		<span>{{ tag.name|default('')  }}</span>
+	{% endfor %}
+</p>

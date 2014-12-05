@@ -282,18 +282,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function createCourse($course)
 	{
-		if (!ArrayToolkit::requireds($course, array('title'))) {
+		if (!ArrayToolkit::requireds($course, array('title', 'subjectIds'))) {
 			throw $this->createServiceException('缺少必要字段，创建课程失败！');
 		}
 
-		$course = ArrayToolkit::parts($course, array('title', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
+		$course = ArrayToolkit::parts($course, array('title', 'subtitle', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address', 'subjectIds'));
 
+		$course = $this->_filterCourse($course);
 		$course['status'] = 'draft';
         $course['about'] = !empty($course['about']) ? $this->getHtmlPurifier()->purify($course['about']) : '';
         $course['tags'] = !empty($course['tags']) ? $course['tags'] : '';
 		$course['userId'] = $this->getCurrentUser()->id;
 		$course['createdTime'] = time();
 		$course['teacherIds'] = array($course['userId']);
+
 		$course = $this->getCourseDao()->addCourse(CourseSerialize::serialize($course));
 		
 		$member = array(
@@ -352,10 +354,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'goals' => array(),
 			'audiences' => array(),
 			'tags' => '',
+			'tagIds' => array(),
 			'price' => 0.00,
 			'startTime' => 0,
 			'endTime'  => 0,
 			'locationId' => 0,
+			'subType' => array(),
+			'subjectIds' => array(),
 			'address' => '',
 			'maxStudentNum' => 0,
 			'freeStartTime' => 0,
@@ -367,7 +372,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (!empty($fields['about'])) {
 			$fields['about'] = $this->purifyHtml($fields['about'],true);
 		}
-
+		
 		if (!empty($fields['tags'])) {
 			$fields['tags'] = explode(',', $fields['tags']);
 			$fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
@@ -378,6 +383,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $fields;
 	}
 
+	private function _filterCourse($course)
+	{
+		if(!is_array($course['subjectIds'])) {
+			$course['subjectIds'] = explode(',', $course['subjectIds']);
+		}
+		if($course['type'] == 'normal') {
+			if(count($course['subjectIds']) >= 2) {
+				throw $this->createServiceException('课程只能设置一个学科！');
+			} 	
+		}
+
+		return $course;
+	}
     public function changeCoursePicture ($courseId, $filePath, array $options)
     {
         $course = $this->getCourseDao()->getCourse($courseId);
@@ -2389,6 +2407,30 @@ class CourseSerialize
     		}
     	}
 
+    	if (isset($course['subjectIds'])) {
+    		if (is_array($course['subjectIds']) and !empty($course['subjectIds'])) {
+    			$course['subjectIds'] = '|' . implode('|', $course['subjectIds']) . '|';
+    		} else {
+    			$course['subjectIds'] = null;
+    		}
+    	}
+
+    	if (isset($course['tagIds'])) {
+    		if (is_array($course['tagIds']) and !empty($course['tagIds'])) {
+    			$course['tagIds'] = '|' . implode('|', $course['tagIds']) . '|';
+    		} else {
+    			$course['tagIds'] = null;
+    		}
+    	}
+
+    	if (isset($course['subType'])) {
+    		if (is_array($course['subType']) and !empty($course['subType'])) {
+    			$course['subType'] = '|' . implode('|', $course['subType']) . '|';
+    		} else {
+    			$course['subType'] = null;
+    		}
+    	}
+
         return $course;
     }
 
@@ -2418,6 +2460,35 @@ class CourseSerialize
 		} else {
 			$course['teacherIds'] = explode('|', trim($course['teacherIds'], '|'));
 		}
+
+		if(empty($course['subjectIds'] )) {
+			$course['subjectIds'] = array();
+		} else {
+			$course['subjectIds'] = explode('|', trim($course['subjectIds'], '|'));
+		}
+
+		if(empty($course['tagIds'] )) {
+			$course['tagIds'] = array();
+		} else {
+			$course['tagIds'] = explode('|', trim($course['tagIds'], '|'));
+		}
+
+		$subType = array(
+			'normal' => '',
+			'refund' => '',
+			'retake' => '',
+			'mentoring' => '',
+		);
+		if(!empty($course['subType'] )) {
+			$temp = explode('|', trim($course['subType'], '|'));
+			foreach ($temp as $key) {
+				if(array_key_exists($key, $subType)) {
+					$subType[$key] ='true';
+				}
+			}
+		}
+		$course['subType'] = $subType;
+
 
 		return $course;
     }
