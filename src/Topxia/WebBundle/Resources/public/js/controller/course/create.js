@@ -21,7 +21,8 @@ define(function(require, exports, module) {
                 $.each(tags, function(i, tag) {
                     tagIds.push(tag.id);
                 });
-                $('input[name=subjectIds]').val(tagIds.join(','));
+                console.log(tagIds);
+                $('input[name=subjectIds]').val(tagIds);
             });
 
         }

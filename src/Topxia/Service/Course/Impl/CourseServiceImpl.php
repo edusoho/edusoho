@@ -288,13 +288,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$course = ArrayToolkit::parts($course, array('title', 'subtitle', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address', 'subjectIds'));
 
+		$course = $this->_filterCourse($course);
 		$course['status'] = 'draft';
         $course['about'] = !empty($course['about']) ? $this->getHtmlPurifier()->purify($course['about']) : '';
         $course['tags'] = !empty($course['tags']) ? $course['tags'] : '';
 		$course['userId'] = $this->getCurrentUser()->id;
 		$course['createdTime'] = time();
 		$course['teacherIds'] = array($course['userId']);
-		$course['subjectIds'] = explode(',', $course['subjectIds']);
+
 		$course = $this->getCourseDao()->addCourse(CourseSerialize::serialize($course));
 		
 		$member = array(
@@ -353,6 +354,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'goals' => array(),
 			'audiences' => array(),
 			'tags' => '',
+			'tagIds' => array(),
 			'price' => 0.00,
 			'startTime' => 0,
 			'endTime'  => 0,
@@ -381,6 +383,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $fields;
 	}
 
+	private function _filterCourse($course)
+	{
+		if(!is_array($course['subjectIds'])) {
+			$course['subjectIds'] = explode(',', $course['subjectIds']);
+		}
+		if($course['type'] == 'normal') {
+			if(count($course['subjectIds']) >= 2) {
+				throw $this->createServiceException('课程只能设置一个学科！');
+			} 	
+		}
+
+		return $course;
+	}
     public function changeCoursePicture ($courseId, $filePath, array $options)
     {
         $course = $this->getCourseDao()->getCourse($courseId);
@@ -2400,6 +2415,14 @@ class CourseSerialize
     		}
     	}
 
+    	if (isset($course['tagIds'])) {
+    		if (is_array($course['tagIds']) and !empty($course['tagIds'])) {
+    			$course['tagIds'] = '|' . implode('|', $course['tagIds']) . '|';
+    		} else {
+    			$course['tagIds'] = null;
+    		}
+    	}
+
     	if (isset($course['subType'])) {
     		if (is_array($course['subType']) and !empty($course['subType'])) {
     			$course['subType'] = '|' . implode('|', $course['subType']) . '|';
@@ -2442,6 +2465,12 @@ class CourseSerialize
 			$course['subjectIds'] = array();
 		} else {
 			$course['subjectIds'] = explode('|', trim($course['subjectIds'], '|'));
+		}
+
+		if(empty($course['tagIds'] )) {
+			$course['tagIds'] = array();
+		} else {
+			$course['tagIds'] = explode('|', trim($course['tagIds'], '|'));
 		}
 
 		$subType = array(

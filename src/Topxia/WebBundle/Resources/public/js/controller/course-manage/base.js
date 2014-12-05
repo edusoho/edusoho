@@ -138,6 +138,32 @@ define(function(require, exports, module) {
             }
         });
         _initTagTreeChooser();
+        _initTagChooer();
+        function _initTagChooer()
+        {
+            var choosedTags = [];
+            if ($('input[name=tagIds]').val().length >0) {
+                choosedTags = $('input[name=tagIds]').val().split(',');
+            }
+
+            var chooser = new TagChooser({
+                element: '#tag-chooser',
+                sourceUrl: $('#tag-chooser').data('sourceUrl'),
+                queryUrl: $('#tag-chooser').data('queryUrl'),
+                matchUrl: $('#tag-chooser').data('matchUrl'),
+                maxTagNum: 15,
+                choosedTags: choosedTags
+            });
+
+            chooser.on('change', function(tags) {
+                var tagIds = [];
+                $.each(tags, function(i, tag) {
+                    tagIds.push(tag.id);
+                });
+                $('input[name=tagIds]').val(tagIds);
+            });
+        }
+
         function _initTagTreeChooser()
         {
             var choosedTags = [];
@@ -160,7 +186,7 @@ define(function(require, exports, module) {
                 $.each(tags, function(i, tag) {
                     tagIds.push(tag.id);
                 });
-                $('input[name=subjectIds]').val(tagIds.join(','));
+                $('input[name=subjectIds]').val(tagIds);
             });
 
         }
