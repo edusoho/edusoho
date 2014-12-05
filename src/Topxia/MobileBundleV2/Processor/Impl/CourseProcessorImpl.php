@@ -253,6 +253,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		);
 
 		$courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+		$courses['content'] = $this->filterSpace($this->controller->convertAbsoluteUrl($this->request, $courses['content']));
 		return array(
 		"start"=>$start,
 		"limit"=>$limit,
@@ -471,7 +472,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
 		$controller = $this;
 		$posts = array_map(function($post) use ($controller) {
-            $post['content'] = $controller->controller->convertAbsoluteUrl($controller->request, $post['content']);
+            $post['content'] = $this->filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $post['content'])); 
             return $post;
         }, $posts);
 
