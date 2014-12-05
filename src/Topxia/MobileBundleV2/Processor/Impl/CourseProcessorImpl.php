@@ -475,7 +475,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
 		$controller = $this;
 		$posts = array_map(function($post) use ($controller) {
-            $post['content'] = $this->filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $post['content'])); 
+            $post['content'] = $controller>filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $post['content'])); 
             return $post;
         }, $posts);
 
