@@ -253,7 +253,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		);
 		$controller = $this;
 		$threads = array_map(function($thread) use ($controller) {
-        	$thread['content'] = $this->filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $thread['content'])); 
+        	$thread['content'] = $controller->filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $thread['content'])); 
             return $thread;
         }, $threads);
 		$courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));	
