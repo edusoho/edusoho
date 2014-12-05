@@ -878,6 +878,10 @@ settings_avatar_fetch_partner:
     defaults: { _controller: TopxiaWebBundle:Settings:avatarFetchPartner }
     methods: [POST]
 
+settings_security: 
+    pattern:  /settings/security 
+    defaults: { _controller: TopxiaWebBundle:Settings:security }
+
 setting_nickname:
     pattern: /settings/nickname
     defaults: { _controller: TopxiaWebBundle:Settings:nickname }

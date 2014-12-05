@@ -228,6 +228,19 @@ class SettingsController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
+	public function securityAction(Request $request) 
+	{ 
+		$user = $this->getCurrentUser(); 
+
+		if ($request->getMethod() == 'POST') { 
+
+		} 
+
+
+		return $this->render('TopxiaWebBundle:Settings:security.html.twig', array( 
+		)); 
+	} 
+
 	public function passwordAction(Request $request)
 	{
 		$user = $this->getCurrentUser();
