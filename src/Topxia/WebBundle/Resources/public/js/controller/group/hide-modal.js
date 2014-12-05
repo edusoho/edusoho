@@ -10,6 +10,10 @@ define(function(require, exports, module) {
 
         var $modal = $('#hide-form').parents('.modal');
 
+        $("#btn-download").on('click',function(){
+            $modal.modal('hide');
+        });
+        
         var validator = new Validator({
             element: '#hide-form',
             autoSubmit: false,

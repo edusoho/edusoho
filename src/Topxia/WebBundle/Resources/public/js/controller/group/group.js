@@ -26,10 +26,40 @@
             });
         });
 
+        $('.attach').tooltip();
+
         if($('#thread_content1').length>0){
 
             var editor_thread = EditorFactory.create('#thread_content1', 'haveHidden', {extraFileUploadParams:{group:'user'}});
+            var validator_thread = new Validator({
+            element: '#user-thread-form',
+            failSilently: true,
+            onFormValidated: function(error){
+                if (error) {
+                    return false;
+                }
+                $('#groupthread-save-btn').button('submiting').addClass('disabled');
+            }
+            });
+            
+            validator_thread.addItem({
+                element: '[name="thread[title]"]',
+                required: true,
+                rule: 'minlength{min:2} maxlength{max:200}',
+                errormessageUrl: '长度为2-200位'
+               
+                
+            });
+            validator_thread.addItem({
+                element: '[name="thread[content]"]',
+                required: true,
+                rule: 'minlength{min:2}'
+                
+            });
 
+            validator_thread.on('formValidate', function(elemetn, event) {
+                editor_thread.sync();
+            });
         };
 
         if($('#thread_content').length>0){
@@ -44,26 +74,26 @@
                 }
                 $('#groupthread-save-btn').button('submiting').addClass('disabled');
             }
-        });
-        
-        validator_thread.addItem({
-            element: '[name="thread[title]"]',
-            required: true,
-            rule: 'minlength{min:2} maxlength{max:200}',
-            errormessageUrl: '长度为2-200位'
-           
+            });
             
-        });
-        validator_thread.addItem({
-            element: '[name="thread[content]"]',
-            required: true,
-            rule: 'minlength{min:2}'
-            
-        });
+            validator_thread.addItem({
+                element: '[name="thread[title]"]',
+                required: true,
+                rule: 'minlength{min:2} maxlength{max:200}',
+                errormessageUrl: '长度为2-200位'
+               
+                
+            });
+            validator_thread.addItem({
+                element: '[name="thread[content]"]',
+                required: true,
+                rule: 'minlength{min:2}'
+                
+            });
 
-        validator_thread.on('formValidate', function(elemetn, event) {
-            editor_thread.sync();
-        });
+            validator_thread.on('formValidate', function(elemetn, event) {
+                editor_thread.sync();
+            });
         }
         
         if($('#post-thread-form').length>0){

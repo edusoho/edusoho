@@ -42,10 +42,17 @@ class ThreadHideDaoImpl extends BaseDao implements ThreadHideDao
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }
 
-    public function deleteHideByThreadId($id)
+    public function updateHide($id,$fields)
     {
-        $sql ="DELETE FROM {$this->table} WHERE threadId = ? ";
-        return $this->getConnection()->executeUpdate($sql, array($id));
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+
+        return $this->getHide($id);
+    }
+
+    public function deleteHideByThreadId($id,$type)
+    {
+        $sql ="DELETE FROM {$this->table} WHERE threadId = ? and type = ? ";
+        return $this->getConnection()->executeUpdate($sql, array($id,$type));
     }
 
     public function getCoinByThreadId($conditions)
@@ -55,12 +62,27 @@ class ThreadHideDaoImpl extends BaseDao implements ThreadHideDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function searchHides($conditions,$orderBy,$start,$limit)
+    {
+        $this->filterStartLimit($start, $limit);
+
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->addOrderBy($orderBy[0], $orderBy[1]);
+  
+        return $builder->execute()->fetchAll() ? : array();  
+    }
+
     private function createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'groups_thread_hide')
             ->andWhere('threadId = :threadId')
+            ->andWhere('fileId = :fileId')
+            ->andWhere('type = :type')
             ;
     }
 }

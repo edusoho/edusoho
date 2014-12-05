@@ -37,7 +37,42 @@
     </div>
     <div class="panel-body" id="post-action">
       {{threadMain.content|raw}}
+      {% if attachs %}
+          <hr>
+          <span class="glyphicon glyphicon-paperclip"></span> 附件下载 :
+          <div class="row clearfix">
+          {% for attach in attachs %}
 
+                  <div class="pull-left attach col-md-4 col-sm-4 col-xs-4 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}描述：{{attach.description}}{% endif %}  上传于 {{files[attach.fileId].createdTime|smart_time}}">
+                    {% if attach.coin > 0  and   user.id != owner.id and app.user %}
+                      <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left"><img src="{{ default_path('iconfont-wenjian.png') }}" class="media-object"></a>
+                    {% else %}
+                      <a href="{{path('group_attach_download',{fileId:attach.id})}}" class="pull-left"><img src="{{ default_path('iconfont-wenjian.png') }}" class="media-object"></a>
+                    {% endif %}
+                    <div class="media-body">
+                        <div class="metas mts">
+                            {% if attach.coin > 0 and  user.id != owner.id and app.user %}
+                              <strong><a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}">{{ attach.title }}</a></strong>
+                            {% else %}
+                              <strong><a href="{{path('group_attach_download',{fileId:attach.id})}}">{{ attach.title }}</a></strong>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="content" style="color: #999;font-size:11px;">
+                          {{files[attach.fileId].size|file_size}}
+                          {% if attach.coin > 0 %}
+                            <span class="mls">售价:{{attach.coin}}{{setting('coin').coin_name}}</span>
+                            {% else %}
+                            <span class="mls">免费</span>
+                          {% endif %}
+                          <br>下载次数：{{attach.hitNum}}
+                        </div>
+                    </div>
+                  </div> 
+          {% endfor %}
+          </div>
+      {% endif %}
       <div class="mtl">
 
         {% if filters.type=='onlyOwner' %}

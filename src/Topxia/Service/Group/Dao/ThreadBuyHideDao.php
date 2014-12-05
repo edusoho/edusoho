@@ -9,4 +9,6 @@ interface ThreadBuyHideDao
     public function addBuyHide($fields);
     
     public function getbuyHideByUserIdandThreadId($id,$userId);
+
+    public function getbuyHideByUserIdandHideId($userId,$hideId);
 }

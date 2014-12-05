@@ -38,4 +38,10 @@ class ThreadBuyHideDaoImpl extends BaseDao implements ThreadBuyHideDao
         return $this->getConnection()->fetchAssoc($sql, array($id,$userId)) ? : null;
     }
 
+    public function getbuyHideByUserIdandHideId($userId,$hideId)
+    {
+        $sql = "SELECT * FROM {$this->table} where hideId=? and userId=? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($hideId,$userId)) ? : null; 
+    }
+
 }

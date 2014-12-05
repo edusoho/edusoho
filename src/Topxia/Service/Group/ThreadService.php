@@ -60,10 +60,18 @@ interface ThreadService
 
     public function getBuyHide($id);
 
+    public function getHide($id);
+
     public function addBuyHide($fields);
 
     public function getCoinByThreadId($id);
 
     public function getbuyHideByUserIdandThreadId($id,$userId);
+
+    public function getbuyHideByUserIdandHideId($userId,$hideId);
+
+    public function addAttach($fileIds,$fileTitles,$fileDescriptions,$fileCoins,$threadId);
+
+    public function searchHides($conditions,$orderBy,$start,$limit);
 
 }

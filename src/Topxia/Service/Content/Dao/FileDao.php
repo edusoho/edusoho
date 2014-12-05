@@ -7,6 +7,8 @@ interface FileDao
 
 	public function getFile($id);
 
+    public function getFilesByIds($ids);
+
 	public function findFiles($start, $limit);
 
 	public function findFileCount();

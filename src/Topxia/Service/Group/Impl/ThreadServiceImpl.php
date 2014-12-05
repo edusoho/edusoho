@@ -50,6 +50,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
             "createdTime"=>time()));
     }
 
+    public function searchHides($conditions,$orderBy,$start,$limit)
+    {
+        return $this->getThreadHideDao()->searchHides($conditions,$orderBy,$start,$limit);
+    }
+
     public function unThreadCollect($userId,$threadId)
     {
         $thread = $this->getThread($threadId);
@@ -91,6 +96,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadPostDao()->searchPostsThreadIdsCount($conditions);
     }
 
+    public function getbuyHideByUserIdandHideId($userId,$hideId)
+    {
+        return $this->getThreadBuyHideDao()->getbuyHideByUserIdandHideId($userId,$hideId);
+    }
+
     public function getPost($id)
     {
          return $this->getThreadPostDao()->getPost($id);
@@ -126,6 +136,49 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $thread;
     }
 
+    public function addAttach($fileIds,$fileTitles,$fileDescriptions,$fileCoins,$threadId)
+    {
+        $fileIds=explode(",", $fileIds);
+        $fileTitles=explode(",", $fileTitles);
+        $fileCoins=explode(",", $fileCoins);
+        $fileDescriptions=explode("end!,", $fileDescriptions);
+
+        $user = $this->getCurrentUser();
+        for($i=0;$i<count($fileIds);$i++){
+
+            $file=$this->getFileService()->getFile($fileIds[$i]);
+
+            if($file['userId'] != $user->id) continue;
+            
+            $hide=$this->getThreadHideDao()->searchHides(array('threadId'=>$threadId,'fileId'=>$fileIds[$i]),array('createdTime','desc'),0,1);
+            
+            $fileTitles[$i]=$this->sub_txt($fileTitles[$i]);
+
+            if($i == count($fileIds) - 1 )
+            {
+                $fileDescriptions[$i]=substr($fileDescriptions[$i], 0, -4);
+            }
+
+            $attach=array(
+                'title'=>$fileTitles[$i],
+                'description'=>$fileDescriptions[$i],
+                'type'=>'attachment',
+                'threadId'=>$threadId,
+                'coin'=>$fileCoins[$i],
+                'fileId'=>$fileIds[$i],
+                'createdTime'=>time(),
+                );
+
+            if($hide){
+
+                $this->getThreadHideDao()->updateHide($hide[0]['id'],$attach);
+                continue;
+
+            }
+            $this->getThreadHideDao()->addHide($attach);
+        }
+    }
+
     protected function hideThings($content,$id)
     {
         $data=explode('[/hide]', $content);
@@ -152,6 +205,31 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     }
 
+    private function sub_txt($string)
+    {
+        $string=explode(".", $string);
+       
+        $length=10;
+        $text=$string[0];
+        $text = strip_tags($text);
+
+        $text = str_replace(array("\n", "\r", "\t") , '', $text);
+        $text = str_replace('&nbsp;' , ' ', $text);
+        $text = trim($text);
+
+        $length = (int) $length;
+        if ( ($length > 0) && (mb_strlen($text,'utf-8') > $length) )  {
+            $text = mb_substr($text, 0, $length, 'UTF-8');
+        }
+
+        return $text.".".$string[1];
+    }
+
+    public function getHide($id)
+    {
+        return $this->getThreadHideDao()->getHide($id);
+    }
+
     public function getCoinByThreadId($id)
     {   
         $condition=array('threadId'=>$id);
@@ -164,7 +242,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     }
 
     public function addBuyHide($fields)
-    {
+    {   
+        if (empty($fields['userId'])) {
+            throw $this->createServiceException("用户ID不能为空!");
+        }
+
         return $this->getThreadBuyHideDao()->addBuyHide($fields);
     }
 
@@ -177,7 +259,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
             throw $this->createServiceException("话题内容不能为空！");
         }
 
-        $this->getThreadHideDao()->deleteHideByThreadId($id);
+        $this->getThreadHideDao()->deleteHideByThreadId($id,'content');
         $this->hideThings($fields['content'],$id);
 
         return $this->getThreadDao()->updateThread($id,$fields);
@@ -368,6 +450,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     private function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+    protected function getFileService()
+    {
+        return $this->createService('Content.FileService');
     }
     private function getThreadPostDao()
     {
