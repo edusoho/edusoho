@@ -328,7 +328,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	        			$lessonInfo = $this->controller->getCourseService()->getCourseLesson($value['courseId'],$value['lessonId']);
 	        			$lessonStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $value['courseId'],$value['lessonId']);
 	        			$noteContent = $this->filterSpace($this->controller->convertAbsoluteUrl($this->request, $value['content']));
-
 	        			$noteInfos[] = array(
 		        			"coursesId"=>$courseMember['courseId'],
 		        			"courseTitle"=>$course['title'],
@@ -336,8 +335,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		        			"lessonId"=>$lessonInfo['id'],
 		        			"lessonTitle"=>$lessonInfo['title'],
 		        			"learnStatus"=>$lessonStatus,
-		        			"content"=>$this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', 
-		        				array('content' => $noteContent))->getContent(),
+		        			// "content"=>$this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', 
+		        			// 	array('content' => $noteContent))->getContent(),
+		        			"content"=>$noteContent,
 		        			"createdTime"=>date('c', $value['createdTime']),
 		        			"noteNum"=>$noteNum,
 		        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png'),
