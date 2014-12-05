@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
 
-    require('jquery.perfect-scrollbar');
-
+    var EditorFactory = require('common/kindeditor-factory');
     var Widget = require('widget');
+    Validator = require('bootstrap.validator');
 
-    var MaterialPane = Widget.extend({
+    var LectureNotePane = Widget.extend({
         attrs: {
             plugin: null
         },
@@ -19,12 +19,11 @@ define(function(require, exports, module) {
                 lessonId: toolbar.get('lessonId')
             }, function(html) {
                 pane.element.html(html);
-                $('.material-pane').perfectScrollbar({wheelSpeed:50});
             });
 
         }
     });
 
-    module.exports = MaterialPane;
+    module.exports = LectureNotePane;
 
 });

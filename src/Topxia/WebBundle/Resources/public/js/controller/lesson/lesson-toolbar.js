@@ -33,20 +33,19 @@ define(function(require, exports, module) {
 
 		setup: function() {
 			var toolbar = this;
-
 			var LessonPlugin = require('./plugins/lesson/plugin');
 			var QuestionPlugin = require('./plugins/question/plugin');
 			var NotePlugin = require('./plugins/note/plugin');
+			var LectureNotePlugin = require('./plugins/lecture-note/plugin');
 			var MaterialPlugin = require('./plugins/material/plugin');
 			var HomeworkPlugin = require('./plugins/homework/plugin');
 
 			toolbar.registerPlugin(new LessonPlugin(toolbar));
 			toolbar.registerPlugin(new QuestionPlugin(toolbar));
 			toolbar.registerPlugin(new NotePlugin(toolbar));
+			toolbar.registerPlugin(new LectureNotePlugin(toolbar));
 			toolbar.registerPlugin(new MaterialPlugin(toolbar));
 			toolbar.registerPlugin(new HomeworkPlugin(toolbar));
-
-			var activePlugins = this.get('activePlugins');
 
 			var html = '';
 			$.each(toolbar.get('activePlugins'), function(i, name){
@@ -54,6 +53,7 @@ define(function(require, exports, module) {
 				if (plugin.noactive == undefined) {
 					plugin.noactive = false;
 				}
+
 				html += '<li data-plugin="' + plugin.code + '" data-noactive="' + plugin.noactive + '"><a href="#"><span class="' + plugin.iconClass + '"> </span>' + plugin.name + '</a></li>'
 			});
 
