@@ -21,3 +21,7 @@ json_knowledges_match:
 json_knowledges_query:
     pattern:  /json/Knowledges/query
     defaults: { _controller: CustomWebBundle:JsonKnowledges:query }
+
+course_manage_lecture_note:
+    pattern:  /course/{courseId}/manage/{lessonId}/lecture/note
+    defaults: { _controller: CustomWebBundle:LectureNote:index }
