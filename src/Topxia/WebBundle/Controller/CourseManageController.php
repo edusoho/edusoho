@@ -28,6 +28,7 @@ class CourseManageController extends BaseController
         $courseSetting = $this->getSettingService()->get('course', array());
 	    if($request->getMethod() == 'POST'){
             $data = $request->request->all();
+            $data['subType'] = empty($data['subType']) ? array() : $data['subType'];
             $this->getCourseService()->updateCourse($id, $data);
             $this->setFlashMessage('success', '课程基本信息已保存！');
             return $this->redirect($this->generateUrl('course_manage_base',array('id' => $id))); 
