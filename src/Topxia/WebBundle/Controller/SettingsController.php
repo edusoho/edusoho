@@ -232,10 +232,6 @@ class SettingsController extends BaseController
 	{ 
 		$user = $this->getCurrentUser(); 
 
-		if ($request->getMethod() == 'POST') { 
-
-		} 
-
 
 		return $this->render('TopxiaWebBundle:Settings:security.html.twig', array( 
 		)); 
