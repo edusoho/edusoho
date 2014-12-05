@@ -1,0 +1,9 @@
+<div 
+  id="{{ id }}"
+  class="tagchooser"
+  data-source-url="{{ path('ajax_categories_search', {group:group}) }}"
+  data-query-url="{{ path('ajax_categories_query') }}"
+  data-match-url="{{ path('ajax_categories_match') }}?q={% verbatim %}{{query}}{% endverbatim %}"
+  >
+  {% include 'CustomWebBundle:Tag:tagchooser-base.html.twig' %}
+</div>

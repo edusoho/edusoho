@@ -282,11 +282,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function createCourse($course)
 	{
-		if (!ArrayToolkit::requireds($course, array('title'))) {
+		if (!ArrayToolkit::requireds($course, array('title', 'subjectIds'))) {
 			throw $this->createServiceException('缺少必要字段，创建课程失败！');
 		}
 
-		$course = ArrayToolkit::parts($course, array('title', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
+		$course = ArrayToolkit::parts($course, array('title', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address', 'subjectIds'));
 
 		$course['status'] = 'draft';
         $course['about'] = !empty($course['about']) ? $this->getHtmlPurifier()->purify($course['about']) : '';
@@ -356,6 +356,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'startTime' => 0,
 			'endTime'  => 0,
 			'locationId' => 0,
+			'subType' => array(),
+			'subjectIds' => '',
 			'address' => '',
 			'maxStudentNum' => 0,
 			'freeStartTime' => 0,
@@ -2389,6 +2391,14 @@ class CourseSerialize
     		}
     	}
 
+    	if (isset($course['subjectIds'])) {
+    		if (is_array($course['subjectIds']) and !empty($course['subjectIds'])) {
+    			$course['subjectIds'] = '|' . implode('|', $course['subjectIds']) . '|';
+    		} else {
+    			$course['subjectIds'] = null;
+    		}
+    	}
+
         return $course;
     }
 
@@ -2419,6 +2429,21 @@ class CourseSerialize
 			$course['teacherIds'] = explode('|', trim($course['teacherIds'], '|'));
 		}
 
+		$subType = array(
+			'normal' => '',
+			'refund' => '',
+			'retake' => '',
+			'mentoring' => '',
+		);
+		if(!empty($course['subType'] )) {
+			$temp = explode('|', trim($course['subType'], '|'));
+			foreach ($temp as $key) {
+				if(array_key_exists($key, $subType)) {
+					$subType[$key] ='true';
+				}
+			}
+		}
+		$course['subType'] = $subType;
 		return $course;
     }
 

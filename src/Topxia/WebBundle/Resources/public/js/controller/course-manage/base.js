@@ -5,7 +5,8 @@ define(function(require, exports, module) {
 
     require('jquery.select2-css');
     require('jquery.select2');
-
+    var TagChooser = require('tag-chooser');
+    var TagTreeChooser = require('tag-tree-chooser');
     exports.run = function() {
 
         require('./header').run();
@@ -93,6 +94,11 @@ define(function(require, exports, module) {
             element: '[name=daysOfNotifyBeforeDeadline]',
             rule: 'integer'
         });
+        validator.addItem({
+            element:'input[name=subjectIds]',
+            require: true,
+            rule: 'remote',
+        });
 
         validator.addItem({
             element: '[name=maxStudentNum]',
@@ -129,7 +135,34 @@ define(function(require, exports, module) {
                 $("#courseDaysOfNotifyBeforeDeadline").hide();
                 $("#deadlineNotifyBlock").show();
             }
-        })
+        });
+        _initTagTreeChooser();
+        function _initTagTreeChooser()
+        {
+            var choosedTags = [];
+            if ($('input[name=subjectIds]').val().length >0) {
+                choosedTags = $('input[name=subjectIds]').val().split(',');
+            }
+
+
+            var chooserTreeForCategories = new TagTreeChooser({
+              element: '#categories-chooser',
+              sourceUrl: $('#categories-chooser').data('sourceUrl'),
+              queryUrl: $('#categories-chooser').data('queryUrl'),
+              matchUrl: $('#categories-chooser').data('matchUrl'),
+              maxTagNum: 1,
+              choosedTags: choosedTags
+            });
+
+            chooserTreeForCategories.on('change', function(tags) {
+                var tagIds = [];
+                $.each(tags, function(i, tag) {
+                    tagIds.push(tag.id);
+                });
+                $('input[name=subjectIds]').val(tagIds.join(','));
+            });
+
+        }
 
     };
 

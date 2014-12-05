@@ -35,13 +35,13 @@
           {{ web_macro.flash_messages() }}
 
           <div class="form-group">
-            <div class="col-md-2 control-label"><label for="course_title" class="required">标题</label></div>
+            <div class="col-md-2 control-label"><label for="course_title" class="required"><span style="color:red">*</span>标题</label></div>
             <div class="col-md-8 controls">
               <input type="text" id="course_title" name="title" required="required" class="form-control" data-widget-cid="widget-1" data-explain="">
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>
-
+          {% include 'TopxiaWebBundle:Course:subject.html.twig' %}
           <div class="form-group">
             <div class="col-md-offset-2 col-md-8 controls">
               <input id="course-create-btn" data-submiting-text="正在创建" class="btn btn-fat btn-primary" type="submit" value="创建">

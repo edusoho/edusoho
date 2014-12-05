@@ -9,10 +9,21 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 {
     public function findCategoriesByGroupIdAndParentId($groupId, $parentId)
     {
-        if (empty($groupId) || empty($parentId)) {
-            return array();
-        }
         return $this->getCategoryDao()->findCategoriesByGroupIdAndParentId($groupId, $parentId);
+    }
+
+    public function findNodesData($groupId, $parentId)
+    {
+        $categories = $this->findCategoriesByGroupIdAndParentId($groupId, $parentId);
+        foreach ($categories as $key => $category) {
+        if(count($this->findCategoriesByGroupIdAndParentId($groupId, $category['id']))) {
+            $category['isParent'] = true;
+        } else {
+            $category['isParent'] = false;
+        }
+            $categories[$key] = $category;
+        }
+        return $categories;
     }
 
     public function getCategory($id)
@@ -107,6 +118,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function findAllCategories()
     {
         return $this->getCategoryDao()->findAllCategories();
+    }
+
+    public function findCategoriesByLikeName($likeString)
+    {
+        return $this->getCategoryDao()->findCategoriesByLikeName($likeString);
     }
 
     public function isCategoryCodeAvaliable($code, $exclude = null)

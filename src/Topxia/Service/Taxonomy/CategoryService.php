@@ -5,6 +5,8 @@ interface CategoryService
 {
     public function findCategoriesByGroupIdAndParentId($groupId, $parentId);
 
+    public function findNodesData($groupId, $parentId);
+
     public function getCategory($id);
 
     public function getCategoryByCode($code);
@@ -20,6 +22,8 @@ interface CategoryService
     public function findCategoriesByIds(array $ids);
 
     public function findAllCategories();
+
+    public function findCategoriesByLikeName($likeString);
 
     public function isCategoryCodeAvaliable($code, $exclude = null);
 
