@@ -33,7 +33,7 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         }
 
         if ($user != 0){ 
-            if (time() > $user['lastPasswordFailTime'] + $temporaryMinutes*60){
+            if (time() > $user['lastPasswordFailTime'] + $loginConnect['temporary_lock_minutes']*60){
                 $user['consecutivePasswordErrorTimes'] = 0;
             }
             $leftTimes = $loginConnect['temporary_lock_allowed_times']-$user['consecutivePasswordErrorTimes']-1;

@@ -960,13 +960,11 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $currentTime = time();
         if ($user['consecutivePasswordErrorTimes'] >= $failAllowNum-1){
-            $this->getUserDao()->updateUser($user['id'], array(
-                    'lockDeadline' => $currentTime+$temporaryMinutes*60,
-                    'lastPasswordFailTime' => $currentTime
-                ));
+            $this->getUserDao()->updateUser($user['id'], array('lockDeadline' => $currentTime+$temporaryMinutes*60));
         } else {
-            $this->getUserDao()->updateUser($user['id'], array('consecutivePasswordErrorTimes' => $user['consecutivePasswordErrorTimes']+1, 'lastPasswordFailTime' => $currentTime));
+            $this->getUserDao()->updateUser($user['id'], array('consecutivePasswordErrorTimes' => $user['consecutivePasswordErrorTimes']+1));
         }
+        $this->getUserDao()->updateUser($user['id'], array('lastPasswordFailTime' => $currentTime));        
     }
 
     public function isUserTemporaryLockedOrLocked($user)
