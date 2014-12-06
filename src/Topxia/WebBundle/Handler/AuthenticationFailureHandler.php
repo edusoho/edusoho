@@ -33,7 +33,9 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         }
 
         if ($user != 0){ 
-
+            if (time() > $user['lastPasswordFailTime'] + $temporaryMinutes*60){
+                $user['consecutivePasswordErrorTimes'] = 0;
+            }
             $leftTimes = $loginConnect['temporary_lock_allowed_times']-$user['consecutivePasswordErrorTimes']-1;
             $leftTimesMessage = ($leftTimes != 0)?"帐号或密码错误，您还有{$leftTimes}次输入机会":"帐号或密码输入错误已到{$loginConnect['temporary_lock_allowed_times']}次，帐号将会封禁{$loginConnect['temporary_lock_minutes']}分钟";
             
