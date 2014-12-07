@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
+    Validator.addRule('rate', /^(?:0|[1-9][0-9]?|100)$/, '请输入合法的{{display}}!');
     require('common/validator-rules').inject(Validator);
 
     require('jquery.select2-css');
@@ -100,7 +101,11 @@ define(function(require, exports, module) {
             display: '学科',
             rule: 'remote'
         });
-
+        validator.addItem({
+            element: '#refundRate',
+            rule: 'rate',
+            display: '退费比例'
+        })
         validator.addItem({
             element: '[name=maxStudentNum]',
             rule: 'integer',
@@ -137,6 +142,15 @@ define(function(require, exports, module) {
                 $("#deadlineNotifyBlock").show();
             }
         });
+        /*$("#refundType").prop('checked') && $('#refundRateDiv').attr('style','display:block');*/
+        $("#refundType").change(function(){
+            var element = $(this);
+            if(element.prop('checked')) {
+                $('#refundRateDiv').slideDown("slow");
+            }else {
+               $('#refundRateDiv').slideUp("slow");
+            }
+        })
         _initTagTreeChooser();
         _initTagChooer();
         function _initTagChooer()

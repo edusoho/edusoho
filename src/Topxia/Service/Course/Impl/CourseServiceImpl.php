@@ -356,6 +356,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'tags' => '',
 			'tagIds' => array(),
 			'price' => 0.00,
+			'refundRate' => 0,
 			'startTime' => 0,
 			'endTime'  => 0,
 			'locationId' => 0,
