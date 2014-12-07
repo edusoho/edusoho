@@ -15,22 +15,21 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="nickname">评分</label>
+        <label for="my-course-rate">评分</label>
       </div>
       <div class="col-md-7 controls">
-        <span id="my-course-rate" data-rating="{{ review.rating|default(0) }}" data-url="{{ path('course_review_create', {id: course.id}) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="mrm"></span>
+        <span id="my-course-rate" data-rating="5" data-url="{{ path('course_review_create', {id: course.id}) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="mrm"></span>
       </div>
     </div>
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="nickname">内容</label>
+        <label for="content">内容</label>
       </div>
       <div class="col-md-7 controls">
-        <textarea id="nickname" name="nickname" data-url="{{path('admin_user_create_nickname_check')}}" class="form-control" rows="4"></textarea>
+        <textarea id="content" name="content" data-url="{{path('admin_user_create_nickname_check')}}" class="form-control" rows="4"></textarea>
       </div>
     </div>
-
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
@@ -38,8 +37,8 @@
 
 {% block footer %}
     <button class="btn btn-link" data-dismiss="modal">取消</button>
-    <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#review-form">保存</button>
+    <button class="btn btn-primary" id="create-btn" type="submit" data-submiting-text="正在保存..." data-toggle="form-submit" data-target="#review-form">保存</button>
   <script>
-      app.load('customwebbundle/courseinitmanage/review-modal');
+      app.load('customwebbundle/controller/courseinitmanage/review-modal');
   </script>
 {% endblock %}

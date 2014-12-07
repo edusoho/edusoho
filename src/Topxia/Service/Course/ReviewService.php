@@ -17,6 +17,8 @@ interface ReviewService
 
 	public function saveReview($fields);
 
+	public function createInitReview($fields);
+
 	public function deleteReview($id);
 
 }

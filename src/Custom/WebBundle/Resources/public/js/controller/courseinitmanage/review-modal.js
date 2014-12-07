@@ -3,9 +3,10 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('jquery.raty');
     require('common/validator-rules').inject(Validator);
+    var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
-
+        var $modal = $('#review-form').parents('.modal');
         $('#my-course-rate').raty({
             path: $('#my-course-rate').data('imgPath'),
             hints: ['很差', '较差', '还行', '推荐', '力荐'],
@@ -24,9 +25,9 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="review[rating]"]',
+            element: '[name="nickname"]',
             required: true,
-            errormessageRequired: '请打分'
+            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
         });
 
         validator.on('formValidated', function(error, msg, $form) {
@@ -34,21 +35,20 @@ define(function(require, exports, module) {
                 return;
             }
 
-            $.post($form.attr('action'), $form.serialize(), function(json) {
-                window.location.reload();
-            }, 'json');
+            $('#create-btn').button('submiting').addClass('disabled');
 
-        });
-
-
-        $('#modal').on('click', '#list_reviews', function(){
-            $.get($('#list_reviews').data('url'), function(html) {
-                $('#modal').html(html);
+            $.post($form.attr('action'), $form.serialize(), function(result) {
+                if(result.status == 'ok') {
+                    $modal.modal('hide');
+                    Notify.success(result.message);
+                    window.location.reload();
+                } else {
+                    $('#create-btn').button('reset').removeClass('disabled');
+                    Notify.danger(result.message);
+                }
+            }).error(function(){
+                Notify.danger('添加评价失败');
             });
-        });
-
-        $('#modal').on('click', '#back_to_create', function(){
-            $('#modal').load($('#back_to_create').data('url'));
         });
 
 

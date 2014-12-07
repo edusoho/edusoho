@@ -46,10 +46,10 @@ class CourseInitManageController extends BaseController
 
 		if ($request->getMethod() == 'POST') {
 			$fields = $request->request->all();
-	        $fields['rating'] = $fields['rating'];
+	        $fields['rating'] = $fields['score'];
 	        $fields['courseId']= $id;
-	        $this->getReviewService()->saveReview($fields);
-	        return $this->createJsonResponse(true);
+	        $result = $this->getReviewService()->createInitReview($fields);
+	        return $this->createJsonResponse($result);
 		}
 
 		return $this->render('CustomWebBundle:CourseInitManage:write-modal.html.twig', array(
@@ -57,6 +57,12 @@ class CourseInitManageController extends BaseController
 		));
 	}
 
+	public function deleteAction(Request $request, $courseId, $id)
+	{
+		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$this->getReviewService()->deleteReview($id);
+		return $this->createJsonResponse(true); 
+	}
 	private function getCourseService()
 	{
 	    return $this->getServiceKernel()->createService('Course.CourseService');

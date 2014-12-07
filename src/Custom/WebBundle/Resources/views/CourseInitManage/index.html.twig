@@ -3,6 +3,7 @@
 {% block title %}初始评价 - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'rating' %}
+{% set script_controller = 'customwebbundle/controller/courseinitmanage/review' %}
 {% block main %}
 
 <div class="panel panel-default panel-col">
@@ -24,15 +25,16 @@
 			      <tbody>
 			      	{% for review in reviews %}
 			      		{% set user = users[review.userId] %}
-			        <tr> 
-			          <td>{{ user.nickname }}</td>
-			          <td><span class="stars-{{ review.rating }}"></span></td>
-			          <td>{{ review.content }}</td>
-			          <td><button class="btn btn-default">删除</button></td>
-			        </tr>
+				        <tr> 
+				          <td>{{ user.nickname }}</td>
+				          <td><span class="stars-{{ review.rating }}"></span></td>
+				          <td>{{ review.content }}</td>
+				          <td><button class="btn btn-default delete-review" data-url="{{ path('course_manage_init_rating_delete', {courseId:course.id, id:review.id})}}">删除</button></td>
+				        </tr>
 			        {% endfor %}
 			      </tbody>
 			    </table>
+			    {{ web_macro.paginator(paginator) }} 
 		</div>
 	</div>
 </div>

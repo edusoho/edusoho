@@ -45,3 +45,7 @@ course_manage_init_rating:
 course_manage_init_rating_create:
     pattern:  /course/{id}/manage/init/rating/create
     defaults: { _controller: CustomWebBundle:CourseInitManage:create }
+
+course_manage_init_rating_delete:
+    pattern:  /course/{courseId}/manage/init/rating/{id}/delete
+    defaults: { _controller: CustomWebBundle:CourseInitManage:delete }
