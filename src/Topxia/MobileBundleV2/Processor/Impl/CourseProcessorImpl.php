@@ -158,12 +158,15 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		unset($formData['action']);
 		unset($formData['threadId']);
 
+		$result = array();
 		if ($action == "add") {
-			return $this->controller->getThreadService()->createThread($formData);
+			$result = $this->controller->getThreadService()->createThread($formData);
 		} else {
 			$fields = array("title" => $title, "content" => $content);
-			return $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
+			$result = $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
 		}
+		$result['content'] = $this->filterSpace($this->controller->convertAbsoluteUrl($this->controller->request,$result['content']));
+		return $result;
 	}
 
 	private function uploadImage($content)
@@ -332,6 +335,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	        			$lessonInfo = $this->controller->getCourseService()->getCourseLesson($value['courseId'],$value['lessonId']);
 	        			$lessonStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $value['courseId'],$value['lessonId']);
 	        			$noteContent = $this->filterSpace($this->controller->convertAbsoluteUrl($this->request, $value['content']));
+	        			// var_dump($noteContent);
+	        			// exec();
 	        			$noteInfos[] = array(
 		        			"coursesId"=>$courseMember['courseId'],
 		        			"courseTitle"=>$course['title'],
