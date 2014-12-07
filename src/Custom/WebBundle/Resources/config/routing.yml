@@ -37,3 +37,7 @@ ajax_categories_query:
 ajax_category_isSubject:
     pattern:  /ajax/categories/check
     defaults: { _controller: CustomWebBundle:AajxCategories:isSubjct }
+
+course_manage_init_rating:
+    pattern:  /course/{id}/manage/init/rating
+    defaults: { _controller: CustomWebBundle:CourseInitManage:index }
