@@ -41,3 +41,7 @@ ajax_category_isSubject:
 course_manage_init_rating:
     pattern:  /course/{id}/manage/init/rating
     defaults: { _controller: CustomWebBundle:CourseInitManage:index }
+
+course_manage_init_rating_create:
+    pattern:  /course/{id}/manage/init/rating/create
+    defaults: { _controller: CustomWebBundle:CourseInitManage:create }

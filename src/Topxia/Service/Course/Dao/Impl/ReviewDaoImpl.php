@@ -89,6 +89,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
             ->from($this->table, $this->table)
                 ->andWhere('userId = :userId')
                 ->andWhere('courseId = :courseId')
+                ->andWhere('isInit = : isInit')
                 ->andWhere('rating = :rating')
                 ->andWhere('content LIKE :content');
     }

@@ -1,0 +1,45 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}添加初始评价{% endblock %}
+{% block body %}
+  <form id="review-form" method="post" class="form-horizontal"  action="{{ path('course_manage_init_rating_create', {id:course.id}) }}">
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="nickname">昵称</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="nickname" name="nickname" data-url="{{path('admin_user_create_nickname_check')}}" class="form-control" >
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="nickname">评分</label>
+      </div>
+      <div class="col-md-7 controls">
+        <span id="my-course-rate" data-rating="{{ review.rating|default(0) }}" data-url="{{ path('course_review_create', {id: course.id}) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="mrm"></span>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="nickname">内容</label>
+      </div>
+      <div class="col-md-7 controls">
+        <textarea id="nickname" name="nickname" data-url="{{path('admin_user_create_nickname_check')}}" class="form-control" rows="4"></textarea>
+      </div>
+    </div>
+
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+
+{% block footer %}
+    <button class="btn btn-link" data-dismiss="modal">取消</button>
+    <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#review-form">保存</button>
+  <script>
+      app.load('customwebbundle/courseinitmanage/review-modal');
+  </script>
+{% endblock %}
