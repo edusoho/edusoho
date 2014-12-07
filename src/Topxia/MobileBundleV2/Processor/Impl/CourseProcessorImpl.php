@@ -166,6 +166,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 			$result = $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
 		}
 		$result['content'] = $this->filterSpace($this->controller->convertAbsoluteUrl($this->controller->request,$result['content']));
+		$result['latestPostTime'] = Date('c' , $result['latestPostTime']);
+		$result['createdTime'] = Date('c' , $result['createdTime']);
 		return $result;
 	}
 
