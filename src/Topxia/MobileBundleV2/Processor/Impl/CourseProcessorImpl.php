@@ -319,7 +319,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
 	     	$conditions = array(
 	            	'userId' => $user['id'],
-	            	'noteNumGreaterThan' => 0
+	            	'noteNumGreaterThan' => 0.1
 	        	);
 
 	        	$courseMembers = $this->controller->getCourseService()->searchMember($conditions,$start,$limit);

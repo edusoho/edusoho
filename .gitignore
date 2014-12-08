@@ -37,6 +37,7 @@ app/data/plugin_installed.php
 /web/themes/*
 /web/test/*
 /web/appwork/*
+/web/phpmyadmin/*
 !/web/themes/autumn
 !/web/themes/default
 !/web/themes/default-b
