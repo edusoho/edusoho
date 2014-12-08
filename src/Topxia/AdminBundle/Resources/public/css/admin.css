@@ -465,3 +465,11 @@ input.LargeInput {width: 600px;}
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
   z-index: 1000;
 }
+
+span.ellipsis {
+  max-width: 285px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -19,13 +19,33 @@ class CourseController extends BaseController
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
   
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
-
+        
+        $teacherIds =array();
+        foreach ($courses as $key => $course) {
+            foreach ($course['teacherIds'] as $teacherId) {
+                if(!in_array($teacherId, $teacherIds)) {
+                    $teacherIds[] = $teacherId;
+                }
+            }
+        }
+        $subjectIds = array();
+        foreach ($courses as $key => $course) {
+            foreach ($course['subjectIds'] as $subjectId) {
+                if(!in_array($subjectId, $subjectIds)) {
+                    $subjectIds[] = $subjectId;
+                }
+            }
+        }
+        $subjects = $this->getCategoryService()->findCategoriesByIds($subjectIds);
+        $teachers = $this->getUserService()->findUsersByIds($teacherIds);
         $courseSetting = $this->getSettingService()->get('course', array());
         if(!isset($courseSetting['live_course_enabled']))$courseSetting['live_course_enabled']="";
         return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
             'conditions' => $conditions,
             'courses' => $courses ,
             'users' => $users,
+            'teachers' => $teachers,
+            'subjects' => $subjects,
             'categories' => $categories,
             'paginator' => $paginator,
             'liveSetEnabled' => $courseSetting['live_course_enabled']

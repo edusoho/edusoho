@@ -1,23 +1,32 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <tr id="course-tr-{{ course.id }}">
-  <td>{{ course.id }}</td>
   <td>
     <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>{% if course.type == 'live' %}<span class="label label-success live-label mls">直播</span>{% endif %}
     <br>
-    <span class="text-muted text-sm">分类：{{ category.name|default('--') }}</span>
+    <span class="text-muted text-sm ellipsis">教师：
+      {% for tid in course.teacherIds|slice(0,3) %}
+        {{ teachers[tid].nickname|default('') }}
+      {% else %}
+        --
+      {% endfor %}
+    </span>
     {% if course.recommended %}
       <span class="label label-default">荐:{{ course.recommendedTime|date('Y-m-d') }} / 序号:{{ course.recommendedSeq }}</span>
     {% endif %}
   </td>
-  <td>{% if  course.serializeMode =="none" %}<span class="text-info">非连载课程</span>{% elseif course.serializeMode =="serialize" %}<span class="text-success">连载中</span>{% elseif course.serializeMode =="finished" %}<span class="text-danger">已完结</span>{% endif %}</td>
+  <td>
+    <span class="text-muted ellipsis">
+      {% for subjectId in course.subjectIds|slice(0,4) %}
+        {{ subjects[subjectId].name|default('') }}
+      {% else %}
+        --
+      {% endfor %}
+    </span>
+  </td>
   <td>{{ course.studentNum }}</td>
   <td><span class="money-text">{{ course.income }}</span></td>
   <td>{{ dict_text('courseStatus:html', course.status) }}</td>
-  <td>
-    {{ admin_macro.user_link(user) }}
-    <br>
-    <span class="text-muted text-sm">{{ course.createdTime|date('Y-n-d H:i') }}</span>
-  </td>
+
   <td>
     <div class="btn-group">
       <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}" target="_blank">管理</a>
