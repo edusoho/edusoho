@@ -22,42 +22,42 @@ class Version20141208094934 extends AbstractMigration
             Add column `payPasswordSalt` varchar(64) NOT NULL AFTER `salt`;
         ");  
 
-        
+
         $this->addSql(" 
             ALTER table `user` 
-            Add column `question1` varchar(64) NOT NULL AFTER `salt`;
+            Add column `securityQuestion1` varchar(64) NOT NULL AFTER `salt`;
         ");  
         $this->addSql(" 
             ALTER table `user` 
-            Add column `answer1` varchar(64) NOT NULL AFTER `salt`;
+            Add column `securityAnswer1` varchar(64) NOT NULL AFTER `salt`;
         ");   
         $this->addSql(" 
             ALTER table `user` 
-            Add column `answerSalt1` varchar(64) NOT NULL AFTER `salt`;
+            Add column `securityAnswerSalt1` varchar(64) NOT NULL AFTER `salt`;
         ");     
         $this->addSql(" 
             ALTER table `user` 
-            Add column `question2` varchar(64) NOT NULL AFTER `salt`;
+            Add column `securityQuestion2` varchar(64) NOT NULL AFTER `salt`;
         ");  
         $this->addSql(" 
             ALTER table `user` 
-            Add column `answer2` varchar(64) NOT NULL AFTER `salt`;
+            Add column `securityAnswer2` varchar(64) NOT NULL AFTER `salt`;
         ");   
         $this->addSql(" 
             ALTER table `user` 
-            Add column `answerSalt2` varchar(64) NOT NULL AFTER `salt`;
+            Add column `securityAnswerSalt2` varchar(64) NOT NULL AFTER `salt`;
         ");  
         $this->addSql(" 
             ALTER table `user` 
-            Add column `question3` varchar(64) NOT NULL AFTER `salt`;
+            Add column `securityQuestion3` varchar(64) NOT NULL AFTER `salt`;
         ");  
         $this->addSql(" 
             ALTER table `user` 
-            Add column `answer3` varchar(64) NOT NULL AFTER `salt`;
+            Add column `securityAnswer3` varchar(64) NOT NULL AFTER `salt`;
         ");   
         $this->addSql(" 
             ALTER table `user` 
-            Add column `answerSalt3` varchar(64) NOT NULL AFTER `salt`;
+            Add column `securityAnswerSalt3` varchar(64) NOT NULL AFTER `salt`;
         ");                                                
     }
 

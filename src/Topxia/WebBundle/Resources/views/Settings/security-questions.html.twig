@@ -13,9 +13,10 @@
     <form id="settings-security-questions-form" class="form-horizontal" method="post" {# {% if not app.user.password %} style="display:none;"{% endif %} #}>
     {{ web_macro.flash_messages() }}
     {% set questionOptions = { parents: '你的父母名字', teacher:'你的老师名字', lover:'你的爱人的名字', notSelected:'不指定问题类型'} %}
+    {% set tt = 'lover' %}
 
       <div class="form-group row">
-        <div  class="col-md-3 col-md-offset-1 control-label">安全问题1</div>
+        <div  class="col-md-3 col-md-offset-1 control-label">安全问题1 {{ questionOptions.{{tt}} }}</div>
         <div class=" col-md-4">
           <select class="form-control" name="question-1">
             {{ select_options(questionOptions, 'parents') }}
