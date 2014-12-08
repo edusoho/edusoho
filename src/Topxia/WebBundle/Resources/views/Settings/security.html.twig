@@ -85,11 +85,15 @@
 
 			<span class="col-md-4 " style="margin-top: 5px;" >在网校进行消费行为时需要输入的密码</span>
 
-			{% if hasPayPassword %} 
-				<a href="{# {{ path('settings_reset_pay_password') }} #}" class="col-md-2 pull-right " style="margin-top: 5px;color:blue;" >重置</a>
-			{% else %}
-				<a href="{{ path('settings_pay_password') }}" class="col-md-2 pull-right " style="margin-top: 5px;color:blue;" >去设置{#{/重置}#}</a>
-			{% endif %}
+			<div class="col-md-2 pull-right ">
+				{% if hasPayPassword %} 
+					<a href="{{ path('settings_reset_pay_password') }}" style="margin-top: 5px;color:blue;" >重置</a>
+					<a>或</a>
+					<a href="{# {{ path('settings_find_pay_password') }} #}" style="margin-top: 5px;color:blue;" >找回</a>				
+				{% else %}
+					<a href="{{ path('settings_pay_password') }}" style="margin-top: 5px;color:blue;" >去设置{#{/重置}#}</a>
+				{% endif %}
+			</div>
 			
 		</div>
 		<hr>

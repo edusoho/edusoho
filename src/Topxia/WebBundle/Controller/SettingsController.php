@@ -253,7 +253,10 @@ class SettingsController extends BaseController
 	public function payPasswordAction(Request $request) 
 	{ 
 		$user = $this->getCurrentUser(); 
-
+		$hasPayPassword = strlen($user['payPassword']) > 0;
+		if ($hasPayPassword){
+			throw new \RuntimeException('用户没有权限不通过旧支付密码，就直接设置新支付密码。');
+		}
 
 		$form = $this->createFormBuilder()
 			->add('currentUserLoginPassword', 'password')
@@ -269,7 +272,6 @@ class SettingsController extends BaseController
 				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
 					$this->setFlashMessage('danger', '当前用户登陆密码不正确，请重试！');
 				} else {
-					//var_dump($passwords);exit;
 					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
 					$this->setFlashMessage('success', '支付密码修改成功。');
 				}
@@ -279,6 +281,44 @@ class SettingsController extends BaseController
 		}
 
 		return $this->render('TopxiaWebBundle:Settings:pay-password.html.twig', array( 
+			'form' => $form->createView()
+		)); 
+	} 
+
+	public function resetPayPasswordAction(Request $request) 
+	{ 
+		$user = $this->getCurrentUser(); 
+
+
+		$form = $this->createFormBuilder()
+			->add('currentUserLoginPassword','password')
+			->add('oldPayPassword', 'password')
+			->add('newPayPassword', 'password')
+			->add('confirmPayPassword', 'password')
+			->getForm();
+
+
+		if ($request->getMethod() == 'POST') {
+			$form->bind($request);
+			if ($form->isValid()) {
+				$passwords = $form->getData();
+		
+				if ( !( $this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])
+							&& $this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']) ) ) 
+				{
+					$this->setFlashMessage('danger', '当前用户登陆密码或者支付密码不正确，请重试！');
+				}
+				else 
+				{
+					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
+					$this->setFlashMessage('success', '支付密码修改成功。');
+				}
+
+				return $this->redirect($this->generateUrl('settings_reset_pay_password'));
+			}
+		}
+
+		return $this->render('TopxiaWebBundle:Settings:reset-pay-password.html.twig', array( 
 			'form' => $form->createView()
 		)); 
 	} 
@@ -594,4 +634,10 @@ class SettingsController extends BaseController
 	{
 		return $this->getServiceKernel()->createService('User.UserFieldService');
 	}
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
 }

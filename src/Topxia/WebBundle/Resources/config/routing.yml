@@ -886,6 +886,9 @@ settings_pay_password:
     pattern:  /settings/pay_password 
     defaults: { _controller: TopxiaWebBundle:Settings:payPassword }
 
+settings_reset_pay_password:
+    pattern:  /settings/reset_pay_password 
+    defaults: { _controller: TopxiaWebBundle:Settings:resetPayPassword }
 
 setting_nickname:
     pattern: /settings/nickname

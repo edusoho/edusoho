@@ -230,7 +230,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function verifyPayPassword($id, $payPassword)
     {
-        $user = $this->getUser($userId);
+        $user = $this->getUser($id);
 
         if (empty($user)) {
             throw $this->createServiceException('参数不正确，校验支付密码失败。');
