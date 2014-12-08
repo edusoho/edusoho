@@ -13,7 +13,7 @@ class Version20141202104230 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `groups_thread` ADD `rewardCoin` INT(10) UNSIGNED NOT NULL DEFAULT '0' ;");
+       /* $this->addSql("ALTER TABLE `groups_thread` ADD `rewardCoin` INT(10) UNSIGNED NOT NULL DEFAULT '0' ;");*/
         $this->addSql("ALTER TABLE `groups_thread` ADD `type` VARCHAR(255) NOT NULL DEFAULT 'default' AFTER `rewardCoin`;");
         $this->addSql("ALTER TABLE `groups_thread_post` ADD `adopt` INT(10) UNSIGNED NOT NULL DEFAULT '0' AFTER `createdTime`;");
         $this->addSql("CREATE TABLE IF NOT EXISTS `groups_thread_trade` (
