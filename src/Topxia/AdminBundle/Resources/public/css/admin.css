@@ -473,3 +473,7 @@ span.ellipsis {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+span.teacher-name {
+  margin-top: 5px;
+}

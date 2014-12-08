@@ -151,6 +151,8 @@ define(function(require, exports, module) {
                $('#refundRateDiv').slideUp("slow");
             }
         })
+
+        var type = $('[name=type]').val();
         _initTagTreeChooser();
         _initTagChooer();
         function _initTagChooer()
@@ -191,7 +193,7 @@ define(function(require, exports, module) {
               sourceUrl: $('#categories-chooser').data('sourceUrl'),
               queryUrl: $('#categories-chooser').data('queryUrl'),
               matchUrl: $('#categories-chooser').data('matchUrl'),
-              maxTagNum: 1,
+              maxTagNum: type === 'package' ? 15 : 1,
               choosedTags: choosedTags
             });
 

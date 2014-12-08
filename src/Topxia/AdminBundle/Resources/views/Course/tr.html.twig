@@ -1,9 +1,14 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <tr id="course-tr-{{ course.id }}">
   <td>
-    <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>{% if course.type == 'live' %}<span class="label label-success live-label mls">直播</span>{% endif %}
+    <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
+      {% if course.type == 'live' %}
+        <span class="label label-success live-label mls">直播</span>
+      {% elseif course.type == 'package' %}
+        <span class="label label-danger live-label mls">课程包</span>
+      {% endif %}  
     <br>
-    <span class="text-muted text-sm ellipsis">教师：
+    <span class="text-muted text-sm ellipsis teacher-name">教师：
       {% for tid in course.teacherIds|slice(0,3) %}
         {{ teachers[tid].nickname|default('') }}
       {% else %}

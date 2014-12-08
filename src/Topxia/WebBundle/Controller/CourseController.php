@@ -433,8 +433,7 @@ class CourseController extends BaseController
 		$user = $this->getUserService()->getCurrentUser();
 		$userProfile = $this->getUserService()->getUserProfile($user['id']);
 
-		$isLive = $request->query->get('flag');
-		$type = ($isLive == "isLive") ? 'live' : 'normal';
+		$type = $request->query->get('type');
 
 		if ($type == 'live') {
 

@@ -40,18 +40,25 @@ class AajxCategoriesController extends BaseController
 
     public function isSubjctAction(Request $request)
     {
-        $id = $request->query->get('value');
-        $category = $this->getCategoryService()->getCategory($id);
-        if(empty($category)) {
-            $response = array('success' => false, 'message' => '分类不存在！');
-        } else {
-            if ($category['isSubject']) {
-                $response = array('success' => true, 'message' => '');
+        $ids = $request->query->get('value');
+        $ids = explode(',', $ids);
+        $message = '';
+        foreach ($ids as $id) {
+            $category = $this->getCategoryService()->getCategory($id);
+            if(empty($category)) {
+                $message .= "#{id}分类不存在,";
             } else {
-                $response = array('success' => false, 'message' => '该分类不是科目，请重新选择!');
+                if (!$category['isSubject']) {
+                    $message .= $category['name'] . '不是科目,';
+                } 
             }
         }
- 
+        if(empty($message)) {
+            $response = array('success' => true);
+        } else {
+            $message = rtrim($message, ',');
+            $response = array('success' => false, 'message' => $message);
+        }
         return $this->createJsonResponse($response);  
     }
 

@@ -320,11 +320,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($course)) {
 			throw $this->createServiceException('课程不存在，更新失败！');
 		}
+
+		$fields = $this->_filterCourse($fields);
 		$fields = $this->_filterCourseFields($fields);
 
-		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
-
 		$fields = CourseSerialize::serialize($fields);
+		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
 		return CourseSerialize::unserialize(
 			$this->getCourseDao()->updateCourse($id, $fields)
@@ -360,6 +361,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'startTime' => 0,
 			'endTime'  => 0,
 			'locationId' => 0,
+			'type' => '',
 			'subType' => array(),
 			'subjectIds' => array(),
 			'address' => '',

@@ -4,6 +4,7 @@ define(function(require, exports, module) {
     var TagChooser = require('tag-chooser');
     var TagTreeChooser = require('tag-tree-chooser');
     exports.run = function() {
+        var type = $('[name=type]').val();
         _initTagTreeChooser();
         var chooserTreeForCategories;
         function _initTagTreeChooser()
@@ -13,7 +14,7 @@ define(function(require, exports, module) {
               sourceUrl: $('#categories-chooser').data('sourceUrl'),
               queryUrl: $('#categories-chooser').data('queryUrl'),
               matchUrl: $('#categories-chooser').data('matchUrl'),
-              maxTagNum: 1
+              maxTagNum: type === 'package' ? 15 : 1
             });
 
             chooserTreeForCategories.on('change', function(tags) {
