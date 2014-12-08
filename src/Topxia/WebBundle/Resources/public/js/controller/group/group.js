@@ -97,7 +97,15 @@
         }
         
         if($('#post-thread-form').length>0){
-        var editor=EditorFactory.create('#post_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+
+            if($('#group_reward').length>0){
+
+                var editor=EditorFactory.create('#post_content', 'haveHidden', {extraFileUploadParams:{group:'user'}});
+      
+            }else{
+                var editor=EditorFactory.create('#post_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+      
+            }
         var validator_post_content = new Validator({
             element: '#post-thread-form',
             failSilently: true,
@@ -309,7 +317,7 @@
         }
         if($('.actions').length>0){
        
-            $('.actions').on('click','.post-delete-btn,.post-adopt-btn',function(){
+            $('.group-post-list').on('click','.post-delete-btn,.post-adopt-btn',function(){
                 
                 var $trigger = $(this);
                  if (!confirm($trigger.attr('title') + '？')) {

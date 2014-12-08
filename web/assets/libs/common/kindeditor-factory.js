@@ -49,7 +49,13 @@ define(function(require, exports, module) {
             $('#uploadModal').on('click','.del-file',function(){
 
                 var id=$(this).attr("data-id");
-                $('#file-'+id).remove();
+
+                if(!$('#file1-'+id).length>0){
+                    $.post("/group/attach/delete/"+id);
+                }
+
+                $('#file1-'+id).remove();
+                $('#file-'+id).remove();       
 
             });
             
@@ -112,11 +118,11 @@ define(function(require, exports, module) {
                     
                     var response=eval("("+response+")");
        
-                    $('#block-table').append('<tr id="file-'+response.id+'" ><td><label class="control-label"><span class="glyphicon glyphicon-folder-close"></span> '+response.name+'</label></td><td><input type="hidden" name="id[]" value="'+response.id+'"/><input type="text" class="form-control" name="description[]" title="'+response.name+'"></td><td><input type="text" name="coin[]" class="form-control"></td><td><button type="button" class="del-file btn btn-default" data-id="'+response.id+'" >删除</button></td></tr>');
+                    $('#block-table').append('<tr id="file1-'+response.id+'" ><td><label class="control-label"><span class="glyphicon glyphicon-folder-close"></span> '+response.name+'</label></td><td><input type="hidden" name="id[]" value="'+response.id+'"/><input type="text" class="form-control" name="description[]" title="'+response.name+'"></td><td><input type="text" name="coin[]" class="form-control"></td><td><button type="button" class="del-file btn btn-default" data-id="'+response.id+'" >删除</button></td></tr>');
                  
      
                 }).error(function(message) {
-                    Notify.danger("上传失败！")
+                    Notify.danger("上传失败！请查看文件类型和大小！")
 
                 });
 

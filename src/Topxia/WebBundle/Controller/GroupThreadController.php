@@ -81,7 +81,7 @@ class GroupThreadController extends BaseController
 
         $thread=$this->getThreadService()->getThread($threadId);
 
-        $attachs=$this->getThreadService()->searchHides(array("threadId"=>$thread['id'],'type'=>'attachment'),array("createdTime","DESC"),0,1000);
+        $attachs=$this->getThreadService()->searchGoods(array("threadId"=>$thread['id'],'type'=>'attachment'),array("createdTime","DESC"),0,1000);
 
         if($request->getMethod()=="POST"){
             $thread = $request->request->all();
@@ -117,19 +117,19 @@ class GroupThreadController extends BaseController
             'is_groupmember' => $this->getGroupMemberRole($id)));  
     }
 
-    public function deleteAttach($hideId)
+    public function deleteAttachAction($goodsId)
     {   
         $currentUser = $this->getCurrentUser();
 
-        $hide=$this->getThreadService()->getHide($hideId);
+        $goods=$this->getThreadService()->getGoods($goodsId);
 
-        $thread=$this->getThreadService()->getThread($hide['threadId']);
+        $thread=$this->getThreadService()->getThread($goods['threadId']);
 
-        if(!$this->checkManagePermission($id,$thread)){
+        if(!$this->checkManagePermission($thread['groupId'],$thread)){
 
-            if($currentUser['id'] == $hide['userId']){
+            if($currentUser['id'] == $goods['userId']){
 
-                $this->getThreadService()->deleteHide($hideId);
+                $this->getThreadService()->deleteGoods($goodsId);
 
             }else{
 
@@ -138,7 +138,9 @@ class GroupThreadController extends BaseController
           
         }
 
-        return ;
+        $this->getThreadService()->deleteGoods($goodsId);
+
+        return new Response("true");
 
     }
 
@@ -280,6 +282,15 @@ class GroupThreadController extends BaseController
             if($reply){
                 $postReplyAll=array_merge($postReplyAll,ArrayToolkit::column($reply, 'userId'));
             }
+
+            $attachs=$this->getThreadService()->searchGoods(array('postId'=>$value,'type'=>'postAttachment'),array("createdTime","DESC"),0,1000);
+        
+            $postFileIds=ArrayToolkit::column($attachs, 'fileId');
+
+            $files=$this->getFileService()->getFilesByIds($postFileIds);
+
+            $postFiles[$value]=$files;
+            $postAttachs[$value]=$attachs;
         }
 
         $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
@@ -302,7 +313,7 @@ class GroupThreadController extends BaseController
 
         $threadMain=$this->hideThings($threadMain);
 
-        $attachs=$this->getThreadService()->searchHides(array("threadId"=>$threadMain['id'],'type'=>'attachment'),array("createdTime","DESC"),0,1000);
+        $attachs=$this->getThreadService()->searchGoods(array("threadId"=>$threadMain['id'],'type'=>'attachment'),array("createdTime","DESC"),0,1000);
 
         $fileIds=ArrayToolkit::column($attachs, 'fileId');
 
@@ -329,6 +340,8 @@ class GroupThreadController extends BaseController
             'isAdopt'=>$isAdopt,
             'attachs'=>$attachs,
             'files'=>$files,
+            'postFiles'=>$postFiles,
+            'postAttachs'=>$postAttachs,
             'is_groupmember' => $this->getGroupMemberRole($id)));
     }
 
@@ -371,19 +384,20 @@ class GroupThreadController extends BaseController
             return $this->redirect($this->generateUrl('login'));
         }
 
-        $hide=$this->getThreadService()->getHide($fileId);
+        $goods=$this->getThreadService()->getGoods($fileId);
 
-        $file=$this->getFileService()->getFile($hide['fileId']);
+        $file=$this->getFileService()->getFile($goods['fileId']);
 
-        if($hide['coin'] > 0 && $user['id']!=$file['userId']){
+        if($goods['coin'] > 0 && $user['id']!=$file['userId']){
 
-            $buyHide=$this->getThreadService()->getbuyHideByUserIdandHideId($user['id'],$hide['id']);
-            if(!$buyHide) 
+            $Trade=$this->getThreadService()->getTradeByUserIdandGoodsId($user['id'],$goods['id']);
+            if(!$Trade) 
 
             return $this->createMessageResponse('info','您未购买该附件!');
         }
 
-        $file=$this->getFileService()->getFile($hide['fileId']); 
+        $file=$this->getFileService()->getFile($goods['fileId']); 
+        $this->getThreadService()->waveGoodsHitNum($goods['id']);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -398,12 +412,12 @@ class GroupThreadController extends BaseController
 
         $response = BinaryFileResponse::create($filename, 200, array(), false);
 
-        $$hide['title'] = urlencode($hide['title']);
-        $$hide['title'] = str_replace('+', '%20', $hide['title']);
+        $$goods['title'] = urlencode($goods['title']);
+        $$goods['title'] = str_replace('+', '%20', $goods['title']);
         if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-            $response->headers->set('Content-Disposition', 'attachment; filename="'.$hide['title'].'"');
+            $response->headers->set('Content-Disposition', 'attachment; filename="'.$goods['title'].'"');
         } else {
-            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$hide['title']);
+            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$goods['title']);
         }
 
         $response->headers->set('Content-type', "application/octet-stream");
@@ -428,12 +442,12 @@ class GroupThreadController extends BaseController
         $user=$this->getCurrentUser();
         $account=$this->getCashService()->getAccountByUserId($user->id,true);
 
-        $attach=$this->getThreadService()->getHide($attachId);
+        $attach=$this->getThreadService()->getGoods($attachId);
 
         if(isset($account['cash']))
             $account['cash']=intval($account['cash']);
 
-        $buyHide=$this->getThreadService()->getbuyHideByUserIdandHideId($user->id,$attach['id']);
+        $Trade=$this->getThreadService()->getTradeByUserIdandGoodsId($user->id,$attach['id']);
 
         if($request->getMethod()=="POST"){
 
@@ -445,15 +459,15 @@ class GroupThreadController extends BaseController
                     
                 }
 
-                if(empty($buyHide)){
+                if(empty($Trade)){
 
                     $this->getCashService()->reWard($attach['coin'],'下载附件<'.$attach['title'].'>',$user->id,'cut');
 
                     $data=array(
-                        'hideId'=>$attach['id'],
+                        'GoodsId'=>$attach['id'],
                         'userId'=>$user->id,
                         'createdTime'=>time());
-                    $this->getThreadService()->addBuyHide($data);
+                    $this->getThreadService()->addTrade($data);
 
                     $reward=$attach['coin']*0.2;
                     if(intval($reward)<1)
@@ -469,7 +483,7 @@ class GroupThreadController extends BaseController
         return $this->render('TopxiaWebBundle:Group:buy-attach-modal.html.twig',array(
             'account'=>$account,
             'attach'=>$attach,
-            'buyHide'=>$buyHide,
+            'Trade'=>$Trade,
             'attachId'=>$attachId,
             ));
     }
@@ -499,7 +513,14 @@ class GroupThreadController extends BaseController
 
             }else{
 
-                 $post=$this->getThreadService()->postThread($content,$groupId,$user['id'],$threadId);
+                $post=$this->getThreadService()->postThread($content,$groupId,$user['id'],$threadId);
+
+                $fileIds=$postContent['fileIds'];
+                $fileTitles=$postContent['fileTitles'];
+                $fileCoins=$postContent['fileCoins'];
+                $fileDescriptions=$postContent['fileDescriptions'];
+
+                $this->getThreadService()->addPostAttach($fileIds,$fileTitles,$fileDescriptions,$fileCoins,$thread['id'],$post['id']); 
 
             }       
             $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
@@ -755,7 +776,7 @@ class GroupThreadController extends BaseController
 
             $this->getCashService()->reWard($need,'查看话题隐藏内容',$user->id,'cut');
 
-            $this->getThreadService()->addBuyHide(array('threadId'=>$threadId,'userId'=>$user->id,'createdTime'=>time()));
+            $this->getThreadService()->addTrade(array('threadId'=>$threadId,'userId'=>$user->id,'createdTime'=>time()));
             
             $reward=$need*0.2;
             if(intval($reward)<1)
@@ -830,9 +851,9 @@ class GroupThreadController extends BaseController
             $value=" ".$value;
             sscanf($value,"%[^[][hide=coin%[^]]]%[^$$]",$content,$coin,$hideContent);
             
-            $buyHide=$this->getThreadService()->getbuyHideByUserIdandThreadId($thread['id'],$user->id);
+            $Trade=$this->getThreadService()->getTradeByUserIdandThreadId($thread['id'],$user->id);
 
-            if($role == 2 || $role ==3 || $user['id'] == $thread['userId'] || !empty($buyHide) ){
+            if($role == 2 || $role ==3 || $user['id'] == $thread['userId'] || !empty($Trade) ){
 
                 if($coin){
 

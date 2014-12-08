@@ -2,37 +2,37 @@
 namespace Topxia\Service\Group\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Group\Dao\ThreadHideDao;
+use Topxia\Service\Group\Dao\ThreadGoodsDao;
 
-class ThreadHideDaoImpl extends BaseDao implements ThreadHideDao
+class ThreadGoodsDaoImpl extends BaseDao implements ThreadGoodsDao
 {
 
-    protected $table = 'groups_thread_hide';
+    protected $table = 'groups_thread_goods';
 
     private $serializeFields = array(
         'tagIds' => 'json',
     );
 
-    public function getHide($id)
+    public function getGoods($id)
     {
         $sql = "SELECT * FROM {$this->table} where id=? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function addHide($hide)
+    public function addGoods($Goods)
     {
-        $hide = $this->createSerializer()->serialize($hide, $this->serializeFields);
+        $Goods = $this->createSerializer()->serialize($Goods, $this->serializeFields);
 
-        $affected = $this->getConnection()->insert($this->table, $hide);
+        $affected = $this->getConnection()->insert($this->table, $Goods);
         if ($affected <= 0) {
 
-            throw $this->createDaoException('Insert ThreadHide error.');
+            throw $this->createDaoException('Insert ThreadGoods error.');
         }
 
-        return $this->getHide($this->getConnection()->lastInsertId());
+        return $this->getGoods($this->getConnection()->lastInsertId());
     }
 
-    public function waveHide($id, $field, $diff)
+    public function waveGoods($id, $field, $diff)
     {
         $fields = array('hitNum');
         if (!in_array($field, $fields)) {
@@ -42,20 +42,20 @@ class ThreadHideDaoImpl extends BaseDao implements ThreadHideDao
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }
 
-    public function updateHide($id,$fields)
+    public function updateGoods($id,$fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
-        return $this->getHide($id);
+        return $this->getGoods($id);
     }
 
-    public function deleteHideByThreadId($id,$type)
+    public function deleteGoodsByThreadId($id,$type)
     {
         $sql ="DELETE FROM {$this->table} WHERE threadId = ? and type = ? ";
         return $this->getConnection()->executeUpdate($sql, array($id,$type));
     }
 
-    public function deleteHide($id)
+    public function deleteGoods($id)
     {
         $sql ="DELETE FROM {$this->table} WHERE id = ? ";
         return $this->getConnection()->executeUpdate($sql, array($id));
@@ -68,7 +68,13 @@ class ThreadHideDaoImpl extends BaseDao implements ThreadHideDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchHides($conditions,$orderBy,$start,$limit)
+    public function waveGoodsHitNum($goodsId)
+    {
+        $sql = "UPDATE {$this->table} SET hitnum = hitnum + 1 WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeQuery($sql, array($goodsId));
+    }
+
+    public function searchGoods($conditions,$orderBy,$start,$limit)
     {
         $this->filterStartLimit($start, $limit);
 
@@ -85,9 +91,10 @@ class ThreadHideDaoImpl extends BaseDao implements ThreadHideDao
     {
         $conditions = array_filter($conditions);
         return $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'groups_thread_hide')
+            ->from($this->table, 'groups_thread_goods')
             ->andWhere('threadId = :threadId')
             ->andWhere('fileId = :fileId')
+            ->andWhere('postId = :postId')
             ->andWhere('type = :type')
             ;
     }

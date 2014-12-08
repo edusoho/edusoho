@@ -5,7 +5,7 @@
 {% block body %}
 
 <form id="hide-form" class="form-horizontal" method="post" action="{{path('group_thread_buy_attach',{attachId:attachId})}}">
-  {% if not buyHide %}
+  {% if not Trade %}
   <div class="row form-group">
     <div class="col-md-3 col-md-offset-2 control">
       <label class="control-label"> 账户余额:</label>
@@ -38,8 +38,8 @@
   <script>
     app.load('group/hide-modal');
   </script>
-  {% if not buyHide %}
-  <button id="create-btn" data-submiting-text="正在提交" type="submit" class="{% if attach.coin > account.cash|default(0)%}disabled{% endif %} btn btn-primary pull-right" data-toggle="form-submit" data-target="#hide-form">立即下载</button>
+  {% if not Trade %}
+  <button id="create-btn" data-submiting-text="正在提交" type="submit" class="{% if attach.coin > account.cash|default(0)%}disabled{% endif %} btn btn-primary pull-right" data-toggle="form-submit" data-target="#hide-form">购买</button>
   {% else %}
     <a id="btn-download" href="{{path('group_attach_download',{fileId:attach.id})}}" class="btn btn-primary pull-right" >立即下载</a>
   {% endif %}

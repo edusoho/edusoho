@@ -39,6 +39,7 @@ class WebExtension extends \Twig_Extension
             'fill_question_stem_html' =>new \Twig_Filter_Method($this, 'fillQuestionStemHtmlFilter'),
             'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter'),
             'purify_html' => new \Twig_Filter_Method($this, 'getPurifyHtml'),
+            'file_type' => new \Twig_Filter_Method($this, 'getFileType'),
         );
     }
 
@@ -550,6 +551,16 @@ class WebExtension extends \Twig_Extension
         }
 
         return $text;
+    }
+
+    public function getFileType($fileName,$string=null)
+    {
+        $fileName=explode(".", $fileName);
+
+        $name=$fileName[1];
+        if($string) $name=$fileName[1].$string;
+
+        return $name;
     }
 
     public function chrFilter($index)
