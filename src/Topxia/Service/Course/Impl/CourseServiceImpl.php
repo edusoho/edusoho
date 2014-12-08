@@ -2205,6 +2205,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
 	}
 
+	/* course package API */
+	public function findSubCoursesByPackgeId($packageId)
+	{
+		if(empty($packageId)) {
+			$this->createServiceException('参数不正确!');
+		}
+		$this->canManageCourse($packageId);
+		$relations = $this->getCoursePackageItemDao()->findRelationsByPackgeId($packageId);
+		$subCourseIds = ArrayToolkit::column($relations, 'courseId');
+		$subCourses = $this->findCoursesByIds($subCourseIds);
+		$relations = ArrayToolkit::index($relations, 'id');
+		return array($relations, $subCourses);
+	}
+
 	private function getCourseLessonReplayDao()
     {
         return $this->createDao('Course.CourseLessonReplayDao');
@@ -2286,6 +2300,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getLessonLearnDao ()
     {
         return $this->createDao('Course.LessonLearnDao');
+    }
+
+    private function getCoursePackageItemDao()
+    {
+    	return $this->createDao('Course.CoursePackageItemDao');
     }
 
     private function getLessonViewedDao ()

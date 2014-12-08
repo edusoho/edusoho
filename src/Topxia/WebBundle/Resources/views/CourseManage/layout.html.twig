@@ -13,17 +13,27 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="list-group-panel">
-            <div class="list-group-heading">课程信息</div>
+            {% if course.type == 'package' %}
+              <div class="list-group-heading">课程包信息</div>
+            {% else %}
+              <div class="list-group-heading">课程信息</div>
+            {% endif %}
+            
             <div class="list-group">
               <a class="list-group-item {% if side_nav == 'base' %}active{% endif %}" href="{{ path('course_manage_base', {id:course.id}) }}">基本信息</a>
               <a class="list-group-item {% if side_nav == 'detail' %}active{% endif %}" href="{{ path('course_manage_detail', {id:course.id}) }}">详细信息</a>
               <a class="list-group-item {% if side_nav == 'picture' %}active{% endif %}" href="{{ path('course_manage_picture', {id:course.id}) }}">课程图片</a>
-
-              <a class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}" href="{{ path('course_manage_lesson', {id:course.id}) }}">课时管理</a>
-              {% if course.type == 'live' %}
-              <a class="list-group-item {% if side_nav == 'replay' %}active{% endif %}" href="{{ path('live_course_manage_replay', {id:course.id}) }}">录播管理</a>
+              
+              {% if course.type == 'package' %}
+                <a class="list-group-item {% if side_nav == 'sub-course' %}active{% endif %}" href="{{ path('course_manage_sub_course', {id:course.id}) }}">课程管理</a>
+              {% else %}
+                <a class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}" href="{{ path('course_manage_lesson', {id:course.id}) }}">课时管理</a>
+                {% if course.type == 'live' %}
+                <a class="list-group-item {% if side_nav == 'replay' %}active{% endif %}" href="{{ path('live_course_manage_replay', {id:course.id}) }}">录播管理</a>
+                {% endif %}
+                <a class="list-group-item {% if side_nav == 'files' %}active{% endif %}" href="{{ path('course_manage_files', {id:course.id}) }}">文件管理</a>
               {% endif %}
-              <a class="list-group-item {% if side_nav == 'files' %}active{% endif %}" href="{{ path('course_manage_files', {id:course.id}) }}">文件管理</a>
+
               <a class="list-group-item {% if side_nav == 'rating' %}active{% endif %}" href="{{ path('course_manage_init_rating', {id:course.id}) }}">初始评价</a>
             </div>
           </div><!-- /list-group-block -->

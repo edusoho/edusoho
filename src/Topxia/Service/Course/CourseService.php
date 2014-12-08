@@ -332,4 +332,7 @@ interface CourseService
 	public function getCourseLessonReplayByLessonId($lessonId);
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
+
+	/* course package API */
+	public function findSubCoursesByPackgeId($packageId);
 }
