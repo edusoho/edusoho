@@ -98,23 +98,29 @@ class ColumnCourseVoteServiceImpl extends BaseService implements ColumnCourseVot
         return $column;
     }
        public function courseVote(array $columnCourseVote){
+        // var_dump($columnCourseVote);
+        // exit();
             $voteCourseName = $columnCourseVote['voteCourseName'];
-            $voteCourseColumn ;
+            $voteCourseColumn="" ;
             foreach ($columnCourseVote as $key => $value) {
                 if($value==$voteCourseName && $key != 'voteCourseName'){
                     $voteCourseColumn = $key;
                     break;
                 }
             }
-            $countAddColumn;
+            if(empty($voteCourseColumn)){
+                throw $this->createServiceException("要投票的课程不存在!");
+            }
+            $countAddColumn="";
             if($voteCourseColumn=='courseAName'){
                 $countAddColumn='courseACount';
             }
             elseif($voteCourseColumn=='courseBName'){
                 $countAddColumn='courseBCount';
             }
-            $columnCourseVote['countAddColumn']  = $countAddColumn;
-            $this->getColumnCourseVoteDao()->courseVote($columnCourseVote);
+            // $columnCourseVote['countAddColumn']  = $countAddColumn;
+            $this->getColumnCourseVoteDao()->updateCourseVoteCountByIdAndVoteCountColumn($columnCourseVote['id'],$countAddColumn);
+            // courseVote($columnCourseVote);
        }
     // public function updateColumn($id, array $fields)
     // {

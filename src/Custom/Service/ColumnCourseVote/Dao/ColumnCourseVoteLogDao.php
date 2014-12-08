@@ -10,4 +10,3 @@ interface ColumnCourseVoteLogDao
        public function getColumnCourseVoteLog($id);
 }
     
-}

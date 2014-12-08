@@ -10,18 +10,22 @@ class ColumnCourseController extends BaseController
 {
 
     private function crateVote(){
-        
+        return array("id"=>11,'specialColumnId'=>1,'courseAName'=>"iiiiii","courseBName"=>"bbbbb","voteCourseName"=>"iiiiii");
     }
 
-    public function courseVote(){
+    public function courseVoteAction(){
         $user = $this->getCurrentUser();
-        $fields = $request->request->all();
-        $columnCourseVoteId = $fields['columnCourseVoteId'];
+        // $fields = $request->request->all();
+        $fields=$this->crateVote();
+        $columnCourseVoteId = $fields['id'];
         $specialColumnId = $fields['specialColumnId'];
         $voteCourseName = $fields['voteCourseName'];
-        $useId = $user['id'];
+        $userId = $user['id'];
+        $fields['userId'] = $userId;
         $flag = $this->getCustomColumnCourseVoteLogService()->isVoted($fields);
-        if(flag){
+      //   var_dump($flag);
+      // exit();
+        if($flag){
               return $this->createJsonResponse(array('status' => 'false', 'errors'=>'您已经参与过本次投票'));
         }
         //1,投票加一
@@ -34,10 +38,10 @@ class ColumnCourseController extends BaseController
 
 
   private function getCustomColumnCourseVoteService(){
-        return $this->getServiceKernel()->crateService('Custom:ColumnCourseVote.ColumnCourseVoteService');
+        return $this->getServiceKernel()->createService('Custom:ColumnCourseVote.ColumnCourseVoteService');
     }
     private function getCustomColumnCourseVoteLogService(){
-        return $this->getServiceKernel()->crateService('Custom:ColumnCourseVote.ColumnCourseVoteLogService');
+        return $this->getServiceKernel()->createService('Custom:ColumnCourseVote.ColumnCourseVoteLogService');
     }
 
 }

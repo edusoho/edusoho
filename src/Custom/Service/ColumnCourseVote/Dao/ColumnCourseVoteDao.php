@@ -27,7 +27,7 @@ interface ColumnCourseVoteDao
     public function getColumnCourseVoteBySpecialColumnId($specialColumnId);
 
 
-          public function courseVote(array $columnCourseVote);
+   // public function courseVote(array $columnCourseVote);
 
     public function updateCourseVoteCountByIdAndVoteCountColumn($id,$countColumn);
     

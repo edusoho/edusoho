@@ -23,3 +23,6 @@
 # # vip:
 # #     pattern: /vip/
 # #     defaults: { _controller: CustomWebBundle:Vip:index }
+column_course_vote:
+    pattern: /column/course/vote
+    defaults: {_controller: CustomWebBundle:ColumnCourse:courseVote }
