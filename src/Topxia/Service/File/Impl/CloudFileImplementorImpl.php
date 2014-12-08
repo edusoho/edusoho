@@ -284,6 +284,62 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $result['persistentId'];
     }
 
+    public function reconvertOldFile($file, $convertCallback, $pipeline = null)
+    {
+        if (empty($file['convertParams'])) {
+            return null;
+        }
+
+        $params = array(
+            'convertCallback' => $convertCallback,
+            'convertor' => $file['convertParams']['convertor'],
+            'convertParams' => $file['convertParams'],
+        );
+
+        if ($file['type'] == 'video') {
+            $watermarks = $this->getVideoWatermarkImages();
+
+            $file['convertParams']['hasVideoWatermark'] = empty($watermarks) ? 0 : 1;
+            $file['convertParams'] = $this->encodeMetas($file['convertParams']);
+
+            $this->getUploadFileDao()->updateFile($file['id'], array('convertParams'=>$file['convertParams']));
+        }
+
+        if ($pipeline) {
+            $params['pipeline'] = $pipeline;
+        }
+
+        if (($file['type'] == 'video') && $watermarks) {
+            $params['convertParams']['videoWatermarkImages'] = $watermarks;
+        }
+
+        $task = array();
+        $task['key'] = $file['hashId'];
+        $task['processor'] = 'video';
+        $task['directives'] = array(
+            'videoQuality' => $params['convertParams']['videoQuality'],
+            'audioQuality' => $params['convertParams']['audioQuality'],
+            'hlsKey' => $params['convertParams']['hlsKey'],
+            'hlsKeyUrl' => $params['convertParams']['hlsKeyUrl'],
+        );
+
+
+        if (!empty($params['convertParams']['videoWatermarkImages'])) {
+            $task['directives']['watermarks'] = $params['convertParams']['videoWatermarkImages'];
+        }
+
+        $task['callbackUrl'] = $convertCallback;
+
+        $api = $this->createAPIClient();
+        $result = $api->post('/processes', $task);
+        if (empty($result['taskNo'])) {
+            return null;
+        }
+
+        return $result['taskNo'];
+    }
+
+
     public function getMediaInfo($key, $mediaType) {
         return $this->getCloudClient()->getMediaInfo($key, $mediaType);
     }
@@ -415,6 +471,9 @@ class HLSVideoConvertor
         }
 
         $file['metas2'] = empty($file['metas2']) ? array() : $file['metas2'];
+        unset($file['metas2']['sd']);
+        unset($file['metas2']['hd']);
+        unset($file['metas2']['shd']);
         $file['metas2'] = array_merge($file['metas2'], $metas);
         $file['convertStatus'] = 'success';
 
