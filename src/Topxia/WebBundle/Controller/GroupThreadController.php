@@ -262,6 +262,8 @@ class GroupThreadController extends BaseController
         $postReply=array();
         $postReplyCount=array();
         $postReplyPaginator=array();
+        $postFiles=array();
+        $postAttachs=array();
         foreach ($postId as $key => $value) {
 
             $replyCount=$this->getThreadService()->searchPostsCount(array('postId'=>$value));
