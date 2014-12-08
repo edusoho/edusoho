@@ -17,6 +17,10 @@ class Version20141208094934 extends AbstractMigration
 			ALTER table `user` 
 			Add column `payPassword` varchar(64) NOT NULL AFTER `password`;
     	");     	
+        $this->addSql(" 
+            ALTER table `user` 
+            Add column `payPasswordSalt` varchar(64) NOT NULL AFTER `password`;
+        ");         
     }
 
     public function down(Schema $schema)

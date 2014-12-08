@@ -215,10 +215,12 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('参数不正确，更改支付密码失败。');
         }
 
-        error_log($user['salt'],3,'/var/tmp/mylogs.log');
+        $payPasswordSalt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+
 
         $fields = array(
-            'payPassword' => $this->getPasswordEncoder()->encodePassword($newPayPassword, $user['salt'])
+            'payPasswordSalt' => $payPasswordSalt,
+            'payPassword' => $this->getPasswordEncoder()->encodePassword($newPayPassword, $payPasswordSalt)
         );
 
         $this->getUserDao()->updateUser($userId, $fields);
@@ -237,7 +239,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $encoder = $this->getPasswordEncoder();
-        $payPasswordHash = $encoder->encodePassword($payPassword, $user['salt']);
+        $payPasswordHash = $encoder->encodePassword($payPassword, $user['payPasswordSalt']);
         return $user['payPassword'] == $payPasswordHash;
     }
 

@@ -253,7 +253,9 @@ class SettingsController extends BaseController
 	public function payPasswordAction(Request $request) 
 	{ 
 		$user = $this->getCurrentUser(); 
+
 		$hasPayPassword = strlen($user['payPassword']) > 0;
+
 		if ($hasPayPassword){
 			throw new \RuntimeException('用户没有权限不通过旧支付密码，就直接设置新支付密码。');
 		}
@@ -273,10 +275,10 @@ class SettingsController extends BaseController
 					$this->setFlashMessage('danger', '当前用户登陆密码不正确，请重试！');
 				} else {
 					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
-					$this->setFlashMessage('success', '支付密码修改成功。');
+					$this->setFlashMessage('success', '新支付密码设置成功。');
 				}
 
-				return $this->redirect($this->generateUrl('settings_pay_password'));
+				return $this->redirect($this->generateUrl('settings_reset_pay_password'));
 			}
 		}
 
@@ -311,7 +313,7 @@ class SettingsController extends BaseController
 				else 
 				{
 					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
-					$this->setFlashMessage('success', '支付密码修改成功。');
+					$this->setFlashMessage('success', '重置支付密码成功。');
 				}
 
 				return $this->redirect($this->generateUrl('settings_reset_pay_password'));
@@ -322,6 +324,20 @@ class SettingsController extends BaseController
 			'form' => $form->createView()
 		)); 
 	} 
+
+	public function securityQuestionsAction(Request $request)
+	{
+		$user = $this->getCurrentUser(); 
+		if ($request->getMethod() == 'POST') {
+			// var_dump($request->request->all());
+			var_dump($request->request->get('question-1'));var_dump($request->request->get('answer-1'));
+			exit;
+		}		
+		return $this->render('TopxiaWebBundle:Settings:security-questions.html.twig', array( 
+
+		)); 
+
+	}
 
 	public function passwordAction(Request $request)
 	{
