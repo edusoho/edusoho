@@ -53,3 +53,7 @@ course_manage_init_rating_delete:
 course_manage_sub_course:
     pattern:  /course/{id}/manage/subcourse
     defaults: { _controller: CustomWebBundle:SubCourseManage:list }
+
+course_manage_sub_course_add:
+    pattern:  /course/{id}/manage/subcourse/add
+    defaults: { _controller: CustomWebBundle:SubCourseManage:add }

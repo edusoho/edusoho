@@ -140,6 +140,13 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['tagId']);
         }
 
+        if (isset($conditions['subjectId'])) {
+            $subjectId = (int) $conditions['subjectId'];
+            if (!empty($subjectId)) {
+                $conditions['subjectId'] = "|{$conditions['subjectId']}|";
+            }
+        }
+
         if (isset($conditions['tagIds'])) {
             $tagIds = $conditions['tagIds'];
             $conditions['tagsLike'] = '%|';
@@ -154,6 +161,11 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         
         if (isset($conditions['notFree'])) {
             $conditions['notFree'] = 0;
+        }
+
+        if (isset($conditions['type']) && $conditions['type'] == 'not-package') {
+            $conditions['notPackageType'] = "('normal','live')";
+            unset($conditions['type']);
         }
         
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -175,6 +187,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
             ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('createdTime >= :startTime')
+            ->andWhere('subjectIds = :subjectId')
             ->andWhere('createdTime <= :endTime');
 
         if (isset($conditions['categoryIds'])) {
@@ -201,7 +214,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 $vipLevelIds = join(',', $vipLevelIds);
                 $builder->andStaticWhere("vipLevelId IN ($vipLevelIds)");
             }
+        }
 
+        if(isset($conditions['notPackageType'])) {
+            $builder->andStaticWhere("type IN ('normal', 'live')");
         }
 
         return $builder;

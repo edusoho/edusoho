@@ -63,6 +63,7 @@ class CourseInitManageController extends BaseController
 		$this->getReviewService()->deleteReview($id);
 		return $this->createJsonResponse(true); 
 	}
+	
 	private function getCourseService()
 	{
 	    return $this->getServiceKernel()->createService('Course.CourseService');
