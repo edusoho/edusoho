@@ -220,6 +220,17 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             $builder->andStaticWhere("type IN ('normal', 'live')");
         }
 
+        if (isset($conditions['excludeIds']) and is_array($conditions['excludeIds'])) {
+            $excludeIds = array();
+            foreach ($conditions['excludeIds'] as $id) {
+                $excludeIds[] = intval($id);
+            }
+
+            if (!empty($excludeIds)) {
+                $builder->andStaticWhere("id NOT IN (" . implode(',', $excludeIds) . ")");
+            }
+        }
+
         return $builder;
     }
 

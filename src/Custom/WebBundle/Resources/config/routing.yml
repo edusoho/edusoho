@@ -57,3 +57,7 @@ course_manage_sub_course:
 course_manage_sub_course_add:
     pattern:  /course/{id}/manage/subcourse/add
     defaults: { _controller: CustomWebBundle:SubCourseManage:add }
+
+course_manage_sub_course_delete:
+    pattern:  /course/{courseId}/manage/subcourse/{id}/delete
+    defaults: { _controller: CustomWebBundle:SubCourseManage:delete }

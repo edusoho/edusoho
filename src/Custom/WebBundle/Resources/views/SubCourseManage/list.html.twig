@@ -1,0 +1,54 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}课程管理 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'sub-course' %}
+{% set script_controller = 'customwebbundle/controller/subcoursemanage/list' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    课程管理
+    <a class="btn btn-default btn-sm pull-right" href="#modal" data-toggle="modal" data-url="{{ path('course_manage_sub_course_add', {id:course.id}) }}">添加课程</a>
+  </div>
+  <div class="panel-body">
+    <ul class="media-list sub-course-media">
+      {% for relation in relations %}
+        {% set subCourse = subCourses[relation.courseId]|default(null) %}
+        {% if subCourse %}
+          
+            <li class="media">
+              <a class="pull-left" href="{{ path('course_show', {'id':subCourse.id}) }}" target="_blank">
+                <img class="course-pic" src="{{ file_path(subCourse.middlePicture, 'course-large.png') }}" alt="{{ subCourse.title }}">
+              </a>
+              <div class="media-body">
+                <h4 class="media-heading title">{{ subCourse.title }}</h4>
+                <div class="clearfix content">
+                  <span class="text-muted ellipsis teacher-name">教师：
+                    {% for tid in subCourse.teacherIds|slice(0,4) %}
+                      {{ teachers[tid].nickname|default('') }}
+                    {% else %}
+                      --
+                    {% endfor %}
+                  </span>
+                  <a class="btn btn-default btn-sm pull-right delete-btn" data-url="{{ path('course_manage_sub_course_delete', {courseId:course.id, id:relation.id})}}">删除</a>
+                </div>
+            
+                
+              </div>
+            </li>
+          
+
+        {% endif %}
+      {% else %}
+        <div class="empty">课程包下还没有课程！</div>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% endblock %}
+
+
+

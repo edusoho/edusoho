@@ -335,4 +335,8 @@ interface CourseService
 
 	/* course package API */
 	public function findSubCoursesByPackgeId($packageId);
+
+	public function deleteCoursePacakageRelationById($id);
+
+	public function addCourseToPackge($courseId, $packageId);
 }

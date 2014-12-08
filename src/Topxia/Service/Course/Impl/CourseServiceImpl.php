@@ -2219,6 +2219,29 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return array($relations, $subCourses);
 	}
 
+	public function deleteCoursePacakageRelationById($id)
+	{
+		if(empty($id)) {
+			$this->createServiceException('参数不正确!');
+		}
+		$this->getCoursePackageItemDao()->delete($id);
+	}
+
+	public function addCourseToPackge($courseId, $packageId)
+	{
+		$course = $this->getCourse($courseId);
+		$coursePackage = $this->getCourse($packageId);
+		if(empty($course) || empty($coursePackage)) {
+			$this->createServiceException('课程或者课程包不存在！');
+		}
+		$relation = array(
+			'courseId' => $courseId,
+			'packageId' => $packageId
+		);
+		$relation = $this->getCoursePackageItemDao()->addRelation($relation);
+		return $relation;
+	}
+
 	private function getCourseLessonReplayDao()
     {
         return $this->createDao('Course.CourseLessonReplayDao');
