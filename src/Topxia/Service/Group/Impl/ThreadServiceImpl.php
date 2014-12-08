@@ -136,6 +136,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $thread;
     }
 
+    public function deleteHide($id)
+    {
+        $this->getThreadHideDao()->deleteHide($id);
+
+        return true;
+    }
+
     public function addAttach($fileIds,$fileTitles,$fileDescriptions,$fileCoins,$threadId)
     {
         $fileIds=explode(",", $fileIds);
@@ -163,6 +170,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
                 'title'=>$fileTitles[$i],
                 'description'=>$fileDescriptions[$i],
                 'type'=>'attachment',
+                'userId'=>$user->id,
                 'threadId'=>$threadId,
                 'coin'=>$fileCoins[$i],
                 'fileId'=>$fileIds[$i],
@@ -173,14 +181,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
                 $this->getThreadHideDao()->updateHide($hide[0]['id'],$attach);
                 continue;
-
             }
+            
             $this->getThreadHideDao()->addHide($attach);
         }
     }
 
     protected function hideThings($content,$id)
-    {
+    {   
+        $user = $this->getCurrentUser();
         $data=explode('[/hide]', $content);
      
         foreach ($data as $key => $value) {
@@ -195,6 +204,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
                     'type'=>'content',
                     'threadId'=>$id,
                     'coin'=>$coin,
+                    'userId'=>$user->id,
                     'createdTime'=>time());
                 $this->getThreadHideDao()->addHide($hide);
             }

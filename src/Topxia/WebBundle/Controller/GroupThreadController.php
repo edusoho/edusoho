@@ -117,6 +117,31 @@ class GroupThreadController extends BaseController
             'is_groupmember' => $this->getGroupMemberRole($id)));  
     }
 
+    public function deleteAttach($hideId)
+    {   
+        $currentUser = $this->getCurrentUser();
+
+        $hide=$this->getThreadService()->getHide($hideId);
+
+        $thread=$this->getThreadService()->getThread($hide['threadId']);
+
+        if(!$this->checkManagePermission($id,$thread)){
+
+            if($currentUser['id'] == $hide['userId']){
+
+                $this->getThreadService()->deleteHide($hideId);
+
+            }else{
+
+                return $this->createMessageResponse('info','您没有权限编辑');
+            }  
+          
+        }
+
+        return ;
+
+    }
+
     public function checkUserAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();

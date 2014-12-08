@@ -46,17 +46,10 @@ define(function(require, exports, module) {
             var descriptions=[];
             var coins=[];
             var names=[];
-            $('#uploadModal').on('input','input[name="description[]"]',function(){
+            $('#uploadModal').on('click','.del-file',function(){
 
-                var rule=/^([\u4E00-\uFA29]|[a-zA-Z0-9_])*$/i;
-
-                var status=rule.test($(this).val());
-                
-/*                if(!status){
-
-                    alert('描述必须是中文字、英文字母、数字及下划线组成!');
-                    $(this).val("");
-                }*/
+                var id=$(this).attr("data-id");
+                $('#file-'+id).remove();
 
             });
             
@@ -119,7 +112,7 @@ define(function(require, exports, module) {
                     
                     var response=eval("("+response+")");
        
-                    $('#block-table').append('<tr><td><label class="control-label"><span class="glyphicon glyphicon-folder-close"></span> '+response.name+'</label></td><td><input type="hidden" name="id[]" value="'+response.id+'"/><input type="text" class="form-control" name="description[]" title="'+response.name+'"></td><td><input type="text" name="coin[]" class="form-control"></td></tr>');
+                    $('#block-table').append('<tr id="file-'+response.id+'" ><td><label class="control-label"><span class="glyphicon glyphicon-folder-close"></span> '+response.name+'</label></td><td><input type="hidden" name="id[]" value="'+response.id+'"/><input type="text" class="form-control" name="description[]" title="'+response.name+'"></td><td><input type="text" name="coin[]" class="form-control"></td><td><button type="button" class="del-file btn btn-default" data-id="'+response.id+'" >删除</button></td></tr>');
                  
      
                 }).error(function(message) {

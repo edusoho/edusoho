@@ -74,4 +74,6 @@ interface ThreadService
 
     public function searchHides($conditions,$orderBy,$start,$limit);
 
+    public function deleteHide($id);
+
 }

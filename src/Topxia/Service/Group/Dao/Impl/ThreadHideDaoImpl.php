@@ -55,6 +55,12 @@ class ThreadHideDaoImpl extends BaseDao implements ThreadHideDao
         return $this->getConnection()->executeUpdate($sql, array($id,$type));
     }
 
+    public function deleteHide($id)
+    {
+        $sql ="DELETE FROM {$this->table} WHERE id = ? ";
+        return $this->getConnection()->executeUpdate($sql, array($id));
+    }
+
     public function getCoinByThreadId($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)

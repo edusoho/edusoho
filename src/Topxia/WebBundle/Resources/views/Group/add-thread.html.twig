@@ -137,11 +137,11 @@
           </tr>
           {% if thread|default(null) %}
           {% for attach in attachs %}
-            <tr>
+            <tr id="file-{{attach.id}}">
               <td><label class="control-label"><span class="glyphicon glyphicon-folder-close"></span> {{attach.title}}</label></td>
               <td><input type="hidden" name="id[]" value="{{attach.fileId}}"/><input type="text" class="form-control" name="description[]" title="{{attach.title}}" value="{{attach.description}}"></td>
               <td><input type="text" name="coin[]" class="form-control" value="{{attach.coin}}"></td>
-              <td><button type="button" class="btn btn-default" data-id="{{attach.id}}" ></button></td>
+              <td><button type="button" class="del-file btn btn-default" data-id="{{attach.id}}">删除</button></td>
             </tr>       
           {% endfor %}
         {% endif %}

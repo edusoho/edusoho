@@ -14,6 +14,8 @@ interface ThreadHideDao
 
     public function deleteHideByThreadId($id,$type);
 
+    public function deleteHide($id);
+
     public function getCoinByThreadId($conditions);
 
     public function searchHides($conditions,$orderBy,$start,$limit);
