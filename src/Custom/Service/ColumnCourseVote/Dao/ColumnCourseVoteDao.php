@@ -23,5 +23,12 @@ interface ColumnCourseVoteDao
 
     // public function deleteColumn($id);
      public function getAllCourseVoteCount();
+
+    public function getColumnCourseVoteBySpecialColumnId($specialColumnId);
+
+
+          public function courseVote(array $columnCourseVote);
+
+    public function updateCourseVoteCountByIdAndVoteCountColumn($id,$countColumn);
     
 }

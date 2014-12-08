@@ -15,6 +15,12 @@ class ColumnCourseVoteDaoImpl extends BaseDao implements ColumnCourseVoteDao
         return $this->getConnection()->fetchAssoc($sql, array($id));
     }
 
+
+    public function getColumnCourseVoteBySpecialColumnId($specialColumnId){
+        $sql = "SELECT * FROM {$this->table} where specialColumnId=?";
+        return $this->getConnection()->fetchAll($sql, array($specialColumnId));
+    }
+
     public function addColumnCourseVote(array $columnCourseVote)
     {
         $affected = $this->getConnection()->insert($this->table, $columnCourseVote);
@@ -23,6 +29,11 @@ class ColumnCourseVoteDaoImpl extends BaseDao implements ColumnCourseVoteDao
         }
         return $this->getColumnCourseVote($this->getConnection()->lastInsertId());
     }
+
+       public function updateCourseVoteCountByIdAndVoteCountColumn($id,$countColumn){
+            // $sql = "UPDATE {$this->table} SET {$countColumn=$countColumn+1} WHERE id={$id} ";
+            // $this->getConnection()->exec($sql);
+       }
 
     // public function updateColumn($id, array $fields)
     // {

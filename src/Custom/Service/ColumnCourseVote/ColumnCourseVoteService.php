@@ -20,11 +20,13 @@ interface ColumnCourseVoteService
         // public function isColumnNameAvalieable($name, $exclude=null);
 
         public function addColumnCourseVote(array $columnCourseVote);
+        public function getColumnCourseVoteBySpecialColumnId($specialColumnId);
 
         // public function updateColumn($id, array $fields);
 
         // public function deleteColumn($id);
 
         //   public function changeColumnAvatar($columnId, $filePath, array $options);
+         public function courseVote(array $columnCourseVote);
 }
 

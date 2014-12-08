@@ -1,25 +1,25 @@
-homepage:
-    pattern:  /
-    defaults: { _controller: CustomWebBundle:Default:index }
-course_manage_base:
-    pattern:  /course/{id}/manage/base
-    defaults: { _controller: CustomWebBundle:CourseManage:base }
-course_manage:
-    pattern:  /course/{id}/manage
-    defaults: { _controller: CustomWebBundle:CourseManage:index }
-course_manage_price:
-    pattern:  /course/{id}/manage/price
-    defaults: { _controller: CustomWebBundle:CourseManage:price }
-# course_favorite:
-#     pattern: /course/{id}/favorite
-#     defaults: { _controller: CustomWebBundle:Course:favorite }
-#     methods: [POST]
-column_match:
-    pattern: /column/match_jsonp
-    defaults: { _controller: CustomWebBundle:Column:match }
-course_search_index:
-    pattern: /course/search/xxx
-    defaults: {_controller: CustomWebBundle:CourseSearch:index }
-vip:
-    pattern: /vip/
-    defaults: { _controller: CustomWebBundle:Vip:index }
+# homepage:
+#     pattern:  /
+#     defaults: { _controller: CustomWebBundle:Default:index }
+# course_manage_base:
+#     pattern:  /course/{id}/manage/base
+#     defaults: { _controller: CustomWebBundle:CourseManage:base }
+# course_manage:
+#     pattern:  /course/{id}/manage
+#     defaults: { _controller: CustomWebBundle:CourseManage:index }
+# course_manage_price:
+#     pattern:  /course/{id}/manage/price
+#     defaults: { _controller: CustomWebBundle:CourseManage:price }
+# # course_favorite:
+# #     pattern: /course/{id}/favorite
+# #     defaults: { _controller: CustomWebBundle:Course:favorite }
+# #     methods: [POST]
+# column_match:
+#     pattern: /column/match_jsonp
+#     defaults: { _controller: CustomWebBundle:Column:match }
+# course_search_index:
+#     pattern: /course/search/xxx
+#     defaults: {_controller: CustomWebBundle:CourseSearch:index }
+# # vip:
+# #     pattern: /vip/
+# #     defaults: { _controller: CustomWebBundle:Vip:index }

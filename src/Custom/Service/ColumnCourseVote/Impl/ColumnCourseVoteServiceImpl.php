@@ -39,6 +39,9 @@ class ColumnCourseVoteServiceImpl extends BaseService implements ColumnCourseVot
     {
         return $this->getColumnCourseVoteDao()->getAllCourseVoteCount();
     }
+    public function getColumnCourseVoteBySpecialColumnId($specialColumnId){
+          return $this->getColumnCourseVoteDao()->getColumnCourseVoteBySpecialColumnId($specialColumnId);
+      }
 
     // public function findColumnsByIds(array $ids)
     // {
@@ -68,7 +71,7 @@ class ColumnCourseVoteServiceImpl extends BaseService implements ColumnCourseVot
     public function addColumnCourseVote(array $columnCourseVote)
     {
         $columnCourseVote = ArrayToolkit::parts($columnCourseVote, array('specialColumnId','isShow','courseAName','courseBName','voteStartTime','voteEndTime'));
-
+        
         // $this->filterColumnFields($column);
         $columnCourseVote['createdTime'] = time();
 
@@ -94,7 +97,25 @@ class ColumnCourseVoteServiceImpl extends BaseService implements ColumnCourseVot
 
         return $column;
     }
-
+       public function courseVote(array $columnCourseVote){
+            $voteCourseName = $columnCourseVote['voteCourseName'];
+            $voteCourseColumn ;
+            foreach ($columnCourseVote as $key => $value) {
+                if($value==$voteCourseName && $key != 'voteCourseName'){
+                    $voteCourseColumn = $key;
+                    break;
+                }
+            }
+            $countAddColumn;
+            if($voteCourseColumn=='courseAName'){
+                $countAddColumn='courseACount';
+            }
+            elseif($voteCourseColumn=='courseBName'){
+                $countAddColumn='courseBCount';
+            }
+            $columnCourseVote['countAddColumn']  = $countAddColumn;
+            $this->getColumnCourseVoteDao()->courseVote($columnCourseVote);
+       }
     // public function updateColumn($id, array $fields)
     // {
     //     $column = $this->getColumn($id);

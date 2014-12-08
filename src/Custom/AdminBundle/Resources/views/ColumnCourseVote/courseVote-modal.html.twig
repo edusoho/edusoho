@@ -12,11 +12,11 @@
     <label class="col-md-4
     control-label">专栏名称</label>
     <div class="col-md-6 controls">
-    <select id="course_categoryId"
-    name="categoryId" required="required" class="form-control
+    <select id="specialColumnId"
+    name="specialColumnId" required="required" class="form-control
     width-input width-input-large">
     {{
-    select_options(columnOptions,courseVotes.specialColumnId ,
+    select_options(columnOptions,courseVotes.specialColumnId|default(null),
     '专栏名称') }}
     </select>
     </div>
@@ -24,7 +24,7 @@
 <div class="form-group">
         <label class="col-md-4 control-label">是否显示课程对垒</label>
         <div class="col-md-6 controls radios">
-          {{ radios('none', { 'none':'关闭','active':'开启'}, courseVotes.isShow|default('none') ) }}
+          {{ radios('isShow', { 'none':'关闭','active':'开启'}, isShow|default('none') ) }}
           <div id="courseVotesIsShow" class="help-block">设置系统是否在专栏页面显示课程投票。</div>
         </div>
 </div>
@@ -46,7 +46,7 @@
           <div class="col-md-4 control-label">
             <label for="voteStartTime">投票开始时间</label>
           </div>
-          <div class="col-md-6 controls">
+          <div class="col-md-6 controls" style="z-index:2000">
             <input type="text" id="voteStartTime" name="voteStartTime" class="form-control" value="{{courseVotes.voteStartTime|default()|data_format('Y-m-d H:i')}}">
             <div class="help-block">在投票开始和结束时间之内的投票有效</div>
           </div>
@@ -55,7 +55,7 @@
           <div class="col-md-4 control-label">
             <label for="voteEndTime">投票结束时间</label>
           </div>
-          <div class="col-md-6 controls">
+          <div class="col-md-6 controls" style="z-index:2000">
             <input type="text" id="voteEndTime" name="voteEndTime" class="form-control" value="{{courseVotes.voteEndTime|default()|data_format('Y-m-d H:i')}}">
             <div class="help-block">在投票开始和结束时间之内的投票有效</div>
           </div>

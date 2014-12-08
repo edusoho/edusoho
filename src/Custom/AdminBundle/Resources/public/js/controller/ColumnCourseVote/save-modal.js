@@ -2,15 +2,13 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    require('jquery.select2-css');
-    require('jquery.select2');
     require("jquery.bootstrap-datetimepicker");
-     var Notify = require('common/bootstrap-notify');
+    var Notify = require('common/bootstrap-notify');
     exports.run = function() {
         var $form = $('#courseVotes-form');
         var $modal = $form.parents('.modal');
         var $table = $('#courseVotes-table');
-       
+
 
         var validator = new Validator({
             element: $form,
@@ -22,9 +20,11 @@ define(function(require, exports, module) {
 
                 $('#courseVotes-create-btn').button('submiting').addClass('disabled');
 
-                
+
                 $.post($form.attr('action'), $form.serialize(), function(html) {
-                    var $html = $(html);
+                     var $html = $(html);
+                if(Object.prototype.toString.call(html) === "[object String]"){
+                     
                     if ($table.find('#' + $html.attr('id')).length > 0) {
                         $('#' + $html.attr('id')).replaceWith($html);
                         Notify.success('专栏更新成功！');
@@ -33,19 +33,25 @@ define(function(require, exports, module) {
                         Notify.success('专栏添加成功!');
                     }
                     $modal.modal('hide');
+                }else{
+                     Notify.warning($html.message);
+                }
+                
+           
                 });
 
             }
         });
 
-         $("#voteStartTime").datetimepicker({
+        $("#voteStartTime").datetimepicker({
             format: 'yyyy-mm-dd hh:ii',
             language: 'zh-CN',
             todayBtn: true,
             autoclose: true,
             startDate: new Date(),
             todayHighlight: true,
-            forceParse: false
+            forceParse: false,
+            pickerPosition: "top-right"
         });
 
         $("#voteEndTime").datetimepicker({
@@ -60,11 +66,27 @@ define(function(require, exports, module) {
 
 
 
-        // validator.addItem({
-        //     element: '#column-name-field',
-        //     required: true,
-        //     rule: 'remote'
-        // });
+        validator.addItem({
+            element: '[name=specialColumnId]',
+            // element: '#specialColumnId',
+            required: true
+        });
+        validator.addItem({
+            element: '#courseAName',
+            required: true
+        });
+        validator.addItem({
+            element: '#courseBName',
+            required: true
+        });
+        validator.addItem({
+            element: '#voteStartTime',
+            required: true
+        });
+        validator.addItem({
+            element: '#voteEndTime',
+            required: true
+        });
 
         // $modal.find('.delete-column').on('click', function() {
         //     if (!confirm('真的要删除该专栏吗？')) {

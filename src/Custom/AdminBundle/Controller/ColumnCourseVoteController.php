@@ -34,7 +34,7 @@ class ColumnCourseVoteController extends BaseController
 
 		if ('POST' == $request->getMethod()) {
 			$courseVote = $this->getColumnCourseVoteService()->addColumnCourseVote($request->request->all());
-			return $this->render('CustomAdminBundle:ColumnCourseVote:list-tr.html.twig', array('courseVotes' => $courseVotes));
+			return $this->render('CustomAdminBundle:ColumnCourseVote:list-tr.html.twig', array('courseVote' => $courseVote));
 		}
 
 		return $this->render('CustomAdminBundle:ColumnCourseVote:courseVote-modal.html.twig', array(
