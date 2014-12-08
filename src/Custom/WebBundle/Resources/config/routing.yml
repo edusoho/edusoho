@@ -21,3 +21,31 @@ json_knowledges_match:
 json_knowledges_query:
     pattern:  /json/Knowledges/query
     defaults: { _controller: CustomWebBundle:JsonKnowledges:query }
+
+ajax_categories_search:
+    pattern:  /ajax/categories/search
+    defaults: { _controller: CustomWebBundle:AajxCategories:search }
+
+ajax_categories_match:
+    pattern:  /ajax/categories/match
+    defaults: { _controller: CustomWebBundle:AajxCategories:match }
+
+ajax_categories_query:
+    pattern:  /ajax/categories/query
+    defaults: { _controller: CustomWebBundle:AajxCategories:query }
+
+ajax_category_isSubject:
+    pattern:  /ajax/categories/check
+    defaults: { _controller: CustomWebBundle:AajxCategories:isSubjct }
+
+course_manage_init_rating:
+    pattern:  /course/{id}/manage/init/rating
+    defaults: { _controller: CustomWebBundle:CourseInitManage:index }
+
+course_manage_init_rating_create:
+    pattern:  /course/{id}/manage/init/rating/create
+    defaults: { _controller: CustomWebBundle:CourseInitManage:create }
+
+course_manage_init_rating_delete:
+    pattern:  /course/{courseId}/manage/init/rating/{id}/delete
+    defaults: { _controller: CustomWebBundle:CourseInitManage:delete }

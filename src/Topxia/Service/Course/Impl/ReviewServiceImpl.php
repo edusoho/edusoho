@@ -104,6 +104,28 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 		return $review;
 	}
 
+	public function createInitReview($fields)
+	{
+		$course = $this->getCourseService()->tryManageCourse($fields['courseId']);
+		if($course['status'] != 'published') {
+			$result = array(
+				'status' => 'fail',
+				'message' => '请先发布课程！',
+			);
+		} else {
+			$user = $this->register($fields);
+			$this->getCourseService()->becomeStudent($fields['courseId'], $user['id']);
+			$fields['userId'] = $user['id'];
+			$review = $this->saveReview($fields);
+			$result = array(
+				'status' => 'ok',
+				'message' => '添加初始评价成功！',
+			);
+		}
+
+		return $result;
+	}
+
 	public function deleteReview($id)
 	{
 		$review = $this->getReview($id);
@@ -138,6 +160,17 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 		return false;
 	}
 
+	private function register($fields)
+	{
+		$uniqueEamil = uniqid() . '@edusoho.com';
+		$registration = array(
+			'email' => $uniqueEamil,
+			'nickname' => $fields['nickname'],
+			'password' => 'qwertyuio',
+		);
+		$user = $this->getUserService()->register($registration);
+		return $user;
+	}
 
 	private function getReviewDao()
     {

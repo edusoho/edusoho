@@ -1,0 +1,10 @@
+<div class="form-group">
+    <label class="col-md-2 control-label" for="tag-chooser">
+        标签
+    </label>
+
+    <div class="col-md-6 controls">
+        {% include 'CustomWebBundle:Tag:tagchooser.html.twig' with {id: 'tag-chooser', type: 'public'} %}
+        <input type="hidden" name="tagIds" value="{{ course.tagIds|default('')|join(',') }}">
+    </div>
+</div>

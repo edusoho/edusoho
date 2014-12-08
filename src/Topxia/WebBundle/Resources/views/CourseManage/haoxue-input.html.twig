@@ -1,0 +1,37 @@
+<link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
+<link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser.css') }}" />
+<div class="form-group">
+  <label class="col-md-2 control-label">科目</label>
+  <div class="col-md-6 controls">
+    {% include 'CustomWebBundle:Tag:tagchooser-categories.html.twig' with {id: 'categories-chooser', group: 'course'} %}
+  	<input type="hidden" name="subjectIds" value="{{ course.subjectIds|default('')|join(',') }}" data-url="{{  path('ajax_category_isSubject') }}">
+  	<div class="help-block" style="display:none;"></div>
+  </div>
+</div>
+
+<div class="form-group">
+	<label class="col-md-2 control-label">课程类型</label>
+	<div class="col-md-8 controls">
+		<label class="checkbox-inline">
+		  <input type="checkbox" id="normalType" name="subType[]" value="normal" {% if course.subType['normal'] %} checked {% endif %}>非协议班
+		</label>
+		<label class="checkbox-inline">
+		  <input type="checkbox" id="refundType" name="subType[]" value="refund" {% if course.subType['refund'] %} checked {% endif %}>退费班
+		</label>
+		<label class="checkbox-inline">
+		  <input type="checkbox" id="retakeType" name="subType[]" value="retake" {% if course.subType['retake'] %} checked {% endif %}>重修班
+		</label>
+		<label class="checkbox-inline">
+		  <input type="checkbox" id="mentoringType" name="subType[]" value="mentoring" {% if course.subType['mentoring'] %} checked {% endif %}>辅导班
+		</label>
+	</div>
+</div>
+
+<div class="form-group" id="refundRateDiv" {% if not course.subType['refund'] %} style="display:none" {% endif %}>
+	<label class="col-md-2 control-label">退费比例</label>
+	<div class="col-md-3 controls">
+		<input type="text" id="refundRate" name="refundRate" required="required" class="form-control" value="{{ course.refundRate|default(0.00) }}">
+		<span class="text-muted">请输入0-100之间的整数</span>
+		<div class="help-block" style="display:none;"></div>
+	</div>
+</div>
