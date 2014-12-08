@@ -879,6 +879,11 @@ class GroupController extends BaseController
         return $filters;
     }
 
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+    
     private function convertFiltersToConditions($id, $filters)
     {
         $conditions = array('groupId' => $id,'num'=>10,'status'=>'open');

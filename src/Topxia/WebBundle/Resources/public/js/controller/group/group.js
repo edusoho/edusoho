@@ -13,6 +13,17 @@
     }
     exports.run = function() {
 
+        var add_btn_clicked = false;
+        
+        $('#add-btn').click(function(){
+            if(!add_btn_clicked)
+            {
+                $('#add-btn').button('loading').addClass('disabled');
+                add_btn_clicked=true;
+            }
+            return true;
+        });
+
         $("#thread-list").on('click', '.uncollect-btn, .collect-btn', function() {
             var $this = $(this);
 
