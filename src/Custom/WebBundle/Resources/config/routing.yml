@@ -42,3 +42,10 @@ course_manage_lecture_note:
     pattern:  /course/{courseId}/manage/{lessonId}/lecture/note
     defaults: { _controller: CustomWebBundle:LectureNote:index }
 
+course_create_lecture_note:
+    pattern:  /course/{courseId}/{lessonId}/create/{type}/lecture/note
+    defaults: { _controller: CustomWebBundle:LectureNote:create }
+
+course_delete_lecture_note:
+    pattern:  /course/{id}/delete//lecture/note
+    defaults: { _controller: CustomWebBundle:LectureNote:delete }

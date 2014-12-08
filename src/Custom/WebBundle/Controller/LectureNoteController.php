@@ -11,9 +11,14 @@ class LectureNoteController extends BaseController
     public function indexAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
-        $category = $this->getCategoryService()->getCategory($course['subjectIds'][0]);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        // $category = $this->getCategoryService()->getCategory($course['subjectIds'][0]);
+        $category['id'] = '3';
 
         $conditions = $request->query->all();
+
+        $type = empty($conditions['type'])? 'essayMaterial':$conditions['type'];
+
         if (!empty($conditions['knowledgeIds'])) {
             $conditions['knowledgeIds'] = explode(',', $conditions['knowledgeIds']);
             $knowledgeSearchs = $this->getKnowledgeService()->findKnowledgeByIds($conditions['knowledgeIds']);
@@ -29,31 +34,89 @@ class LectureNoteController extends BaseController
         }
         $conditions['categoryId'] = $category['id'];
 
-        $articleMaterialsCount = $this->getArticleMaterialService()->searchArticleMaterialsCount($conditions);
+        $essayMaterialsCount = $this->getArticleMaterialService()->searchArticleMaterialsCount($conditions);
 
-        $paginator = new Paginator($this->get('request'), $articleMaterialsCount, 8);
+        $paginator = new Paginator($this->get('request'), $essayMaterialsCount, 8);
 
-        $articleMaterials = $this->getArticleMaterialService()->searchArticleMaterials(
+        $essayMaterials = $this->getArticleMaterialService()->searchArticleMaterials(
             $conditions, 
             array('createdTime','desc'),
             $paginator->getOffsetCount(),  
             $paginator->getPerPageCount()
         );
 
-        $knowledgeSearchs = !empty($knowledgeIds) ? $this->getKnowledgeService()->findKnowledgeByIds($knowledgeIds):array();
-        $tagSearchs = !empty($tagIds) ? $this->getTagService()->findTagsByIds($tagIds):array();
+        $essayPaginator = new Paginator(
+            $this->get('request'),
+            $this->getEssayService()->searchEssaysCount($conditions),
+            20
+        );
+
+        $essays = $this->getEssayService()->searchEssays(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $essayPaginator->getOffsetCount(),
+            $essayPaginator->getPerPageCount()
+        );
+
+        $lectureNotes = $this->getLectureNoteService()->findAllLectureNotes();
+        $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($essayMaterials,'mainKnowledgeId'));
+        $knowledges = ArrayToolkit::index($knowledges, 'id');
 
         return $this->render('CustomWebBundle:LectureNote:modal.html.twig',array(
+            'courseId' => $courseId,
+            'lessonId' => $lessonId,
             'category' => $category,
-            'parentId' => $parentId,
-            'essay' => $essay,
-            'articleMaterials' => $articleMaterials,
+            'essayMaterials' => $essayMaterials,
+            'lectureNotes' => $lectureNotes,
+            'type' => $type,
+            'essays' => $essays ,
             'paginator' => $paginator,
+            'essayPaginator' => $essayPaginator,
             'knowledges' => $knowledges,
             'tagSearchs' => $tagSearchs,
             'knowledgeSearchs' => $knowledgeSearchs,
-            'articleMaterialsCount' => $articleMaterialsCount,
+            'essayMaterialsCount' => $essayMaterialsCount,
         ));
+    }
+
+    public function createAction(Request $request, $courseId, $lessonId, $type)
+    {
+        if ($type == 'essay'){
+            $essay = $this->getEssayService()->getEssay($request->request->get('id'));
+            $field = array(
+                'courseId' => $courseId,
+                'lessonId' => $lessonId,
+                'title' => $essay['title'],
+                'essayId' => $essay['id'],
+                'essayMaterialId' => '0',
+            );
+        } else {
+            $essayMaterial = $this->getArticleMaterialService()->getArticleMaterial($request->request->get('id'));
+            $field = array(
+                'courseId' => $courseId,
+                'lessonId' => $lessonId,
+                'title' => $essayMaterial['title'],
+                'essayId' => '0',
+                'essayMaterialId' => $essayMaterial['id'],
+            );
+        }
+
+        $lectureNote = $this->getLectureNoteService()->createLectureNote($field);
+
+        return $this->render('CustomWebBundle:LectureNote:list-item.html.twig',array(
+            'lectureNote'=> $lectureNote,
+        ));
+    }
+
+    public function deleteAction($id)
+    {
+        $lectureNote = $this->getLectureNoteService()->getLectureNote($id);
+        if (empty($lectureNote)){
+            return $this->createJsonResponse(array('status' => 'error', 'message'=>'讲义不存在，无法删除'));
+        }
+        $course = $this->getCourseService()->tryManageCourse($lectureNote['courseId']);
+        $this->getLectureNoteService()->deleteLectureNote($id);
+        return $this->createJsonResponse(array('status' => 'true', 'message'=>'讲义删除成功'));
     }
 
     private function getCourseService()
@@ -84,5 +147,10 @@ class LectureNoteController extends BaseController
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Tag.TagService');
+    }
+
+    public function getLectureNoteService()
+    {
+        return $this->getServiceKernel()->createService('Custom:LectureNote.LectureNoteService');
     }
 }
