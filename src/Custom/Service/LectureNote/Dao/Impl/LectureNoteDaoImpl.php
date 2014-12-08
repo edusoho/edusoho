@@ -1,5 +1,4 @@
 <?php
-
 namespace Custom\Service\LectureNote\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
@@ -33,5 +32,11 @@ class LectureNoteDaoImpl extends BaseDao implements LectureNoteDao
     public function deleteLectureNote($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
+    public function findLectureNotesByLessonId($lessonId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE lessonId = ? ORDER BY createdTime DESC";
+        return $this->getConnection()->fetchAll($sql, array($lessonId)) ? : array();
     }
 }

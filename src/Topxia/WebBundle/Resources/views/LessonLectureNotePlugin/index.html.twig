@@ -1,12 +1,30 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-{% if lesson.type != 'live' %}
-<h5>课时简介</h5>
+<h5>课时讲义</h5>
 <div class="lesson-about">
-	{% if lesson.summary  %}
-	  {{ lesson.summary }}
-	{% else %}
-	  此课时无简介。
-	{% endif %}
+  {% for lessonLectureNote in lessonLectureNotes %}
+    {{ lessonLectureNote.title }}
+  {% else %}
+    此课时暂无讲义。
+  {% endfor %}
+  {% for items in essayContentItems %}
+    {% for id, item in items %}
+      {% if 'chapter' in id %}
+        <div>
+          {% if item.type == 'unit' %}
+            <h4>&nbsp;&nbsp;第{{ item.number }}节： {{ item.title }}</h4>
+          {% else %}
+          <h4>第{{ item.number }}章： {{ item.title }}</h4>
+          {% endif %}
+        </div>
+      {% elseif 'content' in id %}
+        <div>{{ item.content|raw }}</div>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  {% for essayMaterial in essayMaterials%}
+    {{ essayMaterial.content }}
+  {% endfor %}
+
 </div>
-{% endif %}

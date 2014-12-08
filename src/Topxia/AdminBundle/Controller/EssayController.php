@@ -126,7 +126,7 @@ class  EssayController extends BaseController
         $essay = $this->getEssayService()->getEssay($id);
         return $this->render('TopxiaAdminBundle:Essay:show-modal.html.twig', array(
             'essay' => $essay
-            ));
+        ));
     }
 
     private function getCategoryService()

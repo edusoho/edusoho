@@ -3,11 +3,11 @@
 {% if lesson.type != 'live' %}
 <h5>课时简介</h5>
 <div class="lesson-about">
-	{% if lesson.summary  %}
-	  {{ lesson.summary }}
-	{% else %}
-	  此课时无简介。
-	{% endif %}
+  {% if lesson.summary  %}
+    {{ lesson.summary }}
+  {% else %}
+    此课时无简介。
+  {% endif %}
 </div>
 {% endif %}
 
@@ -32,11 +32,11 @@
             <span class="glyphicon glyphicon-new-window text-muted text-sm" title="网络链接资料"></span>
           </div>
         {% else %}
-        	<div class="title">
-        		<a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" target="_blank">{{ material.title }}</a>
-        		<span class="meta">({{ material.fileSize|file_size }})</span>
-        	</div>
-        	<div class="summary">{{ material.description }}</div>
+          <div class="title">
+            <a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" target="_blank">{{ material.title }}</a>
+            <span class="meta">({{ material.fileSize|file_size }})</span>
+          </div>
+          <div class="summary">{{ material.description }}</div>
         {% endif %}
       </div>
     </li>

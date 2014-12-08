@@ -149,7 +149,7 @@ class LectureNoteController extends BaseController
         return $this->getServiceKernel()->createService('Tag.TagService');
     }
 
-    public function getLectureNoteService()
+    private function getLectureNoteService()
     {
         return $this->getServiceKernel()->createService('Custom:LectureNote.LectureNoteService');
     }

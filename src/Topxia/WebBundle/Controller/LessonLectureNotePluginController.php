@@ -2,27 +2,35 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 
 class LessonLectureNotePluginController extends BaseController
 {
-
     public function initAction (Request $request)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($request->query->get('courseId'));
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $request->query->get('lessonId'));
 
-        if ($lesson['mediaId'] > 0) {
-            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-        } else {
-            $file = null;
+        $lessonLectureNotes = $this->getLectureNoteService()->findLessonLectureNotes($lesson['id']);
+        $essayIds = ArrayToolkit::column($lessonLectureNotes,'essayId');
+        array_filter($essayIds);
+        $essays = array();$essayContentItems = array();
+        foreach ($essayIds as $id) {
+            $essays[] = $this->getEssayService()->getEssay($id);
+            $essayContentItems[] = $this->getEssayContentService()->getEssayItems($id);
         }
 
-        $lessonMaterials = $this->getMaterialService()->findLessonMaterials($lesson['id'], 0, 100);
-        return $this->render('TopxiaWebBundle:LessonMaterialPlugin:index.html.twig',array(
-            'materials' => $lessonMaterials,
+        $essayMaterialIds = ArrayToolkit::column($lessonLectureNotes,'essayMaterialId');
+        array_filter($essayMaterialIds);
+        $essayMaterials = $this->getArticleMaterialService()->getArticleMaterialsByIds($essayMaterialIds);
+
+        return $this->render('TopxiaWebBundle:LessonLectureNotePlugin:index.html.twig',array(
+            'lessonLectureNotes' => $lessonLectureNotes,
+            'essays' => $essays,
+            'essayContentItems' => $essayContentItems,
+            'essayMaterials' => $essayMaterials,
             'course' => $course,
             'lesson' => $lesson,
-            'file' => $file,
         ));
     }
 
@@ -36,8 +44,14 @@ class LessonLectureNotePluginController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    protected function getMaterialService()
+    private function getLectureNoteService()
     {
-        return $this->getServiceKernel()->createService('Course.MaterialService');
+        return $this->getServiceKernel()->createService('Custom:LectureNote.LectureNoteService');
     }
+
+    private function getArticleMaterialService()
+    {
+        return $this->getServiceKernel()->createService('ArticleMaterial.ArticleMaterialService');
+    }
+
 }
