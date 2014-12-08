@@ -10,24 +10,51 @@
 
     	<div class="row">
     		<div class="col-md-1 col-md-offset-2" >
+
 				<svg version="1.1" id="图形" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="27px" height="31px" viewBox="0 0 1024 1024" enable-background="new 0 0 1024 1024" xml:space="preserve">
-				  <path fill={# "#f4c600" yellow#}  "#eb4f38" {#red#} {# "#11cd6e" green#} d="M981.294225 725.649863l0-521.855179q0-46.929423-23.464711-93.389551t-61.477544-90.104491-86.819432-82.595784-99.021082-69.455545-97.613199-50.683776-83.065078-27.688359l-11.263061-1.877177-10.324473 1.877177q-36.60495 7.508708-84.942255 27.688359t-100.428964 50.683776-102.306141 69.455545-89.635197 82.595784-63.824015 90.104491-24.4033 93.389551l0 521.855179 38.482126 5.631531 431.750687 80.718607 440.197984-80.718607zM512.938588 697.492209l-4.692942 0.938588-336.953254-57.253896 0-299.409716 341.646196 0 0 355.725023zM852.707608 341.767186l-339.769019 0 0-426.119157q32.850596 7.508708 71.332722 22.995417t76.025665 36.60495 72.271311 46.929423 61.477544 55.376719 42.705775 61.477544 15.956004 64.762603l0 137.972502z" transform="translate(0, 812) scale(1, -1)"/>
+				  <path fill=
+					{% if progressScore > 90 %}
+						"#11cd6e"
+					{% elseif progressScore > 60 %}
+						"#f4c600"
+					{% else %}
+						"#eb4f38" 
+					{% endif %} 
+				  d="M981.294225 725.649863l0-521.855179q0-46.929423-23.464711-93.389551t-61.477544-90.104491-86.819432-82.595784-99.021082-69.455545-97.613199-50.683776-83.065078-27.688359l-11.263061-1.877177-10.324473 1.877177q-36.60495 7.508708-84.942255 27.688359t-100.428964 50.683776-102.306141 69.455545-89.635197 82.595784-63.824015 90.104491-24.4033 93.389551l0 521.855179 38.482126 5.631531 431.750687 80.718607 440.197984-80.718607zM512.938588 697.492209l-4.692942 0.938588-336.953254-57.253896 0-299.409716 341.646196 0 0 355.725023zM852.707608 341.767186l-339.769019 0 0-426.119157q32.850596 7.508708 71.332722 22.995417t76.025665 36.60495 72.271311 46.929423 61.477544 55.376719 42.705775 61.477544 15.956004 64.762603l0 137.972502z" transform="translate(0, 812) scale(1, -1)"/>
 				</svg>
 
     		</div>
 			<div class="col-md-5 progress mtm" style=" padding-left: 0px; padding-right: 0px;">
-			  <div class="progress-bar" role="progressbar" style="width: 30{#{}#}%;"></div>
+			  <div class="progress-bar" role="progressbar" style="width: {{ progressScore }}%;"></div>
 			</div>
 			<div class="col-md-4 mtm text-danger{#{}#}">
-				安全等级：{#{低}#}
+				
+				{% if progressScore > 90 %}
+					<a style="color:green">安全等级：高</a>
+				{% elseif progressScore > 60 %}
+					<a style="color:yellow">安全等级：中</a>
+				{% else %}
+					<a style="color:red">安全等级：低</a>
+				{% endif %}
+
 			</div>
 		</div>
 		<hr>
 
 	    
 		<div class="row">
-			<div class="col-md-1 col-md-offset-1 text-success{#{}#}" style="font-size:20px">
-				<span class="glyphicon glyphicon-ok{#{}#}"></span>
+			<div class="col-md-1 col-md-offset-1 
+				{% if hasLoginPassword %} 
+					text-success
+				{% else %}
+					text-danger
+				{% endif %}
+			" style="font-size:20px">
+				{% if hasLoginPassword %} 
+					<span class="glyphicon glyphicon-ok"></span>
+				{% else %}
+					<span class="glyphicon glyphicon-warning-sign"></span>
+				{% endif %}
 			</div>
 
 			<span class="col-md-3 " style="margin-top: 5px;" >登录密码</span>
@@ -40,22 +67,49 @@
 
 	    
 		<div class="row">
-			<div class="col-md-1 col-md-offset-1 text-danger{#{}#}" style="font-size:20px">
-				<span class="glyphicon glyphicon-warning-sign {#{}#}" ></span>
+			<div class="col-md-1 col-md-offset-1 
+				{% if hasPayPassword %} 
+					text-success
+				{% else %}
+					text-danger
+				{% endif %}
+			" style="font-size:20px">
+				{% if hasPayPassword %} 
+					<span class="glyphicon glyphicon-ok"></span>
+				{% else %}
+					<span class="glyphicon glyphicon-warning-sign"></span>
+				{% endif %}
 			</div>
 
 			<span class="col-md-3 " style="margin-top: 5px;" >支付密码</span>
 
 			<span class="col-md-4 " style="margin-top: 5px;" >在网校进行消费行为时需要输入的密码</span>
 
-			<a href="{#{ path('settings_password') }#}" class="col-md-2 pull-right " style="margin-top: 5px;color:blue;" >设置{#{}#}</a>
+			{% if hasPayPassword %} 
+				<a href="{# {{ path('settings_reset_pay_password') }} #}" class="col-md-2 pull-right " style="margin-top: 5px;color:blue;" >重置</a>
+			{% else %}
+				<a href="{{ path('settings_pay_password') }}" class="col-md-2 pull-right " style="margin-top: 5px;color:blue;" >去设置{#{/重置}#}</a>
+			{% endif %}
+			
 		</div>
 		<hr>
 
 	    
 		<div class="row">
-			<div class="col-md-1 col-md-offset-1 text-danger{#{}#}" style="font-size:20px">
-				<span class="glyphicon glyphicon-warning-sign {#{}#}" ></span>
+			<div class="col-md-1 col-md-offset-1 
+				{% if hasFindPayPasswordQuestion %} 
+					text-success
+				{% else %}
+					text-danger
+				{% endif %}
+
+			" style="font-size:20px">
+			
+				{% if hasFindPayPasswordQuestion %} 
+					<span class="glyphicon glyphicon-ok"></span>
+				{% else %}
+					<span class="glyphicon glyphicon-warning-sign"></span>
+				{% endif %}
 			</div>
 
 			<span class="col-md-3 " style="margin-top: 5px;" >安全问题</span>

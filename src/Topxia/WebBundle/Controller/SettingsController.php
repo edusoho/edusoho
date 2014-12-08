@@ -231,9 +231,55 @@ class SettingsController extends BaseController
 	public function securityAction(Request $request) 
 	{ 
 		$user = $this->getCurrentUser(); 
+		if (empty($user['setup'])) {
+			return $this->redirect($this->generateUrl('settings_setup'));
+		}
 
+		$hasLoginPassword = strlen($user['password']) > 0;
+		$hasPayPassword = strlen($user['payPassword']) > 0;
+		$hasFindPayPasswordQuestion = False;
+
+		$progressScore = 1 + ($hasLoginPassword? 33:0 ) + ($hasPayPassword? 33:0 ) + ($hasFindPayPasswordQuestion? 33:0 );
 
 		return $this->render('TopxiaWebBundle:Settings:security.html.twig', array( 
+			'progressScore' => $progressScore,
+			'hasLoginPassword' => $hasLoginPassword,
+			'hasPayPassword' => $hasPayPassword,
+			'hasFindPayPasswordQuestion' => $hasFindPayPasswordQuestion
+		)); 
+	} 
+
+	
+	public function payPasswordAction(Request $request) 
+	{ 
+		$user = $this->getCurrentUser(); 
+
+
+		$form = $this->createFormBuilder()
+			->add('currentUserLoginPassword', 'password')
+			->add('newPayPassword', 'password')
+			->add('confirmPayPassword', 'password')
+			->getForm();
+
+
+		if ($request->getMethod() == 'POST') {
+			$form->bind($request);
+			if ($form->isValid()) {
+				$passwords = $form->getData();
+				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
+					$this->setFlashMessage('danger', '当前用户登陆密码不正确，请重试！');
+				} else {
+					//var_dump($passwords);exit;
+					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
+					$this->setFlashMessage('success', '支付密码修改成功。');
+				}
+
+				return $this->redirect($this->generateUrl('settings_pay_password'));
+			}
+		}
+
+		return $this->render('TopxiaWebBundle:Settings:pay-password.html.twig', array( 
+			'form' => $form->createView()
 		)); 
 	} 
 
@@ -259,7 +305,7 @@ class SettingsController extends BaseController
 					$this->setFlashMessage('danger', '当前密码不正确，请重试！');
 				} else {
 					$this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
-					$this->setFlashMessage('success', '密码修改成功。');
+					$this->setFlashMessage('success', '支付密码修改成功。');
 				}
 
 				return $this->redirect($this->generateUrl('settings_password'));

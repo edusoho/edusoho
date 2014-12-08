@@ -208,6 +208,39 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
+    public function changePayPassword($userId, $newPayPassword)
+    {
+        $user = $this->getUser($userId);
+        if (empty($user) or empty($newPayPassword)) {
+            throw $this->createServiceException('参数不正确，更改支付密码失败。');
+        }
+
+        error_log($user['salt'],3,'/var/tmp/mylogs.log');
+
+        $fields = array(
+            'payPassword' => $this->getPasswordEncoder()->encodePassword($newPayPassword, $user['salt'])
+        );
+
+        $this->getUserDao()->updateUser($userId, $fields);
+
+        $this->getLogService()->info('user', 'pay-password-changed', "用户{$user['email']}(ID:{$user['id']})重置支付密码成功");
+
+        return true;
+    }
+
+    public function verifyPayPassword($id, $payPassword)
+    {
+        $user = $this->getUser($userId);
+
+        if (empty($user)) {
+            throw $this->createServiceException('参数不正确，校验支付密码失败。');
+        }
+
+        $encoder = $this->getPasswordEncoder();
+        $payPasswordHash = $encoder->encodePassword($payPassword, $user['salt']);
+        return $user['payPassword'] == $payPasswordHash;
+    }
+
     public function verifyPassword($id, $password)
     {
         $user = $this->getUser($id);

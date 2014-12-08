@@ -15,6 +15,8 @@ interface AuthService
 
     public function changePassword($userId, $oldPassword, $newPassword);
 
+    public function changePayPassword($userId, $userLoginPassword, $newPayPassword);
+
     public function checkUsername($username);
 
     public function checkEmail($email);

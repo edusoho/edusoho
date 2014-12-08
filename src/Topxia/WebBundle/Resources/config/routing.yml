@@ -882,6 +882,11 @@ settings_security:
     pattern:  /settings/security 
     defaults: { _controller: TopxiaWebBundle:Settings:security }
 
+settings_pay_password: 
+    pattern:  /settings/pay_password 
+    defaults: { _controller: TopxiaWebBundle:Settings:payPassword }
+
+
 setting_nickname:
     pattern: /settings/nickname
     defaults: { _controller: TopxiaWebBundle:Settings:nickname }
