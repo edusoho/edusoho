@@ -339,4 +339,6 @@ interface CourseService
 	public function deleteCoursePacakageRelationById($id);
 
 	public function addCourseToPackge($courseId, $packageId);
+
+	public function sortSubCoursesByIds($ids);
 }

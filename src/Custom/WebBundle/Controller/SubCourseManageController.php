@@ -71,6 +71,14 @@ class SubCourseManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function sortAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $sortIds = $request->request->get('ids');
+        $this->getCourseService()->sortSubCoursesByIds($sortIds);
+        return $this->createJsonResponse(true);
+    }
+
     private function findTeachers($courses)
     {
         $teacherIds =array();

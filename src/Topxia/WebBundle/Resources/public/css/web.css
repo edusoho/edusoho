@@ -4486,34 +4486,3 @@ a.homework-essay-textarea-pack-up{
 .course-data a{
 	color:#2a6496;
 }
-
-.sub-course-media .title {
-	margin-top: 10px;
-	font-size: 22px;
-}
-.sub-course-media .course-pic {
-	width: 180px;
-	height: 80px;
-}
-.sub-course-media .course-pic-modal {
-	width: 120px;
-	height: 50px;
-}
-
-.sub-course-media .teacher-name {
-	display: block;
-	margin: 0;
-	max-width: 60%;
-}
-
-.sub-course-media .delete-btn {
-	margin-top: -45px;
-}
-
-.sub-course-media .choose-btn {
-	margin-top: -40px;
-}
-
-.sub-course-media .content {
-	margin-top: 15px;
-}

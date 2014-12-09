@@ -8,7 +8,11 @@ interface CoursePackageItemDao
 
     public function findRelationsByPackgeId($packageId);
 
+    public function findRelationsCountByPackageId($packageId);
+
     public function addRelation($relation);
 
     public function delete($id);
+
+    public function update($id, $fields);
 }

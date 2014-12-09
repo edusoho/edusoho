@@ -61,3 +61,8 @@ course_manage_sub_course_add:
 course_manage_sub_course_delete:
     pattern:  /course/{courseId}/manage/subcourse/{id}/delete
     defaults: { _controller: CustomWebBundle:SubCourseManage:delete }
+
+course_manage_sub_course_sort:
+    pattern:  /course/{courseId}/manage/subcourse/sort
+    defaults: { _controller: CustomWebBundle:SubCourseManage:sort }
+    methods: [POST]

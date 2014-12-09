@@ -13,12 +13,12 @@
     <a class="btn btn-default btn-sm pull-right" href="#modal" data-toggle="modal" data-url="{{ path('course_manage_sub_course_add', {id:course.id}) }}">添加课程</a>
   </div>
   <div class="panel-body">
-    <ul class="media-list sub-course-media">
+    <ul class="media-list sub-course-media sort-ul" data-sort-url="{{ path('course_manage_sub_course_sort', {courseId:course.id}) }}">
       {% for relation in relations %}
         {% set subCourse = subCourses[relation.courseId]|default(null) %}
         {% if subCourse %}
           
-            <li class="media">
+            <li class="media" id="{{ relation.id }}">
               <a class="pull-left" href="{{ path('course_show', {'id':subCourse.id}) }}" target="_blank">
                 <img class="course-pic" src="{{ file_path(subCourse.middlePicture, 'course-large.png') }}" alt="{{ subCourse.title }}">
               </a>

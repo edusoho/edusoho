@@ -1,0 +1,59 @@
+/* subcourse manage */
+.sub-course-media .title {
+	margin-top: 20px;
+	font-size: 20px;
+}
+.sub-course-media .course-pic {
+	width: 180px;
+	height: 80px;
+}
+
+.sub-course-media .course-pic-modal {
+	width: 120px;
+	height: 50px;
+}
+
+.sub-course-media .teacher-name {
+	display: block;
+	margin: 0;
+	max-width: 60%;
+}
+
+.sub-course-media .delete-btn {
+	margin-top: -45px;
+	margin-right: 20px;
+}
+
+.sub-course-media .choose-btn {
+	margin-top: -40px;
+}
+
+.sub-course-media.sort-ul li>a {
+	padding: 15px 0 0 10px;
+}
+.sub-course-media .content {
+	margin-top: 15px;
+}
+
+.sub-course-media.sort-ul li {
+	cursor: pointer;
+}
+
+.sub-course-media.sort-ul li:hover {
+	background-color: #eee;
+}
+
+ul.sort-ul.sub-course-media li.placeholder {
+  position: relative;
+  margin-bottom: 10px 0;
+  width: 100%;
+  height: 90px;
+  background: #FCFFC0;
+  border: 1px dashed #ccc;
+  list-style: none;
+}
+
+ul.sort-ul.sub-course-media li.placeholder:before {
+  position: absolute;
+  /** Define arrowhead **/
+}

@@ -18,8 +18,14 @@ class CoursePackageItemDaoImpl extends BaseDao implements CoursePackageItemDao
 
     public function findRelationsByPackgeId($packageId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE packageId = ?";
+        $sql = "SELECT * FROM {$this->table} WHERE packageId = ? ORDER BY sequence";
         return $this->getConnection()->fetchAll($sql, array($packageId)) ? : array();
+    }
+
+    public function findRelationsCountByPackageId($packageId)
+    {
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE packageId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($packageId));
     }
 
     public function addRelation($relation)
@@ -35,6 +41,12 @@ class CoursePackageItemDaoImpl extends BaseDao implements CoursePackageItemDao
     {
         $sql = "DELETE FROM {$this->table} WHERE id = ?";
         return $this->getConnection()->executeUpdate($sql, array($id));
+    }
+
+    public function update($id, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getRelation($id);
     }
 
 }

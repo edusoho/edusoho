@@ -2234,12 +2234,23 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if(empty($course) || empty($coursePackage)) {
 			$this->createServiceException('课程或者课程包不存在！');
 		}
+		$count = $this->getCoursePackageItemDao()->findRelationsCountByPackageId($packageId);
 		$relation = array(
 			'courseId' => $courseId,
-			'packageId' => $packageId
+			'packageId' => $packageId,
+			'sequence' => $count+1
 		);
 		$relation = $this->getCoursePackageItemDao()->addRelation($relation);
 		return $relation;
+	}
+
+	public function sortSubCoursesByIds($ids)
+	{
+		$sequence = 1;
+		foreach ($ids as $id) {
+			$this->getCoursePackageItemDao()->update($id, array('sequence' => $sequence));
+			$sequence++;
+		}
 	}
 
 	private function getCourseLessonReplayDao()
