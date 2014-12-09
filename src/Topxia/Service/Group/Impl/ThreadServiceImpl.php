@@ -239,7 +239,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
             $value=" ".$value;
             sscanf($value,"%[^[][hide=coin%[^]]]%[^$$]",$content,$coin,$title);
 
-            if($coin >0 && $title !="" ){
+            if(!is_numeric($coin)) $coin=0;
+
+            if($coin >=0 && $title !="" ){
 
                 $hide=array(
                     'title'=>$title,
