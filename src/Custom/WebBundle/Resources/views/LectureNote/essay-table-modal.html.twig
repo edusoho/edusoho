@@ -11,7 +11,7 @@
         <tr>
           <td>{{ essay.title }}</td>
           <td>
-            <button type="submit" class="btn btn-primary essay-creat" data-loading-text="正在提交" data-url="{{ path('course_create_lecture_note',{courseId:courseId, lessonId:lessonId , style: 'essay', type:type})}}" data-id='{{ essay.id }}' tabindex="5">添加</button>
+            <button type="submit" class="btn btn-primary essay-creat" data-loading-text="正在提交" data-url="{{ path('course_manage_lecture_note_create',{courseId:courseId, lessonId:lessonId , style: 'essay', type:type})}}" data-id='{{ essay.id }}' tabindex="5">添加</button>
           </td>
         </tr>
       {% endfor %}

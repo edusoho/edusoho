@@ -8,14 +8,15 @@ use Topxia\Common\ArrayToolkit;
 
 class LectureNoteController extends BaseController
 {
-    public function indexAction(Request $request, $courseId, $lessonId, $type)
+    public function indexAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
+        $conditions = $request->query->all();
+        $lessonId = $conditions['lessonId'];
+        $type = empty($conditions['type'])? 'lectureNote':$conditions['type'];
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         // $category = $this->getCategoryService()->getCategory($course['subjectIds'][0]);
         $category['id'] = '3';
-
-        $conditions = $request->query->all();
 
         $style = empty($conditions['style'])? 'essayMaterial':$conditions['style'];
 
@@ -80,13 +81,15 @@ class LectureNoteController extends BaseController
         ));
     }
 
-    public function createAction(Request $request, $courseId, $lessonId, $style, $type)
+    public function createAction(Request $request, $courseId)
     {
-        if ($style == 'essay'){
+        $conditions = $request->query->all();
+        $type = empty($conditions['type'])? 'lectureNote':$conditions['type'];
+        if ($conditions['style']== 'essay'){
             $essay = $this->getEssayService()->getEssay($request->request->get('id'));
-            $field = array(
+            $fields = array(
                 'courseId' => $courseId,
-                'lessonId' => $lessonId,
+                'lessonId' => $conditions['lessonId'],
                 'title' => $essay['title'],
                 'essayId' => $essay['id'],
                 'essayMaterialId' => '0',
@@ -94,9 +97,9 @@ class LectureNoteController extends BaseController
             );
         } else {
             $essayMaterial = $this->getArticleMaterialService()->getArticleMaterial($request->request->get('id'));
-            $field = array(
+            $fields = array(
                 'courseId' => $courseId,
-                'lessonId' => $lessonId,
+                'lessonId' => $conditions['lessonId'],
                 'title' => $essayMaterial['title'],
                 'essayId' => '0',
                 'essayMaterialId' => $essayMaterial['id'],
@@ -104,7 +107,7 @@ class LectureNoteController extends BaseController
             );
         }
 
-        $lectureNote = $this->getLectureNoteService()->createLectureNote($field);
+        $lectureNote = $this->getLectureNoteService()->createLectureNote($fields);
 
         return $this->render('CustomWebBundle:LectureNote:list-item.html.twig',array(
             'lectureNote'=> $lectureNote,

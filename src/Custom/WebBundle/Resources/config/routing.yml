@@ -39,13 +39,14 @@ ajax_category_isSubject:
     defaults: { _controller: CustomWebBundle:AajxCategories:isSubjct }
 
 course_manage_lecture_note:
-    pattern:  /course/{courseId}/manage/{lessonId}/lecture/note/{type}
-    defaults: { _controller: CustomWebBundle:LectureNote:index, type:'lectureNote' }
+    pattern:  /course/{courseId}/manage/lecture-note
+    defaults: { _controller: CustomWebBundle:LectureNote:index }
 
-course_create_lecture_note:
-    pattern:  /course/{courseId}/{lessonId}/create/{style}/lecture/note/{type}
-    defaults: { _controller: CustomWebBundle:LectureNote:create, type:'lectureNote' }
+course_manage_lecture_note_create:
+    pattern:  /course/{courseId}/lecture-note/create
+    defaults: { _controller: CustomWebBundle:LectureNote:create }
 
-course_delete_lecture_note:
-    pattern:  /course/{id}/delete/lecture/note
+course_manage_lecture_note_delete:
+    pattern:  /course/lecture-note/{id}/delete
     defaults: { _controller: CustomWebBundle:LectureNote:delete }
+
