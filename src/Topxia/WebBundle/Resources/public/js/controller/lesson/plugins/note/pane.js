@@ -17,7 +17,7 @@ define(function(require, exports, module) {
             this.get('plugin').toolbar.showPane(this.get('plugin').code);
             var pane = this,
                 toolbar = pane.get('plugin').toolbar;
-
+console.log(toolbar);
             $.get(pane.get('plugin').api.init, {
                 courseId: toolbar.get('courseId'),
                 lessonId: toolbar.get('lessonId')

@@ -1,0 +1,34 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<h5>课时讲义</h5>
+<div class="lesson-about" style="width:358px;height:660px; overflow-y:auto;">
+  <div>
+  {% for lessonLectureNote in lessonLectureNotes %}
+    {{ lessonLectureNote.title }}
+  {% else %}
+    此课时暂无讲义。
+  {% endfor %}
+  </div>
+  
+  {% for items in essayContentItems %}
+    {% for id, item in items %}
+      {% if 'chapter' in id %}
+        <div>
+          {% if item.type == 'unit' %}
+            <h4>&nbsp;&nbsp;第{{ item.number }}节： {{ item.title }}</h4>
+          {% else %}
+          <h4>第{{ item.number }}章： {{ item.title }}</h4>
+          {% endif %}
+        </div>
+      {% elseif 'content' in id %}
+        <div>{{ item.content|raw }}</div>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  <div>
+    {% for essayMaterial in essayMaterials%}
+      {{ essayMaterial.content|raw }}
+    {% endfor %}
+  </div>
+</div>

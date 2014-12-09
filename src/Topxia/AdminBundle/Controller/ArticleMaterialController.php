@@ -148,7 +148,7 @@ class ArticleMaterialController extends BaseController
     {
         $category = $this->getCategoryService()->getCategory($categoryId);
         if (empty($category)) {
-            throw $this->createNotFoundException("分类(#{$categoryId})不存在，编辑文章素材失败！");
+            throw $this->createNotFoundException("分类(#{$categoryId})不存在，预览文章素材失败！");
         }
 
         $articleMaterial = $this->getArticleMaterialService()->getArticleMaterial($id);

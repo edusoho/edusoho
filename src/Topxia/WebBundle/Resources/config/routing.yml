@@ -358,6 +358,10 @@ course_lesson_plugin_material_init:
     pattern:  /lessonplugin/material/init
     defaults: { _controller: TopxiaWebBundle:LessonMaterialPlugin:init }
 
+course_lesson_plugin_lecture_note_init:
+    pattern:  /lessonplugin/lecture/note/init
+    defaults: { _controller: TopxiaWebBundle:LessonLectureNotePlugin:init }
+
 course_lesson_plugin_note_init:
     pattern:  /lessonplugin/note/init
     defaults: { _controller: TopxiaWebBundle:LessonNotePlugin:init }

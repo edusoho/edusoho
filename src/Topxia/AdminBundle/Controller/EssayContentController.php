@@ -26,18 +26,22 @@ class EssayContentController extends BaseController
         $essay = $this->getEssayService()->getEssay($essayId);
         $category = $this->getCategoryService()->getCategory($essay['categoryId']);
         $parentId = $request->query->get('parentId');
-        $knowledgeIds = $request->query->get('knowledgeIds');
-        $knowledgeIds = empty($knowledgeIds) ? array() : explode(',',$knowledgeIds);
-        $tagIds = $request->query->get('tagIds');
-        $tagIds = empty($tagIds) ? array() : explode(',',$tagIds);
-        $keyword = $request->query->get('keyword');
 
-        $conditions = array(
-            'tagIds' => $tagIds,
-            'knowledgeIds' => $knowledgeIds,
-            'categoryId' => $essay['categoryId'],
-            'keyword' => $keyword,
-        );
+        $conditions = $request->query->all();
+        if (!empty($conditions['knowledgeIds'])) {
+            $conditions['knowledgeIds'] = explode(',', $conditions['knowledgeIds']);
+            $knowledgeSearchs = $this->getKnowledgeService()->findKnowledgeByIds($conditions['knowledgeIds']);
+        } else {
+            $knowledgeSearchs = array();
+        }
+
+        if (!empty($conditions['tagIds'])) {
+            $conditions['tagIds'] = explode(',', $conditions['tagIds']);
+            $tagSearchs = $this->getTagService()->findTagsByIds($conditions['tagIds']);
+        } else {
+            $tagSearchs = array();
+        }
+        $conditions['categoryId'] = $category['id'];
 
         $articleMaterialsCount = $this->getArticleMaterialService()->searchArticleMaterialsCount($conditions);
 
@@ -52,9 +56,6 @@ class EssayContentController extends BaseController
 
         $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($articleMaterials,'mainKnowledgeId'));
         $knowledges = ArrayToolkit::index($knowledges, 'id');
-
-        $knowledgeSearchs = !empty($knowledgeIds) ? $this->getKnowledgeService()->findKnowledgeByIds($knowledgeIds):array();
-        $tagSearchs = !empty($tagIds) ? $this->getTagService()->findTagsByIds($tagIds):array();
 
         return $this->render('TopxiaAdminBundle:EssayContent:content-modal.html.twig',array(
             'category' => $category,

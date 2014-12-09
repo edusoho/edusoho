@@ -521,7 +521,9 @@ class CourseController extends BaseController
 		if (!$this->getCourseService()->canTakeCourse($id)) {
 			return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
 		}
-		
+
+		$learn = $this->getCourseService()->findLearnsByCourseId($id);
+
 		try{
 			list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 			if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
@@ -533,9 +535,6 @@ class CourseController extends BaseController
 					return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
 				}
 			}
-
-
-
 		}catch(Exception $e){
 			throw $this->createAccessDeniedException('抱歉，未发布课程不能学习！');
 		}

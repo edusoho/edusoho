@@ -70,6 +70,11 @@ class ArticleMaterialServiceImpl extends BaseService implements ArticleMaterialS
         return true;
     }
 
+    public function getArticleMaterialsByIds($ids)
+    {
+        return $this->getArticleMaterialDao()->getArticleMaterialsByIds($ids);
+    }
+
     private function getArticleMaterialDao()
     {
         return $this->createDao('ArticleMaterial.ArticleMaterialDao');

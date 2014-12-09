@@ -69,6 +69,18 @@ class ArticleMaterialDaoImpl extends BaseDao implements ArticleMaterialDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
+    public function getArticleMaterialsByIds($ids)
+    {
+        if(empty($ids)) { 
+            return array(); 
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         if (!empty($conditions['keyword'])) {

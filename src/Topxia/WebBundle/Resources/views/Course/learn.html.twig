@@ -10,9 +10,9 @@
 {% set hideSetupHint = true %}
 
 {% if is_plugin_installed('Homework') %}
-  {% set script_arguments = {plugins: ['lesson', 'question', 'note', 'material', 'homework']}  %}
+  {% set script_arguments = {plugins: ['lesson', 'question', 'note', 'material','lecture-note', 'homework']}  %}
 {% else %}  
-  {% set script_arguments = {plugins: ['lesson', 'question', 'note', 'material']}  %}
+  {% set script_arguments = {plugins: ['lesson', 'question', 'note', 'material','lecture-note']}  %}
 {% endif %}
 
 {% set script_controller = 'course/learn' %}
@@ -51,7 +51,7 @@
               data-user-id="{{ app.user.id }}"
           ></div>
           <div class="watermarkEmbedded" ></div>
- 
+
           <div class="lesson-content lesson-content-audio" id="lesson-audio-content" data-role="lesson-content" style="display:none;"></div>
           <div class="lesson-content" id="lesson-swf-content" data-role="lesson-content" style="display:none;"></div>
           <div class="lesson-content" id="lesson-iframe-content" data-role="lesson-content" style="display:none;"></div>
@@ -73,6 +73,9 @@
             <div class="lesson-content-text-body"></div>
           </div>
 
+          <div class="lesson-learner-show">
+            
+          </div>
         </div>
 
         <div class="dashboard-footer clearfix">

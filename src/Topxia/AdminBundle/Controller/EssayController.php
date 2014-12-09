@@ -113,7 +113,7 @@ class  EssayController extends BaseController
     {
         $essay = $this->getEssayService()->getEssay($id);
         $category = $this->getCategoryService()->getCategory($essay['categoryId']);
-        $essayContentItems = $this->getEssayContentService()->getEssayItems($id);        
+        $essayContentItems = $this->getEssayContentService()->getEssayItems($id);      
 
         return $this->render('TopxiaAdminBundle:Essay:preview-modal.html.twig',array(
             'essay' => $essay,
@@ -126,7 +126,7 @@ class  EssayController extends BaseController
         $essay = $this->getEssayService()->getEssay($id);
         return $this->render('TopxiaAdminBundle:Essay:show-modal.html.twig', array(
             'essay' => $essay
-            ));
+        ));
     }
 
     private function getCategoryService()

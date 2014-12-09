@@ -102,7 +102,8 @@
 				{% endif %}
 
       	{% if lesson.type != 'testpaper' %}
-					<li><a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip prs"></span>添加资料</a></li>
+					<li><a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_lecture_note', {courseId:course.id, lessonId:lesson.id,type:'metarial'}) }}"><span class="glyphicon glyphicon-paperclip prs"></span>添加资料</a></li>
+					<li><a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_lecture_note', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip prs"></span>添加讲义</a></li>
 					<li class="divider"></li>
 				{% endif %}
 
