@@ -100,13 +100,14 @@ class CourseController extends BaseController
     {
         $copyCourse = $this->getCourseService()->getCourse($id);
         $course=array();
-        // if ($request->getMethod() == 'POST') {
-        //     $conditions = $request->request->all();
-        //     $course['title']=$conditions['title'];
-        //     $course['type']=$copyCourse['type'];
-        //     $course = $this->getCourseService()->createCourse($course);
-        //     return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
-        // }
+        if ($request->getMethod() == 'POST') {
+            $conditions = $request->request->all();
+            $course['title']=$conditions['title'];
+            $course['type']=$copyCourse['type'];
+
+            $course = $this->getCourseService()->createCourse($course);
+            return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
+        }
         var_dump($copyCourse);exit();
         // $this->getCourseService()->closeCourse($id);
         // return $this->renderCourseTr($id);
