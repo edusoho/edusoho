@@ -58,12 +58,26 @@ interface ThreadService
 
     public function updatePost($id,$fields);
 
-    public function getBuyHide($id);
+    public function getTrade($id);
 
-    public function addBuyHide($fields);
+    public function getGoods($id);
+
+    public function addTrade($fields);
 
     public function getCoinByThreadId($id);
 
-    public function getbuyHideByUserIdandThreadId($id,$userId);
+    public function getTradeByUserIdandThreadId($id,$userId);
+
+    public function getTradeByUserIdandGoodsId($userId,$hideId);
+
+    public function addAttach($fileIds,$fileTitles,$fileDescriptions,$fileCoins,$threadId);
+
+    public function addPostAttach($fileIds,$fileTitles,$fileDescriptions,$fileCoins,$threadId,$postId);
+
+    public function searchGoods($conditions,$orderBy,$start,$limit);
+
+    public function deleteGoods($id);
+
+    public function waveGoodsHitNum($goodsId);
 
 }

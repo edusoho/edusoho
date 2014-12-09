@@ -258,6 +258,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 			);
 	}
 
+
+	public function findPublishedArticlesByTagIdsAndCount($tagIds,$count){
+		return $this->getArticleDao()->findPublishedArticlesByTagIdsAndCount($tagIds,$count);
+	}
+
 	private function filterArticleFields($fields, $mode = 'update')
 	{
         $article = array();

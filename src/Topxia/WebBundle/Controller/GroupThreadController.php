@@ -5,6 +5,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Topxia\Common\FileToolkit;
 
 class GroupThreadController extends BaseController 
 {
@@ -35,14 +37,20 @@ class GroupThreadController extends BaseController
                     ));
             }
 
+            $fileIds=$thread['fileIds'];
+            $fileTitles=$thread['fileTitles'];
+            $fileCoins=$thread['fileCoins'];
+            $fileDescriptions=$thread['fileDescriptions'];
+
             $info=array(
                 'title'=>$thread['thread']['title'],
                 'content'=>$thread['thread']['content'],
                 'groupId'=>$id,
                 'userId'=>$user['id']);
-            
+           
             $thread=$this->getThreadService()->addThread($info);
-
+            $this->getThreadService()->addAttach($fileIds,$fileTitles,$fileDescriptions,$fileCoins,$thread['id']);
+          
             return $this->redirect($this->generateUrl('group_thread_show', array(
                 'id'=>$id,
                 'threadId'=>$thread['id'],
@@ -73,12 +81,22 @@ class GroupThreadController extends BaseController
 
         $thread=$this->getThreadService()->getThread($threadId);
 
+        $attachs=$this->getThreadService()->searchGoods(array("threadId"=>$thread['id'],'type'=>'attachment'),array("createdTime","DESC"),0,1000);
+
         if($request->getMethod()=="POST"){
             $thread = $request->request->all();
             $fields=array(
                 'title'=>$thread['thread']['title'],
                 'content'=>$thread['thread']['content'],);
+
+            $fileIds=$thread['fileIds'];
+            $fileTitles=$thread['fileTitles'];
+            $fileCoins=$thread['fileCoins'];
+            $fileDescriptions=$thread['fileDescriptions'];
+
             $thread=$this->getThreadService()->updateThread($threadId,$fields);
+            $this->getThreadService()->addAttach($fileIds,$fileTitles,$fileDescriptions,$fileCoins,$thread['id']);
+
             if ($user->isAdmin()) {
                 $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$id,'threadId'=>$thread['id']), true);
                 $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员编辑。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
@@ -95,7 +113,35 @@ class GroupThreadController extends BaseController
             'id'=>$id,
             'groupinfo'=>$groupinfo,
             'thread'=>$thread,
+            'attachs'=>$attachs,
             'is_groupmember' => $this->getGroupMemberRole($id)));  
+    }
+
+    public function deleteAttachAction($goodsId)
+    {   
+        $currentUser = $this->getCurrentUser();
+
+        $goods=$this->getThreadService()->getGoods($goodsId);
+
+        $thread=$this->getThreadService()->getThread($goods['threadId']);
+
+        if(!$this->checkManagePermission($thread['groupId'],$thread)){
+
+            if($currentUser['id'] == $goods['userId']){
+
+                $this->getThreadService()->deleteGoods($goodsId);
+
+            }else{
+
+                return $this->createMessageResponse('info','您没有权限编辑');
+            }  
+          
+        }
+
+        $this->getThreadService()->deleteGoods($goodsId);
+
+        return new Response("true");
+
     }
 
     public function checkUserAction(Request $request)
@@ -216,6 +262,8 @@ class GroupThreadController extends BaseController
         $postReply=array();
         $postReplyCount=array();
         $postReplyPaginator=array();
+        $postFiles=array();
+        $postAttachs=array();
         foreach ($postId as $key => $value) {
 
             $replyCount=$this->getThreadService()->searchPostsCount(array('postId'=>$value));
@@ -236,6 +284,15 @@ class GroupThreadController extends BaseController
             if($reply){
                 $postReplyAll=array_merge($postReplyAll,ArrayToolkit::column($reply, 'userId'));
             }
+
+            $attachs=$this->getThreadService()->searchGoods(array('postId'=>$value,'type'=>'postAttachment'),array("createdTime","DESC"),0,1000);
+        
+            $postFileIds=ArrayToolkit::column($attachs, 'fileId');
+
+            $files=$this->getFileService()->getFilesByIds($postFileIds);
+
+            $postFiles[$value]=$files;
+            $postAttachs[$value]=$attachs;
         }
 
         $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
@@ -258,6 +315,12 @@ class GroupThreadController extends BaseController
 
         $threadMain=$this->hideThings($threadMain);
 
+        $attachs=$this->getThreadService()->searchGoods(array("threadId"=>$threadMain['id'],'type'=>'attachment'),array("createdTime","DESC"),0,1000);
+
+        $fileIds=ArrayToolkit::column($attachs, 'fileId');
+
+        $files=$this->getFileService()->getFilesByIds($fileIds);
+
         return $this->render('TopxiaWebBundle:Group:thread.html.twig',array(
             'groupinfo' => $group,
             'isCollected' => $isCollected,
@@ -277,6 +340,10 @@ class GroupThreadController extends BaseController
             'postReplyCount'=>$postReplyCount,
             'postReplyPaginator'=>$postReplyPaginator,
             'isAdopt'=>$isAdopt,
+            'attachs'=>$attachs,
+            'files'=>$files,
+            'postFiles'=>$postFiles,
+            'postAttachs'=>$postAttachs,
             'is_groupmember' => $this->getGroupMemberRole($id)));
     }
 
@@ -309,6 +376,120 @@ class GroupThreadController extends BaseController
             ));
     }
 
+    public function downloadAction(Request $request,$fileId)
+    {  
+        $response = new Response();
+        $user=$this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+                
+            return $this->redirect($this->generateUrl('login'));
+        }
+
+        $goods=$this->getThreadService()->getGoods($fileId);
+
+        $file=$this->getFileService()->getFile($goods['fileId']);
+
+        if($goods['coin'] > 0 && $user['id']!=$file['userId']){
+
+            $Trade=$this->getThreadService()->getTradeByUserIdandGoodsId($user['id'],$goods['id']);
+            if(!$Trade) 
+
+            return $this->createMessageResponse('info','您未购买该附件!');
+        }
+
+        $file=$this->getFileService()->getFile($goods['fileId']); 
+        $this->getThreadService()->waveGoodsHitNum($goods['id']);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        $filename=$this->get('topxia.twig.web_extension')->getFilePath($file['uri']);
+        
+
+        $filename=substr($filename, 1);
+        $filename=explode("?", $filename);
+        $filename=$filename[0];
+
+        $response = BinaryFileResponse::create($filename, 200, array(), false);
+
+        $$goods['title'] = urlencode($goods['title']);
+        $$goods['title'] = str_replace('+', '%20', $goods['title']);
+        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+            $response->headers->set('Content-Disposition', 'attachment; filename="'.$goods['title'].'"');
+        } else {
+            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$goods['title']);
+        }
+
+        $response->headers->set('Content-type', "application/octet-stream");
+
+        return $response;
+
+
+/*        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-type', "application/octet-stream");
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $hide['title'] . '";');
+        $response->headers->set('Content-length', filesize($filename));
+
+        $response->sendHeaders();
+
+        $response->setContent(readfile($filename));
+
+        return $response;*/
+    }
+
+    public function buyAttachAction(Request $request,$attachId)
+    {
+        $user=$this->getCurrentUser();
+        $account=$this->getCashService()->getAccountByUserId($user->id,true);
+
+        $attach=$this->getThreadService()->getGoods($attachId);
+
+        if(isset($account['cash']))
+            $account['cash']=intval($account['cash']);
+
+        $Trade=$this->getThreadService()->getTradeByUserIdandGoodsId($user->id,$attach['id']);
+
+        if($request->getMethod()=="POST"){
+
+                $amount=$request->request->get('amount');
+
+                if(!isset($account['cash']) || $account['cash'] <  $amount ){
+
+                    return $this->createMessageResponse('info','虚拟币余额不足!');
+                    
+                }
+
+                if(empty($Trade)){
+
+                    $this->getCashService()->reWard($attach['coin'],'下载附件<'.$attach['title'].'>',$user->id,'cut');
+
+                    $data=array(
+                        'GoodsId'=>$attach['id'],
+                        'userId'=>$user->id,
+                        'createdTime'=>time());
+                    $this->getThreadService()->addTrade($data);
+
+                    $reward=$attach['coin']*0.2;
+                    if(intval($reward)<1)
+                    $reward=1;
+                    $file=$this->getFileService()->getFile($attach['fileId']);
+                    
+                    $this->getCashService()->reWard(intval($reward),'您发表的附件<'.$attach['title'].'>被购买下载！',$file['userId']);
+
+                }
+
+        }
+
+        return $this->render('TopxiaWebBundle:Group:buy-attach-modal.html.twig',array(
+            'account'=>$account,
+            'attach'=>$attach,
+            'Trade'=>$Trade,
+            'attachId'=>$attachId,
+            ));
+    }
+
     public function postThreadAction(Request $request,$groupId,$threadId)
     {       
             $user=$this->getCurrentUser();
@@ -334,7 +515,14 @@ class GroupThreadController extends BaseController
 
             }else{
 
-                 $post=$this->getThreadService()->postThread($content,$groupId,$user['id'],$threadId);
+                $post=$this->getThreadService()->postThread($content,$groupId,$user['id'],$threadId);
+
+                $fileIds=$postContent['fileIds'];
+                $fileTitles=$postContent['fileTitles'];
+                $fileCoins=$postContent['fileCoins'];
+                $fileDescriptions=$postContent['fileDescriptions'];
+
+                $this->getThreadService()->addPostAttach($fileIds,$fileTitles,$fileDescriptions,$fileCoins,$thread['id'],$post['id']); 
 
             }       
             $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
@@ -485,9 +673,7 @@ class GroupThreadController extends BaseController
                     
                 }
 
-                $account=$this->getCashService()->getAccountByUserId($user->id);
-
-                $this->getCashService()->waveDownCashField($account['id'],$amount);
+                $this->getCashService()->reWard($amount,'发布悬赏话题<'.$thread['title'].'>',$user->id,'cut');
 
                 $thread['type']='reward';
                 $thread['rewardCoin']=$amount;
@@ -592,7 +778,13 @@ class GroupThreadController extends BaseController
 
             $this->getCashService()->reWard($need,'查看话题隐藏内容',$user->id,'cut');
 
-            $this->getThreadService()->addBuyHide(array('threadId'=>$threadId,'userId'=>$user->id,'createdTime'=>time()));
+            $this->getThreadService()->addTrade(array('threadId'=>$threadId,'userId'=>$user->id,'createdTime'=>time()));
+            
+            $reward=$need*0.2;
+            if(intval($reward)<1)
+            $reward=1;
+
+            $this->getCashService()->reWard(intval($reward),'您发表的话题<'.$thread['title'].'>的隐藏内容被查看！',$thread['userId']);
 
         }
 
@@ -661,13 +853,21 @@ class GroupThreadController extends BaseController
             $value=" ".$value;
             sscanf($value,"%[^[][hide=coin%[^]]]%[^$$]",$content,$coin,$hideContent);
             
-            $buyHide=$this->getThreadService()->getbuyHideByUserIdandThreadId($thread['id'],$user->id);
+            $Trade=$this->getThreadService()->getTradeByUserIdandThreadId($thread['id'],$user->id);
 
-            if($role == 2 || $role ==3 || $user['id'] == $thread['userId'] || !empty($buyHide) ){
+            if($role == 2 || $role ==3 || $user['id'] == $thread['userId'] || !empty($Trade) ){
 
                 if($coin){
 
-                    $context.=$content.$hideContent;
+                    if($role == 2 || $role ==3 || $user['id'] == $thread['userId']){
+
+                        $context.=$content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:8px;'>隐藏区域</span>".$hideContent."</div>";
+
+                    }else{
+
+                        $context.=$content.$hideContent;
+                    }
+                    
                     
                 }else{
 
@@ -707,6 +907,43 @@ class GroupThreadController extends BaseController
 
         return $thread;
         
+    }
+
+    public function uploadAction (Request $request)
+    {
+        $group = $request->query->get('group');
+        $file = $this->get('request')->files->get('file');
+
+        if(!is_object($file)){
+
+            throw $this->createNotFoundException('上传文件不能为空!');
+            
+        }
+
+        if(filesize($file)>1024*1024*2){
+
+            throw $this->createNotFoundException('上传文件大小不能超过2MB!');
+            
+        }
+
+        if (FileToolkit::validateFileExtension($file,'png jpg gif doc xls txt rar zip')) {
+
+            throw $this->createNotFoundException('文件类型不正确!');
+
+        }
+
+
+        $record = $this->getFileService()->uploadFile($group, $file);
+
+        //$record['url'] = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+        unset($record['uri']);
+        $record['name']=$file->getClientOriginalName();
+        return new Response(json_encode($record));
+    }
+
+    protected function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 
     private function getThreadService()
@@ -808,7 +1045,7 @@ class GroupThreadController extends BaseController
                 );
                 break;
             default:
-                throw $this->createServiceException('参数sort不正确。');
+                throw $this->createNotFoundException('参数sort不正确。');
         }
         return $orderBys;
     }

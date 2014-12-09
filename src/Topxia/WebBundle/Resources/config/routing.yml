@@ -1384,6 +1384,19 @@ group_thread_adopt:
 group_thread_hide:
     pattern:  /thread/{threadId}/hide
     defaults: { _controller: TopxiaWebBundle:GroupThread:hide }
+group_upload:
+    pattern:  /group/thread/upload
+    defaults: { _controller: TopxiaWebBundle:GroupThread:upload }
+group_attach_download:
+    pattern:  /group/attach/download/{fileId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:download }
+group_thread_buy_attach:
+    pattern:  /group/attach/buy/{attachId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:buyAttach }
+group_thread_delete_attach:
+    pattern:  /group/attach/delete/{goodsId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:deleteAttach }
+
 
 my_coin:
     path:     /my/coin

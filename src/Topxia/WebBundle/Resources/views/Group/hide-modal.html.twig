@@ -36,6 +36,7 @@
   <script>
     app.load('group/hide-modal');
   </script>
+  
   <button id="create-btn" data-submiting-text="正在提交" type="submit" class="{% if need > account.cash|default(0)%}disabled{% endif %} btn btn-primary pull-right" data-toggle="form-submit" data-target="#hide-form">立即查看</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
 {% endblock %}

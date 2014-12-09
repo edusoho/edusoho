@@ -14,7 +14,7 @@
           <hr>
           <div class="">
             {% if is_groupmember==0%}
-              <a class="btn btn-info btn-sm pull-right" href="{{path('group_join',{id:groupinfo.id})}}">加入小组</a>
+              <a id="add-btn" class="btn btn-info btn-sm pull-right" href="{{path('group_join',{id:groupinfo.id})}}">加入小组</a>
             {% endif %}
 
             <span class="text-muted fsn mrm">创建时间：{{groupinfo.createdTime|date('Y-m-d')}}</span>

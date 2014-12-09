@@ -4,6 +4,7 @@ define(function(require, exports, module) {
 
     KindEditor.lang({insertblank: '插入填空项'});
     KindEditor.lang({hidden: '插入隐藏内容'});
+    KindEditor.lang({accessory: '上传附件'});
 
     KindEditor.plugin('hidden', function(K) {
         var editor = this, name = 'hidden';
@@ -31,6 +32,103 @@ define(function(require, exports, module) {
                     $('#myModal').modal('hide');
                     
                 });
+        });
+    });
+
+    KindEditor.plugin('accessory', function(K) {
+        var editor = this, name = 'accessory';
+
+        editor.clickToolbar(name, function() {
+
+            var Uploader = require('upload');
+            var Notify = require('common/bootstrap-notify');
+            var ids=[];
+            var descriptions=[];
+            var coins=[];
+            var names=[];
+            $('#uploadModal').on('click','.del-file',function(){
+
+                var id=$(this).attr("data-id");
+
+                if(!$('#file1-'+id).length>0){
+                    $.post("/group/attach/delete/"+id);
+                }
+
+                $('#file1-'+id).remove();
+                $('#file-'+id).remove();       
+
+            });
+            
+            $('#sure').on('click',function(){
+
+                var id=$('input[name="id[]"]');
+                var description=$('input[name="description[]"]');
+                var coin=$('input[name="coin[]"]');
+
+                $.each(id,function(i,item){
+                
+                    ids.push(item.value);
+                   
+                });
+
+                $.each(description,function(i,item){
+
+                       descriptions.push(item.value+"end!");  
+                       names.push(item.title);           
+                   
+                });
+
+                $.each(coin,function(i,item){
+                   
+                    amount=parseInt(item.value);
+                    if(amount > 0 ){
+
+                        coins.push(amount);
+                    }else{
+
+                        coins.push(0);
+                    }
+                    
+                   
+                });
+
+                $('input[name="fileIds"]').val(ids);
+                $('input[name="fileDescriptions"]').val(descriptions);
+                $('input[name="fileTitles"]').val(names);
+                $('input[name="fileCoins"]').val(coins);
+
+                ids=[];
+                descriptions=[];
+                coins=[];
+                names=[];
+                $('#uploadModal').modal('hide');   
+
+            });
+
+            $('#uploadModal').modal('show');
+
+            $('#uploadModal').find('.upload-img').each(function(index, el) {
+
+            var uploader = new Uploader({
+                    trigger: $(el),
+                    name: 'file',
+                    action: $(el).data('url'),
+                    data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
+                    }).success(function(response) {
+                    
+                    var response=eval("("+response+")");
+       
+                    $('#block-table').append('<tr id="file1-'+response.id+'" ><td><label class="control-label"><span class="glyphicon glyphicon-folder-close"></span> '+response.name+'</label></td><td><input type="hidden" name="id[]" value="'+response.id+'"/><input type="text" class="form-control" name="description[]" title="'+response.name+'"></td><td><input type="text" name="coin[]" class="form-control"></td><td><button type="button" class="del-file btn btn-default" data-id="'+response.id+'" >删除</button></td></tr>');
+                 
+     
+                }).error(function(message) {
+                    Notify.danger("上传失败！请查看文件类型和大小！")
+
+                });
+
+
+            });
+            
         });
     });
 
@@ -68,7 +166,7 @@ define(function(require, exports, module) {
 
     var simpleHaveEmoticonsItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', 'image', '|', 'removeformat', 'source','emoticons'];
 
-    var haveHiddenItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', 'image', '|', 'removeformat', 'source','emoticons','hidden'];
+    var haveHiddenItems = ['bold', 'italic', 'underline', 'forecolor', '|', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'unlink', 'image', '|', 'removeformat', 'source','emoticons','hidden','accessory'];
 
 
     var contentCss = [];

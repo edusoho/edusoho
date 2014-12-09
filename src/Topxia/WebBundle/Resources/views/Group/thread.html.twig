@@ -4,7 +4,15 @@
 {% block keywords %}{{threadMain.title|plain_text(15)}} {{ setting('site.name') }} {% endblock %}
 {% block description %}{{threadMain.content|plain_text(150)}}{% endblock %}
 {% block group_main %}
+<style>
+.ke-icon-accessory {
 
+        background-image: url('/assets/img/default/iconfont-accessory.png');
+        background-position:center;
+        width: 16px;
+        height: 16px;
+}
+</style>
   <div class="panel panel-default group-thread">
     <div class="panel-heading">
       <h2>
@@ -37,7 +45,42 @@
     </div>
     <div class="panel-body" id="post-action">
       {{threadMain.content|raw}}
+      {% if attachs %}
+          <hr>
+          <span class="glyphicon glyphicon-paperclip"></span> 附件下载 :
+          <div class="row clearfix mtm">
+          {% for attach in attachs %}
 
+                  <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}描述：{{attach.description}}{% endif %}  上传于 {{files[attach.fileId].createdTime|smart_time}}">
+                    {% if attach.coin > 0  and   user.id != owner.id and app.user %}
+                      <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
+                    {% else %}
+                      <a href="{{path('group_attach_download',{fileId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
+                    {% endif %}
+                    <div class="media-body">
+                        <div class="metas mts">
+                            {% if attach.coin > 0 and  user.id != owner.id and app.user %}
+                              <strong><a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}">{{ attach.title }}</a></strong>
+                            {% else %}
+                              <strong><a href="{{path('group_attach_download',{fileId:attach.id})}}">{{ attach.title }}</a></strong>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="content" style="color: #999;font-size:11px;">
+                          {{files[attach.fileId].size|file_size}}
+                          {% if attach.coin > 0 %}
+                            <span class="mls">售价:{{attach.coin}}{{setting('coin').coin_name}}</span>
+                            {% else %}
+                            <span class="mls">免费</span>
+                          {% endif %}
+                          <br>下载次数：{{attach.hitNum}}
+                        </div>
+                    </div>
+                  </div> 
+          {% endfor %}
+          </div>
+      {% endif %}
       <div class="mtl">
 
         {% if filters.type=='onlyOwner' %}
@@ -209,6 +252,45 @@
               </div>
                 <div>
             </div>
+          {% if postAttachs[post.id] %}
+          <hr>
+          <span class="glyphicon glyphicon-paperclip"></span> 附件下载 :
+          <div class="row clearfix mtm">
+          {% for attach in postAttachs[post.id] %}
+
+                  {% set postFile = postFiles[post.id] %}
+                  <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}描述：{{attach.description}}{% endif %}  上传于 {{postFile[attach.fileId].createdTime|smart_time}}">
+                    {% if attach.coin > 0  and app.user %}
+                      <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
+                    {% else %}
+                      <a href="{{path('group_attach_download',{fileId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
+                    {% endif %}
+                    <div class="media-body">
+                        <div class="metas mts">
+                            {% if attach.coin > 0 and  user.id != owner.id and app.user %}
+                              <strong><a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}">{{ attach.title }}</a></strong>
+                            {% else %}
+                              <strong><a href="{{path('group_attach_download',{fileId:attach.id})}}">{{ attach.title }}</a></strong>
+                            {% endif %}
+
+                        </div>
+                        <div class="content" style="color: #999;font-size:11px;">
+                          {{postFile[attach.fileId].size|file_size}}
+                          {% if attach.coin > 0 %}
+                            <span class="mls">售价:{{attach.coin}}{{setting('coin').coin_name}}</span>
+                            {% else %}
+                            <span class="mls">免费</span>
+                          {% endif %}
+                          <br>下载次数：{{attach.hitNum}}
+                        </div>
+                {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
+                  <a title="确定删除此附件" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_delete_attach',{goodsId:attach.id})}}">删除</a>
+                {% endif %}
+                    </div>
+                  </div> 
+          {% endfor %}
+          </div>
+      {% endif %}
           </li>
         {% endfor %}
       </ul>
@@ -238,8 +320,14 @@
             <button id="post-thread-btn" data-submiting-text="正在回复" type="submit" class="post-thread-btn btn btn-primary pull-right">发表</button>
             </div>
           </div>
-
+           {% if is_feature_enabled('group_reward') %}
+            <input type="hidden" name="group_reward" id="group_reward">
+           {% endif %}
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          <input type="hidden" name="fileIds">
+          <input type="hidden" name="fileTitles">
+          <input type="hidden" name="fileCoins">
+          <input type="hidden" name="fileDescriptions">
         </form>
       {% else %}
         <div class="empty">
@@ -250,7 +338,7 @@
 
     </div>
   </div>
-
+{% include 'TopxiaWebBundle:Group:upload-modal.html.twig' %}
 {% endblock %}
 
 {% block group_side %}
