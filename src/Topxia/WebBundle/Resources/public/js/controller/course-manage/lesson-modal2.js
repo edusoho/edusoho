@@ -15,36 +15,41 @@ define(function(require,exports,module){
         var $mainKnowledgeId = [];
 
         var $form = $("#course-lesson-form");
+
         $modal = $form.parents('.modal');
         var validator = _initValidator($form, $modal);
 
-        _initLesson();
-        _initTagChooer();
-        _initMainknowledgeTagChooer();
+        _init();
+        _initSearchItems();
 
-
-        function _initLesson()
+        function _init()
         {
             $value = $('[data-role=operate-flag]').val();
 
             if ($value > 0) {
                 $('[data-role=placeholder]').parent().removeClass('hide');
-                coursewareHide();
+                _hideCoursewaresPanel();
             }
 
             if ($value == 0) {
-                coursewareShow();
+                _showCoursewaresPanel();
+                _initTagChooer();
+                _initMainknowledgeTagChooer();
             };
 
-            //trigger
             _trigger();
-
             _SearchBtnOnclick();
+
+            $('#coursewareTab').change(function(){
+                _onChangeActiveTab();
+            });
         }
 
         function _SearchBtnOnclick()
         {
             $('[data-role=search-coursewares-btn]').on("click",function(){
+                var html = "";
+                var $btn = $(this);
                 if (tagIds.length > 1) {
                     tagIds = tagIds.join(",");
                 };
@@ -52,33 +57,49 @@ define(function(require,exports,module){
                 if (tagIds.length == 1 ) {
                     tagIds= tagIds[0];
                 };
-                $keyword = $('[name=keyword]').val();
-                var html = "";
-                $.get($(this).data('url'),{mainKnowledgeId:mainKnowledgeId,tagIds:tagIds,keyword:$keyword},function(items){
-                    $.each(items,function(index,item){
-                        html += "<tr style=\"cursor:pointer;\" data-role=\"search-courseware-item\" data-id=\""+item.id+"\"><td>"+item.title+"</td></tr>"
-                    });
-                    $('.search-result-table').find('tbody').html(html);
-                    $('[data-role=search-courseware-item]').on('click',function(){
-                        $('.search-result').hide();
-                        coursewareHide();
-                        $('[data-role=placeholder]').attr("data-id",$(this).data('id'));
-                        $('[data-role=placeholder]').html($(this).find('td').text());
-                        $('[data-role=placeholder]').parent().removeClass('hide');
-                    });
 
-                    $('[data-role=trigger]').on('click',function(){
-                        $('[data-role=placeholder]').parent().addClass('hide');
-                        $('.search-result').show();
-                        coursewareShow();
-                    });
+                $keyword = $('[name=keyword]').val();
+                $btn.text('搜索中...');
+
+                _searchItems();
+
+            });
+        }
+
+        function _initSearchItems()
+        {
+            _searchItems();
+        }
+
+        function _searchItems()
+        {
+            var html = "";
+            var $keyword = $('[name=keyword]').val();
+            var $btn = $('[data-role=search-coursewares-btn]');
+            $.get($btn.data('url'),{mainKnowledgeId:mainKnowledgeId,tagIds:tagIds,keyword:$keyword},function(items){
+                $btn.text('搜索');
+
+                $.each(items,function(index,item){
+                    html += "<tr style=\"cursor:pointer;\" data-role=\"search-courseware-item\" data-id=\""+item.id+"\"><td>"+item.title+"</td></tr>"
+                });
+                $('.search-result-table').find('tbody').html(html);
+                $('[data-role=search-courseware-item]').on('click',function(){
+                    $('.search-result').hide();
+                    _hideCoursewaresPanel();
+                    $('[data-role=placeholder]').attr("data-id",$(this).data('id'));
+                    $('[data-role=placeholder]').html($(this).find('td').text());
+                    _showPlaceholder();
+                });
+
+                $('[data-role=trigger]').on('click',function(){
+                    _hidePlaceholder();
+                    _showCoursewaresPanel();
                 });
             });
         }
 
         function _initValidator($form, $modal)
         {
-
             var validator = new Validator({
                 element:'#course-lesson-form',
                 failSilently:true,
@@ -90,11 +111,40 @@ define(function(require,exports,module){
                     }
 
                     var $btn = $('#lesson-operate-btn');
-                    $coursewareId = $('[data-role=placeholder]').data('id');
-                    if (!$coursewareId) {
-                        Notify.danger('请选择课件');
+                    $activeItem = " ";
+
+                    $('#coursewareTab').find('li').each(function(index,item){
+                        if ($(item).hasClass('active')) {
+                            $activeItem = $(item);
+                        };
+                    });
+
+                    $activeRole = $activeItem.data('role');
+                    if ($activeRole == 'coursewares-chooser') {
+                        $coursewareId = $('[data-role=placeholder]').data('id');
+                        if (!$coursewareId) {
+                            Notify.danger('请选择课件');
+                            return false;
+                        };
+                    };
+
+                    if ($activeRole == 'import-url') {
+                        console.log('import-url');
+
+                        if (mainKnowledgeId == "") {
+                            Notify.danger('主知识点不能为空');
+                            $btn.button('reset');
+                            return;
+                        };
+
+                        if (tagIds == "" || tagIds.length == 0) {
+                            Notify.danger('标签不能为空');
+                            $btn.button('reset');
+                            return;
+                        };
                         return false;
                     };
+
 
                     $btn.button('submiting').button('loading').addClass('disabled');
 
@@ -118,6 +168,7 @@ define(function(require,exports,module){
 
             return validator;
         }
+
 
         function _initTagChooer()
         {
@@ -164,21 +215,32 @@ define(function(require,exports,module){
             });
         }
 
-
         function _trigger()
         {
             $('[data-role=trigger]').on('click',function(){
-                $('[data-role=placeholder]').parent().addClass('hide');
-                coursewareShow();
+                _hidePlaceholder();
+                _showCoursewaresPanel();
+                _initTagChooer();
+                _initMainknowledgeTagChooer();
             });
         }
 
-        function coursewareShow()
+        function _showPlaceholder()
+        {
+            $('[data-role=placeholder]').parent().removeClass('hide');
+        }
+
+        function _hidePlaceholder()
+        {
+            $('[data-role=placeholder]').parent().addClass('hide');
+        }
+
+        function _showCoursewaresPanel()
         {
             $('.courseware-chooser').removeClass('hide');
         }
 
-        function coursewareHide()
+        function _hideCoursewaresPanel()
         {
             $('.courseware-chooser').addClass('hide');
         }

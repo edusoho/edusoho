@@ -58,19 +58,19 @@
 <div class="form-group">
     <label for="summary" class="col-sm-2 control-label">选择课件</label>
     <div class="col-sm-8">
-     <ul class="nav nav-pills nav-pills-mini mbs" role="tablist" id="myTab">
-       <li role="presentation" class="active">
-        <a href="#coursewares" aria-controls="coursewares" role="tab" data-toggle="tab">
+     <ul class="nav nav-pills nav-pills-mini mbs" role="tablist" id="coursewareTab">
+       <li role="presentation" class="active" data-role="coursewares-chooser">
+        <a href="#coursewares-chooser" aria-controls="coursewares-chooser" role="tab" data-toggle="tab">
         课件库选择
       </a>
       </li>
        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">上传</a></li>
-       <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">导入网络课件</a></li>
+       <li role="presentation" data-role="import-url"><a href="#import-courseware-url-chooser" aria-controls="import-courseware-url-chooser" role="tab" data-toggle="tab"  >导入网络课件</a></li>
      </ul>
 
      <div class="tab-content">
 
-       <div role="tabpanel" class="tab-pane active" id="coursewares">
+       <div role="tabpanel" class="tab-pane active" id="coursewares-chooser">
         <div class="file-chooser-bar hide">
             <span data-role="placeholder" {% if courseware|default(null) %} data-id="{{ courseware.id }}"{% endif %}>{{ courseware.title|default('') }}</span>
             <div class="btn btn-link btn-sm" data-role="trigger"><i class="glyphicon glyphicon-edit"></i>编辑</div>
@@ -102,7 +102,7 @@
             <label class="col-md-8 controls">
               <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="请输入标题关键词">
             </label>
-              <div  class="btn btn-primary" data-role="search-coursewares-btn" data-url="{{ path('json_courseware_search') }}">搜索</div>
+              <div  class="btn btn-primary" data-role="search-coursewares-btn" data-url="{{ path('json_courseware_search') }}"　data-loading-text="正在搜索...">搜索</div>
           </div>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           <input type="hidden" name="courseId" value="{{ course.id }}">
@@ -134,13 +134,50 @@
         </div>
       </div>
        <div role="tabpanel" class="tab-pane" id="profile">
-         <div class="courseware-chooser-uploader">
-          xxxxxxxxxx22
+         <div class="courseware-chooser">
+       上传文件模块制作中。。。
         </div>
        </div>
-       <div role="tabpanel" class="tab-pane" id="messages">
-        <div class="courseware-chooser-uploader">
-          xxxxxxxxx33
+       <div role="tabpanel" class="tab-pane" id="import-courseware-url-chooser">
+        <div class="courseware-chooser">
+
+            <div class="form-group">
+              <label class="col-md-3 control-label">文件URL</label>
+              <div class="col-md-7 controls">
+                <input class="form-control" type="text" name="url" placeholder="请输入网络文件URL的地址">
+              </div>
+              <div class="controls">
+                <div class="btn btn-primary" id="import-courseware-url">导入</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="courseware-mainKnowledgeId-field">
+                主知识点
+              </label>
+              <div class="col-md-7 controls">
+                {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'mainknowledge-chooser', categoryId: category.id} %}
+              </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="article-material-relatedKnowledgeIds-field">
+                    关联知识点
+                </label>
+                <div class="col-md-7 controls">
+                    {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'related-knowledges', categoryId: category.id} %}
+                </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="courseware-relatedKnowledgeIds-field">
+                标签
+              </label>
+              <div class="col-md-7 controls">
+                {% include 'CustomWebBundle:Tag:tagchooser.html.twig' with {id: 'tag-chooser', type: 'coourseware'} %}
+              </div>
+            </div>
+
         </div>
        </div>
      </div>
