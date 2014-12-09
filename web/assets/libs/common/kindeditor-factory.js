@@ -97,6 +97,15 @@ define(function(require, exports, module) {
                 $('input[name="fileTitles"]').val(names);
                 $('input[name="fileCoins"]').val(coins);
 
+                if(ids.length != 0 ){
+                    
+                    $('.ke-icon-accessory').addClass('ke-icon-accessory-red');
+                }
+                if(ids.length == 0 ){
+                    
+                    $('.ke-icon-accessory').removeClass('ke-icon-accessory-red');
+                }
+
                 ids=[];
                 descriptions=[];
                 coins=[];
