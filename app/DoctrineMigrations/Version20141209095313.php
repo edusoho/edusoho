@@ -15,7 +15,6 @@ class Version20141209095313 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
     	$this->addSql("ALTER TABLE `course` DROP `subType`;");
     	$this->addSql("ALTER TABLE `course` Add `subType` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '课程子类型' AFTER `type`;");
-        $this->addSql("ALTER TABLE `course_package_item` ADD `sequence` INT(10) UNSIGNED NOT NULL DEFAULT '1' COMMENT '顺序' AFTER `courseId`;");
     }
 
     public function down(Schema $schema)

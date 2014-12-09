@@ -13,7 +13,7 @@ class SubCourseManageController extends BaseController
     public function listAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
-        list($relations, $subCourses) = $this->getCourseService()->findSubCoursesByPackgeId($id);
+        list($relations, $subCourses) = $this->getCourseService()->findSubcoursesByCourseId($id);
         $teachers = $this->findTeachers($subCourses);
         return $this->render('CustomWebBundle:SubCourseManage:list.html.twig', array(
             'course' => $course,
@@ -27,8 +27,8 @@ class SubCourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
         if ($request->getMethod() == 'POST') {
-            $courseId = $request->query->get('courseId');
-            $this->getCourseService()->addCourseToPackge($courseId, $id);
+            $subcourseId = $request->query->get('subcourseId');
+            $this->getCourseService()->addSubcourse(array('courseId' => $id, 'subcourseId' => $subcourseId));
             return $this->createJsonResponse(true);
         }
         $query = $request->query->all();
@@ -37,12 +37,15 @@ class SubCourseManageController extends BaseController
         foreach ($subjects as $key => $subject) {
             $newSubjects[$subject['id']] = $subject['name'];
         }
-        list($relations, $subCourses) = $this->getCourseService()->findSubCoursesByPackgeId($id);
-        $excludeIds = ArrayToolkit::column($relations, 'courseId');
+        list($relations, $subCourses) = $this->getCourseService()->findSubcoursesByCourseId($id);
+        $excludeIds = ArrayToolkit::column($relations, 'subcourseId');
         $conditions = $request->query->all();
         $conditions['status'] = 'published';
         $conditions['type'] = 'not-package';
         $conditions['excludeIds'] = $excludeIds;
+        if(!isset($conditions['subjectId'])) {
+            $conditions['subjectIds'] = ArrayToolkit::column($subjects, 'id');
+        }
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchCourseCount($conditions)
@@ -67,7 +70,7 @@ class SubCourseManageController extends BaseController
     public function deleteAction(Request $request, $courseId, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $this->getCourseService()->deleteCoursePacakageRelationById($id);
+        $this->getCourseService()->deleteSubCourse($id);
         return $this->createJsonResponse(true);
     }
 
@@ -75,7 +78,7 @@ class SubCourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $sortIds = $request->request->get('ids');
-        $this->getCourseService()->sortSubCoursesByIds($sortIds);
+        $this->getCourseService()->sortSubcoursesByIds($sortIds);
         return $this->createJsonResponse(true);
     }
 

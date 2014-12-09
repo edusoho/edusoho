@@ -334,11 +334,11 @@ interface CourseService
 	public function deleteCourseLessonReplayByLessonId($lessonId);
 
 	/* course package API */
-	public function findSubCoursesByPackgeId($packageId);
+	public function findSubcoursesByCourseId($courseId);
 
-	public function deleteCoursePacakageRelationById($id);
+	public function deleteSubCourse($id);
 
-	public function addCourseToPackge($courseId, $packageId);
+	public function addSubcourse($fields);
 
-	public function sortSubCoursesByIds($ids);
+	public function sortSubcoursesByIds($ids);
 }

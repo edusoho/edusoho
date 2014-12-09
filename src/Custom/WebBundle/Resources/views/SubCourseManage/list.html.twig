@@ -15,7 +15,7 @@
   <div class="panel-body">
     <ul class="media-list sub-course-media sort-ul" data-sort-url="{{ path('course_manage_sub_course_sort', {courseId:course.id}) }}">
       {% for relation in relations %}
-        {% set subCourse = subCourses[relation.courseId]|default(null) %}
+        {% set subCourse = subCourses[relation.subcourseId]|default(null) %}
         {% if subCourse %}
           
             <li class="media" id="{{ relation.id }}">

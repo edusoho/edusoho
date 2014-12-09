@@ -2206,49 +2206,45 @@ class CourseServiceImpl extends BaseService implements CourseService
 	}
 
 	/* course package API */
-	public function findSubCoursesByPackgeId($packageId)
+	public function findSubcoursesByCourseId($courseId)
 	{
-		if(empty($packageId)) {
+		if(empty($courseId)) {
 			$this->createServiceException('参数不正确!');
 		}
-		$this->canManageCourse($packageId);
-		$relations = $this->getCoursePackageItemDao()->findRelationsByPackgeId($packageId);
-		$subCourseIds = ArrayToolkit::column($relations, 'courseId');
+		$this->canManageCourse($courseId);
+		$relations = $this->getCourseSubcourseDao()->findSubcoursesByCourseId($courseId);
+		$subCourseIds = ArrayToolkit::column($relations, 'subcourseId');
 		$subCourses = $this->findCoursesByIds($subCourseIds);
 		$relations = ArrayToolkit::index($relations, 'id');
 		return array($relations, $subCourses);
 	}
 
-	public function deleteCoursePacakageRelationById($id)
+	public function deleteSubCourse($id)
 	{
 		if(empty($id)) {
 			$this->createServiceException('参数不正确!');
 		}
-		$this->getCoursePackageItemDao()->delete($id);
+		$this->getCourseSubcourseDao()->delete($id);
 	}
 
-	public function addCourseToPackge($courseId, $packageId)
+	public function addSubcourse($fields)
 	{
-		$course = $this->getCourse($courseId);
-		$coursePackage = $this->getCourse($packageId);
+		$course = $this->getCourse($fields['courseId']);
+		$coursePackage = $this->getCourse($fields['subcourseId']);
 		if(empty($course) || empty($coursePackage)) {
 			$this->createServiceException('课程或者课程包不存在！');
 		}
-		$count = $this->getCoursePackageItemDao()->findRelationsCountByPackageId($packageId);
-		$relation = array(
-			'courseId' => $courseId,
-			'packageId' => $packageId,
-			'sequence' => $count+1
-		);
-		$relation = $this->getCoursePackageItemDao()->addRelation($relation);
+		$count = $this->getCourseSubcourseDao()->findSubcoursesCountByCourseId($fields['courseId']);
+		$fields['sequence'] = $count+1;
+		$relation = $this->getCourseSubcourseDao()->addSubcourse($fields);
 		return $relation;
 	}
 
-	public function sortSubCoursesByIds($ids)
+	public function sortSubcoursesByIds($ids)
 	{
 		$sequence = 1;
 		foreach ($ids as $id) {
-			$this->getCoursePackageItemDao()->update($id, array('sequence' => $sequence));
+			$this->getCourseSubcourseDao()->update($id, array('sequence' => $sequence));
 			$sequence++;
 		}
 	}
@@ -2336,9 +2332,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course.LessonLearnDao');
     }
 
-    private function getCoursePackageItemDao()
+    private function getCourseSubcourseDao()
     {
-    	return $this->createDao('Course.CoursePackageItemDao');
+    	return $this->createDao('Course.CourseSubcourseDao');
     }
 
     private function getLessonViewedDao ()

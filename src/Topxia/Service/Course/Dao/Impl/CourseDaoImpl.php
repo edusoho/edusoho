@@ -203,6 +203,17 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             }
         }
 
+        if(isset($conditions['subjectIds'])) {
+            if(is_array($conditions['subjectIds']) && $conditions['subjectIds']) {
+                $temp = '';
+                foreach ($conditions['subjectIds'] as $subjectId) {
+                    $temp .= " subjectIds = '|{$subjectId}|' OR";
+                }
+                $temp = rtrim($temp, 'OR');
+                $builder->andStaticWhere("{$temp}");  
+            }
+        }
+
         if (isset($conditions['vipLevelIds'])) {
             $vipLevelIds = array();
             foreach ($conditions['vipLevelIds'] as $vipLevelId) {
@@ -217,7 +228,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         if(isset($conditions['notPackageType'])) {
-            $builder->andStaticWhere("type IN ('normal', 'live')");
+            $builder->andStaticWhere("type IN {$conditions['notPackageType']}");
         }
 
         if (isset($conditions['excludeIds']) and is_array($conditions['excludeIds'])) {
