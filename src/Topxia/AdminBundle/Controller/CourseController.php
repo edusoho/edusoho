@@ -98,15 +98,27 @@ class CourseController extends BaseController
 
     public function copingAction(Request $request, $id)
     {
-         $course = $this->getCourseService()->getCourse($id);
+        $course = $this->getCourseService()->getCourse($id);
 
- $newCourse = $this->getCourseCopyService()->copyCourse($course);
-
-        var_dump($newCourse);exit();
+        $conditions = $request->request->all();
+        $course['title']=$conditions['title'];
         
-        // return $this->render('TopxiaAdminBundle:Course:copy.html.twig', array(
-        //     'course' => $course ,
-        // ));
+        $newCourse = $this->getCourseCopyService()->copyCourse($course);
+        
+        $newTeachers = $this->getCourseCopyService()->copyTeachers($course['id'], $newCourse);
+
+        $newChapters = $this->getCourseCopyService()->copyChapters($course['id'], $newCourse);
+
+        $newLessons = $this->getCourseCopyService()->copyLessons($course['id'], $newCourse, $newChapters);
+
+        $newQuestions = $this->getCourseCopyService()->copyQuestions($course['id'], $newCourse, $newLessons);
+
+        $newTestpapers = $this->getCourseCopyService()->copyTestpapers($course['id'], $newCourse, $newQuestions);
+
+        $this->getCourseCopyService()->convertTestpaperLesson($newLessons, $newTestpapers);
+        // var_dump($newCourse);exit();
+        
+        return $this->redirect($this->generateUrl('admin_course'));
     }
 
     public function recommendAction(Request $request, $id)
