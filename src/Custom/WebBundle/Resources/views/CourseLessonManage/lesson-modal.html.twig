@@ -1,0 +1,173 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+{% set lesson = lesson|default(null) %}
+
+
+{% block title %}
+  {% if lesson %}编辑课时{{ lesson.number }}{% else %}添加课时{% endif %}
+{% endblock %}
+
+{% block body %}
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser-2.css') }}" />
+
+<form id="course-lesson-form" data-course-id="{{course.id}}" class="form-horizontal" method="post" 
+  {% if lesson %}
+    action="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" data-lesson-id="{{lesson.id}}"
+  {% else %}
+    action="{{ path('course_manage_lesson_create', {id:course.id}) }}"
+  {% endif %}
+  >
+
+<div class="form-group">
+  <label for="lesson-type" class="col-sm-2 control-label">类型</label>
+  <div class="col-sm-8 controls">
+
+    <div class="radios" id="lesson-type">
+        <label>
+            <input type="radio" name="type" value="courseware" checked>课件
+        </label>
+
+        <label>
+            <input type="radio" name="type" value="article">文章
+        </label>
+
+        <label>
+            <input type="radio" name="type" value="testpaper">试卷
+        </label>
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+    <label for="title" class="col-sm-2 control-label">标题</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="title" name="title" placeholder="请输入标题">
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="summary" class="col-sm-2 control-label">摘要</label>
+    <div class="col-sm-8">
+      <textarea class="form-control" rows="3" id="summary" name="summary"></textarea>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label for="summary" class="col-sm-2 control-label">选择课件</label>
+    <div class="col-sm-8">
+     <ul class="nav nav-pills nav-pills-mini mbs" role="tablist" id="myTab">
+       <li role="presentation" class="active">
+        <a href="#coursewares" aria-controls="coursewares" role="tab" data-toggle="tab">
+        课件库选择
+      </a>
+      </li>
+       <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">上传</a></li>
+       <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">导入网络课件</a></li>
+     </ul>
+
+     <div class="tab-content">
+
+        
+        <div class="file-chooser-bar hide">
+            <span data-role="placeholder"></span>
+            <div class="btn btn-link btn-sm" data-role="trigger"><i class="glyphicon glyphicon-edit"></i>编辑</div>
+        </div>
+
+       <div role="tabpanel" class="tab-pane active" id="coursewares">
+        <div class="courseware-chooser-uploader">
+
+      {# <form action="/coursewares/searchxxx" method="post" id="coursewares-search-form"> #}
+
+
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="courseware-mainKnowledgeId-field">
+              主知识点
+            </label>
+            <div class="col-md-8 controls">
+              {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'mainknowledge-chooser', categoryId: category.id} %}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="courseware-relatedKnowledgeIds-field">
+              标签
+            </label>
+            <div class="col-md-8 controls">
+              {% include 'CustomWebBundle:Tag:tagchooser.html.twig' with {id: 'tag-chooser', type: 'coourseware'} %}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-md-2  control-label">
+              关键词
+            </label>
+            <label class="col-md-8 controls">
+              <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="请输入标题关键词">
+            </label>
+              <div  class="btn btn-primary" data-role="search-coursewares-btn" data-url="{{ path('json_courseware_search') }}">搜索</div>
+          </div>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          <input type="hidden" name="courseId" value="{{ course.id }}">
+      {# </form> #}
+
+          <div class="form-group">
+
+            <label class="col-md-12 controls">
+
+              <div class="search-result" style="background:#FFF;height:200px;overflow-y:scroll">
+                <table class="table table-condensed table-bordered table-hover search-result-table">
+                  <thead>
+                   <tr>
+                     <th>名称</th>
+                   </tr>
+                  </thead>
+
+                  <tbody>
+
+                  </tbody>
+  
+                </table>
+
+              </div>
+
+            </label>
+          </div>
+
+        </div>
+      </div>
+       <div role="tabpanel" class="tab-pane" id="profile">
+         <div class="courseware-chooser-uploader">
+          xxxxxxxxxx22
+        </div>
+       </div>
+       <div role="tabpanel" class="tab-pane" id="messages">
+        <div class="courseware-chooser-uploader">
+          xxxxxxxxx33
+        </div>
+       </div>
+     </div>
+    </div>
+</div>
+
+</form>
+
+
+
+
+
+<script>
+  app.load('course-manage/lesson-modal2')
+</script>
+
+
+
+{% endblock %}
+{% block footer %}
+    <button type="button" class="btn btn-link" data-dismiss="modal" id="cancel-btn">取消</button>
+    <button id="lesson-operate-btn" data-loading-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">{% if lesson %}保存{% else %}添加{% endif %}</button>
+{% endblock %}
+
+{% set hideFooter = true %}
