@@ -87,6 +87,31 @@ class CourseController extends BaseController
         return $this->renderCourseTr($id);
     }
 
+    public function copyAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+
+        return $this->render('TopxiaAdminBundle:Course:copy.html.twig', array(
+            'course' => $course ,
+        ));
+    }
+
+    public function copingAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+        $conditions = $request->request->all();
+        var_dump($course);exit();
+        // $this->getCourseService()->closeCourse($id);
+        // return $this->renderCourseTr($id);
+        $course = $this->getCourseService()->getCourse($id);
+        
+        return $this->render('TopxiaAdminBundle:Course:copy.html.twig', array(
+            // 'user' => $this->getUserService()->getUser($course['userId']),
+            // 'category' => $this->getCategoryService()->getCategory($course['categoryId']),
+            'course' => $course ,
+        ));
+    }
+
     public function recommendAction(Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
