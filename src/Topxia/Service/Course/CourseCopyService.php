@@ -6,24 +6,18 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface CourseCopyService
 {
-      protected function configure();
+      public function copyTeachers($courseId, $newCourse);
 
-      protected function execute(InputInterface $input, OutputInterface $output);
+      public function copyTestpapers($courseId, $newCourse, $newQuestions);
 
-      protected function copyTeachers($courseId, $newCourse);
+      public function convertTestpaperLesson($newLessons, $newTestpapers);
 
-      protected function copyTestpapers($courseId, $newCourse, $newQuestions);
+      public function copyQuestions($courseId, $newCourse, $newLessons);
 
-      protected function convertTestpaperLesson($newLessons, $newTestpapers);
+      public function copyLessons($courseId, $newCourse, $chapters);
 
-      protected function copyQuestions($courseId, $newCourse, $newLessons);
+      public function copyChapters($courseId, $newCourse);
 
-      protected function copyLessons($courseId, $newCourse, $chapters);
-
-      protected function copyChapters($courseId, $newCourse);
-
-      private function copyCourse($course);
-
-
+      public function copyCourse($course);
 
 }

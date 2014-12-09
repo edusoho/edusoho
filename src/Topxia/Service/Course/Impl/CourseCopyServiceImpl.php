@@ -11,7 +11,7 @@ use Topxia\Common\ArrayToolkit;
 
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Course\CourseService;
+use Topxia\Service\Course\CourseCopyService;
 use Topxia\Common\StringToolkit;
 use Topxia\Service\Util\LiveClientFactory;
 
@@ -24,13 +24,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 {
 
-    protected function configure()
+    public function configure()
     {
         $this->setName ( 'topxia:course-copy' )
             ->addArgument('courseId', InputArgument::REQUIRED, 'courseId');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->initServiceKernel();
 
@@ -55,7 +55,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         $output->writeln("New course id: {$newCourse['id']}");
     }
 
-    protected function copyTeachers($courseId, $newCourse)
+    public function copyTeachers($courseId, $newCourse)
     {
         $count = $this->getCourseMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'teacher');
         $members = $this->getCourseMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, $count);
@@ -72,7 +72,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     }
 
-    protected function copyTestpapers($courseId, $newCourse, $newQuestions)
+    public function copyTestpapers($courseId, $newCourse, $newQuestions)
     {
         $testpapers = $this->getTestpaperDao()->searchTestpapers(array('target' => "course-{$courseId}"), array('createdTime', 'DESC'), 0, 100000);
 
@@ -106,7 +106,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
-    protected function convertTestpaperLesson($newLessons, $newTestpapers)
+    public function convertTestpaperLesson($newLessons, $newTestpapers)
     {
         foreach ($newLessons as $lesson) {
             if ($lesson['type'] != 'testpaper') {
@@ -121,7 +121,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         }
     }
 
-    protected function copyQuestions($courseId, $newCourse, $newLessons)
+    public function copyQuestions($courseId, $newCourse, $newLessons)
     {
         $conditions = array('targetPrefix' => "course-{$courseId}", 'parentId' => 0);
         $count = $this->getQuestionDao()->searchQuestionsCount($conditions);
@@ -171,7 +171,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
-    protected function copyLessons($courseId, $newCourse, $chapters)
+    public function copyLessons($courseId, $newCourse, $chapters)
     {
         $lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
         $map = array();
@@ -194,7 +194,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
-    protected function copyChapters($courseId, $newCourse)
+    public function copyChapters($courseId, $newCourse)
     {
         $chapters = $this->getCourseChapterDao()->findChaptersByCourseId($courseId);
 
@@ -231,62 +231,60 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
-    private function copyCourse($course)
+    public function copyCourse($course)
     {
-        $fields = ArrayToolkit::parts($course, array('title', 'subtitle', 'type', 'maxStudentNum', 'price', 'expiryDay', 'showStudentNumType', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'tags', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId', 'deadlineNotify', 'daysOfNotifyBeforeDeadline'));
-
+        $fields = ArrayToolkit::parts($course, array('title', 'subtitle', 'type', 'maxStudentNum', 'price','coinPrice', 'expiryDay', 'showStudentNumType', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'tags', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId', 'deadlineNotify', 'daysOfNotifyBeforeDeadline'));
         $fields['status'] = 'draft';
         $fields['createdTime'] = time();
-
-        return $this->getCourseDao()->addCourse($fields);
+       return $this->getCourseDao()->addCourse(CourseSerialize::serialize($fields));
     }
 
-    protected function getCourseMemberDao()
+    public function getCourseMemberDao()
     {
-        return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
+        return $this->createDao('Course.CourseMemberDao');
     }
 
-    protected function getTestpaperItemDao()
+    public function getTestpaperItemDao()
     {
-        return $this->getServiceKernel()->createDao('Testpaper.TestpaperItemDao');
+        return $this->createDao('Testpaper.TestpaperItemDao');
     }
 
-    protected function getTestpaperDao()
+    public function getTestpaperDao()
     {
-        return $this->getServiceKernel()->createDao('Testpaper.TestpaperDao');
+        return $this->createDao('Testpaper.TestpaperDao');
     }
 
-    protected function getQuestionDao()
+    public function getQuestionDao()
     {
-        return $this->getServiceKernel()->createDao('Question.QuestionDao');
+        return $this->createDao('Question.QuestionDao');
     }
 
-    protected function getUploadFileDao()
+    public function getUploadFileDao()
     {
-        return $this->getServiceKernel()->createDao('File.UploadFileDao');
+        return $this->createDao('File.UploadFileDao');
     }
 
-    protected function getCourseChapterDao()
+    public function getCourseChapterDao()
     {
-        return $this->getServiceKernel()->createDao('Course.CourseChapterDao');
+        return $this->createDao('Course.CourseChapterDao');
     }
 
-    protected function getLessonDao()
+    public function getLessonDao()
     {
-        return $this->getServiceKernel()->createDao('Course.LessonDao');
+        return $this->createDao('Course.LessonDao');
     }
 
-    protected function getCourseDao()
+    public function getCourseDao()
     {
-        return $this->getServiceKernel()->createDao('Course.CourseDao');
+        return $this->createDao('Course.CourseDao');
     }
 
-    protected function getCourseService()
+    public function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->createService('Course.CourseService');
     }
 
-    private function initServiceKernel()
+    public function initServiceKernel()
     {
         $serviceKernel = ServiceKernel::create('dev', false);
         $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());

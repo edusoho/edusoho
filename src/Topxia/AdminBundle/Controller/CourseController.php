@@ -98,25 +98,15 @@ class CourseController extends BaseController
 
     public function copingAction(Request $request, $id)
     {
-        $copyCourse = $this->getCourseService()->getCourse($id);
-        $course=array();
-        if ($request->getMethod() == 'POST') {
-            $conditions = $request->request->all();
-            $course['title']=$conditions['title'];
-            $course['type']=$copyCourse['type'];
+         $course = $this->getCourseService()->getCourse($id);
 
-            $course = $this->getCourseService()->createCourse($course);
-            return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
-        }
-        var_dump($copyCourse);exit();
-        // $this->getCourseService()->closeCourse($id);
-        // return $this->renderCourseTr($id);
+ $newCourse = $this->getCourseCopyService()->copyCourse($course);
+
+        var_dump($newCourse);exit();
         
-        return $this->render('TopxiaAdminBundle:Course:copy.html.twig', array(
-            // 'user' => $this->getUserService()->getUser($course['userId']),
-            // 'category' => $this->getCategoryService()->getCategory($course['categoryId']),
-            'course' => $course ,
-        ));
+        // return $this->render('TopxiaAdminBundle:Course:copy.html.twig', array(
+        //     'course' => $course ,
+        // ));
     }
 
     public function recommendAction(Request $request, $id)
@@ -307,6 +297,11 @@ class CourseController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getCourseCopyService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseCopyService');
     }
 
     private function getCategoryService()
