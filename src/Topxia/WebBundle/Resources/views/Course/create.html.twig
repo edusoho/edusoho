@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}创建{% if type == 'normal' %}课程{% else %}直播课程{% endif %} - {{ parent() }}{% endblock %}
+{% block title %}创建{% if type == 'normal' %}课程{% elseif type == 'live' %}直播课程{% else %}课程包{% endif %} - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'course/create' %}
 
@@ -8,7 +8,7 @@
 <div class="row">
   <div class="col-md-offset-2 col-md-8">
     <div class="panel panel-default panel-page">
-      <div class="panel-heading"><h2>创建{% if type == 'normal' %}课程{% else %}直播课程{% endif %}</h2></div>
+      <div class="panel-heading"><h2>创建{% if type == 'normal' %}课程{% elseif type == 'live' %}直播课程{% else %}课程包{% endif %}</h2></div>
 
       {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
         <div class="alert alert-info">
