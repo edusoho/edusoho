@@ -31,15 +31,20 @@ define(function(require, exports, module) {
         };
 
         var $list = $("#course-item-list").sortable({
-            cancel: 'li' ,
             distance: 20,
             onDrop: function (item, container, _super) {
                 _super(item, container);
                 sortList($list);
-
             },
             serialize: function(parent, children, isContainer) {
                 return isContainer ? children : parent.attr('id');
+            },
+            isValidTarget:function (item, container) {
+                if(item.has('li').length){ 
+                    return true;
+                }else{
+                    return false;
+                }
             }
         });
 
