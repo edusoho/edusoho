@@ -11,8 +11,12 @@ class CourseLessonManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $categoryId = $course['subjectIds'];
-        $category = $this->getCategoryService()->getCategory($categoryId[0]);
+        $categoryId = $course['subjectIds'][0];
+        $category = $this->getCategoryService()->getCategory($categoryId);
+
+        if (empty($category)) {
+            throw $this->createNotFoundException("科目(#{$categoryId})不存在，创建课时失败！");
+        }
 
         if ($request->getMethod() == "POST") {
 
@@ -34,16 +38,21 @@ class CourseLessonManageController extends BaseController
     public function editAction(Request $request,$courseId,$lessonId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $categoryId = $course['subjectIds'][0];
+        $category = $this->getCategoryService()->getCategory($categoryId);
+
+        if (empty($category)) {
+            throw $this->createNotFoundException("科目(#{$categoryId})不存在，编辑课时失败！");
+        }
+
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
-
-        $courseware = $this->getCoursewareService()->getCourseware($lesson['coursewareId']);
-
-        $categoryId = $course['subjectIds'];
-        $category = $this->getCategoryService()->getCategory($categoryId[0]);
 
         if (empty($lesson)) {
             throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
         }
+
+        $courseware = $this->getCoursewareService()->getCourseware($lesson['coursewareId']);
 
         if($request->getMethod() == 'POST'){
 
