@@ -14,7 +14,7 @@ class TagCourseDaoImpl extends BaseDao implements TagCourseDao{
 		if(!empty($tagId)){
 			   $sql .= " AND tags LIKE '%|$tagId|%'";
 		}
-		return $this->getConnection()->fetchAll($sql);
+		return $this->getConnection()->fetchColumn($sql);
 
 	}
 }
