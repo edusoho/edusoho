@@ -40,9 +40,6 @@ define(function(require,exports,module){
             _trigger();
             _SearchBtnOnclick();
 
-            $('#coursewareTab').change(function(){
-                _onChangeActiveTab();
-            });
         }
 
         function _SearchBtnOnclick()
