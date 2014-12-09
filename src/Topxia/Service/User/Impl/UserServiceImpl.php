@@ -230,6 +230,41 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
+    public function getUserSecureQuestionsByUserId($userId)
+    {
+        return $this->getUserSecureQuestionDao()->getUserSecureQuestionsByUserId($userId);
+    }
+
+    public function addUserSecureQuestionsWithUnHashedAnswers($userId,$fieldsWithQuestionTypesAndUnHashedAnswers)
+    {
+        $fields = array('userId'=>$userId);
+        $encoder = $this->getPasswordEncoder();
+
+        $fields['securityQuestion1'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion1'];
+        $fields['securityAnswerSalt1'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $fields['securityAnswer1'] = 
+            $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer1'], $fields['securityAnswerSalt1']);
+
+        $fields['securityQuestion2'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion2'];
+        $fields['securityAnswerSalt2'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $fields['securityAnswer2'] = 
+            $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer2'], $fields['securityAnswerSalt2']);
+
+        $fields['securityQuestion3'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion3'];
+        $fields['securityAnswerSalt3'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $fields['securityAnswer3'] = 
+            $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer3'], $fields['securityAnswerSalt3']);
+
+        $this->getUserSecureQuestionDao()->addUserSecureQuestions($fields);  
+         
+        return true;             
+    }
+
+    public function verifyInSaltOut($in,$salt,$out)
+    {
+        return $out == $this->getPasswordEncoder()->encodePassword($in,$salt);
+    }
+
     public function verifyPayPassword($id, $payPassword)
     {
         $user = $this->getUser($id);
@@ -238,9 +273,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('参数不正确，校验支付密码失败。');
         }
 
-        $encoder = $this->getPasswordEncoder();
-        $payPasswordHash = $encoder->encodePassword($payPassword, $user['payPasswordSalt']);
-        return $user['payPassword'] == $payPasswordHash;
+        return $this->verifyInSaltOut($payPassword, $user['payPasswordSalt'], $user['payPassword']);
     }
 
     public function verifyPassword($id, $password)
@@ -249,10 +282,7 @@ class UserServiceImpl extends BaseService implements UserService
         if (empty($user)) {
             throw $this->createServiceException('参数不正确，校验密码失败。');
         }
-
-        $encoder = $this->getPasswordEncoder();
-        $passwordHash = $encoder->encodePassword($password, $user['salt']);
-        return $user['password'] == $passwordHash;
+        return $this->verifyInSaltOut($password, $user['salt'], $user['password']);
     }
 
     public function register($registration, $type = 'default')
@@ -947,6 +977,11 @@ class UserServiceImpl extends BaseService implements UserService
     private function getProfileDao()
     {
         return $this->createDao('User.UserProfileDao');
+    }
+
+    private function getUserSecureQuestionDao()
+    {
+        return $this->createDao('User.UserSecureQuestionDao');
     }
 
     private function getUserBindDao()
