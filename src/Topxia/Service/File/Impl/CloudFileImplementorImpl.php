@@ -421,6 +421,17 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     {
         return $this->createService('System.SettingService');
     }
+
+    protected function createAPIClient()
+    {
+        $settings = $this->getSettingService()->get('storage', array());
+        return new CloudAPI(array(
+            'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
+            'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
+            'apiUrl' => empty($settings['cloud_api_server']) ? '' : $settings['cloud_api_server'],
+        ));
+    }
+
 }
 
 class HLSVideoConvertor
