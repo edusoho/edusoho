@@ -957,12 +957,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if($fields['mediaId'] != $lesson['mediaId']){
 			// Incease the link count of the new selected lesson file
 			if(!empty($fields['mediaId'])){
-				$this->getUploadFileService()->increaseFileLinkCount(array($fields['mediaId']));
+				$this->getUploadFileService()->increaseFileUsedCount(array($fields['mediaId']));
 			}
 
 			// Decrease the link count of the original lesson file
 			if(!empty($lesson['mediaId'])){
-				$this->getUploadFileService()->decreaseFileLinkCount(array($lesson['mediaId']));
+				$this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
 			}
 		}
 

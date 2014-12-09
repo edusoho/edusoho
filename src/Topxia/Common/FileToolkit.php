@@ -907,10 +907,10 @@ class FileToolkit
         $currentValue = $currentUnit = null;
         $unitExps = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3);
         foreach ($unitExps as $unit => $exp) {
-            $divisor = pow(1000, $exp);
+            $divisor = pow(1024, $exp);
             $currentUnit = $unit;
             $currentValue = $size / $divisor;
-            if ($currentValue < 1000) {
+            if ($currentValue < 1024) {
                 break;
             }
         }
