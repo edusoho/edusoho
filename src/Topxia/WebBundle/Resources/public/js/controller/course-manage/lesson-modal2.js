@@ -18,45 +18,67 @@ define(function(require,exports,module){
         $modal = $form.parents('.modal');
         var validator = _initValidator($form, $modal);
 
+        _initLesson();
         _initTagChooer();
         _initMainknowledgeTagChooer();
 
 
-        $('[data-role=search-coursewares-btn]').on("click",function(){
-            console.log(tagIds)
-            if (tagIds.length > 1) {
-                tagIds = tagIds.join(",");
+        function _initLesson()
+        {
+            $value = $('[data-role=operate-flag]').val();
+
+            if ($value > 0) {
+                $('[data-role=placeholder]').parent().removeClass('hide');
+                coursewareHide();
+            }
+
+            if ($value == 0) {
+                coursewareShow();
             };
 
-            if (tagIds.length == 1 ) {
-                tagIds= tagIds[0];
-            };
-            $keyword = $('[name=keyword]').val();
-            var html = "";
-            $.get($(this).data('url'),{mainKnowledgeId:mainKnowledgeId,tagIds:tagIds,keyword:$keyword},function(items){
-                $.each(items,function(index,item){
-                    html += "<tr style=\"cursor:pointer;\" data-role=\"search-courseware-item\" data-id=\""+item.id+"\"><td>"+item.title+"</td></tr>"
-                });
-                $('.search-result-table').find('tbody').html(html);
-                $('[data-role=search-courseware-item]').on('click',function(){
-                    $('.search-result').hide();
-                    $('.courseware-chooser-uploader').hide();
-                    $('[data-role=placeholder]').attr("data-id",$(this).data('id'));
-                    $('[data-role=placeholder]').html($(this).find('td').text());
-                    $('[data-role=placeholder]').parent().removeClass('hide');
-                });
+            //trigger
+            _trigger();
 
-                $('[data-role=trigger]').on('click',function(){
-                    $('[data-role=placeholder]').parent().addClass('hide');
-                    $('.search-result').show();
-                    $('.courseware-chooser-uploader').show();
+            _SearchBtnOnclick();
+        }
+
+        function _SearchBtnOnclick()
+        {
+            $('[data-role=search-coursewares-btn]').on("click",function(){
+                if (tagIds.length > 1) {
+                    tagIds = tagIds.join(",");
+                };
+
+                if (tagIds.length == 1 ) {
+                    tagIds= tagIds[0];
+                };
+                $keyword = $('[name=keyword]').val();
+                var html = "";
+                $.get($(this).data('url'),{mainKnowledgeId:mainKnowledgeId,tagIds:tagIds,keyword:$keyword},function(items){
+                    $.each(items,function(index,item){
+                        html += "<tr style=\"cursor:pointer;\" data-role=\"search-courseware-item\" data-id=\""+item.id+"\"><td>"+item.title+"</td></tr>"
+                    });
+                    $('.search-result-table').find('tbody').html(html);
+                    $('[data-role=search-courseware-item]').on('click',function(){
+                        $('.search-result').hide();
+                        coursewareHide();
+                        $('[data-role=placeholder]').attr("data-id",$(this).data('id'));
+                        $('[data-role=placeholder]').html($(this).find('td').text());
+                        $('[data-role=placeholder]').parent().removeClass('hide');
+                    });
+
+                    $('[data-role=trigger]').on('click',function(){
+                        $('[data-role=placeholder]').parent().addClass('hide');
+                        $('.search-result').show();
+                        coursewareShow();
+                    });
                 });
             });
-        });
-
+        }
 
         function _initValidator($form, $modal)
         {
+
             var validator = new Validator({
                 element:'#course-lesson-form',
                 failSilently:true,
@@ -99,11 +121,6 @@ define(function(require,exports,module){
 
         function _initTagChooer()
         {
-            // if ($('[data-role=tag-ids]').length > 0) {
-            //   $tagIds = $('[data-role=tag-ids]').val();
-            //   $tagIds = $tagIds.split(',');
-            // }; 
-
             var chooser = new TagChooser({
                 element: '#tag-chooser',
                 sourceUrl: $('#tag-chooser').data('sourceUrl'),
@@ -145,6 +162,25 @@ define(function(require,exports,module){
 
             chooserTreeForMainKnowlege.on('existed', function(existTag){
             });
+        }
+
+
+        function _trigger()
+        {
+            $('[data-role=trigger]').on('click',function(){
+                $('[data-role=placeholder]').parent().addClass('hide');
+                coursewareShow();
+            });
+        }
+
+        function coursewareShow()
+        {
+            $('.courseware-chooser').removeClass('hide');
+        }
+
+        function coursewareHide()
+        {
+            $('.courseware-chooser').addClass('hide');
         }
     }
 });

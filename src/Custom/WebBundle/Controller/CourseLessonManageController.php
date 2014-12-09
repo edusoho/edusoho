@@ -12,12 +12,13 @@ class CourseLessonManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($id);
 
         $categoryId = $course['subjectIds'];
-
         $category = $this->getCategoryService()->getCategory($categoryId[0]);
 
         if ($request->getMethod() == "POST") {
+
             $formData = $request->request->all();
             $lesson = $this->getCourseService()->createLesson($formData);
+
             return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
                 'course' => $course,
                 'lesson' => $lesson,
@@ -30,15 +31,24 @@ class CourseLessonManageController extends BaseController
         ));
     }
 
-    public function editAction(Request $Request,$courseId,$lessonId)
+    public function editAction(Request $request,$courseId,$lessonId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+
+        $courseware = $this->getCoursewareService()->getCourseware($lesson['coursewareId']);
+
+        $categoryId = $course['subjectIds'];
+        $category = $this->getCategoryService()->getCategory($categoryId[0]);
+
         if (empty($lesson)) {
             throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
         }
 
         if($request->getMethod() == 'POST'){
+
+            $fields = $request->request->all();
+            $lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
 
             return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
                 'course' => $course,
@@ -49,8 +59,14 @@ class CourseLessonManageController extends BaseController
         return $this->render('CustomWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
             'course' => $course,
             'category' => $category,
-            'lesson' => $lesson
+            'lesson' => $lesson,
+            'courseware' => $courseware
         ));
+    }
+
+    private function getCoursewareService()
+    {
+        return $this->getServiceKernel()->createService('Courseware.CoursewareService');
     }
 
     private function getCategoryService()
