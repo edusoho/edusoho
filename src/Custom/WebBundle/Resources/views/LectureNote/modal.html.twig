@@ -2,7 +2,7 @@
 
 {% set modal_class = 'modal-lg' %}
 
-{% block title %}添加讲义{% endblock %}
+{% block title %}添加{% if type == 'lectureNote' %}讲义{% else %}资料{% endif %}{% endblock %}
 {% block body %}
   <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
   <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser2.css') }}" />
@@ -12,7 +12,7 @@
     {% for lectureNote in lectureNotes %}
       {% include 'CustomWebBundle:LectureNote:list-item.html.twig' %}
     {% else %}
-      <div class="control-text text-warning">暂无讲义，请选择。</div>
+      <div class="control-text text-warning">暂无{% if type == 'lectureNote' %}讲义{% else %}资料{% endif %}，请选择。</div>
     {% endfor %}
   </ul>
 </div>
@@ -20,12 +20,12 @@
   <div class="well well-sm">
     <form id="lecture-note-form" class="form-inline" action="" method="get" novalidate>
       <div class="form-group">
-        <select class="form-control method-form-group" name="type">
+        <select class="form-control method-form-group" name="style">
           {% set options = {essayMaterial:'文章素材',essay: '文章'} %}
-          {{ select_options(options, type) }}
+          {{ select_options(options, style) }}
         </select>
       </div>
-      <span id="essay-search" {% if type == 'essayMaterial' %}class="hide"{% endif %}>
+      <span id="essay-search" {% if style == 'essayMaterial' %}class="hide"{% endif %}>
         <div class="form-group">
           <select class="form-control method-form-group" name="status">
             {{ select_options(dict('essayStatus'), app.request.query.get('status'),'--发布状态--') }}
@@ -33,7 +33,7 @@
         </div>
       </span>
 
-      <span id="essay-material-search" {% if type == 'essay' %}class="hide"{% endif %}>
+      <span id="essay-material-search" {% if style == 'essay' %}class="hide"{% endif %}>
         <div class="form-group mrl" id="tags-search-group">
           <label>标签：</label>
             <a href="javascript:;" class="tag-search-trigger">

@@ -1,4 +1,4 @@
-<table class="table table-hover table-striped {% if type == 'essay' %}hide{% endif %}" id="essay-material-table">
+<table class="table table-hover table-striped {% if style == 'essay' %}hide{% endif %}" id="essay-material-table">
   <thead>
     <tr>
       <th width="60%">文章素材标题</th>
@@ -13,7 +13,7 @@
         <td>{{ essayMaterial.title }}</td>
         <td>{{ knowledge.name|default(null) }}</td>
         <td>
-          <button type="submit" class="btn btn-primary essay-material-creat" data-loading-text="正在提交"data-url="{{ path('course_create_lecture_note',{courseId:courseId, lessonId:lessonId , type: 'essayMaterial'})}}" data-id='{{ essayMaterial.id }}' tabindex="5">添加</button>
+          <button type="submit" class="btn btn-primary essay-material-creat" data-loading-text="正在提交"data-url="{{ path('course_create_lecture_note',{courseId:courseId, lessonId:lessonId , style: 'essayMaterial', type:type})}}" data-id='{{ essayMaterial.id }}' tabindex="5">添加</button>
         </td>
       </tr>
     {% else %}

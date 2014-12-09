@@ -20,11 +20,11 @@ class LectureNoteServiceImpl extends BaseService implements LectureNoteService
     public function createLectureNote(array $field)
     {
         if (empty($field)) {
-            $this->createServiceException("内容为空，创建文章失败！");
+            $this->createServiceException("内容为空，创建失败！");
         }
 
         $lectureNote = ArrayToolkit::parts($field,array(
-            'essayId','essayMaterialId','courseId','lessonId','title'
+            'essayId','essayMaterialId','courseId','lessonId','title','type'
         ));
 
         $lectureNote['createdTime'] = time();
@@ -41,6 +41,11 @@ class LectureNoteServiceImpl extends BaseService implements LectureNoteService
     public function findLessonLectureNotes($lessonId)
     {
         return $this->getLectureNoteDao()->findLectureNotesByLessonId($lessonId);
+    }
+
+    public function findLectureNotesByType($type)
+    {
+        return $this->getLectureNoteDao()->findLectureNotesByType($type);
     }
 
     private function getLectureNoteDao()

@@ -8,7 +8,7 @@ use Topxia\Common\ArrayToolkit;
 
 class LectureNoteController extends BaseController
 {
-    public function indexAction(Request $request, $courseId, $lessonId)
+    public function indexAction(Request $request, $courseId, $lessonId, $type)
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
@@ -17,7 +17,7 @@ class LectureNoteController extends BaseController
 
         $conditions = $request->query->all();
 
-        $type = empty($conditions['type'])? 'essayMaterial':$conditions['type'];
+        $style = empty($conditions['style'])? 'essayMaterial':$conditions['style'];
 
         if (!empty($conditions['knowledgeIds'])) {
             $conditions['knowledgeIds'] = explode(',', $conditions['knowledgeIds']);
@@ -58,7 +58,7 @@ class LectureNoteController extends BaseController
             $essayPaginator->getPerPageCount()
         );
 
-        $lectureNotes = $this->getLectureNoteService()->findAllLectureNotes();
+        $lectureNotes = $this->getLectureNoteService()->findLectureNotesByType($type);
         $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($essayMaterials,'mainKnowledgeId'));
         $knowledges = ArrayToolkit::index($knowledges, 'id');
 
@@ -68,6 +68,7 @@ class LectureNoteController extends BaseController
             'category' => $category,
             'essayMaterials' => $essayMaterials,
             'lectureNotes' => $lectureNotes,
+            'style' => $style,
             'type' => $type,
             'essays' => $essays ,
             'paginator' => $paginator,
@@ -79,9 +80,9 @@ class LectureNoteController extends BaseController
         ));
     }
 
-    public function createAction(Request $request, $courseId, $lessonId, $type)
+    public function createAction(Request $request, $courseId, $lessonId, $style, $type)
     {
-        if ($type == 'essay'){
+        if ($style == 'essay'){
             $essay = $this->getEssayService()->getEssay($request->request->get('id'));
             $field = array(
                 'courseId' => $courseId,
@@ -89,6 +90,7 @@ class LectureNoteController extends BaseController
                 'title' => $essay['title'],
                 'essayId' => $essay['id'],
                 'essayMaterialId' => '0',
+                'type' => $type,
             );
         } else {
             $essayMaterial = $this->getArticleMaterialService()->getArticleMaterial($request->request->get('id'));
@@ -98,6 +100,7 @@ class LectureNoteController extends BaseController
                 'title' => $essayMaterial['title'],
                 'essayId' => '0',
                 'essayMaterialId' => $essayMaterial['id'],
+                'type' => $type,
             );
         }
 
@@ -112,11 +115,11 @@ class LectureNoteController extends BaseController
     {
         $lectureNote = $this->getLectureNoteService()->getLectureNote($id);
         if (empty($lectureNote)){
-            return $this->createJsonResponse(array('status' => 'error', 'message'=>'讲义不存在，无法删除'));
+            return $this->createJsonResponse(array('status' => 'error', 'message'=>'内容不存在，无法删除'));
         }
         $course = $this->getCourseService()->tryManageCourse($lectureNote['courseId']);
         $this->getLectureNoteService()->deleteLectureNote($id);
-        return $this->createJsonResponse(array('status' => 'true', 'message'=>'讲义删除成功'));
+        return $this->createJsonResponse(array('status' => 'true', 'message'=>'删除成功'));
     }
 
     private function getCourseService()
