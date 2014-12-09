@@ -37,6 +37,8 @@
             
         <li{% if condition.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'elite',num:condition.num,sort:condition.sort})}}">精华</a></li>
 
+        <li{% if condition.type == 'reward' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'reward',num:condition.num,sort:condition.sort})}}">悬赏</a></li>
+                
         <li><span class="mhm text-muted">|</span></li>
 
         <li class="dropdown">
