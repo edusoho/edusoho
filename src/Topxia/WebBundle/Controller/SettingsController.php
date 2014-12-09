@@ -334,9 +334,14 @@ class SettingsController extends BaseController
 		if ($request->getMethod() == 'POST') {
 
 			if ($hasSecurityQuestions){
-				throw new \RuntimeException('您已经设置过安全问题，不可再次修改。'); exit;
+				throw new \RuntimeException('您已经设置过安全问题，不可再次修改。');
 			}
-			
+
+			if ($request->request->get('question-1') == $request->request->get('question-2')
+			 	|| $request->request->get('question-1') == $request->request->get('question-3')
+			 	|| $request->request->get('question-2') == $request->request->get('question-3')){
+				throw new \RuntimeException('2个问题不能一样。');
+			}
 			$fields = array(  
 					'securityQuestion1'  => $request->request->get('question-1'),
 					'securityAnswer1' => $request->request->get('answer-1'),
@@ -350,7 +355,7 @@ class SettingsController extends BaseController
 			$hasSecurityQuestions = true;
 			$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
 		}		
-		
+
 		return $this->render('TopxiaWebBundle:Settings:security-questions.html.twig', array( 
 			'hasSecurityQuestions' => $hasSecurityQuestions,
 			'question1' => $hasSecurityQuestions?$userSecureQuestions['securityQuestion1']:null,
