@@ -22,7 +22,7 @@ class JsonCoursewareController extends BaseController
         }
 
         if (!empty($query['keyword'])) {
-            $conditions['title'] = $query['keyword'];
+            $conditions['keyword'] = $query['keyword'];
         }
         $coursewares = $this->getCoursewareService()->searchCoursewares($conditions, array('createdTime','DESC'),0, 15);
         

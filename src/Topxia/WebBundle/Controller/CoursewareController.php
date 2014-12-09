@@ -15,7 +15,6 @@ class CoursewareController extends BaseController
             $userIdAndVideoId = $this->getUserIdAndVideoId($courseware['url']);
             $videoInfo = $client->getVideoInfo($userIdAndVideoId['userId'],$userIdAndVideoId['videoId']);
             $videoInfo = json_decode($videoInfo);
-
             if(!empty($videoInfo)){
                 $title = $videoInfo->video->title;
                 return $this->createJsonResponse(array("title" => $title ));

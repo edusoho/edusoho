@@ -13,7 +13,6 @@ define(function(require,exports,module){
     exports.run = function(){
         var $tagIds = [];
         var $mainKnowledgeId = [];
-
         var $form = $("#course-lesson-form");
 
         $modal = $form.parents('.modal');
@@ -45,6 +44,7 @@ define(function(require,exports,module){
         function _SearchBtnOnclick()
         {
             $('[data-role=search-coursewares-btn]').on("click",function(){
+
                 var html = "";
                 var $btn = $(this);
                 if (tagIds.length > 1) {
@@ -73,12 +73,14 @@ define(function(require,exports,module){
             var html = "";
             var $keyword = $('[name=keyword]').val();
             var $btn = $('[data-role=search-coursewares-btn]');
+
             $.get($btn.data('url'),{mainKnowledgeId:mainKnowledgeId,tagIds:tagIds,keyword:$keyword},function(items){
                 $btn.text('搜索');
 
                 $.each(items,function(index,item){
                     html += "<tr style=\"cursor:pointer;\" data-role=\"search-courseware-item\" data-id=\""+item.id+"\"><td>"+item.title+"</td></tr>"
                 });
+
                 $('.search-result-table').find('tbody').html(html);
                 $('[data-role=search-courseware-item]').on('click',function(){
                     $('.search-result').hide();
@@ -102,6 +104,7 @@ define(function(require,exports,module){
                 failSilently:true,
                 triggerType:'change',
                 autoSubmit:false,
+
                 onFormValidated: function(error, results, $form){
                     if (error) {
                         return false;
@@ -126,7 +129,6 @@ define(function(require,exports,module){
                     };
 
                     if ($activeRole == 'import-url') {
-                        console.log('import-url');
 
                         if (mainKnowledgeId == "") {
                             Notify.danger('主知识点不能为空');
