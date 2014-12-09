@@ -21,10 +21,29 @@ define(function(require, exports, module) {
                 $.each(tags, function(i, tag) {
                     tagIds.push(tag.id);
                 });
-                $('input[name=subjectIds]').val(tagIds.join(','));
+                console.log(tagIds);
+                $('input[name=subjectIds]').val(tagIds);
             });
 
         }
+
+        Validator.addRule('checkSubjectAvailable', function(options, commit) {
+           $.ajax({
+              type: "GET",
+              url: options.element.data('url'),
+              data: {value:options.element.val()},
+              async: false,
+              success: function(result){
+                   if(!result.success) {
+                       options.element.next().html('<span class="text-danger">'+result.message+'</span>');
+                       options.element.next().attr('style', 'display:block');
+                       return false;
+                   } else {
+                        commit('true');
+                   }
+              }
+           });
+        });
 
         var validator = new Validator({
             element: '#course-create-form',
@@ -46,30 +65,9 @@ define(function(require, exports, module) {
 
          validator.addItem({
             element: 'input[name=subjectIds]',
-            onItemValidated: function(error, message, elem) {
-                if(elem.val() == '') {
-                    elem.next().html('<span class="text-danger">必须选择科目!</span>');
-                    elem.next().attr('style', 'display:block');
-                    return false;
-                }
-
-                $.ajax({
-                   type: "GET",
-                   url: elem.data('url'),
-                   data: {value:elem.val()},
-                   async: false,
-                   success: function(result){
-                        if(!result.success) {
-                            elem.next().html('<span class="text-danger">'+result.message+'</span>');
-                            elem.next().attr('style', 'display:block');
-                            return false;
-                        }
-                   }
-                });
-            }
-        });
-        $('input[name=subjectIds]').on('change', function(){
-            $(this).next('.help-block').attr('display', 'none');
+            required: true,
+            display: '学科',
+            rule: 'checkSubjectAvailable'
         });
     };
 

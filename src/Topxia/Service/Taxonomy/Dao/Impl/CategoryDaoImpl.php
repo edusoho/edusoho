@@ -38,8 +38,9 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
 
     public function findCategoriesByLikeName($likeString)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE name = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($likeString));
+        $likeString = "%{$likeString}%";
+        $sql = "SELECT * FROM {$this->table} WHERE name like ? LIMIT 10";
+        return $this->getConnection()->fetchAll($sql, array($likeString)) ? : array();
     }
 
 	public function updateCategory($id, $category) 

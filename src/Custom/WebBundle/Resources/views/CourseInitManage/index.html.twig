@@ -1,0 +1,45 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}初始评价 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'rating' %}
+{% set script_controller = 'customwebbundle/controller/courseinitmanage/review' %}
+{% block main %}
+
+<div class="panel panel-default panel-col">
+	<div class="panel-heading">
+		初始评价
+		<a class="btn btn-default btn-sm pull-right" href="#modal" data-toggle="modal" data-url="{{ path('course_manage_init_rating_create', {id:course.id}) }}">添加评价</a>
+	</div>
+	<div class="panel-body">
+		<div class="rating">
+			<table class="table table-striped">
+			      <thead>
+			        <tr>
+			          <th width="15%" class="tac">昵称</th>
+			          <th width="15%" class="tac">评分</th>
+			          <th width="60%" class="tac">内容</th>
+			          <th width="10%" class="tac"></th>
+			        </tr>
+			      </thead>
+			      <tbody>
+			      	{% for review in reviews %}
+			      		{% set user = users[review.userId] %}
+				        <tr> 
+				          <td>{{ user.nickname }}</td>
+				          <td><span class="stars-{{ review.rating }}"></span></td>
+				          <td>{{ review.content }}</td>
+				          <td><button class="btn btn-default delete-review" data-url="{{ path('course_manage_init_rating_delete', {courseId:course.id, id:review.id})}}">删除</button></td>
+				        </tr>
+			        {% endfor %}
+			      </tbody>
+			    </table>
+			    {{ web_macro.paginator(paginator) }} 
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+
+
