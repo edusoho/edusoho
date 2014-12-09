@@ -467,6 +467,7 @@ class CourseController extends BaseController
 
 		if ($request->getMethod() == 'POST') {
 			$course = $request->request->all();
+			var_dump($course );exit();
 			$course = $this->getCourseService()->createCourse($course);
 			return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
 		}

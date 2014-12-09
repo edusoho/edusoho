@@ -98,12 +98,18 @@ class CourseController extends BaseController
 
     public function copingAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->getCourse($id);
-        $conditions = $request->request->all();
-        var_dump($course);exit();
+        $copyCourse = $this->getCourseService()->getCourse($id);
+        $course=array();
+        // if ($request->getMethod() == 'POST') {
+        //     $conditions = $request->request->all();
+        //     $course['title']=$conditions['title'];
+        //     $course['type']=$copyCourse['type'];
+        //     $course = $this->getCourseService()->createCourse($course);
+        //     return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
+        // }
+        var_dump($copyCourse);exit();
         // $this->getCourseService()->closeCourse($id);
         // return $this->renderCourseTr($id);
-        $course = $this->getCourseService()->getCourse($id);
         
         return $this->render('TopxiaAdminBundle:Course:copy.html.twig', array(
             // 'user' => $this->getUserService()->getUser($course['userId']),
