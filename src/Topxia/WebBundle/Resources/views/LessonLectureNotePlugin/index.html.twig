@@ -2,11 +2,14 @@
 
 <h5>课时讲义</h5>
 <div class="lesson-about">
+  <div>
   {% for lessonLectureNote in lessonLectureNotes %}
     {{ lessonLectureNote.title }}
   {% else %}
     此课时暂无讲义。
   {% endfor %}
+  </div>
+  
   {% for items in essayContentItems %}
     {% for id, item in items %}
       {% if 'chapter' in id %}
@@ -23,8 +26,9 @@
     {% endfor %}
   {% endfor %}
 
-  {% for essayMaterial in essayMaterials%}
-    {{ essayMaterial.content }}
-  {% endfor %}
-
+  <div>
+    {% for essayMaterial in essayMaterials%}
+      {{ essayMaterial.content|raw }}
+    {% endfor %}
+  </div>
 </div>

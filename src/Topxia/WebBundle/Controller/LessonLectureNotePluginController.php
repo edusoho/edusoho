@@ -34,11 +34,6 @@ class LessonLectureNotePluginController extends BaseController
         ));
     }
 
-    protected function getUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
-    }
-
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -52,6 +47,16 @@ class LessonLectureNotePluginController extends BaseController
     private function getArticleMaterialService()
     {
         return $this->getServiceKernel()->createService('ArticleMaterial.ArticleMaterialService');
+    }
+
+    private function getEssayService()
+    {
+        return $this->getServiceKernel()->createService('Essay.EssayService');
+    }
+
+    private function getEssayContentService()
+    {
+        return $this->getServiceKernel()->createService('EssayContent.EssayContentService');
     }
 
 }
