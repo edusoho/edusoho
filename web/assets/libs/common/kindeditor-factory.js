@@ -55,7 +55,19 @@ define(function(require, exports, module) {
                 }
 
                 $('#file1-'+id).remove();
-                $('#file-'+id).remove();       
+                $('#file-'+id).remove();    
+
+                var coin=$('input[name="coin[]"]');
+                $.each(coin,function(i,item){
+                
+                    coins.push(item.value);
+                   
+                });
+
+                if($('.del-file').length == 0 ){
+                    
+                    $('.ke-icon-accessory').removeClass('ke-icon-accessory-red');
+                }   
 
             });
             
@@ -97,15 +109,6 @@ define(function(require, exports, module) {
                 $('input[name="fileTitles"]').val(names);
                 $('input[name="fileCoins"]').val(coins);
 
-                if(ids.length != 0 ){
-                    
-                    $('.ke-icon-accessory').addClass('ke-icon-accessory-red');
-                }
-                if(ids.length == 0 ){
-                    
-                    $('.ke-icon-accessory').removeClass('ke-icon-accessory-red');
-                }
-
                 ids=[];
                 descriptions=[];
                 coins=[];
@@ -129,7 +132,8 @@ define(function(require, exports, module) {
        
                     $('#block-table').append('<tr id="file1-'+response.id+'" ><td><label class="control-label"><span class="glyphicon glyphicon-folder-close"></span> '+response.name+'</label></td><td><input type="hidden" name="id[]" value="'+response.id+'"/><input type="text" class="form-control" name="description[]" title="'+response.name+'"></td><td><input type="text" name="coin[]" class="form-control"></td><td><button type="button" class="del-file btn btn-default" data-id="'+response.id+'" >删除</button></td></tr>');
                  
-     
+                    $('.ke-icon-accessory').addClass('ke-icon-accessory-red');
+
                 }).error(function(message) {
                     Notify.danger("上传失败！请查看文件类型和大小！")
 
