@@ -341,7 +341,7 @@ class SettingsController extends BaseController
 		$token = $this->getUserService()->makeToken('pay-password-reset',$userId,strtotime('+1 day'));
 		$request->request->set('token',$token);
 		return $this->forward('TopxiaWebBundle:Settings:updatePayPasswordFromEmailOrSecureQuestions', array(
-            'request' => $request
+            'request' => $request 
         ));
 	}
 	public function updatePayPasswordFromEmailOrSecureQuestionsAction(Request $request)
