@@ -8,15 +8,6 @@
         width: 16px;
         height: 16px;
 }  
-{% if thread|default(null) and attachs %}
-.ke-icon-accessory {
-
-        background-image: url('/assets/img/default/iconfont-accessory-red.png');
-        background-position:center;
-        width: 16px;
-        height: 16px;
-}
-{% else %}
 .ke-icon-accessory {
 
         background-image: url('/assets/img/default/iconfont-accessory.png');
@@ -31,8 +22,11 @@
         width: 16px;
         height: 16px;
 }
-{% endif %}
+
 </style>
+{% if thread|default(null) and attachs %}
+  <div id="hasAttach"></div>
+{% endif %}
   <div class="panel panel-default">
     <div class="panel-heading">
       {% if thread|default(null) %}
