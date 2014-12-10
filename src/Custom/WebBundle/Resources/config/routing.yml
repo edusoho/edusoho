@@ -38,6 +38,18 @@ ajax_category_isSubject:
     pattern:  /ajax/categories/check
     defaults: { _controller: CustomWebBundle:AajxCategories:isSubjct }
 
+course_manage_lesson_create:
+    pattern:  /course/{id}/manage/lesson/create
+    defaults: { _controller: CustomWebBundle:CourseLessonManage:create }
+
+course_manage_lesson_edit:
+    pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit
+    defaults: { _controller: CustomWebBundle:CourseLessonManage:edit }
+
+json_courseware_search:
+    pattern:  /json/courseware/search
+    defaults: { _controller: CustomWebBundle:JsonCourseware:search }
+
 course_manage_init_rating:
     pattern:  /course/{id}/manage/init/rating
     defaults: { _controller: CustomWebBundle:CourseInitManage:index }

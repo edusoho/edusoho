@@ -747,6 +747,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'content' => '',
 			'media' => array(),
 			'mediaId' => 0,
+			'coursewareId' => 0,
 			'length' => 0,
 			'startTime' => 0,
 			'giveCredit' => 0,
@@ -767,7 +768,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt'))) {
+		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt','courseware'))) {
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
