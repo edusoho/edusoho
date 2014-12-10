@@ -1,10 +1,6 @@
 <?php
 namespace Topxia\Service\Course\Impl;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Common\ArrayToolkit;
@@ -23,38 +19,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 {
-
-    public function configure()
-    {
-        $this->setName ( 'topxia:course-copy' )
-            ->addArgument('courseId', InputArgument::REQUIRED, 'courseId');
-    }
-
-    public function execute(InputInterface $input, OutputInterface $output)
-    {
-        $this->initServiceKernel();
-
-        $courseId = $input->getArgument('courseId');
-
-        $course = $this->getCourseDao()->getCourse($courseId);
-
-        $newCourse = $this->copyCourse($course);
-
-        $newTeachers = $this->copyTeachers($courseId, $newCourse);
-
-        $newChapters = $this->copyChapters($courseId, $newCourse);
-
-        $newLessons = $this->copyLessons($courseId, $newCourse, $newChapters);
-
-        $newQuestions = $this->copyQuestions($courseId, $newCourse, $newLessons);
-
-        $newTestpapers = $this->copyTestpapers($courseId, $newCourse, $newQuestions);
-
-        $this->convertTestpaperLesson($newLessons, $newTestpapers);
-
-        $output->writeln("New course id: {$newCourse['id']}");
-    }
-
     public function copyTeachers($courseId, $newCourse)
     {
         $count = $this->getCourseMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'teacher');
@@ -394,23 +358,6 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
     public function getCourseService()
     {
         return $this->createService('Course.CourseService');
-    }
-
-
-    public function initServiceKernel()
-    {
-        $serviceKernel = ServiceKernel::create('dev', false);
-        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
-        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => 1,
-            'nickname' => '游客',
-            'currentIp' =>  '127.0.0.1',
-            'roles' => array(),
-        ));
-        $serviceKernel->setCurrentUser($currentUser);
-
     }
 
 }
