@@ -116,7 +116,13 @@ class CourseController extends BaseController
         $newTestpapers = $this->getCourseCopyService()->copyTestpapers($course['id'], $newCourse, $newQuestions);
 
         $this->getCourseCopyService()->convertTestpaperLesson($newLessons, $newTestpapers);
-        // var_dump($newCourse);exit();
+        
+        $newMaterials = $this->getCourseCopyService()->copyMaterials($course['id'], $newCourse, $newLessons);
+        
+        $newHomeworks = $this->getCourseCopyService()->copyHomeworks($course['id'], $newCourse, $newLessons);
+
+        // // var_dump($newLessons);
+        // exit();
         
         return $this->redirect($this->generateUrl('admin_course'));
     }

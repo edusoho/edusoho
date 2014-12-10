@@ -240,53 +240,55 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $this->getCourseDao()->addCourse(CourseSerialize::serialize($fields));
     }
 
-    public function copyMaterial($courseId, $newCourse, $newLessons,$material)
+    public function copyMaterials($courseId, $newCourse, $newLessons)
     {
-        if (!ArrayToolkit::requireds($material, array('courseId', 'fileId'))) {
-            throw $this->createServiceException('参数缺失，上传失败！');
-        }
+        $count = $this->getMaterialDao()->getMaterialCountByCourseId($courseId);
+        $materials = $this->getMaterialDao()->findMaterialsByCourseId($courseId, 0, $count);
+        
+        $map = array();
 
-        $course = $this->getCourseService()->getCourse($material['courseId']);
-        if (empty($course)) {
-            throw $this->createServiceException('课程不存在，上传资料失败！');
-        }
+        foreach ($materials as $material) {
 
-        $fields = array(
-            'courseId' => $material['courseId'],
-            'lessonId' => empty($material['lessonId']) ? 0 : $material['lessonId'],
-            'description'  => empty($material['description']) ? '' : $material['description'],
-            'userId' => $this->getCurrentUser()->id,
-            'createdTime' => time(),
-        );
+            $fields = ArrayToolkit::parts($material, array('title','description','link','fileId','fileUri','fileMime','fileSize','userId'));
 
-        if (empty($material['fileId'])) {
-            if (empty($material['link'])) {
-                throw $this->createServiceException('资料链接地址不能为空，添加资料失败！');
+            $fields['courseId'] = $newCourse['id'];
+            if ($material['lessonId']) {
+                $fields['lessonId'] = $newLessons[$material['lessonId']]['id'];
+            } else {
+                $fields['lessonId'] = 0;
             }
-            $fields['fileId'] = 0;
-            $fields['link'] = $material['link'];
-            $fields['title'] = empty($material['description']) ? $material['link'] : $material['description'];
-        } else {
-            $fields['fileId'] = (int) $material['fileId'];
-            $file = $this->getUploadFileService()->getFile($material['fileId']);
-            if (empty($file)) {
-                throw $this->createServiceException('文件不存在，上传资料失败！');
+
+            $fields['createdTime'] = time();
+
+            $map[$material['id']] = $this->getMaterialDao()->addMaterial($fields);
+        }
+
+        return $map;
+    }
+
+    public function copyHomeworks($courseId, $newCourse, $newLessons)
+    {
+        $homeworks = $this->getHomeworkDao()->findHomeworksByCourseId($courseId);
+        // var_dump($homeworks);exit();
+        $map = array();
+
+        foreach ($homeworks as $homework) {
+
+            $fields = ArrayToolkit::parts($homework, array('description','itemCount','createdUserId','updatedUserId'));
+
+            $fields['courseId'] = $newCourse['id'];
+            if ($homework['lessonId']) {
+                $fields['lessonId'] = $newLessons[$homework['lessonId']]['id'];
+            } else {
+                $fields['lessonId'] = 0;
             }
-            $fields['link'] = '';
-            $fields['title'] = $file['filename'];
-            $fields['fileSize'] = $file['size'];
+
+            $fields['createdTime'] = time();
+            $fields['updatedTime'] = time();
+            $map[$homework['id']] = $this->getHomeworkDao()->addHomework($fields);
         }
 
-        $material =  $this->getMaterialDao()->addMaterial($fields);
-
-        // Increase the linked file usage count, if there's a linked file used by this material.
-        if(!empty($material['fileId'])){
-            $this->getUploadFileService()->increaseFileUsedCount(array($material['fileId']));
-        }
-
-        $this->getCourseService()->increaseLessonMaterialCount($fields['lessonId']);
-
-        return $material;
+        return $map;
     }
 
     public function getCourseMemberDao()
@@ -329,10 +331,21 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $this->createDao('Course.CourseDao');
     }
 
+     private function getMaterialDao()
+    {
+        return $this->createDao('Course.CourseMaterialDao');
+    }
+
+    private function getHomeworkDao()
+    {
+        return $this->createDao('Homework:Homework.HomeworkDao');
+    }
+
     public function getCourseService()
     {
         return $this->createService('Course.CourseService');
     }
+
 
     public function initServiceKernel()
     {
