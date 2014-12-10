@@ -306,6 +306,31 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
+     public function copyExercises($courseId, $newCourse, $newLessons)
+    {
+        $exercises = $this->getExerciseDao()->findExercisesByCourseId($courseId);
+        
+        $map = array();
+
+        foreach ($exercises as $exercise) {
+
+            $fields = ArrayToolkit::parts($exercise, array('itemCount','source','difficulty','questionTypeRange','createdUserId'));
+
+            $fields['courseId'] = $newCourse['id'];
+            if ($exercise['lessonId']) {
+                $fields['lessonId'] = $newLessons[$exercise['lessonId']]['id'];
+            } else {
+                $fields['lessonId'] = 0;
+            }
+
+            $fields['createdTime'] = time();
+
+            $map[$exercise['id']] = $this->getExerciseDao()->addExercise($fields);
+        }
+
+        return $map;
+    }
+
     public function getCourseMemberDao()
     {
         return $this->createDao('Course.CourseMemberDao');
@@ -359,6 +384,11 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
     private function getHomeworkItemDao()
     {
         return $this->createDao('Homework:Homework.HomeworkItemDao');
+    }
+
+    private function getExerciseDao()
+    {
+        return $this->createDao('Homework:Homework.ExerciseDao');
     }
 
     public function getCourseService()

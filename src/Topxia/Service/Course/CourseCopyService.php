@@ -23,4 +23,6 @@ interface CourseCopyService
     public function copyMaterials($courseId, $newCourse, $newLessons);
 
     public function copyHomeworks($courseId, $newCourse, $newLessons,$newQuestions);
+
+    public function copyExercises($courseId, $newCourse, $newLessons);
 }

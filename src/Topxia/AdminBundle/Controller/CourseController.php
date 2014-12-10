@@ -121,6 +121,8 @@ class CourseController extends BaseController
         
         $newHomeworks = $this->getCourseCopyService()->copyHomeworks($course['id'], $newCourse, $newLessons,$newQuestions);
 
+        $newExercises = $this->getCourseCopyService()->copyExercises($course['id'], $newCourse, $newLessons);
+
         // // var_dump($newLessons);
         // exit();
         
