@@ -414,8 +414,8 @@ class GroupThreadController extends BaseController
 
         $response = BinaryFileResponse::create($filename, 200, array(), false);
 
-        $$goods['title'] = urlencode($goods['title']);
-        $$goods['title'] = str_replace('+', '%20', $goods['title']);
+        $goods['title'] = urlencode($goods['title']);
+        $goods['title'] = str_replace('+', '%20', $goods['title']);
         if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
             $response->headers->set('Content-Disposition', 'attachment; filename="'.$goods['title'].'"');
         } else {
