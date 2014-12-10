@@ -347,7 +347,7 @@ class SettingsController extends BaseController
 
  			if (!$isAnswerRight){
  				$this->setFlashMessage('danger', '回答错误。');
- 				
+
  			}else{$this->setFlashMessage('success', '回答正确。');}
 
 
@@ -362,12 +362,25 @@ class SettingsController extends BaseController
 		)); 
 	} 
 
+	private function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)
+	{
+		return $this->render('TopxiaWebBundle:Settings:security-questions.html.twig', array( 
+			'hasSecurityQuestions' => $hasSecurityQuestions,
+			'question1' => $hasSecurityQuestions?$userSecureQuestions['securityQuestion1']:null,
+			'question2' => $hasSecurityQuestions?$userSecureQuestions['securityQuestion2']:null,
+			'question3' => $hasSecurityQuestions?$userSecureQuestions['securityQuestion3']:null,
+		)); 		
+	}
 	public function securityQuestionsAction(Request $request)
 	{
 		$user = $this->getCurrentUser(); 
 		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
 		$hasSecurityQuestions = isset($userSecureQuestions);
 		if ($request->getMethod() == 'POST') {
+			if (!$this->getAuthService()->checkPassword($user['id'],$request->request->get('userLoginPassword')) ){
+				$this->setFlashMessage('danger', '您的登陆密码错误，不能设置安全问题。');
+				return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
+			}
 
 			if ($hasSecurityQuestions){
 				throw new \RuntimeException('您已经设置过安全问题，不可再次修改。');
@@ -392,13 +405,7 @@ class SettingsController extends BaseController
 			$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
 		}		
 
-		return $this->render('TopxiaWebBundle:Settings:security-questions.html.twig', array( 
-			'hasSecurityQuestions' => $hasSecurityQuestions,
-			'question1' => $hasSecurityQuestions?$userSecureQuestions['securityQuestion1']:null,
-			'question2' => $hasSecurityQuestions?$userSecureQuestions['securityQuestion2']:null,
-			'question3' => $hasSecurityQuestions?$userSecureQuestions['securityQuestion3']:null,
-		)); 
-
+		return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
 	}
 
 	public function passwordAction(Request $request)
