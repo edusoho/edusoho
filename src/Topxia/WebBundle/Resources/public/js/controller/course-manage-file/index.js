@@ -44,6 +44,7 @@ define(function(require, exports, module) {
             });
         })
 
+        $("a").tooltip();
 
 
     };

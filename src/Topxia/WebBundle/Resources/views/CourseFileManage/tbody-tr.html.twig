@@ -1,5 +1,11 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% set quality = "" %}
+<style type="text/css">
+  .tooltip-inner{
+    max-width: 600px;
+  }
+</style>
+  
 <tr id="upload-file-tr-{{uploadFile.id}}" data-role="item" data-convertHash="{{uploadFile.convertHash}}">
 
   <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
@@ -24,7 +30,7 @@
       {{uploadFile.filename|sub_text(15)}}<br><span class="text-danger text-sm">文件格式转换失败，<a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn">重新转换</a></span>
     {% else %}
       {% if uploadFile.targetType in ['courselesson', 'coursematerial'] %}
-        <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank">{{ uploadFile.filename|sub_text(15) }}</a>
+        <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank" rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}</a>
         {% if uploadFile.type == 'ppt' and ( not uploadFile.metas2.length|default(null) ) and uploadFile.targetType == 'courselesson'  %}
           <br><a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
         {% endif %}
