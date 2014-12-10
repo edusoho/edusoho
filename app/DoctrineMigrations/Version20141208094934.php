@@ -38,7 +38,7 @@ class Version20141208094934 extends AbstractMigration
         `securityAnswerSalt3` varchar(64) NOT NULL,        
         
         PRIMARY KEY  (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;"); 
 
     }
 
