@@ -326,6 +326,42 @@ class SettingsController extends BaseController
 		)); 
 	} 
 
+	public function findPayPasswordAction(Request $request) 
+	{ 
+		$user = $this->getCurrentUser(); 
+		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+		$hasSecurityQuestions = isset($userSecureQuestions);
+
+		if (!$hasSecurityQuestions){
+			$this->setFlashMessage('danger', '您还没有安全问题，请先设置。');
+			return $this->forward('TopxiaWebBundle:Settings:securityQuestions');
+		}
+
+		if ($request->getMethod() == 'POST') {
+
+ 			$questionNum = $request->request->get('questionNum');
+ 			$answer = $request->request->get('answer');
+
+ 			$isAnswerRight = $this->getUserService()->verifyInSaltOut(
+ 				$answer,$userSecureQuestions['securityAnswerSalt'.$questionNum],$userSecureQuestions['securityAnswer'.$questionNum]);
+
+ 			if (!$isAnswerRight){
+ 				$this->setFlashMessage('danger', '回答错误。');
+ 				
+ 			}else{$this->setFlashMessage('success', '回答正确。');}
+
+
+		}
+
+		$questionNum = rand(1,3);
+		$question = $userSecureQuestions['securityQuestion'.$questionNum] ;
+
+		return $this->render('TopxiaWebBundle:Settings:find-pay-password.html.twig', array( 
+			'question' => $question,
+			'questionNum' => $questionNum,
+		)); 
+	} 
+
 	public function securityQuestionsAction(Request $request)
 	{
 		$user = $this->getCurrentUser(); 
