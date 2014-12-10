@@ -10,7 +10,7 @@ class CourseSearchDaoImpl extends BaseDao implements CourseSearchDao
 		$this->filterStartLimit($start, $limit);
 		$builder = $this->_createSearchQueryBuilder($conditions)
 		    ->select('*')
-		    ->orderBy($orderBy[0], $orderBy[1])
+		    ->orderBy('createdTime', 'ASC')
 		    ->setFirstResult($start)
 		    ->setMaxResults($limit);
 		if ($orderBy[0] == 'recommendedSeq') {
@@ -34,7 +34,8 @@ class CourseSearchDaoImpl extends BaseDao implements CourseSearchDao
 		    ->from($this->table, 'course')
 		    ->andWhere('complexity = :complexity')
 		    ->andWhere('price >= :minPrice')
-		    ->andWhere('price <= :maxPrice');
+		    ->andWhere('price <= :maxPrice')
+		    ->andWhere('status = :status');
 
 		if (isset($conditions['categoryIds'])) {
 		    $categoryIds = array();
@@ -47,6 +48,9 @@ class CourseSearchDaoImpl extends BaseDao implements CourseSearchDao
 		        $categoryIds = join(',', $categoryIds);
 		        $builder->andStaticWhere("categoryId IN ($categoryIds)");
 		    }
+		}
+		if(!empty($tagId)){
+			    $builder->andStaticWhere(" tags LIKE '%|$tagId|%'");
 		}
 		return $builder;
 	}

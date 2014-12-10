@@ -25,6 +25,8 @@ class DefaultTagController extends TopXiaDefaultController
         return array('id' => 0, 'name' => '', 'description' => '');
     }
 
+    
+
     public function nextAction(Request $request){
         $perPageCount = 14;
         $total = $this->getTagService()->getAllTagCount();

@@ -8,9 +8,10 @@ class CourseSearchServiceImpl extends BaseService implements CourseSearchService
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
-		if($sort == 'latest'){
+		// $orderBy
+		// if($sort == 'latest'){
 			$orderBy = array('createdTime', 'DESC');
-		}
+		// }
 		
 		return CourseSerialize::unserializes($this->getCourseSearchDao()->searchCourses($conditions, $orderBy, $start, $limit));
 	}
@@ -23,12 +24,16 @@ class CourseSearchServiceImpl extends BaseService implements CourseSearchService
 	private function _prepareCourseConditions($conditions)
 	{
 		$conditions = array_filter($conditions);
+		if(empty($conditions['status'])){
+			$conditions['status'] = 'published';
+		}
 
 		if (isset($conditions['categoryId'])) {
 			$childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
 			$conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
 			unset($conditions['categoryId']);
 		}
+		
 		return $conditions;
 	}
 	private function getCourseSearchDao ()
