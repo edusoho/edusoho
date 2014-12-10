@@ -7,31 +7,27 @@ define(function(require, exports, module) {
     exports.run = function() {
         var $form = $('#course-copy-form');
         var $modal = $form.parents('.modal');
-        // var title = $("#course_title").attr('value');
         
-        // $("input[name='title']").on('input',function(){
-        //   var element = $(this);
-        //   var comfirm_title = element.val();
-        //   $("#course_title").attr('value',comfirm_title);
-        // });
+        $("input[name='title']").on('input',function(){
+              var element = $(this);
+              var comfirm_title = element.val();
+              $("#course_title").attr('value',comfirm_title);
+        });
 
-        //  $('#course-copy-btn').on("click",function(){
-        //     if($("#course_title").attr('value') == ''){
-        //         return false;
-        //     }else{
-        //         return true;
-        //     }
-        //  });
+         $('#course-copy-btn').on("click",function(){
+            if($("#course_title").attr('value') == ''){
+                return false;
+            }else{
+                validator.removeItem('#course_title');
+                return true;
+            }
+         });
 
         var validator = new Validator({
-            element: $form,
-            autoSubmit: false,
-            onFormValidated: function(error, results, $form) {
+                element: $form,
+                autoSubmit: false,
+                onFormValidated: function(error, results, $form) {
                 console.log(error);
-                // if (error) {
-                //     return ;
-                // }
-
                 $('#course-copy-btn').button('submiting').addClass('disabled');
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
@@ -46,10 +42,12 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="title"]',
+            element: '#course_title',
             required: true,
             errormessageRequired: '请输入标题，不能为空。'
         });
+
+
         
     };
 
