@@ -915,6 +915,7 @@ CREATE TABLE `upload_files` (
   `storage` enum('local','cloud') NOT NULL COMMENT '文件存储方式',
   `isPublic` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否公开文件',
   `canDownload` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可下载',
+  `usedCount` int(10) unsigned NOT NULL DEFAULT '0',
   `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新用户名',
   `updatedTime` int(10) unsigned DEFAULT '0' COMMENT '文件最后更新时间',
   `createdUserId` int(10) unsigned NOT NULL COMMENT '文件上传人',
