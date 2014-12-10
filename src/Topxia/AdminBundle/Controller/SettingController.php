@@ -389,7 +389,7 @@ class SettingController extends BaseController
             'verify_code' => '',
             'captcha_enabled'=>0,
             'temporary_lock_enabled' => 0,
-            'temporary_lock_allowed_times' => 3,
+            'temporary_lock_allowed_times' => 5,
             'temporary_lock_minutes' => 20,
         );
 

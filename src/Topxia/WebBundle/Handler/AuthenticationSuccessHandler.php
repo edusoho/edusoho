@@ -20,7 +20,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         $loginConnect = $this->getSettingService()->get('login_bind', array());
         $default = array(
             'temporary_lock_enabled' => 0,
-            'temporary_lock_allowed_times' => 3,
+            'temporary_lock_allowed_times' => 5,
             'temporary_lock_minutes' => 20,
         );
 
