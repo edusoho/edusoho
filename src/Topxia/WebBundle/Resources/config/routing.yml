@@ -894,6 +894,10 @@ settings_find_pay_password:
     pattern:  /settings/find_pay_password 
     defaults: { _controller: TopxiaWebBundle:Settings:findPayPassword }
 
+settings_update_pay_password:
+    pattern:  /settings/update_pay_password 
+    defaults: { _controller: TopxiaWebBundle:Settings:updatePayPasswordFromEmailOrSecureQuestions }
+
 settings_security_questions:
     pattern:  /settings/security_questions
     defaults: { _controller: TopxiaWebBundle:Settings:securityQuestions }

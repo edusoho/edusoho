@@ -96,6 +96,9 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function changePayPassword($userId, $userLoginPassword, $newPayPassword)
     {
+        if (!$this->checkPassword($userId, $userLoginPassword)){
+            throw new \InvalidArgumentException();
+        }
         $this->getUserService()->changePayPassword($userId, $newPayPassword);
     }
 

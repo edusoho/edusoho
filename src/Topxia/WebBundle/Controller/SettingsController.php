@@ -336,30 +336,20 @@ class SettingsController extends BaseController
 			'questionNum' => $questionNum,
 		)); 		
 	}
-	private function setPayPasswordPage()
+	private function setPayPasswordPage($request, $userId)
 	{
-		$token = $this->getUserService()->makeToken('pay-password-reset',$user['id'],strtotime('+1 day'));
-		  //   protected function createPaymentRequest($order, $requestParams)
-    // {
-    //     $options = $this->getPaymentOptions($order['payment']);
-    //     $request = Payment::createRequest($order['payment'], $options);
-
-    //     $requestParams = array_merge($requestParams, array(
-    //         'orderSn' => $order['sn'],
-    //         'title' => $order['title'],
-    //         'summary' => '',
-    //         'amount' => $order['amount'],
-    //     ));
-
-    //     return $request->setParams($requestParams);
-    // }
-
+		$token = $this->getUserService()->makeToken('pay-password-reset',$userId,strtotime('+1 day'));
+		$request->request->set('token',$token);
+		return $this->forward('TopxiaWebBundle:Settings:updatePayPasswordFromEmailOrSecureQuestions', array(
+            'request' => $request
+        ));
 	}
 	public function updatePayPasswordFromEmailOrSecureQuestionsAction(Request $request)
 	{
+
 		$token = $this->getUserService()->getToken('pay-password-reset', $request->query->get('token')?:$request->request->get('token'));
 		if (empty($token)){
-			\RuntimeException('Bad Token!');
+			throw new \RuntimeException('Bad Token!');
 		}
 
         $form = $this->createFormBuilder()
@@ -372,16 +362,19 @@ class SettingsController extends BaseController
             $form->bind($request);
             if ($form->isValid()) {
                 $data = $form->getData();
-				$this->getAuthService()->changePayPassword($user['id'], $data['currentUserLoginPassword'], $data['payPassword']);
-                $this->getUserService()->deleteToken('pay-password-reset',$token['token']);
-
-                return $this->render('TopxiaWebBundle:Settings:pay-password-success.html.twig');
-
+                if ($this->getAuthService()->checkPassword($token['userId'], $data['currentUserLoginPassword'])){
+					$this->getAuthService()->changePayPassword($token['userId'], $data['currentUserLoginPassword'], $data['payPassword']);
+	                $this->getUserService()->deleteToken('pay-password-reset',$token['token']);
+	                return $this->render('TopxiaWebBundle:Settings:pay-password-success.html.twig');
+	            }else{
+	            	$this->setFlashMessage('danger', '用户登陆密码错误。');
+	            }
             }
         }
 
-        return $this->render('TopxiaWebBundle:Settings:update-pay-password-from-Email-or-secure-questions.twig', array(
+        return $this->render('TopxiaWebBundle:Settings:update-pay-password-from-email-or-secure-questions.html.twig', array(
             'form' => $form->createView(),
+            'token' => $token?:null
         ));
 
 
@@ -412,7 +405,7 @@ class SettingsController extends BaseController
  			}
 
  			$this->setFlashMessage('success', '回答正确。');
- 			$this->setPayPasswordPage();
+ 			return $this->setPayPasswordPage($request, $user['id']);
 
 		}
 
