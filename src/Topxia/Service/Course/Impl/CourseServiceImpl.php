@@ -990,9 +990,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return  $this->getLessonLearnDao()->findLearnsCountByLessonId($lessonId);
 	}
 
-	public function findLearnsByCourseId($courseId)
+	public function findLearnsByLessonId($learnId)
 	{
-		return  $this->getLessonLearnDao()->findLearnsByCourseId($courseId);
+		return  $this->getLessonLearnDao()->findLearnsByLessonId($learnId,0,10);
 	}
 
 	public function analysisLessonFinishedDataByTime($startTime,$endTime)

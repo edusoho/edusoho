@@ -7,7 +7,7 @@ define(function(require, exports, module) {
         Notify = require('common/bootstrap-notify');
 
     require('mediaelementplayer');
-
+    var learnerShow = require('../../../../customweb/js/controller/lesson/learn-show');
     var Toolbar = require('../lesson/lesson-toolbar');
 
     var MediaPlayer = require('../widget/media-player4');
@@ -185,9 +185,7 @@ define(function(require, exports, module) {
             var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
 
-
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
-
 
                 function recordWatchTime(){
                     url="../../course/"+lesson.id+'/watch/time/2';
@@ -658,9 +656,8 @@ define(function(require, exports, module) {
         }
     };
 
-
     exports.run = function() {
-        
+
         var dashboard = new LessonDashboard({
             element: '#lesson-dashboard'
         }).render();
@@ -670,6 +667,19 @@ define(function(require, exports, module) {
             $.post(url);
             setTimeout(recordLearningTime, 120000);
         }
+        
+        learnerShow.lessonId = dashboard.attrs.lessonId.value;
+        learnerShow.initShow();
+        $('[data-role=next-lesson]').on('click',function(){
+            learnerShow.lessonId = dashboard._getNextLessonId();
+            learnerShow.changeShow();
+        });
+
+        $('[data-role=prev-lesson]').on('click',function(){
+            learnerShow.lessonId = dashboard._getPrevLessonId();
+            learnerShow.changeShow();
+        });
+
         setTimeout(recordLearningTime, 120000);
     };
 

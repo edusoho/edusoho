@@ -79,3 +79,7 @@ course_manage_lecture_note_delete:
     pattern:  /course/lecture-note/{id}/delete
     defaults: { _controller: CustomWebBundle:LectureNote:delete }
 
+
+course_lesson_learn_show:
+    pattern:  /course/lesson/{lessonId}/learn/show
+    defaults: { _controller: CustomWebBundle:Lesson:learnShow }

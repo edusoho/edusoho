@@ -1827,6 +1827,15 @@ body {
 	word-wrap: break-word;	
 }
 
+.lesson-dashboard .lesson-learner-show {
+	background: #fff;
+	max-width: 750px;	
+	margin: 0 auto;
+	margin-top: 20px; 
+	padding: 20px;
+	padding-bottom: 0px;
+}
+
 .lesson-dashboard .lesson-content-text-body img {
 	max-width: 100%;
 }
