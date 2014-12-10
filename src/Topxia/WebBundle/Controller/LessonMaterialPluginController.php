@@ -5,30 +5,20 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LessonMaterialPluginController extends BaseController
 {
-
     public function initAction (Request $request)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($request->query->get('courseId'));
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $request->query->get('lessonId'));
 
-        if ($lesson['mediaId'] > 0) {
-            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-        } else {
-            $file = null;
-        }
+        $lessonMaterials = $this->getLectureNoteService()->findLectureNotesByLessonIdAndType($lesson['id'], 'material');
+        $categoryId = '3';
 
-        $lessonMaterials = $this->getMaterialService()->findLessonMaterials($lesson['id'], 0, 100);
         return $this->render('TopxiaWebBundle:LessonMaterialPlugin:index.html.twig',array(
-            'materials' => $lessonMaterials,
+            'lessonMaterials' => $lessonMaterials,
             'course' => $course,
             'lesson' => $lesson,
-            'file' => $file,
+            'categoryId' => $categoryId,
         ));
-    }
-
-    protected function getUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getCourseService()
@@ -36,8 +26,23 @@ class LessonMaterialPluginController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    protected function getMaterialService()
+    private function getLectureNoteService()
     {
-        return $this->getServiceKernel()->createService('Course.MaterialService');
+        return $this->getServiceKernel()->createService('Custom:LectureNote.LectureNoteService');
+    }
+
+    private function getArticleMaterialService()
+    {
+        return $this->getServiceKernel()->createService('ArticleMaterial.ArticleMaterialService');
+    }
+
+    private function getEssayService()
+    {
+        return $this->getServiceKernel()->createService('Essay.EssayService');
+    }
+
+    private function getEssayContentService()
+    {
+        return $this->getServiceKernel()->createService('EssayContent.EssayContentService');
     }
 }

@@ -11,7 +11,5 @@ interface LectureNoteDao
 
     public function deleteLectureNote($id);
 
-    public function findLectureNotesByLessonId($lessonId);
-
-    public function findLectureNotesByType($type);
+    public function findLectureNotesByLessonIdAndType($lessonId,$type);
 }

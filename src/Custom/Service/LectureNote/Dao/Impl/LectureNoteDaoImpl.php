@@ -29,20 +29,14 @@ class LectureNoteDaoImpl extends BaseDao implements LectureNoteDao
         return $this->getConnection()->fetchAll($sql, array($lessonId)) ? : array();
     }
 
-    public function findLectureNotesByType($type)
+    public function findLectureNotesByLessonIdAndType($lessonId,$type)
     {
-        $sql = "SELECT * FROM {$this->table}  WHERE type = ? ORDER BY createdTime DESC";
-        return $this->getConnection()->fetchAll($sql,array($type))? : array();
+        $sql = "SELECT * FROM {$this->table}  WHERE lessonId = ? AND type = ? ORDER BY createdTime DESC";
+        return $this->getConnection()->fetchAll($sql,array($lessonId, $type))? : array();
     }
 
     public function deleteLectureNote($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
-    }
-
-    public function findLectureNotesByLessonId($lessonId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE lessonId = ? AND type = ? ORDER BY createdTime DESC";
-        return $this->getConnection()->fetchAll($sql, array($lessonId,'lectureNote')) ? : array();
     }
 }

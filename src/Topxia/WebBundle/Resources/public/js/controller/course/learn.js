@@ -667,7 +667,7 @@ define(function(require, exports, module) {
             $.post(url);
             setTimeout(recordLearningTime, 120000);
         }
-        
+
         learnerShow.lessonId = dashboard.attrs.lessonId.value;
         learnerShow.initShow();
         $('[data-role=next-lesson]').on('click',function(){
@@ -682,5 +682,4 @@ define(function(require, exports, module) {
 
         setTimeout(recordLearningTime, 120000);
     };
-
 });
