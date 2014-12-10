@@ -480,7 +480,7 @@ class SettingsController extends BaseController
 					$this->setFlashMessage('danger', '当前密码不正确，请重试！');
 				} else {
 					$this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
-					$this->setFlashMessage('success', '支付密码修改成功。');
+					$this->setFlashMessage('success', '密码修改成功。');
 				}
 
 				return $this->redirect($this->generateUrl('settings_password'));
