@@ -404,7 +404,7 @@ class SettingsController extends BaseController
  				return $this->findPayPasswordActionReturn($userSecureQuestions);
  			}
 
- 			$this->setFlashMessage('success', '回答正确。');
+ 			$this->setFlashMessage('success', '回答正确，你可以开始更新支付密码。');
  			return $this->setPayPasswordPage($request, $user['id']);
 
 		}
