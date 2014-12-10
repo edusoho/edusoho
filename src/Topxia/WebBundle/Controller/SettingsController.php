@@ -326,6 +326,67 @@ class SettingsController extends BaseController
 		)); 
 	} 
 
+	private function findPayPasswordActionReturn($userSecureQuestions)
+	{
+		$questionNum = rand(1,3);
+		$question = $userSecureQuestions['securityQuestion'.$questionNum] ;
+
+		return $this->render('TopxiaWebBundle:Settings:find-pay-password.html.twig', array( 
+			'question' => $question,
+			'questionNum' => $questionNum,
+		)); 		
+	}
+	private function setPayPasswordPage()
+	{
+		$token = $this->getUserService()->makeToken('pay-password-reset',$user['id'],strtotime('+1 day'));
+		  //   protected function createPaymentRequest($order, $requestParams)
+    // {
+    //     $options = $this->getPaymentOptions($order['payment']);
+    //     $request = Payment::createRequest($order['payment'], $options);
+
+    //     $requestParams = array_merge($requestParams, array(
+    //         'orderSn' => $order['sn'],
+    //         'title' => $order['title'],
+    //         'summary' => '',
+    //         'amount' => $order['amount'],
+    //     ));
+
+    //     return $request->setParams($requestParams);
+    // }
+
+	}
+	public function updatePayPasswordFromEmailOrSecureQuestionsAction(Request $request)
+	{
+		$token = $this->getUserService()->getToken('pay-password-reset', $request->query->get('token')?:$request->request->get('token'));
+		if (empty($token)){
+			\RuntimeException('Bad Token!');
+		}
+
+        $form = $this->createFormBuilder()
+            ->add('payPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->add('currentUserLoginPassword', 'password')
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $data = $form->getData();
+				$this->getAuthService()->changePayPassword($user['id'], $data['currentUserLoginPassword'], $data['payPassword']);
+                $this->getUserService()->deleteToken('pay-password-reset',$token['token']);
+
+                return $this->render('TopxiaWebBundle:Settings:pay-password-success.html.twig');
+
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Settings:update-pay-password-from-Email-or-secure-questions.twig', array(
+            'form' => $form->createView(),
+        ));
+
+
+
+	}
 	public function findPayPasswordAction(Request $request) 
 	{ 
 		$user = $this->getCurrentUser(); 
@@ -347,19 +408,15 @@ class SettingsController extends BaseController
 
  			if (!$isAnswerRight){
  				$this->setFlashMessage('danger', '回答错误。');
+ 				return $this->findPayPasswordActionReturn($userSecureQuestions);
+ 			}
 
- 			}else{$this->setFlashMessage('success', '回答正确。');}
-
+ 			$this->setFlashMessage('success', '回答正确。');
+ 			$this->setPayPasswordPage();
 
 		}
 
-		$questionNum = rand(1,3);
-		$question = $userSecureQuestions['securityQuestion'.$questionNum] ;
-
-		return $this->render('TopxiaWebBundle:Settings:find-pay-password.html.twig', array( 
-			'question' => $question,
-			'questionNum' => $questionNum,
-		)); 
+		return $this->findPayPasswordActionReturn($userSecureQuestions);
 	} 
 
 	private function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)
