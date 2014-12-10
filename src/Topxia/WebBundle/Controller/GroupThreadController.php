@@ -425,18 +425,6 @@ class GroupThreadController extends BaseController
         $response->headers->set('Content-type', "application/octet-stream");
 
         return $response;
-
-
-/*        $response->headers->set('Cache-Control', 'private');
-        $response->headers->set('Content-type', "application/octet-stream");
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . $hide['title'] . '";');
-        $response->headers->set('Content-length', filesize($filename));
-
-        $response->sendHeaders();
-
-        $response->setContent(readfile($filename));
-
-        return $response;*/
     }
 
     public function buyAttachAction(Request $request,$attachId)
