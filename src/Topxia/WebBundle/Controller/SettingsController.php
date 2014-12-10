@@ -241,6 +241,7 @@ class SettingsController extends BaseController
 		$hasFindPayPasswordQuestion = isset($userSecureQuestions);
 
 		$progressScore = 1 + ($hasLoginPassword? 33:0 ) + ($hasPayPassword? 33:0 ) + ($hasFindPayPasswordQuestion? 33:0 );
+		if ($progressScore <=1 ) {$progressScore = 0;}
 
 		return $this->render('TopxiaWebBundle:Settings:security.html.twig', array( 
 			'progressScore' => $progressScore,
