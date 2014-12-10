@@ -266,12 +266,11 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
-    public function copyHomeworks($courseId, $newCourse, $newLessons)
+    public function copyHomeworks($courseId, $newCourse, $newLessons,$newQuestions)
     {
         $homeworks = $this->getHomeworkDao()->findHomeworksByCourseId($courseId);
-        // var_dump($homeworks);exit();
+        
         $map = array();
-
         foreach ($homeworks as $homework) {
 
             $fields = ArrayToolkit::parts($homework, array('description','itemCount','createdUserId','updatedUserId'));
@@ -285,7 +284,23 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $fields['createdTime'] = time();
             $fields['updatedTime'] = time();
-            $map[$homework['id']] = $this->getHomeworkDao()->addHomework($fields);
+            $newHomework = $this->getHomeworkDao()->addHomework($fields);
+            $map[$homework['id']] =  $newHomework;
+
+            $items = $this->getHomeworkItemDao()->findItemsByHomeworkId($homework['id']);
+            foreach ($items as $item) {
+                $fields = array(
+                    'homeworkId' => $newHomework['id'],
+                    'seq' => $item['seq'],
+                    'questionId' => empty($newQuestions[$item['questionId']]['id']) ? 0 : $newQuestions[$item['questionId']]['id'],
+                    'score' => $item['score'],
+                    'missScore' => $item['missScore'],
+                    'parentId' => empty($newQuestions[$item['parentId']]['id']) ? 0 : $newQuestions[$item['parentId']]['id'],
+                );
+
+                $this->getHomeworkItemDao()->addItem($fields);
+            }
+
         }
 
         return $map;
@@ -339,6 +354,11 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
     private function getHomeworkDao()
     {
         return $this->createDao('Homework:Homework.HomeworkDao');
+    }
+
+    private function getHomeworkItemDao()
+    {
+        return $this->createDao('Homework:Homework.HomeworkItemDao');
     }
 
     public function getCourseService()
