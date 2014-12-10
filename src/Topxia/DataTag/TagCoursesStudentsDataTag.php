@@ -20,9 +20,10 @@ class TagCoursesStudentsDataTag extends BaseDataTag  implements DataTag
     public function getData(array $arguments)
     {	
               if(empty($arguments['tagId'])){
-               return  array('students' => 0);
+               return  0;
         }
         $result = $this->getTagCourseService()->getCourseStudentCountByTagIdAndCourseStatus($arguments['tagId'],null);
+      
         return  $result;
 
         

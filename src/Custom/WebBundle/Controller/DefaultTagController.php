@@ -13,17 +13,16 @@ class DefaultTagController extends TopXiaDefaultController
         //获取前14个标签
         $tags = $this->getTagService()->findAllTags(0, 14);
         $length=count($tags);
-        for(int i = $length;i++;i<14){
-            $tags[i] = $this->crateNewTag();
+        for($i = $length;$i<14;$i++){
+            $tags[$i] = $this->crateNewTag();
         }
-        
         return $this->render('TopxiaWebBundle:Tag:default-tag.html.twig', array(
             'tags' => $tags
         ));
     }
 
     public function crateNewTag(){
-    return array('id' => 0, 'name' => '', 'description' => '')
+        return array('id' => 0, 'name' => '', 'description' => '');
     }
 
     public function nextAction(Request $request){
