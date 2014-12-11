@@ -34,6 +34,7 @@ class CoursewareExerciseController extends BaseController
             return $this->render('HomeworkBundle:CourseExerciseManage:execise-questions-table.html.twig', array(
                 'exercises' => $mediaExercises,
                 'questions' => $questions,
+                'course' => $course,
             ));
         }
         list($questions, $paginator, $tags, $choosedTags, $showtime) = $this->buildQuestions($request);
