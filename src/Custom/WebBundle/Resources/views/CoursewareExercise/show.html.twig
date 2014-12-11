@@ -5,6 +5,6 @@
     <embed src="{{courseware.url}}&htwxpara={'comeurl':'edusoho'}"  width="100%" height="400px" name="cc_D024B3394D92ED98" allowFullScreen="true" allowScriptAccess="always" wmode="opaque" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"/>
 </object>
 
-<a class="btn btn-primary btn-sm" data-role="addExercise" data-url="{{ path('courseware_exercise_add', {courseId:courseId, lessonId:lessonId}) }}">添加练习</a>
+<a class="btn btn-primary btn-sm" id="addExercise" data-role="addExercise" data-url="{{ path('courseware_exercise_add', {courseId:courseId, lessonId:lessonId}) }}" disabled>添加练习</a>
 <a class="btn btn-primary btn-sm hidden" data-role="hide-add-btn" href="#modal" data-toggle="modal" data-url="">添加练习</a>
 <span class="text-muted text-sm">注：点击【添加练习题】即可在当前的视频播放时间点添加对应练习。</span>

@@ -46,7 +46,7 @@
             <tr>
               <td>{{ question.stem |fill_question_stem_text| plain_text(40) }}</td>
               <td>{{ dict('questionType')[question.type] }}</td>
-              <td class="ellipsis">
+              <td class="">
                 {% for tagId in question.tagIds %}
                   {{ tags[tagId].name|default('') }}
                 {% endfor %}
