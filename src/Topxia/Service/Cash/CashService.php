@@ -25,6 +25,6 @@ interface CashService
 
     public function changeCoin($amount,$account,$userId);
 
-    public function reWard($amount,$name,$userId,$type=null);
+    public function reward($amount,$name,$userId,$type=null);
 
 }

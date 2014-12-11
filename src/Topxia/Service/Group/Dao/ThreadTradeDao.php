@@ -8,7 +8,7 @@ interface ThreadTradeDao
 
     public function addTrade($fields);
     
-    public function getTradeByUserIdandThreadId($id,$userId);
+    public function getTradeByUserIdAndThreadId($userId,$threadId);
 
-    public function getTradeByUserIdandGoodsId($userId,$goodsId);
+    public function getTradeByUserIdAndGoodsId($userId,$goodsId);
 }

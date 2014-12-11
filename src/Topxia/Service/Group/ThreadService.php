@@ -64,15 +64,15 @@ interface ThreadService
 
     public function addTrade($fields);
 
-    public function getCoinByThreadId($id);
+    public function sumGoodsCoinsByThreadId($id);
 
-    public function getTradeByUserIdandThreadId($id,$userId);
+    public function getTradeByUserIdAndThreadId($userId,$threadId);
 
-    public function getTradeByUserIdandGoodsId($userId,$hideId);
+    public function getTradeByUserIdAndGoodsId($userId,$goodsId);
 
-    public function addAttach($fileIds,$fileTitles,$fileDescriptions,$fileCoins,$threadId);
+    public function addAttach($files,$threadId);
 
-    public function addPostAttach($fileIds,$fileTitles,$fileDescriptions,$fileCoins,$threadId,$postId);
+    public function addPostAttach($files,$threadId,$postId);
 
     public function searchGoods($conditions,$orderBy,$start,$limit);
 

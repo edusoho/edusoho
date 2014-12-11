@@ -130,7 +130,7 @@ class CashServiceImpl extends BaseService implements CashService
         return $this->getAccountDao()->waveDownCashField($id, $value);
     }
 
-    public function reWard($amount,$name,$userId,$type=null)
+    public function reward($amount,$name,$userId,$type=null)
     {   
         $coinSetting=$this->getSettingService()->get('coin',array());
 

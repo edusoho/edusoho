@@ -314,7 +314,7 @@
     <div class="panel-body">
 
       {% if app.user %}
-        <form id="post-thread-form" class="post-thread-form " method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
+        <form id="post-thread-form" class="post-thread-form thread-form" method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
 
           <div class="form-group">
               <label class="control-label hide" for="post_content">回复内容</label>
@@ -331,10 +331,6 @@
             <input type="hidden" name="group_reward" id="group_reward">
            {% endif %}
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          <input type="hidden" name="fileIds">
-          <input type="hidden" name="fileTitles">
-          <input type="hidden" name="fileCoins">
-          <input type="hidden" name="fileDescriptions">
         </form>
       {% else %}
         <div class="empty">

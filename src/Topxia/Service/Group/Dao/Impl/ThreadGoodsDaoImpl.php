@@ -61,7 +61,7 @@ class ThreadGoodsDaoImpl extends BaseDao implements ThreadGoodsDao
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
-    public function getCoinByThreadId($conditions)
+    public function sumGoodsCoins($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(coin)');

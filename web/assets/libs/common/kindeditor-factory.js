@@ -77,17 +77,19 @@ define(function(require, exports, module) {
                 var description=$('input[name="description[]"]');
                 var coin=$('input[name="coin[]"]');
 
+                $('.file').remove();
                 $.each(id,function(i,item){
                 
-                    ids.push(item.value);
+    
+                    $('.thread-form').append('<input type="hidden" class="file" name="file[id][]" value="'+item.value+'">');
                    
                 });
-
+                    
                 $.each(description,function(i,item){
-
-                       descriptions.push(item.value+"end!");  
-                       names.push(item.title);           
-                   
+         
+                    $('.thread-form').append('<input type="hidden" class="file" name="file[title][]" value="'+item.title+'">');
+                    $('.thread-form').append('<input type="hidden" class="file" name="file[description][]" value="'+item.value+'">');
+         
                 });
 
                 $.each(coin,function(i,item){
@@ -95,24 +97,16 @@ define(function(require, exports, module) {
                     amount=parseInt(item.value);
                     if(amount > 0 ){
 
-                        coins.push(amount);
+                        $('.thread-form').append('<input type="hidden" class="file" name="file[coin][]" value="'+amount+'">');
+         
                     }else{
 
-                        coins.push(0);
+                        $('.thread-form').append('<input type="hidden" class="file" name="file[coin][]" value="0">');
                     }
                     
-                   
+
                 });
 
-                $('input[name="fileIds"]').val(ids);
-                $('input[name="fileDescriptions"]').val(descriptions);
-                $('input[name="fileTitles"]').val(names);
-                $('input[name="fileCoins"]').val(coins);
-
-                ids=[];
-                descriptions=[];
-                coins=[];
-                names=[];
                 $('#uploadModal').modal('hide');   
 
             });
@@ -131,7 +125,7 @@ define(function(require, exports, module) {
                     var response=eval("("+response+")");
        
                     $('#block-table').append('<tr id="file1-'+response.id+'" ><td><label class="control-label"><span class="glyphicon glyphicon-folder-close"></span> '+response.name+'</label></td><td><input type="hidden" name="id[]" value="'+response.id+'"/><input type="text" class="form-control" name="description[]" title="'+response.name+'"></td><td><input type="text" name="coin[]" class="form-control"></td><td><button type="button" class="del-file btn btn-default" data-id="'+response.id+'" >删除</button></td></tr>');
-                 
+
                     $('.ke-icon-accessory').addClass('ke-icon-accessory-red');
 
                 }).error(function(message) {
