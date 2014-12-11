@@ -7,7 +7,6 @@ define(function(require, exports, module) {
     exports.run = function() {
         var $form = $('#course-copy-form');
         var $modal = $form.parents('.modal');
-        
         $("input[name='title']").on('input',function(){
               var element = $(this);
               var comfirm_title = element.val();

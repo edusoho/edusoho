@@ -121,7 +121,7 @@ class CourseController extends BaseController
         
         $code = 'Homework';
         $homework = $this->getAppService()->findInstallApp($code);
-        $isCopyHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
+        $isCopyHomework = $homework && version_compare($homework['version'], "1.0.1", ">=");
 
         if($isCopyHomework){
             $newHomeworks = $this->getCourseCopyService()->copyHomeworks($course['id'], $newCourse, $newLessons,$newQuestions);
