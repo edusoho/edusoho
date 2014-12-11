@@ -16,7 +16,6 @@ class CourseSearchDaoImpl extends BaseDao implements CourseSearchDao
 		if ($orderBy[0] == 'recommendedSeq') {
 		    $builder->addOrderBy('recommendedTime', 'DESC');
 		}
-	
 		return $builder->execute()->fetchAll() ? : array(); 
 	}
 	public function searchCourseCount($conditions)

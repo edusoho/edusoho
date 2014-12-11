@@ -27,9 +27,15 @@ class TagController extends BaseController
 
 
         $conditions = array('tagId' => $tagId);
-         $count = $this->getCustomCourseSearchService()->searchCourseCount($conditions);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCustomCourseSearchService()->searchCourseCount($conditions)
+            , 10
+        );
+
+         // $count = $this->
            
-        $paginator = new Paginator($this->get('request'), $count, 20);
+        // $paginator = new Paginator($this->get('request'), $count, 20);
 
         $courses = $this->getCustomCourseSearchService()->searchCourses($conditions,null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
       
@@ -37,7 +43,8 @@ class TagController extends BaseController
             'tags' => $tags,
             'tagDetail' => $tagDetail,
             'courses' => $courses,
-            'page'=>1
+            'page'=>1,
+            'paginator'=>$paginator
         ));
 
     }
