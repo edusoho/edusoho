@@ -1,11 +1,5 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 
-<style type="text/css">
-  .tooltip-inner{
-    max-width: 600px;
-  }
-</style>
-
 {% block title %}文件管理 - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'files' %}
@@ -13,6 +7,12 @@
 {% set script_controller = 'course-manage-file/index' %}
 
 {% block main %}
+
+<style type="text/css">
+  .tooltip-inner{
+    max-width: 600px;
+  }
+</style>
 
 <div class="panel panel-default panel-col">
 
