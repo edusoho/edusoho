@@ -4,6 +4,8 @@ namespace Custom\WebBundle\Controller;
 use Topxia\WebBundle\Controller\BaseController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\StringToolkit;
+use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 class CourseController extends BaseController
 {	
 	public function favoriteAction(Request $request, $id)
@@ -63,6 +65,267 @@ class CourseController extends BaseController
 		));
 	}
 
+	public function showAction(Request $request, $id)
+	{
+		$course = $this->getCourseService()->getCourse($id);
+        $code = 'ChargeCoin';
+        $ChargeCoin = $this->getAppService()->findInstallApp($code);
+        
+        $defaultSetting = $this->getSettingService()->get('default', array());
+
+        if (isset($defaultSetting['courseShareContent'])){
+            $courseShareContent = $defaultSetting['courseShareContent'];
+        } else {
+        	$courseShareContent = "";
+        }
+
+        $valuesToBeReplace = array('{{course}}');
+        $valuesToReplace = array($course['title']);
+        $courseShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $courseShareContent);
+
+
+
+		$nextLiveLesson = null;
+
+		$weeks = array("日","一","二","三","四","五","六");
+
+		$currentTime = time();
+ 
+		if (empty($course)) {
+			throw $this->createNotFoundException();
+		}
+
+		if ($course['type'] == 'live') {
+			$conditions = array(
+				'courseId' => $course['id'],
+				'startTimeGreaterThan' => time(),
+				'status' => 'published'
+			);
+			$nextLiveLesson = $this->getCourseService()->searchLessons( $conditions, array('startTime', 'ASC'), 0, 1);
+			if ($nextLiveLesson) {
+				$nextLiveLesson = $nextLiveLesson[0];
+			}
+		};
+
+		$previewAs = $request->query->get('previewAs');
+
+		$user = $this->getCurrentUser();
+
+		$items = $this->getCourseService()->getCourseItems($course['id']);
+		$mediaMap = array();
+		foreach ($items as $item) {
+			if (empty($item['mediaId'])) {
+				continue;
+			}
+
+			if (empty($mediaMap[$item['mediaId']])) {
+				$mediaMap[$item['mediaId']] = array();
+			}
+			$mediaMap[$item['mediaId']][] = $item['id'];
+		}
+
+		$mediaIds = array_keys($mediaMap);
+		$files = $this->getUploadFileService()->findFilesByIds($mediaIds);
+
+		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+
+		$this->getCourseService()->hitCourse($id);
+
+		$member = $this->previewAsMember($previewAs, $member, $course);
+		// if ($member && empty($member['locked'])) {
+		// 	$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
+		// 	//判断用户deadline到了，但是还是限免课程，将用户deadline延长
+		// 	if( $member['deadline'] < time() && !empty($course['freeStartTime']) && !empty($course['freeEndTime']) && $course['freeEndTime'] >= time()) {
+		// 		$member = $this->getCourseService()->updateCourseMember($member['id'], array('deadline'=>$course['freeEndTime']));
+		// 	}
+
+		// 	return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
+		// 		'course' => $course,
+		// 		'type' => $course['type'],
+		// 		'member' => $member,
+		// 		'items' => $items,
+		// 		'learnStatuses' => $learnStatuses,
+		// 		'currentTime' => $currentTime,
+		// 		'weeks' => $weeks,
+		// 		'files' => ArrayToolkit::index($files,'id'),
+		// 		'ChargeCoin'=> $ChargeCoin
+		// 	));
+		// }
+		
+		$groupedItems = $this->groupCourseItems($items);
+		$hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
+
+		$category = $this->getCategoryService()->getCategory($course['categoryId']);
+		$tags = $this->getTagService()->findTagsByIds($course['tags']);
+
+		$checkMemberLevelResult = $courseMemberLevel = null;
+		if ($this->setting('vip.enabled')) {
+			$courseMemberLevel = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+			if ($courseMemberLevel) {
+				$checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
+			}
+		}
+
+		$courseReviews = $this->getReviewService()->findCourseReviews($course['id'],'0','1');
+
+		$freeLesson=$this->getCourseService()->searchLessons(array('courseId'=>$id,'type'=>'video','status'=>'published','free'=>'1'),array('createdTime','ASC'),0,1);
+		if($freeLesson)$freeLesson=$freeLesson[0];
+		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
+			'course' => $course,
+			'member' => $member,
+			'freeLesson'=>$freeLesson,
+			'courseMemberLevel' => $courseMemberLevel,
+			'checkMemberLevelResult' => $checkMemberLevelResult,
+			'groupedItems' => $groupedItems,
+			'hasFavorited' => $hasFavorited,
+			'category' => $category,
+			'previewAs' => $previewAs,
+			'tags' => $tags,
+			'nextLiveLesson' => $nextLiveLesson,
+			'currentTime' => $currentTime,
+			'courseReviews' => $courseReviews,
+			'weeks' => $weeks,
+			'courseShareContent'=>$courseShareContent,
+			'consultDisplay' => true,
+			'ChargeCoin'=> $ChargeCoin
+		));
+	}
+
+	public function headerAction(Request $request,$id)
+	{
+		$course=$this->getCourseService()->getCourse($id);
+		if(empty($course)){
+			throw $this->createNotFoundException("课程不存在，或已删除。");
+		}
+		$user = $this->getCurrentUser();
+		$tags = $this->getTagService()->findTagsByIds($course['tags']);
+		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+		$previewAs = $request->query->get('previewAs');
+		$member = $this->previewAsMember($previewAs, $member, $course);
+		$hasFavorited = $this->getCourseService()->hasFavoritedCourse($id);
+		return $this->render("TopxiaWebBundle:Course:course-header.html.twig", array(
+			'course' => $course,
+			'tags' => $tags,
+			'member' => $member,
+			'hasFavorited' => $hasFavorited
+		));
+	}
+
+	public function relatedArticlesAction(Request $request,$id)
+	{
+		$course=$this->getCourseService()->getCourse($id);
+		$tagIds = $course['tags'];
+        $articles = $this->getArticleService()->findPublishedArticlesByTagIdsAndCount($tagIds,6);
+        return $this->render("TopxiaWebBundle:Course:course-relatedArticles.html.twig", array(
+			'articles'=>$articles
+		));
+	}
+
+	public function reviewListAction(Request $request,$id)
+	{
+		$course = $this->getCourseService()->getCourse($id);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getReviewService()->getCourseReviewCount($id)
+            , 10
+        );
+
+        $reviews = $this->getReviewService()->findCourseReviews(
+            $id,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
+
+        return $this->render('TopxiaWebBundle:CourseReview:list.html.twig', array(
+            'course' => $course,
+            'reviews' => $reviews,
+            'users' => $users,
+            'paginator' => $paginator
+        ));
+	}
+
+	// public function threadListAction(Request $request,$id)
+	// {
+	// 	$user = $this->getCurrentUser();
+ //        if (!$user->isLogin()) {
+ //            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+ //        }
+
+ //        $course = $this->getCourseService()->getCourse($id);
+ //        if (empty($course)) {
+ //            throw $this->createNotFoundException("课程不存在，或已删除。");
+ //        }
+
+ //        if (!$this->getCourseService()->canTakeCourse($course)) {
+ //            return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+ //        }
+
+ //        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+
+ //        $filters = $this->getThreadSearchFilters($request);
+ //        $conditions = $this->convertFiltersToConditions($course, $filters);
+
+ //        $paginator = new Paginator(
+ //            $request,
+ //            $this->getThreadService()->searchThreadCount($conditions),
+ //            20
+ //        );
+
+ //        $threads = $this->getThreadService()->searchThreads(
+ //            $conditions,
+ //            $filters['sort'],
+ //            $paginator->getOffsetCount(),
+ //            $paginator->getPerPageCount()
+ //        );
+
+ //        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
+ //        $userIds = array_merge(
+ //            ArrayToolkit::column($threads, 'userId'),
+ //            ArrayToolkit::column($threads, 'latestPostUserId')
+ //        );
+ //        $users = $this->getUserService()->findUsersByIds($userIds);
+
+ //        $template = $request->isXmlHttpRequest() ? 'index-main' : 'index';
+ //        return $this->render("TopxiaWebBundle:CourseThread:{$template}.html.twig", array(
+ //            'course' => $course,
+ //            'threads' => $threads,
+ //            'users' => $users,
+ //            'paginator' => $paginator,
+ //            'filters' => $filters,
+ //            'lessons'=>$lessons
+ //        ));
+	// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	private function simplifyCousrse($course)
 	{
 		return array(
@@ -76,6 +339,70 @@ class CourseController extends BaseController
 		);
 	}
 
+
+	private function previewAsMember($as, $member, $course)
+	{
+		$user = $this->getCurrentUser();
+		if (empty($user->id)) {
+			return null;
+		}
+
+
+		if (in_array($as, array('member', 'guest'))) {
+			if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+				$member = array(
+					'id' => 0,
+					'courseId' => $course['id'],
+					'userId' => $user['id'],
+					'levelId' => 0,
+					'learnedNum' => 0,
+					'isLearned' => 0,
+					'seq' => 0,
+					'isVisible' => 0,
+					'role' => 'teacher',
+					'locked' => 0,
+					'createdTime' => time(),
+					'deadline' => 0
+				);
+			}
+
+			if (empty($member) or $member['role'] != 'teacher') {
+				return $member;
+			}
+
+			if ($as == 'member') {
+				$member['role'] = 'student';
+			} else {
+				$member = null;
+			}
+		}
+
+		return $member;
+	}
+
+	private function groupCourseItems($items)
+	{
+		$grouped = array();
+
+		$list = array();
+		foreach ($items as $id => $item) {
+			if ($item['itemType'] == 'chapter') {
+				if (!empty($list)) {
+					$grouped[] = array('type' => 'list', 'data' => $list);
+					$list = array();
+				}
+				$grouped[] = array('type' => 'chapter', 'data' => $item);
+			} else {
+				$list[] = $item;
+			}
+		}
+
+		if (!empty($list)) {
+			$grouped[] = array('type' => 'list', 'data' => $list);
+		}
+
+		return $grouped;
+	}
 
 	private function getCustomCourseSearcheService(){
 		return $this->getServiceKernel()->createService('Custom:Course.CourseSearchService');
@@ -95,5 +422,40 @@ class CourseController extends BaseController
 	{
 	return $this->createService('User.StatusService');
 	}
+
+	protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function getUploadFileService()
+    {
+	return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    private function getCategoryService()
+	{
+		return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+	}
+
+	private function getTagService()
+	{
+		return $this->getServiceKernel()->createService('Taxonomy.TagService');
+	}
+
+	private function getReviewService()
+	{
+		return $this->getServiceKernel()->createService('Course.ReviewService');
+	}
+
+	private function getArticleService()
+    {
+        return $this->getServiceKernel()->createService('Article.ArticleService');
+    }
 
 }
