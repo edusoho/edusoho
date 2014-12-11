@@ -917,6 +917,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'startTime' => 0,
 			'giveCredit' => 0,
 			'requireCredit' => 0,
+			'coursewareId' => 0
 		));
 
 		if (isset($fields['title'])) {

@@ -206,7 +206,8 @@ class CoursewareController extends BaseController
         $videoInfo = json_decode($videoInfo);
         return array(
             'title' => $videoInfo->video->title,
-            'image' => $videoInfo->video->image
+            'image' => $videoInfo->video->image,
+            'duration' => $videoInfo->video->duration
         );
     }
 

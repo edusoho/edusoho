@@ -82,6 +82,7 @@ class CoursewareServiceImpl extends BaseService implements CoursewareService
         $courseware['type'] = 'video';
         $courseware['userId'] = $this->getCurrentUser()->id;
         $courseware['createdTime'] = time();
+        $courseware['source'] = !empty($courseware['source']) ? :"";
         return $courseware;
     }
 
