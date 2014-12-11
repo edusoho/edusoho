@@ -38,10 +38,10 @@ class CourseSearchController extends BaseController
 		     unset($options['price']);
 		   
 		}
-	
+		$total=$this->getCustomCourseSearcheService()->searchCourseCount($options);
 		$paginator = new Paginator(
-			$this->get('request'),
-			$this->getCustomCourseSearcheService()->searchCourseCount($options)
+			$this->get('request')
+			,$total
 			, 10
 		);
 		$courses = $this->getCustomCourseSearcheService()->searchCourses(
@@ -49,12 +49,14 @@ class CourseSearchController extends BaseController
 			$paginator->getOffsetCount(),
 			$paginator->getPerPageCount()
 		);
+		// var_dump($courses);
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'categoryId'=>$categoryId,
 			'complexity'=>$complexity,
 			'price'=>$price,
 			'courses'=>$courses,
-			'paginator'=>$paginator
+			'paginator'=>$paginator,
+			'total'=>$total
 		));
 
 	}
