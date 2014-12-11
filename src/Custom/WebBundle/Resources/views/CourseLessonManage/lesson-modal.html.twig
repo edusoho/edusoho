@@ -59,13 +59,13 @@
     <label for="summary" class="col-sm-2 control-label">选择课件</label>
     <div class="col-sm-8">
      <ul class="nav nav-pills nav-pills-mini mbs" role="tablist" id="coursewareTab">
-       <li role="presentation" class="active" data-role="coursewares-chooser">
-        <a href="#coursewares-chooser" aria-controls="coursewares-chooser" role="tab" data-toggle="tab">
+       <li role="presentation" class="active" >
+        <a href="#coursewares-chooser" aria-controls="coursewares-chooser" role="tab" data-toggle="tab" data-role="coursewares-chooser">
         课件库选择
       </a>
       </li>
-       <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">上传</a></li>
-       <li role="presentation" data-role="import-url"><a href="#import-courseware-url-chooser" aria-controls="import-courseware-url-chooser" role="tab" data-toggle="tab"  >导入网络课件</a></li>
+       <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" data-role="upload-file">上传</a></li>
+       <li role="presentation"><a href="#import-courseware-url-chooser" aria-controls="import-courseware-url-chooser" role="tab" data-toggle="tab"   data-role="import-url">导入网络课件</a></li>
      </ul>
 
      <div class="tab-content">
@@ -82,7 +82,7 @@
               主知识点
             </label>
             <div class="col-md-8 controls">
-              {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'mainknowledge-chooser', categoryId: category.id} %}
+              {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'mainKnowledge-chooser', categoryId: category.id} %}
             </div>
           </div>
 
@@ -134,20 +134,21 @@
         </div>
       </div>
        <div role="tabpanel" class="tab-pane" id="profile">
-         <div class="courseware-chooser">
+         <div class="file-chooser">
        上传文件模块制作中。。。
         </div>
        </div>
-       <div role="tabpanel" class="tab-pane" id="import-courseware-url-chooser">
-        <div class="courseware-chooser">
+       <div role="tabpanel" class="tab-pane" id="import-courseware-url-chooser" >
+        <div class="courseware-url-import">
 
             <div class="form-group">
               <label class="col-md-3 control-label">文件URL</label>
               <div class="col-md-7 controls">
-                <input class="form-control" type="text" name="url" placeholder="请输入网络文件URL的地址">
+                <input class="form-control" type="text" name="url" id="courseware-url-field"  placeholder="请输入网络文件URL的地址" value="" >
+                <div class="help-block" data-role="courseware-title"></div>
               </div>
               <div class="controls">
-                <div class="btn btn-primary" id="import-courseware-url">导入</div>
+                <div class="btn btn-primary" id="import-courseware-url"  data-url="{{ path('courseware_info_get') }}" data-loading-text="正在导入..." autocomplete="off">导入</div>
               </div>
             </div>
 
@@ -156,7 +157,7 @@
                 主知识点
               </label>
               <div class="col-md-7 controls">
-                {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'mainknowledge-chooser', categoryId: category.id} %}
+                {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'mainKnowledge-chooser2', categoryId: category.id} %}
               </div>
             </div>
 
@@ -165,7 +166,7 @@
                     关联知识点
                 </label>
                 <div class="col-md-7 controls">
-                    {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'related-knowledges', categoryId: category.id} %}
+                    {% include 'CustomWebBundle:Tag:tagchooser-knowledge.html.twig' with {id: 'relatedknowledges-chooser', categoryId: category.id} %}
                 </div>
             </div>
 
@@ -174,7 +175,7 @@
                 标签
               </label>
               <div class="col-md-7 controls">
-                {% include 'CustomWebBundle:Tag:tagchooser.html.twig' with {id: 'tag-chooser', type: 'coourseware'} %}
+                {% include 'CustomWebBundle:Tag:tagchooser.html.twig' with {id: 'tag-chooser2', type: 'coourseware'} %}
               </div>
             </div>
 

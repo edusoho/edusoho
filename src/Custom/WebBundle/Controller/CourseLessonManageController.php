@@ -4,6 +4,7 @@ namespace Custom\WebBundle\Controller;
 
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Util\CCVideoClientFactory;
 
 class CourseLessonManageController extends BaseController
 {
@@ -21,6 +22,16 @@ class CourseLessonManageController extends BaseController
         if ($request->getMethod() == "POST") {
 
             $formData = $request->request->all();
+
+            if (!empty($formData['tab'])) {
+                $courseware = $formData;
+                $videoMeta = $this->getVideoMeta($courseware['url']);
+                $courseware = $this->filterVideoField($videoMeta,$courseware);
+                $courseware['categoryId'] = $categoryId;
+                $courseware = $this->getCoursewareService()->createCourseware($courseware);
+                $formData['coursewareId'] = $courseware['id'];
+            }
+
             $lesson = $this->getCourseService()->createLesson($formData);
 
             return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
@@ -57,6 +68,16 @@ class CourseLessonManageController extends BaseController
         if($request->getMethod() == 'POST'){
 
             $fields = $request->request->all();
+
+            if (!empty($fields['tab'])) {
+                $courseware = $fields;
+                $videoMeta = $this->getVideoMeta($courseware['url']);
+                $courseware = $this->filterVideoField($videoMeta,$courseware);
+                $courseware['categoryId'] = $categoryId;
+                $courseware = $this->getCoursewareService()->createCourseware($courseware);
+                $fields['coursewareId'] = $courseware['id'];
+            }
+
             $lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
 
             return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
@@ -71,6 +92,57 @@ class CourseLessonManageController extends BaseController
             'lesson' => $lesson,
             'courseware' => $courseware
         ));
+    }
+
+    private function filterVideoField($videoMeta,$courseware)
+    {
+        $courseware['title'] = $videoMeta['title'];
+        $courseware['image'] = $videoMeta['image'];
+        $courseware['knowledgeIds'] = $courseware['mainKnowledgeId'];
+        if (!empty($courseware['relatedKnowledgeIds'])){
+            $courseware['knowledgeIds'] = $courseware['relatedKnowledgeIds'].",".$courseware['mainKnowledgeId'];
+            $courseware['relatedKnowledgeIds'] = array_filter(explode(',', $courseware['relatedKnowledgeIds']));
+        }
+        $courseware['knowledgeIds'] = array_filter(explode(',', $courseware['knowledgeIds']));
+        $courseware['tagIds'] = array_filter(explode(',', $courseware['tagIds']));
+        return $courseware;
+    }
+
+    private function getVideoMeta($videoUrl)
+    {
+        $factory = new CCVideoClientFactory();
+        $client = $factory->createClient();
+        $userIdAndVideoId = $this->getUserIdAndVideoId($videoUrl);
+        $videoInfo = $client->getVideoInfo($userIdAndVideoId['userId'],$userIdAndVideoId['videoId']);
+        $videoInfo = json_decode($videoInfo);
+        return array(
+            'title' => $videoInfo->video->title,
+            'image' => $videoInfo->video->image,
+            'duration' => $videoInfo->video->duration
+        );
+    }
+
+    private function getUserIdAndVideoId($url)
+    {
+        $query = parse_url($url);
+        $querys = $this->convertUrlQuery($query['query']);
+        $queryArr = explode('_', $querys['videoID']);
+        return array(
+            'userId' => $queryArr[0],
+            'videoId' => $queryArr[1]
+        );
+    }
+
+    private function convertUrlQuery($query)
+    {
+        $queryParts = explode('&', $query);
+        $params = array();
+        foreach ($queryParts as $param)
+        {
+            $item = explode('=', $param);
+            $params[$item[0]] = $item[1];
+        }
+        return $params;
     }
 
     private function getCoursewareService()

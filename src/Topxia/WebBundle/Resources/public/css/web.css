@@ -1966,6 +1966,12 @@ body {
 	border: 1px solid #e6e6e6;
 	width:600px;
 }
+.courseware-url-import{
+	padding: 20px;
+	background: #f9f9f9;
+	border: 1px solid #e6e6e6;
+	width:600px;
+}
 
 .file-chooser-uploader-label {
 	margin-bottom: 10px;
