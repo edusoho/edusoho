@@ -28,7 +28,7 @@
       <span id="essay-search" {% if style == 'essayMaterial' %}class="hide"{% endif %}>
         <div class="form-group">
           <select class="form-control method-form-group" name="status">
-            {{ select_options(dict('essayStatus'), app.request.query.get('status'),'--发布状态--') }}
+            {{ select_options(dict('essayStatus'), app.request.query.get('status')) }}
           </select>
         </div>
       </span>
@@ -60,7 +60,7 @@
         </div>
 
 
-        <button id="lecture-note-search" data-url="{{ path('course_manage_lecture_note',{courseId:courseId, lessonId:lessonId})}}" type="submit" class="btn btn-sm btn-primary">搜索</button>
+        <button id="lecture-note-search" data-url="{{ path('course_manage_lecture_note',{courseId:courseId, lessonId:lessonId, type:type})}}" type="submit" class="btn btn-sm btn-primary">搜索</button>
 
         <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
         <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">

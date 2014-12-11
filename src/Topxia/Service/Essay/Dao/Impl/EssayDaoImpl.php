@@ -37,8 +37,9 @@ class EssayDaoImpl extends BaseDao implements EssayDao
 
     public function searchEssays(array $conditions, array $orderBy, $start, $limit)
     {
-        if(isset($conditions['title'])){
-            $conditions['title'] = "%{$conditions['title']}%";
+        if(isset($conditions['keyword'])){
+            $conditions['title'] = "%{$conditions['keyword']}%";
+            unset($conditions['keyword']);
         }
 
         $this->filterStartLimit($start, $limit);

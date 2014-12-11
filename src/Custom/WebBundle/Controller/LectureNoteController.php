@@ -14,11 +14,10 @@ class LectureNoteController extends BaseController
         $conditions = $request->query->all();
         $lessonId = $conditions['lessonId'];
         $type = empty($conditions['type'])? 'lectureNote':$conditions['type'];
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        // $category = $this->getCategoryService()->getCategory($course['subjectIds'][0]);
-        $category['id'] = '3';
-
         $style = empty($conditions['style'])? 'essayMaterial':$conditions['style'];
+// var_dump($conditions);exit();
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $category = $this->getCategoryService()->getCategory($course['subjectIds'][0]);
 
         if (!empty($conditions['knowledgeIds'])) {
             $conditions['knowledgeIds'] = explode(',', $conditions['knowledgeIds']);
@@ -35,25 +34,29 @@ class LectureNoteController extends BaseController
         }
         $conditions['categoryId'] = $category['id'];
 
-        $essayMaterialsCount = $this->getArticleMaterialService()->searchArticleMaterialsCount($conditions);
+        $essayMaterialConditions = $style == 'essayMaterial' ? $conditions: array($category['id']) ;
 
-        $paginator = new Paginator($this->get('request'), $essayMaterialsCount, 8);
+        $essayMaterialsCount = $this->getArticleMaterialService()->searchArticleMaterialsCount($essayMaterialConditions);
+
+        $paginator = new Paginator($this->get('request'), $essayMaterialsCount, 10);
 
         $essayMaterials = $this->getArticleMaterialService()->searchArticleMaterials(
-            $conditions, 
+            $essayMaterialConditions, 
             array('createdTime','desc'),
             $paginator->getOffsetCount(),  
             $paginator->getPerPageCount()
         );
 
+        $essayConditions = $style != 'essayMaterial' ? $conditions: array($category['id']) ;
+
         $essayPaginator = new Paginator(
             $this->get('request'),
-            $this->getEssayService()->searchEssaysCount($conditions),
-            20
+            $this->getEssayService()->searchEssaysCount($essayConditions),
+            10
         );
 
         $essays = $this->getEssayService()->searchEssays(
-            $conditions,
+            $essayConditions,
             array('createdTime', 'DESC'),
             $essayPaginator->getOffsetCount(),
             $essayPaginator->getPerPageCount()

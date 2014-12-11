@@ -84,13 +84,13 @@ class ArticleMaterialDaoImpl extends BaseDao implements ArticleMaterialDao
     private function _createSearchQueryBuilder($conditions)
     {
         if (!empty($conditions['keyword'])) {
-            $conditions['titleLike'] = "%{$conditions['keyword']}%";
+            $conditions['title'] = "%{$conditions['keyword']}%";
             unset($conditions['keyword']);
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'article_material')
-            ->andWhere('title LIKE :titleLike')
+            ->andWhere('title LIKE :title')
             ->andWhere('categoryId = :categoryId');
 
         if (isset($conditions['tagIds'])) {

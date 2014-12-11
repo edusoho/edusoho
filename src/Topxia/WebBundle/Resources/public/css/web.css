@@ -4499,3 +4499,10 @@ a.homework-essay-textarea-pack-up{
 .course-data a{
 	color:#2a6496;
 }
+
+.lesson-lecture-note{
+	width:350px;
+	height:650px; 
+	overflow-y:auto;
+	margin:10px; 
+}
