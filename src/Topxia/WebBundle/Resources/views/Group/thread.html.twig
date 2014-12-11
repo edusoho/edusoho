@@ -59,14 +59,14 @@
           {% for attach in attachs %}
 
                   <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}描述：{{attach.description}}{% endif %}  上传于 {{files[attach.fileId].createdTime|smart_time}}">
-                    {% if attach.coin > 0  and   user.id != owner.id and app.user %}
+                    {% if attach.coin > 0  and   user.id != attach.userId and app.user %}
                       <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
                     {% else %}
                       <a href="{{path('group_attach_download',{fileId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
                     {% endif %}
                     <div class="media-body">
                         <div class="metas mts">
-                            {% if attach.coin > 0 and  user.id != owner.id and app.user %}
+                            {% if attach.coin > 0 and  user.id != attach.userId and app.user %}
                               <strong><a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}">{{ attach.title }}</a></strong>
                             {% else %}
                               <strong><a href="{{path('group_attach_download',{fileId:attach.id})}}">{{ attach.title }}</a></strong>
@@ -267,14 +267,14 @@
 
                   {% set postFile = postFiles[post.id] %}
                   <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}描述：{{attach.description}}{% endif %}  上传于 {{postFile[attach.fileId].createdTime|smart_time}}">
-                    {% if attach.coin > 0  and app.user %}
+                    {% if attach.coin > 0  and app.user and  user.id != attach.userId %}
                       <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
                     {% else %}
                       <a href="{{path('group_attach_download',{fileId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
                     {% endif %}
                     <div class="media-body">
                         <div class="metas mts">
-                            {% if attach.coin > 0 and  user.id != owner.id and app.user %}
+                            {% if attach.coin > 0 and  user.id != attach.userId and app.user %}
                               <strong><a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}">{{ attach.title }}</a></strong>
                             {% else %}
                               <strong><a href="{{path('group_attach_download',{fileId:attach.id})}}">{{ attach.title }}</a></strong>
