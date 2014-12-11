@@ -501,6 +501,11 @@ define(function(require, exports, module) {
 
                         }, 'json');
 
+                    } else if (lesson.type == 'courseware') {
+                        $.get($('#lesson-cc-content').data('url'), {lessonId:lesson.id}, function(html){
+                            $('#lesson-cc-content').html(html);
+                            $('#lesson-cc-content').show();
+                        });
                     }
 
                     else if (lesson.type == 'ppt') {

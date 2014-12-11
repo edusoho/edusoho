@@ -98,3 +98,7 @@ courseware_exercise_add:
 course_lesson_learn_show:
     pattern:  /course/lesson/{lessonId}/learn/show
     defaults: { _controller: CustomWebBundle:Lesson:learnShow }
+
+ccviedo_show:
+    pattern:  /course/{courseId}/lesson/ccviedo/show
+    defaults: { _controller: CustomWebBundle:CCViedoManage:show }
