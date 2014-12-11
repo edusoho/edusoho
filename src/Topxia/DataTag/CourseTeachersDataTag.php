@@ -25,7 +25,10 @@ class CourseTeachersDataTag extends CourseBaseDataTag implements DataTag
         }
         $teachers=array();
         foreach ($course['teacherIds'] as $teacherId) {
-            $teachers[]=$this->getUserService()->getUser($teacherId);
+            $user=$this->getUserService()->getUser($teacherId);
+            $userProfile = $this->getUserService()->getUserProfile($teacherId);
+           $teachers[]=array_merge($user,$userProfile);
+            
         }
         return $teachers;
     }
