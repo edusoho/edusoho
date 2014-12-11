@@ -111,4 +111,16 @@ class ArrayToolkit
     	return $filtered;
     }
 
+    public static function all(array $array, $column)
+    {
+    	$result = array();
+    	foreach ($array as $item) {
+    		foreach ($item[$column] as $value) {
+    			if(!in_array($value, $result)) {
+    				$result[] = $value;
+    			}
+    		}
+    	}
+    	return $result;
+    }
 }

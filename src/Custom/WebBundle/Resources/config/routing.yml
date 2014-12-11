@@ -91,3 +91,7 @@ course_manage_lecture_note_delete:
     pattern:  /course/lecture-note/{id}/delete
     defaults: { _controller: CustomWebBundle:LectureNote:delete }
 
+courseware_exercise_add:
+    pattern:  /course/{courseId}/lesson/{lessonId}/courseware/exercise/add
+    defaults: { _controller: CustomWebBundle:CoursewareExercise:add }
+

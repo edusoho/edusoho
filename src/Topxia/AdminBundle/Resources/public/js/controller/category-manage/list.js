@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-    var Notify = require('common/bootstrap-notify');
     var Overlay = require('overlay');
     var Widget = require('widget');
     var TagTreeChooser = require('tag-tree-chooser');
