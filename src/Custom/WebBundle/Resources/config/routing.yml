@@ -4,9 +4,9 @@
 course_manage_base:
     pattern:  /course/{id}/manage/base
     defaults: { _controller: CustomWebBundle:CourseManage:base }
-# course_manage:
-#     pattern:  /course/{id}/manage
-#     defaults: { _controller: CustomWebBundle:CourseManage:index }
+course_manage:
+    pattern:  /course/{id}/manage
+    defaults: { _controller: CustomWebBundle:CourseManage:index }
 course_manage_price:
     pattern:  /course/{id}/manage/price
     defaults: { _controller: CustomWebBundle:CourseManage:price }
@@ -26,3 +26,8 @@ column_match:
 column_course_vote:
     pattern: /column/course/vote
     defaults: {_controller: CustomWebBundle:ColumnCourse:courseVote }
+
+tag_course_list:
+    pattern:  /tag/course/{tagId}/list
+    defaults:  {_controller: CustomWebBundle:Tag:index ,tagId:'' }
+
