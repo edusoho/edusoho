@@ -11,7 +11,5 @@ interface LectureNoteService
 
     public function deleteLectureNote($id);
 
-    public function findLessonLectureNotes($lessonId);
-
-    public function findLectureNotesByType($type);
+    public function findLectureNotesByLessonIdAndType($lessonId,$type);
 }

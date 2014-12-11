@@ -58,6 +58,7 @@
           <div class="lesson-content lesson-content-text" id="lesson-text-content" data-role="lesson-content" style="display:none;"
           {% if setting('course.copy_enabled')|default(0) > 0 %} oncopy="return false;" oncut="return false;" onselectstart="return false" oncontextmenu="return false;"{% endif %}>
             <div class="lesson-content-text-body"></div>
+
           </div>
           <div class="lesson-content lesson-content-text" id="lesson-live-content" data-role="lesson-content" style="display:none;">
             <div class="lesson-content-text-body"></div>
@@ -73,17 +74,18 @@
             <div class="lesson-content-text-body"></div>
           </div>
 
-          <div class="lesson-learner-show">
-            
-          </div>
         </div>
 
         <div class="dashboard-footer clearfix">
-
-          <div class="pull-right">
+          <div class="lesson-learner-show hide"></div>
+          <div class="pull-right mls">
             <button class="btn btn-primary finish-btn" data-role="finish-lesson" style="display:none;"><span class="glyphicon glyphicon-unchecked"></span> 学过了</button>
           </div>
-
+          <div class="pull-right">
+            <button class="btn btn-primary" id="lesson-learner">
+              <span class="glyphicon glyphicon-user"></span> 课时学员
+            </button>
+          </div>
         </div>
       </div>
 

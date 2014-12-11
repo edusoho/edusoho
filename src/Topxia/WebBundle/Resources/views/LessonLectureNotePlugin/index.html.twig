@@ -1,12 +1,23 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
+{% if lesson.type != 'live' %}
+<h5>课时简介</h5>
+<div class="lesson-about">
+  {% if lesson.summary  %}
+    {{ lesson.summary }}
+  {% else %}
+    此课时无简介。
+  {% endif %}
+</div>
+{% endif %}
+
 <h5>课时讲义</h5>
 <div class="lesson-about" style="width:358px;height:660px; overflow-y:auto;">
   <div>
   {% for lessonLectureNote in lessonLectureNotes %}
     {{ lessonLectureNote.title }}
   {% else %}
-    此课时暂无讲义。
+    <div class="empty-item" style="text-align:left;margin-left:10px;">此课时暂无讲义</div>。
   {% endfor %}
   </div>
   

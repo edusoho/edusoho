@@ -95,3 +95,6 @@ courseware_exercise_add:
     pattern:  /course/{courseId}/lesson/{lessonId}/courseware/exercise/add
     defaults: { _controller: CustomWebBundle:CoursewareExercise:add }
 
+course_lesson_learn_show:
+    pattern:  /course/lesson/{lessonId}/learn/show
+    defaults: { _controller: CustomWebBundle:Lesson:learnShow }

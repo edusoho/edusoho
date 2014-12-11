@@ -513,7 +513,6 @@ class CourseController extends BaseController
 
 		$course = $this->getCourseService()->getCourse($id);
 
-
 		if (empty($course)) {
 			throw $this->createNotFoundException("课程不存在，或已删除。");
 		}
@@ -521,8 +520,6 @@ class CourseController extends BaseController
 		if (!$this->getCourseService()->canTakeCourse($id)) {
 			return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
 		}
-
-		$learn = $this->getCourseService()->findLearnsByCourseId($id);
 
 		try{
 			list($course, $member) = $this->getCourseService()->tryTakeCourse($id);

@@ -11,7 +11,7 @@ class LessonLectureNotePluginController extends BaseController
         list($course, $member) = $this->getCourseService()->tryTakeCourse($request->query->get('courseId'));
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $request->query->get('lessonId'));
 
-        $lessonLectureNotes = $this->getLectureNoteService()->findLessonLectureNotes($lesson['id']);
+        $lessonLectureNotes = $this->getLectureNoteService()->findLectureNotesByLessonIdAndType($lesson['id'], 'lectureNote');
         $essayIds = ArrayToolkit::column($lessonLectureNotes,'essayId');
         array_filter($essayIds);
         $essays = array();$essayContentItems = array();
