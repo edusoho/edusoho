@@ -30,7 +30,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 
             $user = $this->getUserService()->getUser($userId);
             if ($this->getUserService()->isUserTemporaryLockedOrLocked($user)){
-                $ex = new LockedException('User account is temporay locked, you can reopen your account by reset your login password.');  
+                $ex = new LockedException('User account is temporay locked, you can reopen your account by resetting your password.');  
                 $ex->setUser($token->getUser());  
                 throw $ex;
             }
