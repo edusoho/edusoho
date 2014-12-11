@@ -346,6 +346,15 @@ class SettingsController extends BaseController
             'request' => $request 
         ));
 	}
+
+
+	private function  updatePayPasswordFromEmailOrSecureQuestionsActionReturn($form, $token)
+	{
+        return $this->render('TopxiaWebBundle:Settings:update-pay-password-from-email-or-secure-questions.html.twig', array(
+	        'form' => $form->createView(),
+	        'token' => $token?:null
+        ));
+	}
 	public function updatePayPasswordFromEmailOrSecureQuestionsAction(Request $request)
 	{
 
@@ -364,6 +373,12 @@ class SettingsController extends BaseController
             $form->bind($request);
             if ($form->isValid()) {
                 $data = $form->getData();
+
+                if ($data['payPassword'] != $data['confirmPayPassword']){
+                	$this->setFlashMessage('danger', '两次输入的支付密码不一致。');
+			        return $this->updatePayPasswordFromEmailOrSecureQuestionsActionReturn($form, $token);
+                }
+
                 if ($this->getAuthService()->checkPassword($token['userId'], $data['currentUserLoginPassword'])){
 					$this->getAuthService()->changePayPassword($token['userId'], $data['currentUserLoginPassword'], $data['payPassword']);
 	                $this->getUserService()->deleteToken('pay-password-reset',$token['token']);
@@ -374,13 +389,7 @@ class SettingsController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:Settings:update-pay-password-from-email-or-secure-questions.html.twig', array(
-            'form' => $form->createView(),
-            'token' => $token?:null
-        ));
-
-
-
+        return $this->updatePayPasswordFromEmailOrSecureQuestionsActionReturn($form, $token);
 	}
 	public function findPayPasswordAction(Request $request) 
 	{ 

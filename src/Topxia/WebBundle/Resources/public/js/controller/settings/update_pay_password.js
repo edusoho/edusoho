@@ -9,9 +9,24 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                $('#password-save-btn').button('submiting').addClass('disabled');
+                $('#payPassword-save-btn').button('submiting').addClass('disabled');
             }
         });
+
+
+
+        validator.addItem({
+            element: '[name="form[payPassword]"]',
+            required: true,
+            rule: 'minlength{min:5} maxlength{max:20}'
+        });
+
+        validator.addItem({
+            element: '[name="form[confirmPayPassword]"]',
+            required: true,
+            rule: 'confirmation{target:#form_payPassword}'
+        });
+
 
     };
 
