@@ -266,7 +266,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     public function sumGoodsCoinsByThreadId($id)
     {   
-        $condition=array('threadId'=>$id);
+        $condition=array('threadId'=>$id,'type'=>"content");
         return $this->getThreadGoodsDao()->sumGoodsCoins($condition);
     }
 

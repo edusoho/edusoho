@@ -173,7 +173,7 @@ class GroupThreadController extends BaseController
         $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$threadMain['groupId'],'threadId'=>$threadMain['id']), true);
 
         $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>已经收藏了你的话题<a href='{$threadUrl}' target='_blank'><strong>“{$threadMain['title']}”</strong></a>！";
-        $this->getNotificationService()->notify($threadMain['userId'], 'default', $message);
+        $this->getNotifiactionService()->notify($threadMain['userId'], 'default', $message);
 
         return $this->createJsonResponse(true);
     }
@@ -193,7 +193,7 @@ class GroupThreadController extends BaseController
         $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$threadMain['groupId'],'threadId'=>$threadMain['id']), true);
 
         $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>已经取消收藏你的话题<a href='{$threadUrl}' target='_blank'><strong>“{$threadMain['title']}”</strong></a>！";
-        $this->getNotificationService()->notify($threadMain['userId'], 'default', $message);
+        $this->getNotifiactionService()->notify($threadMain['userId'], 'default', $message);
 
         return $this->createJsonResponse(true);    
     }
@@ -982,12 +982,7 @@ class GroupThreadController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getNotifiactionService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-
-        protected function getNotificationService()
+    protected function getNotifiactionService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }

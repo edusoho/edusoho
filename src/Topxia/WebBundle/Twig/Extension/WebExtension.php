@@ -69,6 +69,7 @@ class WebExtension extends \Twig_Extension
             'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
+            'isHide'=>new \Twig_Function_Method($this, 'isHideThread'),
         );
     }
 
@@ -566,6 +567,15 @@ class WebExtension extends \Twig_Extension
     public function chrFilter($index)
     {
         return chr($index);
+    }
+
+    public function isHideThread($id)
+    {
+        $need=ServiceKernel::instance()->createService('Group.ThreadService')->sumGoodsCoinsByThreadId($id);
+
+        if($need) return true;
+
+        return false;
     }
 
     public function bbCode2HtmlFilter($bbCode)
