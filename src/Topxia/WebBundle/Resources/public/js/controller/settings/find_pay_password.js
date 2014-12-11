@@ -6,13 +6,18 @@ define(function(require, exports, module) {
         var validator = new Validator({
             element: '#settings-find-pay-password-form',
             onFormValidated: function(error){
-                if (error) {
-                    return false;
-                }
-                $('#password-save-btn').button('submiting').addClass('disabled');
-            }
-        });
-
+                                        if (error) {
+                                            return false;
+                                        }
+                                        $('#password-save-btn').button('submiting').addClass('disabled');
+                            }
+            });
+            validator.addItem({
+                element: '[name="answer"]',
+                required: true,
+                rule: 'maxlength{max:20}'            
+            });
+        
     };
 
 });
