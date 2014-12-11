@@ -119,14 +119,14 @@ class CourseController extends BaseController
         
         $newMaterials = $this->getCourseCopyService()->copyMaterials($course['id'], $newCourse, $newLessons);
         
-        // $code = 'Homework';
-        // $homework = $this->getAppService()->findInstallApp($code);
-        // $isCopyHomework = $homework && version_compare($homework['version'], "1.0.1", ">=");
+        $code = 'Homework';
+        $homework = $this->getAppService()->findInstallApp($code);
+        $isCopyHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
 
-        // if($isCopyHomework){
+        if($isCopyHomework){
             $newHomeworks = $this->getCourseCopyService()->copyHomeworks($course['id'], $newCourse, $newLessons,$newQuestions);
             $newExercises = $this->getCourseCopyService()->copyExercises($course['id'], $newCourse, $newLessons);
-        // }
+        }
 
         return $this->redirect($this->generateUrl('admin_course'));
     }
