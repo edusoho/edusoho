@@ -119,10 +119,17 @@ class CourseController extends BaseController
         
         $newMaterials = $this->getCourseCopyService()->copyMaterials($course['id'], $newCourse, $newLessons);
         
-        $newHomeworks = $this->getCourseCopyService()->copyHomeworks($course['id'], $newCourse, $newLessons,$newQuestions);
+        $code = 'Homework';
+        $homework = $this->getAppService()->findInstallApp($code);
+        $isShowHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
+        $newHomeworks ="";
+        $newExercises ="";
 
-        $newExercises = $this->getCourseCopyService()->copyExercises($course['id'], $newCourse, $newLessons);
-        
+        if($isShowHomework){
+            $newHomeworks = $this->getCourseCopyService()->copyHomeworks($course['id'], $newCourse, $newLessons,$newQuestions);
+            $newExercises = $this->getCourseCopyService()->copyExercises($course['id'], $newCourse, $newLessons);
+        }
+
         return $this->redirect($this->generateUrl('admin_course'));
     }
 
@@ -344,5 +351,10 @@ class CourseController extends BaseController
     private function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 }
