@@ -38,14 +38,9 @@ class LectureNoteServiceImpl extends BaseService implements LectureNoteService
         $this->getLectureNoteDao()->deleteLectureNote($id);
     }
 
-    public function findLessonLectureNotes($lessonId)
+    public function findLectureNotesByLessonIdAndType($lessonId,$type)
     {
-        return $this->getLectureNoteDao()->findLectureNotesByLessonId($lessonId);
-    }
-
-    public function findLectureNotesByType($type)
-    {
-        return $this->getLectureNoteDao()->findLectureNotesByType($type);
+        return $this->getLectureNoteDao()->findLectureNotesByLessonIdAndType($lessonId,$type);
     }
 
     private function getLectureNoteDao()

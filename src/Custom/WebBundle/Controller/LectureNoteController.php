@@ -62,7 +62,7 @@ class LectureNoteController extends BaseController
             $essayPaginator->getPerPageCount()
         );
 
-        $lectureNotes = $this->getLectureNoteService()->findLectureNotesByType($type);
+        $lectureNotes = $this->getLectureNoteService()->findLectureNotesByLessonIdAndType($lessonId,$type);
         $knowledges = $this->getKnowledgeService()->findKnowledgeByIds(ArrayToolkit::column($essayMaterials,'mainKnowledgeId'));
         $knowledges = ArrayToolkit::index($knowledges, 'id');
 

@@ -6,7 +6,7 @@
   {% for lessonLectureNote in lessonLectureNotes %}
     {{ lessonLectureNote.title }}
   {% else %}
-    此课时暂无讲义。
+    <div class="empty-item" style="text-align:left;margin-left:10px;">此课时暂无讲义</div>。
   {% endfor %}
   </div>
   

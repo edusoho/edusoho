@@ -11,34 +11,18 @@
 </div>
 {% endif %}
 
-{% if lesson.type in ['video', 'audio'] and setting('course.student_download_media') and file %}
-<h5>课时音视频文件下载</h5>
-<div class="lesson-about">
-  <a href="{{ path('course_lesson_media_download', {courseId:lesson.courseId, lessonId:lesson.id}) }}">{{ file.size|file_size }} (点击下载)</a>
-</div>
-{% endif %}
-
-
 <h5>课时资料</h5>
 
 {% if lesson.status == 'published' %}
   <ul class="media-list toolbar-pane-list">
-  {% for material in materials %}
-    <li class="media list-item">
-      <div class="media-body list-item-body">
-        {% if material.link %}
-          <div class="title">
-            <a href="{{ material.link }}" target="_blank">{{ material.title }}</a>
-            <span class="glyphicon glyphicon-new-window text-muted text-sm" title="网络链接资料"></span>
-          </div>
-        {% else %}
-          <div class="title">
-            <a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" target="_blank">{{ material.title }}</a>
-            <span class="meta">({{ material.fileSize|file_size }})</span>
-          </div>
-          <div class="summary">{{ material.description }}</div>
-        {% endif %}
-      </div>
+  {% for lessonMaterial in lessonMaterials %}
+    <li>
+      {% if lessonMaterial.essayId != 0  %}
+        <a class="btn-link" data-role="preview-item" data-url="{{ path('admin_essay_preview', {id:lessonMaterial.essayId}) }}" data-toggle="modal" data-target="#modal" data-toggle="tooltip" data-placement="bottom">
+        {{ lessonMaterial.title}}</a>
+      {% else %}
+      <a class="btn btn-link preview-courseware-btn" data-url="{{ path('admin_article_material_preview',{categoryId:categoryId, id:lessonMaterial.essayMaterialId}) }}" data-toggle="modal" data-target="#modal" data-toggle="tooltip" data-placement="bottom" title="预览">{{ lessonMaterial.title}}</a>
+      {% endif %}
     </li>
     {% else %}
       <li class="empty-item" style="text-align:left;margin-left:10px;">此课时无资料</li>

@@ -1,0 +1,11 @@
+<div class="row">
+  {% for learner in learners %}
+    <div class="col-md-2">
+      <a href="{{path('user_show',{id:learner.id})}}" title="{{learner.nickname}}" target="_blank">
+        <img src="{{ default_path('avatar',learner.largeAvatar, 'large') }}" alt="{{learner.nickname}}" style="width:100px;">
+      </a> 
+      <p class="mvs" align="center"><a href="{{path('user_show',{id:learner.id})}}" title="{{learner.nickname}}" target="_blank">{{learner.nickname}}</a>
+      </p>
+    </div>
+  {% endfor %}
+</div>

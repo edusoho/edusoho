@@ -34,9 +34,10 @@ class CoursewareExerciseController extends BaseController
             return $this->render('HomeworkBundle:CourseExerciseManage:execise-questions-table.html.twig', array(
                 'exercises' => $mediaExercises,
                 'questions' => $questions,
+                'course' => $course,
             ));
         }
-        list($questions, $paginator, $tags, $choosedTags, $showtime) = $this->buildQquestions($request);
+        list($questions, $paginator, $tags, $choosedTags, $showtime) = $this->buildQuestions($request);
     	$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $courseware = $this->getCoursewareService()->getCourseware($lesson['coursewareId']);
     	$mainKnowledge = $this->getKnowledgeService()->getKnowledge($courseware['mainKnowledgeId']);
@@ -65,7 +66,7 @@ class CoursewareExerciseController extends BaseController
         return array($mediaExercises, $questions);
     }
 
-    private function buildQquestions($request)
+    private function buildQuestions($request)
     {
         $conditions = $request->query->all();
         $conditions['types'] = array('choice', 'single_choice', 'uncertain_choice', 'determine');

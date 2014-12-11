@@ -144,8 +144,9 @@ class ArticleMaterialController extends BaseController
         );
     }
 
-    public function previewAction(Request $request, $categoryId, $id)
+    public function previewAction(Request $request, $id)
     {
+        $categoryId = $request->query->get('categoryId');
         $category = $this->getCategoryService()->getCategory($categoryId);
         if (empty($category)) {
             throw $this->createNotFoundException("分类(#{$categoryId})不存在，预览文章素材失败！");
