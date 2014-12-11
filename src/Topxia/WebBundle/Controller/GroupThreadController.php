@@ -414,8 +414,8 @@ class GroupThreadController extends BaseController
 
         $response = BinaryFileResponse::create($filename, 200, array(), false);
 
-        $$goods['title'] = urlencode($goods['title']);
-        $$goods['title'] = str_replace('+', '%20', $goods['title']);
+        $goods['title'] = urlencode($goods['title']);
+        $goods['title'] = str_replace('+', '%20', $goods['title']);
         if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
             $response->headers->set('Content-Disposition', 'attachment; filename="'.$goods['title'].'"');
         } else {
@@ -425,18 +425,6 @@ class GroupThreadController extends BaseController
         $response->headers->set('Content-type', "application/octet-stream");
 
         return $response;
-
-
-/*        $response->headers->set('Cache-Control', 'private');
-        $response->headers->set('Content-type', "application/octet-stream");
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . $hide['title'] . '";');
-        $response->headers->set('Content-length', filesize($filename));
-
-        $response->sendHeaders();
-
-        $response->setContent(readfile($filename));
-
-        return $response;*/
     }
 
     public function buyAttachAction(Request $request,$attachId)

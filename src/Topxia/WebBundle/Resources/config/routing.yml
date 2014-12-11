@@ -1369,6 +1369,7 @@ group_thread_closeThread:
 group_thread_deletePost:
     pattern:  /group/thread/deletePost/{postId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:deletePost }
+    methods: [POST]
 group_thread_post_reply:
     pattern:  /group/post/{postId}/reply
     defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
@@ -1396,6 +1397,7 @@ group_thread_buy_attach:
 group_thread_delete_attach:
     pattern:  /group/attach/delete/{goodsId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:deleteAttach }
+    methods: [POST]
 
 
 my_coin:

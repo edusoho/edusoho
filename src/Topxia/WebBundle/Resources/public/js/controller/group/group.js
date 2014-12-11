@@ -14,7 +14,7 @@
     exports.run = function() {
 
         var add_btn_clicked = false;
-        
+
         $('#add-btn').click(function(){
             if(!add_btn_clicked)
             {
@@ -291,7 +291,12 @@
 
         }
 
+        if($('#hasAttach').length>0){
 
+            $('.ke-icon-accessory').addClass('ke-icon-accessory-red');
+            
+        }
+        
         if($('#post-action').length>0){
           
             $('#post-action').on('click','#closeThread',function(){
