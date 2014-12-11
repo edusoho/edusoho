@@ -731,9 +731,7 @@ class GroupThreadController extends BaseController
 
             $post=$this->getThreadService()->updatePost($post['id'],array('adopt'=>1));
 
-            $account=$this->getCashService()->getAccountByUserId($post['userId']);
-
-            $this->getCashService()->reWard($thread['rewardCoin'],'您的回复被采纳为最佳回答！',$user->id);
+            $this->getCashService()->reWard($thread['rewardCoin'],'您的回复被采纳为最佳回答！',$post['userId']);
 
         }
 
