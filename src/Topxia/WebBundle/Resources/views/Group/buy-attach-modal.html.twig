@@ -1,0 +1,47 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+{% block title %}下载附件{% endblock %}
+{% block body %}
+
+<form id="buy-form" class="form-horizontal" method="post" action="{{path('group_thread_buy_attach',{attachId:attachId})}}">
+  {% if not Trade %}
+  <div class="row form-group">
+    <div class="col-md-3 col-md-offset-2 control">
+      <label class="control-label"> 账户余额:</label>
+    </div>
+    <div class="col-md-3 controls">
+       <label class="control-label" id="canUse" data-val="{{account.cash|default(0)}}">{{account.cash|default(0)}}</label>
+    </div>
+
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 col-md-offset-2 control">
+      <label for="amount" class="control-label"> 所需{{setting('coin').coin_name}}:
+      </label>
+    </div>
+    <div class="col-md-3 controls">
+       <label class="control-label" name="amount" id="amount">{{attach.coin}} {% if attach.coin > account.cash|default(0)%}<a href="{{path('my_coin_buy')}}" class="mll" style="color: #428bca;">充值</a>{% endif %}</label>
+    </div>
+
+  </div>
+  
+  {% else %}
+  <div >您已购买该附件!</div>
+  {% endif %}
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+{% endblock %}
+
+{% block footer %}
+  <script>
+    app.load('group/buy-modal');
+  </script>
+  {% if not Trade %}
+  <button id="create-btn" data-submiting-text="正在提交" type="submit" class="{% if attach.coin > account.cash|default(0)%}disabled{% endif %} btn btn-primary pull-right" data-toggle="form-submit" data-target="#buy-form">购买</button>
+  {% else %}
+    <a id="btn-download" href="{{path('group_attach_download',{fileId:attach.id})}}" class="btn btn-primary pull-right" >立即下载</a>
+  {% endif %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+{% endblock %}

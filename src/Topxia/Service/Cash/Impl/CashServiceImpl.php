@@ -130,6 +130,67 @@ class CashServiceImpl extends BaseService implements CashService
         return $this->getAccountDao()->waveDownCashField($id, $value);
     }
 
+    public function reward($amount,$name,$userId,$type=null)
+    {   
+        $coinSetting=$this->getSettingService()->get('coin',array());
+
+        try {
+
+            $this->getAccountDao()->getConnection()->beginTransaction();
+
+            $account = $this->getAccountDao()->getAccountByUserId($userId, true);
+            
+            if(empty($account)){
+            $this->createAccount($userId);
+            }
+
+            $inflow = array();
+
+            if($type=="cut"){
+
+                $inflow=array(
+                'userId'=>$userId,
+                'sn'=>$this->makeSn(),
+                'type'=>'outflow',
+                'amount'=>$amount,
+                'name'=>$name,
+                'category'=>"exchange",
+                'orderSn'=>'R'.$this->makeSn(),
+                'createdTime'=>time(),
+                );
+
+                $inflow = $this->getFlowDao()->addFlow($inflow);
+
+                $this->getAccountDao()->waveDownCashField($account['id'], $amount);
+
+            }else{
+
+                $inflow=array(
+                'userId'=>$userId,
+                'sn'=>$this->makeSn(),
+                'type'=>'inflow',
+                'amount'=>$amount,
+                'name'=>$name,
+                'category'=>"exchange",
+                'orderSn'=>'R'.$this->makeSn(),
+                'createdTime'=>time(),
+                );
+
+                $inflow = $this->getFlowDao()->addFlow($inflow);
+
+                $this->getAccountDao()->waveCashField($account['id'], $amount);
+            }
+            
+            $this->getAccountDao()->getConnection()->commit();
+
+            return $inflow;
+        } catch (\Exception $e) {
+            $this->getAccountDao()->getConnection()->rollback();
+
+            throw $e;
+        }
+    }
+    
     public function getChangeByUserId($userId)
     {
         return $this->getChangeDao()->getChangeByUserId($userId);
