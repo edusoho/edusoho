@@ -26,16 +26,16 @@ class Version20141208094934 extends AbstractMigration
         $this->addSql(
             "CREATE TABLE IF NOT EXISTS `user_secure_question` (
         `id` int(10) unsigned NOT NULL auto_increment ,
-        `userId` int(10) unsigned NOT NULL ,
-        `securityQuestion1` varchar(64) NOT NULL ,
-        `securityAnswer1` varchar(64) NOT NULL,
-        `securityAnswerSalt1` varchar(64) NOT NULL,
-        `securityQuestion2` varchar(64) NOT NULL ,
-        `securityAnswer2` varchar(64) NOT NULL,
-        `securityAnswerSalt2` varchar(64) NOT NULL,
-        `securityQuestion3` varchar(64) NOT NULL ,
-        `securityAnswer3` varchar(64) NOT NULL,
-        `securityAnswerSalt3` varchar(64) NOT NULL,        
+        `userId` int(10) unsigned NOT NULL DEFAULT 0,
+        `securityQuestion1` varchar(64) NOT NULL DEFAULT '',
+        `securityAnswer1` varchar(64) NOT NULL DEFAULT '',
+        `securityAnswerSalt1` varchar(64) NOT NULL DEFAULT '',
+        `securityQuestion2` varchar(64) NOT NULL DEFAULT '',
+        `securityAnswer2` varchar(64) NOT NULL DEFAULT '',
+        `securityAnswerSalt2` varchar(64) NOT NULL DEFAULT '',
+        `securityQuestion3` varchar(64) NOT NULL  DEFAULT '',
+        `securityAnswer3` varchar(64) NOT NULL DEFAULT '',
+        `securityAnswerSalt3` varchar(64) NOT NULL DEFAULT '',        
         
         PRIMARY KEY  (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;"); 
