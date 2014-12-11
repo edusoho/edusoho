@@ -16,6 +16,7 @@ class CourseSearchDaoImpl extends BaseDao implements CourseSearchDao
 		if ($orderBy[0] == 'recommendedSeq') {
 		    $builder->addOrderBy('recommendedTime', 'DESC');
 		}
+	
 		return $builder->execute()->fetchAll() ? : array(); 
 	}
 	public function searchCourseCount($conditions)
@@ -49,7 +50,8 @@ class CourseSearchDaoImpl extends BaseDao implements CourseSearchDao
 		        $builder->andStaticWhere("categoryId IN ($categoryIds)");
 		    }
 		}
-		if(!empty($tagId)){
+		if(!empty($conditions['tagId'])){
+			$tagId = $conditions['tagId'];
 			    $builder->andStaticWhere(" tags LIKE '%|$tagId|%'");
 		}
 		return $builder;
