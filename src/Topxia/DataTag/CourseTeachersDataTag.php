@@ -4,7 +4,7 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
-class CourseTeacherDataTag extends CourseBaseDataTag implements DataTag  
+class CourseTeachersDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
      * 获取一个课程所有老师
