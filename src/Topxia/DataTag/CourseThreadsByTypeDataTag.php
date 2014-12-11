@@ -31,7 +31,7 @@ class CourseThreadsByTypeDataTag extends CourseBaseDataTag implements DataTag
 
         $arguments['status'] = '1';
 
-        $threads = $this->getThreadService()->searchThreads(array('type'=>$type),'createdNotStick', 0, $arguments['count']);
+        $threads = $this->getThreadService()->searchThreads(array('type'=>$type),'posted', 0, $arguments['count']);
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads,'courseId'));
 
