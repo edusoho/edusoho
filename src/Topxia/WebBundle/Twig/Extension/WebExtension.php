@@ -557,8 +557,8 @@ class WebExtension extends \Twig_Extension
     {
         $fileName=explode(".", $fileName);
 
-        $name=$fileName[1];
-        if($string) $name=$fileName[1].$string;
+        $name=strtolower($fileName[1]);
+        if($string) $name=strtolower($fileName[1]).$string;
 
         return $name;
     }

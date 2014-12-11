@@ -23,9 +23,9 @@ class GroupThreadController extends BaseController
         }
 
         if($request->getMethod()=="POST"){
-            $thread = $request->request->all();
+            $threadData = $request->request->all();
 
-            $title=trim($thread['thread']['title']);
+            $title=trim($threadData['thread']['title']);
             if(empty($title)){
                 $this->setFlashMessage('danger',"话题名称不能为空！");
 
@@ -36,15 +36,19 @@ class GroupThreadController extends BaseController
                     'is_groupmember' => $this->getGroupMemberRole($id)
                     ));
             }
-            $file=$thread['file'];
+            
             $info=array(
-                'title'=>$thread['thread']['title'],
-                'content'=>$thread['thread']['content'],
+                'title'=>$threadData['thread']['title'],
+                'content'=>$threadData['thread']['content'],
                 'groupId'=>$id,
                 'userId'=>$user['id']);
            
             $thread=$this->getThreadService()->addThread($info);
-            $this->getThreadService()->addAttach($file,$thread['id']);
+
+            if(isset($threadData['file'])){
+                $file=$threadData['file'];
+                $this->getThreadService()->addAttach($file,$thread['id']);
+            }
           
             return $this->redirect($this->generateUrl('group_thread_show', array(
                 'id'=>$id,
@@ -79,15 +83,17 @@ class GroupThreadController extends BaseController
         $attachs=$this->getThreadService()->searchGoods(array("threadId"=>$thread['id'],'type'=>'attachment'),array("createdTime","DESC"),0,1000);
 
         if($request->getMethod()=="POST"){
-            $thread = $request->request->all();
+            $threadData = $request->request->all();
             $fields=array(
-                'title'=>$thread['thread']['title'],
-                'content'=>$thread['thread']['content'],);
-
-            $file=$thread['file'];
+                'title'=>$threadData['thread']['title'],
+                'content'=>$threadData['thread']['content'],);
 
             $thread=$this->getThreadService()->updateThread($threadId,$fields);
-            $this->getThreadService()->addAttach($file,$thread['id']);
+            
+            if(isset($threadData['file'])){
+                $file=$threadData['file'];
+                $this->getThreadService()->addAttach($file,$thread['id']);
+            }
 
             if ($user->isAdmin()) {
                 $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$id,'threadId'=>$thread['id']), true);
@@ -484,7 +490,7 @@ class GroupThreadController extends BaseController
             $thread = $this->getThreadService()->getThread($threadId);
 
             $postContent=$request->request->all();
-            $file=$postContent['file'];
+  
             $fromUserId = empty($postContent['fromUserId']) ? 0 : $postContent['fromUserId'];
             $content=array(
             'content'=>$postContent['content'],'fromUserId'=>$fromUserId);
@@ -497,7 +503,10 @@ class GroupThreadController extends BaseController
 
                 $post=$this->getThreadService()->postThread($content,$groupId,$user['id'],$threadId);
 
-                $this->getThreadService()->addPostAttach($file,$thread['id'],$post['id']); 
+                if(isset($postContent['file'])){
+                    $file=$postContent['file'];
+                    $this->getThreadService()->addPostAttach($file,$thread['id'],$post['id']); 
+                }
 
             }       
             $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
