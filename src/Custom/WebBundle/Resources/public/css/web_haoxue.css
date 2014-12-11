@@ -57,3 +57,12 @@ ul.sort-ul.sub-course-media li.placeholder:before {
   position: absolute;
   /** Define arrowhead **/
 }
+
+/* execrcise */
+.execrcise-tips {
+	margin-bottom: 10px;
+	border: 2px solid #eee;
+}
+.execrcise-tips .row {
+	padding: 10px;
+}
