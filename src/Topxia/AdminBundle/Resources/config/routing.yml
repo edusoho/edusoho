@@ -263,6 +263,14 @@ admin_course_close:
     defaults: { _controller: TopxiaAdminBundle:Course:close }
     methods: [POST]
 
+admin_course_copy:
+    pattern: /course/{id}/copy
+    defaults: { _controller: TopxiaAdminBundle:Course:copy }
+
+admin_course_coping:
+    pattern: /course/{id}/coping
+    defaults: { _controller: TopxiaAdminBundle:Course:coping }
+
 admin_course_recommend:
     pattern: /course/{id}/recommend
     defaults: { _controller: TopxiaAdminBundle:Course:recommend }
