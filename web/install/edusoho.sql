@@ -528,6 +528,8 @@ CREATE TABLE `groups_thread` (
   `postNum` int(10) unsigned NOT NULL DEFAULT '0',
   `status` enum('open','close') NOT NULL DEFAULT 'open',
   `hitNum` int(10) unsigned NOT NULL DEFAULT '0',
+  `rewardCoin` INT(10) UNSIGNED NOT NULL DEFAULT '0' ,
+  `type` VARCHAR(255) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -540,6 +542,7 @@ CREATE TABLE `groups_thread_post` (
   `fromUserId` int(10) unsigned NOT NULL DEFAULT '0',
   `postId` int(10) unsigned DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL COMMENT '回复时间',
+  `adopt` INT(10) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -947,6 +950,7 @@ CREATE TABLE `user` (
   `promoted` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推荐',
   `promotedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否被禁止',
+  `lastPasswordFailTime` int(10) not null default '0',
   `loginTime` int(11) NOT NULL DEFAULT '0' COMMENT '最后登录时间',
   `loginIp` varchar(64) NOT NULL DEFAULT '' COMMENT '最后登录IP',
   `loginSessionId` varchar(255) NOT NULL DEFAULT '' COMMENT '最后登录会话ID',
@@ -1149,3 +1153,29 @@ CREATE TABLE `groups_thread_collect` (
   `createdTime` int(10) unsigned NOT NULL COMMENT '收藏时间',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `groups_thread_trade`;
+CREATE TABLE `groups_thread_trade` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `threadId` int(10) unsigned DEFAULT '0',
+  `goodsId` int(10) DEFAULT '0',
+  `userId` int(10) unsigned NOT NULL,
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS `groups_thread_goods`;
+CREATE TABLE `groups_thread_goods` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` text NOT NULL,
+  `description` text,
+  `userId` int(10) unsigned NOT NULL DEFAULT '0',
+  `type` enum('content','attachment','postAttachment') NOT NULL,
+  `threadId` int(10) unsigned NOT NULL,
+  `postId` int(10) unsigned NOT NULL DEFAULT '0',
+  `coin` int(10) unsigned NOT NULL,
+  `fileId` int(10) unsigned NOT NULL DEFAULT '0',
+  `hitNum` int(10) unsigned NOT NULL DEFAULT '0',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
