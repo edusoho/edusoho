@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+    
     var learnerShow = {
         lessonId : '',
         initShow: function(){

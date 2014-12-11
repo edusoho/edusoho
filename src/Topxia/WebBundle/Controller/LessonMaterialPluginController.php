@@ -10,7 +10,7 @@ class LessonMaterialPluginController extends BaseController
         list($course, $member) = $this->getCourseService()->tryTakeCourse($request->query->get('courseId'));
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $request->query->get('lessonId'));
 
-        $lessonMaterials = $this->getLectureNoteService()->findLectureNotesByLessonIdAndType($lesson['id'], 'material');
+        $lessonMaterials = $this->getLectureNoteService()->findLectureNotesByLessonIdAndType($lesson['id'], 'metarial');
         $categoryId = '3';
 
         return $this->render('TopxiaWebBundle:LessonMaterialPlugin:index.html.twig',array(

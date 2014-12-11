@@ -668,6 +668,16 @@ define(function(require, exports, module) {
             setTimeout(recordLearningTime, 120000);
         }
 
+        setTimeout(recordLearningTime, 120000);
+
+        $('#lesson-learner').on('click',function(){
+            if ($('.lesson-learner-show').hasClass('hide')){
+                $('.lesson-learner-show').removeClass('hide');
+            } else {
+                $('.lesson-learner-show').addClass('hide');
+            }
+        });
+
         learnerShow.lessonId = dashboard.attrs.lessonId.value;
         learnerShow.initShow();
         $('[data-role=next-lesson]').on('click',function(){
@@ -679,7 +689,5 @@ define(function(require, exports, module) {
             learnerShow.lessonId = dashboard._getPrevLessonId();
             learnerShow.changeShow();
         });
-
-        setTimeout(recordLearningTime, 120000);
     };
 });
