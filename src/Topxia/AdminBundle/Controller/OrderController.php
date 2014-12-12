@@ -17,7 +17,8 @@ class OrderController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions['targetType'] = $type;
-
+        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'title'){$conditions['keyword'] = '%'. $conditions['keyword'] .'%';}
+        
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->searchOrderCount($conditions),
