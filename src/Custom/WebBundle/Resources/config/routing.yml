@@ -18,9 +18,9 @@ course_review_list:
     pattern:  /course/{id}/review/list
     defaults: { _controller: CustomWebBundle:Course:reviewList }
 
-# course_thread_list:
-#     pattern:  /course/{id}/thread/list
-#     defaults: { _controller: TopxiaWebBundle:Course:threadList }
+course_threads:
+    pattern:  /course/{id}/thread
+    defaults: { _controller: CustomWebBundle:Course:threadList }
 
 course_manage_base:
     pattern:  /course/{id}/manage/base
