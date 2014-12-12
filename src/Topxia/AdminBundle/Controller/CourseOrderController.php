@@ -25,7 +25,7 @@ class CourseOrderController extends BaseController
         if (!empty($conditions['title'])){
             $conditions['targetType'] = 'course';
 
-            $courses = $this->getCourseService()->findCoursesByTitleLike($conditions['title']);
+            $courses = $this->getCourseService()->findCoursesByTitleLike(trim($conditions['title']));
             $courseIds = ArrayToolkit::column($courses, 'id');
 
             $conditions['courseIds'] = '('.implode(', ',$courseIds).')';
