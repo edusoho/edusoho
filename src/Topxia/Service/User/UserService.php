@@ -36,6 +36,16 @@ interface UserService
 
     public function rememberLoginSessionId($id, $sessionId);
 
+    public function changePayPassword($userId, $newPayPassword);
+
+    public function verifyPayPassword($id, $payPassword);
+
+    public function getUserSecureQuestionsByUserId($userId);
+
+    public function addUserSecureQuestionsWithUnHashedAnswers($userId,$fieldsWithQuestionTypesAndUnHashedAnswers);
+
+    public function verifyInSaltOut($in,$salt,$out);
+    
     /**
      * 变更密码
      * 
