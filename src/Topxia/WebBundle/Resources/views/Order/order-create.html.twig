@@ -1,0 +1,53 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %} 订单确认 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'order/pay' %}
+
+{% block content %}
+<div class="container order-pay">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1 ptl">
+      <div class="panel panel-default panel-page">
+        <div class="panel-heading"><h4>订单确认</h4></div>
+        <div class="panel-body">
+          <form method="post">
+          	
+          	{% if setting('coin.charge_coin_enabled')|default(false) %}
+          	<input type="hidden" role="cash-rate" value="{{setting('coin.cash_rate')}}"/>
+          	{% else %}
+          	<input type="hidden" role="cash-rate" value="1"/>
+          	{% endif %}
+
+            {% if courses|default(null) %}
+            {% include 'TopxiaWebBundle:Course:courses-block-list.html.twig' with {courses:courses} %}
+            {% endif %}
+
+            <div class="order-item row">
+            	<h4 class="total-price">应付金额：￥<span role="total-price">{{totalPrice}}</span></h4>
+            </div>
+            
+            {% if couponApp|default(null) and cashAccount|default(null)%}
+            	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
+            {% endif %}
+
+            {% if setting('coin.coin_enabled') and cashAccount|default(null)%}
+            	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
+            {% endif %}
+
+            <div class="order-item row">
+            	<h4 class="total-price">实际支付：￥<span role="pay-amount">{{shouldPayPrice}}</span></h4>
+            </div>
+
+            <div class="form-group pay">
+              <div class="col-md-offset-10 controls">
+                <button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">支付</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
