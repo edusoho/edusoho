@@ -666,7 +666,7 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var mediaexercise = new mediaExercise({
-            element: '#lesson-cc-content',
+            element: '#lesson-cc-content'
         });
 
         var dashboard = new LessonDashboard({

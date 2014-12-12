@@ -53,7 +53,8 @@
           <div class="watermarkEmbedded" ></div>
 
           <div class="lesson-content lesson-content-audio" id="lesson-audio-content" data-role="lesson-content" style="display:none;"></div>
-          <div class="lesson-content" id="lesson-cc-content" data-role="lesson-content" style="display:none;" data-url="{{ path('ccviedo_show', {courseId:course.id})}}" data-exercises-url="{{ path('media_lesson_exercises_get') }}"></div>
+          <div class="lesson-content" id="lesson-cc-content" data-role="lesson-content" style="display:none;" data-url="{{ path('ccviedo_show', {courseId:course.id})}}" data-exercises-url="{{ path('media_lesson_exercises_get') }}" data-question-url="{{ path('ccviedo_question_preview') }}"></div>
+          <a class="popup-question-btn hidden" href="#modal" data-toggle="modal" data-url=""></a>
           <div class="lesson-content" id="lesson-swf-content" data-role="lesson-content" style="display:none;"></div>
           <div class="lesson-content" id="lesson-iframe-content" data-role="lesson-content" style="display:none;"></div>
           <div class="lesson-content lesson-content-text" id="lesson-text-content" data-role="lesson-content" style="display:none;"

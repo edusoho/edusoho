@@ -21,8 +21,9 @@ class CCViedoManageController extends BaseController
         ));
     }
 
-    public function questionPreviewAction(Request $request, $questionId)
+    public function questionPreviewAction(Request $request)
     {
+        $questionId = $request->query->get('questionId');
         $question = $this->getQuestionService()->getQuestion($questionId);
 
         if (empty($question)) {
