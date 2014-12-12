@@ -234,11 +234,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $orderBy = array('createdTime', 'DESC');
         return $this->getOrderRefundDao()->searchRefunds($conditions, $orderBy, $start, $limit);
     }
-    public function searchRefundsByCourseTitle($title, $sort = 'latest', $start, $limit)
-    {
-        $orderBy = array('createdTime', 'DESC');
-        return $this->getOrderRefundDao()->searchRefundsByCourseTitle($title, $orderBy, $start, $limit);
-    }
+
     public function searchRefundCount($conditions)
     {
         $conditions = array_filter($conditions);

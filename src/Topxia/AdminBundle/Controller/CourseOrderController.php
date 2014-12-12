@@ -21,41 +21,28 @@ class CourseOrderController extends BaseController
     public function refundsAction(Request $request)
     {
         $conditions = $this->prepareRefundSearchConditions($request->query->all());
-        
-        error_log("\n\n",3,'/var/tmp/mylogs.log');
-        error_log(serialize($conditions),3,'/var/tmp/mylogs.log');
-        error_log("\n\n",3,'/var/tmp/mylogs.log');
 
-        $refunds = array();
-        $paginator = new Paginator(
-                $this->get('request'),
-                100,
-                20
-            );
+        if (!empty($conditions['title'])){
+            $conditions['targetType'] = 'course';
 
-        if (empty($conditions['title'])){
+            $courses = $this->getCourseService()->findCoursesByTitleLike($conditions['title']);
+            $courseIds = ArrayToolkit::column($courses, 'id');
 
-            $paginator = new Paginator(
-                $this->get('request'),
-                $this->getOrderService()->searchRefundCount($conditions),
-                20
-            );
-
-            $refunds = $this->getOrderService()->searchRefunds(
-                $conditions,
-                'latest',
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-        }else{
-            $refunds = $this->getOrderService()->searchRefundsByCourseTitle(
-                $conditions['title'],
-                'latest',
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );            
-           // $sql = "select filtered_orders.title,order_refund.* from (select * from orders where title like '%123%')  as filtered_orders, order_refund where filtered_orders.id = order_refund.orderId ; ";
+            $conditions['courseIds'] = '('.implode(', ',$courseIds).')';
         }
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getOrderService()->searchRefundCount($conditions),
+            20
+        );
+
+        $refunds = $this->getOrderService()->searchRefunds(
+            $conditions,
+            'latest',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($refunds, 'userId'));
         $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($refunds, 'orderId'));

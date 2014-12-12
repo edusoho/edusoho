@@ -36,6 +36,15 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findCoursesByTitleLike($title)
+    {
+        if(empty($title)){
+            return array();
+        }
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE `title` LIKE '%{$title}%';";
+        return $this->getConnection()->fetchAll($sql, array());
+    }
+
     public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
     {
 
