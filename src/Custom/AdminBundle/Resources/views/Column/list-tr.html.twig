@@ -2,6 +2,8 @@
   <td>{{ column.id }}</td>
   <td>{{ column.name }}</td>
   <td>{{column.description|default("")}}</td>
+  <td><img src="{{ default_path('tagAvatar',column.mediumAvatar) }}"><br/>
+  {{default_path('tagAvatar',column.mediumAvatar) }}</td> 
   <td>{{ column.createdTime|date('Y-m-d H:i') }}</td>
   <td>
          <div class="btn-group">
