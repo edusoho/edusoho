@@ -39,6 +39,18 @@ class OrderRefundDaoImpl extends BaseDao implements OrderRefundDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
+    public function searchRefundsByCourseTitle($title, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = 
+            "SELECT filtered_orders.title,order_refund.* FROM (SELECT * FROM orders WHERE title LIKE '%{$title}%')  AS filtered_orders, order_refund 
+            WHERE filtered_orders.id = order_refund.orderId
+            ORDER BY {$orderBy[0]} {$orderBy[1]}
+            LIMIT {$start}, {$limit}";
+
+        return $this->getConnection()->fetchAll($sql, array()) ? : array();
+    }
+
     public function searchRefundCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
