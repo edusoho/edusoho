@@ -101,6 +101,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             ->andWhere('groupId = :groupId') 
             ->andWhere('createdTime > :createdTime')
             ->andWhere('isElite = :isElite')
+            ->andWhere('type = :type')
             ->andWhere('userId = :userId')
             ->andWhere('status = :status')
             ->andWhere('title like :title'); 

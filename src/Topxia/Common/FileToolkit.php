@@ -104,6 +104,7 @@ class FileToolkit
             return 'ppt';
         } elseif (strpos($mimeType, 'application/vnd.ms-') === 0 
             or strpos($mimeType, 'application/vnd.openxmlformats-officedocument') === 0
+        			or strpos($mimeType, 'application/msword') === 0
             or strpos($mimeType, 'application/pdf') === 0) {
             return 'document';
         }
@@ -892,9 +893,11 @@ class FileToolkit
             return 'audio';
         } elseif (in_array($extension, array('jpg', 'jpeg', 'gif', 'png'))) {
             return 'image';
-        } elseif (in_array($extension, array('txt', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'ppt', 'pptx'))) {
+        } elseif (in_array($extension, array('txt', 'doc', 'docx', 'xls', 'xlsx', 'pdf'))) {
             return 'document';
-        } else {
+        } elseif (in_array($extension, array('ppt', 'pptx'))) {
+            return 'ppt';
+        }else {
             return 'other';
         }
     }
@@ -904,10 +907,10 @@ class FileToolkit
         $currentValue = $currentUnit = null;
         $unitExps = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3);
         foreach ($unitExps as $unit => $exp) {
-            $divisor = pow(1000, $exp);
+            $divisor = pow(1024, $exp);
             $currentUnit = $unit;
             $currentValue = $size / $divisor;
-            if ($currentValue < 1000) {
+            if ($currentValue < 1024) {
                 break;
             }
         }
