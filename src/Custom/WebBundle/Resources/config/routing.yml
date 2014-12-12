@@ -58,4 +58,14 @@ column_course_vote:
 tag_course_list:
     pattern:  /tag/course/{tagId}/list
     defaults:  {_controller: CustomWebBundle:Tag:index ,tagId:'' }
+tag_page:
+    pattern:  /tag/page/{page}
+    defaults:  {_controller: CustomWebBundle:Tag:page ,page:'' }
+course_search_index:
+    pattern:  /course/search/index
+    defaults: {_controller: CustomWebBundle:CourseSearch:index }
+
+
+
+
 

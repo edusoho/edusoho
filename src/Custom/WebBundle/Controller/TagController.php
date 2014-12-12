@@ -27,34 +27,48 @@ class TagController extends BaseController
 
 
         $conditions = array('tagId' => $tagId);
-         $count = $this->getCustomCourseSearchService()->searchCourseCount($conditions);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCustomCourseSearchService()->searchCourseCount($conditions)
+            , 10
+        );
+
+         // $count = $this->
            
-        $paginator = new Paginator($this->get('request'), $count, 20);
+        // $paginator = new Paginator($this->get('request'), $count, 20);
+
         $courses = $this->getCustomCourseSearchService()->searchCourses($conditions,null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
       
         return $this->render('TopxiaWebBundle:Tag:tag-index.html.twig', array(
             'tags' => $tags,
             'tagDetail' => $tagDetail,
-            'courses' => $courses 
+            'courses' => $courses,
+            'page'=>1,
+            'paginator'=>$paginator
         ));
 
     }
-    public function nextAction(Request $request){
-        $perPageCount = 14;
+    public function pageAction(Request $request,$page){
+        $perPageCount =18;
         $total = $this->getTagService()->getAllTagCount();
-        $currentPage = $request->query->get('page');
-        $maxPage = ceil($total / $perPage) ? : 1;
+        $currentPage = $page;
+        $maxPage = ceil($total / $perPageCount) ? : 1;
         $start=0;
         //保证最后一页也有14条记录
         if($currentPage==$maxPage){
-            $start = $total-14;
+            if($total>$perPageCount){
+                     $start = $total-$perPageCount;
+            }else{
+                 $start =0;
+            }
+           
             $nextPage = 1;
         }else{
-             $start = ($currentPage - 1) * 14;
+             $start = ($currentPage - 1) * $perPageCount;
              $nextPage = $currentPage +1;
         }
-        $tags = $this->getTagService()->findAllTags($start, 14);
-        return $this->render('CustomWebBundle:Default:index.html.twig', array(
+        $tags = $this->getTagService()->findAllTags($start, $perPageCount);
+        return $this->render('TopxiaWebBundle:Tag:tags.html.twig', array(
         'tags' => $tags,
         'page' => $nextPage
         ));

@@ -17,7 +17,7 @@ class CourseTagDataTag extends CourseBaseDataTag implements DataTag
     {   
 
         if(empty($arguments['tagId'])){
-               return  array('name' => '');
+               return  array();
         }
 
         return  $this->getTagService()->getTag($arguments['tagId']);
