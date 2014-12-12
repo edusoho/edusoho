@@ -102,3 +102,11 @@ course_lesson_learn_show:
 ccviedo_show:
     pattern:  /course/{courseId}/lesson/ccviedo/show
     defaults: { _controller: CustomWebBundle:CCViedoManage:show }
+
+ccviedo_question_preview:
+    pattern:  /course/lesson/ccviedo/question/{questionId}/preview
+    defaults: { _controller: CustomWebBundle:CCViedoManage:questionPreview }
+
+ccviedo_question_answer_check:
+    pattern:  /course/lesson/ccviedo/question/{questionId}/answer/check
+    defaults: { _controller: CustomWebBundle:CCViedoManage:answerCheck }
