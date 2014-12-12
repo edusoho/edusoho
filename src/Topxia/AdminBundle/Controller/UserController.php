@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
@@ -22,6 +23,7 @@ class UserController extends BaseController
     public function indexAction (Request $request)
     {
         $fields = $request->query->all();
+
         $conditions = array(
             'roles'=>'',
             'keywordType'=>'',
@@ -45,9 +47,18 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $app = $this->getAppService()->findInstallApp("UserImporter");
+        $enabled = $this->getSettingService()->get('plugin_userImporter_enabled');
+        
+        $showUserExport = false;
+        if(!empty($app) && array_key_exists('version', $app) && $enabled){
+            $showUserExport = version_compare($app['version'], "1.0.2", ">=");
+        }
+
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
             'paginator' => $paginator,
+            'showUserExport' => $showUserExport
         ));
     }
 
@@ -422,6 +433,11 @@ class UserController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
     protected function getUserFieldService()

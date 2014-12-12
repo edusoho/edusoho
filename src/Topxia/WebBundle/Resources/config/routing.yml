@@ -1187,6 +1187,10 @@ teacher:
     pattern: /teacher
     defaults: {_controller: TopxiaWebBundle:Teacher:index }
 
+teacher_search:
+    pattern: /teacher/search
+    defaults: {_controller: TopxiaWebBundle:Teacher:search }
+
 partner_login:
     pattern: /partner/login
     defaults: {_controller: TopxiaWebBundle:Partner:login }
@@ -1276,6 +1280,9 @@ group_member_threads:
 group_member_posts:
     pattern:  /my/group/posts
     defaults: { _controller: TopxiaWebBundle:Group:memberPosts}
+group_thread_collecting:
+    pattern:  /my/group/collecting
+    defaults: { _controller: TopxiaWebBundle:Group:collecting }
 group_show:
     pattern:  /group/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupIndex }
@@ -1336,6 +1343,14 @@ group_thread_check_user:
 group_thread_show:
     pattern:  /group/{id}/thread/{threadId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:groupThreadIndex }
+group_thread_collect:
+    pattern:  /group/thread/{threadId}/collect
+    defaults: { _controller: TopxiaWebBundle:GroupThread:collect }
+    methods: [POST]
+group_thread_uncollect:
+    pattern:  /group/thread/{threadId}/uncollect
+    defaults: { _controller: TopxiaWebBundle:GroupThread:uncollect }
+    methods: [POST]
 group_thread_setElite:
     pattern:  /group/thread/{threadId}/setElite
     defaults: { _controller: TopxiaWebBundle:GroupThread:setElite }
@@ -1354,9 +1369,36 @@ group_thread_closeThread:
 group_thread_deletePost:
     pattern:  /group/thread/deletePost/{postId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:deletePost }
+    methods: [POST]
 group_thread_post_reply:
     pattern:  /group/post/{postId}/reply
     defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
+group_thread_reward:
+    pattern:  /thread/{threadId}/reward
+    defaults: { _controller: TopxiaWebBundle:GroupThread:reward }
+group_thread_cancel_reward:
+    pattern:  /thread/{threadId}/reward/cancel
+    defaults: { _controller: TopxiaWebBundle:GroupThread:cancelReward }
+group_thread_adopt:
+    pattern:  /thread/{postId}/adopt
+    defaults: { _controller: TopxiaWebBundle:GroupThread:adopt }
+group_thread_hide:
+    pattern:  /thread/{threadId}/hide
+    defaults: { _controller: TopxiaWebBundle:GroupThread:hide }
+group_upload:
+    pattern:  /group/thread/upload
+    defaults: { _controller: TopxiaWebBundle:GroupThread:upload }
+group_attach_download:
+    pattern:  /group/attach/download/{fileId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:download }
+group_thread_buy_attach:
+    pattern:  /group/attach/buy/{attachId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:buyAttach }
+group_thread_delete_attach:
+    pattern:  /group/attach/delete/{goodsId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:deleteAttach }
+    methods: [POST]
+
 
 my_coin:
     path:     /my/coin

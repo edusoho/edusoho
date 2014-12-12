@@ -452,11 +452,10 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $teacherTests = $this->getTestpaperService()->findTeacherTestpapersByTeacherId($user['id']);
-
-        $testpaperIds = ArrayToolkit::column($teacherTests, 'id');
-
-        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
+        $courseIds=ArrayToolkit::column($courses,'id');
+        $testpapers = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
+        $testpaperIds = ArrayToolkit::column($testpapers, 'id');
 
         $paginator = new Paginator(
             $request,
@@ -503,15 +502,23 @@ class TestpaperController extends BaseController
     {
         $user = $this->getCurrentUser();
 
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
+        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
+        $courseIds=ArrayToolkit::column($courses,'id');
+        $testpapers = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
+        $testpaperIds = ArrayToolkit::column($testpapers, 'id');
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTeacherIds(array($user['id']), 'finished'),
+            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, 'finished'),
             10
         );
 
-        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTeacherIds(
-            array($user['id']),
+        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
+            $testpaperIds,
             'finished',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()

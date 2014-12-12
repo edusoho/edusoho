@@ -44,6 +44,7 @@ define(function(require, exports, module) {
             });
         })
 
+        $("[rel='tooltip']").tooltip();
 
 
     };
