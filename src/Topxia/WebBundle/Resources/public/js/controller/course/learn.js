@@ -8,6 +8,7 @@ define(function(require, exports, module) {
 
     require('mediaelementplayer');
     var learnerShow = require('../../../../customweb/js/controller/lesson/learn-show');
+    var mediaExercise = require('../../../../homework/js/controller/widget/media-exercise');
     var Toolbar = require('../lesson/lesson-toolbar');
 
     var MediaPlayer = require('../widget/media-player4');
@@ -505,6 +506,8 @@ define(function(require, exports, module) {
                         $.get($('#lesson-cc-content').data('url'), {lessonId:lesson.id}, function(html){
                             $('#lesson-cc-content').html(html);
                             $('#lesson-cc-content').show();
+                            var url = $('#lesson-cc-content').data('exercisesUrl')+'?lessonId='+lesson.id;
+                            window.mediaExercise.reset(url);
                         });
                     }
 
@@ -662,10 +665,14 @@ define(function(require, exports, module) {
     };
 
     exports.run = function() {
+        var mediaexercise = new mediaExercise({
+            element: '#lesson-cc-content',
+        });
 
         var dashboard = new LessonDashboard({
             element: '#lesson-dashboard'
         }).render();
+
 
         function recordLearningTime(){
             url="../../course/"+dashboard.attrs.lessonId.value+'/learn/time/2';
