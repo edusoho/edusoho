@@ -22,14 +22,13 @@ class CourseLessonManageController extends BaseController
         if ($request->getMethod() == "POST") {
 
             $formData = $request->request->all();
-
             if (!empty($formData['tab'])) {
                 $courseware = $formData;
                 $videoMeta = $this->getVideoMeta($courseware['url']);
                 $courseware = $this->filterVideoField($videoMeta,$courseware);
                 $courseware['categoryId'] = $categoryId;
                 $courseware = $this->getCoursewareService()->createCourseware($courseware);
-                $formData['coursewareId'] = $courseware['id'];
+                $formData['mediaId'] = $courseware['id'];
             }
 
             $lesson = $this->getCourseService()->createLesson($formData);
@@ -49,7 +48,6 @@ class CourseLessonManageController extends BaseController
     public function editAction(Request $request,$courseId,$lessonId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-
         $categoryId = $course['subjectIds'][0];
         $category = $this->getCategoryService()->getCategory($categoryId);
 
@@ -62,20 +60,18 @@ class CourseLessonManageController extends BaseController
         if (empty($lesson)) {
             throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
         }
-
-        $courseware = $this->getCoursewareService()->getCourseware($lesson['coursewareId']);
-
+        $courseware = $this->getCoursewareService()->getCourseware($lesson['mediaId']);
+        $essay = $this->getEssayService()->getEssay($lesson['mediaId']);
         if($request->getMethod() == 'POST'){
 
             $fields = $request->request->all();
-
             if (!empty($fields['tab'])) {
                 $courseware = $fields;
                 $videoMeta = $this->getVideoMeta($courseware['url']);
                 $courseware = $this->filterVideoField($videoMeta,$courseware);
                 $courseware['categoryId'] = $categoryId;
                 $courseware = $this->getCoursewareService()->createCourseware($courseware);
-                $fields['coursewareId'] = $courseware['id'];
+                $fields['mediaId'] = $courseware['id'];
             }
 
             $lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
@@ -90,7 +86,51 @@ class CourseLessonManageController extends BaseController
             'course' => $course,
             'category' => $category,
             'lesson' => $lesson,
-            'courseware' => $courseware
+            'courseware' => $courseware,
+            'essay' => $essay
+        ));
+    }
+
+    public function editTestpaperAction(Request $request,$courseId,$lessonId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+        if (empty($lesson)) {
+            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+        }
+        $catagoryId = $course['subjectIds'][0];
+        $conditions = array('title' => '');
+        $conditions['target'] = "category-{$catagoryId}";
+        // $conditions['status'] = 'open';
+        $testpapers = $this->getTestpaperService()->searchTestpapers(
+            $conditions,
+            array('createdTime' ,'DESC'),
+            0,
+            15
+        );
+
+        $paperOptions = array();
+        foreach ($testpapers as $paper) {
+            $paperOptions[$paper['id']] = $paper['name'];
+        }
+
+        if($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
+            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+                'course' => $course,
+                'lesson' => $lesson,
+            ));
+        }
+
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
+        return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
+            'course' => $course,
+            'lesson' => $lesson,
+            'paperOptions' => $paperOptions,
+            'features' => $features,
+
         ));
     }
 
@@ -143,6 +183,16 @@ class CourseLessonManageController extends BaseController
             $params[$item[0]] = $item[1];
         }
         return $params;
+    }
+
+    private function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
+
+    private function getEssayService()
+    {
+        return $this->getServiceKernel()->createService('Essay.EssayService');
     }
 
     private function getCoursewareService()
