@@ -96,9 +96,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadPostDao()->searchPostsThreadIdsCount($conditions);
     }
 
-    public function getTradeByUserIdandGoodsId($userId,$hideId)
+    public function getTradeByUserIdAndGoodsId($userId,$goodsId)
     {
-        return $this->getThreadTradeDao()->getTradeByUserIdandGoodsId($userId,$hideId);
+        return $this->getThreadTradeDao()->getTradeByUserIdAndGoodsId($userId,$goodsId);
     }
 
     public function getPost($id)
@@ -143,37 +143,27 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return true;
     }
 
-    public function addAttach($fileIds,$fileTitles,$fileDescriptions,$fileCoins,$threadId)
+    public function addAttach($files,$threadId)
     {
-        $fileIds=explode(",", $fileIds);
-        $fileTitles=explode(",", $fileTitles);
-        $fileCoins=explode(",", $fileCoins);
-        $fileDescriptions=explode("end!,", $fileDescriptions);
-
         $user = $this->getCurrentUser();
-        for($i=0;$i<count($fileIds);$i++){
+        for($i=0;$i<count($files['id']);$i++){
 
-            $file=$this->getFileService()->getFile($fileIds[$i]);
+            $file=$this->getFileService()->getFile($files['id'][$i]);
 
             if($file['userId'] != $user->id) continue;
             
-            $hide=$this->getThreadGoodsDao()->searchGoods(array('threadId'=>$threadId,'fileId'=>$fileIds[$i]),array('createdTime','desc'),0,1);
+            $hide=$this->getThreadGoodsDao()->searchGoods(array('threadId'=>$threadId,'fileId'=>$files['id'][$i]),array('createdTime','desc'),0,1);
             
-            $fileTitles[$i]=$this->sub_txt($fileTitles[$i]);
-
-            if($i == count($fileIds) - 1 )
-            {
-                $fileDescriptions[$i]=substr($fileDescriptions[$i], 0, -4);
-            }
+            $files['title'][$i]=$this->subTxt($files['title'][$i]);
 
             $attach=array(
-                'title'=>$fileTitles[$i],
-                'description'=>$fileDescriptions[$i],
+                'title'=>$files['title'][$i],
+                'description'=>$files['description'][$i],
                 'type'=>'attachment',
                 'userId'=>$user->id,
                 'threadId'=>$threadId,
-                'coin'=>$fileCoins[$i],
-                'fileId'=>$fileIds[$i],
+                'coin'=>$files['coin'][$i],
+                'fileId'=>$files['id'][$i],
                 'createdTime'=>time(),
                 );
 
@@ -187,35 +177,25 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         }
     }
 
-    public function addPostAttach($fileIds,$fileTitles,$fileDescriptions,$fileCoins,$threadId,$postId)
+    public function addPostAttach($files,$threadId,$postId)
     {
-        $fileIds=explode(",", $fileIds);
-        $fileTitles=explode(",", $fileTitles);
-        $fileCoins=explode(",", $fileCoins);
-        $fileDescriptions=explode("end!,", $fileDescriptions);
-
         $user = $this->getCurrentUser();
-        for($i=0;$i<count($fileIds);$i++){
+        for($i=0;$i<count($files['id']);$i++){
 
-            $file=$this->getFileService()->getFile($fileIds[$i]);
+            $file=$this->getFileService()->getFile($files['id'][$i]);
 
             if($file['userId'] != $user->id) continue;
               
-            $fileTitles[$i]=$this->sub_txt($fileTitles[$i]);
-
-            if($i == count($fileIds) - 1 )
-            {
-                $fileDescriptions[$i]=substr($fileDescriptions[$i], 0, -4);
-            }
+            $files['title'][$i]=$this->subTxt($files['title'][$i]);
 
             $attach=array(
-                'title'=>$fileTitles[$i],
-                'description'=>$fileDescriptions[$i],
+                'title'=>$files['title'][$i],
+                'description'=>$files['description'][$i],
                 'type'=>'postAttachment',
                 'userId'=>$user->id,
                 'threadId'=>$threadId,
-                'coin'=>$fileCoins[$i],
-                'fileId'=>$fileIds[$i],
+                'coin'=>$files['coin'][$i],
+                'fileId'=>$files['id'][$i],
                 'postId'=>$postId,
                 'createdTime'=>time(),
                 );
@@ -259,7 +239,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     }
 
-    private function sub_txt($string)
+    private function subTxt($string)
     {
         $string=explode(".", $string);
        
@@ -284,10 +264,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadGoodsDao()->getGoods($id);
     }
 
-    public function getCoinByThreadId($id)
+    public function sumGoodsCoinsByThreadId($id)
     {   
-        $condition=array('threadId'=>$id);
-        return $this->getThreadGoodsDao()->getCoinByThreadId($condition);
+        $condition=array('threadId'=>$id,'type'=>"content");
+        return $this->getThreadGoodsDao()->sumGoodsCoins($condition);
     }
 
     public function waveHitNum($threadId)
@@ -478,9 +458,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $conditions;
     }
 
-    public function getTradeByUserIdandThreadId($id,$userId)
+    public function getTradeByUserIdAndThreadId($userId,$threadId)
     {
-        return $this->getThreadTradeDao()->getTradeByUserIdandThreadId($id,$userId);
+        return $this->getThreadTradeDao()->getTradeByUserIdAndThreadId($userId,$threadId);
     }
 
     private function getThreadTradeDao()

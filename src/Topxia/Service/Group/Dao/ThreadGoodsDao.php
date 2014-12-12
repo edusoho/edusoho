@@ -16,7 +16,7 @@ interface ThreadGoodsDao
 
     public function deleteGoods($id);
 
-    public function getCoinByThreadId($conditions);
+    public function sumGoodsCoins($conditions);
 
     public function searchGoods($conditions,$orderBy,$start,$limit);
 

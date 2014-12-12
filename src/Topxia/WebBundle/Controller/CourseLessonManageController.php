@@ -85,6 +85,7 @@ class CourseLessonManageController extends BaseController
 	            $lessonId = $formData['lessonId'];
 	        } else {
 	            $lessonId = 0;
+	            $formData['lessonId'] = 0;
 	        }
 
 	        $content = $formData['content'];

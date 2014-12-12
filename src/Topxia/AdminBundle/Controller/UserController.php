@@ -48,8 +48,10 @@ class UserController extends BaseController
         );
 
         $app = $this->getAppService()->findInstallApp("UserImporter");
+        $enabled = $this->getSettingService()->get('plugin_userImporter_enabled');
+        
         $showUserExport = false;
-        if(!empty($app) && array_key_exists('version', $app)){
+        if(!empty($app) && array_key_exists('version', $app) && $enabled){
             $showUserExport = version_compare($app['version'], "1.0.2", ">=");
         }
 
