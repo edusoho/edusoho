@@ -72,9 +72,8 @@ class CCViedoManageController extends BaseController
             $result = array('answer' => 'false', 'message'=>'没有答案');
         }
         $question = $this->getQuestionService()->getQuestion($questionId);
-        $trueAnswer =json_decode($question['answer']);
 
-        if ($answer == $trueAnswer){
+        if ($answer == $question['answer']){
             $result = array('answer' => 'true', 'message'=>'回答正确');
         } else {
             $result = array('answer' => 'false', 'message'=>'回答错误');

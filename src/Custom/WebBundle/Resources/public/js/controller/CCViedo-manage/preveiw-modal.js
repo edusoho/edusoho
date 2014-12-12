@@ -4,18 +4,22 @@ define(function(require, exports, module) {
     exports.run = function() {
         $('#save-btn').on('click',function(){
             var self = $(this);
-            $.post(self.data('url'),$('#answer-form').serialize(),function(response){
+            var answer = [];
+            $('[data-type]:checked').each(function(index,item) {
+                answer.push($(item).val());
+            });
+
+            $.post(self.data('url'),{answer:answer},function(response){
                 if(response.answer){
-                    Notify.success(response.message);
                     $('#answer-show').removeClass('hide red').addClass('green');
+                    self.addClass('disabled');
                 } else {
-                    Notify.danger(response.message);
                     $('#answer-show').removeClass('hide');
                 }
             });
         });
 
-        $('#cancel-btn .close').on('click',function(){
+        $('.modal').on('hidden.bs.modal', function (e) {
             window.mediaExercise.player.resume();
         });
     };
