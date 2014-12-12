@@ -147,6 +147,14 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             }
         }
 
+        if (isset($conditions['subjectIdLike'])) {
+            $subjectId = (int) $conditions['subjectIdLike'];
+            if (!empty($subjectId)) {
+                $conditions['subjectIdLike'] = "%|{$subjectId}|%";
+                unset($conditions['subjectId']);
+            }
+        }
+
         if (isset($conditions['tagIds'])) {
             $tagIds = $conditions['tagIds'];
             $conditions['tagsLike'] = '%|';
@@ -188,6 +196,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('subjectIds = :subjectId')
+            ->andWhere('subjectIds LIKE :subjectIdLike')
             ->andWhere('createdTime <= :endTime');
 
         if (isset($conditions['categoryIds'])) {
