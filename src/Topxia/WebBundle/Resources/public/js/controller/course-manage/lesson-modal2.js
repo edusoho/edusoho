@@ -49,7 +49,6 @@ define(function(require,exports,module){
             };
 
             if (lessonType == 'testpaper') {
-                console.log('testpaper')
                 _hideCoursewareChooserModule();
                 _hideEssayChooserModule();
                 _showTestpaperChooserModule();
@@ -80,7 +79,6 @@ define(function(require,exports,module){
             };
          });
          var $lessonType = $('[data-role=lesson-type]').val();
-console.log($lessonType)
          if ($lessonType == 'essay') {
             _initEssay();
             _searchEssayItems();
@@ -93,7 +91,6 @@ console.log($lessonType)
         function _initEssay()
          {
             var validator = _initValidatorForEssay($form, $modal);
-            console.log('okk')
             var $value = $('[data-role=operate-flag-essay]').val();
 
             _hideCoursewaresPanel();
@@ -105,7 +102,6 @@ console.log($lessonType)
                 _searchEssaysBtnOnclick();
                 _triggerForEssay();
             };
-            console.log($value)
          }
 
 
@@ -338,7 +334,6 @@ console.log($lessonType)
 
         function _initValidatorForTestpaper($form, $modal)
         {
-            console.log('_initValidatorForTestpaper')
             var validator = new Validator({
                 element:'#course-lesson-form',
                 failSilently:true,
@@ -381,7 +376,6 @@ console.log($lessonType)
 
         function _initValidator($form, $modal)
         {
-            console.log('_initValidator')
             var validator = new Validator({
                 element:'#course-lesson-form',
                 failSilently:true,
@@ -396,7 +390,6 @@ console.log($lessonType)
                     var $btn = $('#lesson-operate-btn');
 
                     $activeRole = _getActiveRole();
-console.log($activeRole)
                     if ($activeRole == 'coursewares-chooser') {
                         $coursewareId = $('[data-role=placeholder]').data('id');
                         if (!$coursewareId) {
@@ -409,7 +402,6 @@ console.log($activeRole)
                         };
 
                         $btn.button('submiting').button('loading').addClass('disabled');
-console.log('hasActice')
                         $.post($form.attr('action'),$form.serialize()+'&mediaId='+$coursewareId,function(){
                             Notify.success('操作成功！');
                             window.location.reload();
@@ -514,7 +506,6 @@ console.log('hasActice')
 
         function _initMainknowledgeTagChooser(element)
         {
-            console.log('_initMainknowledgeTagChooser')
             $categoryId = $('[data-role=categoryId]').val();
             var chooserTreeForMainKnowlege = new TagTreeChooser({
                 element: element,
@@ -537,7 +528,6 @@ console.log('hasActice')
 
         function _initMainknowledgeTagChooserForTestpaper(element)
         {
-            console.log('_initMainknowledgeTagChooserForTestpaper')
             $categoryId = $('[data-role=categoryId]').val();
             var chooserTreeForMainKnowlege = new TagTreeChooser({
                 element: element,
