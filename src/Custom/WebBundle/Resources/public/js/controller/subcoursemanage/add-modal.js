@@ -4,8 +4,10 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         $('.search-btn').on('click', function() {
-           $.get($(this).data('url'), $('#search-form').serialize(), function(html){
+            $(this).button('search').addClass('disabled');
+            $.get($(this).data('url'), $('#search-form').serialize(), function(html){
                 $('.modal-content').html($(html).find('.modal-content').html());
+                $('.search-btn').removeClass('disabled').button('reset');
            });
 
         });
@@ -36,6 +38,7 @@ define(function(require, exports, module) {
           var code = e.keyCode || e.which; 
           if (code  == 13) {               
             e.preventDefault();
+            $('.search-btn').click();
             return false;
           }
         });

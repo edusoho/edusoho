@@ -28,7 +28,7 @@
        <input class="form-control" type="text" name="stem" value="{{ app.request.query.get('stem') }}" placeholder="题目关键词">
      </div>
 
-     <a class="btn btn-primary search-btn" data-url="{{ path('courseware_exercise_add', {courseId:courseId, lessonId:lessonId}) }}">搜索</a>
+     <a class="btn btn-primary search-btn" data-search-text="搜索中..." data-url="{{ path('courseware_exercise_add', {courseId:courseId, lessonId:lessonId}) }}">搜索</a>
    </form>
    {% include 'CustomWebBundle:Tag:tagchooser-overlay.html.twig' with {id: 'tags-search', type: 'question'} %}
     <div class="">
