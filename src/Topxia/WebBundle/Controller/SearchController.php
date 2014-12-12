@@ -15,6 +15,8 @@ class SearchController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         $keywords = $request->query->get('q');
+        $keywords=trim($keywords);
+        
         $vip = $this->getAppService()->findInstallApp($code);
 
         $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.7", ">=");

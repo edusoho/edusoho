@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Topxia\System;
+use ZipArchive;
 
 class BuildThemeAppCommand extends BaseCommand
 {
@@ -38,7 +39,7 @@ class BuildThemeAppCommand extends BaseCommand
         $distDir = $this->_makeDistDirectory($name);
         $sourceDistDir = $this->_copySource($name, $themeDir, $distDir);
         $this->_cleanGit($sourceDistDir);
-        $this->_zipPackage($distDir);
+        $this->_zip($distDir);
     }
 
     private function _copySource($name, $themeDir, $distDir)
@@ -78,6 +79,44 @@ class BuildThemeAppCommand extends BaseCommand
         $zipPath = "{$buildDir}/{$filename}.zip";
         $this->output->writeln("<question>    * ZIP包大小：" . intval(filesize($zipPath)/1024) . ' Kb');
     }
+
+    private function _zip($distDir)
+    {   
+        $buildDir = dirname($distDir);
+        $filename = basename($distDir);
+
+        if ($this->filesystem->exists("{$buildDir}/{$filename}.zip")) {
+            $this->filesystem->remove("{$buildDir}/{$filename}.zip");
+        }
+
+        $this->output->writeln("<info>    * 制作ZIP包：{$buildDir}/{$filename}.zip</info>");
+
+        $z = new ZipArchive(); 
+        $z->open("{$buildDir}/{$filename}.zip", ZIPARCHIVE::CREATE); 
+        $z->addEmptyDir($filename); 
+        self::folderToZip($distDir, $z, strlen("$buildDir/")); 
+        $z->close(); 
+    }
+
+    private static function folderToZip($folder, &$zipFile, $exclusiveLength) { 
+
+        $handle = opendir($folder); 
+        while (false !== $f = readdir($handle)) { 
+          if ($f != '.' && $f != '..') { 
+            $filePath = "$folder/$f"; 
+           
+            $localPath = substr($filePath, $exclusiveLength); 
+            if (is_file($filePath)) { 
+              $zipFile->addFile($filePath, $localPath); 
+            } elseif (is_dir($filePath)) { 
+ 
+              $zipFile->addEmptyDir($localPath); 
+              self::folderToZip($filePath, $zipFile, $exclusiveLength); 
+            } 
+          } 
+        } 
+        closedir($handle); 
+    } 
 
     private function _makeDistDirectory($name)
     {
