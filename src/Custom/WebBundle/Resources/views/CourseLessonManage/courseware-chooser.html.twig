@@ -51,7 +51,7 @@
               关键词
             </label>
             <label class="col-md-8 controls">
-              <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="请输入标题关键词">
+              <input type="text" id="coursewareKeyword" name="coursewareKeyword" class="form-control" value="{{ app.request.query.get('coursewareKeyword') }}" placeholder="请输入标题关键词">
             </label>
               <div  class="btn btn-primary" data-role="search-coursewares-btn" data-url="{{ path('json_courseware_search') }}"　data-loading-text="正在搜索...">搜索</div>
           </div>

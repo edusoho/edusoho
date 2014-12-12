@@ -26,69 +26,89 @@ define(function(require,exports,module){
          $form.on('change','[name=type]:checked',function(e){
             var lessonType = $(this).val();
             if (lessonType == 'courseware') {
-                _hideEssayChooserModule();
-                _hideTestpaperChooserModule();
-                _showCoursewareChooserModule();
-                if ($coursewareFlag == 0) {
-                    $coursewareFlag = 1;
-                    validator = _initValidator($form, $modal);
-                };
+                _initCourseware();
             };
 
             if (lessonType == 'essay') {
-                _hideCoursewareChooserModule();
-                _hideTestpaperChooserModule();
-                _showEssayChooserModule();
-                if ($essayFlag == 0) {
-                    $essayFlag = 1;
-                    validator = _initValidatorForEssay($form, $modal);
-                };
-                _searchEssaysBtnOnclick();
-                _searchEssayItems();
-                _triggerForEssay();
+                _initEssay();
             };
 
             if (lessonType == 'testpaper') {
-                _hideCoursewareChooserModule();
-                _hideEssayChooserModule();
-                _showTestpaperChooserModule();
-
-
-                if ($testpaperFlag == 0) {
-                    $testpaperFlag = 1;
-                    validator = _initValidatorForTestpaper($form, $modal);
-                    _initTagChooserForTestpaper('#tag-chooser-for-testpaper');
-                    _initMainknowledgeTagChooserForTestpaper('#mainKnowledge-chooser-for-testpaper');
-                };
-                _searchTestpapersBtnOnclick();
-                _searchTestpaperItems();
-                _triggerForTestpaper();
+                _initTestpaper();
             };
          });
 
-         $flag = 0;
+         $importFlag = 0;
          $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             $activeRole = $(e.target).data('role')
 
-            if ($activeRole == 'import-url' && $flag == 0) {
-                $flag = 1;
-                _initTagChooser('#tag-chooser2');
-                _initMainknowledgeTagChooser('#mainKnowledge-chooser2');
-                _initRelatedknowledgeTagChooser('#relatedknowledges-chooser');
-                _initImportBtn('#import-courseware-url');
+            if ($activeRole == 'import-url' && $importFlag == 0) {
+                $importFlag = 1;
+                _initImportUrl();
             };
          });
+
          var $lessonType = $('[data-role=lesson-type]').val();
          if ($lessonType == 'essay') {
-            _initEssay();
+            _initEditEssay();
             _searchEssayItems();
          } else if($lessonType == 'testpaper') {
          } else {
-            _initCourseware();
+            _initEditCourseware();
             _initSearchItems();
          }
 
+        function _initImportUrl()
+        {
+            _initTagChooser('#tag-chooser2');
+            _initMainknowledgeTagChooser('#mainKnowledge-chooser2');
+            _initRelatedknowledgeTagChooser('#relatedknowledges-chooser');
+            _initImportBtn('#import-courseware-url');
+        }
+
+        function _initCourseware()
+        {
+            _hideEssayChooserModule();
+            _hideTestpaperChooserModule();
+            _showCoursewareChooserModule();
+            if ($coursewareFlag == 0) {
+                $coursewareFlag = 1;
+                validator = _initValidator($form, $modal);
+            };
+        }
+
         function _initEssay()
+        {
+            _hideCoursewareChooserModule();
+            _hideTestpaperChooserModule();
+            _showEssayChooserModule();
+            if ($essayFlag == 0) {
+                $essayFlag = 1;
+                validator = _initValidatorForEssay($form, $modal);
+            };
+            _searchEssaysBtnOnclick();
+            _searchEssayItems();
+            _triggerForEssay();
+        }
+
+        function _initTestpaper()
+        {
+            _hideCoursewareChooserModule();
+            _hideEssayChooserModule();
+            _showTestpaperChooserModule();
+
+            if ($testpaperFlag == 0) {
+                $testpaperFlag = 1;
+                validator = _initValidatorForTestpaper($form, $modal);
+                _initTagChooserForTestpaper('#tag-chooser-for-testpaper');
+                _initMainknowledgeTagChooserForTestpaper('#mainKnowledge-chooser-for-testpaper');
+            };
+            _searchTestpapersBtnOnclick();
+            _searchTestpaperItems();
+            _triggerForTestpaper();
+        }
+
+        function _initEditEssay()
          {
             var validator = _initValidatorForEssay($form, $modal);
             var $value = $('[data-role=operate-flag-essay]').val();
@@ -102,15 +122,16 @@ define(function(require,exports,module){
                 _searchEssaysBtnOnclick();
                 _triggerForEssay();
             };
+
          }
 
-
-        function _initCourseware()
+        function _initEditCourseware()
         {
             $('[data-role=loading]').addClass('hide');
             _showCoursewareChooserModule();
             var $value = $('[data-role=operate-flag]').val();
             validator = _initValidator($form, $modal);
+
             if ($value > 0) {
                 $('[data-role=placeholder]').parent().removeClass('hide');
                 _hideCoursewaresPanel();
@@ -122,11 +143,8 @@ define(function(require,exports,module){
                 _initMainknowledgeTagChooser('#mainKnowledge-chooser');
             };
 
-
             _trigger();
-            _searchBtnOnclick();
-
-
+            _searchCoursewaresBtnOnclick();
         }
 
         function _searchEssaysBtnOnclick()
@@ -142,49 +160,43 @@ define(function(require,exports,module){
 
         function _searchTestpapersBtnOnclick()
         {
-            $('[data-role=search-testpapers-btn]').on("click",function(){
-                var html = '';
-                var $btn = $(this);
-
-                if (typeof tagIdsForTestpaper == 'string') {
-                    tagIdsForTestpaper = tagIdsForTestpaper.split(",");
-                };
-
-                if (tagIdsForTestpaper.length > 1) {
-                    tagIdsForTestpaper = tagIdsForTestpaper.join(",");
-                };
-
-                if (tagIdsForTestpaper.length == 1) {
-                    tagIdsForTestpaper = tagIdsForTestpaper[0];
-                };
-
-                $btn.text('搜索中...');
-
-                _searchTestpaperItems();
-            });
+            var $btn = $('[data-role=search-testpapers-btn]');
+            _baseSearchBtnOnclick($btn,'testpaper',tagIdsForTestpaper);
         }
 
-        function _searchBtnOnclick()
+        function _searchCoursewaresBtnOnclick()
         {
-            $('[data-role=search-coursewares-btn]').on("click",function(){
+            var $btn = $('[data-role=search-coursewares-btn]');
+            _baseSearchBtnOnclick($btn,'courseware',tagIds);
+        }
+
+        function _baseSearchBtnOnclick($btn,$type,$paras)
+        {
+            $btn.on("click",function(){
 
                 var html = "";
                 var $btn = $(this);
 
-                if (typeof tagIds == 'string') {
-                    tagIds = tagIds.split(',');
+                if (typeof $paras == 'string') {
+                    $paras = $paras.split(',');
                 };
-                if (tagIds.length > 1) {
-                    tagIds = tagIds.join(",");
+                if ($paras.length > 1) {
+                    $paras = $paras.join(",");
                 };
 
-                if (tagIds.length == 1 ) {
-                    tagIds= tagIds[0];
+                if ($paras.length == 1 ) {
+                    $paras= $paras[0];
                 };
 
                 $btn.text('搜索中...');
 
-                _searchItems();
+                if ($type == 'courseware') {
+                    _searchCoursewareItems();
+                };
+
+                if ($type == 'testpaper') {
+                    _searchTestpaperItems();
+                };
 
             });
         }
@@ -211,9 +223,8 @@ define(function(require,exports,module){
 
         function _initSearchItems()
         {
-            _searchItems();
+            _searchCoursewareItems();
         }
-
 
         function _searchEssayItems()
         {
@@ -260,10 +271,10 @@ define(function(require,exports,module){
             });
         }
 
-        function _searchItems()
+        function _searchCoursewareItems()
         {
             var html = "";
-            var $keyword = $('[name=keyword]').val();
+            var $keyword = $('[name=coursewareKeyword]').val();
             var $btn = $('[data-role=search-coursewares-btn]');
 
             $.get($btn.data('url'),{mainKnowledgeId:mainKnowledgeId,tagIds:tagIds,keyword:$keyword},function(items){
@@ -289,6 +300,7 @@ define(function(require,exports,module){
 
         function _initValidatorForEssay($form, $modal)
         {
+            console.log('_initValidatorForEssay')
             var validator = new Validator({
                 element:'#course-lesson-form',
                 failSilently:true,
@@ -304,7 +316,11 @@ define(function(require,exports,module){
                     var $essayId = $('[data-role=essay-placeholder]').data('id');
 
                     if (!$essayId) {
-                        Notify.danger('请选择文章');
+                        var lessonType  = $('#lesson-type').find('[name=type]:checked').val();
+
+                        if (lessonType == 'essay') {
+                            Notify.danger('请选择文章');
+                        };
                         return false;
                     };
 
@@ -334,6 +350,7 @@ define(function(require,exports,module){
 
         function _initValidatorForTestpaper($form, $modal)
         {
+            console.log('_initValidatorForTestpaper')
             var validator = new Validator({
                 element:'#course-lesson-form',
                 failSilently:true,
@@ -349,7 +366,11 @@ define(function(require,exports,module){
                     var $testpaperId = $('[data-role=testpaper-placeholder]').data('id');
 
                     if (!$testpaperId) {
-                        Notify.danger('请选择试卷');
+                        var lessonType  = $('#lesson-type').find('[name=type]:checked').val();
+
+                        if (lessonType == 'testpaper') {
+                            Notify.danger('请选择试卷');
+                        };
                         return false;
                     };
 
@@ -376,6 +397,7 @@ define(function(require,exports,module){
 
         function _initValidator($form, $modal)
         {
+            console.log('_initValidator')
             var validator = new Validator({
                 element:'#course-lesson-form',
                 failSilently:true,
@@ -409,6 +431,21 @@ define(function(require,exports,module){
                     };
 
                     if ($activeRole == 'import-url') {
+
+                        $importUrl = $('#courseware-url-field').val();
+                        if ($importUrl == '') {
+                            Notify.danger('文件URL不能为空');
+                            $btn.button('reset');
+                            return;
+                        };
+
+                        $re = /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
+                        if (!$re.test($importUrl)) {
+                            Notify.danger('文件URL格式有误');
+                            $btn.button('reset');
+                            return;
+                        }
+
                         if (mainKnowledgeId.length == 0) {
                             Notify.danger('主知识点不能为空');
                             $btn.button('reset');
