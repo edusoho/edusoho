@@ -1,0 +1,14 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% endblock %}
+{% block body %}
+  {% include 'CustomWebBundle:CCViedoManage:video-' ~ type ~ '-preview.html.twig' %}
+{% endblock %}
+
+{% block footer %}
+    <button class="btn btn-primary" id="save-btn" type="submit" data-submiting-text="正在保存..." data-url="{{ path('ccviedo_question_answer_check',{questionId:item.questionId}) }}">确定</button>
+    <button id="cancel-btn" class="btn btn-link" data-dismiss="modal">关闭</button>
+  <script>
+     app.load('customwebbundle/controller/CCViedo-manage/preveiw-modal');
+ </script>
+{% endblock %}
