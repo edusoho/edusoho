@@ -31,7 +31,7 @@
                 {% if course.type == 'live' %}
                 <a class="list-group-item {% if side_nav == 'replay' %}active{% endif %}" href="{{ path('live_course_manage_replay', {id:course.id}) }}">录播管理</a>
                 {% endif %}
-                <a class="list-group-item {% if side_nav == 'files' %}active{% endif %}" href="{{ path('course_manage_files', {id:course.id}) }}">文件管理</a>
+        {#         <a class="list-group-item {% if side_nav == 'files' %}active{% endif %}" href="{{ path('course_manage_files', {id:course.id}) }}">文件管理</a> #}
               {% endif %}
 
               <a class="list-group-item {% if side_nav == 'rating' %}active{% endif %}" href="{{ path('course_manage_init_rating', {id:course.id}) }}">初始评价</a>
