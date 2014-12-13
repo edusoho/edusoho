@@ -64,7 +64,7 @@ class OrderRefundDaoImpl extends BaseDao implements OrderRefundDao
 
     private function _createSearchQueryBuilder($conditions)
     {
-        $result = $this->createDynamicQueryBuilder($conditions)
+        $builder = $this->createDynamicQueryBuilder($conditions)
                     ->from($this->table, $this->table)
                     ->andWhere('status = :status')
                     ->andWhere('userId = :userId')
@@ -72,10 +72,10 @@ class OrderRefundDaoImpl extends BaseDao implements OrderRefundDao
                     // ->andWhere('courseId = :courseId');
                     
         if (isset($conditions['courseIds']) && strlen($conditions['courseIds'])>2 && isset($conditions['targetType']) ){
-            return $result->andWhere('targetType = :targetType')->andStaticWhere("targetId IN {$conditions['courseIds']}");
+            $builder = $builder->andWhere('targetType = :targetType')->andStaticWhere("targetId IN {$conditions['courseIds']}");
         }
 
-        return $result;           
+        return $builder;           
     }
     public function findRefundsByIds(array $ids)
     {
