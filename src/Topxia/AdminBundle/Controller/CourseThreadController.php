@@ -14,11 +14,8 @@ class CourseThreadController extends BaseController
 		$conditions = $request->query->all();
 
         if ( isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle'){
-            
             $courses = $this->getCourseService()->findCoursesByTitleLike(trim($conditions['keyword']));
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
-
-            // $conditions['courseIds'] = '('.implode(', ',$courseIds).')';
         }
 
         $paginator = new Paginator(
