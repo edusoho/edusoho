@@ -10,6 +10,15 @@ class ReviewController extends BaseController {
     public function indexAction (Request $request)
     {   
         $conditions = $request->query->all();
+
+        if (!empty($conditions['courseTitle'])){
+            
+            $courses = $this->getCourseService()->findCoursesByTitleLike(trim($conditions['courseTitle']));
+            $courseIds = ArrayToolkit::column($courses, 'id');
+
+            $conditions['courseIds'] = '('.implode(', ',$courseIds).')';
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getReviewService()->searchReviewsCount($conditions),
