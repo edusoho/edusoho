@@ -92,6 +92,10 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
 			->andWhere('status = :status')
 			->andWhere('content LIKE :content');
 
+        if (isset($conditions['courseIds']) && strlen($conditions['courseIds'])>2 ){
+            $builder = $builder->andStaticWhere("courseId IN {$conditions['courseIds']}");
+        }
+
 		return $builder;
 	}
 

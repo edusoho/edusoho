@@ -11,6 +11,12 @@ class CourseNoteController extends BaseController
 	public function indexAction(Request $request)
 	{
 		$conditions = $request->query->all();
+        
+        if ( isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle'){
+            $courses = $this->getCourseService()->findCoursesByTitleLike(trim($conditions['keyword']));
+            $courseIds = ArrayToolkit::column($courses, 'id');
+            $conditions['courseIds'] = '('.implode(', ',$courseIds).')';
+        }        
 
         $paginator = new Paginator(
             $request,
