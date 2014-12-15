@@ -60,7 +60,29 @@ course_thread_delete:
     pattern:  /course/{courseId}/thread/{id}/delete
     defaults: { _controller: CustomWebBundle:CourseThread:delete }
 
+course_thread_stick:
+    pattern:  /course/{courseId}/thread/{id}/stick
+    defaults: { _controller: CustomWebBundle:CourseThread:stick }
 
+course_thread_unstick:
+    pattern:  /course/{courseId}/thread/{id}/unstick
+    defaults: { _controller: CustomWebBundle:CourseThread:unstick }
+
+course_thread_elite:
+    pattern:  /course/{courseId}/thread/{id}/elite
+    defaults: { _controller: CustomWebBundle:CourseThread:elite }
+
+course_thread_unelite:
+    pattern:  /course/{courseId}/thread/{id}/unelite
+    defaults: { _controller: CustomWebBundle:CourseThread:unelite }
+
+course_thread_post_delete:
+    pattern:  /course/{courseId}/thread/{threadId}/post/{id}/delete
+    defaults: { _controller: CustomWebBundle:CourseThread:deletePost }
+
+course_thread_post_edit:
+    pattern:  /course/{courseId}/thread/{threadId}/post/{id}/edit
+    defaults: { _controller: CustomWebBundle:CourseThread:editPost }
 
 # course_thread_post:
 #     pattern:  /course/{courseId}/thread/{id}/post
