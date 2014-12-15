@@ -430,6 +430,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         } else {
             $lesson['mediaUri'] = $mediaUri;
         }
+        $lesson['mediaUri'] = "http://pl.youku.com/playlist/m3u8?vid=202312657&type=mp4&ts=1418615346&keyframe=0&ep=cCaVEk%2BMU80E4yLcjT8bZnq3fSFZXPwK9ByEg9RnB9QlS%2Bm%2F&sid=2418615346135121fe9ff&token=1310&ctype=12&ev=1&oip=1942485530";
         return $lesson;
 	}
 
