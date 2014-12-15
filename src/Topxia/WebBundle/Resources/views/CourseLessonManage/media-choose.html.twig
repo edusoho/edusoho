@@ -20,6 +20,11 @@
   					从视频库中选择
           </a>
         </li>
+        <li>
+          <a href="#video-chooser-course-file" data-toggle="tab">
+            从文件管理中选择
+          </a>
+        </li>
         <li><a href="#video-chooser-import-pane" data-toggle="tab">导入网络视频</a></li>
       </ul>
       <div class="tab-content">
@@ -137,6 +142,12 @@
             </div>
           {% endif %}
         </div>
+        <div class="tab-pane" id="video-chooser-course-file">
+            <div id="file-browser-video" data-role="course-file-browser"
+            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'video'}) }}" 
+            data-empty="暂无视频文件，请先上传。">
+            </div>
+        </div>
         <div class="tab-pane" id="video-chooser-import-pane">
           <div class="input-group">
             <input class="form-control" type="text" placeholder="支持优酷、土豆、网易公开课的视频页面地址导入" data-role="import-url" >
@@ -167,6 +178,11 @@
         <li><a href="#audio-chooser-disk-pane" data-toggle="tab">
     					从音频库中选择
         </a></li>
+        <li>
+          <a href="#audio-chooser-course-file" data-toggle="tab">
+            从文件管理中选择
+          </a>
+        </li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="audio-chooser-upload-pane">
@@ -229,6 +245,10 @@
           data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'audio'}) }}" data-empty="暂无音频文件，请先上传。"></div>
         {% endif %}
         </div>
+        <div class="tab-pane" id="audio-chooser-course-file">
+          <div id="file-browser-audio" data-role="course-file-browser"
+          data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'audio'}) }}" data-empty="暂无音频文件，请先上传。"></div>
+        </div>
       </div>
     </div>
 
@@ -253,6 +273,11 @@
         <li><a href="#ppt-chooser-disk-pane" data-toggle="tab">
     					从PPT库中选择
         </a></li>
+         <li>
+          <a href="#ppt-chooser-course-file" data-toggle="tab">
+            从文件管理中选择
+          </a>
+        </li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="ppt-chooser-upload-pane">
@@ -302,6 +327,10 @@
           	data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。"></div>
           
           {% endif %}
+        </div>
+        <div class="tab-pane" id="ppt-chooser-course-file">
+            <div id="file-browser-ppt" data-role="course-file-browser"
+            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。"></div>
         </div>
       </div>
     </div>

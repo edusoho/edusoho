@@ -4,12 +4,10 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
-    
-	if ($("div .file-browser-list-container").length > 0) {
-	    var FileBrowser = require('./file-browser-material-lib');
-    }else{
-	    var FileBrowser = require('./file-browser');
-    	}
+
+    var FileBrowser1 = require('../file/file-browser-material-lib');
+
+    var FileBrowser2 = require('../file/file-browser');
 
     var FileChooser = Widget.extend({
         attrs: {
@@ -121,12 +119,20 @@ define(function(require, exports, module) {
         _initFileBrowser: function() {
             var self = this;
 
-            var browser = new FileBrowser({
+            var browser = new FileBrowser1({
                 element: this.$('[data-role=file-browser]')
             }).show();
 
             browser.on('select', function(file) {
-                self.trigger('change', self._convertFileToMedia(file));
+                self.trigger('change', self.get("uploadPanel")._convertFileToMedia(file));
+            });
+
+            var browser1 = new FileBrowser2({
+                element: this.$('[data-role=course-file-browser]')
+            }).show();
+
+            browser1.on('select', function(file) {
+                self.trigger('change', self.get("uploadPanel")._convertFileToMedia(file));
             });
         },
 
