@@ -557,4 +557,14 @@ class CourseLessonController extends BaseController
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
+
+    private function getEssayService()
+    {
+        return $this->getServiceKernel()->createService('Essay.EssayService');
+    }
+
+    private function getEssayContentService()
+    {
+        return $this->getServiceKernel()->createService('EssayContent.EssayContentService');
+    }
 }

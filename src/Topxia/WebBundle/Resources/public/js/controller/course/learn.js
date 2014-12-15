@@ -380,8 +380,9 @@ define(function(require, exports, module) {
                         $("#lesson-text-content").perfectScrollbar('update');
 
                     } else if (lesson.type == 'essay') {
-                        $.get('../../testpaper/' + lesson.mediaId + '/eaasy',function(html){
-                            $("#lesson-text-content").find('.lesson-content-text-body').replaceWith(html);
+                        console.log('1111');
+                        $.get('../../course/lesson/eaasy/' + lesson.mediaId + '/preview',function(html){
+                            $("#lesson-text-content").find('.lesson-content-text-body').html(html);
                             $("#lesson-text-content").show();
                             $("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
                             $("#lesson-text-content").scrollTop(0);
