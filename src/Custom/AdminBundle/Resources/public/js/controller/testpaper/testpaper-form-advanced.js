@@ -4,6 +4,10 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
+    Validator.addRule('countcheck', function(options) {
+        var $modal = $("#testpaper-part-modal");
+        return parseInt($modal.find('#testpaper-count-field').val()) <= parseInt($modal.find('#testpaper-count-field-span').data('num'));
+    }, '必须小于等于已有题目!');
     require('common/validator-rules').inject(Validator);
     require('jquery.sortable');
     var TagTreeChooser = require('tag-tree-chooser');
@@ -124,6 +128,7 @@ define(function(require, exports, module) {
                             ids.push(tag.id);
                         });
                         $partForm.find('[name=tagIds]').val(ids.join(','));
+                        self._getQuestionsCount();
                     });
                 } else {
                     var choosedTags = [];
@@ -134,7 +139,7 @@ define(function(require, exports, module) {
                     self._tagPartChooser.resetTags(choosedTags);
                 }
 
-
+                self._getQuestionsCount();
 
 
 
@@ -209,6 +214,28 @@ define(function(require, exports, module) {
         _onClickPartRemoveBtn: function(e) {
             $(e.currentTarget).parents('tr').remove();
         },
+        _getQuestionsCount: function(e) {
+            var $form = $('#testpaper-form');
+            var $partForm = $('.testpaper-part-form');
+            var $modal = $("#testpaper-part-modal");
+            var type = $modal.find('input[name=type]').val();
+            var tagIds = $.merge($form.find('[name=tagIds]').val().split(','), $partForm.find('[name=tagIds]').val().split(','));
+            tagIds = $.unique(tagIds);
+            tagIds = tagIds.join(',');
+            if(tagIds.indexOf(',') == 0) {
+                tagIds = tagIds.substring(1);
+            }
+            if(tagIds.lastIndexOf(',') == tagIds.length-1) {
+                tagIds = tagIds.substring(0, tagIds.length-1);
+            }
+            
+            $modal.find('#testpaper-count-field-span').html('查询中...');
+
+            $.get($('#testpaper-count-field').data('url'), {type:type,knowledgeIds:$form.find('[name=knowledgeIds]').val(), tagIds:tagIds}, function(count){
+                $modal.find('#testpaper-count-field-span').html('(共'+count+'题)');
+                $modal.find('#testpaper-count-field-span').data('num', count);
+            });
+        },
 
         _initPartForm: function() {
             var self = this;
@@ -226,7 +253,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: 'input[name=count]',
                 required: true,
-                rule: 'integer'
+                rule: 'integer countcheck'
             });
 
             validator.on('formValidated', function(error, msg, $form) {

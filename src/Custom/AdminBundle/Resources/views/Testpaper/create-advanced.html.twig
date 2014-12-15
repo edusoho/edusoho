@@ -84,11 +84,11 @@
               <label class="col-sm-2 control-label" for="testpaper-count-field">题目数量</label>
               <div class="col-sm-4 controls">
                 <div class="input-group">
-                  <input id="testpaper-count-field" class="form-control" type="text" name="count">
+                  <input id="testpaper-count-field" class="form-control" type="text" name="count" data-url="{{ path('ajax_questions_count', {categoryId:category.id}) }}">
                   <div class="input-group-addon">题</div>
                 </div>
               </div>
-              {# <div class="col-sm-3"><p class="form-control-static text-muted">(共250题)</p></div> #}
+              <div class="col-sm-3"><p class="form-control-static text-muted" id="testpaper-count-field-span">查询中...</p></div>
             </div>
 
             <div class="form-group mistakeScore-form-group">
