@@ -48,7 +48,7 @@
     </form>
     <script>app.load('course-manage/lesson-testpaper-modal')</script>
   {% else %}
-    <div class="empty">尚未创建试卷，请先<a href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">创建试卷</a>。</div>
+    <div class="empty">尚未创建试卷，请先<a href="{{ path('admin_testpaper',{categoryId:catagoryId}) }}">创建试卷</a>。</div>
   {% endif %}
 
 {% endblock %}

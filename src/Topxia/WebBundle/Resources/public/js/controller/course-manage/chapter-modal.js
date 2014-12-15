@@ -71,7 +71,7 @@ define(function(require, exports, module) {
                  }else{
                     $("#course-item-list").append(html);
                  }
-                    
+                  $('.lesson-manage-panel').find('.empty').remove(); 
                   Notify.success('章节添加成功');
               }
               $(id).find('.btn-link').tooltip();

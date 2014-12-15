@@ -325,7 +325,6 @@ class CourseLessonManageController extends BaseController
 		if (empty($lesson)) {
 			throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
 		}
-
 		$conditions = array();
 		$conditions['target'] = "course-{$course['id']}";
 		$conditions['status'] = 'open';
