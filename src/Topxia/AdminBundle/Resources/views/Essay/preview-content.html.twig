@@ -1,0 +1,15 @@
+<div class="panel-body">
+  {% for id, item in items %}
+    {% if 'chapter' in id %}
+      <div>
+        {% if item.type == 'unit' %}
+          <h4>&nbsp;&nbsp;第{{ item.number }}节： {{ item.title }}</h4>
+        {% else %}
+        <h4>第{{ item.number }}章： {{ item.title }}</h4>
+        {% endif %}
+      </div>
+    {% elseif 'content' in id %}
+      <div>{{ item.content|raw }}</div>
+    {% endif %}
+  {% endfor %}
+</div>

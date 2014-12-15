@@ -373,12 +373,14 @@ define(function(require, exports, module) {
                         $("#lesson-audio-content").show();
 
                     } else if (lesson.type == 'text' ) {
-                        $("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
-                        $("#lesson-text-content").show();
-                        $("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
-                        $("#lesson-text-content").scrollTop(0);
-                        $("#lesson-text-content").perfectScrollbar('update');
-
+                        $.get('../../testpaper/' + lesson.mediaId + '/eaasy',function(html){
+                            $("#lesson-text-content").find('.lesson-content-text-body').replaceWith(html);
+                            $("#lesson-text-content").show();
+                            $("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
+                            $("#lesson-text-content").scrollTop(0);
+                            $("#lesson-text-content").perfectScrollbar('update');
+                        });
+                        
                     } else if (lesson.type =="live") {
                         var liveStartTimeFormat = lesson.startTimeFormat;
                         var liveEndTimeFormat = lesson.endTimeFormat;
