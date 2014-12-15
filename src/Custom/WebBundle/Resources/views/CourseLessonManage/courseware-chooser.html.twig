@@ -24,7 +24,7 @@
        <div role="tabpanel" class="tab-pane active" id="coursewares-chooser">
         <div class="help-block" data-role="loading">数据加载中...</div>
         <div class="file-chooser-bar hide">
-            <span data-role="placeholder" {% if courseware|default(null) %} data-id="{{ courseware.id }}"{% endif %}>{{ courseware.title|default('') }}</span>
+            <span data-role="courseware-placeholder" {% if courseware|default(null) %} data-id="{{ courseware.id }}"{% endif %}>{{ courseware.title|default('') }}</span>
             <div class="btn btn-link btn-sm" data-role="trigger"><i class="glyphicon glyphicon-edit"></i>编辑</div>
         </div>
         <div class="courseware-chooser hide">
@@ -63,7 +63,7 @@
             <label class="col-md-12 controls">
 
               <div class="search-result">
-                <table class="table table-condensed table-bordered table-hover search-result-table">
+                <table class="table table-condensed table-bordered table-hover search-courseware-result-table">
                   <thead>
                    <tr><th>名称</th></tr>
                   </thead>

@@ -18,7 +18,6 @@ class JsonCoursewareController extends BaseController
 
         if (!empty($query['tagIds'])) {
             $conditions['tagIds'] = $query['tagIds'];
-            $conditions['tagIds'] = explode(',', $conditions['tagIds']);
         }
 
         if (!empty($query['keyword'])) {
