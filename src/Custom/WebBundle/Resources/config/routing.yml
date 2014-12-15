@@ -67,7 +67,9 @@ course_search_index:
 column:
     pattern:  /column
     defaults: {_controller: CustomWebBundle:Column:index }
-
+column_course:
+    pattern:  /column/{id}/course
+    defaults: {_controller: CustomWebBundle:ColumnCourse:index,id:'' }
 
 
 
