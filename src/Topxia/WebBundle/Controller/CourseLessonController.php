@@ -254,6 +254,17 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($json);
     }
 
+    public function essayPreviewAction(Request $request, $id)
+    {
+        $essay = $this->getEssayService()->getEssay($id);
+        $essayContentItems = $this->getEssayContentService()->getEssayItems($id);      
+
+        return $this->render('TopxiaAdminBundle:Essay:preview-content.html.twig',array(
+            'essay' => $essay,
+            'items' =>$essayContentItems,
+        ));
+    }
+
     public function mediaAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
@@ -545,5 +556,15 @@ class CourseLessonController extends BaseController
     private function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
+
+    private function getEssayService()
+    {
+        return $this->getServiceKernel()->createService('Essay.EssayService');
+    }
+
+    private function getEssayContentService()
+    {
+        return $this->getServiceKernel()->createService('EssayContent.EssayContentService');
     }
 }

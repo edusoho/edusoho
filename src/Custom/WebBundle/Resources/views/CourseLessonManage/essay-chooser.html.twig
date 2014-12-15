@@ -1,0 +1,33 @@
+<div class="form-group">
+    <label for="essay-choose" class="col-sm-2 control-label">文章选择</label>
+    <div class="col-sm-10">
+
+      <div class="essay-chooser-bar hide">
+          <span data-role="essay-placeholder" {% if essay|default(null) %} data-id="{{ essay.id }}"{% endif %}>{{ essay.title|default('') }}</span>
+          <div class="btn btn-link btn-sm" data-role="essay-trigger"><i class="glyphicon glyphicon-edit"></i>编辑</div>
+      </div>
+
+      <div class="essay-chooser">
+
+        <div class="form-group">
+          <label class="col-md-2  control-label">
+            关键词
+          </label>
+          <label class="col-md-8 controls">
+            <input type="text" id="essayKeyword" name="essayKeyword" class="form-control" value="{{ app.request.query.get('essayKeyword') }}" placeholder="请输入标题关键词">
+          </label>
+            <div  class="btn btn-primary" data-role="search-essays-btn" data-url="{{ path('json_essay_search') }}"　data-loading-text="正在搜索...">搜索</div>
+        </div>
+        <div class="search-essay-result">
+          <table class="table table-hover table-condensed table-bordered search-essay-result-table">
+            <thead>
+              <tr><th>名称</th></tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+</div>
+<input type="hidden" name="flag"  data-role="operate-flag-essay" value="{{ essay.id|default(0) }}">

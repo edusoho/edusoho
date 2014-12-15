@@ -35,13 +35,11 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
     {
         $this->filterStartLimit($start, $limit);
         $this->checkOrderBy($orderBy, array('createdTime'));
-
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
             ->setMaxResults($limit)
             ->orderBy($orderBy[0], $orderBy[1]);
-
         $questions = $builder->execute()->fetchAll() ? : array();
 
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
@@ -100,7 +98,8 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'testpaper')
             ->andWhere('target = :target')
-            ->andWhere('title LIKE :titleLike')
+            // ->andWhere('title LIKE :titleLike')
+            ->andWhere('name LIKE :titleLike')
 		  ->andWhere('tags LIKE :tagsLike')
             ->andWhere('status LIKE :status');
 
