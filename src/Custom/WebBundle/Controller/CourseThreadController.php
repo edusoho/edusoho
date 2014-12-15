@@ -9,7 +9,7 @@ class CourseThreadController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        return $this->threadListAction($request, $id);
+        return $this->threadList($request, $id);
     }
 
 	public function showAction(Request $request, $courseId, $id)
@@ -42,7 +42,7 @@ class CourseThreadController extends BaseController
             $form->bind($request);
             if ($form->isValid()) {
                 $thread = $this->getThreadService()->createThread($form->getData());
-                return $this->threadListAction($request, $id);
+                return $this->threadList($request, $id);
             }
         }
 
@@ -92,7 +92,19 @@ class CourseThreadController extends BaseController
 
     }
 
+    public function deleteAction(Request $request, $courseId, $id)
+    {
+        $thread = $this->getThreadService()->getThread($courseId, $id);
+        $this->getThreadService()->deleteThread($id);
+        $user = $this->getCurrentUser();
 
+        if ($user->isAdmin()) {
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
+            $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员删除");
+        }
+
+        return $this->threadList($request, $courseId);
+    }
 
     private function showThread(Request $request,$courseId,$id)
     {
@@ -164,7 +176,7 @@ class CourseThreadController extends BaseController
         ));
     }
 
-    private function threadListAction(Request $request, $id)
+    private function threadList(Request $request, $id)
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {

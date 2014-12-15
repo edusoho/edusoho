@@ -56,7 +56,9 @@ course_thread_edit:
     pattern:  /course/{courseId}/thread/{id}/edit
     defaults: { _controller: CustomWebBundle:CourseThread:edit }
 
-
+course_thread_delete:
+    pattern:  /course/{courseId}/thread/{id}/delete
+    defaults: { _controller: CustomWebBundle:CourseThread:delete }
 
 
 
