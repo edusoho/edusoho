@@ -101,7 +101,7 @@ class CourseLessonManageController extends BaseController
         $catagoryId = $course['subjectIds'][0];
         $conditions = array('title' => '');
         $conditions['target'] = "category-{$catagoryId}";
-        // $conditions['status'] = 'open';
+        $conditions['status'] = 'open';
         $testpapers = $this->getTestpaperService()->searchTestpapers(
             $conditions,
             array('createdTime' ,'DESC'),
@@ -130,6 +130,7 @@ class CourseLessonManageController extends BaseController
             'lesson' => $lesson,
             'paperOptions' => $paperOptions,
             'features' => $features,
+            'catagoryId' => $catagoryId
 
         ));
     }
