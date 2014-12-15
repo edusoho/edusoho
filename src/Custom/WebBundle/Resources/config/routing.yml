@@ -151,7 +151,12 @@ tag_page:
 course_search_index:
     pattern:  /course/search/index
     defaults: {_controller: CustomWebBundle:CourseSearch:index }
-
+column:
+    pattern:  /column
+    defaults: {_controller: CustomWebBundle:Column:index }
+column_course:
+    pattern:  /column/{id}/course
+    defaults: {_controller: CustomWebBundle:ColumnCourse:index,id:'' }
 
 
 

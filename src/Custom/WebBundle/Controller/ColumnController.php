@@ -23,6 +23,11 @@ class ColumnController extends BaseController
         return new JsonResponse($data);
     }
 
+    public function indexAction()
+    {
+        return $this->render('TopxiaWebBundle:Column:index.html.twig');   
+    }
+
     private function getColumnService()
     {
         return $this->getServiceKernel()->createService('Custom:Taxonomy.ColumnService');

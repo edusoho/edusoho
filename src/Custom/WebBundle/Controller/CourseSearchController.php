@@ -10,6 +10,15 @@ class CourseSearchController extends BaseController
 	public function indexAction(Request $request)
 	{
 		$options = $request->query->all();
+		  if(isset($options['categoryCode']))
+		  {
+		  	$cateCode = $options['categoryCode'];
+		  	$category = $this->getCategoryService()->getCategoryByCode($cateCode);
+           			if(!empty($category)){
+           				$options['categoryId'] = $category['id'];
+           			} 
+		  	unset($options['categoryCode']);
+		  }
 		  $categoryId = $options['categoryId'];
 		  $complexity = $options['complexity'];
 		   $price = $options['price'];
@@ -63,5 +72,9 @@ class CourseSearchController extends BaseController
 	private function getCustomCourseSearcheService(){
 		return $this->getServiceKernel()->createService('Custom:Course.CourseSearchService');
 	}
+	protected function getCategoryService()
+	 {
+	        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+	 }
 
 }
