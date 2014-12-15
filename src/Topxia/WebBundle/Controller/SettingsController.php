@@ -228,6 +228,9 @@ class SettingsController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
+
+
+
 	public function securityAction(Request $request) 
 	{ 
 		$user = $this->getCurrentUser(); 
@@ -238,7 +241,8 @@ class SettingsController extends BaseController
 		$hasLoginPassword = strlen($user['password']) > 0;
 		$hasPayPassword = strlen($user['payPassword']) > 0;
 		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
-		$hasFindPayPasswordQuestion = isset($userSecureQuestions);
+		$hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+
 
 		$progressScore = 1 + ($hasLoginPassword? 33:0 ) + ($hasPayPassword? 33:0 ) + ($hasFindPayPasswordQuestion? 33:0 );
 		if ($progressScore <= 1 ) {$progressScore = 0;}
@@ -251,7 +255,6 @@ class SettingsController extends BaseController
 		)); 
 	} 
 
-	
 	public function payPasswordAction(Request $request) 
 	{ 
 		$user = $this->getCurrentUser(); 
@@ -328,10 +331,21 @@ class SettingsController extends BaseController
 		)); 
 	} 
 
+	private function getQuestionWhereSecureQuestionNumEquals($questionNum, $userSecureQuestions)
+	{
+		foreach($userSecureQuestions as $userSecureQuestion){
+			if ($userSecureQuestion['securityQuestionNum'] == $questionNum){
+				return $userSecureQuestion;
+			}
+		}
+		throw new \RuntimeException('No secure question matchs the question number!');
+	}
+
 	private function findPayPasswordActionReturn($userSecureQuestions)
 	{
 		$questionNum = rand(1,3);
-		$question = $userSecureQuestions['securityQuestion'.$questionNum] ;
+		$question = $this->getQuestionWhereSecureQuestionNumEquals($questionNum, $userSecureQuestions);
+		$question = $question['securityQuestion'];
 
 		return $this->render('TopxiaWebBundle:Settings:find-pay-password.html.twig', array( 
 			'question' => $question,
@@ -391,11 +405,13 @@ class SettingsController extends BaseController
 
         return $this->updatePayPasswordFromEmailOrSecureQuestionsActionReturn($form, $token);
 	}
+
 	public function findPayPasswordAction(Request $request) 
 	{ 
 		$user = $this->getCurrentUser(); 
 		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
-		$hasSecurityQuestions = isset($userSecureQuestions);
+
+        $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 
 		if (!$hasSecurityQuestions){
 			$this->setFlashMessage('danger', '您还没有安全问题，请先设置。');
@@ -406,9 +422,12 @@ class SettingsController extends BaseController
 
  			$questionNum = $request->request->get('questionNum');
  			$answer = $request->request->get('answer');
+                               
+			$userSecureQuestion = $this->getQuestionWhereSecureQuestionNumEquals($questionNum, $userSecureQuestions);
 
  			$isAnswerRight = $this->getUserService()->verifyInSaltOut(
- 				$answer,$userSecureQuestions['securityAnswerSalt'.$questionNum],$userSecureQuestions['securityAnswer'.$questionNum]);
+                                          $answer, $userSecureQuestion['securityAnswerSalt'] , $userSecureQuestion['securityAnswer'] ); 
+
 
  			if (!$isAnswerRight){
  				$this->setFlashMessage('danger', '回答错误。');
@@ -421,22 +440,35 @@ class SettingsController extends BaseController
 		}
 
 		return $this->findPayPasswordActionReturn($userSecureQuestions);
-	} 
+	}
 
 	private function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)
 	{
+		$question1 = null;$question2 = null;$question3 = null;
+		if ($hasSecurityQuestions){
+			$question1 = $this->getQuestionWhereSecureQuestionNumEquals(1, $userSecureQuestions) ;
+			$question1 = $question1['securityQuestion'];
+			$question2 = $this->getQuestionWhereSecureQuestionNumEquals(2, $userSecureQuestions) ;
+			$question2 = $question2['securityQuestion'];
+			$question3 = $this->getQuestionWhereSecureQuestionNumEquals(3, $userSecureQuestions) ;
+			$question3 = $question3['securityQuestion'];
+		}
+
+
 		return $this->render('TopxiaWebBundle:Settings:security-questions.html.twig', array( 
 			'hasSecurityQuestions' => $hasSecurityQuestions,
-			'question1' => $hasSecurityQuestions?$userSecureQuestions['securityQuestion1']:null,
-			'question2' => $hasSecurityQuestions?$userSecureQuestions['securityQuestion2']:null,
-			'question3' => $hasSecurityQuestions?$userSecureQuestions['securityQuestion3']:null,
+			'question1' => $question1,
+			'question2' => $question2,
+			'question3' => $question3,
 		)); 		
 	}
+
 	public function securityQuestionsAction(Request $request)
 	{
 		$user = $this->getCurrentUser(); 
 		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
-		$hasSecurityQuestions = isset($userSecureQuestions);
+		$hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+
 		if ($request->getMethod() == 'POST') {
 			if (!$this->getAuthService()->checkPassword($user['id'],$request->request->get('userLoginPassword')) ){
 				$this->setFlashMessage('danger', '您的登陆密码错误，不能设置安全问题。');

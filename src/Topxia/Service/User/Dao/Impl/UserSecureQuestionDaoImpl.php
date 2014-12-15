@@ -13,14 +13,13 @@ class UserSecureQuestionDaoImpl extends BaseDao implements UserSecureQuestionDao
 
     public function getUserSecureQuestionsByUserId($userId)
     {
-
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1";
-        return  $this->getConnection()->fetchAssoc($sql, array($userId)) ? : null; 
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY securityQuestionNum ASC ";
+        return  $this->getConnection()->fetchAll($sql, array($userId)) ? : null; 
     }
 
-    public function addUserSecureQuestions($filedsWithUserIdAndQuestionsAndHashedAnswersAndAnswerSalts)
+    public function addOneUserSecureQuestion($filedsWithUserIdAndQuestionNumAndQuestionAndHashedAnswerAndAnswerSalt)
     {
-        $affected = $this->getConnection()->insert($this->table, $filedsWithUserIdAndQuestionsAndHashedAnswersAndAnswerSalts);
+        $affected = $this->getConnection()->insert($this->table, $filedsWithUserIdAndQuestionNumAndQuestionAndHashedAnswerAndAnswerSalt);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert user_secure_question error.');
         }

@@ -239,26 +239,21 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function addUserSecureQuestionsWithUnHashedAnswers($userId,$fieldsWithQuestionTypesAndUnHashedAnswers)
     {
-        $fields = array('userId'=>$userId);
+        
         $encoder = $this->getPasswordEncoder();
+        $userSecureQuestionDao = $this->getUserSecureQuestionDao();
 
-        $fields['securityQuestion1'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion1'];
-        $fields['securityAnswerSalt1'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $fields['securityAnswer1'] = 
-            $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer1'], $fields['securityAnswerSalt1']);
+        for ($questionNum = 1;$questionNum <= (count($fieldsWithQuestionTypesAndUnHashedAnswers) / 2);$questionNum++){
+                $fields = array('userId'=>$userId);
+                $fields['securityQuestionNum']  =  $questionNum;
+        
+                $fields['securityQuestion'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion'.$questionNum];
+                $fields['securityAnswerSalt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+                $fields['securityAnswer'] = 
+                    $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer'.$questionNum], $fields['securityAnswerSalt']);
 
-        $fields['securityQuestion2'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion2'];
-        $fields['securityAnswerSalt2'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $fields['securityAnswer2'] = 
-            $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer2'], $fields['securityAnswerSalt2']);
-
-        $fields['securityQuestion3'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion3'];
-        $fields['securityAnswerSalt3'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $fields['securityAnswer3'] = 
-            $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer3'], $fields['securityAnswerSalt3']);
-
-        $this->getUserSecureQuestionDao()->addUserSecureQuestions($fields);  
-         
+                $userSecureQuestionDao ->addOneUserSecureQuestion($fields);  
+        } 
         return true;             
     }
 
