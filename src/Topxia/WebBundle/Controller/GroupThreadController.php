@@ -457,7 +457,7 @@ class GroupThreadController extends BaseController
                         'createdTime'=>time());
                     $this->getThreadService()->addTrade($data);
 
-                    $reward=$attach['coin']*0.2;
+                    $reward=$attach['coin']*0.5;
                     if(intval($reward)<1)
                     $reward=1;
                     $file=$this->getFileService()->getFile($attach['fileId']);
@@ -762,7 +762,7 @@ class GroupThreadController extends BaseController
 
             $this->getThreadService()->addTrade(array('threadId'=>$threadId,'userId'=>$user->id,'createdTime'=>time()));
             
-            $reward=$need*0.2;
+            $reward=$need*0.5;
             if(intval($reward)<1)
             $reward=1;
 
