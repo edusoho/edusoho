@@ -245,7 +245,6 @@ class UserServiceImpl extends BaseService implements UserService
 
         for ($questionNum = 1;$questionNum <= (count($fieldsWithQuestionTypesAndUnHashedAnswers) / 2);$questionNum++){
                 $fields = array('userId'=>$userId);
-                $fields['securityQuestionNum']  =  $questionNum;
         
                 $fields['securityQuestionCode'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion'.$questionNum];
                 $fields['securityAnswerSalt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);

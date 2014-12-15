@@ -331,22 +331,10 @@ class SettingsController extends BaseController
 		)); 
 	} 
 
-	private function getQuestionWhereSecureQuestionNumEquals($questionNum, $userSecureQuestions)
-	{
-		foreach($userSecureQuestions as $userSecureQuestion){
-			if ($userSecureQuestion['securityQuestionNum'] == $questionNum){
-				return $userSecureQuestion;
-			}
-		}
-		throw new \RuntimeException('No secure question matchs the question number!');
-	}
-
 	private function findPayPasswordActionReturn($userSecureQuestions)
 	{
-		$questionNum = rand(1,3);
-		$question = $this->getQuestionWhereSecureQuestionNumEquals($questionNum, $userSecureQuestions);
-		$question = $question['securityQuestionCode'];
-
+		$questionNum = rand(0,2);
+		$question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
 		return $this->render('TopxiaWebBundle:Settings:find-pay-password.html.twig', array( 
 			'question' => $question,
 			'questionNum' => $questionNum,
@@ -423,7 +411,7 @@ class SettingsController extends BaseController
  			$questionNum = $request->request->get('questionNum');
  			$answer = $request->request->get('answer');
                                
-			$userSecureQuestion = $this->getQuestionWhereSecureQuestionNumEquals($questionNum, $userSecureQuestions);
+			$userSecureQuestion = $userSecureQuestions[$questionNum];
 
  			$isAnswerRight = $this->getUserService()->verifyInSaltOut(
                                           $answer, $userSecureQuestion['securityAnswerSalt'] , $userSecureQuestion['securityAnswer'] ); 
@@ -446,12 +434,9 @@ class SettingsController extends BaseController
 	{
 		$question1 = null;$question2 = null;$question3 = null;
 		if ($hasSecurityQuestions){
-			$question1 = $this->getQuestionWhereSecureQuestionNumEquals(1, $userSecureQuestions) ;
-			$question1 = $question1['securityQuestionCode'];
-			$question2 = $this->getQuestionWhereSecureQuestionNumEquals(2, $userSecureQuestions) ;
-			$question2 = $question2['securityQuestionCode'];
-			$question3 = $this->getQuestionWhereSecureQuestionNumEquals(3, $userSecureQuestions) ;
-			$question3 = $question3['securityQuestionCode'];
+			$question1 = $userSecureQuestions[0]['securityQuestionCode'];
+			$question2 = $userSecureQuestions[1]['securityQuestionCode'];
+			$question3 = $userSecureQuestions[2]['securityQuestionCode'];
 		}
 
 
