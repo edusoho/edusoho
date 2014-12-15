@@ -312,7 +312,7 @@ class CourseThreadController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->searchThreadCount($conditions),
-            20
+            10
         );
 
         $threads = $this->getThreadService()->searchThreads(
