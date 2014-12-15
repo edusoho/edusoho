@@ -157,6 +157,9 @@ column:
 column_course:
     pattern:  /column/{id}/course
     defaults: {_controller: CustomWebBundle:ColumnCourse:index,id:'' }
+vip_buy:
+    pattern: /vip/buy
+    defaults: { _controller: CustomWebBundle:VipOrder:buy }
 
 
 
