@@ -4,7 +4,7 @@ namespace Custom\WebBundle\Controller;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
-class jsonEssayController extends BaseController
+class JsonEssayController extends BaseController
 {
     public function searchAction(Request $request)
     {
