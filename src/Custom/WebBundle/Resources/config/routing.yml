@@ -14,11 +14,6 @@ course_relatedArticles:
     pattern:  /course/{id}/relatedArticles
     defaults: { _controller: CustomWebBundle:Course:relatedArticles }
 
-course_review_list:
-    pattern:  /course/{id}/review/list
-    defaults: { _controller: CustomWebBundle:Course:reviewList }
-
-
 course_manage_base:
     pattern:  /course/{id}/manage/base
     defaults: { _controller: CustomWebBundle:CourseManage:base }
@@ -56,51 +51,57 @@ course_thread_edit:
     pattern:  /course/{courseId}/thread/{id}/edit
     defaults: { _controller: CustomWebBundle:CourseThread:edit }
 
+course_thread_delete:
+    pattern:  /course/{courseId}/thread/{id}/delete
+    defaults: { _controller: CustomWebBundle:CourseThread:delete }
+
+course_thread_stick:
+    pattern:  /course/{courseId}/thread/{id}/stick
+    defaults: { _controller: CustomWebBundle:CourseThread:stick }
+
+course_thread_unstick:
+    pattern:  /course/{courseId}/thread/{id}/unstick
+    defaults: { _controller: CustomWebBundle:CourseThread:unstick }
+
+course_thread_elite:
+    pattern:  /course/{courseId}/thread/{id}/elite
+    defaults: { _controller: CustomWebBundle:CourseThread:elite }
+
+course_thread_unelite:
+    pattern:  /course/{courseId}/thread/{id}/unelite
+    defaults: { _controller: CustomWebBundle:CourseThread:unelite }
+
+course_thread_post_delete:
+    pattern:  /course/{courseId}/thread/{threadId}/post/{id}/delete
+    defaults: { _controller: CustomWebBundle:CourseThread:deletePost }
+
+course_thread_post_edit:
+    pattern:  /course/{courseId}/thread/{threadId}/post/{id}/edit
+    defaults: { _controller: CustomWebBundle:CourseThread:editPost }
 
 
 
 
-# course_thread_post:
-#     pattern:  /course/{courseId}/thread/{id}/post
-#     defaults: { _controller: TopxiaWebBundle:CourseThread:post }
 
-# course_thread_edit:
-#     pattern:  /course/{courseId}/thread/{id}/edit
-#     defaults: { _controller: TopxiaWebBundle:CourseThread:edit }
 
-# course_thread_post_delete:
-#     pattern:  /course/{courseId}/thread/{threadId}/post/{id}/delete
-#     defaults: { _controller: TopxiaWebBundle:CourseThread:deletePost }
-#     methods: [POST]
 
-# course_thread_post_edit:
-#     pattern:  /course/{courseId}/thread/{threadId}/post/{id}/edit
-#     defaults: { _controller: TopxiaWebBundle:CourseThread:editPost }
 
-# course_thread_stick:
-#     pattern:  /course/{courseId}/thread/{id}/stick
-#     defaults: { _controller: TopxiaWebBundle:CourseThread:stick }
-#     methods: [POST]
 
-# course_thread_unstick:
-#     pattern:  /course/{courseId}/thread/{id}/unstick
-#     defaults: { _controller: TopxiaWebBundle:CourseThread:unstick }
-#     methods: [POST]
 
-# course_thread_elite:
-#     pattern:  /course/{courseId}/thread/{id}/elite
-#     defaults: { _controller: TopxiaWebBundle:CourseThread:elite }
-#     methods: [POST]
 
-# course_thread_unelite:
-#     pattern:  /course/{courseId}/thread/{id}/unelite
-#     defaults: { _controller: TopxiaWebBundle:CourseThread:unelite }
-#     methods: [POST]
 
-# course_thread_delete:
-#     pattern:  /course/{courseId}/thread/{id}/delete
-#     defaults: { _controller: TopxiaWebBundle:CourseThread:delete }
-#     methods: [POST]
+
+
+
+
+course_review_list:
+    pattern:  /course/{id}/review/list
+    defaults: { _controller: CustomWebBundle:CourseReview:list }
+
+course_review_create:
+    pattern:  /course/{id}/review/create
+    defaults: { _controller: CustomWebBundle:CourseReview:create }
+
 
 
 

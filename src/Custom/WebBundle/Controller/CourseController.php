@@ -221,54 +221,6 @@ class CourseController extends BaseController
 		));
 	}
 
-	public function reviewListAction(Request $request,$id)
-	{
-
-		$course = $this->getCourseService()->getCourse($id);
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getReviewService()->getCourseReviewCount($id)
-            , 10
-        );
-
-        $reviews = $this->getReviewService()->findCourseReviews(
-            $id,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
-
-        return $this->render('TopxiaWebBundle:CourseReview:list.html.twig', array(
-            'course' => $course,
-            'reviews' => $reviews,
-            'users' => $users,
-            'paginator' => $paginator
-        ));
-	}
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private function convertFiltersToConditions($course, $filters)
     {
         $conditions = array('courseId' => $course['id']);
