@@ -12,8 +12,9 @@ class OrderController extends BaseController
     {
 
         if ($request->getMethod() == 'POST') {
-            $formData = $request->request->all();
+            $fields = $request->request->all();
 
+            $order = $this->getOrderService()->addOrder($fields);
 
 
             return $this->redirect($this->generateUrl('admin_user'));
