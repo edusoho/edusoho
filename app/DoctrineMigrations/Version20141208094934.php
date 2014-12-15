@@ -28,7 +28,7 @@ class Version20141208094934 extends AbstractMigration
         `id` int(10) unsigned NOT NULL auto_increment ,
         `userId` int(10) unsigned NOT NULL DEFAULT 0,
         `securityQuestionNum` int(10) unsigned NOT NULL DEFAULT 0,
-        `securityQuestion` varchar(64) NOT NULL DEFAULT '',
+        `securityQuestionCode` varchar(64) NOT NULL DEFAULT '',
         `securityAnswer` varchar(64) NOT NULL DEFAULT '',
         `securityAnswerSalt` varchar(64) NOT NULL DEFAULT '',
                

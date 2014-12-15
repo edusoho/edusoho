@@ -345,7 +345,7 @@ class SettingsController extends BaseController
 	{
 		$questionNum = rand(1,3);
 		$question = $this->getQuestionWhereSecureQuestionNumEquals($questionNum, $userSecureQuestions);
-		$question = $question['securityQuestion'];
+		$question = $question['securityQuestionCode'];
 
 		return $this->render('TopxiaWebBundle:Settings:find-pay-password.html.twig', array( 
 			'question' => $question,
@@ -447,11 +447,11 @@ class SettingsController extends BaseController
 		$question1 = null;$question2 = null;$question3 = null;
 		if ($hasSecurityQuestions){
 			$question1 = $this->getQuestionWhereSecureQuestionNumEquals(1, $userSecureQuestions) ;
-			$question1 = $question1['securityQuestion'];
+			$question1 = $question1['securityQuestionCode'];
 			$question2 = $this->getQuestionWhereSecureQuestionNumEquals(2, $userSecureQuestions) ;
-			$question2 = $question2['securityQuestion'];
+			$question2 = $question2['securityQuestionCode'];
 			$question3 = $this->getQuestionWhereSecureQuestionNumEquals(3, $userSecureQuestions) ;
-			$question3 = $question3['securityQuestion'];
+			$question3 = $question3['securityQuestionCode'];
 		}
 
 
