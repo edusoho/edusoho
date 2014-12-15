@@ -249,57 +249,6 @@ class CourseController extends BaseController
 	}
 
 	
-	public function threadListAction(Request $request, $id)
-    {
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return $this->render("TopxiaWebBundle:Course:login.html.twig");
-        }
-
-        $course = $this->getCourseService()->getCourse($id);
-        if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在，或已删除。");
-        }
-
-        if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
-        }
-
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-
-        $filters = $this->getThreadSearchFilters($request);
-        $conditions = $this->convertFiltersToConditions($course, $filters);
-
-        $paginator = new Paginator(
-            $request,
-            $this->getThreadService()->searchThreadCount($conditions),
-            20
-        );
-
-        $threads = $this->getThreadService()->searchThreads(
-            $conditions,
-            $filters['sort'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
-        $userIds = array_merge(
-            ArrayToolkit::column($threads, 'userId'),
-            ArrayToolkit::column($threads, 'latestPostUserId')
-        );
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        $template = $request->isXmlHttpRequest() ? 'index-main' : 'index';
-        return $this->render("TopxiaWebBundle:CourseThread:{$template}.html.twig", array(
-            'course' => $course,
-            'threads' => $threads,
-            'users' => $users,
-            'paginator' => $paginator,
-            'filters' => $filters,
-            'lessons'=>$lessons
-        ));
-    }
 
 
 

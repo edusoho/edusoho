@@ -18,9 +18,6 @@ course_review_list:
     pattern:  /course/{id}/review/list
     defaults: { _controller: CustomWebBundle:Course:reviewList }
 
-course_threads:
-    pattern:  /course/{id}/thread
-    defaults: { _controller: CustomWebBundle:Course:threadList }
 
 course_manage_base:
     pattern:  /course/{id}/manage/base
@@ -33,6 +30,96 @@ course_manage:
 course_manage_price:
     pattern:  /course/{id}/manage/price
     defaults: { _controller: CustomWebBundle:CourseManage:price }
+
+
+
+
+
+
+
+
+
+
+course_threads:
+    pattern:  /course/{id}/thread
+    defaults: { _controller: CustomWebBundle:CourseThread:index }
+
+course_thread_create:
+    pattern:  /course/{id}/thread/create
+    defaults: { _controller: CustomWebBundle:CourseThread:create }
+
+course_thread_show:
+    pattern:  /course/{courseId}/thread/{id}
+    defaults: { _controller: CustomWebBundle:CourseThread:show }
+
+course_thread_edit:
+    pattern:  /course/{courseId}/thread/{id}/edit
+    defaults: { _controller: CustomWebBundle:CourseThread:edit }
+
+
+
+
+
+# course_thread_post:
+#     pattern:  /course/{courseId}/thread/{id}/post
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:post }
+
+# course_thread_edit:
+#     pattern:  /course/{courseId}/thread/{id}/edit
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:edit }
+
+# course_thread_post_delete:
+#     pattern:  /course/{courseId}/thread/{threadId}/post/{id}/delete
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:deletePost }
+#     methods: [POST]
+
+# course_thread_post_edit:
+#     pattern:  /course/{courseId}/thread/{threadId}/post/{id}/edit
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:editPost }
+
+# course_thread_stick:
+#     pattern:  /course/{courseId}/thread/{id}/stick
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:stick }
+#     methods: [POST]
+
+# course_thread_unstick:
+#     pattern:  /course/{courseId}/thread/{id}/unstick
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:unstick }
+#     methods: [POST]
+
+# course_thread_elite:
+#     pattern:  /course/{courseId}/thread/{id}/elite
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:elite }
+#     methods: [POST]
+
+# course_thread_unelite:
+#     pattern:  /course/{courseId}/thread/{id}/unelite
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:unelite }
+#     methods: [POST]
+
+# course_thread_delete:
+#     pattern:  /course/{courseId}/thread/{id}/delete
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:delete }
+#     methods: [POST]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # # course_favorite:
 # #     pattern: /course/{id}/favorite
