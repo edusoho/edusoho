@@ -75,10 +75,10 @@ class ColumnCourseController extends BaseController
     }
 
 
-    public function courseVoteAction(){
+    public function courseVoteAction(Request $request){
         $user = $this->getCurrentUser();
-        $fields = $request->request->all();
-        // $fields=$this->crateVote();
+        $fields = $request->query->all();
+     
         $columnCourseVoteId = $fields['id'];
         $specialColumnId = $fields['specialColumnId'];
         $voteCourseName = $fields['voteCourseName'];
