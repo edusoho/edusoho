@@ -1975,11 +1975,51 @@ body {
 	border: 1px solid #e6e6e6;
 	width:600px;
 }
-.courseware-url-import{
+
+.testpaper-chooer {
 	padding: 20px;
 	background: #f9f9f9;
 	border: 1px solid #e6e6e6;
 	width:600px;
+}
+
+.courseware-url-import {
+	padding: 20px;
+	background: #f9f9f9;
+	border: 1px solid #e6e6e6;
+	width:600px;
+}
+
+.search-result {
+	background:#FFF;
+	height:200px;
+	overflow-y:scroll
+}
+
+.essay-chooser {
+	padding: 20px;
+	background: #f9f9f9;
+	border: 1px solid #e6e6e6;
+	width:600px;
+}
+
+.testpaper-chooser {
+	padding: 20px;
+	background: #f9f9f9;
+	border: 1px solid #e6e6e6;
+	width:600px;
+}
+
+.search-essay-result {
+	background:#FFF;
+	height:200px;
+	overflow-y:scroll
+}
+
+.search-testpaper-result {
+	background:#FFF;
+	height:200px;
+	overflow-y:scroll
 }
 
 .file-chooser-uploader-label {
