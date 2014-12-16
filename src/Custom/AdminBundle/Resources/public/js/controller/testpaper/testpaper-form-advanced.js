@@ -6,8 +6,8 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     Validator.addRule('countcheck', function(options) {
         var $modal = $("#testpaper-part-modal");
-        return parseInt($modal.find('#testpaper-count-field').val()) <= parseInt($modal.find('#testpaper-count-field-span').data('num'));
-    }, '必须小于等于已有题目!');
+        return (parseInt($modal.find('#testpaper-count-field').val()) <= parseInt($modal.find('#testpaper-count-field-span').data('num'))) && parseInt($modal.find('#testpaper-count-field').val()) > 0;
+    }, '必须小于等于已有题目,并且大于0!');
     require('common/validator-rules').inject(Validator);
     require('jquery.sortable');
     var TagTreeChooser = require('tag-tree-chooser');
@@ -191,7 +191,7 @@ define(function(require, exports, module) {
         },
 
         _createPartHtml: function(part) {
-            var html = '<tr class="testpaper-part testpaper-part-' + part.id + '">';
+            var html = '<tr class="testpaper-part testpaper-part-' + part.id + ' '+ part.type +'" data-count="'+ part.count +'">';
             html += '<td><a href="javascript:;" class="testpaper-part-sort-handler"><span class="glyphicon glyphicon-move"></span></a></td>';
             html += '<td>' + part.name + '</td>';
             html += '<td>' + part.count + '道，总分' + (part.count*part.score) + '分</td>';
@@ -231,7 +231,13 @@ define(function(require, exports, module) {
             
             $modal.find('#testpaper-count-field-span').html('查询中...');
 
-            $.get($('#testpaper-count-field').data('url'), {type:type,knowledgeIds:$form.find('[name=knowledgeIds]').val(), tagIds:tagIds}, function(count){
+            $.get($('#testpaper-count-field').data('url'), {type:type,knowledgeIds:$form.find('[name=knowledgeIds]').val(), tagIds:tagIds}, function(total){
+                var used = 0,
+                    count = 0;
+                $form.find('.testpaper-parts-list').find('.'+type).each(function(){
+                    used = parseInt($(this).data('count'))+used;
+                });
+                count = total - used;
                 $modal.find('#testpaper-count-field-span').html('(共'+count+'题)');
                 $modal.find('#testpaper-count-field-span').data('num', count);
             });
