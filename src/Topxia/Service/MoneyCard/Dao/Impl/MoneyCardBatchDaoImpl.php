@@ -14,6 +14,7 @@ class MoneyCardBatchDaoImpl extends BaseDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
+
 	public function searchBatchs($conditions, $orderBy, $start, $limit)
     {
         $this->checkOrderBy($orderBy, array('id','createdTime'));
@@ -61,7 +62,8 @@ class MoneyCardBatchDaoImpl extends BaseDao
     private function createBatchQueryBuilder($conditions)
     {
         return $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'batch');
+            ->from($this->table, 'batch')
+            ->andWhere('cardPrefix = :cardPrefix');
     }
 
 }
