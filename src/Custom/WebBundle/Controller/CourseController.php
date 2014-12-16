@@ -170,6 +170,7 @@ class CourseController extends BaseController
 
 		$freeLesson=$this->getCourseService()->searchLessons(array('courseId'=>$id,'type'=>'video','status'=>'published','free'=>'1'),array('createdTime','ASC'),0,1);
 		if($freeLesson)$freeLesson=$freeLesson[0];
+		
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
@@ -203,11 +204,21 @@ class CourseController extends BaseController
 		$previewAs = $request->query->get('previewAs');
 		$member = $this->previewAsMember($previewAs, $member, $course);
 		$hasFavorited = $this->getCourseService()->hasFavoritedCourse($id);
+		
+		$checkMemberLevelResult = $courseMemberLevel = null;
+		if ($this->setting('vip.enabled')) {
+			$courseMemberLevel = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+			if ($courseMemberLevel) {
+				$checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
+			}
+		}
 		return $this->render("TopxiaWebBundle:Course:course-header.html.twig", array(
 			'course' => $course,
 			'tags' => $tags,
 			'member' => $member,
-			'hasFavorited' => $hasFavorited
+			'hasFavorited' => $hasFavorited,
+			'courseMemberLevel' => $courseMemberLevel,
+			'checkMemberLevelResult' => $checkMemberLevelResult,
 		));
 	}
 
@@ -388,5 +399,15 @@ class CourseController extends BaseController
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
     }
+
+    protected function getLevelService()
+	{
+		return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+	}
+
+	protected function getVipService()
+	{
+		return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+	}
 
 }
