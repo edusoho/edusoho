@@ -215,7 +215,12 @@ class CourseController extends BaseController
         $ChargeCoin = $this->getAppService()->findInstallApp($code);
         
         $courseSetting=$this->getSettingService()->get('course',array());
-        $coursesPrice=$courseSetting['coursesPrice'];
+        
+        if (isset($courseSetting['coursesPrice'])) {
+                $coursesPrice=$courseSetting['coursesPrice'];
+        }else{
+                $coursesPrice=0;
+        }
 
         $defaultSetting = $this->getSettingService()->get('default', array());
 

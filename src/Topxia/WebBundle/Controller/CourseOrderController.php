@@ -53,7 +53,11 @@ class CourseOrderController extends OrderController
         
         $course = $this->getCourseService()->getCourse($id);
 
-        $coursesPrice=$courseSetting['coursesPrice'];
+        if (isset($courseSetting['coursesPrice'])) {
+                $coursesPrice=$courseSetting['coursesPrice'];
+        }else{
+                $coursesPrice=0;
+        }
 
         if($coursesPrice == 1){
             $course['price'] =0;
