@@ -430,6 +430,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         } else {
             $lesson['mediaUri'] = $mediaUri;
         }
+        
         return $lesson;
 	}
 
