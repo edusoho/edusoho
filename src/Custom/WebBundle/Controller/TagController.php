@@ -50,70 +50,41 @@ class TagController extends BaseController
     }
 
     public function pageAction(Request $request,$page){
-        $perPageCount =18;
-        $total = $this->getTagService()->getAllTagCount();
-        $currentPage = $page;
-        $maxPage = ceil($total / $perPageCount) ? : 1;
-        $start=0;
-        //保证最后一页也有14条记录
-        if($currentPage==$maxPage){
-            if($total>$perPageCount){
-                     $start = $total-$perPageCount;
-            }else{
-                 $start =0;
-            }
-           
-            $nextPage = 1;
-        }else{
-             $start = ($currentPage - 1) * $perPageCount;
-             $nextPage = $currentPage +1;
-        }
-        $tags = $this->getTagService()->findAllTags($start, $perPageCount);
+       
+         $temp = $this->getTags($page,18);
+         
         return $this->render('TopxiaWebBundle:Tag:tags.html.twig', array(
-        'tags' => $tags,
-        'page' => $nextPage
+        'tags' => $temp['tags'],
+        'page' => $temp['nextPage']
         ));
     }
 
 
     public function indexPageAction(Request $request,$page){
-        $perPageCount =14;
-        $total = $this->getTagService()->getAllTagCount();
-        $currentPage = $page;
-        $maxPage = ceil($total / $perPageCount) ? : 1;
-        $start=0;
-       
-        //保证最后一页也有14条记录
-        if($currentPage==$maxPage){
-      
-            if($total>$perPageCount){
-                     $start = $total-$perPageCount;
-            }else{
-                 $start =0;
-            }
-           
-            $nextPage = 0;
-        }else{
-            
-             $start = ($currentPage - 1) * $perPageCount;
-             $nextPage = $currentPage +1;
-        }
-     
-        $tags = $this->getTagService()->findAllTags($start, $perPageCount);
+        
+        $temp = $this->getTags($page,14);
         return $this->render('TopxiaWebBundle:Tag:index-tag-detail.html.twig', array(
-        'tags' => $tags,
-        'page' => $nextPage
+        'tags' => $temp['tags'],
+        'page' => $temp['nextPage']
         ));
     }
 
     public function ajaxPageAction(Request $request,$page){
-        $perPageCount =14;
+         $temp = $this->getTags($page,18);
+        return $this->render('TopxiaWebBundle:Tag:index-tag-detail.html.twig', array(
+        'tags' => $temp['tags'],
+        'page' => $temp['nextPage']
+        ));
+    }
+
+    private function getTags($page,$perPage){
+        $perPageCount = $perPage;
         $total = $this->getTagService()->getAllTagCount();
         $currentPage = $page;
         $maxPage = ceil($total / $perPageCount) ? : 1;
         $start=0;
        
-        //保证最后一页也有14条记录
+        //保证最后一页也有$perPage条记录
         if($currentPage==$maxPage){
       
             if($total>$perPageCount){
@@ -130,10 +101,9 @@ class TagController extends BaseController
         }
      
         $tags = $this->getTagService()->findAllTags($start, $perPageCount);
-        return $this->render('TopxiaWebBundle:Tag:index-tag-detail.html.twig', array(
-        'tags' => $tags,
-        'page' => $nextPage
-        ));
+        
+        return array("tags"=>$tags,"nextPage"=>$nextPage);
+        // return $tags;
     }
 
 
