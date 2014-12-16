@@ -388,6 +388,9 @@ class SettingController extends BaseController
             'renren_set_fill_account'=>0,
             'verify_code' => '',
             'captcha_enabled'=>0,
+            'temporary_lock_enabled' => 0,
+            'temporary_lock_allowed_times' => 5,
+            'temporary_lock_minutes' => 20,
         );
 
         $loginConnect = array_merge($default, $loginConnect);
@@ -664,7 +667,7 @@ class SettingController extends BaseController
             'userinfoFields'=>array(),
             "userinfoFieldNameArray"=>array(),
             "copy_enabled"=>'0',
-            "picturePreview_enabled"=>'0',
+            "picturePreview_enabled"=>'0'
         );
 
         $this->getSettingService()->set('course', $courseSetting);

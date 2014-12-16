@@ -104,9 +104,27 @@
 	background-position:0 -80px;
 }
 
+@font-face {font-family: "esicon";
+  src: url('font/iconfont.eot'); /* IE9*/
+  src: url('font/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('font/iconfont.woff') format('woff'), /* chrome、firefox */
+  url('font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('font/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
 
+.esicon {
+  font-family:"esicon" !important;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-
+.esicon-share:before { content: "\e601"; }
+.esicon-setting:before { content: "\e603"; }
+.esicon-like:before { content: "\e605"; }
+.esicon-exit:before { content: "\e602"; }
+.esicon-user:before { content: "\e607"; }
 
 
 

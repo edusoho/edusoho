@@ -55,10 +55,9 @@ define(function(require, exports, module) {
         },
 
         deleteItem: function(e) {
-            var teacherCounts=$("#teacher-list-group").children("li").length;
-            if(teacherCounts <= 1){
-                Notify.danger("课程至少需要一个教师！");
-                return ;
+            var beforeDeleteItem = this.get("beforeDeleteItem");          
+            if(beforeDeleteItem && !beforeDeleteItem()){
+                return;
             }
             $(e.currentTarget).parents('[data-role=item]').remove();
             this._toggleList();

@@ -15,11 +15,64 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadDao()->getThread($id);
     }
 
+     public function isCollected($userId, $threadId)
+    {
+        $thread = $this->getThreadCollectDao()->getThreadByUserIdAndThreadId($userId, $threadId);
+        if(empty($thread)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function getThreadsByIds($ids)
     {
         $threads=$this->getThreadDao()->getThreadsByIds($ids);
         return ArrayToolkit::index($threads, 'id');
     }
+
+    public function threadCollect($userId,$threadId)
+    {
+        $thread = $this->getThread($threadId);
+        if(empty($thread)) {
+            throw $this->createServiceException('话题不存在，收藏失败！');
+        }
+        if($userId == $thread['userId']) {
+            throw $this->createServiceException('不能收藏自己的话题！');
+        }
+        $collectThread =  $this->getThreadCollectDao()->getThreadByUserIdAndThreadId($userId, $threadId);
+        if(!empty($collectThread)) {
+            throw $this->createServiceException('不允许重复收藏!');
+        }
+        return $this->getThreadCollectDao()->addThreadCollect(array(
+            "userId"=>$userId,
+            "threadId"=>$threadId,
+            "createdTime"=>time()));
+    }
+
+    public function searchGoods($conditions,$orderBy,$start,$limit)
+    {
+        return $this->getThreadGoodsDao()->searchGoods($conditions,$orderBy,$start,$limit);
+    }
+
+    public function unThreadCollect($userId,$threadId)
+    {
+        $thread = $this->getThread($threadId);
+        if(empty($thread)) {
+            throw $this->createServiceException('话题不存在，取消收藏失败！');
+        }
+        $collectThread =  $this->getThreadCollectDao()->getThreadByUserIdAndThreadId($userId, $threadId);
+        if(empty($collectThread)) {
+            throw $this->createServiceException('不存在此收藏关系，取消收藏失败！');
+        }
+        return $this->getThreadCollectDao()->deleteThreadCollectByUserIdAndThreadId($userId,$threadId);
+    }
+
+    public function searchThreadCollectCount($conditions)
+    {
+        return $this->getThreadCollectDao()->searchThreadCollectCount($conditions);
+    }
+
 
     public function searchThreadsCount($conditions)
     {
@@ -33,9 +86,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadPostDao()->searchPostsThreadIds($conditions,$orderBy,$start,$limit);
     }
 
+    public function searchThreadCollects($conditions,$orderBy,$start,$limit)
+    {
+        return $this->getThreadCollectDao()->searchThreadCollects($conditions,$orderBy,$start,$limit);
+    }
+
     public function searchPostsThreadIdsCount($conditions)
     {
         return $this->getThreadPostDao()->searchPostsThreadIdsCount($conditions);
+    }
+
+    public function getTradeByUserIdAndGoodsId($userId,$goodsId)
+    {
+        return $this->getThreadTradeDao()->getTradeByUserIdAndGoodsId($userId,$goodsId);
     }
 
     public function getPost($id)
@@ -68,12 +131,157 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
         $this->getGroupService()->waveMember($thread['groupId'],$thread['userId'],'threadNum',+1);
         
+        $this->hideThings($thread['content'],$thread['id']);
+
         return $thread;
+    }
+
+    public function deleteGoods($id)
+    {
+        $this->getThreadGoodsDao()->deleteGoods($id);
+
+        return true;
+    }
+
+    public function addAttach($files,$threadId)
+    {
+        $user = $this->getCurrentUser();
+        for($i=0;$i<count($files['id']);$i++){
+
+            $file=$this->getFileService()->getFile($files['id'][$i]);
+
+            if($file['userId'] != $user->id) continue;
+            
+            $hide=$this->getThreadGoodsDao()->searchGoods(array('threadId'=>$threadId,'fileId'=>$files['id'][$i]),array('createdTime','desc'),0,1);
+            
+            $files['title'][$i]=$this->subTxt($files['title'][$i]);
+
+            $attach=array(
+                'title'=>$files['title'][$i],
+                'description'=>$files['description'][$i],
+                'type'=>'attachment',
+                'userId'=>$user->id,
+                'threadId'=>$threadId,
+                'coin'=>$files['coin'][$i],
+                'fileId'=>$files['id'][$i],
+                'createdTime'=>time(),
+                );
+
+            if($hide){
+
+                $this->getThreadGoodsDao()->updateGoods($hide[0]['id'],$attach);
+                continue;
+            }
+            
+            $this->getThreadGoodsDao()->addGoods($attach);
+        }
+    }
+
+    public function addPostAttach($files,$threadId,$postId)
+    {
+        $user = $this->getCurrentUser();
+        for($i=0;$i<count($files['id']);$i++){
+
+            $file=$this->getFileService()->getFile($files['id'][$i]);
+
+            if($file['userId'] != $user->id) continue;
+              
+            $files['title'][$i]=$this->subTxt($files['title'][$i]);
+
+            $attach=array(
+                'title'=>$files['title'][$i],
+                'description'=>$files['description'][$i],
+                'type'=>'postAttachment',
+                'userId'=>$user->id,
+                'threadId'=>$threadId,
+                'coin'=>$files['coin'][$i],
+                'fileId'=>$files['id'][$i],
+                'postId'=>$postId,
+                'createdTime'=>time(),
+                );
+            
+            $this->getThreadGoodsDao()->addGoods($attach);
+        }
+    }
+
+    public function waveGoodsHitNum($goodsId)
+    {
+        return $this->getThreadGoodsDao()->waveGoodsHitNum($goodsId);
+    }
+
+    protected function hideThings($content,$id)
+    {   
+        $user = $this->getCurrentUser();
+        $data=explode('[/hide]', $content);
+     
+        foreach ($data as $key => $value) {
+
+            $value=" ".$value;
+            sscanf($value,"%[^[][hide=coin%[^]]]%[^$$]",$content,$coin,$title);
+
+            if(!is_numeric($coin)) $coin=0;
+
+            if($coin >=0 && $title !="" ){
+
+                $hide=array(
+                    'title'=>$title,
+                    'type'=>'content',
+                    'threadId'=>$id,
+                    'coin'=>$coin,
+                    'userId'=>$user->id,
+                    'createdTime'=>time());
+                $this->getThreadGoodsDao()->addGoods($hide);
+            }
+
+            unset($coin);
+            unset($title);
+        }
+
+    }
+
+    private function subTxt($string)
+    {
+        $string=explode(".", $string);
+       
+        $length=10;
+        $text=$string[0];
+        $text = strip_tags($text);
+
+        $text = str_replace(array("\n", "\r", "\t") , '', $text);
+        $text = str_replace('&nbsp;' , ' ', $text);
+        $text = trim($text);
+
+        $length = (int) $length;
+        if ( ($length > 0) && (mb_strlen($text,'utf-8') > $length) )  {
+            $text = mb_substr($text, 0, $length, 'UTF-8');
+        }
+
+        return $text.".".$string[1];
+    }
+
+    public function getGoods($id)
+    {
+        return $this->getThreadGoodsDao()->getGoods($id);
+    }
+
+    public function sumGoodsCoinsByThreadId($id)
+    {   
+        $condition=array('threadId'=>$id,'type'=>"content");
+        return $this->getThreadGoodsDao()->sumGoodsCoins($condition);
     }
 
     public function waveHitNum($threadId)
     {
         $this->getThreadDao()->waveThread($threadId,'hitNum',+1);
+    }
+
+    public function addTrade($fields)
+    {   
+        if (empty($fields['userId'])) {
+            throw $this->createServiceException("用户ID不能为空!");
+        }
+
+        return $this->getThreadTradeDao()->addTrade($fields);
     }
 
     public function updateThread($id,$fields)
@@ -84,6 +292,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         if (empty($fields['content'])) {
             throw $this->createServiceException("话题内容不能为空！");
         }
+
+        $this->getThreadGoodsDao()->deleteGoodsByThreadId($id,'content');
+        $this->hideThings($fields['content'],$id);
 
         return $this->getThreadDao()->updateThread($id,$fields);
     }
@@ -170,6 +381,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     }
 
+    public function updatePost($id,$fields)
+    {
+        return $this->getThreadPostDao()->updatePost($id,$fields);
+    }
+
     public function deletePost($postId)
     {
         $post=$this->getThreadPostDao()->getPost($postId);
@@ -196,6 +412,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         $this->getGroupService()->waveMember($thread['groupId'],$threadId,'postNum',-$postCount);
 
         $this->getThreadPostDao()->deletePostsByThreadId($threadId);
+    }
+
+    public function getTrade($id)
+    {
+        return $this->getThreadTradeDao()->getTrade($id);
     }
 
     private function waveThread($id,$field, $diff)
@@ -237,6 +458,21 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $conditions;
     }
 
+    public function getTradeByUserIdAndThreadId($userId,$threadId)
+    {
+        return $this->getThreadTradeDao()->getTradeByUserIdAndThreadId($userId,$threadId);
+    }
+
+    private function getThreadTradeDao()
+    {
+        return $this->createDao('Group.ThreadTradeDao');
+    }
+
+    private function getThreadGoodsDao()
+    {
+        return $this->createDao('Group.ThreadGoodsDao');
+    }
+
     private function getThreadDao()
     {
         return $this->createDao('Group.ThreadDao');
@@ -249,9 +485,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     {
         return $this->createService('User.UserService');
     }
+    protected function getFileService()
+    {
+        return $this->createService('Content.FileService');
+    }
     private function getThreadPostDao()
     {
         return $this->createDao('Group.ThreadPostDao');
+    }
+    private function getThreadCollectDao()
+    {
+        return $this->createDao('Group.ThreadCollectDao');
     }
     private function getMessageService() 
     {

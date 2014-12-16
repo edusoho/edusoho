@@ -14,7 +14,7 @@
           <hr>
           <div class="">
             {% if is_groupmember==0%}
-              <a class="btn btn-info btn-sm pull-right" href="{{path('group_join',{id:groupinfo.id})}}">加入小组</a>
+              <a id="add-btn" class="btn btn-info btn-sm pull-right" href="{{path('group_join',{id:groupinfo.id})}}">加入小组</a>
             {% endif %}
 
             <span class="text-muted fsn mrm">创建时间：{{groupinfo.createdTime|date('Y-m-d')}}</span>
@@ -37,6 +37,10 @@
             
         <li{% if condition.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'elite',num:condition.num,sort:condition.sort})}}">精华</a></li>
 
+        {% if is_feature_enabled('group_reward') %}
+        <li{% if condition.type == 'reward' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'reward',num:condition.num,sort:condition.sort})}}">悬赏</a></li>
+        {% endif %}
+        
         <li><span class="mhm text-muted">|</span></li>
 
         <li class="dropdown">

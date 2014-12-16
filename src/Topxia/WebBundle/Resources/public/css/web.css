@@ -1983,8 +1983,15 @@ body {
 	padding: 10px;
 	background: #f9f9f9;
 	border: 1px solid #e6e6e6;
-	height: 200px;
-	overflow-y: scroll;
+	height: 210px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.file-browser-list-container {
+	height: 110px;
+	overflow-y: auto;
+	overflow-x: auto;
 }
 
 .file-browser-list {
@@ -2443,6 +2450,11 @@ body {
 .notification-list .notification-body {
 	margin-bottom: 6px;
 }
+
+.notification-list .notification-body a{
+	color:#428bca;
+}
+
 
 .notification-list .notification-footer {
 	font-size: 12px;

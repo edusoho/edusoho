@@ -263,6 +263,14 @@ admin_course_close:
     defaults: { _controller: TopxiaAdminBundle:Course:close }
     methods: [POST]
 
+admin_course_copy:
+    pattern: /course/{id}/copy
+    defaults: { _controller: TopxiaAdminBundle:Course:copy }
+
+admin_course_coping:
+    pattern: /course/{id}/coping
+    defaults: { _controller: TopxiaAdminBundle:Course:coping }
+
 admin_course_recommend:
     pattern: /course/{id}/recommend
     defaults: { _controller: TopxiaAdminBundle:Course:recommend }
@@ -537,6 +545,10 @@ admin_setting_developer_change_version:
 admin_setting_developer:
     pattern:  /setting/developer
     defaults: { _controller: TopxiaAdminBundle:Setting:developer }
+
+admin_setting_cdn:
+    pattern:  /setting/cdn
+    defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
 
 admin_optimize:
     pattern:  /optimize
