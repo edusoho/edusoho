@@ -1,6 +1,4 @@
-ALTER TABLE  `course` ADD  `discount` float(1,1) AFTER  `freeEndTime`;
-
--- ALTER TABLE  `course` ADD  `isFree` 	enum('active', 'none')  AFTER  `freeEndTime`;
+ALTER TABLE  `course` ADD  `discount` float(10,1) AFTER  `freeEndTime`;
 
 ALTER TABLE  `course` ADD  `complexity` enum('lowLevel', 'middleLevel', 'highLevel')  AFTER  `freeEndTime`;
 
