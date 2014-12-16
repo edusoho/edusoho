@@ -11,7 +11,7 @@
       <div class="panel panel-default panel-page">
         <div class="panel-heading"><h4>订单确认</h4></div>
         <div class="panel-body">
-          <form method="post" action="{{path('order_create')}}">
+          <form method="post" action="{{path(payUrl)}}">
           	
           	<input type="hidden" role="cash-rate" value="{{cashRate}}"/>
             {% for targetType in targetTypes %}

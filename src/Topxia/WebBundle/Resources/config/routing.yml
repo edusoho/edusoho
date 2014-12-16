@@ -1446,6 +1446,14 @@ user_password_check:
     path:   /user/password/check
     defaults: { _controller: TopxiaWebBundle:User:checkPassword }
 
+pay_center_show:
+    path:   /pay/center/show
+    defaults: { _controller: TopxiaWebBundle:PayCenter:show }
+
+pay_center_pay:
+    path:   /pay/center/pay
+    defaults: { _controller: TopxiaWebBundle:PayCenter:pay }
+    methods: [POST]
 
 #占位
 vip:

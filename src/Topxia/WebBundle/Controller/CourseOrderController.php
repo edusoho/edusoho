@@ -87,7 +87,8 @@ class CourseOrderController extends OrderController
             'targetTypes' => array("course"),
             'coursePriceShowType' => $coursePriceShowType,
 
-            'vip' => empty($vip) ? null : array($vip)
+            'vip' => empty($vip) ? null : array($vip),
+            'payUrl' => 'course_order_pay'
         ));
     }
 
@@ -128,13 +129,13 @@ class CourseOrderController extends OrderController
         ));
     }
 
-    public function payAction(Request $request, $courseId)
+    public function payAction(Request $request)
     {
         $fields = $request->request->all();
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，创建课程订单失败。');
+            return $this->createMessageResponse('error', '用户未登录，创建订单。');
         }
 
         if(!array_key_exists("targets", $fields)) {
@@ -178,20 +179,20 @@ class CourseOrderController extends OrderController
         }
 
         //虚拟币优惠价格
-        $coinPayAmmount = $fields["coinPayAmmount"];
+        $coinPayAmount = $fields["coinPayAmount"];
         $coinPreferentialPrice = 0;
         if($coursePriceShowType == "RMB") {
-            $coinPreferentialPrice = $coinPayAmmount/$cashRate;
+            $coinPreferentialPrice = $coinPayAmount/$cashRate;
         } else if ($coursePriceShowType == "Coin") {
-            $coinPreferentialPrice = $coinPayAmmount;
+            $coinPreferentialPrice = $coinPayAmount;
         }
 
         //优惠码优惠价格 TODO
 
         $amount = $totalPrice - $coinPreferentialPrice;
-        if($amount != $fields["actualPrice"]) {
-            return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
-        }
+        // if($amount != $fields["actualPrice"]) {
+        //     return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
+        // }
 
         $cashRate = 1;
         if(array_key_exists("cash_rate", $coinSetting)) {
@@ -203,26 +204,16 @@ class CourseOrderController extends OrderController
             'totalPrice' => $totalPrice,
             'amount' => $amount,
             'cashRate' => $cashRate,
-            'coinAmount' => $coinPayAmmount,
-            
+            'coinAmount' => $coinPayAmount,
+            'userId' => $user["id"],
+            'payment' => 'alipay',
+            'courseId' => $targetIds[0]
         );
 
         $order = $this->getCourseOrderService()->createOrder($order);
 
-        if ($order['status'] == 'paid') {
-            return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
-        } else {
-            $payRequestParams = array(
-                'returnUrl' => $this->generateUrl('course_order_pay_return', array('name' => $order['payment']), true),
-                'notifyUrl' => $this->generateUrl('course_order_pay_notify', array('name' => $order['payment']), true),
-                'showUrl' => $this->generateUrl('course_show', array('id' => $order['targetId']), true),
-            );
+        return $this->redirect($this->generateUrl('pay_center_show', array('id' => $order['id'])));
 
-            return $this->forward('TopxiaWebBundle:Order:submitPayRequest', array(
-                'order' => $order,
-                'requestParams' => $payRequestParams,
-            ));
-        }
     }
 
     public function payReturnAction(Request $request, $name)
