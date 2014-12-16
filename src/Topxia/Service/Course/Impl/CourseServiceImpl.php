@@ -389,11 +389,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	private function _filterCourse($course)
 	{
-		if(!is_array($course['subjectIds'])) {
+		if(!empty($course['subjectIds']) && !is_array($course['subjectIds'])) {
 			$course['subjectIds'] = explode(',', $course['subjectIds']);
 		}
-		if($course['type'] == 'normal') {
-			if(count($course['subjectIds']) >= 2) {
+		if(!empty($course['type']) && $course['type'] == 'normal') {
+			if(count($course['subjectIds']) != 1) {
 				throw $this->createServiceException('课程只能设置一个学科！');
 			} 	
 		}
