@@ -49,21 +49,21 @@ class MoneyCardServiceImpl extends BaseService
             'deadline'
         ));
 
-        $batch['money'] = (int)$batch['money'];
-        $batch['coin'] = (int)$batch['coin'];
-        $batch['cardLength'] = (int)$batch['cardLength'];
-        $batch['number'] = (int)$batch['number'];
+        if (isset($batch['money'])) $batch['money'] = (int)$batch['money'];
+        if (isset($batch['coin'])) $batch['coin'] = (int)$batch['coin'];
+        if (isset($batch['cardLength'])) $batch['cardLength'] = (int)$batch['cardLength'];
+        if (isset($batch['number'])) $batch['number'] = (int)$batch['number'];
 
-        if ($batch['money'] <= 0) {
+        if (isset($batch['money']) && $batch['money'] <= 0) {
             throw $this->createServiceException('ERROR! Money Value Less Than Zero!');
         }
-        if ($batch['coin'] <= 0) {
+        if (isset($batch['coin']) && $batch['coin'] <= 0) {
             throw $this->createServiceException('ERROR! Coin Value Less Than Zero!');
         }
-        if ($batch['cardLength'] <= 0) {
+        if (isset($batch['cardLength']) && $batch['cardLength'] <= 0) {
             throw $this->createServiceException('ERROR! CardLength Less Than Zero!');
         }
-        if ($batch['number'] <= 0) {
+        if (isset($batch['number']) && $batch['number'] <= 0) {
             throw $this->createServiceException('ERROR! Card Number Less Than Zero!');
         }
 
