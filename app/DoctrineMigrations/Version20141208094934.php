@@ -30,7 +30,7 @@ class Version20141208094934 extends AbstractMigration
         `securityQuestionCode` varchar(64) NOT NULL DEFAULT '',
         `securityAnswer` varchar(64) NOT NULL DEFAULT '',
         `securityAnswerSalt` varchar(64) NOT NULL DEFAULT '',
-               
+        `createdTime` int(10) unsigned NOT NULL DEFAULT '0',       
         PRIMARY KEY  (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;"); 
 

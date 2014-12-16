@@ -13,7 +13,7 @@ class UserSecureQuestionDaoImpl extends BaseDao implements UserSecureQuestionDao
 
     public function getUserSecureQuestionsByUserId($userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY securityQuestionNum ASC ";
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime ASC ";
         return  $this->getConnection()->fetchAll($sql, array($userId)) ? : null; 
     }
 

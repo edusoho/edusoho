@@ -250,7 +250,8 @@ class UserServiceImpl extends BaseService implements UserService
                 $fields['securityAnswerSalt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
                 $fields['securityAnswer'] = 
                     $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer'.$questionNum], $fields['securityAnswerSalt']);
-
+                $fields['createdTime'] = time();
+                
                 $userSecureQuestionDao ->addOneUserSecureQuestion($fields);  
         } 
         return true;             
