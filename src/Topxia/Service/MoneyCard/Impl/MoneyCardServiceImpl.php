@@ -46,7 +46,8 @@ class MoneyCardServiceImpl extends BaseService
             'cardLength',
             'number',
             'note',
-            'deadline'
+            'deadline',
+            'batchName'
         ));
 
         if (isset($batch['money'])) $batch['money'] = (int)$batch['money'];
