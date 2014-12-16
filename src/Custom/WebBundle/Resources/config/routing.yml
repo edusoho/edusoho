@@ -161,6 +161,12 @@ column_course:
 vip_buy:
     pattern: /vip/buy
     defaults: { _controller: CustomWebBundle:VipOrder:buy }
+index_tag_page:
+    pattern:  /index/tag/page/{page}
+    defaults:  {_controller: CustomWebBundle:Tag:indexPage ,page:'' }
+ajax_page:
+    pattern:  /index/tag/ajax/page/{page}
+    defaults:  {_controller: CustomWebBundle:Tag:ajaxPage ,page:'' }
 
 
 
