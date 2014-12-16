@@ -15,7 +15,7 @@ class CCViedoManageController extends BaseController
     {
         $lessonId = $request->query->get('lessonId');
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $courseware = $this->getCoursewareService()->getCourseware($lesson['coursewareId']);
+        $courseware = $this->getCoursewareService()->getCourseware($lesson['mediaId']);
         return $this->render('CustomWebBundle:CCViedoManage:CCViedoTemplate.html.twig',array(
             'courseware' => $courseware
         ));

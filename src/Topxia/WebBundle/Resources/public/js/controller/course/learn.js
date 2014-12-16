@@ -379,6 +379,16 @@ define(function(require, exports, module) {
                         $("#lesson-text-content").scrollTop(0);
                         $("#lesson-text-content").perfectScrollbar('update');
 
+                    } else if (lesson.type == 'essay') {
+                        console.log('1111');
+                        $.get('../../course/lesson/eaasy/' + lesson.mediaId + '/preview',function(html){
+                            $("#lesson-text-content").find('.lesson-content-text-body').html(html);
+                            $("#lesson-text-content").show();
+                            $("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
+                            $("#lesson-text-content").scrollTop(0);
+                            $("#lesson-text-content").perfectScrollbar('update');
+                        });
+
                     } else if (lesson.type =="live") {
                         var liveStartTimeFormat = lesson.startTimeFormat;
                         var liveEndTimeFormat = lesson.endTimeFormat;

@@ -22,6 +22,7 @@ define(function(require, exports, module) {
 
                 $.post($form.attr('action'), $form.serialize(), function(result){
                     $modal.modal('hide');
+
                     var zTree = $.fn.zTree.getZTreeObj("knowledge-tree");
                     var node = result.tid ? zTree.getNodeByTId(result.tid) : null;
                     if(result.type) {
@@ -29,7 +30,15 @@ define(function(require, exports, module) {
                         node.id = result.knowledge.id;
                         zTree.updateNode(node);
                     } else {
-                        zTree.addNodes(node,  {id:(result.knowledge.id), pId:result.knowledge.parentId, name:result.knowledge.name, categoryId:result.knowledge.categoryId});
+                        node = zTree.addNodes(node,  {id:(result.knowledge.id), pId:result.knowledge.parentId, name:result.knowledge.name, categoryId:result.knowledge.categoryId});
+                    }
+                    if($form.find('[name=isHidden]').prop('checked')) {
+                        if($.isArray(node)) {
+                            zTree.removeNode(node[0]);
+                        } else {
+                            zTree.removeNode(node);
+                        }
+                        
                     }
                     Notify.success('保存知识点成功！');
 				}).fail(function() {

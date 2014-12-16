@@ -295,6 +295,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$course['userId'] = $this->getCurrentUser()->id;
 		$course['createdTime'] = time();
 		$course['teacherIds'] = array($course['userId']);
+		$course['type'] = empty($course['type']) ? 'normal' : $course['type'];
 
 		$course = $this->getCourseDao()->addCourse(CourseSerialize::serialize($course));
 		
@@ -388,11 +389,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	private function _filterCourse($course)
 	{
-		if(!is_array($course['subjectIds'])) {
+		if(!empty($course['subjectIds']) && !is_array($course['subjectIds'])) {
 			$course['subjectIds'] = explode(',', $course['subjectIds']);
 		}
-		if($course['type'] == 'normal') {
-			if(count($course['subjectIds']) >= 2) {
+		if(!empty($course['type']) && $course['type'] == 'normal') {
+			if(count($course['subjectIds']) != 1) {
 				throw $this->createServiceException('课程只能设置一个学科！');
 			} 	
 		}
@@ -748,6 +749,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'media' => array(),
 			'mediaId' => 0,
 			'coursewareId' => 0,
+			'essayId' => 0,
+			'testpaperId' => 0,
 			'length' => 0,
 			'startTime' => 0,
 			'giveCredit' => 0,
@@ -768,7 +771,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt','courseware'))) {
+		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt','courseware','essay'))) {
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
@@ -847,7 +850,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				$lesson['mediaSource'] = $media['source'];
 				$lesson['mediaUri'] = $media['uri'];
 			}
-		} elseif ($lesson['type'] == 'testpaper') {
+		} elseif ($lesson['type'] == 'testpaper' || $lesson['type'] == 'courseware' || $lesson['type'] == 'essay') {
 			$lesson['mediaId'] = $lesson['mediaId'];
 		} elseif ($lesson['type'] == 'live') {
 		} else {
@@ -856,9 +859,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$lesson['mediaSource'] = '';
 			$lesson['mediaUri'] = '';
 		}
-
 		unset($lesson['media']);
-
 		return $lesson;
 	}
 
@@ -917,7 +918,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'startTime' => 0,
 			'giveCredit' => 0,
 			'requireCredit' => 0,
-			'coursewareId' => 0
+			'coursewareId' => 0,
+			'essayId' => 0
 		));
 
 		if (isset($fields['title'])) {
@@ -930,7 +932,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 		
 		$this->fillLessonMediaFields($fields);
-		
 		$lesson = LessonSerialize::unserialize(
 			$this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))
 		);

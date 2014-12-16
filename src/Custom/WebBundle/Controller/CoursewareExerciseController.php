@@ -39,7 +39,7 @@ class CoursewareExerciseController extends BaseController
         }
         list($questions, $paginator, $tags, $choosedTags, $showtime) = $this->buildQuestions($request);
     	$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $courseware = $this->getCoursewareService()->getCourseware($lesson['coursewareId']);
+        $courseware = $this->getCoursewareService()->getCourseware($lesson['mediaId']);
     	$mainKnowledge = $this->getKnowledgeService()->getKnowledge($courseware['mainKnowledgeId']);
         
     	return $this->render('CustomWebBundle:CoursewareExercise:add-modal.html.twig',array(

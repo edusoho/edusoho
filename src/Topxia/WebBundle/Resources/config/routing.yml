@@ -303,6 +303,10 @@ course_lesson_media_download:
     pattern:  /course/{courseId}/lesson/{lessonId}/media_download
     defaults: { _controller: TopxiaWebBundle:CourseLesson:mediaDownload }
 
+course_lesson_essay_preview:
+    pattern:  /course/lesson/eaasy/{id}/preview
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:essayPreview }
+
 course_lesson_ppt:
     pattern:  /course/{courseId}/lesson/{lessonId}/ppt
     defaults: { _controller: TopxiaWebBundle:CourseLesson:ppt }
