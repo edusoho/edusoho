@@ -2,7 +2,7 @@
 <tr data-role='item'>
     <td><input value="{{ testpaper.id }}" type="checkbox" data-role="batch-item" ></td>
     <td>
-      <a href="{{ path('admin_testpaper_preview', {id:testpaper.id}) }}" target="_blank">{{ testpaper.name|plain_text(40) }}</a>
+      <a href="{{ path('course_manage_preview_test', {testId:testpaper.id}) }}" target="_blank">{{ testpaper.name|plain_text(40) }}</a>
     </td>
     <td>
       {% if testpaper.status == 'draft' %}草稿{% endif %}
@@ -25,7 +25,7 @@
     </td>
     <td>
         <div class="btn-group">
-          <a href="{{ path('admin_testpaper_preview', {id:testpaper.id}) }}" class="btn btn-default btn-sm disabled" target="_blank">预览</a>
+          <a href="{{ path('course_manage_preview_test', {testId:testpaper.id}) }}" class="btn btn-default btn-sm disabled" target="_blank">预览</a>
 
           <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
               <span class="caret"></span>
