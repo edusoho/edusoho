@@ -16,6 +16,12 @@
     账户余额:<br>
     <div class="row">
         <div class="col-md-offset-2" style="font-weight:400;">
+         
+       {% if setting('coin.coin_picture') %}
+          <img class="coin-picture" src="{{setting('coin.coin_picture') }}" alt="虚拟币图片">
+        {% endif %}
+
+
           <strong style="font-size:28px;">{{account.cash|default(0)}}</strong>
             {{setting('coin.coin_name')}}
              {% if setting('coin.coin_enabled') %}

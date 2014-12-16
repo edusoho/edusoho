@@ -30,7 +30,7 @@
           <label>课程价格显示</label>
         </div>
         <div class="controls col-md-4 radios">
-          {{ radios('coin_price_enabled', {'0':'RMB', '1':'虚拟币'},coin_settings_posted.coin_price_enabled) }} 
+          {{ radios('course_price_show_type', {'0':'RMB', '1':'虚拟币'},coin_settings_posted.course_price_show_type) }} 
         </div>
       </div>    
 
@@ -42,6 +42,19 @@
     			<input type="text" id="coin_name" name="coin_name" class="form-control" value="{{coin_settings_posted.coin_name}}">
     		</div>
       </div>
+
+      <div class="row form-group">
+        <div class="col-md-3 control-label">
+          <label for="coin_picture">虚拟币图片</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="hidden" name="coin_picture" id="coin_picture" value="{{setting('coin.coin_picture') }}">
+          <p>
+            <img id="picture-show" name="coin_picture"  src="{{setting('coin.coin_picture') }}" class="img-responsive" style="display:block;">
+          </p>
+          <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_coin_picture') }}" data-toggle="modal" data-target="#modal">设置图片</a>
+        </div>
+    </div>
 
         <div class="form-group">
               <div class="col-md-3 control-label">

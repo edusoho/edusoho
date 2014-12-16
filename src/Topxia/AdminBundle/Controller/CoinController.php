@@ -19,10 +19,11 @@ class CoinController extends BaseController
         $coinSettingsSaved = $coinSettingsPosted;
         $default = array(
           'coin_enabled' => 0,
-          'coin_price_enabled'=>0,
+          'course_price_show_type'=>0,
           'coin_name' => '虚拟币',
           'coin_content' => '',
           'cash_rate' => 1,
+          'coin_picture' => '',
         );
         $coinSettingsPosted = array_merge($default, $coinSettingsPosted);
       
@@ -30,15 +31,21 @@ class CoinController extends BaseController
         $coinSettingsPosted = null;
 
         $coinSettingsPosted['coin_enabled'] = $request->request->get("coin_enabled");
-        $coinSettingsPosted['coin_price_enabled'] = $request->request->get("coin_price_enabled");
+        $coinSettingsPosted['course_price_show_type'] = $request->request->get("course_price_show_type");
         $coinSettingsPosted['coin_name'] = $request->request->get("coin_name");
         $coinSettingsPosted['coin_content'] = $request->request->get("coin_content");
+        $coinSettingsPosted['coin_picture'] = $request->request->get("coin_picture");
         $this->getSettingService()->set('coin', $coinSettingsPosted);
         $this->getLogService()->info('system', 'update_settings', "更新Coin虚拟币设置", $coinSettingsPosted);
         $this->setFlashMessage('success', '虚拟币设置已保存！');      
         }
 
         return $this->settingsRenderedPage($coinSettingsPosted);
+    }
+
+    public function pictureAction(Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Coin:picture-modal.html.twig');
     }
 
     public function  recordsAction(Request $request){
