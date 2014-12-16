@@ -41,6 +41,7 @@ class MoneyCardServiceImpl extends BaseService
     {
         $batch = ArrayToolkit::parts($moneyCardData, array(
             'money',
+            'coin',
             'cardPrefix',
             'cardLength',
             'number',
@@ -49,11 +50,15 @@ class MoneyCardServiceImpl extends BaseService
         ));
 
         $batch['money'] = (int)$batch['money'];
+        $batch['coin'] = (int)$batch['coin'];
         $batch['cardLength'] = (int)$batch['cardLength'];
         $batch['number'] = (int)$batch['number'];
 
         if ($batch['money'] <= 0) {
             throw $this->createServiceException('ERROR! Money Value Less Than Zero!');
+        }
+        if ($batch['coin'] <= 0) {
+            throw $this->createServiceException('ERROR! Coin Value Less Than Zero!');
         }
         if ($batch['cardLength'] <= 0) {
             throw $this->createServiceException('ERROR! CardLength Less Than Zero!');
