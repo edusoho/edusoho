@@ -29,7 +29,8 @@ class DefaultController extends TopXiaDefaultController
         return $this->render('CustomWebBundle:Default:index.html.twig', array(
             'tags' => $tags,
             'blocks' => $blocks,
-            'consultDisplay' => true
+            'consultDisplay' => true,
+            'page'=>1
         ));
     }
 
