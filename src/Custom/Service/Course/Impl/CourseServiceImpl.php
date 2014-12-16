@@ -111,7 +111,7 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 			'complexity'=>'',
 			'originalPrice'=>'',
 			'isFree'=>'none',
-			'discount'=>'0.0',
+			'discount'=>null,
 			'columns'=>''
 
 		));
