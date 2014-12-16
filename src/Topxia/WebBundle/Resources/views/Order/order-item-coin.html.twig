@@ -4,15 +4,15 @@
     <h4 class="title">虚拟币</h4>
     <div class="price_r">
       <span class="price_r_mark">-</span>
-      <span class="pricehead">￥</span>
-      <span class="price_r_num" role="cash-discount">{{coinPrice|default(0)}}</span>
+      <span class="pricehead">{% if coursePriceShowType == "RMB" %}￥{% endif %}</span>
+      <span class="price_r_num" role="cash-discount">{{coinPreferentialPrice|default(0)}}</span>
     </div>
   </div>
   <div class="order-item-detail">
     <div class="coin-detail">
-      账户可用虚拟币 <span role="accountCash">{{cashAccount.cash|default(0)}}</span> 
+      账户可用虚拟币 <span role="accountCash">{{account.cash|default(0)}}</span> 
       本次使用
-      <input role="coinNum" type="text" value="{{coinCash|default(0)}}" maxlength="">虚拟币
+      <input role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">虚拟币
     </div>
   </div>
 </div>

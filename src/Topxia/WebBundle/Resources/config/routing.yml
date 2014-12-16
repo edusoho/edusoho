@@ -1423,10 +1423,6 @@ group_thread_delete_attach:
     defaults: { _controller: TopxiaWebBundle:GroupThread:deleteAttach }
     methods: [POST]
 
-order_create:
-    pattern:  /order/create
-    defaults: { _controller: TopxiaWebBundle:Order:create }
-
 my_coin:
     path:     /my/coin
     defaults: { _controller: TopxiaWebBundle:Coin:index }

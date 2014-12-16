@@ -11,32 +11,36 @@
       <div class="panel panel-default panel-page">
         <div class="panel-heading"><h4>订单确认</h4></div>
         <div class="panel-body">
-          <form method="post">
+          <form method="post" action="{{path('order_create')}}">
           	
-          	{% if setting('coin.charge_coin_enabled')|default(false) %}
-          	<input type="hidden" role="cash-rate" value="{{setting('coin.cash_rate')}}"/>
-          	{% else %}
-          	<input type="hidden" role="cash-rate" value="1"/>
-          	{% endif %}
+          	<input type="hidden" role="cash-rate" value="{{cashRate}}"/>
+            {% for targetType in targetTypes %}
+            <input type="hidden" name="targets[]" value="{{targetType}}-{{targetIds[loop.index0]}}"/>
+            {% endfor %}
+            <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>
+            <input type="hidden" name="coursePriceShowType" value="{{coursePriceShowType}}"/>
+            <input type="hidden" name="shouldPayMoney" value="{{shouldPayMoney}}"/>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
             {% if courses|default(null) %}
             {% include 'TopxiaWebBundle:Course:courses-block-list.html.twig' with {courses:courses} %}
             {% endif %}
 
             <div class="order-item row">
-            	<h4 class="total-price">应付金额：￥<span role="total-price">{{totalPrice}}</span></h4>
+            	<h4 class="total-price">应付{% if coursePriceShowType == "RMB" %}金额：￥{% elseif coursePriceShowType == "Coin" %}虚拟币：{% endif %}<span role="total-price">{{totalPrice}}</span></h4>
             </div>
             
-            {% if couponApp|default(null) and cashAccount|default(null)%}
+            {% if couponApp|default(null) and account|default(null)%}
             	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
             {% endif %}
 
-            {% if setting('coin.coin_enabled') and cashAccount|default(null)%}
+            {% if setting('coin.coin_enabled') and account|default(null)%}
             	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
             {% endif %}
 
             <div class="order-item row">
-            	<h4 class="total-price">实际支付：￥<span role="pay-amount">{{shouldPayPrice}}</span></h4>
+            	<h4 class="total-price">实际支付：{% if coursePriceShowType == "RMB" %}￥{% endif %}<span role="pay-amount">{{shouldPayMoney}}</span></h4>
             </div>
 
             <div class="form-group pay">

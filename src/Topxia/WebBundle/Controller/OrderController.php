@@ -8,66 +8,6 @@ use Topxia\Component\Payment\Payment;
 
 class OrderController extends BaseController
 {
-    public function createAction(Request $request)
-    {
-
-        if ($request->getMethod() == 'POST') {
-            $fields = $request->request->all();
-
-            $order = $this->getOrderService()->addOrder($fields);
-
-
-            return $this->redirect($this->generateUrl('admin_user'));
-        }
-
-        $fields = $request->query->all();
-
-        $totalPrice = 0;
-        $shouldPayPrice = 0;
-        $coinCash = 0;
-        $coinPrice = 0;
-
-        if(!empty($fields) && array_key_exists("targetType", $fields) && $fields["targetType"] == "course"){
-            $course = $this->getCourseService()->getCourse($fields["targetId"]);
-            $userIds = array();
-            $userIds = array_merge($userIds, $course['teacherIds']);
-            $users = $this->getUserService()->findUsersByIds($userIds);
-            $totalPrice += $course["price"];
-        }
-
-        $user = $this->getCurrentUser();
-        $cashAccount = $this->getCashService()->getAccountByUserId($user["id"]);
-
-        $coinSetting = $this->getSettingService()->get("coin");
-        if($totalPrice*100 > $cashAccount["cash"]/$coinSetting["cash_rate"]*100) {
-            $shouldPayPrice = $totalPrice - $cashAccount["cash"]/$coinSetting["cash_rate"];
-            $coinCash = $cashAccount["cash"];
-        } else {
-            $coinCash = $totalPrice*$coinSetting["cash_rate"];
-        }
-
-        $coinPrice = $coinCash/$coinSetting["cash_rate"];
-
-        $couponApp = $this->getAppService()->findInstallApp("Coupon");
-        $vipApp = $this->getAppService()->findInstallApp("Vip");
-
-        if(!empty($vipApp)) {
-            $vip = $this->getVipService()->getMemberByUserId($user["id"]);
-        }
-
-        return $this->render('TopxiaWebBundle:Order:order-create.html.twig', array(
-            'courses' => empty($course) ? null : array($course),
-            'users' => empty($users) ? null : $users,
-            'cashAccount' => $cashAccount,
-            'couponApp' => $couponApp,
-            'vipApp' => $vipApp,
-            'totalPrice' => $totalPrice,
-            'shouldPayPrice' => $shouldPayPrice,
-            'coinCash' => $coinCash,
-            'coinPrice' => $coinPrice,
-            'vip' => empty($vip) ? null : array($vip)
-        ));
-    }
 
     public function submitPayRequestAction(Request $request , $order, $requestParams)
     {

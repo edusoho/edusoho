@@ -15,96 +15,79 @@ class CourseOrderController extends OrderController
 
     public function buyAction(Request $request, $id)
     {   
+        $fields = $request->query->all();
+
+        $coinPayAmount = 0;
+        $totalMoneyPrice = 0;
+        $totalCoinPrice = 0;
+
+        $totalPrice = 0;
+        $coinPreferentialPrice = 0;
+        $shouldPayMoney = 0;
+
         $course = $this->getCourseService()->getCourse($id);
+        $userIds = array();
+        $userIds = array_merge($userIds, $course['teacherIds']);
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $totalMoneyPrice += $course["price"];
+        $totalCoinPrice += $course["coinPrice"];
+
+        $coinSetting = $this->getSettingService()->get("coin");
+        
+        $cashRate = 1;
+        if(array_key_exists("cash_rate", $coinSetting)) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
 
         $user = $this->getCurrentUser();
+        $account = $this->getCashService()->getAccountByUserId($user["id"]);
+        $accountCash = $account["cash"];
 
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+        if($totalMoneyPrice*100 > $accountCash/$cashRate*100) {
+            $shouldPayMoney = $totalMoneyPrice - $accountCash/$cashRate;
+            $coinPayAmount = $accountCash;
+        } else {
+            $coinPayAmount = $totalMoneyPrice*$cashRate;
         }
 
-        $remainingStudentNum = $this->getRemainStudentNum($course);
-        $previewAs = $request->query->get('previewAs');
+        $couponApp = $this->getAppService()->findInstallApp("Coupon");
+        $vipApp = $this->getAppService()->findInstallApp("Vip");
 
-        $payTypeChoices = $request->query->get('payTypeChoices');
-        
-        $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
-        $member = $this->previewAsMember($previewAs, $member, $course);
-
-        $courseSetting = $this->getSettingService()->get('course', array());
-
-        $userInfo = $this->getUserService()->getUserProfile($user['id']);
-        $userInfo['approvalStatus'] = $user['approvalStatus'];
-        
-        $code = 'ChargeCoin';
-        $ChargeCoin = $this->getAppService()->findInstallApp($code);
-
-        $account=$this->getCashService()->getAccountByUserId($user['id'],true);
-        
-         if(empty($account)){
-        $this->getCashService()->createAccount($user['id']);
+        if(!empty($vipApp)) {
+            $vip = $this->getVipService()->getMemberByUserId($user["id"]);
         }
 
-        if(isset($account['cash']))
-        $account['cash']=intval($account['cash']);
-    
-        $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
-        $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
-        
-        $course = $this->getCourseService()->getCourse($id);
-
-        $coursesPrice=$courseSetting['coursesPrice'];
-
-        if($coursesPrice == 1){
-            $course['price'] =0;
-            $course['coinPrice'] =0;
+        $coursePriceShowType = "RMB";
+        if(array_key_exists("course_price_show_type", $coinSetting)) {
+            $coursePriceShowType = $coinSetting["course_price_show_type"];
         }
 
-        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-
-        for($i=0;$i<count($userFields);$i++){
-           if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
-           if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
-           if(strstr($userFields[$i]['fieldName'], "intField")) $userFields[$i]['type']="int";
-           if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
-           if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
+        if($coursePriceShowType == "RMB") {
+            $totalPrice = $totalMoneyPrice;
+            $coinPreferentialPrice = $coinPayAmount/$cashRate;
+        } else if ($coursePriceShowType == "Coin") {
+            $totalPrice = $totalCoinPrice;
+            $coinPreferentialPrice = $coinPayAmount;
         }
 
-        if ($remainingStudentNum == 0 && $course['type'] == 'live') {
-            return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
-                'course' => $course
-            ));
-        }
+        return $this->render('TopxiaWebBundle:Order:order-create.html.twig', array(
+            'courses' => empty($course) ? null : array($course),
+            'users' => empty($users) ? null : $users,
+            'account' => $account,
+            'couponApp' => $couponApp,
+            'vipApp' => $vipApp,
+            'cashRate' => $cashRate,
 
-        $oldOrders = $this->getOrderService()->searchOrders(array(
-                'targetType' => 'course',
-                'targetId' => $course['id'],
-                'userId' => $user['id'],
-                'status' => 'created',
-                'createdTimeGreaterThan' => strtotime('-40 hours'),
-            ), array('createdTime', 'DESC'), 0, 1
-        );
+            'totalPrice' => $totalPrice,
+            'shouldPayMoney' => $shouldPayMoney,
+            'coinPayAmount' => $coinPayAmount,
+            'coinPreferentialPrice' => $coinPreferentialPrice,
 
-        $order = current($oldOrders);
+            'targetIds' => array($id),
+            'targetTypes' => array("course"),
+            'coursePriceShowType' => $coursePriceShowType,
 
-        if($course['price'] > 0 && $order && ($course['price'] == ($order['amount'] + $order['couponDiscount'])) ) {
-             return $this->render('TopxiaWebBundle:CourseOrder:repay.html.twig', array(
-                'order' => $order,
-            ));
-        }
-
-        return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
-            'course' => $course,
-            'payments' => $this->getEnabledPayments(),
-            'user' => $userInfo,
-            'avatarAlert' => AvatarAlert::alertJoinCourse($user),
-            'courseSetting' => $courseSetting,
-            'member' => $member,
-            'userFields'=>$userFields,
-            'payTypeChoices'=>$payTypeChoices,
-            'account'=>$account,
-            'amount'=>$amount,
-            'ChargeCoin'=> $ChargeCoin
+            'vip' => empty($vip) ? null : array($vip)
         ));
     }
 
@@ -145,50 +128,86 @@ class CourseOrderController extends OrderController
         ));
     }
 
-    public function payAction(Request $request)
+    public function payAction(Request $request, $courseId)
     {
-        $formData = $request->request->all();
-
-        if(isset($formData['payTypeChoices']))
-        {
-            if($formData['payTypeChoices'] == "chargeCoin"){
-               $formData['payment'] = 'coin';
-            }
-        }
-
+        $fields = $request->request->all();
         $user = $this->getCurrentUser();
-        if (empty($user)) {
+
+        if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，创建课程订单失败。');
         }
 
-        $userInfo = ArrayToolkit::parts($formData, array(
-            'truename',
-            'mobile',
-            'qq',
-            'company',
-            'weixin',
-            'weibo',
-            'idcard',
-            'gender',
-            'job',
-            'intField1','intField2','intField3','intField4','intField5',
-            'floatField1','floatField2','floatField3','floatField4','floatField5',
-            'dateField1','dateField2','dateField3','dateField4','dateField5',
-            'varcharField1','varcharField2','varcharField3','varcharField4','varcharField5','varcharField10','varcharField6','varcharField7','varcharField8','varcharField9',
-            'textField1','textField2','textField3','textField4','textField5', 'textField6','textField7','textField8','textField9','textField10',
-        ));
-        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+        if(!array_key_exists("targets", $fields)) {
+            return $this->createMessageResponse('error', '订单中没有购买的内容，不能创建!');
+        }
+        $targets = $fields["targets"];
+        
+        $targetTypes = array();
+        $targetIds = array();
 
-        $order = $this->getCourseOrderService()->createOrder($formData);
-        if($order['payment'] == 'coin') {
-            $password = $request->request->get('password');
-
-            if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
-                return $this->createMessageResponse('error', '密码错误。');
-            }
-            $order = $this->getCourseOrderService()->paymentByCoin($order['id']);
+        foreach ($targets as $key => $value) {
+            $target = explode("-",$value);
+            $targetTypes[] = $target[0];
+            $targetIds[] = $target[1];
         }
 
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coursePriceShowType = "RMB";
+        if(array_key_exists("course_price_show_type", $coinSetting)) {
+            $coursePriceShowType = $coinSetting["course_price_show_type"];
+        }
+        $cashRate = 1;
+        if(array_key_exists("cash_rate", $coinSetting)) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
+
+        $totalPrice = 0;
+        foreach ($targetTypes as $key => $value) {
+            if("course" == $value) {
+                $course = $this->getCourseService()->getCourse($targetIds[$key]);
+                if($coursePriceShowType == "RMB") {
+                    $totalPrice += $course["price"];
+                } else if ($coursePriceShowType == "Coin") {
+                    $totalPrice += $course["coinPrice"];
+                }
+            }
+        }
+
+        if($totalPrice != $fields["totalPrice"]) {
+            return $this->createMessageResponse('error', '实际价格不匹配，不能创建订单!');
+        }
+
+        //虚拟币优惠价格
+        $coinPayAmmount = $fields["coinPayAmmount"];
+        $coinPreferentialPrice = 0;
+        if($coursePriceShowType == "RMB") {
+            $coinPreferentialPrice = $coinPayAmmount/$cashRate;
+        } else if ($coursePriceShowType == "Coin") {
+            $coinPreferentialPrice = $coinPayAmmount;
+        }
+
+        //优惠码优惠价格 TODO
+
+        $amount = $totalPrice - $coinPreferentialPrice;
+        if($amount != $fields["actualPrice"]) {
+            return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
+        }
+
+        $cashRate = 1;
+        if(array_key_exists("cash_rate", $coinSetting)) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
+
+        $order = array(
+            'priceType' => $coursePriceShowType,
+            'totalPrice' => $totalPrice,
+            'amount' => $amount,
+            'cashRate' => $cashRate,
+            'coinAmount' => $coinPayAmmount,
+            
+        );
+
+        $order = $this->getCourseOrderService()->createOrder($order);
 
         if ($order['status'] == 'paid') {
             return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));

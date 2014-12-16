@@ -6,7 +6,7 @@
     <a href="javascript:;" class="cancel" role="cancel-coupon" style="display: none;">取消使用</a>
     <div class="price_r" role="coupon-price">
         <span class="price_r_mark">-</span>
-        <span class="pricehead">￥</span>
+        <span class="pricehead">{% if coursePriceShowType == "RMB" %}￥{% endif %}</span>
         <span class="price_r_num">0.0</span>
     </div>
   </div>
