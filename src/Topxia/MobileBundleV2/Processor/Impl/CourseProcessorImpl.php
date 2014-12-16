@@ -128,6 +128,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		unset($formData['imageCount']);
 
 		$post = $this->controller->getThreadService()->updatePost($courseId, $postId, $formData);
+		PushService->sendMsg("user02","学完了");
 		return $post;
 	}
 
