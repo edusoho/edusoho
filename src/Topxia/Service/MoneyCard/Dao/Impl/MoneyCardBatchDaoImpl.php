@@ -63,7 +63,8 @@ class MoneyCardBatchDaoImpl extends BaseDao
     {
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'batch')
-            ->andWhere('cardPrefix = :cardPrefix');
+            ->andWhere('cardPrefix = :cardPrefix')
+            ->andWhere('batchName LIKE :batchName');
     }
 
 }
