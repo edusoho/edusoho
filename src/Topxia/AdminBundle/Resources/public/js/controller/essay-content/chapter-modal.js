@@ -36,7 +36,8 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '#chapter-title-field',
-            required: true
+            required: true,
+            display: '章节名' 
         });
 
         validator.on('formValidated', function(error, msg, $form) {
