@@ -6,6 +6,10 @@ course_show:
     pattern:  /course/{id}
     defaults: { _controller: CustomWebBundle:Course:show }
 
+course_preview:
+    pattern:  /course/{id}/preview
+    defaults: { _controller: CustomWebBundle:Course:preview }
+
 course_header:
     pattern:  /course/{id}/header
     defaults: { _controller: CustomWebBundle:Course:header }
@@ -101,7 +105,6 @@ course_review_list:
 course_review_create:
     pattern:  /course/{id}/review/create
     defaults: { _controller: CustomWebBundle:CourseReview:create }
-
 
 
 
