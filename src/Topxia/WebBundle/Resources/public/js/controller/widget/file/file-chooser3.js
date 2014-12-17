@@ -5,9 +5,10 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
 
-    var FileBrowser1 = require('../file/file-browser-material-lib');
-
-    var FileBrowser2 = require('../file/file-browser');
+    if ($("div .file-browser-list-container").length > 0) {
+        var MaterialFileBrowser = require('../file/file-browser-material-lib');
+    }
+    var CourseFileBrowser = require('../file/file-browser');
 
     var FileChooser = Widget.extend({
         attrs: {
@@ -119,19 +120,20 @@ define(function(require, exports, module) {
         _initFileBrowser: function() {
             var self = this;
 
-            var browser = new FileBrowser1({
-                element: this.$('[data-role=file-browser]')
-            }).show();
+            if ($("div .file-browser-list-container").length > 0) {
+                    var materialBrowser = new MaterialFileBrowser({
+                        element: this.$('[data-role=file-browser]')
+                    }).show();
 
-            browser.on('select', function(file) {
-                self.trigger('change', self.get("uploadPanel")._convertFileToMedia(file));
-            });
-
-            var browser1 = new FileBrowser2({
+                    materialBrowser.on('select', function(file) {
+                        self.trigger('change', self.get("uploadPanel")._convertFileToMedia(file));
+                    });
+            }
+            var courseBrowser = new CourseFileBrowser({
                 element: this.$('[data-role=course-file-browser]')
             }).show();
 
-            browser1.on('select', function(file) {
+            courseBrowser.on('select', function(file) {
                 self.trigger('change', self.get("uploadPanel")._convertFileToMedia(file));
             });
         },
