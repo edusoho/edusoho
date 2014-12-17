@@ -70,7 +70,8 @@ class WebExtension extends \Twig_Extension
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
             'isHide'=>new \Twig_Function_Method($this, 'isHideThread'),
-            'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
+            'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),            
+            'getBatchNameById' => new \Twig_Function_Method($this, 'getBatchNameById'),
         );
     }
 
@@ -652,6 +653,16 @@ class WebExtension extends \Twig_Extension
     private function getUserById($userId)
     {
         return ServiceKernel::instance()->createService('User.UserService')->getUser($userId);
+    }
+
+    public function getBatchNameById($Id)
+    {
+        $batch = $this->getBatchById($Id);
+        return $batch['batchName'];
+    }
+    private function getBatchById($Id)
+    {
+        return ServiceKernel::instance()->createService('MoneyCard.MoneyCardService')->getBatch($Id);
     }
 
     public function getSetting($name, $default = null)
