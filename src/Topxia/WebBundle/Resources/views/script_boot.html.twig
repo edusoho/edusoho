@@ -1,8 +1,11 @@
 {% if setting('consult.enabled', 0) and (consultDisplay|default(false) or siteNav|default() == '/' ) %}
 {% set consult = setting('consult') %}
+  <div id="float-carts" class="float-carts">
+    <span class="btn btn-{{consult.color}}"><span class="glyphicon glyphicon-shopping-cart"></span></span>
+  </div>
+
   <div id="float-consult" class="float-consult">
     <div class="btn-group-vertical">
-
       {% set break = 0 %}
       {% for qq in consult.qq if qq.name is not empty and break == 0 %}
         <span class="btn btn-{{consult.color}} float-consult-qq-btn" data-container=".float-consult-qq-btn" data-title="QQ客服" data-content-element="#consult-qq-content"><span class="icon icon-qq"></span></span>
@@ -31,6 +34,10 @@
     </div>
 
     <div class="consult-contents">
+      <div id="consult-shopping-content">
+        asdasdasdasdsadasd
+      </div>
+
       <div id="consult-qq-content">
         {% for qq in consult.qq if qq.name is not empty %}
           <p>
