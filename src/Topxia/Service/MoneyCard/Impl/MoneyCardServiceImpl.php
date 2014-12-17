@@ -118,7 +118,7 @@ class MoneyCardServiceImpl extends BaseService
         if (empty($moneyCard)) {
             throw $this->createServiceException('充值卡不存在，作废失败！');
         }
-        if ($moneyCard['cardStatus'] == 'invalid') {
+        if ($moneyCard['cardStatus'] == 'invalid' && $moneyCard['rechargeUserId'] != 0) {
             $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'], array('cardStatus' => 'normal'));
 
             $this->getLogService()->info('money_card', 'unlock', "启用了卡号为{$moneyCard['cardId']}的充值卡");
@@ -168,7 +168,8 @@ class MoneyCardServiceImpl extends BaseService
         $this->getMoneyCardDao()->updateBatchByCardStatus(
             array(
             'batchId'    => $batch['id'],
-            'cardStatus' => 'invalid'
+            'cardStatus' => 'invalid',
+            'rechargeUserId' => 0,
             ),
             array('cardStatus' => 'normal')
         );
