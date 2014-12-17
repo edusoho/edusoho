@@ -215,7 +215,9 @@ class CourseOrderController extends OrderController
             return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
         }
 
-        return $this->redirect($this->generateUrl('pay_center_show', array('id' => $order['id'])));
+        return $this->redirect($this->generateUrl('pay_center_show', array(
+            'id' => $order['id']
+        )));
 
     }
 

@@ -15,7 +15,10 @@ class PayCenterController extends BaseController
 
 		return $this->render('TopxiaWebBundle:PayCenter:show.html.twig', array(
             'order' => $order,
-            'payments' => $this->getEnabledPayments()
+            'payments' => $this->getEnabledPayments(),
+            'returnUrl' => $fields["returnUrl"],
+            'notifyUrl' => $fields["notifyUrl"],
+            'showUrl' => $fields["showUrl"],
         ));
 	}
 
@@ -41,9 +44,10 @@ class PayCenterController extends BaseController
 		if ($order['status'] == 'paid') {
             return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
         } else {
+
             $payRequestParams = array(
-                'returnUrl' => $this->generateUrl('course_order_pay_return', array('name' => $order['payment']), true),
-                'notifyUrl' => $this->generateUrl('course_order_pay_notify', array('name' => $order['payment']), true),
+                'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
+                'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
                 'showUrl' => $this->generateUrl('course_show', array('id' => $order['targetId']), true),
             );
 
@@ -53,6 +57,34 @@ class PayCenterController extends BaseController
             ));
         }
 	}
+
+    public function payReturnAction(Request $request, $name)
+    {
+        $controller = $this;
+        return $this->doPayReturn($request, $name, function($success, $order) use(&$controller) {
+            if (!$success) {
+                $controller->generateUrl('course_show', array('id' => $order['targetId']));
+            }
+
+            $controller->getCourseOrderService()->doSuccessPayOrder($order['id']);
+
+            return $controller->generateUrl('course_show', array('id' => $order['targetId']));
+        });
+    }
+
+    public function payNotifyAction(Request $request, $name)
+    {
+        $controller = $this;
+        return $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
+            if (!$success) {
+                return ;
+            }
+
+            $controller->getCourseOrderService()->doSuccessPayOrder($order['id']);
+
+            return ;
+        });
+    }
 
 	private function getEnabledPayments()
     {

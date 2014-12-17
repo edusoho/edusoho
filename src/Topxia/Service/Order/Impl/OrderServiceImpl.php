@@ -498,6 +498,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $conditions;
     }
 
+    private function getCashService()
+    {
+        return $this->createService('Cash.CashService');
+    }
+
     private function getLogService()
     {
         return $this->createService('System.LogService');

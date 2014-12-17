@@ -12,6 +12,7 @@
         <div class="panel-body">
           <form method="post" action="{{path('pay_center_pay')}}">
             <input type="hidden" name="orderId" value="{{order.id}}"/>
+            
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
             
           	<div class="form-group">

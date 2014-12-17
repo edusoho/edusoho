@@ -1455,6 +1455,14 @@ pay_center_pay:
     defaults: { _controller: TopxiaWebBundle:PayCenter:pay }
     methods: [POST]
 
+pay_center_pay_return:
+    pattern:  /pay/center/pay/{name}/return
+    defaults: { _controller: TopxiaWebBundle:PayCenter:payReturn }
+
+pay_center_pay_notify:
+    pattern:  /pay/center/pay/{name}/notify
+    defaults: { _controller: TopxiaWebBundle:PayCenter:payNotify }
+
 #占位
 vip:
     pattern: /vip/
