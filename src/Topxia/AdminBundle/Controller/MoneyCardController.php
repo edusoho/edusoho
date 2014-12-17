@@ -146,12 +146,14 @@ class MoneyCardController extends BaseController
             $batch['number']
         );
 
-        $str = "卡号,密码,批次"."\r\n";
+        $str = "卡号,密码,批次id,批次"."\r\n";
 
         $moneyCards = array_map(function($moneyCard){
             $card['cardId']   = $moneyCard['cardId'];
             $card['password'] = $moneyCard['password'];
             $card['batchId']  = $moneyCard['batchId'];
+            $batch = $this->getMoneyCardService()->getBatch($moneyCard['batchId']);
+            $card['batchName']  = $batch['batchName'];
             return implode(',',$card);
         }, $moneyCards);
 

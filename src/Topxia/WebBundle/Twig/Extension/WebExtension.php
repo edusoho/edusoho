@@ -70,6 +70,7 @@ class WebExtension extends \Twig_Extension
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
             'isHide'=>new \Twig_Function_Method($this, 'isHideThread'),
+            'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
         );
     }
 
@@ -643,6 +644,15 @@ class WebExtension extends \Twig_Extension
         return $purifier->purify($html);
     }
 
+    public function getUserNickNameById($userId)
+    {
+        $user = $this->getUserById($userId);
+        return $user['nickname'];
+    }
+    private function getUserById($userId)
+    {
+        return ServiceKernel::instance()->createService('User.UserService')->getUser($userId);
+    }
 
     public function getSetting($name, $default = null)
     {
