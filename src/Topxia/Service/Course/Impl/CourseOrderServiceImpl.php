@@ -72,19 +72,14 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order['targetType'] = 'course';
             $order['targetId'] = $course['id'];
             $order['payment'] = $info['payment'];
+            $order['amount'] = $info['amount'];
+            $order['priceType'] = $info['priceType'];
+            $order['totalPrice'] = $info["totalPrice"];
+            $order['coinRate'] = $info['coinRate'];
+            $order['coinAmount'] = $info['coinAmount'];
 
             $courseSetting=$this->getSettingService()->get('course',array());
             $coursesPrice=$courseSetting['coursesPrice'];
-
-            if($coursesPrice == 1){
-                $order['amount'] = 0;
-            }else{
-                if($info['payment'] == 'alipay'){
-                    $order['amount'] = $course['price'];
-                }else{
-                    $order['amount'] = $course['coinPrice'];
-                }
-            }
             
             if($order['amount'] > 0){
                 //如果是限时打折，判断是否在限免期，如果是，则Amout为0

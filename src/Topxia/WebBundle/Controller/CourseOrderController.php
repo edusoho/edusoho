@@ -188,7 +188,6 @@ class CourseOrderController extends OrderController
         }
 
         //优惠码优惠价格 TODO
-
         $amount = $totalPrice - $coinPreferentialPrice;
         // if($amount != $fields["actualPrice"]) {
         //     return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
@@ -203,7 +202,7 @@ class CourseOrderController extends OrderController
             'priceType' => $coursePriceShowType,
             'totalPrice' => $totalPrice,
             'amount' => $amount,
-            'cashRate' => $cashRate,
+            'coinRate' => $cashRate,
             'coinAmount' => $coinPayAmount,
             'userId' => $user["id"],
             'payment' => 'alipay',
@@ -211,6 +210,10 @@ class CourseOrderController extends OrderController
         );
 
         $order = $this->getCourseOrderService()->createOrder($order);
+        
+        if($order["status"] == 'paid'){
+            return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
+        }
 
         return $this->redirect($this->generateUrl('pay_center_show', array('id' => $order['id'])));
 
