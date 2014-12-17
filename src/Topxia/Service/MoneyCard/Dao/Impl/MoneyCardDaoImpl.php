@@ -97,7 +97,8 @@ class MoneyCardDaoImpl extends BaseDao
             ->andWhere('cardId = :cardId')
             ->andWhere('deadline = :deadline')
             ->andWhere('batchId = :batchId')
-            ->andWhere('deadline <= :deadlineSearch');
+            ->andWhere('deadline <= :deadlineSearchEnd')
+            ->andWhere('deadline >= :deadlineSearchBegin');
     }
 
 }
