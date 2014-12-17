@@ -4,6 +4,8 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Component\Payment\Payment;
+use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class PayCenterController extends BaseController
 {
@@ -48,7 +50,7 @@ class PayCenterController extends BaseController
             $payRequestParams = array(
                 'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
                 'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
-                'showUrl' => $this->generateUrl('course_show', array('id' => $order['targetId']), true),
+                'showUrl' => $this->generateUrl('pay_target_show', array('id' => $order['id']), true),
             );
 
             return $this->forward('TopxiaWebBundle:Order:submitPayRequest', array(
@@ -84,6 +86,94 @@ class PayCenterController extends BaseController
 
             return ;
         });
+    }
+
+    public function showAction(Request $request)
+    {
+        $orderId = $request->query->get("id");
+        $order = $this->getOrderService()->getOrder($orderId);
+
+        $processor = OrderProcessorFactory::create($order["targetType"]);
+
+        $router = $processor->getRouter();
+
+        return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
+    }
+
+    protected function doPayReturn(Request $request, $name, $successCallback = null)
+    {
+        $this->getLogService()->info('order', 'pay_result',  "{$name}页面跳转支付通知", $request->query->all());
+        $response = $this->createPaymentResponse($name, $request->query->all());
+
+        $payData = $response->getPayData();
+
+        if ($payData['status'] == "waitBuyerConfirmGoods") {
+            return $this->forward("TopxiaWebBundle:Order:resultNotice");
+        }
+
+        list($success, $order) = $this->getOrderService()->payOrder($payData);
+
+        if ($order['status'] == 'paid' and $successCallback) {
+            $successUrl = $successCallback($success, $order);
+        }
+
+        $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
+        return $this->redirect($goto);
+    }
+
+    protected function doPayNotify(Request $request, $name, $successCallback = null)
+    {
+        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
+        $response = $this->createPaymentResponse($name, $request->request->all());
+
+        $payData = $response->getPayData();
+        try {
+            list($success, $order) = $this->getOrderService()->payOrder($payData);
+            if ($order['status'] == 'paid' and $successCallback) {
+                $successCallback($success, $order);
+            }
+
+            return new Response('success');
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    private function createPaymentResponse($name, $params)
+    {
+        $options = $this->getPaymentOptions($name);
+        $response = Payment::createResponse($name, $options);
+
+        return $response->setParams($params);
+    }
+
+    private function getPaymentOptions($payment)
+    {
+        $settings = $this->setting('payment');
+
+        if (empty($settings)) {
+            throw new \RuntimeException('支付参数尚未配置，请先配置。');
+        }
+
+        if (empty($settings['enabled'])) {
+            throw new \RuntimeException("支付模块未开启，请先开启。");
+        }
+
+        if (empty($settings[$payment. '_enabled'])) {
+            throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
+        }
+
+        if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
+            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
+        }
+
+        $options = array(
+            'key' => $settings["{$payment}_key"],
+            'secret' => $settings["{$payment}_secret"],
+            'type' => $settings["{$payment}_type"]
+        );
+
+        return $options;
     }
 
 	private function getEnabledPayments()
