@@ -8,9 +8,8 @@ define(function(require,exports,module){
 
             open: function ()
             {
-                console.log('open')
-                    this.hidePlaceholder();
-                    this.showPanel();
+                this.hidePlaceholder();
+                this.showPanel();
             },
 
             searchItems: function ($paras)

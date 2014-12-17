@@ -11,7 +11,6 @@ define(function(require,exports,module) {
 
         _onClickImportBtn: function (e)
         {
-            console.log('_onClickImportBtn')
             $url = this.element.find('#courseware-url-field').val();
             $re = this._getUrlRule();
             if ($re.test($url)) {
