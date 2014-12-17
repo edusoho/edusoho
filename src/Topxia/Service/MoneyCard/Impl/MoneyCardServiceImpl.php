@@ -221,8 +221,8 @@ class MoneyCardServiceImpl extends BaseService
 
     private function makePassword ($length)
     {
-        $password = '';
-        for ($j=0; $j < (int)$length; $j++) {
+        $password = chr(rand(97, 122));
+        for ($j=0; $j < ((int)$length)-1; $j++) {
                 $password .= mt_rand(0, 9);
             }
 
