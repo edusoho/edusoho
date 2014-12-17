@@ -14,6 +14,13 @@ class MoneyCardDaoImpl extends BaseDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
+    public function getMoneyCardByCardId($cardId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE cardId = ? LIMIT 1";
+
+        return $this->getConnection()->fetchAssoc($sql, array($cardId)) ? : null;
+    }    
+
 	public function searchMoneyCards($conditions, $orderBy, $start, $limit)
     {
         $this->checkOrderBy($orderBy, array('id','createdTime'));

@@ -30,9 +30,11 @@ class RegisterController extends BaseController
 
                 $captchaCode = $request->getSession()->get('captcha_code');   
               
-                if ($captchaCode != $captchaCodePostedByUser){   
+                if ($captchaCode != $captchaCodePostedByUser){ 
+                    $request->getSession()->set('captcha_code',mt_rand(0,9999999));  
                     throw new \RuntimeException('验证码错误。');
                 }
+                $request->getSession()->set('captcha_code',mt_rand(0,9999999));
             }
 
             $registration['createdIp'] = $request->getClientIp();

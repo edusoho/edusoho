@@ -22,6 +22,9 @@
             {% if setting('coin.charge_coin_enabled') %}
             <a href="{{path('my_coin_buy')}}" class="mll" style="color: #428bca;">充值</a>
             {% endif %}
+              {% if is_plugin_installed('MoneyCard') %}
+                <a href="{{path('money_card_use')}}" class="mll" style="color: #428bca;">学习卡充值</a>
+              {% endif %}
             {% endif %}
         </div>
 

@@ -11,7 +11,10 @@ class MoneyCardServiceImpl extends BaseService
     {
 		return $this->getMoneyCardDao()->getMoneyCard($id);
 	}
-
+    public function getMoneyCardByCardId($cardId)
+    {
+        return $this->getMoneyCardDao()->getMoneyCardByCardId($cardId);
+    }
     public function getBatch ($id)
     {
         return $this->getMoneyCardBatchDao()->getBatch($id);
@@ -229,6 +232,12 @@ class MoneyCardServiceImpl extends BaseService
         return $password;
     }
 
+    public function updateMoneyCard($id, $fields)
+    {
+        $moneyCard = $this->getMoneyCard($id);
+        $this->getLogService()->info('money_card', 'update', "update卡号为{$moneyCard['cardId']}的充值卡");
+        return $this->getMoneyCardDao()->updateMoneyCard($id, $fields);
+    }
 
     private function getMoneyCardDao()
     {
