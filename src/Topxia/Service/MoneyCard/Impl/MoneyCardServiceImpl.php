@@ -189,6 +189,9 @@ class MoneyCardServiceImpl extends BaseService
 
     private function makeRands ($median, $number, $cardPrefix, $passwordLength)
     {
+        if ($median <= 3){
+            throw new \RuntimeException('Bad median');
+        }
         $cardIds = array();
         $i = 0;
         while(true) {
