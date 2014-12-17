@@ -13,14 +13,30 @@ define(function(require,exports,module){
     var relatedKnowledgeIds = [];
     var queryUrl = "";
 
+    var CoursewareChooser = require('../widget/media-chooser/courseware-chooser');
+    var EssayChooser = require('../widget/media-chooser/essay-chooser');
+    var TestpaperChooser = require('../widget/media-chooser/testpaper-chooser');
+
     exports.run = function(){
-        var $tagIds = [];
-        var $mainKnowledgeId = [];
-        var $relatedKnowledgeIds = [];
         var $form = $("#course-lesson-form");
         var $testpaperFlag = 0;
         var $coursewareFlag = 0;
         var $essayFlag = 0;
+
+        var coursewareChooser = new CoursewareChooser({
+            type:'courseware',
+            element:'.courseware-chooser-module'
+        });
+
+        var essayChooser = new EssayChooser({
+            type:'essay',
+            element:'.essay-chooser-module'
+        });
+
+        var testpaperChooser = new TestpaperChooser({
+            type:'testpaper',
+            element:'.testpaper-chooser-module'
+        });
 
         $modal = $form.parents('.modal');
          $form.on('change','[name=type]:checked',function(e){
@@ -63,14 +79,14 @@ define(function(require,exports,module){
             _initTagChooser('#tag-chooser2');
             _initMainknowledgeTagChooser('#mainKnowledge-chooser2');
             _initRelatedknowledgeTagChooser('#relatedknowledges-chooser');
-            _initImportBtn('#import-courseware-url');
         }
 
         function _initCourseware()
         {
-            _hideEssayChooserModule();
-            _hideTestpaperChooserModule();
-            _showCoursewareChooserModule();
+            essayChooser.hideModule();
+            testpaperChooser.hideModule();
+            coursewareChooser.showModule();
+
             if ($coursewareFlag == 0) {
                 $coursewareFlag = 1;
                 validator = _initValidator($form, $modal);
@@ -79,23 +95,23 @@ define(function(require,exports,module){
 
         function _initEssay()
         {
-            _hideCoursewareChooserModule();
-            _hideTestpaperChooserModule();
-            _showEssayChooserModule();
+            coursewareChooser.hideModule();
+            testpaperChooser.hideModule();
+            essayChooser.showModule();
+
             if ($essayFlag == 0) {
                 $essayFlag = 1;
                 validator = _initValidatorForEssay($form, $modal);
             };
             _searchEssaysBtnOnclick();
             _searchEssayItems();
-            _triggerForEssay();
         }
 
         function _initTestpaper()
         {
-            _hideCoursewareChooserModule();
-            _hideEssayChooserModule();
-            _showTestpaperChooserModule();
+            coursewareChooser.hideModule();
+            essayChooser.hideModule();
+            testpaperChooser.showModule();
 
             if ($testpaperFlag == 0) {
                 $testpaperFlag = 1;
@@ -105,7 +121,6 @@ define(function(require,exports,module){
             };
             _searchTestpapersBtnOnclick();
             _searchTestpaperItems();
-            _triggerForTestpaper();
         }
 
         function _initEditEssay()
@@ -113,14 +128,14 @@ define(function(require,exports,module){
             var validator = _initValidatorForEssay($form, $modal);
             var $value = $('[data-role=operate-flag-essay]').val();
 
-            _hideCoursewarePanel();
-            _hideCoursewareChooserModule();
-            _showEssayChooserModule();
+            coursewareChooser.hidePanel();
+            coursewareChooser.hideModule();
+            essayChooser.showModule();
+
             if ($value > 0) {
-                _hideEssayPanel();
-                _showEssayPlaceholder();
+                essayChooser.hidePanel();
+                essayChooser.showPlaceholder();
                 _searchEssaysBtnOnclick();
-                _triggerForEssay();
             };
 
          }
@@ -128,22 +143,21 @@ define(function(require,exports,module){
         function _initEditCourseware()
         {
             $('[data-role=loading]').addClass('hide');
-            _showCoursewareChooserModule();
+            coursewareChooser.showModule();
             var $value = $('[data-role=operate-flag]').val();
             validator = _initValidator($form, $modal);
 
             if ($value > 0) {
-                _showCoursewarePlaceholder();
-                _hideCoursewarePanel();
+                coursewareChooser.showPlaceholder();
+                coursewareChooser.hidePanel();
             }
 
             if ($value == 0) {
-                _showCoursewaresPanel();
+                coursewareChooser.showPanel();
                 _initTagChooser('#tag-chooser');
                 _initMainknowledgeTagChooser('#mainKnowledge-chooser');
             };
 
-            _trigger();
             _searchCoursewaresBtnOnclick();
         }
 
@@ -201,26 +215,6 @@ define(function(require,exports,module){
             });
         }
 
-        function _initImportBtn(element)
-        {
-            $(element).on('click',function(){
-                $url = $('#courseware-url-field').val();
-                $re = _getUrlRule();
-                if ($re.test($url)) {
-                    $(this).button('loading');
-                    $.post($(this).data('url'),{url:$url},function(result){
-                        if (result.status) {
-                            $('[data-role=courseware-title]').html('<p class=\'text-danger\'>此URL有误，请检查</p>');
-                            $(element).button('reset');
-                            return;
-                        };
-                        $('[data-role=courseware-title]').html(result.title);
-                        $(element).button('reset');
-                    });
-                }
-            });
-        }
-
         function _initSearchCoursewares()
         {
             _searchCoursewareItems();
@@ -229,66 +223,21 @@ define(function(require,exports,module){
         function _searchEssayItems()
         {
             var $keyword = $('[name=essayKeyword]').val();
-            $btn = $("[data-role=search-essays-btn]");
-
-            $.get($btn.data('url'),{keyword:$keyword},function(items){
-                _commonSearchItems($btn,items,'essay');
-            });
+            essayChooser.searchItems({keyword:$keyword});
         }
 
         function _searchTestpaperItems()
         {
             var $keyword = $('[name=testpaperKeyword]').val();
             var $categoryId = $('[name=categoryId]').val();
-            $btn = $("[data-role=search-testpapers-btn]");
 
-            $.get($btn.data('url'),{categoryId:$categoryId,keyword:$keyword,tagIds:tagIdsForTestpaper,mainKnowledgeId:mainKnowledgeIdForTestpaper},function(items){
-                _commonSearchItems($btn,items,'testpaper')
-            });
+            testpaperChooser.searchItems({categoryId:$categoryId,keyword:$keyword,tagIds:tagIdsForTestpaper,mainKnowledgeId:mainKnowledgeIdForTestpaper});
         }
 
         function _searchCoursewareItems()
         {
             var $keyword = $('[name=coursewareKeyword]').val();
-            var $btn = $('[data-role=search-coursewares-btn]');
-
-            $.get($btn.data('url'),{mainKnowledgeId:mainKnowledgeId,tagIds:tagIds,keyword:$keyword},function(items){
-                _commonSearchItems($btn,items,'courseware');
-                $('[data-role=trigger]').on('click',function(){
-                    _hideCoursewarePlaceholder();
-                    _showCoursewaresPanel();
-                });
-            });
-        }
-
-        function _commonSearchItems($element,items,type)
-        {
-            var html = "";
-
-            $element.text('搜索');
-
-            $.each(items,function(index,item){
-                var title = item.title;
-                if (type == 'testpaper') {
-                    title = item.name;
-                };
-                html += "<tr style=\"cursor:pointer;\" data-role=\"search-"+type+"-item\" data-id=\""+item.id+"\"><td>"+title+"</td></tr>"
-            });
-            $('.search-'+type+'-result-table').find('tbody').html(html);
-            $('[data-role=search-'+type+'-item]').on('click',function(){
-                $('[data-role='+type+'-placeholder]').attr("data-id",$(this).data('id'));
-                $('[data-role='+type+'-placeholder]').html($(this).find('td').text());
-                if (type == 'courseware') {
-                    _hideCoursewarePanel();
-                    _showCoursewarePlaceholder();
-                } else if (type == 'essay') {
-                    _hideEssayPanel();
-                    _showEssayPlaceholder();
-                } else if (type == 'testpaper') {
-                    _hideTestpaperPanel();
-                    _showTestpaperPlaceholder();
-                }
-            });
+            coursewareChooser.searchItems({mainKnowledgeId:mainKnowledgeId,tagIds:tagIds,keyword:$keyword});
         }
 
         function _initValidatorForEssay($form, $modal)
@@ -401,7 +350,7 @@ define(function(require,exports,module){
 
                     var $btn = $('#lesson-operate-btn');
 
-                    $activeRole = _getActiveRole();
+                    $activeRole = coursewareChooser.getActiveRole();
                     if ($activeRole == 'coursewares-chooser') {
                         $coursewareId = $('[data-role=courseware-placeholder]').data('id');
                         if (!$coursewareId) {
@@ -412,7 +361,6 @@ define(function(require,exports,module){
                             };
                             return false;
                         };
-
                         $btn.button('submiting').button('loading').addClass('disabled');
                         $.post($form.attr('action'),$form.serialize()+'&mediaId='+$coursewareId,function(){
                             Notify.success('操作成功！');
@@ -475,20 +423,6 @@ define(function(require,exports,module){
             });
 
             return validator;
-        }
-
-        function _getActiveRole()
-        {
-            $activeItem = " ";
-            $coursewareTab = $('#coursewareTab');
-            $coursewareTab.find('li').each(function(index,item){
-                if ($(item).hasClass('active')) {
-                    $activeItem = $(item);
-                    $activeItem = $activeItem.find('a').data('role');
-                };
-            });
-
-            return $activeItem;
         }
 
         function _initTagChooser(element)
@@ -602,120 +536,6 @@ define(function(require,exports,module){
         function _getUrlRule()
         {
             return /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
-        }
-
-        function _trigger()
-        {
-            $('[data-role=trigger]').on('click',function(){
-                _hideCoursewarePlaceholder();
-                _showCoursewaresPanel();
-            });
-        }
-
-        function _triggerForEssay()
-        {
-            $('[data-role=essay-trigger]').on('click',function(){
-                _hideEssayPlaceholder();
-                _showEssayPanel();
-            });
-        }
-
-        function _triggerForTestpaper()
-        {
-            $('[data-role=testpaper-trigger]').on('click',function(){
-                _hideTestpaperPlaceholder();
-                _showTestpaperPanel();
-            });
-        }
-
-        function _hideTestpaperPanel()
-        {
-            $('.testpaper-chooser').addClass('hide');
-        }
-
-        function _showTestpaperPanel()
-        {
-            $('.testpaper-chooser').removeClass('hide');
-        }
-
-        function _showTestpaperChooserModule()
-        {
-            $('.testpaper-chooser-module').removeClass('hide');
-        }
-
-        function _hideTestpaperChooserModule()
-        {
-            $('.testpaper-chooser-module').addClass('hide');
-        }
-
-        function _showEssayChooserModule()
-        {
-            $('.essay-chooser-module').removeClass('hide');
-        }
-
-        function _hideEssayChooserModule()
-        {
-            $('.essay-chooser-module').addClass('hide');
-        }
-
-        function _showCoursewareChooserModule()
-        {
-            $('.courseware-chooser-module').removeClass('hide');
-        }
-
-        function _hideCoursewareChooserModule()
-        {
-            $('.courseware-chooser-module').addClass('hide');
-        }
-
-        function _showCoursewarePlaceholder()
-        {
-            $('[data-role=courseware-placeholder]').parent().removeClass('hide');
-        }
-
-        function _hideCoursewarePlaceholder()
-        {
-            $('[data-role=courseware-placeholder]').parent().addClass('hide');
-        }
-
-        function _showTestpaperPlaceholder()
-        {
-            $('[data-role=testpaper-placeholder]').parent().removeClass('hide');
-        }
-
-        function _hideTestpaperPlaceholder()
-        {
-            $('[data-role=testpaper-placeholder]').parent().addClass('hide');
-        }
-
-        function _showEssayPlaceholder()
-        {
-            $('[data-role=essay-placeholder]').parent().removeClass('hide');
-        }
-
-        function _hideEssayPlaceholder()
-        {
-            $('[data-role=essay-placeholder]').parent().addClass('hide');
-        }
-
-        function _showCoursewaresPanel()
-        {
-            $('.courseware-chooser').removeClass('hide');
-        }
-
-        function _hideCoursewarePanel()
-        {
-            $('.courseware-chooser').addClass('hide');
-        }
-
-        function _hideEssayPanel()
-        {
-            $('.essay-chooser').addClass('hide');
-        }
-
-        function _showEssayPanel()
-        {
-            $('.essay-chooser').removeClass('hide');
         }
     }
 });

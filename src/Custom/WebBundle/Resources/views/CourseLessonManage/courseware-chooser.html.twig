@@ -25,7 +25,7 @@
         <div class="help-block" data-role="loading">数据加载中...</div>
         <div class="file-chooser-bar hide">
             <span data-role="courseware-placeholder" {% if courseware|default(null) %} data-id="{{ courseware.id }}"{% endif %}>{{ courseware.title|default('') }}</span>
-            <div class="btn btn-link btn-sm" data-role="trigger"><i class="glyphicon glyphicon-edit"></i>编辑</div>
+            <div class="btn btn-link btn-sm" data-role="courseware-trigger"><i class="glyphicon glyphicon-edit"></i>编辑</div>
         </div>
         <div class="courseware-chooser hide">
           <div class="form-group">
