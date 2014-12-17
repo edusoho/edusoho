@@ -235,12 +235,18 @@ define(function(require, exports, module) {
 
                 if(parseInt(now.getFullYear()) > v.split('-')[0]){
                     return false;
+                }else{
+                    return true;
                 }
                 if(parseInt(now.getMonth()+1) > v.split('-')[1] ){
                     return false;
+                }else{
+                    return true;
                 }
                 if(parseInt(now.getDate())> v.split('-')[2]){
                     return false;
+                }else{
+                    return true;
                 }
                 return true;
             },"有效期必须大于等于当前日期"
