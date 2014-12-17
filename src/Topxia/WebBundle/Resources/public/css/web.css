@@ -4341,7 +4341,7 @@ a.homework-essay-textarea-pack-up{
     right: 0;
     top: 50%;
     visibility: hidden;
-    z-index: 999999;
+    z-index: 9999;
 }
 
 .float-consult .popover {
@@ -4408,6 +4408,14 @@ a.homework-essay-textarea-pack-up{
 /**
  * </在线客服>
  */
+
+.float-carts{
+    position: fixed;
+    right: 0;
+    top: 25%;
+    visibility: hidden;
+    z-index: 999999;
+}
 
 .thread-list {
 
