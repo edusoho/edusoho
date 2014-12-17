@@ -226,7 +226,25 @@ define(function(require, exports, module) {
                     return false;
                 }
             },"开始时间必须小于或等于结束时间"
-        ]
+        ],
+        [
+            'deadline_date_check',
+            function(opt) {
+                var now = new Date;
+                var v = opt.element.val();
+
+                if(parseInt(now.getFullYear()) > v.split('-')[0]){
+                    return false;
+                }
+                if(parseInt(now.getMonth()+1) > v.split('-')[1] ){
+                    return false;
+                }
+                if(parseInt(now.getDate())> v.split('-')[2]){
+                    return false;
+                }
+                return true;
+            },"有效期必须大于等于当前日期"
+        ]        
     ];
 
     exports.inject = function(Validator) {
