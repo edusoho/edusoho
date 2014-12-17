@@ -196,11 +196,12 @@ class MoneyCardServiceImpl extends BaseService
             for ($j=0; $j < (int)$median-3; $j++) {
                 $id .= mt_rand(0, 9);
             }
-            $id = substr(crc32($id),0,3).$id;
+            $tmpId = $cardPrefix.$id;
+            $id = $tmpId.substr(crc32($tmpId),0,3);
 
 
-            if (!isset($cardIds[$cardPrefix.$id])) {
-                $cardIds[$cardPrefix.$id] = $this->makePassword($passwordLength);
+            if (!isset($cardIds[$id])) {
+                $cardIds[$id] = $this->makePassword($passwordLength);
                 $i++;
             }
             if ($i >= $number) {
@@ -210,9 +211,9 @@ class MoneyCardServiceImpl extends BaseService
         return $cardIds;
     }
 
-    public function checkCardId($cardId)
+    public function checkCardId($cardIdWithPrefix)
     {
-        return substr(crc32(substr($cardId, 3)),0,3) == substr($cardId,0,3);
+        return substr(crc32(substr($cardIdWithPrefix,0,-3)),0,3) == substr($cardIdWithPrefix,-3,3);
     }
 
     private function makePassword ($length)
