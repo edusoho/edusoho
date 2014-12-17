@@ -146,14 +146,20 @@ class MoneyCardController extends BaseController
             $batch['number']
         );
 
-        $str = "卡号,密码,批次id,批次"."\r\n";
+        $str = "卡号,密码,批次id,批次,有效期,状态,使用状态,使用者id,使用者,使用时间"."\r\n";
 
         $moneyCards = array_map(function($moneyCard){
             $card['cardId']   = $moneyCard['cardId'];
             $card['password'] = $moneyCard['password'];
             $card['batchId']  = $moneyCard['batchId'];
-            $batch = $this->getMoneyCardService()->getBatch($moneyCard['batchId']);
+            $batch = $this->getMoneyCardService()->getBatch($moneyCard['batchId']);            
             $card['batchName']  = $batch['batchName'];
+            $card['deadline']  = $moneyCard['deadline'];
+            $card['cardStatus'] = $moneyCard['cardStatus'] == 'normal'?'未作废':'已作废';
+            $card['rechargeStatus'] = $moneyCard['rechargeUserId']==0?'未使用':'已使用';
+            $card['rechargeUserId'] = $moneyCard['rechargeUserId']!=0?:'--';
+            $card['rechargeUserNickName'] = $moneyCard['rechargeUserId']==0?'--':$this->getUserService()->getUser($moneyCard['rechargeUserId'])['nickname'];
+            $card['rechargeTime'] = $moneyCard['rechargeUserId']==0?'--':date('Y-m-d H:i:s', $moneyCard['rechargeTime']);
             return implode(',',$card);
         }, $moneyCards);
 
@@ -173,6 +179,10 @@ class MoneyCardController extends BaseController
         return $response;
     }
 
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
 	private function getMoneyCardService()
     {
         return $this->getServiceKernel()->createService('MoneyCard.MoneyCardService');
