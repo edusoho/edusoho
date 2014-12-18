@@ -129,9 +129,9 @@ define(function(require, exports, module) {
             content: function() {
                 var url = '../../carts/show'
                 $.get(url,function(html){
-                    return 
+                    return html
                 })
-                return $($(this).data('contentElement')).html();
+                return $('#consult-qq-content').html();
             }
         });
     }

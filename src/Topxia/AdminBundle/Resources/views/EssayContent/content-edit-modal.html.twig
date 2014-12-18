@@ -42,7 +42,7 @@
       <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
       <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">
   </form>
-    {% include 'CustomWebBundle:Tag:tagchooser-overlay.html.twig' with {id: 'tags-search', type: 'question'} %}
+    {% include 'CustomWebBundle:Tag:tagchooser-overlay.html.twig' with {id: 'tags-search', type: 'library'} %}
     {% include 'CustomWebBundle:Tag:tagchooser-knowledge-overlay.html.twig' with {id: 'knowledges-search', categoryId: category.id} %}
 </div>
 
