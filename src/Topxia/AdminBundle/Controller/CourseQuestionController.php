@@ -15,6 +15,16 @@ class CourseQuestionController extends BaseController
         if ( isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle'){
             $courses = $this->getCourseService()->findCoursesByTitleLike(trim($conditions['keyword']));
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
+            if (count($conditions['courseIds']) == 0){
+                return $this->render('TopxiaAdminBundle:CourseQuestion:index.html.twig', array(
+                    'paginator' =>  new Paginator($request,0,20),
+                    'questions' => array(),
+                    'users'=> array(),
+                    'courses' => array(),
+                    'lessons' => array(),
+                    'type' => $postStatus                    
+                ));
+            }  
         }               
         $conditions['type'] = 'question';
         if($postStatus == 'unPosted'){
