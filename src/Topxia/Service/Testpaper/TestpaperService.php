@@ -95,4 +95,6 @@ interface TestpaperService
 
     public function updateTestpaperItems($testpaperId, $items);
 
+    public function makeItemsByPart($part);
+
 }

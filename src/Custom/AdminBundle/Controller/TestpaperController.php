@@ -132,6 +132,12 @@ class TestpaperController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function buildItemsAction(Request $request)
+    {
+        $part = json_decode($request->query->get('part'), true);
+        $result = $this->getTestpaperService()->makeItemsByPart($part);
+        return $this->createJsonResponse($result);
+    }
     public function updateAction(Request $request, $id)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($id);
@@ -202,6 +208,55 @@ class TestpaperController extends BaseController
         ));
     }
 
+    public function previewAction(Request $request, $id)
+    {
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        if (empty($testpaper)) {
+            throw $this->createNotFoundException();
+        }
+        if($testpaper['pattern'] == 'QuestionType') {
+            $this->redirect($this->generateUrl('course_manage_preview_test', array('testId' => $id)));
+        }
+        if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])){
+            throw $this->createAccessDeniedException('无权预览试卷！');
+        }
+
+        $items = $this->getTestpaperService()->previewTestpaper($testId);
+
+        $total = $this->makeTestpaperTotal($testpaper, $items);
+
+        return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
+            'items' => $items,
+            'limitTime' => $testpaper['limitedTime'] * 60,
+            'paper' => $testpaper,
+            'id' => 0,
+            'isPreview' => 'preview',
+            'total' => $total
+        ));
+    }
+
+    private function makeTestpaperTotal ($testpaper, $items)
+    {
+        $total = array();
+        foreach ($testpaper['metas']['question_type_seq'] as $type) {
+            if (empty($items[$type])) {
+                $total[$type]['score'] = 0;
+                $total[$type]['number'] = 0;
+                $total[$type]['missScore'] = 0;
+            } else {
+                $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
+                $total[$type]['number'] = count($items[$type]);
+                if (array_key_exists('missScore', $testpaper['metas']) and array_key_exists($type, $testpaper["metas"]["missScore"])){
+                    $total[$type]['missScore'] =  $testpaper["metas"]["missScore"][$type];
+                } else {
+                    $total[$type]['missScore'] = 0;
+                }
+            }
+        }
+
+        return $total;
+    }
+    
     private function getTestpaperWithException($course, $testpaperId)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);

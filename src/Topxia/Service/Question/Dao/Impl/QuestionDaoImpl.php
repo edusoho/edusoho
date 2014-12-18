@@ -214,7 +214,9 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         if (isset($conditions['tagIds'])) {
 
             $tagIds = $conditions['tagIds'];
-            $tagIds = explode(',', $tagIds);
+            if(!is_array($tagIds)) {
+                $tagIds = explode(',', $tagIds);
+            }
             foreach ($tagIds as $key => $tagId) {
                 if (preg_match('/^[0-9]+$/', $tagId)) {
                     $builder->andStaticWhere("tagIds LIKE '%{$tagId}%'");
@@ -225,7 +227,9 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         if (isset($conditions['knowledgeIds']) && !empty($conditions['knowledgeIds'])) {
 
             $knowledgeIds = $conditions['knowledgeIds'];
-            $knowledgeIds = explode(',', $knowledgeIds);
+            if(!is_array($knowledgeIds)) {
+                $knowledgeIds = explode(',', $knowledgeIds);
+            }
             $ors = array();
             foreach ($knowledgeIds as $key => $knowledgeId) {
                 if (preg_match('/^[0-9]+$/', $knowledgeId)) {

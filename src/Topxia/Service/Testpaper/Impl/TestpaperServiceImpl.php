@@ -63,8 +63,18 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $fields['score'] += $part['score'] * $part['count'];
             $fields['itemCount'] += $part['count'];
         }
-
-        return $this->getTestpaperDao()->addTestpaper($this->filterTestpaperFields($fields, 'create'));
+        $fields = $this->filterTestpaperFields($fields, 'create');
+        $this->getTestpaperDao()->getConnection()->beginTransaction();
+        try{
+            $testpaper = $this->getTestpaperDao()->addTestpaper($this->filterTestpaperFields($fields, 'create'));
+            $this->buildTestpaperAdvanced($testpaper['id'], $fields);
+            $this->getTestpaperDao()->getConnection()->commit();
+        }catch(Exception $e) {
+            $this->getTestpaperDao()->getConnection()->rollBack();
+            $this->createServiceException($e->getMessage());
+        }
+        
+        return $testpaper;
     }
 
     public function updateTestpaper($id, $fields)
@@ -77,6 +87,24 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->updateTestpaper($id, $fields);
     }
 
+    private function filterTestpaperPart($part)
+    {
+        $filtedFields = array();
+        $filtedFields['id'] = $part['id'];
+        $filtedFields['keywords'] = $part['keywords'];
+        $filtedFields['name'] = $part['name'];
+        $filtedFields['type'] = $part['type'];
+        $filtedFields['count'] = (int) $part['count'];
+        $filtedFields['knowledgeIds'] = empty($part['knowledgeIds']) ? array() : explode(',', $part['knowledgeIds']);
+        $filtedFields['tagIds'] = empty($part['tagIds']) ? array() : explode(',', $part['tagIds']);
+        $filtedFields['excludeIds'] = empty($part['excludeIds']) ? array() : explode(',', $part['excludeIds']);
+        $filtedFields['score'] = empty($part['score']) ? 0 : (int) $part['score'];
+        $filtedFields['missScore'] = empty($part['missScore']) ? 0 : (int) $part['missScore'];
+        $filtedFields['mistakeScore'] = empty($part['mistakeScore']) ? 0 : (int) $part['mistakeScore'];
+        $filtedFields['items'] = empty($part['items']) ? array() : $part['items'];
+
+        return $filtedFields;
+    }
     private function filterTestpaperFields($fields, $mode = 'create')
     {
         $filtedFields = array();
@@ -212,6 +240,18 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         ));
 
         return $items;
+    }
+
+    public function buildTestpaperAdvanced($id, $fields)
+    {
+        $parts = $fields['metas']['parts'];
+        foreach ($parts as $part) {
+            $part = $this->filterTestpaperPart($part);
+            foreach ($part['items'] as $item) {
+                $item['testId'] = $id;
+                $this->getTestpaperItemDao()->addItem($item);
+            }
+        }
     }
 
     public function canBuildTestpaper($builder, $options)
@@ -830,6 +870,35 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         ));
 
 
+    }
+
+    public function makeItemsByPart($part)
+    {
+        $part = $this->filterTestpaperPart($part);
+        $conditions = array(
+            'knowledgeIds' => $part['knowledgeIds'],
+            'type' => $part['type'],
+            'tagIds' => $part['tagIds'],
+            'excludeIds' => $part['excludeIds'],
+            'parentId' => 0
+        );
+        $questions = $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $part['count']);
+        $items = array();
+        $index = 1;
+        $excludeIds = array();
+        foreach ($questions as $question) {
+            $items[] = array(
+                'questionId' => $question['id'],
+                'seq' => $index,
+                'questionType' => $part['type'],
+                'partId' => $part['id'],
+                'score' => $part['score'],
+                'missScore' => $part['missScore'],
+                'mistakeScore' => $part['mistakeScore'] 
+            );
+            $excludeIds[] = $question['id'];
+        }
+        return array('items' => $items, 'excludeIds' => implode(',', $excludeIds));
     }
 
     public function canTeacherCheck($id)

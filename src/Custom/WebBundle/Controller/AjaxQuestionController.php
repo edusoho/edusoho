@@ -12,6 +12,7 @@ class AjaxQuestionController extends BaseController
     public function getQuestionsCountAction(Request $request)
     {
         $conditions = $request->query->all();
+        $conditions['parentId'] = 0;
         $count = $this->getQuestionService()->searchQuestionsCount($conditions);
         return $this->createJsonResponse($count);
     }

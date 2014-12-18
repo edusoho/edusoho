@@ -30,15 +30,16 @@ define(function(require, exports, module) {
             'single_choice' : {name:'单选题', type: 'single_choice', mistakeScore: 0 },
             'choice' : {name:'多选题', type: 'choice', mistakeScore: 0, missScore: 0 },
             'uncertain_choice' : {name:'不定向选择题', type: 'uncertain_choice', mistakeScore: 0 },
-            'fill': {name:'多选题', type: 'fill' },
+            'fill': {name:'填空题', type: 'fill' },
             'determine' : {name:'判断题', type: 'single_choice', mistakeScore: 0 },
             'essay': {name:'问答题', type: 'essay' },
-            'material' : {name:'材料题', type: 'essay' }
+            'material' : {name:'材料题', type: 'material' }
         },
 
         _tagPartChooser: null,
 
         setup:function() {
+            this.buildItemsUrl = this.element.data('buildItemsUrl');
             this.createValidator();
             if (this.get('haveBaseFields') === true) {
                 this.initBaseFields();
@@ -191,7 +192,7 @@ define(function(require, exports, module) {
         },
 
         _createPartHtml: function(part) {
-            var html = '<tr class="testpaper-part testpaper-part-' + part.id + ' '+ part.type +'" data-count="'+ part.count +'">';
+            var html = '<tr class="testpaper-part testpaper-part-' + part.id + ' '+ part.type + '">';
             html += '<td><a href="javascript:;" class="testpaper-part-sort-handler"><span class="glyphicon glyphicon-move"></span></a></td>';
             html += '<td>' + part.name + '</td>';
             html += '<td>' + part.count + '道，总分' + (part.count*part.score) + '分</td>';
@@ -219,30 +220,34 @@ define(function(require, exports, module) {
             var $partForm = $('.testpaper-part-form');
             var $modal = $("#testpaper-part-modal");
             var type = $modal.find('input[name=type]').val();
-            var tagIds = $.merge($form.find('[name=tagIds]').val().split(','), $partForm.find('[name=tagIds]').val().split(','));
-            tagIds = $.unique(tagIds);
-            tagIds = tagIds.join(',');
-            if(tagIds.indexOf(',') == 0) {
-                tagIds = tagIds.substring(1);
-            }
-            if(tagIds.lastIndexOf(',') == tagIds.length-1) {
-                tagIds = tagIds.substring(0, tagIds.length-1);
-            }
-            
+            var tagIds = this._setPartTagIds($form.find('[name=tagIds]').val(), $partForm.find('[name=tagIds]').val());
             $modal.find('#testpaper-count-field-span').html('查询中...');
 
+            var used = 0,
+                count = 0;
+            $form.find('.testpaper-parts-list').find('.'+type).each(function(){
+                used = parseInt($(this).data().count)+used;
+            });
             $.get($('#testpaper-count-field').data('url'), {type:type,knowledgeIds:$form.find('[name=knowledgeIds]').val(), tagIds:tagIds}, function(total){
-                var used = 0,
-                    count = 0;
-                $form.find('.testpaper-parts-list').find('.'+type).each(function(){
-                    used = parseInt($(this).data('count'))+used;
-                });
-                count = total - used;
+                count = (total - used) <= 0 ? 0 : (total - used);
                 $modal.find('#testpaper-count-field-span').html('(共'+count+'题)');
                 $modal.find('#testpaper-count-field-span').data('num', count);
             });
         },
-
+        _setPartTagIds: function(formTagIds, partTagIds) {
+            var tagIds = $.unique($.merge(formTagIds.split(','), partTagIds.split(',')));
+            tagIds = tagIds.join(',');
+            return this._trim(tagIds, ',');
+        },
+        _trim: function(str, delimiter) {
+            if(str.indexOf(',') == 0) {
+                str = str.substring(1);
+            }
+            if(str.lastIndexOf(',') == str.length-1) {
+                str = str.substring(0, str.length-1);
+            }
+            return str;
+        },
         _initPartForm: function() {
             var self = this;
             var validator = new Validator({
@@ -253,6 +258,16 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: 'input[name=score]',
                 required: true,
+                rule: 'integer'
+            });
+
+            validator.addItem({
+                element: 'input[name=mistakeScore]',
+                rule: 'integer'
+            });
+
+            validator.addItem({
+                element: 'input[name=missScore]',
                 rule: 'integer'
             });
 
@@ -268,13 +283,32 @@ define(function(require, exports, module) {
                 }
 
                 var $modal = $('#testpaper-part-modal');
+                
                 var formData = $form.serializeArray();
                 var part = {};
                 $.each(formData, function(i, field) {
                     part[field.name] = field.value;
                 });
+                
+                part.knowledgeIds = self.element.find('[name=knowledgeIds]').val();
+                part.tagIds = self._setPartTagIds(part.tagIds, self.element.find('[name=tagIds]').val());
+                var excludeIds = '';
+                $('.testpaper-parts-list').find('.'+part.type).each(function(){
+                    excludeIds = excludeIds + ',' + $(this).data().excludeIds;
+                });
+                part.excludeIds = self._trim(excludeIds, ',');
+                part.id = part.id || self._createPartId();
+                $.ajax({
+                    type: "GET",
+                    url: self.buildItemsUrl,
+                    data: {part:JSON.stringify(part)},
+                    async: false,
+                    success: function(result){
+                        part.items = result.items; 
+                        part.excludeIds = result.excludeIds;
+                    }
+                });
                 if ($modal.find('.part-save-btn').data('modal') == 'create') {
-                    part.id = self._createPartId();
                     var $html = self._createPartHtml(part);
                     $('.testpaper-parts-table tbody').append($html);
                 } else {
@@ -282,7 +316,6 @@ define(function(require, exports, module) {
                 }
                 self._setPartsInput();
                 $modal.modal('hide');
-
                 return false;
 
             });
@@ -293,6 +326,7 @@ define(function(require, exports, module) {
             var $form = $('#testpaper-form');
             var parts = [];
             $form.find('.testpaper-part').each(function(i, tr){
+
                 parts.push($(tr).data());
             });
 
@@ -378,7 +412,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return ;
                 }
-
+               
                 $form[0].submit();
 
 

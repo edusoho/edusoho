@@ -19,6 +19,10 @@ admin_testpaper_build_check:
     pattern: /testpaper/build_check
     defaults: { _controller: CustomAdminBundle:Testpaper:buildCheck }
 
+admin_testpaper_build_items:
+    pattern: /testpaper/build/items
+    defaults: { _controller: CustomAdminBundle:Testpaper:buildItems }
+
 admin_testpaper_deletes:
     pattern: /testpaper/deletes
     defaults: { _controller: CustomAdminBundle:Testpaper:deletes }

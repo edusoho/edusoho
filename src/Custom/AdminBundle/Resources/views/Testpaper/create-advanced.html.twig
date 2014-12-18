@@ -23,7 +23,7 @@
       <li class="active">高级组卷</li>
     </ol>
 
-    <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true">
+    <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true" data-build-items-url="{{ path('admin_testpaper_build_items') }}">
       {{ web_macro.flash_messages() }}
 
       {% include 'CustomAdminBundle:Testpaper:testpaper-form-base-fields.html.twig'%}
