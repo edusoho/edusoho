@@ -13,14 +13,18 @@ class CartsServiceImpl extends BaseService  implements CartsService
 
     public function searchCarts (array $conditions, array $oderBy, $start, $limit)
     {
-        return $this->getCartsDao()->searchCarts($conditions, $oderBy, $start, $limit);
+        return $this->getCartsDao()->searchCartss($conditions, $oderBy, $start, $limit);
     }
 
     public function searchCartsCount(array $conditions)
     {
-        return $this->getCartsDao()->searchCartsCount($conditions);
+        return $this->getCartsDao()->searchCartssCount($conditions);
     }
 
+    public function findLimitCartsByUseId($limit,$userId)
+    {
+        return $this->getCartsDao()->findLimitCartsByUseId($limit,$userId);
+    }
 
     public function addCarts(array $carts)
     {
@@ -35,21 +39,8 @@ class CartsServiceImpl extends BaseService  implements CartsService
 
     public function deleteCarts ($id)
     {
-        return $this->getCartsDao()->deleteCarts($id);
+        $this->getCartsDao()->deleteCarts($id);
 
-    }
-
-    public function deleteCartsByIds($ids)
-    {
-        if (count($ids) == 1) {
-            $this->deleteCarts($ids[0]);
-        } else {
-            foreach ($ids as $key => $id) {
-                $this->deleteCarts($id);
-            }
-        }
-
-        return true;
     }
 
     private function getCartsDao()

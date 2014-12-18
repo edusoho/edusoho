@@ -31,16 +31,6 @@ class CartsController extends BaseController
         # code...
     }
 
-    private function getCartsService()
-    {
-        return $this->getServiceKernel()->createService('Custom:Carts.CartsService');
-    }
-
-    private function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
     public function deleteAction(Request $request)
     {
         $ids = $request->request->get('ids', array());
