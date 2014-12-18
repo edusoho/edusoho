@@ -25,8 +25,19 @@ class ReviewPostDaoImpl extends BaseDao implements ReviewPostDao
             return array();
         }
         $marks = str_repeat('?,', count($reviewIds) - 1) . '?';
-        $sql ="SELECT * FROM {$this->getTablename()} WHERE reviewId IN ({$marks});";
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE reviewId IN ({$marks}) ORDER BY createdTime DESC;";
         return $this->getConnection()->fetchAll($sql, $reviewIds);
+	}
+	
+	public function deleteReviewPost($id)
+	{
+		return $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
+	}
+
+	public function updateReviewPost($id,$fields)
+	{
+		$this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
+        return $this->getReviewPost($id);
 	}
 	
 	private function getTablename()

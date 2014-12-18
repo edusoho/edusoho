@@ -40,22 +40,69 @@ class CourseReviewController extends BaseController
     {
         $user=$this->getCurrentUser();
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        if(in_array($user['id'], $course['teacherIds']) || $user->isAdmin()){
-            $fields = $request->request->all();
-            $fields['userId']= $user['id'];
-            $fields['courseId']= $id;
-            $this->getReviewService()->saveReviewPost($fields);
-
-            $review=$this->getReviewService()->getReview($fields['reviewId']);
-            $reviewPosts=$this->getReviewService()->findReviewPostsByReviewIds(array($fields['reviewId']));
-            $postUsers =$this->getUserService()->findUsersByIds(ArrayToolkit::column($reviewPosts, 'userId'));
-            $reviewPosts = ArrayToolkit::group($reviewPosts,'reviewId');
-            return $this->render('TopxiaWebBundle:CourseReview:post-list.html.twig', array(
-                'review' => $review,
-                'reviewPosts' => $reviewPosts,
-                'postUsers'=>$postUsers
-            ));
+        if(!in_array($user['id'], $course['teacherIds']) && !$user->isAdmin()){
+            throw $this->createAccessDeniedException("您不能新增评论回复。");
         }
+        $fields = $request->request->all();
+        $fields['userId']= $user['id'];
+        $fields['courseId']= $id;
+        $this->getReviewService()->saveReviewPost($fields);
+
+        $review=$this->getReviewService()->getReview($fields['reviewId']);
+        $reviewPosts=$this->getReviewService()->findReviewPostsByReviewIds(array($fields['reviewId']));
+        $postUsers =$this->getUserService()->findUsersByIds(ArrayToolkit::column($reviewPosts, 'userId'));
+        $reviewPosts = ArrayToolkit::group($reviewPosts,'reviewId');
+        return $this->render('TopxiaWebBundle:CourseReview:post-list.html.twig', array(
+            'review' => $review,
+            'reviewPosts' => $reviewPosts,
+            'postUsers'=>$postUsers,
+            'course'=>$course
+        ));
+
+    }
+
+    public function deletePostAction(Request $request, $courseId,$postId)
+    {
+        $user=$this->getCurrentUser();
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        $reviewPost=$this->getReviewService()->getReviewPost($postId);
+        if(empty($reviewPost)){
+            throw $this->createNotFoundException("课程评论回复不存在，或已删除。");
+        }
+        $this->getReviewService()->deleteReviewPost($postId);
+        $review=$this->getReviewService()->getReview($reviewPost['reviewId']);
+        $reviewPosts=$this->getReviewService()->findReviewPostsByReviewIds(array($reviewPost['reviewId']));
+        $postUsers =$this->getUserService()->findUsersByIds(ArrayToolkit::column($reviewPosts, 'userId'));
+        $reviewPosts = ArrayToolkit::group($reviewPosts,'reviewId');
+        return $this->render('TopxiaWebBundle:CourseReview:post-list.html.twig', array(
+            'review' => $review,
+            'reviewPosts' => $reviewPosts,
+            'postUsers'=>$postUsers,
+            'course'=>$course
+        ));
+    }
+
+    public function editPostAction(Request $request, $courseId,$postId)
+    {
+        $user=$this->getCurrentUser();
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        $reviewPost=$this->getReviewService()->getReviewPost($postId);
+        if(empty($reviewPost)){
+            throw $this->createNotFoundException("课程评论回复不存在，或已删除。");
+        }
+        $fields = $request->request->all();
+        $this->getReviewService()->updateReviewPost($postId,$fields);
+        
+        $review=$this->getReviewService()->getReview($reviewPost['reviewId']);
+        $reviewPosts=$this->getReviewService()->findReviewPostsByReviewIds(array($reviewPost['reviewId']));
+        $postUsers =$this->getUserService()->findUsersByIds(ArrayToolkit::column($reviewPosts, 'userId'));
+        $reviewPosts = ArrayToolkit::group($reviewPosts,'reviewId');
+        return $this->render('TopxiaWebBundle:CourseReview:post-list.html.twig', array(
+            'review' => $review,
+            'reviewPosts' => $reviewPosts,
+            'postUsers'=>$postUsers,
+            'course'=>$course
+        ));
     }
 
     private function reviewList(Request $request, $id)

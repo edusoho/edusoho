@@ -8,6 +8,11 @@ use Topxia\Common\ArrayToolkit;
 
 class ReviewServiceImpl extends BaseReviewServiceImpl implements ReviewService
 {
+	public function getReviewPost($id)
+	{
+		return $this->getReviewPostDao()->getReviewPost($id);
+	}
+
 	public function saveReviewPost($fields)
 	{
 		if (!ArrayToolkit::requireds($fields, array('courseId', 'reviewId','userId', 'content'))) {
@@ -34,11 +39,31 @@ class ReviewServiceImpl extends BaseReviewServiceImpl implements ReviewService
 		return $reviewPost;
 	}
 
+	public function updateReviewPost($id,$fields)
+	{
+		if (!ArrayToolkit::requireds($fields, array('content'))) {
+			throw $this->createServiceException('参数不正确，评价失败！');
+		}
+		$post = $this->getReviewPostDao()->getReviewPost($id);
+		if (empty($post)) {
+			throw $this->createServiceException('回复不存在，更新失败！');
+		}
+		$post['content']=$fields['content'];
+		return $this->getReviewPostDao()->updateReviewPost($id,$post);
+
+		
+	}
+
 	public function findReviewPostsByReviewIds(array $reviewIds)
 	{
 		return $this->getReviewPostDao()->findReviewPostsByReviewIds($reviewIds);
 	}
 
+	public function deleteReviewPost($id)
+	{
+		return $this->getReviewPostDao()->deleteReviewPost($id);
+	}
+	
 	private function getCourseService()
     {
     	return $this->createService('Course.CourseService');

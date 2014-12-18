@@ -9,4 +9,8 @@ interface ReviewPostDao
 	public function addReviewPost($reviewPost);
 
 	public function findReviewPostsByReviewIds(array $reviewIds);
+
+	public function deleteReviewPost($id);
+
+	public function updateReviewPost($id,$fields);
 }

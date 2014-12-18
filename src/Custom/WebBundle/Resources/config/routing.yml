@@ -110,6 +110,14 @@ course_review_post_create:
     pattern:  /course/{id}/review/post/create
     defaults: { _controller: CustomWebBundle:CourseReview:createPost }
 
+course_review_post_delete:
+    pattern:  /course/{courseId}/review/post/{postId}/delete
+    defaults: { _controller: CustomWebBundle:CourseReview:deletePost }
+
+course_review_post_edit:
+    pattern:  /course/{courseId}/review/post/{postId}/edit
+    defaults: { _controller: CustomWebBundle:CourseReview:editPost }
+
 
 
 
