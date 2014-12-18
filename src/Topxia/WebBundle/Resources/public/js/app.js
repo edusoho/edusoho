@@ -124,16 +124,18 @@ define(function(require, exports, module) {
 
         $element.popover({
             placement: 'left',
-            trigger: 'hover',
+            trigger: 'click',
             html: true,
             content: function() {
-                var url = '../../carts/show'
+                var url = '../../carts/show';
                 $.get(url,function(html){
-                    return html
-                })
-                return $('#consult-qq-content').html();
+                    $('#consult-cart-content').html(html);
+                    return $('#consult-cart-content');
+                });
+                return $('#consult-cart-content');
             }
         });
+
     }
 
 

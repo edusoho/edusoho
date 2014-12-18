@@ -12,12 +12,17 @@ class CartsController extends BaseController
     public function showAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        $carts = $this->getCartsService()->searchCartsByUseId($user['id'],0,3);
-        $courseIds = ArrayToolkit::culum($carts['itemId']);
-        $course = $this->getCourseService()->findCoursesByCourseIds($courseIds);
+        $carts = $this->getCartsService()->findLimitCartsByUseId(5,$user['id']);
+        $courses = array();
+        if (!empty($carts)){
+            $courseIds = ArrayToolkit::column($carts,'itemId');
+            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+            $courses = ArrayToolkit::index($courses,'id');
+        }
 
         return $this->render('CustomWebBundle:Carts:show-popover.html.twig',array(
-            'carts' => $carts
+            'carts' => $carts,
+            'courses' => $courses
         ));
     }
 
@@ -37,10 +42,5 @@ class CartsController extends BaseController
         return $this->render('CustomWebBundle:Carts:list.html.twig',array(
             // 'carts' => $carts
         ));
-    }
-
-    private function getCartsService()
-    {
-        return $this->getServiceKernel()->createService('Carts:CartsService');
     }
 }

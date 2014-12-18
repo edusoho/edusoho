@@ -66,3 +66,27 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 .execrcise-tips .row {
 	padding: 10px;
 }
+
+.carts-item {
+	width: 250px;
+	height: 50px;
+	border-bottom: 1px solid rgba(0,0,0,0.18);
+    _border-bottom: 1px solid #ddd;
+}
+
+.carts-popover-list {
+    padding-left: 0;
+    list-style: none;
+}
+
+.course-popover {
+	float: left;
+}
+
+.course-popover img{
+	width:80px;
+}
+
+.price-count{
+	color:red;
+}
