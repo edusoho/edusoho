@@ -1,26 +1,32 @@
 <tr>
-    <td><input type="checkbox" data-role="single-select"></td>
+    <td><input type="checkbox" data-role="single-select" data-id={{ cart.id }}></td>
     <td>
         <div class="clearfix course-header">
-            <a href="">
-            <img class="picture" src="/files/course/2014/12-17/1739219d9ab9012864.jpg?4.4.3">
+            <a href="{{ path('course_show', {id:course.id}) }}">
+                <img class="picture" src="{{ default_path('coursePicture',course.largePicture, '') }}" />
             </a>
 
-            <a class="title">课程名称课程名称课程名称</a>
+            <a class="title">{{ course.title }}</a>
             <div class="teachers">
-                <a href="" data-toggle="modal" data-url="" >教师：xxx</a>
+              {% if course.teacherIds|default(null) %}
+                教师：
+                {% for id in course.teacherIds %}
+                  {% set user = users[id] %}
+                  <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.nickname }}</a>
+                {% endfor %}
+              {% endif  %}
             </div>
         </div>
 
     </td>
-    <td>341.50</td>
+    <td>{{ course.price }}</td>
     <td>
         <a href="#" class="btn btn-link">
-            <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="删除"></span>
+            <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" data-role="delete-carts-btn" title="删除" data-url="{{ path('carts_delete',{id:cart.id})}}"></span>
         </a>
 
         <a href="#" class="btn btn-link">
-            <span class="glyphicon glyphicon-bookmark"　data-toggle="tooltip" data-placement="top" title="收藏"></span>
+            <span class="glyphicon glyphicon-bookmark"　data-toggle="tooltip" data-placement="top" data-role="favourite" title="收藏"></span>
         </a>
     </td>
 </tr>

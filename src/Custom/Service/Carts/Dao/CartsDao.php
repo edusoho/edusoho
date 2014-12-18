@@ -1,12 +1,12 @@
 <?php
 
-namespace Topxia\Service\Carts\Dao;
+namespace Custom\Service\Carts\Dao;
 
 interface CartsDao
 {
     public function getCarts($id);
 
-    public function searchCartss($conditions, $oderBy, $start, $limit);
+    public function searchCarts($conditions, $oderBy, $start, $limit);
 
     public function searchCartsCount(array $conditions);
 

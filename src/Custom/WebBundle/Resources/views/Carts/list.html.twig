@@ -2,23 +2,41 @@
 
 {% block title %}我的购物车 - {{ parent() }}{% endblock %}
 
+{% set script_controller = 'customwebbundle/controller/carts/list' %}
+
 {% block content %}
 
 <div class="panel panel-default">
   <div class="panel-heading"><span class="glyphicon glyphicon-shopping-cart"></span>我的购物车</div>
 
+
+{% if carts|default(null) %}
   <table class="table table-hover table-striped">
     <thead>
-        <td><input type="checkbox" data-role="single-select"></td>
+        <td><input type="checkbox" data-role="batch-select"></td>
         <th width="40%">商品信息</th>
-        <th width="30%">单价</th>
+        <th width="30%">单价（元）</th>
         <th width="30%">操作</th>
     </thead>
     <tbody>
-    {# {% for cart in carts|default(null) %} #}
+    {% for cart in carts|default(null) %}
+      {% set course = courses[cart.itemId] %}
             {% include 'CustomWebBundle:Carts:list-tr.html.twig' %}
-    {# {% endfor %} #}
+    {% endfor %}
+  {% else %}
+  <div>您的购物车还是空的，赶紧行动吧！</div>
+{% endif %}
+
     </tbody>
   </table>
+
+  {{ web_macro.paginator(paginator) }}
+
+  <div>
+    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+    <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn" data-url="{{ path('carts_delete')}}">删除</button>
+  </div>
+
 </div>
+
 {% endblock %}
