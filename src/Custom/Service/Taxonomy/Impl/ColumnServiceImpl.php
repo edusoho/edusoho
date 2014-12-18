@@ -16,7 +16,11 @@ class ColumnServiceImpl extends BaseService implements ColumnService
 
     public function getColumn($id)
     {
-        return $this->getColumnDao()->getColumn($id);
+        
+        return ColumnSerialize::unserializes($this->getColumnDao()->getColumn($id));
+    }
+    public function getColumnByCode($code){
+         return $this->getColumnDao()->getColumnByCode($code);
     }
 
     public function getColumnByName($name)
@@ -40,15 +44,7 @@ class ColumnServiceImpl extends BaseService implements ColumnService
         return $this->getColumnDao()->findAllColumnsCount();
     }
 
-    public function findColumnsByIds(array $ids)
-    {
-    	return $this->getColumnDao()->findColumnsByIds($ids);
-    }
-
-    public function findColumnsByNames(array $names)
-    {
-    	return $this->getColumnDao()->findColumnsByNames($names);
-    }
+  
 
     public function isColumnNameAvalieable($name, $exclude=null)
     {
@@ -67,9 +63,13 @@ class ColumnServiceImpl extends BaseService implements ColumnService
 
     public function addColumn(array $column)
     {
-        $column = ArrayToolkit::parts($column, array('name','description'));
-
+        $column = ArrayToolkit::parts($column, array('name','subtitle','code','weight','classIndex','description'));
         $this->filterColumnFields($column);
+        $code = $column['code'];
+        
+        if(!empty($this->getColumnByCode($code))){
+             throw $this->createServiceException('专栏编码已经存在，添加失败！');
+        }
         $column['createdTime'] = time();
 
         $column = $this->getColumnDao()->addColumn($column);
@@ -86,12 +86,12 @@ class ColumnServiceImpl extends BaseService implements ColumnService
             throw $this->createServiceException("专栏(#{$id})不存在，更新失败！");
         }
 
-        $fields = ArrayToolkit::parts($fields, array('name','description'));
+        $fields = ArrayToolkit::parts($fields, array('name','subtitle','weight','classIndex','description','lowTagIds','middleTagIds','highTagIds','code'));
         $this->filterColumnFields($fields, $column);
 
         $this->getLogService()->info('column', 'update', "编辑专栏{$fields['name']}(#{$id})");
 
-        return $this->getColumnDao()->updateColumn($id, $fields);
+        return $this->getColumnDao()->updateColumn($id, ColumnSerialize::serialize($fields));
     }
 
     public function deleteColumn($id)
@@ -101,20 +101,21 @@ class ColumnServiceImpl extends BaseService implements ColumnService
         $this->getLogService()->info('column', 'delete', "删除专栏#{$id}");
     }
 
-    private function filterColumnFields(&$column, $relatedColumn = null)
+    private function filterColumnFields(&$column)
     {
         if (empty($column['name'])) {
-            throw $this->createServiceException('标签名不能为空，添加失败！');
+            throw $this->createServiceException('专栏名不能为空，添加失败！');
         }
-
-        $column['name'] = (string) $column['name'];
-
-        $exclude = $relatedColumn ? $relatedColumn['name'] : null;
-        if (!$this->isColumnNameAvalieable($column['name'], $exclude)) {
-            throw $this->createServiceException('该标签名已存在，添加失败！');
+        if (empty($column['code'])) {
+            throw $this->createServiceException('专栏编码不能为空，添加失败！');
         }
-
-        return $column;
+        if (empty($column['weight'])) {
+            throw $this->createServiceException('专栏排序不能为空，添加失败！');
+        }
+        if (empty($column['classIndex'])) {
+            throw $this->createServiceException('专栏样式不能为空，添加失败！');
+        }
+       
     }
 
     public function changeColumnAvatar($columnId, $filePath, array $options)
@@ -185,3 +186,53 @@ class ColumnServiceImpl extends BaseService implements ColumnService
         }
 
 }  
+
+class ColumnSerialize
+{
+
+
+    public static function serialize(array &$column)
+    {
+        if (isset($column['lowTagIds'])) {
+            if (is_array($column['lowTagIds']) and !empty($column['lowTagIds'])) {
+                $column['lowTagNames'] = getTagNamesByIds($column['lowTagIds']);
+                $column['lowTagIds'] = '|' . implode('|', $column['lowTagIds']) . '|';
+            
+            } else {
+                $column['lowTagIds'] = '';
+            }
+        }
+        if (isset($column['middleTagIds'])) {
+            if (is_array($column['middleTagIds']) and !empty($column['middleTagIds'])) {
+                $column['middleTagIds'] = '|' . implode('|', $column['middleTagIds']) . '|';
+            } else {
+                $column['middleTagIds'] = '';
+            }
+        }
+        if (isset($column['highTagIds'])) {
+            if (is_array($column['highTagIds']) and !empty($column['highTagIds'])) {
+                $column['highTagIds'] = '|' . implode('|', $column['highTagIds']) . '|';
+            } else {
+                $column['highTagIds'] = '';
+            }
+        }
+        return $column;
+    }
+
+
+ 
+    public static function unserializes(array $column)
+    {
+        if (empty($column)) {
+            return $column;
+        }
+
+        $column['lowTagIds'] = empty($column['lowTagIds']) ? array() : explode('|', trim($column['lowTagIds'], '|'));
+        $column['middleTagIds'] = empty($column['middleTagIds']) ? array() : explode('|', trim($column['middleTagIds'], '|'));
+        $column['highTagIds'] = empty($column['highTagIds']) ? array() : explode('|', trim($column['highTagIds'], '|'));
+
+
+        return $column;
+    }
+}
+

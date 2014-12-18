@@ -54,5 +54,8 @@ admin_column_course_vote:
 admin_column_course_vote_create:
     pattern:  /column/course/vote/create
     defaults: { _controller: CustomAdminBundle:ColumnCourseVote:create }
+admin_column_check_code:
+    pattern:  /column/checkCode
+    defaults: { _controller: CustomAdminBundle:Column:checkCode}
 
 

@@ -15,6 +15,14 @@ class ColumnDaoImpl extends BaseDao implements ColumnDao
         return $this->getConnection()->fetchAssoc($sql, array($id));
     }
 
+    public function getColumnByCode($code)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE  code = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($code));
+    }
+
+    
+
     public function addColumn(array $column)
     {
         $affected = $this->getConnection()->insert($this->table, $column);
@@ -54,7 +62,7 @@ class ColumnDaoImpl extends BaseDao implements ColumnDao
     public function findAllColumns($start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} ORDER BY weight, createdTime asc LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
     }
 

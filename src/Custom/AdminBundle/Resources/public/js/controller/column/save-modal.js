@@ -21,12 +21,15 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     var $html = $(html);
                     if ($table.find( '#' +  $html.attr('id')).length > 0) {
-                        $('#' + $html.attr('id')).replaceWith($html);
+                        $('#' + $html.attr('id')).replaceWith(html);
                         Notify.success('专栏更新成功！');
                     } else {
                         $table.find('tbody').prepend(html);
                         Notify.success('专栏添加成功!');
                     }
+
+                    var $tr = $(html);
+                    $('#' + $tr.attr('id')).replaceWith($tr);
                     $modal.modal('hide');
 				});
 
@@ -38,6 +41,17 @@ define(function(require, exports, module) {
             required: true,
             rule: 'remote'
         });
+        validator.addItem({
+            element: '#column-code-field',
+            required: true,
+            rule: 'remote'
+        });
+        validator.addItem({
+            element: '#column-weight-field',
+            required: true,
+            rule: 'integer'
+        });
+        
 
         $modal.find('.delete-column').on('click', function() {
             if (!confirm('真的要删除该专栏吗？')) {

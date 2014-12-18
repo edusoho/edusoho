@@ -22,4 +22,7 @@ interface ColumnDao
     public function findAllColumnsCount();
 
     public function deleteColumn($id);
+    
+    public function getColumnByCode($code);
+    
 }

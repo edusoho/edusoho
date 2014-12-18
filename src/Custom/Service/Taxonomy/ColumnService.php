@@ -5,6 +5,8 @@ interface ColumnService
 {
         public function getColumn($id);
 
+        public function getColumnByCode($code);
+
         public function getColumnByName($name);
 
         public function getColumnByLikeName($name);
@@ -13,9 +15,7 @@ interface ColumnService
 
         public function getAllColumnCount();
 
-        public function findColumnsByIds(array $ids);
-
-        public function findColumnsByNames(array $names);
+    
 
         public function isColumnNameAvalieable($name, $exclude=null);
 

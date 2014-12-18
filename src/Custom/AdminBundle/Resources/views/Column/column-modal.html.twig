@@ -13,6 +13,34 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="col-md-3 control-label" for="column-subtitle-field">专栏副标题</label>
+        <div class="col-md-6 controls">
+          <input class="form-control" id="column-subtitle-field" type="text" name="subtitle" value="{{ column.subtitle }}">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="column-code-field">专栏编码</label>
+        <div class="col-md-6 controls">
+          <input class="form-control" id="column-code-field" type="text" name="code" value="{{ column.code }}" data-url="{{ path('admin_column_check_code', {exclude:column.code}) }}" {% if column.id %}readonly="readonly"{% endif %}>
+          <div class="help-block">必填，建议使用分类名称的英文单词或缩写作为编码,不可进行修改。</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="column-weight-field">专栏排序</label>
+        <div class="col-md-6 controls">
+          <input class="form-control" id="column-weight-field" type="text" name="weight" value="{{ column.weight }}">
+           <div class="help-block">显示序号需为整数，按序号的顺序从小到大排序。</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="column-classIndex-field">色块选择</label>
+        <div class="col-md-6 controls">
+     {#      <input class="form-control" id="column-classIndex-field" type="text" name="classIndex" value="{{ column.classIndex }}"> #}
+            {{ radios('classIndex', {1:'<span class="color-1"></span>',2:'<span class="color-2"></span>', 3:'<span class="color-3"></span>',4:'<span class="color-4"></span>',5:'<span class="color-5"></span>', 6:'<span class="color-6"></span>',7:'<span class="color-7"></span>',8:'<span class="color-8"></span>'}, column.classIndex|default(1) ) }}
+        </div>
+    </div>
+    <div class="form-group">
         <label class="col-md-3 control-label" for="column-name-field">专栏描述</label>
         <div class="col-md-6 controls">
             <textarea class="form-control" id="category-description-field" style="height:100px;" name="description">{{column.description}}</textarea>

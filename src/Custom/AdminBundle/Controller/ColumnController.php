@@ -34,7 +34,7 @@ class ColumnController extends BaseController
 		}
 
 		return $this->render('CustomAdminBundle:Column:column-modal.html.twig', array(
-			'column' => array('id' => 0, 'name' => '','description'=>'')
+			'column' => array('id' => 0, 'name' => '','description'=>'','code'=>'','weight'=>1,'classIndex'=>1,'subtitle'=>'')
 		));
 	}
 
@@ -63,6 +63,22 @@ class ColumnController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
+
+	public function checkCodeAction(Request $request)
+	{
+		$code = $request->query->get('value');
+		$exclude = $request->query->get('exclude');
+
+		$column = $this->getColumnService()->getColumnByCode($code);
+
+		if (!empty($column) && $exclude != $column['code']) {
+			$response = array('success' => false, 'message' => '专栏编码已经存在');
+		} else {
+			$response = array('success' => true, 'message' => '');
+		}
+
+		return $this->createJsonResponse($response);
+	}
 	public function checkNameAction(Request $request)
 	{
 		$name = $request->query->get('value');
