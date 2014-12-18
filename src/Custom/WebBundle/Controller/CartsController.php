@@ -26,6 +26,11 @@ class CartsController extends BaseController
         ));
     }
 
+    public function FunctionName($value='')
+    {
+        # code...
+    }
+
     private function getCartsService()
     {
         return $this->getServiceKernel()->createService('Custom:Carts.CartsService');
