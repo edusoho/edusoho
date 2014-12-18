@@ -38,6 +38,7 @@ class CourseFileManageController extends BaseController
         );
 
         foreach ($files as $key => $file) {
+var_dump($file);
             
             $files[$key]['metas2'] = json_decode($file['metas2'],true) ? : array();
 
@@ -45,13 +46,20 @@ class CourseFileManageController extends BaseController
             
             $useNum=$this->getCourseService()->searchLessonCount(array('mediaId'=>$file['id']));
             
-            $files[$key]['useNum']=$useNum;
+            // $manageFilesUseNum=$this->getMaterialService()->getMaterialCountByFileId(array('fileId'=>$file['id']));
+            
+
+            // if($files[$key]['targetType'] == 'coursematerial'){
+
+            // }else{
+                $files[$key]['useNum']=$useNum;
+            // }
+            
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
         $storageSetting = $this->getSettingService()->get("storage");
-
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
             'type' => $type,
             'course' => $course,
@@ -181,6 +189,11 @@ class CourseFileManageController extends BaseController
     private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function getMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 
     private function createPrivateFileDownloadResponse(Request $request, $file)
