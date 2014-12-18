@@ -38,7 +38,6 @@ class CourseFileManageController extends BaseController
         );
 
         foreach ($files as $key => $file) {
-var_dump($file);
             
             $files[$key]['metas2'] = json_decode($file['metas2'],true) ? : array();
 
@@ -46,15 +45,13 @@ var_dump($file);
             
             $useNum=$this->getCourseService()->searchLessonCount(array('mediaId'=>$file['id']));
             
-            // $manageFilesUseNum=$this->getMaterialService()->getMaterialCountByFileId(array('fileId'=>$file['id']));
-            
+            $manageFilesUseNum=$this->getMaterialService()->getMaterialCountByFileId($file['id']);
 
-            // if($files[$key]['targetType'] == 'coursematerial'){
-
-            // }else{
+            if($files[$key]['targetType'] == 'coursematerial'){
+                $files[$key]['useNum']=$manageFilesUseNum;
+            }else{
                 $files[$key]['useNum']=$useNum;
-            // }
-            
+            }    
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
