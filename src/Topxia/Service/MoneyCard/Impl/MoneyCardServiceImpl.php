@@ -232,6 +232,11 @@ class MoneyCardServiceImpl extends BaseService
         return $password;
     }
 
+    public function updateBatch($id, $fields)
+    {
+        return $this->getMoneyCardBatchDao()->updateBatch($id, $fields);         
+    }
+
     public function updateMoneyCard($id, $fields)
     {
         $moneyCard = $this->getMoneyCard($id);
