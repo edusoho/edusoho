@@ -26,9 +26,7 @@ class CourseOrderController extends BaseController
             $conditions['targetType'] = 'course';
 
             $courses = $this->getCourseService()->findCoursesByTitleLike(trim($conditions['title']));
-            $courseIds = ArrayToolkit::column($courses, 'id');
-
-            $conditions['courseIds'] = '('.implode(', ',$courseIds).')';
+            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
         }
 
         $paginator = new Paginator(

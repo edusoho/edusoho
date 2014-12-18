@@ -14,8 +14,7 @@ class CourseNoteController extends BaseController
         
         if ( isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle'){
             $courses = $this->getCourseService()->findCoursesByTitleLike(trim($conditions['keyword']));
-            $courseIds = ArrayToolkit::column($courses, 'id');
-            $conditions['courseIds'] = '('.implode(', ',$courseIds).')';
+            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');            
         }        
 
         $paginator = new Paginator(

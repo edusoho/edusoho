@@ -14,9 +14,7 @@ class ReviewController extends BaseController {
         if (!empty($conditions['courseTitle'])){
             
             $courses = $this->getCourseService()->findCoursesByTitleLike(trim($conditions['courseTitle']));
-            $courseIds = ArrayToolkit::column($courses, 'id');
-
-            $conditions['courseIds'] = '('.implode(', ',$courseIds).')';
+            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
         }
 
         $paginator = new Paginator(
