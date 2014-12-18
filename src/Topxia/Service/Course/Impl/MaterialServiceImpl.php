@@ -119,6 +119,11 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		return $this->getMaterialDao()->findMaterialsByCourseId($courseId, $start, $limit);
 	}
 
+	public function getMaterialCountByFileId($fileId)
+	{
+		return $this->getMaterialDao()->getMaterialCountByFileId($fileId);
+	}
+
     public function findLessonMaterials($lessonId, $start, $limit)
     {
         return $this->getMaterialDao()->findMaterialsByLessonId($lessonId, $start, $limit);
@@ -128,6 +133,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 	{
 		return $this->getMaterialDao()->getMaterialCountByCourseId($courseId);
 	}
+
 
     private function getMaterialDao()
     {

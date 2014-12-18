@@ -201,6 +201,8 @@ define(function(require, exports, module) {
 
 	    $("#modal").on("hide.bs.modal", function(){
             chunkUpload.destroy();
+            window.location.reload();
         });
+
 	}
 });
