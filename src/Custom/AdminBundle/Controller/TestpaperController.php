@@ -210,22 +210,22 @@ class TestpaperController extends BaseController
 
     public function previewAction(Request $request, $id)
     {
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        $testpaper = $this->getTestpaperService()->getTestpaper($id);
         if (empty($testpaper)) {
             throw $this->createNotFoundException();
         }
         if($testpaper['pattern'] == 'QuestionType') {
-            $this->redirect($this->generateUrl('course_manage_preview_test', array('testId' => $id)));
+            return $this->redirect($this->generateUrl('course_manage_preview_test', array('testId' => $id)));
         }
         if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])){
             throw $this->createAccessDeniedException('无权预览试卷！');
         }
 
-        $items = $this->getTestpaperService()->previewTestpaper($testId);
+        $items = $this->getTestpaperService()->previewTestpaper($id);
 
         $total = $this->makeTestpaperTotal($testpaper, $items);
 
-        return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
+        return $this->render('CustomAdminBundle:QuizQuestionTest:testpaper-show.html.twig', array(
             'items' => $items,
             'limitTime' => $testpaper['limitedTime'] * 60,
             'paper' => $testpaper,
@@ -238,6 +238,9 @@ class TestpaperController extends BaseController
     private function makeTestpaperTotal ($testpaper, $items)
     {
         $total = array();
+        foreach ($items as $item) {
+
+        }
         foreach ($testpaper['metas']['question_type_seq'] as $type) {
             if (empty($items[$type])) {
                 $total[$type]['score'] = 0;

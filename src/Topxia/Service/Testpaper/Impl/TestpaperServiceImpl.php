@@ -102,6 +102,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $filtedFields['missScore'] = empty($part['missScore']) ? 0 : (int) $part['missScore'];
         $filtedFields['mistakeScore'] = empty($part['mistakeScore']) ? 0 : (int) $part['mistakeScore'];
         $filtedFields['items'] = empty($part['items']) ? array() : $part['items'];
+        $filtedFields['parentId'] = empty($part['parentId']) ? 0 : $part['parentId'];
 
         return $filtedFields;
     }
@@ -245,13 +246,26 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function buildTestpaperAdvanced($id, $fields)
     {
         $parts = $fields['metas']['parts'];
+        $mapping = array();
+        $totalScore = 0;
         foreach ($parts as $part) {
             $part = $this->filterTestpaperPart($part);
             foreach ($part['items'] as $item) {
                 $item['testId'] = $id;
-                $this->getTestpaperItemDao()->addItem($item);
+                if(empty($item['parentId'])) {
+                    $new = $this->getTestpaperItemDao()->addItem($item);
+                    $mapping[$new['questionId']] = $new['id'];
+                    if($new['questionType'] != 'material') {
+                        $totalScore += $new['score'];
+                    }
+                } else {
+                    $item['parentId'] = $mapping[$item['parentId']];
+                    $new = $this->getTestpaperItemDao()->addItem($item);
+                    $totalScore += $new['score'];
+                }
             }
         }
+        $this->getTestpaperDao()->updateTestpaper($id, array('score' => $totalScore));
     }
 
     public function canBuildTestpaper($builder, $options)
@@ -344,6 +358,36 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     }
 
     public function previewTestpaper($testpaperId)
+    {
+        $items = $this->getTestpaperItems($testpaperId);
+        $items = ArrayToolkit::index($items, 'questionId');
+        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
+        $questions = ArrayToolkit::index($questions, 'id');
+
+        $questions = $this->completeQuestion($items, $questions);
+
+        $formatItems = array();
+        foreach ($items as $questionId => $item) {
+            $items[$questionId]['question'] = $questions[$questionId];
+
+            if ($item['parentId'] != 0) {
+                if (!array_key_exists('items', $items[$item['parentId']])) {
+                    $items[$item['parentId']]['items'] = array();
+                }
+                $items[$item['parentId']]['items'][$questionId] = $items[$questionId];
+                $formatItems['material'][$item['parentId']]['items'][$item['seq']] = $items[$questionId];
+                unset($items[$questionId]);
+            } else {
+                $formatItems[$item['questionType']][$item['questionId']] = $items[$questionId];
+            }
+
+        }
+
+        ksort($formatItems);
+        return $formatItems;
+    }
+
+    public function previewAdvancedTestpaper($testpaperId)
     {
         $items = $this->getTestpaperItems($testpaperId);
         $items = ArrayToolkit::index($items, 'questionId');
@@ -886,6 +930,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $items = array();
         $index = 1;
         $excludeIds = array();
+        $childrenQuestions = $this->getQuestionService()->findQuestionsByParentIds(ArrayToolkit::column($questions, 'id'));
         foreach ($questions as $question) {
             $items[] = array(
                 'questionId' => $question['id'],
@@ -896,6 +941,23 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 'missScore' => $part['missScore'],
                 'mistakeScore' => $part['mistakeScore'] 
             );
+            $index += 1;
+            foreach ($childrenQuestions as $child) {
+                if($child['parentId'] == $question['id']) {
+                    $items[] = array(
+                        'questionId' => $question['id'],
+                        'seq' => $index,
+                        'questionType' => $part['type'],
+                        'partId' => $part['id'],
+                        'parentId' => $question['id'],
+                        'score' => $part['score'],
+                        'missScore' => $part['missScore'],
+                        'mistakeScore' => $part['mistakeScore'] 
+                    );
+                    $index += 1;
+                    $excludeIds[] = $child['id'];
+                }
+            }
             $excludeIds[] = $question['id'];
         }
         return array('items' => $items, 'excludeIds' => implode(',', $excludeIds));
