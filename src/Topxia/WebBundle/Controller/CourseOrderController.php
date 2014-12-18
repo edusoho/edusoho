@@ -40,7 +40,7 @@ class CourseOrderController extends OrderController
         }
 
         $user = $this->getCurrentUser();
-        $account = $this->getCashService()->getAccountByUserId($user["id"]);
+        $account = $this->getCashAccountService()->getAccountByUserId($user["id"]);
         $accountCash = $account["cash"];
 
         if($totalMoneyPrice*100 > $accountCash/$cashRate*100) {
@@ -422,6 +422,11 @@ class CourseOrderController extends OrderController
     protected function getCashService()
     {
         return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    protected function getCashAccountService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
 
     protected function getCashOrdersService()

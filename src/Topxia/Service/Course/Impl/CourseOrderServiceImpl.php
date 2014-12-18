@@ -202,7 +202,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $connection->beginTransaction();
 
             $order = $this->getOrderService()->getOrder($id);
-            $cashAccount = $this->getCashService()->getAccountByUserId($order["userId"]);
+            $cashAccount = $this->getCashAccountService()->getAccountByUserId($order["userId"]);
             if($cashAccount["cash"]<$order["amount"]){
                 throw $this->createServiceException('余额不足。');
             }
@@ -216,7 +216,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             );
             $this->getCashService()->outflow($order['userId'],$flow);
 
-            $this->getCashService()->waveDownCashField($cashAccount["id"], $order["amount"]);
+            $this->getCashAccountService()->waveDownCashField($cashAccount["id"], $order["amount"]);
 
             $user = $this->getCurrentUser();
             $this->getLogService()->info('cash', 'cost_coin', $user['nickname']." 购买课程时消费 {$order['amount']} 虚拟币", array());
@@ -242,7 +242,12 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
     protected function getCashService()
     {
         return $this->createService('Cash.CashService');
-    }    
+    }
+
+    protected function getCashAccountService()
+    {
+        return $this->createService('Cash.CashAccountService');
+    }
 
     protected function getUserService()
     {

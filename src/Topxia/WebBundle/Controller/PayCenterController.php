@@ -62,45 +62,15 @@ class PayCenterController extends BaseController
 
     public function payReturnAction(Request $request, $name)
     {
-        $controller = $this;
-        return $this->doPayReturn($request, $name, function($success, $order) use(&$controller) {
-            if (!$success) {
-                $controller->generateUrl('course_show', array('id' => $order['targetId']));
-            }
-
-            $controller->getCourseOrderService()->doSuccessPayOrder($order['id']);
-
-            return $controller->generateUrl('course_show', array('id' => $order['targetId']));
-        });
-    }
-
-    public function payNotifyAction(Request $request, $name)
-    {
-        $controller = $this;
-        return $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
-            if (!$success) {
-                return ;
-            }
-
-            $controller->getCourseOrderService()->doSuccessPayOrder($order['id']);
-
-            return ;
-        });
-    }
-
-    public function showAction(Request $request)
-    {
         $orderId = $request->query->get("id");
         $order = $this->getOrderService()->getOrder($orderId);
 
         $processor = OrderProcessorFactory::create($order["targetType"]);
 
-        $router = $processor->getRouter();
-
-        return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
+        return $this->doPayReturn($request, $name, $processor->doPayReturn);
     }
 
-    protected function doPayReturn(Request $request, $name, $successCallback = null)
+    private function doPayReturn(Request $request, $name, $successCallback = null)
     {
         $this->getLogService()->info('order', 'pay_result',  "{$name}页面跳转支付通知", $request->query->all());
         $response = $this->createPaymentResponse($name, $request->query->all());
@@ -111,14 +81,28 @@ class PayCenterController extends BaseController
             return $this->forward("TopxiaWebBundle:Order:resultNotice");
         }
 
+        $this->getPayCenterService()->pay($payData);
+
         list($success, $order) = $this->getOrderService()->payOrder($payData);
 
         if ($order['status'] == 'paid' and $successCallback) {
-            $successUrl = $successCallback($success, $order);
+            $router = $successCallback($success, $order);
+            $successUrl = $this->generateUrl($router, array('id' => $order["targetId"]), true);
         }
 
         $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
+
         return $this->redirect($goto);
+    }
+
+    public function payNotifyAction(Request $request, $name)
+    {
+        $orderId = $request->query->get("id");
+        $order = $this->getOrderService()->getOrder($orderId);
+
+        $processor = OrderProcessorFactory::create($order["targetType"]);
+
+        return $this->doPayNotify($request, $name, $processor->doPayNotify);
     }
 
     protected function doPayNotify(Request $request, $name, $successCallback = null)
@@ -137,6 +121,18 @@ class PayCenterController extends BaseController
         } catch (\Exception $e) {
             throw $e;
         }
+    }
+
+    public function showAction(Request $request)
+    {
+        $orderId = $request->query->get("id");
+        $order = $this->getOrderService()->getOrder($orderId);
+
+        $processor = OrderProcessorFactory::create($order["targetType"]);
+
+        $router = $processor->getRouter();
+
+        return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
     }
 
     private function createPaymentResponse($name, $params)
@@ -201,6 +197,11 @@ class PayCenterController extends BaseController
 	protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getPayCenterService()
+    {
+        return $this->getServiceKernel()->createService('PayCenter.PayCenterService');
     }
 
 

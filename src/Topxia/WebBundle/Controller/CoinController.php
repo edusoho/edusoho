@@ -17,12 +17,12 @@ class CoinController extends BaseController
     public function indexAction(Request $request)
     {   
         $user=$this->getCurrentUser();
-        $account=$this->getCashService()->getAccountByUserId($user->id,true);
+        $account=$this->getCashAccountService()->getAccountByUserId($user->id,true);
         $code = 'ChargeCoin';
         $ChargeCoin = $this->getAppService()->findInstallApp($code);
         
         if(empty($account)){
-        $this->getCashService()->createAccount($user->id);
+            $this->getCashAccountService()->createAccount($user->id);
         }
         
         if(isset($account['cash']))
@@ -72,11 +72,11 @@ class CoinController extends BaseController
         $user=$this->getCurrentUser();
         $userId=$user->id;
 
-        $change=$this->getCashService()->getChangeByUserId($userId);
+        $change=$this->getCashAccountService()->getChangeByUserId($userId);
 
         if(empty($change)){
 
-            $change=$this->getCashService()->addChange($userId);
+            $change=$this->getCashAccountService()->addChange($userId);
         }
 
         $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
@@ -89,7 +89,7 @@ class CoinController extends BaseController
         if($request->getMethod()=="POST"){
 
             if($canChange>0)
-            $this->getCashService()->changeCoin($changeAmount-$canUseAmount,$canChange,$userId);
+            $this->getCashAccountService()->changeCoin($changeAmount-$canUseAmount,$canChange,$userId);
 
             return $this->redirect($this->generateUrl('my_coin'));
         }
@@ -322,6 +322,11 @@ class CoinController extends BaseController
     protected function getCashService(){
       
         return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    protected function getCashAccountService()
+    {
+        return $this->createService('Cash.CashAccountService');
     }
 
     protected function getCashOrdersService(){

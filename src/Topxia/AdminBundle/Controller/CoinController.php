@@ -159,20 +159,20 @@ class CoinController extends BaseController
 
             $user=$this->getUserService()->getUserByNickname($fields['nickname']);
 
-            $account=$this->getCashService()->getAccountByUserId($user["id"]);
+            $account=$this->getCashAccountService()->getAccountByUserId($user["id"]);
 
             if(empty($account)){
-                $account=$this->getCashService()->createAccount($user["id"]);
+                $account=$this->getCashAccountService()->createAccount($user["id"]);
             }
 
             if($fields['type']=="add"){
 
-                $this->getCashService()->waveCashField($account["id"],$fields['amount']);
+                $this->getCashAccountService()->waveCashField($account["id"],$fields['amount']);
                 $this->getLogService()->info('cash', 'add_coin', "添加 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
 
             }else{
 
-                $this->getCashService()->waveDownCashField($account["id"],$fields['amount']);
+                $this->getCashAccountService()->waveDownCashField($account["id"],$fields['amount']);
                 $this->getLogService()->info('cash', 'add_coin', "扣除 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
             }
   
@@ -202,11 +202,11 @@ class CoinController extends BaseController
 
     //     $paginator = new Paginator(
     //         $this->get('request'),
-    //         $this->getCashService()->searchAccountCount($conditions),
+    //         $this->getCashAccountService()->searchAccountCount($conditions),
     //         20
     //       );
 
-    //     $cashes=$this->getCashService()->searchAccount(
+    //     $cashes=$this->getCashAccountService()->searchAccount(
     //         $conditions,
     //         array(),
     //         $paginator->getOffsetCount(),
@@ -237,13 +237,13 @@ class CoinController extends BaseController
 
                 if($fields['type']=="add"){
 
-                $this->getCashService()->waveCashField($id,$fields['amount']);
+                $this->getCashAccountService()->waveCashField($id,$fields['amount']);
 
                 $this->getLogService()->info('cash', 'add_coin', "添加 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
 
                 }else{
 
-                    $this->getCashService()->waveDownCashField($id,$fields['amount']);
+                    $this->getCashAccountService()->waveDownCashField($id,$fields['amount']);
                     $this->getLogService()->info('cash', 'add_coin', "扣除 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
 
                 }
@@ -361,6 +361,10 @@ class CoinController extends BaseController
     protected function getCashService(){
       
         return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    protected function getCashAccountService(){
+        return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
 
     protected function getCashOrdersService(){
