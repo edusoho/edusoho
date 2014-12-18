@@ -34,4 +34,6 @@ interface CourseDao
 
     public function analysisCourseSumByTime($endTime);
 
+    public function findCoursesByLikeTitle($title);
+
 }

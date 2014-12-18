@@ -22,7 +22,7 @@ interface CourseService
 
 	public function findCoursesByIds(array $ids);
 
-	public function findCoursesByTitleLike($title);
+	public function findCoursesByLikeTitle($title);
 	
 	public function findMinStartTimeByCourseId($courseId);
 

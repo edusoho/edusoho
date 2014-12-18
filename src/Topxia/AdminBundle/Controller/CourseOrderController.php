@@ -25,7 +25,7 @@ class CourseOrderController extends BaseController
         if (!empty($conditions['title'])){
             $conditions['targetType'] = 'course';
 
-            $courses = $this->getCourseService()->findCoursesByTitleLike(trim($conditions['title']));
+            $courses = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['title']));
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
             if (count($conditions['courseIds']) == 0){
                 return $this->render('TopxiaAdminBundle:CourseOrder:refunds.html.twig', array(

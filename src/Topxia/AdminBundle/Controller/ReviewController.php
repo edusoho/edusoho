@@ -13,7 +13,7 @@ class ReviewController extends BaseController {
 
         if (!empty($conditions['courseTitle'])){
             
-            $courses = $this->getCourseService()->findCoursesByTitleLike(trim($conditions['courseTitle']));
+            $courses = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['courseTitle']));
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
             if (count($conditions['courseIds']) == 0){
                 return $this->render('TopxiaAdminBundle:Review:index.html.twig', array(
