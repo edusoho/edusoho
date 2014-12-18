@@ -11,6 +11,20 @@ class CourseNoteController extends BaseController
 	public function indexAction(Request $request)
 	{
 		$conditions = $request->query->all();
+        
+        if ( isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle'){
+            $courses = $this->getCourseService()->findCoursesByTitleLike(trim($conditions['keyword']));
+            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id'); 
+            if (count($conditions['courseIds']) == 0){
+                return $this->render('TopxiaAdminBundle:CourseNote:index.html.twig', array(
+                    'notes' => array(),
+                    'paginator' => new Paginator($request,0,20),
+                    'users'=> array(),
+                    'lessons'=> array(),
+                    'courses'=>array()
+                ));
+            }  
+        }        
 
         $paginator = new Paginator(
             $request,

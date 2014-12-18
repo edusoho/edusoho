@@ -12,6 +12,21 @@ class CourseThreadController extends BaseController
     {
 
 		$conditions = $request->query->all();
+
+        if ( isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle'){
+            $courses = $this->getCourseService()->findCoursesByTitleLike(trim($conditions['keyword']));
+            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
+            if (count($conditions['courseIds']) == 0){
+                return $this->render('TopxiaAdminBundle:CourseThread:index.html.twig', array(
+                    'paginator' => new Paginator($request,0,20),
+                    'threads' => array(),
+                    'users'=> array(),
+                    'courses' => array(),
+                    'lessons' => array()               
+                ));
+            }               
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->searchThreadCount($conditions),
