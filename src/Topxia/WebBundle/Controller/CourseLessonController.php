@@ -475,11 +475,13 @@ class CourseLessonController extends BaseController
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
 
-        $file['filename'] = urlencode($file['filename']);
-        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
-        } else {
-            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+        if($isDownload) {
+            $file['filename'] = urlencode($file['filename']);
+            if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+                $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+            } else {
+                $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+            }
         }
 
         $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
