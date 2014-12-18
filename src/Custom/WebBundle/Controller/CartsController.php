@@ -30,4 +30,17 @@ class CartsController extends BaseController
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
+
+    public function listAction(Request $request)
+    {
+        // $carts = $this->getCartsService()->searchCarts();
+        return $this->render('CustomWebBundle:Carts:list.html.twig',array(
+            // 'carts' => $carts
+        ));
+    }
+
+    private function getCartsService()
+    {
+        return $this->getServiceKernel()->createService('Carts:CartsService');
+    }
 }
