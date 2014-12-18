@@ -19,11 +19,6 @@ class CashServiceImpl extends BaseService implements CashService
         return $this->getAccountDao()->getAccountByUserId($userId);
     }
 
-    public function updateAccount($id, $fields)
-    {
-        return $this->getAccountDao()->updateAccount($id, $fields);
-    }    
-
     public function outflow($userId, $flow) 
     {
         $inflow=array(
