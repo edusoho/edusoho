@@ -44,8 +44,13 @@ class ColumnController extends BaseController
 		if (empty($column)) {
 			throw $this->createNotFoundException();
 		}
+		//取该专栏下，初，中，高级课程的标签
+		$lowLevelTags=$this->getColumnService()->findTagIdsByColumnIdAndCourseComplexity($id,'lowLevel');
+		$middleLevelTags=$this->getColumnService()->findTagIdsByColumnIdAndCourseComplexity($id,'middleLevel');
+		$highLevelTags=$this->getColumnService()->findTagIdsByColumnIdAndCourseComplexity($id,'highLevel');
 
 		if ('POST' == $request->getMethod()) {
+
 			$column = $this->getColumnService()->updateColumn($id, $request->request->all());
 			return $this->render('CustomAdminBundle:Column:list-tr.html.twig', array(
 				'column' => $column
@@ -53,7 +58,10 @@ class ColumnController extends BaseController
 		}
 
 		return $this->render('CustomAdminBundle:Column:column-modal.html.twig', array(
-			'column' => $column
+			'column' => $column,
+			'lowLevelTags' => $lowLevelTags,
+			'middleLevelTags'=>$middleLevelTags,
+			'highLevelTags'=>$highLevelTags
 		));
 	}
 

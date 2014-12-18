@@ -85,4 +85,14 @@ class ColumnDaoImpl extends BaseDao implements ColumnDao
         return $this->getConnection()->fetchColumn($sql, array());
     }
 
+    public function findTagIdsByColumnIdAndCourseComplexity($columId,$courseComplexity){
+        if($columId){
+            $columIdLike ="   '%|$columId|%' ";
+        }
+        $sql = "SELECT tags FROM course where  complexity= '{$courseComplexity}' and columns LIKE {$columIdLike} ";
+        
+        return $this->getConnection()->fetchAll($sql, array());
+       
+    }
+
 }

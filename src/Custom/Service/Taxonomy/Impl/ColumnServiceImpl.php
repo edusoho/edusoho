@@ -67,7 +67,8 @@ class ColumnServiceImpl extends BaseService implements ColumnService
         $this->filterColumnFields($column);
         $code = $column['code'];
         
-        if(!empty($this->getColumnByCode($code))){
+        $resultCode = $this->getColumnByCode($code);
+        if(!empty($resultCode)){
              throw $this->createServiceException('专栏编码已经存在，添加失败！');
         }
         $column['createdTime'] = time();
@@ -167,10 +168,38 @@ class ColumnServiceImpl extends BaseService implements ColumnService
             'largeAvatar' => $largeFileRecord['uri'],
         ));
     }
+    public function findColumnsByIds(array $ids)
+    {
+        return $this->getColumnDao()->findColumnsByIds($ids);
+    }
+    public function findColumnsByNames(array $names)
+    {
+        return $this->getColumnDao()->findColumnsByNames($names);
+    }
+    public function findTagIdsByColumnIdAndCourseComplexity($columId,$courseComplexity){
+        $result = array();
+        $tagIds = $this->getColumnDao()->findTagIdsByColumnIdAndCourseComplexity($columId,$courseComplexity);
+        if($tagIds){
+            foreach ($tagIds as $key => $value) {
+                foreach ($value as $k => $v) {
+                   $temp = explode('|', trim($v, '|'));
+                   $result = array_merge($result, $temp);
+                }
+            }
+        
+        }
+        
+        return $this->getTagService()->findTagsByIds($result);
+     
+    }
+   
 
 
 
-
+        private function getTagService()
+        {
+            return $this->createService('Taxonomy.TagService');
+        }
         private function getColumnDao()
         {
             return $this->createDao('Custom:Taxonomy.ColumnDao');
@@ -195,7 +224,6 @@ class ColumnSerialize
     {
         if (isset($column['lowTagIds'])) {
             if (is_array($column['lowTagIds']) and !empty($column['lowTagIds'])) {
-                $column['lowTagNames'] = getTagNamesByIds($column['lowTagIds']);
                 $column['lowTagIds'] = '|' . implode('|', $column['lowTagIds']) . '|';
             
             } else {

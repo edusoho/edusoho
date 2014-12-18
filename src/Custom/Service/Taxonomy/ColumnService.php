@@ -25,6 +25,14 @@ interface ColumnService
 
         public function deleteColumn($id);
 
-          public function changeColumnAvatar($columnId, $filePath, array $options);
+        public function changeColumnAvatar($columnId, $filePath, array $options);
+        
+        public function findColumnsByIds(array $ids);
+
+        public function findTagIdsByColumnIdAndCourseComplexity($columId,$courseComplexity);
+  
+  
+       
 }
+
 

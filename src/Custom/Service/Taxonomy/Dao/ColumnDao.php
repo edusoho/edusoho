@@ -24,5 +24,7 @@ interface ColumnDao
     public function deleteColumn($id);
     
     public function getColumnByCode($code);
+
+    public function findTagIdsByColumnIdAndCourseComplexity($columId,$courseComplexity);
     
 }

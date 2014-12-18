@@ -40,6 +40,23 @@
             {{ radios('classIndex', {1:'<span class="color-1"></span>',2:'<span class="color-2"></span>', 3:'<span class="color-3"></span>',4:'<span class="color-4"></span>',5:'<span class="color-5"></span>', 6:'<span class="color-6"></span>',7:'<span class="color-7"></span>',8:'<span class="color-8"></span>'}, column.classIndex|default(1) ) }}
         </div>
     </div>
+    {% if column.id %}
+      <div class="form-group">
+          <label class="col-md-3 control-label" for="column-name-field">初级</label>
+          <div class="col-md-6 controls">
+            <select id="course_lowTagIds_1" name="lowTagIds[0]"  class="form-control width-input width-input-large">
+            {#   {{ select_options(category_choices('course'), course.categoryId, '分类') }} #}
+              <option>请选择标签</option>
+              {% for tag in lowLevelTags %}
+                 <option value="{{tag.id}}">{{tag.name}}</option>
+              {% endfor %}
+          </select>
+              <input name="lowTagIds[0]" value="1">
+              <input name="lowTagIds[1]" value="2">
+              <input name="lowTagIds[2]" value="3">
+          </div>
+     </div>
+    {% endif %}
     <div class="form-group">
         <label class="col-md-3 control-label" for="column-name-field">专栏描述</label>
         <div class="col-md-6 controls">
