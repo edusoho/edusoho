@@ -127,6 +127,10 @@ carts_list:
     pattern:  /carts/list
     defaults: { _controller: CustomWebBundle:Carts:list }
 
+carts_delete:
+    pattern:  /carts/delete
+    defaults: { _controller: CustomWebBundle:Carts:delete }
+
 carts_show:
     pattern:  /carts/show
     defaults: { _controller: CustomWebBundle:Carts:show }

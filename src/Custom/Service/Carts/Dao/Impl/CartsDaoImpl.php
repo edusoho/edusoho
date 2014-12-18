@@ -15,12 +15,6 @@ class CartsDaoImpl extends BaseDao implements CartsDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function findLimitCartsByUseId($limit,$userId)
-    {
-        $sql = "SELECT * FROM {$this->table}  WHERE userId = ? ORDER BY createdTime DESC LIMIT {$limit}";
-        return $this->getConnection()->fetchAll($sql,array($userId))? : array();
-    }
-
     public function addCarts(array $carts)
     {
         $affected = $this->getConnection()->insert($this->table, $carts);
@@ -41,28 +35,26 @@ class CartsDaoImpl extends BaseDao implements CartsDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function searchCarts($conditions, $oderBy, $start, $limit)
+    public function searchCarts($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->select('*')
             ->from($this->table, $this->table)
-            ->andWhere('courseId = :courseId')
+            ->andWhere('userId = :userId')
+            ->andWhere('itemType = :itemType')
             ->addOrderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-    public function searchCartsCount($conditions)
+    public function searchCartsCount(array $conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->select('COUNT(id)')
             ->from($this->table, $this->table)
-            ->andWhere('courseId = :courseId')
-            ->andWhere('postNum > :postNumLargerThan')
-            ->andWhere('title LIKE :title')
-            ->andWhere('content LIKE :content');
+            ->andWhere('userId = :userId');
         return $builder->execute()->fetchColumn(0);
     }
 

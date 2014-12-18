@@ -41,11 +41,82 @@ class CartsController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+    public function deleteAction(Request $request)
+    {
+        $ids = $request->request->get('ids', array());
+
+        $id = $request->query->get('id', null);
+
+        if ($id) {
+            array_push($ids, $id);
+        }
+
+        $res = $this->getCartsService()->deleteCartsByIds($ids);
+
+        if ($res) {
+            return $this->createJsonResponse(array('status'=>'success'));
+        } else {
+            return $this->createJsonResponse(array('status'=>'fail'));
+        }
+
+    }
+
     public function listAction(Request $request)
     {
-        // $carts = $this->getCartsService()->searchCarts();
+        $userId = $this->getCurrentUser()->id;
+
+        $condition = array(
+            'userId' => $userId,
+            'itemType' => 'courseware'
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCartsService()->searchCartsCount($condition),
+            3
+        );
+
+        $carts = $this->getCartsService()->searchCarts(
+            $condition,
+            array('createdTime','DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $ids = ArrayToolkit::column($carts,'itemId');
+        $courses = $this->getCourseService()->findCoursesByIds($ids);
+        $teacherIds = ArrayToolkit::column($courses,'teacherIds');
+        $users = $this->getUsers($teacherIds);
+
         return $this->render('CustomWebBundle:Carts:list.html.twig',array(
-            // 'carts' => $carts
+            'carts' => $carts,
+            'courses' =>$courses,
+            'users' => $users,
+            'paginator' => $paginator
         ));
+    }
+
+    private function getUsers($userIds)
+    {
+        $ids = array();
+
+        foreach ($userIds as $key => $userId) {
+            foreach ($userId as $key => $value) {
+                $ids[] = $value;
+            }
+        }
+        $ids = array_unique($ids);
+
+        return $this->getUserService()->findUsersByIds($ids);
+    }
+
+    private function getCartsService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Carts.CartsService');
+    }
+
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
