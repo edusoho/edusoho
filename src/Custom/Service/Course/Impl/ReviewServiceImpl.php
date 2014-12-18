@@ -13,7 +13,6 @@ class ReviewServiceImpl extends BaseReviewServiceImpl implements ReviewService
 		if (!ArrayToolkit::requireds($fields, array('courseId', 'reviewId','userId', 'content'))) {
 			throw $this->createServiceException('参数不正确，评价失败！');
 		}
-
 		list($course, $member) = $this->getCourseService()->tryTakeCourse($fields['courseId']);
 
 		$userId = $this->getCurrentUser()->id;
@@ -25,11 +24,6 @@ class ReviewServiceImpl extends BaseReviewServiceImpl implements ReviewService
 		if (empty($user)) {
 			return $this->createServiceException("用户(#{$fields['userId']})不存在,评价失败!");
 		}
-
-		$review = $this->getReviewDao()->getReviewByUserIdAndCourseId($user['id'], $course['id']);
-		if (empty($review)) {
-			return $this->createServiceException("评论(#{$fields['reviewId']})不存在,评价失败!");
-		}
 		$reviewPost = $this->getReviewPostDao()->addReviewPost(array(
 			'userId' => $fields['userId'],
 			'courseId' => $fields['courseId'],
@@ -37,7 +31,6 @@ class ReviewServiceImpl extends BaseReviewServiceImpl implements ReviewService
 			'content' => $fields['content'],
 			'createdTime' => time(),
 		));
-
 		return $reviewPost;
 	}
 
