@@ -118,6 +118,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 		$this->getLogService()->info('review', 'delete', "删除评价#{$id}");
 	}
 
+
 	private function calculateCourseRating($courseId)
 	{
 		$ratingSum = $this->getReviewDao()->getReviewRatingSumByCourseId($courseId);

@@ -106,6 +106,11 @@ course_review_create:
     pattern:  /course/{id}/review/create
     defaults: { _controller: CustomWebBundle:CourseReview:create }
 
+course_review_post_create:
+    pattern:  /course/{id}/review/post/create
+    defaults: { _controller: CustomWebBundle:CourseReview:createPost }
+
+
 
 
 
