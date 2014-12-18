@@ -10,6 +10,7 @@ use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
 
 class FileServiceImpl extends BaseService implements FileService
 {
@@ -124,6 +125,11 @@ class FileServiceImpl extends BaseService implements FileService
 	{
 		$this->getFileDao()->deleteFile($id);
 	}
+
+    public function getFile($id)
+    {
+        return $this->getFileDao()->getFile($id);
+    }
 
 	public function bindFile($id, $target)
 	{
@@ -270,6 +276,12 @@ class FileServiceImpl extends BaseService implements FileService
 
         return $file;
 	}
+
+    public function getFilesByIds($ids)
+    {
+        $files=$this->getFileDao()->getFilesByIds($ids);
+        return ArrayToolkit::index($files, 'id');
+    }
 
     private function getSettingService()
     {

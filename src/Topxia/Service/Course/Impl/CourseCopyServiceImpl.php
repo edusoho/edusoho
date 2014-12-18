@@ -142,7 +142,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
         foreach ($lessons as $lesson) {
 
-            $fields = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'tags', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'startTime', 'endTime', 'replayStatus', 'liveProvider', 'userId'));
+            $fields = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'tags', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'materialNum','startTime', 'endTime', 'replayStatus', 'liveProvider', 'userId'));
             $fields['courseId'] = $newCourse['id'];
             if ($lesson['chapterId']) {
                 $fields['chapterId'] = $chapters[$lesson['chapterId']]['id'];
@@ -152,7 +152,11 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $fields['createdTime'] = time();
 
-            $map[$lesson['id']] = $this->getLessonDao()->addLesson($fields);
+            $copiedLesson = $this->getLessonDao()->addLesson($fields);
+            $map[$lesson['id']] = $copiedLesson;
+            if(array_key_exists("mediaId", $copiedLesson) && $copiedLesson["mediaId"]>0 && in_array($copiedLesson["type"], array('video', 'audio','ppt'))) {
+                $this->getUploadFileDao()->updateFileUsedCount(array($copiedLesson["mediaId"]), 1);
+            }
         }
 
         return $map;
@@ -224,7 +228,12 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $fields['createdTime'] = time();
 
-            $map[$material['id']] = $this->getMaterialDao()->addMaterial($fields);
+            $copiedMaterial = $this->getMaterialDao()->addMaterial($fields);
+            $map[$material['id']] = $copiedMaterial;
+
+            if(array_key_exists("fileId", $copiedMaterial) && $copiedMaterial["fileId"]>0 ) {
+                $this->getUploadFileDao()->updateFileUsedCount(array($copiedMaterial["fileId"]), 1);
+            }
         }
 
         return $map;
@@ -295,6 +304,11 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
+    public function getUploadFileDao()
+    {
+        return $this->createDao('File.UploadFileDao');
+    }
+
     public function getCourseMemberDao()
     {
         return $this->createDao('Course.CourseMemberDao');
@@ -313,11 +327,6 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
     public function getQuestionDao()
     {
         return $this->createDao('Question.QuestionDao');
-    }
-
-    public function getUploadFileDao()
-    {
-        return $this->createDao('File.UploadFileDao');
     }
 
     public function getCourseChapterDao()
