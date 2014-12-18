@@ -42,20 +42,103 @@
     </div>
     {% if column.id %}
       <div class="form-group">
-          <label class="col-md-3 control-label" for="column-name-field">初级</label>
+          <label class="col-md-3 control-label" for="column-lowTagIds-field">初级标签</label>
           <div class="col-md-6 controls">
             <select id="course_lowTagIds_1" name="lowTagIds[0]"  class="form-control width-input width-input-large">
-            {#   {{ select_options(category_choices('course'), course.categoryId, '分类') }} #}
-              <option>请选择标签</option>
-              {% for tag in lowLevelTags %}
-                 <option value="{{tag.id}}">{{tag.name}}</option>
-              {% endfor %}
-          </select>
-              <input name="lowTagIds[0]" value="1">
-              <input name="lowTagIds[1]" value="2">
-              <input name="lowTagIds[2]" value="3">
+              {#   {{ select_options(category_choices('course'), course.categoryId, '分类') }} #}
+              <option value="-1">请选择第一个标签</option>
+              {% if lowLevelTags %}
+                {% for tag in lowLevelTags %}
+                   <option value="{{tag.id}}" {% if tag.id == column.lowTagIds[0] %}selected="selected"{% endif %}>{{tag.name}}</option>
+                {% endfor %}
+              {% endif %}
+            </select>
+            <select id="course_lowTagIds_2" name="lowTagIds[1]"  class="form-control width-input width-input-large">
+              {#   {{ select_options(category_choices('course'), course.categoryId, '分类') }} #}
+              <option value="-1">请选择第二个标签</option>
+              {% if lowLevelTags %}
+                {% for tag in lowLevelTags %}
+                   <option value="{{tag.id}}" {% if tag.id == column.lowTagIds[1] %}selected="selected"{% endif %}>{{tag.name}}</option>
+                {% endfor %}
+              {% endif %}
+            </select>
+            <select id="course_lowTagIds_3" name="lowTagIds[2]"  class="form-control width-input width-input-large">
+              {#   {{ select_options(category_choices('course'), course.categoryId, '分类') }} #}
+              <option value="-1">请选择第三个标签</option>
+              {% if lowLevelTags %}
+                {% for tag in lowLevelTags %}
+                   <option value="{{tag.id}}" {% if tag.id == column.lowTagIds[2] %}selected="selected"{% endif %}>{{tag.name}}</option>
+                {% endfor %}
+              {% endif %}
+            </select>
+             
           </div>
-     </div>
+      </div>
+      <div class="form-group">
+          <label class="col-md-3 control-label" for="column-middleTagIds-field">中级标签</label>
+          <div class="col-md-6 controls">
+            <select id="course_middleTagIds_1" name="middleTagIds[0]"  class="form-control width-input width-input-large">
+              {#   {{ select_options(category_choices('course'), course.categoryId, '分类') }} #}
+              <option value="-1">请选择第一个标签</option>
+              {% if middleTagIds %}
+                {% for tag in middleTagIds %}
+                   <option value="{{tag.id}}"{% if tag.id == column.middleTagIds[0] %}selected="selected"{% endif %}>{{tag.name}}</option>
+                {% endfor %}
+              {% endif %}
+            </select>
+            <select id="course_middleTagIds_2" name="middleTagIds[1]"  class="form-control width-input width-input-large">
+              {#   {{ select_options(category_choices('course'), course.categoryId, '分类') }} #}
+              <option value="-1">请选择第二个标签</option>
+              {% if middleTagIds %}
+                {% for tag in middleTagIds %}
+                   <option value="{{tag.id}}" {% if tag.id == column.middleTagIds[1] %}selected="selected"{% endif %}>{{tag.name}}</option>
+                {% endfor %}
+              {% endif %}
+            </select>
+            <select id="course_lowTagIds_3" name="middleTagIds[2]"  class="form-control width-input width-input-large">
+              {#   {{ select_options(category_choices('course'), course.categoryId, '分类') }} #}
+              <option value="-1">请选择第三个标签</option>
+              {% if middleTagIds %}
+                {% for tag in middleTagIds %}
+                   <option value="{{tag.id}}" {% if tag.id == column.middleTagIds[2] %}selected="selected"{% endif %}>{{tag.name}}</option>
+                {% endfor %}
+              {% endif %}
+            </select>
+          </div>
+      </div>
+      <div class="form-group">
+          <label class="col-md-3 control-label" for="column-highTagIds-field">高级标签</label>
+          <div class="col-md-6 controls">
+          <select id="course_highTagIds_1" name="highTagIds[0]"  class="form-control width-input width-input-large">
+              {#   {{ select_options(category_choices('course'), course.categoryId, '分类') }} #}
+              <option value="-1">请选择第一个标签</option>
+              {% if highTagIds %}
+                {% for tag in highTagIds %}
+                   <option value="{{tag.id}}" {% if tag.id == column.highTagIds[0] %}selected="selected"{% endif %}>{{tag.name}}</option>
+                {% endfor %}
+              {% endif %}
+            </select>
+            <select id="course_highTagIds_2" name="highTagIds[1]"  class="form-control width-input width-input-large">
+              {#   {{ select_options(category_choices('course'), course.categoryId, '分类') }} #}
+             <option value="-1">请选择第二个标签</option>
+              {% if highTagIds %}
+                {% for tag in highTagIds %}
+                   <option value="{{tag.id}}" {% if tag.id == column.highTagIds[1] %}selected="selected"{% endif %}>{{tag.name}}</option>
+                {% endfor %}
+              {% endif %}
+            </select>
+            <select id="course_highTagIds_3" name="highTagIds[2]"  class="form-control width-input width-input-large">
+              {#   {{ select_options(category_choices('course'), course.categoryId, '分类') }} #}
+             <option value="-1">请选择第三个标签</option>
+              {% if highTagIds %}
+                {% for tag in highTagIds %}
+                   <option value="{{tag.id}}" {% if tag.id == column.highTagIds[2] %}selected="selected"{% endif %}>{{tag.name}}</option>
+                {% endfor %}
+              {% endif %}
+            </select>
+             
+          </div>
+      </div>
     {% endif %}
     <div class="form-group">
         <label class="col-md-3 control-label" for="column-name-field">专栏描述</label>

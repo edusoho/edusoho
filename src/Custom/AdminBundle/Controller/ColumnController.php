@@ -41,6 +41,7 @@ class ColumnController extends BaseController
 	public function updateAction(Request $request, $id)
 	{
 		$column = $this->getColumnService()->getColumn($id);
+		//var_dump($column);
 		if (empty($column)) {
 			throw $this->createNotFoundException();
 		}
@@ -60,8 +61,8 @@ class ColumnController extends BaseController
 		return $this->render('CustomAdminBundle:Column:column-modal.html.twig', array(
 			'column' => $column,
 			'lowLevelTags' => $lowLevelTags,
-			'middleLevelTags'=>$middleLevelTags,
-			'highLevelTags'=>$highLevelTags
+			'middleTagIds'=>$middleLevelTags,
+			'highTagIds'=>$highLevelTags
 		));
 	}
 

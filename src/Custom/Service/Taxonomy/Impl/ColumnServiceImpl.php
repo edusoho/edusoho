@@ -90,6 +90,10 @@ class ColumnServiceImpl extends BaseService implements ColumnService
         $fields = ArrayToolkit::parts($fields, array('name','subtitle','weight','classIndex','description','lowTagIds','middleTagIds','highTagIds','code'));
         $this->filterColumnFields($fields, $column);
 
+        $fields['lowTagIds'] = array_filter($fields['lowTagIds']);
+        $fields['middleTagIds'] = array_filter($fields['middleTagIds']);
+        $fields['highTagIds'] = array_filter($fields['highTagIds']);
+
         $this->getLogService()->info('column', 'update', "编辑专栏{$fields['name']}(#{$id})");
 
         return $this->getColumnDao()->updateColumn($id, ColumnSerialize::serialize($fields));
@@ -222,6 +226,7 @@ class ColumnSerialize
 
     public static function serialize(array &$column)
     {
+
         if (isset($column['lowTagIds'])) {
             if (is_array($column['lowTagIds']) and !empty($column['lowTagIds'])) {
                 $column['lowTagIds'] = '|' . implode('|', $column['lowTagIds']) . '|';
