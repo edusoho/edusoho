@@ -14,20 +14,20 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="form[currentPassword]"]',
+            element: '#current-password-field',
             required: true
         });
 
         validator.addItem({
-            element: '[name="form[newPassword]"]',
+            element: '#new-password-field',
             required: true,
             rule: 'minlength{min:5} maxlength{max:20}'
         });
 
         validator.addItem({
-            element: '[name="form[confirmPassword]"]',
+            element: '#confrim-password-field',
             required: true,
-            rule: 'confirmation{target:#form_newPassword}'
+            rule: 'confirmation{target:#new-password-field}'
         });
     };
 

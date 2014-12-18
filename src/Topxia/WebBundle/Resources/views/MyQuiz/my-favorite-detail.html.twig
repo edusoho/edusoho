@@ -4,9 +4,9 @@
 <div class="panel panel-default" style="display:none">
 
 	<div class="panel-body">
-		正确答案：{{ question.answer|join(', ') }}
+		{{ '正确答案：'|trans }}{{ question.answer|join(', ') }}
 		<br>
-		{% if question.analysis != '' %}解析：{{ question.analysis }}{% endif %}
+		{% if question.analysis != '' %}{{ '解析：'|trans }}{{ question.analysis }}{% endif %}
 	</div>
 
 </div>
@@ -32,9 +32,9 @@
 			{% endfor %}
 		</ul>
 
-		正确答案：{{ keys|join(',') }}
+		{{ '正确答案：'|trans }}{{ keys|join(',') }}
 		<br>
-		{% if question.analysis != '' %}解析：{{ question.analysis }}{% endif %}
+		{% if question.analysis != '' %}{{ '解析：'|trans }}{{ question.analysis }}{% endif %}
 	</div>
 
 </div>
@@ -45,9 +45,9 @@
 <div class="panel panel-default" style="display:none">
 
 	<div class="panel-body">
-		正确答案：{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}
+		{{ '正确答案：'|trans }}{% if question.answer[0] == 1 %} {{ '正确'|trans }} {% else %} {{ '错误'|trans }} {% endif %}
 		<br>
-		{% if question.analysis != '' %}解析：{{ question.analysis }}{% endif %}
+		{% if question.analysis != '' %}{{ '解析：'|trans }}{{ question.analysis }}{% endif %}
 	</div>
 
 </div>
@@ -57,9 +57,9 @@
 <div class="panel panel-default" style="display:none">
 
 	<div class="panel-body">
-		正确答案：{{ question.answer[0]}}
+		{{ '正确答案：'|trans }}{{ question.answer[0]}}
 		<br>
-		{% if question.analysis != '' %}解析：{{ question.analysis }}{% endif %}
+		{% if question.analysis != '' %}{{ '解析：'|trans }}{{ question.analysis }}{% endif %}
 	</div>
 
 </div>

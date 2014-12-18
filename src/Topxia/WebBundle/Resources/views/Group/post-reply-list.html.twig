@@ -13,16 +13,16 @@
             </div>
             <div class="content">{{post.content|raw}}</div>
             <div class="text-muted text-normal pull-right">
-              <a href="javascript:" class="li-reply" postId="{{postMain.id}}" postName="{{users[post.userId].nickname}}" data-from-user-id= "{{ users[post.userId].id }}"> 回复</a>
+              <a href="javascript:" class="li-reply" postId="{{postMain.id}}" postName="{{users[post.userId].nickname}}" data-from-user-id= "{{ users[post.userId].id }}"> {{ '回复'|trans }}</a>
             </div>
           </div>
         </li>
       {% endfor %}
     <div class="actions">
-      <a class="replyToo btn btn-default btn-xs pull-right" data-status="hidden" postId="{{post.id}}" href="javascript:;">我也要说</a>
+      <a class="replyToo btn btn-default btn-xs pull-right" data-status="hidden" postId="{{post.id}}" href="javascript:;">{{ '我也要说'|trans }}</a>
       {% if posts|length > 5 %}
       <div class="lookOver-{{postMain.id}}">
-        <span class="text-muted ">还有{{postReplyCount[post.id]-5}}条回复，</span><a href="javascript:" postId="{{postMain.id}}" class="lookOver">点击查看</a>
+        <span class="text-muted ">{{ '还有%number%条回复，'|trans({'%bnumber%':postReplyCount[post.id]-5}) }}</span><a href="javascript:" postId="{{postMain.id}}" class="lookOver">{{ '点击查看'|trans }}</a>
       </div>
       {% endif %}
       <span class="text-muted">&nbsp;</sapn>
@@ -33,18 +33,18 @@
     {% if postReplyPaginator[postMain.id].lastPage > 1 %}
       <ul  class="paginator-{{postMain.id}} pagination pagination-sm pull-left " style="display:none;">
         {% if postReplyPaginator[postMain.id].currentPage == postReplyPaginator[postMain.id].firstPage %}
-          <li class="disabled "><span>上一页</span></li>
+          <li class="disabled "><span>{{ '上一页'|trans }}</span></li>
         {% else %}
-          <li class="postReply-page"  postId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator[postMain.id].previousPage})}}"><a >上一页</a></li>
+          <li class="postReply-page"  postId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator[postMain.id].previousPage})}}"><a >{{ '上一页'|trans }}</a></li>
         {% endif %}
         {% for page in postReplyPaginator[postMain.id].pages %}
           <li {% if page == postReplyPaginator[postMain.id].currentPage %}class="active"{% endif %} class="postReply-page"  postId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:page})}}"><a  >{{ page }}</a></li>
         {% endfor %}
 
         {% if postReplyPaginator[postMain.id].currentPage == postReplyPaginator[postMain.id].lastPage %}
-          <li class="disabled"><span>下一页</span></li>
+          <li class="disabled"><span>{{ '下一页'|trans }}</span></li>
         {% else %}
-          <li class="postReply-page"  postId="{{postMain.id}}" data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator[postMain.id].nextPage})}}"><a>下一页</a></li>
+          <li class="postReply-page"  postId="{{postMain.id}}" data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator[postMain.id].nextPage})}}"><a>{{ '下一页'|trans }}</a></li>
         {% endif %}
       </ul>
     {% endif %}
@@ -53,14 +53,14 @@
   <div id="li-{{post.id}}" style="display:none;">
   <form  class="thread-post-reply-form reply-{{post.id}}" method="post"  post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
     <div class="form-group">
-      <label class="control-label hide" for="reply-content-{{post.id}}">回复内容</label>
+      <label class="control-label hide" for="reply-content-{{post.id}}">{{ '回复内容'|trans }}</label>
       <div class="controls">
       <textarea id="reply-content-{{post.id}}" class="form-control"></textarea>
       </div>
     <div id="fromUserIdDiv"></div>
     </div>
     <div class="form-group">
-      <button type="submit" postId="{{postMain.id}}" class="reply-btn btn btn-xs btn-primary pull-right"  style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
+      <button type="submit" postId="{{postMain.id}}" class="reply-btn btn btn-xs btn-primary pull-right"  style="margin-top:-10px;"data-submiting-text="{{ '正在发表回复'|trans }}">{{ '发表'|trans }}</button>
     </div>
   </form>
 </div>

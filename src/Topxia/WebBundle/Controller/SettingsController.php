@@ -119,34 +119,27 @@ class SettingsController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 
-		$form = $this->createFormBuilder()
-			->add('avatar', 'file')
-			->getForm();
-
 		if ($request->getMethod() == 'POST') {
-			$form->bind($request);
-			if ($form->isValid()) {
-				$data = $form->getData();
-				$file = $data['avatar'];
 
-				if (!FileToolkit::isImageFile($file)) {
-					return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
-				}
+			$file = $request->files->get('avatar');
 
-				$filenamePrefix = "user_{$user['id']}_";
-				$hash = substr(md5($filenamePrefix . time()), -8);
-				$ext = $file->getClientOriginalExtension();
-				$filename = $filenamePrefix . $hash . '.' . $ext;
-
-				$directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-				$file = $file->move($directory, $filename);
-
-				$fileName = str_replace('.', '!', $file->getFilename());
-
-				return $this->redirect($this->generateUrl('settings_avatar_crop', array(
-					'file' => $fileName)
-				));
+			if (!FileToolkit::isImageFile($file)) {
+				return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
 			}
+
+			$filenamePrefix = "user_{$user['id']}_";
+			$hash = substr(md5($filenamePrefix . time()), -8);
+			$ext = $file->getClientOriginalExtension();
+			$filename = $filenamePrefix . $hash . '.' . $ext;
+
+			$directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
+			$file = $file->move($directory, $filename);
+
+			$fileName = str_replace('.', '!', $file->getFilename());
+
+			return $this->redirect($this->generateUrl('settings_avatar_crop', array(
+				'file' => $fileName)
+			));
 		}
 
 		$hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
@@ -156,13 +149,8 @@ class SettingsController extends BaseController
 			$partnerAvatar = null;
 		}
 
-		$fromCourse = $request->query->get('fromCourse');
-
 		return $this->render('TopxiaWebBundle:Settings:avatar.html.twig', array(
-			'form' => $form->createView(),
-			'user' => $this->getUserService()->getUser($user['id']),
 			'partnerAvatar' => $partnerAvatar,
-			'fromCourse' => $fromCourse,
 		));
 	}
 
@@ -236,29 +224,20 @@ class SettingsController extends BaseController
 			return $this->redirect($this->generateUrl('settings_setup'));
 		}
 
-		$form = $this->createFormBuilder()
-			->add('currentPassword', 'password')
-			->add('newPassword', 'password')
-			->add('confirmPassword', 'password')
-			->getForm();
-
 		if ($request->getMethod() == 'POST') {
-			$form->bind($request);
-			if ($form->isValid()) {
-				$passwords = $form->getData();
-				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword'])) {
-					$this->setFlashMessage('danger', '当前密码不正确，请重试！');
-				} else {
-					$this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
-					$this->setFlashMessage('success', '密码修改成功。');
-				}
 
-				return $this->redirect($this->generateUrl('settings_password'));
+			$passwords = $request->request->all();
+			if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword'])) {
+				$this->setFlashMessage('danger', '当前密码不正确，请重试！');
+			} else {
+				$this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
+				$this->setFlashMessage('success', '密码修改成功。');
 			}
+
+			return $this->redirect($this->generateUrl('settings_password'));
 		}
 
 		return $this->render('TopxiaWebBundle:Settings:password.html.twig', array(
-			'form' => $form->createView()
 		));
 	}
 

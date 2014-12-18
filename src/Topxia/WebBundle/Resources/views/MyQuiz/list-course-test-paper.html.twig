@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 {% import 'TopxiaWebBundle::macro.html.twig' as macro %}
 
-{% block title %}试卷批阅 - {{ parent() }}{% endblock %}
+{% block title %}{{ '试卷批阅'|trans }} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'testCheck' %}
 {% set parentId = parentId | default(null)%}
@@ -12,12 +12,12 @@
 <div class="panel panel-default panel-col">
 
   <div class="panel-heading">
-    试卷批阅
+    {{ '试卷批阅'|trans }}
   </div>
   <div class="panel-body">
     <ul class="nav nav-tabs">
-      <li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}">未批阅</a></li>
-      <li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('course_manage_test_check', {id:course.id, status:'finished'}) }}">已批阅</a></li>
+      <li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}">{{ '未批阅'|trans }}</a></li>
+      <li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('course_manage_test_check', {id:course.id, status:'finished'}) }}">{{ '已批阅'|trans }}</a></li>
     </ul>
     <br>
     {% include 'TopxiaWebBundle:MyQuiz:list-teacher-test.html.twig' %}

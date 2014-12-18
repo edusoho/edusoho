@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}写私信 - {{ parent() }}{% endblock %}
+{% block title %}{{ '写私信'|trans }} - {{ parent() }}{% endblock %}
 {% set script_controller = 'message/create' %}
 {% 
   set script_arguments = {
@@ -41,8 +41,8 @@
   <div class="col-md-8 col-md-offset-2">
     <div class="panel panel-default panel-page">
       <div class="panel-heading">
-        <a href="{{ path('message')}}" class="btn btn-default pull-right">返回我的私信</a>
-        <h2>写私信</h2>
+        <a href="{{ path('message')}}" class="btn btn-default pull-right">{{ '返回我的私信'|trans }}</a>
+        <h2>{{ '写私信'|trans }}</h2>
       </div>
 
       <form id="message-create-form" class="form-horizontal" method="post">
@@ -62,7 +62,7 @@
         <div class="form-group">
           <div class="col-md-12 controls">
             {{ form_rest(form) }}
-            <input id="message-create-btn" class="btn btn-primary pull-right" type="submit" value="发送">
+            <input id="message-create-btn" class="btn btn-primary pull-right" type="submit" value="{{ '发送'|trans }}">
           </div>
         </div>
 

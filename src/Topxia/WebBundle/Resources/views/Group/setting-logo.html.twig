@@ -2,7 +2,7 @@
 
 {% set script_controller = 'group/group_logo' %}
 
-{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+{% block title %}{{groupinfo.title}}{{ '小组'|trans }} - {{ parent() }}{% endblock %}
 
 {% set settingNav = 'logo' %}
 
@@ -11,25 +11,25 @@
   <form id="group-avatar-form" class="form-horizontal" method="post" enctype="multipart/form-data" action="{{path ('group_logo_set',{id:id})}}">
   
   <div class="form-group">
-    <label class="col-md-2 control-label">当前图标</label>
+    <label class="col-md-2 control-label">{{ '当前图标'|trans }}</label>
     <div class="controls col-md-8 controls">
       <img src="{{ file_path(logo, 'group.png')}}">
     </div>
   </div>
   <div class="form-group">
     <div class="col-md-2 control-label">
-      <label for="form_avatar" class="required">新图标 </label>
+      <label for="form_avatar" class="required">{{ '新图标'|trans }} </label>
     </div>
     <div class="controls col-md-8 controls">
       <input type="file" id="form_avatar" name="form[avatar]" required="required" accept="image/gif,image/jpeg,image/png" />
-      <p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。推荐大小（180*180）</p>
+      <p class="help-block">{{ '你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过>%size%。推荐大小（180*180）'|trans({'%size%':upload_max_filesize()}) }}</p>
     </div>
   </div>
   <div class="form-group">
     <div class="col-md-2 control-label"></div>
     <div class="controls col-md-8 controls">
       
-      <button id="group-save-btn" data-submiting-text="正在上传" type="submit" class="btn btn-primary">上传</button>
+      <button id="group-save-btn" data-submiting-text="{{ '正在上传'|trans }}" type="submit" class="btn btn-primary">{{ '上传'|trans }}</button>
       
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </div>

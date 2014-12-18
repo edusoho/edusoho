@@ -1,16 +1,16 @@
 <form id="transfer-group-form" class="form-horizontal" method="post">
     <div class="form-group">
-      <label class="col-xs-2 control-label" for="user_nickname">转移给</label>
+      <label class="col-xs-2 control-label" for="user_nickname">{{ '转移给'|trans }}</label>
       <div class="col-xs-7 controls">
         <input type="text"  id="username" name="user[name]" class="form-control"
-        data-url="{{path('group_thread_check_user')}}" data-display="用户昵称"  placeholder="请输入用户昵称">
+        data-url="{{path('group_thread_check_user')}}" data-display="{{ '用户昵称'|trans }}"  placeholder="{{ '请输入用户昵称'|trans }}">
         <div class="help-block" style="display:none;"></div>
       </div>
     </div>
 
     <div class="row">
       <div class="col-xs-7 col-xs-offset-2">
-        <button id="transfer-group-btn" data-submiting-text="正在转移" type="submit" class="btn btn-primary">转移</button>
+        <button id="transfer-group-btn" data-submiting-text="{{ '正在转移'|trans }}" type="submit" class="btn btn-primary">{{ '转移'|trans }}</button>
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -22,7 +22,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">请输入您的登录密码</h4>
+        <h4 class="modal-title" id="myModalLabel">{{ '请输入您的登录密码'|trans }}</h4>
       </div>          
       <form  class="form-horizontal" method="post" action="{{path('group_transfer',{id:groupinfo.id})}}">
         <div class="modal-body">
@@ -33,7 +33,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-md-2 control-label" >密码</label>
+                <label class="col-md-2 control-label" >{{ '密码'|trans }}</label>
                 <div class="col-md-7 controls">
                   <input type="password"  name="user[password]" class="form-control" value=""
                  ><input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -41,8 +41,8 @@
               </div>
         </div>
         <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-              <button type="submit" class="btn btn-primary" >确认转移小组</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">{{ '关闭'|trans }}</button>
+              <button type="submit" class="btn btn-primary" >{{ '确认转移小组'|trans }}</button>
         </div>   
       </form>
     </div>

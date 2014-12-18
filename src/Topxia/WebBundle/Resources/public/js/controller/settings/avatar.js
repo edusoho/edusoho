@@ -8,10 +8,10 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="form[avatar]"]',
+            element: '#avatar-field',
             required: true,
             rule: 'maxsize_image',
-            requiredErrorMessage: '请选择要上传的头像文件。'
+            errormessageRequired: '请选择要上传的头像文件。'
         });
 
         $('.use-partner-avatar').on('click', function(){
