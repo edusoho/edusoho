@@ -30,12 +30,6 @@ define(function(require, exports, module) {
                 window.location.reload();
             });
         });
-        $('.glyphicon-question-sign').hover(function(){
-            $('#tips').show();
-        });
-        $('.glyphicon-question-sign').mouseout(function(){
-            $('#tips').hide();
-        });        
 	};
 
 });
