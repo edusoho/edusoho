@@ -121,20 +121,20 @@ define(function(require, exports, module) {
             var self = this;
 
             if ($("div .file-browser-list-container").length > 0) {
-                    var materialBrowser = new MaterialFileBrowser({
-                        element: this.$('[data-role=file-browser]')
-                    }).show();
+                var materialBrowser = new MaterialFileBrowser({
+                    element: this.$('[data-role=file-browser]')
+                }).show();
 
-                    materialBrowser.on('select', function(file) {
-                        self.trigger('change', self.get("uploadPanel")._convertFileToMedia(file));
-                    });
+                materialBrowser.on('select', function(file) {
+                    self.trigger('change', self._convertFileToMedia(file));
+                });
             }
             var courseBrowser = new CourseFileBrowser({
                 element: this.$('[data-role=course-file-browser]')
             }).show();
 
             courseBrowser.on('select', function(file) {
-                self.trigger('change', self.get("uploadPanel")._convertFileToMedia(file));
+                self.trigger('change', self._convertFileToMedia(file));
             });
         },
 
