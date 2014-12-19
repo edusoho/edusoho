@@ -1,0 +1,25 @@
+{% extends 'TopxiaWebBundle:Question2:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {% include 'TopxiaWebBundle:Question2:question-choice-header.html.twig' %}
+{% endblock %}
+
+{% block body %}
+
+  {% include 'TopxiaWebBundle:Question2:question-choice-options.html.twig' %}
+
+{% endblock %}
+
+{% block footer %}
+  {% if itemResult.answer|default(null) %}
+    {% set answerChoiceIndex = itemResult.answer|split(',') %}
+  {% endif %}
+    <div class="question-choices-inputs">
+      {% for key, choice in question.metas.choices %}
+        {% set choiceIndex = (65+key)|chr %}
+        <label class="checkbox-inline">
+          <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" name="answer[{{ question.id }}][]" value="{{ key }}"  {% if key in answerChoiceIndex|default(null) %}checked{% endif %}> {{ choiceIndex }}
+        </label>
+      {% endfor %}
+    </div>
+{% endblock %}
