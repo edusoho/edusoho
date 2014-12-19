@@ -81,7 +81,7 @@ class PayCenterController extends BaseController
             return $this->forward("TopxiaWebBundle:Order:resultNotice");
         }
 
-        $this->getPayCenterService()->pay($payData);
+        $this->getPayCenterService()->pay($payData, $successCallback);
 
         list($success, $order) = $this->getOrderService()->payOrder($payData);
 
@@ -111,6 +111,9 @@ class PayCenterController extends BaseController
         $response = $this->createPaymentResponse($name, $request->request->all());
 
         $payData = $response->getPayData();
+
+        $this->getPayCenterService()->pay($payData);
+
         try {
             list($success, $order) = $this->getOrderService()->payOrder($payData);
             if ($order['status'] == 'paid' and $successCallback) {
@@ -123,7 +126,7 @@ class PayCenterController extends BaseController
         }
     }
 
-    public function showAction(Request $request)
+    public function show1Action(Request $request)
     {
         $orderId = $request->query->get("id");
         $order = $this->getOrderService()->getOrder($orderId);

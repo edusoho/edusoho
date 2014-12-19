@@ -326,7 +326,7 @@ class CoinController extends BaseController
 
     protected function getCashAccountService()
     {
-        return $this->createService('Cash.CashAccountService');
+        return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
 
     protected function getCashOrdersService(){

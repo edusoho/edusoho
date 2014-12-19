@@ -1063,9 +1063,4 @@ class GroupThreadController extends BaseController
         return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
 
-    private function getCashAccountService()
-    {
-        return $this->getServiceKernel()->createService('Cash.CashAccountService');
-    }
-
 }

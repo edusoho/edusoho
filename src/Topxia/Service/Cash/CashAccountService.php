@@ -1,7 +1,5 @@
 <?php
-namespace Topxia\Service\Cash\Impl;
-
-use Topxia\Service\Cash\CashAccountService;
+namespace Topxia\Service\Cash;
 
 interface CashAccountService
 {
