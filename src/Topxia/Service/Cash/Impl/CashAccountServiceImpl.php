@@ -112,7 +112,6 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
         if(!is_numeric($value))
         {
             throw $this->createServiceException('充值金额必须为整数!');
-            
         }
         
         $coinSetting=$this->getSettingService()->get('coin',array());

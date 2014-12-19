@@ -11,17 +11,7 @@ class CourseOrderProcessor implements OrderProcessor
 		return $this->router;
 	}
 
-	public function doPayReturn($success, $order) {
-	    if (!$success) {
-	        return $this->router;
-	    }
-
-	    $this->getCourseOrderService()->doSuccessPayOrder($order['id']);
-
-	    return $this->router;
-	}
-
-	public function doPayNotify($success, $order) {
+	public function doPaySuccess($success, $order) {
         if (!$success) {
             return ;
         }

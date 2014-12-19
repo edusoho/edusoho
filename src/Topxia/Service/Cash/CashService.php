@@ -11,4 +11,11 @@ interface CashService
 
     public function inflow($userId, $flow);
 
+    public function outFlowByCoin($outFlow);
+
+    public function inFlowByRmb($inFlow);
+
+    public function outFlowByRmb($outFlow);
+
+    public function changeRmbToCoin($rmbFlow);
 }
