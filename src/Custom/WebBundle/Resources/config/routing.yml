@@ -127,7 +127,9 @@ course_manage_chapter_edit:
 
 
 
-
+course_materials:
+    pattern:  /course/{id}/material/
+    defaults: { _controller: CustomWebBundle:CourseMaterial:index }
 
 
 
