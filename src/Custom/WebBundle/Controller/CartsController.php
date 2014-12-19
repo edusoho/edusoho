@@ -29,9 +29,9 @@ class CartsController extends BaseController
         ));
     }
 
-    // public function FunctionName($value='')
+    // public function showAction(Request $request)
     // {
-    //     # code...
+        
     // }
 
     public function deleteAction(Request $request)
