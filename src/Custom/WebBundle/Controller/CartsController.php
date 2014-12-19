@@ -18,18 +18,21 @@ class CartsController extends BaseController
             $courseIds = ArrayToolkit::column($carts,'itemId');
             $courses = $this->getCourseService()->findCoursesByIds($courseIds);
             $courses = ArrayToolkit::index($courses,'id');
+            $teacherIds = ArrayToolkit::column($courses,'teacherIds');
+            $users = $this->getUsers($teacherIds);
         }
 
         return $this->render('CustomWebBundle:Carts:show-popover.html.twig',array(
             'carts' => $carts,
-            'courses' => $courses
+            'courses' => $courses,
+            'users' => $users,
         ));
     }
 
-    public function FunctionName($value='')
-    {
-        # code...
-    }
+    // public function FunctionName($value='')
+    // {
+    //     # code...
+    // }
 
     public function deleteAction(Request $request)
     {
@@ -57,7 +60,7 @@ class CartsController extends BaseController
 
         $condition = array(
             'userId' => $userId,
-            'itemType' => 'courseware'
+            'itemType' => 'course'
         );
 
         $paginator = new Paginator(

@@ -90,3 +90,11 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 .price-count{
 	color:red;
 }
+
+.popover-teachers {
+	font-size: 6px;
+	width : 120px;
+	word-wrap:break-word; 
+	overflow:hidden;
+	white-space: nowrap;
+}

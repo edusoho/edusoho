@@ -13,12 +13,12 @@ class CartsServiceImpl extends BaseService  implements CartsService
 
     public function searchCarts (array $conditions, array $oderBy, $start, $limit)
     {
-        return $this->getCartsDao()->searchCartss($conditions, $oderBy, $start, $limit);
+        return $this->getCartsDao()->searchCarts($conditions, $oderBy, $start, $limit);
     }
 
     public function searchCartsCount(array $conditions)
     {
-        return $this->getCartsDao()->searchCartssCount($conditions);
+        return $this->getCartsDao()->searchCartsCount($conditions);
     }
 
     public function findLimitCartsByUseId($limit,$userId)
