@@ -1,0 +1,1 @@
+ALTER TABLE  `course_chapter` ADD  `description` varchar(1024)  AFTER  `title`;

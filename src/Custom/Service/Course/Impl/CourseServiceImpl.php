@@ -137,26 +137,40 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 		return $fields;
 	}
 
+	public function updateChapter($courseId, $chapterId, $fields)
+	{
+		$chapter = $this->getChapter($courseId, $chapterId);
+		if (empty($chapter)) {
+			throw $this->createServiceException("章节#{$chapterId}不存在！");
+		}
+		$fields = ArrayToolkit::parts($fields, array('title','description'));
+		return $this->getChapterDao()->updateChapter($chapterId, $fields);
+	}
 
     private function getCourseDao ()
     {
         return $this->createDao('Course.CourseDao');
     }
-       private function getTagService()
+    private function getTagService()
     {
         return $this->createService('Taxonomy.TagService');
     }
-     private function getFavoriteDao ()
+    private function getFavoriteDao ()
     {
         return $this->createDao('Course.FavoriteDao');
     }
-     private function getStatusService()
+    private function getStatusService()
     {
         return $this->createService('User.StatusService');
     }
     private function getColumnService()
     {
         return $this->createService('Custom:Taxonomy.ColumnService');
+    }
+
+    private function getChapterDao()
+    {
+        return $this->createDao('Course.CourseChapterDao');
     }
 }
 

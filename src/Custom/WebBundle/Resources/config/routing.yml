@@ -90,14 +90,6 @@ course_thread_post_edit:
 
 
 
-
-
-
-
-
-
-
-
 course_review_list:
     pattern:  /course/{id}/review/list
     defaults: { _controller: CustomWebBundle:CourseReview:list }
@@ -125,6 +117,9 @@ course_review_post_edit:
 
 
 
+course_manage_chapter_edit:
+    pattern:  /course/{courseId}/manage/chapter/{chapterId}/edit
+    defaults: { _controller: CustomWebBundle:CourseChapterManage:edit }
 
 
 
@@ -132,6 +127,9 @@ course_review_post_edit:
 
 
 
+course_materials:
+    pattern:  /course/{id}/material/
+    defaults: { _controller: CustomWebBundle:CourseMaterial:index }
 
 
 
