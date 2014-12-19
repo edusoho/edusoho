@@ -22,6 +22,6 @@ class CourseOrderProcessor implements OrderProcessor
     }
 
 	protected function getCourseOrderService() {
-		return ServiceKernel::instance()->createService("Course.CourseOrder");
+		return ServiceKernel::instance()->createService("Course.CourseOrderService");
 	}
 }

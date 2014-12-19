@@ -5,6 +5,7 @@ namespace Topxia\Service\PayCenter\Impl;
 use Topxia\Service\PayCenter\PayCenterService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class PayCenterServiceImpl extends BaseService implements PayCenterService
 {
@@ -12,36 +13,51 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	{
 		$connection = ServiceKernel::instance()->getConnection();
 		try {
-			$connection()->beginTransaction();
+			$connection->beginTransaction();
 			
 			$order = $this->getOrderService()->getOrderBySn($payData['sn']);
 
 			$this->proccessCashFlow($order);
 
+			list($success, $router, $order) = $this->processOrder($payData);
+	        
+            $connection->commit();
+            return array($success, $router, $order);
+		} catch (\Exception $e) {
+            $connection->rollback();
+            throw $e;
+        }
+
+        return array(false, '', array());
+
+	}
+
+	public function processOrder($payData)
+	{
+		$connection = ServiceKernel::instance()->getConnection();
+		try {
+			$connection->beginTransaction();
 			list($success, $order) = $this->getOrderService()->payOrder($payData);
 
 			$processor = OrderProcessorFactory::create($order["targetType"]);
 
+			$router = '';
 	        if ($order['status'] == 'paid' and $processor) {
 	            $router = $processor->doPaySuccess($success, $order);
-
-	            $connection()->commit();
-	            return array($success, $router, $order);
-	        } else {
-	        	$connection()->rollback();
 	        }
 
-		}catch (\Exception $e) {
-            $connection()->rollback();
+	        $connection->commit();
+	        return array($success, $router, $order);
+        }catch (\Exception $e) {
+            $connection->rollback();
             throw $e;
         }
-
-        return array(false, '', $order);
-
+        
+        return array(false, '', array());
 	}
 
 	private function proccessCashFlow($order) {
-		if($order["priceType"] == "Coin")
+		if($order["priceType"] == "Coin") {
 			if($order["amount"] == 0 && $order["coinAmount"] > 0) {
 				$this->payAllByCoin($order);
 			}
@@ -127,11 +143,11 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 	protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->createService('Order.OrderService');
     }
 
     protected function getCashService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashService');
+        return $this->createService('Cash.CashService');
     }
 }

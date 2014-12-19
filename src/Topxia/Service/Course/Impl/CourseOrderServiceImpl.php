@@ -104,20 +104,20 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             }
 
             // 免费课程，就直接将订单置为已购买
-            if (intval($order['amount']*100) == 0) {
-                list($success, $order) = $this->getOrderService()->payOrder(array(
-                    'sn' => $order['sn'],
-                    'status' => 'success', 
-                    'amount' => $order['amount'], 
-                    'paidTime' => time()
-                ));
+            // if (intval($order['amount']*100) == 0) {
+            //     list($success, $order) = $this->getOrderService()->payOrder(array(
+            //         'sn' => $order['sn'],
+            //         'status' => 'success', 
+            //         'amount' => $order['amount'], 
+            //         'paidTime' => time()
+            //     ));
 
-                $info = array(
-                    'orderId' => $order['id'],
-                    'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
-                );
-                $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-            }
+            //     $info = array(
+            //         'orderId' => $order['id'],
+            //         'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
+            //     );
+            //     $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+            // }
 
             $connection->commit();
 

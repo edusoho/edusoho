@@ -71,7 +71,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
             
             $this->getChangeDao()->waveCashField($change['id'], $amount);
 
-            $this->getNotifiactionService()->notify($userId, 'default', "您已成功兑换".$coinAmount.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
+            $this->getNotificationService()->notify($userId, 'default', "您已成功兑换".$coinAmount.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
            
             $this->getAccountDao()->getConnection()->commit();
 
@@ -102,7 +102,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
         }
         $coinSetting=$this->getSettingService()->get('coin',array());
         $account=$this->getCashAccountService()->getAccount($id);
-        $this->getNotifiactionService()->notify($account['userId'], 'default', "您已成功充值".$value.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
+        $this->getNotificationService()->notify($account['userId'], 'default', "您已成功充值".$value.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
            
         return $this->getAccountDao()->waveCashField($id, $value);
     }
@@ -116,7 +116,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
         
         $coinSetting=$this->getSettingService()->get('coin',array());
         $account=$this->getAccountDao()->getAccount($id);
-        $this->getNotifiactionService()->notify($account['userId'], 'default', "您被扣除".$value.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
+        $this->getNotificationService()->notify($account['userId'], 'default', "您被扣除".$value.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
 
         return $this->getAccountDao()->waveDownCashField($id, $value);
     }
@@ -182,8 +182,14 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
         }
     }
 
-    protected function getSettingService(){
+    protected function getSettingService()
+    {
         return $this->createService('System.SettingService');
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->createService('User.NotificationService');
     }
 
     protected function getAccountDao()

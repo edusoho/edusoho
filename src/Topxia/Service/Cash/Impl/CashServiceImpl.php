@@ -96,7 +96,7 @@ class CashServiceImpl extends BaseService implements CashService
 
     public function outFlowByCoin($outFlow)
     {
-        if(ArrayToolkit::requireds($outFlow, array(
+        if(!ArrayToolkit::requireds($outFlow, array(
             'userId', 'amount', 'name', 'orderSn', 'category', 'note'
         ))){
             throw $this->createServiceException('参数缺失');
@@ -125,7 +125,7 @@ class CashServiceImpl extends BaseService implements CashService
 
     public function inFlowByRmb($inFlow)
     {
-        if(ArrayToolkit::requireds($inFlow, array(
+        if(!ArrayToolkit::requireds($inFlow, array(
             'userId', 'amount', 'name', 'orderSn', 'category', 'note'
         ))){
             throw $this->createServiceException('参数缺失');
@@ -146,7 +146,7 @@ class CashServiceImpl extends BaseService implements CashService
 
     public function outFlowByRmb($outFlow)
     {
-        if(ArrayToolkit::requireds($outFlow, array(
+        if(!ArrayToolkit::requireds($outFlow, array(
             'userId', 'amount', 'name', 'orderSn', 'category', 'note'
         ))){
             throw $this->createServiceException('参数缺失');

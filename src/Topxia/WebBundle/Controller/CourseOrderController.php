@@ -210,10 +210,6 @@ class CourseOrderController extends OrderController
         );
 
         $order = $this->getCourseOrderService()->createOrder($order);
-        
-        if($order["status"] == 'paid'){
-            return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
-        }
 
         return $this->redirect($this->generateUrl('pay_center_show', array(
             'id' => $order['id']

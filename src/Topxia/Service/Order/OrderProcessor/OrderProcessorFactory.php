@@ -3,7 +3,7 @@ namespace Topxia\Service\Order\OrderProcessor;
 
 use Topxia\Service\Order\OrderProcessor\OrderProcessor;
 
-class OrderProcessorFactory implements OrderProcessor
+class OrderProcessorFactory
 {
 
 	public static function create($target)

@@ -9,18 +9,40 @@ use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class PayCenterController extends BaseController
 {
-
 	public function showAction(Request $request)
 	{
 		$fields = $request->query->all();
 		$order = $this->getOrderService()->getOrder($fields["id"]);
 
+        if($order["amount"] == 0 && $order["coinAmount"] == 0) {
+            $payData = array(
+                'sn' => $order['sn'],
+                'status' => 'success', 
+                'amount' => $order['amount'], 
+                'paidTime' => time()
+            );
+            $this->getPayCenterService()->processOrder($payData);
+
+            $processor = OrderProcessorFactory::create($order["targetType"]);
+            $router = $processor->getRouter();
+
+            return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
+        } else if ($order["amount"] == 0 && $order["coinAmount"] > 0) {
+            $payData = array(
+                'sn' => $order['sn'],
+                'status' => 'success', 
+                'amount' => $order['amount'], 
+                'paidTime' => time()
+            );
+            
+            list($success, $router, $order) = $this->getPayCenterService()->pay($payData);
+            $goto = $success && empty($router) ? $this->generateUrl('homepage', array(), true) : $this->generateUrl($router, array('id' => $order["targetId"]), true);
+            return $this->redirect($goto);
+        }
+
 		return $this->render('TopxiaWebBundle:PayCenter:show.html.twig', array(
             'order' => $order,
             'payments' => $this->getEnabledPayments(),
-            'returnUrl' => $fields["returnUrl"],
-            'notifyUrl' => $fields["notifyUrl"],
-            'showUrl' => $fields["showUrl"],
         ));
 	}
 
@@ -60,15 +82,7 @@ class PayCenterController extends BaseController
         }
 	}
 
-    public function payReturnAction(Request $request, $name)
-    {
-        $orderId = $request->query->get("id");
-        $order = $this->getOrderService()->getOrder($orderId);
-
-        return $this->doPayReturn($request, $name);
-    }
-
-    private function doPayReturn(Request $request, $name, $successCallback = null)
+    public function payReturnAction(Request $request, $name, $successCallback = null)
     {
         $this->getLogService()->info('order', 'pay_result',  "{$name}页面跳转支付通知", $request->query->all());
         $response = $this->createPaymentResponse($name, $request->query->all());
@@ -87,11 +101,6 @@ class PayCenterController extends BaseController
     }
 
     public function payNotifyAction(Request $request, $name)
-    {
-        return $this->doPayNotify($request, $name);
-    }
-
-    protected function doPayNotify(Request $request, $name)
     {
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
         $response = $this->createPaymentResponse($name, $request->request->all());
