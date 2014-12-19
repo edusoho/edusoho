@@ -80,6 +80,9 @@ class ColumnServiceImpl extends BaseService implements ColumnService
              throw $this->createServiceException('专栏编码已经存在，添加失败！');
         }
         $column['createdTime'] = time();
+        $column['lowTagIds']='|-1|-1|-1|';
+        $column['middleTagIds']='|-1|-1|-1|';
+        $column['highTagIds']='|-1|-1|-1|';
 
         $column = $this->getColumnDao()->addColumn($column);
 

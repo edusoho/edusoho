@@ -5,7 +5,48 @@
 {% set menu = 'column' %}
 {% set script_controller = 'customadminbundle/controller/column/list' %}
 {% block main %}
+  <style type="text/css">
+  #column-table .bg-1 {
+  background-color: #ff8f6c;
+}
+#column-table .bg-2 {
+  background-color: #ffbd68;
+}
+#column-table .bg-3 {
+  background-color: #68c9fc;
+}
+#column-table .bg-4 {
+  background-color: #aed24c;
+}
+#column-table .bg-5 {
+  background-color: #b59dd7;
+}
+#column-table .bg-6 {
+  background-color: #7ed0b6;
+}
+#column-table .bg-7 {
+  background-color: #79a5bc;
+}
+#column-table .bg-8 {
+  background-color: #ee8773;
+}
 
+#column-table .bg-1,
+#column-table .bg-2,
+#column-table .bg-3,
+#column-table .bg-4,
+#column-table .bg-5,
+#column-table .bg-6,
+#column-table .bg-7,
+#column-table .bg-8 {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin-right: 3px;
+}
+
+  
+</style>
 <div class="page-header clearfix">
   <button class="btn btn-info btn-sm pull-right" id="add-column-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_column_create') }}">新增专栏</button>    
   <h1 class="pull-left">专栏管理</h1>
