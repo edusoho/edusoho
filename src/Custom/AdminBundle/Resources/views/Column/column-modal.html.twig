@@ -4,7 +4,53 @@
 {% block title %}
 {% if column.id %}编辑{% else %}新增{% endif %}专栏
 {% endblock %}
+
+
+
 {% block body %}
+
+  <style type="text/css">
+  #column-form .bg-1 {
+  background-color: #ff8f6c;
+}
+#column-form .bg-2 {
+  background-color: #ffbd68;
+}
+#column-form .bg-3 {
+  background-color: #68c9fc;
+}
+#column-form .bg-4 {
+  background-color: #aed24c;
+}
+#column-form .bg-5 {
+  background-color: #b59dd7;
+}
+#column-form .bg-6 {
+  background-color: #7ed0b6;
+}
+#column-form .bg-7 {
+  background-color: #79a5bc;
+}
+#column-form .bg-8 {
+  background-color: #ee8773;
+}
+
+#column-form .bg-1,
+#column-form .bg-2,
+#column-form .bg-3,
+#column-form .bg-4,
+#column-form .bg-5,
+#column-form .bg-6,
+#column-form .bg-7,
+#column-form .bg-8 {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin-right: 3px;
+}
+
+  
+</style>
   <form class="form-horizontal" id="column-form" action="{% if column.id %}{{ path('admin_column_update', {id:column.id}) }}{% else %}{{ path('admin_column_create') }}{% endif %}" method="post">
     <div class="form-group">
         <label class="col-md-3 control-label" for="column-name-field">专栏名称</label>

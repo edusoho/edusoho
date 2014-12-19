@@ -17,7 +17,7 @@ class ColumnServiceImpl extends BaseService implements ColumnService
     public function getColumn($id)
     {
         
-        return ColumnSerialize::unserializes($this->getColumnDao()->getColumn($id));
+        return ColumnSerialize::unserialize($this->getColumnDao()->getColumn($id));
     }
     public function getColumnByCode($code){
          return $this->getColumnDao()->getColumnByCode($code);
@@ -36,7 +36,15 @@ class ColumnServiceImpl extends BaseService implements ColumnService
 
     public function findAllColumns($start, $limit)
     {
-    	return $this->getColumnDao()->findAllColumns($start, $limit);
+        $colums = $this->getColumnDao()->findAllColumns($start, $limit);
+        $colums = ColumnSerialize::unserializes($colums);
+        foreach ($colums as $key => &$value) {
+
+            $value['lowTagNames'] = $this->getTagService()->findTagsByIds($value['lowTagIds']);
+            $value['middleTagNames'] = $this->getTagService()->findTagsByIds($value['middleTagIds']);
+            $value['highTagNames'] = $this->getTagService()->findTagsByIds($value['highTagIds']);
+        }
+    	return $colums;
     }
 
     public function getAllColumnCount()
@@ -252,9 +260,14 @@ class ColumnSerialize
         return $column;
     }
 
-
+      public static function unserializes(array $columns)
+    {
+        return array_map(function($column) {
+            return ColumnSerialize::unserialize($column);
+        }, $columns);
+    }
  
-    public static function unserializes(array $column)
+    public static function unserialize(array $column = null)
     {
         if (empty($column)) {
             return $column;

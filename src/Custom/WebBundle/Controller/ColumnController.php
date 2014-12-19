@@ -27,10 +27,23 @@ class ColumnController extends BaseController
    
         $columnCount = $this->getColumnService()->getAllColumnCount();
         $columns = $this->getColumnService()->findAllColumns(0,$columnCount);
+
         return $this->render('TopxiaWebBundle:Column:course-column.html.twig',array(
             'columns'=>$columns
         ));
     }
+    public function allColumnAction(){
+   // array_chunk
+        $columnCount = $this->getColumnService()->getAllColumnCount();
+        $columns = $this->getColumnService()->findAllColumns(0,$columnCount);
+        $columns = array_chunk($columns,4);
+      
+        return $this->render('TopxiaWebBundle:Column:column-header.html.twig',array(
+            'columns'=>$columns
+        ));
+    }
+
+    
 
     public function indexAction()
     {
