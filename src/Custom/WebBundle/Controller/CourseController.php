@@ -201,7 +201,19 @@ class CourseController extends BaseController
 
 
 
-
+	public function lessonBlockAction(Request $request, $id)
+	{
+		$course = $this->getCourseService()->getCourse($id);
+		$lessons=$this->getCourseService()->getCourseLessons($id);
+		$lessons=ArrayToolkit::group($lessons,'chapterId');
+		$chapters=$this->getCustomCourseService()->findCourseChaptersByType($id,'chapter');
+		$units=$this->getCustomCourseService()->findCourseChaptersByType($id,'units');
+		return $this->render("TopxiaWebBundle:Course:course-lesson-list.html.twig", array(
+			'chapters'=>$chapters,
+			'units'=>$units,
+			'lessons'=>$lessons
+		));
+	}
 
 
 

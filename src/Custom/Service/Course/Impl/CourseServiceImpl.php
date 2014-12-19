@@ -71,6 +71,42 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 		));
 		return true;
 	}
+
+	public function findCourseChaptersByType($courseId,$type)
+	{
+		$chapters=$this->getChapterDao()->findChaptersByCourseId($courseId);
+		$chapters=ArrayToolkit::group($chapters,'type');
+		if(!isset($chapters[$type])){
+			return array();
+		}
+		return $chapters[$type];
+	}
+
+	public function getCourseItems($courseId)
+	{
+		$lessons = LessonSerialize::unserializes(
+			$this->getLessonDao()->findLessonsByCourseId($courseId)
+		);
+
+		$chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+
+		$items = array();
+		foreach ($lessons as $lesson) {
+			$lesson['itemType'] = 'lesson';
+			$items["lesson-{$lesson['id']}"] = $lesson;
+		}
+
+		foreach ($chapters as $chapter) {
+			$chapter['itemType'] = 'chapter';
+			$items["chapter-{$chapter['id']}"] = $chapter;
+		}
+
+		uasort($items, function($item1, $item2){
+			return $item1['seq'] > $item2['seq'];
+		});
+		return $items;
+	}
+	
 	private function simplifyCousrse($course)
 	{
 		return array(
