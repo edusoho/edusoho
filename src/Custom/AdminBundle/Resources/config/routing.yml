@@ -58,4 +58,7 @@ admin_column_check_code:
     pattern:  /column/checkCode
     defaults: { _controller: CustomAdminBundle:Column:checkCode}
 
+admin_category_isSearch:
+    pattern:  /category/isSearch
+    defaults: { _controller: CustomAdminBundle:Category:isSearch}
 
