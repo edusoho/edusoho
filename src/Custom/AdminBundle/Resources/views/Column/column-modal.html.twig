@@ -37,7 +37,7 @@
         <label class="col-md-3 control-label" for="column-classIndex-field">色块选择</label>
         <div class="col-md-6 controls">
      {#      <input class="form-control" id="column-classIndex-field" type="text" name="classIndex" value="{{ column.classIndex }}"> #}
-            {{ radios('classIndex', {1:'<span class="color-1"></span>',2:'<span class="color-2"></span>', 3:'<span class="color-3"></span>',4:'<span class="color-4"></span>',5:'<span class="color-5"></span>', 6:'<span class="color-6"></span>',7:'<span class="color-7"></span>',8:'<span class="color-8"></span>'}, column.classIndex|default(1) ) }}
+            {{ radios('classIndex', {1:'<span class="bg-1"></span>',2:'<span class="bg-2"></span>', 3:'<span class="bg-3"></span>',4:'<span class="bg-4"></span>',5:'<span class="bg-5"></span>', 6:'<span class="bg-6"></span>',7:'<span class="bg-7"></span>',8:'<span class="bg-8"></span>'}, column.classIndex|default(1) ) }}
         </div>
     </div>
     {% if column.id %}
