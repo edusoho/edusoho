@@ -25,6 +25,12 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
+            element: '[name="daySignLimit"]',
+            required: true,
+            rule: 'positive_integer' 
+        });
+
+        validator.addItem({
             element: '.recharge',
             required: true,
             rule: 'positive_integer' 

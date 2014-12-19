@@ -20,7 +20,9 @@ class SignController extends BaseController
         }
         
         $userId=$user['id'];
-        $this->getSignService()->userSign($userId, 'group_sign', $groupId);
+        $sign=$this->getSignService()->userSign($userId, 'group_sign', $groupId);
+
+        if(!$sign) return $this->createJsonResponse('false');
         return $this->createJsonResponse('success');
     }
 

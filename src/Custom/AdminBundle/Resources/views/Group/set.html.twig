@@ -29,6 +29,22 @@
     </fieldset>
 
     <fieldset>
+      <legend>每日签到上限</legend>
+        <div class="form-group">
+        <div class="col-md-3 control-label">
+            <label for="daySignLimit">每日签到上限</label>
+        </div>
+        <div class="col-md-3 controls">
+            <input type="text" class="form-control" name="daySignLimit" id="daySignLimit" value="{{setting('group').daySignLimit|default(5)}}"/>
+        </div>
+        <div class="col-md-1 control-label">
+            {{setting('coin').coin_name}}
+        </div>
+        </div>      
+
+    </fieldset>
+
+    <fieldset>
       <legend>连续签到奖励</legend>
         <div class="form-group">
           <div class="col-md-3 control-label">

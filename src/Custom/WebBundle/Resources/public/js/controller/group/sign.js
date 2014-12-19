@@ -53,21 +53,22 @@ define(function(require, exports, module) {
                 dataType: 'json',
                 success: function(data){
 
-                if($('#sign-coin').length>0){
+                if(data == "success" ){   
+                    if($('#sign-coin').length>0){
 
-                    var num=$('#sign-coin').attr('data-num');
+                        var num=$('#sign-coin').attr('data-num');
 
-                    if(num>0){
-                            $.tipsBox({
-                            obj: $('#sign-btn'),
-                            str:"<b>+"+num+"</b>",
-                            callback: function() {        
-                               
-                            }
-                        }); 
+                        if(num>0){
+                                $.tipsBox({
+                                obj: $('#sign-btn'),
+                                str:"<b>+"+num+"</b>",
+                                callback: function() {        
+                                   
+                                }
+                            }); 
+                        }
                     }
-                }
-                
+                } 
                 setTimeout("window.location.reload()",1000);
 /*                    self.showSignTable();
                     self.initTable(true);

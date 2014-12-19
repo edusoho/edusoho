@@ -22,6 +22,7 @@ class GroupController extends BaseController
             $data=$request->request->all();
 
             $set['daySign']=$data['daySign'];
+            $set['daySignLimit']=$data['daySignLimit'];
             
             $this->getSettingService()->set('group',$set);
 
