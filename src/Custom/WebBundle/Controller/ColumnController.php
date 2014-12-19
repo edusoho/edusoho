@@ -23,6 +23,15 @@ class ColumnController extends BaseController
         return new JsonResponse($data);
     }
 
+    public function courseColumnAction(){
+   
+        $columnCount = $this->getColumnService()->getAllColumnCount();
+        $columns = $this->getColumnService()->findAllColumns(0,$columnCount);
+        return $this->render('TopxiaWebBundle:Column:course-column.html.twig',array(
+            'columns'=>$columns
+        ));
+    }
+
     public function indexAction()
     {
         return $this->render('TopxiaWebBundle:Column:index.html.twig');   
