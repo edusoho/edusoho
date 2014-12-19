@@ -275,6 +275,21 @@ class CourseController extends BaseController
 		$this->getCourseService()->hitCourse($id);
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
+
+		$appCode = 'MaterialLib';
+        		$MaterialLib = $this->getAppService()->findInstallApp($appCode);
+                             $homeworkLessonIds =array();
+                             $exercisesLessonIds =array();
+
+        		if($MaterialLib){
+                                    $lessons = $this->getCourseService()->getCourseLessons($course['id']);
+                                    $lessonIds = ArrayToolkit::column($lessons, 'id');
+                                    $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
+                                    $exercises = $this->getExerciseService()->findExercisesByLessonIds($lessonIds);
+                                    $homeworkLessonIds = ArrayToolkit::column($homeworks,'lessonId');
+                                    $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
+        		}
+
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
 			//判断用户deadline到了，但是还是限免课程，将用户deadline延长
@@ -291,7 +306,9 @@ class CourseController extends BaseController
 				'currentTime' => $currentTime,
 				'weeks' => $weeks,
 				'files' => ArrayToolkit::index($files,'id'),
-				'ChargeCoin'=> $ChargeCoin
+				'ChargeCoin'=> $ChargeCoin,
+				'homeworkLessonIds'=>$homeworkLessonIds,
+				'exercisesLessonIds'=>$exercisesLessonIds
 			));
 		}
 		
@@ -812,6 +829,16 @@ class CourseController extends BaseController
 	{
 		return $this->getServiceKernel()->createService('Course.ReviewService');
 	}
+
+    	private function getHomeworkService()
+    	{
+        		return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+    	} 
+
+    	private function getExerciseService()
+    	{
+        		return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+    	}
 
 	private function getSettingService()
     {
