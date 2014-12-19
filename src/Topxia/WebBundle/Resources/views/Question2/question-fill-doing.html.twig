@@ -6,8 +6,8 @@
 
 {% block body %}
 
-{% if itemResult.answer|default(null) %}
-{% set fileItemResultAnswer = itemResult.answer|split(',') %}
+{% if result.answer|default(null) %}
+{% set fileItemResultAnswer = result.answer|split(',') %}
 {% endif %}
   <div class="question-fill question-fill-inputs">
     {% for index,answer in question.answer %}

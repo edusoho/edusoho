@@ -1,14 +1,12 @@
 {% extends 'TopxiaWebBundle:Question2:question-choice-doing.html.twig' %}
 
 {% block body %}
-
-  {% include 'TopxiaWebBundle:Question2:question-choice-options.html.twig' %}
-
+  {{ question.stem|bbCode2Html|raw }}
 {% endblock %}
 
 {% block footer %}
-  {% if itemResult.answer|default(null) %}
-   {% set answerChoiceIndex = itemResult.answer %}
+  {% if result.answer|default(null) %}
+   {% set answerChoiceIndex = result.answer %}
    {% else %}
    {% set answerChoiceIndex = '-1' %}
   {% endif %}

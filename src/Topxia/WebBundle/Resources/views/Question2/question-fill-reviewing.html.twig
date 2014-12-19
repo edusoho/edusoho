@@ -6,21 +6,21 @@
 
 {% block body %}
 
-{% set fileItemResultAnswer = itemResult.answer|split(',') %}
+{% set fileItemResultAnswer = result.answer|split(',') %}
 
-{% if itemResult.status == 'right' %}
+{% if result.status == 'right' %}
 
   {% set itemResultStatus = '你答对了' %}
 
-{% elseif itemResult.status == 'wrong' %}
+{% elseif result.status == 'wrong' %}
 
   {% set itemResultStatus = '回答错误' %}
 
-{% elseif itemResult.status == 'partRight' %}
+{% elseif result.status == 'partRight' %}
 
   {% set itemResultStatus = '部分回答正确' %}
 
-{% elseif itemResult.status == 'noAnswer' %}
+{% elseif result.status == 'noAnswer' %}
 
   {% set itemResultStatus = '你未回答' %}
 
@@ -43,7 +43,7 @@
               未回答
               {% endif %}
 
-              {% if itemResult.status == 'right' %}
+              {% if result.status == 'right' %}
                   <span class="glyphicon glyphicon-ok question-text-success">
               {% else %}
                   <span class="glyphicon glyphicon-remove question-text-danger">

@@ -1,15 +1,15 @@
-  <div class="questionset-item">
+  <div class="question-item">
 
-    <div class="questionset-item-side">
-      <span class="question-set-item-seq">{{ questionset.seq }}</span>
-      {% if questionset.score > 0 %}
-        <span class="questionset-item-score">{{ questionset.score }}</span>
+    <div class="question-item-side">
+      <span class="question-item-seq">{{ questionItem.seq }}</span>
+      {% if questionItem.score > 0 %}
+        <span class="question-item-score">{{ questionItem.score }}</span>
       {% endif %}
     </div>
 
-    <div class="questionset-item-main">
-      {% set question = questionset.question %}
-      {% set itemResult = questionset.itemResult|default(null) %}
+    <div class="question-item-main">
+      {% set question = questionItem.question %}
+      {% set result = questionItem.result|default(null) %}
       {% include 'TopxiaWebBundle:Question2:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
 
     </div>

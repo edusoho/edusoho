@@ -6,7 +6,7 @@
 
 {% block body %}
 
- {% set answer = itemResult.answer|default("") %}
+ {% set answer = result.answer|default("") %}
  
     <textarea name="answer[{{ question.id }}]" rows="1" class="form-control question-essay-input-short"  data-question-id={{ question.id }} >{{ answer }}</textarea>
 

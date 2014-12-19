@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle:Question2:question-base-layout.html.twig' %}
 
 {% block heading %}
-  {% include 'TopxiaWebBundle:Question2:question-choice-header.html.twig' %}
+  {{ question.stem|bbCode2Html|raw }}
 {% endblock %}
 
 {% block body %}
@@ -11,19 +11,20 @@
 {% endblock %}
 
 {% block footer %}
-  {% if itemResult.answer|default(null) or itemResult.answer == 0 %}
-    {% set choiceIndex = itemResult.answer|split(',') %}
+  {% if result.answer|default(null) or result.answer == 0 %}
+    {% set choiceIndex = result.answer|split(',') %}
   {% endif %}
 
   <div class="question-result">
-    {% if itemResult.status == 'right' %}
+    {% if result.status == 'right' %}
       正确答案是 <strong class="text-success">{{ choiceIndex|join(',') }}</strong>，回答正确
-    {% elseif itemResult.status == 'partRight' %}
-      正确答案是 <strong class="text-success">{{ choiceIndex|join(',') }}</strong>，你的答案是 <strong class="text-danger">{{ choiceIndex|join(',') }}</strong>。回答部分正确。得分：{{ itemResult.score }}分
-    {% elseif itemResult.status == 'wrong' %}
+    {% elseif result.status == 'partRight' %}
+      正确答案是 <strong class="text-success">{{ choiceIndex|join(',') }}</strong>，你的答案是 <strong class="text-danger">{{ choiceIndex|join(',') }}</strong>。回答部分正确。得分：{{ result.score }}分
+    {% elseif result.status == 'wrong' %}
       正确答案是 <strong class="text-success">{{ choiceIndex|join(',') }}</strong>，你的答案是 <strong class="text-danger">{{ choiceIndex|join(',') }}</strong>。回答错误
-    {% elseif itemResult.status == 'noAnswer' %}
+    {% elseif result.status == 'noAnswer' %}
       正确答案是 <strong class="text-success">{{ choiceIndex|join(',') }}</strong>，你未答题
     {% endif %}
   </div>
+  {% include 'TopxiaWebBundle:Question2:question-actions.html.twig' with {flags:['mark','favorite', 'analysis']}%}
 {% endblock %}

@@ -6,21 +6,20 @@
 
 {% block body %}
 
- {% set rightAnswerIndex = question.answer %}
-
-  <div class="question-result">
-    {% if itemResult.status == 'right' %}
-	   <span class="glyphicon glyphicon-ok question-text-success"></span> 
-    {% elseif itemResult.status == 'wrong' %}
-       <span class="glyphicon glyphicon-remove question-text-danger"></span> 
-    {% elseif itemResult.status == 'noAnswer' %}
-　　　  <span class="glyphicon glyphicon-remove question-text-danger"></span> 未答题
-    {% endif %}
-	 正确答案是: <strong style="color:red">{% if rightAnswerIndex == 1 %} 正确 {% else %} 错误 {% endif %}</strong>
-</div>
-
 {% endblock %}
 
 {% block footer %}
+  {% set rightAnswerIndex = question.answer %}
+
+  <div class="question-result">
+    {% if result.status == 'right' %}
+      <span class="glyphicon glyphicon-ok question-text-success"></span> 
+    {% elseif result.status == 'wrong' %}
+      <span class="glyphicon glyphicon-remove question-text-danger"></span> 
+    {% elseif result.status == 'noAnswer' %}
+    　　<span class="glyphicon glyphicon-remove question-text-danger"></span> 未答题
+    {% endif %}
+    正确答案是: <strong style="color:red">{% if rightAnswerIndex == 1 %} 正确 {% else %} 错误 {% endif %}</strong>
+  </div>
 
 {% endblock %}

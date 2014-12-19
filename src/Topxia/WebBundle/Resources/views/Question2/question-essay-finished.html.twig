@@ -8,7 +8,7 @@
 
 <div style="margin-bottom:18px">
     <div style="margin-bottom:5px">学员回答:</div>
-    <strong class="">{{ itemResult.answer|raw }}</strong>
+    <strong class="">{{ result.answer|raw }}</strong>
 </div>
 
 {% endblock %}
@@ -19,10 +19,10 @@
          <div style="margin-bottom:5px">正确答案</div> <strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong>
       {% endfor %}
   </div>
-  {% if itemResult.teacherSay|default(null) %}
+  {% if result.teacherSay|default(null) %}
       <div  class="question-eassy-form-control question-teacher-say-input">
         <div class="teacher-say-text">老师评语:</div>
-        {{ itemResult.teacherSay }}
+        {{ result.teacherSay }}
       </div> 
   {% endif %}
 {% endblock %}
