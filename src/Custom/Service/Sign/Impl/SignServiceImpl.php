@@ -42,8 +42,8 @@ class SignServiceImpl extends BaseService implements SignService
         $endTime = strtotime(date('Y-m-d',time()).' 23:59:59');
 
         $signAmount=$this->getCashService()->sumSignAmount(array('userId'=>$user['id'],'type'=>'inflow','name'=>'每日签到奖励','startTime'=>$startTime,'endTime'=>$endTime));
-        
-        if (!empty($signAmount)&& isset($set['daySignLimit']) && $signAmount>=$set['daySignLimit']) {
+        if(!isset($set['daySignLimit'])) $set['daySignLimit']=5;
+        if (!empty($signAmount)&& $signAmount>=$set['daySignLimit']) {
            
            return false;
         }
