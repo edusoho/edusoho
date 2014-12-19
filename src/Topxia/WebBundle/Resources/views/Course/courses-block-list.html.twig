@@ -56,7 +56,7 @@
             <span class="free-money-text"><del>{{ course.coinPrice }}</del></span>
           {% endif %}
           {% if setting('coin.coin_enabled') %}
-          <span class="course-price"{% if setting('coin.course_price_show_type') %} style="display:none;"  {% else %}  style="display:inline " {% endif %}>
+          <span class="course-price"{% if setting('coin.course_price_show_type') == 'COIN'%} style="display:none;"  {% else %}  style="display:inline " {% endif %}>
             {% if course.price > 0 %}
               {% if free_limit_type(course) == 'free_now' %}
                 0.00 元
@@ -65,7 +65,7 @@
               {% endif %}  
             {% else %}免费{% endif %}
           </span>
-          <span class="course-price"{% if setting('coin.course_price_show_type') %} style="display:inline " {% else %} style="display:none;"   {% endif %} >
+          <span class="course-price"{% if setting('coin.course_price_show_type') == 'COIN'%} style="display:inline " {% else %} style="display:none;"   {% endif %} >
             {% if course.coinPrice > 0 %}
               {% if free_limit_type(course) == 'free_now' %}
                 0.00 元
