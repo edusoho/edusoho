@@ -66,7 +66,7 @@ class CashServiceImpl extends BaseService implements CashService
                 'category'=>$flow['category'],
                 'note'=>$flow['note'],
                 'createdTime'=>time(),
-                );
+            );
 
             $inflow = $this->getFlowDao()->addFlow($inflow);
 
@@ -115,6 +115,7 @@ class CashServiceImpl extends BaseService implements CashService
         $outFlow["cashType"] = "Coin";
         $outFlow["type"] = "outflow";
         $outFlow["sn"] = $this->makeSn();
+        $outFlow["createdTime"] = time();
 
         $outFlow = $this->getFlowDao()->addFlow($outFlow);
 
@@ -138,6 +139,7 @@ class CashServiceImpl extends BaseService implements CashService
         $inFlow["cashType"] = "RMB";
         $inFlow["type"] = "inflow";
         $inFlow["sn"] = $this->makeSn();
+        $inFlow["createdTime"] = time();
 
         $inFlow = $this->getFlowDao()->addFlow($inFlow);
         return $inFlow;
@@ -159,6 +161,7 @@ class CashServiceImpl extends BaseService implements CashService
         $outFlow["cashType"] = "RMB";
         $outFlow["type"] = "outflow";
         $outFlow["sn"] = $this->makeSn();
+        $outFlow["createdTime"] = time();
 
         $outFlow = $this->getFlowDao()->addFlow($outFlow);
         return $outFlow;
@@ -169,6 +172,11 @@ class CashServiceImpl extends BaseService implements CashService
         $outFlow = $this->outFlowByRmb($rmbFlow);
 
         $coinRate = $this->getSettingService()->get("coin.cash_rate");
+
+        if(!$coinRate) {
+            $coinRate = 1;
+        }
+
         $amount = $outFlow["amount"] * $coinRate;
 
         $inFlow = array(
@@ -176,13 +184,14 @@ class CashServiceImpl extends BaseService implements CashService
             'amount' => $amount,
             'name' => "充值",
             'orderSn' => $outFlow['orderSn'],
-            'category' => 'recharge',
+            'category' => 'change',
             'note' => ''
         );
 
         $inFlow["cashType"] = "Coin";
         $inFlow["type"] = "inflow";
         $inFlow["sn"] = $this->makeSn();
+        $inFlow["createdTime"] = time();
 
         $inFlow = $this->getFlowDao()->addFlow($inFlow);
 

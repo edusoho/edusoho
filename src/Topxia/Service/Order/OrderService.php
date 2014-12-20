@@ -67,4 +67,6 @@ interface OrderService
     public function analysisAmountDataByTime($startTime,$endTime);
 
     public function analysisCourseAmountDataByTime($startTime,$endTime);
+
+    public function updateOrderCashSn($id, $cashSn);
 }

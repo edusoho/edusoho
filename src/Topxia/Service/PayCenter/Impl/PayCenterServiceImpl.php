@@ -17,7 +17,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 			
 			$order = $this->getOrderService()->getOrderBySn($payData['sn']);
 
-			$this->proccessCashFlow($order);
+			$outFlow = $this->proccessCashFlow($order);
 
 			list($success, $router, $order) = $this->processOrder($payData);
 	        
@@ -59,14 +59,18 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	private function proccessCashFlow($order) {
 		if($order["priceType"] == "Coin") {
 			if($order["amount"] == 0 && $order["coinAmount"] > 0) {
-				$this->payAllByCoin($order);
+				$outFlow = $this->payAllByCoin($order);
 			}
 			if($order["amount"] > 0 && $order["coinAmount"] >= 0) {
-				$this->payByCoinAndMoney($order);
+				$outFlow = $this->payByCoinAndMoney($order);
 			}
 		} else if($order["priceType"] == "RMB") {
-			$this->payByMoney($order);
+			$outFlow = $this->payByMoney($order);
 		}
+
+		$this->getOrderService()->updateOrderCashSn($order["id"], $outFlow["sn"]);
+
+		return $outFlow;
 	}
 
 	private function payByMoney($order) {
@@ -88,7 +92,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             'category' => 'outflow',
             'note' => ''
 		);
-		$this->getCashService()->outFlowByRmb($outFlow);
+		return $this->getCashService()->outFlowByRmb($outFlow);
 	}
 
 	private function payAllByCoin($order) {
@@ -102,7 +106,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             'note' => ''
 		);
 
-		$this->getCashService()->outFlowByCoin($cashFlow);
+		return $this->getCashService()->outFlowByCoin($cashFlow);
 	}
 
 	private function payByCoinAndMoney($order) {
@@ -138,7 +142,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             'note' => ''
 		);
 
-		$this->getCashService()->outFlowByCoin($userId, $outFlow);
+		return $this->getCashService()->outFlowByCoin($outFlow);
 	}
 
 	protected function getOrderService()

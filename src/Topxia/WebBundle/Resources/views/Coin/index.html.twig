@@ -51,7 +51,7 @@
                 <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span></td>
             <td>{{cash.sn}}</td>
             <td>{{cash.createdTime|date('Y-m-d H:i:s')}}</td>
-            <td>{% if cash.type =="outflow" %}-{% endif %}{{cash.amount|score_text}}</td>
+            <td>{% if cash.type =="outflow" %}-{% endif %}{{cash.amount}}</td>
           </tr>
         {% endfor %}
         {% else %}

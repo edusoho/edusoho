@@ -101,7 +101,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
             
         }
         $coinSetting=$this->getSettingService()->get('coin',array());
-        $account=$this->getCashAccountService()->getAccount($id);
+        $account=$this->getAccount($id);
         $this->getNotificationService()->notify($account['userId'], 'default', "您已成功充值".$value.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
            
         return $this->getAccountDao()->waveCashField($id, $value);

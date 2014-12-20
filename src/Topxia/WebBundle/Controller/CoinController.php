@@ -25,9 +25,6 @@ class CoinController extends BaseController
             $this->getCashAccountService()->createAccount($user->id);
         }
         
-        if(isset($account['cash']))
-            $account['cash']=intval($account['cash']);
-        
         $fields = $request->query->all();
 
         $conditions = array(
@@ -47,11 +44,11 @@ class CoinController extends BaseController
         );
 
         $cashes=$this->getCashService()->searchFlows(
-                $conditions,
-                array('createdTime','DESC'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-                );
+            $conditions,
+            array('createdTime','DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
@@ -64,7 +61,7 @@ class CoinController extends BaseController
           'paginator'=>$paginator,
           'amount'=>$amount,
           'ChargeCoin' => $ChargeCoin
-          ));
+        ));
     }
 
     public function changeAction(Request $request)

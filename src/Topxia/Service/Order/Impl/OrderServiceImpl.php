@@ -498,9 +498,16 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $conditions;
     }
 
-    private function getCashService()
+    public function updateOrderCashSn($id, $cashSn) 
     {
-        return $this->createService('Cash.CashService');
+        $order = $this->getOrder($id);
+        if(empty($order)) {
+            throw $this->createServiceException('更新订单失败：订单不存在。');
+        }
+        if(empty($cashSn)) {
+            throw $this->createServiceException('更新订单失败：支付流水号不存在。');
+        }
+        $this->getOrderDao()->updateOrder($id, array("cashSn" => $cashSn));
     }
 
     private function getLogService()
