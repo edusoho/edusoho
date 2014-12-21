@@ -11,7 +11,7 @@ class CourseMaterialController extends BaseController
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+            return $this->render("TopxiaWebBundle:Course:login.html.twig");
         }
 
         $course = $this->getCourseService()->getCourse($id);
@@ -20,7 +20,7 @@ class CourseMaterialController extends BaseController
         }
 
         if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+            return $this->render("TopxiaWebBundle:Course:member-error.html.twig",array('behavior'=>'查看课程资料'));
         }
 
 

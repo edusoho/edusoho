@@ -113,6 +113,7 @@ class CourseReviewController extends BaseController
         if(in_array($user['id'], $course['teacherIds']) || $user->isAdmin()){
             $canPost=1;
         }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getReviewService()->getCourseReviewCount($id)
@@ -135,7 +136,8 @@ class CourseReviewController extends BaseController
             'users' => $users,
             'postUsers'=>$postUsers,
             'paginator' => $paginator,
-            'canPost'=>$canPost
+            'canPost'=>$canPost,
+            'canTake' => $this->getCourseService()->canTakeCourse($course)
         ));
     }
     public function latestBlockAction($course)
