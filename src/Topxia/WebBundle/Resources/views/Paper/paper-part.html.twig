@@ -1,0 +1,14 @@
+<div class="panel panel-default papaer-part" id="paper-part-{{ part.id }}">
+    <div class="panel-heading">
+        <strong class="">{{ part.description }}</strong>
+    </div>
+    <div class="panel-body">
+        {% for questionItem in questionItemSet[part.id] %}
+{#             {% if questionItem.subItems is defined %}
+              {% include 'TopxiaWebBundle:Question2:question-item-have-sub.html.twig' %}
+            {% else %} #}
+              {% include 'TopxiaWebBundle:Question2:question-item.html.twig' with {questionStatus:status} %}
+            {# {% endif %} #}
+        {% endfor %}
+    </div>
+</div>

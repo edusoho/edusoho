@@ -1,0 +1,19 @@
+{% extends paperLayout|default('TopxiaWebBundle::layout.html.twig') %}
+{% block content %}
+  <div class="paper-container">
+    <div class="paper-heading">
+      {% block paper_heading %}
+      {% endblock %}
+    </div>
+    <div class="paper-body">
+      <div class="paper-body-content">
+        {% block paper_content %}
+        {% endblock %}
+      </div>
+      <div class="paper-body-side">
+        {% block paper_side %}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

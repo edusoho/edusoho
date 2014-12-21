@@ -963,6 +963,40 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return array('items' => $items, 'excludeIds' => implode(',', $excludeIds));
     }
 
+    public function buildPaper($paperId, $status)
+    {
+        $paper = $this->getTestpaper($paperId);
+        $questionItemSet = $this->makeQuestionItemSet($paperId);
+        return array($paper, $questionItemSet);
+    }
+
+    public function makeQuestionItemSet($paperId)
+    {
+        $paperItems = $this->getTestpaperItems($paperId);
+        $questionIds = ArrayToolkit::column($paperItems, 'questionId');
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        $questionItemSet = array();
+        foreach ($paperItems as $paperItem) {
+            $questionItem = array(
+                'id' => $paperItem['id'],
+                'item' => $paperItem,
+                'question' => $questions[$paperItem['questionId']]
+            );
+            if($paperItem['parentId'] != 0) {
+                foreach ($questionItemSet[$paperItem['partId']] as $key => $questionItem) {
+                    if($questionItem['id'] == $paperItem['parentId']) {
+                        $questionItem['subItems'][] = $questionItem;
+                        $questionItemSet[$paperItem['partId']][$key] = $questionItem;
+                        break;
+                    }
+                }
+            } else {
+                $questionItemSet[$paperItem['partId']][] = $questionItem;
+            }
+        }
+        return $questionItemSet;
+    }
+
     public function canTeacherCheck($id)
     {
         $paper = $this->getTestpaperDao()->getTestpaper($id);

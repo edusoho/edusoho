@@ -221,17 +221,12 @@ class TestpaperController extends BaseController
             throw $this->createAccessDeniedException('无权预览试卷！');
         }
 
-        $items = $this->getTestpaperService()->previewTestpaper($id);
-
-        $total = $this->makeTestpaperTotal($testpaper, $items);
-
-        return $this->render('CustomAdminBundle:QuizQuestionTest:testpaper-show.html.twig', array(
-            'items' => $items,
-            'limitTime' => $testpaper['limitedTime'] * 60,
-            'paper' => $testpaper,
-            'id' => 0,
-            'isPreview' => 'preview',
-            'total' => $total
+        list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($id, 'doing');
+        
+        return $this->render('TopxiaWebBundle:Paper:paper-show-reviewing.html.twig', array(
+            'paper' => $paper,
+            'questionItemSet' => $questionItemSet,
+            'status' => 'previewing'
         ));
     }
 

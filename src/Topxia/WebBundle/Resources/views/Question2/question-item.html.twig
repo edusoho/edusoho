@@ -1,0 +1,16 @@
+  <div class="question-item">
+
+    <div class="question-item-side">
+      <span class="question-item-seq">{{ questionItem.item.seq }}</span>
+      {% if questionItem.item.score > 0 %}
+        <span class="question-item-score">{{ questionItem.item.score }}</span>
+      {% endif %}
+    </div>
+
+    <div class="question-item-main">
+      {% set question = questionItem.question %}
+      {% set result = questionItem.result|default(null) %}
+      {% include 'TopxiaWebBundle:Question2:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
+    </div>
+
+  </div>

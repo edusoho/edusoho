@@ -97,4 +97,6 @@ interface TestpaperService
 
     public function makeItemsByPart($part);
 
+    public function buildPaper($paperId, $status);
+
 }

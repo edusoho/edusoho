@@ -1,9 +1,5 @@
 {% extends 'TopxiaWebBundle:Question2:question-choice-finished.html.twig' %}
 
-{% block body %}
-  {{ question.stem|bbCode2Html|raw }}
-{% endblock %}
-
 {% block footer %}
   {% set itemResultAnswer = result.answer|default(null)  %}
 
