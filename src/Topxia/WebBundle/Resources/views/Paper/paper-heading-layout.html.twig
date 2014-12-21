@@ -15,7 +15,7 @@
     <div id="testpaper-navbar" class="testpaper-navbar" data-spy="affix" data-offset-top="200">
       <ul class="nav nav navbar-nav nav-pills">
         {% for part in paper.metas.parts %}
-          <li><a href="#paper-part--{{ part.id }}">第{{ part.id }}部分</a></li>
+          <li><a href="#paper-part-{{ part.id }}">第{{ part.id }}部分</a></li>
         {% endfor %}
       </ul>
     </div>
