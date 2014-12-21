@@ -207,7 +207,8 @@ class CourseController extends BaseController
 		$lessons=$this->getCourseService()->getCourseLessons($id);
 		$lessons=ArrayToolkit::group($lessons,'chapterId');
 		$chapters=$this->getCustomCourseService()->findCourseChaptersByType($id,'chapter');
-		$units=$this->getCustomCourseService()->findCourseChaptersByType($id,'units');
+		$units=$this->getCustomCourseService()->findCourseChaptersByType($id,'unit');
+		$units=ArrayToolkit::group($units,'parentId');
 		return $this->render("TopxiaWebBundle:Course:course-lesson-list.html.twig", array(
 			'chapters'=>$chapters,
 			'units'=>$units,
