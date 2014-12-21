@@ -5,7 +5,7 @@
   <td>{{ column.subtitle }}</td>
   <td>{{ column.code }}</td>
   <td>{{ column.weight }}</td>
-  <td>{{ column.classIndex }}</td>
+  <td><span class="bg-{{column.classIndex}}"></span></td>
   <td>{{column.description|default("")}}</td>
   <td>{{ column.createdTime|date('Y-m-d H:i') }}</td>
   <td>
