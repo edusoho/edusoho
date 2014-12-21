@@ -222,8 +222,8 @@ class TestpaperController extends BaseController
         }
 
         list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($id, 'doing');
-        
-        return $this->render('TopxiaWebBundle:Paper:paper-show-reviewing.html.twig', array(
+
+        return $this->render('TopxiaWebBundle:Paper:paper-reviewing.html.twig', array(
             'paper' => $paper,
             'questionItemSet' => $questionItemSet,
             'status' => 'previewing'

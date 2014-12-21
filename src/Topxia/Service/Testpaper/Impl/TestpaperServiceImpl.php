@@ -945,7 +945,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             foreach ($childrenQuestions as $child) {
                 if($child['parentId'] == $question['id']) {
                     $items[] = array(
-                        'questionId' => $question['id'],
+                        'questionId' => $child['id'],
                         'seq' => $index,
                         'questionType' => $part['type'],
                         'partId' => $part['id'],
@@ -977,22 +977,30 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
         $questionItemSet = array();
         foreach ($paperItems as $paperItem) {
+            if($paperItem['parentId'] != 0) {
+                continue;
+            }
+
             $questionItem = array(
                 'id' => $paperItem['id'],
                 'item' => $paperItem,
                 'question' => $questions[$paperItem['questionId']]
             );
-            if($paperItem['parentId'] != 0) {
-                foreach ($questionItemSet[$paperItem['partId']] as $key => $questionItem) {
-                    if($questionItem['id'] == $paperItem['parentId']) {
-                        $questionItem['subItems'][] = $questionItem;
-                        $questionItemSet[$paperItem['partId']][$key] = $questionItem;
-                        break;
-                    }
+
+            if($paperItem['questionType'] == 'material') {
+                $questionItem['subItems'] = array();
+                $childItems = $this->getTestpaperItemDao()->findItemsByParentId($paperItem['id']);
+                foreach ($childItems as $item) {
+                    $subItem = array(
+                        'id' => $item['id'],
+                        'item' => $item,
+                        'question' => $questions[$item['questionId']]
+                    );
+                    $questionItem['subItems'][] = $subItem;
                 }
-            } else {
-                $questionItemSet[$paperItem['partId']][] = $questionItem;
             }
+
+            $questionItemSet[$paperItem['partId']][] = $questionItem;
         }
         return $questionItemSet;
     }

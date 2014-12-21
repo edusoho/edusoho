@@ -4,11 +4,11 @@
     </div>
     <div class="panel-body">
         {% for questionItem in questionItemSet[part.id] %}
-{#             {% if questionItem.subItems is defined %}
-              {% include 'TopxiaWebBundle:Question2:question-item-have-sub.html.twig' %}
-            {% else %} #}
+            {% if questionItem.subItems is defined %}
+              {% include 'TopxiaWebBundle:Question2:question-item-have-sub.html.twig' with {questionStatus:status} %}
+            {% else %}
               {% include 'TopxiaWebBundle:Question2:question-item.html.twig' with {questionStatus:status} %}
-            {# {% endif %} #}
+            {% endif %}
         {% endfor %}
     </div>
 </div>

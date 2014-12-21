@@ -5,14 +5,18 @@
       {% block paper_heading %}
       {% endblock %}
     </div>
-    <div class="paper-body">
-      <div class="paper-body-content">
-        {% block paper_content %}
-        {% endblock %}
+    <div class="row">
+      <div class="col-md-9">
+        <div class="paper-content">
+          {% block paper_content %}
+          {% endblock %}
+        </div>
       </div>
-      <div class="paper-body-side">
-        {% block paper_side %}
-        {% endblock %}
+      <div class="col-md-3">
+        <div class="paper-side">
+          {% block paper_side %}
+          {% endblock %}
+        </div>
       </div>
     </div>
   </div>

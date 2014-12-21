@@ -3,8 +3,8 @@
 
   <div class="well">{{ question.stem|bbCode2Html|raw }}</div>
 
-  {% for key,questionItem in questionItem.subItems %}
-    {% include 'TopxiaWebBundle:Question:question-item.html.twig' %}
+  {% for questionItem in questionItem.subItems %}
+    {% include 'TopxiaWebBundle:Question2:question-item.html.twig' %}
   {% endfor %}
 
 </div>
