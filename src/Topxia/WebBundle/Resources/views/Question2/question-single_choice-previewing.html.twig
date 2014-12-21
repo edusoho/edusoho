@@ -1,0 +1,14 @@
+{% extends 'TopxiaWebBundle:Question2:question-choice-doing.html.twig' %}
+
+
+{% block footer %}
+
+  <div class="question-choices-inputs">
+      {% for key, choice in question.metas.choices %}
+        {% set choiceIndex = (65+key)|chr %}
+        <label class="radio-inline">
+          <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="choice" name="answer[{{ question.id }}]" value="{{ key }}"> {{ choiceIndex }}
+        </label>
+      {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'TopxiaWebBundle:Question2:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+{% endblock %}
+
+{% block footer %}
+    <div class="question-choices-inputs">
+      <label class="radio-inline"><input type="radio" data-type="determine" name="answer[{{ question.id }}]" value="1"> 正确</label>
+      <label class="radio-inline"><input type="radio" data-type="determine" name="answer[{{ question.id }}]" value="0">错误</label>
+    </div>
+    {% include 'TopxiaWebBundle:Question2:question-actions.html.twig' with {flags:['mark','favorite', 'analysis']}%}
+{% endblock %}

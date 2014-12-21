@@ -20,6 +20,8 @@ interface TestpaperItemDao
 
     public function findItemsByTestPaperId($testPaperId);
 
+    public function findItemsByParentId($parentId);
+
     public function getItemsCountByTestId($testId);
 
     public function getItemsCountByTestIdAndParentId($testId, $parentId);
