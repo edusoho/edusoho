@@ -18,7 +18,7 @@ class ColumnCourseController extends BaseController
         $column=$this->getColumnService()->getColumn($id);
         $votedCourse = $this->getCustomColumnCourseVoteService()->getColumnCourseVoteBySpecialColumnId($column['id']);
 
-        $lowOptions = array("complexity"=>'lowLevel');
+        $lowOptions = array("complexity"=>'lowLevel',"columnId"=>$id);
         $lowCount = $this->getCustomCourseSearcheService()->searchCourseCount($lowOptions);
         $lowCourses = $this->getCustomCourseSearcheService()->searchCourses(
             $lowOptions, null,
@@ -26,7 +26,7 @@ class ColumnCourseController extends BaseController
            $lowCount
         );
 
-        $middleOptions = array("complexity"=>'middleLevel');
+        $middleOptions = array("complexity"=>'middleLevel',"columnId"=>$id);
         $middleCount = $this->getCustomCourseSearcheService()->searchCourseCount($middleOptions);
         $middleCourses = $this->getCustomCourseSearcheService()->searchCourses(
             $middleOptions, null,
@@ -34,7 +34,7 @@ class ColumnCourseController extends BaseController
            $middleCount
         );
 
-        $highOptions = array("complexity"=>'highLevel');
+        $highOptions = array("complexity"=>'highLevel',"columnId"=>$id);
         $highCount = $this->getCustomCourseSearcheService()->searchCourseCount($highOptions);
         $highCourses = $this->getCustomCourseSearcheService()->searchCourses(
             $highOptions, null,
@@ -42,7 +42,7 @@ class ColumnCourseController extends BaseController
            $highCount
         );
 
-        $OnlineOptions = array("categoryId"=>$this->getOnlineCategoryId());
+        $OnlineOptions = array("categoryId"=>$this->getOnlineCategoryId(),"columnId"=>$id);
         $OnlineCount = $this->getCustomCourseSearcheService()->searchCourseCount($OnlineOptions);
         $OnlineCourses = $this->getCustomCourseSearcheService()->searchCourses(
             $OnlineOptions, null,

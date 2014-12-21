@@ -1,1 +1,1 @@
-ALTER TABLE  `category` ADD  `isSearch` enum('active','none') DEFAULT NULL AFTER  `name`;
+ALTER TABLE  `category` ADD  `isSearch` enum('active','none') DEFAULT 'active' AFTER  `name`;

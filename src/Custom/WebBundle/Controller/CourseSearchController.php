@@ -21,7 +21,8 @@ class CourseSearchController extends BaseController
 		  }
 		  $categoryId = $options['categoryId'];
 		  $complexity = $options['complexity'];
-		   $price = $options['price'];
+		  $price = $options['price'];
+		  $firstLevel = $options['firstLevel'];
 		if($options['complexity']=='all'){
 		   unset($options['complexity']);
 		}
@@ -65,7 +66,8 @@ class CourseSearchController extends BaseController
 			'price'=>$price,
 			'courses'=>$courses,
 			'paginator'=>$paginator,
-			'total'=>$total
+			'total'=>$total,
+			'firstLevel' => $firstLevel
 		));
 
 	}

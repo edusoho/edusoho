@@ -49,6 +49,12 @@ class CourseSearchDaoImpl extends BaseDao implements CourseSearchDao
 		        $builder->andStaticWhere("categoryId IN ($categoryIds)");
 		    }
 		}
+		if (isset($conditions['columnId'])) {
+			if(!empty($conditions['columnId'])){
+			$columnId = $conditions['columnId'];
+			$builder->andStaticWhere(" columns LIKE '%|$columnId|%'");
+		}
+		}
 		if(!empty($conditions['tagId'])){
 			$tagId = $conditions['tagId'];
 			    $builder->andStaticWhere(" tags LIKE '%|$tagId|%'");
