@@ -19,7 +19,7 @@
                         <a href="javascript:;" data-anchor="#question{{ questionItem.item.questionId }}" class="btn btn-default btn-index pull-left {% if questionItem.question.testResult|default(null) %}active{% endif %}">{{ questionItem.item.seq }}</a>
                     {% else %}
                         {% for subItem in questionItem.subItems|default([]) %}
-                            <a href="javascript:;" data-anchor="#question{{ subItem.item.id }}" class="btn btn-default btn-index pull-left {% if subItem.question.testResult|default(null) %}active{% endif %}">{{ subItem.item.seq }}</a>
+                            <a href="javascript:;" data-anchor="#question{{ subItem.item.questionId }}" class="btn btn-default btn-index pull-left {% if subItem.question.testResult|default(null) %}active{% endif %}">{{ subItem.item.seq }}</a>
                         {% endfor %}
                     {% endif %}
                     
