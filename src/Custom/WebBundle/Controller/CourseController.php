@@ -192,15 +192,6 @@ class CourseController extends BaseController
 		));
 	}
 
-
-
-
-
-
-
-
-
-
 	public function lessonBlockAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->getCourse($id);
@@ -215,17 +206,6 @@ class CourseController extends BaseController
 			'lessons'=>$lessons
 		));
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 
 	public function previewAction(Request $request,$id)
