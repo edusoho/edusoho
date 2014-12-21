@@ -248,10 +248,15 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $parts = $fields['metas']['parts'];
         $mapping = array();
         $totalScore = 0;
+        $seq = 1;
         foreach ($parts as $part) {
             $part = $this->filterTestpaperPart($part);
             foreach ($part['items'] as $item) {
                 $item['testId'] = $id;
+                if($item['questionType'] != 'material' || !empty($item['parentId'])) {
+                    $item['seq'] = $seq;
+                    $seq += 1;
+                }
                 if(empty($item['parentId'])) {
                     $new = $this->getTestpaperItemDao()->addItem($item);
                     $mapping[$new['questionId']] = $new['id'];
