@@ -11,9 +11,11 @@
       <div class="panel panel-default panel-page">
         <div class="panel-heading"><h4>订单确认</h4></div>
         <div class="panel-body">
-          <form method="post" action="{{path(payUrl)}}">
+          <form method="post" action="{{path(payUrl)}}" 
+          >
           	
-          	<input type="hidden" role="cash-rate" value="{{cashRate}}"/>
+          	<input type="hidden" role="cash-rate" value="{{cashRate}}"
+            data-course-price-show-type = "{{coursePriceShowType}}"/>
             {% for targetType in targetTypes %}
             <input type="hidden" name="targets[]" value="{{targetType}}-{{targetIds[loop.index0]}}"/>
             {% endfor %}
@@ -28,7 +30,7 @@
             {% endif %}
 
             <div class="order-item row">
-            	<h4 class="total-price">应付{% if coursePriceShowType == "RMB" %}金额：￥{% elseif coursePriceShowType == "Coin" %}虚拟币：{% endif %}<span role="total-price">{{totalPrice}}</span></h4>
+            	<h4 class="price_r">应付{% if coursePriceShowType == "RMB" %}金额：￥{% elseif coursePriceShowType == "Coin" %}虚拟币：{% endif %}<span role="total-price">{{totalPrice}}</span></h4>
             </div>
             
             {% if couponApp|default(null) and account|default(null)%}
@@ -40,7 +42,13 @@
             {% endif %}
 
             <div class="order-item row">
-            	<h4 class="total-price">实际支付：{% if coursePriceShowType == "RMB" %}￥{% endif %}<span role="pay-amount">{{shouldPayMoney}}</span></h4>
+              <div class="total-price">
+                {% if coursePriceShowType == "Coin" %}
+              	<h4>需支付虚拟币：<span role="pay-coin">{{shouldPayMoney}}</span></h4>
+                {% endif %}
+
+                <h4>需支付RMB：￥<span role="pay-rmb">{{shouldPayMoney}}</span></h4>
+              </div>
             </div>
 
             <div class="form-group pay">

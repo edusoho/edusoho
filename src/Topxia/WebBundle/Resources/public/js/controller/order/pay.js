@@ -1,6 +1,11 @@
 define(function(require, exports, module) {
-
+	
 	exports.run = function() {
+		var cashRateElement = $('[role="cash-rate"]');
+		var cashRate = 1;
+		if($('[role="cash-rate"]').val() != "")
+			cashRate = $('[role="cash-rate"]').val();
+
 		function conculatePrice(){
 			var totalPrice = parseFloat($('[role="total-price"]').text());
 			var couponAmount = parseFloat($('[role="coupon-price"]').find(".price_r_num").text());
@@ -9,11 +14,16 @@ define(function(require, exports, module) {
 			if(activeAmount<0){
 				activeAmount=0;
 			}
-			$('[role="pay-amount"]').text(activeAmount);
+			if(cashRateElement.data("coursePriceShowType") == "Coin") {
+				$('[role="pay-coin"]').text(activeAmount);
+				$('[role="pay-rmb"]').text(activeAmount/cashRate);
+			} else {
+				$('[role="pay-rmb"]').text(activeAmount);
+			}
 		}
 
 		$('[role="coinNum"]').blur(function(e){
-			var cashRate = $('[role="cash-rate"]').val();
+			
 			var coin = $(this).val();
 			if(isNaN(coin)){
 				$(this).val("0.00");
@@ -22,12 +32,19 @@ define(function(require, exports, module) {
 			}
 			var cash = $('[role="accountCash"]').text();
 			var discount = 0;
-			$('[role="pay-amount"]').text();
 			if(parseFloat(cash) < parseFloat(coin)) {
 				$(this).val(cash);
-				discount = cash/cashRate;
+				if(cashRateElement.data("coursePriceShowType") != "Coin"){
+					discount = cash/cashRate;
+				} else {
+					discount = cash;
+				}
 			} else {
-				discount = coin/cashRate;
+				if(cashRateElement.data("coursePriceShowType") != "Coin"){
+					discount = coin/cashRate;
+				} else {
+					discount = coin;
+				}
 			}
 			$('[role="cash-discount"]').text(discount);
 			conculatePrice();

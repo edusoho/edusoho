@@ -4632,9 +4632,13 @@ a.homework-essay-textarea-pack-up{
 }
 
 .order-item .total-price {
+	float: right;
 	text-align: right;
-	margin-right: 48px;
+	margin-right: 18px;
 	margin-bottom: 30px;
+	border: 1px solid red;
+	padding: 0px 20px;
+	width: 250px;
 }
 
 .coin-detail input {

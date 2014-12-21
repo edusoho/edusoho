@@ -34,7 +34,7 @@ class CourseOrderController extends OrderController
 
         $coinSetting = $this->getSettingService()->get("coin");
         
-        $cashRate = 1;
+        $cashRate = 10;
         if(array_key_exists("cash_rate", $coinSetting)) {
             $cashRate = $coinSetting["cash_rate"];
         }

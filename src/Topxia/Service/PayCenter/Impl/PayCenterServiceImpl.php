@@ -17,7 +17,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 			
 			$order = $this->getOrderService()->getOrderBySn($payData['sn']);
 
-			$outFlow = $this->proccessCashFlow($order);
+			$this->proccessCashFlow($order);
 
 			list($success, $router, $order) = $this->processOrder($payData);
 	        
@@ -62,10 +62,10 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 				$outFlow = $this->payAllByCoin($order);
 			}
 			if($order["amount"] > 0 && $order["coinAmount"] >= 0) {
-				$outFlow = $this->payByCoinAndMoney($order);
+				$outFlow = $this->payByCoinAndRmb($order);
 			}
 		} else if($order["priceType"] == "RMB") {
-			$outFlow = $this->payByMoney($order);
+			$outFlow = $this->payByRmb($order);
 		}
 
 		$this->getOrderService()->updateOrderCashSn($order["id"], $outFlow["sn"]);
@@ -73,7 +73,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		return $outFlow;
 	}
 
-	private function payByMoney($order) {
+	private function payByRmb($order) {
 		$inFlow = array(
 			'userId' => $order["userId"],
             'amount' => $order["amount"],
@@ -109,7 +109,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		return $this->getCashService()->outFlowByCoin($cashFlow);
 	}
 
-	private function payByCoinAndMoney($order) {
+	private function payByCoinAndRmb($order) {
 		$userId = $order["userId"];
 		$inFlow = array(
 			'userId' => $userId,
