@@ -1061,10 +1061,6 @@ my_orders:
     pattern: /my/orders
     defaults: { _controller: TopxiaWebBundle:MyOrder:index }
 
-my_bill:
-    pattern: /my/bill
-    defaults: { _controller: TopxiaWebBundle:MyOrder:cashBill }
-
 my_order_cancel:
     pattern: /my/order/{id}/cancel
     defaults: { _controller: TopxiaWebBundle:MyOrder:cancel }
@@ -1431,6 +1427,9 @@ group_thread_delete_attach:
     defaults: { _controller: TopxiaWebBundle:GroupThread:deleteAttach }
     methods: [POST]
 
+my_bill:
+    pattern: /my/bill
+    defaults: { _controller: TopxiaWebBundle:Coin:cashBill }
 my_coin:
     path:     /my/coin
     defaults: { _controller: TopxiaWebBundle:Coin:index }
