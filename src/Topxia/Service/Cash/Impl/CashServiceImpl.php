@@ -93,7 +93,10 @@ class CashServiceImpl extends BaseService implements CashService
     {
         return $this->getFlowDao()->searchFlowsCount($conditions);
     }
-
+    public function analysisAmount($conditions)
+    {
+        return $this->getFlowDao()->analysisAmount($conditions);
+    }
     public function outFlowByCoin($outFlow)
     {
         if(!ArrayToolkit::requireds($outFlow, array(

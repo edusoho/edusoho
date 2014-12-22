@@ -69,17 +69,24 @@ class CoinController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
-        $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+$conditions['type']  = 'inflow';      
+$amountInflow = $this->getCashService()->analysisAmount($conditions);
+var_dump($amountInflow);
+$conditions['type']  = 'outflow'; 
+$amountOutflow = $this->getCashService()->analysisAmount($conditions);
+var_dump($amountOutflow);
+        // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         
         return $this->render('TopxiaWebBundle:Coin:index.html.twig',array(
           'payments' => $this->getEnabledPayments(),
           'account'=>$account,
           'cashes'=>$cashes,
           'paginator'=>$paginator,
-          'amount'=>$amount,
-          'ChargeCoin' => $ChargeCoin
+          // 'amount'=>$amount,
+          'ChargeCoin' => $ChargeCoin,
+          'amountInflow' => $amountInflow?:0,
+          'amountOutflow' => $amountOutflow?:0
         ));
     }
 
@@ -126,10 +133,17 @@ class CoinController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
+$conditions['type']  = 'inflow';      
+$amountInflow = $this->getCashService()->analysisAmount($conditions);
+var_dump($amountInflow);
+$conditions['type']  = 'outflow'; 
+$amountOutflow = $this->getCashService()->analysisAmount($conditions);
+var_dump($amountOutflow);
         return $this->render('TopxiaWebBundle:Coin:cash_bill.html.twig',array(
             'cashes' => $cashes,
             'paginator' => $paginator,
+            'amountInflow' => $amountInflow?:0,
+            'amountOutflow' => $amountOutflow?:0            
           
         ));   
     }

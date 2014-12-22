@@ -8,10 +8,11 @@
 {% block main %}
 {# <div class="panel panel-default panel-col"> #}
 <div class="panel panel-default panel-col lesson-manage-panel">
-  <div class="panel-heading">
+
+  {% include 'TopxiaWebBundle:Coin:bill-bar.html.twig' %}
+{#   <div class="panel-heading">
     我的{{setting('coin.coin_name')}}
-    {# 我的{{setting('coin.coin_name')}} #}
-  </div>
+  </div> #}
   <div class="panel-heading" style="font-weight:normal;">
     账户余额:<br>
     <div class="row">
@@ -47,7 +48,10 @@
         </div> 
 
        {# <button class="btn btn-primary">搜索</button>#}
-
+       <div class="control-label pull-right" style="padding-top: 8px;">
+        收入：<a class="success">{{ amountInflow }}</a>虚拟币
+        支出：<a class="danger">{{ amountOutflow }}</a>虚拟币
+        </div>
       </form>
    {% endif %}
 

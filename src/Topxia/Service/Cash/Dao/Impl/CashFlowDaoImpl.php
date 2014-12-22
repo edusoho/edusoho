@@ -36,6 +36,13 @@ class CashFlowDaoImpl extends BaseDao implements CashFlowDao
             ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ? : array();
     }
+    
+    public function analysisAmount($conditions)
+    {
+        $builder = $this->createFlowQueryBuilder($conditions)
+            ->select('sum(amount)');
+        return $builder->execute()->fetchColumn(0);
+    }
 
     public function searchFlowsCount($conditions)
     {

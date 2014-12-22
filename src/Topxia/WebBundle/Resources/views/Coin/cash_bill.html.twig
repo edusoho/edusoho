@@ -6,7 +6,9 @@
 
 {% block main %}
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">我的现金消费账单</div>
+  {% include 'TopxiaWebBundle:Coin:bill-bar.html.twig' %}
+
+  {# <div class="panel-heading">我的现金消费账单</div> #}
     <div class="panel-body">
       
     <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
@@ -18,7 +20,10 @@
       </div>
 
       {#<button class="btn btn-primary">搜索</button>#}
-
+       <div class="control-label pull-right" style="padding-top: 8px;">
+        收入：<a class="success">{{ amountInflow }}</a>RMB
+        支出：<a class="danger">{{ amountOutflow }}</a>RMB
+        </div>
     </form>
 
         <br>
