@@ -111,6 +111,11 @@ class BaseProcessor {
         return $this->controller->getService('Order.OrderService');
     }
 
+    protected function getTagService()
+    {
+        return $this->controller->getService('Taxonomy.TagService');
+    }
+
     protected function getFileService()
     {
         return $this->controller->getService('Content.FileService');

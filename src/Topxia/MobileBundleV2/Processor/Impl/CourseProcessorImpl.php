@@ -750,7 +750,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	public function searchCourse()
 	{
 		$search = $this->getParam("search", '');
+		$tagId = $this->getParam("tagId", '');
 		$conditions['title'] = $search;
+
+		if (empty($tagId)) {
+			$conditions['title'] = $search;
+		} else {
+			$conditions['tagId'] = $tagId;
+		}
 		return $this->findCourseByConditions($conditions);
 	}
 

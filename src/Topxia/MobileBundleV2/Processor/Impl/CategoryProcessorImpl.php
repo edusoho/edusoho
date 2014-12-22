@@ -6,6 +6,17 @@ use Topxia\MobileBundleV2\Processor\CategoryProcessor;
 
 class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
 {
+
+    public function getTags()
+    {
+        $tags = $this->getTagService()->findAllTags(0, 100);
+        $tags = array_map(function($tag){
+            $tag['createdTime'] = Date('c' , $tag['createdTime']);
+            return $tag;
+        }, $tags);
+        return $tags;
+    }
+
     public function getCategories()
     {
         $category = $this->getParam("category");
