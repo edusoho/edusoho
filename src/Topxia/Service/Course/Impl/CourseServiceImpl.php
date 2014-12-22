@@ -315,6 +315,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $course;
 	}
 
+	// public function findhotSaleCourses()
+	// {
+	// 	return $this->getMemberDao()->;
+	// }
+
 	public function updateCourse($id, $fields)
 	{
 		$course = $this->getCourseDao()->getCourse($id);
