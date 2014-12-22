@@ -29,6 +29,12 @@ class UserLoginTokenListener
         $userLoginToken = $request->getSession()->getId();
         $user = $this->getUserService()->getCurrentUser();
 
+        if(isset($user['locked']) && $user['locked'] == 1){
+            $this->container->get("security.context")->setToken(null);
+            setcookie("REMEMBERME");
+            return;
+        }
+
         if (!$user->islogin()) {
             return;
         }
