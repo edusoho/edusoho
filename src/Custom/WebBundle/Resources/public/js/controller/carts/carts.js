@@ -37,10 +37,7 @@ define(function(require,exports,module){
                 $role = '[data-role=cart-tr-'+$btn.data('id')+']';
                 $($role).remove();
 
-                if (self.$('#carts-table').find('tbody > tr').length == 0) {
-                    self.$('#carts-table').empty();
-                    self.$('.carts-text-help').removeClass('hide');
-                };
+                self._initCartsList();
                 self._initTotalNum();
                 self._initTotalPrice();
             }).error(function(){
@@ -82,12 +79,19 @@ define(function(require,exports,module){
                     $($role).remove();
                 });
 
-                // $('.carts-text-help').removeClass('hide');
+                self._initCartsList();
                 self._initTotalNum();
                 self._initTotalPrice();
             }).error(function(){
                     Notify.danger("删除失败");
             });
+        },
+
+        _initCartsList: function () {
+            if (this.$('#carts-table').find('tbody > tr').length == 0) {
+                this.$('#carts-table').empty();
+                this.$('.carts-text-help').removeClass('hide');
+            }
         },
 
         _initTotalPrice: function () {
