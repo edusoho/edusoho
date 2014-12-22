@@ -6,6 +6,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Task\Task;
 
 class KernelRequestListener
 {
@@ -17,6 +18,10 @@ class KernelRequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
     	$request = $event->getRequest();
+        
+        $task=new Task;
+        $task->run();
+
     	if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
 
             if (stripos($request->getPathInfo(), '/mapi') === 0) {

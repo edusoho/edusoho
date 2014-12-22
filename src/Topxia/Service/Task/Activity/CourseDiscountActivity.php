@@ -7,6 +7,6 @@ class CourseDiscountActivity implements Activity
 {   
     public function run()
     {
-
+        
     }
 }

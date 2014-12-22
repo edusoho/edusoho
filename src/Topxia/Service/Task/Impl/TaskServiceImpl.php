@@ -16,4 +16,14 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
 
     }
+
+    public function getTask($id)
+    {
+
+    }
+
+    public function findActiveTasks($time)
+    {
+        
+    }
 }

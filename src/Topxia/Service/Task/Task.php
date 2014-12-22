@@ -8,7 +8,10 @@ class Task
         //读数据库数据
         //执行计划
 
-        $task=new "Topxia\\Service\\Task\\Activity".$taskClassName();
+        $taskClassName="CourseDiscountActivity";
+        $class="Topxia\\Service\\Task\\Activity\\".$taskClassName;
+
+        $task=new $class;
 
         $task->run();
 
