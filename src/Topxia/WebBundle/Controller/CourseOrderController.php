@@ -58,8 +58,8 @@ class CourseOrderController extends OrderController
         }
 
         $coursePriceShowType = "Coin";
-        if(array_key_exists("course_price_show_type", $coinSetting)) {
-            $coursePriceShowType = $coinSetting["course_price_show_type"];
+        if(array_key_exists("price_type", $coinSetting)) {
+            $coursePriceShowType = $coinSetting["price_type"];
         }
 
         if($coursePriceShowType == "RMB") {
@@ -156,8 +156,8 @@ class CourseOrderController extends OrderController
 
         $coinSetting = $this->getSettingService()->get("coin");
         $coursePriceShowType = "RMB";
-        if(array_key_exists("course_price_show_type", $coinSetting)) {
-            $coursePriceShowType = $coinSetting["course_price_show_type"];
+        if(array_key_exists("price_type", $coinSetting)) {
+            $coursePriceShowType = $coinSetting["price_type"];
         }
         $cashRate = 1;
         if(array_key_exists("cash_rate", $coinSetting)) {
