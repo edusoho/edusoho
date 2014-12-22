@@ -9,7 +9,9 @@ define(function(require, exports, module) {
         show: function() {
             var overlay = this;
             TagChooserOverlay.superclass.show.call(this);
+            overlay.$('.panel').css('visibility', 'hidden');
             if (this._chooser) {
+                overlay.$('.panel').css('visibility', 'visible');
                 return ;
             }
 
@@ -26,6 +28,7 @@ define(function(require, exports, module) {
             });
 
             chooser.on('change', function(tags) {
+                overlay.$('.panel').css('visibility', 'visible');
                 overlay.set('height', this.getHeight() + 70);
             });
 
