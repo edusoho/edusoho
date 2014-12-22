@@ -9,7 +9,7 @@ class CartsDaoImpl extends BaseDao implements CartsDao
 {
     protected $table = 'carts';
 
-    public function getCarts($id)
+    public function getCart($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
@@ -21,22 +21,22 @@ class CartsDaoImpl extends BaseDao implements CartsDao
         return $this->getConnection()->fetchAll($sql,array($userId))? : array();
     }
     
-    public function addCarts(array $carts)
+    public function addCart(array $carts)
     {
         $affected = $this->getConnection()->insert($this->table, $carts);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert carts error.');
         }
-        return $this->getCarts($this->getConnection()->lastInsertId());
+        return $this->getCart($this->getConnection()->lastInsertId());
     }
 
-    public function updateCarts($id, array $carts)
+    public function updateCart($id, array $carts)
     {
         $this->getConnection()->update($this->table, $carts, array('id' => $id));
-        return $this->getCarts($id);
+        return $this->getCart($id);
     }
 
-    public function deleteCarts($id)
+    public function deleteCart($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }

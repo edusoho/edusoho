@@ -6,9 +6,9 @@ use Custom\Service\Carts\CartsService;
 
 class CartsServiceImpl extends BaseService  implements CartsService
 {
-    public function getCarts ($id)
+    public function getCart ($id)
     {
-        return $this->getCartsDao()->getCarts($id);
+        return $this->getCartsDao()->getCart($id);
     }
 
     public function searchCarts (array $conditions, array $oderBy, $start, $limit)
@@ -26,20 +26,20 @@ class CartsServiceImpl extends BaseService  implements CartsService
         return $this->getCartsDao()->findLimitCartsByUseId($limit,$userId);
     }
 
-    public function addCarts(array $carts)
+    public function addCart(array $carts)
     {
-        return $this->getCartsDao()->addCarts($carts);
+        return $this->getCartsDao()->addCart($carts);
     }
 
-    public function updateCarts($id,$carts)
+    public function updateCart($id,$carts)
     {
-        return $this->getCartsDao()->updateCarts($id,$carts);
+        return $this->getCartsDao()->updateCart($id,$carts);
     }
 
 
-    public function deleteCarts ($id)
+    public function deleteCart ($id)
     {
-        $this->getCartsDao()->deleteCarts($id);
+        $this->getCartsDao()->deleteCart($id);
 
     }
 

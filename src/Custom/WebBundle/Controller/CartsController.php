@@ -29,11 +29,6 @@ class CartsController extends BaseController
         ));
     }
 
-    // public function showAction(Request $request)
-    // {
-        
-    // }
-
     public function deleteAction(Request $request)
     {
         $ids = $request->request->get('ids', array());
