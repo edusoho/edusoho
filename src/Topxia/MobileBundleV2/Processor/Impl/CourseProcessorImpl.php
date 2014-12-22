@@ -87,6 +87,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		$formData['content'] = $content;
 		unset($formData['imageCount']);
 		$post = $this->controller->getThreadService()->createPost($formData);
+		$threadTitle = $thread['title'];
+		//PushService::sendMsg($thread['userId'],"1|$courseId|$threadTitle|$threadId");
 		return $post;
 	}
 
@@ -128,7 +130,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		unset($formData['imageCount']);
 
 		$post = $this->controller->getThreadService()->updatePost($courseId, $postId, $formData);
-		PushService->sendMsg("user02","学完了");
+
+		$threadInfo = $this->controller->getThreadService()->getThread($courseId, $threadId);
 		return $post;
 	}
 
