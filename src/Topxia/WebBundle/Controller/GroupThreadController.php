@@ -826,7 +826,7 @@ class GroupThreadController extends BaseController
         $data=explode('[/hide]',$thread['content']);
         
         $user=$this->getCurrentUser();
-        $role=$this->getGroupMemberRole($user->id);
+        $role=$this->getGroupMemberRole($thread['groupId']);
         $context="";
         $count=0;
      
@@ -1065,17 +1065,17 @@ class GroupThreadController extends BaseController
         return $orderBys;
     }
 
-    private function getGroupMemberRole($userId)
+    private function getGroupMemberRole($groupId)
     {
        $user = $this->getCurrentUser();
 
        if (!$user['id']) return 0;
 
-       if ($this->getGroupService()->isOwner($userId, $user['id'])) return 2;
+       if ($this->getGroupService()->isOwner($groupId, $user['id'])) return 2;
 
-       if ($this->getGroupService()->isAdmin($userId, $user['id'])) return 3;
+       if ($this->getGroupService()->isAdmin($groupId, $user['id'])) return 3;
 
-       if ($this->getGroupService()->isMember($userId, $user['id'])) return 1;
+       if ($this->getGroupService()->isMember($groupId, $user['id'])) return 1;
 
        return 0;
     }
