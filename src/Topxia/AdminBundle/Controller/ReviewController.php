@@ -10,6 +10,21 @@ class ReviewController extends BaseController {
     public function indexAction (Request $request)
     {   
         $conditions = $request->query->all();
+
+        if (!empty($conditions['courseTitle'])){
+            
+            $courses = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['courseTitle']));
+            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
+            if (count($conditions['courseIds']) == 0){
+                return $this->render('TopxiaAdminBundle:Review:index.html.twig', array(
+                'reviews' => array(),
+                'users'=>array(),
+                'courses'=>array(),
+                'paginator' => new Paginator($request,0,20)
+                ));
+            }                 
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getReviewService()->searchReviewsCount($conditions),

@@ -29,6 +29,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
+	public function findCoursesByLikeTitle($title)
+	{
+		$coursesUnserialized = $this->getCourseDao()->findCoursesByLikeTitle($title);
+		$courses = CourseSerialize::unserializes($coursesUnserialized);
+        return ArrayToolkit::index($courses, 'id');		
+	}
+
 	public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
 	{
 		$courses = CourseSerialize::unserializes(
@@ -957,12 +964,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if($fields['mediaId'] != $lesson['mediaId']){
 			// Incease the link count of the new selected lesson file
 			if(!empty($fields['mediaId'])){
-				$this->getUploadFileService()->increaseFileLinkCount(array($fields['mediaId']));
+				$this->getUploadFileService()->increaseFileUsedCount(array($fields['mediaId']));
 			}
 
 			// Decrease the link count of the original lesson file
 			if(!empty($lesson['mediaId'])){
-				$this->getUploadFileService()->decreaseFileLinkCount(array($lesson['mediaId']));
+				$this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
 			}
 		}
 
