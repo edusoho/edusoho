@@ -19,7 +19,7 @@ class CoinController extends BaseController
         $coinSettingsSaved = $coinSettingsPosted;
         $default = array(
           'coin_enabled' => 0,
-          'course_price_show_type'=>'RMB',
+          'price_type'=>'RMB',
           'coin_name' => '虚拟币',
           'coin_content' => '',
           'cash_rate' => 1,
@@ -31,7 +31,7 @@ class CoinController extends BaseController
         $coinSettingsPosted = null;
 
         $coinSettingsPosted['coin_enabled'] = $request->request->get("coin_enabled");
-        $coinSettingsPosted['course_price_show_type'] = $request->request->get("course_price_show_type");
+        $coinSettingsPosted['price_type'] = $request->request->get("price_type");
         $coinSettingsPosted['coin_name'] = $request->request->get("coin_name");
         $coinSettingsPosted['coin_content'] = $request->request->get("coin_content");
         $coinSettingsPosted['coin_picture'] = $request->request->get("coin_picture");
