@@ -14,4 +14,6 @@ interface CartsService
     public function updateCart($id,$carts);
 
     public function deleteCart($id);
+
+    public function deleteCartsByIds($ids);
 }

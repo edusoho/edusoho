@@ -43,6 +43,19 @@ class CartsServiceImpl extends BaseService  implements CartsService
 
     }
 
+    public function deleteCartsByIds($ids)
+    {
+        if (count($ids) == 1) {
+            $this->deleteCarts($ids[0]);
+        } else {
+            foreach ($ids as $key => $id) {
+                $this->deleteCart($id);
+            }
+        }
+
+        return true;
+    }
+
     private function getCartsDao()
     {
         return $this->createDao('Custom:Carts.CartsDao');

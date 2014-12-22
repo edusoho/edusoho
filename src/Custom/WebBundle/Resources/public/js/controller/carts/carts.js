@@ -14,7 +14,8 @@ define(function(require,exports,module){
             "click [data-role=delete-carts-btn]": "_OnClickDeleteItem",
             "click [data-role=batch-select]" : "_OnClickBatch",
             "click [data-role=single-select]" : "_initTotalNum",
-            "click [data-role=batch-delete-btn]" : "_OnClickBatchDelete"
+            "click [data-role=batch-delete-btn]" : "_OnClickBatchDelete",
+            "click [data-role=batch-favourite-btn]" : "_OnClickFavourite"
         },
 
         setup: function() {
@@ -67,7 +68,9 @@ define(function(require,exports,module){
             var ids = [];
             var $btn = $(e.currentTarget);
             this.$('[data-role=single-select]').each(function(index,item){
-                ids.push($(item).data('id'));
+                if ($(item).is(':checked')) {
+                    ids.push($(item).data('id'));
+                }
             });
 
             var self = this;
@@ -79,7 +82,6 @@ define(function(require,exports,module){
                     $($role).remove();
                 });
 
-                self.$('#carts-table').empty();
                 $('.carts-text-help').removeClass('hide');
                 self._initTotalNum();
                 self._initTotalPrice();
@@ -106,6 +108,10 @@ define(function(require,exports,module){
                 };
             });
             this.$('[data-role=total-num]').html(courseNum);
+        },
+
+        _OnClickFavourite: function (e) {
+
         }
 
     });
