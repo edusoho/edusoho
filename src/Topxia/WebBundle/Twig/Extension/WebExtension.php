@@ -573,6 +573,17 @@ class WebExtension extends \Twig_Extension
     {
         $need=ServiceKernel::instance()->createService('Group.ThreadService')->sumGoodsCoinsByThreadId($id);
 
+        $thread=ServiceKernel::instance()->createService('Group.ThreadService')->getThread($id);
+        
+        $data=explode('[/hide]',$thread['content']);
+        foreach ($data as $key => $value) {
+
+            $value=" ".$value;
+            sscanf($value,"%[^[][hide=reply]%[^$$]",$replyContent,$replyHideContent);
+            if($replyHideContent)
+                return true;
+        }
+
         if($need) return true;
 
         return false;
