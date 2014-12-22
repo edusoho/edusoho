@@ -14,21 +14,11 @@ use Imagine\Image\ImageInterface;
 class ColumnCourseVoteServiceImpl extends BaseService implements ColumnCourseVoteService
 {
 
-    // public function getColumn($id)
-    // {
-    //     return $this->getColumnDao()->getColumn($id);
-    // }
+    public function getColumnCourseVote($id)
+    {
+        return $this->getColumnCourseVoteDao()->getColumnCourseVote($id);
+    }
 
-    // public function getColumnByName($name)
-    // {
-    //     return $this->getColumnDao()->getColumnByName($name);
-    // }
-    
-
-    // public function getColumnByLikeName($name)
-    // {
-    //     return $this->getColumnDao()->getColumnByLikeName($name);
-    // }
 
     public function findAllCourseVote($start, $limit)
     {
@@ -43,36 +33,12 @@ class ColumnCourseVoteServiceImpl extends BaseService implements ColumnCourseVot
           return $this->getColumnCourseVoteDao()->getColumnCourseVoteBySpecialColumnId($specialColumnId);
       }
 
-    // public function findColumnsByIds(array $ids)
-    // {
-    // 	return $this->getColumnDao()->findColumnsByIds($ids);
-    // }
-
-    // public function findColumnsByNames(array $names)
-    // {
-    // 	return $this->getColumnDao()->findColumnsByNames($names);
-    // }
-
-    // public function isColumnNameAvalieable($name, $exclude=null)
-    // {
-    //     if (empty($name)) {
-    //         return false;
-    //     }
-
-    //     if ($name == $exclude) {
-    //         return true;
-    //     }
-
-    //     $column = $this->getColumnByName($name);
-
-    //     return $column ? false : true;
-    // }
-
     public function addColumnCourseVote(array $columnCourseVote)
     {
+       
         $columnCourseVote = ArrayToolkit::parts($columnCourseVote, array('specialColumnId','isShow','courseAName','courseBName','voteStartTime','voteEndTime'));
-        
-        // $this->filterColumnFields($column);
+        $columnCourseVote['voteStartTime'] =  strtotime($columnCourseVote['voteStartTime']);
+        $columnCourseVote['voteEndTime'] =  strtotime($columnCourseVote['voteEndTime']);
         $columnCourseVote['createdTime'] = time();
 
         $columnCourseVote = $this->getColumnCourseVoteDao()->addColumnCourseVote($columnCourseVote);
@@ -80,6 +46,21 @@ class ColumnCourseVoteServiceImpl extends BaseService implements ColumnCourseVot
         $this->getLogService()->info('columnCourseVote', 'create', "添加课程对垒");
 
         return $columnCourseVote;
+    }
+    public function updateColumnCourseVote($id, array $columnCourseVote)
+    {
+        $temp = $this->getColumnCourseVote($id);
+        if (empty($temp)) {
+            throw $this->createServiceException("课程对垒(#{$id})不存在，更新失败！");
+        }
+
+        $columnCourseVote = ArrayToolkit::parts($columnCourseVote, array('specialColumnId','isShow','courseAName','courseBName','voteStartTime','voteEndTime'));
+        $columnCourseVote['voteStartTime'] =  strtotime($columnCourseVote['voteStartTime']);
+        $columnCourseVote['voteEndTime'] =  strtotime($columnCourseVote['voteEndTime']);
+
+        $this->getLogService()->info('columnCourseVote', 'update', "编辑课程对垒(#{$id})");
+
+        return $this->getColumnCourseVoteDao()->updateColumnCourseVote($id, $columnCourseVote);
     }
     //验证是否合法
     private function filterColumnFields(&$column, $relatedColumn = null)
@@ -122,27 +103,6 @@ class ColumnCourseVoteServiceImpl extends BaseService implements ColumnCourseVot
             $this->getColumnCourseVoteDao()->updateCourseVoteCountByIdAndVoteCountColumn($columnCourseVote['id'],$countAddColumn);
             // courseVote($columnCourseVote);
        }
-    // public function updateColumn($id, array $fields)
-    // {
-    //     $column = $this->getColumn($id);
-    //     if (empty($column)) {
-    //         throw $this->createServiceException("专栏(#{$id})不存在，更新失败！");
-    //     }
-
-    //     $fields = ArrayToolkit::parts($fields, array('name','description'));
-    //     $this->filterColumnFields($fields, $column);
-
-    //     $this->getLogService()->info('column', 'update', "编辑专栏{$fields['name']}(#{$id})");
-
-    //     return $this->getColumnDao()->updateColumn($id, $fields);
-    // }
-
-    // public function deleteColumn($id)
-    // {
-    //     $this->getColumnDao()->deleteColumn($id);
-
-    //     $this->getLogService()->info('column', 'delete', "删除专栏#{$id}");
-    // }
 
 
   private function getLogService()

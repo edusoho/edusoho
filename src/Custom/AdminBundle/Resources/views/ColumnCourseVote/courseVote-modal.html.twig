@@ -5,7 +5,7 @@
 {% if courseVotes.id %}编辑{% else %}新增{% endif %}课程对垒
 {% endblock %}
 {% block body %}
-  <form class="form-horizontal" id="courseVotes-form" action="{% if courseVotes.id %}{{ path('admin_column_update', {id:courseVotes.id}) }}{% else %}{{ path('admin_column_course_vote_create') }}{% endif %}" method="post">
+  <form class="form-horizontal" id="courseVotes-form" action="{% if courseVotes.id %}{{ path('admin_column_course_vote_update', {id:courseVotes.id}) }}{% else %}{{ path('admin_column_course_vote_create') }}{% endif %}" method="post">
 
 
   <div class="form-group">

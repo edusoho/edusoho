@@ -3,7 +3,7 @@ namespace Custom\Service\ColumnCourseVote;
 
 interface ColumnCourseVoteService
 {
-        // public function getColumn($id);
+        public function getColumnCourseVote($id);
 
         // public function getColumnByName($name);
 

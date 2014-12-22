@@ -4,6 +4,7 @@ namespace Custom\Service\ColumnCourseVote\Dao;
 interface ColumnCourseVoteDao
 {
 	public function addColumnCourseVote(array $columnCourseVote);
+    public function updateColumnCourseVote($id, array $columnCourseVote);
 
 	// public function updateColumn($id, array $fields);
 

@@ -11,15 +11,17 @@
   <td>{{courseVote.voteStartTime|date('Y-m-d H:i')}}</td>
   <td>{{ courseVote.voteEndTime|date('Y-m-d H:i') }}</td>
   <td>
-{#          <div class="btn-group">
-                   <a href="#modal" data-toggle="modal" data-url="{{ path('admin_column_update', {id:column.id}) }}" data-url="" class="btn btn-default btn-sm">编辑</a>
-     	    <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <div class="btn-group">
+                   <a href="#modal" data-toggle="modal"  data-url="{{ path('admin_column_course_vote_update', {id:courseVote.id}) }}"  data-url="" class="btn btn-default btn-sm">编辑</a>
+     	   {#  <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
        	          <span class="caret"></span>
-                 </a>
+                 </a> #}
+        {#           
 	      <ul class="dropdown-menu">
               <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_column_avatar', {id:column.id}) }}">设置专栏图标</a></li>
 	      </ul>
-        </div> #}
+         #}
+        </div>
    </td>
  </tr>
     {#      </div>

@@ -33,6 +33,13 @@ class ColumnCourseVoteDaoImpl extends BaseDao implements ColumnCourseVoteDao
         return $this->getColumnCourseVote($this->getConnection()->lastInsertId());
     }
 
+    public function updateColumnCourseVote($id, array $columnCourseVote){
+       // var_dump($columnCourseVote);
+       // exit();
+        $this->getConnection()->update($this->table, $columnCourseVote, array('id' => $id));
+        return $this->getColumnCourseVote($id);
+    }
+
        public function updateCourseVoteCountByIdAndVoteCountColumn($id,$countColumn)
        {
             $sql = " UPDATE {$this->table} SET {$countColumn}={$countColumn}+1 WHERE id={$id} ";

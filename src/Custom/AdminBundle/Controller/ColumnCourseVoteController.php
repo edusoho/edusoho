@@ -58,20 +58,30 @@ class ColumnCourseVoteController extends BaseController
 
 	public function updateAction(Request $request, $id)
 	{
-		$column = $this->getColumnService()->getColumn($id);
-		if (empty($column)) {
+		$columnOptions=array();
+		$total = $this->getColumnService()->getAllColumnCount();
+		$columns = $this->getColumnService()->findAllColumns(0, $total);
+		foreach ($columns as $key => $value) {
+			$columnId = $value['id'];
+			$columnName = $value['name'];
+			$columnOptions[$columnId]=$columnName;
+		}
+		
+		$columnCourseVote = $this->getColumnCourseVoteService()->getColumnCourseVote($id);
+		if (empty($columnCourseVote)) {
 			throw $this->createNotFoundException();
 		}
 
 		if ('POST' == $request->getMethod()) {
-			$column = $this->getColumnService()->updateColumn($id, $request->request->all());
-			return $this->render('CustomAdminBundle:Column:list-tr.html.twig', array(
-				'column' => $column
+			$columnCourseVote = $this->getColumnCourseVoteService()->updateColumnCourseVote($id, $request->request->all());
+			return $this->render('CustomAdminBundle:ColumnCourseVote:list-tr.html.twig', array(
+				'courseVote' => $columnCourseVote
 			));
 		}
 
-		return $this->render('CustomAdminBundle:Column:column-modal.html.twig', array(
-			'column' => $column
+		return $this->render('CustomAdminBundle:ColumnCourseVote:courseVote-modal.html.twig', array(
+			'courseVotes' => $columnCourseVote,
+			'columnOptions'=>$columnOptions
 		));
 	}
 
