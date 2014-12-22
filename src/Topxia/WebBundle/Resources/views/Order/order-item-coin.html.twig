@@ -15,7 +15,7 @@
       <input role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">虚拟币
     </div>
     <div>
-      <input placeholder="请输入支付密码"/>
+      <input name="payPassword" placeholder="请输入支付密码"/>
       <div>
         {% if not hasPayPassword %}
         为了保障账户资金安全，暂时不可使用，请先<a href="#">开启支付密码</a>

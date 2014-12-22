@@ -267,17 +267,6 @@ class UserServiceImpl extends BaseService implements UserService
         return $out == $this->getPasswordEncoder()->encodePassword($in,$salt);
     }
 
-    public function verifyPayPassword($id, $payPassword)
-    {
-        $user = $this->getUser($id);
-
-        if (empty($user)) {
-            throw $this->createServiceException('参数不正确，校验支付密码失败。');
-        }
-
-        return $this->verifyInSaltOut($payPassword, $user['payPasswordSalt'], $user['payPassword']);
-    }
-
     public function verifyPassword($id, $password)
     {
         $user = $this->getUser($id);
@@ -285,6 +274,15 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('参数不正确，校验密码失败。');
         }
         return $this->verifyInSaltOut($password, $user['salt'], $user['password']);
+    }
+
+    public function verifyPayPassword($id, $payPassword)
+    {
+        $user = $this->getUser($id);
+        if (empty($user)) {
+            throw $this->createServiceException('参数不正确，校验密码失败。');
+        }
+        return $this->verifyInSaltOut($payPassword, $user['payPasswordSalt'], $user['payPassword']);
     }
 
     public function register($registration, $type = 'default')

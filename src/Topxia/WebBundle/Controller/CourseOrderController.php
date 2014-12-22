@@ -136,8 +136,15 @@ class CourseOrderController extends OrderController
         $fields = $request->request->all();
         $user = $this->getCurrentUser();
 
+        $coinSetting = $this->getSettingService()->get("coin");
+        if(array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] == 1) {
+            $checked = $this->getAuthService()->checkPayPassword($user["id"], $fields["payPassword"]);
+            if($checked)
+                return $this->createMessageResponse('error', '用户未登录，创建订单。');
+        }
+
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，创建订单。');
+            return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
         }
 
         if(!array_key_exists("targets", $fields)) {
@@ -154,13 +161,13 @@ class CourseOrderController extends OrderController
             $targetIds[] = $target[1];
         }
 
-        $coinSetting = $this->getSettingService()->get("coin");
+        
         $coursePriceShowType = "RMB";
-        if(array_key_exists("price_type", $coinSetting)) {
+        if(array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] == 1 && array_key_exists("price_type", $coinSetting)) {
             $coursePriceShowType = $coinSetting["price_type"];
         }
         $cashRate = 1;
-        if(array_key_exists("cash_rate", $coinSetting)) {
+        if(array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] == 1 && array_key_exists("cash_rate", $coinSetting)) {
             $cashRate = $coinSetting["cash_rate"];
         }
 
@@ -198,10 +205,6 @@ class CourseOrderController extends OrderController
         //     return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
         // }
 
-        $cashRate = 1;
-        if(array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
 
         $order = array(
             'priceType' => $coursePriceShowType,
@@ -423,6 +426,11 @@ class CourseOrderController extends OrderController
     protected function getCashService()
     {
         return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 
     protected function getCashAccountService()
