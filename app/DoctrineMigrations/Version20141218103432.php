@@ -15,7 +15,8 @@ class Version20141218103432 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE `carts` CHANGE `createdTime` `createdTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '购买时间';");
         $this->addSql("ALTER TABLE `carts` CHANGE `userId` `userId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '购买者Id';");
-    	$this->addSql("ALTER TABLE `carts` CHANGE `number` `number` INT(10) UNSIGNED NOT NULL DEFAULT '1' COMMENT '数量';");
+        $this->addSql("ALTER TABLE `carts` CHANGE `number` `number` INT(10) UNSIGNED NOT NULL DEFAULT '1' COMMENT '数量';");
+        $this->addSql("ALTER TABLE `haoxue`.`carts` ADD UNIQUE (`itemId`, `itemType`, `userId`)COMMENT '';");
     }
 
     public function down(Schema $schema)

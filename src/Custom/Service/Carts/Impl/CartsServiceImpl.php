@@ -21,9 +21,9 @@ class CartsServiceImpl extends BaseService  implements CartsService
         return $this->getCartsDao()->searchCartsCount($conditions);
     }
 
-    public function findLimitCartsByUseId($limit,$userId)
+    public function findCartsByUseId($userId)
     {
-        return $this->getCartsDao()->findLimitCartsByUseId($limit,$userId);
+        return $this->getCartsDao()->findCartsByUseId($userId);
     }
 
     public function addCarts(array $carts)

@@ -130,7 +130,7 @@ define(function(require, exports, module) {
         });
 
         $element.on('shown.bs.popover', function () {
-            $.get('../../carts/show',function(html){
+            $.get($element.data('url'),function(html){
                 $('#consult-cart-content').html(html);
             });
             $element.find('.arrow').remove();
