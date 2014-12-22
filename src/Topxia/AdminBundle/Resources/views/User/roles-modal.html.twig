@@ -16,6 +16,9 @@
     <label>
     	<input type="checkbox" name="roles[]" value="ROLE_TEACHER" {% if 'ROLE_TEACHER' in user.roles %}checked="checked"{% endif %}>教师
     </label>
+    <label>
+      <input type="checkbox" name="roles[]" value="ROLE_ADMIN" {% if 'ROLE_ADMIN' in user.roles %}checked="checked"{% endif %}>管理员
+    </label>
     {% endif %}
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
