@@ -46,7 +46,7 @@ class CartsServiceImpl extends BaseService  implements CartsService
     public function deleteCartsByIds($ids)
     {
         if (count($ids) == 1) {
-            $this->deleteCarts($ids[0]);
+            $this->deleteCart($ids[0]);
         } else {
             foreach ($ids as $key => $id) {
                 $this->deleteCart($id);

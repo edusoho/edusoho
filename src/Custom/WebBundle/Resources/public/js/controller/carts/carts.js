@@ -82,7 +82,7 @@ define(function(require,exports,module){
                     $($role).remove();
                 });
 
-                $('.carts-text-help').removeClass('hide');
+                // $('.carts-text-help').removeClass('hide');
                 self._initTotalNum();
                 self._initTotalPrice();
             }).error(function(){
