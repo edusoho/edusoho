@@ -27,15 +27,14 @@ class CoinController extends BaseController
         
         $fields = $request->query->all();
 
-        $conditions = array(
-            'type'=>'',
-        );
+        $conditions = array();
 
         if(!empty($fields)){
-            $conditions =$fields;
+            $conditions = $fields;
         }
 
-        $conditions['userId']=$user->id;
+        $conditions['cashType'] = 'Coin';
+        $conditions['userId'] = $user->id;
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -45,7 +44,7 @@ class CoinController extends BaseController
 
         $cashes=$this->getCashService()->searchFlows(
             $conditions,
-            array('createdTime','DESC'),
+            array('ID','DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -53,7 +52,6 @@ class CoinController extends BaseController
         $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         
-
         return $this->render('TopxiaWebBundle:Coin:index.html.twig',array(
           'payments' => $this->getEnabledPayments(),
           'account'=>$account,

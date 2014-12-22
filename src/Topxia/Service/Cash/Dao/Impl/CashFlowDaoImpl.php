@@ -67,6 +67,7 @@ class CashFlowDaoImpl extends BaseDao implements CashFlowDao
             ->from($this->table, 'cash_flow')
             ->andWhere('userId = :userId')
             ->andWhere('type = :type')
+            ->andWhere('cashType = :cashType')
             ->andWhere('status = :status')
             ->andWhere('category = :category')
             ->andWhere('sn = :sn')

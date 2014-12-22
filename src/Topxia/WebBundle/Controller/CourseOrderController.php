@@ -57,7 +57,7 @@ class CourseOrderController extends OrderController
             $vip = $this->getVipService()->getMemberByUserId($user["id"]);
         }
 
-        $coursePriceShowType = "RMB";
+        $coursePriceShowType = "Coin";
         if(array_key_exists("course_price_show_type", $coinSetting)) {
             $coursePriceShowType = $coinSetting["course_price_show_type"];
         }

@@ -40,18 +40,33 @@
       <table class="table table-striped">
         {% if cashes %}
         <tr>
-          <th>名称</th>
           <th>流水号</th>
           <th>成交时间</th>
-          <th>收支</th>
+          <th>名称</th>
+          <th>收入</th>
+          <th>支出</th>
+          <th>支付方式</th>
         </tr>
         {% for cash in cashes %}
            <tr>
-            <td>{{cash.name}}<br>
-                <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span></td>
             <td>{{cash.sn}}</td>
             <td>{{cash.createdTime|date('Y-m-d H:i:s')}}</td>
-            <td>{% if cash.type =="outflow" %}-{% endif %}{{cash.amount}}</td>
+            <td>{{cash.name}}<br>
+                <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span>
+            </td>
+            <td style="color:#1bb974">
+              {% if cash.type =="inflow" %}{{cash.amount}}{% endif %}
+            </td>
+            <td style="color:#ff7b0e">
+              {% if cash.type =="outflow" %}-{{cash.amount}}{% endif %}
+            </td>
+            <td>
+              {% if cash.category == "recharge" %}
+              支付宝
+              {% elseif cash.category == "outflow" %}
+              余额支付
+              {% endif %}
+            </td>
           </tr>
         {% endfor %}
         {% else %}
