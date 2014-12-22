@@ -250,7 +250,7 @@ class CourseController extends BaseController
                 $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
 
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lessonId, 'times' => 1, 'duration' => 3600));
+                    $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
                     $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                     $headLeaderInfo = $this->getHeadLeaderInfo();
                     $hls = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, $headLeaderInfo['headLeaders'], $headLeaderInfo['headLeaderHlsKeyUrl'], 3600);
@@ -474,7 +474,7 @@ class CourseController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.TokenService');
     }
-    
+
 	private function getCustomCourseSearcheService(){
 		return $this->getServiceKernel()->createService('Custom:Course.CourseSearchService');
 	}
