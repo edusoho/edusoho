@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\StringToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\CloudClientFactory;
+
 class CourseController extends BaseController
 {	
 	public function favoriteAction(Request $request, $id)
