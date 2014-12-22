@@ -36,14 +36,15 @@ class KnowledgeServiceImpl extends BaseService implements KnowledgeService
 
     public function deleteKnowledge($id)
     {
-        $ids = array();
+        
+/*        $ids = array();
         $ids = $this->findKnowledgeChildrenIds($id, $ids);
         $ids[] = $id;
         foreach ($ids as $id) {
             $this->getknowledgeDao()->deleteknowledge($id);
         }
 
-        $this->getLogService()->info('knowledge', 'delete', "删除知识点(#{$id})");
+        $this->getLogService()->info('knowledge', 'delete', "删除知识点(#{$id})");*/
     }
 
     public function createKnowledge($knowledge)

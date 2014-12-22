@@ -54,7 +54,7 @@ define(function(require, exports, module) {
 		    var html = '<div class="actions ">';
 		    html += '<button class="btn btn-link btn-sm" id="addBtn_'+treeNode.tId+'"><span class="glyphicon glyphicon-plus"></span> 添加子节点</button>';
 		    html += '<button class="btn btn-link btn-sm" id="editBtn_'+treeNode.tId+'"><span class="glyphicon glyphicon-edit"></span> 编辑</button>';
-		    html += '<button class="btn btn-link btn-sm" id="removeBtn_'+treeNode.tId+'"><span class="glyphicon glyphicon-remove-circle"> 删除</span></button>';
+		   /* html += '<button class="btn btn-link btn-sm" id="removeBtn_'+treeNode.tId+'"><span class="glyphicon glyphicon-remove-circle"> 删除</span></button>';*/
 		    html += '</div>';
 		  	$('#' + treeNode.tId + '_a').after(html);
 		  	var addBtn = $("#addBtn_"+treeNode.tId),
