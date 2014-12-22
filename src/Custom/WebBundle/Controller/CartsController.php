@@ -11,8 +11,28 @@ class CartsController extends BaseController
 {
     public function showAction(Request $request)
     {
-        # code...
+        $user = $this->getCurrentUser();
+        $carts = $this->getCartsService()->findLimitCartsByUseId(5,$user['id']);
+        $courses = array();
+        if (!empty($carts)){
+            $courseIds = ArrayToolkit::column($carts,'itemId');
+            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+            $courses = ArrayToolkit::index($courses,'id');
+            $teacherIds = ArrayToolkit::column($courses,'teacherIds');
+            $users = $this->getUsers($teacherIds);
+        }
+
+        return $this->render('CustomWebBundle:Carts:show-popover.html.twig',array(
+            'carts' => $carts,
+            'courses' => $courses,
+            'users' => $users,
+        ));
     }
+
+    // public function showAction(Request $request)
+    // {
+        
+    // }
 
     public function deleteAction(Request $request)
     {
@@ -31,6 +51,7 @@ class CartsController extends BaseController
         } else {
             return $this->createJsonResponse(array('status'=>'fail'));
         }
+
     }
 
     public function listAction(Request $request)

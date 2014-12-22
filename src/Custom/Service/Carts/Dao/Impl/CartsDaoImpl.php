@@ -15,6 +15,12 @@ class CartsDaoImpl extends BaseDao implements CartsDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
+    public function findLimitCartsByUseId($limit,$userId)
+    {
+        $sql = "SELECT * FROM {$this->table}  WHERE userId = ? ORDER BY createdTime DESC LIMIT {$limit}";
+        return $this->getConnection()->fetchAll($sql,array($userId))? : array();
+    }
+    
     public function addCarts(array $carts)
     {
         $affected = $this->getConnection()->insert($this->table, $carts);

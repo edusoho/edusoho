@@ -122,18 +122,19 @@ define(function(require, exports, module) {
             $element.css( {marginTop: marginTop, visibility: 'visible'});
         }
 
-        $element.popover({
-            placement: 'left',
-            trigger: 'hover',
+        $element.find('.btn-carts .btn').popover({
+            placement:'left',
+            trigger: 'click',
             html: true,
-            content: function() {
-                var url = '../../carts/show'
-                $.get(url,function(html){
-                    return 
-                })
-                return $($(this).data('contentElement')).html();
-            }
+            content:'<div id="consult-cart-content" class="consult-cart-content">正在载入,请稍候...</div>'
         });
+
+        $element.on('shown.bs.popover', function () {
+            $.get('../../carts/show',function(html){
+                $('#consult-cart-content').html(html);
+            });
+            $element.find('.arrow').remove();
+        })
     }
 
 

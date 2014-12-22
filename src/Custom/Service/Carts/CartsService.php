@@ -3,7 +3,6 @@ namespace Custom\Service\Carts;
 
 interface CartsService
 {
-
     public function getCarts($id);
 
     public function searchCarts(array $conditions, array $sort, $start, $limit);
@@ -15,6 +14,4 @@ interface CartsService
     public function updateCarts($id,$carts);
 
     public function deleteCarts($id);
-
-    public function deleteCartsByIds($ids);
 }

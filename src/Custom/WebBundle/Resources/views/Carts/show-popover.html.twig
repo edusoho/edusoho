@@ -1,0 +1,40 @@
+{% if carts %}
+<div>
+  <ul class="carts-popover-list">
+    {% for cart in carts %}
+    {% set course = courses[cart.itemId] %}
+    <li class="carts-item clearfix">
+      <a href="{{ path('course_show', {id:course.id}) }}" class="course-popover pull-left" target="_blink">
+        <img src="{{ default_path('coursePicture',course.smallPicture, '') }}">
+      </a>
+
+      <span class="pull-right">
+        <div class="price-count">{{ course.price }}元</div>
+        <div class="carts-item-delete" data-url="{{ path('carts_delete', {id:cart.id}) }}">
+          <a href="javascript:;">删除</a>
+        </div>
+      </span>
+
+      <a href="{{ path('course_show', {id:course.id}) }}" target="_blink">
+        <span class="apply-name">{{ course.title }}</span>
+      </a>
+      <div class="popover-teachers">
+        {% if course.teacherIds|default(null) %}
+          教师：
+          {% for id in course.teacherIds %}
+            {% set user = users[id] %}
+            <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.nickname }}</a>
+          {% endfor %}
+        {% endif  %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+  <a href="{{ path('carts_list') }}" class="btn btn-danger btn-xs pull-right">去购物车结算</a>
+{% else %}
+  您的购物车还是空的，赶紧行动吧！
+{% endif %}
+
+
+<script>app.load('customwebbundle/controller/carts/show-popover')</script>
