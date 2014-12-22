@@ -46,7 +46,7 @@ class CourseSubcourseDaoImpl extends BaseDao implements CourseSubcourseDao
     public function update($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $this->getRelation($id);
+        return $this->get($id);
     }
 
 }
