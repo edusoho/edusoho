@@ -39,20 +39,14 @@ class CartsController extends BaseController
 
         $condition = array(
             'userId' => $userId,
-            'itemType' => 'courseware'
-        );
-
-        $paginator = new Paginator(
-            $request,
-            $this->getCartsService()->searchCartsCount($condition),
-            3
+            'itemType' => 'course'
         );
 
         $carts = $this->getCartsService()->searchCarts(
             $condition,
             array('createdTime','DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
+            0,
+            $this->getCartsService()->searchCartsCount($condition)
         );
 
         $ids = ArrayToolkit::column($carts,'itemId');
@@ -64,7 +58,6 @@ class CartsController extends BaseController
             'carts' => $carts,
             'courses' =>$courses,
             'users' => $users,
-            'paginator' => $paginator
         ));
     }
 

@@ -1,11 +1,10 @@
-<tr>
+<tr data-role="cart-tr-{{cart.id}}" class="cart-tr">
     <td><input type="checkbox" data-role="single-select" data-id={{ cart.id }}></td>
     <td>
         <div class="clearfix course-header">
             <a href="{{ path('course_show', {id:course.id}) }}">
                 <img class="picture" src="{{ default_path('coursePicture',course.largePicture, '') }}" />
             </a>
-
             <a class="title">{{ course.title }}</a>
             <div class="teachers">
               {% if course.teacherIds|default(null) %}
@@ -19,10 +18,10 @@
         </div>
 
     </td>
-    <td>{{ course.price }}</td>
+    <td data-role="price" class="text-danger">{{ course.price }}</td>
     <td>
         <a href="#" class="btn btn-link">
-            <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" data-role="delete-carts-btn" title="删除" data-url="{{ path('carts_delete',{id:cart.id})}}"></span>
+            <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" data-role="delete-carts-btn" title="删除" data-url="{{ path('carts_delete',{id:cart.id})}}" data-id={{ cart.id }}></span>
         </a>
 
         <a href="#" class="btn btn-link">
