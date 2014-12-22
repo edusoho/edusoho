@@ -15,6 +15,8 @@ class CartsController extends BaseController
         $carts = $this->getCartsService()->findCartsByUseId($user['id']);
         array_slice($carts,0,5);
         $courses = array();
+        $users = array();
+        
         if (!empty($carts)){
             $courseIds = ArrayToolkit::column($carts,'itemId');
             $courses = $this->getCourseService()->findCoursesByIds($courseIds);
