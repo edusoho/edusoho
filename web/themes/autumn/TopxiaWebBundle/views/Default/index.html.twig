@@ -50,8 +50,8 @@
                     <div class="course-metas">
                     {% if setting('course.coursesPrice') == 0 %}
                       {% if setting('coin.coin_enabled') %}
-                      <span class="price"{% if setting('coin.coin_price_enabled') %} style="display:none;"  {% else %}  style="display:inline " {% endif %}>{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                      <span class="price"{% if setting('coin.coin_price_enabled') %} style="display:inline " {% else %} style="display:none;"   {% endif %} >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
+                      <span class="price"{% if setting('coin.course_price_show_type') %} style="display:none;"  {% else %}  style="display:inline " {% endif %}>{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+                      <span class="price"{% if setting('coin.course_price_show_type') %} style="display:inline " {% else %} style="display:none;"   {% endif %} >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
                       {% else %}
                       <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
                       {% endif %}
@@ -113,8 +113,8 @@
                     <div class="course-metas">
                     {% if setting('course.coursesPrice') == 0 %}
                       {% if setting('coin.coin_enabled') %}
-                      <span class="price"{% if setting('coin.coin_price_enabled') %} style="display:none;"  {% else %}  style="display:inline " {% endif %}>{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                      <span class="price"{% if setting('coin.coin_price_enabled') %} style="display:inline " {% else %} style="display:none;"   {% endif %} >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
+                      <span class="price"{% if setting('coin.course_price_show_type') %} style="display:none;"  {% else %}  style="display:inline " {% endif %}>{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+                      <span class="price"{% if setting('coin.course_price_show_type') %} style="display:inline " {% else %} style="display:none;"   {% endif %} >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
                       {% else %}
                       <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
                       {% endif %}
@@ -181,8 +181,8 @@
                       <div class="course-metas">
                       {% if setting('course.coursesPrice') == 0 %}
                       {% if setting('coin.coin_enabled') %}
-                      <span class="price"{% if setting('coin.coin_price_enabled') %} style="display:none;"  {% else %}  style="display:inline " {% endif %}>{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                      <span class="price"{% if setting('coin.coin_price_enabled') %} style="display:inline " {% else %} style="display:none;"   {% endif %} >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
+                      <span class="price"{% if setting('coin.course_price_show_type') %} style="display:none;"  {% else %}  style="display:inline " {% endif %}>{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+                      <span class="price"{% if setting('coin.course_price_show_type') %} style="display:inline " {% else %} style="display:none;"   {% endif %} >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
                       {% else %}
                       <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
                       {% endif %}

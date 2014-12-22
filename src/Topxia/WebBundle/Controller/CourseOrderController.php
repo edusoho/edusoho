@@ -88,7 +88,9 @@ class CourseOrderController extends OrderController
             'coursePriceShowType' => $coursePriceShowType,
 
             'vip' => empty($vip) ? null : array($vip),
-            'payUrl' => 'course_order_pay'
+            'payUrl' => 'course_order_pay',
+
+            'hasPayPassword' => strlen($user['payPassword']) > 0
         ));
     }
 
