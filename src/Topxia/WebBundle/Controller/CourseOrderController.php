@@ -139,8 +139,8 @@ class CourseOrderController extends OrderController
         $coinSetting = $this->getSettingService()->get("coin");
         if(array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] == 1) {
             $checked = $this->getAuthService()->checkPayPassword($user["id"], $fields["payPassword"]);
-            if($checked)
-                return $this->createMessageResponse('error', '用户未登录，创建订单。');
+            if(!$checked)
+                return $this->createMessageResponse('error', '支付密码不正确，创建订单失败。');
         }
 
         if (!$user->isLogin()) {
