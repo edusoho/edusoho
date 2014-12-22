@@ -87,54 +87,6 @@ class MyOrderController extends BaseController
         ));
     }
 
-    public function cashBillAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        $conditions = array(
-            'userId' => $user['id'],
-        );
-
-        $conditions['startTime'] = 0; 
-        $conditions['endTime'] = time();
-        switch ($request->get('lastHowManyMonths')) { 
-            case 'oneWeek': 
-                $conditions['startTime'] = $conditions['endTime']-7*24*3600; 
-                break; 
-            case 'twoWeeks': 
-                $conditions['startTime'] = $conditions['endTime']-14*24*3600; 
-                break; 
-            case 'oneMonth': 
-                $conditions['startTime'] = $conditions['endTime']-30*24*3600;               
-                break;     
-            case 'twoMonths': 
-                $conditions['startTime'] = $conditions['endTime']-60*24*3600;               
-                break;   
-            case 'threeMonths': 
-                $conditions['startTime'] = $conditions['endTime']-90*24*3600;               
-                break;  
-        } 
-        
-        $paginator = new Paginator(
-            $request,
-            $this->getOrderService()->countUserBillNum($conditions),
-            20
-        );
-
-        $orders = $this->getOrderService()->searchBill(
-            $conditions,
-            'latest',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-
-        return $this->render('TopxiaWebBundle:MyOrder:cash_bill.html.twig',array(
-            'orders' => $orders,
-            'paginator' => $paginator,
-            'request' => $request
-        ));   
-    }
 
     public function refundsAction(Request $request)
     {
