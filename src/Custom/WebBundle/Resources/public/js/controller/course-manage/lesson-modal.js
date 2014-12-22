@@ -13,9 +13,9 @@ define(function(require,exports,module){
     var relatedKnowledgeIds = [];
     var queryUrl = "";
 
-    var CoursewareChooser = require('/bundles/topxiaweb/js/controller/widget/media-chooser/courseware-chooser.js');
-    var EssayChooser = require('/bundles/topxiaweb/js/controller/widget/media-chooser/essay-chooser.js');
-    var TestpaperChooser = require('/bundles/topxiaweb/js/controller/widget/media-chooser/testpaper-chooser');
+    var CoursewareChooser = require('../media-chooser/courseware-chooser.js');
+    var EssayChooser = require('../media-chooser/essay-chooser.js');
+    var TestpaperChooser = require('../media-chooser/testpaper-chooser');
 
     exports.run = function(){
         var $form = $("#course-lesson-form");
