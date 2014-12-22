@@ -47,7 +47,22 @@
               	<h4>需支付虚拟币：<span role="pay-coin">{{shouldPayMoney}}</span></h4>
                 {% endif %}
 
-                <h4>需支付RMB：￥<span role="pay-rmb">{{shouldPayMoney}}</span></h4>
+                <h4>
+                  {% if coursePriceShowType == "Coin" %}
+                  折合RMB
+                  {% else %}
+                  需支付RMB
+                  {% endif %}
+                  ：￥&nbsp;<span role="pay-rmb">{{shouldPayMoney}}</span></h4>
+              </div>
+              <div style="
+                clear: both;
+                float: right;
+                padding-bottom: 10px;
+                padding-right: 18px;
+              ">
+                <input placeholder="请输入支付密码"/>
+                <div><a href="">忘记密码？</a></div>
               </div>
             </div>
 

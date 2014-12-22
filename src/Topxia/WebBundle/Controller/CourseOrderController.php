@@ -188,6 +188,9 @@ class CourseOrderController extends OrderController
         }
 
         //优惠码优惠价格 TODO
+
+        
+
         $amount = $totalPrice - $coinPreferentialPrice;
         // if($amount != $fields["actualPrice"]) {
         //     return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
