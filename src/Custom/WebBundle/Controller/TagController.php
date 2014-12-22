@@ -11,7 +11,7 @@ class TagController extends BaseController
      public function indexAction (Request $request, $tagId)
     {
         //获取前18个标签
-        $tags = $this->getTagService()->findAllTags(0, 20);
+        $tags = $this->getCustomTagService()->findAllTags(0, 20);
       if (empty($tags)) {
             throw $this->createNotFoundException();
         }
@@ -100,7 +100,7 @@ class TagController extends BaseController
              $nextPage = $currentPage +1;
         }
      
-        $tags = $this->getTagService()->findAllTags($start, $perPageCount);
+        $tags = $this->getCustomTagService()->findAllTags($start, $perPageCount);
         
         return array("tags"=>$tags,"nextPage"=>$nextPage);
         // return $tags;
@@ -114,6 +114,11 @@ class TagController extends BaseController
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
+    private function getCustomTagService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Taxonomy.TagService');
+    }
+
 
     private function getCustomCourseSearchService()
     {

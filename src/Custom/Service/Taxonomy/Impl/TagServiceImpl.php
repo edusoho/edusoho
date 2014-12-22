@@ -17,7 +17,7 @@ class TagServiceImpl extends BaseTagServiceImpl implements CustomTagService
 
     public function addTag(array $tag)
     {
-        $tag = ArrayToolkit::parts($tag, array('name','description'));
+        $tag = ArrayToolkit::parts($tag, array('name','description','weight'));
 
         $this->filterTagFields($tag);
         $tag['createdTime'] = time();
@@ -36,12 +36,16 @@ class TagServiceImpl extends BaseTagServiceImpl implements CustomTagService
             throw $this->createServiceException("标签(#{$id})不存在，更新失败！");
         }
 
-        $fields = ArrayToolkit::parts($fields, array('name','description'));
+        $fields = ArrayToolkit::parts($fields, array('name','description','weight'));
         $this->filterTagFields($fields, $tag);
 
         $this->getLogService()->info('tag', 'update', "编辑标签{$fields['name']}(#{$id})");
 
         return $this->getTagDao()->updateTag($id, $fields);
+    }
+
+    public function findAllTags($start, $limit){
+        return $this->getCustomTagDao()->findAllTags($start, $limit);
     }
 
         private function filterTagFields(&$tag, $relatedTag = null)
@@ -111,9 +115,13 @@ class TagServiceImpl extends BaseTagServiceImpl implements CustomTagService
     }
 
 
-        private function getTagDao()
+    private function getTagDao()
     {
         return $this->createDao('Taxonomy.TagDao');
+    }
+    private function getCustomTagDao()
+    {
+        return $this->createDao('Custom:Taxonomy.TagDao');
     }
 
     private function getLogService()

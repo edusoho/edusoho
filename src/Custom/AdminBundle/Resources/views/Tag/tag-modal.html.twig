@@ -13,11 +13,18 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="col-md-3 control-label" for="tag-name-field">标签描述</label>
+        <label class="col-md-3 control-label" for="tag-description-field">标签描述</label>
         <div class="col-md-6 controls">
             <textarea class="form-control" id="category-description-field" style="height:100px;" name="description">{{tag.description}}</textarea>
         </div>
-   </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label" for="tag-weight-field">标签排序</label>
+        <div class="col-md-6 controls">
+            <textarea class="form-control" id="category-weight-field" style="height:100px;" name="weight">{{tag.weight}}</textarea>
+        </div>
+    </div>
+   
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
   <script type="text/javascript">app.load('customadminbundle/controller/tag/save-modal')</script>

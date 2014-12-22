@@ -1,26 +1,26 @@
 define(function(require, exports, module) {
 
-	var Validator = require('bootstrap.validator');
+    var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
-	require('common/validator-rules').inject(Validator);
-	exports.run = function() {
-		var $form = $('#tag-form');
-		var $modal = $form.parents('.modal');
+    require('common/validator-rules').inject(Validator);
+    exports.run = function() {
+        var $form = $('#tag-form');
+        var $modal = $form.parents('.modal');
         var $table = $('#tag-table');
 
-		var validator = new Validator({
+        var validator = new Validator({
             element: $form,
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
-                    return ;
+                    return;
                 }
 
                 $('#tag-create-btn').button('submiting').addClass('disabled');
 
-                $.post($form.attr('action'), $form.serialize(), function(html){
+                $.post($form.attr('action'), $form.serialize(), function(html) {
                     var $html = $(html);
-                    if ($table.find( '#' +  $html.attr('id')).length > 0) {
+                    if ($table.find('#' + $html.attr('id')).length > 0) {
                         $('#' + $html.attr('id')).replaceWith($html);
                         Notify.success('标签更新成功！');
                     } else {
@@ -28,7 +28,7 @@ define(function(require, exports, module) {
                         Notify.success('标签添加成功!');
                     }
                     $modal.modal('hide');
-				});
+                });
 
             }
         });
@@ -38,10 +38,15 @@ define(function(require, exports, module) {
             required: true,
             rule: 'remote'
         });
+        validator.addItem({
+            element: '#tag-weight-field',
+            required: true,
+            rule: 'integer'
+        });
 
         $modal.find('.delete-tag').on('click', function() {
             if (!confirm('真的要删除该标签吗？')) {
-                return ;
+                return;
             }
 
             var trId = '#tag-tr-' + $(this).data('tagId');
@@ -52,8 +57,7 @@ define(function(require, exports, module) {
 
         });
 
-	};
-
+    };
 
 
 
