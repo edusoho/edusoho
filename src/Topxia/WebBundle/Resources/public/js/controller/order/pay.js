@@ -77,15 +77,20 @@ define(function(require, exports, module) {
 				return;
 			}
 			data.targetType = "course";
-			data.targetId = 1;
-			data.amount = 0.01;
+			data.targetId = $(this).data("targetId");
+			data.amount = $(this).data("amount");
 			
-			$.post('/coupon/check', data, function(data){
+			$.post('/course/'+data.targetId+'/coupon/check', data, function(data){
 				if(data.useable == "no") {
 					$('[role="code-notify"]').css("color","red").text(data.message);
 				} else if(data.useable == "yes"){
 					$('[role="code-notify"]').css("color","green").text("优惠码可用");
-					$('[role="coupon-price"]').find(".price_r_num").text(data.decreaseAmount);
+					if(cashRateElement.data("coursePriceShowType") == "RMB") {
+						$('[role="coupon-price"]').find(".price_r_num").text(data.decreaseAmount);
+					} else {
+						$('[role="coupon-price"]').find(".price_r_num").text(data.decreaseAmount * cashRate);
+					}
+
 				}
 				conculatePrice();
 			})

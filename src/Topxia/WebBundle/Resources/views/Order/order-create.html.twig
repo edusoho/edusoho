@@ -33,7 +33,7 @@
             	<h4 class="price_r">应付{% if coursePriceShowType == "RMB" %}金额：￥{% elseif coursePriceShowType == "Coin" %}虚拟币：{% endif %}<span role="total-price">{{totalPrice}}</span></h4>
             </div>
             
-            {% if couponApp|default(null) and account|default(null)%}
+            {% if courses|default(null) and couponApp|default(null) and account|default(null)%}
             	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
             {% endif %}
 

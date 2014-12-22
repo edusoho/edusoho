@@ -7,11 +7,12 @@
     <div class="price_r" role="coupon-price">
         <span class="price_r_mark">-</span>
         <span class="pricehead">{% if coursePriceShowType == "RMB" %}￥{% endif %}</span>
-        <span class="price_r_num">0.0</span>
+        <span class="price_r_num">0.00</span>
     </div>
   </div>
   <div class="coupon-detail" >
-    <input role="coupon-code" type="text" name="couponCode" placeholder="请输入优惠码" style="display: none;"/>  <span role="code-notify" class="code-notify"></span>
+    <input role="coupon-code" type="text" name="couponCode" placeholder="请输入优惠码" style="display: none;" data-target-id="{{courses[0]['id']}}" data-amount="{{courses[0]['price']}}"/>  
+    <span role="code-notify" class="code-notify"></span>
     <div role="no-use-coupon-code" style="display: block;">没有使用优惠码</div>
   </div>
 </div>
