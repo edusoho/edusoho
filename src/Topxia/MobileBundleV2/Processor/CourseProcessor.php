@@ -8,7 +8,14 @@ interface CourseProcessor
 	public function getLearningCourse();
 	public function getLearnedCourse();
 	public function getFavoriteCoruse();
+
+	/**
+	* tagId    	标签id 
+	* search 	搜索内容
+	* 参数只能有一个 tagId或search
+	*/
 	public function searchCourse();
+	
 	public function getCourse();
 	public function getReviews();
 
