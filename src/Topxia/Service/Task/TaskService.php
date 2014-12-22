@@ -1,10 +1,9 @@
 <?php
+namespace Topxia\Service\Task;
 
-namespace Topxia\Service\Task\Dao;
-
-interface TaskDao
+interface TaskService
 {
-    public function createTask($task);
+    public function createTask($type="single",$startTime,$taskClassName);
 
     public function cancelTaskByClassName($taskClassName);
 
@@ -13,4 +12,8 @@ interface TaskDao
     public function findActiveTasks($time,$lock=false);
 
     public function updateTask($id,$fields);
+
+    public function run();
 }
+
+?>

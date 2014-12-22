@@ -3,10 +3,10 @@ namespace Topxia\Service\Task\Activity;
 
 use Topxia\Service\Task\Activity;
 
-class CourseDiscountActivity implements Activity
+class CourseDiscountActivity1 implements Activity
 {   
     public function run()
     {
-        echo "1";
+        echo "2";
     }
 }
