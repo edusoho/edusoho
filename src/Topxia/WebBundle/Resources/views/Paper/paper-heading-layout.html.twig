@@ -1,0 +1,24 @@
+<div class="es-row-wrap testpaper-heading">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="testpaper-titlebar clearfix">
+        <h1 class="testpaper-title">{{ paper.name }} <br>
+
+        </h1>
+        <div class="testpaper-status">
+          {% block paper_heading_status %}{% endblock %}
+        </div>
+      </div>
+      {% block paper_heading_content %}{% endblock %}
+    </div>
+
+    <div id="testpaper-navbar" class="testpaper-navbar" data-spy="affix" data-offset-top="200">
+      <ul class="nav nav navbar-nav nav-pills">
+        {% for part in paper.metas.parts %}
+          <li><a href="#paper-part-{{ part.id }}">第{{ part.id }}部分</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+</div>

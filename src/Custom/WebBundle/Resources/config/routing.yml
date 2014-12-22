@@ -38,6 +38,10 @@ ajax_category_isSubject:
     pattern:  /ajax/categories/check
     defaults: { _controller: CustomWebBundle:AajxCategories:isSubjct }
 
+ajax_questions_count:
+    pattern:  /ajax/category/{categoryId}/questions/count
+    defaults: { _controller: CustomWebBundle:AjaxQuestion:getQuestionsCount }
+
 course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: CustomWebBundle:CourseLessonManage:create }

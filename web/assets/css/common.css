@@ -1794,3 +1794,39 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 .searchSelect {
   height: 46px;
 }
+
+
+/* paper css*/
+
+.panel-body .question-item {
+  margin-bottom: 50px;
+  font-size: 14px;
+  border-top: 1px solid #ccc;
+  padding-top: 20px;
+}
+
+.panel-body .question-item:first-child {
+  border-top: none;
+}
+
+.question-item-side {
+  float: left;
+  width: 40px;
+  margin-right: 10px;
+  text-align: center;
+}
+
+.question-item-side .question-item-seq {
+  font-size: 20px;
+  color: #3a87ad;
+}
+
+.question-item-side .question-item-score {
+  font-size: 12px;
+  color: #aaa;
+  border: 1px solid #ccc;
+  padding: 0px 1px;
+  border-radius: 5px;
+  background: #f6f6f6;
+  display: inline-block;
+}

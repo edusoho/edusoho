@@ -1,0 +1,23 @@
+{% extends 'TopxiaWebBundle:Question2:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+  {% include 'TopxiaWebBundle:Question2:question-choice-options.html.twig' %}
+
+{% endblock %}
+
+{% block footer %}
+  <div class="question-choices-inputs">
+    {% for key, choice in question.metas.choices %}
+      {% set choiceIndex = (65+key)|chr %}
+      <label class="checkbox-inline">
+        <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" name="answer[{{ question.id }}][]" value="{{ key }}"> {{ choiceIndex }}
+      </label>
+    {% endfor %}
+  </div>
+  {% include 'TopxiaWebBundle:Question2:question-actions.html.twig' with {flags:['mark','favorite', 'analysis']}%}
+{% endblock %}

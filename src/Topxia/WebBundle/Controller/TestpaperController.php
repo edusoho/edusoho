@@ -154,6 +154,10 @@ class TestpaperController extends BaseController
             throw $this->createAccessDeniedException('无权预览试卷！');
         }
 
+        if($testpaper['pattern'] == 'Part') {
+            return $this->redirect($this->generateUrl('admin_testpaper_preview', array('id' => $testId)));
+        }
+
         $items = $this->getTestpaperService()->previewTestpaper($testId);
 
         $total = $this->makeTestpaperTotal($testpaper, $items);

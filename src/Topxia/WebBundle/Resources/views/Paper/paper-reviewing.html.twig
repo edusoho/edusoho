@@ -1,0 +1,17 @@
+{% extends 'TopxiaWebBundle:Paper:paper-layout.html.twig' %}
+
+{% set script_controller = 'quiz-question/do-test' %}
+
+{% block paper_heading %}
+  {% include 'TopxiaWebBundle:Paper:paper-heading-previewing.html.twig' %}
+{% endblock %}
+
+{% block paper_content %}
+  {% for part in paper.metas.parts %}
+    {% include 'TopxiaWebBundle:Paper:paper-part.html.twig' %}
+  {% endfor %}
+{% endblock %}
+
+{% block paper_side %}
+	{% include 'TopxiaWebBundle:Paper:paper-card.html.twig' %}
+{% endblock %}

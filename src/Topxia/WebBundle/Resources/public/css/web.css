@@ -4557,11 +4557,17 @@ a.homework-essay-textarea-pack-up{
 	color:#2a6496;
 }
 
+.lecture-note-pane {
+	overflow-y: auto;
+	overflow-x:hidden;
+}
+
 .lesson-lecture-note{
-	width:350px;
+	width:320px;
 	height:650px; 
-	overflow-y:auto;
 	margin:10px; 
+	word-break: break-all;
+	word-wrap: break-word;
 }
 
 .green {

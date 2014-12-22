@@ -50,6 +50,7 @@ class CoursewareExerciseController extends BaseController
             'choosedTags' => $choosedTags,
     		'mainKnowledge' => $mainKnowledge,
             'showtime' => $showtime,
+            'position' => $request->query->get('position'),
             'lessonId' => $lessonId,
             'courseId' => $courseId,
     	));

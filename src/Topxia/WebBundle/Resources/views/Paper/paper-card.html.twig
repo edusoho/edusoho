@@ -1,0 +1,41 @@
+<div class="testpaper-card" data-spy="affix" data-offset-top="200">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% if paper.limitedTime != 0 %}
+                {# <span class="{{ paperCard.isPreview|default('') }} testpaper-card-timer" id="time_show" data-time="{% if paperResult.usedTime|default(0) == 0 %}{{ paperCard.limitTime }}{% else %}{{ paperCard.limitTime - paperResult.usedTime }}{% endif %}">00:00</span> #}
+                <button class="btn btn-sm btn-default pull-right" id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:paper.id}) }}" data-goto="{{ path('my_quiz') }}">下次再做</button>
+                <button id="pause" class="btn btn-sm btn-default pull-right" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}">暂停</button>
+            {% else %}
+              <span class="testpaper-card-timer"><small class="text-muted" style="font-size:14px;">时间不限</small></span>
+                <button class="btn btn-sm btn-default pull-right" id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:paper.id}) }}" data-goto="{{ path('my_quiz') }}">下次再做</button>
+            {% endif %}
+        </div>
+        <div class="panel-body">
+
+            {% for part in paper.metas.parts %}
+
+                {% for questionItem in questionItemSet[part.id] %}
+                    {% if questionItem.item.questionType != 'material' %}
+                        <a href="javascript:;" data-anchor="#question{{ questionItem.item.questionId }}" class="btn btn-default btn-index pull-left {% if questionItem.question.testResult|default(null) %}active{% endif %}">{{ questionItem.item.seq }}</a>
+                    {% else %}
+                        {% for subItem in questionItem.subItems|default([]) %}
+                            <a href="javascript:;" data-anchor="#question{{ subItem.item.questionId }}" class="btn btn-default btn-index pull-left {% if subItem.question.testResult|default(null) %}active{% endif %}">{{ subItem.item.seq }}</a>
+                        {% endfor %}
+                    {% endif %}
+                    
+                {% endfor %}
+
+                <div class="clearfix mtm mbm"></div>
+
+            {% endfor %}
+
+        </div>
+        <div class="panel-footer">
+            {% if status == 'previewing' %}
+                <button class="btn btn-success btn-block">我要交卷</button>
+            {% else %}
+                <button class="btn btn-success btn-block do-test" id="finishPaper" data-ajax="{{ path('course_manage_submit_test', { id: id }) }}" data-url="{{ path('course_manage_finish_test', { id: paper.id }) }}" data-goto="{{ path('course_manage_test_results', { id: paper.id }) }}">我要交卷</button>
+            {% endif %}
+        </div>
+    </div>
+  </div>

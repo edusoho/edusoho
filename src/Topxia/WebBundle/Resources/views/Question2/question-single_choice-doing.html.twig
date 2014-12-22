@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle:Question2:question-choice-doing.html.twig' %}
+
+{% block body %}
+  {{ question.stem|bbCode2Html|raw }}
+{% endblock %}
+
+{% block footer %}
+  {% if result.answer|default(null) %}
+   {% set answerChoiceIndex = result.answer %}
+   {% else %}
+   {% set answerChoiceIndex = '-1' %}
+  {% endif %}
+
+  <div class="question-choices-inputs">
+      {% for key, choice in question.metas.choices %}
+        {% set choiceIndex = (65+key)|chr %}
+        <label class="radio-inline">
+          <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="choice" name="answer[{{ question.id }}]" value="{{ key }}" {% if key in  answerChoiceIndex|split(',') %}checked{% endif %}> {{ choiceIndex }}
+        </label>
+      {% endfor %}
+    </div>
+{% endblock %}
