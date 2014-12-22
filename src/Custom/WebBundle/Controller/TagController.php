@@ -11,7 +11,7 @@ class TagController extends BaseController
      public function indexAction (Request $request, $tagId)
     {
         //获取前18个标签
-        $tags = $this->getTagService()->findAllTags(0, 18);
+        $tags = $this->getTagService()->findAllTags(0, 20);
       if (empty($tags)) {
             throw $this->createNotFoundException();
         }
@@ -51,7 +51,7 @@ class TagController extends BaseController
 
     public function pageAction(Request $request,$page){
        
-         $temp = $this->getTags($page,18);
+         $temp = $this->getTags($page,20);
          
         return $this->render('TopxiaWebBundle:Tag:tags.html.twig', array(
         'tags' => $temp['tags'],
@@ -70,7 +70,7 @@ class TagController extends BaseController
     }
 
     public function ajaxPageAction(Request $request,$page){
-         $temp = $this->getTags($page,18);
+         $temp = $this->getTags($page,14);
         return $this->render('TopxiaWebBundle:Tag:index-tag-detail.html.twig', array(
         'tags' => $temp['tags'],
         'page' => $temp['nextPage']
