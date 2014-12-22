@@ -14,13 +14,13 @@
       本次使用
       <input role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">虚拟币
     </div>
-    <div>
+    <div class="pay-password">
       <input name="payPassword" type="password" placeholder="请输入支付密码"/>
       <div>
         {% if not hasPayPassword %}
-        为了保障账户资金安全，暂时不可使用，请先<a href="#">开启支付密码</a>
+        为了保障账户资金安全，暂时不可用，请先<a href="{{path('settings_pay_password')}}" class="btn-link">开启支付密码</a>。
         {% else %}
-        <a href="#">忘记密码？</a>
+        <a href="{{path('settings_find_pay_password')}}" class="btn-link">忘记密码？</a>
         {% endif %}
       </div>
     </div>

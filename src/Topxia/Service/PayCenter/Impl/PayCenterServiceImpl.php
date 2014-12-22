@@ -15,7 +15,19 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		try {
 			$connection->beginTransaction();
 			
-			$order = $this->getOrderService()->getOrderBySn($payData['sn']);
+			$order = $this->getOrderService()->getOrderBySn($payData['sn'],true);
+
+			if($order["status"] == "paid"){
+				$connection->rollback();
+				return;
+			}
+
+			if($order["coupon"]) {
+				$couponApp = $this->getAppService()->findInstallApp("Coupon");
+				if(!empty($couponApp)) {
+					$this->getCouponService()->useCoupon($order["coupon"], $order);
+				}
+			}
 
 			$this->proccessCashFlow($order);
 
@@ -145,6 +157,11 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		return $this->getCashService()->outFlowByCoin($outFlow);
 	}
 
+	protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
 	protected function getOrderService()
     {
         return $this->createService('Order.OrderService');
@@ -153,5 +170,10 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
     protected function getCashService()
     {
         return $this->createService('Cash.CashService');
+    }
+
+    protected function getCouponService()
+    {
+        return $this->getServiceKernel()->createService('Coupon.CouponService');
     }
 }

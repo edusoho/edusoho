@@ -4658,3 +4658,14 @@ a.homework-essay-textarea-pack-up{
 .order-pay .pay {
 	margin-top: 20px
 }
+
+.order-item-detail .pay-password {
+	margin-left: 15px;
+	font-size: 12px;
+	padding-top: 10px;
+}
+
+.order-item-detail .pay-password input {
+	margin-bottom: 5px;
+	border: 1px solid #b5b5b5;
+}

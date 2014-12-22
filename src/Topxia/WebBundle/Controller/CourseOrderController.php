@@ -135,16 +135,15 @@ class CourseOrderController extends OrderController
     {
         $fields = $request->request->all();
         $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
+        }
 
         $coinSetting = $this->getSettingService()->get("coin");
         if(array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] == 1) {
-            $checked = $this->getAuthService()->checkPayPassword($user["id"], $fields["payPassword"]);
-            if(!$checked)
+            $isRight = $this->getAuthService()->checkPayPassword($user["id"], $fields["payPassword"]);
+            if(!$isRight)
                 return $this->createMessageResponse('error', '支付密码不正确，创建订单失败。');
-        }
-
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
         }
 
         if(!array_key_exists("targets", $fields)) {
@@ -196,15 +195,19 @@ class CourseOrderController extends OrderController
             $coinPreferentialPrice = $coinPayAmount;
         }
 
-        //优惠码优惠价格 TODO
-
-        
-
         $amount = $totalPrice - $coinPreferentialPrice;
-        // if($amount != $fields["actualPrice"]) {
-        //     return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
-        // }
 
+        //优惠码优惠价格
+        $couponApp = $this->getAppService()->findInstallApp("Coupon");
+        if(!empty($couponApp)) {
+            $couponResult = $this->getCouponService()->checkCouponUseable($code, $targetType, $targetId, $amount);
+            $amount = $couponResult["afterAmount"];
+        }
+
+        //价格比较
+        if($amount != $fields["actualPrice"]) {
+            return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
+        }
 
         $order = array(
             'priceType' => $coursePriceShowType,
@@ -446,5 +449,10 @@ class CourseOrderController extends OrderController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getCouponService()
+    {
+        return $this->getServiceKernel()->createService('Coupon.CouponService');
     }
 }
