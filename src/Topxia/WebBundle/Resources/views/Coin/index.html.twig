@@ -1,7 +1,7 @@
-{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
-
+{#% extends 'TopxiaWebBundle:My:layout.html.twig' %#}
+{% extends 'TopxiaWebBundle:Settings:layout.html.twig' %}
 {# {% block title %}我的{{setting('coin.coin_name')}} - {{ parent() }}{% endblock %} #}
-{% block title %}我的账户 - {{ parent() }}{% endblock %}
+{% block title %}我的{#虚拟币#}{{setting('coin.coin_name')}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-coin' %}
 
@@ -9,7 +9,7 @@
 {# <div class="panel panel-default panel-col"> #}
 <div class="panel panel-default panel-col lesson-manage-panel">
   <div class="panel-heading">
-    我的账户
+    我的{{setting('coin.coin_name')}}
     {# 我的{{setting('coin.coin_name')}} #}
   </div>
   <div class="panel-heading" style="font-weight:normal;">
@@ -30,10 +30,26 @@
   </div>
   <div class="panel-body">
    <ul class="nav nav-pills" role="tablist">
-      <li role="presentation" {% if app.request.query.get('type') != "inflow" and app.request.query.get('type') != "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:''})}}">全部记录</a></li>
+     <li role="presentation" {% if app.request.query.get('type') != "inflow" and app.request.query.get('type') != "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:''})}}">全部记录</a></li>
+
       <li role="presentation" {% if app.request.query.get('type') == "inflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:'inflow'})}}">充值记录</a></li>
       <li role="presentation" {% if app.request.query.get('type') == "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:'outflow'})}}">消费记录</a></li>
     </ul>
+
+   {% if not(app.request.query.get('type') == "inflow" or app.request.query.get('type') == "outflow")  %} 
+    <br>
+      <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
+        <div class="form-group"> 
+          <select class="form-control" name="lastHowManyMonths" onchange="submit();"> 
+               {% set options = {'oneWeek':'最近一周','twoWeeks':'最近两周','oneMonth':'最近一个月','twoMonths':'最近两个月','threeMonths':'最近三个月','':'全部记录'} %}
+            {{ select_options(options, app.request.get('lastHowManyMonths')) }} 
+          </select> 
+        </div> 
+
+       {# <button class="btn btn-primary">搜索</button>#}
+
+      </form>
+   {% endif %}
 
     <br>
     <div class="table-responsive">
@@ -41,6 +57,7 @@
         {% if cashes %}
         <tr>
           <th>流水号</th>
+          <th>名称</th>          
           <th>成交时间</th>
           <th>名称</th>
           <th>收入</th>
@@ -50,15 +67,17 @@
         {% for cash in cashes %}
            <tr>
             <td>{{cash.sn}}</td>
+            <td>{{cash.name}}<br>
+                <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span></td>            
             <td>{{cash.createdTime|date('Y-m-d H:i:s')}}</td>
             <td>{{cash.name}}<br>
                 <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span>
             </td>
             <td style="color:#1bb974">
-              {% if cash.type =="inflow" %}{{cash.amount}}{% endif %}
+              {% if cash.type =="inflow" %}{{cash.amount}} {% endif %}
             </td>
             <td style="color:#ff7b0e">
-              {% if cash.type =="outflow" %}-{{cash.amount}}{% endif %}
+              {% if cash.type =="outflow" %}-{{cash.amount}} {% endif %}
             </td>
             <td>
               {% if cash.category == "recharge" %}

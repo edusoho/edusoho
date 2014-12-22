@@ -71,6 +71,20 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->createSerializer()->unserializes($orders, $this->serializeFields);
     }
 
+    public function searchBill($conditions, $orderBy, $start, $limit)
+    {
+        if (!isset($conditions['startTime'])) $conditions['startTime'] = 0;
+        $sql = "SELECT * FROM {$this->table} WHERE `createdTime`>={$conditions['startTime']} and `createdTime`<{$conditions['endTime']} and `userId` = {$conditions['userId']} and (not(`payment` in ('none','coin'))) and `status` = 'paid' ORDER BY {$orderBy[0]} {$orderBy[1]}  LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array());
+    }
+
+    public function countUserBillNum($conditions)
+    {
+        if (!isset($conditions['startTime'])) $conditions['startTime'] = 0;
+        $sql = "SELECT count(*) FROM {$this->table} WHERE `createdTime`>={$conditions['startTime']} and `createdTime`<{$conditions['endTime']} and `userId` = {$conditions['userId']} and (not(`payment` in ('none','coin'))) and `status` = 'paid' ";
+        return $this->getConnection()->fetchColumn($sql, array());
+    }    
+
     public function searchOrderCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -92,7 +106,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
     }
 
     private function _createSearchQueryBuilder($conditions)
-    {
+    {error_log(serialize($conditions),3,'/var/tmp/mylogs.log');
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_order')
             ->andWhere('sn = :sn')
@@ -106,7 +120,9 @@ class OrderDaoImpl extends BaseDao implements OrderDao
             ->andWhere('payment = :payment')
             ->andWhere('createdTime >= :createdTimeGreaterThan')
             ->andWhere('paidTime >= :paidStartTime')
-            ->andWhere('paidTime < :paidEndTime');
+            ->andWhere('paidTime < :paidEndTime')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime < :endTime');            
     }
 
     public function sumOrderPriceByTargetAndStatuses($targetType, $targetId, array $statuses)

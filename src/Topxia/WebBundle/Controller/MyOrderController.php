@@ -7,6 +7,16 @@ use Topxia\Common\ArrayToolkit;
 
 class MyOrderController extends BaseController
 {
+    private function getTimeRange($fields)
+    {
+        if(isset($fields['startTime'])&&isset($fields['endTime'])&&$fields['startTime']!=""&&$fields['endTime']!="")
+        {   
+            if($fields['startTime']>$fields['endTime']) return false;
+            return array('startTime'=>strtotime($fields['startTime']),'endTime'=>(strtotime($fields['endTime'])+24*3600));
+        }
+
+        return array('startTime'=>strtotime(date("Y-m",time())),'endTime'=>strtotime(date("Y-m-d",time()+24*3600)));
+    }
 
     public function indexAction (Request $request)
     {
@@ -15,6 +25,26 @@ class MyOrderController extends BaseController
     	$conditions = array(
     		'userId' => $user['id'],
 		);
+
+        $conditions['startTime'] = 0; 
+        $conditions['endTime'] = time();
+        switch ($request->get('lastHowManyMonths')) { 
+            case 'oneWeek': 
+                $conditions['startTime'] = $conditions['endTime']-7*24*3600; 
+                break; 
+            case 'twoWeeks': 
+                $conditions['startTime'] = $conditions['endTime']-14*24*3600; 
+                break; 
+            case 'oneMonth': 
+                $conditions['startTime'] = $conditions['endTime']-30*24*3600;               
+                break;     
+            case 'twoMonths': 
+                $conditions['startTime'] = $conditions['endTime']-60*24*3600;               
+                break;   
+            case 'threeMonths': 
+                $conditions['startTime'] = $conditions['endTime']-90*24*3600;               
+                break;  
+        } 
 
         $paginator = new Paginator(
             $request,
@@ -31,7 +61,78 @@ class MyOrderController extends BaseController
 
         return $this->render('TopxiaWebBundle:MyOrder:index.html.twig',array(
         	'orders' => $orders,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'request' => $request,
+        ));   
+    }
+
+    public  function detailAction(Request $request, $id)
+    {
+        $currentUser = $this->getCurrentUser();
+        $order = $this->getOrderService()->getOrder($id);
+        if ($currentUser['id'] != $order['userId'] ){
+            throw new \RuntimeException("普通用户不能查看别人的订单");
+        }
+        $user = $this->getUserService()->getUser($order['userId']);
+
+        $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
+        
+        return $this->render('TopxiaWebBundle:MyOrder:detail-modal.html.twig', array(
+            'order'=>$order,
+            'user'=>$user,
+            'orderLogs'=>$orderLogs,
+            'users' => $users
+        ));
+    }
+
+    public function cashBillAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $conditions = array(
+            'userId' => $user['id'],
+        );
+
+        $conditions['startTime'] = 0; 
+        $conditions['endTime'] = time();
+        switch ($request->get('lastHowManyMonths')) { 
+            case 'oneWeek': 
+                $conditions['startTime'] = $conditions['endTime']-7*24*3600; 
+                break; 
+            case 'twoWeeks': 
+                $conditions['startTime'] = $conditions['endTime']-14*24*3600; 
+                break; 
+            case 'oneMonth': 
+                $conditions['startTime'] = $conditions['endTime']-30*24*3600;               
+                break;     
+            case 'twoMonths': 
+                $conditions['startTime'] = $conditions['endTime']-60*24*3600;               
+                break;   
+            case 'threeMonths': 
+                $conditions['startTime'] = $conditions['endTime']-90*24*3600;               
+                break;  
+        } 
+        
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->countUserBillNum($conditions),
+            20
+        );
+
+        $orders = $this->getOrderService()->searchBill(
+            $conditions,
+            'latest',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+
+        return $this->render('TopxiaWebBundle:MyOrder:cash_bill.html.twig',array(
+            'orders' => $orders,
+            'paginator' => $paginator,
+            'request' => $request
         ));   
     }
 

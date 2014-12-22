@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}帐号设置 - {{ parent() }}{% endblock %}
+{% block title %}个人中心 - {{ parent() }}{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -10,6 +10,9 @@
         <div class="panel-body">
           <div class="list-group-block">
             <div class="list-group-panel">
+
+
+
               <div class="list-group-heading">帐号设置</div>
             <ul class="list-group">
               {% set side_nav = side_nav|default(null) %}
@@ -29,7 +32,33 @@
               {% endif %}
 
             </ul>
-            </div>
+          </div>
+
+          <div class="list-group-panel">
+
+               
+            <div class="list-group-heading">订单</div>
+
+            <ul class="list-group">
+                <a class="list-group-item 
+                     {% if side_nav == 'my-orders' %} active {% endif %} " 
+                     href="{{path('my_orders')}}">我的订单</a>
+
+                <a class="list-group-item 
+                     {% if side_nav == 'my-bill' %} active {% endif %} " 
+                     href="{{path('my_bill')}}">我的现金账单</a>                
+
+
+                {% if setting('coin.coin_enabled') %}
+                      <a class="list-group-item 
+                        {% if side_nav == 'my-coin' %} active {% endif %} " 
+                        href="{{path('my_coin')}}">我的{#虚拟币#}{{setting('coin.coin_name')}}</a>
+                {% endif %}
+              
+            </ul>
+          </div>
+
+            
           </div><!-- /list-group-block -->
         </div>
 
