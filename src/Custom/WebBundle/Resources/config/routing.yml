@@ -126,3 +126,19 @@ ccviedo_question_preview:
 ccviedo_question_answer_check:
     pattern:  /course/lesson/ccviedo/question/{questionId}/answer/check
     defaults: { _controller: CustomWebBundle:CCViedoManage:answerCheck }
+
+carts_list:
+    pattern:  /carts/list
+    defaults: { _controller: CustomWebBundle:Carts:list }
+
+carts_delete:
+    pattern:  /carts/delete
+    defaults: { _controller: CustomWebBundle:Carts:delete }
+
+carts_show:
+    pattern:  /carts/show
+    defaults: { _controller: CustomWebBundle:Carts:show }
+
+hot_sale_courses:
+    pattern:  /hot/sale/courses/index
+    defaults: { _controller: CustomWebBundle:Carts:index }
