@@ -13,9 +13,9 @@ define(function(require,exports,module){
     var relatedKnowledgeIds = [];
     var queryUrl = "";
 
-    var CoursewareChooser = require('../widget/media-chooser/courseware-chooser');
-    var EssayChooser = require('../widget/media-chooser/essay-chooser');
-    var TestpaperChooser = require('../widget/media-chooser/testpaper-chooser');
+    var CoursewareChooser = require('../media-chooser/courseware-chooser.js');
+    var EssayChooser = require('../media-chooser/essay-chooser.js');
+    var TestpaperChooser = require('../media-chooser/testpaper-chooser');
 
     exports.run = function(){
         var $form = $("#course-lesson-form");

@@ -1,0 +1,49 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}我的购物车 - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'customwebbundle/controller/carts/list' %}
+
+{% block content %}
+
+<div id="carts-module">
+  <div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-shopping-cart"></span>我的购物车</div>
+
+  {% if carts|default(null) %}
+    <table class="table table-hover table-striped" id="carts-table">
+      <thead>
+          <td><input type="checkbox" data-role="batch-select"></td>
+          <th width="50%">商品信息</th>
+          <th width="30%">单价（元）</th>
+          <th >操作</th>
+      </thead>
+      <tbody>
+      {% for cart in carts|default(null) %}
+        {% set course = courses[cart.itemId] %}
+              {% include 'CustomWebBundle:Carts:list-tr.html.twig' %}
+      {% endfor %}
+    {% else %}
+      <div> <p class="text-center" style="margin-top:30px">您的购物车还是空的，赶紧行动吧！</p></div>
+  {% endif %}
+      <div class="hide carts-text-help"> <p class="text-center" style="margin-top:30px">您的购物车还是空的，赶紧行动吧！</p></div>
+      </tbody>
+    </table>
+    <br>
+  <div class="well well-sm clearfix">
+    <div>
+      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+      <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn" data-url="{{ path('carts_delete')}}" >删除</button>
+
+      <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-favourite-btn" data-url="#" >加入收藏</button>
+
+      <button  type="button" class="btn btn-default btn-sm mlm pull-right" data-role="batch-favourite-btn" data-url="#" style="margin-right:100px">结算</button>
+      <div class="pull-right" style="margin-right:30px;margin-top:5px" >已选 <strong><span data-role="total-num" class="text-danger">0</span></strong> 门课程：<strong><span class="text-danger">  ¥ </span><span data-role="total-price" class="text-danger">200</span></strong></div>
+    </div>
+  </div>
+
+  </div>
+</div>
+
+
+{% endblock %}
