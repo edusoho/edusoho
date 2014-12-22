@@ -470,6 +470,11 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
+    private function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
+    }
+    
 	private function getCustomCourseSearcheService(){
 		return $this->getServiceKernel()->createService('Custom:Course.CourseSearchService');
 	}
