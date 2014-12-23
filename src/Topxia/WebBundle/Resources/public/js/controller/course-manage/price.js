@@ -59,7 +59,6 @@ define(function(require, exports, module) {
                     var cash_rate= $form.data("cashrate");
                     var priceDisabled= $form.find('[name=price]').attr("disabled");
                     var coinPriceDisabled= $form.find('[name=coinPrice]').attr("disabled");
-                    console.log(coinPriceDisabled);
                     if(priceDisabled == "disabled"){
                         var turePrice=parseFloat(coinPrice)*parseFloat(cash_rate);
                         if(price!=turePrice){

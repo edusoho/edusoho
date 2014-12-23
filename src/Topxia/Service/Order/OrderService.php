@@ -6,7 +6,7 @@ interface OrderService
 {
     public function getOrder($id);
 
-    public function getOrderBySn($sn);
+    public function getOrderBySn($sn, $lock);
 
     public function findOrdersByIds(array $ids);
 

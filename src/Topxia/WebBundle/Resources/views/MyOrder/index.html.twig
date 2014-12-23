@@ -46,11 +46,11 @@
               {% endif %}
             </div>
           </td>
-          <td>{{ order.createdTime|date('Y-n-d H:i') }},{{ order.createdTime }}</td>
-          {% if order.payment == 'coin'%}
-            <td>{{ order.amount }} {{setting('coin.coin_name')}}</td>
+          <td>{{ order.createdTime|date('Y-n-d H:i') }}</td>
+          {% if order.priceType == 'Coin'%}
+            <td>{{ order.totalPrice }}{{setting('coin.coin_name')}}</td>
               {% else %}
-          <td>{{ order.amount }}元</td>
+          <td>{{ order.totalPrice }}元</td>
               {% endif %}
           <td>
             {{ dict_text('orderStatus:html', order.status) }}
@@ -66,20 +66,21 @@
                 </a>
 
                 
-                <ul class="dropdown-menu pull-right text-right" style="min-width: 60px;" > 
+                <ul class="dropdown-menu pull-right {# text-right #}" style="min-width: 120px;" > 
 
-                   <div class="actions">
+                   {# <div class="actions"> #}
                     {% if order.status == 'refunding' %}
-                      <li><a href="javascript:;" class="text-sm cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">取消退款</a></li>
+                      <li><a href="javascript:;" class="cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">取消退款</a></li>
                     {% endif %}
                     {% if order.status == 'created' %}
 
-                     <li><a href="javascript:;" class="text-sm pay"  style="display:block" data-url="{{ path('course_order_repay') }}" data-order-id="{{order.id}}">去支付</a></li>
-
-                      <li><a href="javascript:;" class="text-sm cancel" style="display:block" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消订单</a></li>
+                      <li>
+                        <a href="{{path('course_order_repay', {orderId: order.id})}}"  style="display:block" >去支付</a>
+                      </li>
+                      <li><a href="javascript:;" class=" cancel" style="display:block" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消订单</a></li>
 
                     {% endif %}
-                    </div>
+                   {#  </div> #}
                   </ul>
                 {% endif %}
             </div>  

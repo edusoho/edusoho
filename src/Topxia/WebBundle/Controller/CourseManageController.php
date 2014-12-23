@@ -199,11 +199,11 @@ class CourseManageController extends BaseController
             $fields = $request->request->all();
             $price = $request->request->get('price');
             $coinPrice = $request->request->get('coinPrice');
-            if($price == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['coin_price_enabled'] == 1){
+            if($price == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] == 'Coin'){
                 $fields['price'] = floatval($coinPrice)*floatval($cashRate);
             }
 
-            if($coinPrice == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['coin_price_enabled'] ==0){
+            if($coinPrice == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] =='RMB'){
                 $fields['coinPrice'] = floatval($price)/floatval($cashRate);
             }
 

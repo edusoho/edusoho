@@ -14,9 +14,37 @@ class CourseOrderController extends OrderController
     public $courseId = 0;
 
     public function buyAction(Request $request, $id)
-    {   
-        $fields = $request->query->all();
+    {
+        $result = $this->getOrderInfo($id);
 
+        return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $result);
+    }
+
+    public function repayAction(Request $request)
+    {
+        $order = $this->getOrderService()->getOrder($request->query->get('orderId'));
+
+        if (empty($order)) {
+            return $this->createMessageResponse('error', '订单不存在!');
+        }
+
+        if ((time() - $order['createdTime']) > 40 * 3600 ) {
+            return $this->createMessageResponse('error', '订单已过期，不能支付，请重新创建订单。');
+        }
+
+        $course = $this->getCourseService()->getCourse($order['targetId']);
+        if (empty($course)) {
+            return $this->createMessageResponse('error', '购买的课程不存在，请重新创建订单!');
+        }
+
+        $result = $this->getOrderInfo($order["targetId"]);
+        $result["order"] = $order;
+
+        return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $result);
+    }
+
+    private function getOrderInfo($id)
+    {
         $coinPayAmount = 0;
         $totalMoneyPrice = 0;
         $totalCoinPrice = 0;
@@ -29,8 +57,8 @@ class CourseOrderController extends OrderController
         $userIds = array();
         $userIds = array_merge($userIds, $course['teacherIds']);
         $users = $this->getUserService()->findUsersByIds($userIds);
-        $totalMoneyPrice += $course["price"];
-        $totalCoinPrice += $course["coinPrice"];
+        $totalMoneyPrice = $course["price"];
+        $totalCoinPrice = $course["coinPrice"];
 
         $coinSetting = $this->getSettingService()->get("coin");
         
@@ -39,16 +67,44 @@ class CourseOrderController extends OrderController
             $cashRate = $coinSetting["cash_rate"];
         }
 
+        $coursePriceShowType = "Coin";
+        if(array_key_exists("price_type", $coinSetting)) {
+            $coursePriceShowType = $coinSetting["price_type"];
+        }
+
         $user = $this->getCurrentUser();
         $account = $this->getCashAccountService()->getAccountByUserId($user["id"]);
         $accountCash = $account["cash"];
 
-        if($totalMoneyPrice*100 > $accountCash/$cashRate*100) {
-            $shouldPayMoney = $totalMoneyPrice - $accountCash/$cashRate;
-            $coinPayAmount = $accountCash;
-        } else {
-            $coinPayAmount = $totalMoneyPrice*$cashRate;
+        $hasPayPassword = strlen($user['payPassword']) > 0;
+
+        if($hasPayPassword 
+            && array_key_exists("coin_enabled", $coinSetting) 
+            && $coinSetting["coin_enabled"]) {
+            if($coursePriceShowType == "RMB") {
+                $totalPrice = $totalMoneyPrice;
+                if($totalMoneyPrice*100 > $accountCash/$cashRate*100) {
+                    $shouldPayMoney = $totalMoneyPrice - $accountCash/$cashRate;
+                    $coinPayAmount = $accountCash;
+                    $coinPreferentialPrice = $accountCash/$cashRate;
+                } else {
+                    $coinPayAmount = $totalMoneyPrice*$cashRate;
+                    $coinPreferentialPrice = $totalMoneyPrice;
+                }
+            } else if ($coursePriceShowType == "Coin") {
+                $totalPrice = $totalCoinPrice;
+                if($totalCoinPrice*100 > $accountCash*100) {
+                    $shouldPayMoney = ($totalCoinPrice - $accountCash)/$cashRate;
+                    $coinPayAmount = $accountCash;
+                } else {
+                    $coinPayAmount = $totalCoinPrice;
+                }
+                
+                $coinPreferentialPrice = $coinPayAmount;
+            }
         }
+
+        $shouldPayMoney = $totalMoneyPrice - $coinPreferentialPrice;
 
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
         $vipApp = $this->getAppService()->findInstallApp("Vip");
@@ -57,20 +113,7 @@ class CourseOrderController extends OrderController
             $vip = $this->getVipService()->getMemberByUserId($user["id"]);
         }
 
-        $coursePriceShowType = "Coin";
-        if(array_key_exists("course_price_show_type", $coinSetting)) {
-            $coursePriceShowType = $coinSetting["course_price_show_type"];
-        }
-
-        if($coursePriceShowType == "RMB") {
-            $totalPrice = $totalMoneyPrice;
-            $coinPreferentialPrice = $coinPayAmount/$cashRate;
-        } else if ($coursePriceShowType == "Coin") {
-            $totalPrice = $totalCoinPrice;
-            $coinPreferentialPrice = $coinPayAmount;
-        }
-
-        return $this->render('TopxiaWebBundle:Order:order-create.html.twig', array(
+        return array(
             'courses' => empty($course) ? null : array($course),
             'users' => empty($users) ? null : $users,
             'account' => $account,
@@ -88,54 +131,18 @@ class CourseOrderController extends OrderController
             'coursePriceShowType' => $coursePriceShowType,
 
             'vip' => empty($vip) ? null : array($vip),
-            'payUrl' => 'course_order_pay'
-        ));
-    }
+            'payUrl' => 'course_order_pay',
 
-    public function repayAction(Request $request)
-    {
-        $order = $this->getOrderService()->getOrder($request->request->get('orderId'));
-        if (empty($order)) {
-            return $this->createMessageResponse('error', '订单不存在!');
-        }
-
-        if ( (time() - $order['createdTime']) > 40 * 3600 ) {
-            return $this->createMessageResponse('error', '订单已过期，不能支付，请重新创建订单。');
-        }
-
-        if ($order['targetType'] != 'course') {
-            return $this->createMessageResponse('error', '此类订单不能支付，请重新创建订单!');
-        }
-
-        $course = $this->getCourseService()->getCourse($order['targetId']);
-        if (empty($course)) {
-            return $this->createMessageResponse('error', '购买的课程不存在，请重新创建订单!');
-        }
-
-        if ($course['price'] != ($order['amount'] + $order['couponDiscount'])) {
-            return $this->createMessageResponse('error', '订单价格已变更，请重新创建订单!');
-        }
-
-
-        $payRequestParams = array(
-            'returnUrl' => $this->generateUrl('course_order_pay_return', array('name' => $order['payment']), true),
-            'notifyUrl' => $this->generateUrl('course_order_pay_notify', array('name' => $order['payment']), true),
-            'showUrl' => $this->generateUrl('course_show', array('id' => $order['targetId']), true),
+            'hasPayPassword' => $hasPayPassword
         );
-
-        return $this->forward('TopxiaWebBundle:Order:submitPayRequest', array(
-            'order' => $order,
-            'requestParams' => $payRequestParams,
-        ));
     }
 
     public function payAction(Request $request)
     {
         $fields = $request->request->all();
         $user = $this->getCurrentUser();
-
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，创建订单。');
+            return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
         }
 
         if(!array_key_exists("targets", $fields)) {
@@ -151,14 +158,14 @@ class CourseOrderController extends OrderController
             $targetTypes[] = $target[0];
             $targetIds[] = $target[1];
         }
-
-        $coinSetting = $this->getSettingService()->get("coin");
+        
         $coursePriceShowType = "RMB";
-        if(array_key_exists("course_price_show_type", $coinSetting)) {
-            $coursePriceShowType = $coinSetting["course_price_show_type"];
+        $coinSetting = $this->getSettingService()->get("coin");
+        if(array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] && array_key_exists("price_type", $coinSetting)) {
+            $coursePriceShowType = $coinSetting["price_type"];
         }
         $cashRate = 1;
-        if(array_key_exists("cash_rate", $coinSetting)) {
+        if(array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] && array_key_exists("cash_rate", $coinSetting)) {
             $cashRate = $coinSetting["cash_rate"];
         }
 
@@ -180,6 +187,11 @@ class CourseOrderController extends OrderController
 
         //虚拟币优惠价格
         $coinPayAmount = $fields["coinPayAmount"];
+        if(!empty($coinPayAmount) && $coinPayAmount>0 && array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"]) {
+            $isRight = $this->getAuthService()->checkPayPassword($user["id"], $fields["payPassword"]);
+            if(!$isRight)
+                return $this->createMessageResponse('error', '支付密码不正确，创建订单失败。');
+        }
         $coinPreferentialPrice = 0;
         if($coursePriceShowType == "RMB") {
             $coinPreferentialPrice = $coinPayAmount/$cashRate;
@@ -187,21 +199,29 @@ class CourseOrderController extends OrderController
             $coinPreferentialPrice = $coinPayAmount;
         }
 
-        //优惠码优惠价格 TODO
-
-        
-
         $amount = $totalPrice - $coinPreferentialPrice;
-        // if($amount != $fields["actualPrice"]) {
-        //     return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
-        // }
 
-        $cashRate = 1;
-        if(array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
+        //优惠码优惠价格
+        $couponApp = $this->getAppService()->findInstallApp("Coupon");
+        if(!empty($couponApp) && $fields["couponCode"]) {
+            $couponResult = $this->getCouponService()->checkCouponUseable($fields["couponCode"], "course", $targetIds[0], $amount);
+            $afterRmbAmount = $couponResult["afterAmount"];
+            if($coursePriceShowType == "RMB") {
+                $amount = $amount - $couponResult["decreaseAmount"];
+                $couponDiscount = $couponResult["decreaseAmount"];
+            } else if ($coursePriceShowType == "Coin") {
+                $amount = $amount - $couponResult["decreaseAmount"]*$cashRate;
+                $couponDiscount = $couponResult["decreaseAmount"]*$cashRate;
+            }
         }
 
-        $order = array(
+        $amount = ceil($amount*100)/100;
+        //价格比较
+        if($amount != $fields["shouldPayMoney"]) {
+            return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
+        }
+
+        $orderFileds = array(
             'priceType' => $coursePriceShowType,
             'totalPrice' => $totalPrice,
             'amount' => $amount,
@@ -209,43 +229,26 @@ class CourseOrderController extends OrderController
             'coinAmount' => $coinPayAmount,
             'userId' => $user["id"],
             'payment' => 'alipay',
-            'courseId' => $targetIds[0]
+            'courseId' => $targetIds[0],
+            'coupon' => empty($couponResult) ? null : $fields["couponCode"],
+            'couponDiscount' => empty($couponDiscount) ? null : $couponDiscount,
         );
 
-        $order = $this->getCourseOrderService()->createOrder($order);
+        if(array_key_exists("orderId", $fields)){
+            $order = $this->getOrderService()->getOrder($request->request->get('orderId'));
+
+            if (empty($order)) {
+                return $this->createMessageResponse('error', '订单不存在!');
+            }
+            $order = $this->getCourseOrderService()->updateOrder($order["id"], $orderFileds);
+        } else {
+            $order = $this->getCourseOrderService()->createOrder($orderFileds);
+        }
 
         return $this->redirect($this->generateUrl('pay_center_show', array(
             'id' => $order['id']
         )));
 
-    }
-
-    public function payReturnAction(Request $request, $name)
-    {
-        $controller = $this;
-        return $this->doPayReturn($request, $name, function($success, $order) use(&$controller) {
-            if (!$success) {
-                $controller->generateUrl('course_show', array('id' => $order['targetId']));
-            }
-
-            $controller->getCourseOrderService()->doSuccessPayOrder($order['id']);
-
-            return $controller->generateUrl('course_show', array('id' => $order['targetId']));
-        });
-    }
-
-    public function payNotifyAction(Request $request, $name)
-    {
-        $controller = $this;
-        return $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
-            if (!$success) {
-                return ;
-            }
-
-            $controller->getCourseOrderService()->doSuccessPayOrder($order['id']);
-
-            return ;
-        });
     }
 
     public function refundAction(Request $request , $id)
@@ -306,67 +309,6 @@ class CourseOrderController extends OrderController
 
     }
 
-    private function previewAsMember($as, $member, $course)
-    {
-        $user = $this->getCurrentUser();
-        if (empty($user->id)) {
-            return null;
-        }
-
-
-        if (in_array($as, array('member', 'guest'))) {
-            if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-                $member = array(
-                    'id' => 0,
-                    'courseId' => $course['id'],
-                    'userId' => $user['id'],
-                    'levelId' => 0,
-                    'learnedNum' => 0,
-                    'isLearned' => 0,
-                    'seq' => 0,
-                    'isVisible' => 0,
-                    'role' => 'teacher',
-                    'locked' => 0,
-                    'createdTime' => time(),
-                    'deadline' => 0
-                );
-            }
-
-            if (empty($member) or $member['role'] != 'teacher') {
-                return $member;
-            }
-
-            if ($as == 'member') {
-                $member['role'] = 'student';
-            } else {
-                $member = null;
-            }
-        }
-
-        return $member;
-    }
-
-    private function getRemainStudentNum($course)
-    {
-        $remainingStudentNum = $course['maxStudentNum'];
-
-        if ($course['type'] == 'live') {
-            if ($course['price'] <= 0) {
-                $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'];
-            } else {
-                $createdOrdersCount = $this->getOrderService()->searchOrderCount(array(
-                    'targetType' => 'course',
-                    'targetId' => $course['id'],
-                    'status' => 'created',
-                    'createdTimeGreaterThan' => strtotime("-30 minutes")
-                ));
-                $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'] - $createdOrdersCount;
-            }
-        }
-
-        return $remainingStudentNum;
-    }
-
     public function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -382,45 +324,14 @@ class CourseOrderController extends OrderController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-
-    private function getEnabledPayments()
-    {
-        $enableds = array();
-
-        $setting = $this->setting('payment', array());
-
-        if (empty($setting['enabled'])) {
-            return $enableds;
-        }
-
-        $payNames = array('alipay');
-        foreach ($payNames as $payName) {
-            if (!empty($setting[$payName . '_enabled'])) {
-                $enableds[$payName] = array(
-                    'type' => empty($setting[$payName . '_type']) ? '' : $setting[$payName . '_type'],
-                );
-            }
-        }
-
-        return $enableds;
-    }
-    protected function getUserFieldService()
-    {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
-    }
-
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
-    protected function getCashService()
+    protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashService');
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 
     protected function getCashAccountService()
@@ -428,13 +339,13 @@ class CourseOrderController extends OrderController
         return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
 
-    protected function getCashOrdersService()
-    {
-        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
-    }
-
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getCouponService()
+    {
+        return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
     }
 }

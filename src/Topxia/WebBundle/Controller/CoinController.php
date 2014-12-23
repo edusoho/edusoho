@@ -190,7 +190,12 @@ class CoinController extends BaseController
     public function showAction(Request $request)
     {
         $coinSetting=$this->getSettingService()->get('coin',array());
-        $content=$coinSetting['coin_content'];
+
+        if (isset($coinSetting['coin_content'])) {
+            $content=$coinSetting['coin_content'];
+        }else{
+             $content='';
+        }
 
         return $this->render('TopxiaWebBundle:Coin:coin-content-show.html.twig', array(
             'content'=>$content,

@@ -14,9 +14,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->getOrder($id);
     }
 
-    public function getOrderBySn($sn)
+    public function getOrderBySn($sn, $lock)
     {
-        return $this->getOrderDao()->getOrderBySn($sn);
+        return $this->getOrderDao()->getOrderBySn($sn, $lock);
     }
 
     public function findOrdersByIds(array $ids)
@@ -27,12 +27,11 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function createOrder($order)
     {
-        
         if (!ArrayToolkit::requireds($order, array('userId', 'title',  'amount', 'targetType', 'targetId', 'payment'))) {
             throw $this->createServiceException('创建订单失败：缺少参数。');
         }
 
-        $order = ArrayToolkit::parts($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment', 'note', 'snPrefix', 'data', 'couponCode', 'coinAmount', 'coinRate'));
+        $order = ArrayToolkit::parts($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment', 'note', 'snPrefix', 'data', 'couponCode', 'coinAmount', 'coinRate','priceType','totalPrice','coupon','couponDiscount'));
 
         $orderUser = $this->getUserService()->getUser($order['userId']);
         if (empty($orderUser)) {
@@ -52,8 +51,6 @@ class OrderServiceImpl extends BaseService implements OrderService
                 throw $this->createServiceException("优惠码不可用");            
             }
 
-            $order['couponDiscount'] = $order['amount'] - $couponInfo['afterAmount'];
-            $order['amount'] = $couponInfo['afterAmount'];
         }
         $order['coupon'] = empty($order['couponCode']) ? '' : $order['couponCode'];
         unset($order['couponCode']);
@@ -531,6 +528,11 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('更新订单失败：支付流水号不存在。');
         }
         $this->getOrderDao()->updateOrder($id, array("cashSn" => $cashSn));
+    }
+
+    public function updateOrder($id, $orderFileds)
+    {
+        return $this->getOrderDao()->updateOrder($id, $orderFileds);
     }
 
     private function getLogService()

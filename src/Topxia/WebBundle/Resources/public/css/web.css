@@ -4600,7 +4600,6 @@ a.homework-essay-textarea-pack-up{
 
 .order-item .price_r_num {
 	font-size: 19px; 
-	margin-right: 15px;  
 	float: left;margin-top: -4px; 
 	line-height: 26px;
 }
@@ -4636,9 +4635,11 @@ a.homework-essay-textarea-pack-up{
 	text-align: right;
 	margin-right: 18px;
 	margin-bottom: 30px;
-	border: 1px solid red;
-	padding: 0px 20px;
+	border: 1px solid #ff7e00;
+	background-color: #fff8ed;
+	padding-right: 20px ;
 	width: 250px;
+	border-radius: 3px;
 }
 
 .coin-detail input {
@@ -4657,4 +4658,15 @@ a.homework-essay-textarea-pack-up{
 
 .order-pay .pay {
 	margin-top: 20px
+}
+
+.order-item-detail .pay-password {
+	margin-left: 15px;
+	font-size: 12px;
+	padding-top: 10px;
+}
+
+.order-item-detail .pay-password input {
+	margin-bottom: 5px;
+	border: 1px solid #b5b5b5;
 }

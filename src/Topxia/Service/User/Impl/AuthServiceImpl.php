@@ -160,6 +160,11 @@ class AuthServiceImpl extends BaseService implements AuthService
         return $this->getUserService()->verifyPassword($userId, $password);
     }
 
+    public function checkPayPassword($userId, $payPassword)
+    {
+        return $this->getUserService()->verifyPayPassword($userId, $payPassword);
+    }
+
     public function checkPartnerLoginById($userId, $password)
     {
         return $this->getAuthProvider()->checkLoginById($userId, $password);

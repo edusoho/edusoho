@@ -79,6 +79,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order['coinAmount'] = $info['coinAmount'];
 
             $courseSetting=$this->getSettingService()->get('course',array());
+
             $coursesPrice=$courseSetting['coursesPrice'];
             
             if($order['amount'] > 0){
@@ -91,7 +92,8 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order['snPrefix'] = 'C';
 
             if (!empty($info['coupon'])) {
-                $order['couponCode'] = $info['coupon'];
+                $order['coupon'] = $info['coupon'];
+                $order['couponDiscount'] = $info['couponDiscount'];
             }
 
             if (!empty($info['note'])) {
@@ -237,6 +239,22 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $connection->rollBack();
             throw $e;
         }
+    }
+
+    public function updateOrder($id, $orderFileds) 
+    {
+        $orderFileds = array(
+            'priceType' => $orderFileds["priceType"],
+            'totalPrice' => $orderFileds["totalPrice"],
+            'amount' => $orderFileds['amount'],
+            'coinRate' => $orderFileds['coinRate'],
+            'coinAmount' => $orderFileds['coinAmount'],
+            'userId' => $orderFileds["userId"],
+            'payment' => $orderFileds["payment"],
+            'targetId' => $orderFileds["courseId"]
+        );
+
+        return $this->getOrderService()->updateOrder($id, $orderFileds);
     }
     
     protected function getCashService()
