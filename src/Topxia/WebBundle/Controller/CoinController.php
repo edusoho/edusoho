@@ -69,12 +69,13 @@ class CoinController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-$conditions['type']  = 'inflow';      
-$amountInflow = $this->getCashService()->analysisAmount($conditions);
-var_dump($amountInflow);
-$conditions['type']  = 'outflow'; 
-$amountOutflow = $this->getCashService()->analysisAmount($conditions);
-var_dump($amountOutflow);
+
+        $conditions['type']  = 'inflow';      
+        $amountInflow = $this->getCashService()->analysisAmount($conditions);
+
+        $conditions['type']  = 'outflow'; 
+        $amountOutflow = $this->getCashService()->analysisAmount($conditions);
+
         // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         
@@ -133,12 +134,13 @@ var_dump($amountOutflow);
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-$conditions['type']  = 'inflow';      
-$amountInflow = $this->getCashService()->analysisAmount($conditions);
-var_dump($amountInflow);
-$conditions['type']  = 'outflow'; 
-$amountOutflow = $this->getCashService()->analysisAmount($conditions);
-var_dump($amountOutflow);
+        
+        $conditions['type']  = 'inflow';      
+        $amountInflow = $this->getCashService()->analysisAmount($conditions);
+
+        $conditions['type']  = 'outflow'; 
+        $amountOutflow = $this->getCashService()->analysisAmount($conditions);
+
         return $this->render('TopxiaWebBundle:Coin:cash_bill.html.twig',array(
             'cashes' => $cashes,
             'paginator' => $paginator,
