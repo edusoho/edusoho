@@ -59,6 +59,10 @@ admin_testpaper_items_reset:
     pattern: /testpaper/{id}/items_reset
     defaults: { _controller: CustomAdminBundle:Testpaper:itemsReset }
 
+admin_testpaper_advanced_items_reset:
+    pattern: /testpaper/{id}/advanced_items_reset
+    defaults: { _controller: CustomAdminBundle:Testpaper:advancedItemsReset }
+
 admin_testpaper_item_picker:
     pattern: /testpaper/{id}/item_picker
     defaults: { _controller: CustomAdminBundle:Testpaper:itemPicker }

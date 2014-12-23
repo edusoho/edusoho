@@ -101,4 +101,5 @@ interface TestpaperService
 
     public function buildPaper($paperId, $status);
 
+    public function resetAdvancedTestPaper($id, $fields);
 }

@@ -366,6 +366,46 @@ class TestpaperController extends BaseController
         ));
     }
 
+    public function advancedItemsResetAction(Request $request, $id)
+    {
+        $testpaper = $this->getTestpaperService()->getTestpaper($id);
+        if(empty($testpaper)){
+            throw $this->createNotFoundException('试卷不存在');
+        }
+
+        $category = $this->getCategoryByTarget($testpaper['target']);
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $fields['target'] = "category-{$category['id']}";
+            $fields['pattern'] = 'Part';
+            $fields['metas'] = array('parts' => json_decode($fields['parts'], true));
+            $fields['knowledgeIds'] = explode(',', $fields['knowledgeIds']);
+            $fields['tagIds'] = explode(',', $fields['tagIds']);
+            unset($fields['parts']);
+            $this->getTestpaperService()->resetAdvancedTestPaper($id, $fields);
+            return $this->redirect($this->generateUrl('admin_testpaper', array('categoryId' => $category['id'])));
+        }
+
+        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $types = array();
+        foreach ($typeNames as $type => $name) {
+            $typeObj = QuestionTypeFactory::create($type);
+            $types[] = array(
+                'key' => $type,
+                'name' => $name,
+                'hasMissScore' => $typeObj->hasMissScore(),
+            );
+        }
+
+
+        return $this->render('CustomAdminBundle:Testpaper:advanced-items-reset.html.twig', array(
+            'category'    => $category,
+            'testpaper' => $testpaper,
+            'types' => $types,
+        ));
+    }
+
     public function itemPickerAction(Request $request, $id)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($id);
