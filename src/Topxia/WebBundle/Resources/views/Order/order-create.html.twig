@@ -11,7 +11,7 @@
       <div class="panel panel-default panel-page">
         <div class="panel-heading"><h4>订单确认</h4></div>
         <div class="panel-body">
-          <form method="post" action="{{path(payUrl)}}" 
+          <form id="order-create-form" method="post" action="{{path(payUrl)}}" 
           >
           	{% if order|default(null) %}
             <input type="hidden" name="orderId" value="{{order.id}}"/>
@@ -63,7 +63,7 @@
 
             <div class="form-group pay">
               <div class="col-md-offset-10 controls">
-                <button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">提交订单</button>
+                <button class="btn btn-fat btn-primary" id="order-create-btn" type="submit">提交订单</button>
               </div>
             </div>
           </form>
