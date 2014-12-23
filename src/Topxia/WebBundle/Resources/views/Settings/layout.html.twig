@@ -45,8 +45,15 @@
                      href="{{path('my_orders')}}">我的订单</a>
 
                 <a class="list-group-item 
-                     {% if side_nav == 'my-bill' %} active {% endif %} " 
-                     href="{{path('my_bill')}}">账户中心{# 我的现金账单 #}</a>                
+                     {% if side_nav == 'my-bill' or side_nav == 'my-coin' %} active {% endif %} " 
+                     href="
+                     {% if setting('coin.coin_enabled') %}
+                      {{path('my_coin')}}
+                     {% else %}
+                      {{path('my_bill')}}
+                     {% endif %}
+                     "
+                     >账户中心{# 我的现金账单 #}</a>                
 
                 {#虚拟币#}
               {#   {% if setting('coin.coin_enabled') %}

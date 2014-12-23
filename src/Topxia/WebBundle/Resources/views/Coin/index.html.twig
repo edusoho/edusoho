@@ -49,8 +49,8 @@
 
        {# <button class="btn btn-primary">搜索</button>#}
        <div class="control-label pull-right" style="padding-top: 8px;">
-        收入：<a class="success">{{ amountInflow }}</a>虚拟币
-        支出：<a class="danger">{{ amountOutflow }}</a>虚拟币
+        收入：<span style="color:green;">{{ amountInflow }}</span>&nbsp;{{setting('coin.coin_name')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        支出：<span style="color:red;">{{ amountOutflow }}</span>&nbsp;{{setting('coin.coin_name')}}
         </div>
       </form>
    {% endif %}
@@ -60,35 +60,39 @@
       <table class="table table-striped">
         {% if cashes %}
         <tr>
-          <th>流水号</th>
-          <th>名称</th>          
-          <th>成交时间</th>
-          <th>名称</th>
-          <th>收入</th>
-          <th>支出</th>
-          <th>支付方式</th>
+          <th><span class="text-sm">流水号</span></th>
+          <th><span class="text-sm">名称</span></th>          
+          <th><span class="text-sm">成交时间</span></th>
+          <th><span class="text-sm">收支</span></th>
+          <th><span class="text-sm">支付方式</span></th>
         </tr>
         {% for cash in cashes %}
            <tr>
-            <td>{{cash.sn}}</td>
-            <td>{{cash.name}}<br>
+            <td><span class="text-sm">{{cash.sn}}</span></td>
+            <td><span class="text-sm">{{cash.name}}</span><br>
                 <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span></td>            
-            <td>{{cash.createdTime|date('Y-m-d H:i:s')}}</td>
-            <td>{{cash.name}}<br>
-                <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span>
-            </td>
+            <td><span class="text-sm">{{cash.createdTime|date('Y-m-d H:i:s')}}</span></td>
+
+            {% if cash.type =="inflow" %}
             <td style="color:#1bb974">
-              {% if cash.type =="inflow" %}{{cash.amount}} {% endif %}
+              {{cash.amount}} 
             </td>
+            {% endif %}
+
+            {% if cash.type =="outflow" %}
             <td style="color:#ff7b0e">
-              {% if cash.type =="outflow" %}-{{cash.amount}} {% endif %}
+              -&nbsp;{{cash.amount}} 
             </td>
+            {% endif %}
+
             <td>
-              {% if cash.category == "recharge" %}
-              支付宝
-              {% elseif cash.category == "outflow" %}
-              余额支付
-              {% endif %}
+              <span class="text-sm">
+                {% if cash.category == "recharge" %}
+                支付宝
+                {% elseif cash.category == "outflow" %}
+                余额支付
+                {% endif %}
+              </span>
             </td>
           </tr>
         {% endfor %}
