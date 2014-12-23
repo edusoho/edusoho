@@ -10,12 +10,6 @@ use Topxia\Service\Util\CloudClientFactory;
 
 class CourseController extends BaseController
 {	
-	public function favoriteAction(Request $request, $id)
-	{
-		$this->getCustomCourseService()->favoriteCourse($id);
-		return $this->createJsonResponse(true);
-	}
-
 	public function learnAction(Request $request, $id)
 	{
 		$user = $this->getCurrentUser();
@@ -290,23 +284,25 @@ class CourseController extends BaseController
 
 
 
+	public function favoriteAction(Request $request, $id)
+	{
+		$user = $this->getCurrentUser();
+		if (!$user->isLogin()) {
+			return $this->createJsonResponse(false);
+		}
+		$this->getCourseService()->favoriteCourse($id);
+		return $this->createJsonResponse(true);
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	public function unfavoriteAction(Request $request, $id)
+	{
+		$user = $this->getCurrentUser();
+		if (!$user->isLogin()) {
+			return $this->createJsonResponse(false);
+		}
+		$this->getCourseService()->unfavoriteCourse($id);
+		return $this->createJsonResponse(true);
+	}
 
 
 
