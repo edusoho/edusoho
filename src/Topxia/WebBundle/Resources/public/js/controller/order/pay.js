@@ -9,7 +9,7 @@ define(function(require, exports, module) {
 		function conculatePrice(){
 			var totalPrice = parseFloat($('[role="total-price"]').text());
 			var couponTotalPrice = $('[role="coupon-price"]').find(".price_r_num").text();
-			if(isNaN(couponTotalPrice)){
+			if($.trim(couponTotalPrice) == "" || isNaN(couponTotalPrice)){
 				couponTotalPrice = 0;
 			}
 			var couponAmount = parseFloat(couponTotalPrice);
@@ -132,6 +132,19 @@ define(function(require, exports, module) {
 				conculatePrice();
 			})
 		})
+
+		var validator = new Validator({
+            element: '#order-create-form',
+            triggerType: 'change',
+            onFormValidated: function(error){
+                if (error) {
+                    return false;
+                }
+                $('#order-create-btn').button('submiting').addClass('disabled');
+            }
+        });
+
+        
 
 	}
 });
