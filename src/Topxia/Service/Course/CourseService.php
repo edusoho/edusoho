@@ -21,6 +21,8 @@ interface CourseService
 	public function getCoursesCount();
 
 	public function findCoursesByIds(array $ids);
+
+	public function findCoursesByLikeTitle($title);
 	
 	public function findMinStartTimeByCourseId($courseId);
 
