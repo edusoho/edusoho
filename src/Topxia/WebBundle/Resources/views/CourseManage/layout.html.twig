@@ -35,7 +35,7 @@
               <a class="list-group-item {% if side_nav == 'students' %}active{% endif %}" href="{{ path('course_manage_students', {id:course.id}) }}">学员管理</a>
             </div>
           </div>
-          {% if course.type == 'normal' %}
+
           <div class="list-group-panel">
             <div class="list-group-heading">题库</div>
             <div class="list-group">
@@ -53,7 +53,6 @@
               {% endif %}
             </div>
           </div>
-          {% endif %}
 
           <div class="list-group-panel">
             <div class="list-group-heading">课程运营</div>
