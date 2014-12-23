@@ -1,5 +1,5 @@
 <tr data-role="cart-tr-{{cart.id}}" class="cart-tr">
-    <td><input type="checkbox" data-role="single-select" data-id={{ cart.id }}></td>
+    <td><input type="checkbox" data-role="single-select" data-id={{ cart.id }} data-item-id="{{ course.id }}"></td>
     <td>
         <div class="clearfix course-header">
             <a href="{{ path('course_show', {id:course.id}) }}">
@@ -25,7 +25,7 @@
         </a>
 
         <a href="#" class="btn btn-link">
-            <span class="glyphicon glyphicon-bookmark"　data-toggle="tooltip" data-placement="top" data-role="favourite" title="收藏"></span>
+            <span class="glyphicon glyphicon-bookmark"　data-toggle="tooltip" data-placement="top" data-role="single-favourite-btn" title="收藏" data-url="{{ path('carts_course_favorite') }}" data-item-id="{{ course.id }}"></span>
         </a>
     </td>
 </tr>

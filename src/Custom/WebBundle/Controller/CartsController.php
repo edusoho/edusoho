@@ -55,7 +55,6 @@ class CartsController extends BaseController
 
         $condition = array(
             'userId' => $userId,
-            'itemType' => 'course'
         );
 
         $carts = $this->getCartsService()->searchCarts(
@@ -75,6 +74,20 @@ class CartsController extends BaseController
             'courses' =>$courses,
             'users' => $users,
         ));
+    }
+
+    public function favoriteAction(Request $request)
+    {
+        $ids = $request->request->all();
+        if (!empty($ids['ids'])) {
+            $ids = $ids['ids'];
+        } else {
+            return $this->createJsonResponse(array('status' => 'fail'));
+        }
+
+        $this->getCourseService()->favoriteCourses($ids);
+
+        return $this->createJsonResponse(true);
     }
 
     private function getUsers($userIds)

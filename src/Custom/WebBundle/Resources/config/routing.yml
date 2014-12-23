@@ -142,3 +142,7 @@ carts_show:
 hot_sale_courses:
     pattern:  /hot/sale/courses/index
     defaults: { _controller: CustomWebBundle:Carts:index }
+
+carts_course_favorite:
+    pattern: /carts/favourite
+    defaults: { _controller: CustomWebBundle:Carts:favorite }
