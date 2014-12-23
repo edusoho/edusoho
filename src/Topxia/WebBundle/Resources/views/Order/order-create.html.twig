@@ -16,6 +16,7 @@
           	{% if order|default(null) %}
             <input type="hidden" name="orderId" value="{{order.id}}"/>
             {% endif %}
+            
           	<input type="hidden" role="cash-rate" value="{{cashRate}}"
             data-course-price-show-type = "{{coursePriceShowType}}"/>
             {% for targetType in targetTypes %}
@@ -23,7 +24,7 @@
             {% endfor %}
             <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>
             <input type="hidden" name="coursePriceShowType" value="{{coursePriceShowType}}"/>
-            <input type="hidden" name="shouldPayMoney" value="{{shouldPayMoney}}"/>
+            <input type="hidden" name="shouldPayMoney" value=""/>
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
@@ -46,7 +47,7 @@
             <div class="order-item row">
               <div class="total-price">
                 {% if coursePriceShowType == "Coin" %}
-              	<h4>需支付{{setting("coin.coin_name")}}：<span role="pay-coin">{{shouldPayMoney}}</span></h4>
+              	<h4>需支付{{setting("coin.coin_name")}}：<span role="pay-coin"></span></h4>
                 {% endif %}
 
                 <h4>
@@ -55,7 +56,7 @@
                   {% else %}
                   支付金额
                   {% endif %}
-                  ：￥<span role="pay-rmb">{{shouldPayMoney}}</span>
+                  ：￥<span role="pay-rmb"></span>
                 </h4>
               </div>
               
