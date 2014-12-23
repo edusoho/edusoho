@@ -4,6 +4,8 @@
 
 {% set script_controller = 'customwebbundle/controller/carts/list' %}
 
+{% set pageNav = pageNav|default('hotSale') %}
+
 {% block content %}
 
 <div id="carts-module">
@@ -45,5 +47,17 @@
   </div>
 </div>
 
+
+<div class="es-row-wrap container-gap userpage-body">
+  <ul class="nav nav-pills userpage-nav clearfix">
+    <li id="hot-sale-btn" class="active"><a href="javascript:;">热卖课程</a></li>
+    <li id="favorited-btn" ><a href="javascript:;">收藏的课程</a></li>
+  </ul>
+
+  {% block main %}
+    {{ render(controller('CustomWebBundle:Carts:CartCourses')) }}
+  {% endblock %}
+
+</div>
 
 {% endblock %}

@@ -1,14 +1,26 @@
-<li class="courseware-grid item-courseware">
-  <input value="{{ courseware.id }}" type="checkbox" data-role="single-select" data-courseware-id="{{courseware.id}}">
+<div id="hot-sale-courses" class="cart-courses course-grids">
+  {% for course in hotSaleCourses %}
+    <li class="course-grid item-course">
+      <div class="thumb-img-background" align=center>
+        <a href="{{ path('course_show', {id:course.id}) }}" target="_blink">
+          <img src="{{ default_path('coursePicture',course.smallPicture, '') }}" width=100%>
+        </a>
+      </div>
+      <h4><strong><span class="text-danger">  ¥ </span><span data-role="total-price" class="text-danger">{{ course.price }}</span></strong></h4>
+      <div class="courseware-thumb-title">{{ course.title|plain_text(25) }}</div>
+    </li>
+  {% endfor %}
+</div>
 
-  <div class="thumb-img-background" align=center>
-    <img src="{{ courseware.image }}" class="courseware-thumb-img" width="80%" />
-    <span class="glyphicon glyphicon-play-circle courseware-thumb-play" style="font-size:36px;cursor:pointer" data-url="{{ path('admin_courseware_preview',{categoryId:category.id,id:courseware.id}) }}" data-toggle="modal" data-target="#modal"></span>
-  </div>
-
-  <div class="courseware-thumb-title" align=center >{{ courseware.title|plain_text(25) }}</div>
-  <div class="row hide courseware-thumb-btn" align=center>
-    <a class="btn btn-link update-courseware-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_courseware_edit',{categoryId:category.id,id:courseware.id}) }}"><span class="glyphicon glyphicon-pencil"></span>编辑</a>
-    <a class="btn btn-link delete-courseware-btn" data-url="{{ path('admin_courseware_delete',{id:courseware.id}) }}"><span class="glyphicon glyphicon-trash"></span>删除</a>
-  </div>
-</li>
+<div id="favorited-courses" class="cart-courses course-grids hide">
+  {% for favoritedCourse in favoritedCourses %}
+    <li class="course-grid item-course">
+      <div class="thumb-img-background" align=center>
+        <a href="{{ path('course_show', {id:FavoritedCourse.id}) }}" target="_blink">
+          <img src="{{ default_path('coursePicture',FavoritedCourse.smallPicture, '') }}" width=100%>
+        </a>
+      </div>
+      <div class="courseware-thumb-title">{{ FavoritedCourse.title|plain_text(25) }}</div>
+    </li>
+  {% endfor %}
+</div>

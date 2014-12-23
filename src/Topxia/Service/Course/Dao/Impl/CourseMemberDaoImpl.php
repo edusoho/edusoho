@@ -183,6 +183,12 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAll($sql, array($userId));
     }
 
+    public function analysisCourseMembers()
+    {
+        $sql = "SELECT courseId, count(orderId) AS buyNum FROM {$this->table} WHERE  orderId > ? GROUP BY courseId ORDER BY buyNum DESC";
+        return $this->getConnection()->fetchAll($sql, array(0));
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {   
         $builder = $this->createDynamicQueryBuilder($conditions)

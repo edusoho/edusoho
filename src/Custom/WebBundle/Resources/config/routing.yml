@@ -140,9 +140,9 @@ carts_show:
     defaults: { _controller: CustomWebBundle:Carts:show }
 
 hotSaleCourses:
-    pattern:  /hotSaleCourses
+    pattern:  /carts/hotSaleCourses
     defaults: { _controller: CustomWebBundle:Carts:hotSaleCourses }
 
 user_favoriteCourses:
-    pattern:  user/{id}/favoriteCourses
+    pattern:  /carts/user/{id}/favoriteCourses
     defaults: { _controller: CustomWebBundle:Carts:favoriteCourses }
