@@ -9,16 +9,26 @@ define(function(require, exports, module) {
 		function conculatePrice(){
 			var totalPrice = parseFloat($('[role="total-price"]').text());
 			var couponAmount = parseFloat($('[role="coupon-price"]').find(".price_r_num").text());
-			var coinAmount = parseFloat($('[role="cash-discount"]').text());
-			var activeAmount = totalPrice-couponAmount-coinAmount;
-			if(activeAmount<0){
+			var activeAmount = totalPrice-couponAmount;
+			if(activeAmount <= 0){
 				activeAmount=0;
+				$('[role="cash-discount"]').text(0.00);
+				$('[role="coinNum"]').val(0.00);
+			} 
+
+			if(activeAmount>0) {
+				var coinAmount = parseFloat($('[role="cash-discount"]').text());
+				activeAmount = activeAmount-coinAmount;
 			}
+
 			if(cashRateElement.data("coursePriceShowType") == "Coin") {
 				$('[role="pay-coin"]').text(activeAmount);
-				$('[role="pay-rmb"]').text(activeAmount/cashRate);
+				var payRmb = activeAmount/cashRate;
+				$('[role="pay-rmb"]').text(payRmb);
+				$('input[name="shouldPayMoney"]').val(payRmb);
 			} else {
 				$('[role="pay-rmb"]').text(activeAmount);
+				$('input[name="shouldPayMoney"]').val(activeAmount);
 			}
 		}
 

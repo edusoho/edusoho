@@ -43,11 +43,28 @@ class CourseOrderController extends OrderController
         $account = $this->getCashAccountService()->getAccountByUserId($user["id"]);
         $accountCash = $account["cash"];
 
-        if($totalMoneyPrice*100 > $accountCash/$cashRate*100) {
-            $shouldPayMoney = $totalMoneyPrice - $accountCash/$cashRate;
-            $coinPayAmount = $accountCash;
-        } else {
-            $coinPayAmount = $totalMoneyPrice*$cashRate;
+        $hasPayPassword = strlen($user['payPassword']) > 0;
+
+        $coursePriceShowType = "Coin";
+        if(array_key_exists("price_type", $coinSetting)) {
+            $coursePriceShowType = $coinSetting["price_type"];
+        }
+
+        if($hasPayPassword) {
+            if($totalMoneyPrice*100 > $accountCash/$cashRate*100) {
+                $shouldPayMoney = $totalMoneyPrice - $accountCash/$cashRate;
+                $coinPayAmount = $accountCash;
+            } else {
+                $coinPayAmount = $totalMoneyPrice*$cashRate;
+            }
+
+            if($coursePriceShowType == "RMB") {
+                $totalPrice = $totalMoneyPrice;
+                $coinPreferentialPrice = $coinPayAmount/$cashRate;
+            } else if ($coursePriceShowType == "Coin") {
+                $totalPrice = $totalCoinPrice;
+                $coinPreferentialPrice = $coinPayAmount;
+            }
         }
 
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
@@ -55,19 +72,6 @@ class CourseOrderController extends OrderController
 
         if(!empty($vipApp)) {
             $vip = $this->getVipService()->getMemberByUserId($user["id"]);
-        }
-
-        $coursePriceShowType = "Coin";
-        if(array_key_exists("price_type", $coinSetting)) {
-            $coursePriceShowType = $coinSetting["price_type"];
-        }
-
-        if($coursePriceShowType == "RMB") {
-            $totalPrice = $totalMoneyPrice;
-            $coinPreferentialPrice = $coinPayAmount/$cashRate;
-        } else if ($coursePriceShowType == "Coin") {
-            $totalPrice = $totalCoinPrice;
-            $coinPreferentialPrice = $coinPayAmount;
         }
 
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', array(
@@ -90,7 +94,7 @@ class CourseOrderController extends OrderController
             'vip' => empty($vip) ? null : array($vip),
             'payUrl' => 'course_order_pay',
 
-            'hasPayPassword' => strlen($user['payPassword']) > 0
+            'hasPayPassword' => $hasPayPassword
         ));
     }
 
@@ -139,13 +143,6 @@ class CourseOrderController extends OrderController
             return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
         }
 
-        $coinSetting = $this->getSettingService()->get("coin");
-        if(array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] == 1) {
-            $isRight = $this->getAuthService()->checkPayPassword($user["id"], $fields["payPassword"]);
-            if(!$isRight)
-                return $this->createMessageResponse('error', '支付密码不正确，创建订单失败。');
-        }
-
         if(!array_key_exists("targets", $fields)) {
             return $this->createMessageResponse('error', '订单中没有购买的内容，不能创建!');
         }
@@ -159,9 +156,9 @@ class CourseOrderController extends OrderController
             $targetTypes[] = $target[0];
             $targetIds[] = $target[1];
         }
-
         
         $coursePriceShowType = "RMB";
+        $coinSetting = $this->getSettingService()->get("coin");
         if(array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] == 1 && array_key_exists("price_type", $coinSetting)) {
             $coursePriceShowType = $coinSetting["price_type"];
         }
@@ -188,6 +185,11 @@ class CourseOrderController extends OrderController
 
         //虚拟币优惠价格
         $coinPayAmount = $fields["coinPayAmount"];
+        if(!empty($coinPayAmount) && empty($coinPayAmount)>0 && array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] == 1) {
+            $isRight = $this->getAuthService()->checkPayPassword($user["id"], $fields["payPassword"]);
+            if(!$isRight)
+                return $this->createMessageResponse('error', '支付密码不正确，创建订单失败。');
+        }
         $coinPreferentialPrice = 0;
         if($coursePriceShowType == "RMB") {
             $coinPreferentialPrice = $coinPayAmount/$cashRate;
@@ -199,16 +201,18 @@ class CourseOrderController extends OrderController
 
         //优惠码优惠价格
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
-        if(!empty($couponApp)) {
-            $couponResult = $this->getCouponService()->checkCouponUseable($code, $targetType, $targetId, $amount);
+        if(!empty($couponApp) && $fields["couponCode"]) {
+            $couponResult = $this->getCouponService()->checkCouponUseable($fields["couponCode"], "course", $targetIds[0], $amount);
             $amount = $couponResult["afterAmount"];
         }
 
         //价格比较
-        if($amount != $fields["actualPrice"]) {
+        if($amount != $fields["shouldPayMoney"]) {
             return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
         }
-
+        var_dump($amount);
+        var_dump($fields["shouldPayMoney"]);
+        exit();
         $order = array(
             'priceType' => $coursePriceShowType,
             'totalPrice' => $totalPrice,
@@ -453,6 +457,6 @@ class CourseOrderController extends OrderController
 
     protected function getCouponService()
     {
-        return $this->getServiceKernel()->createService('Coupon.CouponService');
+        return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
     }
 }

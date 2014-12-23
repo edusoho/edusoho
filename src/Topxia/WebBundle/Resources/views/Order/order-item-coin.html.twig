@@ -1,6 +1,8 @@
 <div class="row order-item">
   <div class="order-item-title">
-    <i class="order-item-title-icon"></i>
+    <i class="order-item-title-icon">
+      <img src="/bundles/topxiaweb/img/order-pay/iconfont-coin.png" width="25px">
+    </i>
     <h4 class="title">虚拟币</h4>
     <div class="price_r">
       <span class="price_r_mark">-</span>
@@ -9,20 +11,24 @@
     </div>
   </div>
   <div class="order-item-detail">
+    {% if hasPayPassword %}
     <div class="coin-detail">
       账户可用虚拟币 <span role="accountCash">{{account.cash|default(0)}}</span> 
       本次使用
       <input role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">虚拟币
     </div>
+    {% endif %}
     <div class="pay-password">
+      {% if not hasPayPassword %}
+      <div>
+        为了保障账户资金安全，暂时不可用，请先<a href="{{path('settings_pay_password')}}" class="btn-link">设置支付密码</a>。
+      </div>
+      {% else %}
       <input name="payPassword" type="password" placeholder="请输入支付密码"/>
       <div>
-        {% if not hasPayPassword %}
-        为了保障账户资金安全，暂时不可用，请先<a href="{{path('settings_pay_password')}}" class="btn-link">开启支付密码</a>。
-        {% else %}
         <a href="{{path('settings_find_pay_password')}}" class="btn-link">忘记密码？</a>
-        {% endif %}
       </div>
+      {% endif %}
     </div>
   </div>
 </div>
