@@ -47,10 +47,10 @@
             </div>
           </td>
           <td>{{ order.createdTime|date('Y-n-d H:i') }},{{ order.createdTime }}</td>
-          {% if order.payment == 'coin'%}
-            <td>{{ order.amount }} {{setting('coin.coin_name')}}</td>
+          {% if order.priceType == 'Coin'%}
+            <td>{{ order.totalPrice }}{{setting('coin.coin_name')}}</td>
               {% else %}
-          <td>{{ order.amount }}元</td>
+          <td>{{ order.totalPrice }}元</td>
               {% endif %}
           <td>
             {{ dict_text('orderStatus:html', order.status) }}
@@ -65,7 +65,7 @@
               {% endif %}
               {% if order.status == 'created' %}
 
-               <a href="javascript:;" class="text-sm pay"  style="display:block" data-url="{{ path('course_order_repay') }}" data-order-id="{{order.id}}">去支付</a>
+               <a href="{{path('course_order_repay', {orderId: order.id})}}" class="text-sm"  style="display:block" >去支付</a>
 
                 <a href="javascript:;" class="text-sm cancel" style="display:block" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消订单</a>
 

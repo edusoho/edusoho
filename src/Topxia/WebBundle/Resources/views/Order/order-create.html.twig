@@ -13,7 +13,9 @@
         <div class="panel-body">
           <form method="post" action="{{path(payUrl)}}" 
           >
-          	
+          	{% if order|default(null) %}
+            <input type="hidden" name="orderId" value="{{order.id}}"/>
+            {% endif %}
           	<input type="hidden" role="cash-rate" value="{{cashRate}}"
             data-course-price-show-type = "{{coursePriceShowType}}"/>
             {% for targetType in targetTypes %}
@@ -33,7 +35,7 @@
             	<h4 class="price_r">应付{% if coursePriceShowType == "RMB" %}金额：￥{% elseif coursePriceShowType == "Coin" %}{{setting("coin.coin_name")}}：{% endif %}<span role="total-price">{{totalPrice}}</span></h4>
             </div>
             
-            {% if setting('coupon.enabled') and courses|default(null) and couponApp|default(null) and account|default(null)%}
+            {% if setting('coupon.enabled') and courses|default(null) and couponApp|default(null) %}
             	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
             {% endif %}
 
@@ -49,18 +51,19 @@
 
                 <h4>
                   {% if coursePriceShowType == "Coin" %}
-                  折合人民币
+                  折合金额
                   {% else %}
-                  支付人民币
+                  支付金额
                   {% endif %}
-                  ：￥&nbsp;<span role="pay-rmb">{{shouldPayMoney}}</span></h4>
+                  ：￥<span role="pay-rmb">{{shouldPayMoney}}</span>
+                </h4>
               </div>
               
             </div>
 
             <div class="form-group pay">
               <div class="col-md-offset-10 controls">
-                <button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">支付</button>
+                <button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">提交订单</button>
               </div>
             </div>
           </form>

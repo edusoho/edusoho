@@ -32,7 +32,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('创建订单失败：缺少参数。');
         }
 
-        $order = ArrayToolkit::parts($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment', 'note', 'snPrefix', 'data', 'couponCode', 'coinAmount', 'coinRate'));
+        $order = ArrayToolkit::parts($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment', 'note', 'snPrefix', 'data', 'couponCode', 'coinAmount', 'coinRate','priceType'));
 
         $orderUser = $this->getUserService()->getUser($order['userId']);
         if (empty($orderUser)) {
@@ -531,6 +531,11 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('更新订单失败：支付流水号不存在。');
         }
         $this->getOrderDao()->updateOrder($id, array("cashSn" => $cashSn));
+    }
+
+    public function updateOrder($id, $orderFileds)
+    {
+        return $this->getOrderDao()->updateOrder($id, $orderFileds);
     }
 
     private function getLogService()
