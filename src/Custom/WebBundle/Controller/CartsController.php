@@ -87,6 +87,20 @@ class CartsController extends BaseController
         ));
     }
 
+    public function favoriteAction(Request $request)
+    {
+        $params = $request->request->all();
+        if (!empty($params['ids'])) {
+            $ids = $params['ids'];
+        } else {
+            return $this->createJsonResponse(array('status' => 'fail'));
+        }
+
+        $this->getCourseService()->favoriteCourses($ids);
+
+        return $this->createJsonResponse(true);
+    }
+
     private function getUsers($userIds)
     {
         $ids = array();

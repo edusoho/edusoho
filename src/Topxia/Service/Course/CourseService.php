@@ -308,6 +308,8 @@ interface CourseService
 
 	public function favoriteCourse($courseId);
 
+	public function favoriteCourses(array $courseIds);
+
 	public function unFavoriteCourse($courseId);
 
 	public function hasFavoritedCourse($courseId);

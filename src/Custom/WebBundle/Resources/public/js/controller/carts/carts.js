@@ -15,11 +15,24 @@ define(function(require,exports,module){
             "click [data-role=batch-select]" : "_OnClickBatch",
             "click [data-role=single-select]" : "_initTotalNum",
             "click [data-role=batch-delete-btn]" : "_OnClickBatchDelete",
-            "click [data-role=batch-favourite-btn]" : "_OnClickFavourite"
+            "click [data-role=batch-favourite-btn]" : "_OnClickBatchFavourite",
+            "click [data-role=single-favourite-btn]" : "_OnClickSingleFavourite"
         },
 
         setup: function() {
             this._initTotalPrice();
+            this.on('selectedItems',function(){
+                var $items = [];
+                var $cartsIds = [];
+                this.$('[data-role=single-select]').each(function(index,item){
+                    if ($(item).is(':checked')) {
+                        $cartsIds.push($(item).data('id'));
+                        $items.push($(item).data('itemId'));
+                    };
+                });
+                this.set('cartsIds',$cartsIds);
+                this.set('selectedItems',$items);
+            });
         },
 
         _OnClickDeleteItem: function(e){
@@ -64,13 +77,11 @@ define(function(require,exports,module){
 
             var ids = [];
             var $btn = $(e.currentTarget);
-            this.$('[data-role=single-select]').each(function(index,item){
-                if ($(item).is(':checked')) {
-                    ids.push($(item).data('id'));
-                }
-            });
-
             var self = this;
+
+            this.trigger('selectedItems');
+            ids = this.get('cartsIds');
+
             $.post($btn.data('url'),{ids:ids},function(){
                 Notify.success("删除成功");
 
@@ -105,17 +116,40 @@ define(function(require,exports,module){
         },
 
         _initTotalNum: function () {
-            var courseNum = 0;
-            this.$('[data-role=single-select]').each(function(index,item){
-                if ($(this).is(':checked')) {
-                    courseNum += 1;
-                };
-            });
-            this.$('[data-role=total-num]').html(courseNum);
+            this.trigger('selectedItems');
+            var items = [];
+            items = this.get('cartsIds');
+            this.$('[data-role=total-num]').html(items.length);
         },
 
-        _OnClickFavourite: function (e) {
+        _OnClickBatchFavourite: function (e) {
+            if (!confirm('确定收藏选中课程吗？')) {
+                return ;
+            };
+            var $btn = $(e.currentTarget);
+            var ids = [];
+            this.trigger('selectedItems');
 
+            ids = this.get('selectedItems');
+            $.post($btn.data('url'),{ids:ids},function(result){
+                Notify.success('收藏成功');
+            }).error(function(result){
+                Notify.danger('已经收藏');
+            });
+        },
+
+        _OnClickSingleFavourite: function (e) {
+            if (!confirm('确定收藏此课程吗？')) {
+                return ;
+            };
+            $btn = $(e.currentTarget);
+            var id = [];
+            id.push($btn.data('itemId'));
+            $.post($btn.data('url'),{ids:id},function(result){
+                Notify.success('收藏成功');
+            }).error(function(result){
+                Notify.danger('已经收藏');
+            });
         }
 
     });

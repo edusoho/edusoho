@@ -565,6 +565,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return true;
 	}
 
+	public function favoriteCourses(array $courseIds)
+	{
+		foreach ($courseIds as $key => $courseId) {
+			$this->favoriteCourse($courseId);
+		}
+
+		return true;
+	}
+
 	public function unFavoriteCourse($courseId)
 	{
 		$user = $this->getCurrentUser();
