@@ -119,6 +119,7 @@ class CashServiceImpl extends BaseService implements CashService
         $outFlow["type"] = "outflow";
         $outFlow["sn"] = $this->makeSn();
         $outFlow["createdTime"] = time();
+        $outFlow["cash"] = $account["cash"]-$outFlow["amount"];
 
         $outFlow = $this->getFlowDao()->addFlow($outFlow);
 
@@ -188,7 +189,8 @@ class CashServiceImpl extends BaseService implements CashService
             'name' => "充值",
             'orderSn' => $outFlow['orderSn'],
             'category' => 'change',
-            'note' => ''
+            'note' => '',
+            'parentSn' => $outFlow['sn']
         );
 
         $inFlow["cashType"] = "Coin";
@@ -196,9 +198,11 @@ class CashServiceImpl extends BaseService implements CashService
         $inFlow["sn"] = $this->makeSn();
         $inFlow["createdTime"] = time();
 
+        $account = $this->getCashAccountService()->getAccountByUserId($inFlow["userId"]);
+        $inFlow["cash"] = $account["cash"]+$inFlow["amount"];
+
         $inFlow = $this->getFlowDao()->addFlow($inFlow);
 
-        $account = $this->getCashAccountService()->getAccountByUserId($inFlow["userId"]);
         $this->getCashAccountService()->waveCashField($account["id"], $inFlow["amount"]);
 
         return $inFlow;
