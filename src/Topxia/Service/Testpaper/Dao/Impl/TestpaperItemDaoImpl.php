@@ -83,6 +83,12 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         return $this->getConnection()->fetchColumn($sql, array($testId, $parentId));
     }
 
+    public function getItemsByTestIdAndPartId($testId, $partId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND partId = ?";
+        return $this->getConnection()->fetchAll($sql, array($testId, $partId)) ? : array();
+    }
+
     public function getItemsCountByTestIdAndQuestionType($testId, $questionType)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `testId` = ? and `questionType` = ? ";

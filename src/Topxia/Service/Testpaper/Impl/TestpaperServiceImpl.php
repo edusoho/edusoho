@@ -87,6 +87,21 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->updateTestpaper($id, $fields);
     }
 
+    public function updateAdvancedTestpaperMetas($id)
+    {
+        $testpaper = $this->getTestpaperDao()->getTestpaper($id);
+        if (empty($testpaper)) {
+            throw $this->createServiceException("Testpaper #{$id} is not found, update testpaper failure.");
+        }
+        foreach ($testpaper['metas']['parts'] as $key => $part) {
+            $items = $this->getTestpaperItemDao()->getItemsByTestIdAndPartId($id, $part['id']);
+            if (empty($items)) {
+                unset($testpaper['metas']['parts'][$key]);
+            }
+        }
+        return $this->getTestpaperDao()->updateTestpaper($id, array('metas' => $testpaper['metas']));
+    }
+
     private function filterTestpaperPart($part)
     {
         $filtedFields = array();

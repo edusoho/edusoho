@@ -23,8 +23,8 @@ define(function(require, exports, module) {
                     $("#testpaper-item-" + replace).parents('tbody').find('[data-parent-id=' + replace + ']').remove();
                     $("#testpaper-item-" + replace).replaceWith($trs);
                 } else {
-                    var type = $firstTr.data('type');
-                    $("#testpaper-items-" + type).append($trs);
+                    var target = $firstTr.data('part') || $firstTr.data('type');
+                    $("#testpaper-items-" + target).append($trs);
                 }
 
                 $modal.modal('hide');

@@ -390,6 +390,7 @@ class TestpaperController extends BaseController
 
 
         $replace = empty($conditions['replace']) ? '' : $conditions['replace'];
+        $part = empty($conditions['part']) ? 0 : $conditions['part'];
 
         $paginator = new Paginator(
             $request,
@@ -409,6 +410,7 @@ class TestpaperController extends BaseController
             'testpaper' => $testpaper,
             'questions' => $questions,
             'replace' => $replace,
+            'part' => $part,
             'paginator' => $paginator,
             'conditions' => $conditions,
         ));
@@ -423,6 +425,7 @@ class TestpaperController extends BaseController
         }
 
         $category = $this->getCategoryByTarget($testpaper['target']);
+        $part = empty($request->query->get('part')) ? 0 : $request->query->get('part');
 
         $question = $this->getQuestionService()->getQuestion($request->query->get('questionId'));
         if (empty($question)) {
@@ -438,6 +441,7 @@ class TestpaperController extends BaseController
         return $this->render('CustomAdminBundle:Testpaper:item-picked.html.twig', array(
             'category'    => $category,
             'testpaper' => $testpaper,
+            'part' => $part,
             'question' => $question,
             'subQuestions' => $subQuestions,
             'type' => $question['type']
@@ -472,7 +476,7 @@ class TestpaperController extends BaseController
             }
 
             $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $items);
-
+            $this->getTestpaperService()->updateAdvancedTestpaperMetas($testpaper['id']);
             $this->setFlashMessage('success', '试卷题目保存成功！');
             return $this->redirect($this->generateUrl('admin_testpaper',array( 'categoryId' => $category['id'])));
         }
