@@ -56,21 +56,33 @@
             {{ dict_text('orderStatus:html', order.status) }}
           </td>
           <td>
+            <div class="btn-group">
+               <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">详情</a>  
+                
+               {% if order.status == 'refunding' or  order.status == 'created' %}
+               
+                <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                </a>
 
-             <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">详情</a>  
+                
+                <ul class="dropdown-menu pull-right text-right" style="min-width: 60px;" > 
 
-             <div class="actions">
-              {% if order.status == 'refunding' %}
-                <a href="javascript:;" class="text-sm cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">取消退款</a>
-              {% endif %}
-              {% if order.status == 'created' %}
+                   <div class="actions">
+                    {% if order.status == 'refunding' %}
+                      <li><a href="javascript:;" class="text-sm cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">取消退款</a></li>
+                    {% endif %}
+                    {% if order.status == 'created' %}
 
-               <a href="javascript:;" class="text-sm pay"  style="display:block" data-url="{{ path('course_order_repay') }}" data-order-id="{{order.id}}">去支付</a>
+                     <li><a href="javascript:;" class="text-sm pay"  style="display:block" data-url="{{ path('course_order_repay') }}" data-order-id="{{order.id}}">去支付</a></li>
 
-                <a href="javascript:;" class="text-sm cancel" style="display:block" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消订单</a>
+                      <li><a href="javascript:;" class="text-sm cancel" style="display:block" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消订单</a></li>
 
-              {% endif %}
-            </div>
+                    {% endif %}
+                    </div>
+                  </ul>
+                {% endif %}
+            </div>  
           </td>
         </tr>
       {% else %}
