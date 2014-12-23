@@ -70,7 +70,3 @@ admin_testpaper_item_picked:
 admin_testpaper_advanced_items:
     pattern: /testpaper/{id}/advanced-items
     defaults: { _controller: CustomAdminBundle:Testpaper:advancedItems }
-
-admin_question_preview:
-    pattern: /question/{id}/preview
-    defaults: { _controller: CustomAdminBundle:Testpaper:preview }

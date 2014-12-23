@@ -17,7 +17,7 @@
   <td>
     <div class="btn-group">
       {% if question.parentId == 0 %}
-        <a href="#modal" data-toggle="modal" data-url="{{ path('admin_question_preview', {id:question.id}) }}" class="notMoveHandle btn btn-default btn-sm">预览</a>
+        <a href="#modal" data-toggle="modal" data-url="{{ path('admin_category_manage_question_preview', {categoryId:category.id, id:question.id}) }}" class="notMoveHandle btn btn-default btn-sm">预览</a>
         <a href="javascript:" class="notMoveHandle btn btn-default btn-sm item-delete-btn">删除</a>
         <a href="javascript:" class="notMoveHandle btn btn-default btn-sm" data-role="pick-item" data-url="{{ path('admin_testpaper_item_picker', {id:testpaper.id, replace: question.id }) }}" >替换</a>
       {% endif %}

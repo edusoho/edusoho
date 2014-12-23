@@ -8,7 +8,7 @@
   <td>{{ dict_text('questionType', question.type) }}</td>
   <td>{{question.score }}</td>
   <td>
-    <button data-url="{{ path('admin_question_preview', {id:question.id }) }}" class="btn btn-default btn-sm newWindowPreview">预览</button>
+    <button data-url="{{ path('admin_category_manage_question_preview', {categoryId:category.id, id:question.id}) }}" class="btn btn-default btn-sm newWindowPreview">预览</button>
     <button type="button" class="btn btn-primary btn-sm" data-role="picked-item" data-replace="{{ replace|default('') }}" data-url="{{ path('admin_testpaper_item_picked', {id:testpaper.id, questionId:question.id, part:part }) }}">{% if replace %}替换{% else %}选择{% endif %}</button>
   </td>
 </tr>
