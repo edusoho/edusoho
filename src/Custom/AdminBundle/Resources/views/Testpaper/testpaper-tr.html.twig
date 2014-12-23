@@ -43,6 +43,8 @@
               <li><a href="{{ path('admin_testpaper_update', {id:testpaper.id}) }}"><span class="glyphicon glyphicon-edit"></span> 编辑试卷信息</a></li>
               {% if testpaper.pattern == 'QuestionType' %}
                 <li><a href="{{ path('admin_testpaper_items', {id:testpaper.id}) }}"><span class="glyphicon glyphicon-list"></span> 管理题目</a></li>
+            {% else %}
+                <li><a href="{{ path('admin_testpaper_advanced_items', {id:testpaper.id}) }}"><span class="glyphicon glyphicon-list"></span> 管理题目</a></li>
             {% endif %}
               <li><a href="{{ path('admin_testpaper_items_reset', {id:testpaper.id}) }}"><span class="glyphicon glyphicon-repeat"></span> 重新生成题目</a></li>
               <li><a href="javascript:" data-name='试卷' data-role='item-delete' data-url="{{ path('admin_testpaper_delete', {id:testpaper.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除试卷</a></li>
