@@ -8,7 +8,11 @@ define(function(require, exports, module) {
 
 		function conculatePrice(){
 			var totalPrice = parseFloat($('[role="total-price"]').text());
-			var couponAmount = parseFloat($('[role="coupon-price"]').find(".price_r_num").text());
+			var couponTotalPrice = $('[role="coupon-price"]').find(".price_r_num").text();
+			if(isNaN(couponTotalPrice)){
+				couponTotalPrice = 0;
+			}
+			var couponAmount = parseFloat(couponTotalPrice);
 			var payAmount = totalPrice-couponAmount;
 			if(payAmount <= 0){
 				payAmount = 0;

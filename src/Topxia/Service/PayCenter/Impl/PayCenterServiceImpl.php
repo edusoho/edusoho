@@ -43,14 +43,14 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		try {
 			$connection->beginTransaction();
 
+			list($success, $order) = $this->getOrderService()->payOrder($payData);
+
 			if($order["coupon"]) {
 				$couponApp = $this->getAppService()->findInstallApp("Coupon");
 				if(!empty($couponApp)) {
 					$this->getCouponService()->useCoupon($order["coupon"], $order);
 				}
 			}
-
-			list($success, $order) = $this->getOrderService()->payOrder($payData);
 
 			$processor = OrderProcessorFactory::create($order["targetType"]);
 
@@ -160,7 +160,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 	protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->createService('CloudPlatform.AppService');
     }
 
 	protected function getOrderService()
@@ -175,6 +175,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
     protected function getCouponService()
     {
-        return $this->getServiceKernel()->createService('Coupon.CouponService');
+        return $this->createService('Coupon:Coupon.CouponService');
     }
 }
