@@ -70,9 +70,19 @@ class WebExtension extends \Twig_Extension
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
             'isHide'=>new \Twig_Function_Method($this, 'isHideThread'),
+            'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),            
+            'getBatchNameById' => new \Twig_Function_Method($this, 'getBatchNameById'),
         );
     }
-
+    public function getUserNickNameById($userId)
+    {
+        $user = $this->getUserById($userId);
+        return $user['nickname'];
+    }
+    private function getUserById($userId)
+    {
+        return ServiceKernel::instance()->createService('User.UserService')->getUser($userId);
+    }
     public function isExistInSubArrayById($currentTarget, $targetArray)
     {
         foreach ($targetArray as $target) {
