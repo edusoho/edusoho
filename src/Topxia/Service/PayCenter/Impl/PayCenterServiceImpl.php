@@ -19,7 +19,8 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 			if($order["status"] == "paid"){
 				$connection->rollback();
-				return;
+				$processor = OrderProcessorFactory::create($order["targetType"]);
+				return array(true, $processor->getRouter(), $order);
 			}
 
 			$this->proccessCashFlow($order);
@@ -60,7 +61,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	        }
 
 	        $connection->commit();
-	        return array($success, $router, $order);
+	        return array($success, $processor->getRouter(), $order);
         }catch (\Exception $e) {
             $connection->rollback();
             throw $e;
@@ -70,14 +71,16 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	}
 
 	private function proccessCashFlow($order) {
-		if($order["priceType"] == "Coin") {
+		$coinSetting = $this->getSettingService()->get("coin");
+
+		if(!empty($coinSetting) && array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] == 1) {
 			if($order["amount"] == 0 && $order["coinAmount"] > 0) {
 				$outFlow = $this->payAllByCoin($order);
 			}
 			if($order["amount"] > 0 && $order["coinAmount"] >= 0) {
 				$outFlow = $this->payByCoinAndRmb($order);
 			}
-		} else if($order["priceType"] == "RMB") {
+		} else {
 			$outFlow = $this->payByRmb($order);
 		}
 
@@ -95,7 +98,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             'category' => 'inFlow',
             'note' => ''
 		);
-		$this->getCashService()->inFlowByRmb($inFlow);
+		$inFlow = $this->getCashService()->inFlowByRmb($inFlow);
 
 		$outFlow = array(
 			'userId' => $order["userId"],
@@ -174,6 +177,11 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
     protected function getCashService()
     {
         return $this->createService('Cash.CashService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 
     protected function getCouponService()

@@ -175,10 +175,11 @@ class CashServiceImpl extends BaseService implements CashService
     {
         $outFlow = $this->outFlowByRmb($rmbFlow);
 
-        $coinRate = $this->getSettingService()->get("coin.cash_rate");
+        $coinSetting = $this->getSettingService()->get("coin");
 
-        if(!$coinRate) {
-            $coinRate = 1;
+        $coinRate = 1;
+        if(!empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
+            $coinRate = $coinSetting["cash_rate"];
         }
 
         $amount = $outFlow["amount"] * $coinRate;

@@ -55,7 +55,7 @@ class CourseOrderController extends OrderController
 
         $coinSetting = $this->getSettingService()->get("coin");
         
-        $cashRate = 10;
+        $cashRate = 1;
         if(array_key_exists("cash_rate", $coinSetting)) {
             $cashRate = $coinSetting["cash_rate"];
         }
@@ -183,7 +183,6 @@ class CourseOrderController extends OrderController
         }
 
         $amount = $totalPrice - $coinPreferentialPrice;
-
         //优惠码优惠价格
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
         if(!empty($couponApp) && $fields["couponCode"]) {

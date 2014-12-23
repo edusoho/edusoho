@@ -36,7 +36,7 @@ class PayCenterController extends BaseController
             );
             
             list($success, $router, $order) = $this->getPayCenterService()->pay($payData);
-            $goto = $success && empty($router) ? $this->generateUrl('homepage', array(), true) : $this->generateUrl($router, array('id' => $order["targetId"]), true);
+            $goto = $success && !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true):$this->generateUrl('homepage', array(), true);
             return $this->redirect($goto);
         }
 
@@ -66,7 +66,9 @@ class PayCenterController extends BaseController
 		}
 
 		if ($order['status'] == 'paid') {
-            return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
+            $processor = OrderProcessorFactory::create($order["targetType"]);
+            $router = $processor->getRouter();
+            return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
         } else {
 
             $payRequestParams = array(
@@ -95,7 +97,7 @@ class PayCenterController extends BaseController
 
         list($success, $router, $order) = $this->getPayCenterService()->pay($payData);
 
-        $goto = $success && empty($router) ? $this->generateUrl('homepage', array(), true) : $this->generateUrl($router, array('id' => $order["targetId"]), true);
+        $goto = $success && !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
 
         return $this->redirect($goto);
     }
