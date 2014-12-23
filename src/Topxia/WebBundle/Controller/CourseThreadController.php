@@ -308,6 +308,7 @@ class CourseThreadController extends BaseController
             'courseId' => $thread['courseId'],
             'threadId' => $thread['id']
         ));
+
         $currentUser = $this->getCurrentUser();
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -330,10 +331,11 @@ class CourseThreadController extends BaseController
                 }
 
                 foreach ($users as $user) {
-
-                    if ($user['id'] != $userId) {
-                    $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-                    $this->getNotifiactionService()->notify($user['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中@了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
+                    if ($thread['userId'] != $user['id']) {
+                        if ($user['id'] != $userId) {
+                        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+                        $this->getNotifiactionService()->notify($user['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中@了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
+                        }
                     }
                 }
 
