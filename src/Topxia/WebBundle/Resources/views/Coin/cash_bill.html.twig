@@ -6,7 +6,9 @@
 
 {% block main %}
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">我的现金消费账单</div>
+  {% include 'TopxiaWebBundle:Coin:bill-bar.html.twig' %}
+
+  {# <div class="panel-heading">我的现金消费账单</div> #}
     <div class="panel-body">
       
     <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
@@ -18,7 +20,10 @@
       </div>
 
       {#<button class="btn btn-primary">搜索</button>#}
-
+       <div class="control-label pull-right" style="padding-top: 8px;">
+        收入：<a class="success">{{ amountInflow }}</a>RMB
+        支出：<a class="danger">{{ amountOutflow }}</a>RMB
+        </div>
     </form>
 
         <br>
@@ -30,7 +35,7 @@
           <th>名称</th>          
           <th>成交时间</th>
           <th>名称</th>
-          {# <th>收入</th> #}
+          <th>收入</th>
           <th>支出</th>
           <th>支付方式</th>
         </tr>
@@ -43,9 +48,9 @@
             <td>{{cash.name}}<br>
                 <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span>
             </td>
-            {# <td style="color:#1bb974">
+            <td style="color:#1bb974">
               {% if cash.type =="inflow" %}{{cash.amount}} {% endif %}
-            </td> #}
+            </td>
             <td style="color:#ff7b0e">
               {% if cash.type =="outflow" %}-{{cash.amount}} {% endif %}
             </td>

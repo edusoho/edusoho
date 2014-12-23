@@ -46,14 +46,14 @@
 
                 <a class="list-group-item 
                      {% if side_nav == 'my-bill' %} active {% endif %} " 
-                     href="{{path('my_bill')}}">我的现金账单</a>                
+                     href="{{path('my_bill')}}">账户中心{# 我的现金账单 #}</a>                
 
-
-                {% if setting('coin.coin_enabled') %}
+                {#虚拟币#}
+              {#   {% if setting('coin.coin_enabled') %}
                       <a class="list-group-item 
                         {% if side_nav == 'my-coin' %} active {% endif %} " 
-                        href="{{path('my_coin')}}">我的{#虚拟币#}{{setting('coin.coin_name')}}</a>
-                {% endif %}
+                        href="{{path('my_coin')}}">我的{{setting('coin.coin_name')}}</a>
+                {% endif %} #}
               
             </ul>
           </div>
