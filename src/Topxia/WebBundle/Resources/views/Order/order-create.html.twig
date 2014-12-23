@@ -30,7 +30,7 @@
             {% endif %}
 
             <div class="order-item row">
-            	<h4 class="price_r">应付{% if coursePriceShowType == "RMB" %}金额：￥{% elseif coursePriceShowType == "Coin" %}虚拟币：{% endif %}<span role="total-price">{{totalPrice}}</span></h4>
+            	<h4 class="price_r">应付{% if coursePriceShowType == "RMB" %}金额：￥{% elseif coursePriceShowType == "Coin" %}{{setting("coin.coin_name")}}：{% endif %}<span role="total-price">{{totalPrice}}</span></h4>
             </div>
             
             {% if courses|default(null) and couponApp|default(null) and account|default(null)%}
@@ -44,7 +44,7 @@
             <div class="order-item row">
               <div class="total-price">
                 {% if coursePriceShowType == "Coin" %}
-              	<h4>需支付虚拟币：<span role="pay-coin">{{shouldPayMoney}}</span></h4>
+              	<h4>需支付{{setting("coin.coin_name")}}：<span role="pay-coin">{{shouldPayMoney}}</span></h4>
                 {% endif %}
 
                 <h4>

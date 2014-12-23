@@ -29,8 +29,8 @@ class CourseOrderController extends OrderController
         $userIds = array();
         $userIds = array_merge($userIds, $course['teacherIds']);
         $users = $this->getUserService()->findUsersByIds($userIds);
-        $totalMoneyPrice += $course["price"];
-        $totalCoinPrice += $course["coinPrice"];
+        $totalMoneyPrice = $course["price"];
+        $totalCoinPrice = $course["coinPrice"];
 
         $coinSetting = $this->getSettingService()->get("coin");
         
@@ -39,30 +39,37 @@ class CourseOrderController extends OrderController
             $cashRate = $coinSetting["cash_rate"];
         }
 
+        $coursePriceShowType = "Coin";
+        if(array_key_exists("price_type", $coinSetting)) {
+            $coursePriceShowType = $coinSetting["price_type"];
+        }
+
         $user = $this->getCurrentUser();
         $account = $this->getCashAccountService()->getAccountByUserId($user["id"]);
         $accountCash = $account["cash"];
 
         $hasPayPassword = strlen($user['payPassword']) > 0;
 
-        $coursePriceShowType = "Coin";
-        if(array_key_exists("price_type", $coinSetting)) {
-            $coursePriceShowType = $coinSetting["price_type"];
-        }
-
         if($hasPayPassword) {
-            if($totalMoneyPrice*100 > $accountCash/$cashRate*100) {
-                $shouldPayMoney = $totalMoneyPrice - $accountCash/$cashRate;
-                $coinPayAmount = $accountCash;
-            } else {
-                $coinPayAmount = $totalMoneyPrice*$cashRate;
-            }
-
             if($coursePriceShowType == "RMB") {
                 $totalPrice = $totalMoneyPrice;
-                $coinPreferentialPrice = $coinPayAmount/$cashRate;
+                if($totalMoneyPrice*100 > $accountCash/$cashRate*100) {
+                    $shouldPayMoney = $totalMoneyPrice - $accountCash/$cashRate;
+                    $coinPayAmount = $accountCash;
+                    $coinPreferentialPrice = $accountCash/$cashRate;
+                } else {
+                    $coinPayAmount = $totalMoneyPrice*$cashRate;
+                    $coinPreferentialPrice = $totalMoneyPrice;
+                }
             } else if ($coursePriceShowType == "Coin") {
                 $totalPrice = $totalCoinPrice;
+                if($totalCoinPrice*100 > $accountCash*100) {
+                    $shouldPayMoney = ($totalCoinPrice - $accountCash)/$cashRate;
+                    $coinPayAmount = $accountCash;
+                } else {
+                    $coinPayAmount = $totalCoinPrice;
+                }
+                
                 $coinPreferentialPrice = $coinPayAmount;
             }
         }

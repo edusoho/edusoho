@@ -9,31 +9,30 @@ define(function(require, exports, module) {
 		function conculatePrice(){
 			var totalPrice = parseFloat($('[role="total-price"]').text());
 			var couponAmount = parseFloat($('[role="coupon-price"]').find(".price_r_num").text());
-			var activeAmount = totalPrice-couponAmount;
-			if(activeAmount <= 0){
-				activeAmount=0;
+			var payAmount = totalPrice-couponAmount;
+			if(payAmount <= 0){
+				payAmount = 0;
 				$('[role="cash-discount"]').text(0.00);
 				$('[role="coinNum"]').val(0.00);
 			} 
 
-			if(activeAmount>0) {
+			if(payAmount>0) {
 				var coinAmount = parseFloat($('[role="cash-discount"]').text());
-				activeAmount = activeAmount-coinAmount;
+				payAmount = payAmount-coinAmount;
 			}
 
 			if(cashRateElement.data("coursePriceShowType") == "Coin") {
-				$('[role="pay-coin"]').text(activeAmount);
-				var payRmb = activeAmount/cashRate;
+				$('[role="pay-coin"]').text(payAmount);
+				var payRmb = payAmount/cashRate;
 				$('[role="pay-rmb"]').text(payRmb);
 				$('input[name="shouldPayMoney"]').val(payRmb);
 			} else {
-				$('[role="pay-rmb"]').text(activeAmount);
-				$('input[name="shouldPayMoney"]').val(activeAmount);
+				$('[role="pay-rmb"]').text(payAmount);
+				$('input[name="shouldPayMoney"]').val(payAmount);
 			}
 		}
 
 		$('[role="coinNum"]').blur(function(e){
-			
 			var coin = $(this).val();
 			if(isNaN(coin)){
 				$(this).val("0.00");
@@ -56,11 +55,22 @@ define(function(require, exports, module) {
 					discount = coin;
 				}
 			}
+
+			var totalPrice = parseFloat($('[role="total-price"]').text());
+			if(discount>totalPrice){
+				discount = totalPrice;
+				if(cashRateElement.data("coursePriceShowType") != "Coin"){
+					$(this).val(discount*cashRate);
+				} else {
+					$(this).val(discount);
+				}
+			}
+
 			$('[role="cash-discount"]').text(discount);
 			conculatePrice();
 		});
 
-		$("#add_card").click(function(e){
+		$("#coupon-code-btn").click(function(e){
 			$('[role="coupon-code"]').show().focus();
 			$('[role="no-use-coupon-code"]').hide();
 			$('[role="cancel-coupon"]').show();
@@ -71,7 +81,7 @@ define(function(require, exports, module) {
 		$('[role="cancel-coupon"]').click(function(e){
 			$('[role="coupon-code"]').hide();
 			$('[role="no-use-coupon-code"]').show();
-			$("#add_card").show();
+			$("#coupon-code-btn").show();
 			$('[role="code-notify"]').hide();
 			$('[role="coupon-price"]').find(".price_r_num").text("0.00");
 			$('[role="code-notify"]').text("");
@@ -98,7 +108,12 @@ define(function(require, exports, module) {
 					if(cashRateElement.data("coursePriceShowType") == "RMB") {
 						$('[role="coupon-price"]').find(".price_r_num").text(data.decreaseAmount);
 					} else {
-						$('[role="coupon-price"]').find(".price_r_num").text(data.decreaseAmount * cashRate);
+						var coinPrice = data.decreaseAmount*cashRate;
+						var totalPrice = parseFloat($('[role="total-price"]').text());
+						if(totalPrice < coinPrice){
+							coinPrice = totalPrice;
+						}
+						$('[role="coupon-price"]').find(".price_r_num").text(coinPrice);
 					}
 
 				}
