@@ -1,4 +1,8 @@
-      <br>
+      {% set blocks = data('Blocks',{'codes':['bill_bar'] }) %}
+      {% if blocks.bill_bar %}
+        {{ blocks.bill_bar|raw }}
+      {% endif %}
+
       <div class="clearfix">
       <div class="col-md-12">
         <ul class="nav nav-tabs mbl">
