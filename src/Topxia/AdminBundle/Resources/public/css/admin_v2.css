@@ -346,3 +346,13 @@ fieldset #checkboxChoices{
 .choiceFields label{
    margin-left:7px;;
 }
+
+#copy-course .badge {
+  position: absolute;
+  top: 28px;
+  right: 72px;
+  font-size: 11px;
+  background: none repeat scroll 0% 0% #F60;
+  padding: 2px 5px;
+  border-radius: 12px;
+}

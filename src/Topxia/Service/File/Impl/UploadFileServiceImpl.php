@@ -338,7 +338,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $fileNeedUpdateFields['convertParams'] = json_encode($convertParams);
         }
 
-        $convertHash = $this->getFileImplementorByFile($file)->reconvertFile($file, $convertCallback, $pipeline);
+        $convertHash = $this->getFileImplementorByFile($file)->reconvertOldFile($file, $convertCallback, $pipeline);
         if (empty($convertHash)) {
             return array('error' => 'convert_request_failed', 'message' => "文件(#{$id})转换请求失败！");
         }
