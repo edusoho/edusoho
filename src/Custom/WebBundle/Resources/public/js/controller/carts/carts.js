@@ -123,7 +123,7 @@ define(function(require,exports,module){
         },
 
         _OnClickBatchFavourite: function (e) {
-            if (!confirm('确定收藏选中课程')) {
+            if (!confirm('确定收藏选中课程吗？')) {
                 return ;
             };
             var $btn = $(e.currentTarget);
@@ -139,6 +139,9 @@ define(function(require,exports,module){
         },
 
         _OnClickSingleFavourite: function (e) {
+            if (!confirm('确定收藏此课程吗？')) {
+                return ;
+            };
             $btn = $(e.currentTarget);
             var id = [];
             id.push($btn.data('itemId'));
