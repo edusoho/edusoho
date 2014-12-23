@@ -46,7 +46,7 @@
               {% endif %}
             </div>
           </td>
-          <td>{{ order.createdTime|date('Y-n-d H:i') }},{{ order.createdTime }}</td>
+          <td>{{ order.createdTime|date('Y-n-d H:i') }}</td>
           {% if order.priceType == 'Coin'%}
             <td>{{ order.totalPrice }}{{setting('coin.coin_name')}}</td>
               {% else %}
