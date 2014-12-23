@@ -324,7 +324,12 @@
                             <p>{{ level.description|plain_text(40) }}</p>
                           </div>
                           <div class="vip-price col-sm-3 col-md-3">
-                            <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                              {% if setting('coin.coin_enabled') %}
+                                <h4 {% if setting('coin.price_type') == 'Coin'%} style="display:none;"  {% else %}  style="display:inline " {% endif %}>¥&nbsp;{{ level.monthPrice }}</h4>
+                                <h4 {% if setting('coin.price_type') == 'Coin'%} style="display:inline " {% else %} style="display:none;"   {% endif %} >¥&nbsp;{{ level.monthCoinPrice }}{{setting('coin.coin_name')}}</h4>
+                               {% else %}
+                              <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                             {% endif %}
                             <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
                           </div>
                         </div>
