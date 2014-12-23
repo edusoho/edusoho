@@ -92,7 +92,8 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order['snPrefix'] = 'C';
 
             if (!empty($info['coupon'])) {
-                $order['couponCode'] = $info['coupon'];
+                $order['coupon'] = $info['coupon'];
+                $order['couponDiscount'] = $info['couponDiscount'];
             }
 
             if (!empty($info['note'])) {
@@ -252,7 +253,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             'payment' => $orderFileds["payment"],
             'targetId' => $orderFileds["courseId"]
         );
-        
+
         return $this->getOrderService()->updateOrder($id, $orderFileds);
     }
     

@@ -24,11 +24,19 @@ define(function(require, exports, module) {
 			if(cashRateElement.data("coursePriceShowType") == "Coin") {
 				$('[role="pay-coin"]').text(payAmount);
 				var payRmb = payAmount/cashRate;
-				$('[role="pay-rmb"]').text(payRmb);
-				$('input[name="shouldPayMoney"]').val(payRmb);
+				fixedPayRmb = payRmb.toFixed(2);
+				if(fixedPayRmb<payRmb){
+					fixedPayRmb = parseFloat(fixedPayRmb)+0.01;
+				}
+				$('[role="pay-rmb"]').text(fixedPayRmb);
+				$('input[name="shouldPayMoney"]').val(fixedPayRmb);
 			} else {
-				$('[role="pay-rmb"]').text(payAmount);
-				$('input[name="shouldPayMoney"]').val(payAmount);
+				fixedPayAmount = payAmount.toFixed(2);
+				if(fixedPayAmount<payAmount){
+					fixedPayAmount = parseFloat(fixedPayAmount)+0.01;
+				}
+				$('[role="pay-rmb"]').text(fixedPayAmount);
+				$('input[name="shouldPayMoney"]').val(fixedPayAmount);
 			}
 		}
 

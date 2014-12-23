@@ -187,7 +187,7 @@ class CourseOrderController extends OrderController
 
         //虚拟币优惠价格
         $coinPayAmount = $fields["coinPayAmount"];
-        if(!empty($coinPayAmount) && empty($coinPayAmount)>0 && array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] == 1) {
+        if(!empty($coinPayAmount) && $coinPayAmount>0 && array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"]) {
             $isRight = $this->getAuthService()->checkPayPassword($user["id"], $fields["payPassword"]);
             if(!$isRight)
                 return $this->createMessageResponse('error', '支付密码不正确，创建订单失败。');
@@ -205,9 +205,17 @@ class CourseOrderController extends OrderController
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
         if(!empty($couponApp) && $fields["couponCode"]) {
             $couponResult = $this->getCouponService()->checkCouponUseable($fields["couponCode"], "course", $targetIds[0], $amount);
-            $amount = $couponResult["afterAmount"];
+            $afterRmbAmount = $couponResult["afterAmount"];
+            if($coursePriceShowType == "RMB") {
+                $amount = $amount - $couponResult["decreaseAmount"];
+                $couponDiscount = $couponResult["decreaseAmount"];
+            } else if ($coursePriceShowType == "Coin") {
+                $amount = $amount - $couponResult["decreaseAmount"]*$cashRate;
+                $couponDiscount = $couponResult["decreaseAmount"]*$cashRate;
+            }
         }
 
+        $amount = ceil($amount*100)/100;
         //价格比较
         if($amount != $fields["shouldPayMoney"]) {
             return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
@@ -222,6 +230,8 @@ class CourseOrderController extends OrderController
             'userId' => $user["id"],
             'payment' => 'alipay',
             'courseId' => $targetIds[0],
+            'coupon' => empty($couponResult) ? null : $fields["couponCode"],
+            'couponDiscount' => empty($couponDiscount) ? null : $couponDiscount,
         );
 
         if(array_key_exists("orderId", $fields)){
