@@ -78,9 +78,9 @@ class CartsController extends BaseController
 
     public function favoriteAction(Request $request)
     {
-        $ids = $request->request->all();
-        if (!empty($ids['ids'])) {
-            $ids = $ids['ids'];
+        $params = $request->request->all();
+        if (!empty($params['ids'])) {
+            $ids = $params['ids'];
         } else {
             return $this->createJsonResponse(array('status' => 'fail'));
         }
