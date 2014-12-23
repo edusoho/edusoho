@@ -15,35 +15,35 @@
     <form id="settings-security-questions-form" class="form-horizontal" method="post" {# {% if not app.user.password %} style="display:none;"{% endif %} #}> 
 
       <div class="form-group row"> 
-        <div  class="col-md-3 col-md-offset-1 control-label">安全问题1</div> 
+        <div  class="col-md-3 col-md-offset-1 control-label"><label for="question-1">安全问题1</label></div> 
         <div class=" col-md-4"> 
-          <select class="form-control" name="question-1"> 
+          <select class="form-control" id="question-1" name="question-1"> 
             {{ select_options(questionOptions, question1|default('parents') ) }} 
           </select> 
         </div> 
       </div> 
       <div class="form-group row"> 
-        <div  class="col-md-3 col-md-offset-1 control-label">答案</div> 
+        <div  class="col-md-3 col-md-offset-1 control-label"><label for="answer-1">答案</label></div> 
         <div class=" col-md-4"> 
-          <input type="text" name="answer-1" class="form-control" value="" placeholder="安全问题1答案"> 
+          <input type="text" id="answer-1" name="answer-1" class="form-control" value="" placeholder="安全问题1答案"> 
         </div> 
       </div> 
 
 
 
       <div class="form-group row"> 
-        <div class="col-md-3 col-md-offset-1 control-label">安全问题2</div> 
+        <div class="col-md-3 col-md-offset-1 control-label"><label for="question-2">安全问题2</label></div> 
         <div class=" col-md-4"> 
-          <select class="form-control " name="question-2"> 
+          <select class="form-control " id="question-2" name="question-2"> 
             {{ select_options(questionOptions, question2|default('teacher')) }} 
           </select> 
         </div> 
       </div> 
 
       <div class="form-group row"> 
-        <div  class="col-md-3 col-md-offset-1 control-label">答案</div> 
+        <div  class="col-md-3 col-md-offset-1 control-label"><label for="answer-2">答案</label></div> 
         <div class=" col-md-4"> 
-          <input type="text" name="answer-2" class="form-control" value="" placeholder="安全问题2答案"> 
+          <input type="text" id="answer-2" name="answer-2" class="form-control" value="" placeholder="安全问题2答案"> 
         </div> 
       </div> 
 
@@ -51,25 +51,25 @@
 
 
       <div class="form-group row"> 
-        <div  class="col-md-3 col-md-offset-1 control-label">安全问题3</div> 
+        <div  class="col-md-3 col-md-offset-1 control-label"><label for="question-3">安全问题3</label></div> 
         <div class=" col-md-4"> 
-          <select class="form-control" name="question-3"> 
+          <select class="form-control" id="question-3" name="question-3"> 
             {{ select_options(questionOptions,question3|default('lover')) }} 
           </select> 
         </div> 
       </div> 
     
       <div class="form-group row"> 
-        <div  class="col-md-3 col-md-offset-1 control-label">答案</div> 
+        <div  class="col-md-3 col-md-offset-1 control-label"><label for="answer-3">答案</label></div> 
         <div class=" col-md-4"> 
-          <input type="text" name="answer-3" class="form-control" value="" placeholder="安全问题3答案"> 
+          <input type="text" id="answer-3" name="answer-3" class="form-control" value="" placeholder="安全问题3答案"> 
         </div> 
       </div> 
 
       <div class="form-group row"> 
-        <div  class="col-md-3 col-md-offset-1 control-label text-danger">您的登陆密码</div> 
+        <div  class="col-md-3 col-md-offset-1 control-label text-danger"><label for="userLoginPassword">您的登陆密码</label></div> 
         <div class=" col-md-4"> 
-          <input type="password" name="userLoginPassword" class="form-control" value=""> 
+          <input type="password" id="userLoginPassword" name="userLoginPassword" class="form-control" value=""> 
         </div> 
       </div> 
 
