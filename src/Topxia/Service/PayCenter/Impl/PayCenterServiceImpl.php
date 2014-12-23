@@ -22,13 +22,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 				return;
 			}
 
-			if($order["coupon"]) {
-				$couponApp = $this->getAppService()->findInstallApp("Coupon");
-				if(!empty($couponApp)) {
-					$this->getCouponService()->useCoupon($order["coupon"], $order);
-				}
-			}
-
 			$this->proccessCashFlow($order);
 
 			list($success, $router, $order) = $this->processOrder($payData);
@@ -49,6 +42,14 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		$connection = ServiceKernel::instance()->getConnection();
 		try {
 			$connection->beginTransaction();
+
+			if($order["coupon"]) {
+				$couponApp = $this->getAppService()->findInstallApp("Coupon");
+				if(!empty($couponApp)) {
+					$this->getCouponService()->useCoupon($order["coupon"], $order);
+				}
+			}
+
 			list($success, $order) = $this->getOrderService()->payOrder($payData);
 
 			$processor = OrderProcessorFactory::create($order["targetType"]);
