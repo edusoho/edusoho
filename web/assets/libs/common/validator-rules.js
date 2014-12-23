@@ -210,12 +210,12 @@ define(function(require, exports, module) {
             }
         ],
         [
-            'SMTP_check',
+            'smtp_check',
             function() {
 
-                var SMTP = $('[name=host]').val();
-                SMTP = SMTP.substring(0,5);
-                if (SMTP == 'smtp.') {
+                var smtp = $('[name=host]').val();
+                smtp = smtp.substring(0,5);
+                if (smtp == 'smtp.') {
                     return true;
                 }else{
                     return false;
