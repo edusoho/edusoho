@@ -52,7 +52,7 @@ class CourseSearchController extends BaseController
 		$paginator = new Paginator(
 			$this->get('request')
 			,$total
-			, 10
+			, 18
 		);
 		$courses = $this->getCustomCourseSearcheService()->searchCourses(
 			$options, null,
