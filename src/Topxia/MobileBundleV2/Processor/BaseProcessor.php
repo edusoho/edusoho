@@ -63,6 +63,11 @@ class BaseProcessor {
         return $this->controller->getService('Content.BlockService');
     }
 
+    protected function getUploadFileService()
+    {
+        return $this->controller->getService('File.UploadFileService');
+    }
+
     protected function getUserService(){
         return $this->controller->getService('User.UserService');
     }
