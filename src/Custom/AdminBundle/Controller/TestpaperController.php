@@ -428,7 +428,8 @@ class TestpaperController extends BaseController
             $conditions['stem'] = $conditions['keyword'];
         }
 
-
+        $knowledgeSearchs = empty($conditions['knowledgeIds']) ? array() : $this->getKnowledgeService()->findKnowledgeByIds(explode(',',$conditions['knowledgeIds']));
+        $tagSearchs = empty($conditions['tagIds']) ? array() : $this->getTagService()->findTagsByIds(explode(',',$conditions['tagIds']));
         $replace = empty($conditions['replace']) ? '' : $conditions['replace'];
         $part = empty($conditions['part']) ? 0 : $conditions['part'];
 
@@ -449,6 +450,8 @@ class TestpaperController extends BaseController
             'category' => $category,
             'testpaper' => $testpaper,
             'questions' => $questions,
+            'knowledgeSearchs' => $knowledgeSearchs,
+            'tagSearchs' => $tagSearchs,
             'replace' => $replace,
             'part' => $part,
             'paginator' => $paginator,
