@@ -67,7 +67,7 @@ class CourseThreadController extends BaseController
         } else {
             $course = $this->getCourseService()->tryManageCourse($courseId);
         }
-
+        $isModal = $request->query->get('isModal');
         $form = $this->createThreadForm($thread);
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -75,7 +75,7 @@ class CourseThreadController extends BaseController
                 $thread = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
                 
                 if ($user->isAdmin()) {
-                    $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$thread['id']), true);
+                    $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$thread['id'],'isModal'=>$isModal), true);
                     $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员编辑");
                 }
                 return $this->showThread($request,$courseId,$id);
@@ -88,6 +88,7 @@ class CourseThreadController extends BaseController
             'course' => $course,
             'thread' => $thread,
             'type' => $thread['type'],
+            'isModal'=>$isModal
         ));
 
     }
@@ -194,7 +195,7 @@ class CourseThreadController extends BaseController
         $thread = $this->getThreadService()->getThread($courseId, $threadId);
 
         $form = $this->createPostForm($post);
-
+        $isModal = $request->query->get('isModal');
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
             if ($form->isValid()) {
@@ -214,6 +215,7 @@ class CourseThreadController extends BaseController
             'form' => $form->createView(),
             'post' => $post,
             'thread' => $thread,
+            'isModal' =>$isModal
         ));
 
     }
@@ -241,7 +243,7 @@ class CourseThreadController extends BaseController
         } else {
             $isMemberNonExpired = true;
         }
-        
+        $isModal = $request->query->get('isModal');
         $thread = $this->getThreadService()->getThread($course['id'], $id);
         if (empty($thread)) {
             throw $this->createNotFoundException("话题不存在，或已删除。");
@@ -272,7 +274,6 @@ class CourseThreadController extends BaseController
         $this->getThreadService()->hitThread($courseId, $id);
 
         $isManager = $this->getCourseService()->canManageCourse($course['id']);
-
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $thread['lessonId']);
         return $this->render("TopxiaWebBundle:CourseThread:show.html.twig", array(
             'course' => $course,
@@ -285,6 +286,7 @@ class CourseThreadController extends BaseController
             'isManager' => $isManager,
             'isMemberNonExpired' => $isMemberNonExpired,
             'paginator' => $paginator,
+            'isModal'=>$isModal
         ));
     }
 
