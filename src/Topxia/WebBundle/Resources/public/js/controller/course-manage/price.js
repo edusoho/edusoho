@@ -15,14 +15,14 @@ define(function(require, exports, module) {
             var element = $(this);
             var cash_rate= element.data("cashrate");
             var price = element.val();
-            $("input[name='coinPrice']").attr('value',parseFloat(price)/parseFloat(cash_rate));
+            $("input[name='coinPrice']").attr('value',parseFloat(price)*parseFloat(cash_rate));
         });
 
         $("input[name='coinPrice']").on('input',function(){
             var element = $(this);
             var cash_rate= element.data("cashrate");
             var price = element.val();
-            $("input[name='price']").attr('value',parseFloat(price)*parseFloat(cash_rate));
+            $("input[name='price']").attr('value',parseFloat(price)/parseFloat(cash_rate));
         });
 
         var validator = new Validator({
@@ -60,13 +60,13 @@ define(function(require, exports, module) {
                     var priceDisabled= $form.find('[name=price]').attr("disabled");
                     var coinPriceDisabled= $form.find('[name=coinPrice]').attr("disabled");
                     if(priceDisabled == "disabled"){
-                        var turePrice=parseFloat(coinPrice)*parseFloat(cash_rate);
+                        var turePrice=parseFloat(coinPrice)/parseFloat(cash_rate);
                         if(price!=turePrice){
                             return false;
                         }
                     }
                     if(coinPriceDisabled == "disabled"){
-                        var turePrice=parseFloat(price)/parseFloat(cash_rate);
+                        var turePrice=parseFloat(price)*parseFloat(cash_rate);
                         if(coinPrice!=turePrice){
                             return false;
                         }

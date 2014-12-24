@@ -200,11 +200,11 @@ class CourseManageController extends BaseController
             $price = $request->request->get('price');
             $coinPrice = $request->request->get('coinPrice');
             if($price == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] == 'Coin'){
-                $fields['price'] = floatval($coinPrice)*floatval($cashRate);
+                $fields['price'] = floatval($coinPrice)/floatval($cashRate);
             }
 
             if($coinPrice == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] =='RMB'){
-                $fields['coinPrice'] = floatval($price)/floatval($cashRate);
+                $fields['coinPrice'] = floatval($price)*floatval($cashRate);
             }
 
             if(isset($fields['freeStartTime'])){
