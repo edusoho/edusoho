@@ -16,17 +16,19 @@
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
             
           	<div class="form-group">
-              <div class="col-md-3 control-label col-md-offset-2">选择支付方式</div>
-              <div class="col-md-7 controls">
+              <div class="col-md-2 control-label col-md-offset-2">
+                选择支付方式
+              </div>
+              <div class="col-md-7 controls pull-left">
               {% for payment, options in payments %}
               <input type="radio"  role="payTypeChoices" name="payTypeChoices" id="zhiFuBao" value="zhiFuBao" checked="checked"/>
-              <img src="{{ asset('assets/img/order/alipay.gif') }}" /></br></br>
+              <img src="{{ asset('assets/img/order/alipay.gif') }}" width="80px"/></br></br>
               {% endfor %}
               </div>
             </div>
             <div class="form-group pay">
-              <div class="col-md-offset-10 controls">
-                <button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">支付</button>
+              <div class="col-md-offset-8 controls">
+                <button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">去支付</button>
               </div>
             </div>
           </form>

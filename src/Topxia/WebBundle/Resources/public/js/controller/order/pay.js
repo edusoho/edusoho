@@ -1,5 +1,23 @@
 define(function(require, exports, module) {
-	
+	var Validator = require('bootstrap.validator');
+
+
+	Validator.addRule.apply(Validator, [
+		'payPasswordRequired', 
+		function(options) {
+		    var coinNum = $("input[role='coinNum']").val();
+		    var pass = false;
+			if(coinNum>0) {
+				var password = options.element.value;
+				if($.trim(password) != "") {
+					pass = true;
+				}
+			}
+		    return pass;
+		}, 
+		'请填写支付密码'
+	]);
+
 	exports.run = function() {
 		var cashRateElement = $('[role="cash-rate"]');
 		var cashRate = 1;
@@ -16,8 +34,8 @@ define(function(require, exports, module) {
 			var payAmount = totalPrice-couponAmount;
 			if(payAmount <= 0){
 				payAmount = 0;
-				$('[role="cash-discount"]').text(0.00);
-				$('[role="coinNum"]').val(0.00);
+				$('[role="cash-discount"]').text(0);
+				$('[role="coinNum"]').val(0);
 			} 
 
 			if(payAmount>0) {
@@ -28,7 +46,7 @@ define(function(require, exports, module) {
 			if(cashRateElement.data("coursePriceShowType") == "Coin") {
 				$('[role="pay-coin"]').text(payAmount);
 				var payRmb = payAmount/cashRate;
-				fixedPayRmb = payRmb.toFixed(2);
+				fixedPayRmb = parseFloat(payRmb.toFixed(2));
 				if(fixedPayRmb<payRmb){
 					fixedPayRmb = parseFloat(fixedPayRmb)+0.01;
 				}
@@ -47,8 +65,8 @@ define(function(require, exports, module) {
 		$('[role="coinNum"]').blur(function(e){
 			var coin = $(this).val();
 			if(isNaN(coin)){
-				$(this).val("0.00");
-				$('[role="cash-discount"]').text("0.00");
+				$(this).val("0");
+				$('[role="cash-discount"]').text("0");
 				return;
 			}
 			var cash = $('[role="accountCash"]').text();
@@ -95,7 +113,7 @@ define(function(require, exports, module) {
 			$('[role="no-use-coupon-code"]').show();
 			$("#coupon-code-btn").show();
 			$('[role="code-notify"]').hide();
-			$('[role="coupon-price"]').find(".price_r_num").text("0.00");
+			$('[role="coupon-price"]').find(".price_r_num").text("0");
 			$('[role="code-notify"]').text("");
 			$('[role="coupon-code"]').val("");
 			$(this).hide();
@@ -133,6 +151,7 @@ define(function(require, exports, module) {
 			})
 		})
 
+
 		var validator = new Validator({
             element: '#order-create-form',
             triggerType: 'change',
@@ -140,11 +159,20 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
+				
                 $('#order-create-btn').button('submiting').addClass('disabled');
             }
         });
 
-        
+		if($("input[name='payPassword'").length>0) {
+			// validator.addItem({
+			//     element: '[name=payPassword]',
+			//     rule:'payPasswordRequired'
+			// });
+		}
+ 		
+ 		$('[role="coinNum"]').blur();
+ 		conculatePrice();
 
 	}
 });
