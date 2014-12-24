@@ -14,7 +14,7 @@ class CartsController extends BaseController
         $user = $this->getCurrentUser();
         $carts = $this->getCartsService()->findCartsByUseId($user['id']);
         array_slice($carts,0,5);
-        $courses = array();
+        $courses = array();$users = array();
         if (!empty($carts)){
             $courseIds = ArrayToolkit::column($carts,'itemId');
             $courses = $this->getCourseService()->findCoursesByIds($courseIds);
@@ -40,7 +40,7 @@ class CartsController extends BaseController
         }
 
         $user = $this->getCurrentUser();
-        $favoritedCourses = $this->getCourseService()->findUserFavoritedCourses($user['id'],0,5);
+        $favoritedCourses = $this->getCourseService()->findUserFavoritedCourses($user['id'],0,10);
 
         return $this->render('CustomWebBundle:Carts:course-list.html.twig',array(
             'hotSaleCourses' => $hotSaleCourses,

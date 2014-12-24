@@ -71,7 +71,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 	width: 250px;
 	height: 50px;
 	border-bottom: 1px solid rgba(0,0,0,0.18);
-    _border-bottom: 1px solid #ddd;
+	margin-bottom: 5px;
 }
 
 .carts-popover-list {
@@ -99,19 +99,17 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 	white-space: nowrap;
 }
 
-.cart-courses {
-	margin-left: 20px;
+.popover-empty{
+	color: #999;
+	padding:5px 20px;
+	text-align: center;
 }
 
-.cart-courses .item-course{
-  width: 200px; 
-  height: 180px; 
-  padding: 8px;
+.item-courses-show{
+	padding: 10px;
 }
 
-.cart-courses .course-grids {
-  margin: 0 -15px 0 0;
-  padding: 0;
-  list-style: none;
+.carousel .carousel-control {
+	background-image: none;
+	background: none;
 }
-

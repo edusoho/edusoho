@@ -1,26 +1,74 @@
-<div id="hot-sale-courses" class="cart-courses course-grids">
-  {% for course in hotSaleCourses %}
-    <li class="course-grid item-course">
-      <div class="thumb-img-background" align=center>
-        <a href="{{ path('course_show', {id:course.id}) }}" target="_blink">
-          <img src="{{ default_path('coursePicture',course.smallPicture, '') }}" width=100%>
-        </a>
-      </div>
-      <h4><strong><span class="text-danger">  ¥ </span><span data-role="total-price" class="text-danger">{{ course.price }}</span></strong></h4>
-      <div class="courseware-thumb-title">{{ course.title|plain_text(25) }}</div>
-    </li>
-  {% endfor %}
+<div id="hot-sale-courses">
+  <div id="carousel-hot-salt-course" class="carousel slide row" data-ride="carousel" data-interval="false">
+    <div class="carousel-inner" role="listbox">
+      {% set index = 0 %}
+      {% set keys = hotSaleCourses|keys %}
+      {% for i in 0..((hotSaleCourses|length)//4) if hotSaleCourses|length > 0 %}
+        <div class="item row {% if i == 0 %} active {% endif %}">
+          {% for j in 1..4 if keys[index] is defined %}
+          {% set hotSaleCourse = hotSaleCourses[keys[index]] %}
+            <div class="col-md-3 item-courses-show">
+              <div class="thumbnail">
+                <a href="{{ path('course_show', {id:hotSaleCourse.id}) }}" target="_blink">
+                  <img src="{{ default_path('coursePicture',hotSaleCourse.smallPicture, '') }}" width=100%>
+                </a>
+                <h4><strong><span class="text-danger">  ¥ </span><span data-role="total-price" class="text-danger">{{ hotSaleCourse.price }}</span></strong></h4>
+                <h4 class="courseware-thumb-title">{{ hotSaleCourse.title|plain_text(25) }}</h4>
+              </div>
+            </div>
+            {% set index = index +1 %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="item active tac">
+          <div class="empty" style="margin-right: auto; margin-left: auto;"></div>
+        </div>
+      {% endfor %}
+    </div>
+    <a class="left carousel-control col-md-1" href="#carousel-hot-salt-course" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control col-md-1" href="#carousel-hot-salt-course" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
 </div>
 
-<div id="favorited-courses" class="cart-courses course-grids hide">
-  {% for favoritedCourse in favoritedCourses %}
-    <li class="course-grid item-course">
-      <div class="thumb-img-background" align=center>
-        <a href="{{ path('course_show', {id:FavoritedCourse.id}) }}" target="_blink">
-          <img src="{{ default_path('coursePicture',FavoritedCourse.smallPicture, '') }}" width=100%>
-        </a>
-      </div>
-      <div class="courseware-thumb-title">{{ FavoritedCourse.title|plain_text(25) }}</div>
-    </li>
-  {% endfor %}
+<div id="favorited-courses" class="hide">
+  <div id="carousel-favorited-course" class="carousel slide row" data-ride="carousel" data-interval="false">
+    <div class="carousel-inner" role="listbox">
+      {% set index = 0 %}
+      {% set keys = favoritedCourses|keys %}
+      {% for i in 0..((favoritedCourses|length)//4) if favoritedCourses|length > 0 %}
+        <div class="item row {% if i == 0 %} active {% endif %}">
+          {% for j in 1..4 if keys[index] is defined %}
+          {% set favoritedCourse = favoritedCourses[keys[index]] %}
+            <div class="col-md-3 item-courses-show">
+              <div class="thumbnail">
+                <a href="{{ path('course_show', {id:favoritedCourse.id}) }}" target="_blink">
+                  <img src="{{ default_path('coursePicture',favoritedCourse.smallPicture, '') }}" width=100%>
+                </a>
+                <h4 class="courseware-thumb-title">{{ favoritedCourse.title|plain_text(25) }}</h4>
+              </div>
+            </div>
+            {% set index = index +1 %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="item active tac">
+          <div class="empty" style="margin-right: auto; margin-left: auto;">暂无收藏的课程</div>
+        </div>
+      {% endfor %}
+    </div>
+    <a class="left carousel-control col-md-1" href="#carousel-favorited-course" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control col-md-1" href="#carousel-favorited-course" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
 </div>
