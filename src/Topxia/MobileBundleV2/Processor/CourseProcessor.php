@@ -8,7 +8,14 @@ interface CourseProcessor
 	public function getLearningCourse();
 	public function getLearnedCourse();
 	public function getFavoriteCoruse();
+
+	/**
+	* tagId    	标签id 
+	* search 	搜索内容
+	* 参数只能有一个 tagId或search
+	*/
 	public function searchCourse();
+	
 	public function getCourse();
 	public function getReviews();
 
@@ -88,7 +95,7 @@ interface CourseProcessor
 	public function getNoteList();
 
 	/**
-	* 获取课程所有笔记
+	* 获取课程下所有笔记
 	*/
 	public function getCourseNotes();
 
@@ -109,4 +116,10 @@ interface CourseProcessor
 	 *删除一条笔记
 	 */
 	public function DeleteNote();
+
+	/**
+	*
+	*获取学堂页面展示数据
+	*/
+	public function getSchoolRoom();
 }
