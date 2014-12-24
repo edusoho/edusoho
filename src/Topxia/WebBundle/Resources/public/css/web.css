@@ -4731,9 +4731,18 @@ a.homework-essay-textarea-pack-up{
 }
 
 .pay-center .pay-amount {
-	font-size: 18px;
+	font-size: 20px;
 }
 
 .pay-center .pay-amount span {
 	color: #ff6600;
+}
+
+.pay-center .pay-type-lable {
+	padding-bottom: 10px
+}
+
+.pay-center .pay-button {
+	float:left;
+	margin-top: 15px;
 }
