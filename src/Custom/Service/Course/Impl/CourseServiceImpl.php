@@ -232,6 +232,12 @@ class CourseSerialize
     			$course['columns'] = null;
     		}
     	}
+    	if (isset($course['freeStartTime'])) {
+    		$course['freeStartTime'] = strtotime($course['freeStartTime']);
+    	}
+    	if (isset($course['freeEndTime'])) {
+    		$course['freeEndTime'] = strtotime($course['freeEndTime']);
+    	}
         return $course;
     }
 
