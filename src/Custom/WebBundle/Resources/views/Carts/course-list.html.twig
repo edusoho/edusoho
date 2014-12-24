@@ -47,7 +47,7 @@
           {% set favoritedCourse = favoritedCourses[keys[index]] %}
             <div class="col-md-3 item-courses-show">
               <div class="thumbnail">
-                <a href="{{ path('course_show', {id:favoritedCourse.id}) }}" target="_blink">
+                <a href="{{ path('course_show', {id:favoritedCourse.id}) }}" target="_blank">
                   <img src="{{ default_path('coursePicture',favoritedCourse.smallPicture, '') }}" width=100%>
                 </a>
                 <h4 class="courseware-thumb-title">{{ favoritedCourse.title|plain_text(25) }}</h4>
