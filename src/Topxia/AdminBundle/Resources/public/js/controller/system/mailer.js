@@ -16,7 +16,6 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="host"]',
                     required: true,
-                    rule: 'smtp_check',
                     errormessageRequired: '请输入SMTP服务器地址'
                 });
                 validator.addItem({

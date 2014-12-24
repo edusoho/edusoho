@@ -210,19 +210,6 @@ define(function(require, exports, module) {
             }
         ],
         [
-            'smtp_check',
-            function() {
-
-                var smtp = $('[name=host]').val();
-                smtp = smtp.substring(0,5);
-                if (smtp == 'smtp.') {
-                    return true;
-                }else{
-                    return false;
-                }
-            },"格式不正确，请输入正确的服务地址"
-        ],
-        [
             'date_check',
             function() {
 
