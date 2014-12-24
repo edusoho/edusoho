@@ -170,8 +170,7 @@ class CourseManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($id);
         
 
-        $code = 'ChargeCoin';
-        $ChargeCoin = $this->getAppService()->findInstallApp($code);
+        $ChargeCoin = $this->getAppService()->findInstallApp('ChargeCoin');
         if($ChargeCoin){
             $coinSetting=$this->getSettingService()->get('coin',array());
             if(isset($coinSetting['cash_rate'])){
@@ -200,7 +199,7 @@ class CourseManageController extends BaseController
             $price = $request->request->get('price');
             $coinPrice = $request->request->get('coinPrice');
             if($price == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] == 'Coin'){
-                $fields['price'] = floatval($coinPrice)/floatval($cashRate);
+               $fields['price'] = ceil(floatval((floatval($coinPrice)/floatval($cashRate))*100))/100;
             }
 
             if($coinPrice == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] =='RMB'){

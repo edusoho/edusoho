@@ -24,7 +24,7 @@
   </div>
 </div>
 {% endif %}
-
+{{dump(isCoursePrice(course.title))}}
 {% if course.type == 'live' %}
 
   {% include 'TopxiaWebBundle:Course:live-course.html.twig' %}
