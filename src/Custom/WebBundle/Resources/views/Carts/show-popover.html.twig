@@ -16,7 +16,7 @@
       </span>
 
       <a href="{{ path('course_show', {id:course.id}) }}" target="_blink">
-        <span class="apply-name">{{ course.title }}</span>
+        <span class="apply-name">{{ course.title|plain_text(5) }}</span>
       </a>
       <div class="popover-teachers">
         {% if course.teacherIds|default(null) %}
@@ -31,9 +31,9 @@
     {% endfor %}
   </ul>
 </div>
-  <a href="{{ path('carts_list') }}" class="btn btn-danger btn-xs pull-right">去购物车结算</a>
+  <a href="{{ path('carts_list') }}" class="btn btn-danger btn-xs pull-right" target="_blank">去购物车结算</a>
 {% else %}
-  您的购物车还是空的，赶紧行动吧！
+  <div class="popover-empty">您的购物车还是空的，赶紧行动吧！<a href="{{ path('homepage') }}" target="_blank">去首页看看</a></div>
 {% endif %}
 
 

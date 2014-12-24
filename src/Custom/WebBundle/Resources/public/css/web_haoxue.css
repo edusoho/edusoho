@@ -71,7 +71,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 	width: 250px;
 	height: 50px;
 	border-bottom: 1px solid rgba(0,0,0,0.18);
-    _border-bottom: 1px solid #ddd;
+	margin-bottom: 5px;
 }
 
 .carts-popover-list {
@@ -97,4 +97,19 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 	word-wrap:break-word; 
 	overflow:hidden;
 	white-space: nowrap;
+}
+
+.popover-empty{
+	color: #999;
+	padding:5px 20px;
+	text-align: center;
+}
+
+.item-courses-show{
+	padding: 10px;
+}
+
+.carousel .carousel-control {
+	background-image: none;
+	background: none;
 }

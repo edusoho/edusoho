@@ -14,9 +14,10 @@ class CartsController extends BaseController
         $user = $this->getCurrentUser();
         $carts = $this->getCartsService()->findCartsByUseId($user['id']);
         array_slice($carts,0,5);
+
         $courses = array();
         $users = array();
-        
+
         if (!empty($carts)){
             $courseIds = ArrayToolkit::column($carts,'itemId');
             $courses = $this->getCourseService()->findCoursesByIds($courseIds);
@@ -32,11 +33,21 @@ class CartsController extends BaseController
         ));
     }
 
-    public function hotSaleAction(Request $request)
+    public function CartCoursesAction(Request $request)
     {
-        $courses = $this->getCourseService()->findhotSaleCourses();
-        return $this->render('CustomWebBundle:Carts:show-popover.html.twig',array(
-            'courses' =>$courses,
+        $hotSales = $this->getCourseService()->findhotSaleCourses();
+        $hotSaleCourses = array();
+        if (!empty($hotSales)){
+            $courseIds = ArrayToolkit::column($hotSales,'courseId');
+            $hotSaleCourses = $this->getCourseService()->findCoursesByIds($courseIds);
+        }
+
+        $user = $this->getCurrentUser();
+        $favoritedCourses = $this->getCourseService()->findUserFavoritedCourses($user['id'],0,10);
+
+        return $this->render('CustomWebBundle:Carts:course-list.html.twig',array(
+            'hotSaleCourses' => $hotSaleCourses,
+            'favoritedCourses' => $favoritedCourses
         ));
     }
 
@@ -57,7 +68,6 @@ class CartsController extends BaseController
         } else {
             return $this->createJsonResponse(array('status'=>'fail'));
         }
-
     }
 
     public function listAction(Request $request)

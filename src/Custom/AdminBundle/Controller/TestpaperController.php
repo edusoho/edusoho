@@ -468,7 +468,7 @@ class TestpaperController extends BaseController
         }
 
         $category = $this->getCategoryByTarget($testpaper['target']);
-        $part = empty($request->query->get('part')) ? 0 : $request->query->get('part');
+        $part = $request->query->get('part');
 
         $question = $this->getQuestionService()->getQuestion($request->query->get('questionId'));
         if (empty($question)) {

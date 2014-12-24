@@ -1,14 +1,13 @@
+<div id="float-carts" class="float-carts" data-url={{ path('carts_show') }}>
+  <div class="btn-carts">
+    <span class="btn btn-danger">
+      <span class="glyphicon glyphicon-shopping-cart"></span>
+    </span>
+  </div>
+</div>
+
 {% if setting('consult.enabled', 0) and (consultDisplay|default(false) or siteNav|default() == '/' ) %}
 {% set consult = setting('consult') %}
-{#   <div id="float-carts" class="float-carts" data-url={{ path('carts_show') }}>
-    <div class="btn-carts">
-      <span class="btn btn-{{consult.color}}">
-        <span class="glyphicon glyphicon-shopping-cart"></span>
-      </span>
-    </div>
-    
-  </div> #}
-
   <div id="float-consult" class="float-consult">
     <div class="btn-group-vertical">
       {% set break = 0 %}
