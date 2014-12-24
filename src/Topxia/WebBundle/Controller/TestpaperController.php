@@ -390,7 +390,9 @@ class TestpaperController extends BaseController
                 $questionTypes = ArrayToolkit::index(empty($item['items']) ? array() : $item['items'], 'questionType');
 
                 if(array_key_exists('essay', $questionTypes)){
-                    array_push($types, 'material');
+                    if(!in_array('material', $types)) {
+                        array_push($types, 'material');
+                    }
                 }
             }
         }
