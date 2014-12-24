@@ -11,8 +11,31 @@ class PayCenterController extends BaseController
 {
 	public function showAction(Request $request)
 	{
+
+        $user = $this->getCurrentUser();
+
+        if(!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，不能支付。');
+        }
+
 		$fields = $request->query->all();
 		$order = $this->getOrderService()->getOrder($fields["id"]);
+
+        if (empty($order)) {
+            return $this->createMessageResponse('error', '订单不存在!');
+        }
+
+        if($order["userId"] != $user["id"]){
+            return $this->createMessageResponse('error', '不是您的订单，不能支付');
+        }
+
+        if($order["status"] != "created") {
+            return $this->createMessageResponse('error', '订单状态被更改，不能支付');
+        }
+
+        if(($order["createdTime"] + 40*60*60) < time()) {
+            return $this->createMessageResponse('error', '订单已经过期，不能支付');
+        }
 
         if($order["amount"] == 0 && $order["coinAmount"] == 0) {
             $payData = array(

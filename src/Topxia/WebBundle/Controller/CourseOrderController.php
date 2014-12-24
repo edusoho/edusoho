@@ -22,7 +22,13 @@ class CourseOrderController extends OrderController
 
     public function repayAction(Request $request)
     {
+        $user = $this->getCurrentUser();
+        if(!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，不能支付。');
+        }
+
         $order = $this->getOrderService()->getOrder($request->query->get('orderId'));
+
 
         if (empty($order)) {
             return $this->createMessageResponse('error', '订单不存在!');
@@ -30,6 +36,10 @@ class CourseOrderController extends OrderController
 
         if ((time() - $order['createdTime']) > 40 * 3600 ) {
             return $this->createMessageResponse('error', '订单已过期，不能支付，请重新创建订单。');
+        }
+
+        if($order["userId"] != $user["id"]){
+            return $this->createMessageResponse('error', '不是您的订单，不能支付');
         }
 
         $course = $this->getCourseService()->getCourse($order['targetId']);
