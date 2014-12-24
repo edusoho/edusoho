@@ -50,7 +50,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         $conditions = array_filter($conditions);
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
-            if (!in_array($conditions['keywordType'], array('content', 'courseId'))) {
+            if (!in_array($conditions['keywordType'], array('content', 'courseId', 'courseTitle' ))) {
                 throw $this->createServiceException('keywordType参数不正确');
             }
             $conditions[$conditions['keywordType']] = $conditions['keyword'];

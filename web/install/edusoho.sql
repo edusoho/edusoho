@@ -950,6 +950,8 @@ CREATE TABLE `user` (
   `promoted` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推荐',
   `promotedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否被禁止',
+  `lockDeadline` int(10) not null default '0' COMMENT '帐号锁定期限', 
+  `consecutivePasswordErrorTimes` int not null default '0' COMMENT '帐号密码错误次数', 
   `lastPasswordFailTime` int(10) not null default '0',
   `loginTime` int(11) NOT NULL DEFAULT '0' COMMENT '最后登录时间',
   `loginIp` varchar(64) NOT NULL DEFAULT '' COMMENT '最后登录IP',
@@ -1177,5 +1179,16 @@ CREATE TABLE `groups_thread_goods` (
   `fileId` int(10) unsigned NOT NULL DEFAULT '0',
   `hitNum` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS `upload_files_share`;
+CREATE TABLE `upload_files_share` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `sourceUserId` int(10) UNSIGNED NOT NULL COMMENT '上传文件的用户ID',
+  `targetUserId` int(10) UNSIGNED NOT NULL COMMENT '文件分享目标用户ID',
+  `isActive` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否有效',
+  `createdTime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

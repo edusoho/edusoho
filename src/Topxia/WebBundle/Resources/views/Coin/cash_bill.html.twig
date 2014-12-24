@@ -21,8 +21,8 @@
 
       {#<button class="btn btn-primary">搜索</button>#}
        <div class="control-label pull-right" style="padding-top: 8px;">
-        收入：<span style="color:green;">{{ amountInflow }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        支出：<span style="color:red;">{{ amountOutflow }}</span>
+        收入：<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        支出：<span style="color:#ff7b0e;">{{ amountOutflow }}</span>
         </div>
     </form>
 
@@ -34,9 +34,9 @@
           <th><span class="text-sm">流水号</span></th>
           <th><span class="text-sm">名称</span></th>          
           <th><span class="text-sm">成交时间</span></th>
-          <th><span class="text-sm">收支</span></th>
+          <th class="text-right" style="padding-right: 60px;"><span class="text-sm">收支</span></th>
           
-          <th>支付方式</th>
+          <th><span class="text-sm">支付方式</span></th>
         </tr>
         {% for cash in cashes %}
            <tr>
@@ -46,13 +46,13 @@
             <td><span class="text-sm">{{cash.createdTime|date('Y-m-d H:i:s')}}</span></td>
 
             {% if cash.type =="inflow" %}
-            <td style="color:#1bb974">
+            <td class="text-right" style="color:#1bb974;padding-right: 50px;">
                {{cash.amount}} 
             </td>
             {% endif %}
             {% if cash.type =="outflow" %}
-            <td style="color:#ff7b0e">
-              -&nbsp;{{cash.amount}} 
+            <td  class="text-right" style="color:#ff7b0e;padding-right: 50px;">
+               -&nbsp;{{cash.amount}}               
             </td>
             {% endif %}
            

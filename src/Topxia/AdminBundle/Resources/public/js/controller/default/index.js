@@ -29,25 +29,45 @@ define(function(require, exports, module) {
             $alert.append(html);
             $alert.removeClass('hide');
         });*/
-
-        $.post($('#operation-analysis-title').data('url'),function(html){
-            $('#operation-analysis-table').html(html);
+        
+        $.ajax({
+            url: $('#operation-analysis-title').data('url'),
+            type: 'POST',
+            async: false,
+            success: function(html){
+                $('#operation-analysis-table').html(html);
+            }
         });
 
 /*        $.post($('#open-message-title').data('url'),function(html){
             $('#edusoho-open-message').html(html);
         });*/
 
-        $.post($('#system-status-title').data('url'),function(html){
-            $('#system-status').html(html);
+        $.ajax({
+            url: $('#system-status-title').data('url'),
+            type: 'POST',
+            async: false,
+            success: function(html){
+                $('#system-status').html(html);
+            }
         });
 
-        $.post($('#onlineNum').data('url'),function(res){
-            $('#onlineNum').html("当前在线："+res.onlineCount+"人");
+        $.ajax({
+            url: $('#onlineNum').data('url'),
+            type: 'POST',
+            async: false,
+            success: function(res){
+                $('#onlineNum').html("当前在线："+res.onlineCount+"人");
+            }
         });
 
-        $.post($('#loginNum').data('url'),function(res){
-            $('#loginNum').html("登录人数："+res.loginCount+"人");
+        $.ajax({
+            url: $('#loginNum').data('url'),
+            type: 'POST',
+            async: false,
+            success: function(res){
+                $('#loginNum').html("登录人数："+res.loginCount+"人");
+            }
         });
     };
 
