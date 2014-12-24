@@ -76,15 +76,9 @@
 						{% endif %}
 					{% endif %}
 
-				{% for homeworkLessonId in homeworkLessonIds %}
-					{% if item.id == homeworkLessonId  %}
-						<span class="glyphicon  glyphicon-pencil" title="此课时有作业"></span>
-					{% endif %}
-				{% endfor %}
-				
-				{% for exercisesLessonId in exercisesLessonIds %}
-					{% if  item.id == exercisesLessonId  %}
-						<span class="glyphicon  glyphicon-pushpin" title="此课时有练习"></span>
+				{% for lessonId in lessonIds %}
+					{% if item.id == lessonId  %}
+						<span class="glyphicon  glyphicon-list-alt" title="此课时有作业或练习"></span>
 					{% endif %}
 				{% endfor %}
 

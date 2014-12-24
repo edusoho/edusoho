@@ -276,10 +276,12 @@ class CourseController extends BaseController
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
 
-		$appCode = 'MaterialLib';
-        		$MaterialLib = $this->getAppService()->findInstallApp($appCode);
-                             $homeworkLessonIds =array();
-                             $exercisesLessonIds =array();
+        		$MaterialLib = $this->getAppService()->findInstallApp('MaterialLib');
+		$homeworkLessonIds =array();
+		$exercisesLessonIds =array();
+		$sameLessonIds =array();
+                        	$diffLessonIdsBetweenHomeworkAndSame = array();
+                        	$diffLessonIdsBetweenExerciseAndSame = array();
 
         		if($MaterialLib){
                                     $lessons = $this->getCourseService()->getCourseLessons($course['id']);
@@ -288,6 +290,27 @@ class CourseController extends BaseController
                                     $exercises = $this->getExerciseService()->findExercisesByLessonIds($lessonIds);
                                     $homeworkLessonIds = ArrayToolkit::column($homeworks,'lessonId');
                                     $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
+                                    $sameLessonIds=array_intersect($homeworkLessonIds,$exercisesLessonIds);
+                                    $homeworkLessonIdNum = count($homeworkLessonIds);
+                                    $exercisesLessonIdNum = count($exercisesLessonIds);
+                                    $sameLessonIdNum = count($sameLessonIds);
+
+                                    if($exercisesLessonIdNum > $sameLessonIdNum){
+                                    	foreach ($exercisesLessonIds as $key => $value) {
+                                    		if(!in_array($value,$sameLessonIds)){
+                                    			$diffLessonIdsBetweenHomeworkAndSame[]=$value;
+                                    		}
+                                    	}
+                                    }
+
+                                    if($homeworkLessonIdNum > $sameLessonIdNum){
+                                    	foreach ($homeworkLessonIds as $key => $value) {
+                                    		if(!in_array($value,$sameLessonIds)){
+                                    			$diffLessonIdsBetweenExerciseAndSame[]=$value;
+                                    		}
+                                    	}
+                                    }
+                                    $lessonIds=array_merge($sameLessonIds,$diffLessonIdsBetweenHomeworkAndSame,$diffLessonIdsBetweenExerciseAndSame);
         		}
 
 		if ($member && empty($member['locked'])) {
@@ -307,8 +330,7 @@ class CourseController extends BaseController
 				'weeks' => $weeks,
 				'files' => ArrayToolkit::index($files,'id'),
 				'ChargeCoin'=> $ChargeCoin,
-				'homeworkLessonIds'=>$homeworkLessonIds,
-				'exercisesLessonIds'=>$exercisesLessonIds
+				'lessonIds'=>$lessonIds,
 			));
 		}
 		
