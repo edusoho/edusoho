@@ -973,7 +973,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'excludeIds' => $part['excludeIds'],
             'parentId' => 0
         );
-        $questions = $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $part['count']);
+        $questions = $this->findPartQuestions($conditions, $part);
         $items = array();
         $index = 1;
         $excludeIds = array();
@@ -1008,6 +1008,20 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $excludeIds[] = $question['id'];
         }
         return array('items' => $items, 'excludeIds' => implode(',', $excludeIds));
+    }
+
+    private function findPartQuestions($conditions, $part)
+    {
+        $total = $this->getQuestionService()->searchQuestionsCount($conditions);
+        $questions = $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
+        shuffle($questions);
+        if (count($questions) < $part['count']) {
+            $this->createServiceException('请求题目数量大于已有题目数量!');
+        } else {
+            $questions = array_slice($questions, 0, $part['count']); 
+        }
+
+        return $questions;
     }
 
     public function buildPaper($paperId, $status)
