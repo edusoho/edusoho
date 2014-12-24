@@ -1,22 +1,6 @@
 define(function(require, exports, module) {
 	var Validator = require('bootstrap.validator');
-
-
-	Validator.addRule.apply(Validator, [
-		'payPasswordRequired', 
-		function(options) {
-		    var coinNum = $("input[role='coinNum']").val();
-		    var pass = false;
-			if(coinNum>0) {
-				var password = options.element.value;
-				if($.trim(password) != "") {
-					pass = true;
-				}
-			}
-		    return pass;
-		}, 
-		'请填写支付密码'
-	]);
+	require('common/validator-rules').inject(Validator);
 
 	exports.run = function() {
 		var cashRateElement = $('[role="cash-rate"]');
@@ -165,14 +149,13 @@ define(function(require, exports, module) {
         });
 
 		if($("input[name='payPassword'").length>0) {
-			// validator.addItem({
-			//     element: '[name=payPassword]',
-			//     rule:'payPasswordRequired'
-			// });
+			validator.addItem({
+			    element: '[name="payPassword"]',
+			    rule: 'remote',
+			    required : true
+			});
 		}
  		
  		$('[role="coinNum"]').blur();
- 		conculatePrice();
-
 	}
 });

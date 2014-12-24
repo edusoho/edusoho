@@ -153,6 +153,25 @@ class PayCenterController extends BaseController
         return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
     }
 
+    public function payPasswordCheckAction(Request $request)
+    {
+        $password = $request->query->get('value');
+
+        $user = $this->getCurrentUser();
+
+        if(!$user->isLogin()) {
+            $response = array('success' => false, 'message' => '用户未登录');
+        }
+        
+        $isRight = $this->getAuthService()->checkPayPassword($user["id"], $password);
+        if(!$isRight) {
+            $response = array('success' => false, 'message' => '支付密码不正确');
+        }
+        $response = array('success' => true, 'message' => '支付密码正确');
+
+        return $this->createJsonResponse($response);
+    }
+
     private function createPaymentResponse($name, $params)
     {
         $options = $this->getPaymentOptions($name);
@@ -210,6 +229,11 @@ class PayCenterController extends BaseController
         }
 
         return $enableds;
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 
 	protected function getOrderService()

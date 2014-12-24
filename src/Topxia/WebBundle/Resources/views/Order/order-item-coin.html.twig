@@ -31,7 +31,10 @@
         为了保障账户资金安全，暂时不可用，请先<a href="{{path('settings_pay_password')}}" class="btn-link">设置支付密码</a>。
       </div>
       {% else %}
-      <input name="payPassword" type="password" placeholder="请输入支付密码"/>
+      <label class="control-label" for="payPassword" style="display:none">支付密码</label>
+      <div class="controls">
+        <input id="payPassword" name="payPassword" type="password" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}"/>
+      </div>
       <div>
         <a href="{{path('settings_find_pay_password')}}" class="btn-link">忘记密码？</a>
       </div>

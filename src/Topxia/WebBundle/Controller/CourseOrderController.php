@@ -55,9 +55,6 @@ class CourseOrderController extends OrderController
 
     private function getOrderInfo($id)
     {
-        $coinPayAmount = 0;
-        $totalPrice = 0;
-
         $course = $this->getCourseService()->getCourse($id);
         $userIds = array();
         $userIds = array_merge($userIds, $course['teacherIds']);
@@ -70,8 +67,9 @@ class CourseOrderController extends OrderController
             $cashRate = $coinSetting["cash_rate"];
         }
 
-        $coursePriceShowType = "Coin";
-        if(array_key_exists("price_type", $coinSetting)) {
+        $coursePriceShowType = "RMB";
+        if(array_key_exists("coin_enabled", $coinSetting) 
+            && $coinSetting["coin_enabled"] && array_key_exists("price_type", $coinSetting)) {
             $coursePriceShowType = $coinSetting["price_type"];
         }
 
@@ -79,41 +77,34 @@ class CourseOrderController extends OrderController
         $account = $this->getCashAccountService()->getAccountByUserId($user["id"]);
         $accountCash = $account["cash"];
 
+        $coinPayAmount = 0;
+        $totalPrice = 0;
+
         $hasPayPassword = strlen($user['payPassword']) > 0;
 
-        if($hasPayPassword 
-            && array_key_exists("coin_enabled", $coinSetting) 
-            && $coinSetting["coin_enabled"]) {
-            if($coursePriceShowType == "RMB") {
-                $totalPrice = $course["price"];
-                if($totalPrice*100 > $accountCash/$cashRate*100) {
-                    $coinPayAmount = $accountCash;
-                } else {
-                    $coinPayAmount = $totalPrice*$cashRate;
-                }
-            } else if ($coursePriceShowType == "Coin") {
-                $totalPrice = $course["coinPrice"];
-                if($totalPrice*100 > $accountCash*100) {
-                    $coinPayAmount = $accountCash;
-                } else {
-                    $coinPayAmount = $totalPrice;
-                }                
+        if($coursePriceShowType == "RMB") {
+            $totalPrice = $course["price"];
+            if($totalPrice*100 > $accountCash/$cashRate*100) {
+                $coinPayAmount = $accountCash;
+            } else {
+                $coinPayAmount = $totalPrice*$cashRate;
             }
-        }
+        } else if ($coursePriceShowType == "Coin") {
+            $totalPrice = $course["coinPrice"];
+            if($hasPayPassword && $totalPrice*100 > $accountCash*100) {
+                $coinPayAmount = $accountCash;
+            } else if($hasPayPassword) {
+                $coinPayAmount = $totalPrice;
+            }                
+        } 
 
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
-        $vipApp = $this->getAppService()->findInstallApp("Vip");
-
-        if(!empty($vipApp)) {
-            $vip = $this->getVipService()->getMemberByUserId($user["id"]);
-        }
 
         return array(
             'courses' => empty($course) ? null : array($course),
             'users' => empty($users) ? null : $users,
             'account' => $account,
             'couponApp' => $couponApp,
-            'vipApp' => $vipApp,
             'cashRate' => $cashRate,
             'hasPayPassword' => $hasPayPassword,
             'payUrl' => 'course_order_pay',
@@ -124,9 +115,6 @@ class CourseOrderController extends OrderController
             'targetIds' => array($id),
             'targetTypes' => array("course"),
             'coursePriceShowType' => $coursePriceShowType,
-
-            'vip' => empty($vip) ? null : array($vip),
-
         );
     }
 

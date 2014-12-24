@@ -1473,6 +1473,11 @@ pay_success_show:
     pattern:  /pay/center/success/show
     defaults: { _controller: TopxiaWebBundle:PayCenter:showTarget }
 
+pay_password_check:
+    pattern:  /pay/password/check
+    defaults: { _controller: TopxiaWebBundle:PayCenter:payPasswordCheck }
+
+
 #占位
 vip:
     pattern: /vip/
