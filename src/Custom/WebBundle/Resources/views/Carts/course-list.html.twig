@@ -9,7 +9,7 @@
           {% set hotSaleCourse = hotSaleCourses[keys[index]] %}
             <div class="col-md-3 item-courses-show">
               <div class="thumbnail">
-                <a href="{{ path('course_show', {id:hotSaleCourse.id}) }}" target="_blink">
+                <a href="{{ path('course_show', {id:hotSaleCourse.id}) }}" target="_blank">
                   <img src="{{ default_path('coursePicture',hotSaleCourse.smallPicture, '') }}" width=100%>
                 </a>
                 <h4><strong><span class="text-danger">  ¥ </span><span data-role="total-price" class="text-danger">{{ hotSaleCourse.price }}</span></strong></h4>
