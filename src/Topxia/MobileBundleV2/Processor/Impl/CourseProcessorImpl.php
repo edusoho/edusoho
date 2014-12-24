@@ -1006,25 +1006,17 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	    	$sort[$key] = $value['latestMessageTime'];
 	    }
 
-
-
-	    	//     	foreach ($noteList as $key => $value) {
-	    	// 	$sort_course[$key] = $value['courseId'];
-	    	// 	$sort_lesson[$key] = $value['lessonId'];
-	    	// }
-	    array_multisort($sort,SORT_DESC,$conversations);
+	    array_multisort($sort, SORT_DESC, $conversations);
 	    $lastestMessage = reset($conversations);
 	    $data = array('content' => $lastestMessage['latestMessageContent'],
 	    			  'id' => $lastestMessage['id'],
-	    		      'fromId' => $lastestMessage['fromId'],
-	    		      'toId' => $lastestMessage['toId'],
+	    		      'courseId' => $lastestMessage['fromId'],
+	    		      'lessonId' => $lastestMessage['toId'],
 	    		      'time' => Date('c', $lastestMessage['createdTime']));
 
 		$result[4] = array('title' => '私信',
 					'data' => $data);
-		var_dump($result);
-		exit();
 
-
+		return $result;
     }
 }
