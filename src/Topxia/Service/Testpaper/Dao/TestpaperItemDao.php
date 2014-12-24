@@ -26,6 +26,8 @@ interface TestpaperItemDao
 
     public function getItemsCountByTestIdAndParentId($testId, $parentId);
 
+    public function getItemsByTestIdAndPartId($testId, $partId);
+
     public function getItemsCountByTestIdAndQuestionType($testId, $questionType);
 
     public function deleteItemByIds(array $ids);

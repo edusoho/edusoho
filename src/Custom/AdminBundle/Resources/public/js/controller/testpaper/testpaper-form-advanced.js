@@ -326,7 +326,6 @@ define(function(require, exports, module) {
             var $form = $('#testpaper-form');
             var parts = [];
             $form.find('.testpaper-part').each(function(i, tr){
-                console.log($(tr).data());
                 parts.push($(tr).data());
             });
 

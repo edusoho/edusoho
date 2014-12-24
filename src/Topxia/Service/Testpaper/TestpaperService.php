@@ -21,6 +21,8 @@ interface TestpaperService
 
     public function updateTestpaper($id, $fields);
 
+    public function updateAdvancedTestpaperMetas($id);
+
     public function publishTestpaper($id);
 
     public function closeTestpaper($id);
@@ -99,4 +101,5 @@ interface TestpaperService
 
     public function buildPaper($paperId, $status);
 
+    public function resetAdvancedTestPaper($id, $fields);
 }

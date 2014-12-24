@@ -77,6 +77,29 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
+    public function resetAdvancedTestPaper($id, $fields)
+    {
+        $fields['score'] = 0;
+        $fields['itemCount'] = 0;
+        $parts = $fields['metas']['parts'];
+        foreach ($parts as $part) {
+            $fields['score'] += $part['score'] * $part['count'];
+            $fields['itemCount'] += $part['count'];
+        }
+        $fields = $this->filterTestpaperFields($fields, 'create');
+        $this->getTestpaperDao()->getConnection()->beginTransaction();
+        try{
+            $this->getTestpaperItemDao()->deleteItemsByTestpaperId($id);
+            $testpaper = $this->buildTestpaperAdvanced($id, $fields);
+            $this->getTestpaperDao()->getConnection()->commit();
+        }catch(Exception $e) {
+            $this->getTestpaperDao()->getConnection()->rollBack();
+            $this->createServiceException($e->getMessage());
+        }
+        
+        return $testpaper;
+    }
+
     public function updateTestpaper($id, $fields)
     {
         $testpaper = $this->getTestpaperDao()->getTestpaper($id);
@@ -85,6 +108,21 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
         $fields = $this->filterTestpaperFields($fields, 'update');
         return $this->getTestpaperDao()->updateTestpaper($id, $fields);
+    }
+
+    public function updateAdvancedTestpaperMetas($id)
+    {
+        $testpaper = $this->getTestpaperDao()->getTestpaper($id);
+        if (empty($testpaper)) {
+            throw $this->createServiceException("Testpaper #{$id} is not found, update testpaper failure.");
+        }
+        foreach ($testpaper['metas']['parts'] as $key => $part) {
+            $items = $this->getTestpaperItemDao()->getItemsByTestIdAndPartId($id, $part['id']);
+            if (empty($items)) {
+                unset($testpaper['metas']['parts'][$key]);
+            }
+        }
+        return $this->getTestpaperDao()->updateTestpaper($id, array('metas' => $testpaper['metas']));
     }
 
     private function filterTestpaperPart($part)
@@ -257,7 +295,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                     $item['seq'] = $seq;
                     $seq += 1;
                 }
-                if(empty($item['parentId'])) {
+                if (empty($item['parentId'])) {
                     $new = $this->getTestpaperItemDao()->addItem($item);
                     $mapping[$new['questionId']] = $new['id'];
                     if($new['questionType'] != 'material') {
@@ -270,7 +308,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 }
             }
         }
-        $this->getTestpaperDao()->updateTestpaper($id, array('score' => $totalScore));
+        $this->getTestpaperDao()->updateTestpaper($id, array(
+            'metas' => $fields['metas'],
+            'itemCount' => $seq -1,
+            'score' => $totalScore
+        ));
     }
 
     public function canBuildTestpaper($builder, $options)
