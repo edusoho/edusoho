@@ -28,8 +28,8 @@ a.link-muted {
 }
 
 .modal-body {
-	word-break: break-all;
-	word-wrap: break-word;
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 .modal-body img {
@@ -210,8 +210,8 @@ textarea {
 
 
 .dynamic-collection .list-group-item {
-	word-break: break-all;
-	word-wrap: break-word;	
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 
@@ -717,8 +717,8 @@ body {
 	margin: 0;
 	padding: 0;
 	margin-bottom: 5px;
-	word-break: break-all;
-	word-wrap: break-word;
+	word-wrap:break-word;
+	overflow:hidden;
 
 }
 
@@ -735,8 +735,8 @@ body {
 
 .thread-body {
 	margin-bottom: 15px;
-	word-break: break-all;
-	word-wrap: break-word;
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 .thread-body img,.thread-post-content img{
@@ -1829,8 +1829,8 @@ body {
 	max-width: 750px;
 	margin: 0 auto;
 	padding: 20px;
-	word-break: break-all;
-	word-wrap: break-word;	
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 .lesson-dashboard .lesson-content-text-body img {
@@ -2531,12 +2531,10 @@ body {
 }
 
 .notebook-note .notebook-note-body {
-	word-break: break-all;
 	display: block;
 }
 
 .notebook-note-collapsed .notebook-note-body {
-	word-break: break-all;
 	display: none;
 }
 
@@ -3060,8 +3058,8 @@ body {
 .latest-review-list .review-content {
 	font-size: 13px;
 	color: #999;
-	word-break: break-all;
-	word-wrap: break-word;
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 .latest-review-list .review-footer {
