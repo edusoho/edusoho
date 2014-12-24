@@ -1,7 +1,13 @@
 <div class="row order-item">
   <div class="order-item-title">
     <i class="order-item-title-icon">
-      <img src="/bundles/topxiaweb/img/order-pay/iconfont-coin.png" width="25px">
+      <img 
+      {% if setting("coin.coin_picture") %}
+      src="{{setting("coin.coin_picture")}}"
+      {% else %}
+      src="/bundles/topxiaweb/img/order-pay/iconfont-coin.png" 
+      {% endif %}
+      width="25px">
     </i>
     <h4 class="title">{{setting("coin.coin_name")}}</h4>
     <span>（1元 = {{cashRate}}{{setting("coin.coin_name")}}）</span>
