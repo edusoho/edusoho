@@ -24,7 +24,9 @@ define(function(require, exports, module) {
 
 			if(payAmount>0) {
 				var coinAmount = parseFloat($('[role="cash-discount"]').text());
-				payAmount = payAmount-coinAmount;
+				if(!isNaN(coinAmount)) {
+					payAmount = payAmount-coinAmount;
+				}
 			}
 
 			if(cashRateElement.data("coursePriceShowType") == "Coin") {
@@ -156,6 +158,10 @@ define(function(require, exports, module) {
 			});
 		}
  		
- 		$('[role="coinNum"]').blur();
+ 		if($('[role="coinNum"]').length>0) {
+ 			$('[role="coinNum"]').blur();
+ 		}else{
+ 			conculatePrice();
+ 		}
 	}
 });

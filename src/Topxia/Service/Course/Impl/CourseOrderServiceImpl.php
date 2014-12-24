@@ -80,12 +80,22 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
             $courseSetting=$this->getSettingService()->get('course',array());
 
-            $coursesPrice=$courseSetting['coursesPrice'];
-            
+            if (isset($courseSetting['coursesPrice'])) {
+                $isEnabledCoursesPrice = $courseSetting['coursesPrice'];
+            }else{
+                $isEnabledCoursesPrice = 0;
+            }
+
+            if(!$isEnabledCoursesPrice) {
+                $order['amount'] = 0;
+                $order['totalPrice'] = 0;
+            }
+
             if($order['amount'] > 0){
                 //如果是限时打折，判断是否在限免期，如果是，则Amout为0
                 if($course['freeStartTime'] < time() &&  $course['freeEndTime'] > time() ){
                     $order['amount'] = 0;
+                    $order['totalPrice'] = 0;
                 }
             }
 
@@ -191,53 +201,6 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
         if ($this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
             $this->getCourseService()->unlockStudent($order['targetId'], $order['userId']);
-        }
-    }
-
-    public function paymentByCoin($id) 
-    {
-        //直接扣余额
-        //加入课程
-        //修改订单状态
-        $connection = ServiceKernel::instance()->getConnection();
-        try {
-            $connection->beginTransaction();
-
-            $order = $this->getOrderService()->getOrder($id);
-            $cashAccount = $this->getCashAccountService()->getAccountByUserId($order["userId"]);
-            if($cashAccount["cash"]<$order["amount"]){
-                throw $this->createServiceException('余额不足。');
-            }
-
-            $flow=array(
-                'amount'=>$order['amount'],
-                'sn'=>$order['sn'],
-                'name'=>$order['title'],
-                'note'=>'',
-                'category'=>'recharge',
-            );
-            $this->getCashService()->outflow($order['userId'],$flow);
-
-            $this->getCashAccountService()->waveDownCashField($cashAccount["id"], $order["amount"]);
-
-            $user = $this->getCurrentUser();
-            $this->getLogService()->info('cash', 'cost_coin', $user['nickname']." 购买课程时消费 {$order['amount']} 虚拟币", array());
-
-            $payData = array(
-                'status' => 'success',
-                'amount' => $order['amount'],
-                'paidTime' => time(),
-                'sn'  => $order['sn']
-            );
-            list($success, $order) = $this->getOrderService()->payOrder($payData);
-            $this->doSuccessPayOrder($id);
-
-            $connection->commit();
-
-            return $order;
-        } catch (\Exception $e) {
-            $connection->rollBack();
-            throw $e;
         }
     }
 

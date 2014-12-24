@@ -7,10 +7,6 @@ interface CashService
 
     public function searchFlowsCount($conditions);
 
-    public function outflow($userId, $flow);
-
-    public function inflow($userId, $flow);
-
     public function outFlowByCoin($outFlow);
 
     public function inFlowByRmb($inFlow);

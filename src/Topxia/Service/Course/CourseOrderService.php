@@ -35,7 +35,5 @@ interface CourseOrderService
      */
 	public function cancelRefundOrder($id);
 
-    public function paymentByCoin($id);
-
     public function updateOrder($id, $orderFileds);
 }

@@ -60,15 +60,29 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
                     ));
                     $this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
 
-                    
-                    $flow=array(
-                        'amount'=>$order['amount'],
-                        'sn'=>$order['sn'],
-                        'name'=>$order['title'],
-                        'note'=>'',
-                        'category'=>'course',
+                    $userId = $order["userId"];
+                    $inFlow = array(
+                        'userId' => $userId,
+                        'amount' => $order["amount"],
+                        'name' => '入账',
+                        'orderSn' => $order['sn'],
+                        'category' => 'outflow',
+                        'note' => ''
                     );
-                    $this->getCashService()->inflow($order['userId'],$flow);
+
+                    $rmbInFlow = $this->getCashService()->inFlowByRmb($inFlow);
+
+                    $rmbOutFlow = array(
+                        'userId' => $userId,
+                        'amount' => $order["amount"],
+                        'name' => '出账',
+                        'orderSn' => $order['sn'],
+                        'category' => 'inflow',
+                        'note' => '',
+                        'parentSn' => $rmbInFlow['sn']
+                    );
+
+                    $coinInFlow = $this->getCashService()->changeRmbToCoin($rmbOutFlow);
 
                     $success = true;
 

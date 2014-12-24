@@ -167,20 +167,24 @@ class CourseOrderController extends OrderController
         }
 
         //虚拟币优惠价格
-        $coinPayAmount = $fields["coinPayAmount"];
-        if(!empty($coinPayAmount) && $coinPayAmount>0 && array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"]) {
-            $isRight = $this->getAuthService()->checkPayPassword($user["id"], $fields["payPassword"]);
-            if(!$isRight)
-                return $this->createMessageResponse('error', '支付密码不正确，创建订单失败。');
-        }
-        $coinPreferentialPrice = 0;
-        if($coursePriceShowType == "RMB") {
-            $coinPreferentialPrice = $coinPayAmount/$cashRate;
-        } else if ($coursePriceShowType == "Coin") {
-            $coinPreferentialPrice = $coinPayAmount;
-        }
+        if(array_key_exists("coinPayAmount", $fields)) {
+            $coinPayAmount = $fields["coinPayAmount"];
+            if(!empty($coinPayAmount) && $coinPayAmount>0 && array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"]) {
+                $isRight = $this->getAuthService()->checkPayPassword($user["id"], $fields["payPassword"]);
+                if(!$isRight)
+                    return $this->createMessageResponse('error', '支付密码不正确，创建订单失败。');
+            }
+            $coinPreferentialPrice = 0;
+            if($coursePriceShowType == "RMB") {
+                $coinPreferentialPrice = $coinPayAmount/$cashRate;
+            } else if ($coursePriceShowType == "Coin") {
+                $coinPreferentialPrice = $coinPayAmount;
+            }
 
-        $amount = $totalPrice - $coinPreferentialPrice;
+            $amount = $totalPrice - $coinPreferentialPrice;
+        } else {
+            $amount = $totalPrice;
+        }
         //优惠码优惠价格
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
         if(!empty($couponApp) && $fields["couponCode"]) {
@@ -211,7 +215,7 @@ class CourseOrderController extends OrderController
             'totalPrice' => $totalPrice,
             'amount' => $amount,
             'coinRate' => $cashRate,
-            'coinAmount' => $coinPayAmount,
+            'coinAmount' => empty($coinPayAmount)?0:$coinPayAmount,
             'userId' => $user["id"],
             'payment' => 'alipay',
             'courseId' => $targetIds[0],
