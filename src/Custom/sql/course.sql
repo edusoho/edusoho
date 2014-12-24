@@ -5,3 +5,6 @@ ALTER TABLE  `course` ADD  `complexity` enum('lowLevel', 'middleLevel', 'highLev
 ALTER TABLE  `course` ADD  `originalPrice` float(10,2) AFTER  `price`;
 
 ALTER TABLE  `course` ADD  `columns` text  AFTER  `freeEndTime`;
+
+
+UPDATE `course` SET `originalPrice` = price;
