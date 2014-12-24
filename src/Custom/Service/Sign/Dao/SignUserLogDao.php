@@ -10,5 +10,7 @@ interface SignUserLogDao
 
 	public function updateSignLog($id, $fields);
 
+    public function getSignByUserId($userId);
+
 	public function findSignLogByPeriod($userId, $targetType, $targetId, $startTime, $EndTime);
 }

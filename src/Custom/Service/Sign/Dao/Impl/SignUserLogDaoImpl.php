@@ -35,4 +35,10 @@ class SignUserLogDaoImpl extends BaseDao implements SignUserLogDao
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getSignLog($id);
 	}
+
+    public function getSignByUserId($userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND targetType = 'group_sign' ORDER BY createdTime DESC LIMIT 1 ";
+        return $this->getConnection()->fetchAssoc($sql, array($userId)) ? : null;
+    }
 }

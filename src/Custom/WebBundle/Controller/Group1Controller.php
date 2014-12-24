@@ -9,19 +9,38 @@ use Topxia\Common\Paginator;
 
 class Group1Controller extends GroupController
 {
-   public function indexAction() 
+    public function index1Action(Request $request) 
     {   
         $mycreatedGroup = array();
         $myJoinGroup = array();
 
         $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 12);
-    
+        
+        $type=$request->query->get('type');
+        $sort=$this->filterSort('byCreatedTimeOnly');
+        if($type && $type == "post"){
+
+            $sort=$this->filterSort('byLastPostTimeOnly');
+
+        }
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getThreadService()->searchThreadsCount(array(
+                'createdTime'=>time()-30*24*60*60,
+                'status'=>'open'
+                )),
+            20 
+        );
+
         $recentlyThread = $this->getThreadService()->searchThreads(
             array(
                 'createdTime'=>time()-30*24*60*60,
                 'status'=>'open'
                 ),
-            $this->filterSort('byCreatedTimeOnly'),0, 25
+            $sort,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
         );
 
         $ownerIds = ArrayToolkit::column($recentlyThread, 'userId');
@@ -51,9 +70,30 @@ class Group1Controller extends GroupController
 
         }
 
+        $vip =  $user->isLogin() ? $this->getVipService()->getMemberByUserId($user['id']) : null;
+   
+        $userLevel=array();
+        $status="false";
+        if($vip){
+
+            $level=$this->getLevelService()->getLevel($vip['levelId']);
+
+            if($level && $this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId'])=="ok"){
+                
+                $userLevel=$level;
+
+                $status=$this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId']);
+
+            }
+        }
+
         $newGroups=$this->getGroupService()->searchGroups(array('status'=>'open',),
             array('createdTime','DESC'),0,8);
 
+        $sign=$this->getSignService()->getSignByUserId($user['id']);
+
+        $groupId=$sign ? $sign['targetId'] : 1;
+  
         return $this->render("CustomWebBundle:Group:index.html.twig", array(
             'activeGroup' => $activeGroup,
             'myJoinGroup' => $myJoinGroup,
@@ -61,7 +101,11 @@ class Group1Controller extends GroupController
             'owners'=>$owners,
             'newGroups'=>$newGroups,
             'groupinfo'=>$groups,
-            'user'=>$user,  
+            'user'=>$user,
+            'type'=>$type,
+            'groupId'=>$groupId,
+            'paginator'=>$paginator,
+            'userLevel'=>$userLevel,  
             'recentlyThread'=>$recentlyThread,
         ));
     }
@@ -293,6 +337,12 @@ class Group1Controller extends GroupController
                 break;
             case 'byCreatedTimeOnly':
                 $orderBys=array(
+                    array('createdTime','DESC'),
+                );
+                break;
+            case 'byLastPostTimeOnly':
+                $orderBys=array(
+                    array('lastPostTime','DESC'),
                     array('createdTime','DESC'),
                 );
                 break;

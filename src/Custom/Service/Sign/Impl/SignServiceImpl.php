@@ -117,6 +117,11 @@ class SignServiceImpl extends BaseService implements SignService
         return $this->getSignCardDao()->getSignCardByUserId($userId);
     }
 
+    public function getSignByUserId($userId)
+    {
+        return $this->getSignUserLogDao()->getSignByUserId($userId);
+    }
+
     public function repairSign($userId, $targetType, $targetId,$date)
     {
         $user = $this->getUserService()->getUser($userId);
