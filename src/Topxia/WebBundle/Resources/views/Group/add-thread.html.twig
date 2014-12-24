@@ -1,7 +1,32 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% set script_controller = 'group/group' %}
 {% block group_body %}
+<style>
+.ke-icon-hidden {
+        background-image: url('{{default_path("iconfont-hide.png")}}');
+        background-position:center;
+        width: 16px;
+        height: 16px;
+}  
+.ke-icon-accessory {
 
+        background-image: url('/assets/img/default/iconfont-accessory.png');
+        background-position:center;
+        width: 16px;
+        height: 16px;
+}
+.ke-icon-accessory-red {
+
+        background-image: url('/assets/img/default/iconfont-accessory-red.png');
+        background-position:center;
+        width: 16px;
+        height: 16px;
+}
+
+</style>
+{% if thread|default(null) and attachs %}
+  <div id="hasAttach"></div>
+{% endif %}
   <div class="panel panel-default">
     <div class="panel-heading">
       {% if thread|default(null) %}
@@ -11,7 +36,7 @@
       {% endif %}
     </div>
     <div class="panel-body">
-      <form id="user-thread-form" class="form-horizontal" method="post">
+      <form id="user-thread-form" class="form-horizontal thread-form" method="post">
 
         <div class="form-group">
           <label class="col-xs-2 control-label" for="thread_title">标题</label>
@@ -22,9 +47,13 @@
         </div>
 
         <div class="form-group">
-          <label class="col-xs-2 control-label" for="thread_content">内容</label>
+          <label class="col-xs-2 control-label" for="{% if is_feature_enabled('group_reward') %}thread_content1{% else %}thread_content{% endif %}">内容</label>
           <div class="col-xs-7 controls">
+            {% if is_feature_enabled('group_reward') %}
+            <textarea name="thread[content]" rows="10" id="thread_content1" class="form-control">{{thread.content|default('')}}</textarea>
+            {% else %}
             <textarea name="thread[content]" rows="10" id="thread_content" class="form-control">{{thread.content|default('')}}</textarea>
+            {% endif %}
           </div>
         </div>
 
@@ -39,8 +68,55 @@
         </div>
         
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <input type="hidden" name="files">
       </form>
       
     </div>
   </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">插入隐藏内容</h4>
+      </div>
+      <div class="modal-body">
+          
+      <form  class="form-horizontal" method="post" >
+
+        <div class="row form-group">
+          <div class="col-md-4 control">
+            <label class="control-label"> 请输入要隐藏的内容:</label>
+          </div>
+          <div class="col-md-7 controls">
+            <textarea class="form-control" rows="3" id="text"> </textarea>
+          </div>
+
+        </div>
+
+        <div class="row form-group">
+          <div class="col-md-4 control">
+            <label for="amount" class="control-label"> 查看所需{{setting('coin').coin_name}}:</label>
+          </div>
+          <div class="col-md-3 controls">
+             <input name="amount" class="form-control" tyoe="text" id="amount"/>
+          </div>
+
+        </div>
+
+      </form>
+      </div>
+      <div class="modal-footer">
+          <div class="pull-left text-muted">隐藏话题获得的{{setting('coin').coin_name}}会在扣除80%之后添加到您的账户
+          </div>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="insert">插入</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'TopxiaWebBundle:Group:upload-modal.html.twig' %}
+
 {% endblock %}

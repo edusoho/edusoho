@@ -34,7 +34,15 @@ course_manage_price:
     pattern:  /course/{id}/manage/price
     defaults: { _controller: CustomWebBundle:CourseManage:price }
 
+course_favorite:
+    pattern: /course/{id}/favorite
+    defaults: { _controller: CustomWebBundle:Course:favorite }
+    methods: [POST]
 
+course_unfavorite:
+    pattern: /course/{id}/unfavorite
+    defaults: { _controller: CustomWebBundle:Course:unfavorite }
+    methods: [POST]
 
 
 
@@ -138,11 +146,6 @@ course_materials:
 
 
 
-
-# # course_favorite:
-# #     pattern: /course/{id}/favorite
-# #     defaults: { _controller: CustomWebBundle:Course:favorite }
-# #     methods: [POST]
 
 column_match:
     pattern: /column/match_jsonp

@@ -39,6 +39,7 @@ class WebExtension extends \Twig_Extension
             'fill_question_stem_html' =>new \Twig_Filter_Method($this, 'fillQuestionStemHtmlFilter'),
             'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter'),
             'purify_html' => new \Twig_Filter_Method($this, 'getPurifyHtml'),
+            'file_type' => new \Twig_Filter_Method($this, 'getFileType'),
         );
     }
 
@@ -68,6 +69,7 @@ class WebExtension extends \Twig_Extension
             'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
+            'isHide'=>new \Twig_Function_Method($this, 'isHideThread'),
         );
     }
 
@@ -552,9 +554,28 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
+    public function getFileType($fileName,$string=null)
+    {
+        $fileName=explode(".", $fileName);
+
+        $name=strtolower($fileName[1]);
+        if($string) $name=strtolower($fileName[1]).$string;
+
+        return $name;
+    }
+
     public function chrFilter($index)
     {
         return chr($index);
+    }
+
+    public function isHideThread($id)
+    {
+        $need=ServiceKernel::instance()->createService('Group.ThreadService')->sumGoodsCoinsByThreadId($id);
+
+        if($need) return true;
+
+        return false;
     }
 
     public function bbCode2HtmlFilter($bbCode)

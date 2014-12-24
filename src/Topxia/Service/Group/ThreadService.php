@@ -56,4 +56,28 @@ interface ThreadService
 
     public function waveHitNum($threadId);
 
+    public function updatePost($id,$fields);
+
+    public function getTrade($id);
+
+    public function getGoods($id);
+
+    public function addTrade($fields);
+
+    public function sumGoodsCoinsByThreadId($id);
+
+    public function getTradeByUserIdAndThreadId($userId,$threadId);
+
+    public function getTradeByUserIdAndGoodsId($userId,$goodsId);
+
+    public function addAttach($files,$threadId);
+
+    public function addPostAttach($files,$threadId,$postId);
+
+    public function searchGoods($conditions,$orderBy,$start,$limit);
+
+    public function deleteGoods($id);
+
+    public function waveGoodsHitNum($goodsId);
+
 }

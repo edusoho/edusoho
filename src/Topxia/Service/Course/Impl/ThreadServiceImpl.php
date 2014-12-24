@@ -124,7 +124,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		}
 
 		if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
-			if (!in_array($conditions['keywordType'], array('title', 'content', 'courseId'))) {
+			if (!in_array($conditions['keywordType'], array('title', 'content', 'courseId', 'courseTitle'))) {
 				throw $this->createServiceException('keywordType参数不正确');
 			}
 			$conditions[$conditions['keywordType']] = $conditions['keyword'];

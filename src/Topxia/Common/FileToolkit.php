@@ -886,7 +886,9 @@ class FileToolkit
     }
 
     public static function getFileTypeByExtension($extension)
-    {
+    {   
+        $extension = strtolower($extension);
+
         if (in_array($extension, array('mp4', 'avi', 'wmv', 'flv', 'mov'))) {
             return 'video';
         } elseif (in_array($extension, array('mp3', 'wma'))) {
