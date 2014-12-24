@@ -4670,3 +4670,70 @@ a.homework-essay-textarea-pack-up{
 	margin-bottom: 5px;
 	border: 1px solid #b5b5b5;
 }
+
+.pay-center .uncheck {
+	cursor: pointer;
+	width: 150px;
+	height: 58px;
+	position: relative;
+	text-align:center;
+	font-size: 16px;
+	line-height: 58px;
+	border: 1px solid #cccccc; 
+	margin-bottom: 30px;
+}
+
+.pay-center .check {
+	cursor: pointer;
+	width: 150px;
+	height: 58px;
+	position: relative;
+	text-align:center;
+	font-size: 16px;
+	line-height: 58px;
+	border: 1px solid #21a557; 
+	margin-bottom: 30px;
+}
+
+.pay-center .uncheck .icon {
+	background: url(/bundles/topxiaweb/img/order-pay/pay-check-status.png) no-repeat ;
+    top: 0px;
+    right: 0px;
+    width: 23px;
+    height: 26px;
+    background-position: 0 -30px;
+    position: absolute;
+    overflow: hidden;
+}
+
+.pay-center .check .icon {
+	background: url(/bundles/topxiaweb/img/order-pay/pay-check-status.png) no-repeat ;
+    top: 0px;
+    right: 0px;
+    width: 23px;
+    height: 26px;
+    background-position: 0 -4px;
+    position: absolute;
+    overflow: hidden;
+}
+
+.pay-center .help {
+	float: left;
+    width: 400px;
+    height: 40px;
+    line-height: 19px;
+    padding-left: 30px;
+    background: url(/bundles/topxiaweb/img/order-pay/iconfont-caution-block.png) no-repeat;
+    font-size: 12px;
+    color: #666;
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+.pay-center .pay-amount {
+	font-size: 18px;
+}
+
+.pay-center .pay-amount span {
+	color: #ff6600;
+}
