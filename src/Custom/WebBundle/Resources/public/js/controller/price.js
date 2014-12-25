@@ -108,7 +108,8 @@ Validator.addRule('discountCheck', /^(([+-]?[1-9]{1}\d*)|([+-]?[1-9]{1}))(\.(\d)
 
     validator.addItem({
         element: '[name="originalPrice"]',
-        rule: 'currency'
+        rule: 'currency',
+        required: true
     });
     validator.addItem({
         element: '[name="discount"]',

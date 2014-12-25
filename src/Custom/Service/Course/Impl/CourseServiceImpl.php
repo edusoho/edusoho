@@ -22,6 +22,14 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 		if (empty($course)) {
 			throw $this->createServiceException('课程不存在，更新失败！');
 		}
+		if (isset($fields['freeStartTime'])) {
+    		$fields['freeStartTime'] = strtotime($fields['freeStartTime']);
+    	}
+    	if (isset($fields['freeEndTime'])) {
+    		$fields['freeEndTime'] = strtotime($fields['freeEndTime']);
+    	}
+    
+
 		$fields = $this->_filterCourseFields($fields);
 
 
@@ -232,12 +240,7 @@ class CourseSerialize
     			$course['columns'] = null;
     		}
     	}
-    	if (isset($course['freeStartTime'])) {
-    		$course['freeStartTime'] = strtotime($course['freeStartTime']);
-    	}
-    	if (isset($course['freeEndTime'])) {
-    		$course['freeEndTime'] = strtotime($course['freeEndTime']);
-    	}
+   
         return $course;
     }
 
