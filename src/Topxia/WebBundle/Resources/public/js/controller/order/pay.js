@@ -50,9 +50,12 @@ define(function(require, exports, module) {
 
 		$('[role="coinNum"]').blur(function(e){
 			var coin = $(this).val();
-			if(isNaN(coin)){
+
+			if(coin == "0" || isNaN(coin)){
 				$(this).val("0");
 				$('[role="cash-discount"]').text("0");
+				
+				
 				return;
 			}
 			var cash = $('[role="accountCash"]').text();

@@ -11,7 +11,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 		return $this->router;
 	}
 
-	public function getOrderInfo($targetId)
+	public function getOrderInfo($targetId, $fields)
 	{
 		$course = $this->getCourseService()->getCourse($targetId);
         $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
@@ -135,12 +135,12 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         );
 	}
 
-	public function createOrder($orderInfo) 
+	public function createOrder($orderInfo, $fields) 
 	{
 		return $this->getCourseOrderService()->createOrder($orderInfo);
 	}
 
-	public function updateOrder($orderInfo) 
+	public function updateOrder($orderId, $orderInfo, $fields) 
 	{
 		return $this->getCourseOrderService()->updateOrder($orderId, $orderInfo);
 	}

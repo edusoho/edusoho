@@ -180,8 +180,19 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 		return $this->getOrderService()->createOrder($orderInfo);
 	}
 
-	public function updateOrder($orderInfo) 
+	public function updateOrder($orderId, $orderInfo, $fields) 
 	{
+        unset($orderInfo['coupon']);
+        unset($orderInfo['couponDiscount']);
+        
+        $unitNames = array('month' => '个月', 'year' => '年');
+        $level = $this->getLevelService()->getLevel($orderInfo['targetId']);
+
+        $orderInfo['title'] = ($fields['buyType'] == 'renew' ? '续费' : '购买') .  "{$level['name']} x {$fields['duration']}{$unitNames[$fields['unitType']]}{$level['name']}会员";
+        $orderInfo['targetType'] = 'vip';
+        $orderInfo['snPrefix'] = 'V';
+        $orderInfo['data'] = $fields;
+
 		return $this->getCourseOrderService()->updateOrder($orderId, $orderInfo);
 	}
 
@@ -243,7 +254,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return ServiceKernel::instance()->createService('User.NotificationService');
     }
 
-	protected function getLevelService() 
+	protected function getLevelService()
 	{
 		return ServiceKernel::instance()->createService("Vip:Vip.LevelService");
 	}

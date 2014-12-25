@@ -19,6 +19,10 @@ class OrderController extends BaseController
 
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
+
+        if(empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip")) ) {
+            return $this->createMessageResponse('error', '参数不正确');
+        }
         
         $processor = OrderProcessorFactory::create($targetType);
 
@@ -85,7 +89,7 @@ class OrderController extends BaseController
                 if (empty($order)) {
                     return $this->createMessageResponse('error', '订单不存在!');
                 }
-                $order = $processor->updateOrder($order["id"], $orderFileds);
+                $order = $processor->updateOrder($order["id"], $orderFileds, $fields);
             } else {
                 $order = $processor->createOrder($orderFileds, $fields);
             }
