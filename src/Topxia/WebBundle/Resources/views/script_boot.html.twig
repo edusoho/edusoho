@@ -1,5 +1,6 @@
 <div id="float-carts" class="float-carts" data-url={{ path('carts_show') }}>
   <div class="btn-carts">
+    <span  class="carts-add-num"><font data-role="add-number" class="glyphicon"></font></span>
     <span class="btn btn-danger">
       <span class="glyphicon glyphicon-shopping-cart"></span>
       <span class="badge" id="carts-badge">{{ cartsCount()|default('0') }}</span>
