@@ -153,7 +153,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 		$outFlow = array(
 			'userId' => $userId,
-            'amount' => $order["coinAmount"] + $coinInFlow["amount"],
+            'amount' => $order["totalPrice"],
             'name' => $order['title'],
             'orderSn' => $order['sn'],
             'category' => 'outflow',
