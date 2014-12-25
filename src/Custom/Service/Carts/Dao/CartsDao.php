@@ -15,4 +15,8 @@ interface CartsDao
     public function updateCart($id, array $carts);
 
     public function deleteCart($id);
+
+    public function findCartsByUserId($userId);
+
+    public function findCartsByUserKey($userKey);
 }
