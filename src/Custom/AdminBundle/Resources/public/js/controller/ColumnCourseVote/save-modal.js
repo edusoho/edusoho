@@ -12,6 +12,8 @@ define(function(require, exports, module) {
 
         var validator = new Validator({
             element: $form,
+            failSilently: true,
+            triggerType: 'change',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
@@ -80,7 +82,7 @@ define(function(require, exports, module) {
             required: true
         });
         validator.addItem({
-            element: '#voteStartTime',
+            element: '[name=voteStartTime]',
             required: true
         });
         validator.addItem({
