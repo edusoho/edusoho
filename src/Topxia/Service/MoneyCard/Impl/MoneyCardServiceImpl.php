@@ -86,8 +86,10 @@ class MoneyCardServiceImpl extends BaseService
         $moneyCards = array();
         foreach ($moneyCardIds as $cardid => $cardPassword) {
             $moneyCards[] = array(
+                'IdUsedToPromotion' => $batch['cardPrefix'].time(), //<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD 
                 'cardId' => $cardid,
-                'password' => $cardPassword,
+                'password' => $cardid,  //<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD    
+                // 'password' => $cardPassword,   //<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD    
                 'deadline' => $moneyCardData['deadline'],
                 'cardStatus' => 'normal',
                 'batchId' => $batch['id']
