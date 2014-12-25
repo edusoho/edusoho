@@ -52,9 +52,9 @@ class MoneyCardDaoImpl extends BaseDao
             $moneyCardsForSQL = array_merge($moneyCardsForSQL, array_values($value));
         }
 
-        $sql = "INSERT INTO $this->table (idUsedToPromotion, cardId, password, deadline, cardStatus, batchId, createdTime)     VALUE ";
+        $sql = "INSERT INTO $this->table (idUsedToPromotion, cardId, password, deadline, cardStatus, batchId )     VALUE ";
         for ($i=0; $i < count($moneyCards); $i++) {
-            $sql .= "(?, ?, ?, ?, ?, ?, ?),";
+            $sql .= "(?, ?, ?, ?, ?, ?),";
         }//<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD 
 
         $sql = substr($sql, 0, -1);

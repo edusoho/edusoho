@@ -92,6 +92,7 @@ class MoneyCardServiceImpl extends BaseService
                 'batchId' => $batch['id']
             );
         }
+        
         $this->getMoneyCardDao()->addMoneyCard($moneyCards);
         $this->getLogService()->info('money_card_batch', 'create', "创建新批次充值卡,卡号前缀为({$batch['cardPrefix']}),批次为({$batch['id']})");
         return $batch;
