@@ -20,6 +20,8 @@
             
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
             <div class="row">
+
+              {% if order.targetType == "course" %}
               <div class="form-group">
                 <div class="col-md-7 ">
                   {% if order.coupon %}
@@ -35,6 +37,8 @@
                   {% endif %}
                 </div>
               </div>
+              {% endif %}
+              
             	<div class="form-group">
                 <div class="col-md-7">
                   <div class="pay-type-lable">支付方式</div>

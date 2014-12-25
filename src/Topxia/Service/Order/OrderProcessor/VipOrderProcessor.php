@@ -4,7 +4,7 @@ namespace Topxia\Service\Order\OrderProcessor;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
 
-class VipOrderProcessor implements OrderProcessor
+class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 {
 	protected $router = "vip";
 
@@ -14,7 +14,6 @@ class VipOrderProcessor implements OrderProcessor
 
 	public function getOrderInfo($targetId, $fields)
 	{
-
         $user = $this->getUserService()->getCurrentUser();
         $member = $this->getVipService()->getMemberByUserId($user->id);
         if ($member) {
@@ -191,33 +190,33 @@ class VipOrderProcessor implements OrderProcessor
             return ;
         }
 
-        if ($order['data']['type'] == 'new') {
+        if ($order['data']['buyType'] == 'new') {
 	        $vip = $this->getVipService()->becomeMember(
 	            $order['userId'],
-	            $order['data']['level'],
+	            $order['data']['targetId'],
 	            $order['data']['duration'], 
-	            $order['data']['unit'], 
+	            $order['data']['unitType'], 
 	            $order['id']
 	        );
 
 	        $level = $this->getLevelService()->getLevel($vip['levelId']);
 	        $message = "您已经成功加入 {$level['name']} ，点击查看<a href='/vip/course/level/{$level['id']}' target='_blank'>{$level['name']}</a>课程";
 
-	    } elseif ($order['data']['type'] == 'renew') {
+	    } elseif ($order['data']['buyType'] == 'renew') {
 	        $vip = $this->getVipService()->renewMember(
 	            $order['userId'],
 	            $order['data']['duration'], 
-	            $order['data']['unit'], 
+	            $order['data']['unitType'], 
 	            $order['id']
 	        );
 
 	        $level = $this->getLevelService()->getLevel($vip['levelId']);
 	        $message = "您的 {$level['name']} 已成功续费，当前的有效期至：".date('Y-m-d', $vip['deadline']);
 
-	    } elseif ($order['data']['type'] == 'upgrade') {
+	    } elseif ($order['data']['buyType'] == 'upgrade') {
 	        $vip = $this->getVipService()->upgradeMember(
 	            $order['userId'],
-	            $order['data']['level'], 
+	            $order['data']['targetId'], 
 	            $order['id']
 	        );
 
