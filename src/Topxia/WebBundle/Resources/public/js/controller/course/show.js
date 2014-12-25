@@ -1,6 +1,18 @@
 define(function(require, exports, module) {
 
     exports.run = function() {
+        $('#add-carts-btn').on('click',function(){
+           $.post($(this).data('url'),function(result){
+                var status = result.status;
+                var num = $('#carts-badge').text();
+                if (status == 'success') {
+                    num = Number(num);
+                    num += 1;
+                    $('#carts-badge').html(num)
+                };
+           });
+        });
+
          require('./timeleft').run();
         $('#teacher-carousel').carousel({interval: 0});
         $('#teacher-carousel').on('slide.bs.carousel', function (e) {
