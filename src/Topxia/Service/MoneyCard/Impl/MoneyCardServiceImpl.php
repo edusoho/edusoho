@@ -121,12 +121,12 @@ class MoneyCardServiceImpl extends BaseService
         if (empty($moneyCard)) {
             throw $this->createServiceException('充值卡不存在，作废失败！');
         }
-        if ($moneyCard['cardStatus'] == 'invalid' && $moneyCard['rechargeUserId'] != 0) {
+        if ($moneyCard['cardStatus'] == 'invalid' && $moneyCard['rechargeUserId'] == 0) {
             $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'], array('cardStatus' => 'normal'));
 
             $this->getLogService()->info('money_card', 'unlock', "启用了卡号为{$moneyCard['cardId']}的充值卡");
         } else {
-            throw $this->createServiceException('只能启用作废状态的充值卡！');
+            throw $this->createServiceException("只能启用作废状态的充值卡！{$moneyCard['cardStatus']}--{$moneyCard['rechargeUserId']}");
         }
         return $moneyCard;
     }
