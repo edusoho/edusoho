@@ -131,10 +131,19 @@ class CoinController extends BaseController
 
         if(isset($condition['userId'])){
 
+            if($condition['userId'] == 0 ){
+                $userIds=array();
+                $users=array();
+                $condition['userId']="null";
+                goto response;
+            } 
+            
+
             $userIds=array($condition['userId']);
             $user=$this->getUserService()->getUser($condition['userId']);
             $users=array($condition['userId']=>$user);
 
+            response:
             return $this->render('TopxiaAdminBundle:Coin:coin-user-records.html.twig',array(
               'condition'=>$condition,
               'userIds'=>$userIds,
@@ -179,7 +188,7 @@ class CoinController extends BaseController
         $filter =$this->convertFiltersToCondition($condition);
 
         $conditions['startTime']=$filter['time'];
-      
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCashService()->searchFlowsCount($conditions),
@@ -486,18 +495,21 @@ class CoinController extends BaseController
                 $keyword=$condition['keyword'];
             }
 
-            switch ($condition['searchType']) {
+            if($keyword !=""){
+                switch ($condition['searchType']) {
                 case 'nickname':
                     $user=$this->getUserService()->getUserByNickname($keyword);
-                    $condition['userId']=$user['id'];
+                    $condition['userId']=$user ? $user['id'] : 0 ;
                     break;
                 case 'email':
                     $user=$this->getUserService()->getUserByEmail($keyword);
-                    $condition['userId']=$user['id'];
+                    $condition['userId']=$user ? $user['id'] : 0 ;
                     break;                
                 default:
                     break;
+                }
             }
+
         }else{
             
             $condition['searchType']="";
