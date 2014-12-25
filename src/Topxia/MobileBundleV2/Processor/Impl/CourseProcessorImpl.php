@@ -5,6 +5,7 @@ use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\CourseProcessor;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\ServiceException;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
@@ -643,11 +644,16 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             		return $this->createErrorResponse('not_login', "您尚未登录，不能收藏课程！");
         		}
 
+        		
         		if (!$this->controller->getCourseService()->hasFavoritedCourse($courseId)) {
             		return $this->createErrorResponse('runtime_error', "您尚未收藏课程，不能取消收藏！");
         		}
 
-        		$this->controller->getCourseService()->unfavoriteCourse($courseId);
+        		try {
+        			$this->controller->getCourseService()->unfavoriteCourse($courseId);
+        		} catch (ServiceException $e) {
+            		return $this->createErrorResponse('runtime_error', $e->getMessage());
+        		}
 
         		return true;
 	}
@@ -663,7 +669,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         		if (!$user->isLogin()) {
             		return $this->createErrorResponse('not_login', "您尚未登录，不能收藏课程！");
         		}
-        		$this->controller->getCourseService()->becomeStudent($courseId, $user['id'], array('becomeUseMember' => true));
+
+        		try {
+        			$this->controller->getCourseService()->becomeStudent($courseId, $user['id'], array('becomeUseMember' => true));
+        		} catch (ServiceException $e) {
+            		return $this->createErrorResponse('runtime_error', $e->getMessage());
+        		}
         		return true;
 	}
 
