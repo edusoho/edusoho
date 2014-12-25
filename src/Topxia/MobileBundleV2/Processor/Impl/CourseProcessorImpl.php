@@ -372,8 +372,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		$lessonStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $noteInfo['courseId'],$noteInfo['lessonId']);
 		$noteContent = $this->filterSpace($this->controller->convertAbsoluteUrl($this->request, $noteInfo['content']));
 		$noteInfos = array(
-			"coursesId"=>"",
-			"courseTitle"=>"",
+			"coursesId"=>"1",
+			"courseTitle"=>"1",
 			"noteLastUpdateTime"=>"",
 			"lessonId"=>$lessonInfo['id'],
 			"lessonTitle"=>$lessonInfo['title'],
@@ -382,8 +382,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 			// 	array('content' => $noteContent))->getContent(),
 			"content"=>$noteContent,
 			"createdTime"=>date('c', $noteInfo['createdTime']),
-			"noteNum"=>"",
-			"largePicture"=>"",
+			"noteNum"=>0,
+			"largePicture"=>"1",
 		);
 		return $noteInfos;
     }
