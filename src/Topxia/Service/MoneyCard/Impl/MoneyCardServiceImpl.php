@@ -15,6 +15,12 @@ class MoneyCardServiceImpl extends BaseService
     {
         return $this->getMoneyCardDao()->getMoneyCardByCardId($cardId);
     }
+
+    public function getMoneyCardByPassword($password)
+    {
+        return $this->getMoneyCardDao()->getMoneyCardByPassword($password);
+    }    
+
     public function getBatch ($id)
     {
         return $this->getMoneyCardBatchDao()->getBatch($id);
@@ -83,10 +89,9 @@ class MoneyCardServiceImpl extends BaseService
         $moneyCards = array();
         foreach ($moneyCardIds as $cardid => $cardPassword) {
             $moneyCards[] = array(
-                'idUsedToPromotion' => $batch['cardPrefix'].time(), //<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD 
-                'cardId' => $cardid,
-                'password' => $cardid,  //<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD    
-                // 'password' => $cardPassword,   //<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD    
+                // 'idUsedToPromotion' => $batch['cardPrefix'].time(), //<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD 
+                'cardId' => $cardid,  
+                'password' => $cardPassword,   
                 'deadline' => $moneyCardData['deadline'],
                 'cardStatus' => 'normal',
                 'batchId' => $batch['id']
@@ -202,8 +207,7 @@ class MoneyCardServiceImpl extends BaseService
                 $id .= mt_rand(0, 9);
             }
             $tmpId = $cardPrefix.$id;
-            $id = $tmpId.substr(crc32($tmpId),0,3);
-
+            $id = $this->blendCrc32($tmpId);
 
             if (!isset($cardIds[$id])) {
                 $cardIds[$id] = $this->makePassword($passwordLength);
@@ -216,20 +220,49 @@ class MoneyCardServiceImpl extends BaseService
         return $cardIds;
     }
 
-    public function checkCardId($cardIdWithPrefix)
+    public function  uuid($uuidLength, $prefix  =  '' , $needSplit = false)
     {
-        return substr(crc32(substr($cardIdWithPrefix,0,-3)),0,3) == substr($cardIdWithPrefix,-3,3);
+        $chars = md5(uniqid(mt_rand(), true));
+        if($needSplit){
+            $uuid = '';    
+            $uuid .= substr ( $chars ,0,8) .  '-' ;  
+            $uuid .= substr ( $chars ,8,4) .  '-' ;  
+            $uuid .= substr ( $chars ,12,4) .  '-' ; 
+            $uuid .= substr ( $chars ,16,4) .  '-' ;
+            $uuid .= substr ( $chars ,20,12);
+        }else{
+            $uuid = substr ( $chars,0,$uuidLength );
+        }
+
+        return   $prefix.$uuid ;
     }
+
+    public function blendCrc32($word)
+    {
+        return $word.substr(crc32($word),0,3);
+    }
+    public function checkCrc32($word)
+    {
+        return substr(crc32(substr($word,0,-3)),0,3) == substr($word,-3,3);
+    }
+
 
     private function makePassword ($length)
     {
-        $pattern = '1234567890abcdefghijklmnopqrstuvwxyz';
-        $password = chr(rand(97, 122));
-        for ($j=0; $j < ((int)$length)-1; $j++) {
-                $password .= $pattern[mt_rand(0, 35)];
-            }
+        $uuid =  $this->uuid($length-3);
+        return $this->blendCrc32($uuid);
+        //NEED TO CHECK Unique
+        
 
-        return $password;
+        // $cardIds[$id] = $this->makePassword($passwordLength);
+
+        // $pattern = '1234567890abcdefghijklmnopqrstuvwxyz';
+        // $password = chr(rand(97, 122));
+        // for ($j=0; $j < ((int)$length)-1; $j++) {
+        //         $password .= $pattern[mt_rand(0, 35)];
+        //     }
+
+        // return $password;
     }
 
     public function updateBatch($id, $fields)

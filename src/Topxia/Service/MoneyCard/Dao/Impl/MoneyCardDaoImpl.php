@@ -20,6 +20,12 @@ class MoneyCardDaoImpl extends BaseDao
 
         return $this->getConnection()->fetchAssoc($sql, array($cardId)) ? : null;
     }    
+    public function getMoneyCardByPassword($password)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE password = ? LIMIT 1";
+
+        return $this->getConnection()->fetchAssoc($sql, array($password)) ? : null;
+    }       
 
 	public function searchMoneyCards($conditions, $orderBy, $start, $limit)
     {
@@ -52,9 +58,9 @@ class MoneyCardDaoImpl extends BaseDao
             $moneyCardsForSQL = array_merge($moneyCardsForSQL, array_values($value));
         }
 
-        $sql = "INSERT INTO $this->table (idUsedToPromotion, cardId, password, deadline, cardStatus, batchId )     VALUE ";
+        $sql = "INSERT INTO $this->table (cardId, password, deadline, cardStatus, batchId )     VALUE ";
         for ($i=0; $i < count($moneyCards); $i++) {
-            $sql .= "(?, ?, ?, ?, ?, ?),";
+            $sql .= "(?, ?, ?, ?, ?),";
         }//<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD 
 
         $sql = substr($sql, 0, -1);
