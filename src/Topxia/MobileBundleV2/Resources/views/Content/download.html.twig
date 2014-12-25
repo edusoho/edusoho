@@ -7,11 +7,13 @@
   <script>
     var urls = {
       iphone: '{{iphoneUrl | raw}}',
-      android: 'http://mobcdn.qiniudn.com/{{code | raw}}-Android-v2.0.1.apk'
+      android: 'http://mobcdn.qiniudn.com/{{code | raw}}-Android-v2.0.1.apk',
+      weixin : "http://dd.myapp.com/16891/FAE3571F12D8C9AA3747152331C0C878.apk?fsname=com%2Eedusoho%2Ekuozhi%5F2%2E2%2E2%5F8.apk&asr=8eff"
     };
     var uagent = navigator.userAgent.toLowerCase();
     if(uagent.match(/MicroMessenger/i)=="micromessenger") {  
-        window.location = "http://dd.myapp.com/16891/FAE3571F12D8C9AA3747152331C0C878.apk?fsname=com%2Eedusoho%2Ekuozhi%5F2%2E2%2E2%5F8.apk&asr=8eff";
+        window.location = urls.weixin;
+        document.write("<a href=' " + urls.weixin + "' class='message'>点击下载...</a>");
     }else if (uagent.search("iphone") > -1 || uagent.search("ipad") > -1 ) {
         window.location = urls.iphone;
     } else {
