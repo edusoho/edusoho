@@ -346,7 +346,10 @@ class CourseController extends BaseController
 	{
 		$course=$this->getCourseService()->getCourse($id);
 		$tagIds = $course['tags'];
-        $articles = $this->getArticleService()->findPublishedArticlesByTagIdsAndCount($tagIds,6);
+		$articles=array();
+		if (!empty($tagIds)) {
+        	$articles = $this->getArticleService()->findPublishedArticlesByTagIdsAndCount($tagIds,6);
+		}
         return $this->render("TopxiaWebBundle:Course:course-relatedArticles.html.twig", array(
 			'articles'=>$articles
 		));
