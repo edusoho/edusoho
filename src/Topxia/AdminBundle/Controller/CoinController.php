@@ -50,23 +50,12 @@ class CoinController extends BaseController
 
     public function  recordsAction(Request $request){
         $fields = $request->query->all();
-        $conditions=array();
+        $conditions=array(
+            'startTime'=>time()-7*24*3600);
+
         if(!empty($fields)){
-          $conditions =$fields;
+          $conditions =$this->filterCondition($fields);
         };
-        
-        if  (isset($conditions['keywordType'])) {
-          if ($conditions['keywordType'] == 'userName'){
-            $conditions['keywordType'] = 'userId';
-            $userFindbyNickName = $this->getUserService()->getUserByNickname($conditions['keyword']);
-            $conditions['keyword'] = $userFindbyNickName? $userFindbyNickName['id']:-1;
-          }
-        }
-        if (isset($conditions['keywordType'])) {
-          $conditions[$conditions['keywordType']] = $conditions['keyword'];
-          unset($conditions['keywordType']);
-          unset($conditions['keyword']);
-        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -81,14 +70,137 @@ class CoinController extends BaseController
             $paginator->getPerPageCount()
           );
 
+        if(isset($conditions['type'])){
+
+            switch ($conditions['type']) {
+                case 'inflow':
+                    $inflow=$this->getCashService()->analysisAmount($conditions);
+                    $outflow=0;
+                    break;
+                case 'outflow':
+                    $outflow=$this->getCashService()->analysisAmount($conditions);
+                    $inflow=0;
+                    break;
+                default:
+                    $conditions['type']="outflow";
+                    $outflow=$this->getCashService()->analysisAmount($conditions);
+                    $conditions['type']="inflow";
+                    $inflow=$this->getCashService()->analysisAmount($conditions);
+                    break;
+            }
+
+        }else{
+
+            $conditions['type']="outflow";
+            $outflow=$this->getCashService()->analysisAmount($conditions);
+            $conditions['type']="inflow";
+            $inflow=$this->getCashService()->analysisAmount($conditions);   
+        }
+
+        $in=$this->getCashService()->analysisAmount(array('type'=>'inflow'));
+        $out=$this->getCashService()->analysisAmount(array('type'=>'outflow'));
+        $amounts=$in-$out;
+
         $userIds =  ArrayToolkit::column($cashes, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
         
         return $this->render('TopxiaAdminBundle:Coin:coin-records.html.twig',array(
             'users'=>$users,
             'cashes'=>$cashes,
+            'outflow'=>$outflow,
+            'inflow'=>$inflow,
+            'amounts'=>$amounts,
             'paginator'=>$paginator,
           ));
+    }
+
+    public function userRecordsAction(Request $request)
+    {   
+        $condition['time']=time()-7*3600*24;
+        $condition['type']="inflow";
+        $condition['timeType']="oneWeek";
+        $condition['orderBY']="desc";
+        $condition['searchType']="";
+        $condition['keyword']="";
+
+        $fields = $request->query->all();
+
+        if(!empty($fields)){
+          $condition =$this->convertFiltersToCondition($fields);
+        };
+
+        if(isset($condition['userId'])){
+
+            $userIds=array($condition['userId']);
+            $user=$this->getUserService()->getUser($condition['userId']);
+            $users=array($condition['userId']=>$user);
+
+            return $this->render('TopxiaAdminBundle:Coin:coin-user-records.html.twig',array(
+              'condition'=>$condition,
+              'userIds'=>$userIds,
+              'users'=>$users,
+            ));
+        }
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCashService()->findUserIdsByFlowsCount($condition['type'],$condition['time']),
+            20
+          );
+
+        $flows=$this->getCashService()->findUserIdsByFlows(
+            $condition['type'],$condition['time'],$condition['orderBY'],           
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+          );
+
+        $userIds=ArrayToolkit::column($flows,'userId');
+
+        $users=$this->getUserService()->findUsersByIds($userIds);
+        
+        return $this->render('TopxiaAdminBundle:Coin:coin-user-records.html.twig',array(
+          'paginator'=>$paginator,
+          'condition'=>$condition,
+          'userIds'=>$userIds,
+          'users'=>$users,
+          ));
+    }
+    
+    public function flowDetailAction(Request $request)
+    {   
+        $userId=$request->query->get("userId");
+        $timeType=$request->query->get("timeType");
+
+        if(empty($timeType)){
+            $timeType="oneWeek";
+        }
+
+        $condition['timeType']=$timeType;
+        $filter =$this->convertFiltersToCondition($condition);
+
+        $conditions['startTime']=$filter['time'];
+      
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCashService()->searchFlowsCount($conditions),
+            20
+          );
+
+        $cashes=$this->getCashService()->searchFlows(
+            $conditions,
+            array('createdTime','DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+          );
+        
+        $user=$this->getUserService()->getUser($userId);
+
+        return $this->render('TopxiaAdminBundle:Coin:flow-deatil-modal.html.twig', array(
+            'user'=>$user,
+            'cashes'=>$cashes,
+            'paginator'=>$paginator,
+            'timeType'=>$timeType,
+        ));
     }
 
     public function  ordersAction(Request $request){
@@ -360,6 +472,126 @@ class CoinController extends BaseController
         ));
     }
 
+    private function convertFiltersToCondition($condition)
+    {   
+        $condition['time']=time()-7*3600*24;
+        $condition['type']="inflow";
+        $condition['orderBY']="desc";
+        $keyword="";
+
+        if(isset($condition['searchType'])){
+
+            if(isset($condition['keyword'])){
+
+                $keyword=$condition['keyword'];
+            }
+
+            switch ($condition['searchType']) {
+                case 'nickname':
+                    $user=$this->getUserService()->getUserByNickname($keyword);
+                    $condition['userId']=$user['id'];
+                    break;
+                case 'email':
+                    $user=$this->getUserService()->getUserByEmail($keyword);
+                    $condition['userId']=$user['id'];
+                    break;                
+                default:
+                    break;
+            }
+        }else{
+            
+            $condition['searchType']="";
+            $condition['keyword']="";
+        }
+
+        if(isset($condition['timeType']))
+        {
+            switch ($condition['timeType']) {
+                case 'oneWeek':
+                    $condition['time']=time()-7*3600*24;
+                    break;
+                case 'oneMonth':
+                    $condition['time']=time()-30*3600*24;
+                    break;                
+                case 'threeMonths':
+                    $condition['time']=time()-90*3600*24;
+                    break;
+                default:
+                    break;
+            }
+        }else{
+            $condition['timeType']="oneWeek";
+        }
+
+        if(isset($condition['flowType'])){
+
+            switch ($condition['flowType']) {
+                case 'inUp':
+                    $condition['type']="inflow";
+                    $condition['orderBY']="ASC";
+                    break;
+                case 'inDown':
+                    $condition['type']="inflow";
+                    $condition['orderBY']="DESC";
+                    break;  
+                case 'outUp':
+                    $condition['type']="outflow";
+                    $condition['orderBY']="ASC";
+                    break;
+                case 'outDown':
+                    $condition['type']="outflow";
+                    $condition['orderBY']="DESC";
+                    break;              
+                default:
+                    break;
+            }  
+        }
+
+
+        return $condition;
+    }
+
+    private function filterCondition($conditions)
+    {
+        if  (isset($conditions['keywordType'])) {
+          if ($conditions['keywordType'] == 'userName'){
+            $conditions['keywordType'] = 'userId';
+            $userFindbyNickName = $this->getUserService()->getUserByNickname($conditions['keyword']);
+            $conditions['keyword'] = $userFindbyNickName? $userFindbyNickName['id']:-1;
+          }
+        }
+        if (isset($conditions['keywordType'])) {
+          $conditions[$conditions['keywordType']] = $conditions['keyword'];
+          unset($conditions['keywordType']);
+          unset($conditions['keyword']);
+        }
+
+        if(isset($conditions['createdTime'])){
+
+            switch ($conditions['createdTime']) {
+                case 'oneWeek':
+                    $conditions['startTime']=time()-7*24*3600;
+                    break;
+                case 'oneMonth':
+                    $conditions['startTime']=time()-30*24*3600;
+                    break;
+                case 'threeMonths':
+                    $conditions['startTime']=time()-90*24*3600;
+                    break;
+                case 'all':
+                    break;
+                default:
+                    break;
+            }
+            unset($conditions['createdTime']);
+
+        }else{
+
+            $conditions['startTime']=time()-7*24*3600;
+        }
+
+        return $conditions;
+    }
     protected function getSettingService(){
 
       return $this->getServiceKernel()->createService('System.SettingService');
@@ -383,6 +615,8 @@ class CoinController extends BaseController
     {
         return $this->getServiceKernel()->createService('System.LogService');
     }
+
+
 
 
 }

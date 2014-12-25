@@ -215,6 +215,11 @@ class DataDict
     		'open'=>'开启',
     		'close'=>'关闭',
     	),
+        'coinRecordType'=>array(
+            'sn'=>'流水号',
+            'orderSn'=>'订单号',
+            'userName'=>'用户名',
+        ),
 	);
 
 	public static function dict($type)

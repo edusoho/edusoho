@@ -1059,4 +1059,10 @@ admin_coin_give:
 admin_coin_give_check_nickname:
     path:     /coin/give/check_nickname
     defaults: { _controller: TopxiaAdminBundle:Coin:checkNickname }
+admin_coin_user_records:
+    path:     /coin/records/user
+    defaults: { _controller: TopxiaAdminBundle:Coin:userRecords }
+admin_coin_flow_detail:
+    path:     /coin/flow/detail/
+    defaults: { _controller: TopxiaAdminBundle:Coin:flowDetail }
 

@@ -171,6 +171,16 @@ class CashServiceImpl extends BaseService implements CashService
         return $outFlow;
     }
 
+    public function findUserIdsByFlows($type,$createdTime,$orderBy, $start, $limit)
+    {
+        return $this->getFlowDao()->findUserIdsByFlows($type,$createdTime,$orderBy, $start, $limit);
+    }
+
+    public function findUserIdsByFlowsCount($type,$createdTime)
+    {
+        return $this->getFlowDao()->findUserIdsByFlowsCount($type,$createdTime);
+    }
+
     public function changeRmbToCoin($rmbFlow)
     {
         $outFlow = $this->outFlowByRmb($rmbFlow);
