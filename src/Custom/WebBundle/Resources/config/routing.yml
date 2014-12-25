@@ -86,6 +86,10 @@ course_thread_unelite:
     pattern:  /course/{courseId}/thread/{id}/unelite
     defaults: { _controller: CustomWebBundle:CourseThread:unelite }
 
+course_thread_post:
+    pattern:  /course/{courseId}/thread/{id}/post
+    defaults: { _controller: CustomWebBundle:CourseThread:post }
+
 course_thread_post_delete:
     pattern:  /course/{courseId}/thread/{threadId}/post/{id}/delete
     defaults: { _controller: CustomWebBundle:CourseThread:deletePost }
