@@ -1,6 +1,35 @@
 
-购买 {{level.name}} 会员 {{duration}} 个 {{unitType}}, {{buyType}}
-
 <input type="hidden" name="buyType" value="{{buyType}}"/>
 <input type="hidden" name="duration" value="{{duration}}"/>
 <input type="hidden" name="unitType" value="{{unitType}}"/>
+
+<ul class="course-wide-list">
+	<li class="course-item clearfix member-item">
+	  <a href="{{ path('vip_course_explore', {levelId:level.id}) }}"><img class="course-picture" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}"></a>
+	  <div class="course-view">
+	    <a href="{{ path('vip_course_explore', {levelId:level.id}) }}" class="btn btn-link">查看会员课程</a>
+	  </div>
+	  <div class="course-body">
+	    <h4 class="course-title"><a href="{{ path('vip_course_explore', {levelId:level.id}) }}">{{ level.name}}</a></h4>
+	      
+	    <div class="course-about ">
+	      {{ level.description|plain_text(52) }}
+	      <a class="glyphicon glyphicon-hand-down text-muted vip-property-tips " href="javascript:" title="" data-content="{{ level.description|raw }}" data-placement="bottom">
+	      </a>
+	    </div>
+
+	    <div class="course-footer clearfix">
+	      <span class="course-price" >
+	        {% if buyType == 10 %}
+	          {{ level.monthPrice }}元/月 {{ level.yearPrice }}元/年
+	        {% elseif buyType == 20 %}
+	           {{ level.yearPrice }}元/年
+	        {% else %}
+	          {{ level.monthPrice }}元/月
+	        {% endif %}
+	      </span>
+	    </div>
+
+	  </div>
+	</li>
+</ul>
