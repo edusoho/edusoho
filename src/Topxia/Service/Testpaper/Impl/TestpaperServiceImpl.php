@@ -741,7 +741,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $existItems = ArrayToolkit::index($existItems, 'questionId');
 
-
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
         if (count($items) != count($questions)) {
             throw $this->createServiceException('数据缺失');
