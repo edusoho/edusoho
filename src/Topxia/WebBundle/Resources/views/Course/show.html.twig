@@ -35,7 +35,7 @@
 	<div class="row row-5-7 course-cover-heading">
 		<div class="col-sm-5 picture hidden-xs">
 			{% if setting('course.picturePreview_enabled')|default(0) > 0  and freeLesson %}
-			<a  href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:freeLesson.courseId, lessonId:freeLesson.id}) }}" ><img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" /></a>
+			<a  href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:freeLesson.courseId, lessonId:freeLesson.id}) }}" ><span class="glyphicon glyphicon-play-circle" style="font-size:80px;position:absolute;top:75px;right:190px;"></span><img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" /></a>
 			{% else %}
 			<img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
 			{% endif %}

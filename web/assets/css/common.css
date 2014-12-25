@@ -31,13 +31,11 @@
 
 .short-long-text .short-text {
   cursor: pointer;
-  word-break: break-all;
 }
 
 .short-long-text .long-text {
   cursor: pointer;
   display: none;
-  word-break: break-all;
 }
 
 .social-icon-weibo,
