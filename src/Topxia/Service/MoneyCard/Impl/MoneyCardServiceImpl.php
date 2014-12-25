@@ -210,7 +210,9 @@ class MoneyCardServiceImpl extends BaseService
             $id = $this->blendCrc32($tmpId);
 
             if (!isset($cardIds[$id])) {
-                $cardIds[$id] = $this->makePassword($passwordLength);
+                $tmpPassword = $this->makePassword($passwordLength);
+                $cardIds[$id] = $tmpPassword;
+                $this->tmpPasswords[$tmpPassword] = true;
                 $i++;
             }
             if ($i >= $number) {
@@ -246,11 +248,19 @@ class MoneyCardServiceImpl extends BaseService
         return substr(crc32(substr($word,0,-3)),0,3) == substr($word,-3,3);
     }
 
-
+    private $tmpPasswords = array();
     private function makePassword ($length)
     {
-        $uuid =  $this->uuid($length-3);
-        return $this->blendCrc32($uuid);
+        while (true){
+
+            $uuid =  $this->uuid($length-3);
+            $password = $this->blendCrc32($uuid);
+            $moneyCard = $this->getMoneyCardByPassword($password);
+            if (($moneyCard == null)&&  (!isset($this->tmpPasswords[$password]))){
+                break;
+            }
+        }
+        return $password;
         //NEED TO CHECK Unique
         
 
