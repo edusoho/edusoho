@@ -275,6 +275,44 @@ class CourseController extends BaseController
 		$this->getCourseService()->hitCourse($id);
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
+
+        		$materialLib = $this->getAppService()->findInstallApp('materialLib');
+		$homeworkLessonIds =array();
+		$exercisesLessonIds =array();
+		$sameLessonIds =array();
+                        	$diffLessonIdsBetweenHomeworkAndSame = array();
+                        	$diffLessonIdsBetweenExerciseAndSame = array();
+
+        		if($materialLib){
+                                    $lessons = $this->getCourseService()->getCourseLessons($course['id']);
+                                    $lessonIds = ArrayToolkit::column($lessons, 'id');
+                                    $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
+                                    $exercises = $this->getExerciseService()->findExercisesByLessonIds($lessonIds);
+                                    $homeworkLessonIds = ArrayToolkit::column($homeworks,'lessonId');
+                                    $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
+                                    $sameLessonIds=array_intersect($homeworkLessonIds,$exercisesLessonIds);
+                                    $homeworkLessonIdNum = count($homeworkLessonIds);
+                                    $exercisesLessonIdNum = count($exercisesLessonIds);
+                                    $sameLessonIdNum = count($sameLessonIds);
+
+                                    if($exercisesLessonIdNum > $sameLessonIdNum){
+                                    	foreach ($exercisesLessonIds as $key => $value) {
+                                    		if(!in_array($value,$sameLessonIds)){
+                                    			$diffLessonIdsBetweenHomeworkAndSame[]=$value;
+                                    		}
+                                    	}
+                                    }
+
+                                    if($homeworkLessonIdNum > $sameLessonIdNum){
+                                    	foreach ($homeworkLessonIds as $key => $value) {
+                                    		if(!in_array($value,$sameLessonIds)){
+                                    			$diffLessonIdsBetweenExerciseAndSame[]=$value;
+                                    		}
+                                    	}
+                                    }
+                                    $lessonIds=array_merge($sameLessonIds,$diffLessonIdsBetweenHomeworkAndSame,$diffLessonIdsBetweenExerciseAndSame);
+        		}
+
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
 			//判断用户deadline到了，但是还是限免课程，将用户deadline延长
@@ -291,7 +329,8 @@ class CourseController extends BaseController
 				'currentTime' => $currentTime,
 				'weeks' => $weeks,
 				'files' => ArrayToolkit::index($files,'id'),
-				'ChargeCoin'=> $ChargeCoin
+				'ChargeCoin'=> $ChargeCoin,
+				'lessonIds'=>$lessonIds,
 			));
 		}
 		
@@ -812,6 +851,16 @@ class CourseController extends BaseController
 	{
 		return $this->getServiceKernel()->createService('Course.ReviewService');
 	}
+
+    	private function getHomeworkService()
+    	{
+        		return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+    	} 
+
+    	private function getExerciseService()
+    	{
+        		return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+    	}
 
 	private function getSettingService()
     {
