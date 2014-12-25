@@ -366,7 +366,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     	if(!$user->isLogin()){
     		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
     	}
-    	$noteId = $this->getParam("id", 0);
+    	$noteId = $this->getParam("noteId", 0);
     	$noteInfo = $this->controller->getNoteService()->getNote($noteId);
     	$lessonInfo = $this->controller->getCourseService()->getCourseLesson($noteInfo['courseId'],$noteInfo['lessonId']);
 		$lessonStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $noteInfo['courseId'],$noteInfo['lessonId']);
