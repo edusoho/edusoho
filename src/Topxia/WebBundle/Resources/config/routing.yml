@@ -232,6 +232,10 @@ order_result_notice:
     pattern: /order/result/notice
     defaults: { _controller: TopxiaWebBundle:Order:resultNotice }
 
+course_order_buy:
+    pattern:  /course/{id}/order/buy
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
+
 course_order_repay:
     pattern:  /course/order/repay
     defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }

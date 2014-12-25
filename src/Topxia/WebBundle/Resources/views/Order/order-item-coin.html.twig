@@ -25,7 +25,7 @@
       <input role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">{{setting("coin.coin_name")}}
     </div>
     {% endif %}
-    <div class="pay-password">
+    <div class="pay-password" style="display:none">
       {% if not hasPayPassword %}
       <div>
         为了保障账户资金安全，暂时不可用，请先<a href="{{path('settings_pay_password')}}" class="btn-link">设置支付密码</a>。

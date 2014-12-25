@@ -13,6 +13,94 @@ class CourseOrderController extends OrderController
 {
     public $courseId = 0;
 
+    public function buyAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $remainingStudentNum = $this->getRemainStudentNum($course);
+
+        $previewAs = $request->query->get('previewAs');
+
+        $payTypeChoices = $request->query->get('payTypeChoices');
+        
+        $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+        $member = $this->previewAsMember($previewAs, $member, $course);
+
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        $userInfo = $this->getUserService()->getUserProfile($user['id']);
+        $userInfo['approvalStatus'] = $user['approvalStatus'];
+        
+        $code = 'ChargeCoin';
+        $ChargeCoin = $this->getAppService()->findInstallApp($code);
+
+        $account=$this->getCashService()->getAccountByUserId($user['id'],true);
+        
+        if(empty($account)){
+            $this->getCashService()->createAccount($user['id']);
+        }
+
+        if(isset($account['cash']))
+        $account['cash']=intval($account['cash']);
+    
+        $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        
+        $course = $this->getCourseService()->getCourse($id);
+       
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
+        for($i=0;$i<count($userFields);$i++){
+           if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
+           if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
+           if(strstr($userFields[$i]['fieldName'], "intField")) $userFields[$i]['type']="int";
+           if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
+           if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
+        }
+
+        if ($remainingStudentNum == 0 && $course['type'] == 'live') {
+            return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
+                'course' => $course
+            ));
+        }
+
+        $oldOrders = $this->getOrderService()->searchOrders(array(
+                'targetType' => 'course',
+                'targetId' => $course['id'],
+                'userId' => $user['id'],
+                'status' => 'created',
+                'createdTimeGreaterThan' => strtotime('-40 hours'),
+            ), array('createdTime', 'DESC'), 0, 1
+        );
+
+        $order = current($oldOrders);
+
+        if($course['price'] > 0 && $order && ($course['price'] == ($order['amount'] + $order['couponDiscount'])) ) {
+             return $this->render('TopxiaWebBundle:CourseOrder:repay.html.twig', array(
+                'order' => $order,
+            ));
+        }
+
+        return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
+            'course' => $course,
+            'user' => $userInfo,
+            'avatarAlert' => AvatarAlert::alertJoinCourse($user),
+            'courseSetting' => $courseSetting,
+            'member' => $member,
+            'userFields'=>$userFields,
+            'payTypeChoices'=>$payTypeChoices,
+            'account'=>$account,
+            'amount'=>$amount,
+            'ChargeCoin'=> $ChargeCoin
+        ));
+    }
+
     public function repayAction(Request $request)
     {
         $user = $this->getCurrentUser();

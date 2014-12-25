@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+	
 	var Validator = require('bootstrap.validator');
 	require('common/validator-rules').inject(Validator);
 
@@ -7,6 +8,18 @@ define(function(require, exports, module) {
 		var cashRate = 1;
 		if($('[role="cash-rate"]').val() != "")
 			cashRate = $('[role="cash-rate"]').val();
+
+		var validator = new Validator({
+            element: '#order-create-form',
+            triggerType: 'change',
+            onFormValidated: function(error){
+                if (error) {
+                    return false;
+                }
+				
+                $('#order-create-btn').button('submiting').addClass('disabled');
+            }
+        });
 
 		function conculatePrice(){
 			var totalPrice = parseFloat($('[role="total-price"]').text());
@@ -51,13 +64,23 @@ define(function(require, exports, module) {
 		$('[role="coinNum"]').blur(function(e){
 			var coin = $(this).val();
 
-			if(coin == "0" || isNaN(coin)){
+			validator.removeItem('[name="payPassword"]');
+			
+			if(coin=="0" || isNaN(coin)){
 				$(this).val("0");
 				$('[role="cash-discount"]').text("0");
-				
-				
+				$(".pay-password").hide();
+				conculatePrice();
 				return;
 			}
+
+			$(".pay-password").show();
+			validator.addItem({
+			    element: '[name="payPassword"]',
+			    rule: 'remote',
+			    required : true
+			});
+
 			var cash = $('[role="accountCash"]').text();
 			var discount = 0;
 			if(parseFloat(cash) < parseFloat(coin)) {
@@ -139,27 +162,6 @@ define(function(require, exports, module) {
 				conculatePrice();
 			})
 		})
-
-
-		var validator = new Validator({
-            element: '#order-create-form',
-            triggerType: 'change',
-            onFormValidated: function(error){
-                if (error) {
-                    return false;
-                }
-				
-                $('#order-create-btn').button('submiting').addClass('disabled');
-            }
-        });
-
-		if($("input[name='payPassword'").length>0) {
-			validator.addItem({
-			    element: '[name="payPassword"]',
-			    rule: 'remote',
-			    required : true
-			});
-		}
  		
  		if($('[role="coinNum"]').length>0) {
  			$('[role="coinNum"]').blur();

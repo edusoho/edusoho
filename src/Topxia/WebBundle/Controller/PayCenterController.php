@@ -166,8 +166,9 @@ class PayCenterController extends BaseController
         $isRight = $this->getAuthService()->checkPayPassword($user["id"], $password);
         if(!$isRight) {
             $response = array('success' => false, 'message' => '支付密码不正确');
+        } else {
+            $response = array('success' => true, 'message' => '支付密码正确');
         }
-        $response = array('success' => true, 'message' => '支付密码正确');
 
         return $this->createJsonResponse($response);
     }
