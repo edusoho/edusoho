@@ -76,17 +76,14 @@ class MoneyCardServiceImpl extends BaseService
         $batch['createdTime'] = time();
 
         $moneyCardIds = $this->makeRands($batch['cardLength'], $batch['number'], $batch['cardPrefix'], $moneyCardData['passwordLength']);
-
         if (!$this->getMoneyCardDao()->isCardIdAvaliable($moneyCardIds)) {
             throw $this->createServiceException('卡号有重复，生成失败，请重新生成！');
         }
-
         $batch = $this->getMoneyCardBatchDao()->addBatch($batch);
-
         $moneyCards = array();
         foreach ($moneyCardIds as $cardid => $cardPassword) {
             $moneyCards[] = array(
-                'IdUsedToPromotion' => $batch['cardPrefix'].time(), //<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD 
+                'idUsedToPromotion' => $batch['cardPrefix'].time(), //<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD 
                 'cardId' => $cardid,
                 'password' => $cardid,  //<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD    
                 // 'password' => $cardPassword,   //<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD    
@@ -95,7 +92,6 @@ class MoneyCardServiceImpl extends BaseService
                 'batchId' => $batch['id']
             );
         }
-
         $this->getMoneyCardDao()->addMoneyCard($moneyCards);
         $this->getLogService()->info('money_card_batch', 'create', "创建新批次充值卡,卡号前缀为({$batch['cardPrefix']}),批次为({$batch['id']})");
         return $batch;
