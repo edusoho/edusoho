@@ -6,7 +6,6 @@ define(function(require, exports, module) {
            $.post($(this).data('url'),function(result){
                 var status = result.status;
                 var num = $('#carts-badge').text();
-                console.log(num)
                 if (status == 'success') {
                     num = Number(num);
                     num += 1;
