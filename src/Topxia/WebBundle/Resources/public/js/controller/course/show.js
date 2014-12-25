@@ -1,8 +1,10 @@
 define(function(require, exports, module) {
 
     exports.run = function() {
+
         $('#add-carts-btn').on('click',function(){
            $.post($(this).data('url'),function(result){
+
             var $cartsBadge = $('#carts-badge');
             var status = result.status;
             var num = $cartsBadge.text();
