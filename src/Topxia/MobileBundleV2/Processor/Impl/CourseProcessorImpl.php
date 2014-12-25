@@ -944,7 +944,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 			$data = array('content' => $resultQuestion['title'],
 						'id' => $resultQuestion['id'],
 						'courseId' => $resultQuestion['courseId'],
-						'lessonId' => $resultQuestion['lessonId'],
+						'lessonId' => $resultQuestion['id'],
 						'time' => Date('c', $resultQuestion['latestPostTime']));
 		}
 		$result[1] = array('title' => '问答',
@@ -994,8 +994,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	    	'toId' => $user['id']
 	    );
 	    $sort = array('createTime', 'DESC');
-	    //$lastestMessage = $this->getMessageService()->searchMessages($messageConditions, $sort, 0, 1);
-	    //$message = $this->getMessageService()->getConversation($lastestMessage['id']);
+
 	    $msgCount = $this->getMessageService()->getUserConversationCount($user['id']);
 	    $conversations = $this->getMessageService()->findUserConversations(
             $user['id'],
