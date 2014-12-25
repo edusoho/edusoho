@@ -36,6 +36,12 @@ define(function(require, exports, module) {
                 element: '[name="captcha_num"]',
                 required: true,
                 rule: 'alphanumeric remote',
+                onItemValidated: function(error, message, eleme) {
+                    // console.log(message);
+                    if (message == "验证码错误"){
+                        $("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+                    }
+                }                
             });
         };
 

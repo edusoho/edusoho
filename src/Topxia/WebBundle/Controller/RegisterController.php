@@ -228,6 +228,7 @@ class RegisterController extends BaseController
         if ($request->getSession()->get('captcha_code') == $captchaFilledByUser) {
             $response = array('success' => true, 'message' => '验证码正确');
         } else {
+            $request->getSession()->set('captcha_code',mt_rand(0,9999999)); 
             $response = array('success' => false, 'message' => '验证码错误');
         }
         return $this->createJsonResponse($response);
