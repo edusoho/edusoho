@@ -4,7 +4,7 @@
     {% for cart in carts %}
     {% set course = courses[cart.itemId] %}
     <li class="carts-item clearfix">
-      <a href="{{ path('course_show', {id:course.id}) }}" class="course-popover pull-left" target="_blink">
+      <a href="{{ path('course_show', {id:course.id}) }}" class="course-popover pull-left" target="_blank">
         <img src="{{ default_path('coursePicture',course.smallPicture, '') }}">
       </a>
 
@@ -15,7 +15,7 @@
         </div>
       </span>
 
-      <a href="{{ path('course_show', {id:course.id}) }}" target="_blink">
+      <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">
         <span class="apply-name">{{ course.title|plain_text(5) }}</span>
       </a>
       <div class="popover-teachers">
