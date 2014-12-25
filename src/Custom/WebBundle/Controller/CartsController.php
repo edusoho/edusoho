@@ -19,7 +19,7 @@ class CartsController extends BaseController
             $carts = $this->getCartsService()->findCartsByUserKey($userKey);
         }
         
-        array_slice($carts,0,5);
+        $carts = count($carts) <= 5 ? $carts : array_slice($carts,0,4);
 
         $courses = array();
         $users = array();
