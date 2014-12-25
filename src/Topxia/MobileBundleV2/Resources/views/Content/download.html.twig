@@ -10,6 +10,7 @@
       android: 'http://mobcdn.qiniudn.com/{{code | raw}}-Android-v2.0.1.apk'
     };
     var uagent = navigator.userAgent.toLowerCase();
+    alert(uagent);
     if(uagent.match(/MicroMessenger/i)=="micromessenger") {  
         window.location = "http://android.myapp.com/myapp/detail.htm?apkName=com.edusoho.kuozhi";
     }else if (uagent.search("iphone") > -1 || uagent.search("ipad") > -1 ) {
