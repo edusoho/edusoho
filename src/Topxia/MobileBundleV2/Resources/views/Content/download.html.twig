@@ -12,9 +12,9 @@
     };
     var uagent = navigator.userAgent.toLowerCase();
     if(uagent.match(/MicroMessenger/i)=="micromessenger") {
+      document.write("<div class='message'>正在跳转...</div>");
+      document.write("<a href='" + urls.weixin + "'>直接下载</a>");
         window.location = urls.weixin;
-          document.write("<div class='message'>正在跳转...</div>");
-          document.write("<a href='" + urls.weixin + "'>直接下载</a>");
     }else if (uagent.search("iphone") > -1 || uagent.search("ipad") > -1 ) {
         window.location = urls.iphone;
     } else {
