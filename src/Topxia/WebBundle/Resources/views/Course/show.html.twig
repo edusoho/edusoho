@@ -24,8 +24,7 @@
   </div>
 </div>
 {% endif %}
-{{dump(getCoursePrice(course.id))}}
-{# {{dump(course.id)}} #}
+
 {% if course.type == 'live' %}
 
   {% include 'TopxiaWebBundle:Course:live-course.html.twig' %}
@@ -56,58 +55,7 @@
 			<h1 class="title">{{ course.title }}</h1>
 			<div class="subtitle">{{ course.subtitle }}</div>
 			<div class="stats">
-			{% if setting('course.coursesPrice') == 0 %}
-				<p>
-					价　格：
-					{% if setting('coin.coin_enabled') %}
-
-					{% if course.price > 0 %}
-						{% if free_limit_type(course) == 'free_now' %}
-							<span class="money-num">0.00</span>
-							<span class="money-text">元</span>
-							<span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
-							<span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
-						{% else %}
-						<span class="course-price" {% if setting('coin.price_type') == 'Coin'%} style="display:none;"  {% else %}  style="display:inline " {% endif %}>
-							<span class="money-num">{{ course.price }}</span>
-							<span class="money-text">元</span>
-						</span>
-
-						 {% if course.coinPrice > 0 %}
-						 <span class="course-price"{% if setting('coin.price_type') == 'Coin'%} style="display:inline " {% else %} style="display:none;"   {% endif %} >
-							<span class="money-num">{{ course.coinPrice }}</span>
-							<span class="money-text" > {{setting('coin.coin_name')}}</span>
-						</span>
-						{% endif %}  
-						{% endif %}  
-
-					{% else %}
-						<span class="money-num" style="font-size:16px;">免费</span>
-					{% endif %}
-
-					{% else %}
-					{% if course.price > 0 %}
-						{% if free_limit_type(course) == 'free_now' %}
-							<span class="money-num">0.00</span>
-							<span class="money-text">元</span>
-							<span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
-							<span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
-						{% else %}
-						<span class="course-price" >
-							<span class="money-num">{{ course.price }}</span>
-							<span class="money-text">元</span>
-						</span>
-					{% endif %}
-						
-						{% else %}
-						<span class="money-num" style="font-size:16px;">免费</span>
-					{% endif %}
-
-					{% endif %}
-
-				</p>
-					{% endif %}
-								
+				{% include 'TopxiaWebBundle:Course:course-index-price.html.twig' with {'course':course} %}
 				<p>
 					评　价：
 					<span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>

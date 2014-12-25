@@ -103,11 +103,6 @@ abstract class BaseController extends Controller
         return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
     }
 
-    protected function getCoursePrice($id)
-    {
-        return $this->get('topxia.twig.web_extension')->getCoursePrice($id);
-    }
-
     protected function isPluginInstalled($name)
     {
         return $this->get('topxia.twig.web_extension')->isPluginInstaled($name);
