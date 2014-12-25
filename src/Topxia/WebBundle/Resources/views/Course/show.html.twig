@@ -105,6 +105,10 @@
 					{% else %}
 						<a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
 
+						{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}
+							<a id = "add-carts-btn" data-url="{{ path('carts_add',{id:course.id,itemType:'course'}) }}" class="btn btn-primary btn-fat">加入购物车</a>
+						{% endif %}
+
 						{% if courseMemberLevel %}
 							{% if checkMemberLevelResult == 'not_login' %}
 								<a href="{{ path('login') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>  

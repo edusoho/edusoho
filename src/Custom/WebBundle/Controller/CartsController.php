@@ -101,6 +101,46 @@ class CartsController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function addAction(Request $request)
+    {
+        $id = $request->query->get('id');
+        $itemType = $request->query->get('itemType','course');
+
+        if (empty($id)) {
+            return $this->createNotFoundException();
+        }
+        $user = $this->getCurrentUser();
+
+        $cart = array(
+            'itemId' => $id,
+            'itemType' => $itemType,
+            'number' => 1,
+            'userId' => $user->id,
+            'createdTime' => time()
+        );
+
+        if (!$user->isLogin()) {
+
+            $Uuid = $this->getUuid();
+            if (empty($_COOKIE['user-key'])) {
+                setcookie('user-key',$Uuid);
+                $cart['userKey'] = $Uuid;
+            } else {
+                $Uuid = $_COOKIE['user-key'];
+                $cart['userKey'] = $Uuid;
+            }
+        }
+
+        $carts = $this->getCartsService()->searchCarts($cart,array('createdTime','DESC'),0,1);
+
+        if (empty($carts)) {
+            $carts = $this->getCartsService()->addCart($cart);
+            return $this->createJsonResponse(array('status' => 'success'));
+        }
+
+        return $this->createJsonResponse(array('status' => 'exists'));
+    }
+
     private function getUsers($userIds)
     {
         $ids = array();
@@ -113,6 +153,19 @@ class CartsController extends BaseController
         $ids = array_unique($ids);
 
         return $this->getUserService()->findUsersByIds($ids);
+    }
+
+    private function getUuid($prefix = "")
+    {
+        $str = md5(uniqid(mt_rand(), true));
+
+        $uuid  = substr($str,0,8) . '-';
+        $uuid .= substr($str,8,4) . '-';
+        $uuid .= substr($str,12,4) . '-';
+        $uuid .= substr($str,16,4) . '-';
+        $uuid .= substr($str,20,12);
+
+        return $prefix . $uuid;
     }
 
     private function getCartsService()

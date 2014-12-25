@@ -48,7 +48,9 @@ class CartsDaoImpl extends BaseDao implements CartsDao
             ->select('*')
             ->from($this->table, $this->table)
             ->andWhere('userId = :userId')
+            ->andWhere('itemId = :itemId')
             ->andWhere('itemType = :itemType')
+            ->andWhere('userKey = :userKey')
             ->addOrderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
