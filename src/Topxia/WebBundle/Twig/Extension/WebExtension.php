@@ -643,19 +643,17 @@ class WebExtension extends \Twig_Extension
         return $purifier->purify($html);
     }
 
-    public function isCoursePrice($course)
+    public function getCoursePrice($id)
     {
         $coinSetting=ServiceKernel::instance()->createService('System.SettingService')->get('coin',array());
         var_dump($coinSetting);
-        // if($coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] == 'Coin'){
-        //    $fields['price'] = ceil(floatval((floatval($coinPrice)/floatval($cashRate))*100))/100;
-        // }
 
-        // $need=ServiceKernel::instance()->createService('Course.CourseService')->sumGoodsCoinsByThreadId($id);
-
-        // if($need) return true;
-
-        // return false;
+        if($coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] == 'Coin'){
+            $price = ServiceKernel::instance()->createService('Course.CourseService')->getCourseCoinPriceByCourseId($id);
+        }else{
+            $price = ServiceKernel::instance()->createService('Course.CourseService')->getCoursePriceByCourseId($id);
+        }
+        return $price;
     }
 
     public function getSetting($name, $default = null)
