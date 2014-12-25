@@ -14,7 +14,7 @@ class CartsServiceImpl extends BaseService  implements CartsService
     public function getCartsCount()
     {
         $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
+        if ($user['id'] != 0) {
             if (empty($_COOKIE['user-key'])) {
                 return '0';
             } else {
