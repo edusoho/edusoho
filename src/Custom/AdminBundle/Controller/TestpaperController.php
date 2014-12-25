@@ -66,6 +66,7 @@ class TestpaperController extends BaseController
             $fields['ranges'] = empty($fields['ranges']) ? array() : explode(',', $fields['ranges']);
             $fields['target'] = "category-{$category['id']}";
             $fields['pattern'] = 'QuestionType';
+
             list($testpaper, $items) = $this->getTestpaperService()->createTestpaper($fields);
             return $this->redirect($this->generateUrl('admin_testpaper_items',array('id' => $testpaper['id'])));
         }

@@ -235,9 +235,9 @@ define(function(require, exports, module) {
                 self.$('.normal-percentage-text').html('一般' + normalPercentage + '%');
                 self.$('.difficulty-percentage-text').html('困难' + difficultyPercentage + '%');
 
-                self.$('input[name="percentages[simple]"]').val(simplePercentage);
-                self.$('input[name="percentages[normal]"]').val(normalPercentage);
-                self.$('input[name="percentages[difficulty]"]').val(difficultyPercentage);
+                // self.$('input[name="percentages[simple]"]').val(simplePercentage);
+                // self.$('input[name="percentages[normal]"]').val(normalPercentage);
+                // self.$('input[name="percentages[difficulty]"]').val(difficultyPercentage);
 
             });
         },

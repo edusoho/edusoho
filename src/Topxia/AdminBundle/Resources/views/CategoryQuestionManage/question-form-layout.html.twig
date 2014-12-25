@@ -66,7 +66,7 @@
         <div class="form-group">
           <div class="col-md-2 control-label"><label>难度</label></div>
           <div class="col-md-8 controls radios">
-            {{ radios('difficulty', {'simpler':'简单', 'simple':'较易', 'normal':'中等', 'difficulty':'较难', 'more-difficulty':'困难'}, question.difficulty | default('normal')) }}
+            {{ radios('difficulty', {'simple':'简单', 'easy':'较易', 'normal':'中等', 'difficulty':'较难', 'hard':'困难'}, question.difficulty | default('normal')) }}
           </div>          
         </div>
 

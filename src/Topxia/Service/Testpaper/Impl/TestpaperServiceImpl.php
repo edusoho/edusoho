@@ -196,6 +196,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function buildTestpaper($id, $options)
     {
         $testpaper = $this->getTestpaperDao()->getTestpaper($id);
+
         if (empty($testpaper)) {
             throw $this->createServiceException("Testpaper #{$id} is not found.");
         }

@@ -214,6 +214,13 @@ class DataDict
 	    	'normal' => '一般',
 	    	'difficulty' => '困难',
         ),
+        'difficulty2' => array(
+            'simple' => '简单',
+            'easy' => '较易',
+            'normal' => '普通',
+            'difficulty' => '较难',
+            'hard' => '困难'
+        ),
         'targetName' => array(
         	'course' => '课程',
         	'vip' => '会员'

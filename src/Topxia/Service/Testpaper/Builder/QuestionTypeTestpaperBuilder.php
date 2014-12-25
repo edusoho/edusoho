@@ -13,7 +13,6 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         $questions = $this->getQuestions($options);
         shuffle($questions);
         $typedQuestions = ArrayToolkit::group($questions, 'type');
-
         $canBuildResult = $this->canBuildWithQuestions($options, $typedQuestions);
         if ($canBuildResult['status'] == 'no') {
             return array('status' => 'error', 'missing' => $canBuildResult['missing']);
@@ -30,7 +29,6 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
 
             if ($options['mode'] == 'difficulty') {
                 $difficultiedQuestions = ArrayToolkit::group($typedQuestions[$type], 'difficulty');
-
                 // 按难度百分比选取Question
                 $selectedQuestions = $this->selectQuestionsWithDifficultlyPercentage($difficultiedQuestions, $needCount, $options['percentages']);
 
@@ -81,12 +79,16 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         $selectedQuestions = array();
         foreach ($percentages as $difficulty => $percentage) {
             $subNeedCount = intval($needCount * $percentage / 100);
+
             if ($subNeedCount == 0) {
                 continue;
             }
 
-            $questions = array_slice($difficultiedQuestions[$difficulty], 0, $subNeedCount);
-            $selectedQuestions = array_merge($selectedQuestions, $questions);
+            if (!empty($difficultiedQuestions[$difficulty])) {
+                $questions = array_slice($difficultiedQuestions[$difficulty], 0, $subNeedCount);
+                $selectedQuestions = array_merge($selectedQuestions, $questions);
+            }
+
         }
 
         return $selectedQuestions;
