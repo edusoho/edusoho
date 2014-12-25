@@ -374,7 +374,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 		$noteInfos = array(
 			"coursesId"=>"1",
 			"courseTitle"=>"1",
-			"noteLastUpdateTime"=>"",
+			"noteLastUpdateTime"=>Date('c',$lessonInfo['createdTime']),
 			"lessonId"=>$lessonInfo['id'],
 			"lessonTitle"=>$lessonInfo['title'],
 			"learnStatus"=>$lessonStatus,
