@@ -946,8 +946,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $resultLeaned = $this->controller->filterCourses($coursesLeaned);
 		$courseIds = ArrayToolkit::column($resultLearning + $resultLeaned, 'id');
 
-		$conditions['courseIds'] = $courseIds;
-		$conditions['type'] = 'question';
+		$conditions = array(
+	        'userId' => $user['id'],
+	        'courseIds' => $courseIds,
+	        'type' => 'question'
+	    );
 		$resultQuestion = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
 		$resultQuestion = reset($resultQuestion);
 		$data = array();
@@ -955,7 +958,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 			$data = array('content' => $resultQuestion['title'],
 						'id' => $resultQuestion['id'],
 						'courseId' => $resultQuestion['courseId'],
-						'lessonId' => $resultQuestion['id'],
+						'lessonId' => $resultQuestion['lessonId'],
 						'time' => Date('c', $resultQuestion['latestPostTime']));
 		}
 		$result[1] = array('title' => '问答',
