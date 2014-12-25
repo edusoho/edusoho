@@ -48,14 +48,9 @@
                     <div class="course-about">{{ course.about|plain_text(60) }}</div>
 
                     <div class="course-metas">
-                    {% if setting('course.coursesPrice') == 0 %}
-                      {% if setting('coin.coin_enabled') %}
-                      <span class="price"{% if setting('coin.price_type') == 'Coin'%} style="display:none;"  {% else %}  style="display:inline " {% endif %}>{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                      <span class="price"{% if setting('coin.price_type') == 'Coin'%} style="display:inline " {% else %} style="display:none;"   {% endif %} >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
-                      {% else %}
-                      <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                      {% endif %}
-                      {% endif %}
+
+                    {% include 'TopxiaWebBundle:Default:autumn-course-index-price.html.twig' with {'course':course} %}
+
                       <span class="teachers">
                          主讲：
                         {% for teacher in course.teachers %}
@@ -111,14 +106,9 @@
                     <div class="course-about">{{ course.about|plain_text(60) }}</div>
                     
                     <div class="course-metas">
-                    {% if setting('course.coursesPrice') == 0 %}
-                      {% if setting('coin.coin_enabled') %}
-                      <span class="price"{% if setting('coin.price_type') == 'Coin'%} style="display:none;"  {% else %}  style="display:inline " {% endif %}>{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                      <span class="price"{% if setting('coin.price_type') == 'Coin'%} style="display:inline " {% else %} style="display:none;"   {% endif %} >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
-                      {% else %}
-                      <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                      {% endif %}
-                      {% endif %}
+
+                    {% include 'TopxiaWebBundle:Default:autumn-course-index-price.html.twig' with {'course':course} %}
+
                       <span class="teachers">
                          主讲：
                         {% for teacher in course.teachers %}
@@ -179,14 +169,9 @@
                       </div>
 
                       <div class="course-metas">
-                      {% if setting('course.coursesPrice') == 0 %}
-                      {% if setting('coin.coin_enabled') %}
-                      <span class="price"{% if setting('coin.price_type') == 'Coin'%} style="display:none;"  {% else %}  style="display:inline " {% endif %}>{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                      <span class="price"{% if setting('coin.price_type') == 'Coin'%} style="display:inline " {% else %} style="display:none;"   {% endif %} >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
-                      {% else %}
-                      <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                      {% endif %}
-                      {% endif %}
+
+                    {% include 'TopxiaWebBundle:Default:autumn-course-index-price.html.twig' with {'course':course} %}
+
                         <span class="teachers">
                            主讲：
                           {% for teacher in course.teachers %}

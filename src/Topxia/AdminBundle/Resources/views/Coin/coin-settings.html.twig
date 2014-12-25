@@ -45,6 +45,16 @@
 
       <div class="row form-group">
         <div class="col-md-3 control-label">
+            <label for="cash_rate">虚拟币汇率设置</label>
+        </div>
+        <div class="controls col-md-4">
+          <input  type="text" id="cash_rate" name="cash_rate" class="form-control" {% if coin_settings_posted.cash_rate %}value="{{coin_settings_posted.cash_rate}}" {% else %} value="1" {% endif %}>
+          <div class="help-block">在此设置1元RMB可换取的虚拟币数量</div>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-3 control-label">
           <label for="coin_picture">虚拟币图片</label>
         </div>
         <div class="col-md-7 controls">
