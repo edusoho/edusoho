@@ -629,7 +629,6 @@ class WebExtension extends \Twig_Extension
     public function getCartsCount()
     {
         $count = ServiceKernel::instance()->createService('Custom:Carts.CartsService')->getCartsCount();
-
         return $count;
     }
 

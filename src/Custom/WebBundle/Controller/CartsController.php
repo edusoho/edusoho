@@ -15,8 +15,12 @@ class CartsController extends BaseController
         if ($user->isLogin()) {
             $carts = $this->getCartsService()->findCartsByUserId($user['id']);
         } else {
-            $userKey = $_COOKIE['user-key'];
-            $carts = $this->getCartsService()->findCartsByUserKey($userKey);
+            if (!empty($_COOKIE['user-key'])){
+                $userKey = $_COOKIE['user-key'];
+                $carts = $this->getCartsService()->findCartsByUserKey($userKey);                
+            } else {
+                $carts =array();
+            }
         }
         
         $carts = count($carts) <= 5 ? $carts : array_slice($carts,0,4);

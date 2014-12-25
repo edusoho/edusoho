@@ -15,7 +15,11 @@ class CartsServiceImpl extends BaseService  implements CartsService
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            $conditions['userKey'] = $_COOKIE['user-key'];
+            if (empty($_COOKIE['user-key'])) {
+                return '0';
+            } else {
+                $conditions['userKey'] = $_COOKIE['user-key'];
+            }
         } else {
             $conditions['userId'] = $user['id'];
         }
