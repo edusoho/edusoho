@@ -4744,3 +4744,11 @@ a.homework-essay-textarea-pack-up{
 	float:left;
 	margin-top: 15px;
 }
+
+.order-pay .buy-vip-num {
+	float: right; 
+	margin-right: 33px; 
+	margin-top: 4px; 
+	line-height: 19px;
+	position: relative;
+}
