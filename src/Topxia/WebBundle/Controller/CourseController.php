@@ -276,14 +276,14 @@ class CourseController extends BaseController
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
 
-        		$MaterialLib = $this->getAppService()->findInstallApp('MaterialLib');
+        		$materialLib = $this->getAppService()->findInstallApp('materialLib');
 		$homeworkLessonIds =array();
 		$exercisesLessonIds =array();
 		$sameLessonIds =array();
                         	$diffLessonIdsBetweenHomeworkAndSame = array();
                         	$diffLessonIdsBetweenExerciseAndSame = array();
 
-        		if($MaterialLib){
+        		if($materialLib){
                                     $lessons = $this->getCourseService()->getCourseLessons($course['id']);
                                     $lessonIds = ArrayToolkit::column($lessons, 'id');
                                     $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
