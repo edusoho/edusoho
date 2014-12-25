@@ -382,7 +382,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 			// 	array('content' => $noteContent))->getContent(),
 			"content"=>$noteContent,
 			"createdTime"=>date('c', $noteInfo['createdTime']),
-			"noteNum"=>0,
+			"noteNum"=>"0",
 			"largePicture"=>"1",
 		);
 		return $noteInfos;
