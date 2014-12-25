@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
 
     exports.run = function() {
-        var i = 1;
         $('#add-carts-btn').on('click',function(){
            $.post($(this).data('url'),function(result){
                 var status = result.status;
