@@ -47,18 +47,18 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                 throw $this->createServiceException('用户未登录，不能创建订单');
             }
 
-            if (!ArrayToolkit::requireds($info, array('courseId', 'payment'))) {
+            if (!ArrayToolkit::requireds($info, array('targetId', 'payment'))) {
                 throw $this->createServiceException('订单数据缺失，创建课程订单失败。');
             }
 
             // 获得锁
             $user = $this->getUserService()->getUser($user['id'], true);
 
-            if ($this->getCourseService()->isCourseStudent($info['courseId'], $user['id'])) {
+            if ($this->getCourseService()->isCourseStudent($info['targetId'], $user['id'])) {
                 throw $this->createServiceException('已经是课程学员，创建课程订单失败。');
             }
 
-            $course = $this->getCourseService()->getCourse($info['courseId']);
+            $course = $this->getCourseService()->getCourse($info['targetId']);
             if (empty($course)) {
                 throw $this->createServiceException('课程不存在，创建课程订单失败。');
             }

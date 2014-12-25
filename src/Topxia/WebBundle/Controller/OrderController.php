@@ -11,12 +11,19 @@ class OrderController extends BaseController
 {
     public function createAction(Request $request) 
     {   
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isLogin()) {
+            return $this->redirect($this->generateUrl('login'));
+        }
+
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
         
         $processor = OrderProcessorFactory::create($targetType);
 
-        $orderInfo = $processor->getOrderInfo($targetId);
+        $fields = $request->query->all();
+        $orderInfo = $processor->getOrderInfo($targetId, $fields);
 
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
 
@@ -80,7 +87,7 @@ class OrderController extends BaseController
                 }
                 $order = $processor->updateOrder($order["id"], $orderFileds);
             } else {
-                $order = $processor->createOrder($orderFileds);
+                $order = $processor->createOrder($orderFileds, $fields);
             }
 
             return $this->redirect($this->generateUrl('pay_center_show', array(

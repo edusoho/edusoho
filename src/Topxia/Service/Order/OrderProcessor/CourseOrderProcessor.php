@@ -67,12 +67,12 @@ class CourseOrderProcessor implements OrderProcessor
         }
 
         return array(
-            'totalPrice' => $totalPrice,
             'courses' => empty($course) ? null : array($course),
             'users' => empty($users) ? null : $users,
+            
+            'totalPrice' => $totalPrice,
             'targetId' => $targetId,
             'targetType' => "course",
-
             'cashRate' => $cashRate,
             'priceType' => $priceType,
             'account' => $account,

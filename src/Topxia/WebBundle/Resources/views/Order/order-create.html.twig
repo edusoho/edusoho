@@ -28,8 +28,12 @@
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-            {% if courses|default(null) %}
+            {% if targetType == "course" and courses|default(null) %}
             {% include 'TopxiaWebBundle:Course:courses-block-list.html.twig' with {courses:courses} %}
+            {% endif %}
+
+            {% if targetType == "vip" %}
+            {% include 'TopxiaWebBundle:Order:vip.html.twig' %}
             {% endif %}
 
             <div class="order-item row">
