@@ -16,4 +16,9 @@ interface CartsService
     public function deleteCart($id);
 
     public function deleteCartsByIds($ids);
+
+    public function findCartsByUserId($userId);
+
+    public function findCartsByUserKey($userKey);
+    
 }

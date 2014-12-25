@@ -11,6 +11,17 @@ class CartsServiceImpl extends BaseService  implements CartsService
         return $this->getCartsDao()->getCart($id);
     }
 
+    public function getCartsCount()
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            $conditions['userKey'] = $_COOKIE['user-key'];
+        } else {
+            $conditions['userId'] = $user['id'];
+        }
+        return $this->getCartsDao()->searchCartsCount($conditions);
+    }
+
     public function searchCarts (array $conditions, array $oderBy, $start, $limit)
     {
         return $this->getCartsDao()->searchCarts($conditions, $oderBy, $start, $limit);
@@ -21,9 +32,14 @@ class CartsServiceImpl extends BaseService  implements CartsService
         return $this->getCartsDao()->searchCartsCount($conditions);
     }
 
-    public function findCartsByUseId($userId)
+    public function findCartsByUserId($userId)
     {
-        return $this->getCartsDao()->findCartsByUseId($userId);
+        return $this->getCartsDao()->findCartsByUserId($userId);
+    }
+
+    public function findCartsByUserKey($userKey)
+    {
+        return $this->getCartsDao()->findCartsByUserKey($userKey);
     }
 
     public function addCart(array $carts)

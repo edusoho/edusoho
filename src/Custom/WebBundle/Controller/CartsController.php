@@ -12,7 +12,13 @@ class CartsController extends BaseController
     public function showAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        $carts = $this->getCartsService()->findCartsByUseId($user['id']);
+        if ($user->isLogin()) {
+            $carts = $this->getCartsService()->findCartsByUserId($user['id']);
+        } else {
+            $userKey = $_COOKIE['user-key'];
+            $carts = $this->getCartsService()->findCartsByUserKey($userKey);
+        }
+        
         array_slice($carts,0,5);
 
         $courses = array();
