@@ -113,3 +113,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 	background-image: none;
 	background: none;
 }
+
+.btn-carts .glyphicon-shopping-cart {
+	font-size: 18px;
+}

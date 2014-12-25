@@ -14,16 +14,18 @@ class CartsServiceImpl extends BaseService  implements CartsService
     public function getCartsCount()
     {
         $user = $this->getCurrentUser();
-        if ($user['id'] != 0) {
-            if (empty($_COOKIE['user-key'])) {
+        if (empty($user['id'])) {
+            if (empty($_COOKIE['user-key'])){
                 return '0';
             } else {
-                $conditions['userKey'] = $_COOKIE['user-key'];
+                $userKey = $_COOKIE['user-key'];
+                $carts = $this->findCartsByUserKey($userKey);
             }
         } else {
-            $conditions['userId'] = $user['id'];
+            $carts = $this->findCartsByUserId($user['id']);
         }
-        return $this->getCartsDao()->searchCartsCount($conditions);
+
+        return count($carts);
     }
 
     public function searchCarts (array $conditions, array $oderBy, $start, $limit)

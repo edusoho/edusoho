@@ -12,17 +12,17 @@ class CartsController extends BaseController
     public function showAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        if ($user->isLogin()) {
-            $carts = $this->getCartsService()->findCartsByUserId($user['id']);
-        } else {
-            if (!empty($_COOKIE['user-key'])){
-                $userKey = $_COOKIE['user-key'];
-                $carts = $this->getCartsService()->findCartsByUserKey($userKey);                
+        if (empty($user['id'])) {
+            if (empty($_COOKIE['user-key'])){
+                $carts = array();
             } else {
-                $carts =array();
+                $userKey = $_COOKIE['user-key'];
+                $carts = $this->getCartsService()->findCartsByUserKey($userKey);
             }
+        } else {
+            $carts = $this->getCartsService()->findCartsByUserId($user['id']);
         }
-        
+
         $carts = count($carts) <= 5 ? $carts : array_slice($carts,0,4);
 
         $courses = array();
