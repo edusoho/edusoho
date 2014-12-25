@@ -11,19 +11,19 @@
       <div class="panel panel-default panel-page">
         <div class="panel-heading"><h4>订单确认</h4></div>
         <div class="panel-body">
-          <form id="order-create-form" method="post" action="{{path(payUrl)}}" 
+          <form id="order-create-form" method="post" action="{{path('order_pay')}}" 
           >
           	{% if order|default(null) %}
             <input type="hidden" name="orderId" value="{{order.id}}"/>
             {% endif %}
             
-          	<input type="hidden" role="cash-rate" value="{{cashRate}}"
-            data-course-price-show-type = "{{coursePriceShowType}}"/>
-            {% for targetType in targetTypes %}
-            <input type="hidden" name="targets[]" value="{{targetType}}-{{targetIds[loop.index0]}}"/>
-            {% endfor %}
+          	<input type="hidden" role="cash-rate" value="{{cashRate|default(null)}}"
+            data-course-price-show-type = "{{priceType|default('RMB')}}"/>
+
+            <input type="hidden" name="targetType" value="{{targetType}}"/>
+            <input type="hidden" name="targetId" value="{{targetId}}"/>
+            
             <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>
-            <input type="hidden" name="coursePriceShowType" value="{{coursePriceShowType}}"/>
             <input type="hidden" name="shouldPayMoney" value=""/>
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -33,25 +33,25 @@
             {% endif %}
 
             <div class="order-item row">
-            	<h4 class="price_r">应付{% if coursePriceShowType == "RMB" %}金额：￥{% elseif coursePriceShowType == "Coin" %}{{setting("coin.coin_name")}}：{% endif %}<span role="total-price">{{totalPrice}}</span></h4>
+            	<h4 class="price_r">应付{% if priceType|default('RMB') == "RMB" %}金额：￥{% elseif priceType|default('RMB') == "Coin" %}{{setting("coin.coin_name")}}：{% endif %}<span role="total-price">{{totalPrice}}</span></h4>
             </div>
             
-            {% if setting('coupon.enabled') and courses|default(null) and couponApp|default(null) %}
+            {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and 'course' in targetType%}
             	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
             {% endif %}
 
-            {% if setting('coin.coin_enabled') and account|default(null)%}
+            {% if setting('coin.coin_enabled') %}
             	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
             {% endif %}
 
             <div class="order-item row">
               <div class="total-price">
-                {% if coursePriceShowType == "Coin" %}
+                {% if priceType|default('RMB') == "Coin" %}
               	<h4>需支付{{setting("coin.coin_name")}}：<span role="pay-coin"></span></h4>
                 {% endif %}
 
                 <h4>
-                  {% if coursePriceShowType == "Coin" %}
+                  {% if priceType|default('RMB') == "Coin" %}
                   折合金额
                   {% else %}
                   支付金额

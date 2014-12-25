@@ -220,10 +220,6 @@ course_become_use_member:
     defaults: { _controller: TopxiaWebBundle:Course:becomeUseMember }
     methods: [POST]
 
-course_buy:
-    pattern:  /course/{id}/buy
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
-
 course_rebuy:
     pattern:  /course/{courseId}/course_rebuy
     defaults: { _controller: TopxiaWebBundle:Course:rebuy }
@@ -235,11 +231,6 @@ coupon_check:
 order_result_notice:
     pattern: /order/result/notice
     defaults: { _controller: TopxiaWebBundle:Order:resultNotice }
-
-course_order_pay:
-    pattern:  /course/order/pay
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:pay }
-    methods: [POST]
 
 course_order_repay:
     pattern:  /course/order/repay
@@ -1477,6 +1468,14 @@ pay_password_check:
     pattern:  /pay/password/check
     defaults: { _controller: TopxiaWebBundle:PayCenter:payPasswordCheck }
 
+order_create:
+    pattern:  /order/create
+    defaults: { _controller: TopxiaWebBundle:Order:create }
+
+order_pay:
+    pattern:  /order/pay
+    defaults: { _controller: TopxiaWebBundle:Order:pay }
+    methods: [POST]
 
 #占位
 vip:

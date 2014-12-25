@@ -80,13 +80,13 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
             $courseSetting=$this->getSettingService()->get('course',array());
 
-            if (isset($courseSetting['coursesPrice'])) {
-                $isEnabledCoursesPrice = $courseSetting['coursesPrice'];
+            if (array_key_exists("coursesPrice", $courseSetting)) {
+                $notShowPrice = $courseSetting['coursesPrice'];
             }else{
-                $isEnabledCoursesPrice = 0;
+                $notShowPrice = 0;
             }
 
-            if(!$isEnabledCoursesPrice) {
+            if($notShowPrice == 1) {
                 $order['amount'] = 0;
                 $order['totalPrice'] = 0;
             }
