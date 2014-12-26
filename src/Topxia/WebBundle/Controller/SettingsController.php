@@ -299,7 +299,7 @@ class SettingsController extends BaseController
 
 
 		$form = $this->createFormBuilder()
-			->add('currentUserLoginPassword','password')
+			// ->add('currentUserLoginPassword','password')
 			->add('oldPayPassword', 'password')
 			->add('newPayPassword', 'password')
 			->add('confirmPayPassword', 'password')
@@ -311,14 +311,19 @@ class SettingsController extends BaseController
 			if ($form->isValid()) {
 				$passwords = $form->getData();
 		
-				if ( !( $this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])
-							&& $this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']) ) ) 
+				// if ( !( $this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])
+				// 			&& $this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']) ) ) 
+				// {
+				// 	$this->setFlashMessage('danger', '当前用户登陆密码或者支付密码不正确，请重试！');
+				// }
+				if ( !($this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']) ) ) 
 				{
-					$this->setFlashMessage('danger', '当前用户登陆密码或者支付密码不正确，请重试！');
-				}
+					$this->setFlashMessage('danger', '支付密码不正确，请重试！');
+				}				
 				else 
 				{
-					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
+					$this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], $passwords['newPayPassword']);
+					// $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
 					$this->setFlashMessage('success', '重置支付密码成功。');
 				}
 
