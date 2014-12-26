@@ -112,7 +112,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         //优惠码优惠价格
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
         if(!empty($couponApp) && $fields["couponCode"]) {
-            list($afterCouponAmount, $couponDiscount) = $this->afterCouponPay(
+            list($afterCouponAmount, $couponResult, $couponDiscount) = $this->afterCouponPay(
             	$fields["couponCode"], 
             	$targetId, 
             	$amount, 
@@ -157,7 +157,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             $amount = $amount - $couponResult["decreaseAmount"]*$cashRate;
             $couponDiscount = $couponResult["decreaseAmount"]*$cashRate;
         }
-        return array($amount, $couponDiscount);
+        return array($amount, $couponResult, $couponDiscount);
 	}
 
 	public function doPaySuccess($success, $order) {

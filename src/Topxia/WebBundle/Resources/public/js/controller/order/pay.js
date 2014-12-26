@@ -43,7 +43,11 @@ define(function(require, exports, module) {
 			}
 
 			if(cashRateElement.data("coursePriceShowType") == "Coin") {
-				$('[role="pay-coin"]').text(payAmount);
+				if(payAmount == 0){
+					$('[role="pay-coin"]').text(0);
+				} else {
+					$('[role="pay-coin"]').text(payAmount.toFixed(2));
+				}
 				var payRmb = payAmount/cashRate;
 				fixedPayRmb = parseFloat(payRmb.toFixed(2));
 				if(fixedPayRmb<payRmb){

@@ -65,12 +65,12 @@ define(function(require, exports, module) {
                     var priceDisabled= $form.find('[name=price]').attr("disabled");
                     var coinPriceDisabled= $form.find('[name=coinPrice]').attr("disabled");
                     if(priceDisabled == "disabled"){
-                        var payRmb = parseFloat(price)/parseFloat(cash_rate);
+                        var payRmb = parseFloat(coinPrice)/parseFloat(cash_rate);
                         fixedPayRmb = parseFloat(payRmb.toFixed(2));
                         if(fixedPayRmb<payRmb){
-                            fixedPayRmb = parseFloat(fixedPayRmb)+0.01;
+                            fixedPayRmb = fixedPayRmb+0.01;
                         }
-                        var turePrice=fixedPayRmb;
+                        var turePrice=fixedPayRmb.toFixed(2);
                         if(price!=turePrice){
                             return false;
                         }
