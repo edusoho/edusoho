@@ -66,10 +66,6 @@ class CashServiceImpl extends BaseService implements CashService
 
         $account = $this->getCashAccountService()->getAccountByUserId($inflow["userId"]);
 
-        if($account["cash"] < $inflow["amount"]) {
-            throw $this->createServiceException('余额不足');
-        }
-
         $inflow["cashType"] = "Coin";
         $inflow["type"] = "inflow";
         $inflow["sn"] = $this->makeSn();
