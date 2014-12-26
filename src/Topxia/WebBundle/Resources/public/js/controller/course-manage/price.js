@@ -7,6 +7,10 @@ define(function(require, exports, module) {
     require("jquery.bootstrap-datetimepicker");
     var Notify = require('common/bootstrap-notify');
 
+    function roundUp(amount){
+            return Math.ceil(amount*100)/100;
+    }
+
     exports.run = function() {
     
         require('./header').run();
@@ -23,11 +27,7 @@ define(function(require, exports, module) {
             var cash_rate= element.data("cashrate");
             var price = element.val();
             var payRmb = parseFloat(price)/parseFloat(cash_rate);
-            fixedPayRmb = parseFloat(payRmb.toFixed(2));
-            if(fixedPayRmb<payRmb){
-                fixedPayRmb = parseFloat(fixedPayRmb)+0.01;
-            }
-            $("input[name='price']").attr('value',fixedPayRmb);
+            $("input[name='price']").attr('value',roundUp(payRmb));
         });
 
         var validator = new Validator({
@@ -66,11 +66,8 @@ define(function(require, exports, module) {
                     var coinPriceDisabled= $form.find('[name=coinPrice]').attr("disabled");
                     if(priceDisabled == "disabled"){
                         var payRmb = parseFloat(price)/parseFloat(cash_rate);
-                        fixedPayRmb = parseFloat(payRmb.toFixed(2));
-                        if(fixedPayRmb<payRmb){
-                            fixedPayRmb = parseFloat(fixedPayRmb)+0.01;
-                        }
-                        var turePrice=fixedPayRmb;
+
+                        var turePrice=roundUp(payRmb);
                         if(price!=turePrice){
                             return false;
                         }
