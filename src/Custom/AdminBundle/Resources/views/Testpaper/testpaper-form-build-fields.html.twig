@@ -9,16 +9,7 @@
   <div class="col-md-2 control-label"><label for="testpaper-percentage-field">试卷难度</label></div>
   <div class="col-md-8 controls form-control-static">
       {# <div class="difficulty-percentage-slider"></div> #}
-       <span class="mlm">简单:</span>
-          <input type="text" class="form-control width-input width-input-mini input-sm item-number" name="percentages[simple]"  value="20" / style="width:39px">％
-       <span class="mlm">较易:</span>
-          <input type="text" class="form-control width-input width-input-mini input-sm item-number" name="percentages[easy]"  value="20" / style="width:39px">％
-       <span class="mlm">普通:</span>
-          <input type="text" class="form-control width-input width-input-mini input-sm item-number" name="percentages[normal]"  value="20" / style="width:39px">％
-       <span class="mlm">较难:</span>
-          <input type="text" class="form-control width-input width-input-mini input-sm item-number" name="percentages[difficulty]"  value="20" / style="width:39px">％
-       <span class="mlm">困难:</span>
-          <input type="text" class="form-control width-input width-input-mini input-sm item-number" name="percentages[hard]"  value="20" / style="width:39px">％
+      {% include 'CustomAdminBundle:Testpaper:diffcult-persentage.html.twig' %}
       <div class="help-block">
           <span class="simple-percentage-text"></span>
           <span class="normal-percentage-text"></span>

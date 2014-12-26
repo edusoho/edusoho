@@ -277,6 +277,15 @@ define(function(require, exports, module) {
                 rule: 'integer countcheck'
             });
 
+            validator.addItem({
+                element: '.difficult-num',
+                required: true,
+                errormessageRequired:'请输入<=100的数字',
+                display: '试卷难度',
+                total: '100',
+                rule:'integer,max{max:100},total_num{total:100}'
+            });
+
             validator.on('formValidated', function(error, msg, $form) {
                 if (error) {
                     return ;
@@ -426,6 +435,7 @@ define(function(require, exports, module) {
         new TestpaperForm({
             element: '#testpaper-form'
         });
+
     }
 
 });

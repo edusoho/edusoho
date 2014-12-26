@@ -23,7 +23,25 @@ define(function(require, exports, module) {
             'not_all_digital',
             /(^(?![^0-9a-zA-Z]+$))(?![0-9]+$).+/,
             '{{display}}不能全为数字'
-        ], 
+        ],
+        [
+            'total_num',
+            function(options) {
+                var num = 0;
+                var total = options.total;
+                var elements = options.element;
+                $.each(elements,function(index,item){
+                    $val = $(item).val();
+                    num += Number($val);
+                });
+                if (num > total) {
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+            '{{display}}不能超{{total}}%'
+        ],
         [
             'visible_character',
             function(options) {
