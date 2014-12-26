@@ -7,21 +7,13 @@
 
  
 {% block main %}
+
     {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %}
 
     <div class="page-header"><h1>用户虚拟币</h1></div>
 
     <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
-        <div class="form-group">
-         <a type="button" class="btn btn-default {% if condition.timeType != "threeMonths" and  condition.timeType != "oneMonth" %}active{% endif %}" href="{{path('admin_coin_user_records',{timeType:"oneWeek",searchType:condition.searchType,keyword:condition.keyword})}}">本周</a>
-        </div>
-        <div class="form-group">
-         <a type="button" class="btn btn-default {% if condition.timeType == "oneMonth" %}active{% endif %}" href="{{path('admin_coin_user_records',{timeType:"oneMonth",searchType:condition.searchType,keyword:condition.keyword})}}">本月</a>
-        </div>
-        <div class="form-group">
-         <a type="button" class="btn btn-default {% if condition.timeType == "threeMonths" %}active{% endif %}" href="{{path('admin_coin_user_records',{timeType:"threeMonths",searchType:condition.searchType,keyword:condition.keyword})}}">三个月</a>
-        </div>
         <input value="{{condition.type}}" name="flowType" type="hidden"/>
         <input value="{{condition.timeType}}" name="timeType" type="hidden"/>
         <div class="form-group">
@@ -37,20 +29,49 @@
 
       <button class="btn btn-primary">搜索</button>
     </form>
-  
+    
+    <div class="well">
+      <div>
+      时间：
+
+          <a type="button" class="btn btn-default btn-sm {% if condition.timeType != "threeMonths" and  condition.timeType != "oneMonth" and  condition.timeType != "all" %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{timeType:"oneWeek",searchType:condition.searchType,keyword:condition.keyword})}}">本周</a>
+
+          <a type="button" class="btn btn-default btn-sm {% if condition.timeType == "oneMonth" %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{timeType:"oneMonth",searchType:condition.searchType,keyword:condition.keyword})}}">本月</a>
+
+
+          <a type="button" class="btn btn-default btn-sm {% if condition.timeType == "threeMonths" %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{timeType:"threeMonths",searchType:condition.searchType,keyword:condition.keyword})}}">三个月</a>
+
+          <a type="button" class="btn btn-default btn-sm {% if condition.timeType == "all" %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{timeType:"all",searchType:condition.searchType,keyword:condition.keyword})}}">全部历史</a>
+
+      </div>
+      <div class="mtl">
+      类型：
+
+          <a type="button" class="btn btn-default btn-sm {% if condition.flowType != "out" and  condition.flowType != "in" %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{flowType:"",timeType:condition.timeType,sort:condition.sort})}}">默认</a>
+
+          <a type="button" class="btn btn-default btn-sm {% if condition.flowType == "out" %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{flowType:"out",timeType:condition.timeType,sort:condition.sort})}}">消费</a>
+
+
+          <a type="button" class="btn btn-default btn-sm {% if condition.flowType == "in" %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{flowType:"in",timeType:condition.timeType,sort:condition.sort})}}">充值</a>
+
+      </div>
+      <div class="mtl">
+      排序：
+
+          <a type="button" class="btn btn-default btn-sm {% if condition.sort == "up"  %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{flowType:condition.flowType,timeType:condition.timeType,sort:"up"})}}">升序</a>
+
+          <a type="button" class="btn btn-default btn-sm {% if condition.sort == "down"  %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{flowType:condition.flowType,timeType:condition.timeType,sort:"down"})}}">降序</a>
+
+        </div>
+    </div>
+
     <div class="table-responsive">
       <table class="table table-striped">
         <tr>
           <th width="30%">用户</th>
           <th>充值 
-            {% if not condition.userId|default(null) %}
-            <a type="button" href="{{path('admin_coin_user_records',{flowType:"inUp",timeType:condition.timeType})}}"><span class="glyphicon glyphicon-arrow-up"></span></a> <a type="button" href="{{path('admin_coin_user_records',{flowType:"inDown",timeType:condition.timeType})}}"><span class="glyphicon glyphicon-arrow-down"></span></a>
-          {% endif %}
           </th>
           <th>消费
-            {% if not condition.userId|default(null) %}
-            <a type="button" href="{{path('admin_coin_user_records',{flowType:"outUp",timeType:condition.timeType})}}"><span class="glyphicon glyphicon-arrow-up"></span></a> <a type="button" href="{{path('admin_coin_user_records',{flowType:"outDown",timeType:condition.timeType})}}"><span class="glyphicon glyphicon-arrow-down"></span>
-            {% endif %}
           </a></th>
           <th>账户余额</th>
           <th>操作</th>

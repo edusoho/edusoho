@@ -122,6 +122,8 @@ class CoinController extends BaseController
         $condition['orderBY']="desc";
         $condition['searchType']="";
         $condition['keyword']="";
+        $condition['sort']="down";
+        $condition['flowType']="";
 
         $fields = $request->query->all();
 
@@ -484,7 +486,7 @@ class CoinController extends BaseController
     private function convertFiltersToCondition($condition)
     {   
         $condition['time']=time()-7*3600*24;
-        $condition['type']="inflow";
+        $condition['type']="";
         $condition['orderBY']="desc";
         $keyword="";
 
@@ -528,6 +530,9 @@ class CoinController extends BaseController
                 case 'threeMonths':
                     $condition['time']=time()-90*3600*24;
                     break;
+                case 'all':
+                    $condition['time']=0;
+                    break;
                 default:
                     break;
             }
@@ -535,28 +540,36 @@ class CoinController extends BaseController
             $condition['timeType']="oneWeek";
         }
 
-        if(isset($condition['flowType'])){
+        if(isset($condition['sort'])){
 
-            switch ($condition['flowType']) {
-                case 'inUp':
-                    $condition['type']="inflow";
+            switch ($condition['sort']) {
+                case 'up':
                     $condition['orderBY']="ASC";
                     break;
-                case 'inDown':
-                    $condition['type']="inflow";
+                case 'down':
                     $condition['orderBY']="DESC";
-                    break;  
-                case 'outUp':
-                    $condition['type']="outflow";
-                    $condition['orderBY']="ASC";
-                    break;
-                case 'outDown':
-                    $condition['type']="outflow";
-                    $condition['orderBY']="DESC";
-                    break;              
+                    break;               
                 default:
                     break;
             }  
+        }else{
+            $condition['sort']="down";
+        }
+
+        if(isset($condition['flowType'])){
+
+            switch ($condition['flowType']) {
+                case 'in':
+                    $condition['type']="inflow";
+                    break;
+                case 'out':
+                    $condition['type']="outflow";
+                    break;            
+                default:
+                    break;
+            }  
+        }else{
+            $condition['flowType']="";
         }
 
 
