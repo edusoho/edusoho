@@ -136,7 +136,7 @@ class TestpaperController extends BaseController
     public function buildItemsAction(Request $request)
     {
         $part = json_decode($request->query->get('part'), true);
-        $this->filtParts($part);
+        $this->filtPart($part);
         $result = $this->getTestpaperService()->makeItemsByPart($part);
         return $this->createJsonResponse($result);
     }
@@ -443,7 +443,7 @@ class TestpaperController extends BaseController
 
     }
 
-    private function filtParts($part)
+    private function filtPart($part)
     {
         foreach ($part as $key => $value) {
             if (strstr($key,'percentages')) {
