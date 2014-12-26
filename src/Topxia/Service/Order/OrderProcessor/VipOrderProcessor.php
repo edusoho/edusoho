@@ -3,6 +3,7 @@ namespace Topxia\Service\Order\OrderProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\NumberToolkit;
 
 class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 {
@@ -153,7 +154,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $amount = $amount/$cashRate;
         }
 
-        $amount = $this->roundUp($amount);
+        $amount = NumberToolkit::roundUp($amount);
 
         return array(
         	$amount, 

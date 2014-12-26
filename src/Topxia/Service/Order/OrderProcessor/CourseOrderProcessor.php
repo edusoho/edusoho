@@ -2,6 +2,7 @@
 namespace Topxia\Service\Order\OrderProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\NumberToolkit;
 
 class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 {
@@ -127,7 +128,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             $amount = $amount/$cashRate;
         }
 
-        $amount = $this->roundUp($amount);
+        $amount = NumberToolkit::roundUp($amount);
 
         return array(
         	$amount, 
