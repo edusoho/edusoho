@@ -16,11 +16,11 @@ class Version20141208094934 extends AbstractMigration
     	
         $this->addSql(" 
             ALTER table `user` 
-            Add column `payPasswordSalt` varchar(64) NOT NULL AFTER `salt`;
+            Add column `payPasswordSalt` varchar(64) NOT NULL DEFAULT '' AFTER `salt`;
         ");  
         $this->addSql(" 
             ALTER table `user` 
-            Add column `payPassword` varchar(64) NOT NULL AFTER `salt`;
+            Add column `payPassword` varchar(64) NOT NULL DEFAULT '' AFTER `salt`;
         "); 
 
         $this->addSql(
