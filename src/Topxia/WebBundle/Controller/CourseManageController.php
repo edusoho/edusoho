@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Form\ReviewType;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\NumberToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Service\Util\LiveClientFactory;
@@ -199,7 +200,7 @@ class CourseManageController extends BaseController
             $price = $request->request->get('price');
             $coinPrice = $request->request->get('coinPrice');
             if($price == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] == 'Coin'){
-               $fields['price'] = ceil(floatval((floatval($coinPrice)/floatval($cashRate))*100))/100;
+               $fields['price'] = NumberToolkit::roundUP(floatval($coinPrice)/floatval($cashRate)); 
             }
 
             if($coinPrice == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] =='RMB'){
