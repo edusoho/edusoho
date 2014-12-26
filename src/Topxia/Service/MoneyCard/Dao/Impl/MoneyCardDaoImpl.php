@@ -61,7 +61,7 @@ class MoneyCardDaoImpl extends BaseDao
         $sql = "INSERT INTO $this->table (cardId, password, deadline, cardStatus, batchId )     VALUE ";
         for ($i=0; $i < count($moneyCards); $i++) {
             $sql .= "(?, ?, ?, ?, ?),";
-        }//<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD 
+        }
 
         $sql = substr($sql, 0, -1);
 

@@ -88,8 +88,7 @@ class MoneyCardServiceImpl extends BaseService
         $batch = $this->getMoneyCardBatchDao()->addBatch($batch);
         $moneyCards = array();
         foreach ($moneyCardIds as $cardid => $cardPassword) {
-            $moneyCards[] = array(
-                // 'idUsedToPromotion' => $batch['cardPrefix'].time(), //<------To Fit ONLY ENTER ID, NO NEED TO ENTER PASSWORD 
+            $moneyCards[] = array(                
                 'cardId' => $cardid,  
                 'password' => $cardPassword,   
                 'deadline' => $moneyCardData['deadline'],
@@ -263,7 +262,6 @@ class MoneyCardServiceImpl extends BaseService
         return $password;
         //NEED TO CHECK Unique
         
-
         // $cardIds[$id] = $this->makePassword($passwordLength);
 
         // $pattern = '1234567890abcdefghijklmnopqrstuvwxyz';
