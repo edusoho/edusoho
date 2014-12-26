@@ -314,76 +314,79 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	}
 
 	public function getNoteList(){
-	    	$user = $this->controller->getUserByToken($this->request);
-	    	$start = $this->getParam("start", 0);
-	    	$limit = $this->getParam("limit", 10);
+    	$user = $this->controller->getUserByToken($this->request);
+    	$start = $this->getParam("start", 0);
+    	$limit = $this->getParam("limit", 10);
 
-	    	if(!$user->isLogin()){
-	    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
-	    	}
-
-	     	$conditions = array(
-	            	'userId' => $user['id'],
-	            	'noteNumGreaterThan' => 0.1
-	        	);
-
-	        	$courseMembers = $this->controller->getCourseService()->searchMember($conditions,$start,$limit);
-	        	$courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
-	        	$noteInfos = array();
-	        	for ($i = 0; $i < count($courseMembers); $i++) { 
-	        		$courseMember = $courseMembers[$i];
-	        		$course = $courses[$courseMember['courseId']];
-	        		$noteNum = $courseMember['noteNum'];
-	        		if (empty($noteNum) or $noteNum == '0') {
-	        			continue;
-	        		}
-	        		$noteListByOneCourse = $this->controller->getNoteService()->findUserCourseNotes($user['id'],$courseMember['courseId']);
-	        		foreach ($noteListByOneCourse as $value) {
-	        			$lessonInfo = $this->controller->getCourseService()->getCourseLesson($value['courseId'],$value['lessonId']);
-	        			$lessonStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $value['courseId'],$value['lessonId']);
-	        			$noteContent = $this->filterSpace($this->controller->convertAbsoluteUrl($this->request, $value['content']));
-	        			$noteInfos[] = array(
-		        			"coursesId"=>$courseMember['courseId'],
-		        			"courseTitle"=>$course['title'],
-		        			"noteLastUpdateTime"=>date('c',$courseMember['noteLastUpdateTime']),
-		        			"lessonId"=>$lessonInfo['id'],
-		        			"lessonTitle"=>$lessonInfo['title'],
-		        			"learnStatus"=>$lessonStatus,
-		        			// "content"=>$this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', 
-		        			// 	array('content' => $noteContent))->getContent(),
-		        			"content"=>$noteContent,
-		        			"createdTime"=>date('c', $value['createdTime']),
-		        			"noteNum"=>$noteNum,
-		        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png'),
-		        			);
-	        		}
-	        	}
-	        	/*
-	    	$noteList = array();
-	    	$index = 0;
-	    	for($i = 0;$i < count($courseMember);$i++){
-	    		$noteListByOneCourse =  $this->controller->getNoteService()->findUserCourseNotes($user['id'],$courseMember[$i]['courseId']);
-	    		foreach ($noteListByOneCourse as $key => $value) {
-		    		$courseId = $value['courseId'];
-		    		$lessonId = $value['lessonId'];
-		    		$courseInfo = $this->controller->getCourseService()->getCourse($courseId);
-		    		$lessonInfo = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
-		    		$value["title"] = $courseInfo["title"];
-		    		$value["largePicture"] = $this->controller->coverPath($courseInfo["largePicture"], 'course-large.png');
-		    		$value["lessonName"] = $lessonInfo["title"];
-		    		$value["number"] = $lessonInfo["number"];
-		    		$noteList[$index++] = $value;
-	    		}
-	    	}
-
-	    	foreach ($noteList as $key => $value) {
-	    		$sort_course[$key] = $value['courseId'];
-	    		$sort_lesson[$key] = $value['lessonId'];
-	    	}
-	    	array_multisort($sort_course,SORT_ASC,$sort_lesson,SORT_ASC,$noteList);
-	    	*/
-    		return $noteInfos;
+    	if(!$user->isLogin()){
+    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
     	}
+
+     	$conditions = array(
+            	'userId' => $user['id'],
+            	'noteNumGreaterThan' => 0.1
+        );
+
+    	$courseMembers = $this->controller->getCourseService()->searchMember($conditions,$start,$limit);
+    	$courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
+    	$noteInfos = array();
+    	for ($i = 0; $i < count($courseMembers); $i++) { 
+    		$courseMember = $courseMembers[$i];
+    		$course = $courses[$courseMember['courseId']];
+    		$noteNum = $courseMember['noteNum'];
+    		if (empty($noteNum) or $noteNum == '0') {
+    			continue;
+    		}
+    		$noteListByOneCourse = $this->controller->getNoteService()->findUserCourseNotes($user['id'],$courseMember['courseId']);
+    		foreach ($noteListByOneCourse as $value) {
+    			$lessonInfo = $this->controller->getCourseService()->getCourseLesson($value['courseId'],$value['lessonId']);
+    			$lessonStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $value['courseId'],$value['lessonId']);
+    			$noteContent = $this->filterSpace($this->controller->convertAbsoluteUrl($this->request, $value['content']));
+    			$noteInfos[] = array(
+        			"coursesId"=>$courseMember['courseId'],
+        			"courseTitle"=>$course['title'],
+        			"noteLastUpdateTime"=>date('c',$courseMember['noteLastUpdateTime']),
+        			"lessonId"=>$lessonInfo['id'],
+        			"lessonTitle"=>$lessonInfo['title'],
+        			"learnStatus"=>$lessonStatus,
+        			// "content"=>$this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', 
+        			// 	array('content' => $noteContent))->getContent(),
+        			"content"=>$noteContent,
+        			"createdTime"=>date('c', $value['createdTime']),
+        			"noteNum"=>$noteNum,
+        			"largePicture"=>$this->controller->coverPath($course["largePicture"], 'course-large.png'),
+        		);
+    		}
+    	}
+    	return $noteInfos;
+    }
+
+    public function getOneNote(){
+		$user = $this->controller->getUserByToken($this->request);
+    	if(!$user->isLogin()){
+    		return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
+    	}
+    	$noteId = $this->getParam("noteId", 0);
+    	$noteInfo = $this->controller->getNoteService()->getNote($noteId);
+    	$lessonInfo = $this->controller->getCourseService()->getCourseLesson($noteInfo['courseId'],$noteInfo['lessonId']);
+		$lessonStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $noteInfo['courseId'],$noteInfo['lessonId']);
+		$noteContent = $this->filterSpace($this->controller->convertAbsoluteUrl($this->request, $noteInfo['content']));
+		$noteInfos = array(
+			"coursesId"=>null,
+			"courseTitle"=>null,
+			"noteLastUpdateTime"=>null,
+			"lessonId"=>$lessonInfo['id'],
+			"lessonTitle"=>$lessonInfo['title'],
+			"learnStatus"=>$lessonStatus,
+			// "content"=>$this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', 
+			// 	array('content' => $noteContent))->getContent(),
+			"content"=>$noteContent,
+			"createdTime"=>date('c', $noteInfo['createdTime']),
+			"noteNum"=>null,
+			"largePicture"=>null,
+		);
+		return $noteInfos;
+    }
 
     public function AddNote(){
     	$courseId = $this->getParam("courseId", 0);
@@ -939,12 +942,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	    $sort = array('startTime', 'DESC');
 	    $resultCourse = $this->controller->getCourseService()->searchLearns($courseConditions ,$sort, 0, 1);
 	    $resultCourse = reset($resultCourse);
-	    $lesson = $this->controller->getCourseService()->getCourseLesson($resultCourse['courseId'], $resultCourse['lessonId']);
 	    if($resultCourse != false){
-	    	$data = array('content' => $lesson['title'],
+		    $courseInfo = $this->controller->getCourseService()->getCourse($resultCourse['courseId']);
+		    //$lesson = $this->controller->getCourseService()->getCourseLesson($resultCourse['courseId'], $resultCourse['lessonId']);
+	    	$data = array('content' => $courseInfo['title'],
 	    				  'id' => $resultCourse['id'],
 	    				  'courseId' => $resultCourse['courseId'],
-	    				  'lessonId' => $resultCourse['lessonId'],
+	    				  'lessonId' => $courseInfo['largePicture'],
 	    				  'time' => Date('c', $resultCourse['startTime']));
 	    }
 	    $result[0] = array('title' => '在学课程',
