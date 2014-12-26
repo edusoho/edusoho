@@ -42,8 +42,8 @@
   
     <div class="well clearfix">
     <span class="pull-right">
-      <span class="mrl">网校余额：<span style="color:blue;">{{amounts}} 虚拟币</span></span><span class="mrl">充值：<span style="color:#1bb974;">{{inflow}} 虚拟币 </span> </span>
-      <span class="mrl">消费：<span style="color:#ff7b0e;">{{outflow}} 虚拟币</span></span>
+      <span class="mrl">网校余额：<span style="color:blue;">{{amounts|default(0)}} 虚拟币</span></span><span class="mrl">充值：<span style="color:#1bb974;">{{inflow|default(0)}} 虚拟币 </span> </span>
+      <span class="mrl">消费：<span style="color:#ff7b0e;">{{outflow|default(0)}} 虚拟币</span></span>
     </span>
     </div>
     <div class="table-responsive">

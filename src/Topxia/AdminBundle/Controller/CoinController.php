@@ -117,7 +117,7 @@ class CoinController extends BaseController
     public function userRecordsAction(Request $request)
     {   
         $condition['time']=time()-7*3600*24;
-        $condition['type']="inflow";
+        $condition['type']="";
         $condition['timeType']="oneWeek";
         $condition['orderBY']="desc";
         $condition['searchType']="";

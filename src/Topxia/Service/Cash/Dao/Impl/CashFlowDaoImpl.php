@@ -68,16 +68,16 @@ class CashFlowDaoImpl extends BaseDao implements CashFlowDao
 
     public function findUserIdsByFlows($type,$createdTime, $orderBy, $start, $limit)
     {
-        $sql="SELECT  userId,sum(amount) as amounts FROM `cash_flow` where `type`=?  and createdTime >= ? group by userId  order by amounts {$orderBy} limit {$start},{$limit} ";
+        $sql="SELECT  userId,sum(amount) as amounts FROM `cash_flow` where ".($type ? "`type`=? and " : "" )." createdTime >= ? group by userId  order by amounts {$orderBy} limit {$start},{$limit} ";
         
-        return $this->getConnection()->fetchAll($sql,array($type,$createdTime)) ? : array() ;
+        return $this->getConnection()->fetchAll($sql,$type ? array($type,$createdTime) : array($createdTime) ) ? : array() ;
     }
 
     public function findUserIdsByFlowsCount($type,$createdTime)
     {
-        $sql="SELECT count( distinct userId)  FROM `cash_flow` where `type`=?  and createdTime >= ? ";
+        $sql="SELECT count( distinct userId)  FROM `cash_flow` where ".($type ? "`type`=? and " : "" )." createdTime >= ? ";
       
-        return $this->getConnection()->fetchColumn($sql,array($type,$createdTime)) ? : 0 ;
+        return $this->getConnection()->fetchColumn($sql,$type ? array($type,$createdTime) : array($createdTime)) ? : 0 ;
     }
 
     private function createFlowQueryBuilder($conditions)
