@@ -103,6 +103,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $filtedFields['mistakeScore'] = empty($part['mistakeScore']) ? 0 : (int) $part['mistakeScore'];
         $filtedFields['items'] = empty($part['items']) ? array() : $part['items'];
         $filtedFields['parentId'] = empty($part['parentId']) ? 0 : $part['parentId'];
+        $filtedFields['percentages'] = empty($part['percentages']) ? array() : $part['percentages'];
 
         return $filtedFields;
     }
@@ -932,43 +933,138 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'excludeIds' => $part['excludeIds'],
             'parentId' => 0
         );
-        $questions = $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $part['count']);
+
+        $searchQuestionsCount = $this->getQuestionService()->searchQuestionsCount($conditions);
+        $questions = $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $searchQuestionsCount);
+        $questions = $this->buildPartItems($part,$questions,$part);
         $items = array();
         $index = 1;
         $excludeIds = array();
         $childrenQuestions = $this->getQuestionService()->findQuestionsByParentIds(ArrayToolkit::column($questions, 'id'));
         foreach ($questions as $question) {
             $items[] = array(
-                'questionId' => $question['id'],
+                'questionId' => $question['questionId'],
                 'seq' => $index,
-                'questionType' => $part['type'],
+                'questionType' => $question['questionType'],
                 'partId' => $part['id'],
-                'score' => $part['score'],
-                'missScore' => $part['missScore'],
-                'mistakeScore' => $part['mistakeScore'] 
+                'score' => $question['score'],
+                'missScore' => $question['missScore'],
+                'mistakeScore' => !empty($question['mistakeScore']) ? $question['mistakeScore'] : 0
             );
             $index += 1;
             foreach ($childrenQuestions as $child) {
-                if($child['parentId'] == $question['id']) {
+                if($child['parentId'] == $question['questionId']) {
                     $items[] = array(
                         'questionId' => $child['id'],
                         'seq' => $index,
-                        'questionType' => $part['type'],
+                        'questionType' => $child['questionType'],
                         'partId' => $part['id'],
-                        'parentId' => $question['id'],
-                        'score' => $part['score'],
-                        'missScore' => $part['missScore'],
-                        'mistakeScore' => $part['mistakeScore'] 
+                        'parentId' => $question['questionId'],
+                        'score' => $child['score'],
+                        'missScore' => $child['missScore'],
+                        'mistakeScore' => !empty($child['mistakeScore']) ? $child['mistakeScore'] : 0
                     );
                     $index += 1;
                     $excludeIds[] = $child['id'];
                 }
             }
-            $excludeIds[] = $question['id'];
+            $excludeIds[] = $question['questionId'];
         }
         return array('items' => $items, 'excludeIds' => implode(',', $excludeIds));
     }
 
+    private function buildPartItems($part,$questions,$options)
+    {
+        shuffle($questions);
+        $typedQuestions = ArrayToolkit::group($questions, 'type');
+
+        $type = $options['type'];
+        $needCount = $options['count'];
+        $items = array();
+        $needCount = intval($needCount);
+
+        $difficultiedQuestions = ArrayToolkit::group($typedQuestions[$type], 'difficulty');
+
+        $selectedQuestions = $this->selectQuestionsWithDifficultlyPercentage($difficultiedQuestions, $needCount, $options['percentages']);
+        $selectedQuestions = $this->fillQuestionsToNeedCount($selectedQuestions, $typedQuestions[$type], $needCount);
+
+        $itemsOfType = $this->convertQuestionsToItems($part, $selectedQuestions, $needCount, $options);
+ 
+        return array_merge($items, $itemsOfType);
+    }
+
+    private function selectQuestionsWithDifficultlyPercentage($difficultiedQuestions, $needCount, $percentages)
+    {
+        $selectedQuestions = array();
+        foreach ($percentages as $difficulty => $percentage) {
+            $subNeedCount = intval($needCount * $percentage / 100);
+
+            if ($subNeedCount == 0) {
+                continue;
+            }
+
+            if (!empty($difficultiedQuestions[$difficulty])) {
+                $questions = array_slice($difficultiedQuestions[$difficulty], 0, $subNeedCount);
+                $selectedQuestions = array_merge($selectedQuestions, $questions);
+            }
+
+        }
+
+        return $selectedQuestions;
+    }
+
+    private function fillQuestionsToNeedCount($selectedQuestions, $allQuestions, $needCount)
+    {
+        $indexedQuestions = ArrayToolkit::index($allQuestions, 'id');
+        foreach ($selectedQuestions as $question) {
+            unset($indexedQuestions[$question['id']]);
+        }
+
+        if (count($selectedQuestions) < $needCount) {
+            $stillNeedCount = $needCount - count($selectedQuestions);
+        } else {
+            $stillNeedCount = 0;
+        }
+
+        if ($stillNeedCount) {
+            $questions = array_slice(array_values($indexedQuestions), 0, $stillNeedCount);
+            $selectedQuestions = array_merge($selectedQuestions, $questions);
+        }
+
+
+        return $selectedQuestions;
+    }
+
+    private function convertQuestionsToItems($part, $questions, $count, $options)
+    {
+        $items = array();
+        for ($i=0; $i<$count; $i++) {
+            $question = $questions[$i];
+            $score = empty($options['scores'][$question['type']]) ? 0 : $options['scores'][$question['type']];
+            $missScore = empty($options['missScores'][$question['type']]) ? 0 : $options['missScores'][$question['type']];
+            $items[] = $this->makeItem($part, $question, $score, $missScore);
+            if ($question['subCount'] > 0) {
+                $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id'], 0, $question['subCount']);
+                foreach ($subQuestions as $subQuestion) {
+                    $missScore = empty($options['missScores'][$subQuestion['type']]) ? 0 : $options['missScores'][$subQuestion['type']];
+                    $items[] = $this->makeItem($part, $subQuestion, $score, $missScore);
+                }
+            }
+        }
+        return $items;
+    }
+
+    private function makeItem($part, $question, $score, $missScore)
+    {
+        return array(
+            'testId' => $part['id'],
+            'questionId' => $question['id'],
+            'questionType' => $question['type'],
+            'parentId' => $question['parentId'],
+            'score' => $score,
+            'missScore' => $missScore,
+        );
+    }
     public function buildPaper($paperId, $status)
     {
         $paper = $this->getTestpaper($paperId);

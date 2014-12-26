@@ -136,9 +136,11 @@ class TestpaperController extends BaseController
     public function buildItemsAction(Request $request)
     {
         $part = json_decode($request->query->get('part'), true);
+        $this->filtParts($part);
         $result = $this->getTestpaperService()->makeItemsByPart($part);
         return $this->createJsonResponse($result);
     }
+
     public function updateAction(Request $request, $id)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($id);
@@ -223,7 +225,6 @@ class TestpaperController extends BaseController
         }
 
         list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($id, 'doing');
-
         return $this->render('TopxiaWebBundle:Paper:paper-reviewing.html.twig', array(
             'paper' => $paper,
             'questionItemSet' => $questionItemSet,
@@ -442,9 +443,18 @@ class TestpaperController extends BaseController
 
     }
 
-
-
-
+    private function filtParts($part)
+    {
+        foreach ($part as $key => $value) {
+            if (strstr($key,'percentages')) {
+                 $name = str_replace("percentages[", "", $key);
+                $name = str_replace("]", "", $name);
+                $part['percentages'][$name] = $value;
+                unset($part[$key]);
+            }
+        }
+        return $part;
+    }
 
     private function getCourseService()
     {

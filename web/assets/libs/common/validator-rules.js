@@ -34,13 +34,13 @@ define(function(require, exports, module) {
                     $val = $(item).val();
                     num += Number($val);
                 });
-                if (num > total) {
+                if (num != total ) {
                     return false;
                 } else {
                     return true;
                 }
             },
-            '{{display}}不能超{{total}}%'
+            '{{display}}必须等于{{total}}%'
         ],
         [
             'visible_character',
