@@ -169,9 +169,18 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
         
+
         $code = 'ChargeCoin';
         $ChargeCoin = $this->getAppService()->findInstallApp($code);
-        
+        if($ChargeCoin){
+            $coinSetting=$this->getSettingService()->get('coin',array());
+            if(isset($coinSetting['cash_rate'])){
+                $cashRate=$coinSetting['cash_rate'];
+            }else{
+                $cashRate=1;
+            }
+        }
+
         $canModifyPrice = true;
         $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
         if ($this->setting('vip.enabled')) {
@@ -188,6 +197,16 @@ class CourseManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
+            $price = $request->request->get('price');
+            $coinPrice = $request->request->get('coinPrice');
+            if($price == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] == 'Coin'){
+                $fields['price'] = floatval($coinPrice)*floatval($cashRate);
+            }
+
+            if($coinPrice == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] =='RMB'){
+                $fields['coinPrice'] = floatval($price)/floatval($cashRate);
+            }
+
             if(isset($fields['freeStartTime'])){
                 $fields['freeStartTime'] = strtotime($fields['freeStartTime']);
                 $fields['freeEndTime'] = strtotime($fields['freeEndTime']);
@@ -205,7 +224,8 @@ class CourseManageController extends BaseController
             'course' => $course,
             'canModifyPrice' => $canModifyPrice,
             'levels' => $this->makeLevelChoices($levels),
-            'ChargeCoin'=> $ChargeCoin
+            'ChargeCoin'=> $ChargeCoin,
+            'cashRate'=>$cashRate
         ));
     }
 

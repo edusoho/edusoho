@@ -55,8 +55,11 @@
 			<h1 class="title">{{ course.title }}</h1>
 			<div class="subtitle">{{ course.subtitle }}</div>
 			<div class="stats">
+			{% if setting('course.coursesPrice') == 0 %}
 				<p>
 					价　格：
+					{% if setting('coin.coin_enabled') %}
+
 					{% if course.price > 0 %}
 						{% if free_limit_type(course) == 'free_now' %}
 							<span class="money-num">0.00</span>
@@ -64,23 +67,45 @@
 							<span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
 							<span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
 						{% else %}
+						<span class="course-price" {% if setting('coin.price_type') == 'Coin'%} style="display:none;"  {% else %}  style="display:inline " {% endif %}>
 							<span class="money-num">{{ course.price }}</span>
 							<span class="money-text">元</span>
-							&nbsp;&nbsp;&nbsp;
-						 {% if setting('coin.coin_enabled') %}
+						</span>
+
 						 {% if course.coinPrice > 0 %}
-						 <span class="coin-price" >
-							<span >{{ course.coinPrice }}</span>
-							<span  > {{setting('coin.coin_name')}}</span>
+						 <span class="course-price"{% if setting('coin.price_type') == 'Coin'%} style="display:inline " {% else %} style="display:none;"   {% endif %} >
+							<span class="money-num">{{ course.coinPrice }}</span>
+							<span class="money-text" > {{setting('coin.coin_name')}}</span>
 						</span>
 						{% endif %}  
 						{% endif %}  
 
-						{% endif %}  
 					{% else %}
 						<span class="money-num" style="font-size:16px;">免费</span>
 					{% endif %}
+
+					{% else %}
+					{% if course.price > 0 %}
+						{% if free_limit_type(course) == 'free_now' %}
+							<span class="money-num">0.00</span>
+							<span class="money-text">元</span>
+							<span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
+							<span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
+						{% else %}
+						<span class="course-price" >
+							<span class="money-num">{{ course.price }}</span>
+							<span class="money-text">元</span>
+						</span>
+					{% endif %}
+						
+						{% else %}
+						<span class="money-num" style="font-size:16px;">免费</span>
+					{% endif %}
+
+					{% endif %}
+
 				</p>
+					{% endif %}
 								
 				<p>
 					评　价：
@@ -114,7 +139,7 @@
 				<div class="pull-left">
 					{% if course.status != 'published' %}
 					{% else %}
-						<a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+						<a class="btn btn-primary btn-fat" id="course-buy-btn" href="{{ path('course_buy', {id:course.id}) }}" >{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
 
 						{% if courseMemberLevel %}
 							{% if checkMemberLevelResult == 'not_login' %}

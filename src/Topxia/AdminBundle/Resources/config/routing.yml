@@ -1029,13 +1029,9 @@ admin_uploadfile_head_leader_params:
     pattern: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
 
-coin_settings_avatar:
-    pattern:  /coin/settings/avatar
-    defaults: { _controller: TopxiaWebBundle:Coin:avatar }
-
-coin_settings_avatar_crop:
-    pattern:  /coin/settings/avatar/crop
-    defaults: { _controller: TopxiaWebBundle:Coin:avatarCrop }
+admin_coin_picture:
+    pattern: /coin/picture
+    defaults: { _controller: TopxiaAdminBundle:Coin:picture }
 
 admin_coin_settings:
     path:     /coin/settings

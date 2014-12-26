@@ -72,11 +72,15 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order['targetType'] = 'course';
             $order['targetId'] = $course['id'];
             $order['payment'] = $info['payment'];
-            if($info['payment'] == 'alipay'){
-                $order['amount'] = $course['price'];
-            }else{
-                $order['amount'] = $course['coinPrice'];
-            }
+            $order['amount'] = $info['amount'];
+            $order['priceType'] = $info['priceType'];
+            $order['totalPrice'] = $info["totalPrice"];
+            $order['coinRate'] = $info['coinRate'];
+            $order['coinAmount'] = $info['coinAmount'];
+
+            $courseSetting=$this->getSettingService()->get('course',array());
+
+            $coursesPrice=$courseSetting['coursesPrice'];
             
             if($order['amount'] > 0){
                 //如果是限时打折，判断是否在限免期，如果是，则Amout为0
@@ -88,7 +92,8 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order['snPrefix'] = 'C';
 
             if (!empty($info['coupon'])) {
-                $order['couponCode'] = $info['coupon'];
+                $order['coupon'] = $info['coupon'];
+                $order['couponDiscount'] = $info['couponDiscount'];
             }
 
             if (!empty($info['note'])) {
@@ -101,20 +106,20 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             }
 
             // 免费课程，就直接将订单置为已购买
-            if (intval($order['amount']*100) == 0) {
-                list($success, $order) = $this->getOrderService()->payOrder(array(
-                    'sn' => $order['sn'],
-                    'status' => 'success', 
-                    'amount' => $order['amount'], 
-                    'paidTime' => time()
-                ));
+            // if (intval($order['amount']*100) == 0) {
+            //     list($success, $order) = $this->getOrderService()->payOrder(array(
+            //         'sn' => $order['sn'],
+            //         'status' => 'success', 
+            //         'amount' => $order['amount'], 
+            //         'paidTime' => time()
+            //     ));
 
-                $info = array(
-                    'orderId' => $order['id'],
-                    'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
-                );
-                $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-            }
+            //     $info = array(
+            //         'orderId' => $order['id'],
+            //         'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
+            //     );
+            //     $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+            // }
 
             $connection->commit();
 
@@ -199,7 +204,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $connection->beginTransaction();
 
             $order = $this->getOrderService()->getOrder($id);
-            $cashAccount = $this->getCashService()->getAccountByUserId($order["userId"]);
+            $cashAccount = $this->getCashAccountService()->getAccountByUserId($order["userId"]);
             if($cashAccount["cash"]<$order["amount"]){
                 throw $this->createServiceException('余额不足。');
             }
@@ -213,7 +218,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             );
             $this->getCashService()->outflow($order['userId'],$flow);
 
-            $this->getCashService()->waveDownCashField($cashAccount["id"], $order["amount"]);
+            $this->getCashAccountService()->waveDownCashField($cashAccount["id"], $order["amount"]);
 
             $user = $this->getCurrentUser();
             $this->getLogService()->info('cash', 'cost_coin', $user['nickname']." 购买课程时消费 {$order['amount']} 虚拟币", array());
@@ -235,11 +240,32 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             throw $e;
         }
     }
+
+    public function updateOrder($id, $orderFileds) 
+    {
+        $orderFileds = array(
+            'priceType' => $orderFileds["priceType"],
+            'totalPrice' => $orderFileds["totalPrice"],
+            'amount' => $orderFileds['amount'],
+            'coinRate' => $orderFileds['coinRate'],
+            'coinAmount' => $orderFileds['coinAmount'],
+            'userId' => $orderFileds["userId"],
+            'payment' => $orderFileds["payment"],
+            'targetId' => $orderFileds["courseId"]
+        );
+
+        return $this->getOrderService()->updateOrder($id, $orderFileds);
+    }
     
     protected function getCashService()
     {
         return $this->createService('Cash.CashService');
-    }    
+    }
+
+    protected function getCashAccountService()
+    {
+        return $this->createService('Cash.CashAccountService');
+    }
 
     protected function getUserService()
     {

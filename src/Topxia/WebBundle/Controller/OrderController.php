@@ -129,6 +129,16 @@ class OrderController extends BaseController
         return $options;
     }
 
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');   
+    }
+
+    protected function getCashService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
@@ -137,6 +147,16 @@ class OrderController extends BaseController
     protected function getCouponService()
     {
         return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 
     protected function getCourseService()

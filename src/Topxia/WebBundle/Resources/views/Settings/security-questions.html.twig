@@ -1,0 +1,109 @@
+{% extends 'TopxiaWebBundle:Settings:layout.html.twig' %}
+
+{% set script_controller = 'settings/security-questions' %} 
+{% set side_nav = 'security' %} 
+{% set questionOptions = { parents: '你的父母名字', teacher:'你的老师名字', lover:'你的爱人的名字', schoolName:'你的母校名字', firstTeacher:'你的启蒙老师', hobby:'你的爱好', notSelected:'不指定问题类型' } %} 
+
+{% block main %} 
+ {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
+    {% block heading %}<a href="{{ path('settings_security') }}">安全设置</a> / <a>设置安全问题</a> (<a class="text-danger">安全问题一经设置,不可再次修改</a> ){% endblock %}
+    {% block body %}
+
+    {{ web_macro.flash_messages() }} 
+
+  {%  if not hasSecurityQuestions  %}
+    <form id="settings-security-questions-form" class="form-horizontal" method="post" {# {% if not app.user.password %} style="display:none;"{% endif %} #}> 
+
+      <div class="form-group row"> 
+        <div  class="col-md-3 col-md-offset-1 control-label">安全问题1</div> 
+        <div class=" col-md-4"> 
+          <select class="form-control" name="question-1"> 
+            {{ select_options(questionOptions, question1|default('parents') ) }} 
+          </select> 
+        </div> 
+      </div> 
+      <div class="form-group row"> 
+        <div  class="col-md-3 col-md-offset-1 control-label">答案</div> 
+        <div class=" col-md-4"> 
+          <input type="text" name="answer-1" class="form-control" value="" placeholder="安全问题1答案"> 
+        </div> 
+      </div> 
+
+
+
+      <div class="form-group row"> 
+        <div class="col-md-3 col-md-offset-1 control-label">安全问题2</div> 
+        <div class=" col-md-4"> 
+          <select class="form-control " name="question-2"> 
+            {{ select_options(questionOptions, question2|default('teacher')) }} 
+          </select> 
+        </div> 
+      </div> 
+
+      <div class="form-group row"> 
+        <div  class="col-md-3 col-md-offset-1 control-label">答案</div> 
+        <div class=" col-md-4"> 
+          <input type="text" name="answer-2" class="form-control" value="" placeholder="安全问题2答案"> 
+        </div> 
+      </div> 
+
+
+
+
+      <div class="form-group row"> 
+        <div  class="col-md-3 col-md-offset-1 control-label">安全问题3</div> 
+        <div class=" col-md-4"> 
+          <select class="form-control" name="question-3"> 
+            {{ select_options(questionOptions,question3|default('lover')) }} 
+          </select> 
+        </div> 
+      </div> 
+    
+      <div class="form-group row"> 
+        <div  class="col-md-3 col-md-offset-1 control-label">答案</div> 
+        <div class=" col-md-4"> 
+          <input type="text" name="answer-3" class="form-control" value="" placeholder="安全问题3答案"> 
+        </div> 
+      </div> 
+
+      <div class="form-group row"> 
+        <div  class="col-md-3 col-md-offset-1 control-label text-danger">您的登陆密码</div> 
+        <div class=" col-md-4"> 
+          <input type="password" name="userLoginPassword" class="form-control" value=""> 
+        </div> 
+      </div> 
+
+      <br>
+      <div class="form-group row"> 
+          <div class="controls  col-md-offset-7  controls"> 
+            <button id="password-save-btn" data-submiting-text="正在保存" type="submit" class="btn btn-primary {# pull-right #}">提交</button> 
+          </div> 
+        </div> 
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"> 
+ 
+    </form> 
+
+  {% else %}
+        <div class="form-group row"> 
+          <div  class="col-md-3 col-md-offset-2 control-label">安全问题1:</div> 
+          <div class=" col-md-3 control-label"> 
+      {{ questionOptions[question1] }}
+          </div> 
+        </div>
+        <div class="form-group row"> 
+          <div  class="col-md-3 col-md-offset-2 control-label">安全问题2:</div> 
+          <div class=" col-md-3 control-label"> 
+      {{ questionOptions[question2] }}
+          </div> 
+        </div>  
+        <div class="form-group row"> 
+          <div  class="col-md-3 col-md-offset-2 control-label">安全问题3:</div> 
+          <div class=" col-md-3 control-label"> 
+      {{ questionOptions[question3] }}
+          </div> 
+        </div> 
+  {% endif %}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

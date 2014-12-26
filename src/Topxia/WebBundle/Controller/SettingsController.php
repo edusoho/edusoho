@@ -228,6 +228,247 @@ class SettingsController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
+	public function securityAction(Request $request) 
+	{ 
+		$user = $this->getCurrentUser(); 
+		if (empty($user['setup'])) {
+			return $this->redirect($this->generateUrl('settings_setup'));
+		}
+
+		$hasLoginPassword = strlen($user['password']) > 0;
+		$hasPayPassword = strlen($user['payPassword']) > 0;
+		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+		$hasFindPayPasswordQuestion = isset($userSecureQuestions);
+
+		$progressScore = 1 + ($hasLoginPassword? 33:0 ) + ($hasPayPassword? 33:0 ) + ($hasFindPayPasswordQuestion? 33:0 );
+		if ($progressScore <= 1 ) {$progressScore = 0;}
+
+		return $this->render('TopxiaWebBundle:Settings:security.html.twig', array( 
+			'progressScore' => $progressScore,
+			'hasLoginPassword' => $hasLoginPassword,
+			'hasPayPassword' => $hasPayPassword,
+			'hasFindPayPasswordQuestion' => $hasFindPayPasswordQuestion
+		)); 
+	} 
+
+	
+	public function payPasswordAction(Request $request) 
+	{ 
+		$user = $this->getCurrentUser(); 
+
+		$hasPayPassword = strlen($user['payPassword']) > 0;
+
+		if ($hasPayPassword){
+			throw new \RuntimeException('用户没有权限不通过旧支付密码，就直接设置新支付密码。');
+		}
+
+		$form = $this->createFormBuilder()
+			->add('currentUserLoginPassword', 'password')
+			->add('newPayPassword', 'password')
+			->add('confirmPayPassword', 'password')
+			->getForm();
+
+
+		if ($request->getMethod() == 'POST') {
+			$form->bind($request);
+			if ($form->isValid()) {
+				$passwords = $form->getData();
+				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
+					$this->setFlashMessage('danger', '当前用户登陆密码不正确，请重试！');
+					return $this->redirect($this->generateUrl('settings_pay_password'));
+				} else {
+					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
+					$this->setFlashMessage('success', '新支付密码设置成功，您可以在此重设密码。');
+				}
+
+				return $this->redirect($this->generateUrl('settings_reset_pay_password'));
+			}
+		}
+
+		return $this->render('TopxiaWebBundle:Settings:pay-password.html.twig', array( 
+			'form' => $form->createView()
+		)); 
+	} 
+
+	public function resetPayPasswordAction(Request $request) 
+	{ 
+		$user = $this->getCurrentUser(); 
+
+
+		$form = $this->createFormBuilder()
+			->add('currentUserLoginPassword','password')
+			->add('oldPayPassword', 'password')
+			->add('newPayPassword', 'password')
+			->add('confirmPayPassword', 'password')
+			->getForm();
+
+
+		if ($request->getMethod() == 'POST') {
+			$form->bind($request);
+			if ($form->isValid()) {
+				$passwords = $form->getData();
+		
+				if ( !( $this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])
+							&& $this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']) ) ) 
+				{
+					$this->setFlashMessage('danger', '当前用户登陆密码或者支付密码不正确，请重试！');
+				}
+				else 
+				{
+					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
+					$this->setFlashMessage('success', '重置支付密码成功。');
+				}
+
+				return $this->redirect($this->generateUrl('settings_reset_pay_password'));
+			}
+		}
+
+		return $this->render('TopxiaWebBundle:Settings:reset-pay-password.html.twig', array( 
+			'form' => $form->createView()
+		)); 
+	} 
+
+	private function findPayPasswordActionReturn($userSecureQuestions)
+	{
+		$questionNum = rand(1,3);
+		$question = $userSecureQuestions['securityQuestion'.$questionNum] ;
+
+		return $this->render('TopxiaWebBundle:Settings:find-pay-password.html.twig', array( 
+			'question' => $question,
+			'questionNum' => $questionNum,
+		)); 		
+	}
+	private function setPayPasswordPage($request, $userId)
+	{
+		$token = $this->getUserService()->makeToken('pay-password-reset',$userId,strtotime('+1 day'));
+		$request->request->set('token',$token);
+		return $this->forward('TopxiaWebBundle:Settings:updatePayPasswordFromEmailOrSecureQuestions', array(
+            'request' => $request 
+        ));
+	}
+
+
+	private function  updatePayPasswordFromEmailOrSecureQuestionsActionReturn($form, $token)
+	{
+        return $this->render('TopxiaWebBundle:Settings:update-pay-password-from-email-or-secure-questions.html.twig', array(
+	        'form' => $form->createView(),
+	        'token' => $token?:null
+        ));
+	}
+	public function updatePayPasswordFromEmailOrSecureQuestionsAction(Request $request)
+	{
+
+		$token = $this->getUserService()->getToken('pay-password-reset', $request->query->get('token')?:$request->request->get('token'));
+		if (empty($token)){
+			throw new \RuntimeException('Bad Token!');
+		}
+
+        $form = $this->createFormBuilder()
+            ->add('payPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->add('currentUserLoginPassword', 'password')
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                if ($data['payPassword'] != $data['confirmPayPassword']){
+                	$this->setFlashMessage('danger', '两次输入的支付密码不一致。');
+			        return $this->updatePayPasswordFromEmailOrSecureQuestionsActionReturn($form, $token);
+                }
+
+                if ($this->getAuthService()->checkPassword($token['userId'], $data['currentUserLoginPassword'])){
+					$this->getAuthService()->changePayPassword($token['userId'], $data['currentUserLoginPassword'], $data['payPassword']);
+	                $this->getUserService()->deleteToken('pay-password-reset',$token['token']);
+	                return $this->render('TopxiaWebBundle:Settings:pay-password-success.html.twig');
+	            }else{
+	            	$this->setFlashMessage('danger', '用户登陆密码错误。');
+	            }
+            }
+        }
+
+        return $this->updatePayPasswordFromEmailOrSecureQuestionsActionReturn($form, $token);
+	}
+	public function findPayPasswordAction(Request $request) 
+	{ 
+		$user = $this->getCurrentUser(); 
+		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+		$hasSecurityQuestions = isset($userSecureQuestions);
+
+		if (!$hasSecurityQuestions){
+			$this->setFlashMessage('danger', '您还没有安全问题，请先设置。');
+			return $this->forward('TopxiaWebBundle:Settings:securityQuestions');
+		}
+
+		if ($request->getMethod() == 'POST') {
+
+ 			$questionNum = $request->request->get('questionNum');
+ 			$answer = $request->request->get('answer');
+
+ 			$isAnswerRight = $this->getUserService()->verifyInSaltOut(
+ 				$answer,$userSecureQuestions['securityAnswerSalt'.$questionNum],$userSecureQuestions['securityAnswer'.$questionNum]);
+
+ 			if (!$isAnswerRight){
+ 				$this->setFlashMessage('danger', '回答错误。');
+ 				return $this->findPayPasswordActionReturn($userSecureQuestions);
+ 			}
+
+ 			$this->setFlashMessage('success', '回答正确，你可以开始更新支付密码。');
+ 			return $this->setPayPasswordPage($request, $user['id']);
+
+		}
+
+		return $this->findPayPasswordActionReturn($userSecureQuestions);
+	} 
+
+	private function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)
+	{
+		return $this->render('TopxiaWebBundle:Settings:security-questions.html.twig', array( 
+			'hasSecurityQuestions' => $hasSecurityQuestions,
+			'question1' => $hasSecurityQuestions?$userSecureQuestions['securityQuestion1']:null,
+			'question2' => $hasSecurityQuestions?$userSecureQuestions['securityQuestion2']:null,
+			'question3' => $hasSecurityQuestions?$userSecureQuestions['securityQuestion3']:null,
+		)); 		
+	}
+	public function securityQuestionsAction(Request $request)
+	{
+		$user = $this->getCurrentUser(); 
+		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+		$hasSecurityQuestions = isset($userSecureQuestions);
+		if ($request->getMethod() == 'POST') {
+			if (!$this->getAuthService()->checkPassword($user['id'],$request->request->get('userLoginPassword')) ){
+				$this->setFlashMessage('danger', '您的登陆密码错误，不能设置安全问题。');
+				return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
+			}
+
+			if ($hasSecurityQuestions){
+				throw new \RuntimeException('您已经设置过安全问题，不可再次修改。');
+			}
+
+			if ($request->request->get('question-1') == $request->request->get('question-2')
+			 	|| $request->request->get('question-1') == $request->request->get('question-3')
+			 	|| $request->request->get('question-2') == $request->request->get('question-3')){
+				throw new \RuntimeException('2个问题不能一样。');
+			}
+			$fields = array(  
+					'securityQuestion1'  => $request->request->get('question-1'),
+					'securityAnswer1' => $request->request->get('answer-1'),
+					'securityQuestion2'  => $request->request->get('question-2'),
+					'securityAnswer2' => $request->request->get('answer-2'),
+					'securityQuestion3'  => $request->request->get('question-3'),
+					'securityAnswer3' => $request->request->get('answer-3'),
+				);							
+			$this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($user['id'],$fields);
+			$this->setFlashMessage('success', '安全问题设置成功。');
+			$hasSecurityQuestions = true;
+			$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+		}		
+
+		return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
+	}
+
 	public function passwordAction(Request $request)
 	{
 		$user = $this->getCurrentUser();
@@ -539,4 +780,10 @@ class SettingsController extends BaseController
 	{
 		return $this->getServiceKernel()->createService('User.UserFieldService');
 	}
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
 }

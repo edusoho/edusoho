@@ -1,10 +1,43 @@
 define(function(require, exports, module) {
 	
-	var Notify = require('common/bootstrap-notify');
+   var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
+    var EditorFactory = require('common/kindeditor-factory');
     require('common/validator-rules').inject(Validator);
+    require('jquery.select2-css');
+    require('jquery.select2');
+    require('jquery.bootstrap-datetimepicker');
+    require('jquery.form');
 
-	exports.run = function() {
+exports.run = function() {
+
+        var $form = $("#coin-settings-form"),
+        	$modal = $form.children('.coin_content');
+
+        var validator = _initValidator($form, $modal);
+        var $editor = _initEditorFields($form, validator);
+
+         function _initValidator($form, $modal)
+    {
+        var validator = new Validator({
+            element: $form,
+            autoSubmit: false,
+        });
+
+        return validator;
+    }
+
+    function _initEditorFields($form, validator)
+    {
+        
+        var editor = EditorFactory.create('#coin_content', 'full', {extraFileUploadParams:{group:'default'}});
+        validator.on('formValidate', function(elemetn, event) {
+            editor.sync();
+        });
+
+        return editor;
+    }
+
 		var global_number_reserved = [];
         var validator = new Validator({
             element: '#coin-settings-form'
