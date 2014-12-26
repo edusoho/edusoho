@@ -204,7 +204,7 @@ class CourseManageController extends BaseController
             }
 
             if($coinPrice == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] =='RMB'){
-                $fields['coinPrice'] = floatval($price)*floatval($cashRate);
+                $fields['coinPrice'] = NumberToolkit::roundUP(floatval($price)*floatval($cashRate));
             }
 
             if(isset($fields['freeStartTime'])){

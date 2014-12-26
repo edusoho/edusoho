@@ -19,7 +19,7 @@ define(function(require, exports, module) {
             var element = $(this);
             var cash_rate= element.data("cashrate");
             var price = element.val();
-            $("input[name='coinPrice']").attr('value',parseFloat(price)*parseFloat(cash_rate));
+            $("input[name='coinPrice']").attr('value',roundUp(parseFloat(price)*parseFloat(cash_rate)));
         });
 
         $("input[name='coinPrice']").on('input',function(){
@@ -72,7 +72,7 @@ define(function(require, exports, module) {
                         }
                     }
                     if(coinPriceDisabled == "disabled"){
-                        var turePrice=parseFloat(price)*parseFloat(cash_rate);
+                        var turePrice=roundUp(parseFloat(price)*parseFloat(cash_rate));
                         if(coinPrice!=turePrice){
                             return false;
                         }
