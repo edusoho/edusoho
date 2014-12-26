@@ -68,10 +68,6 @@
           <ul class="nav navbar-nav navbar-right">
             {% if app.user %}
               <li><a href="{{ path('my') }}"> 我的课程 </a></li>
-              <li><a href="{{path('my_coin')}}" style="line-height: 1;height:54px;"  >
-                <img src="{{default_path('iconfont-qiandai.png')}}"/>
-              </a>
-              </li>
               {% if setting('mobile.enabled') %}
                 <li><a href="{{ path('mobile') }}" class="mobile-badge-container">
                   <span class="glyphicon glyphicon-phone"></span>
@@ -89,6 +85,10 @@
                 <span class="visible-lt-ie8">私信</span>
                 {% if app.user.newMessageNum > 0 %}<span class="badge">{{ app.user.newMessageNum }}</span>{% endif %}
                 </a>
+              </li>
+              <li><a href="{{path('my_coin')}}" style="line-height: 1;height:54px;"  >
+                <img src="{{default_path('iconfont-qiandai.png')}}"/>
+              </a>
               </li>
               <li class="visible-lt-ie8"><a href="{{ path('settings') }}">{{ app.user.nickname }}</a></li>
               <li class="dropdown hidden-lt-ie8">
