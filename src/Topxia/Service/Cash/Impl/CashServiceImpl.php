@@ -1,10 +1,10 @@
 <?php
 namespace Topxia\Service\Cash\Impl;
 
-use TopXia\Service\Common\BaseService;
+use Topxia\Service\Common\BaseService;
 use Topxia\Service\Cash\CashService;
-use TopXia\Common\ArrayToolkit;
-use TopXia\Service\Util\EasyValidator;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\EasyValidator;
 
 class CashServiceImpl extends BaseService implements CashService
 {
