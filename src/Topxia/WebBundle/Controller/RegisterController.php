@@ -37,6 +37,11 @@ class RegisterController extends BaseController
 
             $registration['createdIp'] = $request->getClientIp();
 
+            if(isset($authSettings['register_protective'])){
+
+                $this->protectiveRule($authSettings['register_protective'],$registration['createdIp']);
+            }
+
             $user = $this->getAuthService()->register($registration);
 
             $this->authenticateUser($user);
@@ -80,6 +85,23 @@ class RegisterController extends BaseController
             'userFields'=>$userFields,
             '_target_path' => $this->getTargetPath($request),
         ));
+    }
+
+    private function protectiveRule($type,$ip)
+    {
+        switch ($type) {
+            case 'middle':
+                $condition=array(
+                    'startTime'=>time()-24*3600,
+                    'createdIp'=>$ip,);
+                $registerCount=$this->getUserService()->searchUserCount($condition);
+                echo $registerCount;
+                break;
+            case 'high':
+                break;
+            default:
+                break;
+        }
     }
 
     public function userTermsAction(Request $request)
