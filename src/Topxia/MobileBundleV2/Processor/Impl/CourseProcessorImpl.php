@@ -927,12 +927,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	    $sort = array('startTime', 'DESC');
 	    $resultCourse = $this->controller->getCourseService()->searchLearns($courseConditions ,$sort, 0, 1);
 	    $resultCourse = reset($resultCourse);
-	    $lesson = $this->controller->getCourseService()->getCourseLesson($resultCourse['courseId'], $resultCourse['lessonId']);
 	    if($resultCourse != false){
-	    	$data = array('content' => $lesson['title'],
+		    $courseInfo = $this->controller->getCourseService()->getCourse($resultCourse['courseId']);
+		    //$lesson = $this->controller->getCourseService()->getCourseLesson($resultCourse['courseId'], $resultCourse['lessonId']);
+	    	$data = array('content' => $courseInfo['title'],
 	    				  'id' => $resultCourse['id'],
 	    				  'courseId' => $resultCourse['courseId'],
-	    				  'lessonId' => $resultCourse['lessonId'],
+	    				  'lessonId' => null,
 	    				  'time' => Date('c', $resultCourse['startTime']));
 	    }
 	    $result[0] = array('title' => '在学课程',
