@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}我的账户 - {{ parent() }}{% endblock %}
+{% block title %}账户中心 - {{ parent() }}{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -13,7 +13,7 @@
           <div class="list-group-panel">
 
                
-            <div class="list-group-heading">我的账户</div>
+            <div class="list-group-heading">账户中心</div>
 
             <ul class="list-group">
                 <a class="list-group-item 
@@ -25,7 +25,7 @@
                       {{path('my_bill')}}
                      {% endif %}
                      "
-                     >账户中心{# 我的现金账单 #}</a>  
+                     >我的账户{# 我的现金账单 #}</a>  
                 <a class="list-group-item 
                      {% if side_nav == 'my-orders' %} active {% endif %} " 
                      href="{{path('my_orders')}}">我的订单</a>              
