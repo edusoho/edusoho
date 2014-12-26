@@ -203,6 +203,18 @@ class CourseController extends BaseController
 		));
 	}
 
+	public function studentBlockAction(Request $request,$id)
+	{
+		$course = $this->getCourseService()->getCourse($id);
+
+		$conditions = array('courseId' => $id, 'unique' => true , 'role' => 'student');
+        $members = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'DESC'),0,PHP_INT_MAX);
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members,'userId'));
+        return $this->render("TopxiaWebBundle:Course:course-student.html.twig", array(
+			'course' => $course,
+			'users'=>$users,
+		));
+	}
 
 	public function previewAction(Request $request,$id)
 	{
