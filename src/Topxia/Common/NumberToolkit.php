@@ -5,6 +5,14 @@ class NumberToolkit {
 	public static function roundUp($value, $precision=2) 
     {
         $amt = explode(".", $value);
+        if(count($amt)==0){
+            return 0;
+        } 
+
+        if(count($amt) == 1){
+            return $amt[0];
+        }
+
         if(strlen($amt[1]) > $precision) {
             $next = (int)substr($amt[1],$precision);
             $amt[1] = (float)(".".substr($amt[1],0,$precision));
