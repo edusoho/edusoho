@@ -36,16 +36,25 @@ define(function(require, exports, module) {
 			if(payAmount <= 0){
 				payAmount = 0;
 				coinPriceZero();
-			} 
+			}
 
+			var totalPrice = payAmount;
 			if(payAmount>0) {
 				var coinAmount = parseFloat($('[role="cash-discount"]').text());
 				if(!isNaN(coinAmount)) {
 					payAmount = payAmount-coinAmount;
 				}
-
+				if(payAmount < 0){
+					payAmount = totalPrice;
+					if(cashRateElement.data("coursePriceShowType") == "Coin") {
+						$('[role="coinNum"]').val(payAmount);
+					}else{
+						$('[role="coinNum"]').val(payAmount*cashRate);
+					}
+					$('[role="cash-discount"]').text(payAmount);
+					payAmount = 0;
+				}
 			}
-			calculatorCoinPay();
 
 			if(cashRateElement.data("coursePriceShowType") == "Coin") {
 				if(payAmount == 0){
@@ -53,11 +62,12 @@ define(function(require, exports, module) {
 				} else {
 					$('[role="pay-coin"]').text(roundUp(payAmount));
 				}
+
 				payAmount = payAmount/cashRate;
 			}
 
-			$('[role="pay-rmb"]').text(roundUp(payAmount));
-			$('input[name="shouldPayMoney"]').val(roundUp(payAmount));
+			$('[role="pay-rmb"]').text(payAmount.toFixed(2));
+			$('input[name="shouldPayMoney"]').val(payAmount.toFixed(2));
 		}
 
 		function coinPriceZero(){
@@ -85,7 +95,7 @@ define(function(require, exports, module) {
 				var cash = $('[role="accountCash"]').text();
 				var discount = 0;
 				if(parseFloat(cash) < parseFloat(coin)) {
-					$(this).val(cash);
+					$('[role="coinNum"]').val(cash);
 					if(cashRateElement.data("coursePriceShowType") != "Coin"){
 						discount = cash/cashRate;
 					} else {
@@ -100,7 +110,6 @@ define(function(require, exports, module) {
 				}
 
 				var discountArray = (discount+"").split(".");
-
 				if (discountArray.length>1 && discountArray[1].length>2) {
 					coinPriceZero();
 				} else {
@@ -137,10 +146,9 @@ define(function(require, exports, module) {
 		function shouldPayCoin() {
 			var totalPrice = $("[role='total-price']").text();
 			var couponPrice = $("[role='coupon-price']").find(".price_r_num").text();
-			console.log(Math.round(totalPrice*100)/100);
-			console.log(Math.round(couponPrice*100)/100);
-			var coinPrice = Math.round(totalPrice*100)/100 - Math.round(couponPrice*100)/100;
-			console.log(coinPrice);
+			var coinPrice = parseFloat(totalPrice) - parseFloat(couponPrice);
+			coinPrice = coinPrice.toFixed(2);
+
 			var shouldPayCoin = 0;
 			if(cashRateElement.data("coursePriceShowType") == "RMB") {
 				shouldPayCoin = coinPrice*cashRate;
