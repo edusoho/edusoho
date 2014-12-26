@@ -21,6 +21,10 @@ define(function(require, exports, module) {
             }
         });
 
+		function roundUp(amount){
+			return Math.ceil(amount*100)/100;
+		}
+
 		function conculatePrice(){
 			var totalPrice = parseFloat($('[role="total-price"]').text());
 			var couponTotalPrice = $('[role="coupon-price"]').find(".price_r_num").text();
@@ -46,22 +50,14 @@ define(function(require, exports, module) {
 				if(payAmount == 0){
 					$('[role="pay-coin"]').text(0);
 				} else {
-					$('[role="pay-coin"]').text(payAmount.toFixed(2));
+					$('[role="pay-coin"]').text(roundUp(payAmount));
 				}
 				var payRmb = payAmount/cashRate;
-				fixedPayRmb = parseFloat(payRmb.toFixed(2));
-				if(fixedPayRmb<payRmb){
-					fixedPayRmb = fixedPayRmb+0.01;
-				}
-				$('[role="pay-rmb"]').text(fixedPayRmb.toFixed(2));
-				$('input[name="shouldPayMoney"]').val(fixedPayRmb.toFixed(2));
+				$('[role="pay-rmb"]').text(roundUp(payRmb));
+				$('input[name="shouldPayMoney"]').val(roundUp(payRmb));
 			} else {
-				fixedPayAmount = parseFloat(payAmount.toFixed(2));
-				if(fixedPayAmount<payAmount){
-					fixedPayAmount = fixedPayAmount+0.01;
-				}
-				$('[role="pay-rmb"]').text(fixedPayAmount.toFixed(2));
-				$('input[name="shouldPayMoney"]').val(fixedPayAmount.toFixed(2));
+				$('[role="pay-rmb"]').text(roundUp(payAmount));
+				$('input[name="shouldPayMoney"]').val(roundUp(payAmount));
 			}
 		}
 
