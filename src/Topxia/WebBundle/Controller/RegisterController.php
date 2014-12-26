@@ -39,7 +39,12 @@ class RegisterController extends BaseController
 
             if(isset($authSettings['register_protective'])){
 
-                $this->protectiveRule($authSettings['register_protective'],$registration['createdIp']);
+                $status=$this->protectiveRule($authSettings['register_protective'],$registration['createdIp']);
+
+                if(!$status){
+
+                    return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
+                }
             }
 
             $user = $this->getAuthService()->register($registration);
@@ -95,11 +100,32 @@ class RegisterController extends BaseController
                     'startTime'=>time()-24*3600,
                     'createdIp'=>$ip,);
                 $registerCount=$this->getUserService()->searchUserCount($condition);
-                echo $registerCount;
+                if($registerCount > 30 ){
+                    
+                    return false;
+                }
+                return true;
                 break;
             case 'high':
+                $condition=array(
+                    'startTime'=>time()-24*3600,
+                    'createdIp'=>$ip,);
+                $registerCount=$this->getUserService()->searchUserCount($condition);
+                if($registerCount > 10 ){
+                    
+                    return false;
+                }
+                $registerCount=$this->getUserService()->searchUserCount(array(
+                    'startTime'=>time()-3600,
+                    'createdIp'=>$ip,));
+                if($registerCount >= 1 ){
+                    
+                    return false;
+                }
+                return true;
                 break;
             default:
+                return true;
                 break;
         }
     }
