@@ -121,7 +121,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
                 $cashRate
             );
             $amount = $afterCouponAmount;
-            var_dump($amount);
         }
 
         if ($priceType == "Coin") {
