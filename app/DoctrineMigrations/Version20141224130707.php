@@ -13,12 +13,13 @@ class Version20141224130707 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
+        $time = time();
         $this->addSql("
-        INSERT INTO `block` (`userId`, `title`, `mode`, `content`, `code`) 
-        VALUES ('1', '我的账户Bar', 'html', 
+        INSERT INTO `block` (`userId`, `title`, `mode`, `content`, `code`, `createdTime`, `updateTime`) 
+        VALUES ('1', '我的账户Banner', 'html', 
         '<br>\n<div class=\"col-md-12\">\n  
         <a href=\"#\"><img src=\"http://open.edusoho.com/assets/img/edusoho-demo/vip-banner-1.jpg\" /></a>
-        <br>\n<br>\n</div>', 'bill_bar');
+        <br>\n<br>\n</div>', 'bill_banner','{$time}','{$time}');
         ");
 
     }
