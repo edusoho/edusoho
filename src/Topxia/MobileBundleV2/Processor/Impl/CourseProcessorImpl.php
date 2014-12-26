@@ -933,7 +933,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	    	$data = array('content' => $courseInfo['title'],
 	    				  'id' => $resultCourse['id'],
 	    				  'courseId' => $resultCourse['courseId'],
-	    				  'lessonId' => null,
+	    				  'lessonId' => $courseInfo['largePicture'],
 	    				  'time' => Date('c', $resultCourse['startTime']));
 	    }
 	    $result[0] = array('title' => '在学课程',
