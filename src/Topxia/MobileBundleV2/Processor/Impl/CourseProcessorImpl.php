@@ -202,7 +202,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 				return "src=\"{$urlArray[$matches[1]]}\"";
 			}
 		}, $content);
-        return $content;
+        		return $content;
 	}
 
 	public function commitCourse()
@@ -267,6 +267,22 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $thread;
         }, $threads);
 		$courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));	
+		
+		$posts = array();
+		foreach ($threads as $key => $thread) {
+			$post = $this->controller->getThreadService()->findThreadPosts(
+				$thread["courseId"], $thread["id"], "default", 0, 1);
+			if (!empty($post)) {
+				$posts[$post[0]["threadId"]] = $post[0];
+			}
+		}
+		
+		$threads = array_map(function($thread) use($posts){
+			if (isset($posts[$thread["id"]])) {
+				$thread["latestPostContent"] = $posts[$thread["id"]]["content"];
+			}
+			return $thread;
+		}, $threads);
 		return array(
 		"start"=>$start,
 		"limit"=>$limit,
