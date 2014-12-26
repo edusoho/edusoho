@@ -58,26 +58,29 @@ define(function(require, exports, module) {
                     }
                 }   
 
-                $.post($form.attr('action'), $form.serialize(), function(html) {
-                    var price =$("input[name='price']").val();
-                    var coinPrice=$("input[name='coinPrice']").val();
-                    var cash_rate= $form.data("cashrate");
-                    var priceDisabled= $form.find('[name=price]').attr("disabled");
-                    var coinPriceDisabled= $form.find('[name=coinPrice]').attr("disabled");
-                    if(priceDisabled == "disabled"){
-                        var payRmb = parseFloat(price)/parseFloat(cash_rate);
+                var price = $("input[name='price']").val();
+                var coinPrice = $("input[name='coinPrice']").val();
+                var cash_rate = $form.data("cashrate");
+                var priceDisabled = $form.find('[name=price]').attr("disabled");
+                var coinPriceDisabled = $form.find('[name=coinPrice]').attr("disabled");
 
-                        var turePrice=roundUp(payRmb);
-                        if(price!=turePrice){
-                            return false;
-                        }
+                if(priceDisabled == "disabled"){
+                    var payRmb = parseFloat(coinPrice)/parseFloat(cash_rate);
+                    var turePrice=roundUp(payRmb);
+                    if(price!=turePrice){
+                        Notify.danger('操作失败');
+                        return;
                     }
-                    if(coinPriceDisabled == "disabled"){
-                        var turePrice=roundUp(parseFloat(price)*parseFloat(cash_rate));
-                        if(coinPrice!=turePrice){
-                            return false;
-                        }
+                }
+                if(coinPriceDisabled == "disabled"){
+                    var turePrice=roundUp(parseFloat(price)*parseFloat(cash_rate));
+                    if(coinPrice!=turePrice){
+                        Notify.danger('操作失败');
+                        return;
                     }
+                }
+
+                $.post($form.attr('action'), $form.serialize(), function(html) {
                     Notify.success('课程价格已经修改成功');
                 }).error(function(){
                     Notify.danger('操作失败');
