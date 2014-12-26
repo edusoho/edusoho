@@ -288,7 +288,7 @@ class CourseController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 		if (!$user->isLogin()) {
-			return $this->createJsonResponse(false);
+			throw $this->createAccessDeniedException();
 		}
 		$this->getCourseService()->favoriteCourse($id);
 		return $this->createJsonResponse(true);
@@ -298,7 +298,7 @@ class CourseController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 		if (!$user->isLogin()) {
-			return $this->createJsonResponse(false);
+			throw $this->createAccessDeniedException();
 		}
 		$this->getCourseService()->unfavoriteCourse($id);
 		return $this->createJsonResponse(true);
