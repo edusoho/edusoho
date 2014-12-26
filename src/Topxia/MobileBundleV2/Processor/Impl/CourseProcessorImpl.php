@@ -835,10 +835,25 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
 		$start = (int) $this->getParam("start", 0);
 		$limit = (int) $this->getParam("limit", 10);
-        $total = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
-        $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
-        		
-        $result = array(
+	        $total = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
+	        $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
+	        	
+        		$count  = $this->controller->getCourseService()->searchLearnCount(array("status"=>"learning"));
+        		$learnStatus = $this->controller->getCourseService()->searchLearns(
+        			array("status"=>"learning"),
+        			array("finishedTime","ASC"),0,$count
+        			);
+
+        		$lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatus, 'lessonId'));
+        		$courses = array_map(function($course) use ($lessons){
+        			$courseId = $course["id"];
+        			if (isset($lessons[$courseId])) {
+        				$course["lastLessonTitle"] = $lessons[$courseId]["title"];
+        			}
+        			return $course;
+        		}, $courses);
+
+        		$result = array(
 			"start"=>$start,
 			"limit"=>$limit,
 			"total"=>$total,
