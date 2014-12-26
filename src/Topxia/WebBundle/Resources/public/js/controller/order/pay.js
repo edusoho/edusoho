@@ -69,12 +69,12 @@ define(function(require, exports, module) {
 			if(parseFloat(coin) == 0 || isNaN(coin)){
 				$(this).val("0");
 				$('[role="cash-discount"]').text("0");
-				$(".pay-password").hide();
+				$(".pay-password div[role='password-input']").hide();
 				conculatePrice();
 				return;
 			}
 
-			$(".pay-password").show();
+			$(".pay-password div[role='password-input']").show();
 			validator.addItem({
 			    element: '[name="payPassword"]',
 			    rule: 'remote',
